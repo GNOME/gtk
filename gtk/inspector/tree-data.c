@@ -35,6 +35,8 @@ struct _GtkInspectorTreeData
 {
   GtkWidget parent_instance;
 
+  GtkWidget *box;
+  GtkWidget *swin;
   GtkTreeModel *object;
   GtkTreeModel *types;
   GtkTreeView *view;
@@ -190,6 +192,8 @@ gtk_inspector_tree_data_class_init (GtkInspectorTreeDataClass *klass)
   object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/tree-data.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, swin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, view);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorTreeData, object_title);
   gtk_widget_class_bind_template_callback (widget_class, toggle_show);

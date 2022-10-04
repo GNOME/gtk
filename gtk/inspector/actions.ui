@@ -5,7 +5,7 @@
       <class name="view"/>
     </style>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkScrolledWindow" id="swin">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <property name="hscrollbar-policy">never</property>

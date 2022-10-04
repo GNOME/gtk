@@ -36,6 +36,8 @@ struct _GtkInspectorListData
 {
   GtkWidget parent_instance;
 
+  GtkWidget *box;
+  GtkWidget *swin;
   GListModel *object;
   GtkColumnView *view;
   GtkWidget *items_label;
@@ -205,6 +207,8 @@ gtk_inspector_list_data_class_init (GtkInspectorListDataClass *klass)
   object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/list-data.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, swin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, view);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorListData, items_label);
 

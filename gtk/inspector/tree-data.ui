@@ -1,7 +1,7 @@
 <interface domain="gtk40">
   <template class="GtkInspectorTreeData" parent="GtkWidget">
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <style>
           <class name="toolbar"/>
         </style>
@@ -21,7 +21,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkScrolledWindow" id="swin">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <property name="vscrollbar-policy">always</property>
