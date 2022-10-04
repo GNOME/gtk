@@ -20,7 +20,7 @@
 
 #include "gtkentry.h"
 
-#include "gtkentrycompletion.h"
+#include "deprecated/gtkentrycompletion.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkliststore.h"
 #include "gtktreemodelfilter.h"

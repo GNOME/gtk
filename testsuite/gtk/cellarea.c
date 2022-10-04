@@ -22,6 +22,8 @@
 #include <string.h>
 #include <math.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* tests related to handling of the cell-area property in
  * GtkCellLayout implementations
  */

@@ -106,7 +106,7 @@
 #include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkentrybuffer.h>
-#include <gtk/gtkentrycompletion.h>
+#include <gtk/deprecated/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventcontroller.h>
 #include <gtk/gtkeventcontrollerfocus.h>

@@ -36,6 +36,8 @@
 #include "gtkeventcontrollerfocus.h"
 #include "gtkprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 
 #define GTK_FILE_CHOOSER_ENTRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_ENTRY, GtkFileChooserEntryClass))
