@@ -54,7 +54,6 @@
 #include "gtktreelistmodel.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
-#include "gtktreestore.h"
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"

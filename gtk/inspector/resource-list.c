@@ -25,8 +25,6 @@
 #include "gtksearchentry.h"
 #include "gtkstack.h"
 #include "gtktextbuffer.h"
-#include "gtktreeselection.h"
-#include "gtktreestore.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkpicture.h"
 #include "gtkmediafile.h"
