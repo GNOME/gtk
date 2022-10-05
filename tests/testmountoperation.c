@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 
 static gboolean ask_question = FALSE;
+static gboolean show_processes = FALSE;
 static gboolean anonymous = FALSE;
 static gboolean dont_ask_username = FALSE;
 static gboolean dont_ask_domain = FALSE;
@@ -100,6 +101,7 @@ main (int argc, char *argv[])
   GError *error = NULL;
   GOptionEntry options[] = {
     { "ask-question", 'q', 0, G_OPTION_ARG_NONE, &ask_question, "Ask a question not a password.", NULL },
+    { "show-processes", 0, 0, G_OPTION_ARG_NONE, &show_processes, "Show (pretend) processes.", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
     { "anonymous", 'a', 0, G_OPTION_ARG_NONE, &anonymous, "Anonymous login allowed.", NULL },
     { "no-username", 'u', 0, G_OPTION_ARG_NONE, &dont_ask_username, "Don't ask for the username.", NULL },
@@ -136,6 +138,26 @@ main (int argc, char *argv[])
       };
 
       g_signal_emit_by_name (op, "ask_question", "Foo\nbar", choices);
+    }
+  else if (show_processes)
+    {
+      static const char *choices[] = {
+        "Yes", "No", "Sauerkraut", NULL
+      };
+      GArray *pids;
+      GPid pid;
+
+      pids = g_array_new (TRUE, FALSE, sizeof (GPid));
+      pid = 1000;
+      g_array_append_val (pids, pid);
+      pid = 2000;
+      g_array_append_val (pids, pid);
+      pid = 3000;
+      g_array_append_val (pids, pid);
+
+      g_signal_emit_by_name (op, "show-processes", "Foo\nbar", pids, choices);
+
+      g_array_unref (pids);
     }
   else
     {
