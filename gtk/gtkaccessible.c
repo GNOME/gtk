@@ -676,11 +676,11 @@ gtk_accessible_role_is_range_subclass (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_SCROLLBAR:
     case GTK_ACCESSIBLE_ROLE_SLIDER:
     case GTK_ACCESSIBLE_ROLE_SPIN_BUTTON:
-      return true;
+      return TRUE;
     default:
       break;
     }
-  return false;
+  return FALSE;
 }
 
 /*<private>
