@@ -543,32 +543,35 @@ _gtk_mount_operation_lookup_context_get (GdkDisplay *display)
   context->pid_to_window = g_hash_table_new (g_direct_hash, g_direct_equal);
   context->display = display;
 
-  mapping = NULL;
-  mapping_length = 0;
-  get_window_list (context->display,
-                   gdk_x11_display_get_xdisplay (context->display),
-                   gdk_x11_display_get_xrootwindow (context->display),
-                   gdk_x11_get_xatom_by_name_for_display (context->display,
-                                                          "_NET_CLIENT_LIST"),
-                   &mapping,
-                   &mapping_length);
-  for (n = 0; n < mapping_length; n++)
+  if (GDK_IS_X11_DISPLAY (display))
     {
-      int pid;
+      mapping = NULL;
+      mapping_length = 0;
+      get_window_list (context->display,
+                       gdk_x11_display_get_xdisplay (context->display),
+                       gdk_x11_display_get_xrootwindow (context->display),
+                       gdk_x11_get_xatom_by_name_for_display (context->display,
+                                                              "_NET_CLIENT_LIST"),
+                       &mapping,
+                       &mapping_length);
+      for (n = 0; n < mapping_length; n++)
+        {
+          int pid;
 
-      if (!get_cardinal (context->display,
-                         GDK_DISPLAY_XDISPLAY (context->display),
-                         mapping[n],
-                         gdk_x11_get_xatom_by_name_for_display (context->display,
-                                                                "_NET_WM_PID"),
-                         &pid))
-        continue;
+          if (!get_cardinal (context->display,
+                             GDK_DISPLAY_XDISPLAY (context->display),
+                             mapping[n],
+                             gdk_x11_get_xatom_by_name_for_display (context->display,
+                                                                    "_NET_WM_PID"),
+                             &pid))
+            continue;
 
-      g_hash_table_insert (context->pid_to_window,
-                           GINT_TO_POINTER (pid),
-                           GINT_TO_POINTER ((int) mapping[n]));
+          g_hash_table_insert (context->pid_to_window,
+                               GINT_TO_POINTER (pid),
+                               GINT_TO_POINTER ((int) mapping[n]));
+        }
+      g_free (mapping);
     }
-  g_free (mapping);
 
   return context;
 }
@@ -1000,6 +1003,9 @@ _gtk_mount_operation_lookup_info (GtkMountOperationLookupContext *context,
   g_return_val_if_fail (out_name != NULL && *out_name == NULL, FALSE);
   g_return_val_if_fail (out_command_line != NULL && *out_command_line == NULL, FALSE);
   g_return_val_if_fail (out_texture != NULL && *out_texture == NULL, FALSE);
+
+  if (!GDK_IS_X11_DISPLAY (context->display))
+    return FALSE;
 
   /* We perform two different lookups for name and icon size.. this is
    * because we want the name from the window with WINDOWID and this
