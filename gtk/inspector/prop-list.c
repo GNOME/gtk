@@ -28,9 +28,6 @@
 
 #include "prop-editor.h"
 
-#include "gtkcelllayout.h"
-#include "gtktreeview.h"
-#include "gtktreeselection.h"
 #include "gtkpopover.h"
 #include "gtksearchentry.h"
 #include "gtklabel.h"
@@ -38,10 +35,8 @@
 #include "gtkstack.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtklayoutmanager.h"
-#include "gtklistbox.h"
 #include "gtksizegroup.h"
 #include "gtkroot.h"
-#include "gtkgestureclick.h"
 #include "prop-holder.h"
 #include "window.h"
 

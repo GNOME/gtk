@@ -58,8 +58,6 @@
 #include "gtktexthandleprivate.h"
 #include "gtktextutil.h"
 #include "gtktooltip.h"
-#include "gtktreeselection.h"
-#include "gtktreeview.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"

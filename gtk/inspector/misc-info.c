@@ -25,7 +25,6 @@
 #include "type-info.h"
 
 #include "gtktypebuiltins.h"
-#include "gtktreeview.h"
 #include "gtkbuildable.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
