@@ -41,26 +41,22 @@
 #include "gtkcheckbutton.h"
 #include "gtkgrid.h"
 #include "gtkwindow.h"
-#include "gtktreeview.h"
-#include "gtktreeselection.h"
-#include "gtkcellrenderertext.h"
-#include "gtkcellrendererpixbuf.h"
 #include "gtkscrolledwindow.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkdialogprivate.h"
-#include "gtkgestureclick.h"
-#include "gtkmodelbuttonprivate.h"
 #include "gtkpopover.h"
 #include "gtksnapshot.h"
 #include "gdktextureprivate.h"
-#include "gtkshortcutcontroller.h"
-#include "gtkshortcuttrigger.h"
-#include "gtkshortcutaction.h"
-#include "gtkshortcut.h"
 #include "gtkliststore.h"
 #include <glib/gprintf.h>
+#include "gtklistview.h"
+#include "gtksignallistitemfactory.h"
+#include "gtklistitem.h"
+#include "gtksingleselection.h"
+#include "gtkpicture.h"
+
 
 /**
  * GtkMountOperation:
@@ -133,8 +129,8 @@ struct _GtkMountOperationPrivate {
   gboolean          anonymous;
 
   /* for the show-processes dialog */
-  GtkWidget *process_tree_view;
-  GtkListStore *process_list_store;
+  GtkWidget *process_list_view;
+  GListStore *process_list_store;
 };
 
 enum {
@@ -1064,12 +1060,17 @@ gtk_mount_operation_ask_question (GMountOperation *op,
 }
 
 static void
-show_processes_button_clicked (GtkDialog       *dialog,
-                               int              button_number,
+show_processes_button_clicked (GtkWidget       *button,
                                GMountOperation *op)
 {
   GtkMountOperationPrivate *priv;
   GtkMountOperation *operation;
+  int button_number;
+  GtkDialog *dialog;
+
+  button_number = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "choice"));
+  dialog = GTK_DIALOG (gtk_widget_get_ancestor (button, GTK_TYPE_DIALOG));
+
 
   operation = GTK_MOUNT_OPERATION (op);
   priv = operation->priv;
@@ -1180,17 +1181,70 @@ render_paintable_to_texture (GdkPaintable *paintable)
   return texture;
 }
 
+typedef struct _ProcessData ProcessData;
+
+G_DECLARE_FINAL_TYPE (ProcessData, process_data, PROCESS, DATA, GObject);
+
+struct _ProcessData
+{
+  GObject parent;
+
+  GdkTexture *texture;
+  char *name;
+  GPid pid;
+};
+
+G_DEFINE_TYPE (ProcessData, process_data, G_TYPE_OBJECT);
+
+static void
+process_data_init (ProcessData *self)
+{
+}
+
+static void
+process_data_finalize (GObject *object)
+{
+  ProcessData *pd = PROCESS_DATA (object);
+
+  g_free (pd->name);
+  g_object_unref (pd->texture);
+
+  G_OBJECT_CLASS (process_data_parent_class)->finalize (object);
+}
+
+static void
+process_data_class_init (ProcessDataClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = process_data_finalize;
+}
+
+static ProcessData *
+process_data_new (const char *name,
+                  GPid        pid,
+                  GdkTexture *texture)
+{
+  ProcessData *self;
+
+  self = g_object_new (process_data_get_type (), NULL);
+  self->name = g_strdup (name);
+  self->pid = pid;
+  g_set_object (&self->texture, texture);
+
+  return self;
+}
+
 static void
 add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                GtkMountOperationLookupContext *lookup_context,
-                               GtkListStore                   *list_store,
+                               GListStore                     *list_store,
                                GPid                            pid)
 {
   char *command_line;
   char *name;
   GdkTexture *texture;
   char *markup;
-  GtkTreeIter iter;
 
   name = NULL;
   texture = NULL;
@@ -1229,12 +1283,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                             name,
                             command_line);
 
-  gtk_list_store_append (list_store, &iter);
-  gtk_list_store_set (list_store, &iter,
-                      0, texture,
-                      1, markup,
-                      2, pid,
-                      -1);
+  g_list_store_append (list_store, process_data_new (markup, pid, texture));
 
   if (texture != NULL)
     g_object_unref (texture);
@@ -1245,35 +1294,27 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
 
 static void
 remove_pid_from_process_list_store (GtkMountOperation *mount_operation,
-                                    GtkListStore      *list_store,
+                                    GListStore        *list_store,
                                     GPid               pid)
 {
-  GtkTreeIter iter;
-  GPid pid_of_item;
-
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store), &iter))
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (list_store)); i++)
     {
-      do
-        {
-          gtk_tree_model_get (GTK_TREE_MODEL (list_store),
-                              &iter,
-                              2, &pid_of_item,
-                              -1);
+      ProcessData *data = g_list_model_get_item (G_LIST_MODEL (list_store), i);
 
-          if (pid_of_item == pid)
-            {
-              gtk_list_store_remove (list_store, &iter);
-              break;
-            }
+      g_object_unref (data);
+
+      if (data->pid == pid)
+        {
+          g_list_store_remove (list_store, i);
+          break;
         }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store), &iter));
     }
 }
 
 
 static void
 update_process_list_store (GtkMountOperation *mount_operation,
-                           GtkListStore      *list_store,
+                           GListStore        *list_store,
                            GArray            *processes)
 {
   guint n;
@@ -1281,7 +1322,6 @@ update_process_list_store (GtkMountOperation *mount_operation,
   GArray *current_pids;
   GArray *pid_indices_to_add;
   GArray *pid_indices_to_remove;
-  GtkTreeIter iter;
   GPid pid;
 
   /* Just removing all items and adding new ones will screw up the
@@ -1292,18 +1332,13 @@ update_process_list_store (GtkMountOperation *mount_operation,
   pid_indices_to_add = g_array_new (FALSE, FALSE, sizeof (int));
   pid_indices_to_remove = g_array_new (FALSE, FALSE, sizeof (int));
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store), &iter))
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (list_store)); i++)
     {
-      do
-        {
-          gtk_tree_model_get (GTK_TREE_MODEL (list_store),
-                              &iter,
-                              2, &pid,
-                              -1);
+      ProcessData *data = g_list_model_get_item (G_LIST_MODEL (list_store), i);
 
-          g_array_append_val (current_pids, pid);
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store), &iter));
+      g_array_append_val (current_pids, data->pid);
+
+      g_object_unref (data);
     }
 
   g_array_sort (current_pids, pid_equal);
@@ -1319,24 +1354,13 @@ update_process_list_store (GtkMountOperation *mount_operation,
 
   if (pid_indices_to_add->len > 0)
     {
-      lookup_context = _gtk_mount_operation_lookup_context_get (gtk_widget_get_display (mount_operation->priv->process_tree_view));
+      lookup_context = _gtk_mount_operation_lookup_context_get (gtk_widget_get_display (mount_operation->priv->process_list_view));
       for (n = 0; n < pid_indices_to_add->len; n++)
         {
           pid = g_array_index (processes, GPid, n);
           add_pid_to_process_list_store (mount_operation, lookup_context, list_store, pid);
         }
       _gtk_mount_operation_lookup_context_free (lookup_context);
-    }
-
-  /* select the first item, if we went from a zero to a non-zero amount of processes */
-  if (current_pids->len == 0 && pid_indices_to_add->len > 0)
-    {
-      if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store), &iter))
-        {
-          GtkTreeSelection *tree_selection;
-          tree_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (mount_operation->priv->process_tree_view));
-          gtk_tree_selection_select_iter (tree_selection, &iter);
-        }
     }
 
   g_array_unref (current_pids);
@@ -1357,26 +1381,18 @@ on_dialog_response (GtkDialog *dialog,
 }
 
 static void
-on_end_process_activated (GtkModelButton *button,
-                          gpointer user_data)
+on_end_process_activated (GtkButton         *button,
+                          GtkMountOperation *op)
 {
-  GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
-  GtkTreeSelection *selection;
-  GtkTreeIter iter;
-  GPid pid_to_kill;
+  GtkSelectionModel *selection;
+  ProcessData *data;
   GError *error;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (op->priv->process_tree_view));
-
-  if (!gtk_tree_selection_get_selected (selection,
-                                        NULL,
-                                        &iter))
+  selection = gtk_list_view_get_model (GTK_LIST_VIEW (op->priv->process_list_view));
+  if (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (selection)) == GTK_INVALID_LIST_POSITION)
     goto out;
 
-  gtk_tree_model_get (GTK_TREE_MODEL (op->priv->process_list_store),
-                      &iter,
-                      2, &pid_to_kill,
-                      -1);
+  data = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (selection));
 
   /* TODO: We might want to either
    *
@@ -1389,7 +1405,7 @@ on_end_process_activated (GtkModelButton *button,
    *      But that's not how things work right now....
    */
   error = NULL;
-  if (!_gtk_mount_operation_kill_process (pid_to_kill, &error))
+  if (!_gtk_mount_operation_kill_process (data->pid, &error))
     {
       GtkWidget *dialog;
 
@@ -1418,82 +1434,38 @@ on_end_process_activated (GtkModelButton *button,
   ;
 }
 
-static gboolean
-do_popup_menu_for_process_tree_view (GtkWidget         *widget,
-                                     GdkEvent          *event,
-                                     GtkMountOperation *op)
+static void
+setup_process_row (GtkListItemFactory *factory,
+                   GtkListItem        *item)
 {
-  GtkWidget *menu;
-  GtkWidget *item;
-  double x, y;
+  GtkWidget *box, *picture, *label;
 
-  menu = gtk_popover_new ();
-  gtk_widget_set_parent (menu, widget);
-  gtk_widget_add_css_class (menu, "context-menu");
+  picture = gtk_picture_new ();
+  label = gtk_label_new (NULL);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
 
-  item = gtk_model_button_new ();
-  g_object_set (item, "text", _("_End Process"), NULL);
-  g_signal_connect (item, "clicked",
-                    G_CALLBACK (on_end_process_activated),
-                    op);
-  gtk_box_append (GTK_BOX (menu), item);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_box_append (GTK_BOX (box), picture);
+  gtk_box_append (GTK_BOX (box), label);
 
-  if (event && gdk_event_triggers_context_menu (event))
-    {
-      GtkTreePath *path;
-      GtkTreeSelection *selection;
-
-      gdk_event_get_position (event, &x, &y);
-      if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (op->priv->process_tree_view),
-                                         (int) x,
-                                         (int) y,
-                                         &path,
-                                         NULL,
-                                         NULL,
-                                         NULL))
-        {
-          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (op->priv->process_tree_view));
-          gtk_tree_selection_select_path (selection, path);
-          gtk_tree_path_free (path);
-        }
-      else
-        {
-          /* don't popup a menu if the user right-clicked in an area with no rows */
-          return FALSE;
-        }
-
-      gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
-    }
-
-  gtk_popover_popup (GTK_POPOVER (menu));
-  return TRUE;
-}
-
-static gboolean
-on_popup_menu_for_process_tree_view (GtkWidget *widget,
-                                     GVariant  *args,
-                                     gpointer   user_data)
-{
-  GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
-  return do_popup_menu_for_process_tree_view (widget, NULL, op);
+  gtk_list_item_set_child (item, box);
 }
 
 static void
-click_cb (GtkGesture *gesture,
-                int         n_press,
-                double      x,
-                double      y,
-                gpointer    user_data)
+bind_process_row (GtkListItemFactory *factory,
+                  GtkListItem        *item)
 {
-  GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
-  GdkEvent *event;
-  GdkEventSequence *sequence;
-  GtkWidget *widget;
+  GtkWidget *box, *picture, *label;
+  ProcessData *data;
 
-  sequence = gtk_gesture_get_last_updated_sequence (gesture);
-  event = gtk_gesture_get_last_event (gesture, sequence);
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  do_popup_menu_for_process_tree_view (widget, event, op);
+  data = gtk_list_item_get_item (item);
+
+  box = gtk_list_item_get_child (item);
+  picture = gtk_widget_get_first_child (box);
+  label = gtk_widget_get_next_sibling (picture);
+
+  gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (data->texture));
+  gtk_label_set_markup (GTK_LABEL (label), data->name);
 }
 
 static GtkWidget *
@@ -1507,20 +1479,15 @@ create_show_processes_dialog (GtkMountOperation *op,
   char       *primary;
   int        count, len = 0;
   GtkWidget *label;
-  GtkWidget *tree_view;
+  GtkWidget *list_view;
   GtkWidget *scrolled_window;
   GtkWidget *vbox;
+  GtkWidget *hbox;
   GtkWidget *content_area;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  GtkListStore *list_store;
   char *s;
-  gboolean use_header;
-  GtkGesture *gesture;
-  GtkEventController *controller;
-  GtkShortcutTrigger *trigger;
-  GtkShortcutAction *action;
-  GtkShortcut *shortcut;
+  GListStore *store;
+  GtkListItemFactory *factory;
+  GtkWidget *button;
 
   priv = op->priv;
 
@@ -1531,12 +1498,7 @@ create_show_processes_dialog (GtkMountOperation *op,
       primary = g_strndup (message, primary - message);
     }
 
-  g_object_get (gtk_settings_get_default (),
-                "gtk-dialogs-use-header", &use_header,
-                NULL);
-  dialog = g_object_new (GTK_TYPE_DIALOG,
-                         "use-header-bar", use_header,
-                         NULL);
+  dialog = gtk_dialog_new ();
 
   if (priv->parent_window != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), priv->parent_window);
@@ -1544,6 +1506,10 @@ create_show_processes_dialog (GtkMountOperation *op,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+  gtk_widget_set_margin_top (vbox, 12);
+  gtk_widget_set_margin_bottom (vbox, 12);
+  gtk_widget_set_margin_start (vbox, 12);
+  gtk_widget_set_margin_end (vbox, 12);
   gtk_box_append (GTK_BOX (content_area), vbox);
 
   if (secondary != NULL)
@@ -1564,11 +1530,16 @@ create_show_processes_dialog (GtkMountOperation *op,
   while (choices[len] != NULL)
     len++;
 
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   for (count = len - 1; count >= 0; count--)
-    gtk_dialog_add_button (GTK_DIALOG (dialog), choices[count], count);
-
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (show_processes_button_clicked), op);
+    {
+      button = gtk_button_new_with_label (choices[count]);
+      g_object_set_data (G_OBJECT (button), "choice", GINT_TO_POINTER (count));
+      g_signal_connect (button, "clicked", G_CALLBACK (show_processes_button_clicked), op);
+      gtk_box_append (GTK_BOX (hbox), button);
+    }
+  gtk_widget_set_halign (hbox, GTK_ALIGN_END);
+  gtk_box_append (GTK_BOX (vbox), hbox);
 
   priv->dialog = GTK_DIALOG (dialog);
   g_object_notify (G_OBJECT (op), "is-showing");
@@ -1576,67 +1547,38 @@ create_show_processes_dialog (GtkMountOperation *op,
   if (priv->parent_window == NULL && priv->display)
     gtk_window_set_display (GTK_WINDOW (dialog), priv->display);
 
-  tree_view = gtk_tree_view_new ();
-  gtk_widget_set_size_request (tree_view, 300, 120);
+  store = g_list_store_new (process_data_get_type ());
+  factory = gtk_signal_list_item_factory_new ();
 
-  column = gtk_tree_view_column_new ();
-  renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-                                       "texture", 0,
-                                       NULL);
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer,
-                "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
-                "ellipsize-set", TRUE,
-                NULL);
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-                                       "markup", 1,
-                                       NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_process_row), op);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_process_row), op);
 
+  list_view = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (store))), factory);
+
+  gtk_widget_set_size_request (list_view, 300, 120);
 
   scrolled_window = gtk_scrolled_window_new ();
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
   gtk_scrolled_window_set_has_frame (GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
 
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), list_view);
   gtk_box_append (GTK_BOX (vbox), scrolled_window);
 
-  controller = gtk_shortcut_controller_new ();
-  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
-                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
-  action = gtk_callback_action_new (on_popup_menu_for_process_tree_view,
-                                    op,
-                                    NULL);
-  shortcut = gtk_shortcut_new_with_arguments (trigger, action, "s", "sv");
-  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
-  gtk_widget_add_controller (GTK_WIDGET (tree_view), controller);
+  button = gtk_button_new_with_mnemonic (_("End Process"));
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_end_process_activated), op);
+  gtk_box_append (GTK_BOX (vbox), button);
 
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (click_cb), op);
-  gtk_widget_add_controller (tree_view, GTK_EVENT_CONTROLLER (gesture));
-
-  list_store = gtk_list_store_new (3,
-                                   GDK_TYPE_TEXTURE,
-                                   G_TYPE_STRING,
-                                   G_TYPE_INT);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (list_store));
-
-  priv->process_list_store = list_store;
-  priv->process_tree_view = tree_view;
+  priv->process_list_store = store;
+  priv->process_list_view = list_view;
   /* set pointers to NULL when dialog goes away */
   g_object_add_weak_pointer (G_OBJECT (priv->process_list_store), (gpointer *) &priv->process_list_store);
-  g_object_add_weak_pointer (G_OBJECT (priv->process_tree_view), (gpointer *) &priv->process_tree_view);
+  g_object_add_weak_pointer (G_OBJECT (priv->process_list_view), (gpointer *) &priv->process_list_view);
 
-  g_object_unref (list_store);
   g_object_ref (op);
 
   return dialog;
