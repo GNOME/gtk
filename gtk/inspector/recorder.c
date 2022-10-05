@@ -594,7 +594,6 @@ setup_label (GtkSignalListItemFactory *factory,
 
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.);
-  gtk_widget_set_valign (label, GTK_ALIGN_START);
   gtk_list_item_set_child (list_item, label);
 }
 
