@@ -31,13 +31,14 @@
 #include "gtk-builder-tool.h"
 
 static GType
-make_fake_type (const char *type_name,
+make_fake_type (GtkBuilder *builder,
+		const char *type_name,
                 const char *parent_name)
 {
   GType parent_type;
   GTypeQuery query;
 
-  parent_type = g_type_from_name (parent_name);
+  parent_type = gtk_builder_get_type_from_name (builder, parent_name);
   if (parent_type == G_TYPE_INVALID)
     {
       g_printerr ("Failed to lookup template parent type %s\n", parent_name);
@@ -65,12 +66,14 @@ do_validate_template (const char *filename,
   GError *error = NULL;
   int ret;
 
+  builder = gtk_builder_new ();
+
   /* Only make a fake type if it doesn't exist yet.
    * This lets us e.g. validate the GtkFileChooserWidget template.
    */
-  template_type = g_type_from_name (type_name);
+  template_type = gtk_builder_get_type_from_name (builder, type_name);
   if (template_type == G_TYPE_INVALID)
-    template_type = make_fake_type (type_name, parent_name);
+    template_type = make_fake_type (builder, type_name, parent_name);
 
   object = g_object_new (template_type, NULL);
   if (!object)
@@ -79,7 +82,6 @@ do_validate_template (const char *filename,
       exit (1);
     }
 
-  builder = gtk_builder_new ();
   ret = gtk_builder_extend_with_template (builder, object , template_type, " ", 1, &error);
   if (ret)
     ret = gtk_builder_add_from_file (builder, filename, &error);
