@@ -656,6 +656,33 @@ gtk_accessible_role_to_name (GtkAccessibleRole  role,
   return role_names[role];
 }
 
+/*< private >
+ * gtk_accessible_role_is_range_subclass:
+ * @role: a `GtkAccessibleRole`
+ * 
+ * Checks if @role is considered to be a subclass of %GTK_ACCESSIBLE_ROLE_RANGE
+ * according to the WAI-ARIA specification.
+ * 
+ * Returns: whether the @role is range-like
+ */
+gboolean
+gtk_accessible_role_is_range_subclass (GtkAccessibleRole role)
+{
+  /* Same trick as in gtkatcontext.c */
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_METER:
+    case GTK_ACCESSIBLE_ROLE_PROGRESS_BAR:
+    case GTK_ACCESSIBLE_ROLE_SCROLLBAR:
+    case GTK_ACCESSIBLE_ROLE_SLIDER:
+    case GTK_ACCESSIBLE_ROLE_SPIN_BUTTON:
+      return TRUE;
+    default:
+      break;
+    }
+  return FALSE;
+}
+
 /*<private>
  * gtk_accessible_platform_changed:
  * @self: a `GtkAccessible`

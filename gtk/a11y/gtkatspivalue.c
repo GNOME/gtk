@@ -24,14 +24,9 @@
 
 #include "a11y/atspi/atspi-value.h"
 
+#include "gtkaccessiblerangeprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkdebug.h"
-#include "gtklevelbar.h"
-#include "gtkpaned.h"
-#include "gtkprogressbar.h"
-#include "gtkrange.h"
-#include "gtkscalebutton.h"
-#include "gtkspinbutton.h"
 
 #include <gio/gio.h>
 
@@ -45,31 +40,58 @@ handle_value_get_property (GDBusConnection  *connection,
                            gpointer          user_data)
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (user_data);
+
+  /* Numeric attributes */
   struct {
     const char *name;
     GtkAccessibleProperty property;
-  } properties[] = {
+  } num_properties[] = {
     { "MinimumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MIN },
     { "MaximumValue", GTK_ACCESSIBLE_PROPERTY_VALUE_MAX },
     { "CurrentValue", GTK_ACCESSIBLE_PROPERTY_VALUE_NOW },
   };
-  int i;
 
-  for (i = 0; i < G_N_ELEMENTS (properties); i++)
+  /* String attributes */
+  struct {
+    const char *name;
+    GtkAccessibleProperty property;
+  } str_properties[] = {
+    { "Text", GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT },
+  };
+
+  for (int i = 0; i < G_N_ELEMENTS (num_properties); i++)
     {
-      if (g_strcmp0 (property_name,  properties[i].name) == 0)
+      if (g_strcmp0 (property_name,  num_properties[i].name) == 0)
         {
-          if (gtk_at_context_has_accessible_property (ctx, properties[i].property))
+          if (gtk_at_context_has_accessible_property (ctx, num_properties[i].property))
             {
-              GtkAccessibleValue *value;
+              GtkAccessibleValue *value =
+                gtk_at_context_get_accessible_property (ctx, num_properties[i].property);
 
-              value = gtk_at_context_get_accessible_property (ctx, properties[i].property);
               return g_variant_new_double (gtk_number_accessible_value_get (value));
             }
         }
     }
 
-  /* fall back for a) MinimumIncrement b) widgets that should have the
+  for (int i = 0; i < G_N_ELEMENTS (str_properties); i++)
+    {
+      if (g_strcmp0 (property_name, str_properties[i].name) == 0)
+        {
+          if (gtk_at_context_has_accessible_property (ctx, str_properties[i].property))
+            {
+              GtkAccessibleValue *value =
+                gtk_at_context_get_accessible_property (ctx, str_properties[i].property);
+
+              return g_variant_new_string (gtk_string_accessible_value_get (value));
+            }
+        }
+    }
+
+  /* Special-case MinimumIncrement as it does not have an ARIA counterpart */
+  if (g_strcmp0 (property_name, "MinimumIncrement") == 0)
+    return g_variant_new_double (0.0);
+
+  /* fall back for widgets that should have the
    * properties but don't
    */
   return g_variant_new_double (0.0);
@@ -86,23 +108,10 @@ handle_value_set_property (GDBusConnection  *connection,
                            gpointer          user_data)
 {
   GtkATContext *self = user_data;
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (self));
+  GtkAccessibleRange *range = GTK_ACCESSIBLE_RANGE (gtk_at_context_get_accessible (self));
 
   if (g_strcmp0 (property_name, "CurrentValue") == 0)
-    {
-      /* we only allow setting values if that is part of the user-exposed
-       * functionality of the widget.
-       */
-      if (GTK_IS_RANGE (widget))
-        gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
-      else if (GTK_IS_PANED (widget))
-        gtk_paned_set_position (GTK_PANED (widget), (int)(g_variant_get_double (value) + 0.5));
-      else if (GTK_IS_SPIN_BUTTON (widget))
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), g_variant_get_double (value));
-      else if (GTK_IS_SCALE_BUTTON (widget))
-        gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), g_variant_get_double (value));
-      return TRUE;
-    }
+    return gtk_accessible_range_set_current_value (range, g_variant_get_double (value));
 
   return FALSE;
 }
@@ -116,14 +125,8 @@ static const GDBusInterfaceVTable value_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_value_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_LEVEL_BAR (accessible) ||
-      GTK_IS_PANED (accessible) ||
-      GTK_IS_PROGRESS_BAR (accessible) ||
-      GTK_IS_RANGE (accessible) ||
-      GTK_IS_SCALE_BUTTON (accessible) ||
-      GTK_IS_SPIN_BUTTON (accessible))
+  if (GTK_IS_ACCESSIBLE_RANGE (accessible))
     return &value_vtable;
 
   return NULL;
 }
-

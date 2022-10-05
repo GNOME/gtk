@@ -36,6 +36,7 @@
 
 #include "gtkscalebutton.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbuttonprivate.h"
@@ -159,11 +160,31 @@ static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScr
                                                            double                    dy,
                                                            GtkScaleButton           *button);
 
+static void     gtk_scale_button_accessible_range_init    (GtkAccessibleRangeInterface *iface);
+
+
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkScaleButton)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
+                                                gtk_scale_button_accessible_range_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static guint signals[LAST_SIGNAL] = { 0, };
+
+static gboolean
+accessible_range_set_current_value (GtkAccessibleRange *accessible_range,
+                                    double              value)
+{
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (accessible_range), value);
+
+  return TRUE;
+}
+
+static void
+gtk_scale_button_accessible_range_init (GtkAccessibleRangeInterface *iface)
+{
+  iface->set_current_value = accessible_range_set_current_value;
+}
 
 static void
 gtk_scale_button_class_init (GtkScaleButtonClass *klass)
