@@ -17,6 +17,10 @@
         <property name="vscrollbar-policy">always</property>
         <child>
           <object class="GtkColumnView" id="view">
+            <style>
+              <class name="data-table"/>
+              <class name="list"/>
+            </style>
             <child>
               <object class="GtkColumnViewColumn">
                 <property name="title" translatable="yes">Label</property>

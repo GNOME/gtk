@@ -135,6 +135,10 @@
                                 <property name="propagate-natural-width">1</property>
                                 <child>
                                   <object class="GtkColumnView" id="node_property_tree">
+                                    <style>
+                                      <class name="data-table"/>
+                                      <class name="list"/>
+                                    </style>
                                     <child>
                                       <object class="GtkColumnViewColumn">
                                         <property name="title" translatable="yes">Property</property>
@@ -174,6 +178,10 @@
                             <property name="propagate-natural-width">1</property>
                             <child>
                               <object class="GtkColumnView" id="event_property_tree">
+                                <style>
+                                  <class name="data-table"/>
+                                  <class name="list"/>
+                                </style>
                                 <child>
                                   <object class="GtkColumnViewColumn">
                                     <property name="title" translatable="yes">Property</property>
