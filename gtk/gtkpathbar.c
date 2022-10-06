@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkpathbar.h"
+#include "gtkpathbarprivate.h"
 
 #include <string.h>
 

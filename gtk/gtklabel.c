@@ -35,7 +35,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 #include "gtkprivate.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
@@ -43,7 +43,7 @@
 #include "gtkshow.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
-#include "gtktextutil.h"
+#include "gtktextutilprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

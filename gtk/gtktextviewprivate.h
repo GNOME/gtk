@@ -20,7 +20,7 @@
 #define __GTK_TEXT_VIEW_PRIVATE_H__
 
 #include "gtktextview.h"
-#include "gtktextattributes.h"
+#include "gtktextattributesprivate.h"
 #include "gtkcssnodeprivate.h"
 
 G_BEGIN_DECLS

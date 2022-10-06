@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#include "gtktreedatalist.h"
+#include "gtktreedatalistprivate.h"
 #include <string.h>
 
 /* node allocation

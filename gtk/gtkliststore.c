@@ -22,7 +22,7 @@
 #include <gobject/gvaluecollector.h>
 #include "gtktreemodel.h"
 #include "gtkliststore.h"
-#include "gtktreedatalist.h"
+#include "gtktreedatalistprivate.h"
 #include "gtktreednd.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"

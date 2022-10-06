@@ -22,7 +22,7 @@
 
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtktrashmonitor.h"
+#include "gtktrashmonitorprivate.h"
 
 #define UPDATE_RATE_SECONDS 1
 

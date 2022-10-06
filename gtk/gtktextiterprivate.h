@@ -30,8 +30,8 @@
 G_BEGIN_DECLS
 
 #include <gtk/gtktextiter.h>
-#include <gtk/gtktextbtree.h>
-#include <gtk/gtktextattributes.h>
+#include <gtk/gtktextbtreeprivate.h>
+#include <gtk/gtktextattributesprivate.h>
 
 GtkTextLineSegment *_gtk_text_iter_get_indexable_segment      (const GtkTextIter *iter);
 GtkTextLineSegment *_gtk_text_iter_get_any_segment            (const GtkTextIter *iter);

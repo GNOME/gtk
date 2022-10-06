@@ -45,7 +45,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
 #include "gtkpaned.h"
-#include "gtkpathbar.h"
+#include "gtkpathbarprivate.h"
 #include "gtkplacessidebarprivate.h"
 #include "gtkplacesviewprivate.h"
 #include "gtkprivate.h"

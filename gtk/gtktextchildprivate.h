@@ -50,7 +50,7 @@
 #ifndef __GTK_TEXT_CHILD_PRIVATE_H__
 #define __GTK_TEXT_CHILD_PRIVATE_H__
 
-#include <gtk/gtktexttypes.h>
+#include <gtk/gtktexttypesprivate.h>
 
 G_BEGIN_DECLS
 

@@ -31,11 +31,11 @@
 #include "gtktextbuffer.h"
 #include "gtktexthistoryprivate.h"
 #include "gtktextbufferprivate.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtktexttagprivate.h"
 #include "gtktexttagtableprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 #include "gtkprivate.h"
 
 #define DEFAULT_MAX_UNDO 200

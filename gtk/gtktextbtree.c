@@ -53,7 +53,7 @@
  */
 
 #include "config.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -65,8 +65,8 @@
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"
-#include "gtktextsegment.h"
-#include "gtkpango.h"
+#include "gtktextsegmentprivate.h"
+#include "gtkpangoprivate.h"
 #include "gdkprivate.h"
 
 /*

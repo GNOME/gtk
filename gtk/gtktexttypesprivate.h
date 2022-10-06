@@ -22,8 +22,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_TYPES_H__
-#define __GTK_TEXT_TYPES_H__
+#ifndef __GTK_TEXT_TYPES_PRIVATE_H__
+#define __GTK_TEXT_TYPES_PRIVATE_H__
 
 #include <gtk/gtk.h>
 #include <gtk/gtktexttagprivate.h>

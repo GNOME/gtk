@@ -21,7 +21,7 @@
 
 #include "gsk/gsk.h"
 #include "gsk/gskrendernodeprivate.h"
-#include "gskpango.h"
+#include "gskpangoprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gtktextlayoutprivate.h"
 #include "gtktextviewprivate.h"

@@ -35,7 +35,7 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
-#include "gtk/gskpango.h"
+#include "gtk/gskpangoprivate.h"
 
 #define GDK_ARRAY_NAME gtk_snapshot_nodes
 #define GDK_ARRAY_TYPE_NAME GtkSnapshotNodes

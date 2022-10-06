@@ -41,7 +41,7 @@
 #include "gtkmountoperation.h"
 #include "gtkscrolledwindow.h"
 #include "gtksettings.h"
-#include "gtktrashmonitor.h"
+#include "gtktrashmonitorprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkpopovermenu.h"

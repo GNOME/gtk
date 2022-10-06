@@ -1,4 +1,4 @@
-/* gtkpathbar.h
+/* gtkpathbarprivate.h
  * Copyright (C) 2004  Red Hat, Inc.,  Jonathan Blandford <jrb@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PATH_BAR_H__
-#define __GTK_PATH_BAR_H__
+#ifndef __GTK_PATH_BAR_PRIVATE_H__
+#define __GTK_PATH_BAR_PRIVATE_H__
 
 #include "gtkwidget.h"
 
@@ -38,4 +38,4 @@ void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 
 G_END_DECLS
 
-#endif /* __GTK_PATH_BAR_H__ */
+#endif /* __GTK_PATH_BAR_PRIVATE_H__ */

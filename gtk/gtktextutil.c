@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include "gtktextview.h"
-#include "gtktextutil.h"
+#include "gtktextutilprivate.h"
 
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkstylecontextprivate.h"

@@ -18,7 +18,7 @@
 
 #include "config.h"
 #include "gtkatspipangoprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 
 void
 gtk_pango_get_font_attributes (PangoFontDescription *font,

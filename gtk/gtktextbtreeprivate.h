@@ -22,8 +22,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_BTREE_H__
-#define __GTK_TEXT_BTREE_H__
+#ifndef __GTK_TEXT_BTREE_PRIVATE_H__
+#define __GTK_TEXT_BTREE_PRIVATE_H__
 
 #if 0
 #define DEBUG_VALIDATION_AND_SCROLLING
@@ -39,7 +39,7 @@
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextmark.h>
 #include <gtk/gtktextchild.h>
-#include <gtk/gtktextsegment.h>
+#include <gtk/gtktextsegmentprivate.h>
 #include <gtk/gtktextiter.h>
 
 G_BEGIN_DECLS

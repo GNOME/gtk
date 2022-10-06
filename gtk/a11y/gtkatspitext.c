@@ -35,7 +35,7 @@
 #include "gtkentryprivate.h"
 #include "gtkinscriptionprivate.h"
 #include "gtklabelprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 #include "gtkpasswordentryprivate.h"
 #include "gtksearchentryprivate.h"
 #include "gtkspinbuttonprivate.h"
