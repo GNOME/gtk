@@ -5606,8 +5606,6 @@ gtk_entry_move_cursor (GtkEntry       *entry,
   GtkEntryPrivate *priv = entry->priv;
   gint new_pos = priv->current_pos;
 
-  gtk_entry_reset_im_context (entry);
-
   if (priv->current_pos != priv->selection_bound && !extend_selection)
     {
       /* If we have a current selection and aren't extending it, move to the
@@ -5732,6 +5730,9 @@ gtk_entry_move_cursor (GtkEntry       *entry,
     gtk_editable_set_position (GTK_EDITABLE (entry), new_pos);
   
   gtk_entry_pend_cursor_blink (entry);
+
+  priv->need_im_reset = TRUE;
+  gtk_entry_reset_im_context (entry);
 }
 
 static void
@@ -5761,8 +5762,6 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
   gint end_pos = priv->current_pos;
   gint old_n_bytes = gtk_entry_buffer_get_bytes (get_buffer (entry));
 
-  gtk_entry_reset_im_context (entry);
-
   if (!priv->editable)
     {
       gtk_widget_error_bell (GTK_WIDGET (entry));
@@ -5772,6 +5771,8 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
   if (priv->selection_bound != priv->current_pos)
     {
       gtk_editable_delete_selection (editable);
+      priv->need_im_reset = TRUE;
+      gtk_entry_reset_im_context (entry);
       return;
     }
   
@@ -5834,6 +5835,11 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
 
   if (gtk_entry_buffer_get_bytes (get_buffer (entry)) == old_n_bytes)
     gtk_widget_error_bell (GTK_WIDGET (entry));
+  else
+    {
+      priv->need_im_reset = TRUE;
+      gtk_entry_reset_im_context (entry);
+    }
 
   gtk_entry_pend_cursor_blink (entry);
 }
@@ -5845,8 +5851,6 @@ gtk_entry_backspace (GtkEntry *entry)
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint prev_pos;
 
-  gtk_entry_reset_im_context (entry);
-
   if (!priv->editable)
     {
       gtk_widget_error_bell (GTK_WIDGET (entry));
@@ -5856,6 +5860,8 @@ gtk_entry_backspace (GtkEntry *entry)
   if (priv->selection_bound != priv->current_pos)
     {
       gtk_editable_delete_selection (editable);
+      priv->need_im_reset = TRUE;
+      gtk_entry_reset_im_context (entry);
       return;
     }
 
@@ -5902,6 +5908,9 @@ gtk_entry_backspace (GtkEntry *entry)
           gtk_editable_delete_text (editable, prev_pos, priv->current_pos);
 	}
       
+      priv->need_im_reset = TRUE;
+      gtk_entry_reset_im_context (entry);
+
       g_free (log_attrs);
     }
   else
@@ -6143,10 +6152,8 @@ gtk_entry_enter_text (GtkEntry       *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint tmp_pos;
-  gboolean old_need_im_reset;
   guint text_length;
 
-  old_need_im_reset = priv->need_im_reset;
   priv->need_im_reset = FALSE;
 
   if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
@@ -6164,8 +6171,6 @@ gtk_entry_enter_text (GtkEntry       *entry,
   tmp_pos = priv->current_pos;
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
   gtk_editable_set_position (editable, tmp_pos);
-
-  priv->need_im_reset = old_need_im_reset;
 }
 
 /* All changes to priv->current_pos and priv->selection_bound
