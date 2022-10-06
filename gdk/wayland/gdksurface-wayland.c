@@ -1419,10 +1419,18 @@ configure_toplevel_geometry (GdkSurface *surface)
       GdkRectangle monitor_geometry;
 
       monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      gdk_monitor_get_geometry (monitor, &monitor_geometry);
-      bounds_width = monitor_geometry.width;
-      bounds_height = monitor_geometry.height;
-      g_object_unref (monitor);
+      if (monitor)
+        {
+          gdk_monitor_get_geometry (monitor, &monitor_geometry);
+          bounds_width = monitor_geometry.width;
+          bounds_height = monitor_geometry.height;
+          g_object_unref (monitor);
+        }
+      else
+        {
+          bounds_width = 0;
+          bounds_height = 0;
+        }
     }
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
