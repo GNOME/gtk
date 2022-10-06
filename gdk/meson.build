@@ -161,6 +161,8 @@ gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_MACOS', macos_enabled)
+gdkconfig_cdata.set('GDK_RENDERING_CAIRO', true)
+gdkconfig_cdata.set('GDK_RENDERING_GL', true)
 gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
 
 gdkconfig = configure_file(
