@@ -42,9 +42,130 @@
 #include "gtktreeselection.h"
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
+#include "gtknoselection.h"
+#include "gtkcolumnview.h"
+#include "gtkcolumnviewcolumn.h"
 
 #include <glib/gi18n-lib.h>
 #include <gtk/css/gtkcss.h>
+
+/* {{{ CssProperty object */
+
+typedef struct _CssProperty CssProperty;
+
+G_DECLARE_FINAL_TYPE (CssProperty, css_property, CSS, PROPERTY, GObject);
+
+struct _CssProperty
+{
+  GObject parent;
+
+  char *name;
+  char *value;
+  char *location;
+};
+
+enum {
+  CSS_PROPERTY_PROP_NAME = 1,
+  CSS_PROPERTY_PROP_VALUE,
+  CSS_PROPERTY_PROP_LOCATION,
+  Css_PROPERTY_NUM_PROPERTIES
+};
+
+G_DEFINE_TYPE (CssProperty, css_property, G_TYPE_OBJECT);
+
+static void
+css_property_init (CssProperty *self)
+{
+}
+
+static void
+css_property_finalize (GObject *object)
+{
+  CssProperty *self = CSS_PROPERTY (object);
+
+  g_free (self->name);
+  g_free (self->value);
+  g_free (self->location);
+
+  G_OBJECT_CLASS (css_property_parent_class)->finalize (object);
+}
+
+static void
+css_property_get_property (GObject    *object,
+                           guint       property_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  CssProperty *self = CSS_PROPERTY (object);
+
+  switch (property_id)
+    {
+    case CSS_PROPERTY_PROP_NAME:
+      g_value_set_string (value, self->name);
+      break;
+
+    case CSS_PROPERTY_PROP_VALUE:
+      g_value_set_string (value, self->value);
+      break;
+
+    case CSS_PROPERTY_PROP_LOCATION:
+      g_value_set_string (value, self->location);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+css_property_class_init (CssPropertyClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GParamSpec *pspec;
+
+  object_class->finalize = css_property_finalize;
+  object_class->get_property = css_property_get_property;
+
+  pspec = g_param_spec_string ("name", NULL, NULL,
+                               NULL,
+                               G_PARAM_READABLE |
+                               G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_NAME, pspec);
+
+  pspec = g_param_spec_string ("value", NULL, NULL,
+                               NULL,
+                               G_PARAM_READABLE |
+                               G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_VALUE, pspec);
+
+  pspec = g_param_spec_string ("location", NULL, NULL,
+                               NULL,
+                               G_PARAM_READABLE |
+                               G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_LOCATION, pspec);
+}
+
+static CssProperty *
+css_property_new (const char *name,
+                  const char *value,
+                  const char *location)
+{
+  CssProperty *self;
+
+  self = g_object_new (css_property_get_type (), NULL);
+
+  self->name = g_strdup (name);
+  self->value = g_strdup (value);
+  self->location = g_strdup (location);
+
+  return self;
+}
+
+/* }}} */
 
 enum {
   COLUMN_NODE_NAME,
@@ -54,13 +175,6 @@ enum {
   COLUMN_NODE_STATE,
   /* add more */
   N_NODE_COLUMNS
-};
-
-enum
-{
-  COLUMN_PROP_NAME,
-  COLUMN_PROP_VALUE,
-  COLUMN_PROP_LOCATION
 };
 
 enum
@@ -78,10 +192,8 @@ struct _GtkInspectorCssNodeTreePrivate
   GtkTreeViewColumn *node_name_column;
   GtkTreeViewColumn *node_id_column;
   GtkTreeViewColumn *node_classes_column;
-  GtkListStore *prop_model;
+  GListStore *prop_model;
   GtkWidget *prop_tree;
-  GtkTreeViewColumn *prop_name_column;
-  GHashTable *prop_iters;
   GtkCssNode *node;
 };
 
@@ -218,7 +330,7 @@ gtk_inspector_css_node_tree_finalize (GObject *object)
 
   gtk_inspector_css_node_tree_unset_node (cnt);
 
-  g_hash_table_unref (cnt->priv->prop_iters);
+  g_object_unref (cnt->priv->prop_model);
 
   G_OBJECT_CLASS (gtk_inspector_css_node_tree_parent_class)->finalize (object);
 }
@@ -245,9 +357,7 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_id_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, node_classes_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_name_column);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_name_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssNodeTree, prop_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
@@ -343,10 +453,74 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
 }
 
 static void
+setup_label (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+setup_value (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (label), 20);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_name (GtkSignalListItemFactory *factory,
+           GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  CssProperty *property;
+
+  property = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+  gtk_label_set_text (GTK_LABEL (label), property->name);
+}
+
+static void
+bind_value (GtkSignalListItemFactory *factory,
+            GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  CssProperty *property;
+
+  property = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+  gtk_label_set_text (GTK_LABEL (label), property->value);
+}
+
+static void
+bind_location (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  CssProperty *property;
+
+  property = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+  gtk_label_set_text (GTK_LABEL (label), property->location);
+}
+
+static void
 gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
 {
   GtkInspectorCssNodeTreePrivate *priv;
   int i;
+  GtkListItemFactory *factory;
+  GtkColumnViewColumn *column;
+  GtkSorter *sorter;
+  GtkSortListModel *sort_model;
 
   cnt->priv = gtk_inspector_css_node_tree_get_instance_private (cnt);
   gtk_widget_init_template (GTK_WIDGET (cnt));
@@ -362,25 +536,51 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_tree), priv->node_model);
   g_object_unref (priv->node_model);
 
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (cnt->priv->prop_model),
-                                        COLUMN_PROP_NAME,
-                                        GTK_SORT_ASCENDING);
+  priv->prop_model = g_list_store_new (css_property_get_type ());
 
-  priv->prop_iters = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                            NULL, (GDestroyNotify) gtk_tree_iter_free);
+  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (priv->prop_model),
+                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (priv->prop_tree)));
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (priv->prop_tree),
+                             GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (sort_model))));
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (priv->prop_tree)), 0);
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_name), NULL);
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (css_property_get_type (), NULL, "name")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (priv->prop_tree), column, GTK_SORT_ASCENDING);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (priv->prop_tree)), 1);
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_value), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_value), NULL);
+  gtk_column_view_column_set_factory (column, factory);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (priv->prop_tree)), 2);
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_location), NULL);
+  gtk_column_view_column_set_factory (column, factory);
+  g_object_unref (factory);
+  g_object_unref (column);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
       GtkCssStyleProperty *prop;
-      GtkTreeIter iter;
       const char *name;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
 
-      gtk_list_store_append (cnt->priv->prop_model, &iter);
-      gtk_list_store_set (cnt->priv->prop_model, &iter, COLUMN_PROP_NAME, name, -1);
-      g_hash_table_insert (cnt->priv->prop_iters, (gpointer)name, gtk_tree_iter_copy (&iter));
+      g_list_store_append (priv->prop_model, css_property_new (name, NULL, NULL));
     }
 }
 
@@ -437,15 +637,13 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
     {
       GtkCssStyleProperty *prop;
       const char *name;
-      GtkTreeIter *iter;
       GtkCssSection *section;
       char *location;
       char *value;
+      CssProperty *property;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
-
-      iter = (GtkTreeIter *)g_hash_table_lookup (priv->prop_iters, name);
 
       if (new_style)
         {
@@ -463,11 +661,8 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
           location = NULL;
         }
 
-      gtk_list_store_set (priv->prop_model,
-                          iter,
-                          COLUMN_PROP_VALUE, value,
-                          COLUMN_PROP_LOCATION, location,
-                          -1);
+      property = css_property_new (name, value, location);
+      g_list_store_splice (priv->prop_model, i, 1, (gpointer *)&property, 1);
 
       g_free (location);
       g_free (value);
@@ -528,4 +723,4 @@ gtk_inspector_css_node_tree_set_display (GtkInspectorCssNodeTree *cnt,
   g_free (theme_name);
 }
 
-// vim: set et sw=2 ts=2:
+/* vim:set foldmethod=marker expandtab: */
