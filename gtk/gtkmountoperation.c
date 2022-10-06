@@ -1568,7 +1568,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), list_view);
   gtk_box_append (GTK_BOX (vbox), scrolled_window);
 
-  button = gtk_button_new_with_mnemonic (_("End Process"));
+  button = gtk_button_new_with_mnemonic (_("_End Process"));
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   g_signal_connect (button, "clicked", G_CALLBACK (on_end_process_activated), op);
   gtk_box_append (GTK_BOX (vbox), button);
