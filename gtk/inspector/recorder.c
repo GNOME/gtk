@@ -62,7 +62,7 @@
 
 /* {{{ ObjectProperty object */
 
-typedef struct _ObjectProperty RenderNodeProperty;
+typedef struct _ObjectProperty ObjectProperty;
 
 G_DECLARE_FINAL_TYPE (ObjectProperty, object_property, OBJECT, PROPERTY, GObject);
 
