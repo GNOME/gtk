@@ -19,7 +19,7 @@
 #define __GTK_TEXT_BUFFER_PRIVATE_H__
 
 #include <gtk/gtktextbuffer.h>
-#include "gtktexttypes.h"
+#include "gtktexttypesprivate.h"
 
 G_BEGIN_DECLS
 

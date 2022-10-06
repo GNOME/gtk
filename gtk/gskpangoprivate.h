@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_PANGO_H__
-#define __GSK_PANGO_H__
+#ifndef __GSK_PANGO_PRIVATE_H__
+#define __GSK_PANGO_PRIVATE_H__
 
 #include <pango/pango.h>
 #include "gtk/gtksnapshot.h"
@@ -85,4 +85,4 @@ void              gsk_pango_renderer_release   (GskPangoRenderer      *crenderer
 
 G_END_DECLS
 
-#endif /* __GSK_PANGO_H__ */
+#endif /* __GSK_PANGO_PRIVATE_H__ */

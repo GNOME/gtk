@@ -23,7 +23,7 @@
  */
 
 #include "config.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 #include <pango/pangocairo.h>
 #include "gtkbuilderprivate.h"
 

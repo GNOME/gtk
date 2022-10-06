@@ -15,8 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TREE_DATA_LIST_H__
-#define __GTK_TREE_DATA_LIST_H__
+#ifndef __GTK_TREE_DATA_LIST_PRIVATE_H__
+#define __GTK_TREE_DATA_LIST_PRIVATE_H__
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
@@ -78,4 +78,4 @@ GList                 *_gtk_tree_data_list_set_header  (GList                  *
 							gpointer                data,
 							GDestroyNotify          destroy);
 
-#endif /* __GTK_TREE_DATA_LIST_H__ */
+#endif /* __GTK_TREE_DATA_LIST_PRIVATE_H__ */

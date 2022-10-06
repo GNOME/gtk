@@ -79,7 +79,7 @@
 #define __GTK_TEXT_LAYOUT_PRIVATE_H__
 
 #include <gtk/gtk.h>
-#include <gtk/gtktextattributes.h>
+#include <gtk/gtktextattributesprivate.h>
 
 G_BEGIN_DECLS
 

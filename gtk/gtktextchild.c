@@ -49,7 +49,7 @@
 
 #include "config.h"
 #include "gtktextchild.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include "gtktextlayoutprivate.h"
 #include "gtkprivate.h"
 

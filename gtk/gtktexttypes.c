@@ -23,7 +23,7 @@
  */
 
 #include "config.h"
-#include "gtktexttypes.h"
+#include "gtktexttypesprivate.h"
 
 /* These are used to represent embedded non-character objects
  * if you return a string representation of a text buffer

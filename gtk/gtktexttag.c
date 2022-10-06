@@ -76,7 +76,7 @@
 #include <string.h>
 
 #include "gtktexttag.h"
-#include "gtktexttypes.h"
+#include "gtktexttypesprivate.h"
 #include "gtktexttagtable.h"
 #include "gtktexttagtableprivate.h"
 #include "gtkmarshalers.h"

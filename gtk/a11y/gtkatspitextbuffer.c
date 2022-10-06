@@ -21,7 +21,7 @@
 #include "gtkatspipangoprivate.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextviewprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 
 void
 gtk_text_view_add_default_attributes (GtkTextView     *view,

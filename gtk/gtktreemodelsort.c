@@ -22,7 +22,7 @@
 #include "gtktreemodelsort.h"
 #include "gtktreesortable.h"
 #include "gtktreestore.h"
-#include "gtktreedatalist.h"
+#include "gtktreedatalistprivate.h"
 #include "gtkprivate.h"
 #include "gtktreednd.h"
 

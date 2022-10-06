@@ -24,7 +24,7 @@
 
 #include "config.h"
 #include "gtktextiter.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkdebug.h"

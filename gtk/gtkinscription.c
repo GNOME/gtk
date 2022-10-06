@@ -23,7 +23,7 @@
 
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

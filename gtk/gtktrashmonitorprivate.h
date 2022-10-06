@@ -18,8 +18,8 @@
  * Authors: Federico Mena Quintero <federico@gnome.org>
  */
 
-#ifndef __GTK_TRASH_MONITOR_H__
-#define __GTK_TRASH_MONITOR_H__
+#ifndef __GTK_TRASH_MONITOR_PRIVATE_H__
+#define __GTK_TRASH_MONITOR_PRIVATE_H__
 
 #include <gio/gio.h>
 
@@ -44,4 +44,4 @@ gboolean _gtk_trash_monitor_get_has_trash (GtkTrashMonitor *monitor);
 
 G_END_DECLS
 
-#endif /* __GTK_TRASH_MONITOR_H__ */
+#endif /* __GTK_TRASH_MONITOR_PRIVATE_H__ */

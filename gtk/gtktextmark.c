@@ -48,7 +48,7 @@
  */
 
 #include "config.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include "gtkprivate.h"
 
 

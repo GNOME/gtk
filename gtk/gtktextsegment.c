@@ -51,7 +51,7 @@
  */
 
 #include "config.h"
-#include "gtktextbtree.h"
+#include "gtktextbtreeprivate.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

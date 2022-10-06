@@ -34,7 +34,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkrendernodepaintableprivate.h"
-#include "gtktextutil.h"
+#include "gtktextutilprivate.h"
 
 
 /**

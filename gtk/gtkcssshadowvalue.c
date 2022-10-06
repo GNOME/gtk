@@ -25,7 +25,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtksnapshotprivate.h"
-#include "gtkpango.h"
+#include "gtkpangoprivate.h"
 
 #include "gsk/gskcairoblurprivate.h"
 #include "gsk/gskroundedrectprivate.h"

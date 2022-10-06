@@ -21,7 +21,7 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
-#include "gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
+#include "gtk/gtktexttypesprivate.h" /* Private header, for UNKNOWN_CHAR */
 #include "gtk/gtktextbufferprivate.h" /* Private header */
 
 static void

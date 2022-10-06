@@ -49,7 +49,7 @@
 
 #include "config.h"
 
-#include "gtktextattributes.h"
+#include "gtktextattributesprivate.h"
 #include "gtktexttagprivate.h"
 
 /**

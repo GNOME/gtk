@@ -25,7 +25,7 @@
 
 #include "gtkfilechooserutils.h"
 #include "gtkmarshalers.h"
-#include "gtktreedatalist.h"
+#include "gtktreedatalistprivate.h"
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
 #include "gtkfilter.h"
