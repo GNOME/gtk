@@ -17,34 +17,29 @@
  */
 
 #include "config.h"
-#define GDK_PIXBUF_ENABLE_BACKEND /* Ugly? */
 #include "gdkdisplay.h"
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
-#include <glib/gi18n-lib.h>
 
 #include "gdkdisplay-win32.h"
 
-#ifdef __MINGW32__
-#include <w32api.h>
-#endif
-
 #include "xcursors.h"
 
-typedef struct _DefaultCursor {
+#include <stdint.h>
+
+static struct {
   char *name;
   char *id;
-} DefaultCursor;
-
-static DefaultCursor default_cursors[] = {
+} default_cursors[] = {
+  /* -- Win32 cursor names: -- */
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
   { "hand",  IDC_HAND },
   { "help",  IDC_HELP },
   { "ibeam", IDC_IBEAM },
-  /* an X cursor name, for compatibility with GTK: */
+  /* -- X11 cursor names: -- */
   { "left_ptr_watch", IDC_APPSTARTING },
   { "sizeall", IDC_SIZEALL },
   { "sizenesw", IDC_SIZENESW },
@@ -53,7 +48,7 @@ static DefaultCursor default_cursors[] = {
   { "sizewe", IDC_SIZEWE },
   { "uparrow", IDC_UPARROW },
   { "wait", IDC_WAIT },
-  /* css cursor names: */
+  /* -- CSS cursor names: -- */
   { "default", IDC_ARROW },
   { "pointer", IDC_HAND },
   { "progress", IDC_APPSTARTING },
@@ -93,18 +88,17 @@ struct _GdkWin32HCursor
 
   /* Do not do any modifications to the handle
    * (i.e. do not call DestroyCursor() on it).
-   * It's a "read-only" copy, the original is stored
-   * in the display instance.
-   */
+   * It's a "read-only" copy, the original is
+   * stored in the display instance */
   HANDLE           readonly_handle;
 
-  /* This is a way to access the real handle stored
-   * in the display.
-   * TODO: make it a weak reference
-   */
+  /* This is a way to access the real handle
+   * stored in the display.
+   * TODO: make it a weak reference */
   GdkWin32Display *display;
 
-  /* A copy of the "destoyable" attribute of the handle */
+  /* A copy of the "destoyable" attribute of
+   * the handle */
   gboolean         readonly_destroyable;
 };
 
@@ -382,7 +376,8 @@ hcursor_from_x_cursor (int          i,
   int j, x, y, ofs;
   HCURSOR rv;
   int w, h;
-  guchar *and_plane, *xor_plane;
+  uint8_t *and_plane;
+  uint8_t *xor_plane;
 
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
@@ -406,7 +401,7 @@ hcursor_from_x_cursor (int          i,
 	  for (x = 0; x < cursors[i].width && x < w ; x++, j++)
 	    {
 	      int pofs = ofs + x / 8;
-	      guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
+              uint8_t data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
 	      int bit = 7 - (j % cursors[i].width) % 8;
 
 	      if (data)
@@ -852,7 +847,7 @@ static GdkWin32HCursor *
 create_blank_win32hcursor (GdkWin32Display *display)
 {
   int w, h;
-  guchar *and_plane, *xor_plane;
+  uint8_t *and_plane, *xor_plane;
   HCURSOR rv;
 
   w = GetSystemMetrics (SM_CXCURSOR);
@@ -1009,7 +1004,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
     RGBQUAD colors[2];
   } bmi;
   HDC hdc;
-  guchar *pixels, *bits;
+  uint8_t *pixels, *bits;
   int rowstride, x, y, w, h;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
@@ -1117,7 +1112,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 
       for (y = 0; y < h; y++)
 	{
-	  const guchar *andp, *xorp;
+          const uint8_t *andp, *xorp;
 	  if (bmi.bi.biHeight < 0)
 	    {
 	      andp = bits + bpl*y;
@@ -1178,8 +1173,8 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
  */
 
 static HBITMAP
-create_alpha_bitmap (int      size,
-		     guchar **outdata)
+create_alpha_bitmap (int       size,
+                     uint8_t **outdata)
 {
   BITMAPV5HEADER bi;
   HDC hdc;
@@ -1216,9 +1211,9 @@ create_alpha_bitmap (int      size,
 }
 
 static HBITMAP
-create_color_bitmap (int      size,
-		     guchar **outdata,
-		     int      bits)
+create_color_bitmap (int       size,
+                     uint8_t **outdata,
+                     int       bits)
 {
   struct {
     BITMAPV4HEADER bmiHeader;
@@ -1265,8 +1260,9 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
    * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
    */
   HBITMAP hColorBitmap, hMaskBitmap;
-  guchar *indata, *inrow;
-  guchar *colordata, *colorrow, *maskdata, *maskbyte;
+  const uint8_t *indata;
+  const uint8_t *inrow;
+  uint8_t *colordata, *colorrow, *maskdata, *maskbyte;
   int width, height, size, i, i_offset, j, j_offset, rowstride;
   guint maskstride, mask_bit;
 
@@ -1289,7 +1285,7 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
   /* MSDN says mask rows are aligned to "LONG" boundaries */
   maskstride = (((size + 31) & ~31) >> 3);
 
-  indata = gdk_pixbuf_get_pixels (pixbuf);
+  indata = gdk_pixbuf_read_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
 
   if (width > height)
@@ -1343,8 +1339,9 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
    * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
    */
   HBITMAP hColorBitmap, hMaskBitmap;
-  guchar *indata, *inrow;
-  guchar *colordata, *colorrow, *maskdata, *maskbyte;
+  const uint8_t *indata;
+  const uint8_t *inrow;
+  uint8_t *colordata, *colorrow, *maskdata, *maskbyte;
   int width, height, size, i, i_offset, j, j_offset, rowstride, nc, bmstride;
   gboolean has_alpha;
   guint maskstride, mask_bit;
@@ -1373,7 +1370,7 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
   /* MSDN says mask rows are aligned to "LONG" boundaries */
   maskstride = (((size + 31) & ~31) >> 3);
 
-  indata = gdk_pixbuf_get_pixels (pixbuf);
+  indata = gdk_pixbuf_read_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   nc = gdk_pixbuf_get_n_channels (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
