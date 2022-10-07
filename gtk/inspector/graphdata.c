@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Benjamin Otte <ottte@gnome.org>
+ * Copyright (c) 2014 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,74 +24,73 @@ enum {
   PROP_N_VALUES
 };
 
-struct _GtkGraphDataPrivate
+struct _GraphData
 {
+  GObject parent;
+
   guint n_values;
   guint offset;
   double *values;
 };
 
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkGraphData, gtk_graph_data, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GraphData, graph_data, G_TYPE_OBJECT)
 
 static void
-gtk_graph_data_get_property (GObject    *object,
-                             guint       param_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
+graph_data_get_property (GObject    *object,
+                         guint       param_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
 {
-  GtkGraphData *graph = GTK_GRAPH_DATA (object);
-  GtkGraphDataPrivate *priv = graph->priv;
+  GraphData *graph = GRAPH_DATA (object);
 
   switch (param_id)
     {
-      case PROP_N_VALUES:
-        g_value_set_boolean (value, priv->n_values);
-        break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+    case PROP_N_VALUES:
+      g_value_set_boolean (value, graph->n_values);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
 }
 
 static void
-gtk_graph_data_finalize (GObject *object)
+graph_data_finalize (GObject *object)
 {
-  GtkGraphData *graph = GTK_GRAPH_DATA (object);
-  GtkGraphDataPrivate *priv = graph->priv;
+  GraphData *graph = GRAPH_DATA (object);
 
-  g_free (priv->values);
+  g_free (graph->values);
 
-  G_OBJECT_CLASS (gtk_graph_data_parent_class)->finalize (object);
+  G_OBJECT_CLASS (graph_data_parent_class)->finalize (object);
 }
 
 static void
-gtk_graph_data_set_property (GObject      *object,
-                             guint         param_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
+graph_data_set_property (GObject      *object,
+                         guint         param_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
 {
-  GtkGraphData *graph = GTK_GRAPH_DATA (object);
-  GtkGraphDataPrivate *priv = graph->priv;
+  GraphData *graph = GRAPH_DATA (object);
 
   switch (param_id)
     {
-      case PROP_N_VALUES:
-        priv->n_values = g_value_get_uint (value);
-        priv->values = g_new0 (double, priv->n_values);
-        break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+    case PROP_N_VALUES:
+      graph->n_values = g_value_get_uint (value);
+      graph->values = g_new0 (double, graph->n_values);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
 }
 
 static void
-gtk_graph_data_class_init (GtkGraphDataClass *klass)
+graph_data_class_init (GraphDataClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_graph_data_finalize;
-  object_class->get_property = gtk_graph_data_get_property;
-  object_class->set_property = gtk_graph_data_set_property;
+  object_class->finalize = graph_data_finalize;
+  object_class->get_property = graph_data_get_property;
+  object_class->set_property = graph_data_set_property;
 
   g_object_class_install_property (object_class,
                                    PROP_N_VALUES,
@@ -101,71 +100,63 @@ gtk_graph_data_class_init (GtkGraphDataClass *klass)
 }
 
 static void
-gtk_graph_data_init (GtkGraphData *graph)
+graph_data_init (GraphData *graph)
 {
-  graph->priv = gtk_graph_data_get_instance_private (graph);
 }
 
-GtkGraphData *
-gtk_graph_data_new (guint n_values)
+GraphData *
+graph_data_new (guint n_values)
 {
-  return g_object_new (GTK_TYPE_GRAPH_DATA,
+  return g_object_new (graph_data_get_type (),
                        "n-values", n_values,
                        NULL);
 }
 
 guint
-gtk_graph_data_get_n_values (GtkGraphData *data)
+graph_data_get_n_values (GraphData *data)
 {
-  return data->priv->n_values;
+  return data->n_values;
 }
 
 double
-gtk_graph_data_get_value (GtkGraphData   *data,
-                          guint           i)
+graph_data_get_value (GraphData *data,
+                      guint      i)
 {
-  GtkGraphDataPrivate *priv = data->priv;
-
-  return priv->values[(priv->offset + i) % priv->n_values];
+  return data->values[(data->offset + i) % data->n_values];
 }
 
 double
-gtk_graph_data_get_minimum (GtkGraphData *data)
+graph_data_get_minimum (GraphData *data)
 {
-  GtkGraphDataPrivate *priv = data->priv;
   double minimum = G_MAXDOUBLE;
   guint i;
 
-  for (i = 0; i < priv->n_values; i++)
+  for (i = 0; i < data->n_values; i++)
     {
-      minimum = MIN (minimum, priv->values[i]);
+      minimum = MIN (minimum, data->values[i]);
     }
 
   return minimum;
 }
 
 double
-gtk_graph_data_get_maximum (GtkGraphData *data)
+graph_data_get_maximum (GraphData *data)
 {
-  GtkGraphDataPrivate *priv = data->priv;
   double maximum = -G_MAXDOUBLE;
   guint i;
 
-  for (i = 0; i < priv->n_values; i++)
+  for (i = 0; i < data->n_values; i++)
     {
-      maximum = MAX (maximum, priv->values[i]);
+      maximum = MAX (maximum, data->values[i]);
     }
 
   return maximum;
 }
 
 void
-gtk_graph_data_prepend_value (GtkGraphData *data,
-                              double        value)
+graph_data_prepend_value (GraphData *data,
+                          double     value)
 {
-  GtkGraphDataPrivate *priv = data->priv;
-
-  priv->offset = (priv->offset + priv->n_values - 1) % priv->n_values;
-  priv->values[priv->offset] = value;
+  data->offset = (data->offset + data->n_values - 1) % data->n_values;
+  data->values[data->offset] = value;
 }
-

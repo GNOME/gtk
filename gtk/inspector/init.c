@@ -26,7 +26,7 @@
 
 #include "a11y.h"
 #include "actions.h"
-#include "cellrenderergraph.h"
+#include "graphrenderer.h"
 #include "clipboard.h"
 #include "controllers.h"
 #include "css-editor.h"
@@ -66,8 +66,8 @@ gtk_inspector_init (void)
 
   g_type_ensure (G_TYPE_LIST_STORE);
 
-  g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
-  g_type_ensure (GTK_TYPE_GRAPH_DATA);
+  g_type_ensure (graph_data_get_type ());
+  g_type_ensure (graph_renderer_get_type ());
   g_type_ensure (GTK_TYPE_INSPECTOR_A11Y);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CLIPBOARD);
