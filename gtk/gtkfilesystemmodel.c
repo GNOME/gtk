@@ -997,10 +997,8 @@ gtk_file_system_model_finalize (GObject *object)
       int v;
 
       FileModelNode *node = get_node (model, i);
-      if (node->file)
-        g_object_unref (node->file);
-      if (node->info)
-        g_object_unref (node->info);
+      g_clear_object (&node->file);
+      g_clear_object (&node->info);
 
       for (v = 0; v < model->n_columns; v++)
 	if (G_VALUE_TYPE (&node->values[v]) != G_TYPE_INVALID)
@@ -1008,15 +1006,12 @@ gtk_file_system_model_finalize (GObject *object)
     }
   g_array_free (model->files, TRUE);
 
-  g_object_unref (model->cancellable);
-  g_free (model->attributes);
-  if (model->dir)
-    g_object_unref (model->dir);
-  if (model->dir_monitor)
-    g_object_unref (model->dir_monitor);
-  g_hash_table_destroy (model->file_lookup);
-  if (model->filter)
-    g_object_unref (model->filter);
+  g_clear_object (&model->cancellable);
+  g_clear_pointer (&model->attributes, g_free);
+  g_clear_object (&model->dir);
+  g_clear_object (&model->dir_monitor);
+  g_clear_pointer (&model->file_lookup, g_hash_table_destroy);
+  g_clear_object (&model->filter);
 
   g_slice_free1 (sizeof (GType) * model->n_columns, model->column_types);
 
