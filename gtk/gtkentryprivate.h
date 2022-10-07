@@ -22,9 +22,9 @@
 
 #include "deprecated/gtkentrycompletion.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkliststore.h"
-#include "gtktreemodelfilter.h"
-#include "gtktreeviewcolumn.h"
+#include "deprecated/gtkliststore.h"
+#include "deprecated/gtktreemodelfilter.h"
+#include "deprecated/gtktreeviewcolumn.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtktextprivate.h"
 

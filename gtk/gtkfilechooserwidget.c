@@ -24,9 +24,8 @@
 
 #include "gtkbookmarksmanagerprivate.h"
 #include "gtkbutton.h"
-#include "gtkcelllayout.h"
-#include "gtkcellrendererpixbuf.h"
-#include "gtkcellrenderertext.h"
+#include "deprecated/gtkcellrendererpixbuf.h"
+#include "deprecated/gtkcellrenderertext.h"
 #include "gtkdropdown.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
@@ -56,9 +55,9 @@
 #include "gtksizerequest.h"
 #include "gtkstack.h"
 #include "gtktooltip.h"
-#include "gtktreednd.h"
-#include "gtktreeprivate.h"
-#include "gtktreeselection.h"
+#include "deprecated/gtktreednd.h"
+#include "deprecated/gtktreeprivate.h"
+#include "deprecated/gtktreeselection.h"
 #include "gtkbox.h"
 #include "gtkcheckbutton.h"
 #include "gtkwindowgroup.h"
@@ -96,6 +95,8 @@
 #ifdef G_OS_WIN32
 #include <io.h>
 #endif
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkFileChooserWidget:

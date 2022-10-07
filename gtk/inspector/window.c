@@ -59,7 +59,6 @@
 #include "gtkprivate.h"
 #include "gtknative.h"
 #include "gtkstack.h"
-#include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
 #include "gtkrevealer.h"
 #include "gtklayoutmanager.h"

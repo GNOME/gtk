@@ -25,11 +25,13 @@
 
 #include "gtkfilechooserutils.h"
 #include "gtkmarshalers.h"
-#include "gtktreedatalistprivate.h"
-#include "gtktreednd.h"
-#include "gtktreemodel.h"
+#include "deprecated/gtktreedatalistprivate.h"
+#include "deprecated/gtktreednd.h"
+#include "deprecated/gtktreemodel.h"
 #include "gtkfilter.h"
 #include "gtkprivate.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /*** Structure: how GtkFileSystemModel works
  *

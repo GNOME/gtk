@@ -42,7 +42,6 @@ inspector_sources = files(
   'statistics.c',
   'strv-editor.c',
   'tree-data.c',
-  'treewalk.c',
   'type-info.c',
   'updatesoverlay.c',
   'variant-editor.c',

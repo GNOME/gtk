@@ -38,7 +38,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktreeexpander.h>
 #include <gtk/gtktreelistmodel.h>
-#include <gtk/gtktreemodel.h>
 #include <gtk/gtkstack.h>
 #include <gtk/gtknoselection.h>
 #include <gtk/gtkcolumnview.h>

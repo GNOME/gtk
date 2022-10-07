@@ -23,11 +23,11 @@
 #endif
 
 #include <gdk/gdk.h>
-#include <gtk/gtktreemodel.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtkcellarea.h>
-#include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktreemodelfilter.h>
+#include <gtk/deprecated/gtktreemodel.h>
+#include <gtk/deprecated/gtkliststore.h>
+#include <gtk/deprecated/gtkcellarea.h>
+#include <gtk/deprecated/gtktreeviewcolumn.h>
+#include <gtk/deprecated/gtktreemodelfilter.h>
 
 G_BEGIN_DECLS
 

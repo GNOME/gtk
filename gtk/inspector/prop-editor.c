@@ -26,14 +26,14 @@
 #include "gtkactionable.h"
 #include "gtkadjustment.h"
 #include "gtkapplicationwindow.h"
-#include "gtkcelllayout.h"
-#include "gtkcellrenderertext.h"
+#include "deprecated/gtkcelllayout.h"
+#include "deprecated/gtkcombobox.h"
+#include "deprecated/gtkiconview.h"
+#include "deprecated/gtktreeview.h"
 #include "gtkcolorbutton.h"
 #include "gtkcolorchooser.h"
-#include "gtkcombobox.h"
 #include "gtkfontbutton.h"
 #include "gtkfontchooser.h"
-#include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
@@ -45,6 +45,8 @@
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
 #include "gtkmenubutton.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 struct _GtkInspectorPropEditor
 {

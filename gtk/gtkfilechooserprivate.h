@@ -21,14 +21,14 @@
 
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
-#include "gtkliststore.h"
+#include "deprecated/gtkliststore.h"
 #include "gtkrecentmanager.h"
 #include "gtksearchengineprivate.h"
 #include "gtkquery.h"
 #include "gtksizegroup.h"
-#include "gtktreemodelsort.h"
-#include "gtktreestore.h"
-#include "gtktreeview.h"
+#include "deprecated/gtktreemodelsort.h"
+#include "deprecated/gtktreestore.h"
+#include "deprecated/gtktreeview.h"
 #include "gtkbox.h"
 
 G_BEGIN_DECLS

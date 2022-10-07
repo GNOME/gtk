@@ -34,8 +34,7 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
-#include "gtkcelleditable.h"
-#include "gtkcelllayout.h"
+#include "deprecated/gtkcelleditable.h"
 #include "gtkdebug.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
@@ -1859,6 +1858,9 @@ gtk_entry_direction_changed (GtkWidget        *widget,
 
 /* GtkCellEditable method implementations
  */
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 gtk_cell_editable_entry_activated (GtkEntry *entry, gpointer data)
 {
@@ -1907,6 +1909,8 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
                     G_CALLBACK (gtk_cell_editable_entry_key_pressed),
                     cell_editable);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /* Internal functions
  */
