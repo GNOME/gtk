@@ -27,6 +27,7 @@
 #include "deprecated/gtkcellrendererpixbuf.h"
 #include "deprecated/gtkcellrenderertext.h"
 #include "gtkdropdown.h"
+#include "gtkcolumnview.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdroptarget.h"
@@ -43,6 +44,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
+#include "gtkmultiselection.h"
 #include "gtkpaned.h"
 #include "gtkpathbarprivate.h"
 #include "gtkplacessidebarprivate.h"
@@ -51,6 +53,7 @@
 #include "gtkrecentmanager.h"
 #include "gtksearchentryprivate.h"
 #include "gtksettings.h"
+#include "gtksingleselection.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtkstack.h"
@@ -193,6 +196,7 @@ struct _GtkFileChooserWidget
   GtkWidget *browse_files_stack;
   GtkWidget *browse_files_swin;
   GtkWidget *browse_files_tree_view;
+  GtkWidget *browse_files_column_view;
   GtkWidget *remote_warning_bar;
 
   GtkWidget *browse_files_popover;
@@ -212,6 +216,8 @@ struct _GtkFileChooserWidget
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
+
+  GtkSelectionModel *browse_files_selection_model;
 
   GtkWidget *places_sidebar;
   GtkWidget *places_view;
@@ -2676,6 +2682,14 @@ set_select_multiple (GtkFileChooserWidget *impl,
 
   gtk_tree_view_set_rubber_banding (GTK_TREE_VIEW (impl->browse_files_tree_view), select_multiple);
 
+  g_clear_object (&impl->browse_files_selection_model);
+  impl->browse_files_selection_model = select_multiple
+    ? GTK_SELECTION_MODEL (gtk_multi_selection_new (G_LIST_MODEL (impl->browse_files_model)))
+    : GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (impl->browse_files_model)));
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view),
+                             GTK_SELECTION_MODEL (impl->browse_files_selection_model));
+
   impl->select_multiple = select_multiple;
   g_object_notify (G_OBJECT (impl), "select-multiple");
 }
@@ -4733,6 +4747,14 @@ set_list_model (GtkFileChooserWidget  *impl,
                     G_CALLBACK (browse_files_model_row_changed_cb), impl);
 
   _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
+
+  g_clear_object (&impl->browse_files_selection_model);
+  impl->browse_files_selection_model = impl->select_multiple
+    ? GTK_SELECTION_MODEL (gtk_multi_selection_new (G_LIST_MODEL (impl->browse_files_model)))
+    : GTK_SELECTION_MODEL (gtk_single_selection_new (G_LIST_MODEL (impl->browse_files_model)));
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view),
+                             GTK_SELECTION_MODEL (impl->browse_files_selection_model));
 
   return TRUE;
 }
@@ -7735,6 +7757,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, places_view);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_column_view);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_swin);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_header_revealer);

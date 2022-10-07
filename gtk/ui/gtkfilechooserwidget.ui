@@ -136,6 +136,36 @@
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
+                                      <object class="GtkScrolledWindow">
+                                        <property name="hscrollbar-policy">2</property>
+                                        <property name="vexpand">1</property>
+                                        <child>
+                                          <object class="GtkColumnView" id="browse_files_column_view">
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkActionBar" id="remote_warning_bar2">
+                                        <property name="visible">0</property>
+                                        <child type="center">
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="yes">Remote location — only searching the current folder</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkStackPage">
+                                <property name="name">list2</property>
+                                <property name="child">
+                                  <object class="GtkBox">
+                                    <property name="orientation">1</property>
+                                    <child>
                                       <object class="GtkScrolledWindow" id="browse_files_swin">
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="vexpand">1</property>
