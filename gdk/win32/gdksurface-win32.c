@@ -2917,8 +2917,11 @@ _gdk_win32_surface_compute_size (GdkSurface *surface)
   if (!impl->drag_move_resize_context.native_move_resize_pending)
     {
       bool size_changed;
+      GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
 
-      if (GDK_IS_TOPLEVEL (surface) && impl->force_recompute_size)
+      if (GDK_IS_TOPLEVEL (surface) &&
+          impl->force_recompute_size &&
+          !(display->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK))
         {
           size_changed = width != surface->width ||
                          height != surface->height;
