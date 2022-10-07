@@ -11,66 +11,34 @@
             <property name="vexpand">1</property>
             <property name="min-content-height">100</property>
             <child>
-              <object class="GtkTreeView" id="node_tree">
-                <property name="search-column">0</property>
-                <property name="enable-search">0</property>
-                <property name="enable-grid-lines">vertical</property>
-                <signal name="row-activated" handler="row_activated"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection">
-                    <signal name="changed" handler="selection_changed"/>
-                  </object>
-                </child>
+              <object class="GtkColumnView" id="node_tree">
+                <style>
+                  <class name="data-table"/>
+                  <class name="list"/>
+                </style>
                 <child>
-                  <object class="GtkTreeViewColumn" id="node_name_column">
+                  <object class="GtkColumnViewColumn">
                     <property name="resizable">1</property>
                     <property name="title" translatable="yes">Name</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                        <attribute name="sensitive">1</attribute>
-                      </attributes>
-                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="node_id_column">
+                  <object class="GtkColumnViewColumn">
                     <property name="resizable">1</property>
                     <property name="title" translatable="yes">ID</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">3</attribute>
-                        <attribute name="sensitive">1</attribute>
-                      </attributes>
-                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="node_classes_column">
+                  <object class="GtkColumnViewColumn">
                     <property name="resizable">1</property>
                     <property name="title" translatable="yes">Style Classes</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">2</attribute>
-                        <attribute name="sensitive">1</attribute>
-                      </attributes>
-                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="node_state_column">
+                  <object class="GtkColumnViewColumn">
                     <property name="resizable">1</property>
+                    <property name="expand">1</property>
                     <property name="title" translatable="yes">State</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">4</attribute>
-                        <attribute name="sensitive">1</attribute>
-                      </attributes>
-                    </child>
                   </object>
                 </child>
               </object>
