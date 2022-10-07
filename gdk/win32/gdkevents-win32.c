@@ -2981,6 +2981,8 @@ gdk_event_translate (MSG *msg,
       }
 #endif
 
+      impl = GDK_WIN32_SURFACE (window);
+
       /* Break grabs on unmap or minimize */
       if (windowpos->flags & SWP_HIDEWINDOW ||
 	  ((windowpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
@@ -3041,9 +3043,18 @@ gdk_event_translate (MSG *msg,
 	  !(windowpos->flags & SWP_NOCLIENTSIZE) ||
 	  (windowpos->flags & SWP_SHOWWINDOW))
 	{
-	  if (!IsIconic (msg->hwnd) &&
-	      !GDK_SURFACE_DESTROYED (window))
-	    gdk_surface_request_layout (window);
+          if (!IsIconic (msg->hwnd) && !GDK_SURFACE_DESTROYED (window))
+            {
+              if (!_gdk_win32_surface_lacks_wm_decorations (window) &&
+                  !(windowpos->flags & SWP_NOCLIENTSIZE) &&
+                  window->width == impl->next_layout.configured_width &&
+                  window->height == impl->next_layout.configured_height)
+                {
+                  impl->inhibit_configure = TRUE;
+                }
+
+              gdk_surface_request_layout (window);
+            }
 	}
 
       if ((windowpos->flags & SWP_HIDEWINDOW) &&
