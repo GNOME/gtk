@@ -521,6 +521,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
   GtkColumnViewColumn *column;
   GtkSorter *sorter;
   GtkSortListModel *sort_model;
+  GtkSelectionModel *selection_model;
 
   cnt->priv = gtk_inspector_css_node_tree_get_instance_private (cnt);
   gtk_widget_init_template (GTK_WIDGET (cnt));
@@ -539,10 +540,13 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
   priv->prop_model = g_list_store_new (css_property_get_type ());
 
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (priv->prop_model),
-                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (priv->prop_tree)));
+                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (priv->prop_tree))));
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (priv->prop_tree),
-                             GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (sort_model))));
+  selection_model = GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (sort_model)));
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (priv->prop_tree), selection_model);
+
+  g_object_unref (selection_model);
 
   column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (priv->prop_tree)), 0);
   factory = gtk_signal_list_item_factory_new ();

@@ -15,57 +15,28 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_GRAPH_DATA_H__
-#define __GTK_GRAPH_DATA_H__
+#ifndef __GRAPH_DATA_H__
+#define __GRAPH_DATA_H__
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_GRAPH_DATA            (gtk_graph_data_get_type ())
-#define GTK_GRAPH_DATA(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_GRAPH_DATA, GtkGraphData))
-#define GTK_GRAPH_DATA_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_GRAPH_DATA, GtkGraphDataClass))
-#define GTK_IS_GRAPH_DATA(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_GRAPH_DATA))
-#define GTK_IS_GRAPH_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GRAPH_DATA))
-#define GTK_GRAPH_DATA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_GRAPH_DATA, GtkGraphDataClass))
+typedef struct _GraphData        GraphData;
 
-typedef struct _GtkGraphData        GtkGraphData;
-typedef struct _GtkGraphDataClass   GtkGraphDataClass;
-typedef struct _GtkGraphDataPrivate GtkGraphDataPrivate;
+G_DECLARE_FINAL_TYPE (GraphData, graph_data, GRAPH, DATA, GObject)
 
-struct _GtkGraphData
-{
-  GObject              object;
+GraphData       *graph_data_new             (guint        n_values);
 
-  /*< private >*/
-  GtkGraphDataPrivate *priv;
-};
+guint            graph_data_get_n_values    (GraphData   *data);
+double           graph_data_get_value       (GraphData   *data,
+                                             guint        i);
+double           graph_data_get_minimum     (GraphData   *data);
+double           graph_data_get_maximum     (GraphData   *data);
 
-struct _GtkGraphDataClass
-{
-  GObjectClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
-
-GType            gtk_graph_data_get_type        (void) G_GNUC_CONST;
-
-GtkGraphData    *gtk_graph_data_new             (guint           n_values);
-
-guint            gtk_graph_data_get_n_values    (GtkGraphData   *data);
-double           gtk_graph_data_get_value       (GtkGraphData   *data,
-                                                 guint           i);
-double           gtk_graph_data_get_minimum     (GtkGraphData   *data);
-double           gtk_graph_data_get_maximum     (GtkGraphData   *data);
-
-void             gtk_graph_data_prepend_value   (GtkGraphData   *data,
-                                                 double          value);
+void             graph_data_prepend_value   (GraphData   *data,
+                                             double       value);
 
 G_END_DECLS
 
-#endif /* __GTK_GRAPH_DATA_H__ */
+#endif /* __GRAPH_DATA_H__ */

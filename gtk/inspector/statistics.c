@@ -20,20 +20,214 @@
 #include "statistics.h"
 
 #include "graphdata.h"
+#include "graphrenderer.h"
 
-#include "gtkcelllayout.h"
-#include "gtkcellrenderertext.h"
 #include "gtklabel.h"
 #include "gtksearchbar.h"
 #include "gtkstack.h"
 #include "gtktogglebutton.h"
-#include "gtktreeselection.h"
-#include "gtktreeview.h"
-#include "gtkeventcontrollerkey.h"
 #include "gtkmain.h"
-#include "gtkliststore.h"
+#include "gtkcolumnview.h"
+#include "gtkcolumnviewcolumn.h"
+#include "gtksingleselection.h"
+#include "gtksignallistitemfactory.h"
+#include "gtklistitem.h"
+#include "gtkstringsorter.h"
+#include "gtknumericsorter.h"
+#include "gtksortlistmodel.h"
+#include "gtksearchentry.h"
 
 #include <glib/gi18n-lib.h>
+
+/* {{{ TypeData object */
+
+typedef struct _TypeData TypeData;
+
+G_DECLARE_FINAL_TYPE (TypeData, type_data, TYPE, DATA, GObject);
+
+struct _TypeData {
+  GObject parent;
+
+  GType type;
+  GraphData *self;
+  GraphData *cumulative;
+};
+
+enum {
+  TYPE_DATA_PROP_NAME = 1,
+  TYPE_DATA_PROP_SELF1,
+  TYPE_DATA_PROP_CUMULATIVE1,
+  TYPE_DATA_PROP_SELF2,
+  TYPE_DATA_PROP_CUMULATIVE2,
+  TYPE_DATA_PROP_SELF,
+  TYPE_DATA_PROP_CUMULATIVE,
+};
+
+G_DEFINE_TYPE (TypeData, type_data, G_TYPE_OBJECT);
+
+static void
+type_data_init (TypeData *self)
+{
+}
+
+static void
+type_data_finalize (GObject *object)
+{
+  TypeData *self = TYPE_DATA (object);
+
+  g_object_unref (self->self);
+  g_object_unref (self->cumulative);
+
+  G_OBJECT_CLASS (type_data_parent_class)->finalize (object);
+}
+
+static void
+type_data_get_property (GObject    *object,
+                        guint       property_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
+{
+  TypeData *self = TYPE_DATA (object);
+
+  switch (property_id)
+    {
+    case TYPE_DATA_PROP_NAME:
+      g_value_set_string (value, g_type_name (self->type));
+      break;
+
+    case TYPE_DATA_PROP_SELF1:
+      g_value_set_int (value, (int) graph_data_get_value (self->self, 1));
+      break;
+
+    case TYPE_DATA_PROP_CUMULATIVE1:
+      g_value_set_int (value, (int) graph_data_get_value (self->cumulative, 1));
+      break;
+
+    case TYPE_DATA_PROP_SELF2:
+      g_value_set_int (value, (int) graph_data_get_value (self->self, 0));
+      break;
+
+    case TYPE_DATA_PROP_CUMULATIVE2:
+      g_value_set_int (value, (int) graph_data_get_value (self->cumulative, 0));
+      break;
+
+    case TYPE_DATA_PROP_SELF:
+      g_value_set_object (value, self->self);
+      break;
+
+    case TYPE_DATA_PROP_CUMULATIVE:
+      g_value_set_object (value, self->cumulative);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+type_data_class_init (TypeDataClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = type_data_finalize;
+  object_class->get_property = type_data_get_property;
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_NAME,
+                                   g_param_spec_string ("name", NULL, NULL,
+                                                        NULL,
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_SELF1,
+                                   g_param_spec_int ("self1", NULL, NULL,
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READABLE |
+                                                     G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_CUMULATIVE1,
+                                   g_param_spec_int ("cumulative1", NULL, NULL,
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READABLE |
+                                                     G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_SELF2,
+                                   g_param_spec_int ("self2", NULL, NULL,
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READABLE |
+                                                     G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_CUMULATIVE2,
+                                   g_param_spec_int ("cumulative2", NULL, NULL,
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READABLE |
+                                                     G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_SELF,
+                                   g_param_spec_object ("self", NULL, NULL,
+                                                        graph_data_get_type (),
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   TYPE_DATA_PROP_CUMULATIVE,
+                                   g_param_spec_object ("cumulative", NULL, NULL,
+                                                        graph_data_get_type (),
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_STATIC_STRINGS));
+}
+
+static TypeData *
+type_data_new (GType type)
+{
+  TypeData *self;
+
+  self = g_object_new (type_data_get_type (), NULL);
+
+  self->type = type;
+  self->self = graph_data_new (60);
+  self->cumulative = graph_data_new (60);
+
+  return self;
+}
+
+static void
+type_data_update (TypeData *data,
+                  int       self,
+                  int       cumulative)
+{
+  int value;
+
+  g_object_freeze_notify (G_OBJECT (data));
+
+  value = graph_data_get_value (data->self, 0);
+  if (value != self)
+    g_object_notify (G_OBJECT (data), "self2");
+  if (value != graph_data_get_value (data->self, 1))
+    g_object_notify (G_OBJECT (data), "self1");
+
+  g_object_notify (G_OBJECT (data), "self");
+  graph_data_prepend_value (data->self, self);
+
+  value = graph_data_get_value (data->cumulative, 0);
+  if (value != cumulative)
+    g_object_notify (G_OBJECT (data), "cumulative2");
+  if (value != graph_data_get_value (data->cumulative, 1))
+    g_object_notify (G_OBJECT (data), "cumulative1");
+
+  g_object_notify (G_OBJECT (data), "cumulative");
+  graph_data_prepend_value (data->cumulative, cumulative);
+
+  g_object_thaw_notify (G_OBJECT (data));
+}
+
+/* }}} */
 
 enum
 {
@@ -45,41 +239,14 @@ struct _GtkInspectorStatisticsPrivate
 {
   GtkWidget *stack;
   GtkWidget *excuse;
-  GtkTreeModel *model;
-  GtkTreeView  *view;
+  GtkWidget *view;
   GtkWidget *button;
-  GHashTable *data;
-  GtkTreeViewColumn *column_self1;
-  GtkCellRenderer *renderer_self1;
-  GtkTreeViewColumn *column_cumulative1;
-  GtkCellRenderer *renderer_cumulative1;
-  GtkTreeViewColumn *column_self2;
-  GtkCellRenderer *renderer_self2;
-  GtkTreeViewColumn *column_cumulative2;
-  GtkCellRenderer *renderer_cumulative2;
-  GHashTable *counts;
+  GListStore *data;
+  GtkSingleSelection *selection;
+  GHashTable *types;
   guint update_source_id;
   GtkWidget *search_entry;
   GtkWidget *search_bar;
-};
-
-typedef struct {
-  GType type;
-  GtkTreeIter treeiter;
-  GtkGraphData *self;
-  GtkGraphData *cumulative;
-} TypeData;
-
-enum
-{
-  COLUMN_TYPE,
-  COLUMN_TYPE_NAME,
-  COLUMN_SELF1,
-  COLUMN_CUMULATIVE1,
-  COLUMN_SELF2,
-  COLUMN_CUMULATIVE2,
-  COLUMN_SELF_DATA,
-  COLUMN_CUMULATIVE_DATA
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorStatistics, gtk_inspector_statistics, GTK_TYPE_BOX)
@@ -92,6 +259,7 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   GType *children;
   guint n_children;
   int i;
+  guint idx;
   TypeData *data;
 
   cumulative = 0;
@@ -100,35 +268,25 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   for (i = 0; i < n_children; i++)
     cumulative += add_type_count (sl, children[i]);
 
-  data = g_hash_table_lookup (sl->priv->counts, GSIZE_TO_POINTER (type));
-  if (!data)
+  idx = GPOINTER_TO_UINT (g_hash_table_lookup (sl->priv->types, GSIZE_TO_POINTER (type)));
+  if (idx == 0)
     {
-      data = g_new0 (TypeData, 1);
-      data->type = type;
-      data->self = gtk_graph_data_new (60);
-      data->cumulative = gtk_graph_data_new (60);
-      gtk_list_store_append (GTK_LIST_STORE (sl->priv->model), &data->treeiter);
-      gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
-                          COLUMN_TYPE, data->type,
-                          COLUMN_TYPE_NAME, g_type_name (data->type),
-                          COLUMN_SELF_DATA, data->self,
-                          COLUMN_CUMULATIVE_DATA, data->cumulative,
-                          -1);
-      g_hash_table_insert (sl->priv->counts, GSIZE_TO_POINTER (type), data);
+      g_list_store_append (sl->priv->data, type_data_new (type));
+      idx = g_list_model_get_n_items (G_LIST_MODEL (sl->priv->data));
+      g_hash_table_insert (sl->priv->types, GSIZE_TO_POINTER (type), GUINT_TO_POINTER (idx));
     }
+
+  data = g_list_model_get_item (G_LIST_MODEL (sl->priv->data), idx - 1);
+
+  g_assert (data->type == type);
 
   self = g_type_get_instance_count (type);
   cumulative += self;
 
-  gtk_graph_data_prepend_value (data->self, self);
-  gtk_graph_data_prepend_value (data->cumulative, cumulative);
+  type_data_update (data, self, cumulative);
 
-  gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
-                      COLUMN_SELF1, (int) gtk_graph_data_get_value (data->self, 1),
-                      COLUMN_CUMULATIVE1, (int) gtk_graph_data_get_value (data->cumulative, 1),
-                      COLUMN_SELF2, (int) gtk_graph_data_get_value (data->self, 0),
-                      COLUMN_CUMULATIVE2, (int) gtk_graph_data_get_value (data->cumulative, 0),
-                      -1);
+  g_object_unref (data);
+
   return cumulative;
 }
 
@@ -196,152 +354,45 @@ instance_counts_enabled (void)
 }
 
 static void
-cell_data_data (GtkCellLayout   *layout,
-                GtkCellRenderer *cell,
-                GtkTreeModel    *model,
-                GtkTreeIter     *iter,
-                gpointer         data)
+search_changed (GtkSearchEntry         *entry,
+                GtkInspectorStatistics *sl)
 {
-  int column;
-  int count;
-  char *text;
+  const char *text;
+  GListModel *model;
 
-  column = GPOINTER_TO_INT (data);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  model = gtk_single_selection_get_model (sl->priv->selection);
 
-  gtk_tree_model_get (model, iter, column, &count, -1);
-
-  text = g_strdup_printf ("%d", count);
-  g_object_set (cell, "text", text, NULL);
-  g_free (text);
-}
-
-static void
-cell_data_delta (GtkCellLayout   *layout,
-                 GtkCellRenderer *cell,
-                 GtkTreeModel    *model,
-                 GtkTreeIter     *iter,
-                 gpointer         data)
-{
-  int column;
-  int count1;
-  int count2;
-  char *text;
-
-  column = GPOINTER_TO_INT (data);
-
-  gtk_tree_model_get (model, iter, column - 2, &count1, column, &count2, -1);
-
-  if (count2 > count1)
-    text = g_strdup_printf ("%d (↗ %d)", count2, count2 - count1);
-  else if (count2 < count1)
-    text = g_strdup_printf ("%d (↘ %d)", count2, count1 - count2);
-  else
-    text = g_strdup_printf ("%d", count2);
-  g_object_set (cell, "text", text, NULL);
-  g_free (text);
-}
-
-static void
-type_data_free (gpointer data)
-{
-  TypeData *type_data = data;
-
-  g_object_unref (type_data->self);
-  g_object_unref (type_data->cumulative);
-
-  g_free (type_data);
-}
-
-static gboolean
-key_pressed (GtkEventController     *controller,
-             guint                   keyval,
-             guint                   keycode,
-             GdkModifierType         state,
-             GtkInspectorStatistics *sl)
-{
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+  for (guint i = 0; i < g_list_model_get_n_items (model); i++)
     {
-      if (keyval == GDK_KEY_Return ||
-          keyval == GDK_KEY_ISO_Enter ||
-          keyval == GDK_KEY_KP_Enter)
+      TypeData *data = g_list_model_get_item (model, i);
+      char *string;
+
+      g_object_unref (data);
+
+      string = g_ascii_strdown (g_type_name (data->type), -1);
+      if (g_str_has_prefix (string, text))
         {
-          GtkTreeSelection *selection;
-          GtkTreeModel *model;
-          GtkTreeIter iter;
-          GtkTreePath *path;
-
-          selection = gtk_tree_view_get_selection (sl->priv->view);
-          if (gtk_tree_selection_get_selected (selection, &model, &iter))
-            {
-              path = gtk_tree_model_get_path (model, &iter);
-              gtk_tree_view_row_activated (sl->priv->view, path, NULL);
-              gtk_tree_path_free (path);
-
-              return GDK_EVENT_STOP;
-            }
+          g_free (string);
+          gtk_single_selection_set_selected (sl->priv->selection, i);
+          return;
         }
+
+       g_free (string);
     }
 
-  return GDK_EVENT_PROPAGATE;
-}
-
-static gboolean
-match_string (const char *string,
-              const char *text)
-{
-  char *lower;
-  gboolean match = FALSE;
-
-  if (string)
-    {
-      lower = g_ascii_strdown (string, -1);
-      match = g_str_has_prefix (lower, text);
-      g_free (lower);
-    }
-
-  return match;
-}
-
-static gboolean
-match_row (GtkTreeModel *model,
-           int           column,
-           const char   *key,
-           GtkTreeIter  *iter,
-           gpointer      data)
-{
-  char *type;
-  gboolean match;
-
-  gtk_tree_model_get (model, iter, column, &type, -1);
-
-  match = match_string (type, key);
-
-  g_free (type);
-
-  return !match;
-}
-
-static void
-destroy_controller (GtkEventController *controller)
-{
-  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
+  gtk_single_selection_set_selected (sl->priv->selection, GTK_INVALID_LIST_POSITION);
 }
 
 static void
 root (GtkWidget *widget)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (widget);
-  GtkEventController *controller;
   GtkWidget *toplevel;
 
   GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->root (widget);
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-
-  controller = gtk_event_controller_key_new ();
-  g_object_set_data_full (G_OBJECT (toplevel), "statistics-controller", controller, (GDestroyNotify)destroy_controller);
-  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
-  gtk_widget_add_controller (toplevel, controller);
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar), toplevel);
 }
@@ -349,39 +400,403 @@ root (GtkWidget *widget)
 static void
 unroot (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
-
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  g_object_set_data (G_OBJECT (toplevel), "statistics-controller", NULL);
-
   GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->unroot (widget);
+}
+
+static void
+setup_label (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_name (GtkSignalListItemFactory *factory,
+           GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  data = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+  gtk_label_set_text (GTK_LABEL (label), g_type_name (data->type));
+}
+
+static void
+set_self1 (TypeData   *data,
+           GParamSpec *pspec,
+           GtkWidget  *label)
+{
+  int count;
+  char *text;
+
+  g_object_get (data, "self1", &count, NULL);
+  text = g_strdup_printf ("%d", count);
+  gtk_label_set_text (GTK_LABEL (label), text);
+  g_free (text);
+}
+
+static void
+bind_self1 (GtkSignalListItemFactory *factory,
+            GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  set_self1 (data, NULL, label);
+  g_signal_connect (data, "notify::self1", G_CALLBACK (set_self1), label);
+}
+
+static void
+unbind_self1 (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_self1), label);
+}
+
+static void
+set_cumulative1 (TypeData   *data,
+                 GParamSpec *pspec,
+                 GtkWidget  *label)
+{
+  int count;
+  char *text;
+
+  g_object_get (data, "cumulative1", &count, NULL);
+  text = g_strdup_printf ("%d", count);
+  gtk_label_set_text (GTK_LABEL (label), text);
+  g_free (text);
+}
+
+static void
+bind_cumulative1 (GtkSignalListItemFactory *factory,
+                  GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  set_cumulative1 (data, NULL, label);
+  g_signal_connect (data, "notify::cumulative1", G_CALLBACK (set_cumulative1), label);
+}
+
+static void
+unbind_cumulative1 (GtkSignalListItemFactory *factory,
+                    GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_cumulative1), label);
+}
+
+static void
+set_self2 (TypeData   *data,
+           GParamSpec *pspec,
+           GtkWidget  *label)
+{
+  int count1;
+  int count2;
+  char *text;
+
+  g_object_get (data, "self1", &count1, NULL);
+  g_object_get (data, "self2", &count2, NULL);
+  if (count2 > count1)
+    text = g_strdup_printf ("%d (↗ %d)", count2, count2 - count1);
+  else if (count2 < count1)
+    text = g_strdup_printf ("%d (↘ %d)", count2, count1 - count2);
+  else
+    text = g_strdup_printf ("%d", count2);
+  gtk_label_set_text (GTK_LABEL (label), text);
+  g_free (text);
+}
+
+static void
+bind_self2 (GtkSignalListItemFactory *factory,
+            GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  set_self2 (data, NULL, label);
+  g_signal_connect (data, "notify::self1", G_CALLBACK (set_self2), label);
+  g_signal_connect (data, "notify::self2", G_CALLBACK (set_self2), label);
+}
+
+static void
+unbind_self2 (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_self2), label);
+}
+
+static void
+set_cumulative2 (TypeData   *data,
+                 GParamSpec *pspec,
+                 GtkWidget  *label)
+{
+  int count1;
+  int count2;
+  char *text;
+
+  g_object_get (data, "cumulative1", &count1, NULL);
+  g_object_get (data, "cumulative2", &count2, NULL);
+  if (count2 > count1)
+    text = g_strdup_printf ("%d (↗ %d)", count2, count2 - count1);
+  else if (count2 < count1)
+    text = g_strdup_printf ("%d (↘ %d)", count2, count1 - count2);
+  else
+    text = g_strdup_printf ("%d", count2);
+  gtk_label_set_text (GTK_LABEL (label), text);
+  g_free (text);
+}
+
+static void
+bind_cumulative2 (GtkSignalListItemFactory *factory,
+                  GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  set_cumulative2 (data, NULL, label);
+  g_signal_connect (data, "notify::cumulative1", G_CALLBACK (set_cumulative2), label);
+  g_signal_connect (data, "notify::cumulative2", G_CALLBACK (set_cumulative2), label);
+}
+
+static void
+unbind_cumulative2 (GtkSignalListItemFactory *factory,
+                    GtkListItem              *list_item)
+{
+  GtkWidget *label;
+  TypeData *data;
+
+  label = gtk_list_item_get_child (list_item);
+  data = gtk_list_item_get_item (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_cumulative2), label);
+}
+
+static void
+setup_graph (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item)
+{
+  gtk_list_item_set_child (list_item, GTK_WIDGET (graph_renderer_new ()));
+}
+
+static void
+set_graph_self (TypeData   *data,
+                GParamSpec *pspec,
+                GtkWidget  *graph)
+{
+  graph_renderer_set_data (GRAPH_RENDERER (graph), data->self);
+}
+
+static void
+bind_graph_self (GtkSignalListItemFactory *factory,
+                 GtkListItem              *list_item)
+{
+  GtkWidget *graph;
+  TypeData *data;
+
+  data = gtk_list_item_get_item (list_item);
+  graph = gtk_list_item_get_child (list_item);
+
+  set_graph_self (data, NULL, graph);
+  g_signal_connect (data, "notify::self", G_CALLBACK (set_graph_self), graph);
+}
+
+static void
+unbind_graph_self (GtkSignalListItemFactory *factory,
+                   GtkListItem              *list_item)
+{
+  GtkWidget *graph;
+  TypeData *data;
+
+  data = gtk_list_item_get_item (list_item);
+  graph = gtk_list_item_get_child (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_graph_self), graph);
+}
+
+static void
+set_graph_cumulative (TypeData   *data,
+                      GParamSpec *pspec,
+                      GtkWidget  *graph)
+{
+  graph_renderer_set_data (GRAPH_RENDERER (graph), data->cumulative);
+}
+
+static void
+bind_graph_cumulative (GtkSignalListItemFactory *factory,
+                       GtkListItem              *list_item)
+{
+  GtkWidget *graph;
+  TypeData *data;
+
+  data = gtk_list_item_get_item (list_item);
+  graph = gtk_list_item_get_child (list_item);
+
+  set_graph_cumulative (data, NULL, graph);
+  g_signal_connect (data, "notify::cumulative", G_CALLBACK (set_graph_cumulative), graph);
+}
+
+static void
+unbind_graph_cumulative (GtkSignalListItemFactory *factory,
+                         GtkListItem              *list_item)
+{
+  GtkWidget *graph;
+  TypeData *data;
+
+  data = gtk_list_item_get_item (list_item);
+  graph = gtk_list_item_get_child (list_item);
+
+  g_signal_handlers_disconnect_by_func (data, G_CALLBACK (set_graph_cumulative), graph);
 }
 
 static void
 gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
 {
+  GtkColumnViewColumn *column;
+  GtkListItemFactory *factory;
+  GtkSorter *sorter;
+  GtkSortListModel *sort_model;
+
   sl->priv = gtk_inspector_statistics_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (sl->priv->column_self1),
-                                      sl->priv->renderer_self1,
-                                      cell_data_data,
-                                      GINT_TO_POINTER (COLUMN_SELF1), NULL);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (sl->priv->column_cumulative1),
-                                      sl->priv->renderer_cumulative1,
-                                      cell_data_data,
-                                      GINT_TO_POINTER (COLUMN_CUMULATIVE1), NULL);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (sl->priv->column_self2),
-                                      sl->priv->renderer_self2,
-                                      cell_data_delta,
-                                      GINT_TO_POINTER (COLUMN_SELF2), NULL);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (sl->priv->column_cumulative2),
-                                      sl->priv->renderer_cumulative2,
-                                      cell_data_delta,
-                                      GINT_TO_POINTER (COLUMN_CUMULATIVE2), NULL);
-  sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, type_data_free);
+  sl->priv->types = g_hash_table_new (NULL, NULL);
 
-  gtk_tree_view_set_search_entry (sl->priv->view, GTK_EDITABLE (sl->priv->search_entry));
-  gtk_tree_view_set_search_equal_func (sl->priv->view, match_row, sl, NULL);
+  sl->priv->data = g_list_store_new (type_data_get_type ());
+
+  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (sl->priv->data),
+                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->priv->view))));
+
+  sl->priv->selection = gtk_single_selection_new (G_LIST_MODEL (sort_model));
+  gtk_single_selection_set_can_unselect (sl->priv->selection, TRUE);
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->priv->view), GTK_SELECTION_MODEL (sl->priv->selection));
+
+  g_object_unref (sl->priv->selection);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 0);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_name), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (type_data_get_type (), NULL, "name")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 1);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_self1), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_self1), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (type_data_get_type (), NULL, "self1")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 2);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_cumulative1), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_cumulative1), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (type_data_get_type (), NULL, "cumulative1")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 3);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_self2), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_self2), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (type_data_get_type (), NULL, "self2")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 4);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_cumulative2), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_cumulative2), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_property_expression_new (type_data_get_type (), NULL, "cumulative2")));
+  gtk_column_view_column_set_sorter (column, sorter);
+  g_object_unref (sorter);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 5);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_graph), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_graph_self), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_graph_self), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  g_object_unref (factory);
+  g_object_unref (column);
+
+  column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (sl->priv->view)), 6);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_graph), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_graph_cumulative), NULL);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_graph_cumulative), NULL);
+
+  gtk_column_view_column_set_factory (column, factory);
+  g_object_unref (factory);
+  g_object_unref (column);
 }
 
 static void
@@ -389,8 +804,7 @@ constructed (GObject *object)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
 
-  g_signal_connect (sl->priv->button, "toggled",
-                    G_CALLBACK (toggle_record), sl);
+  g_signal_connect (sl->priv->button, "toggled", G_CALLBACK (toggle_record), sl);
 
   if (has_instance_counts ())
     update_type_counts (sl);
@@ -411,7 +825,7 @@ finalize (GObject *object)
   if (sl->priv->update_source_id)
     g_source_remove (sl->priv->update_source_id);
 
-  g_hash_table_unref (sl->priv->counts);
+  g_hash_table_unref (sl->priv->types);
 
   G_OBJECT_CLASS (gtk_inspector_statistics_parent_class)->finalize (object);
 }
@@ -477,19 +891,10 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/statistics.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_self1);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_self1);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_cumulative1);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative1);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_self2);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_self2);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_cumulative2);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, excuse);
-
+  gtk_widget_class_bind_template_callback (widget_class, search_changed);
 }
 
-// vim: set et sw=2 ts=2:
+/* vim:set foldmethod=marker expandtab: */
