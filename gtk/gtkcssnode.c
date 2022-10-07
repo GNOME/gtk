@@ -241,6 +241,9 @@ gtk_css_node_dispose (GObject *object)
 
   g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
 
+ if (cssnode->children_observer)
+   gtk_list_list_model_clear (cssnode->children_observer);
+
   G_OBJECT_CLASS (gtk_css_node_parent_class)->dispose (object);
 }
 
@@ -506,6 +509,9 @@ gtk_css_node_real_node_removed (GtkCssNode *parent,
   node->previous_sibling = NULL;
   node->next_sibling = NULL;
   node->parent = NULL;
+
+  if (parent->children_observer)
+    gtk_list_list_model_item_removed (parent->children_observer, previous);
 }
 
 static void
@@ -713,10 +719,13 @@ gtk_css_node_reposition (GtkCssNode *node,
                          GtkCssNode *previous)
 {
   GtkCssNode *old_parent;
+  GtkCssNode *old_previous;
 
   g_assert (! (new_parent == NULL && previous != NULL));
 
   old_parent = node->parent;
+  old_previous = node->previous_sibling;
+
   /* Take a reference here so the whole function has a reference */
   g_object_ref (node);
 
@@ -800,6 +809,14 @@ gtk_css_node_reposition (GtkCssNode *node,
                                  | GTK_CSS_CHANGE_NTH_CHILD
                                  | (node->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD)
                                  | (node->next_sibling ? 0 : GTK_CSS_CHANGE_LAST_CHILD));
+
+  if (new_parent && new_parent->children_observer)
+    {
+      if (old_previous)
+        gtk_list_list_model_item_moved (new_parent->children_observer, node, old_previous);
+      else
+        gtk_list_list_model_item_added (new_parent->children_observer, node);
+    }
 
   g_object_unref (node);
 }
@@ -1442,3 +1459,27 @@ gtk_css_node_print (GtkCssNode                *cssnode,
         gtk_css_node_print (node, flags, string, indent + 2);
     }
 }
+
+static void
+gtk_css_node_child_observer_destroyed (gpointer cssnode)
+{
+  GTK_CSS_NODE (cssnode)->children_observer = NULL;
+}
+
+GListModel *
+gtk_css_node_observe_children (GtkCssNode *cssnode)
+{
+  if (cssnode->children_observer)
+    return g_object_ref (G_LIST_MODEL (cssnode->children_observer));
+
+  cssnode->children_observer = gtk_list_list_model_new ((gpointer) gtk_css_node_get_first_child,
+                                                        (gpointer) gtk_css_node_get_next_sibling,
+                                                        (gpointer) gtk_css_node_get_previous_sibling,
+                                                        (gpointer) gtk_css_node_get_last_child,
+                                                        (gpointer) g_object_ref,
+                                                        cssnode,
+                                                        gtk_css_node_child_observer_destroyed);
+
+  return G_LIST_MODEL (cssnode->children_observer);
+}
+
