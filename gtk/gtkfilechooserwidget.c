@@ -275,7 +275,6 @@ struct _GtkFileChooserWidget
   GFile *renamed_file;
 
   GtkTreeViewColumn *list_name_column;
-  GtkCellRenderer *list_name_renderer;
   GtkCellRenderer *list_pixbuf_renderer;
   GtkTreeViewColumn *list_time_column;
   GtkCellRenderer *list_date_renderer;
@@ -7146,12 +7145,6 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
                                        "gicon", MODEL_COL_ICON,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
-  gtk_tree_view_column_set_attributes (impl->list_name_column,
-                                       impl->list_name_renderer,
-                                       "text", MODEL_COL_NAME,
-                                       "ellipsize", MODEL_COL_ELLIPSIZE,
-                                       "sensitive", MODEL_COL_IS_SENSITIVE,
-                                       NULL);
 
   gtk_tree_view_column_set_attributes (impl->list_size_column,
                                        impl->list_size_renderer,
@@ -7774,7 +7767,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_spinner);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_name_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_date_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_renderer);

@@ -967,6 +967,7 @@ enum {
   PROP_0,
   PROP_FILE,
   PROP_FILE_INFO,
+  PROP_NAME,
   N_PROPS,
 };
 
@@ -990,6 +991,10 @@ _gtk_file_system_item_get_property (GObject    *object,
       g_value_set_object (value, self->node->info);
       break;
 
+    case PROP_NAME:
+      g_value_set_string (value, g_file_info_get_display_name (self->node->info));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1010,6 +1015,10 @@ _gtk_file_system_item_class_init (GtkFileSystemItemClass *klass)
   item_properties[PROP_FILE_INFO] =
     g_param_spec_object ("file-info", NULL, NULL,
                          G_TYPE_FILE_INFO,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  item_properties[PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL, "",
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, item_properties);

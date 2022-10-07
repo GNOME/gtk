@@ -141,6 +141,42 @@
                                         <property name="vexpand">1</property>
                                         <child>
                                           <object class="GtkColumnView" id="browse_files_column_view">
+
+                                            <child>
+                                              <object class="GtkColumnViewColumn" id="column_view_name_column">
+                                                <property name="title" translatable="yes">Name</property>
+                                                <property name="expand">1</property>
+                                                <property name="resizable">1</property>
+                                                <property name="factory">
+                                                  <object class="GtkBuilderListItemFactory">
+                                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkInscription">
+            <property name="hexpand">1</property>
+            <property name="xalign">0</property>
+            <property name="min-chars">10</property>
+            <binding name="text">
+              <lookup type="GtkFileSystemItem" name="name">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+                                                ]]></property>
+                                                  </object>
+                                                </property>
+                                              </object>
+                                            </child>
+
                                           </object>
                                         </child>
                                       </object>
@@ -201,12 +237,6 @@
                                                 <child>
                                                   <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer">
                                                     <property name="xpad">6</property>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCellRendererText" id="list_name_renderer">
-                                                    <property name="width-chars">10</property>
-                                                    <property name="ellipsize">3</property>
                                                   </object>
                                                 </child>
                                               </object>
