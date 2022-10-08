@@ -11,6 +11,8 @@
 #include <stdlib.h> /* for exit() */
 #include "paintable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
 static void

@@ -10,6 +10,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *window = NULL;
 static GtkWidget *font_button = NULL;
 static GtkWidget *entry = NULL;

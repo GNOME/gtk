@@ -11,6 +11,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum
 {
   ICON_NAME_COL,

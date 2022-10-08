@@ -9,6 +9,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *window = NULL;
 
 #define FOLDER_NAME "/iconview/gnome-fs-directory.png"

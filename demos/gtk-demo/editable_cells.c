@@ -14,6 +14,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct
 {
   int    number;
