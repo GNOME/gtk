@@ -647,47 +647,6 @@ gtk_file_system_model_iface_init (GtkTreeModelIface *iface)
   iface->unref_node =      gtk_file_system_model_unref_node;
 }
 
-/*** GtkTreeDragSource ***/
-
-static gboolean
-drag_source_row_draggable (GtkTreeDragSource *drag_source,
-			   GtkTreePath       *path)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (drag_source);
-  GtkTreeIter iter;
-
-  if (!gtk_file_system_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-    return FALSE;
-
-  return ITER_INDEX (&iter) != 0;
-}
-
-static GdkContentProvider *
-drag_source_drag_data_get (GtkTreeDragSource *drag_source,
-			   GtkTreePath       *path)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (drag_source);
-  FileModelNode *node;
-  GtkTreeIter iter;
-
-  if (!gtk_file_system_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-    return NULL;
-
-  node = get_node (model, ITER_INDEX (&iter));
-  if (node->file == NULL)
-    return FALSE;
-
-  return gdk_content_provider_new_typed (G_TYPE_FILE, node->file);
-}
-
-static void
-drag_source_iface_init (GtkTreeDragSourceIface *iface)
-{
-  iface->row_draggable = drag_source_row_draggable;
-  iface->drag_data_get = drag_source_drag_data_get;
-  iface->drag_data_delete = NULL;
-}
-
 /*** GListModel ***/
 
 struct _GtkFileSystemItem {
@@ -822,8 +781,6 @@ static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_file_system_model_iface_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						drag_source_iface_init)
 			 G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
 						g_list_model_iface_init))
 
