@@ -367,10 +367,12 @@ get_property_pspec (MyParserData *data,
       {
         GObjectClass *cell_class;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         /* We're just assuming that the cell layout is using a GtkCellAreaBox. */
         cell_class = g_type_class_ref (GTK_TYPE_CELL_AREA_BOX);
         pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_CLASS (cell_class), canonical_name);
         g_type_class_unref (cell_class);
+G_GNUC_END_IGNORE_DEPRECATIONS
       }
       break;
 
