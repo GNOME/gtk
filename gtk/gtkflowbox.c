@@ -96,7 +96,6 @@
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkrender.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
