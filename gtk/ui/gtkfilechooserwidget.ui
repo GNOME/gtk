@@ -156,6 +156,15 @@
     <property name="child">
       <object class="GtkBox">
         <child>
+          <object class="GtkFileThumbnail">
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <binding name="item">
+              <lookup name="item">GtkListItem</lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
           <object class="GtkInscription">
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
@@ -234,11 +243,6 @@
                                                 <property name="title" translatable="yes">Name</property>
                                                 <property name="resizable">1</property>
                                                 <property name="expand">1</property>
-                                                <child>
-                                                  <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer">
-                                                    <property name="xpad">6</property>
-                                                  </object>
-                                                </child>
                                               </object>
                                             </child>
                                             <child>

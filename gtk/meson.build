@@ -109,6 +109,7 @@ gtk_private_sources = files([
   'gtkfilechoosernativeportal.c',
   'gtkfilechooserutils.c',
   'gtkfilesystemmodel.c',
+  'gtkfilethumbnail.c',
   'gtkgizmo.c',
   'gtkiconcache.c',
   'gtkiconcachevalidator.c',

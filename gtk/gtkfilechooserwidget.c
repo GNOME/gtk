@@ -38,6 +38,7 @@
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
+#include "gtkfilethumbnail.h"
 #include "gtkgrid.h"
 #include "gtkicontheme.h"
 #include "gtklabel.h"
@@ -275,7 +276,6 @@ struct _GtkFileChooserWidget
   GFile *renamed_file;
 
   GtkTreeViewColumn *list_name_column;
-  GtkCellRenderer *list_pixbuf_renderer;
   GtkTreeViewColumn *list_time_column;
   GtkCellRenderer *list_date_renderer;
   GtkCellRenderer *list_time_renderer;
@@ -363,7 +363,6 @@ enum {
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_ICON,
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_DATE_TEXT,
   MODEL_COL_TIME_TEXT,
@@ -383,7 +382,6 @@ enum {
         G_TYPE_STRING,            /* MODEL_COL_NAME_COLLATED */ \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_FOLDER */     \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_SENSITIVE */  \
-        G_TYPE_ICON,              /* MODEL_COL_ICON */          \
         G_TYPE_STRING,            /* MODEL_COL_SIZE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_DATE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_TIME_TEXT */     \
@@ -2207,17 +2205,6 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
   return TRUE;
 }
 
-static void
-set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
-{
-  int xpad, ypad;
-
-  gtk_cell_renderer_get_padding (impl->list_pixbuf_renderer, &xpad, &ypad);
-  gtk_cell_renderer_set_fixed_size (impl->list_pixbuf_renderer,
-                                    xpad * 2 + ICON_SIZE,
-                                    ypad * 2 + ICON_SIZE);
-}
-
 static GtkWidget *
 get_accept_action_widget (GtkDialog *dialog,
                           gboolean   sensitive_only)
@@ -3274,10 +3261,6 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
 static void
 change_icon_theme (GtkFileChooserWidget *impl)
 {
-  /* the first cell in the first column is the icon column, and we have a fixed size there */
-  set_icon_cell_renderer_fixed_size (impl);
-
-  clear_model_cache (impl, MODEL_COL_ICON);
   gtk_widget_queue_resize (impl->browse_files_tree_view);
 }
 
@@ -4346,53 +4329,6 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
   return date_str;
 }
 
-static void
-copy_attribute (GFileInfo   *to,
-                GFileInfo   *from,
-                const char *attribute)
-{
-  GFileAttributeType type;
-  gpointer value;
-
-  if (g_file_info_get_attribute_data (from, attribute, &type, &value, NULL))
-    g_file_info_set_attribute (to, attribute, type, value);
-}
-
-static void
-file_system_model_got_thumbnail (GObject      *object,
-                                 GAsyncResult *res,
-                                 gpointer      data)
-{
-  GtkFileSystemModel *model = data; /* might be unreffed if operation was cancelled */
-  GFile *file = G_FILE (object);
-  GFileInfo *queried, *info;
-  GtkTreeIter iter;
-
-  queried = g_file_query_info_finish (file, res, NULL);
-  if (queried == NULL)
-    return;
-
-  /* now we know model is valid */
-
-  /* file was deleted */
-  if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
-    {
-      g_object_unref (queried);
-      return;
-    }
-
-  info = g_file_info_dup (_gtk_file_system_model_get_info (model, &iter));
-
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
-
-  _gtk_file_system_model_update_file (model, file, info);
-
-  g_object_unref (info);
-  g_object_unref (queried);
-}
-
 /* Copied from src/nautilus_file.c:get_description() */
 struct {
   const char *icon_name;
@@ -4541,71 +4477,6 @@ file_system_model_set (GtkFileSystemModel *model,
         }
       else
         g_value_set_boolean (value, TRUE);
-      break;
-    case MODEL_COL_ICON:
-      if (info)
-        {
-          if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
-            {
-              int scale;
-              GtkIconTheme *icon_theme;
-
-              scale = gtk_widget_get_scale_factor (GTK_WIDGET (impl));
-              icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (impl)));
-
-              g_value_take_object (value, _gtk_file_info_get_icon (info, ICON_SIZE, scale, icon_theme));
-            }
-          else
-            {
-              GtkTreeModel *tree_model;
-              GtkTreePath *start, *end;
-              GtkTreeIter iter;
-              gboolean visible;
-
-              if (impl->browse_files_tree_view == NULL ||
-                  g_file_info_has_attribute (info, "filechooser::queried"))
-                return FALSE;
-
-              tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
-              if (tree_model != GTK_TREE_MODEL (model))
-                return FALSE;
-
-              if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
-                g_assert_not_reached ();
-
-              if (gtk_tree_view_get_visible_range (GTK_TREE_VIEW (impl->browse_files_tree_view), &start, &end))
-                {
-                  GtkTreePath *path;
-
-                  gtk_tree_path_prev (start);
-                  gtk_tree_path_next (end);
-                  path = gtk_tree_model_get_path (tree_model, &iter);
-                  visible = gtk_tree_path_compare (start, path) != 1 &&
-                            gtk_tree_path_compare (path, end) != 1;
-                  gtk_tree_path_free (path);
-                  gtk_tree_path_free (start);
-                  gtk_tree_path_free (end);
-                }
-              else
-                visible = TRUE;
-              if (visible)
-                {
-                  g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
-                  g_file_query_info_async (file,
-                                           G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
-                                           G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
-                                           G_FILE_ATTRIBUTE_STANDARD_ICON,
-                                           G_FILE_QUERY_INFO_NONE,
-                                           G_PRIORITY_DEFAULT,
-                                           _gtk_file_system_model_get_cancellable (model),
-                                           file_system_model_got_thumbnail,
-                                           model);
-                }
-              return FALSE;
-            }
-        }
-      else
-        g_value_set_boxed (value, NULL);
       break;
     case MODEL_COL_SIZE:
       g_value_set_int64 (value, info ? g_file_info_get_size (info) : 0);
@@ -7140,12 +7011,6 @@ path_bar_clicked (GtkPathBar           *path_bar,
 static void
 update_cell_renderer_attributes (GtkFileChooserWidget *impl)
 {
-  gtk_tree_view_column_set_attributes (impl->list_name_column,
-                                       impl->list_pixbuf_renderer,
-                                       "gicon", MODEL_COL_ICON,
-                                       "sensitive", MODEL_COL_IS_SENSITIVE,
-                                       NULL);
-
   gtk_tree_view_column_set_attributes (impl->list_size_column,
                                        impl->list_size_renderer,
                                        "text", MODEL_COL_SIZE_TEXT,
@@ -7367,6 +7232,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+
+  g_type_ensure (GTK_TYPE_FILE_THUMBNAIL);
 
   /*
    * Signals
@@ -7766,7 +7633,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_spinner);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_name_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_date_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_renderer);
@@ -7887,11 +7753,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   file = g_file_new_for_path ("/");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
   g_object_unref (file);
-
-  /* Set the fixed size icon renderer, this requires
-   * that impl->icon_size be already setup.
-   */
-  set_icon_cell_renderer_fixed_size (impl);
 
   gtk_popover_set_default_widget (GTK_POPOVER (impl->new_folder_popover), impl->new_folder_create_button);
   gtk_popover_set_default_widget (GTK_POPOVER (impl->rename_file_popover), impl->rename_file_rename_button);
