@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #ifdef G_OS_WIN32
 # define _BUILDER_TEST_EXPORT __declspec(dllexport)
 #else

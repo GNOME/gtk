@@ -18,6 +18,7 @@
 #include "config.h"
 #include "gtktreemodelrefcount.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /* The purpose of this GtkTreeModel is to keep record of the reference count
  * of each node.  The reference count does not effect the functioning of

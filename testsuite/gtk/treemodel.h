@@ -17,6 +17,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 void register_list_store_tests (void);
 void register_tree_store_tests (void);
 void register_sort_model_tests (void);

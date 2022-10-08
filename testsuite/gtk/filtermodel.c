@@ -21,6 +21,8 @@
 #include "treemodel.h"
 #include "gtktreemodelrefcount.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* Left to do:
  *   - Proper coverage checking to see if the unit tests cover
  *     all possible cases.

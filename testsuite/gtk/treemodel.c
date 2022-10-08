@@ -19,6 +19,8 @@
 
 #include "treemodel.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 int
 main (int    argc,
       char **argv)
