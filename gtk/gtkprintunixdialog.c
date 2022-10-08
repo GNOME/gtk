@@ -46,7 +46,9 @@
 #include "gtkbuildable.h"
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -1956,6 +1958,7 @@ paint_page (GtkPrintUnixDialog *dialog,
   GdkRGBA color;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
+  GtkCssBoxes boxes;
 
   width = 20;
   height = 26;
@@ -1965,10 +1968,12 @@ paint_page (GtkPrintUnixDialog *dialog,
   gtk_style_context_save_to_node (context, dialog->collate_paper_node);
 
   snapshot = gtk_snapshot_new ();
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, context, x, y, width, height);
-  gtk_snapshot_render_frame (snapshot, context, x, y, width, height);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
+
   node = gtk_snapshot_free_to_node (snapshot);
   if (node)
     {
@@ -2405,6 +2410,7 @@ draw_page (GtkDrawingArea *da,
   int pages_per_sheet;
   gboolean ltr = TRUE;
   GtkSnapshot *snapshot;
+  GtkCssBoxes boxes;
   GskRenderNode *node;
 
   orientation = gtk_page_setup_get_orientation (dialog->page_setup);
@@ -2501,10 +2507,12 @@ draw_page (GtkDrawingArea *da,
   cairo_translate (cr, pos_x, pos_y);
 
   snapshot = gtk_snapshot_new ();
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, context, 1, 1, w, h);
-  gtk_snapshot_render_frame (snapshot, context, 1, 1, w, h);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 1, 1, w, h);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
+
   node = gtk_snapshot_free_to_node (snapshot);
   if (node)
     {
