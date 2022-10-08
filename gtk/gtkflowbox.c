@@ -2570,6 +2570,8 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_path_t *path;
           GtkBorder border;
           const GdkRGBA *border_color;
+          GtkSnapshot *bg_snapshot;
+          GskRenderNode *node;
 
           if (vertical)
             path_from_vertical_line_rects (cr, (GdkRectangle *)lines->data, lines->len);
@@ -2583,7 +2585,16 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 
           cairo_save (cr);
           cairo_clip (cr);
-          gtk_render_background (context, cr, x, y, width, height);
+
+          bg_snapshot = gtk_snapshot_new ();
+          gtk_snapshot_render_background (bg_snapshot, context, x, y, width, height);
+          node = gtk_snapshot_free_to_node (bg_snapshot);
+          if (node)
+            {
+              gsk_render_node_draw (node, cr);
+              gsk_render_node_unref (node);
+            }
+
           cairo_restore (cr);
 
           cairo_append_path (cr, path);
