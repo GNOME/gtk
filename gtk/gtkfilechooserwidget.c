@@ -275,7 +275,6 @@ struct _GtkFileChooserWidget
   GFile *current_folder;
   GFile *renamed_file;
 
-  GtkTreeViewColumn *list_name_column;
   GtkTreeViewColumn *list_time_column;
   GtkCellRenderer *list_date_renderer;
   GtkCellRenderer *list_time_renderer;
@@ -1370,7 +1369,7 @@ rename_selected_cb (GtkTreeModel *model,
                       -1);
 
   gtk_tree_view_get_cell_area (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                               path, impl->list_name_column, &rect);
+                               path, impl->list_size_column, &rect);
 
   gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (impl->browse_files_tree_view),
                                                      rect.x, rect.y,
@@ -2150,7 +2149,6 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
 
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view), -1);
 
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, MODEL_COL_NAME);
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, MODEL_COL_TIME);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, MODEL_COL_SIZE);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, MODEL_COL_TYPE);
@@ -3857,7 +3855,6 @@ update_columns (GtkFileChooserWidget *impl,
   if (need_resize)
     {
       /* This undoes user resizing of columns when the columns change. */
-      gtk_tree_view_column_set_expand (impl->list_name_column, TRUE);
       gtk_tree_view_column_set_expand (impl->list_location_column, TRUE);
       gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
     }
@@ -6575,7 +6572,6 @@ search_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->search_model));
 
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, -1);
@@ -6815,7 +6811,6 @@ recent_start_loading (GtkFileChooserWidget *impl)
                            GTK_TREE_MODEL (impl->recent_model));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view), -1);
 
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, -1);
@@ -7632,7 +7627,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, location_entry_box);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_spinner);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_date_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_renderer);

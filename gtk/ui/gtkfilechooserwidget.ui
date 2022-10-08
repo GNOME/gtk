@@ -239,13 +239,6 @@
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkTreeViewColumn" id="list_name_column">
-                                                <property name="title" translatable="yes">Name</property>
-                                                <property name="resizable">1</property>
-                                                <property name="expand">1</property>
-                                              </object>
-                                            </child>
-                                            <child>
                                               <object class="GtkTreeViewColumn" id="list_location_column">
                                                 <property name="title" translatable="yes">Location</property>
                                                 <property name="resizable">1</property>
