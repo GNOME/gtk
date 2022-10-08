@@ -51,7 +51,7 @@
 #include "gtkscrollable.h"
 #include "gtksettingsprivate.h"
 #include "gtkshortcutcontroller.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktooltip.h"
 #include "gtktreednd.h"

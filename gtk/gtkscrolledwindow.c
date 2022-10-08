@@ -47,7 +47,7 @@
 #include "gtkscrollable.h"
 #include "gtkscrollbar.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
@@ -1885,12 +1885,14 @@ gtk_scrolled_window_snapshot_scrollbars_junction (GtkScrolledWindow *scrolled_wi
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, priv->junction_node);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_background (snapshot, context,
                                   junction_rect.x, junction_rect.y,
                                   junction_rect.width, junction_rect.height);
   gtk_snapshot_render_frame (snapshot, context,
                              junction_rect.x, junction_rect.y,
                              junction_rect.width, junction_rect.height);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_style_context_restore (context);
 }
@@ -1905,6 +1907,7 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
   GtkStyleContext *context;
   GdkRectangle rect;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
@@ -1943,6 +1946,7 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
       gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, rect.width, -overshoot_y);
       gtk_style_context_restore (context);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -1955,6 +1959,7 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
   GdkRectangle rect;
   GtkAdjustment *adj;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (widget);
   gtk_scrolled_window_inner_allocation (scrolled_window, &rect);
 
@@ -1990,6 +1995,7 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
       gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
       gtk_style_context_restore (context);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

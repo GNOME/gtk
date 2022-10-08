@@ -4271,9 +4271,11 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                   if (cursor.is_insert || cursor.is_selection_bound)
                     gtk_snapshot_push_opacity (cursor_snapshot, cursor_alpha);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                   gtk_snapshot_render_insertion_cursor (cursor_snapshot, context,
                                                         line_display->x_offset, offset_y + line_display->top_margin,
                                                         line_display->layout, cursor.pos, dir);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
                   if (cursor.is_insert || cursor.is_selection_bound)
                     gtk_snapshot_pop (cursor_snapshot);

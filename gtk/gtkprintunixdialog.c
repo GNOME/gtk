@@ -46,6 +46,7 @@
 #include "gtkbuildable.h"
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
+#include "deprecated/gtkrender.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -1964,8 +1965,10 @@ paint_page (GtkPrintUnixDialog *dialog,
   gtk_style_context_save_to_node (context, dialog->collate_paper_node);
 
   snapshot = gtk_snapshot_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_background (snapshot, context, x, y, width, height);
   gtk_snapshot_render_frame (snapshot, context, x, y, width, height);
+G_GNUC_END_IGNORE_DEPRECATIONS
   node = gtk_snapshot_free_to_node (snapshot);
   if (node)
     {
@@ -2498,8 +2501,10 @@ draw_page (GtkDrawingArea *da,
   cairo_translate (cr, pos_x, pos_y);
 
   snapshot = gtk_snapshot_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_background (snapshot, context, 1, 1, w, h);
   gtk_snapshot_render_frame (snapshot, context, 1, 1, w, h);
+G_GNUC_END_IGNORE_DEPRECATIONS
   node = gtk_snapshot_free_to_node (snapshot);
   if (node)
     {

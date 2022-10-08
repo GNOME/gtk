@@ -24,7 +24,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "deprecated/gtktreeprivate.h"

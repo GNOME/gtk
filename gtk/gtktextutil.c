@@ -34,6 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "deprecated/gtkrender.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
 #define DRAG_ICON_MAX_HEIGHT 250
@@ -146,10 +147,12 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
       else
         bg_widget = widget;
       pango_layout_get_size (layout, &layout_width, &layout_height);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_snapshot_render_background (snapshot,
                                       gtk_widget_get_style_context (bg_widget),
                                       0, 0, layout_width / PANGO_SCALE,
                                       layout_height / PANGO_SCALE);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   gtk_snapshot_append_layout (snapshot, layout, color);
@@ -274,9 +277,11 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   if (!gdk_display_is_rgba (display) ||
       !gdk_display_is_composited (display))
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_snapshot_render_background (snapshot,
                                       gtk_widget_get_style_context (widget),
                                       0, 0, layout_width, layout_height);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height }, 1.0);

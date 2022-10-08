@@ -348,7 +348,7 @@
 #include "deprecated/gtkcellareacontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontext.h"
 #include "gtknative.h"
 

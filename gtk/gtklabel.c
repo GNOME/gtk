@@ -41,7 +41,7 @@
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkshow.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktextutilprivate.h"
 #include "gtktooltip.h"
@@ -1382,6 +1382,7 @@ gtk_label_snapshot (GtkWidget   *widget,
   int lx, ly;
   int width, height;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!self->text || (*self->text == '\0'))
     return;
 
@@ -1492,6 +1493,7 @@ gtk_label_snapshot (GtkWidget   *widget,
           gtk_style_context_restore (context);
         }
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static GtkSizeRequestMode

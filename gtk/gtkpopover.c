@@ -118,7 +118,7 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkshortcutmanager.h"
 #include "gtkbuildable.h"
 #include "gtktooltipprivate.h"
@@ -1572,11 +1572,13 @@ create_arrow_render_node (GtkPopover *popover)
 
   /* Render the arrow background */
   bg_snapshot = gtk_snapshot_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_background (bg_snapshot,
                                   context,
                                   0, 0,
                                   gtk_widget_get_width (widget),
                                   gtk_widget_get_height (widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
   node = gtk_snapshot_free_to_node (bg_snapshot);
   if (node)
     {

@@ -29,6 +29,7 @@
 #include "gtksnapshot.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
+#include "deprecated/gtkrender.h"
 
 #include <epoxy/gl.h>
 
@@ -659,10 +660,12 @@ gtk_gl_area_draw_error_screen (GtkGLArea   *area,
   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
   pango_layout_get_pixel_size (layout, NULL, &layout_height);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_layout (snapshot,
                               gtk_widget_get_style_context (GTK_WIDGET (area)),
                               0, (height - layout_height) / 2,
                               layout);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_object_unref (layout);
 }

@@ -53,7 +53,7 @@
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtktexthistoryprivate.h"
@@ -65,6 +65,7 @@
 #include "gtknative.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "deprecated/gtkrender.h"
 
 #include <cairo-gobject.h>
 #include <string.h>
@@ -2524,6 +2525,7 @@ gtk_text_draw_undershoot (GtkText     *self,
   GtkStyleContext *context;
   int min_offset, max_offset;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   gtk_text_get_scroll_limits (self, &min_offset, &max_offset);
@@ -2543,6 +2545,7 @@ gtk_text_draw_undershoot (GtkText     *self,
       gtk_snapshot_render_frame (snapshot, context, text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
       gtk_style_context_restore (context);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -4604,6 +4607,7 @@ gtk_text_draw_text (GtkText     *self,
   PangoLayout *layout;
   int x, y;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /* Nothing to display at all */
   if (gtk_text_get_display_mode (self) == DISPLAY_BLANK)
     return;
@@ -4645,6 +4649,7 @@ gtk_text_draw_text (GtkText     *self,
 
       gtk_style_context_restore (context);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -4663,6 +4668,7 @@ gtk_text_draw_cursor (GtkText     *self,
   const char *text;
   int x, y;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (widget);
 
   layout = g_object_ref (gtk_text_ensure_layout (self, TRUE));
@@ -4707,6 +4713,7 @@ gtk_text_draw_cursor (GtkText     *self,
     }
 
   g_object_unref (layout);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

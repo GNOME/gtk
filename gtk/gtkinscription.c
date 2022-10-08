@@ -24,7 +24,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
 #include "gtkpangoprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -520,7 +520,9 @@ gtk_inscription_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT(0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget)));
   gtk_inscription_get_layout_location (self, &lx, &ly);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_snapshot_pop (snapshot);
 }
 

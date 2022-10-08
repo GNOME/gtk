@@ -59,6 +59,7 @@
 #include "gtkjoinedmenuprivate.h"
 #include "gtkcsslineheightvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "deprecated/gtkrender.h"
 
 
 /**
@@ -5864,6 +5865,7 @@ draw_text (GtkWidget   *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_snapshot_render_background (snapshot, context,
                                   -priv->xoffset, -priv->yoffset - priv->top_margin,
                                   MAX (SCREEN_WIDTH (text_view), priv->width),
@@ -5872,6 +5874,7 @@ draw_text (GtkWidget   *widget,
                              -priv->xoffset, -priv->yoffset - priv->top_margin,
                              MAX (SCREEN_WIDTH (text_view), priv->width),
                              MAX (SCREEN_HEIGHT (text_view), priv->height));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
