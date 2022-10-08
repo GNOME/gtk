@@ -47,7 +47,9 @@
 #include "gtkscrollable.h"
 #include "gtkscrollbar.h"
 #include "gtksettingsprivate.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
@@ -1873,6 +1875,7 @@ gtk_scrolled_window_snapshot_scrollbars_junction (GtkScrolledWindow *scrolled_wi
   GtkAllocation hscr_allocation, vscr_allocation;
   GtkStyleContext *context;
   GdkRectangle junction_rect;
+  GtkCssBoxes boxes;
 
   gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
@@ -1885,14 +1888,12 @@ gtk_scrolled_window_snapshot_scrollbars_junction (GtkScrolledWindow *scrolled_wi
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, priv->junction_node);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, context,
-                                  junction_rect.x, junction_rect.y,
-                                  junction_rect.width, junction_rect.height);
-  gtk_snapshot_render_frame (snapshot, context,
-                             junction_rect.x, junction_rect.y,
-                             junction_rect.width, junction_rect.height);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 junction_rect.x, junction_rect.y,
+                                 junction_rect.width, junction_rect.height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 
   gtk_style_context_restore (context);
 }
@@ -1906,8 +1907,8 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
   int overshoot_x, overshoot_y;
   GtkStyleContext *context;
   GdkRectangle rect;
+  GtkCssBoxes boxes;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
@@ -1920,30 +1921,42 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (overshoot_x > 0)
     {
       gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_RIGHT]);
-      gtk_snapshot_render_background (snapshot, context, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
   else if (overshoot_x < 0)
     {
       gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_LEFT]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, -overshoot_x, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, -overshoot_x, rect.height);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y, -overshoot_x, rect.height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
 
   if (overshoot_y > 0)
     {
       gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_BOTTOM]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
   else if (overshoot_y < 0)
     {
       gtk_style_context_save_to_node (context, priv->overshoot_node[GTK_POS_TOP]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, rect.width, -overshoot_y);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, rect.width, -overshoot_y);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y, rect.width, -overshoot_y);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -1958,8 +1971,8 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
   GtkStyleContext *context;
   GdkRectangle rect;
   GtkAdjustment *adj;
+  GtkCssBoxes boxes;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (widget);
   gtk_scrolled_window_inner_allocation (scrolled_window, &rect);
 
@@ -1967,16 +1980,21 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_RIGHT]);
-      gtk_snapshot_render_background (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
-
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
   if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_LEFT]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
 
@@ -1984,18 +2002,23 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_BOTTOM]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
   if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[GTK_POS_TOP]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
