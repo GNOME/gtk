@@ -31,28 +31,28 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_check       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_option      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_arrow       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               angle,
                                     double               x,
                                     double               y,
                                     double               size);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_background  (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
@@ -60,55 +60,55 @@ void        gtk_render_background  (GtkStyleContext     *context,
                                     double               width,
                                     double               height);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_frame       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_expander    (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_focus       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_layout      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     PangoLayout         *layout);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_line        (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x0,
                                     double               y0,
                                     double               x1,
                                     double               y1);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_handle      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_activity    (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
                                     double               width,
                                     double               height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     GdkTexture          *texture,

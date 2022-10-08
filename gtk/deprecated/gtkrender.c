@@ -33,6 +33,8 @@
 #include "gsk/gskroundedrectprivate.h"
 #include <gdk/gdktextureprivate.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 gtk_do_render_icon (GtkStyleContext        *context,
                     cairo_t                *cr,
@@ -76,6 +78,8 @@ gtk_do_render_icon (GtkStyleContext        *context,
  * Typical checkmark rendering:
  *
  * ![](checks.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_check (GtkStyleContext *context,
@@ -110,6 +114,8 @@ gtk_render_check (GtkStyleContext *context,
  * Typical option mark rendering:
  *
  * ![](options.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_option (GtkStyleContext *context,
@@ -142,6 +148,8 @@ gtk_render_option (GtkStyleContext *context,
  * Typical arrow rendering at 0, 1⁄2 π;, π; and 3⁄2 π:
  *
  * ![](arrows.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_arrow (GtkStyleContext *context,
@@ -175,6 +183,8 @@ gtk_render_arrow (GtkStyleContext *context,
  * `background-image`, `border-width` and `border-radius`:
  *
  * ![](background.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_background (GtkStyleContext *context,
@@ -221,6 +231,8 @@ gtk_render_background (GtkStyleContext *context,
  * `border-color`, `border-width`, `border-radius` and junctions:
  *
  * ![](frames.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_frame (GtkStyleContext *context,
@@ -268,6 +280,8 @@ gtk_render_frame (GtkStyleContext *context,
  * Typical expander rendering:
  *
  * ![](expanders.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_expander (GtkStyleContext *context,
@@ -300,6 +314,8 @@ gtk_render_expander (GtkStyleContext *context,
  * Typical focus rendering:
  *
  * ![](focus.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_focus (GtkStyleContext *context,
@@ -340,6 +356,8 @@ gtk_render_focus (GtkStyleContext *context,
  * @layout: the `PangoLayout` to render
  *
  * Renders @layout on the coordinates @x, @y
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_layout (GtkStyleContext *context,
@@ -378,6 +396,8 @@ gtk_render_layout (GtkStyleContext *context,
  * @y1: Y coordinate for the end of the line
  *
  * Renders a line from (x0, y0) to (x1, y1).
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_line (GtkStyleContext *context,
@@ -423,6 +443,8 @@ gtk_render_line (GtkStyleContext *context,
  * Handles rendered for the paned and grip classes:
  *
  * ![](handles.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_handle (GtkStyleContext *context,
@@ -456,6 +478,8 @@ gtk_render_handle (GtkStyleContext *context,
  * Renders an activity indicator (such as in `GtkSpinner`).
  * The state %GTK_STATE_FLAG_CHECKED determines whether there is
  * activity going on.
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_activity (GtkStyleContext *context,
@@ -488,6 +512,7 @@ gtk_render_activity (GtkStyleContext *context,
  * regardless of scaling factors, which may not be appropriate when
  * drawing on displays with high pixel densities.
  *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_icon (GtkStyleContext *context,
