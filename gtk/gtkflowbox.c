@@ -97,7 +97,8 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
@@ -2497,6 +2498,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   int x, y, width, height;
+  GtkCssBoxes boxes;
 
   GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
 
@@ -2586,9 +2588,10 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_clip (cr);
 
           bg_snapshot = gtk_snapshot_new ();
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_snapshot_render_background (bg_snapshot, context, x, y, width, height);
-G_GNUC_END_IGNORE_DEPRECATIONS
+          gtk_css_boxes_init_border_box (&boxes,
+                                         gtk_style_context_lookup_style (context),
+                                         x, y, width, height);
+          gtk_css_style_snapshot_background (&boxes, bg_snapshot);
           node = gtk_snapshot_free_to_node (bg_snapshot);
           if (node)
             {
