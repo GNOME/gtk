@@ -186,6 +186,38 @@
                                               </object>
                                             </child>
 
+                                            <child>
+                                              <object class="GtkColumnViewColumn" id="column_view_location_column">
+                                                <property name="title" translatable="yes">Location</property>
+                                                <property name="resizable">1</property>
+                                                <property name="visible">0</property>
+                                                <property name="expand">1</property>
+                                                <property name="factory">
+                                                  <object class="GtkBuilderListItemFactory">
+                                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkInscription">
+        <property name="hexpand">1</property>
+        <property name="xalign">0</property>
+        <property name="min-chars">10</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <binding name="text">
+          <closure type="gchararray" function="column_view_get_location" />
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                                ]]></property>
+                                                  </object>
+                                                </property>
+                                              </object>
+                                            </child>
+
                                           </object>
                                         </child>
                                       </object>
@@ -236,22 +268,6 @@
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection2">
                                                 <signal name="changed" handler="list_selection_changed" swapped="no"/>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkTreeViewColumn" id="list_location_column">
-                                                <property name="title" translatable="yes">Location</property>
-                                                <property name="resizable">1</property>
-                                                <property name="visible">0</property>
-                                                <property name="expand">1</property>
-                                                <child>
-                                                  <object class="GtkCellRendererText" id="list_location_renderer">
-                                                    <property name="xalign">0</property>
-                                                    <property name="width-chars">10</property>
-                                                    <property name="ellipsize">1</property>
-                                                    <property name="xpad">6</property>
-                                                  </object>
-                                                </child>
                                               </object>
                                             </child>
                                             <child>

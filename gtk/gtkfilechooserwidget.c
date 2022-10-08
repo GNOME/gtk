@@ -28,6 +28,7 @@
 #include "deprecated/gtkcellrenderertext.h"
 #include "gtkdropdown.h"
 #include "gtkcolumnview.h"
+#include "gtkcolumnviewcolumn.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdroptarget.h"
@@ -42,6 +43,7 @@
 #include "gtkgrid.h"
 #include "gtkicontheme.h"
 #include "gtklabel.h"
+#include "gtklistitem.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
@@ -282,8 +284,8 @@ struct _GtkFileChooserWidget
   GtkCellRenderer *list_size_renderer;
   GtkTreeViewColumn *list_type_column;
   GtkCellRenderer *list_type_renderer;
-  GtkTreeViewColumn *list_location_column;
-  GtkCellRenderer *list_location_renderer;
+
+  GtkColumnViewColumn *column_view_location_column;
 
   guint location_changed_id;
 
@@ -365,7 +367,6 @@ enum {
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_DATE_TEXT,
   MODEL_COL_TIME_TEXT,
-  MODEL_COL_LOCATION_TEXT,
   MODEL_COL_ELLIPSIZE,
   MODEL_COL_NUM_COLUMNS
 };
@@ -384,7 +385,6 @@ enum {
         G_TYPE_STRING,            /* MODEL_COL_SIZE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_DATE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_TIME_TEXT */     \
-        G_TYPE_STRING,            /* MODEL_COL_LOCATION_TEXT */ \
         PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
@@ -2134,6 +2134,70 @@ long_press_cb (GtkGesture           *gesture,
   file_list_show_popover (impl, x, y);
 }
 
+static char *
+column_view_get_location (GtkListItem *list_item)
+{
+  GtkFileChooserWidget *impl;
+  GtkFileSystemItem *item;
+  GFile *home_location;
+  GFile *dir_location;
+  GFile *file;
+  char *location;
+
+  item = gtk_list_item_get_item (list_item);
+  if (!item)
+    return NULL;
+
+  file = _gtk_file_system_item_get_file (item);
+
+  home_location = g_file_new_for_path (g_get_home_dir ());
+  if (file)
+    dir_location = g_file_get_parent (file);
+  else
+    dir_location = NULL;
+
+  if (dir_location && file_is_recent_uri (dir_location))
+    {
+      const char *target_uri;
+      GFileInfo *info;
+      GFile *target;
+
+      info = _gtk_file_system_item_get_file_info (item);
+      target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
+      target = g_file_new_for_uri (target_uri);
+      g_object_unref (dir_location);
+      dir_location = g_file_get_parent (target);
+      g_clear_object (&target);
+    }
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (list_item),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+  g_assert (impl != NULL);
+
+  if (!dir_location)
+    location = g_strdup ("/");
+  else if (impl->current_folder && g_file_equal (impl->current_folder, dir_location))
+    location = g_strdup ("");
+  else if (g_file_equal (home_location, dir_location))
+    location = g_strdup (_("Home"));
+  else if (g_file_has_prefix (dir_location, home_location))
+    {
+      char *relative_path;
+
+      relative_path = g_file_get_relative_path (home_location, dir_location);
+      location = g_filename_display_name (relative_path);
+
+      g_free (relative_path);
+    }
+  else
+    location = g_file_get_path (dir_location);
+
+  g_clear_object (&dir_location);
+  g_clear_object (&home_location);
+
+  return g_steal_pointer (&location);
+}
+
 typedef struct {
   OperationMode operation_mode;
   int general_column;
@@ -2152,7 +2216,6 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, MODEL_COL_TIME);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, MODEL_COL_SIZE);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, MODEL_COL_TYPE);
-  gtk_tree_view_column_set_sort_column_id (impl->list_location_column, MODEL_COL_LOCATION_TEXT);
 }
 
 static gboolean
@@ -3665,20 +3728,6 @@ compare_time (GtkFileSystemModel   *model,
   return ta < tb ? -1 : (ta == tb ? 0 : 1);
 }
 
-static int
-compare_location (GtkFileSystemModel   *model,
-                  GtkTreeIter          *a,
-                  GtkTreeIter          *b,
-                  GtkFileChooserWidget *impl)
-{
-  const char *key_a, *key_b;
-
-  key_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_LOCATION_TEXT));
-  key_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_LOCATION_TEXT));
-
-  return g_strcmp0 (key_a, key_b);
-}
-
 /* Sort callback for the filename column */
 static int
 name_sort_func (GtkTreeModel *model,
@@ -3770,9 +3819,6 @@ recent_sort_func (GtkTreeModel *model,
   if (result == 0)
     result = compare_name (fs_model, a, b, impl);
 
-  if (result == 0)
-    result = compare_location (fs_model, a, b, impl);
-
   return result;
 }
 
@@ -3786,10 +3832,7 @@ search_sort_func (GtkTreeModel *model,
   GtkFileChooserWidget *impl = user_data;
   int result;
 
-  result = compare_location (fs_model, a, b, impl);
-
-  if (result == 0)
-    result = compare_name (fs_model, a, b, impl);
+  result = compare_name (fs_model, a, b, impl);
 
   if (result == 0)
     result = compare_time (fs_model, a, b, impl);
@@ -3840,9 +3883,9 @@ update_columns (GtkFileChooserWidget *impl,
 {
   gboolean need_resize = FALSE;
 
-  if (gtk_tree_view_column_get_visible (impl->list_location_column) != location_visible)
+  if (gtk_column_view_column_get_visible (impl->column_view_location_column) != location_visible)
     {
-      gtk_tree_view_column_set_visible (impl->list_location_column, location_visible);
+      gtk_column_view_column_set_visible (impl->column_view_location_column, location_visible);
       need_resize = TRUE;
     }
 
@@ -3855,7 +3898,6 @@ update_columns (GtkFileChooserWidget *impl,
   if (need_resize)
     {
       /* This undoes user resizing of columns when the columns change. */
-      gtk_tree_view_column_set_expand (impl->list_location_column, TRUE);
       gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
     }
 }
@@ -4513,55 +4555,6 @@ file_system_model_set (GtkFileSystemModel *model,
       }
     case MODEL_COL_ELLIPSIZE:
       g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
-      break;
-    case MODEL_COL_LOCATION_TEXT:
-      {
-        GFile *home_location;
-        GFile *dir_location;
-        char *location;
-
-        home_location = g_file_new_for_path (g_get_home_dir ());
-        if (file)
-          dir_location = g_file_get_parent (file);
-        else
-          dir_location = NULL;
-
-        if (dir_location && file_is_recent_uri (dir_location))
-          {
-            const char *target_uri;
-            GFile *target;
-
-            target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
-            target = g_file_new_for_uri (target_uri);
-            g_object_unref (dir_location);
-            dir_location = g_file_get_parent (target);
-            g_object_unref (target);
-          }
-
-        if (!dir_location)
-          location = g_strdup ("/");
-        else if (impl->current_folder && g_file_equal (impl->current_folder, dir_location))
-          location = g_strdup ("");
-        else if (g_file_equal (home_location, dir_location))
-          location = g_strdup (_("Home"));
-        else if (g_file_has_prefix (dir_location, home_location))
-          {
-            char *relative_path;
-
-            relative_path = g_file_get_relative_path (home_location, dir_location);
-            location = g_filename_display_name (relative_path);
-
-            g_free (relative_path);
-          }
-        else
-          location = g_file_get_path (dir_location);
-
-        g_value_take_string (value, location);
-
-        if (dir_location)
-          g_object_unref (dir_location);
-        g_object_unref (home_location);
-      }
       break;
     default:
       g_assert_not_reached ();
@@ -6575,7 +6568,6 @@ search_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, -1);
-  gtk_tree_view_column_set_sort_column_id (impl->list_location_column, -1);
 
   update_columns (impl, TRUE, _("Modified"));
 }
@@ -6814,7 +6806,6 @@ recent_start_loading (GtkFileChooserWidget *impl)
   gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_size_column, -1);
   gtk_tree_view_column_set_sort_column_id (impl->list_type_column, -1);
-  gtk_tree_view_column_set_sort_column_id (impl->list_location_column, -1);
 
   update_columns (impl, TRUE, _("Accessed"));
 }
@@ -7027,12 +7018,6 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
   gtk_tree_view_column_set_attributes (impl->list_time_column,
                                        impl->list_time_renderer,
                                        "text", MODEL_COL_TIME_TEXT,
-                                       "sensitive", MODEL_COL_IS_SENSITIVE,
-                                       NULL);
-
-  gtk_tree_view_column_set_attributes (impl->list_location_column,
-                                       impl->list_location_renderer,
-                                       "text", MODEL_COL_LOCATION_TEXT,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
 
@@ -7620,6 +7605,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_new_folder_button);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_path_bar_size_group);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_path_bar);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_location_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo_hbox);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, extra_align);
@@ -7634,8 +7620,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_size_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_type_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_type_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_location_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_location_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_name_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_create_button);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_error_stack);
@@ -7667,6 +7651,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
   gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 
