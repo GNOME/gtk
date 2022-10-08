@@ -59,7 +59,9 @@
 #include "gtkjoinedmenuprivate.h"
 #include "gtkcsslineheightvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
 
 
 /**
@@ -5847,6 +5849,7 @@ draw_text (GtkWidget   *widget,
   GtkTextViewPrivate *priv = text_view->priv;
   GtkStyleContext *context;
   gboolean did_save = FALSE;
+  GtkCssBoxes boxes;
 
   if (priv->border_window_size.left || priv->border_window_size.top)
     {
@@ -5865,16 +5868,13 @@ draw_text (GtkWidget   *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, context,
-                                  -priv->xoffset, -priv->yoffset - priv->top_margin,
-                                  MAX (SCREEN_WIDTH (text_view), priv->width),
-                                  MAX (SCREEN_HEIGHT (text_view), priv->height));
-  gtk_snapshot_render_frame (snapshot, context,
-                             -priv->xoffset, -priv->yoffset - priv->top_margin,
-                             MAX (SCREEN_WIDTH (text_view), priv->width),
-                             MAX (SCREEN_HEIGHT (text_view), priv->height));
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 -priv->xoffset, -priv->yoffset - priv->top_margin,
+                                 MAX (SCREEN_WIDTH (text_view), priv->width),
+                                 MAX (SCREEN_HEIGHT (text_view), priv->height));
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
   gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)

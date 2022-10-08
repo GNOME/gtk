@@ -92,6 +92,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtktextviewprivate.h"
 #include "gtkprivate.h"
+#include "gtkrenderlayoutprivate.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -4257,8 +4258,14 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
            */
           if (line_display->cursors != NULL)
             {
+              GdkDisplay *display;
+              GtkCssBoxes boxes;
+
               if (cursor_snapshot == NULL)
                 cursor_snapshot = gtk_snapshot_new ();
+
+              display = gtk_widget_get_display (widget);
+              gtk_css_boxes_init (&boxes, widget);
 
               for (int i = 0; i < line_display->cursors->len; i++)
                 {
@@ -4271,11 +4278,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                   if (cursor.is_insert || cursor.is_selection_bound)
                     gtk_snapshot_push_opacity (cursor_snapshot, cursor_alpha);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-                  gtk_snapshot_render_insertion_cursor (cursor_snapshot, context,
-                                                        line_display->x_offset, offset_y + line_display->top_margin,
-                                                        line_display->layout, cursor.pos, dir);
-G_GNUC_END_IGNORE_DEPRECATIONS
+                  gtk_css_style_snapshot_caret (&boxes, display, cursor_snapshot,
+                                                line_display->x_offset, offset_y + line_display->top_margin,
+                                                line_display->layout, cursor.pos, dir);
 
                   if (cursor.is_insert || cursor.is_selection_bound)
                     gtk_snapshot_pop (cursor_snapshot);
