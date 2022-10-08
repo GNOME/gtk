@@ -2867,11 +2867,6 @@ update_appearance (GtkFileChooserWidget *impl)
     _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
 
   location_bar_update (impl);
-
-  /* This *is* needed; we need to redraw the file list because the "sensitivity"
-   * of files may change depending whether we are in a file or folder-only mode.
-   */
-  gtk_widget_queue_draw (impl->browse_files_tree_view);
 }
 
 static char *
@@ -3187,7 +3182,7 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
 static void
 change_icon_theme (GtkFileChooserWidget *impl)
 {
-  gtk_widget_queue_resize (impl->browse_files_tree_view);
+  /* TODO: handle icon theme changes */
 }
 
 /* Callback used when a GtkSettings value changes */
