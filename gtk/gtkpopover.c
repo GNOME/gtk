@@ -125,7 +125,6 @@
 #include "gtkcssboxesimplprivate.h"
 #include "gtknativeprivate.h"
 
-#include "gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gsk/gskroundedrectprivate.h"
@@ -1549,6 +1548,8 @@ create_arrow_render_node (GtkPopover *popover)
   GtkBorder border;
   cairo_t *cr;
   GtkSnapshot *snapshot;
+  GtkSnapshot *bg_snapshot;
+  GskRenderNode *node;
 
   snapshot = gtk_snapshot_new ();
 
@@ -1570,10 +1571,18 @@ create_arrow_render_node (GtkPopover *popover)
   gtk_style_context_save_to_node (context, priv->arrow_node);
 
   /* Render the arrow background */
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_width (widget),
-                         gtk_widget_get_height (widget));
+  bg_snapshot = gtk_snapshot_new ();
+  gtk_snapshot_render_background (bg_snapshot,
+                                  context,
+                                  0, 0,
+                                  gtk_widget_get_width (widget),
+                                  gtk_widget_get_height (widget));
+  node = gtk_snapshot_free_to_node (bg_snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
