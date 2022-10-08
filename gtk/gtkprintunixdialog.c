@@ -1953,6 +1953,8 @@ paint_page (GtkPrintUnixDialog *dialog,
   int width, height;
   int text_y;
   GdkRGBA color;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
 
   width = 20;
   height = 26;
@@ -1961,8 +1963,15 @@ paint_page (GtkPrintUnixDialog *dialog,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, dialog->collate_paper_node);
 
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_render_background (snapshot, context, x, y, width, height);
+  gtk_snapshot_render_frame (snapshot, context, x, y, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   gtk_style_context_get_color (context, &color);
   cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
@@ -2392,6 +2401,8 @@ draw_page (GtkDrawingArea *da,
   double pos_x, pos_y;
   int pages_per_sheet;
   gboolean ltr = TRUE;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
 
   orientation = gtk_page_setup_get_orientation (dialog->page_setup);
   landscape =
@@ -2486,8 +2497,15 @@ draw_page (GtkDrawingArea *da,
   pos_y = (height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
-  gtk_render_background (context, cr, 1, 1, w, h);
-  gtk_render_frame (context, cr, 1, 1, w, h);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_render_background (snapshot, context, 1, 1, w, h);
+  gtk_snapshot_render_frame (snapshot, context, 1, 1, w, h);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   cairo_set_line_width (cr, 1.0);
 
