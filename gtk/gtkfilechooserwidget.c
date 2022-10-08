@@ -480,11 +480,6 @@ static gboolean list_select_func   (GtkTreeSelection      *selection,
 
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
                                         GtkFileChooserWidget  *impl);
-static void list_row_activated         (GtkTreeView           *tree_view,
-                                        GtkTreePath           *path,
-                                        GtkTreeViewColumn     *column,
-                                        GtkFileChooserWidget  *impl);
-
 static void path_bar_clicked (GtkPathBar            *path_bar,
                               GFile                 *file,
                               GFile                 *child,
@@ -6843,42 +6838,30 @@ browse_files_column_view_keynav_failed_cb (GtkWidget        *widget,
 
 /* Callback used when a row in the file list is activated */
 static void
-list_row_activated (GtkTreeView          *tree_view,
-                    GtkTreePath          *path,
-                    GtkTreeViewColumn    *column,
-                    GtkFileChooserWidget *impl)
+column_view_row_activated_cb (GtkColumnView        *column_view,
+                              guint                 position,
+                              GtkFileChooserWidget *self)
 {
-  GFile *file;
-  GtkTreeIter iter;
-  GtkTreeModel *model;
-  gboolean is_folder;
-  gboolean is_sensitive;
+  GtkFileSystemItem *item;
+  GtkSelectionModel *selection_model;
+  GFileInfo *info;
 
-  model = gtk_tree_view_get_model (tree_view);
+  selection_model = gtk_column_view_get_model (column_view);
+  item = g_list_model_get_item (G_LIST_MODEL (selection_model), position);
+  info = _gtk_file_system_item_get_file_info (item);
 
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    return;
-
-  gtk_tree_model_get (model, &iter,
-                      MODEL_COL_FILE, &file,
-                      MODEL_COL_IS_FOLDER, &is_folder,
-                      MODEL_COL_IS_SENSITIVE, &is_sensitive,
-                      -1);
-
-  if (is_sensitive && is_folder && file)
+  if (_gtk_file_info_consider_as_directory (info))
     {
-      change_folder_and_display_error (impl, file, FALSE);
-      goto out;
+      GFile *file = _gtk_file_system_item_get_file (item);
+      change_folder_and_display_error (self, file, FALSE);
+    }
+  else if (self->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+           self->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      gtk_widget_activate_default (GTK_WIDGET (self));
     }
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    gtk_widget_activate_default (GTK_WIDGET (impl));
-
- out:
-
-  if (file)
-    g_object_unref (file);
+  g_clear_object (&item);
 }
 
 static void
@@ -7507,7 +7490,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 
   /* And a *lot* of callbacks to bind ... */
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
-  gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, browse_files_column_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
@@ -7531,6 +7513,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_time_visible);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_row_activated_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 
