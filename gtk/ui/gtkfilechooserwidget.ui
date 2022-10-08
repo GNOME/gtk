@@ -387,11 +387,6 @@
                                                 <signal name="pressed" handler="click_cb" swapped="no"/>
                                               </object>
                                             </child>
-                                            <child internal-child="selection">
-                                              <object class="GtkTreeSelection" id="treeview-selection2">
-                                                <signal name="changed" handler="list_selection_changed" swapped="no"/>
-                                              </object>
-                                            </child>
                                           </object>
                                         </child>
                                       </object>
