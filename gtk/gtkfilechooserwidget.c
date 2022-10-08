@@ -6825,9 +6825,9 @@ list_selection_changed (GtkTreeSelection     *selection,
 }
 
 static gboolean
-browse_files_tree_view_keynav_failed_cb (GtkWidget        *widget,
-                                         GtkDirectionType  direction,
-                                         gpointer          user_data)
+browse_files_column_view_keynav_failed_cb (GtkWidget        *widget,
+                                           GtkDirectionType  direction,
+                                           gpointer          user_data)
 {
  GtkFileChooserWidget *impl = user_data;
 
@@ -7509,7 +7509,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
-  gtk_widget_class_bind_template_callback (widget_class, browse_files_tree_view_keynav_failed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_column_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
