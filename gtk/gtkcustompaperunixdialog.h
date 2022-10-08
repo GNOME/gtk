@@ -33,7 +33,6 @@ GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_
 GtkWidget *       _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
                                                                     const char *title);
 GtkUnit           _gtk_print_get_default_user_units                (void);
-void              _gtk_print_load_custom_papers                    (GtkListStore *store);
 void               gtk_print_load_custom_papers                    (GListStore *store);
 GList *           _gtk_load_custom_papers                          (void);
 

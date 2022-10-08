@@ -198,29 +198,6 @@ _gtk_load_custom_papers (void)
 }
 
 void
-_gtk_print_load_custom_papers (GtkListStore *store)
-{
-  GtkTreeIter iter;
-  GList *papers, *p;
-  GtkPageSetup *page_setup;
-
-  gtk_list_store_clear (store);
-
-  papers = _gtk_load_custom_papers ();
-  for (p = papers; p; p = p->next)
-    {
-      page_setup = p->data;
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter,
-                          0, page_setup,
-                          -1);
-      g_object_unref (page_setup);
-    }
-
-  g_list_free (papers);
-}
-
-void
 gtk_print_load_custom_papers (GListStore *store)
 {
   GList *papers, *p;
