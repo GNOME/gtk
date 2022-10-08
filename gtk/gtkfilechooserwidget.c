@@ -2753,18 +2753,11 @@ static void
 set_select_multiple (GtkFileChooserWidget *impl,
                      gboolean               select_multiple)
 {
-  GtkTreeSelection *selection;
-  GtkSelectionMode mode;
-
   if (select_multiple == impl->select_multiple)
     return;
 
-  mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_set_mode (selection, mode);
-
-  gtk_tree_view_set_rubber_banding (GTK_TREE_VIEW (impl->browse_files_tree_view), select_multiple);
+  gtk_column_view_set_enable_rubberband (GTK_COLUMN_VIEW (impl->browse_files_column_view),
+                                         select_multiple);
 
   g_clear_object (&impl->browse_files_selection_model);
   impl->browse_files_selection_model = select_multiple
