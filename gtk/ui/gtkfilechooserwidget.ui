@@ -331,7 +331,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkActionBar" id="remote_warning_bar2">
+                                      <object class="GtkActionBar" id="remote_warning_bar">
                                         <property name="visible">0</property>
                                         <child type="center">
                                           <object class="GtkLabel">
@@ -378,16 +378,6 @@
                                                 <signal name="changed" handler="list_selection_changed" swapped="no"/>
                                               </object>
                                             </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkActionBar" id="remote_warning_bar">
-                                        <property name="visible">0</property>
-                                        <child type="center">
-                                          <object class="GtkLabel">
-                                            <property name="label" translatable="yes">Remote location — only searching the current folder</property>
                                           </object>
                                         </child>
                                       </object>
