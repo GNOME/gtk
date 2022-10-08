@@ -27,11 +27,20 @@
 
 G_BEGIN_DECLS
 
-void            gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
-                                               GtkSnapshot *snapshot,
-                                               int          x,
-                                               int          y,
-                                               PangoLayout *layout);
+void            gtk_css_style_snapshot_layout (GtkCssBoxes    *boxes,
+                                               GtkSnapshot    *snapshot,
+                                               int             x,
+                                               int             y,
+                                               PangoLayout    *layout);
+
+void            gtk_css_style_snapshot_caret  (GtkCssBoxes    *boxes,
+                                               GdkDisplay     *display,
+                                               GtkSnapshot    *snapshot,
+                                               int             x,
+                                               int             y,
+                                               PangoLayout    *layout,
+                                               int             index,
+                                               PangoDirection  direction);
 
 
 G_END_DECLS
