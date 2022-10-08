@@ -53,7 +53,10 @@
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkrenderlayoutprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtktexthistoryprivate.h"
@@ -2524,8 +2527,8 @@ gtk_text_draw_undershoot (GtkText     *self,
   const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   GtkStyleContext *context;
   int min_offset, max_offset;
+  GtkCssBoxes boxes;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   gtk_text_get_scroll_limits (self, &min_offset, &max_offset);
@@ -2533,19 +2536,24 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->scroll_offset > min_offset)
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
-      gtk_snapshot_render_background (snapshot, context, 0, 0, UNDERSHOOT_SIZE, text_height);
-      gtk_snapshot_render_frame (snapshot, context, 0, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     0, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
 
   if (priv->scroll_offset < max_offset)
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
-      gtk_snapshot_render_background (snapshot, context, text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
-      gtk_snapshot_render_frame (snapshot, context, text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
       gtk_style_context_restore (context);
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -4606,8 +4614,8 @@ gtk_text_draw_text (GtkText     *self,
   GtkStyleContext *context;
   PangoLayout *layout;
   int x, y;
+  GtkCssBoxes boxes;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /* Nothing to display at all */
   if (gtk_text_get_display_mode (self) == DISPLAY_BLANK)
     return;
@@ -4617,7 +4625,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   gtk_text_get_layout_offsets (self, &x, &y);
 
-  gtk_snapshot_render_layout (snapshot, context, x, y, layout);
+  gtk_css_boxes_init (&boxes, widget);
+  gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
 
   if (priv->selection_bound != priv->current_pos)
     {
@@ -4640,16 +4649,18 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
       cairo_region_get_extents (clip, &clip_extents);
 
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents));
-      gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
-      gtk_snapshot_render_layout (snapshot, context, x, y, layout);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
       gtk_snapshot_pop (snapshot);
 
       cairo_region_destroy (clip);
 
       gtk_style_context_restore (context);
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -4667,8 +4678,10 @@ gtk_text_draw_cursor (GtkText     *self,
   PangoLayout *layout;
   const char *text;
   int x, y;
+  GtkCssBoxes boxes;
+  GdkDisplay *display;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  display = gtk_widget_get_display (widget);
   context = gtk_widget_get_style_context (widget);
 
   layout = g_object_ref (gtk_text_ensure_layout (self, TRUE));
@@ -4685,11 +4698,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   else
     block = _gtk_text_util_get_block_cursor_location (layout,
                                                       cursor_index, &cursor_rect, &block_at_line_end);
+
   if (!block)
     {
-      gtk_snapshot_render_insertion_cursor (snapshot, context,
-                                            x, y,
-                                            layout, cursor_index, priv->resolved_dir);
+      gtk_css_boxes_init (&boxes, widget);
+      gtk_css_style_snapshot_caret (&boxes, display, snapshot,
+                                    x, y,
+                                    layout, cursor_index, priv->resolved_dir);
     }
   else /* overwrite_mode */
     {
@@ -4704,16 +4719,18 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       gtk_style_context_save_to_node (context, priv->block_cursor_node);
 
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &bounds);
-      gtk_snapshot_render_background (snapshot, context,  0, 0, width, height);
-      gtk_snapshot_render_layout (snapshot, context,  x, y, layout);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
+      gtk_css_style_snapshot_layout (&boxes,snapshot, x, y, layout);
       gtk_snapshot_pop (snapshot);
 
       gtk_style_context_restore (context);
     }
 
   g_object_unref (layout);
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
