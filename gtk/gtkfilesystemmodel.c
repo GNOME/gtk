@@ -1912,3 +1912,25 @@ _gtk_file_system_item_get_file_info (GtkFileSystemItem *item)
 {
   return item->node->info;
 }
+
+gboolean
+_gtk_file_system_item_is_visible (GtkFileSystemItem *item)
+{
+  return item->node->visible;
+}
+
+GtkFileSystemItem *
+_gtk_file_system_model_get_item_for_file(GtkFileSystemModel *model,
+                                         GFile              *file)
+{
+  FileModelNode *node;
+  guint i;
+
+  i = node_get_for_file (model, file);
+
+  if (i == 0)
+    return NULL;
+
+  node = get_node (model, i);
+  return node->item;
+}

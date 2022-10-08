@@ -104,6 +104,11 @@ GFile *             _gtk_file_system_item_get_file          (GtkFileSystemItem  
 
 GFileInfo *         _gtk_file_system_item_get_file_info     (GtkFileSystemItem  *item);
 
+gboolean            _gtk_file_system_item_is_visible        (GtkFileSystemItem  *item);
+
+GtkFileSystemItem * _gtk_file_system_model_get_item_for_file(GtkFileSystemModel *model,
+							     GFile              *file);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_MODEL_H__ */
