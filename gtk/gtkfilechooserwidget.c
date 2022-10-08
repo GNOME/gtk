@@ -1591,117 +1591,6 @@ change_show_time_state (GSimpleAction *action,
   impl->show_time = g_variant_get_boolean (state);
 }
 
-/* Shows an error dialog about not being able to select a dragged file */
-static void
-error_selecting_dragged_file_dialog (GtkFileChooserWidget *impl,
-                                     GFile                 *file,
-                                     GError                *error)
-{
-  error_dialog (impl,
-                _("Could not select file"),
-                error);
-}
-
-static void
-file_list_drag_data_select_files (GtkFileChooserWidget  *impl,
-                                  GSList                *files)
-{
-  GtkFileChooser *chooser = GTK_FILE_CHOOSER (impl);
-  GSList *l;
-
-  for (l = files; l; l = l->next)
-    {
-      GFile *file = l->data;
-      GError *error = NULL;
-
-      gtk_file_chooser_widget_select_file (chooser, file, &error);
-      if (error)
-        error_selecting_dragged_file_dialog (impl, file, error);
-    }
-}
-
-typedef struct
-{
-  GtkFileChooserWidget *impl;
-  GSList *files;
-} FileListDragData;
-
-static void
-file_list_drag_data_received_get_info_cb (GObject      *source,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
-{
-  GFile *file = G_FILE (source);
-  FileListDragData *data = user_data;
-  GFileInfo *info;
-  GtkFileChooserWidget *impl = data->impl;
-  GtkFileChooser *chooser = GTK_FILE_CHOOSER (impl);
-
-  g_clear_object (&impl->file_list_drag_data_received_cancellable);
-
-  info = g_file_query_info_finish (file, result, NULL);
-  if (!info)
-    goto out;
-
-  if ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-       impl->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
-      data->files->next == NULL && _gtk_file_info_consider_as_directory (info))
-    change_folder_and_display_error (data->impl, data->files->data, FALSE);
-  else
-    {
-      GError *local_error = NULL;
-
-      gtk_file_chooser_widget_unselect_all (chooser);
-      gtk_file_chooser_widget_select_file (chooser, data->files->data, &local_error);
-      if (local_error)
-        error_selecting_dragged_file_dialog (data->impl, data->files->data, local_error);
-      else
-        browse_files_center_selected_row (data->impl);
-    }
-
-  if (impl->select_multiple)
-    file_list_drag_data_select_files (data->impl, data->files->next);
-
-out:
-  g_object_unref (data->impl);
-  g_slist_free_full (data->files, g_object_unref);
-  g_free (data);
-
-  g_clear_object (&info);
-}
-
-static gboolean
-file_list_drag_drop_cb (GtkDropTarget        *dest,
-                        const GValue         *value,
-                        double                x,
-                        double                y,
-                        GtkFileChooserWidget *impl)
-{
-  GSList *files;
-  FileListDragData *data;
-
-  files = g_value_get_boxed (value);
-
-  data = g_new0 (FileListDragData, 1);
-  data->impl = g_object_ref (impl);
-  data->files = g_slist_copy_deep (files, (GCopyFunc) g_object_ref, NULL);
-
-  if (impl->file_list_drag_data_received_cancellable)
-    g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
-  g_clear_object (&impl->file_list_drag_data_received_cancellable);
-
-  impl->file_list_drag_data_received_cancellable = g_cancellable_new ();
-  g_file_query_info_async (data->files->data,
-                           "standard::type",
-                           G_FILE_QUERY_INFO_NONE,
-                           G_PRIORITY_DEFAULT,
-                           impl->file_list_drag_data_received_cancellable,
-                           file_list_drag_data_received_get_info_cb,
-                           data);
-
-  return TRUE;
-}
-
 /* Sensitizes the "Copy file’s location" and other context menu items if there is actually
  * a selection active.
  */
@@ -7314,10 +7203,8 @@ captured_key (GtkEventControllerKey *controller,
 static void
 post_process_ui (GtkFileChooserWidget *impl)
 {
-  GdkContentFormats *drag_formats;
   GtkTreeSelection *selection;
   GFile            *file;
-  GtkDropTarget *target;
   GtkGesture *gesture;
   GtkEventController *controller;
   GtkShortcutTrigger *trigger;
@@ -7329,17 +7216,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
                                           impl, NULL);
-
-  drag_formats = gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST);
-  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                                          GDK_BUTTON1_MASK,
-                                          drag_formats,
-                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gdk_content_formats_unref (drag_formats);
-
-  target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (target, "drop", G_CALLBACK (file_list_drag_drop_cb), impl);
-  gtk_widget_add_controller (impl->browse_files_tree_view, GTK_EVENT_CONTROLLER (target));
 
   file = g_file_new_for_path ("/");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
