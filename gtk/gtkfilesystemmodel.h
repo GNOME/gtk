@@ -96,8 +96,6 @@ void                _gtk_file_system_model_set_show_files   (GtkFileSystemModel 
 							     gboolean            show_files);
 void                _gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
 							     gboolean            show_folders);
-void                _gtk_file_system_model_clear_cache      (GtkFileSystemModel *model,
-                                                             int                 column);
 
 void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
                                                              GtkFileFilter      *filter);

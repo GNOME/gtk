@@ -519,8 +519,6 @@ static void     recent_start_loading         (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserWidget *impl);
-static void     clear_model_cache            (GtkFileChooserWidget *impl,
-                                              int                   column);
 static void     set_model_filter             (GtkFileChooserWidget *impl,
                                               GtkFileFilter        *filter);
 static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
@@ -1585,20 +1583,6 @@ change_sort_directories_first_state (GSimpleAction *action,
   gtk_tree_sortable_set_sort_column_id (sortable,
                                         impl->sort_column,
                                         impl->sort_order);
-}
-
-static void
-clear_model_cache (GtkFileChooserWidget *impl,
-                   int                   column)
-{
-  if (impl->browse_files_model)
-    _gtk_file_system_model_clear_cache (impl->browse_files_model, column);
-
-  if (impl->search_model)
-    _gtk_file_system_model_clear_cache (impl->search_model, column);
-
-  if (impl->recent_model)
-    _gtk_file_system_model_clear_cache (impl->recent_model, column);
 }
 
 static void
@@ -6783,7 +6767,6 @@ set_current_filter (GtkFileChooserWidget *impl,
 
       gtk_drop_down_set_selected (GTK_DROP_DOWN (impl->filter_combo), filter_index);
 
-      clear_model_cache (impl, MODEL_COL_IS_SENSITIVE);
       set_model_filter (impl, impl->current_filter);
       g_object_notify (G_OBJECT (impl), "filter");
     }

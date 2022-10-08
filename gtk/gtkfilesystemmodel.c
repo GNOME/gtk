@@ -2157,59 +2157,6 @@ thaw_updates (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_clear_cache:
- * @model: a `GtkFileSystemModel`
- * @column: the column to clear or -1 for all columns
- *
- * Clears the cached values in the model for the given @column. Use 
- * this function whenever your get_value function would return different
- * values for a column.
- * The file chooser uses this for example when the icon theme changes to 
- * invalidate the cached pixbufs.
- **/
-void
-_gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
-                                    int                 column)
-{
-  guint i;
-  int start, end;
-  gboolean changed;
-
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (column >= -1 && (guint) column < model->n_columns);
-
-  if (column > -1)
-    {
-      start = column;
-      end = column + 1;
-    }
-  else
-    {
-      start = 0;
-      end = model->n_columns;
-    }
-
-  for (i = 0; i < model->files->len; i++)
-    {
-      FileModelNode *node = get_node (model, i);
-      changed = FALSE;
-      for (column = start; column < end; column++)
-        {
-          if (!G_VALUE_TYPE (&node->values[column]))
-            continue;
-          
-          g_value_unset (&node->values[column]);
-          changed = TRUE;
-        }
-
-      if (changed && node->visible)
-	emit_row_changed_for_node (model, i);
-    }
-
-  /* FIXME: resort? */
-}
-
-/**
  * _gtk_file_system_model_add_and_query_file:
  * @model: a `GtkFileSystemModel`
  * @file: the file to add
