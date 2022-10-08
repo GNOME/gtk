@@ -486,7 +486,6 @@ static void path_bar_clicked (GtkPathBar            *path_bar,
                               GtkFileChooserWidget *impl);
 
 static void load_remove_timer (GtkFileChooserWidget *impl, LoadState new_load_state);
-static void browse_files_center_selected_row (GtkFileChooserWidget *impl);
 
 static void location_switch_to_path_bar (GtkFileChooserWidget *impl);
 
@@ -3614,43 +3613,6 @@ browse_files_select_first_row (GtkFileChooserWidget *impl)
   gtk_tree_path_free (path);
 }
 
-struct center_selected_row_closure {
-  GtkFileChooserWidget *impl;
-  gboolean already_centered;
-};
-
-/* Callback used from gtk_tree_selection_selected_foreach(); centers the
- * selected row in the tree view.
- */
-static void
-center_selected_row_foreach_cb (GtkTreeModel      *model,
-                                GtkTreePath       *path,
-                                GtkTreeIter       *iter,
-                                gpointer           data)
-{
-  struct center_selected_row_closure *closure = data;
-
-  if (closure->already_centered)
-    return;
-
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (closure->impl->browse_files_tree_view), path, NULL, TRUE, 0.5, 0.0);
-  closure->already_centered = TRUE;
-}
-
-/* Centers the selected row in the tree view */
-static void
-browse_files_center_selected_row (GtkFileChooserWidget *impl)
-{
-  struct center_selected_row_closure closure;
-  GtkTreeSelection *selection;
-
-  closure.impl = impl;
-  closure.already_centered = FALSE;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_selected_foreach (selection, center_selected_row_foreach_cb, &closure);
-}
-
 static gboolean
 show_and_select_files (GtkFileChooserWidget *impl,
                        GSList               *files)
@@ -3731,8 +3693,6 @@ show_and_select_files (GtkFileChooserWidget *impl,
         }
     }
 
-  browse_files_center_selected_row (impl);
-
   return selected_a_file;
 }
 
@@ -3747,7 +3707,6 @@ pending_select_files_process (GtkFileChooserWidget *impl)
     {
       show_and_select_files (impl, impl->pending_select_files);
       pending_select_files_free (impl);
-      browse_files_center_selected_row (impl);
     }
   else
     {
