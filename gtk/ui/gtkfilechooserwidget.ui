@@ -136,7 +136,7 @@
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
-                                      <object class="GtkScrolledWindow">
+                                      <object class="GtkScrolledWindow" id="browse_files_swin">
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="vexpand">1</property>
                                         <child>
@@ -368,7 +368,7 @@
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
-                                      <object class="GtkScrolledWindow" id="browse_files_swin">
+                                      <object class="GtkScrolledWindow">
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="vexpand">1</property>
                                         <child>
