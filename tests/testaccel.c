@@ -18,6 +18,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 accel_edited_callback (GtkCellRendererText *cell,
                        const char          *path_string,

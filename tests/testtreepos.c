@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean
 clicked_icon (GtkTreeView  *tv,
               int           x,

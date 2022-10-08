@@ -18,6 +18,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static const char *baseline_pos_str[] = {
   "BASELINE_POSITION_TOP",
   "BASELINE_POSITION_CENTER",

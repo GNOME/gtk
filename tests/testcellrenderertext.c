@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define COL_BACKGROUND 15
 #define COL_LINE_NUM   16
 #define NUM_COLS       17 /* change this when adding columns */

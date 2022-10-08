@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 activate (GSimpleAction *action,
           GVariant      *parameter,

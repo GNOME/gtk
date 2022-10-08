@@ -19,6 +19,8 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct {
   const char *string;
   gboolean is_editable;

@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 combo_changed_cb (GtkWidget *combo,
 		  gpointer   data)

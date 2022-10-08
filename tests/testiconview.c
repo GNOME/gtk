@@ -20,6 +20,8 @@
 #include <sys/types.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define NUMBER_OF_ITEMS   10
 #define SOME_ITEMS       100
 #define MANY_ITEMS     10000

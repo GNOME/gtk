@@ -19,6 +19,8 @@
 #include <string.h>
 #include <stdio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * oh yes, this test app surely has a lot of ugly code
  */

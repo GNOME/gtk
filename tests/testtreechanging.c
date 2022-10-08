@@ -18,6 +18,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define MIN_ROWS 50
 #define MAX_ROWS 150
 

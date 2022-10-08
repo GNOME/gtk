@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _Row Row;
 typedef struct _RowClass RowClass;
 
