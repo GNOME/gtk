@@ -30,6 +30,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderlayoutprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtksettings.h"
 
@@ -667,33 +668,16 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             double           y,
                             PangoLayout     *layout)
 {
-  const bool needs_translate = (x != 0 || y != 0);
-  const GdkRGBA *fg_color;
-  GtkCssValue *shadows_value;
-  gboolean has_shadow;
+  GtkCssBoxes boxes;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  if (needs_translate)
-    {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-    }
-
-  fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-
-  shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
-
-  gtk_snapshot_append_layout (snapshot, layout, fg_color);
-
-  if (has_shadow)
-    gtk_snapshot_pop (snapshot);
-
-  if (needs_translate)
-    gtk_snapshot_restore (snapshot);
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, 0, 0);
+  gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
 }
 
 static void
