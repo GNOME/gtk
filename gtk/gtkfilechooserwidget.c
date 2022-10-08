@@ -3804,25 +3804,8 @@ update_columns (GtkFileChooserWidget *impl,
                 gboolean              location_visible,
                 const char           *time_title)
 {
-  gboolean need_resize = FALSE;
-
-  if (gtk_column_view_column_get_visible (impl->column_view_location_column) != location_visible)
-    {
-      gtk_column_view_column_set_visible (impl->column_view_location_column, location_visible);
-      need_resize = TRUE;
-    }
-
-  if (g_strcmp0 (gtk_column_view_column_get_title (impl->column_view_time_column), time_title) != 0)
-    {
-      gtk_column_view_column_set_title (impl->column_view_time_column, time_title);
-      need_resize = TRUE;
-    }
-
-  if (need_resize)
-    {
-      /* This undoes user resizing of columns when the columns change. */
-      gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
-    }
+  gtk_column_view_column_set_visible (impl->column_view_location_column, location_visible);
+  gtk_column_view_column_set_title (impl->column_view_time_column, time_title);
 }
 
 /* Creates a sort model to wrap the file system model and sets it on the tree view */
