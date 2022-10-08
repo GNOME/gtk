@@ -34,7 +34,9 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
-#include "deprecated/gtkrender.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
@@ -1624,6 +1626,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   GtkStyleContext *context;
   int width, height;
   double offset_x, offset_y;
+  GtkCssBoxes boxes;
 
   icon_view = GTK_ICON_VIEW (widget);
 
@@ -1712,11 +1715,10 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
       gtk_style_context_save_to_node (context, icon_view->priv->dndnode);
       gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_snapshot_render_frame (snapshot, context,
-                                 rect.x, rect.y,
-                                 rect.width, rect.height);
-G_GNUC_END_IGNORE_DEPRECATIONS
+      gtk_css_boxes_init_border_box (&boxes,
+                                     gtk_style_context_lookup_style (context),
+                                     rect.x, rect.y, rect.width, rect.height);
+      gtk_css_style_snapshot_border (&boxes, snapshot);
 
       gtk_style_context_restore (context);
     }
@@ -2804,6 +2806,7 @@ gtk_icon_view_snapshot_item (GtkIconView     *icon_view,
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkCellAreaContext *context;
+  GtkCssBoxes boxes;
 
   if (priv->model == NULL || item->cell_area.width <= 0 || item->cell_area.height <= 0)
     return;
@@ -2836,18 +2839,14 @@ gtk_icon_view_snapshot_item (GtkIconView     *icon_view,
 
   gtk_style_context_set_state (style_context, state);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, style_context,
-                                  x - priv->item_padding,
-                                  y - priv->item_padding,
-                                  item->cell_area.width  + priv->item_padding * 2,
-                                  item->cell_area.height + priv->item_padding * 2);
-  gtk_snapshot_render_frame (snapshot, style_context,
-                             x - priv->item_padding,
-                             y - priv->item_padding,
-                             item->cell_area.width  + priv->item_padding * 2,
-                             item->cell_area.height + priv->item_padding * 2);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (style_context),
+                                 x - priv->item_padding,
+                                 y - priv->item_padding,
+                                 item->cell_area.width  + priv->item_padding * 2,
+                                 item->cell_area.height + priv->item_padding * 2);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 
   cell_area.x      = x;
   cell_area.y      = y;
@@ -2869,6 +2868,7 @@ gtk_icon_view_snapshot_rubberband (GtkIconView *icon_view,
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkStyleContext *context;
   GdkRectangle rect;
+  GtkCssBoxes boxes;
 
   rect.x = MIN (priv->rubberband_x1, priv->rubberband_x2);
   rect.y = MIN (priv->rubberband_y1, priv->rubberband_y2);
@@ -2879,14 +2879,12 @@ gtk_icon_view_snapshot_rubberband (GtkIconView *icon_view,
 
   gtk_style_context_save_to_node (context, priv->rubberband_node);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (snapshot, context,
-                                  rect.x, rect.y,
-                                  rect.width, rect.height);
-  gtk_snapshot_render_frame (snapshot, context,
-                             rect.x, rect.y,
-                             rect.width, rect.height);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 rect.x, rect.y,
+                                 rect.width, rect.height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 
   gtk_style_context_restore (context);
 }
