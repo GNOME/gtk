@@ -605,8 +605,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   _gtk_file_system_model_set_show_files (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
                                          chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
                                          chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
-					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
 				  chooser_entry->completion_store);
