@@ -279,6 +279,53 @@
                                               </object>
                                             </child>
 
+                                            <child>
+                                              <object class="GtkColumnViewColumn" id="column_view_time_column">
+                                                <property name="title" translatable="yes">Modified</property>
+                                                <property name="factory">
+                                                  <object class="GtkBuilderListItemFactory">
+                                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <binding name="label">
+              <closure type="gchararray" function="column_view_get_file_date">
+                <lookup type="GtkFileSystemItem" name="file-info">
+                  <lookup name="item">GtkListItem</lookup>
+                </lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <binding name="visible">
+              <closure type="gboolean" function="column_view_get_time_visible" />
+            </binding>
+            <binding name="label">
+              <closure type="gchararray" function="column_view_get_file_time">
+                <lookup type="GtkFileSystemItem" name="file-info">
+                  <lookup name="item">GtkListItem</lookup>
+                </lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+                                                ]]></property>
+                                                  </object>
+                                                </property>
+                                              </object>
+                                            </child>
+
                                           </object>
                                         </child>
                                       </object>
@@ -329,22 +376,6 @@
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection2">
                                                 <signal name="changed" handler="list_selection_changed" swapped="no"/>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkTreeViewColumn" id="list_time_column">
-                                                <property name="title" translatable="yes">Modified</property>
-                                                <property name="sizing">2</property>
-                                                <child>
-                                                  <object class="GtkCellRendererText" id="list_date_renderer">
-                                                    <property name="xpad">6</property>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCellRendererText" id="list_time_renderer">
-                                                    <property name="xpad">6</property>
-                                                  </object>
-                                                </child>
                                               </object>
                                             </child>
                                           </object>

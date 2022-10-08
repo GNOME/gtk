@@ -277,12 +277,9 @@ struct _GtkFileChooserWidget
   GFile *current_folder;
   GFile *renamed_file;
 
-  GtkTreeViewColumn *list_time_column;
-  GtkCellRenderer *list_date_renderer;
-  GtkCellRenderer *list_time_renderer;
-
   GtkColumnViewColumn *column_view_location_column;
   GtkColumnViewColumn *column_view_size_column;
+  GtkColumnViewColumn *column_view_time_column;
   GtkColumnViewColumn *column_view_type_column;
 
   guint location_changed_id;
@@ -356,13 +353,10 @@ enum {
   /* the first 4 must be these due to settings caching sort column */
   MODEL_COL_NAME,
   MODEL_COL_SIZE,
-  MODEL_COL_TIME,
   MODEL_COL_FILE,
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_DATE_TEXT,
-  MODEL_COL_TIME_TEXT,
   MODEL_COL_ELLIPSIZE,
   MODEL_COL_NUM_COLUMNS
 };
@@ -372,13 +366,10 @@ enum {
         MODEL_COL_NUM_COLUMNS,                                  \
         G_TYPE_STRING,            /* MODEL_COL_NAME */          \
         G_TYPE_INT64,             /* MODEL_COL_SIZE */          \
-        G_TYPE_LONG,              /* MODEL_COL_TIME */          \
         G_TYPE_FILE,              /* MODEL_COL_FILE */          \
         G_TYPE_STRING,            /* MODEL_COL_NAME_COLLATED */ \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_FOLDER */     \
         G_TYPE_BOOLEAN,           /* MODEL_COL_IS_SENSITIVE */  \
-        G_TYPE_STRING,            /* MODEL_COL_DATE_TEXT */     \
-        G_TYPE_STRING,            /* MODEL_COL_TIME_TEXT */     \
         PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
@@ -500,8 +491,6 @@ static void path_bar_clicked (GtkPathBar            *path_bar,
                               gboolean               child_is_hidden,
                               GtkFileChooserWidget *impl);
 
-static void update_cell_renderer_attributes (GtkFileChooserWidget *impl);
-
 static void load_remove_timer (GtkFileChooserWidget *impl, LoadState new_load_state);
 static void browse_files_center_selected_row (GtkFileChooserWidget *impl);
 
@@ -539,6 +528,10 @@ static void     set_show_hidden              (GtkFileChooserWidget *impl,
                                               gboolean              show_hidden);
 static char *   get_type_information         (GtkFileChooserWidget *impl,
                                               GFileInfo            *info);
+static char *   my_g_format_date_for_display (GtkFileChooserWidget *impl,
+                                              glong                 secs);
+static char *   my_g_format_time_for_display (GtkFileChooserWidget *impl,
+                                              glong                 secs);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
@@ -1363,8 +1356,7 @@ rename_selected_cb (GtkTreeModel *model,
                       MODEL_COL_FILE, &impl->rename_file_source_file,
                       -1);
 
-  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                               path, impl->list_time_column, &rect);
+  rect = (GdkRectangle) { 0, 0, 1, 1 };
 
   gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (impl->browse_files_tree_view),
                                                      rect.x, rect.y,
@@ -1624,17 +1616,6 @@ set_model_filter (GtkFileChooserWidget *impl,
 }
 
 static void
-update_time_renderer_visible (GtkFileChooserWidget *impl)
-{
-  g_object_set (impl->list_time_renderer,
-                "visible", impl->show_time,
-                NULL);
-  clear_model_cache (impl, MODEL_COL_DATE_TEXT);
-  clear_model_cache (impl, MODEL_COL_TIME_TEXT);
-  gtk_widget_queue_draw (impl->browse_files_tree_view);
-}
-
-static void
 change_show_time_state (GSimpleAction *action,
                         GVariant      *state,
                         gpointer       data)
@@ -1643,7 +1624,6 @@ change_show_time_state (GSimpleAction *action,
 
   g_simple_action_set_state (action, state);
   impl->show_time = g_variant_get_boolean (state);
-  update_time_renderer_visible (impl);
 }
 
 /* Shows an error dialog about not being able to select a dragged file */
@@ -2130,6 +2110,50 @@ long_press_cb (GtkGesture           *gesture,
 }
 
 static char *
+column_view_get_file_date (GtkListItem *item,
+                           GFileInfo   *info)
+{
+  GtkFileChooserWidget *impl;
+  glong time;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+  g_assert (impl != NULL);
+
+  if (impl->operation_mode == OPERATION_MODE_RECENT)
+    time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_ACCESS);
+  else
+    time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  if (time == 0)
+    return g_strdup (_("Unknown"));
+
+  return my_g_format_date_for_display (impl, time);
+}
+
+static char *
+column_view_get_file_time (GtkListItem *item,
+                           GFileInfo   *info)
+{
+  GtkFileChooserWidget *impl;
+  glong time;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+  g_assert (impl != NULL);
+
+  if (impl->operation_mode == OPERATION_MODE_RECENT)
+    time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_ACCESS);
+  else
+    time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  if (time == 0)
+    return g_strdup (_("Unknown"));
+
+  return my_g_format_time_for_display (impl, time);
+}
+
+static char *
 column_view_get_file_type (GtkListItem *item,
                            GFileInfo   *info)
 {
@@ -2219,6 +2243,18 @@ column_view_get_size (GtkListItem *item,
     return NULL;
 }
 
+static gboolean
+column_view_get_time_visible (GtkListItem *item)
+{
+  GtkFileChooserWidget *impl;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+  g_assert (impl != NULL);
+
+  return impl->show_time;
+}
+
 typedef struct {
   OperationMode operation_mode;
   int general_column;
@@ -2233,8 +2269,6 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
 {
 
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view), -1);
-
-  gtk_tree_view_column_set_sort_column_id (impl->list_time_column, MODEL_COL_TIME);
 }
 
 static gboolean
@@ -3134,7 +3168,6 @@ gtk_file_chooser_widget_set_property (GObject      *object,
                 set_select_multiple (impl, FALSE);
               }
             impl->action = action;
-            update_cell_renderer_attributes (impl);
             update_appearance (impl);
             settings_load (impl);
           }
@@ -3453,7 +3486,6 @@ settings_load (GtkFileChooserWidget *impl)
    * call set_sort_column() themselves.
    */
 
-  update_time_renderer_visible (impl);
   if (sidebar_width < 0)
     {
       GtkWidget *sidebar = gtk_paned_get_start_child (GTK_PANED (impl->browse_widgets_hpaned));
@@ -3719,20 +3751,6 @@ compare_size (GtkFileSystemModel   *model,
   return size_a < size_b ? -1 : (size_a == size_b ? 0 : 1);
 }
 
-static int
-compare_time (GtkFileSystemModel   *model,
-              GtkTreeIter          *a,
-              GtkTreeIter          *b,
-              GtkFileChooserWidget *impl)
-{
-  glong ta, tb;
-
-  ta = g_value_get_long (_gtk_file_system_model_get_value (model, a, MODEL_COL_TIME));
-  tb = g_value_get_long (_gtk_file_system_model_get_value (model, b, MODEL_COL_TIME));
-
-  return ta < tb ? -1 : (ta == tb ? 0 : 1);
-}
-
 /* Sort callback for the filename column */
 static int
 name_sort_func (GtkTreeModel *model,
@@ -3771,25 +3789,6 @@ size_sort_func (GtkTreeModel *model,
   return result;
 }
 
-/* Sort callback for the time column */
-static int
-time_sort_func (GtkTreeModel *model,
-                GtkTreeIter  *a,
-                GtkTreeIter  *b,
-                gpointer      user_data)
-{
-  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
-  GtkFileChooserWidget *impl = user_data;
-  int result;
-
-  result = compare_directory (fs_model, a, b, impl);
-
-  if (result == 0)
-    result = compare_time (fs_model, a, b, impl);
-
-  return result;
-}
-
 static int
 recent_sort_func (GtkTreeModel *model,
                   GtkTreeIter  *a,
@@ -3798,14 +3797,10 @@ recent_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  int result;
 
-  result = compare_time (fs_model, a, b, impl);
+  /* TODO: reimplement time sorting */
 
-  if (result == 0)
-    result = compare_name (fs_model, a, b, impl);
-
-  return result;
+  return compare_name (fs_model, a, b, impl);
 }
 
 static int
@@ -3816,14 +3811,8 @@ search_sort_func (GtkTreeModel *model,
 {
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
   GtkFileChooserWidget *impl = user_data;
-  int result;
 
-  result = compare_name (fs_model, a, b, impl);
-
-  if (result == 0)
-    result = compare_time (fs_model, a, b, impl);
-
-  return result;
+  return compare_name (fs_model, a, b, impl);
 }
 
 /* Callback used when the sort column changes.  We cache the sort order for use
@@ -3875,9 +3864,9 @@ update_columns (GtkFileChooserWidget *impl,
       need_resize = TRUE;
     }
 
-  if (g_strcmp0 (gtk_tree_view_column_get_title (impl->list_time_column), time_title) != 0)
+  if (g_strcmp0 (gtk_column_view_column_get_title (impl->column_view_time_column), time_title) != 0)
     {
-      gtk_tree_view_column_set_title (impl->list_time_column, time_title);
+      gtk_column_view_column_set_title (impl->column_view_time_column, time_title);
       need_resize = TRUE;
     }
 
@@ -4506,27 +4495,6 @@ file_system_model_set (GtkFileSystemModel *model,
     case MODEL_COL_SIZE:
       g_value_set_int64 (value, info ? g_file_info_get_size (info) : 0);
       break;
-    case MODEL_COL_TIME:
-    case MODEL_COL_DATE_TEXT:
-    case MODEL_COL_TIME_TEXT:
-      {
-        glong time;
-        if (info == NULL)
-          break;
-        if (impl->operation_mode == OPERATION_MODE_RECENT)
-          time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_ACCESS);
-        else
-          time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
-        if (column == MODEL_COL_TIME)
-          g_value_set_long (value, time);
-        else if (time == 0)
-          g_value_set_static_string (value, _("Unknown"));
-        else if (column == MODEL_COL_DATE_TEXT)
-          g_value_take_string (value, my_g_format_date_for_display (impl, time));
-        else
-          g_value_take_string (value, my_g_format_time_for_display (impl, time));
-        break;
-      }
     case MODEL_COL_ELLIPSIZE:
       g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
       break;
@@ -4564,7 +4532,6 @@ set_list_model (GtkFileChooserWidget  *impl,
 
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_TIME, time_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), NULL, NULL, NULL);
   set_sort_column (impl);
   impl->list_sort_ascending = TRUE;
@@ -6538,8 +6505,6 @@ search_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->search_model));
 
-  gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
-
   update_columns (impl, TRUE, _("Modified"));
 }
 
@@ -6774,8 +6739,6 @@ recent_start_loading (GtkFileChooserWidget *impl)
                            GTK_TREE_MODEL (impl->recent_model));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view), -1);
 
-  gtk_tree_view_column_set_sort_column_id (impl->list_time_column, -1);
-
   update_columns (impl, TRUE, _("Accessed"));
 }
 
@@ -6961,24 +6924,6 @@ path_bar_clicked (GtkPathBar           *path_bar,
    */
   if (child_is_hidden)
     set_show_hidden (impl, TRUE);
-}
-
-static void
-update_cell_renderer_attributes (GtkFileChooserWidget *impl)
-{
-  gtk_tree_view_column_set_attributes (impl->list_time_column,
-                                       impl->list_date_renderer,
-                                       "text", MODEL_COL_DATE_TEXT,
-                                       "sensitive", MODEL_COL_IS_SENSITIVE,
-                                       NULL);
-
-  gtk_tree_view_column_set_attributes (impl->list_time_column,
-                                       impl->list_time_renderer,
-                                       "text", MODEL_COL_TIME_TEXT,
-                                       "sensitive", MODEL_COL_IS_SENSITIVE,
-                                       NULL);
-
-  update_time_renderer_visible (impl);
 }
 
 static void
@@ -7564,6 +7509,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_path_bar);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_location_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_size_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_time_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_type_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo_hbox);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo);
@@ -7572,9 +7518,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, location_entry_box);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, search_spinner);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_date_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, list_time_renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_name_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_create_button);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, new_folder_error_stack);
@@ -7606,9 +7549,12 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
   gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_date);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_time);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_type);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_get_time_visible);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 
@@ -7684,7 +7630,6 @@ post_process_ui (GtkFileChooserWidget *impl)
    * in code.
    */
   file_list_set_sort_column_ids (impl);
-  update_cell_renderer_attributes (impl);
 
   file = g_file_new_for_path ("/");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
