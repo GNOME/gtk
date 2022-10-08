@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkListStore" id="completion_store">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkEntryCompletion" id="address_entry_completion">
-    <property name="model">completion_store</property>
-    <property name="text-column">1</property>
-    <property name="inline-completion">1</property>
-    <property name="popup-completion">0</property>
-  </object>
   <object class="GtkPopover" id="server_adresses_popover">
     <property name="position">2</property>
     <child>
@@ -276,7 +264,6 @@
                 <property name="width-chars">20</property>
                 <property name="placeholder-text" translatable="yes">Enter server address…</property>
                 <property name="secondary-icon-name">dialog-question-symbolic</property>
-                <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
                 <signal name="icon-press" handler="on_address_entry_show_help_pressed" object="GtkPlacesView" swapped="yes"/>
