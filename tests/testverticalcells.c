@@ -22,6 +22,8 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _TreeEntry TreeEntry;
 
 struct _TreeEntry {

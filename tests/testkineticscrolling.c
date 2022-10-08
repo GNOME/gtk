@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum
 {
   TARGET_GTK_TREE_MODEL_ROW

@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean
 query_tooltip_cb (GtkWidget  *widget,
 		  gint        x,

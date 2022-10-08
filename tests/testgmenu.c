@@ -21,6 +21,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* TODO
  *
  * - Labeled sections

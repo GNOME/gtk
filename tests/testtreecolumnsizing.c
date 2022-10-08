@@ -23,6 +23,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define NO_EXPAND "No expandable columns"
 #define SINGLE_EXPAND "One expandable column"
 #define MULTI_EXPAND "Multiple expandable columns"

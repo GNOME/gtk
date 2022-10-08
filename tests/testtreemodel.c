@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gint repeats = 2;
 static gint max_size = 8;
 

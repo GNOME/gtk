@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static void
 horizontal_policy_changed (GtkComboBox *combo_box,
