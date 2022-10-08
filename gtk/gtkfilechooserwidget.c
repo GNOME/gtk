@@ -2234,6 +2234,30 @@ column_view_get_time_visible (GtkListItem *item)
   return impl->show_time;
 }
 
+static char *
+column_view_get_tooltip_text (GtkListItem *list_item)
+{
+  GtkFileChooserWidget *impl;
+  GtkFileSystemItem *item;
+  GFile *file;
+
+  item = gtk_list_item_get_item (list_item);
+  if (!item)
+    return NULL;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (list_item),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+  g_assert (impl != NULL);
+
+  if (impl->operation_mode == OPERATION_MODE_BROWSE)
+    return NULL;
+
+  item = gtk_list_item_get_item (list_item);
+  file = _gtk_file_system_item_get_file (item);
+
+  return g_file_get_path (file);
+}
+
 typedef struct {
   OperationMode operation_mode;
   int general_column;
@@ -2248,54 +2272,6 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
 {
 
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view), -1);
-}
-
-static gboolean
-file_list_query_tooltip_cb (GtkWidget  *widget,
-                            int         x,
-                            int         y,
-                            gboolean    keyboard_tip,
-                            GtkTooltip *tooltip,
-                            gpointer    user_data)
-{
-  GtkFileChooserWidget *impl = user_data;
-  GtkTreeModel *model;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GFile *file;
-  char *filename;
-
-  if (impl->operation_mode == OPERATION_MODE_BROWSE)
-    return FALSE;
-
-
-  if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                                          x, y,
-                                          keyboard_tip,
-                                          &model, &path, &iter))
-    return FALSE;
-
-  gtk_tree_model_get (model, &iter,
-                      MODEL_COL_FILE, &file,
-                      -1);
-
-  if (file == NULL)
-    {
-      gtk_tree_path_free (path);
-      return FALSE;
-    }
-
-  filename = g_file_get_path (file);
-  gtk_tooltip_set_text (tooltip, filename);
-  gtk_tree_view_set_tooltip_row (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                                 tooltip,
-                                 path);
-
-  g_free (filename);
-  g_object_unref (file);
-  gtk_tree_path_free (path);
-
-  return TRUE;
 }
 
 static GtkWidget *
@@ -7489,7 +7465,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, browse_files_column_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
@@ -7513,6 +7488,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_time_visible);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_get_tooltip_text);
   gtk_widget_class_bind_template_callback (widget_class, column_view_row_activated_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
