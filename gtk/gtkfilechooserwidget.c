@@ -2461,7 +2461,7 @@ location_mode_set (GtkFileChooserWidget *impl,
           location_switch_to_path_bar (impl);
 
           if (switch_to_file_list)
-            gtk_widget_grab_focus (impl->browse_files_tree_view);
+            gtk_widget_grab_focus (impl->browse_files_column_view);
 
           break;
 
@@ -4959,7 +4959,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
     current_focus = NULL;
 
   file_list_seen = FALSE;
-  if (current_focus == impl->browse_files_tree_view)
+  if (current_focus == impl->browse_files_column_view)
     {
       GtkTreeSelection *selection;
 
@@ -5007,7 +5007,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
       else
         goto empty;
     }
-  else if (impl->toplevel_last_focus_widget == impl->browse_files_tree_view)
+  else if (impl->toplevel_last_focus_widget == impl->browse_files_column_view)
     goto file_list;
   else if (impl->location_entry && impl->toplevel_last_focus_widget == impl->location_entry)
     goto file_entry;
@@ -5678,7 +5678,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
 
   current_focus = gtk_root_get_focus (GTK_ROOT (toplevel));
 
-  if (current_focus == impl->browse_files_tree_view)
+  if (current_focus == impl->browse_files_column_view)
     {
       /* The following array encodes what we do based on the impl->action and the
        * number of files selected.
@@ -5880,7 +5880,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
 
       g_object_unref (file);
     }
-  else if (impl->toplevel_last_focus_widget == impl->browse_files_tree_view)
+  else if (impl->toplevel_last_focus_widget == impl->browse_files_column_view)
     {
       /* The focus is on a dialog's action area button, *and* the widget that
        * was focused immediately before it is the file list.
@@ -5924,7 +5924,7 @@ gtk_file_chooser_widget_initial_focus (GtkFileChooserWidget *impl)
     {
       if (impl->location_mode == LOCATION_MODE_PATH_BAR
           || impl->operation_mode == OPERATION_MODE_RECENT)
-        widget = impl->browse_files_tree_view;
+        widget = impl->browse_files_column_view;
       else
         widget = impl->location_entry;
     }
