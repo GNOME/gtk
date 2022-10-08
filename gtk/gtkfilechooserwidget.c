@@ -7330,7 +7330,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_type_ensure (GTK_TYPE_FILE_CHOOSER_ERROR_STACK);
 
   gtk_widget_init_template (GTK_WIDGET (impl));
-  gtk_widget_set_size_request (impl->browse_files_tree_view, 280, -1);
 
   g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
   check_icon_theme (impl);
