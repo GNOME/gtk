@@ -118,7 +118,8 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "deprecated/gtkrender.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkshortcutmanager.h"
 #include "gtkbuildable.h"
 #include "gtktooltipprivate.h"
@@ -1550,6 +1551,7 @@ create_arrow_render_node (GtkPopover *popover)
   GtkSnapshot *snapshot;
   GtkSnapshot *bg_snapshot;
   GskRenderNode *node;
+  GtkCssBoxes boxes;
 
   snapshot = gtk_snapshot_new ();
 
@@ -1572,13 +1574,12 @@ create_arrow_render_node (GtkPopover *popover)
 
   /* Render the arrow background */
   bg_snapshot = gtk_snapshot_new ();
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_snapshot_render_background (bg_snapshot,
-                                  context,
-                                  0, 0,
-                                  gtk_widget_get_width (widget),
-                                  gtk_widget_get_height (widget));
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 0, 0,
+                                 gtk_widget_get_width (widget),
+                                 gtk_widget_get_height (widget));
+  gtk_css_style_snapshot_background (&boxes, snapshot);
   node = gtk_snapshot_free_to_node (bg_snapshot);
   if (node)
     {
