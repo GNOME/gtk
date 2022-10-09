@@ -49,7 +49,6 @@
 #include "gtktypebuiltins.h"
 #include "gtktextviewchildprivate.h"
 #include "gtktexthandleprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkpopover.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
@@ -5847,7 +5846,7 @@ draw_text (GtkWidget   *widget,
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   gboolean did_save = FALSE;
   GtkCssBoxes boxes;
 
@@ -5866,16 +5865,13 @@ draw_text (GtkWidget   *widget,
                                                SCREEN_WIDTH (widget),
                                                SCREEN_HEIGHT (widget)));
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
-  gtk_css_boxes_init_border_box (&boxes,
-                                 gtk_style_context_lookup_style (context),
+  style = gtk_css_node_get_style (text_view->priv->text_window->css_node);
+  gtk_css_boxes_init_border_box (&boxes, style,
                                  -priv->xoffset, -priv->yoffset - priv->top_margin,
                                  MAX (SCREEN_WIDTH (text_view), priv->width),
                                  MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_css_style_snapshot_background (&boxes, snapshot);
   gtk_css_style_snapshot_border (&boxes, snapshot);
-  gtk_style_context_restore (context);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
