@@ -24,7 +24,6 @@
   </gresource>
   <gresource prefix="/css_accordion">
     <file>css_accordion.css</file>
-    <file>reset.css</file>
   </gresource>
   <gresource prefix="/css_basics">
     <file>css_basics.css</file>

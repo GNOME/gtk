@@ -1,13 +1,13 @@
-@import url("resource://css_accordion/reset.css");
+.accordion, .accordion * {
+    all: unset;
 
-* {
     transition-property: color, background-color, border-color, background-image, padding, border-width;
     transition-duration: 1s;
 
     font: 20px Cantarell;
 }
 
-window {
+.accordion {
     background: linear-gradient(153deg, #151515, #151515 5px, transparent 5px) 0 0,
                 linear-gradient(333deg, #151515, #151515 5px, transparent 5px) 10px 5px,
                 linear-gradient(153deg, #222, #222 5px, transparent 5px) 0 5px,
@@ -18,7 +18,7 @@ window {
     background-size: 20px 20px;
 }
 
-button {
+.accordion button {
     color: black;
     background-color: #bbb;
     border-style: solid;
@@ -28,25 +28,25 @@ button {
     padding: 12px 4px;
 }
 
-button:first-child {
+.accordion button:first-child {
     border-radius: 5px 0 0 5px;
 }
 
-button:last-child {
+.accordion button:last-child {
     border-radius: 0 5px 5px 0;
     border-width: 2px;
 }
 
-button:hover {
+.accordion button:hover {
     padding: 12px 48px;
     background-color: #4870bc;
 }
 
-button *:hover {
+.accordion button *:hover {
     color: white;
 }
 
-button:hover:active,
-button:active {
+.accordion button:hover:active,
+.accordion button:active {
     background-color: #993401;
 }
