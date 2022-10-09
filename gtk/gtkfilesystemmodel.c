@@ -366,8 +366,7 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
   if (model->filter == NULL)
     return FALSE;
 
-  if (!g_file_info_has_attribute (node->info, "standard::file"))
-    g_file_info_set_attribute_object (node->info, "standard::file", G_OBJECT (node->file));
+  g_assert (g_file_info_has_attribute (node->info, "standard::file"));
 
   return !gtk_filter_match (GTK_FILTER (model->filter), node->info);
 }
@@ -1612,7 +1611,10 @@ add_file (GtkFileSystemModel *model,
   node = g_slice_alloc0 (model->node_size);
   node->file = g_object_ref (file);
   if (info)
-    node->info = g_object_ref (info);
+    {
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+      node->info = g_object_ref (info);
+    }
   node->frozen_add = model->frozen ? TRUE : FALSE;
 
   g_array_append_vals (model->files, node, 1);
@@ -1721,6 +1723,8 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
       if (G_VALUE_TYPE (&node->values[i]))
         g_value_unset (&node->values[i]);
     }
+
+  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
 
   if (node->visible)
     emit_row_changed_for_node (model, id);

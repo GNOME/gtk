@@ -197,7 +197,6 @@ match_func (GtkEntryCompletion *compl,
    * current file filter (e.g. just jpg files) here. */
   if (chooser_entry->current_filter != NULL)
     {
-      GFile *file;
       GFileInfo *info;
 
       file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
@@ -209,8 +208,7 @@ match_func (GtkEntryCompletion *compl,
       if (g_file_info_get_file_type (info) != G_FILE_TYPE_REGULAR)
         return TRUE;
 
-      if (!g_file_info_has_attribute (info, "standard::file"))
-        g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+      g_assert (g_file_info_has_attribute (info, "standard::file"));
 
       return gtk_filter_match (GTK_FILTER (chooser_entry->current_filter), info);
     }
