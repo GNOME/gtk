@@ -57,7 +57,9 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
-#include "gtkstylecontext.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 
 
 /**
@@ -196,6 +198,9 @@ struct _GtkAboutDialog
   GtkWidget *system_view;
 
   GPtrArray *visited_links;
+
+  GtkCssNode *link_node;
+  GtkCssNode *visited_link_node;
 
   GtkLicense license_type;
 
@@ -707,6 +712,9 @@ update_credits_button_visibility (GtkAboutDialog *about)
 static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
+  GtkCssNode *node;
+  GtkStateFlags state;
+
   /* Data */
   about->name = NULL;
   about->version = NULL;
@@ -735,6 +743,21 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   /* force defaults */
   gtk_about_dialog_set_program_name (about, NULL);
   gtk_about_dialog_set_logo (about, NULL);
+
+  node = gtk_widget_get_css_node (GTK_WIDGET (about));
+  state = gtk_css_node_get_state (node);
+
+  about->link_node = gtk_css_node_new ();
+  gtk_css_node_set_name (about->link_node, g_quark_from_static_string ("link"));
+  gtk_css_node_set_parent (about->link_node, node);
+  gtk_css_node_set_state (about->link_node, state | GTK_STATE_FLAG_LINK);
+  g_object_unref (about->link_node);
+
+  about->visited_link_node = gtk_css_node_new ();
+  gtk_css_node_set_name (about->visited_link_node, g_quark_from_static_string ("link"));
+  gtk_css_node_set_parent (about->visited_link_node, node);
+  gtk_css_node_set_state (about->visited_link_node, state | GTK_STATE_FLAG_VISITED);
+  g_object_unref (about->visited_link_node);
 }
 
 static void
@@ -1677,12 +1700,10 @@ follow_if_link (GtkAboutDialog *about,
       if (uri && !g_ptr_array_find_with_equal_func (about->visited_links, uri, (GCompareFunc)strcmp, NULL))
         {
           GdkRGBA visited_link_color;
-          GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_VISITED);
-          gtk_style_context_get_color (context, &visited_link_color);
-          gtk_style_context_restore (context);
+          GtkCssStyle *style;
 
+          style = gtk_css_node_get_style (about->visited_link_node);
+          visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
           g_object_set (G_OBJECT (tag), "foreground-rgba", &visited_link_color, NULL);
 
           g_ptr_array_add (about->visited_links, g_strdup (uri));
@@ -1823,15 +1844,13 @@ text_buffer_new (GtkAboutDialog  *about,
   GdkRGBA visited_link_color;
   GtkTextIter start_iter, end_iter;
   GtkTextTag *tag;
-  GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (about));
-  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
+  GtkCssStyle *style;
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state | GTK_STATE_FLAG_LINK);
-  gtk_style_context_get_color (context, &link_color);
-  gtk_style_context_set_state (context, state | GTK_STATE_FLAG_VISITED);
-  gtk_style_context_get_color (context, &visited_link_color);
-  gtk_style_context_restore (context);
+  style = gtk_css_node_get_style (about->link_node);
+  link_color = *gtk_css_color_value_get_rgba (style->core->color);
+  style = gtk_css_node_get_style (about->visited_link_node);
+  visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
+
   buffer = gtk_text_buffer_new (NULL);
 
   for (p = strings; *p; p++)
