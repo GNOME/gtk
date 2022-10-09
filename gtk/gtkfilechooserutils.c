@@ -479,3 +479,12 @@ _gtk_file_info_get_icon (GFileInfo    *info,
   icon = g_themed_icon_new ("text-x-generic");
   return icon;
 }
+
+GFile *
+_gtk_file_info_get_file (GFileInfo *info)
+{
+  g_assert (G_IS_FILE_INFO (info));
+  g_assert (g_file_info_has_attribute (info, "standard::file"));
+
+  return G_FILE (g_file_info_get_attribute_object (info, "standard::file"));
+}
