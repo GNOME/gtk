@@ -45,7 +45,6 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderlayoutprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextutilprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
@@ -1381,7 +1380,7 @@ gtk_label_snapshot (GtkWidget   *widget,
 {
   GtkLabel *self = GTK_LABEL (widget);
   GtkLabelSelectionInfo *info;
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   int lx, ly;
   int width, height;
   GtkCssBoxes boxes;
@@ -1391,7 +1390,6 @@ gtk_label_snapshot (GtkWidget   *widget,
 
   gtk_label_ensure_layout (self);
 
-  context = _gtk_widget_get_style_context (widget);
   get_layout_location (self, &lx, &ly);
 
   gtk_css_boxes_init (&boxes, widget);
@@ -1414,11 +1412,8 @@ gtk_label_snapshot (GtkWidget   *widget,
       range[0] = MIN (info->selection_anchor, info->selection_end);
       range[1] = MAX (info->selection_anchor, info->selection_end);
 
-      gtk_style_context_save_to_node (context, info->selection_node);
-
-      gtk_css_boxes_init_border_box (&boxes,
-                                     gtk_style_context_lookup_style (context),
-                                     0, 0, width, height);
+      style = gtk_css_node_get_style (info->selection_node);
+      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
 
       range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
       for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1432,8 +1427,6 @@ gtk_label_snapshot (GtkWidget   *widget,
         }
 
       cairo_region_destroy (range_clip);
-
-      gtk_style_context_restore (context);
     }
   else
     {
@@ -1468,11 +1461,8 @@ gtk_label_snapshot (GtkWidget   *widget,
           range[0] = active_link->start;
           range[1] = active_link->end;
 
-          gtk_style_context_save_to_node (context, active_link->cssnode);
-
-          gtk_css_boxes_init_border_box (&boxes,
-                                         gtk_style_context_lookup_style (context),
-                                         0, 0, width, height);
+          style = gtk_css_node_get_style (active_link->cssnode);
+          gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1486,8 +1476,6 @@ gtk_label_snapshot (GtkWidget   *widget,
             }
 
           cairo_region_destroy (range_clip);
-
-          gtk_style_context_restore (context);
         }
 
       if (focus_link && gtk_widget_has_visible_focus (widget))
@@ -1495,19 +1483,15 @@ gtk_label_snapshot (GtkWidget   *widget,
           range[0] = focus_link->start;
           range[1] = focus_link->end;
 
-          gtk_style_context_save_to_node (context, focus_link->cssnode);
+          style = gtk_css_node_get_style (focus_link->cssnode);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &rect);
 
-          gtk_css_boxes_init_border_box (&boxes,
-                                         gtk_style_context_lookup_style (context),
-                                         rect.x, rect.y, rect.width, rect.height);
+          gtk_css_boxes_init_border_box (&boxes, style, rect.x, rect.y, rect.width, rect.height);
           gtk_css_style_snapshot_outline (&boxes, snapshot);
 
           cairo_region_destroy (range_clip);
-
-          gtk_style_context_restore (context);
         }
     }
 }
