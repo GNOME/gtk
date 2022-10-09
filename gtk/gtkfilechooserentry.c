@@ -544,8 +544,7 @@ discard_completion_store (GtkFileChooserEntry *chooser_entry)
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
   update_inline_completion (chooser_entry);
-  g_object_unref (chooser_entry->completion_store);
-  chooser_entry->completion_store = NULL;
+  g_clear_object (&chooser_entry->completion_store);
 }
 
 static gboolean
@@ -656,11 +655,7 @@ set_completion_folder (GtkFileChooserEntry *chooser_entry,
       return;
     }
 
-  if (chooser_entry->current_folder_file)
-    {
-      g_object_unref (chooser_entry->current_folder_file);
-      chooser_entry->current_folder_file = NULL;
-    }
+  g_clear_object (&chooser_entry->current_folder_file);
 
   g_free (chooser_entry->dir_part);
   chooser_entry->dir_part = g_strdup (dir_part);
