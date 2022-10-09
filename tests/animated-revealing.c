@@ -67,15 +67,15 @@ main(int argc, char **argv)
 
   cssprovider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (cssprovider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   for (x = 0; x < 10; x++)
     {
       for (y = 0; y < 20; y++)
         {
           widget = gtk_label_new ("Hello World");
-          gtk_style_context_add_provider (gtk_widget_get_style_context (widget),
-                                          GTK_STYLE_PROVIDER (cssprovider),
-                                          GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
           gtk_grid_attach (GTK_GRID (grid), widget, x, y, 1, 1);
         }
     }

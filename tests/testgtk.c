@@ -193,26 +193,30 @@ create_alpha_window (GtkWidget *widget)
 
   if (!window)
     {
+      static GtkCssProvider *provider = NULL;
       GtkWidget *content_area;
       GtkWidget *vbox;
       GtkWidget *label;
       GdkDisplay *display;
-      GtkCssProvider *provider;
       
       window = gtk_dialog_new_with_buttons ("Alpha Window",
 					    GTK_WINDOW (gtk_widget_get_root (widget)), 0,
 					    "_Close", 0,
 					    NULL);
-      provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_data (provider,
-                                       "dialog {\n"
-                                       "  background: radial-gradient(ellipse at center, #FFBF00, #FFBF0000);\n"
-                                       "}\n",
-                                       -1);
-      gtk_style_context_add_provider (gtk_widget_get_style_context (window),
-                                      GTK_STYLE_PROVIDER (provider),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-      g_object_unref (provider);
+      gtk_widget_add_css_class (window, "alpha");
+      if (provider == NULL)
+        {
+          provider = gtk_css_provider_new ();
+          gtk_css_provider_load_from_data (provider,
+                                           "dialog.alpha {\n"
+                                           "  background: radial-gradient(ellipse at center, #FFBF00, #FFBF0000);\n"
+                                           "}\n",
+                                           -1);
+          gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
+                                                      GTK_STYLE_PROVIDER (provider),
+                                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+          g_object_unref (provider);
+        }
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
