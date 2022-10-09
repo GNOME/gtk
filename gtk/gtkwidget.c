@@ -6742,8 +6742,6 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SCALE_FACTOR]);
 
-  gtk_widget_queue_draw (widget);
-
   gtk_widget_forall (widget, (GtkCallback)_gtk_widget_scale_changed, NULL);
 }
 
