@@ -205,7 +205,6 @@ struct _GtkFileChooserWidget
   GtkWidget *browse_header_stack;
   GtkWidget *browse_files_stack;
   GtkWidget *browse_files_swin;
-  GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_column_view;
   GtkWidget *remote_warning_bar;
 
@@ -1809,8 +1808,8 @@ file_list_show_popover (GtkFileChooserWidget *impl,
   GdkRectangle rect;
   graphene_rect_t bounds;
 
-  if (!gtk_widget_compute_bounds (impl->browse_files_tree_view,
-                                  impl->browse_files_tree_view,
+  if (!gtk_widget_compute_bounds (impl->browse_files_column_view,
+                                  impl->browse_files_column_view,
                                   &bounds))
     return;
 
@@ -1831,8 +1830,8 @@ list_popup_menu_cb (GtkWidget *widget,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   graphene_rect_t bounds;
 
-  if (gtk_widget_compute_bounds (impl->browse_files_tree_view,
-                                 impl->browse_files_tree_view,
+  if (gtk_widget_compute_bounds (impl->browse_files_column_view,
+                                 impl->browse_files_column_view,
                                  &bounds))
     {
       file_list_show_popover (impl, 0.5 * bounds.size.width, 0.5 * bounds.size.height);
@@ -1911,7 +1910,7 @@ click_cb (GtkGesture           *gesture,
 
   pd = g_new (PopoverData, 1);
   pd->impl = impl;
-  gtk_widget_translate_coordinates (impl->browse_files_tree_view,
+  gtk_widget_translate_coordinates (impl->browse_files_column_view,
                                     GTK_WIDGET (impl),
                                     x, y, &x, &y);
   pd->x = x;
@@ -6890,7 +6889,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, places_view);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_column_view);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_files_swin);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_header_revealer);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_header_stack);
@@ -7022,7 +7020,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_clicked), impl);
-  gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_tree_view), GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_column_view), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_shortcut_controller_new ();
   trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
@@ -7030,7 +7028,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
-  gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_tree_view), controller);
+  gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_column_view), controller);
 
   /* Add ability to restrict interaction on file list (click and key_press events),
    * needed to prevent data loss bug #2288 */
@@ -7039,12 +7037,12 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_restrict_clicking), impl);
-  gtk_widget_add_controller (impl->browse_files_tree_view, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (impl->browse_files_column_view, GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (files_list_restrict_key_presses), impl);
-  gtk_widget_add_controller (impl->browse_files_tree_view, controller);
+  gtk_widget_add_controller (impl->browse_files_column_view, controller);
 }
 
 void

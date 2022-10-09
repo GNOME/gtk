@@ -143,6 +143,18 @@
                                           <object class="GtkColumnView" id="browse_files_column_view">
                                             <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_column_view_keynav_failed_cb"/>
+                                            <child>
+                                              <object class="GtkGestureLongPress">
+                                                <property name="touch-only">1</property>
+                                                <signal name="pressed" handler="long_press_cb" swapped="no"/>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkGestureClick">
+                                                <property name="button">3</property>
+                                                <signal name="pressed" handler="click_cb" swapped="no"/>
+                                              </object>
+                                            </child>
 
                                             <child>
                                               <object class="GtkColumnViewColumn" id="column_view_name_column">
@@ -353,40 +365,6 @@
                                         <child type="center">
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">Remote location — only searching the current folder</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkStackPage">
-                                <property name="name">list2</property>
-                                <property name="child">
-                                  <object class="GtkBox">
-                                    <property name="orientation">1</property>
-                                    <child>
-                                      <object class="GtkScrolledWindow">
-                                        <property name="hscrollbar-policy">2</property>
-                                        <property name="vexpand">1</property>
-                                        <child>
-                                          <object class="GtkTreeView" id="browse_files_tree_view">
-                                            <property name="has-tooltip">1</property>
-                                            <property name="enable-search">0</property>
-                                            <child>
-                                              <object class="GtkGestureLongPress">
-                                                <property name="touch-only">1</property>
-                                                <signal name="pressed" handler="long_press_cb" swapped="no"/>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkGestureClick">
-                                                <property name="button">3</property>
-                                                <signal name="pressed" handler="click_cb" swapped="no"/>
-                                              </object>
-                                            </child>
                                           </object>
                                         </child>
                                       </object>
