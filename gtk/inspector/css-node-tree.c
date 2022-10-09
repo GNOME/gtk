@@ -188,19 +188,25 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssNodeTree, gtk_inspector_css_node_tree
 static void
 gtk_inspector_css_node_tree_set_node (GtkInspectorCssNodeTree *cnt,
                                       GtkCssNode              *node);
+static void
+gtk_inspector_css_node_tree_unset_node (GtkInspectorCssNodeTree *cnt);
 
 static void
 selection_changed (GtkSelectionModel       *model,
                    GParamSpec              *pspec,
                    GtkInspectorCssNodeTree *cnt)
 {
-  GtkTreeListRow *row;
-  GtkCssNode *node;
+  if (gtk_single_selection_get_selected (cnt->priv->selection_model) != GTK_INVALID_LIST_POSITION)
+    {
+      GtkTreeListRow *row;
+      GtkCssNode *node;
 
-  row = gtk_single_selection_get_selected_item (cnt->priv->selection_model);
-  node = gtk_tree_list_row_get_item (row);
-
-  gtk_inspector_css_node_tree_set_node (cnt, node);
+      row = gtk_single_selection_get_selected_item (cnt->priv->selection_model);
+      node = gtk_tree_list_row_get_item (row);
+      gtk_inspector_css_node_tree_set_node (cnt, node);
+    }
+  else
+    gtk_inspector_css_node_tree_unset_node (cnt);
 }
 
 static void
@@ -260,8 +266,6 @@ gtk_inspector_css_node_tree_finalize (GObject *object)
   GtkInspectorCssNodeTree *cnt = GTK_INSPECTOR_CSS_NODE_TREE (object);
 
   gtk_inspector_css_node_tree_unset_node (cnt);
-
-  g_object_unref (cnt->priv->prop_model);
 
   G_OBJECT_CLASS (gtk_inspector_css_node_tree_parent_class)->finalize (object);
 }
