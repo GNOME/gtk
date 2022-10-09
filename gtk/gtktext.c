@@ -57,7 +57,6 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderlayoutprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtktexthistoryprivate.h"
 #include "gtktextutilprivate.h"
@@ -2525,34 +2524,27 @@ gtk_text_draw_undershoot (GtkText     *self,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
   const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   int min_offset, max_offset;
   GtkCssBoxes boxes;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   gtk_text_get_scroll_limits (self, &min_offset, &max_offset);
 
   if (priv->scroll_offset > min_offset)
     {
-      gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
-      gtk_css_boxes_init_border_box (&boxes,
-                                     gtk_style_context_lookup_style (context),
-                                     0, 0, UNDERSHOOT_SIZE, text_height);
+      style = gtk_css_node_get_style (priv->undershoot_node[0]);
+      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, UNDERSHOOT_SIZE, text_height);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
-      gtk_style_context_restore (context);
     }
 
   if (priv->scroll_offset < max_offset)
     {
-      gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
-      gtk_css_boxes_init_border_box (&boxes,
-                                     gtk_style_context_lookup_style (context),
+      style = gtk_css_node_get_style (priv->undershoot_node[1]);
+      gtk_css_boxes_init_border_box (&boxes, style,
                                      text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
-      gtk_style_context_restore (context);
     }
 }
 
@@ -4611,7 +4603,7 @@ gtk_text_draw_text (GtkText     *self,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   PangoLayout *layout;
   int x, y;
   GtkCssBoxes boxes;
@@ -4620,7 +4612,6 @@ gtk_text_draw_text (GtkText     *self,
   if (gtk_text_get_display_mode (self) == DISPLAY_BLANK)
     return;
 
-  context = gtk_widget_get_style_context (widget);
   layout = gtk_text_ensure_layout (self, TRUE);
 
   gtk_text_get_layout_offsets (self, &x, &y);
@@ -4644,22 +4635,18 @@ gtk_text_draw_text (GtkText     *self,
       range[0] = MIN (start_index, end_index);
       range[1] = MAX (start_index, end_index);
 
-      gtk_style_context_save_to_node (context, priv->selection_node);
+      style = gtk_css_node_get_style (priv->selection_node);
 
       clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
       cairo_region_get_extents (clip, &clip_extents);
 
-      gtk_css_boxes_init_border_box (&boxes,
-                                     gtk_style_context_lookup_style (context),
-                                     0, 0, width, height);
+      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents));
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
       gtk_snapshot_pop (snapshot);
 
       cairo_region_destroy (clip);
-
-      gtk_style_context_restore (context);
     }
 }
 
@@ -4670,7 +4657,7 @@ gtk_text_draw_cursor (GtkText     *self,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   PangoRectangle cursor_rect;
   int cursor_index;
   gboolean block;
@@ -4682,7 +4669,6 @@ gtk_text_draw_cursor (GtkText     *self,
   GdkDisplay *display;
 
   display = gtk_widget_get_display (widget);
-  context = gtk_widget_get_style_context (widget);
 
   layout = g_object_ref (gtk_text_ensure_layout (self, TRUE));
   text = pango_layout_get_text (layout);
@@ -4717,17 +4703,12 @@ gtk_text_draw_cursor (GtkText     *self,
       bounds.size.width = PANGO_PIXELS (cursor_rect.width);
       bounds.size.height = PANGO_PIXELS (cursor_rect.height);
 
-      gtk_style_context_save_to_node (context, priv->block_cursor_node);
-
-      gtk_css_boxes_init_border_box (&boxes,
-                                     gtk_style_context_lookup_style (context),
-                                     0, 0, width, height);
+      style = gtk_css_node_get_style (priv->block_cursor_node);
+      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_layout (&boxes,snapshot, x, y, layout);
       gtk_snapshot_pop (snapshot);
-
-      gtk_style_context_restore (context);
     }
 
   g_object_unref (layout);
