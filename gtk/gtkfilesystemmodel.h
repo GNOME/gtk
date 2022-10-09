@@ -33,14 +33,6 @@ typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
 GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
 
-#define GTK_TYPE_FILE_SYSTEM_ITEM             (_gtk_file_system_item_get_type ())
-#define GTK_FILE_SYSTEM_ITEM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_SYSTEM_ITEM, GtkFileSystemItem))
-#define GTK_IS_FILE_SYSTEM_ITEM(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_SYSTEM_ITEM))
-
-typedef struct _GtkFileSystemItem      GtkFileSystemItem;
-
-GType _gtk_file_system_item_get_type (void) G_GNUC_CONST;
-
 typedef gboolean (*GtkFileSystemModelGetValue)   (GtkFileSystemModel *model,
                                                   GFile              *file,
                                                   GFileInfo          *info,
@@ -68,6 +60,8 @@ GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel 
 							     GtkTreeIter        *iter);
 gboolean            _gtk_file_system_model_get_iter_for_file(GtkFileSystemModel *model,
 							     GtkTreeIter        *iter,
+							     GFile              *file);
+GFileInfo *         _gtk_file_system_model_get_info_for_file(GtkFileSystemModel *model,
 							     GFile              *file);
 GFile *             _gtk_file_system_model_get_file         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
@@ -99,15 +93,6 @@ void                _gtk_file_system_model_set_filter_folders (GtkFileSystemMode
 
 void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
                                                              GtkFileFilter      *filter);
-
-GFile *             _gtk_file_system_item_get_file          (GtkFileSystemItem  *item);
-
-GFileInfo *         _gtk_file_system_item_get_file_info     (GtkFileSystemItem  *item);
-
-gboolean            _gtk_file_system_item_is_visible        (GtkFileSystemItem  *item);
-
-GtkFileSystemItem * _gtk_file_system_model_get_item_for_file(GtkFileSystemModel *model,
-							     GFile              *file);
 
 G_END_DECLS
 

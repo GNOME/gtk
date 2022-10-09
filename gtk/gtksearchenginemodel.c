@@ -24,6 +24,7 @@
 #include <gdk/gdk.h>
 
 #include "gtksearchenginemodelprivate.h"
+#include "gtkfilechooserutils.h"
 #include "gtkprivate.h"
 
 #include <string.h>
@@ -86,25 +87,21 @@ do_search (gpointer data)
 
   for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model->model)); i++)
     {
-      GtkFileSystemItem *item;
-      GFileInfo *info;
-
-      item = g_list_model_get_item (G_LIST_MODEL (model->model), i);
-      info = _gtk_file_system_item_get_file_info (item);
+      GFileInfo *info = g_list_model_get_item (G_LIST_MODEL (model->model), i);
 
       if (info_matches_query (model->query, info))
         {
           GFile *file;
           GtkSearchHit *hit;
 
-          file = _gtk_file_system_item_get_file (item);
+          file = _gtk_file_info_get_file (info);
           hit = g_new (GtkSearchHit, 1);
           hit->file = g_object_ref (file);
           hit->info = g_object_ref (info);
           hits = g_list_prepend (hits, hit);
         }
 
-      g_clear_object (&item);
+      g_clear_object (&info);
     }
 
   if (hits)

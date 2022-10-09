@@ -126,7 +126,6 @@ struct _FileModelNode
 {
   GFile *               file;           /* file represented by this node or NULL for editable */
   GFileInfo *           info;           /* info for this file or NULL if unknown */
-  GtkFileSystemItem *   item;           /* item for the GListModel implementation */
 
   guint                 row;            /* if valid (see model->n_valid_indexes), visible nodes before and including
 					 * this one - see the "Structure" comment above.
@@ -648,89 +647,10 @@ gtk_file_system_model_iface_init (GtkTreeModelIface *iface)
 
 /*** GListModel ***/
 
-struct _GtkFileSystemItem {
-  GObject parent;
-
-  FileModelNode *node; /* unonwned */
-};
-
-typedef struct _GtkFileSystemItemClass
-{
-  GObjectClass parent_class;
-} GtkFileSystemItemClass;
-
-G_DEFINE_TYPE (GtkFileSystemItem, _gtk_file_system_item, G_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  PROP_FILE,
-  PROP_FILE_INFO,
-  PROP_NAME,
-  N_PROPS,
-};
-
-static GParamSpec *item_properties[N_PROPS] = { NULL, };
-
-static void
-_gtk_file_system_item_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
-{
-  GtkFileSystemItem *self = GTK_FILE_SYSTEM_ITEM (object);
-
-  switch (prop_id)
-    {
-    case PROP_FILE:
-      g_value_set_object (value, self->node->file);
-      break;
-
-    case PROP_FILE_INFO:
-      g_value_set_object (value, self->node->info);
-      break;
-
-    case PROP_NAME:
-      g_value_set_string (value, g_file_info_get_display_name (self->node->info));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-_gtk_file_system_item_class_init (GtkFileSystemItemClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->get_property = _gtk_file_system_item_get_property;
-
-  item_properties[PROP_FILE] =
-    g_param_spec_object ("file", NULL, NULL,
-                         G_TYPE_FILE,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  item_properties[PROP_FILE_INFO] =
-    g_param_spec_object ("file-info", NULL, NULL,
-                         G_TYPE_FILE_INFO,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  item_properties[PROP_NAME] =
-    g_param_spec_string ("name", NULL, NULL, "",
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (object_class, N_PROPS, item_properties);
-}
-
-static void
-_gtk_file_system_item_init (GtkFileSystemItem *self)
-{
-}
-
 static GType
 list_model_get_item_type (GListModel *list_model)
 {
-  return GTK_TYPE_FILE_SYSTEM_ITEM;
+  return G_TYPE_FILE_INFO;
 }
 
 static guint
@@ -754,7 +674,7 @@ list_model_get_item (GListModel *list_model,
     return NULL;
 
   node = get_node (model, position + 1);
-  return g_object_ref (node->item);
+  return g_object_ref (node->info);
 }
 
 static void
@@ -813,7 +733,6 @@ gtk_file_system_model_finalize (GObject *object)
       int v;
 
       FileModelNode *node = get_node (model, i);
-      g_clear_object (&node->item);
       g_clear_object (&node->file);
       g_clear_object (&node->info);
 
@@ -1560,6 +1479,26 @@ _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
   return TRUE;
 }
 
+
+GFileInfo *
+_gtk_file_system_model_get_info_for_file (GtkFileSystemModel *model,
+                                          GFile              *file)
+{
+  FileModelNode *node;
+  guint i;
+
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  i = node_get_for_file (model, file);
+
+  if (i == 0)
+    return NULL;
+
+  node = get_node (model, i);
+  return node->info;
+}
+
 /* When an element is added or removed to the model->files array, we need to
  * update the model->file_lookup mappings of (node, index), as the indexes
  * change.  This function adds the specified increment to the index in that pair
@@ -1622,14 +1561,6 @@ add_file (GtkFileSystemModel *model,
 
   position = model->files->len - 1;
 
-  /* 'node' is now invalid, fetch the actual node from the array - this
-   * will all go away when we finish the transition to GtkColumnView
-   * and drop the GtkTreeModel code.
-   */
-  node = get_node (model, position);
-  node->item = g_object_new (GTK_TYPE_FILE_SYSTEM_ITEM, NULL);
-  node->item->node = node;
-
   if (!model->frozen)
     node_compute_visibility_and_filters (model, model->files->len -1);
 
@@ -1667,8 +1598,6 @@ remove_file (GtkFileSystemModel *model,
   row = node_get_tree_row (model, id);
 
   node_invalidate_index (model, id);
-
-  g_clear_object (&node->item);
 
   g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
@@ -1901,36 +1830,3 @@ _gtk_file_system_model_get_directory (GtkFileSystemModel *model)
   return model->dir;
 }
 
-GFile *
-_gtk_file_system_item_get_file (GtkFileSystemItem *item)
-{
-  return item->node->file;
-}
-
-GFileInfo *
-_gtk_file_system_item_get_file_info (GtkFileSystemItem *item)
-{
-  return item->node->info;
-}
-
-gboolean
-_gtk_file_system_item_is_visible (GtkFileSystemItem *item)
-{
-  return item->node->visible;
-}
-
-GtkFileSystemItem *
-_gtk_file_system_model_get_item_for_file(GtkFileSystemModel *model,
-                                         GFile              *file)
-{
-  FileModelNode *node;
-  guint i;
-
-  i = node_get_for_file (model, file);
-
-  if (i == 0)
-    return NULL;
-
-  node = get_node (model, i);
-  return node->item;
-}

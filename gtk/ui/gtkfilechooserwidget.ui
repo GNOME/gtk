@@ -170,13 +170,15 @@
     <property name="child">
       <object class="GtkBox">
         <binding name="tooltip-text">
-          <closure type="gchararray" function="column_view_get_tooltip_text" />
+          <closure type="gchararray" function="column_view_get_tooltip_text">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
         <child>
           <object class="GtkFileThumbnail">
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
-            <binding name="item">
+            <binding name="file-info">
               <lookup name="item">GtkListItem</lookup>
             </binding>
           </object>
@@ -187,9 +189,9 @@
             <property name="xalign">0</property>
             <property name="min-chars">10</property>
             <binding name="text">
-              <lookup type="GtkFileSystemItem" name="name">
+              <closure type="gchararray" function="column_view_get_file_display_name">
                 <lookup name="item">GtkListItem</lookup>
-              </lookup>
+              </closure>
             </binding>
           </object>
         </child>
@@ -223,10 +225,14 @@
         <property name="margin-start">6</property>
         <property name="margin-end">6</property>
         <binding name="text">
-          <closure type="gchararray" function="column_view_get_location" />
+          <closure type="gchararray" function="column_view_get_location">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
         <binding name="tooltip-text">
-          <closure type="gchararray" function="column_view_get_tooltip_text" />
+          <closure type="gchararray" function="column_view_get_tooltip_text">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
       </object>
     </property>
@@ -253,13 +259,13 @@
         <property name="xalign">0</property>
         <binding name="label">
           <closure type="gchararray" function="column_view_get_size">
-            <lookup type="GtkFileSystemItem" name="file-info">
-              <lookup name="item">GtkListItem</lookup>
-            </lookup>
+            <lookup name="item">GtkListItem</lookup>
           </closure>
         </binding>
         <binding name="tooltip-text">
-          <closure type="gchararray" function="column_view_get_tooltip_text" />
+          <closure type="gchararray" function="column_view_get_tooltip_text">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
       </object>
     </property>
@@ -287,13 +293,13 @@
         <property name="xalign">0</property>
         <binding name="label">
           <closure type="gchararray" function="column_view_get_file_type">
-            <lookup type="GtkFileSystemItem" name="file-info">
-              <lookup name="item">GtkListItem</lookup>
-            </lookup>
+            <lookup name="item">GtkListItem</lookup>
           </closure>
         </binding>
         <binding name="tooltip-text">
-          <closure type="gchararray" function="column_view_get_tooltip_text" />
+          <closure type="gchararray" function="column_view_get_tooltip_text">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
       </object>
     </property>
@@ -318,15 +324,15 @@
       <object class="GtkBox">
         <property name="spacing">6</property>
         <binding name="tooltip-text">
-          <closure type="gchararray" function="column_view_get_tooltip_text" />
+          <closure type="gchararray" function="column_view_get_tooltip_text">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
         </binding>
         <child>
           <object class="GtkLabel">
             <binding name="label">
               <closure type="gchararray" function="column_view_get_file_date">
-                <lookup type="GtkFileSystemItem" name="file-info">
-                  <lookup name="item">GtkListItem</lookup>
-                </lookup>
+                <lookup name="item">GtkListItem</lookup>
               </closure>
             </binding>
           </object>
@@ -338,9 +344,7 @@
             </binding>
             <binding name="label">
               <closure type="gchararray" function="column_view_get_file_time">
-                <lookup type="GtkFileSystemItem" name="file-info">
-                  <lookup name="item">GtkListItem</lookup>
-                </lookup>
+                <lookup name="item">GtkListItem</lookup>
               </closure>
             </binding>
           </object>

@@ -36,8 +36,8 @@ struct _GtkFileThumbnail
 
   GtkWidget *image;
 
-  GtkFileSystemItem *item;
   GCancellable *cancellable;
+  GFileInfo *info;
 };
 
 typedef struct
@@ -49,7 +49,7 @@ G_DEFINE_FINAL_TYPE (GtkFileThumbnail, _gtk_file_thumbnail, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
-  PROP_ITEM,
+  PROP_INFO,
   N_PROPS,
 };
 
@@ -71,18 +71,16 @@ static gboolean
 update_image (GtkFileThumbnail *self)
 {
   GtkIconTheme *icon_theme;
-  GFileInfo *info;
   GIcon *icon;
   int scale;
 
-  info = _gtk_file_system_item_get_file_info (self->item);
-  if (!g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
+  if (!g_file_info_has_attribute (self->info, G_FILE_ATTRIBUTE_STANDARD_ICON))
     return FALSE;
 
   scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
 
-  icon = _gtk_file_info_get_icon (info, ICON_SIZE, scale, icon_theme);
+  icon = _gtk_file_info_get_icon (self->info, ICON_SIZE, scale, icon_theme);
 
   gtk_image_set_from_gicon (GTK_IMAGE (self->image), icon);
 
@@ -100,16 +98,14 @@ thumbnail_queried_cb (GObject      *object,
   GtkFileThumbnail *self = user_data; /* might be unreffed if operation was cancelled */
   GFile *file = G_FILE (object);
   GFileInfo *queried;
-  GFileInfo *info;
 
   queried = g_file_query_info_finish (file, result, NULL);
   if (queried == NULL)
     return;
 
-  info = _gtk_file_system_item_get_file_info (self->item);
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
-  copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
+  copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+  copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
+  copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
 
   update_image (self);
 
@@ -128,23 +124,21 @@ cancel_thumbnail (GtkFileThumbnail *self)
 static void
 get_thumbnail (GtkFileThumbnail *self)
 {
-  if (!self->item)
+  if (!self->info)
     return;
 
   if (!update_image (self))
     {
-      GFileInfo *info;
       GFile *file;
 
-      info = _gtk_file_system_item_get_file_info (self->item);
-      if (g_file_info_has_attribute (info, "filechooser::queried"))
+      if (g_file_info_has_attribute (self->info, "filechooser::queried"))
         return;
 
       g_assert (self->cancellable == NULL);
       self->cancellable = g_cancellable_new ();
 
-      file = _gtk_file_system_item_get_file (self->item);
-      g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
+      file = _gtk_file_info_get_file (self->info);
+      g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
       g_file_query_info_async (file,
                                G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
                                G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
@@ -162,7 +156,7 @@ _gtk_file_thumbnail_dispose (GObject *object)
 {
   GtkFileThumbnail *self = (GtkFileThumbnail *)object;
 
-  _gtk_file_thumbnail_set_item (self, NULL);
+  _gtk_file_thumbnail_set_info (self, NULL);
 
   g_clear_pointer (&self->image, gtk_widget_unparent);
 
@@ -179,8 +173,8 @@ _gtk_file_thumbnail_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM:
-      g_value_set_object (value, self->item);
+    case PROP_INFO:
+      g_value_set_object (value, self->info);
       break;
 
     default:
@@ -198,8 +192,8 @@ _gtk_file_thumbnail_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ITEM:
-      _gtk_file_thumbnail_set_item (self, g_value_get_object (value));
+    case PROP_INFO:
+      _gtk_file_thumbnail_set_info (self, g_value_get_object (value));
       break;
 
     default:
@@ -217,9 +211,9 @@ _gtk_file_thumbnail_class_init (GtkFileThumbnailClass *klass)
   object_class->get_property = _gtk_file_thumbnail_get_property;
   object_class->set_property = _gtk_file_thumbnail_set_property;
 
-  properties[PROP_ITEM] =
-    g_param_spec_object ("item", NULL, NULL,
-                         GTK_TYPE_FILE_SYSTEM_ITEM,
+  properties[PROP_INFO] =
+    g_param_spec_object ("file-info", NULL, NULL,
+                         G_TYPE_FILE_INFO,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -236,26 +230,26 @@ _gtk_file_thumbnail_init (GtkFileThumbnail *self)
   gtk_widget_set_parent (self->image, GTK_WIDGET (self));
 }
 
-GtkFileSystemItem *
-_gtk_file_thumbnail_get_item (GtkFileThumbnail *self)
+GFileInfo *
+_gtk_file_thumbnail_get_info (GtkFileThumbnail *self)
 {
   g_assert (GTK_IS_FILE_THUMBNAIL (self));
 
-  return self->item;
+  return self->info;
 }
 
 void
-_gtk_file_thumbnail_set_item (GtkFileThumbnail  *self,
-                              GtkFileSystemItem *item)
+_gtk_file_thumbnail_set_info (GtkFileThumbnail *self,
+                              GFileInfo        *info)
 {
   g_assert (GTK_IS_FILE_THUMBNAIL (self));
-  g_assert (item == NULL || GTK_IS_FILE_SYSTEM_ITEM (item));
+  g_assert (info == NULL || G_IS_FILE_INFO (info));
 
-  if (g_set_object (&self->item, item))
+  if (g_set_object (&self->info, info))
     {
       cancel_thumbnail (self);
       get_thumbnail (self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INFO]);
     }
 }
 
