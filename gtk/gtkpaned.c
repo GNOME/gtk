@@ -102,13 +102,13 @@
  * gtk_widget_set_size_request (hpaned, 200, -1);
  *
  * gtk_paned_set_start_child (GTK_PANED (hpaned), frame1);
- * gtk_paned_set_start_child_resize (GTK_PANED (hpaned), TRUE);
- * gtk_paned_set_start_child_shrink (GTK_PANED (hpaned), FALSE);
+ * gtk_paned_set_resize_start_child (GTK_PANED (hpaned), TRUE);
+ * gtk_paned_set_shrink_start_child (GTK_PANED (hpaned), FALSE);
  * gtk_widget_set_size_request (frame1, 50, -1);
  *
  * gtk_paned_set_end_child (GTK_PANED (hpaned), frame2);
- * gtk_paned_set_end_child_resize (GTK_PANED (hpaned), FALSE);
- * gtk_paned_set_end_child_shrink (GTK_PANED (hpaned), FALSE);
+ * gtk_paned_set_resize_end_child (GTK_PANED (hpaned), FALSE);
+ * gtk_paned_set_shrink_end_child (GTK_PANED (hpaned), FALSE);
  * gtk_widget_set_size_request (frame2, 50, -1);
  * ```
  */
