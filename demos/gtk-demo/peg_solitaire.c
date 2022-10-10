@@ -8,6 +8,8 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* Create an object for the pegs that get moved around in the game.
  *
  * We implement the GdkPaintable interface for them, so we can use GtkPicture
