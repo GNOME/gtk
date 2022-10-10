@@ -60,7 +60,8 @@ struct _GtkFileChooserEntry
   char *dir_part;
   char *file_part;
 
-  GtkTreeModel *completion_store;
+  GtkTreeStore *completion_store;
+  GtkFileSystemModel *model;
   GtkFileFilter *current_filter;
 
   guint current_folder_loaded : 1;
@@ -71,6 +72,7 @@ struct _GtkFileChooserEntry
 
 enum
 {
+  FILE_INFO_COLUMN,
   DISPLAY_NAME_COLUMN,
   FULL_PATH_COLUMN,
   N_COLUMNS
@@ -199,10 +201,13 @@ match_func (GtkEntryCompletion *compl,
     {
       GFileInfo *info;
 
-      file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                              iter);
-      info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                              iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
+                          iter,
+                          FILE_INFO_COLUMN, &info,
+                          -1);
+
+      g_assert (info != NULL);
+      g_object_unref (info);
 
       /* We always allow navigating into subfolders, so don't ever filter directories */
       if (g_file_info_get_file_type (info) != G_FILE_TYPE_REGULAR)
@@ -426,7 +431,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
   chooser_entry->complete_on_load = FALSE;
 
-  if (chooser_entry->completion_store)
+  if (chooser_entry->model)
     {
       char *completion, *text;
       gsize completion_len, text_len;
@@ -537,12 +542,15 @@ update_inline_completion (GtkFileChooserEntry *chooser_entry)
 static void
 discard_completion_store (GtkFileChooserEntry *chooser_entry)
 {
-  if (!chooser_entry->completion_store)
+  if (!chooser_entry->model)
     return;
+
+  g_assert (chooser_entry->completion_store != NULL);
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
   update_inline_completion (chooser_entry);
   g_clear_object (&chooser_entry->completion_store);
+  g_clear_object (&chooser_entry->model);
 }
 
 static gboolean
@@ -560,6 +568,9 @@ completion_store_set (GtkFileSystemModel  *model,
 
   switch (column)
     {
+    case FILE_INFO_COLUMN:
+      g_value_set_object (value, info);
+      break;
     case FULL_PATH_COLUMN:
       prefix = chooser_entry->dir_part;
       G_GNUC_FALLTHROUGH;
@@ -581,30 +592,88 @@ completion_store_set (GtkFileSystemModel  *model,
   return TRUE;
 }
 
+static void
+model_items_changed_cb (GListModel          *model,
+                        guint                position,
+                        guint                removed,
+                        guint                added,
+                        GtkFileChooserEntry *self)
+{
+  if (removed > 0)
+    {
+      GtkTreeIter iter;
+
+      if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (self->completion_store),
+                                         &iter,
+                                         NULL,
+                                         position))
+        {
+          while (removed--)
+            gtk_tree_store_remove (self->completion_store, &iter);
+        }
+    }
+
+  while (added-- > 0)
+    {
+      GtkTreeIter iter;
+      GFileInfo *info;
+      const char *suffix = NULL;
+      char *full_path;
+      char *display_name;
+
+      info = g_list_model_get_item (model, position);
+
+      if (_gtk_file_info_consider_as_directory (info))
+        suffix = G_DIR_SEPARATOR_S;
+
+      display_name = g_strconcat (g_file_info_get_display_name (info), suffix, NULL);
+      full_path = g_strconcat (self->dir_part, display_name, NULL);
+
+      gtk_tree_store_insert_with_values (self->completion_store,
+                                         &iter, NULL,
+                                         position,
+                                         FILE_INFO_COLUMN, info,
+                                         FULL_PATH_COLUMN, full_path,
+                                         DISPLAY_NAME_COLUMN, display_name,
+                                         -1);
+
+      g_clear_object (&info);
+
+      position++;
+    }
+}
+
 /* Fills the completion store from the contents of the current folder */
 static void
 populate_completion_store (GtkFileChooserEntry *chooser_entry)
 {
-  chooser_entry->completion_store = GTK_TREE_MODEL (
+  chooser_entry->completion_store = gtk_tree_store_new (N_COLUMNS,
+                                                        G_TYPE_FILE_INFO,
+                                                        G_TYPE_STRING,
+                                                        G_TYPE_STRING);
+
+  chooser_entry->model =
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
                                                 "standard::name,standard::display-name,standard::type,"
                                                 "standard::content-type",
                                                 completion_store_set,
                                                 chooser_entry,
                                                 N_COLUMNS,
+                                                G_TYPE_FILE_INFO,
                                                 G_TYPE_STRING,
-                                                G_TYPE_STRING));
-  g_signal_connect (chooser_entry->completion_store, "finished-loading",
+                                                G_TYPE_STRING);
+  g_signal_connect (chooser_entry->model, "items-changed",
+                    G_CALLBACK (model_items_changed_cb), chooser_entry);
+  g_signal_connect (chooser_entry->model, "finished-loading",
 		    G_CALLBACK (finished_loading_cb), chooser_entry);
 
-  _gtk_file_system_model_set_filter_folders (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                             TRUE);
-  _gtk_file_system_model_set_show_files (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+  _gtk_file_system_model_set_filter_folders (chooser_entry->model, TRUE);
+  _gtk_file_system_model_set_show_files (chooser_entry->model,
                                          chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
                                          chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  chooser_entry->completion_store);
+                                  GTK_TREE_MODEL (chooser_entry->completion_store));
 }
 
 /* Callback when the current folder finishes loading */
@@ -701,7 +770,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 
   g_free (dir_part);
 
-  if (chooser_entry->completion_store &&
+  if (chooser_entry->model &&
       (g_strcmp0 (old_file_part, chooser_entry->file_part) != 0))
     {
       GtkFileFilter *filter;
@@ -711,8 +780,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
       pattern = g_strconcat (chooser_entry->file_part, "*", NULL);
       gtk_file_filter_add_pattern (filter, pattern);
 
-      _gtk_file_system_model_set_filter (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                         filter);
+      _gtk_file_system_model_set_filter (chooser_entry->model, filter);
 
       g_free (pattern);
       g_object_unref (filter);
@@ -931,8 +999,8 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
 	  break;
 	}
 
-      if (chooser_entry->completion_store)
-        _gtk_file_system_model_set_show_files (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+      if (chooser_entry->model)
+        _gtk_file_system_model_set_show_files (chooser_entry->model,
                                                action == GTK_FILE_CHOOSER_ACTION_OPEN ||
                                                action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
@@ -962,17 +1030,14 @@ gboolean
 _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 				       GFile               *file)
 {
-  GtkTreeIter iter;
   GFileInfo *info;
 
-  if (chooser_entry->completion_store == NULL ||
-      !_gtk_file_system_model_get_iter_for_file (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                                 &iter,
-                                                 file))
+  if (chooser_entry->model == NULL)
     return FALSE;
 
-  info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
-                                          &iter);
+  info = _gtk_file_system_model_get_info_for_file (chooser_entry->model, file);
+  if (!info)
+    return FALSE;
 
   return _gtk_file_info_consider_as_directory (info);
 }
