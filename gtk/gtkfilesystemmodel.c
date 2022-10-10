@@ -27,7 +27,6 @@
 #include "gtkmarshalers.h"
 #include "deprecated/gtktreedatalistprivate.h"
 #include "deprecated/gtktreednd.h"
-#include "deprecated/gtktreemodel.h"
 #include "gtkfilter.h"
 #include "gtkprivate.h"
 
