@@ -271,50 +271,6 @@ node_invalidate_index (GtkFileSystemModel *model, guint id)
   model->n_nodes_valid = MIN (model->n_nodes_valid, id);
 }
 
-static GtkTreePath *
-tree_path_new_from_node (GtkFileSystemModel *model, guint id)
-{
-  guint r = node_get_tree_row (model, id);
-
-  g_assert (r < model->files->len);
-
-  return gtk_tree_path_new_from_indices (r, -1);
-}
-
-static void
-emit_row_inserted_for_node (GtkFileSystemModel *model, guint id)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-
-  path = tree_path_new_from_node (model, id);
-  ITER_INIT_FROM_INDEX (model, &iter, id);
-  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-  gtk_tree_path_free (path);
-}
-
-static void
-emit_row_changed_for_node (GtkFileSystemModel *model, guint id)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-
-  path = tree_path_new_from_node (model, id);
-  ITER_INIT_FROM_INDEX (model, &iter, id);
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-  gtk_tree_path_free (path);
-}
-
-static void
-emit_row_deleted_for_row (GtkFileSystemModel *model, guint row)
-{
-  GtkTreePath *path;
-
-  path = gtk_tree_path_new_from_indices (row, -1);
-  gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-  gtk_tree_path_free (path);
-}
-
 static void
 node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean visible, gboolean filtered_out)
 {
@@ -325,8 +281,6 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
   if (node->filtered_out != filtered_out)
     {
       node->filtered_out = filtered_out;
-      if (node->visible && visible)
-        emit_row_changed_for_node (model, id);
     }
 
   /* Visibility */
@@ -339,7 +293,6 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
     {
       node->visible = TRUE;
       node_invalidate_index (model, id);
-      emit_row_inserted_for_node (model, id);
     }
   else
     {
@@ -350,7 +303,6 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
 
       node->visible = FALSE;
       node_invalidate_index (model, id);
-      emit_row_deleted_for_row (model, row);
     }
 }
 
@@ -414,237 +366,6 @@ node_compute_visibility_and_filters (GtkFileSystemModel *model, guint id)
   node_set_visible_and_filtered_out (model, id, visible, filtered_out);
 }
 
-/*** GtkTreeModel ***/
-
-static GtkTreeModelFlags
-gtk_file_system_model_get_flags (GtkTreeModel *tree_model)
-{
-  /* GTK_TREE_MODEL_ITERS_PERSIST doesn't work with arrays :( */
-  return GTK_TREE_MODEL_LIST_ONLY;
-}
-
-static int
-gtk_file_system_model_get_n_columns (GtkTreeModel *tree_model)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-  
-  return model->n_columns;
-}
-
-static GType
-gtk_file_system_model_get_column_type (GtkTreeModel *tree_model,
-				       int           i)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-  
-  g_return_val_if_fail (i >= 0 && (guint) i < model->n_columns, G_TYPE_NONE);
-
-  return model->column_types[i];
-}
-
-static int
-compare_indices (gconstpointer key, gconstpointer _node)
-{
-  const FileModelNode *node = _node;
-
-  return GPOINTER_TO_UINT (key) - node->row;
-}
-
-static gboolean
-gtk_file_system_model_iter_nth_child (GtkTreeModel *tree_model,
-				      GtkTreeIter  *iter,
-				      GtkTreeIter  *parent,
-				      int           n)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-  char *node;
-  guint id;
-  guint row_to_find;
-
-  g_return_val_if_fail (n >= 0, FALSE);
-
-  if (parent != NULL)
-    return FALSE;
-
-  row_to_find = n + 1; /* plus one as our node->row numbers are 1-based; see the "Structure" comment at the beginning */
-
-  if (model->n_nodes_valid > 0 &&
-      get_node (model, model->n_nodes_valid - 1)->row >= row_to_find)
-    {
-      /* Fast path - the nodes are valid up to the sought one.
-       *
-       * First, find a node with the sought row number...*/
-
-      node = bsearch (GUINT_TO_POINTER (row_to_find), 
-                      model->files->data,
-                      model->n_nodes_valid,
-                      model->node_size,
-                      compare_indices);
-      if (node == NULL)
-        return FALSE;
-
-      /* ... Second, back up until we find the first visible node with that row number */
-
-      id = node_index (model, node);
-      while (!get_node (model, id)->visible)
-        id--;
-
-      g_assert (get_node (model, id)->row == row_to_find);
-    }
-  else
-    {
-      /* Slow path - the nodes need to be validated up to the sought one */
-
-      node_validate_rows (model, G_MAXUINT, n); /* note that this is really "n", not row_to_find - see node_validate_rows() */
-      id = model->n_nodes_valid - 1;
-      if (model->n_nodes_valid == 0 || get_node (model, id)->row != row_to_find)
-        return FALSE;
-    }
-
-  ITER_INIT_FROM_INDEX (model, iter, id);
-  return TRUE;
-}
-
-static gboolean
-gtk_file_system_model_get_iter (GtkTreeModel *tree_model,
-				GtkTreeIter  *iter,
-				GtkTreePath  *path)
-{
-  g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
-
-  if (gtk_tree_path_get_depth (path) > 1)
-    return FALSE;
-
-  return gtk_file_system_model_iter_nth_child (tree_model, 
-                                               iter,
-                                               NULL, 
-                                               gtk_tree_path_get_indices (path)[0]);
-}
-
-static GtkTreePath *
-gtk_file_system_model_get_path (GtkTreeModel *tree_model,
-				GtkTreeIter  *iter)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-      
-  g_return_val_if_fail (ITER_IS_VALID (model, iter), NULL);
-
-  return tree_path_new_from_node (model, ITER_INDEX (iter));
-}
-
-static void
-gtk_file_system_model_get_value (GtkTreeModel *tree_model,
-				 GtkTreeIter  *iter,
-				 int           column,
-				 GValue       *value)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-  const GValue *original;
-  
-  g_return_if_fail ((guint) column < model->n_columns);
-  g_return_if_fail (ITER_IS_VALID (model, iter));
-
-  original = _gtk_file_system_model_get_value (model, iter, column);
-  if (original)
-    {
-      g_value_init (value, G_VALUE_TYPE (original));
-      g_value_copy (original, value);
-    }
-  else
-    g_value_init (value, model->column_types[column]);
-}
-
-static gboolean
-gtk_file_system_model_iter_next (GtkTreeModel *tree_model,
-				 GtkTreeIter  *iter)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-  guint i;
-
-  g_return_val_if_fail (ITER_IS_VALID (model, iter), FALSE);
-
-  for (i = ITER_INDEX (iter) + 1; i < model->files->len; i++) 
-    {
-      FileModelNode *node = get_node (model, i);
-
-      if (node->visible)
-        {
-          ITER_INIT_FROM_INDEX (model, iter, i);
-          return TRUE;
-        }
-    }
-      
-  return FALSE;
-}
-
-static gboolean
-gtk_file_system_model_iter_children (GtkTreeModel *tree_model,
-				     GtkTreeIter  *iter,
-				     GtkTreeIter  *parent)
-{
-  return FALSE;
-}
-
-static gboolean
-gtk_file_system_model_iter_has_child (GtkTreeModel *tree_model,
-				      GtkTreeIter  *iter)
-{
-  return FALSE;
-}
-
-static int
-gtk_file_system_model_iter_n_children (GtkTreeModel *tree_model,
-				       GtkTreeIter  *iter)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
-
-  if (iter)
-    return 0;
-
-  return node_get_tree_row (model, model->files->len - 1) + 1;
-}
-
-static gboolean
-gtk_file_system_model_iter_parent (GtkTreeModel *tree_model,
-				   GtkTreeIter  *iter,
-				   GtkTreeIter  *child)
-{
-  return FALSE;
-}
-
-static void
-gtk_file_system_model_ref_node (GtkTreeModel *tree_model,
-				GtkTreeIter  *iter)
-{
-  /* nothing to do */
-}
-
-static void
-gtk_file_system_model_unref_node (GtkTreeModel *tree_model,
-				  GtkTreeIter  *iter)
-{
-  /* nothing to do */
-}
-
-static void
-gtk_file_system_model_iface_init (GtkTreeModelIface *iface)
-{
-  iface->get_flags =       gtk_file_system_model_get_flags;
-  iface->get_n_columns =   gtk_file_system_model_get_n_columns;
-  iface->get_column_type = gtk_file_system_model_get_column_type;
-  iface->get_iter =        gtk_file_system_model_get_iter;
-  iface->get_path =        gtk_file_system_model_get_path;
-  iface->get_value =       gtk_file_system_model_get_value;
-  iface->iter_next =       gtk_file_system_model_iter_next;
-  iface->iter_children =   gtk_file_system_model_iter_children;
-  iface->iter_has_child =  gtk_file_system_model_iter_has_child;
-  iface->iter_n_children = gtk_file_system_model_iter_n_children;
-  iface->iter_nth_child =  gtk_file_system_model_iter_nth_child;
-  iface->iter_parent =     gtk_file_system_model_iter_parent;
-  iface->ref_node =        gtk_file_system_model_ref_node;
-  iface->unref_node =      gtk_file_system_model_unref_node;
-}
-
 /*** GListModel ***/
 
 static GType
@@ -698,8 +419,6 @@ static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
-						gtk_file_system_model_iface_init)
 			 G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
 						g_list_model_iface_init))
 
@@ -1582,9 +1301,7 @@ remove_file (GtkFileSystemModel *model,
 	     GFile              *file)
 {
   FileModelNode *node;
-  gboolean was_visible;
   guint id;
-  guint row;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1594,8 +1311,6 @@ remove_file (GtkFileSystemModel *model,
     return;
 
   node = get_node (model, id);
-  was_visible = node->visible;
-  row = node_get_tree_row (model, id);
 
   node_invalidate_index (model, id);
 
@@ -1607,9 +1322,6 @@ remove_file (GtkFileSystemModel *model,
     g_object_unref (node->info);
 
   g_array_remove_index (model->files, id);
-
-  if (was_visible)
-    emit_row_deleted_for_row (model, row);
 
   g_list_model_items_changed (G_LIST_MODEL (model), id - 1, 1, 0);
 }
@@ -1654,9 +1366,6 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
     }
 
   g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
-
-  if (node->visible)
-    emit_row_changed_for_node (model, id);
 }
 
 void
