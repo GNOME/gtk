@@ -23,6 +23,8 @@
 #include <gtk/gtk.h>
 #include "testsuite/testutils.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #ifdef G_OS_WIN32
 # include <io.h>
 #endif
