@@ -3756,19 +3756,28 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
 /* Callback used when file system model adds or updates a file.
  * We detect here when a new renamed file appears and reveal it */
 static void
-browse_files_model_row_changed_cb (GtkTreeModel         *model,
-                                   GtkTreePath          *path,
-                                   GtkTreeIter          *iter,
-                                   GtkFileChooserWidget *impl)
+browse_files_model_items_changed_cb (GListModel           *model,
+                                     guint                 position,
+                                     guint                 removed,
+                                     guint                 added,
+                                     GtkFileChooserWidget *impl)
 {
-  GFile *file;
-  GSList files;
+  if (!impl->renamed_file)
+    return;
 
-  if (impl->renamed_file)
+  for (guint i = 0; i < added; i++)
     {
-      gtk_tree_model_get (model, iter, MODEL_COL_FILE, &file, -1);
+      GFileInfo *info;
+      GFile *file;
+
+      info = g_list_model_get_item (model, position + i);
+      file = _gtk_file_info_get_file (info);
+      g_clear_object (&info);
+
       if (g_file_equal (impl->renamed_file, file))
         {
+          GSList files;
+
           g_clear_object (&impl->renamed_file);
 
           files.data = (gpointer) file;
@@ -3776,8 +3785,6 @@ browse_files_model_row_changed_cb (GtkTreeModel         *model,
 
           show_and_select_files (impl, &files);
         }
-
-      g_object_unref (file);
     }
 }
 
@@ -4097,8 +4104,8 @@ set_list_model (GtkFileChooserWidget  *impl,
   g_signal_connect (impl->browse_files_model, "finished-loading",
                     G_CALLBACK (browse_files_model_finished_loading_cb), impl);
 
-  g_signal_connect (impl->browse_files_model, "row-changed",
-                    G_CALLBACK (browse_files_model_row_changed_cb), impl);
+  g_signal_connect (impl->selection_model, "items-changed",
+                    G_CALLBACK (browse_files_model_items_changed_cb), impl);
 
   _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
 
