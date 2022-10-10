@@ -31,7 +31,6 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkflowbox.h"
 #include "gtkstack.h"
-#include "gtkstylecontext.h"
 
 struct _GtkEmojiCompletion
 {
