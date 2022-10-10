@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *
 oriented_test_widget (const char *label, const char *color)
 {
