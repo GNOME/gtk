@@ -38,7 +38,6 @@
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkwidgetprivate.h"
 
