@@ -247,7 +247,7 @@
 #include <gtk/gtkstringfilter.h>
 #include <gtk/gtkstringlist.h>
 #include <gtk/gtkstringsorter.h>
-#include <gtk/gtkstylecontext.h>
+#include <gtk/deprecated/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymbolicpaintable.h>

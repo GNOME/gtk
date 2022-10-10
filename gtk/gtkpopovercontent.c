@@ -21,8 +21,8 @@
 #include "config.h"
 
 #include "gtkpopovercontentprivate.h"
-#include "gtkstylecontextprivate.h"
 
+#include "gtkcssstylechangeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 

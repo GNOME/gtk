@@ -28,7 +28,6 @@
 
 #include "gtkcssprovider.h"
 #include "gtkstyleprovider.h"
-#include "gtkstylecontext.h"
 #include "gtktextview.h"
 #include "gtkmessagedialog.h"
 #include "gtkfilechooserdialog.h"

@@ -24,7 +24,7 @@
 #include "gtkcssstylechangeprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkstylecontext.h"
+#include "deprecated/gtkstylecontext.h"
 #include "gtklistlistmodelprivate.h"
 
 G_BEGIN_DECLS

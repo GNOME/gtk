@@ -22,7 +22,7 @@
 #include "graphdata.h"
 
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
+#include "deprecated/gtkstylecontext.h"
 
 enum {
   PROP_0,
@@ -155,8 +155,10 @@ graph_renderer_snapshot (GtkWidget   *widget,
 
   diff = maximum - minimum;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (

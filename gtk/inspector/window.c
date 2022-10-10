@@ -63,7 +63,6 @@
 #include "gtkrevealer.h"
 #include "gtklayoutmanager.h"
 #include "gtkcssprovider.h"
-#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 

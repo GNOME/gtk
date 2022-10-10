@@ -220,7 +220,9 @@ gtk_style_context_impl_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DISPLAY:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_set_display (context, g_value_get_object (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -341,6 +343,8 @@ gtk_style_context_new_for_node (GtkCssNode *node)
  * Note: If both priorities are the same, a `GtkStyleProvider`
  * added through this function takes precedence over another added
  * through [func@Gtk.StyleContext.add_provider_for_display].
+ *
+ * Deprecated: 4.10: Use style classes instead
  */
 void
 gtk_style_context_add_provider (GtkStyleContext  *context,
@@ -376,6 +380,8 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
  * @provider: a `GtkStyleProvider`
  *
  * Removes @provider from the style providers list in @context.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_style_context_remove_provider (GtkStyleContext  *context,
@@ -393,67 +399,13 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 }
 
 /**
- * gtk_style_context_add_provider_for_display:
- * @display: a `GdkDisplay`
- * @provider: a `GtkStyleProvider`
- * @priority: the priority of the style provider. The lower
- *   it is, the earlier it will be used in the style construction.
- *   Typically this will be in the range between
- *   %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
- *   %GTK_STYLE_PROVIDER_PRIORITY_USER
- *
- * Adds a global style provider to @display, which will be used
- * in style construction for all `GtkStyleContexts` under @display.
- *
- * GTK uses this to make styling information from `GtkSettings`
- * available.
- *
- * Note: If both priorities are the same, A `GtkStyleProvider`
- * added through [method@Gtk.StyleContext.add_provider] takes
- * precedence over another added through this function.
- **/
-void
-gtk_style_context_add_provider_for_display (GdkDisplay       *display,
-                                            GtkStyleProvider *provider,
-                                            guint             priority)
-{
-  GtkStyleCascade *cascade;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_display (GTK_SETTINGS (provider)) == display);
-
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
-  _gtk_style_cascade_add_provider (cascade, provider, priority);
-}
-
-/**
- * gtk_style_context_remove_provider_for_display:
- * @display: a `GdkDisplay`
- * @provider: a `GtkStyleProvider`
- *
- * Removes @provider from the global style providers list in @display.
- */
-void
-gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
-                                               GtkStyleProvider *provider)
-{
-  GtkStyleCascade *cascade;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider));
-
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
-  _gtk_style_cascade_remove_provider (cascade, provider);
-}
-
-/**
  * gtk_style_context_set_state:
  * @context: a `GtkStyleContext`
  * @flags: state to represent
  *
  * Sets the state to be used for style matching.
+ *
+ * Deprecated: 4.10: You should not use this api
  */
 void
 gtk_style_context_set_state (GtkStyleContext *context,
@@ -479,6 +431,8 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * [method@Gtk.Widget.get_state_flags].
  *
  * Returns: the state flags
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_state_flags] instead
  **/
 GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
@@ -496,6 +450,8 @@ gtk_style_context_get_state (GtkStyleContext *context)
  * @scale: scale
  *
  * Sets the scale to use when getting image assets for the style.
+ *
+ * Deprecated: 4.10: You should not use this api
  **/
 void
 gtk_style_context_set_scale (GtkStyleContext *context,
@@ -529,6 +485,8 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  * Returns the scale used for assets.
  *
  * Returns: the scale
+ *
+ * Deprecated 4.10: Use [method@Gtk.Widget.get_scale_factor] instead
  **/
 int
 gtk_style_context_get_scale (GtkStyleContext *context)
@@ -586,6 +544,8 @@ gtk_style_context_save_to_node (GtkStyleContext *context,
  *
  * The matching call to [method@Gtk.StyleContext.restore]
  * must be done before GTK returns to the main loop.
+ *
+ * Deprecated: 4.10: This API will be removed in GTK 5
  **/
 void
 gtk_style_context_save (GtkStyleContext *context)
@@ -616,6 +576,8 @@ gtk_style_context_save (GtkStyleContext *context)
  * Restores @context state to a previous stage.
  *
  * See [method@Gtk.StyleContext.save].
+ *
+ * Deprecated: 4.10: This API will be removed in GTK 5
  **/
 void
 gtk_style_context_restore (GtkStyleContext *context)
@@ -653,6 +615,7 @@ gtk_style_context_restore (GtkStyleContext *context)
  * ```css
  * .search { ... }
  * ```
+ * Deprecated: 4.10: Use [method@Gtk.Widget.add_css_class] instead
  */
 void
 gtk_style_context_add_class (GtkStyleContext *context,
@@ -675,6 +638,8 @@ gtk_style_context_add_class (GtkStyleContext *context,
  * @class_name: class name to remove
  *
  * Removes @class_name from @context.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.remove_css_class] instead
  */
 void
 gtk_style_context_remove_class (GtkStyleContext *context,
@@ -702,6 +667,8 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  * given class name.
  *
  * Returns: %TRUE if @context has @class_name defined
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.has_css_class] instead
  **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
@@ -742,6 +709,8 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
  * If you are using a `GtkStyleContext` returned from
  * [method@Gtk.Widget.get_style_context], you do not need to
  * call this yourself.
+ *
+ * Deprecated: 4.10: You should not use this api
  */
 void
 gtk_style_context_set_display (GtkStyleContext *context,
@@ -780,6 +749,8 @@ gtk_style_context_set_display (GtkStyleContext *context,
  * Returns the `GdkDisplay` to which @context is attached.
  *
  * Returns: (transfer none): a `GdkDisplay`.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_display] instead
  */
 GdkDisplay *
 gtk_style_context_get_display (GtkStyleContext *context)
@@ -824,6 +795,8 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
  * Looks up and resolves a color name in the @context color map.
  *
  * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
@@ -850,6 +823,8 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * @color: (out): return value for the foreground color
  *
  * Gets the foreground color for a given state.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_color (GtkStyleContext *context,
@@ -867,6 +842,8 @@ gtk_style_context_get_color (GtkStyleContext *context,
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_border (GtkStyleContext *context,
@@ -891,6 +868,8 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_padding (GtkStyleContext *context,
@@ -915,6 +894,8 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_margin (GtkStyleContext *context,
@@ -981,6 +962,8 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
  * the format of the returned string, it may change.
  *
  * Returns: a newly allocated string representing @context
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 char *
 gtk_style_context_to_string (GtkStyleContext           *context,

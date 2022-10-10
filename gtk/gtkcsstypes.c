@@ -20,7 +20,6 @@
 #include "gtkcsstypesprivate.h"
 
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkstylecontextprivate.h"
 
 void
 gtk_css_change_print (GtkCssChange  change,

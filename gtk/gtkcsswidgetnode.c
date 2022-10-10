@@ -22,7 +22,7 @@
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "deprecated/gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 

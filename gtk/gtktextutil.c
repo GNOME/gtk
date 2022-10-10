@@ -28,7 +28,6 @@
 #include "gtktextutilprivate.h"
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextbuffer.h"
 #include "gtktextlayoutprivate.h"
 #include "gtkwidgetprivate.h"

@@ -706,7 +706,7 @@ void            gtk_requisition_free     (GtkRequisition       *requisition);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 
 GDK_AVAILABLE_IN_ALL

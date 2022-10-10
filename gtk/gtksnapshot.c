@@ -24,7 +24,6 @@
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkrendernodepaintableprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"

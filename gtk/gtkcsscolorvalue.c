@@ -22,6 +22,8 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtkcssstyleprivate.h"
+#include "gtkstyleproviderprivate.h"
 
 #include "gdk/gdkhslaprivate.h"
 #include "gdk/gdkrgbaprivate.h"

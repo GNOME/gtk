@@ -23,7 +23,7 @@
 #include "gtkcssproviderprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
-#include "gtkstylecontextprivate.h"
+#include "deprecated/gtkstylecontextprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"

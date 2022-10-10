@@ -48,7 +48,6 @@
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksymbolicpaintable.h"
 #include "gtkwidgetprivate.h"
