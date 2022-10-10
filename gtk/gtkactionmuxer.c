@@ -27,6 +27,8 @@
 #include "gtkmarshalers.h"
 #include "gtkwidgetprivate.h"
 #include "gsettings-mapping.h"
+#include "gtkdebug.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 
@@ -846,9 +848,15 @@ gtk_action_muxer_activate_action (GtkActionMuxer *muxer,
               if (!_gtk_bitmask_get (muxer->widget_actions_disabled, position))
                 {
                   if (action->activate)
-                    action->activate (muxer->widget, action->name, parameter);
+                    {
+                      GTK_DEBUG (ACTIONS, "%s: activate action", action->name);
+                      action->activate (muxer->widget, action->name, parameter);
+                    }
                   else if (action->pspec)
-                    prop_action_activate (muxer->widget, action, parameter);
+                    {
+                      GTK_DEBUG (ACTIONS, "%s: activate prop action", action->pspec->name);
+                      prop_action_activate (muxer->widget, action, parameter);
+                    }
                 }
 
               return;
