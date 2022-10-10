@@ -879,7 +879,7 @@ file_text_serializer (GdkContentSerializer *serializer)
           g_string_append (str, path);
           g_free (path);
           if (l->next)
-            g_string_append (str, " ");
+            g_string_append (str, "\n");
         }
       path = g_string_free (str, FALSE);
     }
