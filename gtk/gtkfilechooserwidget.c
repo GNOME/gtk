@@ -6298,7 +6298,10 @@ column_view_row_activated_cb (GtkColumnView        *column_view,
   else if (self->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
            self->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
+      /* prevent recursion */
+      g_signal_handlers_block_by_func (column_view, column_view_row_activated_cb, self);
       gtk_widget_activate_default (GTK_WIDGET (self));
+      g_signal_handlers_unblock_by_func (column_view, column_view_row_activated_cb, self);
     }
 
   g_clear_object (&info);
