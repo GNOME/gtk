@@ -478,6 +478,11 @@ static void list_selection_changed     (GtkSelectionModel    *selection_model,
                                         guint                 position,
                                         guint                 n_items,
                                         GtkFileChooserWidget *impl);
+static void list_items_changed         (GListModel           *model,
+                                        guint                 position,
+                                        guint                 removed,
+                                        guint                 added,
+                                        GtkFileChooserWidget *impl);
 static void path_bar_clicked (GtkPathBar            *path_bar,
                               GFile                 *file,
                               GFile                 *child,
@@ -6262,6 +6267,19 @@ list_selection_changed (GtkSelectionModel    *selection_model,
   update_default (impl);
 }
 
+static void
+list_items_changed (GListModel           *model,
+                    guint                 position,
+                    guint                 removed,
+                    guint                 added,
+                    GtkFileChooserWidget *impl)
+{
+  if (get_current_model (impl) == NULL)
+    return;
+
+  update_default (impl);
+}
+
 static gboolean
 browse_files_column_view_keynav_failed_cb (GtkWidget        *widget,
                                            GtkDirectionType  direction,
@@ -7111,10 +7129,10 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->auto_selecting_first_row = FALSE;
   impl->renamed_file = NULL;
 
-  g_signal_connect (impl->selection_model,
-                    "selection-changed",
-                    G_CALLBACK (list_selection_changed),
-                    impl);
+  g_signal_connect (impl->selection_model, "selection-changed",
+                    G_CALLBACK (list_selection_changed), impl);
+  g_signal_connect (impl->selection_model, "items-changed",
+                    G_CALLBACK (list_items_changed), impl);
 
   /* Ensure private types used by the template
    * definition before calling gtk_widget_init_template()
