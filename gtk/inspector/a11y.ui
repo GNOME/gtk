@@ -12,7 +12,7 @@
             <property name="margin-bottom">10</property>
             <property name="spacing">40</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="role_label">
                 <property name="label" translatable="yes">Role</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
@@ -24,6 +24,9 @@
                 <property name="selectable">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
+                <accessibility>
+                  <relation name="labelled-by">role_label</relation>
+                </accessibility>
               </object>
             </child>
           </object>
@@ -36,7 +39,7 @@
             <property name="margin-bottom">10</property>
             <property name="spacing">40</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="path_label">
                 <property name="label" translatable="yes">Object path</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
@@ -48,6 +51,9 @@
                 <property name="selectable">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
+                <accessibility>
+                  <relation name="labelled-by">path_label</relation>
+                </accessibility>
               </object>
             </child>
           </object>
