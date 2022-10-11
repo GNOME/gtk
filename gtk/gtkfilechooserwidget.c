@@ -2590,6 +2590,11 @@ set_select_multiple (GtkFileChooserWidget *impl,
                     G_CALLBACK (list_selection_changed),
                     impl);
 
+  g_signal_connect (impl->selection_model,
+                    "items-changed",
+                    G_CALLBACK (list_items_changed),
+                    impl);
+
   gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view),
                              GTK_SELECTION_MODEL (impl->selection_model));
 
