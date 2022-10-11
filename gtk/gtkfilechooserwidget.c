@@ -4114,7 +4114,7 @@ set_list_model (GtkFileChooserWidget  *impl,
   g_signal_connect (impl->browse_files_model, "finished-loading",
                     G_CALLBACK (browse_files_model_finished_loading_cb), impl);
 
-  g_signal_connect (impl->selection_model, "items-changed",
+  g_signal_connect (impl->browse_files_model, "items-changed",
                     G_CALLBACK (browse_files_model_items_changed_cb), impl);
 
   _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
