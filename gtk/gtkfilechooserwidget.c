@@ -93,6 +93,8 @@
 #include "gtkshortcutaction.h"
 #include "gtkshortcut.h"
 #include "gtkstringlist.h"
+#include "gtkfilterlistmodel.h"
+#include "gtkcustomfilter.h"
 
 #ifndef G_OS_WIN32
 #include "gopenuriportal.h"
@@ -198,6 +200,7 @@ struct _GtkFileChooserWidget
    * selection model.
    */
   GtkSelectionModel *selection_model;
+  GtkFilterListModel *filter_model;
 
   /* The file browsing widgets */
   GtkWidget *browse_widgets_hpaned;
@@ -596,6 +599,9 @@ gtk_file_chooser_widget_finalize (GObject *object)
   recent_clear_model (impl, FALSE);
   g_clear_object (&impl->model_for_search);
 
+  g_clear_object (&impl->selection_model);
+  g_clear_object (&impl->filter_model);
+
   /* stopping the load above should have cleared this */
   g_assert (impl->load_timeout_id == 0);
 
@@ -618,28 +624,16 @@ get_toplevel (GtkWidget *widget)
 static GListModel *
 get_current_model (GtkFileChooserWidget *self)
 {
-  g_assert (self->selection_model != NULL);
-  g_assert (GTK_IS_MULTI_SELECTION (self->selection_model) ||
-            GTK_IS_SINGLE_SELECTION (self->selection_model));
-
-  if (GTK_IS_MULTI_SELECTION (self->selection_model))
-    return gtk_multi_selection_get_model (GTK_MULTI_SELECTION (self->selection_model));
-  else
-    return gtk_single_selection_get_model (GTK_SINGLE_SELECTION (self->selection_model));
+  return gtk_filter_list_model_get_model (self->filter_model);
 }
 
 static void
 set_current_model (GtkFileChooserWidget *self,
                    GListModel           *model)
 {
-  g_assert (self->selection_model != NULL);
-  g_assert (GTK_IS_MULTI_SELECTION (self->selection_model) ||
-            GTK_IS_SINGLE_SELECTION (self->selection_model));
-
-  if (GTK_IS_MULTI_SELECTION (self->selection_model))
-    gtk_multi_selection_set_model (GTK_MULTI_SELECTION (self->selection_model), model);
-  else
-    gtk_single_selection_set_model (GTK_SINGLE_SELECTION (self->selection_model), model);
+  gtk_filter_list_model_set_model (self->filter_model, model);
+  gtk_filter_changed (gtk_filter_list_model_get_filter (self->filter_model),
+                      GTK_FILTER_CHANGE_DIFFERENT);
 }
 
 /* Extracts the parent folders out of the supplied list of GtkRecentInfo* items, and returns
@@ -1575,6 +1569,9 @@ set_model_filter (GtkFileChooserWidget *impl,
 
   if (impl->recent_model)
     _gtk_file_system_model_set_filter (impl->recent_model, filter);
+
+  gtk_filter_changed (gtk_filter_list_model_get_filter (impl->filter_model),
+                      GTK_FILTER_CHANGE_DIFFERENT);
 }
 
 static void
@@ -2566,9 +2563,9 @@ switch_to_home_dir (GtkFileChooserWidget *impl)
 /* Sets the file chooser to multiple selection mode */
 static void
 set_select_multiple (GtkFileChooserWidget *impl,
-                     gboolean               select_multiple)
+                     gboolean              select_multiple)
 {
-  GListModel *model = NULL;
+  GListModel *model;
 
   if (select_multiple == impl->select_multiple)
     return;
@@ -2576,7 +2573,7 @@ set_select_multiple (GtkFileChooserWidget *impl,
   gtk_column_view_set_enable_rubberband (GTK_COLUMN_VIEW (impl->browse_files_column_view),
                                          select_multiple);
 
-  model = get_current_model (impl);
+  model = g_object_ref (G_LIST_MODEL (impl->filter_model));
 
   g_clear_object (&impl->selection_model);
 
@@ -2585,10 +2582,10 @@ set_select_multiple (GtkFileChooserWidget *impl,
   else
     impl->selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
 
-  g_signal_connect (impl->selection_model,
-                    "selection-changed",
-                    G_CALLBACK (list_selection_changed),
-                    impl);
+  g_signal_connect (impl->selection_model, "selection-changed",
+                    G_CALLBACK (list_selection_changed), impl);
+  g_signal_connect (impl->selection_model, "items-changed",
+                    G_CALLBACK (list_items_changed), impl);
 
   g_signal_connect (impl->selection_model,
                     "items-changed",
@@ -2920,6 +2917,9 @@ set_show_hidden (GtkFileChooserWidget *impl,
 
       if (impl->browse_files_model)
         _gtk_file_system_model_set_show_hidden (impl->browse_files_model, show_hidden);
+
+      gtk_filter_changed (gtk_filter_list_model_get_filter (impl->filter_model),
+                          GTK_FILTER_CHANGE_DIFFERENT);
     }
 }
 
@@ -7113,12 +7113,19 @@ filter_name (GtkFileFilter *filter)
   return g_strdup (gtk_file_filter_get_name (filter));
 }
 
+static gboolean
+match_func (gpointer item, gpointer user_data)
+{
+  return g_file_info_get_attribute_boolean (G_FILE_INFO (item), "filechooser::visible");
+}
+
 static void
 gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 {
   GtkExpression *expression;
 
   impl->selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (NULL));
+  impl->filter_model = gtk_filter_list_model_new (NULL, GTK_FILTER (gtk_custom_filter_new (match_func, NULL, NULL)));
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->show_size_column = TRUE;
@@ -7133,6 +7140,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->create_folders = TRUE;
   impl->auto_selecting_first_row = FALSE;
   impl->renamed_file = NULL;
+
+  gtk_single_selection_set_model (GTK_SINGLE_SELECTION (impl->selection_model), G_LIST_MODEL (impl->filter_model));
 
   g_signal_connect (impl->selection_model, "selection-changed",
                     G_CALLBACK (list_selection_changed), impl);
