@@ -3599,6 +3599,7 @@ show_and_select_files (GtkFileChooserWidget *impl,
       GFileInfo *info;
       GFile *file;
       guint i;
+      gboolean enabled_hidden, removed_filters;
 
       file = walk->data;
 
@@ -3608,16 +3609,11 @@ show_and_select_files (GtkFileChooserWidget *impl,
       if (!info)
         continue;
 
-      /* TODO: Reimplement showing hidden files and removing filters */
-#if 0
-      gboolean enabled_hidden, removed_filters;
-
       enabled_hidden = impl->show_hidden;
       removed_filters = (impl->current_filter == NULL);
 
-      if (!_gtk_file_system_item_is_visible (item))
+      if (!g_file_info_get_attribute_boolean (info, "filechooser::visible"))
         {
-          GFileInfo *info = _gtk_file_system_item_get_file_info (item);
           if (!enabled_hidden &&
               (g_file_info_get_is_hidden (info) ||
                g_file_info_get_is_backup (info)))
@@ -3629,11 +3625,7 @@ show_and_select_files (GtkFileChooserWidget *impl,
 
       /* Is it a filtered file? */
 
-      item = _gtk_file_system_model_get_item_for_file (fsmodel, file);
-      if (!item)
-        continue; /* re-get the iter as it may change when the model refilters */
-
-      if (!_gtk_file_system_item_is_visible (item))
+      if (g_file_info_get_attribute_boolean (info, "filechooser::filtered-out"))
         {
           /* Maybe we should have a way to ask the fsmodel if it had filtered a file */
           if (!removed_filters)
@@ -3642,12 +3634,6 @@ show_and_select_files (GtkFileChooserWidget *impl,
               removed_filters = TRUE;
             }
         }
-
-      /* Okay, can we select the file now? */
-      item = _gtk_file_system_model_get_info_for_file (fsmodel, file);
-      if (!item)
-        continue;
-#endif
 
       /* TODO: "accidentally" quadratic! */
 
@@ -3659,15 +3645,13 @@ show_and_select_files (GtkFileChooserWidget *impl,
 
           if (info2 == info)
             {
-              gtk_selection_model_select_item (impl->selection_model,
-                                               i,
-                                               FALSE);
-              g_clear_object (&info);
+              gtk_selection_model_select_item (impl->selection_model, i, FALSE);
+              g_clear_object (&info2);
               selected_a_file = TRUE;
               break;
             }
 
-          g_clear_object (&info);
+          g_clear_object (&info2);
         }
     }
 
