@@ -192,6 +192,7 @@ macos:
   only:
     - branches@GNOME/gtk
   stage: build
+  allow_failure: true
   tags:
     - macos
   needs: []

@@ -42,6 +42,7 @@ struct _GtkStringSorter
   GtkSorter parent_instance;
 
   gboolean ignore_case;
+  GtkCollation collation;
 
   GtkExpression *expression;
 };
@@ -50,6 +51,7 @@ enum {
   PROP_0,
   PROP_EXPRESSION,
   PROP_IGNORE_CASE,
+  PROP_COLLATION,
   NUM_PROPERTIES
 };
 
@@ -60,10 +62,13 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 static char *
 gtk_string_sorter_get_key (GtkExpression *expression,
                            gboolean       ignore_case,
+                           GtkCollation   collation,
                            gpointer       item1)
 {
   GValue value = G_VALUE_INIT;
+  const char *string;
   char *s;
+  char *key;
 
   if (expression == NULL)
     return NULL;
@@ -71,23 +76,35 @@ gtk_string_sorter_get_key (GtkExpression *expression,
   if (!gtk_expression_evaluate (expression, item1, &value))
     return NULL;
 
-  /* If strings are NULL, order them before "". */
-  if (ignore_case)
-    {
-      char *t;
+  string = g_value_get_string (&value);
 
-      t = g_utf8_casefold (g_value_get_string (&value), -1);
-      s = g_utf8_collate_key (t, -1);
-      g_free (t);
-    }
+  if (ignore_case)
+    s = g_utf8_casefold (string, -1);
   else
+    s = (char *) string;
+
+  switch (collation)
     {
-      s = g_utf8_collate_key (g_value_get_string (&value), -1);
+    case GTK_COLLATION_NONE:
+      key = s;
+      break;
+    case GTK_COLLATION_UNICODE:
+      key = g_utf8_collate_key (s, -1);
+      break;
+    case GTK_COLLATION_FILENAME:
+      key = g_utf8_collate_key_for_filename (s, -1);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
+
+  if (s != string)
+    g_free (s);
 
   g_value_unset (&value);
 
-  return s;
+  return key;
 }
 
 static GtkOrdering
@@ -102,8 +119,8 @@ gtk_string_sorter_compare (GtkSorter *sorter,
   if (self->expression == NULL)
     return GTK_ORDERING_EQUAL;
 
-  s1 = gtk_string_sorter_get_key (self->expression, self->ignore_case, item1);
-  s2 = gtk_string_sorter_get_key (self->expression, self->ignore_case, item2);
+  s1 = gtk_string_sorter_get_key (self->expression, self->ignore_case, self->collation, item1);
+  s2 = gtk_string_sorter_get_key (self->expression, self->ignore_case, self->collation, item2);
 
   result = gtk_ordering_from_cmpfunc (g_strcmp0 (s1, s2));
 
@@ -131,6 +148,7 @@ struct _GtkStringSortKeys
 
   GtkExpression *expression;
   gboolean ignore_case;
+  GtkCollation collation;
 };
 
 static void
@@ -173,7 +191,7 @@ gtk_string_sort_keys_init_key (GtkSortKeys *keys,
   GtkStringSortKeys *self = (GtkStringSortKeys *) keys;
   char **key = (char **) key_memory;
 
-  *key = gtk_string_sorter_get_key (self->expression, self->ignore_case, item);
+  *key = gtk_string_sorter_get_key (self->expression, self->ignore_case, self->collation, item);
 }
 
 static void
@@ -209,6 +227,7 @@ gtk_string_sort_keys_new (GtkStringSorter *self)
 
   result->expression = gtk_expression_ref (self->expression);
   result->ignore_case = self->ignore_case;
+  result->collation = self->collation;
 
   return (GtkSortKeys *) result;
 }
@@ -231,13 +250,17 @@ gtk_string_sorter_set_property (GObject      *object,
       gtk_string_sorter_set_ignore_case (self, g_value_get_boolean (value));
       break;
 
+    case PROP_COLLATION:
+      gtk_string_sorter_set_collation (self, g_value_get_enum (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void 
+static void
 gtk_string_sorter_get_property (GObject     *object,
                                 guint        prop_id,
                                 GValue      *value,
@@ -253,6 +276,10 @@ gtk_string_sorter_get_property (GObject     *object,
 
     case PROP_IGNORE_CASE:
       g_value_set_boolean (value, self->ignore_case);
+      break;
+
+    case PROP_COLLATION:
+      g_value_set_enum (value, self->collation);
       break;
 
     default:
@@ -296,12 +323,31 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   /**
    * GtkStringSorter:ignore-case: (attributes org.gtk.Property.get=gtk_string_sorter_get_ignore_case org.gtk.Property.set=gtk_string_sorter_set_ignore_case)
    *
-   * If matching is case sensitive.
+   * If sorting is case sensitive.
    */
   properties[PROP_IGNORE_CASE] =
       g_param_spec_boolean ("ignore-case", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStringSorter:collation: (attributes org.gtk.Property.get=gtk_string_sorter_get_collation org.gtk.Property.set=gtk_string_sorter_set_collation)
+   *
+   * The collation method to use for sorting.
+   *
+   * The `GTK_COLLATION_NONE` value is useful when the expression already
+   * returns collation keys, or strings that need to be compared byte-by-byte.
+   *
+   * The default value, `GTK_COLLATION_UNICODE`, compares strings according
+   * to the [Unicode collation algorithm](https://www.unicode.org/reports/tr10/).
+   *
+   * Since: 4.10
+   */
+  properties[PROP_COLLATION] =
+      g_param_spec_enum ("collation", NULL, NULL,
+                         GTK_TYPE_COLLATION,
+                         GTK_COLLATION_UNICODE,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -311,6 +357,7 @@ static void
 gtk_string_sorter_init (GtkStringSorter *self)
 {
   self->ignore_case = TRUE;
+  self->collation = GTK_COLLATION_UNICODE;
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_DIFFERENT,
@@ -428,4 +475,49 @@ gtk_string_sorter_set_ignore_case (GtkStringSorter *self,
                                 gtk_string_sort_keys_new (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_CASE]);
+}
+
+/**
+ * gtk_string_sorter_get_collation: (attributes org.gtk.Method.get_property=collation)
+ * @self: a `GtkStringSorter`
+ *
+ * Gets which collation method the sorter uses.
+ *
+ * Returns: The collation method
+ *
+ * Since: 4.10
+ */
+GtkCollation
+gtk_string_sorter_get_collation (GtkStringSorter *self)
+{
+  g_return_val_if_fail (GTK_IS_STRING_SORTER (self), GTK_COLLATION_UNICODE);
+
+  return self->collation;
+}
+
+/**
+ * gtk_string_sorter_set_collation: (attributes org.gtk.Method.set_property=collation)
+ * @self: a `GtkStringSorter`
+ * @collation: the collation method
+ *
+ * Sets the collation method to use for sorting.
+ *
+ * Since: 4.10
+ */
+void
+gtk_string_sorter_set_collation (GtkStringSorter *self,
+                                 GtkCollation     collation)
+{
+  g_return_if_fail (GTK_IS_STRING_SORTER (self));
+
+  if (self->collation == collation)
+    return;
+
+  self->collation = collation;
+
+  gtk_sorter_changed_with_keys (GTK_SORTER (self),
+                                GTK_SORTER_CHANGE_DIFFERENT,
+                                gtk_string_sort_keys_new (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLLATION]);
 }

@@ -47,6 +47,34 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_string_sorter_set_ignore_case       (GtkStringSorter        *self,
                                                                  gboolean                ignore_case);
 
+/**
+ * GtkCollation:
+ * @GTK_COLLATION_NONE: Don't do any collation
+ * @GTK_COLLATION_UNICODE: Use [func@GLib.utf8_collate_key]
+ * @GTK_COLLATION_FILENAME: Use [func@GLib.utf8_collate_key_for_filename]
+ *
+ * Describes how a [class@Gtk.StringSorter] turns strings into sort keys to
+ * compare them.
+ *
+ * Note that the result of sorting will in general depend on the current locale
+ * unless the mode is @GTK_COLLATION_NONE.
+ *
+ * Since: 4.10
+ */
+typedef enum
+{
+  GTK_COLLATION_NONE,
+  GTK_COLLATION_UNICODE,
+  GTK_COLLATION_FILENAME
+} GtkCollation;
+
+GDK_AVAILABLE_IN_4_10
+void                    gtk_string_sorter_set_collation         (GtkStringSorter        *self,
+                                                                 GtkCollation            collation);
+
+GDK_AVAILABLE_IN_4_10
+GtkCollation            gtk_string_sorter_get_collation         (GtkStringSorter        *self);
+
 G_END_DECLS
 
 #endif /* __GTK_STRING_SORTER_H__ */
