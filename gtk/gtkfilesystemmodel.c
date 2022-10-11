@@ -277,13 +277,17 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
 
   /* Filteredness */
 
+  g_file_info_set_attribute_boolean (node->info, "filechooser::filtered-out", filtered_out);
+
   if (node->filtered_out != filtered_out)
     {
       node->filtered_out = filtered_out;
     }
 
   /* Visibility */
-  
+
+  g_file_info_set_attribute_boolean (node->info, "filechooser::visible", visible);
+
   if (node->visible == visible ||
       node->frozen_add)
     return;
