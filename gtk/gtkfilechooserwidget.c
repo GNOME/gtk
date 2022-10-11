@@ -403,8 +403,6 @@ static void     gtk_file_chooser_widget_map            (GtkWidget             *w
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_root           (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unroot         (GtkWidget             *widget);
-static void     gtk_file_chooser_widget_css_changed    (GtkWidget             *widget,
-                                                        GtkCssStyleChange     *change);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder           (GtkFileChooser    *chooser,
                                                                             GFile             *folder,
@@ -470,7 +468,6 @@ static void search_shortcut_handler (GtkFileChooserWidget *impl);
 static void recent_shortcut_handler (GtkFileChooserWidget *impl);
 static void places_shortcut_handler (GtkFileChooserWidget *impl);
 static void update_appearance       (GtkFileChooserWidget *impl);
-static void check_icon_theme (GtkFileChooserWidget *impl);
 
 static void operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode);
 static void location_mode_set  (GtkFileChooserWidget *impl, LocationMode new_mode);
@@ -3211,21 +3208,6 @@ cancel_all_operations (GtkFileChooserWidget *impl)
   search_stop_searching (impl, TRUE);
 }
 
-/* Removes the settings signal handler.  It's safe to call multiple times */
-static void
-remove_settings_signal (GtkFileChooserWidget *impl)
-{
-  if (impl->settings_signal_id)
-    {
-      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (impl));
-      GtkSettings *settings = gtk_settings_get_for_display (display);
-
-      g_signal_handler_disconnect (settings,
-                                   impl->settings_signal_id);
-      impl->settings_signal_id = 0;
-    }
-}
-
 static void
 gtk_file_chooser_widget_dispose (GObject *object)
 {
@@ -3244,8 +3226,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
       location_entry_disconnect (impl);
       impl->external_entry = NULL;
     }
-
-  remove_settings_signal (impl);
 
   gtk_widget_dispose_template (GTK_WIDGET (impl), GTK_TYPE_FILE_CHOOSER_WIDGET);
 
@@ -3300,58 +3280,6 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
-}
-
-/* Changes the icons wherever it is needed */
-static void
-change_icon_theme (GtkFileChooserWidget *impl)
-{
-  /* TODO: handle icon theme changes */
-}
-
-/* Callback used when a GtkSettings value changes */
-static void
-settings_notify_cb (GObject               *object,
-                    GParamSpec            *pspec,
-                    GtkFileChooserWidget *impl)
-{
-  const char *name;
-
-  name = g_param_spec_get_name (pspec);
-
-  if (strcmp (name, "gtk-icon-theme-name") == 0)
-    change_icon_theme (impl);
-}
-
-/* Installs a signal handler for GtkSettings so that we can monitor changes in
- * the icon theme.
- */
-static void
-check_icon_theme (GtkFileChooserWidget *impl)
-{
-  GtkSettings *settings;
-
-  if (impl->settings_signal_id)
-    return;
-
-  settings = gtk_widget_get_settings (GTK_WIDGET (impl));
-  impl->settings_signal_id = g_signal_connect (settings, "notify",
-                                               G_CALLBACK (settings_notify_cb), impl);
-
-  change_icon_theme (impl);
-}
-
-static void
-gtk_file_chooser_widget_css_changed (GtkWidget         *widget,
-                                     GtkCssStyleChange *change)
-{
-  GtkFileChooserWidget *impl;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (widget);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->css_changed (widget, change);
-
-  change_icon_theme (impl);
 }
 
 static void
@@ -6646,7 +6574,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unmap = gtk_file_chooser_widget_unmap;
   widget_class->root = gtk_file_chooser_widget_root;
   widget_class->unroot = gtk_file_chooser_widget_unroot;
-  widget_class->css_changed = gtk_file_chooser_widget_css_changed;
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
@@ -7215,15 +7142,6 @@ gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *impl,
     }
 }
 
-static void
-display_changed_cb (GtkWidget            *wiget,
-                    GParamSpec           *pspec,
-                    GtkFileChooserWidget *impl)
-{
-  remove_settings_signal (impl);
-  check_icon_theme (impl);
-}
-
 static char *
 filter_name (GtkFileFilter *filter)
 {
@@ -7477,9 +7395,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   gtk_sort_list_model_set_model (impl->sort_model, G_LIST_MODEL (impl->filter_model));
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view), impl->selection_model);
-
-  g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
-  check_icon_theme (impl);
 
   impl->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
