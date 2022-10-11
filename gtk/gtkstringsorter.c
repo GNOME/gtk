@@ -335,6 +335,12 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
    *
    * The collation method to use for sorting.
    *
+   * The `GTK_COLLATION_NONE` value is useful when the expression already
+   * returns collation keys, or strings that need to be compared byte-by-byte.
+   *
+   * The default value, `GTK_COLLATION_UNICODE`, compares strings according
+   * to the [Unicode collation algorithm](https://www.unicode.org/reports/tr10/).
+   *
    * Since: 4.10
    */
   properties[PROP_COLLATION] =
