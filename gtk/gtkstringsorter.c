@@ -338,7 +338,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
    * Since: 4.10
    */
   properties[PROP_COLLATION] =
-      g_param_spec_enum ("collationmode", NULL, NULL,
+      g_param_spec_enum ("collation", NULL, NULL,
                          GTK_TYPE_COLLATION,
                          GTK_COLLATION_UNICODE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);

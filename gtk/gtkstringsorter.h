@@ -58,6 +58,8 @@ void                    gtk_string_sorter_set_ignore_case       (GtkStringSorter
  *
  * Note that the result of sorting will in general depend on the current locale
  * unless the mode is @GTK_COLLATION_NONE.
+ *
+ * Since: 4.10
  */
 typedef enum
 {
