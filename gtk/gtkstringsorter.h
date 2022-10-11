@@ -50,8 +50,8 @@ void                    gtk_string_sorter_set_ignore_case       (GtkStringSorter
 /**
  * GtkCollation:
  * @GTK_COLLATION_NONE: Don't do any collation
- * @GTK_COLLATION_UNICODE: Use [func@GLib.g_utf8_collate_key]
- * @GTK_COLLATION_FILENAME: Use [func@GLib.g_utf8_collate_key_for_filename]
+ * @GTK_COLLATION_UNICODE: Use [func@GLib.utf8_collate_key]
+ * @GTK_COLLATION_FILENAME: Use [func@GLib.utf8_collate_key_for_filename]
  *
  * Describes how a [class@Gtk.StringSorter] turns strings into sort keys to
  * compare them.
