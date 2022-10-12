@@ -32,21 +32,10 @@ typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
 GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
 
-typedef gboolean (*GtkFileSystemModelGetValue)   (GtkFileSystemModel *model,
-                                                  GFile              *file,
-                                                  GFileInfo          *info,
-                                                  int                 column,
-                                                  GValue             *value,
-                                                  gpointer            user_data);
-
-GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystemModelGetValue get_func,
-                                                             gpointer            get_data,
-                                                             guint               n_columns,
+GtkFileSystemModel *_gtk_file_system_model_new              (guint               n_columns,
                                                              ...);
 GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *             dir,
                                                              const char *       attributes,
-                                                             GtkFileSystemModelGetValue get_func,
-                                                             gpointer            get_data,
                                                              guint               n_columns,
                                                              ...);
 GFile *             _gtk_file_system_model_get_directory    (GtkFileSystemModel *model);

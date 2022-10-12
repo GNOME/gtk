@@ -617,8 +617,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
                                                 "standard::name,standard::display-name,standard::type,"
                                                 "standard::content-type",
-                                                NULL,
-                                                NULL,
                                                 N_COLUMNS,
                                                 G_TYPE_FILE_INFO,
                                                 G_TYPE_STRING,

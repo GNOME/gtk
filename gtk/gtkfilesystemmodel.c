@@ -158,8 +158,6 @@ struct _GtkFileSystemModel
 
   guint                 n_columns;      /* number of columns */
   GType *               column_types;   /* types of each column */
-  GtkFileSystemModelGetValue get_func;  /* function to call to fill in values in columns */
-  gpointer              get_data;       /* data to pass to get_func */
 
   GtkFileFilter *       filter;         /* filter to use for deciding which nodes are visible */
 
@@ -759,16 +757,12 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
 }
 
 static GtkFileSystemModel *
-_gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
-                                   gpointer            get_data,
-                                   guint               n_columns,
+_gtk_file_system_model_new_valist (guint               n_columns,
                                    va_list             args)
 {
   GtkFileSystemModel *model;
 
   model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
-  model->get_func = get_func;
-  model->get_data = get_data;
 
   gtk_file_system_model_set_n_columns (model, n_columns, args);
 
@@ -777,8 +771,6 @@ _gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
 
 /**
  * _gtk_file_system_model_new:
- * @get_func: function to call for getting a value
- * @get_data: user data argument passed to @get_func
  * @n_columns: number of columns
  * @...: @n_columns `GType` types for the columns
  *
@@ -789,9 +781,7 @@ _gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
  * Returns: the newly created `GtkFileSystemModel`
  **/
 GtkFileSystemModel *
-_gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
-                            gpointer            get_data,
-                            guint               n_columns,
+_gtk_file_system_model_new (guint               n_columns,
                             ...)
 {
   GtkFileSystemModel *model;
@@ -800,7 +790,7 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
   g_return_val_if_fail (n_columns > 0, NULL);
 
   va_start (args, n_columns);
-  model = _gtk_file_system_model_new_valist (get_func, get_data, n_columns, args);
+  model = _gtk_file_system_model_new_valist (n_columns, args);
   va_end (args);
 
   return model;
@@ -810,8 +800,6 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
  * _gtk_file_system_model_new_for_directory:
  * @directory: the directory to show.
  * @attributes: (nullable): attributes to immediately load or %NULL for all
- * @get_func: function that the model should call to query data about a file
- * @get_data: user data to pass to the @get_func
  * @n_columns: number of columns
  * @...: @n_columns `GType` types for the columns
  *
@@ -828,8 +816,6 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
 GtkFileSystemModel *
 _gtk_file_system_model_new_for_directory (GFile *                    dir,
                                           const char *              attributes,
-                                          GtkFileSystemModelGetValue get_func,
-                                          gpointer                   get_data,
                                           guint                      n_columns,
                                           ...)
 {
@@ -840,7 +826,7 @@ _gtk_file_system_model_new_for_directory (GFile *                    dir,
   g_return_val_if_fail (n_columns > 0, NULL);
 
   va_start (args, n_columns);
-  model = _gtk_file_system_model_new_valist (get_func, get_data, n_columns, args);
+  model = _gtk_file_system_model_new_valist (n_columns, args);
   va_end (args);
 
   gtk_file_system_model_set_directory (model, dir, attributes);

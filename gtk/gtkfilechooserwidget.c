@@ -4063,8 +4063,6 @@ set_list_model (GtkFileChooserWidget  *impl,
   impl->browse_files_model =
     _gtk_file_system_model_new_for_directory (impl->current_folder,
                                               MODEL_ATTRIBUTES,
-                                              NULL,
-                                              NULL,
                                               MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
@@ -5934,9 +5932,7 @@ search_setup_model (GtkFileChooserWidget *impl)
 {
   g_assert (impl->search_model == NULL);
 
-  impl->search_model = _gtk_file_system_model_new (NULL,
-                                                   NULL,
-                                                   MODEL_COLUMN_TYPES);
+  impl->search_model = _gtk_file_system_model_new (MODEL_COLUMN_TYPES);
 
   set_current_model (impl, G_LIST_MODEL (impl->search_model));
   update_columns (impl, TRUE, _("Modified"));
@@ -6100,9 +6096,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
   /* Setup recent model */
   g_assert (impl->recent_model == NULL);
 
-  impl->recent_model = _gtk_file_system_model_new (NULL,
-                                                   NULL,
-                                                   MODEL_COLUMN_TYPES);
+  impl->recent_model = _gtk_file_system_model_new (MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_filter (impl->recent_model, impl->current_filter);
 
