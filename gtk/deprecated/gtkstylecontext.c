@@ -824,7 +824,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *
  * Gets the foreground color for a given state.
  *
- * Deprecated: 4.10: This api will be removed in GTK 5
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_style_color] instead
  */
 void
 gtk_style_context_get_color (GtkStyleContext *context,

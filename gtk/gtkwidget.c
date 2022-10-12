@@ -35,6 +35,7 @@
 #include "gtkconstraint.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -12867,6 +12868,33 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 
   gtk_css_node_set_classes (priv->cssnode, classes);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
+}
+
+/**
+ * gtk_widget_get_css_style:
+ * @widget: a `GtkWidget`
+ * @color: (out): return location for the color
+ *
+ * Gets the current foreground color for the widgets
+ * CSS style.
+ *
+ * This function should only be used in snapshot
+ * implementations that need need to do custom
+ * drawing with the foreground color.
+ *
+ * Since: 4.10
+ */
+void
+gtk_widget_get_style_color (GtkWidget *widget,
+                            GdkRGBA   *color)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssStyle *style;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  *color = *gtk_css_color_value_get_rgba (style->core->color);
 }
 
 /*< private >
