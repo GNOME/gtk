@@ -22,7 +22,6 @@
 #include "graphdata.h"
 
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
 
 enum {
   PROP_0,
@@ -131,7 +130,6 @@ graph_renderer_snapshot (GtkWidget   *widget,
                          GtkSnapshot *snapshot)
 {
   GraphRenderer *self = GRAPH_RENDERER (widget);
-  GtkStyleContext *context;
   double minimum, maximum, diff;
   double x, y, width, height;
   cairo_t *cr;
@@ -155,8 +153,7 @@ graph_renderer_snapshot (GtkWidget   *widget,
 
   diff = maximum - minimum;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, &color);
+  gtk_widget_get_style_color (widget, &color);
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (

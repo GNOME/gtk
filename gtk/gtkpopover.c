@@ -119,14 +119,13 @@
 #include "gtkpointerfocusprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkshortcutmanager.h"
 #include "gtkbuildable.h"
 #include "gtktooltipprivate.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtknativeprivate.h"
 
-#include "gtkrender.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gtkcssshadowvalueprivate.h"
@@ -1545,10 +1544,13 @@ create_arrow_render_node (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
-  GtkStyleContext *context;
   GtkBorder border;
   cairo_t *cr;
   GtkSnapshot *snapshot;
+  GtkSnapshot *bg_snapshot;
+  GskRenderNode *node;
+  GtkCssBoxes boxes;
+  GtkCssStyle *style;
 
   snapshot = gtk_snapshot_new ();
 
@@ -1566,22 +1568,27 @@ create_arrow_render_node (GtkPopover *popover)
 
   get_border (priv->arrow_node, &border);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->arrow_node);
+  style = gtk_css_node_get_style (priv->arrow_node);
 
   /* Render the arrow background */
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_width (widget),
-                         gtk_widget_get_height (widget));
+  bg_snapshot = gtk_snapshot_new ();
+  gtk_css_boxes_init_border_box (&boxes, style,
+                                 0, 0,
+                                 gtk_widget_get_width (widget),
+                                 gtk_widget_get_height (widget));
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  node = gtk_snapshot_free_to_node (bg_snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
     {
-      GtkCssStyle *style;
       const GdkRGBA *border_color;
 
-      style = gtk_css_node_get_style (priv->arrow_node);
       border_color = gtk_css_color_value_get_rgba (style->border->border_left_color ? style->border->border_left_color : style->core->color);
 
       gtk_popover_apply_tail_path (popover, cr);
@@ -1593,8 +1600,6 @@ create_arrow_render_node (GtkPopover *popover)
 
   cairo_restore (cr);
   cairo_destroy (cr);
-
-  gtk_style_context_restore (context);
 
   priv->arrow_render_node = gtk_snapshot_free_to_node (snapshot);
 }

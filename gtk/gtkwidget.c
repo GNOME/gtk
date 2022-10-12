@@ -35,6 +35,7 @@
 #include "gtkconstraint.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssfiltervalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -65,7 +66,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"
-#include "gtkstylecontextprivate.h"
+#include "deprecated/gtkstylecontextprivate.h"
 #include "gtktooltipprivate.h"
 #include "gsktransformprivate.h"
 #include "gtktypebuiltins.h"
@@ -2442,8 +2443,10 @@ gtk_widget_root (GtkWidget *widget)
       priv->root = priv->parent->priv->root;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->context)
     gtk_style_context_set_display (priv->context, gtk_root_get_display (priv->root));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->surface_transform_data)
     add_parent_surface_transform_changed_listener (widget);
@@ -2479,8 +2482,10 @@ gtk_widget_unroot (GtkWidget *widget)
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, NULL);
@@ -3410,10 +3415,12 @@ gtk_widget_realize (GtkWidget *widget)
 
   g_signal_emit (widget, widget_signals[REALIZE], 0);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
   else
     gtk_widget_get_style_context (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -6737,8 +6744,10 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SCALE_FACTOR]);
 
@@ -10712,6 +10721,8 @@ _gtk_widget_peek_style_context (GtkWidget *widget)
  * for the lifetime of @widget.
  *
  * Returns: (transfer none): the widgets `GtkStyleContext`
+ *
+ * Deprecated: 4.10: Style contexts will be removed in GTK 5
  */
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
@@ -10726,11 +10737,13 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
       display = _gtk_widget_get_display (widget);
       if (display)
         gtk_style_context_set_display (priv->context, display);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   return priv->context;
@@ -12855,6 +12868,33 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 
   gtk_css_node_set_classes (priv->cssnode, classes);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
+}
+
+/**
+ * gtk_widget_get_css_style:
+ * @widget: a `GtkWidget`
+ * @color: (out): return location for the color
+ *
+ * Gets the current foreground color for the widgets
+ * CSS style.
+ *
+ * This function should only be used in snapshot
+ * implementations that need need to do custom
+ * drawing with the foreground color.
+ *
+ * Since: 4.10
+ */
+void
+gtk_widget_get_style_color (GtkWidget *widget,
+                            GdkRGBA   *color)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssStyle *style;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  *color = *gtk_css_color_value_get_rgba (style->core->color);
 }
 
 /*< private >

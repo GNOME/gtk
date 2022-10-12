@@ -19,6 +19,7 @@
 #define __GTK_STYLE_PROVIDER_PRIVATE_H__
 
 #include <glib-object.h>
+#include <gtk/gtkstyleprovider.h>
 #include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsskeyframesprivate.h"
 #include "gtk/gtkcsslookupprivate.h"

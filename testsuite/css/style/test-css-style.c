@@ -27,6 +27,8 @@
 # include <io.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* There shall be no other styles */
 #define GTK_STYLE_PROVIDER_PRIORITY_FORCE G_MAXUINT
 

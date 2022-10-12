@@ -36,7 +36,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/win32/gdkwin32.h"
 #include "gtk/gtkimmodule.h"
-#include "gtk/gtkstylecontextprivate.h"
+#include "gtk/deprecated/gtkstylecontextprivate.h"
 #include "gtk/gtkcssstyleprivate.h"
 
 /* avoid warning */

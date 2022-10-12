@@ -46,12 +46,15 @@
 #include "gtkbuildable.h"
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
+#include "gtksnapshot.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkdialogprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 
 
 /**
@@ -1949,23 +1952,34 @@ paint_page (GtkPrintUnixDialog *dialog,
             const char *text,
             int         text_x)
 {
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   int width, height;
   int text_y;
   GdkRGBA color;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GtkCssBoxes boxes;
 
   width = 20;
   height = 26;
   text_y = 21;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, dialog->collate_paper_node);
+  style = gtk_css_node_get_style (dialog->collate_paper_node);
 
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
+  snapshot = gtk_snapshot_new ();
+  gtk_css_boxes_init_border_box (&boxes, style, x, y, width, height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 
-  gtk_style_context_get_color (context, &color);
-  cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
+
+  color = *gtk_css_color_value_get_rgba (style->core->color);
+  gdk_cairo_set_source_rgba (cr, &color);
 
   cairo_select_font_face (cr, "Sans",
                           CAIRO_FONT_SLANT_NORMAL,
@@ -1973,8 +1987,6 @@ paint_page (GtkPrintUnixDialog *dialog,
   cairo_set_font_size (cr, 9);
   cairo_move_to (cr, x + text_x, y + text_y);
   cairo_show_text (cr, text);
-
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -2372,7 +2384,7 @@ draw_page (GtkDrawingArea *da,
 {
   GtkWidget *widget = GTK_WIDGET (da);
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   double ratio;
   int w, h, tmp;
   int pages_x, pages_y, i, x, y, layout_w, layout_h;
@@ -2392,6 +2404,9 @@ draw_page (GtkDrawingArea *da,
   double pos_x, pos_y;
   int pages_per_sheet;
   gboolean ltr = TRUE;
+  GtkSnapshot *snapshot;
+  GtkCssBoxes boxes;
+  GskRenderNode *node;
 
   orientation = gtk_page_setup_get_orientation (dialog->page_setup);
   landscape =
@@ -2478,16 +2493,24 @@ draw_page (GtkDrawingArea *da,
       pages_y = tmp;
     }
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, dialog->page_layout_paper_node);
-  gtk_style_context_get_color (context, &color);
+  style = gtk_css_node_get_style (dialog->page_layout_paper_node);
+  color = *gtk_css_color_value_get_rgba (style->core->color);
 
   pos_x = (width - w) / 2;
   pos_y = (height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
-  gtk_render_background (context, cr, 1, 1, w, h);
-  gtk_render_frame (context, cr, 1, 1, w, h);
+  snapshot = gtk_snapshot_new ();
+  gtk_css_boxes_init_border_box (&boxes, style, 1, 1, w, h);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
+
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
 
   cairo_set_line_width (cr, 1.0);
 
@@ -2589,7 +2612,7 @@ draw_page (GtkDrawingArea *da,
         break;
     }
 
-  cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
+  gdk_cairo_set_source_rgba (cr, &color);
   if (horizontal)
     for (y = start_y; y != end_y + dy; y += dy)
       {
@@ -2629,9 +2652,8 @@ draw_page (GtkDrawingArea *da,
 
   g_object_unref (layout);
 
-  gtk_style_context_restore (context);
-
-  gtk_style_context_get_color (context, &color);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  color = *gtk_css_color_value_get_rgba (style->core->color);
 
   if (page_setup != NULL)
     {

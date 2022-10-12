@@ -225,43 +225,6 @@ void            gtk_snapshot_append_layout              (GtkSnapshot            
                                                          const GdkRGBA          *color);
 
 
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_render_background          (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         double                  x,
-                                                         double                  y,
-                                                         double                  width,
-                                                         double                  height);
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_render_frame               (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         double                  x,
-                                                         double                  y,
-                                                         double                  width,
-                                                         double                  height);
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_render_focus               (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         double                  x,
-                                                         double                  y,
-                                                         double                  width,
-                                                         double                  height);
-GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_render_layout              (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         double                  x,
-                                                         double                  y,
-                                                         PangoLayout            *layout);
-GDK_AVAILABLE_IN_ALL /* in gtkstylecontext.c */
-void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            *snapshot,
-                                                         GtkStyleContext        *context,
-                                                         double                  x,
-                                                         double                  y,
-                                                         PangoLayout            *layout,
-                                                         int                     index,
-                                                         PangoDirection          direction);
-
-
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_H__ */

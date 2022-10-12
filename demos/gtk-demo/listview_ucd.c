@@ -10,6 +10,7 @@
 #include "script-names.h"
 #include "unicode-names.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 #define UCD_TYPE_ITEM (ucd_item_get_type ())
 G_DECLARE_FINAL_TYPE (UcdItem, ucd_item, UCD, ITEM, GObject)

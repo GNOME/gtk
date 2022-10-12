@@ -42,7 +42,9 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshow.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkrenderlayoutprivate.h"
 #include "gtktextutilprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
@@ -1378,19 +1380,20 @@ gtk_label_snapshot (GtkWidget   *widget,
 {
   GtkLabel *self = GTK_LABEL (widget);
   GtkLabelSelectionInfo *info;
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   int lx, ly;
   int width, height;
+  GtkCssBoxes boxes;
 
   if (!self->text || (*self->text == '\0'))
     return;
 
   gtk_label_ensure_layout (self);
 
-  context = _gtk_widget_get_style_context (widget);
   get_layout_location (self, &lx, &ly);
 
-  gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+  gtk_css_boxes_init (&boxes, widget);
+  gtk_css_style_snapshot_layout (&boxes, snapshot, lx, ly, self->layout);
 
   info = self->select_info;
   if (!info)
@@ -1409,7 +1412,8 @@ gtk_label_snapshot (GtkWidget   *widget,
       range[0] = MIN (info->selection_anchor, info->selection_end);
       range[1] = MAX (info->selection_anchor, info->selection_end);
 
-      gtk_style_context_save_to_node (context, info->selection_node);
+      style = gtk_css_node_get_style (info->selection_node);
+      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
 
       range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
       for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1417,14 +1421,12 @@ gtk_label_snapshot (GtkWidget   *widget,
           cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
           gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
-          gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
-          gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+          gtk_css_style_snapshot_background (&boxes, snapshot);
+          gtk_css_style_snapshot_layout (&boxes, snapshot, lx, ly, self->layout);
           gtk_snapshot_pop (snapshot);
         }
 
       cairo_region_destroy (range_clip);
-
-      gtk_style_context_restore (context);
     }
   else
     {
@@ -1443,10 +1445,12 @@ gtk_label_snapshot (GtkWidget   *widget,
           PangoDirection cursor_direction;
 
           cursor_direction = get_cursor_direction (self);
-          gtk_snapshot_render_insertion_cursor (snapshot, context,
-                                                lx, ly,
-                                                self->layout, self->select_info->selection_end,
-                                                cursor_direction);
+          gtk_css_style_snapshot_caret (&boxes, gtk_widget_get_display (widget),
+                                        snapshot,
+                                        lx, ly,
+                                        self->layout,
+                                        self->select_info->selection_end,
+                                        cursor_direction);
         }
 
       focus_link = gtk_label_get_focus_link (self, NULL);
@@ -1457,7 +1461,8 @@ gtk_label_snapshot (GtkWidget   *widget,
           range[0] = active_link->start;
           range[1] = active_link->end;
 
-          gtk_style_context_save_to_node (context, active_link->cssnode);
+          style = gtk_css_node_get_style (active_link->cssnode);
+          gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1465,14 +1470,12 @@ gtk_label_snapshot (GtkWidget   *widget,
               cairo_region_get_rectangle (range_clip, i, &clip_rect);
 
               gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_rect));
-              gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
-              gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+              gtk_css_style_snapshot_background (&boxes, snapshot);
+              gtk_css_style_snapshot_layout (&boxes, snapshot, lx, ly, self->layout);
               gtk_snapshot_pop (snapshot);
             }
 
           cairo_region_destroy (range_clip);
-
-          gtk_style_context_restore (context);
         }
 
       if (focus_link && gtk_widget_has_visible_focus (widget))
@@ -1480,16 +1483,15 @@ gtk_label_snapshot (GtkWidget   *widget,
           range[0] = focus_link->start;
           range[1] = focus_link->end;
 
-          gtk_style_context_save_to_node (context, focus_link->cssnode);
+          style = gtk_css_node_get_style (focus_link->cssnode);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &rect);
 
-          gtk_snapshot_render_focus (snapshot, context, rect.x, rect.y, rect.width, rect.height);
+          gtk_css_boxes_init_border_box (&boxes, style, rect.x, rect.y, rect.width, rect.height);
+          gtk_css_style_snapshot_outline (&boxes, snapshot);
 
           cairo_region_destroy (range_clip);
-
-          gtk_style_context_restore (context);
         }
     }
 }

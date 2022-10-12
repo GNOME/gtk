@@ -28,10 +28,16 @@
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderlayoutprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtksettings.h"
 
 #include "gsk/gskroundedrectprivate.h"
 #include <gdk/gdktextureprivate.h>
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static void
 gtk_do_render_icon (GtkStyleContext        *context,
@@ -76,6 +82,8 @@ gtk_do_render_icon (GtkStyleContext        *context,
  * Typical checkmark rendering:
  *
  * ![](checks.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_check (GtkStyleContext *context,
@@ -110,6 +118,8 @@ gtk_render_check (GtkStyleContext *context,
  * Typical option mark rendering:
  *
  * ![](options.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_option (GtkStyleContext *context,
@@ -142,6 +152,8 @@ gtk_render_option (GtkStyleContext *context,
  * Typical arrow rendering at 0, 1⁄2 π;, π; and 3⁄2 π:
  *
  * ![](arrows.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_arrow (GtkStyleContext *context,
@@ -175,6 +187,8 @@ gtk_render_arrow (GtkStyleContext *context,
  * `background-image`, `border-width` and `border-radius`:
  *
  * ![](background.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_background (GtkStyleContext *context,
@@ -221,6 +235,8 @@ gtk_render_background (GtkStyleContext *context,
  * `border-color`, `border-width`, `border-radius` and junctions:
  *
  * ![](frames.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_frame (GtkStyleContext *context,
@@ -268,6 +284,8 @@ gtk_render_frame (GtkStyleContext *context,
  * Typical expander rendering:
  *
  * ![](expanders.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_expander (GtkStyleContext *context,
@@ -300,6 +318,8 @@ gtk_render_expander (GtkStyleContext *context,
  * Typical focus rendering:
  *
  * ![](focus.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_focus (GtkStyleContext *context,
@@ -340,6 +360,8 @@ gtk_render_focus (GtkStyleContext *context,
  * @layout: the `PangoLayout` to render
  *
  * Renders @layout on the coordinates @x, @y
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_layout (GtkStyleContext *context,
@@ -378,6 +400,8 @@ gtk_render_layout (GtkStyleContext *context,
  * @y1: Y coordinate for the end of the line
  *
  * Renders a line from (x0, y0) to (x1, y1).
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_line (GtkStyleContext *context,
@@ -423,6 +447,8 @@ gtk_render_line (GtkStyleContext *context,
  * Handles rendered for the paned and grip classes:
  *
  * ![](handles.png)
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_handle (GtkStyleContext *context,
@@ -456,6 +482,8 @@ gtk_render_handle (GtkStyleContext *context,
  * Renders an activity indicator (such as in `GtkSpinner`).
  * The state %GTK_STATE_FLAG_CHECKED determines whether there is
  * activity going on.
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_activity (GtkStyleContext *context,
@@ -488,6 +516,7 @@ gtk_render_activity (GtkStyleContext *context,
  * regardless of scaling factors, which may not be appropriate when
  * drawing on displays with high pixel densities.
  *
+ * Deprecated: 4.10
  **/
 void
 gtk_render_icon (GtkStyleContext *context,
@@ -513,4 +542,179 @@ gtk_render_icon (GtkStyleContext *context,
   cairo_translate (cr, x, y);
   gsk_render_node_draw (node, cr);
   cairo_restore (cr);
+}
+
+
+/**
+ * gtk_snapshot_render_background:
+ * @snapshot: a `GtkSnapshot`
+ * @context: the style context that defines the background
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the CSS background according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Deprecated: 4.10
+ */
+void
+gtk_snapshot_render_background (GtkSnapshot     *snapshot,
+                                GtkStyleContext *context,
+                                double           x,
+                                double           y,
+                                double           width,
+                                double           height)
+{
+  GtkCssBoxes boxes;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+}
+
+/**
+ * gtk_snapshot_render_frame:
+ * @snapshot: a `GtkSnapshot`
+ * @context: the style context that defines the frame
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the CSS border according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Deprecated: 4.10
+ */
+void
+gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
+                           GtkStyleContext *context,
+                           double           x,
+                           double           y,
+                           double           width,
+                           double           height)
+{
+  GtkCssBoxes boxes;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
+}
+
+/**
+ * gtk_snapshot_render_focus:
+ * @snapshot: a `GtkSnapshot`
+ * @context: the style context that defines the focus ring
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Creates a render node for the focus outline according to @context,
+ * and appends it to the current node of @snapshot, without changing
+ * the current node.
+ *
+ * Deprecated: 4.10
+ */
+void
+gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
+                           GtkStyleContext *context,
+                           double           x,
+                           double           y,
+                           double           width,
+                           double           height)
+{
+  GtkCssBoxes boxes;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, width, height);
+  gtk_css_style_snapshot_outline (&boxes, snapshot);
+}
+
+/**
+ * gtk_snapshot_render_layout:
+ * @snapshot: a `GtkSnapshot`
+ * @context: the style context that defines the text
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @layout: the `PangoLayout` to render
+ *
+ * Creates a render node for rendering @layout according to the style
+ * information in @context, and appends it to the current node of @snapshot,
+ * without changing the current node.
+ *
+ * Deprecated: 4.10
+ */
+void
+gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
+                            GtkStyleContext *context,
+                            double           x,
+                            double           y,
+                            PangoLayout     *layout)
+{
+  GtkCssBoxes boxes;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, 0, 0);
+  gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
+}
+
+/**
+ * gtk_snapshot_render_insertion_cursor:
+ * @snapshot: snapshot to render to
+ * @context: a `GtkStyleContext`
+ * @x: X origin
+ * @y: Y origin
+ * @layout: the `PangoLayout` of the text
+ * @index: the index in the `PangoLayout`
+ * @direction: the `PangoDirection` of the text
+ *
+ * Draws a text caret using @snapshot at the specified index of @layout.
+ *
+ * Deprecated: 4.10
+ */
+void
+gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
+                                      GtkStyleContext *context,
+                                      double           x,
+                                      double           y,
+                                      PangoLayout     *layout,
+                                      int              index,
+                                      PangoDirection   direction)
+{
+  GtkCssBoxes boxes;
+  GdkDisplay *display;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+  g_return_if_fail (index >= 0);
+
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_style_context_lookup_style (context),
+                                 x, y, 0, 0);
+
+  display = gtk_style_context_get_display (context);
+  gtk_css_style_snapshot_caret (&boxes, display, snapshot, x, y, layout, index, direction);
 }

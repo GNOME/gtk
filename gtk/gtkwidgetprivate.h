@@ -446,15 +446,6 @@ _gtk_widget_get_display (GtkWidget *widget)
   return gtk_root_get_display (root);
 }
 
-static inline GtkStyleContext *
-_gtk_widget_get_style_context (GtkWidget *widget)
-{
-  if (G_LIKELY (widget->priv->context))
-    return widget->priv->context;
-
-  return gtk_widget_get_style_context (widget);
-}
-
 static inline gpointer
 _gtk_widget_peek_request_cache (GtkWidget *widget)
 {

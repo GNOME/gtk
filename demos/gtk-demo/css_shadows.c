@@ -5,6 +5,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 show_parsing_error (GtkCssProvider *provider,
                     GtkCssSection  *section,

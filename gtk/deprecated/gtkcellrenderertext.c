@@ -26,7 +26,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontextprivate.h"
 #include "deprecated/gtktreeprivate.h"
 

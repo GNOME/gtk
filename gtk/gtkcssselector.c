@@ -18,12 +18,12 @@
 #include "config.h"
 
 #include "gtkcssselectorprivate.h"
+#include "gtkcssnodeprivate.h"
 
 #include <stdlib.h>
 #include <string.h>
 
 #include "gtkcssprovider.h"
-#include "gtkstylecontextprivate.h"
 
 #include <errno.h>
 #if defined(_MSC_VER) && _MSC_VER >= 1500

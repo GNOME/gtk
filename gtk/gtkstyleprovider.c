@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
 
 #include "gtkprivate.h"
@@ -168,3 +169,65 @@ gtk_style_provider_emit_error (GtkStyleProvider *provider,
   if (iface->emit_error)
     iface->emit_error (provider, section, error);
 }
+
+
+/* These apis are misnamed, and the rest of GtkStyleContext is deprecated,
+ * so put them here for now
+ */
+
+/**
+ * gtk_style_context_add_provider_for_display:
+ * @display: a `GdkDisplay`
+ * @provider: a `GtkStyleProvider`
+ * @priority: the priority of the style provider. The lower
+ *   it is, the earlier it will be used in the style construction.
+ *   Typically this will be in the range between
+ *   %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
+ *   %GTK_STYLE_PROVIDER_PRIORITY_USER
+ *
+ * Adds a global style provider to @display, which will be used
+ * in style construction for all `GtkStyleContexts` under @display.
+ *
+ * GTK uses this to make styling information from `GtkSettings`
+ * available.
+ *
+ * Note: If both priorities are the same, A `GtkStyleProvider`
+ * added through [method@Gtk.StyleContext.add_provider] takes
+ * precedence over another added through this function.
+ */
+void
+gtk_style_context_add_provider_for_display (GdkDisplay       *display,
+                                            GtkStyleProvider *provider,
+                                            guint             priority)
+{
+  GtkStyleCascade *cascade;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_display (GTK_SETTINGS (provider)) == display);
+
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  _gtk_style_cascade_add_provider (cascade, provider, priority);
+}
+
+/**
+ * gtk_style_context_remove_provider_for_display:
+ * @display: a `GdkDisplay`
+ * @provider: a `GtkStyleProvider`
+ *
+ * Removes @provider from the global style providers list in @display.
+ */
+void
+gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
+                                               GtkStyleProvider *provider)
+{
+  GtkStyleCascade *cascade;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (!GTK_IS_SETTINGS (provider));
+
+  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  _gtk_style_cascade_remove_provider (cascade, provider);
+}
+

@@ -90,6 +90,15 @@ GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStyleProvider, g_object_unref)
 
+GDK_AVAILABLE_IN_ALL
+void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
+                                                    GtkStyleProvider *provider,
+                                                    guint             priority);
+GDK_AVAILABLE_IN_ALL
+void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
+                                                    GtkStyleProvider *provider);
+
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROVIDER_H__ */

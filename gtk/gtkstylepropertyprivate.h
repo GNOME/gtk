@@ -21,7 +21,6 @@
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS

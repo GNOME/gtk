@@ -1388,10 +1388,10 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
 }
 
 void
-gtk_css_node_print (GtkCssNode                *cssnode,
-                    GtkStyleContextPrintFlags  flags,
-                    GString                   *string,
-                    guint                      indent)
+gtk_css_node_print (GtkCssNode           *cssnode,
+                    GtkCssNodePrintFlags  flags,
+                    GString              *string,
+                    guint                 indent)
 {
   gboolean need_newline = FALSE;
 
@@ -1405,7 +1405,7 @@ gtk_css_node_print (GtkCssNode                *cssnode,
   if (!cssnode->visible)
     g_string_append_c (string, ']');
 
-  if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE)
+  if (flags & GTK_CSS_NODE_PRINT_SHOW_CHANGE)
     {
       GtkCssStyle *style = gtk_css_node_get_style (cssnode);
       GtkCssChange change;
@@ -1417,10 +1417,10 @@ gtk_css_node_print (GtkCssNode                *cssnode,
 
   g_string_append_c (string, '\n');
 
-  if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE)
+  if (flags & GTK_CSS_NODE_PRINT_SHOW_STYLE)
     need_newline = gtk_css_style_print (gtk_css_node_get_style (cssnode), string, indent + 2, TRUE);
 
-  if (flags & GTK_STYLE_CONTEXT_PRINT_RECURSE)
+  if (flags & GTK_CSS_NODE_PRINT_RECURSE)
     {
       GtkCssNode *node;
 

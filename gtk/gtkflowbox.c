@@ -96,10 +96,9 @@
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkrender.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontextprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
@@ -2498,6 +2497,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   int x, y, width, height;
+  GtkCssBoxes boxes;
 
   GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
 
@@ -2508,7 +2508,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 
   if (priv->rubberband_first && priv->rubberband_last)
     {
-      GtkStyleContext *context;
+      GtkCssStyle *style;
       GSequenceIter *iter, *iter1, *iter2;
       GdkRectangle line_rect, rect;
       GArray *lines;
@@ -2520,8 +2520,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
       cr = gtk_snapshot_append_cairo (snapshot,
                                       &GRAPHENE_RECT_INIT (x, y, width, height));
 
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_save_to_node (context, priv->rubberband_node);
+      style = gtk_css_node_get_style (priv->rubberband_node);
 
       iter1 = CHILD_PRIV (priv->rubberband_first)->iter;
       iter2 = CHILD_PRIV (priv->rubberband_last)->iter;
@@ -2568,8 +2567,8 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
       if (lines->len > 0)
         {
           cairo_path_t *path;
-          GtkBorder border;
           const GdkRGBA *border_color;
+          int border_width;
           GtkSnapshot *bg_snapshot;
           GskRenderNode *node;
 
@@ -2587,7 +2586,8 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_clip (cr);
 
           bg_snapshot = gtk_snapshot_new ();
-          gtk_snapshot_render_background (bg_snapshot, context, x, y, width, height);
+          gtk_css_boxes_init_border_box (&boxes, style, x, y, width, height);
+          gtk_css_style_snapshot_background (&boxes, bg_snapshot);
           node = gtk_snapshot_free_to_node (bg_snapshot);
           if (node)
             {
@@ -2600,16 +2600,15 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-          border_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-          gtk_style_context_get_border (context, &border);
+          border_color = gtk_css_color_value_get_rgba (style->border->border_top_color ? style->border->border_top_color : style->core->color);
+          border_width = round (_gtk_css_number_value_get (style->border->border_left_width, 100));
 
-          cairo_set_line_width (cr, border.left);
+          cairo_set_line_width (cr, border_width);
           gdk_cairo_set_source_rgba (cr, border_color);
           cairo_stroke (cr);
         }
       g_array_free (lines, TRUE);
 
-      gtk_style_context_restore (context);
       cairo_destroy (cr);
     }
 }

@@ -205,7 +205,7 @@
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrecentmanager.h>
-#include <gtk/gtkrender.h>
+#include <gtk/deprecated/gtkrender.h>
 #include <gtk/gtkrevealer.h>
 #include <gtk/gtkroot.h>
 #include <gtk/gtkscale.h>
@@ -247,7 +247,7 @@
 #include <gtk/gtkstringfilter.h>
 #include <gtk/gtkstringlist.h>
 #include <gtk/gtkstringsorter.h>
-#include <gtk/gtkstylecontext.h>
+#include <gtk/deprecated/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymbolicpaintable.h>

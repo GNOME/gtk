@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct _GtkFocusWidget      GtkFocusWidget;
 typedef struct _GtkFocusWidgetClass GtkFocusWidgetClass;

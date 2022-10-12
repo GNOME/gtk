@@ -27,6 +27,7 @@
 # include <io.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static char *
 test_get_reference_file (const char *ui_file)

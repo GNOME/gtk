@@ -25,6 +25,7 @@
 #include "gtkcssstylechangeprivate.h"
 #include "gtkpangoprivate.h"
 #include "gtksnapshot.h"
+#include "gtkrenderlayoutprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -510,17 +511,18 @@ gtk_inscription_snapshot (GtkWidget   *widget,
                           GtkSnapshot *snapshot)
 {
   GtkInscription *self = GTK_INSCRIPTION (widget);
-  GtkStyleContext *context;
   float lx, ly;
+  GtkCssBoxes boxes;
 
   if (!self->text || (*self->text == '\0'))
     return;
 
-  context = _gtk_widget_get_style_context (widget);
-
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT(0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget)));
   gtk_inscription_get_layout_location (self, &lx, &ly);
-  gtk_snapshot_render_layout (snapshot, context, lx, ly, self->layout);
+
+  gtk_css_boxes_init (&boxes, widget);
+  gtk_css_style_snapshot_layout (&boxes, snapshot, lx, ly, self->layout);
+
   gtk_snapshot_pop (snapshot);
 }
 

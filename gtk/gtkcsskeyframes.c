@@ -19,6 +19,7 @@
 
 #include "gtkcsskeyframesprivate.h"
 
+#include "gtkcssstyleprivate.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylepropertyprivate.h"

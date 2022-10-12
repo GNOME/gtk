@@ -28,12 +28,12 @@
 #include "gtktextutilprivate.h"
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextbuffer.h"
 #include "gtktextlayoutprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
 #define DRAG_ICON_MAX_HEIGHT 250
@@ -140,16 +140,21 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
       !gdk_display_is_composited (display))
     {
       GtkWidget *bg_widget;
+      GtkCssBoxes boxes;
 
       if (GTK_IS_TEXT (widget))
         bg_widget = gtk_widget_get_parent (widget);
       else
         bg_widget = widget;
+
       pango_layout_get_size (layout, &layout_width, &layout_height);
-      gtk_snapshot_render_background (snapshot,
-                                      gtk_widget_get_style_context (bg_widget),
-                                      0, 0, layout_width / PANGO_SCALE,
-                                      layout_height / PANGO_SCALE);
+
+      style = gtk_css_node_get_style (gtk_widget_get_css_node (bg_widget));
+      gtk_css_boxes_init_border_box (&boxes, style,
+                                     0, 0,
+                                     layout_width / PANGO_SCALE,
+                                     layout_height / PANGO_SCALE);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
     }
 
   gtk_snapshot_append_layout (snapshot, layout, color);
@@ -274,9 +279,13 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   if (!gdk_display_is_rgba (display) ||
       !gdk_display_is_composited (display))
     {
-      gtk_snapshot_render_background (snapshot,
-                                      gtk_widget_get_style_context (widget),
-                                      0, 0, layout_width, layout_height);
+      GtkCssBoxes boxes;
+      GtkCssStyle *css_style;
+
+      css_style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+      gtk_css_boxes_init_border_box (&boxes, css_style,
+                                     0, 0, layout_width, layout_height);
+      gtk_css_style_snapshot_background (&boxes, snapshot);
     }
 
   gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height }, 1.0);

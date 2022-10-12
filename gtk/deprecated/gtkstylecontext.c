@@ -28,7 +28,7 @@
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 
 
 /**
@@ -220,7 +220,9 @@ gtk_style_context_impl_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DISPLAY:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_set_display (context, g_value_get_object (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -341,6 +343,8 @@ gtk_style_context_new_for_node (GtkCssNode *node)
  * Note: If both priorities are the same, a `GtkStyleProvider`
  * added through this function takes precedence over another added
  * through [func@Gtk.StyleContext.add_provider_for_display].
+ *
+ * Deprecated: 4.10: Use style classes instead
  */
 void
 gtk_style_context_add_provider (GtkStyleContext  *context,
@@ -376,6 +380,8 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
  * @provider: a `GtkStyleProvider`
  *
  * Removes @provider from the style providers list in @context.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_style_context_remove_provider (GtkStyleContext  *context,
@@ -393,67 +399,13 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 }
 
 /**
- * gtk_style_context_add_provider_for_display:
- * @display: a `GdkDisplay`
- * @provider: a `GtkStyleProvider`
- * @priority: the priority of the style provider. The lower
- *   it is, the earlier it will be used in the style construction.
- *   Typically this will be in the range between
- *   %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
- *   %GTK_STYLE_PROVIDER_PRIORITY_USER
- *
- * Adds a global style provider to @display, which will be used
- * in style construction for all `GtkStyleContexts` under @display.
- *
- * GTK uses this to make styling information from `GtkSettings`
- * available.
- *
- * Note: If both priorities are the same, A `GtkStyleProvider`
- * added through [method@Gtk.StyleContext.add_provider] takes
- * precedence over another added through this function.
- **/
-void
-gtk_style_context_add_provider_for_display (GdkDisplay       *display,
-                                            GtkStyleProvider *provider,
-                                            guint             priority)
-{
-  GtkStyleCascade *cascade;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_display (GTK_SETTINGS (provider)) == display);
-
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
-  _gtk_style_cascade_add_provider (cascade, provider, priority);
-}
-
-/**
- * gtk_style_context_remove_provider_for_display:
- * @display: a `GdkDisplay`
- * @provider: a `GtkStyleProvider`
- *
- * Removes @provider from the global style providers list in @display.
- */
-void
-gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
-                                               GtkStyleProvider *provider)
-{
-  GtkStyleCascade *cascade;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider));
-
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
-  _gtk_style_cascade_remove_provider (cascade, provider);
-}
-
-/**
  * gtk_style_context_set_state:
  * @context: a `GtkStyleContext`
  * @flags: state to represent
  *
  * Sets the state to be used for style matching.
+ *
+ * Deprecated: 4.10: You should not use this api
  */
 void
 gtk_style_context_set_state (GtkStyleContext *context,
@@ -479,6 +431,8 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * [method@Gtk.Widget.get_state_flags].
  *
  * Returns: the state flags
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_state_flags] instead
  **/
 GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
@@ -496,6 +450,8 @@ gtk_style_context_get_state (GtkStyleContext *context)
  * @scale: scale
  *
  * Sets the scale to use when getting image assets for the style.
+ *
+ * Deprecated: 4.10: You should not use this api
  **/
 void
 gtk_style_context_set_scale (GtkStyleContext *context,
@@ -529,6 +485,8 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  * Returns the scale used for assets.
  *
  * Returns: the scale
+ *
+ * Deprecated 4.10: Use [method@Gtk.Widget.get_scale_factor] instead
  **/
 int
 gtk_style_context_get_scale (GtkStyleContext *context)
@@ -586,6 +544,8 @@ gtk_style_context_save_to_node (GtkStyleContext *context,
  *
  * The matching call to [method@Gtk.StyleContext.restore]
  * must be done before GTK returns to the main loop.
+ *
+ * Deprecated: 4.10: This API will be removed in GTK 5
  **/
 void
 gtk_style_context_save (GtkStyleContext *context)
@@ -616,6 +576,8 @@ gtk_style_context_save (GtkStyleContext *context)
  * Restores @context state to a previous stage.
  *
  * See [method@Gtk.StyleContext.save].
+ *
+ * Deprecated: 4.10: This API will be removed in GTK 5
  **/
 void
 gtk_style_context_restore (GtkStyleContext *context)
@@ -653,6 +615,7 @@ gtk_style_context_restore (GtkStyleContext *context)
  * ```css
  * .search { ... }
  * ```
+ * Deprecated: 4.10: Use [method@Gtk.Widget.add_css_class] instead
  */
 void
 gtk_style_context_add_class (GtkStyleContext *context,
@@ -675,6 +638,8 @@ gtk_style_context_add_class (GtkStyleContext *context,
  * @class_name: class name to remove
  *
  * Removes @class_name from @context.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.remove_css_class] instead
  */
 void
 gtk_style_context_remove_class (GtkStyleContext *context,
@@ -702,6 +667,8 @@ gtk_style_context_remove_class (GtkStyleContext *context,
  * given class name.
  *
  * Returns: %TRUE if @context has @class_name defined
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.has_css_class] instead
  **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
@@ -742,6 +709,8 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
  * If you are using a `GtkStyleContext` returned from
  * [method@Gtk.Widget.get_style_context], you do not need to
  * call this yourself.
+ *
+ * Deprecated: 4.10: You should not use this api
  */
 void
 gtk_style_context_set_display (GtkStyleContext *context,
@@ -780,6 +749,8 @@ gtk_style_context_set_display (GtkStyleContext *context,
  * Returns the `GdkDisplay` to which @context is attached.
  *
  * Returns: (transfer none): a `GdkDisplay`.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_display] instead
  */
 GdkDisplay *
 gtk_style_context_get_display (GtkStyleContext *context)
@@ -824,6 +795,8 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
  * Looks up and resolves a color name in the @context color map.
  *
  * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
@@ -850,6 +823,8 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * @color: (out): return value for the foreground color
  *
  * Gets the foreground color for a given state.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_style_color] instead
  */
 void
 gtk_style_context_get_color (GtkStyleContext *context,
@@ -867,6 +842,8 @@ gtk_style_context_get_color (GtkStyleContext *context,
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_border (GtkStyleContext *context,
@@ -891,6 +868,8 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_padding (GtkStyleContext *context,
@@ -915,6 +894,8 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a `GtkBorder`.
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 void
 gtk_style_context_get_margin (GtkStyleContext *context,
@@ -949,271 +930,6 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
     *secondary_color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color);
 }
 
-static void
-draw_insertion_cursor (GtkStyleContext *context,
-                       cairo_t         *cr,
-                       double           x,
-                       double           y,
-                       double           width,
-                       double           height,
-                       double           aspect_ratio,
-                       gboolean         is_primary,
-                       PangoDirection   direction,
-                       gboolean         draw_arrow)
-{
-  GdkRGBA primary_color;
-  GdkRGBA secondary_color;
-  int stem_width;
-  double angle;
-  double dx, dy;
-  double xx1, yy1, xx2, yy2;
-
-  cairo_save (cr);
-  cairo_new_path (cr);
-
-  _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
-  gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
-
-  stem_width = height * aspect_ratio + 1;
-
-  yy1 = y;
-  yy2 = y + height;
-
-  if (width < 0)
-    {
-      xx1 = x;
-      xx2 = x - width;
-    }
-  else
-    {
-      xx1 = x + width;
-      xx2 = x;
-    }
-
-  angle = atan2 (height, width);
-
-  dx = (stem_width/2.0) * cos (M_PI/2 - angle);
-  dy = (stem_width/2.0) * sin (M_PI/2 - angle);
-
-  if (draw_arrow)
-    {
-      if (direction == PANGO_DIRECTION_RTL)
-        {
-          double x0, y0, x1, y1, x2, y2;
-
-          x0 = xx2 - dx + 2 * dy;
-          y0 = yy2 - dy - 2 * dx;
-
-          x1 = x0 + 4 * dy;
-          y1 = y0 - 4 * dx;
-          x2 = x0 + 2 * dy - 3 * dx;
-          y2 = y0 - 2 * dx - 3 * dy;
-
-          cairo_move_to (cr, xx1 + dx, yy1 + dy);
-          cairo_line_to (cr, xx2 + dx, yy2 + dy);
-          cairo_line_to (cr, x2, y2);
-          cairo_line_to (cr, x1, y1);
-          cairo_line_to (cr, xx1 - dx, yy1 - dy);
-        }
-      else if (direction == PANGO_DIRECTION_LTR)
-        {
-          double x0, y0, x1, y1, x2, y2;
-
-          x0 = xx2 + dx + 2 * dy;
-          y0 = yy2 + dy - 2 * dx;
-
-          x1 = x0 + 4 * dy;
-          y1 = y0 - 4 * dx;
-          x2 = x0 + 2 * dy + 3 * dx;
-          y2 = y0 - 2 * dx + 3 * dy;
-
-          cairo_move_to (cr, xx1 - dx, yy1 - dy);
-          cairo_line_to (cr, xx2 - dx, yy2 - dy);
-          cairo_line_to (cr, x2, y2);
-          cairo_line_to (cr, x1, y1);
-          cairo_line_to (cr, xx1 + dx, yy1 + dy);
-        }
-      else
-        g_assert_not_reached();
-    }
-  else
-    {
-      cairo_move_to (cr, xx1 + dx, yy1 + dy);
-      cairo_line_to (cr, xx2 + dx, yy2 + dy);
-      cairo_line_to (cr, xx2 - dx, yy2 - dy);
-      cairo_line_to (cr, xx1 - dx, yy1 - dy);
-    }
-
-  cairo_fill (cr);
-
-  cairo_restore (cr);
-}
-
-static void
-get_insertion_cursor_bounds (double           width,
-                             double           height,
-                             double           aspect_ratio,
-                             PangoDirection   direction,
-                             gboolean         draw_arrow,
-                             graphene_rect_t *bounds)
-{
-  int stem_width;
-
-  if (width < 0)
-    width = - width;
-
-  stem_width = height * aspect_ratio + 1;
-
-  graphene_rect_init (bounds,
-                      - 2 * stem_width, - stem_width,
-                      width + 4 * stem_width, height + 2 * stem_width);
-}
-
-static void
-snapshot_insertion_cursor (GtkSnapshot     *snapshot,
-                           GtkStyleContext *context,
-                           double           width,
-                           double           height,
-                           double           aspect_ratio,
-                           gboolean         is_primary,
-                           PangoDirection   direction,
-                           gboolean         draw_arrow)
-{
-  if (width != 0 || draw_arrow)
-    {
-      cairo_t *cr;
-      graphene_rect_t bounds;
-
-      get_insertion_cursor_bounds (width, height, aspect_ratio, direction, draw_arrow, &bounds);
-      cr = gtk_snapshot_append_cairo (snapshot, &bounds);
-
-      draw_insertion_cursor (context, cr, 0, 0, width, height, aspect_ratio, is_primary, direction, draw_arrow);
-
-      cairo_destroy (cr);
-    }
-  else
-    {
-      GdkRGBA primary_color;
-      GdkRGBA secondary_color;
-      int stem_width;
-      int offset;
-
-      _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
-
-      stem_width = height * aspect_ratio + 1;
-
-      /* put (stem_width % 2) on the proper side of the cursor */
-      if (direction == PANGO_DIRECTION_LTR)
-        offset = stem_width / 2;
-      else
-        offset = stem_width - stem_width / 2;
-
-      gtk_snapshot_append_color (snapshot,
-                                 is_primary ? &primary_color : &secondary_color,
-                                 &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
-    }
-}
-
-/**
- * gtk_snapshot_render_insertion_cursor:
- * @snapshot: snapshot to render to
- * @context: a `GtkStyleContext`
- * @x: X origin
- * @y: Y origin
- * @layout: the `PangoLayout` of the text
- * @index: the index in the `PangoLayout`
- * @direction: the `PangoDirection` of the text
- *
- * Draws a text caret using @snapshot at the specified index of @layout.
- */
-void
-gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
-                                      GtkStyleContext *context,
-                                      double           x,
-                                      double           y,
-                                      PangoLayout     *layout,
-                                      int              index,
-                                      PangoDirection   direction)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-  gboolean split_cursor;
-  double aspect_ratio;
-  PangoRectangle strong_pos, weak_pos;
-  PangoRectangle *cursor1, *cursor2;
-  GdkSeat *seat;
-  PangoDirection keyboard_direction;
-  PangoDirection direction2;
-
-  g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
-  g_return_if_fail (index >= 0);
-
-  g_object_get (gtk_settings_get_for_display (priv->display),
-                "gtk-split-cursor", &split_cursor,
-                "gtk-cursor-aspect-ratio", &aspect_ratio,
-                NULL);
-
-  keyboard_direction = PANGO_DIRECTION_LTR;
-  seat = gdk_display_get_default_seat (priv->display);
-  if (seat)
-    {
-      GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
-
-      if (keyboard)
-        keyboard_direction = gdk_device_get_direction (keyboard);
-    }
-
-  pango_layout_get_caret_pos (layout, index, &strong_pos, &weak_pos);
-
-  direction2 = PANGO_DIRECTION_NEUTRAL;
-
-  if (split_cursor)
-    {
-      cursor1 = &strong_pos;
-
-      if (strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y)
-        {
-          direction2 = (direction == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
-          cursor2 = &weak_pos;
-        }
-    }
-  else
-    {
-      if (keyboard_direction == direction)
-        cursor1 = &strong_pos;
-      else
-        cursor1 = &weak_pos;
-    }
-
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor1->x, cursor1->x + cursor1->width)), y + PANGO_PIXELS (cursor1->y)));
-  snapshot_insertion_cursor (snapshot,
-                             context,
-                             PANGO_PIXELS (cursor1->width),
-                             PANGO_PIXELS (cursor1->height),
-                             aspect_ratio,
-                             TRUE,
-                             direction,
-                             direction2 != PANGO_DIRECTION_NEUTRAL);
-  gtk_snapshot_restore (snapshot);
-
-  if (direction2 != PANGO_DIRECTION_NEUTRAL)
-    {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor2->x, cursor2->x + cursor2->width)), y + PANGO_PIXELS (cursor2->y)));
-      snapshot_insertion_cursor (snapshot,
-                                 context,
-                                 PANGO_PIXELS (cursor2->width),
-                                 PANGO_PIXELS (cursor2->height),
-                                 aspect_ratio,
-                                 FALSE,
-                                 direction2,
-                                 TRUE);
-      gtk_snapshot_restore (snapshot);
-    }
-}
-
 /**
  * GtkStyleContextPrintFlags:
  * @GTK_STYLE_CONTEXT_PRINT_NONE: Default value.
@@ -1246,6 +962,8 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
  * the format of the returned string, it may change.
  *
  * Returns: a newly allocated string representing @context
+ *
+ * Deprecated: 4.10: This api will be removed in GTK 5
  */
 char *
 gtk_style_context_to_string (GtkStyleContext           *context,
@@ -1258,7 +976,7 @@ gtk_style_context_to_string (GtkStyleContext           *context,
 
   string = g_string_new ("");
 
-  gtk_css_node_print (priv->cssnode, flags, string, 0);
+  gtk_css_node_print (priv->cssnode, (GtkCssNodePrintFlags)flags, string, 0);
 
   return g_string_free (string, FALSE);
 }

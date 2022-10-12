@@ -30,7 +30,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtksnapshot.h"
+#include "deprecated/gtkrender.h"
 #include "gtkstylecontext.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

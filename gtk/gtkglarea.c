@@ -29,6 +29,9 @@
 #include "gtksnapshot.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
+#include "gtksnapshot.h"
+#include "gtkrenderlayoutprivate.h"
+#include "gtkcssnodeprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -652,17 +655,15 @@ gtk_gl_area_draw_error_screen (GtkGLArea   *area,
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   PangoLayout *layout;
   int layout_height;
+  GtkCssBoxes boxes;
 
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET (area),
-                                           priv->error->message);
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (area), priv->error->message);
   pango_layout_set_width (layout, width * PANGO_SCALE);
   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
   pango_layout_get_pixel_size (layout, NULL, &layout_height);
 
-  gtk_snapshot_render_layout (snapshot,
-                              gtk_widget_get_style_context (GTK_WIDGET (area)),
-                              0, (height - layout_height) / 2,
-                              layout);
+  gtk_css_boxes_init (&boxes, GTK_WIDGET (area));
+  gtk_css_style_snapshot_layout (&boxes, snapshot, 0, (height - layout_height) / 2, layout);
 
   g_object_unref (layout);
 }

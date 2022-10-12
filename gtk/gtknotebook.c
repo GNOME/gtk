@@ -45,7 +45,6 @@
 #include "gtkpopovermenuprivate.h"
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"

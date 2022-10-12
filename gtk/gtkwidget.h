@@ -706,7 +706,7 @@ void            gtk_requisition_free     (GtkRequisition       *requisition);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 
 GDK_AVAILABLE_IN_ALL
@@ -928,7 +928,9 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_css_classes      (GtkWidget   *widget,
                                                          const char **classes);
 
-
+GDK_AVAILABLE_IN_4_10
+void                    gtk_widget_get_style_color      (GtkWidget   *widget,
+                                                         GdkRGBA     *rgba);
 
 
 /**

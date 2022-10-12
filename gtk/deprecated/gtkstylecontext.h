@@ -61,72 +61,64 @@ struct _GtkStyleContextClass
 GDK_AVAILABLE_IN_ALL
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
-                                                    GtkStyleProvider *provider,
-                                                    guint             priority);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
-                                                    GtkStyleProvider *provider);
-
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_add_provider    (GtkStyleContext  *context,
                                         GtkStyleProvider *provider,
                                         guint             priority);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_remove_provider (GtkStyleContext  *context,
                                         GtkStyleProvider *provider);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_save    (GtkStyleContext *context);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_restore (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_style_context_set_scale    (GtkStyleContext *context,
                                               int              scale);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int           gtk_style_context_get_scale    (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void     gtk_style_context_add_class    (GtkStyleContext *context,
                                          const char      *class_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void     gtk_style_context_remove_class (GtkStyleContext *context,
                                          const char      *class_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean gtk_style_context_has_class    (GtkStyleContext *context,
                                          const char      *class_name);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void        gtk_style_context_set_display (GtkStyleContext *context,
                                            GdkDisplay      *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GdkDisplay *gtk_style_context_get_display (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const char      *color_name,
                                          GdkRGBA         *color);
 
 /* Some helper functions to retrieve most common properties */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_get_color            (GtkStyleContext *context,
                                              GdkRGBA         *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkBorder       *border);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_get_padding          (GtkStyleContext *context,
                                              GtkBorder       *padding);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkBorder       *margin);
 
@@ -137,7 +129,7 @@ typedef enum {
   GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE  = 1 << 2
 } GtkStyleContextPrintFlags;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 char * gtk_style_context_to_string (GtkStyleContext           *context,
                                     GtkStyleContextPrintFlags  flags);
 
