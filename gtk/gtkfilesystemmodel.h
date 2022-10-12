@@ -21,7 +21,6 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
-#include <gtk/deprecated/gtktreemodel.h>
 
 G_BEGIN_DECLS
 
@@ -52,19 +51,8 @@ GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *            
                                                              ...);
 GFile *             _gtk_file_system_model_get_directory    (GtkFileSystemModel *model);
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
-gboolean            _gtk_file_system_model_iter_is_visible  (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
-gboolean            _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
-								 GtkTreeIter        *iter);
-GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
-gboolean            _gtk_file_system_model_get_iter_for_file(GtkFileSystemModel *model,
-							     GtkTreeIter        *iter,
-							     GFile              *file);
 GFileInfo *         _gtk_file_system_model_get_info_for_file(GtkFileSystemModel *model,
 							     GFile              *file);
-GFile *             _gtk_file_system_model_get_file         (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
 
 void                _gtk_file_system_model_add_and_query_file  (GtkFileSystemModel *model,
                                                                 GFile              *file,
