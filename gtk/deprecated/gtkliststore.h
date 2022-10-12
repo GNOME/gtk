@@ -60,88 +60,88 @@ struct _GtkListStoreClass
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_list_store_get_type         (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 GtkListStore *gtk_list_store_new              (int           n_columns,
 					       ...);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 GtkListStore *gtk_list_store_newv             (int           n_columns,
 					       GType        *types);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_set_column_types (GtkListStore *list_store,
 					       int           n_columns,
 					       GType        *types);
 
 /* NOTE: use gtk_tree_model_get to get values from a GtkListStore */
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_set_value        (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       int           column,
 					       GValue       *value);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_set              (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       ...);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_set_valuesv      (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       int          *columns,
 					       GValue       *values,
 					       int           n_values);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_set_valist       (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       va_list       var_args);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 gboolean      gtk_list_store_remove           (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_insert           (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       int           position);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_insert_before    (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       GtkTreeIter  *sibling);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_insert_after     (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       GtkTreeIter  *sibling);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_insert_with_values  (GtkListStore *list_store,
 						  GtkTreeIter  *iter,
 						  int           position,
 						  ...);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
 						  GtkTreeIter  *iter,
 						  int           position,
 						  int          *columns,
 						  GValue       *values,
 						  int           n_values);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_prepend          (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_append           (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_clear            (GtkListStore *list_store);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 gboolean      gtk_list_store_iter_is_valid    (GtkListStore *list_store,
                                                GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_reorder          (GtkListStore *store,
                                                int          *new_order);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_swap             (GtkListStore *store,
                                                GtkTreeIter  *a,
                                                GtkTreeIter  *b);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_move_after       (GtkListStore *store,
                                                GtkTreeIter  *iter,
                                                GtkTreeIter  *position);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListStore)
 void          gtk_list_store_move_before      (GtkListStore *store,
                                                GtkTreeIter  *iter,
                                                GtkTreeIter  *position);
