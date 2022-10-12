@@ -1920,17 +1920,11 @@ file_list_show_popover (GtkFileChooserWidget *impl,
                         double                y)
 {
   GdkRectangle rect;
-  graphene_rect_t bounds;
-
-  if (!gtk_widget_compute_bounds (impl->browse_files_column_view,
-                                  impl->browse_files_column_view,
-                                  &bounds))
-    return;
 
   file_list_update_popover (impl);
 
   /* TODO: figure out popover position */
-  rect = (GdkRectangle) { 0, 0, 0, 0 };
+  rect = (GdkRectangle) { (int) x, (int) y, 1, 1 };
 
   gtk_popover_set_pointing_to (GTK_POPOVER (impl->browse_files_popover), &rect);
   gtk_popover_popup (GTK_POPOVER (impl->browse_files_popover));
@@ -1944,15 +1938,16 @@ list_popup_menu_cb (GtkWidget *widget,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   graphene_rect_t bounds;
 
-  if (gtk_widget_compute_bounds (impl->browse_files_column_view,
-                                 impl->browse_files_column_view,
-                                 &bounds))
-    {
-      file_list_show_popover (impl, 0.5 * bounds.size.width, 0.5 * bounds.size.height);
-      return TRUE;
-    }
+  if (!gtk_widget_compute_bounds (impl->browse_files_column_view,
+                                  GTK_WIDGET (impl),
+                                  &bounds))
+    return FALSE;
 
-  return FALSE;
+  file_list_show_popover (impl,
+                          bounds.origin.x + bounds.size.width / 2,
+                          bounds.origin.y + bounds.size.height / 2);
+
+  return TRUE;
 }
 
 static void
