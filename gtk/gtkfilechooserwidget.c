@@ -96,7 +96,9 @@
 #include "gtkfilterlistmodel.h"
 #include "gtkcustomfilter.h"
 #include "gtkcustomsorter.h"
+#include "gtkstringsorter.h"
 #include "gtkmultisorter.h"
+#include "gtkexpression.h"
 
 #ifndef G_OS_WIN32
 #include "gopenuriportal.h"
@@ -7312,6 +7314,12 @@ search_sort_func (gconstpointer a,
   return result;
 }
 
+static char *
+get_name (GFileInfo *info)
+{
+  return g_strdup (g_file_info_get_display_name (info));
+}
+
 static void
 setup_sorting (GtkFileChooserWidget *impl)
 {
@@ -7328,11 +7336,28 @@ setup_sorting (GtkFileChooserWidget *impl)
 
   if (fsmodel == impl->browse_files_model)
     {
-      gtk_column_view_column_set_sorter (impl->column_view_name_column, GTK_SORTER (gtk_custom_sorter_new (name_sort_func, impl, NULL)));
-      gtk_column_view_column_set_sorter (impl->column_view_location_column, GTK_SORTER (gtk_custom_sorter_new (location_sort_func, impl, NULL)));
-      gtk_column_view_column_set_sorter (impl->column_view_size_column, GTK_SORTER (gtk_custom_sorter_new (size_sort_func, impl, NULL)));
-      gtk_column_view_column_set_sorter (impl->column_view_type_column, GTK_SORTER (gtk_custom_sorter_new (type_sort_func, impl, NULL)));
-      gtk_column_view_column_set_sorter (impl->column_view_time_column, GTK_SORTER (gtk_custom_sorter_new (time_sort_func, impl, NULL)));
+      GtkExpression *expression;
+
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                                0, NULL,
+                                                G_CALLBACK (get_name),
+                                                NULL, NULL);
+      sorter = GTK_SORTER (gtk_string_sorter_new (expression));
+      gtk_string_sorter_set_collation (GTK_STRING_SORTER (sorter), GTK_COLLATION_FILENAME);
+      gtk_column_view_column_set_sorter (impl->column_view_name_column, sorter);
+      g_object_unref (sorter);
+
+      sorter = GTK_SORTER (gtk_custom_sorter_new (size_sort_func, impl, NULL));
+      gtk_column_view_column_set_sorter (impl->column_view_size_column, sorter);
+      g_object_unref (sorter);
+
+      sorter = GTK_SORTER (gtk_custom_sorter_new (type_sort_func, impl, NULL));
+      gtk_column_view_column_set_sorter (impl->column_view_type_column, sorter);
+      g_object_unref (sorter);
+
+      sorter = GTK_SORTER (gtk_custom_sorter_new (time_sort_func, impl, NULL));
+      gtk_column_view_column_set_sorter (impl->column_view_time_column, sorter);
+      g_object_unref (sorter);
 
       sorter = GTK_SORTER (gtk_multi_sorter_new ());
       gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), GTK_SORTER (gtk_custom_sorter_new (directory_sort_func, impl, NULL)));
