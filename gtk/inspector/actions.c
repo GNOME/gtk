@@ -24,7 +24,6 @@
 
 #include "gtkapplication.h"
 #include "gtkapplicationwindow.h"
-#include "gtkliststore.h"
 #include "gtkwidgetprivate.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkpopover.h"

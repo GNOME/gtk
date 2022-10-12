@@ -21,7 +21,7 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
-#include <gtk/gtktreemodel.h>
+#include <gtk/deprecated/gtktreemodel.h>
 
 G_BEGIN_DECLS
 

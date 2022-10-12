@@ -269,11 +269,13 @@ widget_test_properties (GtkWidget   *widget,
 static void
 widget_fixups (GtkWidget *widget)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /* post-constructor for widgets that need additional settings to work correctly */
   if (GTK_IS_COMBO_BOX_TEXT (widget))
     {
       gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "test text");
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

@@ -49,7 +49,6 @@
 #include "gtkpopover.h"
 #include "gtksnapshot.h"
 #include "gdktextureprivate.h"
-#include "gtkliststore.h"
 #include <glib/gprintf.h>
 #include "gtklistview.h"
 #include "gtksignallistitemfactory.h"

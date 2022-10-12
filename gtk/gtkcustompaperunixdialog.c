@@ -28,7 +28,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 
-#include "gtkliststore.h"
+#include "deprecated/gtkliststore.h"
 
 #include "gtksignallistitemfactory.h"
 #include "gtklabel.h"

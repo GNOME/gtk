@@ -18,6 +18,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static char *
 get_content (void)
 {

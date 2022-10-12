@@ -21,6 +21,8 @@
 
 #include "guide-editor.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _GuideEditor
 {
   GtkWidget parent_instance;

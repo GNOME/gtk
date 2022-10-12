@@ -21,6 +21,8 @@
 
 #include "constraint-editor.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _ConstraintEditor
 {
   GtkWidget parent_instance;

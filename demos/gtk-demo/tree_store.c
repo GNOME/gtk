@@ -10,6 +10,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* TreeItem structure */
 typedef struct _TreeItem TreeItem;
 struct _TreeItem

@@ -22,14 +22,15 @@
 
 #include "object-tree.h"
 
-#include "gtktreeview.h"
-#include "gtkcellrenderertext.h"
+#include "deprecated/gtktreeview.h"
+#include "deprecated/gtkcellrenderertext.h"
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
 #include "gtkstack.h"
 #include "gtkboxlayout.h"
 #include "gtkorientable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 struct _GtkInspectorTreeData
 {

@@ -19,6 +19,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct _ListSort ListSort;
 struct _ListSort

@@ -20,6 +20,7 @@
 #include "treemodel.h"
 #include "gtktreemodelrefcount.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static void
 ref_count_single_level (void)

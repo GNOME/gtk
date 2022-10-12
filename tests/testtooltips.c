@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _MyTooltip MyTooltip;
 typedef struct _MyTooltipClass MyTooltipClass;
 

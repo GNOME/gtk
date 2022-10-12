@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef GtkListStore MyModel;
 typedef GtkListStoreClass MyModelClass;
 

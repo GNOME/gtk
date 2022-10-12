@@ -38,7 +38,7 @@
 #include "gtkbutton.h"
 #include "gtkbuttonprivate.h"
 #include "gtkeditable.h"
-#include "gtkcelleditable.h"
+#include "deprecated/gtkcelleditable.h"
 #include "gtkimage.h"
 #include "gtktext.h"
 #include "gtkeventcontrollerkey.h"
@@ -651,6 +651,8 @@ gtk_spin_button_accessible_range_init (GtkAccessibleRangeInterface *iface)
   iface->set_current_value = accessible_range_set_current_value;
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 gtk_cell_editable_spin_button_activated (GtkText *text, GtkSpinButton *spin)
 {
@@ -710,6 +712,8 @@ gtk_spin_button_cell_editable_init (GtkCellEditableIface *iface)
 {
   iface->start_editing = gtk_spin_button_start_editing;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gtk_spin_button_set_property (GObject      *object,

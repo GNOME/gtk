@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 GtkTreeStore *base_model;
 static int node_count = 0;
 

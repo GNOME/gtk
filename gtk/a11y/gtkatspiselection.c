@@ -31,7 +31,7 @@
 #include "gtklistbase.h"
 #include "gtklistbox.h"
 #include "gtkflowbox.h"
-#include "gtkcombobox.h"
+#include "deprecated/gtkcombobox.h"
 #include "gtkstackswitcher.h"
 #include "gtknotebook.h"
 #include "gtklistview.h"
@@ -618,6 +618,8 @@ static const GDBusInterfaceVTable flowbox_vtable = {
 /* }}} */
 /* {{{ GtkComboBox */
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 combobox_handle_method (GDBusConnection       *connection,
                         const gchar           *sender,
@@ -712,6 +714,8 @@ static const GDBusInterfaceVTable combobox_vtable = {
   combobox_get_property,
   NULL
 };
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /* }}} */
 /* {{{ GtkStackSwitcher */

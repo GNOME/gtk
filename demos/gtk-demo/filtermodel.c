@@ -9,6 +9,8 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   WIDTH_COLUMN,
   HEIGHT_COLUMN,

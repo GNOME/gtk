@@ -33,14 +33,14 @@
 
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
-#include "gtkcelllayout.h"
+#include "deprecated/gtkcelllayout.h"
 #include "gtkcolumnview.h"
-#include "gtkcomboboxprivate.h"
+#include "deprecated/gtkcomboboxprivate.h"
 #include "gtkfilterlistmodel.h"
 #include "gtkcustomfilter.h"
 #include "gtkflattenlistmodel.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkiconview.h"
+#include "deprecated/gtkiconview.h"
 #include "gtkinscription.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
@@ -52,15 +52,16 @@
 #include "gtktogglebutton.h"
 #include "gtktreeexpander.h"
 #include "gtktreelistmodel.h"
-#include "gtktreeview.h"
-#include "gtktreeselection.h"
-#include "gtktreemodelsort.h"
-#include "gtktreemodelfilter.h"
+#include "deprecated/gtktreeview.h"
+#include "deprecated/gtktreeselection.h"
+#include "deprecated/gtktreemodelsort.h"
+#include "deprecated/gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 enum
 {

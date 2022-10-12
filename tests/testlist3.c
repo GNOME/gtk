@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GdkContentProvider *
 prepare (GtkDragSource *source,
          double         x,

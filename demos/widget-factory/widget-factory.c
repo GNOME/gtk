@@ -664,6 +664,7 @@ on_record_button_toggled (GtkToggleButton *button,
     gtk_widget_add_css_class (GTK_WIDGET (button), "destructive-action");
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 on_page_combo_changed (GtkComboBox *combo,
                        gpointer     user_data)
@@ -705,6 +706,7 @@ on_page_combo_changed (GtkComboBox *combo,
     default:;
     }
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 on_range_from_changed (GtkSpinButton *from)
@@ -843,6 +845,7 @@ page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
     }
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 populate_model (GtkTreeStore *store)
 {
@@ -960,6 +963,7 @@ row_separator_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 
   return is_sep;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 update_title_header (GtkListBoxRow *row,
@@ -1578,6 +1582,7 @@ osd_frame_pressed (GtkGestureClick *gesture,
   return GDK_EVENT_STOP;
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static gboolean
 page_combo_separator_func (GtkTreeModel *model,
                            GtkTreeIter  *iter,
@@ -1592,6 +1597,7 @@ page_combo_separator_func (GtkTreeModel *model,
 
   return res;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 toggle_format (GSimpleAction *action,
@@ -1844,6 +1850,7 @@ update_buttons (GtkWidget *iv, GtkIconSize size)
   gtk_widget_set_sensitive (button, size != GTK_ICON_SIZE_INHERIT);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 increase_icon_size (GtkWidget *iv)
 {
@@ -1894,6 +1901,7 @@ reset_icon_size (GtkWidget *iv)
 
   gtk_widget_queue_resize (iv);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static char *
 scale_format_value_blank (GtkScale *scale, double value, gpointer user_data)
@@ -2270,10 +2278,12 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (window), "selection_flowbox", widget2);
   g_signal_connect_swapped (widget, "clicked", G_CALLBACK (populate_flowbox), widget2);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
   populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
   gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (widget), row_separator_func, NULL, NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   widget = GTK_WIDGET (gtk_builder_get_object (builder, "munsell"));
   widget2 = GTK_WIDGET (gtk_builder_get_object (builder, "cchooser"));
@@ -2281,6 +2291,7 @@ activate (GApplication *app)
   populate_colors (widget, widget2);
   g_signal_connect (widget2, "notify::rgba", G_CALLBACK (rgba_changed), widget);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page_combo");
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (widget), page_combo_separator_func, NULL, NULL);
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "range_from_spin");
@@ -2291,6 +2302,7 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget2), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget), "print_button", widget4);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "tooltextview");
 

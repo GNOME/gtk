@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static int repeats = 2;
 static int max_size = 8;
 

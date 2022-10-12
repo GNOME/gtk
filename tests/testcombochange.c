@@ -20,6 +20,8 @@
 #include <gtk/gtk.h>
 #include <stdarg.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 GtkWidget *text_view;
 GtkListStore *model;
 GArray *contents;

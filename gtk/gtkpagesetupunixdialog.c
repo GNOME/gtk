@@ -29,8 +29,6 @@
 #include "gtkcheckbutton.h"
 #include "gtklabel.h"
 #include "gtkgrid.h"
-#include "gtkcelllayout.h"
-#include "gtkcellrenderertext.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"

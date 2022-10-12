@@ -18,6 +18,8 @@
 #include "gtktreemodelrefcount.h"
 #include "treemodel.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* And the tests themselves */
 
 static void

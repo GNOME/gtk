@@ -7,6 +7,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *window = NULL;
 static GtkTreeModel *model = NULL;
 static guint timeout = 0;

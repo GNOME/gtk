@@ -22,8 +22,8 @@
 
 #include <string.h>
 
-#include "gtkcelllayout.h"
-#include "gtkcellrenderertext.h"
+#include "deprecated/gtkcelllayout.h"
+#include "deprecated/gtkcellrenderertext.h"
 #include "gtkentryprivate.h"
 #include "gtkfilechooserutils.h"
 #include "gtklabel.h"

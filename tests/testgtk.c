@@ -49,6 +49,8 @@
 
 #include "test.xpm"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean done = FALSE;
 
 static gboolean

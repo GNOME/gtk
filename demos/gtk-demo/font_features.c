@@ -21,6 +21,7 @@
 #include "script-names.h"
 #include "language-names.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 

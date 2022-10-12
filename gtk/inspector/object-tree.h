@@ -24,7 +24,7 @@
 #define _GTK_INSPECTOR_OBJECT_TREE_H_
 
 #include <gtk/gtkbox.h>
-#include <gtk/gtktreemodel.h>
+#include <gtk/deprecated/gtktreemodel.h>
 
 #define GTK_TYPE_INSPECTOR_OBJECT_TREE            (gtk_inspector_object_tree_get_type())
 #define GTK_INSPECTOR_OBJECT_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_OBJECT_TREE, GtkInspectorObjectTree))

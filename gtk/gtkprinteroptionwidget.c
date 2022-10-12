@@ -31,7 +31,6 @@
 #include "gtkfilechooserprivate.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkliststore.h"
 #include "gtkcheckbutton.h"
 #include "gtkgrid.h"
 #include "gtkorientable.h"
