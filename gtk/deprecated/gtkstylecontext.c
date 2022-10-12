@@ -976,7 +976,7 @@ gtk_style_context_to_string (GtkStyleContext           *context,
 
   string = g_string_new ("");
 
-  gtk_css_node_print (priv->cssnode, flags, string, 0);
+  gtk_css_node_print (priv->cssnode, (GtkCssNodePrintFlags)flags, string, 0);
 
   return g_string_free (string, FALSE);
 }
