@@ -797,7 +797,6 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
   GtkFileSystemModel *model;
   va_list args;
 
-  g_return_val_if_fail (get_func != NULL, NULL);
   g_return_val_if_fail (n_columns > 0, NULL);
 
   va_start (args, n_columns);
@@ -838,7 +837,6 @@ _gtk_file_system_model_new_for_directory (GFile *                    dir,
   va_list args;
 
   g_return_val_if_fail (G_IS_FILE (dir), NULL);
-  g_return_val_if_fail (get_func != NULL, NULL);
   g_return_val_if_fail (n_columns > 0, NULL);
 
   va_start (args, n_columns);
@@ -1085,53 +1083,6 @@ _gtk_file_system_model_get_file (GtkFileSystemModel *model,
 
   node = get_node (model, ITER_INDEX (iter));
   return node->file;
-}
-
-/**
- * _gtk_file_system_model_get_value:
- * @model: a `GtkFileSystemModel`
- * @iter: a `GtkTreeIter` pointing to a row of @model
- * @column: the column to get the value for
- *
- * Gets the value associated with the given row @iter and @column.
- * If no value is available yet and the default value should be used,
- * %NULL is returned.
- * This is a performance optimization for the calls 
- * gtk_tree_model_get() or gtk_tree_model_get_value(), which copy 
- * the value and spend a considerable amount of time in iterator 
- * lookups. Both of which are slow.
- *
- * Returns: a pointer to the actual value as stored in @model or %NULL
- *   if no value available yet
- */
-const GValue *
-_gtk_file_system_model_get_value (GtkFileSystemModel *model,
-                                  GtkTreeIter *       iter,
-                                  int                 column)
-{
-  FileModelNode *node;
-
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), NULL);
-  g_return_val_if_fail (column >= 0 && (guint) column < model->n_columns, NULL);
-
-  node = get_node (model, ITER_INDEX (iter));
-    
-  if (!G_VALUE_TYPE (&node->values[column]))
-    {
-      g_value_init (&node->values[column], model->column_types[column]);
-      if (!model->get_func (model, 
-                            node->file, 
-                            node->info, 
-                            column, 
-                            &node->values[column],
-                            model->get_data))
-        {
-          g_value_unset (&node->values[column]);
-          return NULL;
-        }
-    }
-  
-  return &node->values[column];
 }
 
 static guint

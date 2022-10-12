@@ -4045,77 +4045,6 @@ end:
   return g_strdup ("");
 }
 
-static gboolean
-file_system_model_set (GtkFileSystemModel *model,
-                       GFile              *file,
-                       GFileInfo          *info,
-                       int                 column,
-                       GValue             *value,
-                       gpointer            data)
-{
-  GtkFileChooserWidget *impl = data;
-
-  switch (column)
-    {
-    case MODEL_COL_FILE:
-      g_value_set_object (value, file);
-      break;
-    case MODEL_COL_NAME:
-      if (info == NULL)
-        g_value_set_string (value, DEFAULT_NEW_FOLDER_NAME);
-      else
-        g_value_set_string (value, g_file_info_get_display_name (info));
-      break;
-    case MODEL_COL_NAME_COLLATED:
-      if (info == NULL)
-        g_value_take_string (value, g_utf8_collate_key_for_filename (DEFAULT_NEW_FOLDER_NAME, -1));
-      else
-        g_value_take_string (value, g_utf8_collate_key_for_filename (g_file_info_get_display_name (info), -1));
-      break;
-    case MODEL_COL_IS_FOLDER:
-      g_value_set_boolean (value, info == NULL || _gtk_file_info_consider_as_directory (info));
-      break;
-    case MODEL_COL_IS_SENSITIVE:
-      if (info)
-        {
-          gboolean sensitive = TRUE;
-
-          if (impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-            {
-              sensitive = TRUE; /* for file modes... */
-            }
-          else if (!_gtk_file_info_consider_as_directory (info))
-            {
-              sensitive = FALSE; /* for folder modes, files are not sensitive... */
-            }
-          else
-            {
-              /* ... and for folder modes, folders are sensitive only if the filter says so */
-              GtkTreeIter iter;
-              if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
-                g_assert_not_reached ();
-              sensitive = !_gtk_file_system_model_iter_is_filtered_out (model, &iter);
-            }
-
-          g_value_set_boolean (value, sensitive);
-        }
-      else
-        g_value_set_boolean (value, TRUE);
-      break;
-    case MODEL_COL_SIZE:
-      g_value_set_int64 (value, info ? g_file_info_get_size (info) : 0);
-      break;
-    case MODEL_COL_ELLIPSIZE:
-      g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return TRUE;
-}
-
 /* Gets rid of the old list model and creates a new one for the current folder */
 static gboolean
 set_list_model (GtkFileChooserWidget  *impl,
@@ -4134,8 +4063,8 @@ set_list_model (GtkFileChooserWidget  *impl,
   impl->browse_files_model =
     _gtk_file_system_model_new_for_directory (impl->current_folder,
                                               MODEL_ATTRIBUTES,
-                                              file_system_model_set,
-                                              impl,
+                                              NULL,
+                                              NULL,
                                               MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
@@ -6005,8 +5934,8 @@ search_setup_model (GtkFileChooserWidget *impl)
 {
   g_assert (impl->search_model == NULL);
 
-  impl->search_model = _gtk_file_system_model_new (file_system_model_set,
-                                                   impl,
+  impl->search_model = _gtk_file_system_model_new (NULL,
+                                                   NULL,
                                                    MODEL_COLUMN_TYPES);
 
   set_current_model (impl, G_LIST_MODEL (impl->search_model));
@@ -6171,8 +6100,8 @@ recent_start_loading (GtkFileChooserWidget *impl)
   /* Setup recent model */
   g_assert (impl->recent_model == NULL);
 
-  impl->recent_model = _gtk_file_system_model_new (file_system_model_set,
-                                                   impl,
+  impl->recent_model = _gtk_file_system_model_new (NULL,
+                                                   NULL,
                                                    MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_filter (impl->recent_model, impl->current_filter);
