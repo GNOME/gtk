@@ -553,45 +553,6 @@ discard_completion_store (GtkFileChooserEntry *chooser_entry)
   g_clear_object (&chooser_entry->model);
 }
 
-static gboolean
-completion_store_set (GtkFileSystemModel  *model,
-                      GFile               *file,
-                      GFileInfo           *info,
-                      int                  column,
-                      GValue              *value,
-                      gpointer             data)
-{
-  GtkFileChooserEntry *chooser_entry = data;
-
-  const char *prefix = "";
-  const char *suffix = "";
-
-  switch (column)
-    {
-    case FILE_INFO_COLUMN:
-      g_value_set_object (value, info);
-      break;
-    case FULL_PATH_COLUMN:
-      prefix = chooser_entry->dir_part;
-      G_GNUC_FALLTHROUGH;
-    case DISPLAY_NAME_COLUMN:
-      if (_gtk_file_info_consider_as_directory (info))
-        suffix = G_DIR_SEPARATOR_S;
-
-      g_value_take_string (value,
-			   g_strconcat (prefix,
-					g_file_info_get_display_name (info),
-					suffix,
-					NULL));
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return TRUE;
-}
-
 static void
 model_items_changed_cb (GListModel          *model,
                         guint                position,
@@ -656,8 +617,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
                                                 "standard::name,standard::display-name,standard::type,"
                                                 "standard::content-type",
-                                                completion_store_set,
-                                                chooser_entry,
+                                                NULL,
+                                                NULL,
                                                 N_COLUMNS,
                                                 G_TYPE_FILE_INFO,
                                                 G_TYPE_STRING,
