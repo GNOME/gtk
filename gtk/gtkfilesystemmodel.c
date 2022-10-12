@@ -607,22 +607,19 @@ query_done_helper (GObject *     object,
                    gpointer      data,
                    gboolean      do_thaw_updates)
 {
-  GtkFileSystemModel *model;
+  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (data);
   GFile *file = G_FILE (object);
   GFileInfo *info;
 
   info = g_file_query_info_finish (file, res, NULL);
-  if (info == NULL)
-    return;
-
-  model = GTK_FILE_SYSTEM_MODEL (data);
-
-  _gtk_file_system_model_update_file (model, file, info);
+  if (info)
+    {
+      _gtk_file_system_model_update_file (model, file, info);
+      g_object_unref (info);
+    }
 
   if (do_thaw_updates)
     thaw_updates (model);
-
-  g_object_unref (info);
 }
 
 static void
