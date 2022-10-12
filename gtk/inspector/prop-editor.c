@@ -1249,6 +1249,23 @@ property_editor (GObject                *object,
 
   notify_property (object, spec);
 
+  if (GTK_IS_LABEL (prop_edit))
+    {
+      gtk_widget_set_can_focus (prop_edit, TRUE);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (prop_edit),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                      g_strdup_printf ("%s: %s",
+                                                       self->name,
+                                                       gtk_label_get_text (GTK_LABEL (prop_edit))),
+                                      NULL);
+    }
+  else
+    {
+      gtk_accessible_update_property (GTK_ACCESSIBLE (prop_edit),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, self->name,
+                                      NULL);
+    }
+
   return prop_edit;
 }
 
