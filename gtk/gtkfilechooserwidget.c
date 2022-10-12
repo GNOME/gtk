@@ -356,28 +356,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
                          "standard::content-type,standard::fast-content-type,time::modified,time::access," \
                          "access::can-rename,access::can-delete,access::can-trash," \
                          "standard::target-uri"
-enum {
-  /* the first 4 must be these due to settings caching sort column */
-  MODEL_COL_NAME,
-  MODEL_COL_SIZE,
-  MODEL_COL_FILE,
-  MODEL_COL_NAME_COLLATED,
-  MODEL_COL_IS_FOLDER,
-  MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_ELLIPSIZE,
-  MODEL_COL_NUM_COLUMNS
-};
-
-/* This list of types is passed to _gtk_file_system_model_new*() */
-#define MODEL_COLUMN_TYPES                                      \
-        MODEL_COL_NUM_COLUMNS,                                  \
-        G_TYPE_STRING,            /* MODEL_COL_NAME */          \
-        G_TYPE_INT64,             /* MODEL_COL_SIZE */          \
-        G_TYPE_FILE,              /* MODEL_COL_FILE */          \
-        G_TYPE_STRING,            /* MODEL_COL_NAME_COLLATED */ \
-        G_TYPE_BOOLEAN,           /* MODEL_COL_IS_FOLDER */     \
-        G_TYPE_BOOLEAN,           /* MODEL_COL_IS_SENSITIVE */  \
-        PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
 
@@ -4062,8 +4040,7 @@ set_list_model (GtkFileChooserWidget  *impl,
 
   impl->browse_files_model =
     _gtk_file_system_model_new_for_directory (impl->current_folder,
-                                              MODEL_ATTRIBUTES,
-                                              MODEL_COLUMN_TYPES);
+                                              MODEL_ATTRIBUTES);
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
 
@@ -5932,7 +5909,7 @@ search_setup_model (GtkFileChooserWidget *impl)
 {
   g_assert (impl->search_model == NULL);
 
-  impl->search_model = _gtk_file_system_model_new (MODEL_COLUMN_TYPES);
+  impl->search_model = _gtk_file_system_model_new ();
 
   set_current_model (impl, G_LIST_MODEL (impl->search_model));
   update_columns (impl, TRUE, _("Modified"));
@@ -6096,7 +6073,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
   /* Setup recent model */
   g_assert (impl->recent_model == NULL);
 
-  impl->recent_model = _gtk_file_system_model_new (MODEL_COLUMN_TYPES);
+  impl->recent_model = _gtk_file_system_model_new ();
 
   _gtk_file_system_model_set_filter (impl->recent_model, impl->current_filter);
 

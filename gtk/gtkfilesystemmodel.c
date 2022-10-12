@@ -133,8 +133,6 @@ struct _FileModelNode
   guint                 visible :1;     /* if the file is currently visible */
   guint                 filtered_out :1;/* if the file is currently filtered out (i.e. it didn't pass the filters) */
   guint                 frozen_add :1;  /* true if the model was frozen and the entry has not been added yet */
-
-  GValue                values[1];      /* actually n_columns values */
 };
 
 struct _GtkFileSystemModel
@@ -148,16 +146,12 @@ struct _GtkFileSystemModel
 
   GCancellable *        cancellable;    /* cancellable in use for all operations - cancelled on dispose */
   GArray *              files;          /* array of FileModelNode containing all our files */
-  gsize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
   guint                 n_nodes_valid;  /* count of valid nodes (i.e. those whose node->row is accurate) */
   GHashTable *          file_lookup;    /* mapping of GFile => array index in model->files
 					 * This hash table doesn't always have the same number of entries as the files array;
 					 * The hash table gets re-populated in node_get_for_file() if this mismatch is
 					 * detected.
 					 */
-
-  guint                 n_columns;      /* number of columns */
-  GType *               column_types;   /* types of each column */
 
   GtkFileFilter *       filter;         /* filter to use for deciding which nodes are visible */
 
@@ -214,10 +208,10 @@ static void remove_file (GtkFileSystemModel *model,
 /*** FileModelNode ***/
 
 /* Get a FileModelNode structure given an index in the model->files array of nodes */
-#define get_node(_model, _index) ((FileModelNode *) ((_model)->files->data + (_index) * (_model)->node_size))
+#define get_node(_model, _index) ((FileModelNode *) ((_model)->files->data + (_index) * sizeof (FileModelNode)))
 
 /* Get an index within the model->files array of nodes, given a FileModelNode* */
-#define node_index(_model, _node) (((char *) (_node) - (_model)->files->data) / (_model)->node_size)
+#define node_index(_model, _node) (((char *) (_node) - (_model)->files->data) / sizeof (FileModelNode))
 
 /* @up_to_index: smallest model->files array index that will be valid after this call
  * @up_to_row: smallest node->row that will be valid after this call
@@ -450,15 +444,9 @@ gtk_file_system_model_finalize (GObject *object)
 
   for (i = 0; i < model->files->len; i++)
     {
-      int v;
-
       FileModelNode *node = get_node (model, i);
       g_clear_object (&node->file);
       g_clear_object (&node->info);
-
-      for (v = 0; v < model->n_columns; v++)
-	if (G_VALUE_TYPE (&node->values[v]) != G_TYPE_INVALID)
-	  g_value_unset (&node->values[v]);
     }
   g_array_free (model->files, TRUE);
 
@@ -468,8 +456,6 @@ gtk_file_system_model_finalize (GObject *object)
   g_clear_object (&model->dir_monitor);
   g_clear_pointer (&model->file_lookup, g_hash_table_destroy);
   g_clear_object (&model->filter);
-
-  g_slice_free1 (sizeof (GType) * model->n_columns, model->column_types);
 
   G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->finalize (object);
 }
@@ -704,39 +690,6 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
 }
 
 static void
-gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
-                                     int                 n_columns,
-                                     va_list             args)
-{
-  guint i;
-
-  g_assert (model->files == NULL);
-  g_assert (n_columns > 0);
-
-  model->n_columns = n_columns;
-  model->column_types = g_slice_alloc (sizeof (GType) * n_columns);
-
-  model->node_size = sizeof (FileModelNode) + sizeof (GValue) * (n_columns - 1); /* minus 1 because FileModelNode.values[] has a default size of 1 */
-
-  for (i = 0; i < (guint) n_columns; i++)
-    {
-      GType type = va_arg (args, GType);
-      if (! _gtk_tree_data_list_check_type (type))
-	{
-	  g_error ("%s: type %s cannot be a column type for GtkFileSystemModel\n", G_STRLOC, g_type_name (type));
-          return; /* not reached */
-	}
-
-      model->column_types[i] = type;
-    }
-
-  model->files = g_array_sized_new (FALSE, FALSE, model->node_size, FILES_PER_QUERY);
-  /* add editable node at start */
-  g_array_set_size (model->files, 1);
-  memset (get_node (model, 0), 0, model->node_size);
-}
-
-static void
 gtk_file_system_model_set_directory (GtkFileSystemModel *model,
                                      GFile *             dir,
 			             const char *       attributes)
@@ -756,23 +709,8 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
 
 }
 
-static GtkFileSystemModel *
-_gtk_file_system_model_new_valist (guint               n_columns,
-                                   va_list             args)
-{
-  GtkFileSystemModel *model;
-
-  model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
-
-  gtk_file_system_model_set_n_columns (model, n_columns, args);
-
-  return model;
-}
-
 /**
  * _gtk_file_system_model_new:
- * @n_columns: number of columns
- * @...: @n_columns `GType` types for the columns
  *
  * Creates a new `GtkFileSystemModel` object. You need to add files
  * to the list using _gtk_file_system_model_add_and_query_file()
@@ -781,17 +719,16 @@ _gtk_file_system_model_new_valist (guint               n_columns,
  * Returns: the newly created `GtkFileSystemModel`
  **/
 GtkFileSystemModel *
-_gtk_file_system_model_new (guint               n_columns,
-                            ...)
+_gtk_file_system_model_new (void)
 {
   GtkFileSystemModel *model;
-  va_list args;
 
-  g_return_val_if_fail (n_columns > 0, NULL);
+  model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
 
-  va_start (args, n_columns);
-  model = _gtk_file_system_model_new_valist (n_columns, args);
-  va_end (args);
+  model->files = g_array_sized_new (FALSE, FALSE, sizeof (FileModelNode), FILES_PER_QUERY);
+  /* add editable node at start */
+  g_array_set_size (model->files, 1);
+  memset (get_node (model, 0), 0, sizeof (FileModelNode));
 
   return model;
 }
@@ -800,8 +737,6 @@ _gtk_file_system_model_new (guint               n_columns,
  * _gtk_file_system_model_new_for_directory:
  * @directory: the directory to show.
  * @attributes: (nullable): attributes to immediately load or %NULL for all
- * @n_columns: number of columns
- * @...: @n_columns `GType` types for the columns
  *
  * Creates a new `GtkFileSystemModel` object.
  *
@@ -814,21 +749,14 @@ _gtk_file_system_model_new (guint               n_columns,
  * Returns: the newly created `GtkFileSystemModel`
  **/
 GtkFileSystemModel *
-_gtk_file_system_model_new_for_directory (GFile *                    dir,
-                                          const char *              attributes,
-                                          guint                      n_columns,
-                                          ...)
+_gtk_file_system_model_new_for_directory (GFile      *dir,
+                                          const char *attributes)
 {
   GtkFileSystemModel *model;
-  va_list args;
 
   g_return_val_if_fail (G_IS_FILE (dir), NULL);
-  g_return_val_if_fail (n_columns > 0, NULL);
 
-  va_start (args, n_columns);
-  model = _gtk_file_system_model_new_valist (n_columns, args);
-  va_end (args);
-
+  model = _gtk_file_system_model_new ();
   gtk_file_system_model_set_directory (model, dir, attributes);
 
   return model;
@@ -1064,7 +992,7 @@ add_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (G_IS_FILE_INFO (info));
 
-  node = g_slice_alloc0 (model->node_size);
+  node = g_slice_alloc0 (sizeof (FileModelNode));
   node->file = g_object_ref (file);
   if (info)
     {
@@ -1074,7 +1002,7 @@ add_file (GtkFileSystemModel *model,
   node->frozen_add = model->frozen ? TRUE : FALSE;
 
   g_array_append_vals (model->files, node, 1);
-  g_slice_free1 (model->node_size, node);
+  g_slice_free1 (sizeof (FileModelNode), node);
 
   position = model->files->len - 1;
 
@@ -1140,7 +1068,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
                                     GFileInfo          *info)
 {
   FileModelNode *node;
-  guint i, id;
+  guint id;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1156,12 +1084,6 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
   node = get_node (model, id);
 
   g_set_object (&node->info, info);
-
-  for (i = 0; i < model->n_columns; i++)
-    {
-      if (G_VALUE_TYPE (&node->values[i]))
-        g_value_unset (&node->values[i]);
-    }
 
   g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
 }

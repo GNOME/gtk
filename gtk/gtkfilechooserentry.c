@@ -616,11 +616,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   chooser_entry->model =
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
                                                 "standard::name,standard::display-name,standard::type,"
-                                                "standard::content-type",
-                                                N_COLUMNS,
-                                                G_TYPE_FILE_INFO,
-                                                G_TYPE_STRING,
-                                                G_TYPE_STRING);
+                                                "standard::content-type");
   g_signal_connect (chooser_entry->model, "items-changed",
                     G_CALLBACK (model_items_changed_cb), chooser_entry);
   g_signal_connect (chooser_entry->model, "finished-loading",

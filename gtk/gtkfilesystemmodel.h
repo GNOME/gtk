@@ -32,12 +32,9 @@ typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
 GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
 
-GtkFileSystemModel *_gtk_file_system_model_new              (guint               n_columns,
-                                                             ...);
-GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *             dir,
-                                                             const char *       attributes,
-                                                             guint               n_columns,
-                                                             ...);
+GtkFileSystemModel *_gtk_file_system_model_new              (void);
+GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile              *dir,
+                                                             const char         *attributes);
 GFile *             _gtk_file_system_model_get_directory    (GtkFileSystemModel *model);
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
 GFileInfo *         _gtk_file_system_model_get_info_for_file(GtkFileSystemModel *model,
