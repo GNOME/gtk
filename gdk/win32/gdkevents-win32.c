@@ -2229,6 +2229,7 @@ gdk_event_translate (MSG *msg,
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, msg);
 
+      *ret_valp = (msg->message == WM_XBUTTONDOWN ? TRUE : 0);
       return_val = TRUE;
       break;
 
@@ -2312,6 +2313,7 @@ gdk_event_translate (MSG *msg,
           mouse_window_ignored_leave = NULL;
         }
 
+      *ret_valp = (msg->message == WM_XBUTTONUP ? TRUE : 0);
       return_val = TRUE;
       break;
     }
