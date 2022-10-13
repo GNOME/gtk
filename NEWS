@@ -1,6 +1,49 @@
 Overview of Changes in 4.9.1, dd-mm-yyyy
 ========================================
 
+Note that deprecations are an early outlook
+at changes that will appear in an eventual
+GTK 5 release, which is still far away.
+
+* GtkTreeView, GtkIconView, GtkComboBox and
+  auxiliary classes have been deprecated
+
+* GtkEntryCompletion has been deprecated
+
+* GtkStyleContext has been deprecated
+
+* gtk_render_ and gtk_snapshot_render_ APIs
+  have been deprecated
+
+* GtkAppChooser widgets hae been deprecated
+
+* GtkMountOperation:
+ - Fix the dialog to look reasonable
+ - Make it work under non-X11
+
+* GtkStringSorter:
+ - Support different collation methods
+
+* Accessibility:
+ - Introduce GtkAccessibleRange and implement it
+
+* Debugging:
+ - Unify formatting for debug output
+ - Make make debug options available in
+   non-debug builds
+
+* Translation updates:
+ Abkhazian
+ Basque
+ Bulgarian
+ Croatian
+ Friulian
+ Georgian
+ German
+ Hungarian
+ Russian
+ Turkish
+
 
 Overview of Changes in 4.8.1, 16-09-2022
 ========================================
