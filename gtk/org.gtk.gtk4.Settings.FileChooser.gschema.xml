@@ -118,8 +118,7 @@
       <default>(-1, -1)</default>
       <summary>Window position</summary>
       <description>
-	The (x, y) coordinates of the upper-left corner of the GtkFileChooserDialog's
-        window.
+        This key is ignored.
       </description>
     </key>
     <key name='window-size' type='(ii)'>
