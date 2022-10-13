@@ -1576,7 +1576,7 @@ create_arrow_render_node (GtkPopover *popover)
                                  0, 0,
                                  gtk_widget_get_width (widget),
                                  gtk_widget_get_height (widget));
-  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_background (&boxes, bg_snapshot);
   node = gtk_snapshot_free_to_node (bg_snapshot);
   if (node)
     {
