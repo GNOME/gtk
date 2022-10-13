@@ -1,6 +1,13 @@
 Title: Tree and List Widget Overview
 Slug: gtk-treeview
 
+This document describes the `GtkTreeView` widget and auxiliary
+classes, like tree models and cell renderers. All of these have
+been deprecated and will be removed in GTK 5. Their replacements
+are described in the [List Widget Overview](section-list-widget.html).
+
+## Introduction
+
 To create a tree or list in GTK, use the `GtkTreeModel` interface in
 conjunction with the `GtkTreeView` widget. This widget is designed around
 a _Model/View/Controller_ design and consists of four major parts:
