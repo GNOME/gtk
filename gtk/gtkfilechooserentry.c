@@ -1017,3 +1017,20 @@ _gtk_file_chooser_entry_set_file_filter (GtkFileChooserEntry *chooser_entry,
 {
   chooser_entry->current_filter = filter;
 }
+
+void
+gtk_file_chooser_entry_set_text (GtkFileChooserEntry *entry,
+                                 const char          *text)
+{
+  GtkEntryCompletion *completion;
+  gboolean popup;
+
+  completion = gtk_entry_get_completion (GTK_ENTRY (entry));
+  popup = gtk_entry_completion_get_popup_completion (completion);
+
+  gtk_entry_completion_set_popup_completion (completion, FALSE);
+
+  gtk_editable_set_text (GTK_EDITABLE (entry), text);
+
+  gtk_entry_completion_set_popup_completion (completion, popup);
+}
