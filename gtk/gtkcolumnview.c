@@ -659,6 +659,8 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gpointer iface;
 
+  widget_class->focus = gtk_widget_focus_child;
+  widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->measure = gtk_column_view_measure;
   widget_class->size_allocate = gtk_column_view_allocate;
 
@@ -1314,7 +1316,6 @@ gtk_column_view_init (GtkColumnView *self)
                           g_quark_from_static_string (I_("view")));
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
-  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   self->reorderable = TRUE;
 }
