@@ -930,7 +930,7 @@ void                    gtk_widget_set_css_classes      (GtkWidget   *widget,
 
 GDK_AVAILABLE_IN_4_10
 void                    gtk_widget_get_style_color      (GtkWidget   *widget,
-                                                         GdkRGBA     *rgba);
+                                                         GdkRGBA     *color);
 
 
 /**

@@ -12871,7 +12871,7 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_get_css_style:
+ * gtk_widget_get_style_color:
  * @widget: a `GtkWidget`
  * @color: (out): return location for the color
  *
