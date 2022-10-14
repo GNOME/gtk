@@ -72,8 +72,6 @@
 #include "gtkspinner.h"
 #include "gtkseparator.h"
 #include "gtkmodelbuttonprivate.h"
-#include "gtkgesturelongpress.h"
-#include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
@@ -212,6 +210,7 @@ struct _GtkFileChooserWidget
   GtkWidget *remote_warning_bar;
 
   GtkWidget *browse_files_popover;
+  guint browse_files_popover_item;
 
   GtkWidget *browse_new_folder_button;
   GtkSizeGroup *browse_path_bar_size_group;
@@ -476,7 +475,6 @@ static void stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
                                                gboolean remove_from_treeview);
 
 static GSList  *get_selected_files           (GtkFileChooserWidget *impl);
-static GSList  *get_selected_infos           (GtkFileChooserWidget *impl);
 
 static void     search_setup_widgets         (GtkFileChooserWidget *impl);
 static void     search_stop_searching        (GtkFileChooserWidget *impl,
@@ -1362,18 +1360,18 @@ copy_file_location_cb (GSimpleAction *action,
                        gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
-  GSList *selected_files = NULL;
+  GFileInfo *info;
+  GFile *file;
+  GdkClipboard *clipboard;
 
-  selected_files = get_selected_files (impl);
+  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
+  file = _gtk_file_info_get_file (info);
 
-  if (selected_files)
-    {
-      GdkClipboard *clipboard;
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl));
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (impl));
-      gdk_clipboard_set (clipboard, GDK_TYPE_FILE_LIST, selected_files);
-      g_slist_free_full (selected_files, g_object_unref);
-    }
+  gdk_clipboard_set (clipboard, G_TYPE_FILE, file);
+
+  g_clear_object (&info);
 }
 
 /* Callback used when the "Visit this file" menu item is activated */
@@ -1383,19 +1381,15 @@ visit_file_cb (GSimpleAction *action,
                gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
-  GSList *files;
+  GFileInfo *info;
+  GFile *file;
 
-  files = get_selected_files (impl);
+  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
+  file = _gtk_file_info_get_file (info);
 
-  /* Sigh, just use the first one */
-  if (files)
-    {
-      GFile *file = files->data;
+  gtk_file_chooser_widget_select_file (GTK_FILE_CHOOSER (impl), file, NULL); /* NULL-GError */
 
-      gtk_file_chooser_widget_select_file (GTK_FILE_CHOOSER (impl), file, NULL); /* NULL-GError */
-    }
-
-  g_slist_free_full (files, g_object_unref);
+  g_clear_object (&info);
 }
 
 #define FILE_MANAGER_DBUS_NAME "org.freedesktop.FileManager1"
@@ -1411,17 +1405,12 @@ open_folder_cb (GSimpleAction *action,
   GtkFileChooserWidget *impl = data;
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (impl));
   GtkWindow *toplevel = GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : NULL;
-  GSList *files;
+  GFileInfo *info;
   GFile *file;
   char *uri;
 
-  files = get_selected_files (impl);
-
-  if (!files)
-    return;
-
-  /* Sigh, just use the first one */
-  file = files->data;
+  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
+  file = _gtk_file_info_get_file (info);
 
 #ifdef G_OS_WIN32
 
@@ -1481,7 +1470,7 @@ open_folder_cb (GSimpleAction *action,
 
 #endif
 
-  g_slist_free_full (files, g_object_unref);
+  g_clear_object (&info);
 }
 
 /* callback used when the "Show Hidden Files" menu item is toggled */
@@ -1677,87 +1666,75 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
   return TRUE;
 }
 
-/* Sensitizes the "Copy file’s location" and other context menu items if there is actually
- * a selection active.
- */
 static void
 check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
 {
-  int num_selected;
-  gboolean all_files;
-  gboolean all_folders;
-  gboolean active;
-  GAction *action, *action2;
+  GAction *action;
+  GFileInfo *info;
+  gboolean is_folder;
+  GSimpleAction *delete_action, *trash_action;
 
-  selection_check (impl, &num_selected, &all_files, &all_folders);
-
-  active = (num_selected != 0);
+  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
+  is_folder = _gtk_file_info_consider_as_directory (info);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "copy-location");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "add-shortcut");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active && all_folders);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), is_folder);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "visit");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "open");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (num_selected == 1) && all_folders);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), is_folder);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "rename");
-  if (num_selected == 1)
-    {
-      GSList *infos;
-      GFileInfo *info;
-
-      infos = get_selected_infos (impl);
-      info = G_FILE_INFO (infos->data);
-
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                                   g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME));
-
-      g_slist_free_full (infos, g_object_unref);
-    }
-  else
-    g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "delete");
-  action2 = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "trash");
+  delete_action = G_SIMPLE_ACTION (action);
 
-  if (num_selected == 1)
+  action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "trash");
+  trash_action = G_SIMPLE_ACTION (action);
+
+  if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH))
     {
-      GSimpleAction *delete_action = G_SIMPLE_ACTION (action);
-      GSimpleAction *trash_action = G_SIMPLE_ACTION (action2);
-      GSList *infos;
-      GFileInfo *info;
-
-      infos = get_selected_infos (impl);
-      info = G_FILE_INFO (infos->data);
-
-      if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH))
-        {
-          g_simple_action_set_enabled (trash_action, TRUE);
-          g_simple_action_set_enabled (delete_action, FALSE);
-        }
-      else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE))
-        {
-          g_simple_action_set_enabled (delete_action, TRUE);
-          g_simple_action_set_enabled (trash_action, FALSE);
-        }
-      else
-        {
-          g_simple_action_set_enabled (trash_action, FALSE);
-          g_simple_action_set_enabled (delete_action, FALSE);
-        }
-
-      g_slist_free_full (infos, g_object_unref);
+      g_simple_action_set_enabled (trash_action, TRUE);
+      g_simple_action_set_enabled (delete_action, FALSE);
+    }
+  else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE))
+    {
+      g_simple_action_set_enabled (delete_action, TRUE);
+      g_simple_action_set_enabled (trash_action, FALSE);
     }
   else
     {
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-      g_simple_action_set_enabled (G_SIMPLE_ACTION (action2), FALSE);
+      g_simple_action_set_enabled (trash_action, FALSE);
+      g_simple_action_set_enabled (delete_action, FALSE);
     }
+}
+
+static void
+file_list_show_popover (GtkFileChooserWidget *impl,
+                        double                x,
+                        double                y);
+
+static void
+popup_file_list_menu (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  GtkFileChooserWidget *impl = user_data;
+  guint position;
+  double x, y;
+
+  g_variant_get (parameter, "(udd)", &position, &x, &y);
+
+  impl->browse_files_popover_item = position;
+
+  file_list_show_popover (impl, x, y);
 }
 
 static GActionEntry entries[] = {
@@ -1768,6 +1745,7 @@ static GActionEntry entries[] = {
   { "rename", rename_file_cb, NULL, NULL, NULL },
   { "delete", delete_file_cb, NULL, NULL, NULL },
   { "trash", trash_file_cb, NULL, NULL, NULL },
+  { "popup-file-list-menu",  popup_file_list_menu, "(udd)", NULL, NULL },
   { "toggle-show-hidden", NULL, NULL, "false", change_show_hidden_state },
   { "toggle-show-size", NULL, NULL, "false", change_show_size_state },
   { "toggle-show-type", NULL, NULL, "false", change_show_type_state },
@@ -1860,18 +1838,17 @@ file_list_update_popover (GtkFileChooserWidget *impl)
   /* The sensitivity of the Add to Bookmarks item is set in
    * bookmarks_check_add_sensitivity()
    */
-  state = impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->operation_mode != OPERATION_MODE_BROWSE;
+  state = impl->action == GTK_FILE_CHOOSER_ACTION_SAVE &&
+          impl->operation_mode == OPERATION_MODE_BROWSE;
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "rename");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !state);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), state);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "delete");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !state);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), state);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "trash");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !state);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), state);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "visit");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->operation_mode != OPERATION_MODE_BROWSE));
@@ -1928,27 +1905,6 @@ list_popup_menu_cb (GtkWidget *widget,
   return TRUE;
 }
 
-static void
-files_list_clicked (GtkGesture           *gesture,
-                    int                   n_press,
-                    double                x,
-                    double                y,
-                    GtkFileChooserWidget *impl)
-{
-  list_popup_menu_cb (NULL, NULL, impl);
-}
-
-static void
-files_list_restrict_clicking (GtkGestureClick      *gesture,
-                              int                   n_press,
-                              double                x,
-                              double                y,
-                              GtkFileChooserWidget *impl)
-{
-  if (impl->browse_files_interaction_frozen)
-    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-}
-
 static gboolean
 files_list_restrict_key_presses (GtkEventControllerKey *controller,
                                  guint                  keyval,
@@ -1984,35 +1940,6 @@ file_list_show_popover_in_idle (gpointer data)
   g_free (data);
 
   return G_SOURCE_REMOVE;
-}
-
-static void
-click_cb (GtkGesture           *gesture,
-          int                   n_press,
-          double                x,
-          double                y,
-          GtkFileChooserWidget *impl)
-{
-  PopoverData *pd;
-
-  pd = g_new (PopoverData, 1);
-  pd->impl = impl;
-  gtk_widget_translate_coordinates (impl->browse_files_column_view,
-                                    GTK_WIDGET (impl),
-                                    x, y, &x, &y);
-  pd->x = x;
-  pd->y = y;
-
-  g_idle_add (file_list_show_popover_in_idle, pd);
-}
-
-static void
-long_press_cb (GtkGesture           *gesture,
-               double                x,
-               double                y,
-               GtkFileChooserWidget *impl)
-{
-  file_list_show_popover (impl, x, y);
 }
 
 static char *
@@ -5765,31 +5692,6 @@ get_selected_files (GtkFileChooserWidget *impl)
   return result;
 }
 
-static GSList *
-get_selected_infos (GtkFileChooserWidget *impl)
-{
-  GtkBitsetIter iter;
-  GtkBitset *bitset;
-  GSList *result = NULL;
-  guint i;
-
-  bitset = gtk_selection_model_get_selection (impl->selection_model);
-
-  for (gtk_bitset_iter_init_first (&iter, bitset, &i);
-       gtk_bitset_iter_is_valid (&iter);
-       gtk_bitset_iter_next (&iter, &i))
-    {
-      GFileInfo *info;
-
-      info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), i);
-      result = g_slist_prepend (result, g_object_ref (info));
-
-      g_clear_object (&info);
-    }
-
-  return result;
-}
-
 /* Callback used from GtkSearchEngine when we get new hits */
 static void
 search_engine_hits_added_cb (GtkSearchEngine      *engine,
@@ -6899,8 +6801,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_name_changed);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
-  gtk_widget_class_bind_template_callback (widget_class, click_cb);
-  gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_date);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_display_name);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_time);
@@ -6955,7 +6855,6 @@ post_process_ui (GtkFileChooserWidget *impl)
 {
   GFile            *file;
   GtkDropTarget *target;
-  GtkGesture *gesture;
   GtkEventController *controller;
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
@@ -6990,11 +6889,6 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   gtk_widget_set_parent (impl->rename_file_popover, GTK_WIDGET (impl));
 
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_clicked), impl);
-  gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_column_view), GTK_EVENT_CONTROLLER (gesture));
-
   controller = gtk_shortcut_controller_new ();
   trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
                                          gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
@@ -7002,15 +6896,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_column_view), controller);
-
-  /* Add ability to restrict interaction on file list (click and key_press events),
-   * needed to prevent data loss bug #2288 */
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
-  g_signal_connect (gesture, "pressed", G_CALLBACK (files_list_restrict_clicking), impl);
-  gtk_widget_add_controller (impl->browse_files_column_view, GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
