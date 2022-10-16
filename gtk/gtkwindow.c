@@ -3811,6 +3811,10 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
+  guint i;
+  if (!g_list_store_find (toplevel_list, window, &i))
+    g_warning("The window is shown after it has been destroyed. This will leave the window in an inconsistent state.");
+
   _gtk_widget_set_visible_flag (widget, TRUE);
 
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
