@@ -12871,7 +12871,7 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_get_style_color:
+ * gtk_widget_get_color:
  * @widget: a `GtkWidget`
  * @color: (out): return location for the color
  *
@@ -12885,8 +12885,8 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
  * Since: 4.10
  */
 void
-gtk_widget_get_style_color (GtkWidget *widget,
-                            GdkRGBA   *color)
+gtk_widget_get_color (GtkWidget *widget,
+                      GdkRGBA   *color)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssStyle *style;
