@@ -259,6 +259,9 @@ typedef struct {
  * @keycode: the raw code of the key that was pressed or released.
  * @translated: the result of translating @keycode. First with the full
  *   @state, then while ignoring Caps Lock.
+ * @compose_sequence: optional string for use by selected IM modules.
+ *   Contains either partial compose sequences or the final composed
+ *   string of the keystroke sequence.
  *
  * Describes a key press or key release event.
  */
@@ -270,6 +273,7 @@ struct _GdkKeyEvent
   guint32 keycode;
   gboolean key_is_modifier;
   GdkTranslatedKey translated[2];
+  char *compose_sequence;
 };
 
 /*
@@ -470,7 +474,8 @@ GdkEvent * gdk_key_event_new            (GdkEventType      type,
                                          GdkModifierType   modifiers,
                                          gboolean          is_modifier,
                                          GdkTranslatedKey *translated,
-                                         GdkTranslatedKey *no_lock);
+                                         GdkTranslatedKey *no_lock,
+                                         char             *compose_sequence);
 
 GdkEvent * gdk_focus_event_new          (GdkSurface      *surface,
                                          GdkDevice       *device,
@@ -597,6 +602,8 @@ GdkEvent * gdk_grab_broken_event_new    (GdkSurface      *surface,
 GdkTranslatedKey *      gdk_key_event_get_translated_key        (GdkEvent *event,
                                                                  gboolean  no_lock);
 
+char *                  gdk_key_event_get_compose_sequence      (GdkEvent *event);
+
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -625,7 +632,6 @@ void    gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
 void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
 double * gdk_event_dup_axes (GdkEvent *event);
-
 
 G_END_DECLS
 
