@@ -544,6 +544,7 @@ static void
 gtk_directory_list_start_loading (GtkDirectoryList *self)
 {
   gboolean was_loading;
+  char *glib_apis_suck;
 
   was_loading = gtk_directory_list_stop_loading (self);
   gtk_directory_list_clear_items (self);
@@ -555,14 +556,16 @@ gtk_directory_list_start_loading (GtkDirectoryList *self)
       return;
     }
 
+  glib_apis_suck = g_strconcat ("standard::name,", self->attributes, NULL);
   self->cancellable = g_cancellable_new ();
   g_file_enumerate_children_async (self->file,
-                                   self->attributes,
+                                   glib_apis_suck,
                                    G_FILE_QUERY_INFO_NONE,
                                    self->io_priority,
                                    self->cancellable,
                                    gtk_directory_list_got_enumerator_cb,
                                    self);
+  g_free (glib_apis_suck);
 
   if (!was_loading)
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOADING]);
@@ -861,8 +864,8 @@ gtk_directory_list_get_file (GtkDirectoryList *self)
  *
  * Sets the @attributes to be enumerated and starts the enumeration.
  *
- * If @attributes is %NULL, no attributes will be queried, but a list
- * of `GFileInfo`s will still be created.
+ * If @attributes is %NULL, the list of file infos will still be created, it will just
+ * not contain any extra attributes.
  */
 void
 gtk_directory_list_set_attributes (GtkDirectoryList *self,
