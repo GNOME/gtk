@@ -198,11 +198,9 @@ selection_changed (GtkSingleSelection *selection,
 {
   GtkDropDown *self = data;
   guint selected;
-  gpointer item;
   GtkFilter *filter;
 
   selected = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection));
-  item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
 
   if (selected == GTK_INVALID_LIST_POSITION)
     {
@@ -211,7 +209,14 @@ selection_changed (GtkSingleSelection *selection,
   else
     {
       gtk_stack_set_visible_child_name (GTK_STACK (self->button_stack), "item");
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item), selected, item, FALSE);
+    }
+
+  if (selected != gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (self->button_item)))
+    {
+      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
+                                   selected,
+                                   gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection)),
+                                   FALSE);
     }
 
   /* reset the filter so positions are 1-1 */
@@ -221,6 +226,26 @@ selection_changed (GtkSingleSelection *selection,
   gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->popup_selection), selected);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+}
+
+static void
+selection_item_changed (GtkSingleSelection *selection,
+                        GParamSpec         *pspec,
+                        gpointer            data)
+{
+  GtkDropDown *self = data;
+  gpointer item;
+
+  item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
+
+  if (item != gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (self->button_item)))
+    {
+      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
+                                   gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)),
+                                   item,
+                                   FALSE);
+    }
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
 }
 
@@ -289,7 +314,10 @@ gtk_drop_down_dispose (GObject *object)
 
   g_clear_object (&self->model);
   if (self->selection)
-    g_signal_handlers_disconnect_by_func (self->selection, selection_changed, self);
+    {
+      g_signal_handlers_disconnect_by_func (self->selection, selection_changed, self);
+      g_signal_handlers_disconnect_by_func (self->selection, selection_item_changed, self);
+    }
   g_clear_object (&self->filter_model);
   g_clear_pointer (&self->expression, gtk_expression_unref);
   g_clear_object (&self->selection);
@@ -805,7 +833,10 @@ gtk_drop_down_set_model (GtkDropDown *self,
       gtk_list_view_set_model (GTK_LIST_VIEW (self->popup_list), NULL);
 
       if (self->selection)
-        g_signal_handlers_disconnect_by_func (self->selection, selection_changed, self);
+        {
+          g_signal_handlers_disconnect_by_func (self->selection, selection_changed, self);
+          g_signal_handlers_disconnect_by_func (self->selection, selection_item_changed, self);
+        }
 
       g_clear_object (&self->selection);
       g_clear_object (&self->filter_model);
@@ -831,7 +862,9 @@ gtk_drop_down_set_model (GtkDropDown *self,
       g_object_unref (selection);
 
       g_signal_connect (self->selection, "notify::selected", G_CALLBACK (selection_changed), self);
+      g_signal_connect (self->selection, "notify::selected-item", G_CALLBACK (selection_item_changed), self);
       selection_changed (GTK_SINGLE_SELECTION (self->selection), NULL, self);
+      selection_item_changed (GTK_SINGLE_SELECTION (self->selection), NULL, self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);

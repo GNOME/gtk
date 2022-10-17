@@ -200,7 +200,6 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     {
       self->selected += added - removed;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
     }
   else
     {
@@ -216,7 +215,6 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                 {
                   self->selected = position + i;
                   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
-                  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
                 }
 
               g_object_unref (item);
@@ -226,6 +224,8 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
         }
       if (i == added)
         {
+          guint old_selected = self->selected;
+
           /* the item really was deleted */
           g_clear_object (&self->selected_item);
           if (self->autoselect)
@@ -266,7 +266,9 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
               g_clear_object (&self->selected_item);
               self->selected = GTK_INVALID_LIST_POSITION;
             }
-          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+          if (old_selected != self->selected)
+            g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+          /* the item was deleted above, so this is guaranteed to be new, even if the position didn't change */
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
         }
     }
