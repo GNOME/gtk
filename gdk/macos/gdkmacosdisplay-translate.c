@@ -431,7 +431,8 @@ fill_key_event (GdkMacosDisplay *display,
                             state,
                             is_modifier,
                             &translated,
-                            &no_lock);
+                            &no_lock,
+                            NULL);
 }
 
 static GdkEvent *

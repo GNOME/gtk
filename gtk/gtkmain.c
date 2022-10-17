@@ -1084,7 +1084,8 @@ rewrite_event_for_toplevel (GdkEvent *event)
                             gdk_key_event_get_keycode (event),
                             gdk_event_get_modifier_state (event),
                             gdk_key_event_is_modifier (event),
-                            key, key_no_lock);
+                            key, key_no_lock,
+                            gdk_key_event_get_compose_sequence (event));
 }
 
 static gboolean

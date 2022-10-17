@@ -2205,7 +2205,8 @@ deliver_key_event (GdkWaylandSeat *seat,
                              device_get_modifiers (seat->logical_pointer),
                              _gdk_wayland_keymap_key_is_modifier (keymap, key),
                              &translated,
-                             &no_lock);
+                             &no_lock,
+                             NULL);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
