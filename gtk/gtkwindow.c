@@ -2004,7 +2004,9 @@ gtk_window_root_set_focus (GtkRoot   *root,
 
   if (focus == priv->focus_widget)
     {
-      priv->move_focus = FALSE;
+      if (priv->move_focus &&
+          focus && gtk_widget_is_visible (focus))
+        priv->move_focus = FALSE;
       return;
     }
 
@@ -2024,7 +2026,9 @@ gtk_window_root_set_focus (GtkRoot   *root,
 
   g_clear_object (&old_focus);
 
-  priv->move_focus = FALSE;
+  if (priv->move_focus &&
+      focus && gtk_widget_is_visible (focus))
+    priv->move_focus = FALSE;
 
   g_object_notify (G_OBJECT (self), "focus-widget");
 }
@@ -4689,7 +4693,7 @@ maybe_unset_focus_and_default (GtkWindow *window)
                 break;
             }
 
-           parent = _gtk_widget_get_parent (parent);
+          parent = _gtk_widget_get_parent (parent);
         }
     }
 
