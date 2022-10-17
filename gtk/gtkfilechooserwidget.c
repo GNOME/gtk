@@ -211,6 +211,8 @@ struct _GtkFileChooserWidget
 
   GtkWidget *browse_files_popover;
   guint browse_files_popover_item;
+  double browse_files_popover_x;
+  double browse_files_popover_y;
 
   GtkWidget *browse_new_folder_button;
   GtkSizeGroup *browse_path_bar_size_group;
@@ -1314,35 +1316,23 @@ rename_file_cb (GSimpleAction *action,
                 gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
-  GtkBitsetIter iter;
   GdkRectangle rect;
-  GtkBitset *bitset;
   GFileInfo *info;
   GFile *file;
-  double x, y;
-  guint position;
   char *filename;
-
-  bitset = gtk_selection_model_get_selection (impl->selection_model);
-  if (!gtk_bitset_iter_init_first (&iter, bitset, &position))
-    return;
 
   /* insensitive until we change the name */
   gtk_widget_set_sensitive (impl->rename_file_rename_button, FALSE);
 
-  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), position);
+  info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
   file = _gtk_file_info_get_file (info);
   g_clear_object (&info);
 
   impl->rename_file_source_file = g_object_ref (file);
   rect = (GdkRectangle) { 0, 0, 1, 1 };
 
-  gtk_widget_translate_coordinates (impl->browse_files_column_view,
-                                    GTK_WIDGET (impl),
-                                    rect.x, rect.y,
-                                    &x, &y);
-  rect.x = x;
-  rect.y = y;
+  rect.x = impl->browse_files_popover_x;
+  rect.y = impl->browse_files_popover_y;
 
   filename = g_file_get_basename (impl->rename_file_source_file);
   gtk_editable_set_text (GTK_EDITABLE (impl->rename_file_name_entry), filename);
@@ -1733,6 +1723,8 @@ popup_file_list_menu (GSimpleAction *action,
   g_variant_get (parameter, "(udd)", &position, &x, &y);
 
   impl->browse_files_popover_item = position;
+  impl->browse_files_popover_x = x;
+  impl->browse_files_popover_y = y;
 
   file_list_show_popover (impl, x, y);
 }
@@ -1919,27 +1911,6 @@ files_list_restrict_key_presses (GtkEventControllerKey *controller,
     }
 
   return GDK_EVENT_PROPAGATE;
-}
-
-/* Callback used when a button is pressed on the file list.  We trap button 3 to
- * bring up a popup menu.
- */
-
-typedef struct {
-  GtkFileChooserWidget *impl;
-  double x;
-  double y;
-} PopoverData;
-
-static gboolean
-file_list_show_popover_in_idle (gpointer data)
-{
-  PopoverData *pd = data;
-
-  file_list_show_popover (pd->impl, pd->x, pd->y);
-  g_free (data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static char *
