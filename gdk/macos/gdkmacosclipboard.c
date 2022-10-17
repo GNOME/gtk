@@ -440,7 +440,7 @@ on_data_ready_cb (GObject      *object,
 
       g_output_stream_close (G_OUTPUT_STREAM (wr->stream), NULL, NULL);
 
-      size = g_memory_output_stream_get_size (wr->stream);
+      size = g_memory_output_stream_get_data_size (wr->stream);
       bytes = g_memory_output_stream_steal_data (wr->stream);
       data = [[NSData alloc] initWithBytesNoCopy:bytes
                                           length:size
