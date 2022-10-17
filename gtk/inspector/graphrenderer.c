@@ -153,7 +153,7 @@ graph_renderer_snapshot (GtkWidget   *widget,
 
   diff = maximum - minimum;
 
-  gtk_widget_get_style_color (widget, &color);
+  gtk_widget_get_color (widget, &color);
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
