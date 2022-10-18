@@ -192,11 +192,23 @@ gtk_editable_label_prepare_drag (GtkDragSource    *source,
                                          gtk_label_get_label (GTK_LABEL (self->label)));
 }
 
+static gboolean
+stop_editing_soon (gpointer data)
+{
+  GtkEventController *controller = data;
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+
+  if (!gtk_event_controller_focus_contains_focus (GTK_EVENT_CONTROLLER_FOCUS (controller)))
+    gtk_editable_label_stop_editing (GTK_EDITABLE_LABEL (widget), TRUE);
+
+  return FALSE;
+}
+
 static void
 gtk_editable_label_focus_out (GtkEventController *controller,
                               GtkEditableLabel   *self)
 {
-  gtk_editable_label_stop_editing (self, TRUE);
+  g_timeout_add (100, stop_editing_soon, controller);
 }
 
 static void
