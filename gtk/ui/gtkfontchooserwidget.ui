@@ -188,7 +188,7 @@
                                 <property name="tooltip-text" translatable="yes">Preview Font</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="yes">horizontal</property>
+                                    <property name="flags">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
@@ -217,7 +217,7 @@
                                 <property name="round-digits">0</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="yes">horizontal</property>
+                                    <property name="flags">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
