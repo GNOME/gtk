@@ -54,71 +54,6 @@ make_fake_type (const char *type_name,
                                         0);
 }
 
-static void
-do_validate_template (const char *filename,
-                      const char *type_name,
-                      const char *parent_name)
-{
-  GType template_type;
-  GObject *object;
-  GtkBuilder *builder;
-  GError *error = NULL;
-  int ret;
-
-  /* Only make a fake type if it doesn't exist yet.
-   * This lets us e.g. validate the GtkFileChooserWidget template.
-   */
-  template_type = g_type_from_name (type_name);
-  if (template_type == G_TYPE_INVALID)
-    template_type = make_fake_type (type_name, parent_name);
-
-  object = g_object_new (template_type, NULL);
-  if (!object)
-    {
-      g_printerr ("Failed to create an instance of the template type %s\n", type_name);
-      exit (1);
-    }
-
-  builder = gtk_builder_new ();
-  ret = gtk_builder_extend_with_template (builder, object , template_type, " ", 1, &error);
-  if (ret)
-    ret = gtk_builder_add_from_file (builder, filename, &error);
-  g_object_unref (builder);
-
-  if (ret == 0)
-    {
-      g_printerr ("%s\n", error->message);
-      exit (1);
-    }
-}
-
-static gboolean
-parse_template_error (const char   *message,
-                      char        **class_name,
-                      char        **parent_name)
-{
-  char *p;
-
-  p = strstr (message, "(class '");
-  if (p)
-    {
-      *class_name = g_strdup (p + strlen ("(class '"));
-      p = strstr (*class_name, "'");
-      if (p)
-        *p = '\0';
-    }
-  p = strstr (message, ", parent '");
-  if (p)
-    {
-      *parent_name = g_strdup (p + strlen (", parent '"));
-      p = strstr (*parent_name, "'");
-      if (p)
-        *p = '\0';
-    }
-
-  return *class_name && *parent_name;
-}
-
 static gboolean
 is_deprecated (GObject *object)
 {
@@ -193,7 +128,7 @@ check_deprecations (GtkBuilder  *builder,
     {
       GObject *obj = l->data;
 
-      if (is_deprecated (obj))
+      if (1 || is_deprecated (obj))
         {
           if (s->len == 0)
             g_string_append (s, "Deprecated types:\n");
@@ -215,12 +150,82 @@ check_deprecations (GtkBuilder  *builder,
 }
 
 static gboolean
+validate_template (const char *filename,
+                   const char *type_name,
+                   const char *parent_name,
+                   gboolean    deprecations)
+{
+  GType template_type;
+  GObject *object;
+  GtkBuilder *builder;
+  GError *error = NULL;
+  gboolean ret;
+
+  /* Only make a fake type if it doesn't exist yet.
+   * This lets us e.g. validate the GtkFileChooserWidget template.
+   */
+  template_type = g_type_from_name (type_name);
+  if (template_type == G_TYPE_INVALID)
+    template_type = make_fake_type (type_name, parent_name);
+
+  object = g_object_new (template_type, NULL);
+  if (!object)
+    {
+      g_printerr ("Failed to create an instance of the template type %s\n", type_name);
+      return FALSE;
+    }
+
+  builder = gtk_builder_new ();
+  ret = gtk_builder_extend_with_template (builder, object, template_type, " ", 1, &error);
+  if (ret)
+    ret = gtk_builder_add_from_file (builder, filename, &error);
+  if (ret && deprecations)
+    ret = check_deprecations (builder, &error);
+  g_object_unref (builder);
+
+  if (!ret)
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+    }
+
+  return ret;
+}
+
+static gboolean
+parse_template_error (const char   *message,
+                      char        **class_name,
+                      char        **parent_name)
+{
+  char *p;
+
+  p = strstr (message, "(class '");
+  if (p)
+    {
+      *class_name = g_strdup (p + strlen ("(class '"));
+      p = strstr (*class_name, "'");
+      if (p)
+        *p = '\0';
+    }
+  p = strstr (message, ", parent '");
+  if (p)
+    {
+      *parent_name = g_strdup (p + strlen (", parent '"));
+      p = strstr (*parent_name, "'");
+      if (p)
+        *p = '\0';
+    }
+
+  return *class_name && *parent_name;
+}
+
+static gboolean
 validate_file (const char *filename,
                gboolean    deprecations)
 {
   GtkBuilder *builder;
   GError *error = NULL;
-  int ret;
+  gboolean ret;
   char *class_name = NULL;
   char *parent_name = NULL;
 
@@ -230,21 +235,22 @@ validate_file (const char *filename,
     ret = check_deprecations (builder, &error);
   g_object_unref (builder);
 
-  if (ret == 0)
+  if (!ret)
     {
       if (g_error_matches (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG) &&
           parse_template_error (error->message, &class_name, &parent_name))
         {
-          do_validate_template (filename, class_name, parent_name);
+          ret = validate_template (filename, class_name, parent_name, deprecations);
         }
       else
         {
           g_printerr ("%s\n", error->message);
-          return FALSE;
         }
+
+      g_error_free (error);
     }
 
-  return TRUE;
+  return ret;
 }
 
 void
