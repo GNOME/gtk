@@ -116,7 +116,7 @@ parse_template_error (const char   *message,
         *p = '\0';
     }
 
-  return TRUE;
+  return *class_name && *parent_name;
 }
 
 static gboolean
