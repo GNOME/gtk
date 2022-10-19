@@ -120,7 +120,103 @@ parse_template_error (const char   *message,
 }
 
 static gboolean
-validate_file (const char *filename)
+is_deprecated (GObject *object)
+{
+  const char *names[] = {
+    "GtkAppChooser",
+    "GtkAppChooserButton",
+    "GtkAppChooserDialog",
+    "GtkAppChooserWidget",
+    "GtkCellAreaBox",
+    "GtkCellAreaBoxContext",
+    "GtkCellArea",
+    "GtkCellEditable",
+    "GtkCellLayout",
+    "GtkCellRendererAccel",
+    "GtkCellRenderer",
+    "GtkCellRendererCombo",
+    "GtkCellRendererPixbuf",
+    "GtkCellRendererProgress",
+    "GtkCellRendererSpin",
+    "GtkCellRendererSpinner",
+    "GtkCellRendererText",
+    "GtkCellRendererToggle",
+    "GtkCellView",
+    "GtkComboBox",
+    "GtkComboBoxText",
+    "GtkEntryCompletion",
+    "GtkIconView",
+    "GtkListStore",
+    "GtkStyleContext",
+    "GtkTreeModel",
+    "GtkTreeModelFilter",
+    "GtkTreeModelSort",
+    "GtkTreePopover",
+    "GtkTreeSelection",
+    "GtkTreeSortable",
+    "GtkTreeStore",
+    "GtkTreeView",
+    "GtkTreeViewColumn",
+    NULL
+  };
+
+  return g_strv_contains (names, G_OBJECT_TYPE_NAME (object));
+}
+
+static const char *
+object_get_id (GObject *object)
+{
+  const char *name;
+
+  if (GTK_IS_BUILDABLE (object))
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
+  else
+    name = g_object_get_data (object, "gtk-builder-id");
+
+  if (g_str_has_prefix (name, "___"))
+    return NULL;
+
+  return name;
+}
+
+static gboolean
+check_deprecations (GtkBuilder  *builder,
+                    GError     **error)
+{
+  GSList *objects;
+  GString *s;
+
+  s = g_string_new ("");
+
+  objects = gtk_builder_get_objects (builder);
+  for (GSList *l = objects; l; l = l->next)
+    {
+      GObject *obj = l->data;
+
+      if (is_deprecated (obj))
+        {
+          if (s->len == 0)
+            g_string_append (s, "Deprecated types:\n");
+          g_string_append_printf (s, "%s", G_OBJECT_TYPE_NAME (obj));
+          if (object_get_id (obj))
+            g_string_append_printf (s, " (named '%s')", object_get_id (obj));
+          g_string_append (s, "\n");
+        }
+    }
+
+  g_slist_free (objects);
+
+  if (s->len > 0)
+    g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, s->str);
+
+  g_string_free (s, TRUE);
+
+  return *error == NULL;
+}
+
+static gboolean
+validate_file (const char *filename,
+               gboolean    deprecations)
 {
   GtkBuilder *builder;
   GError *error = NULL;
@@ -130,11 +226,13 @@ validate_file (const char *filename)
 
   builder = gtk_builder_new ();
   ret = gtk_builder_add_from_file (builder, filename, &error);
+  if (ret && deprecations)
+    ret = check_deprecations (builder, &error);
   g_object_unref (builder);
 
   if (ret == 0)
     {
-      if (g_error_matches (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG)  &&
+      if (g_error_matches (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG) &&
           parse_template_error (error->message, &class_name, &parent_name))
         {
           do_validate_template (filename, class_name, parent_name);
@@ -154,8 +252,10 @@ do_validate (int *argc, const char ***argv)
 {
   GError *error = NULL;
   char **filenames = NULL;
+  gboolean deprecations = FALSE;
   GOptionContext *context;
   const GOptionEntry entries[] = {
+    { "deprecations", 0, 0, G_OPTION_ARG_NONE, &deprecations, NULL, NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
@@ -178,7 +278,7 @@ do_validate (int *argc, const char ***argv)
 
   for (i = 0; filenames[i]; i++)
     {
-      if (!validate_file (filenames[i]))
+      if (!validate_file (filenames[i], deprecations))
         exit (1);
     }
 
