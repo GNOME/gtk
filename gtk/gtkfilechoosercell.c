@@ -31,6 +31,8 @@ struct _GtkFileChooserCell
 {
   GtkWidget parent_instance;
 
+  GFileInfo *item;
+  gboolean selected;
   guint position;
 };
 
@@ -44,6 +46,8 @@ G_DEFINE_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK_TYPE_WIDGET)
 enum
 {
   PROP_POSITION = 1,
+  PROP_SELECTED,
+  PROP_ITEM,
 };
 
 static void
@@ -126,6 +130,14 @@ gtk_file_chooser_cell_set_property (GObject      *object,
       self->position = g_value_get_uint (value);
       break;
 
+    case PROP_SELECTED:
+      self->selected = g_value_get_boolean (value);
+      break;
+
+    case PROP_ITEM:
+      self->item = g_value_get_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -144,6 +156,14 @@ gtk_file_chooser_cell_get_property (GObject    *object,
     {
     case PROP_POSITION:
       g_value_set_uint (value, self->position);
+      break;
+
+    case PROP_SELECTED:
+      g_value_set_boolean (value, self->selected);
+      break;
+
+    case PROP_ITEM:
+      g_value_set_object (value, self->item);
       break;
 
     default:
@@ -167,6 +187,16 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
                                    g_param_spec_uint ("position", NULL, NULL,
                                                       0, G_MAXUINT, 0,
                                                       GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_SELECTED,
+                                   g_param_spec_boolean ("selected", NULL, NULL,
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_ITEM,
+                                   g_param_spec_object ("item", NULL, NULL,
+                                                        G_TYPE_FILE_INFO,
+                                                        GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_css_name (widget_class, I_("filelistcell"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

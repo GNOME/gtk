@@ -159,6 +159,12 @@
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
         </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
         <child>
           <object class="GtkBox">
             <binding name="tooltip-text">
@@ -216,6 +222,12 @@
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
         </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
         <child>
           <object class="GtkInscription">
             <property name="hexpand">1</property>
@@ -259,6 +271,12 @@
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
         </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
@@ -300,6 +318,12 @@
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
         </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
@@ -339,6 +363,12 @@
       <object class="GtkFileChooserCell">
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
+        </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <child>
           <object class="GtkBox">
