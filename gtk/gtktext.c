@@ -4321,6 +4321,9 @@ gtk_text_enter_text (GtkText    *self,
   int tmp_pos;
   guint text_length;
 
+  gtk_text_history_begin_user_action (priv->history);
+  begin_change (self);
+
   priv->need_im_reset = FALSE;
 
   if (priv->selection_bound != priv->current_pos)
@@ -4338,6 +4341,9 @@ gtk_text_enter_text (GtkText    *self,
   tmp_pos = priv->current_pos;
   gtk_editable_insert_text (GTK_EDITABLE (self), str, strlen (str), &tmp_pos);
   gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
+
+  end_change (self);
+  gtk_text_history_end_user_action (priv->history);
 }
 
 /* All changes to priv->current_pos and priv->selection_bound
