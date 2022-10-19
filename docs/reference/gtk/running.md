@@ -92,8 +92,7 @@ Specifies a list of directories to search when GTK is looking for
 dynamically loaded objects such as input method modules and print
 backends. If the path to the dynamically loaded object is given as
 an absolute path name, then GTK loads it directly. Otherwise, GTK
-goes in turn through the directories in `GTK_PATH`, followed by
-the directory `.gtk-4.0` in the user's home directory, followed
+goes in turn through the directories in `GTK_PATH`, followed
 by the system default directory, which is `libdir/gtk-4.0/modules`.
 (If `GTK_EXE_PREFIX` is defined, `libdir` is `$GTK_EXE_PREFIX/lib`.
 Otherwise it is the libdir specified when GTK was configured, usually
