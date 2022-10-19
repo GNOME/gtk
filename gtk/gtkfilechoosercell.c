@@ -23,9 +23,15 @@
 
 #include "gtkprivate.h"
 #include "gtkbinlayout.h"
+#include "gtkdragsource.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
+#include "gtkicontheme.h"
+#include "gtklistitem.h"
+#include "gtkselectionmodel.h"
+#include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidget.h"
+#include "gtkfilechooserwidgetprivate.h"
 
 struct _GtkFileChooserCell
 {
@@ -49,6 +55,8 @@ enum
   PROP_SELECTED,
   PROP_ITEM,
 };
+
+#define ICON_SIZE 16
 
 static void
 popup_menu (GtkFileChooserCell *self,
@@ -91,10 +99,56 @@ file_chooser_cell_long_pressed (GtkEventController *controller,
   popup_menu (self, x, y);
 }
 
+static GdkContentProvider *
+drag_prepare_cb (GtkDragSource *source,
+                 double         x,
+                 double         y,
+                 gpointer       user_data)
+{
+  GdkContentProvider *provider;
+  GSList *selection;
+  GtkFileChooserWidget *impl;
+  GtkIconTheme *icon_theme;
+  GIcon *icon;
+  int scale;
+  GtkIconPaintable *paintable;
+  GtkFileChooserCell *self = user_data;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+
+  if (!self->selected)
+    {
+      gtk_selection_model_select_item (gtk_file_chooser_widget_get_selection_model (impl),
+                                       self->position, TRUE);
+    }
+
+  selection = gtk_file_chooser_widget_get_selected_files (impl);
+  if (!selection)
+    return NULL;
+
+  scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
+  icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
+
+  icon = _gtk_file_info_get_icon (self->item, ICON_SIZE, scale, icon_theme);
+
+  paintable = gtk_icon_theme_lookup_by_gicon (icon_theme,icon, ICON_SIZE, scale, GTK_TEXT_DIR_NONE, 0);
+
+  gtk_drag_source_set_icon (source, GDK_PAINTABLE (paintable), x, y);
+
+  provider = gdk_content_provider_new_typed (GDK_TYPE_FILE_LIST, selection);
+  g_slist_free_full (selection, g_object_unref);
+  g_object_unref (paintable);
+  g_object_unref (icon);
+
+  return provider;
+}
+
 static void
 gtk_file_chooser_cell_init (GtkFileChooserCell *self)
 {
   GtkGesture *gesture;
+  GtkDragSource *drag_source;
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
@@ -103,6 +157,10 @@ gtk_file_chooser_cell_init (GtkFileChooserCell *self)
 
   gesture = gtk_gesture_long_press_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (file_chooser_cell_long_pressed), NULL);
+
+  drag_source = gtk_drag_source_new ();
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (drag_source));
+  g_signal_connect (drag_source, "prepare", G_CALLBACK (drag_prepare_cb), self);
 }
 
 static void

@@ -29,7 +29,6 @@
 #include "gtkcolumnview.h"
 #include "gtkcolumnviewcolumn.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkdragsource.h"
 #include "gtkdroptarget.h"
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
@@ -40,7 +39,6 @@
 #include "gtkfilesystemmodel.h"
 #include "gtkfilethumbnail.h"
 #include "gtkgrid.h"
-#include "gtkicontheme.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
 #include "gtkmarshalers.h"
@@ -359,8 +357,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
                          "standard::target-uri"
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
-
-#define ICON_SIZE 16
 
 static void gtk_file_chooser_widget_iface_init       (GtkFileChooserIface        *iface);
 
