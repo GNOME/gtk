@@ -73,6 +73,10 @@
  * and accessed via [method@Gtk.Application.get_menu_by_id] which allows for
  * dynamic population of a part of the menu structure.
  *
+ * Note that automatic resource loading uses the resource base path
+ * that is set at construction time and will not work if the resource
+ * base path is changed at a later time.
+ *
  * It is also possible to provide the menubar manually using
  * [method@Gtk.Application.set_menubar].
  *
