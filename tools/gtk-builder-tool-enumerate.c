@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtkbuilderprivate.h"
 #include "gtk-builder-tool.h"
+#include "fake-scope.h"
 
 static const char *
 object_get_id (GObject *object)
@@ -42,15 +43,16 @@ object_get_id (GObject *object)
 void
 do_enumerate (int *argc, const char ***argv)
 {
+  FakeScope *scope;
   GtkBuilder *builder;
   GError *error = NULL;
   int ret;
   GSList *list, *l;
-  GObject *object;
-  const char *name;
+  gboolean callbacks = FALSE;
   char **filenames = NULL;
   GOptionContext *context;
   const GOptionEntry entries[] = {
+    { "callbacks", 0, 0, G_OPTION_ARG_NONE, &callbacks, "Also print callbacks", NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
@@ -59,7 +61,7 @@ do_enumerate (int *argc, const char ***argv)
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("List all named objects."));
+  g_option_context_set_summary (context, _("Print all named objects."));
 
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
@@ -83,6 +85,9 @@ do_enumerate (int *argc, const char ***argv)
     }
 
   builder = gtk_builder_new ();
+  scope = fake_scope_new ();
+  gtk_builder_set_scope (builder, GTK_BUILDER_SCOPE (scope));
+
   ret = gtk_builder_add_from_file (builder, filenames[0], &error);
 
   if (ret == 0)
@@ -91,11 +96,14 @@ do_enumerate (int *argc, const char ***argv)
       exit (1);
     }
 
+  if (callbacks)
+    g_print ("Objects:\n");
+
   list = gtk_builder_get_objects (builder);
   for (l = list; l; l = l->next)
     {
-      object = l->data;
-      name = object_get_id (object);
+      GObject *object = l->data;
+      const char *name = object_get_id (object);
       if (g_str_has_prefix (name, "___") && g_str_has_suffix (name, "___"))
         continue;
 
@@ -103,6 +111,27 @@ do_enumerate (int *argc, const char ***argv)
     }
   g_slist_free (list);
 
+  if (callbacks)
+    {
+      GPtrArray *names;
+      gboolean need_prefix = TRUE;
+
+      names = fake_scope_get_callbacks (scope);
+      for (int i = 0; i < names->len; i++)
+        {
+          const char *name = g_ptr_array_index (names, i);
+
+          if (need_prefix)
+            {
+              need_prefix = FALSE;
+              g_print ("\nCallbacks:\n");
+            }
+
+          g_print ("%s\n", name);
+        }
+    }
+
+  g_object_unref (scope);
   g_object_unref (builder);
 
   g_strfreev (filenames);
