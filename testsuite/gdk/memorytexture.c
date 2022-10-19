@@ -496,7 +496,7 @@ create_texture (GdkMemoryFormat  format,
         GdkPixbuf *pixbuf;
         GBytes *bytes;
 
-        bytes = gdk_texture_save_to_png_bytes (texture);
+        bytes = gdk_texture_save_to_tiff_bytes (texture);
         g_assert (bytes);
         g_object_unref (texture);
         stream = g_memory_input_stream_new_from_bytes (bytes);
