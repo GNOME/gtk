@@ -5328,7 +5328,7 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
   g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
 
   seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (gdk_device));
-  serial = _gdk_wayland_seat_get_implicit_grab_serial (GDK_SEAT (seat), NULL);
+  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL);
   wl_data_device_set_selection (seat->data_device, source, serial);
 }
 
