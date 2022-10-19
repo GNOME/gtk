@@ -7341,3 +7341,8 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
   return NULL;
 }
 
+GtkSelectionModel *
+gtk_file_chooser_widget_get_selection_model (GtkFileChooserWidget *chooser)
+{
+  return chooser->selection_model;
+}
