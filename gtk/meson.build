@@ -766,6 +766,10 @@ if not (x11_enabled or win32_enabled)
   gtk_sources += ['gtkmountoperation-stub.c', ]
 endif
 
+if not os_win32
+  gtk_sources += ['gopenuriportal.c', ]
+endif
+
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
 gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
   command: [
@@ -997,6 +1001,16 @@ typefuncs = custom_target('gtktypefuncs.inc',
   install: false,
 )
 
+if os_win32
+  xdp_dbus_generated = []
+else
+  xdp_dbus_generated = gnome.gdbus_codegen('xdp-dbus',
+    sources : 'org.freedesktop.portal.OpenURI.xml',
+    interface_prefix : 'org.freedesktop.portal.',
+    namespace : 'GXdp',
+  )
+endif
+
 gtkversion_cdata = configuration_data()
 gtkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 gtkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
@@ -1156,7 +1170,7 @@ darwin_versions = [
 
 # Library
 libgtk_static = static_library('gtk',
-  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
+  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h, xdp_dbus_generated],
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
   dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
