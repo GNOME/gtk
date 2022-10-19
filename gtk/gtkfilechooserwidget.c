@@ -476,8 +476,6 @@ static void location_switch_to_path_bar (GtkFileChooserWidget *impl);
 static void stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
                                                gboolean remove_from_treeview);
 
-static GSList  *get_selected_files           (GtkFileChooserWidget *impl);
-
 static void     search_setup_widgets         (GtkFileChooserWidget *impl);
 static void     search_stop_searching        (GtkFileChooserWidget *impl,
                                               gboolean               remove_query);
@@ -4638,7 +4636,7 @@ get_selected_files_as_model (GtkFileChooserWidget *impl)
   GSList *files, *l;
 
   store = g_list_store_new (G_TYPE_FILE);
-  files = get_selected_files (impl);
+  files = gtk_file_chooser_widget_get_selected_files (impl);
   for (l = files; l; l = l->next)
     g_list_store_append (store, l->data);
   g_slist_free_full (files, g_object_unref);
@@ -5635,8 +5633,8 @@ gtk_file_chooser_widget_initial_focus (GtkFileChooserWidget *impl)
   gtk_widget_grab_focus (widget);
 }
 
-static GSList *
-get_selected_files (GtkFileChooserWidget *impl)
+GSList *
+gtk_file_chooser_widget_get_selected_files (GtkFileChooserWidget *impl)
 {
   GtkBitsetIter iter;
   GtkBitset *bitset;
