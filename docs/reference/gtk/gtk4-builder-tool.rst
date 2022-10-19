@@ -12,7 +12,7 @@ SYNOPSIS
 --------
 |   **gtk4-builder-tool** <COMMAND> [OPTIONS...] <FILE>
 |
-|   **gtk4-builder-tool** validate <FILE>
+|   **gtk4-builder-tool** validate [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** enumerate <FILE>
 |   **gtk4-builder-tool** simplify [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** preview [OPTIONS...] <FILE>
@@ -32,6 +32,10 @@ Validation
 
 The ``validate`` command validates the given UI definition file and reports
 errors to ``stderr``.
+
+``--deprecations``
+
+  Warn about uses of deprecated types in the UI definition file.
 
 Enumeration
 ^^^^^^^^^^^
