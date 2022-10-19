@@ -114,7 +114,7 @@ encode (GdkMemoryFormat format,
   return GSIZE_TO_POINTER (method * GDK_MEMORY_N_FORMATS + format);
 }
 
-static void
+static gboolean
 decode (gconstpointer     data,
         GdkMemoryFormat *format,
         TextureMethod   *method)
@@ -125,8 +125,16 @@ decode (gconstpointer     data,
   value /= GDK_MEMORY_N_FORMATS;
 
   *method = value;
+
+  if (*method == TEXTURE_METHOD_TIFF_PIXBUF)
+    {
+      g_test_skip ("the pixbuf tiff loader is broken (gdk-pixbuf#100)");
+      return FALSE;
+    }
+
+  return TRUE;
 }
-        
+
 static void
 texture_builder_init (TextureBuilder  *builder,
                       GdkMemoryFormat  format,
@@ -496,7 +504,7 @@ create_texture (GdkMemoryFormat  format,
         GdkPixbuf *pixbuf;
         GBytes *bytes;
 
-        bytes = gdk_texture_save_to_png_bytes (texture);
+        bytes = gdk_texture_save_to_tiff_bytes (texture);
         g_assert (bytes);
         g_object_unref (texture);
         stream = g_memory_input_stream_new_from_bytes (bytes);
@@ -537,7 +545,8 @@ test_download_1x1 (gconstpointer data)
   GdkTexture *expected, *test;
   gsize i;
 
-  decode (data, &format, &method);
+  if (!decode (data, &format, &method))
+    return;
 
   for (i = 0; i < N; i++)
     {
@@ -562,7 +571,8 @@ test_download_4x4 (gconstpointer data)
   GdkTexture *expected, *test;
   gsize i;
 
-  decode (data, &format, &method);
+  if (!decode (data, &format, &method))
+    return;
 
   for (i = 0; i < N; i++)
     {
@@ -588,7 +598,8 @@ test_download_192x192 (gconstpointer data)
   GdkTexture *expected, *test;
   GdkRGBA color;
 
-  decode (data, &format, &method);
+  if (!decode (data, &format, &method))
+    return;
 
   create_random_color (&color);
   expected = create_texture (GDK_MEMORY_DEFAULT, TEXTURE_METHOD_LOCAL, 192, 192, &color);
