@@ -13,7 +13,7 @@ SYNOPSIS
 |   **gtk4-builder-tool** <COMMAND> [OPTIONS...] <FILE>
 |
 |   **gtk4-builder-tool** validate [OPTIONS...] <FILE>
-|   **gtk4-builder-tool** enumerate <FILE>
+|   **gtk4-builder-tool** enumerate [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** simplify [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** preview [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** screenshot [OPTIONS...] <FILE>
@@ -40,8 +40,12 @@ errors to ``stderr``.
 Enumeration
 ^^^^^^^^^^^
 
-The ``enumerate`` command lists all the named objects that are present in the UI
+The ``enumerate`` command prints all the named objects that are present in the UI
 definition file.
+
+``--callbacks``
+
+  Print the names of callbacks as well.
 
 Preview
 ^^^^^^^
