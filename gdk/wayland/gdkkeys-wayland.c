@@ -203,7 +203,7 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
         {
           const xkb_keysym_t *syms;
           int num_syms;
-          num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, hardware_keycode, layout, 0, &syms);
+          num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, hardware_keycode, layout, level, &syms);
           if (keys)
             {
               (*keys)[i].keycode = hardware_keycode;
