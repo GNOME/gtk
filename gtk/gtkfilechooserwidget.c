@@ -7003,9 +7003,17 @@ time_sort_func (gconstpointer a,
   glong time_a, time_b;
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
-    time_a = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)a, G_FILE_ATTRIBUTE_TIME_ACCESS);
+    {
+      time_a = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)a, G_FILE_ATTRIBUTE_TIME_ACCESS);
+      time_b = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)b, G_FILE_ATTRIBUTE_TIME_ACCESS);
+    }
+
   else
-    time_b = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)b, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+    {
+      time_a = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)a, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+      time_b = (glong) g_file_info_get_attribute_uint64 ((GFileInfo *)b, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+    }
+
 
   if (time_a < time_b)
     return GTK_ORDERING_SMALLER;
