@@ -3345,10 +3345,12 @@ bad things might happen.</property>
       <attribute name="display-hint">circular-buttons</attribute>
       <item>
         <attribute name="verb-icon">printer-symbolic</attribute>
+        <attribute name="label" translatable="yes">Print all the things!</attribute>
         <attribute name="action">win.print</attribute>
       </item>
       <item>
         <attribute name="verb-icon">emblem-shared-symbolic</attribute>
+        <attribute name="label" translatable="yes">Share all the things!</attribute>
         <attribute name="action">app.share</attribute>
       </item>
     </section>
@@ -3363,14 +3365,17 @@ bad things might happen.</property>
       <attribute name="label" translatable="yes">Edit</attribute>
       <item>
         <attribute name="verb-icon">edit-cut-symbolic</attribute>
+        <attribute name="label" translatable="yes">Cut</attribute>
         <attribute name="action">app.cut</attribute>
       </item>
       <item>
         <attribute name="verb-icon">edit-copy-symbolic</attribute>
+        <attribute name="label" translatable="yes">Copy</attribute>
         <attribute name="action">app.copy</attribute>
       </item>
       <item>
         <attribute name="verb-icon">edit-paste-symbolic</attribute>
+        <attribute name="label" translatable="yes">Paste</attribute>
         <attribute name="action">app.paste</attribute>
       </item>
     </section>
