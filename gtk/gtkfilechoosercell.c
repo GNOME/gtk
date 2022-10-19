@@ -40,6 +40,8 @@ struct _GtkFileChooserCell
   GFileInfo *item;
   gboolean selected;
   guint position;
+
+  gboolean show_time;
 };
 
 struct _GtkFileChooserCellClass
@@ -54,6 +56,7 @@ enum
   PROP_POSITION = 1,
   PROP_SELECTED,
   PROP_ITEM,
+  PROP_SHOW_TIME,
 };
 
 #define ICON_SIZE 16
@@ -145,6 +148,18 @@ drag_prepare_cb (GtkDragSource *source,
 }
 
 static void
+gtk_file_chooser_cell_realize (GtkWidget *widget)
+{
+  GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
+  GtkFileChooserWidget *impl;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
+                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
+
+  g_object_bind_property (impl, "show-time", self, "show-time", G_BINDING_SYNC_CREATE);
+}
+
+static void
 gtk_file_chooser_cell_init (GtkFileChooserCell *self)
 {
   GtkGesture *gesture;
@@ -161,6 +176,8 @@ gtk_file_chooser_cell_init (GtkFileChooserCell *self)
   drag_source = gtk_drag_source_new ();
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (drag_source));
   g_signal_connect (drag_source, "prepare", G_CALLBACK (drag_prepare_cb), self);
+
+  g_signal_connect (self, "realize", G_CALLBACK (gtk_file_chooser_cell_realize), NULL);
 }
 
 static void
@@ -196,6 +213,10 @@ gtk_file_chooser_cell_set_property (GObject      *object,
       self->item = g_value_get_object (value);
       break;
 
+    case PROP_SHOW_TIME:
+      self->show_time = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -222,6 +243,10 @@ gtk_file_chooser_cell_get_property (GObject    *object,
 
     case PROP_ITEM:
       g_value_set_object (value, self->item);
+      break;
+
+    case PROP_SHOW_TIME:
+      g_value_set_boolean (value, self->show_time);
       break;
 
     default:
@@ -255,6 +280,11 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
                                    g_param_spec_object ("item", NULL, NULL,
                                                         G_TYPE_FILE_INFO,
                                                         GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_SHOW_TIME,
+                                   g_param_spec_boolean ("show-time", NULL, NULL,
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_css_name (widget_class, I_("filelistcell"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

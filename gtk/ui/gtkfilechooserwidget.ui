@@ -360,7 +360,7 @@
 <interface>
   <template class="GtkListItem">
     <property name="child">
-      <object class="GtkFileChooserCell">
+      <object class="GtkFileChooserCell" id="file_chooser_cell">
         <binding name="position">
           <lookup name="position">GtkListItem</lookup>
         </binding>
@@ -389,9 +389,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <binding name="visible">
-                  <closure type="gboolean" function="column_view_get_time_visible" />
-                </binding>
+                <property name="visible" bind-source="file_chooser_cell" bind-property="show-time" bind-flags="sync-create"/>
                 <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_time">
                     <lookup name="item">GtkListItem</lookup>

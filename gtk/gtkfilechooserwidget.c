@@ -125,7 +125,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 enum {
   PROP_SEARCH_MODE = 1,
-  PROP_SUBTITLE
+  PROP_SUBTITLE,
+  PROP_SHOW_TIME,
 };
 
 typedef enum {
@@ -1539,6 +1540,7 @@ change_show_time_state (GSimpleAction *action,
 
   g_simple_action_set_state (action, state);
   impl->show_time = g_variant_get_boolean (state);
+  g_object_notify (G_OBJECT (impl), "show-time");
 }
 
 /* Shows an error dialog about not being able to select a dragged file */
@@ -2063,19 +2065,6 @@ column_view_get_size (GtkListItem *item,
     return g_format_size (g_file_info_get_size (info));
   else
     return NULL;
-}
-
-static gboolean
-column_view_get_time_visible (GtkListItem *item)
-{
-  GtkFileChooserWidget *impl;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
-    return FALSE;
-
-  return impl->show_time;
 }
 
 static char *
@@ -3016,6 +3005,10 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
     case PROP_SUBTITLE:
       g_value_take_string (value, gtk_file_chooser_widget_get_subtitle (impl));
+      break;
+
+    case PROP_SHOW_TIME:
+      g_value_set_boolean (value, impl->show_time);
       break;
 
     case GTK_FILE_CHOOSER_PROP_ACTION:
@@ -6710,6 +6703,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                                         "",
                                                         GTK_PARAM_READABLE));
 
+  g_object_class_install_property (gobject_class, PROP_SHOW_TIME,
+                                   g_param_spec_boolean ("show-time", NULL, NULL,
+                                                         FALSE,
+                                                         GTK_PARAM_READABLE));
+
   _gtk_file_chooser_install_properties (gobject_class);
 
   /* Bind class to template */
@@ -6772,7 +6770,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_type);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_time_visible);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_tooltip_text);
   gtk_widget_class_bind_template_callback (widget_class, column_view_row_activated_cb);
 
