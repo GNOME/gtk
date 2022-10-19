@@ -4388,7 +4388,7 @@ gtk_label_click_gesture_released (GtkGestureClick *gesture,
 
   if (info->in_drag)
     {
-      info->in_drag = 0;
+      info->in_drag = FALSE;
       get_layout_index (self, x, y, &index);
       gtk_label_select_region_index (self, index, index);
     }
@@ -4457,7 +4457,7 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
   state_mask = gdk_event_get_modifier_state (event);
 
   if ((info->selection_anchor != info->selection_end) &&
-      (state_mask & GDK_SHIFT_MASK))
+      ((state_mask & GDK_SHIFT_MASK) != 0))
     {
       if (index > min && index < max)
         {
@@ -4488,7 +4488,8 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
     {
       if (min < max && min <= index && index <= max)
         {
-          info->in_drag = TRUE;
+          if (!info->select_words)
+            info->in_drag = TRUE;
           info->drag_start_x = start_x;
           info->drag_start_y = start_y;
         }
