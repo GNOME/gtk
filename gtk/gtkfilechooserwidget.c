@@ -87,6 +87,10 @@
 #include "gtkshortcut.h"
 #include "gtkstringlist.h"
 
+#ifndef G_OS_WIN32
+#include "gopenuriportal.h"
+#endif
+
 #include <cairo-gobject.h>
 
 #ifdef HAVE_UNISTD_H
@@ -1442,6 +1446,10 @@ visit_file_cb (GSimpleAction *action,
   g_slist_free_full (files, g_object_unref);
 }
 
+#define FILE_MANAGER_DBUS_NAME "org.freedesktop.FileManager1"
+#define FILE_MANAGER_DBUS_IFACE "org.freedesktop.FileManager1"
+#define FILE_MANAGER_DBUS_PATH "/org/freedesktop/FileManager1"
+
 /* Callback used when the "Open this folder" menu item is activated */
 static void
 open_folder_cb (GSimpleAction *action,
@@ -1449,21 +1457,77 @@ open_folder_cb (GSimpleAction *action,
                 gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
-  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (impl)));
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (impl));
+  GtkWindow *toplevel = GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : NULL;
   GSList *files;
+  GFile *file;
+  char *uri;
 
   files = get_selected_files (impl);
 
+  if (!files)
+    return;
+
   /* Sigh, just use the first one */
-  if (files && GTK_IS_WINDOW (toplevel))
+  file = files->data;
+
+#ifdef G_OS_WIN32
+
+  uri = g_file_get_uri (file);
+  gtk_show_uri (toplevel, uri, GDK_CURRENT_TIME);
+  g_free (uri);
+
+#else
+
+  if (gdk_should_use_portal ())
     {
-      GFile *file = files->data;
-      char *uri;
+      g_openuri_portal_open_async (file, toplevel, NULL, NULL, NULL);
+    }
+  else
+    {
+      GDBusConnection *bus;
+      GVariantBuilder *uris_builder;
+      GVariant *result;
+      GError *error = NULL;
 
       uri = g_file_get_uri (file);
-      gtk_show_uri (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME);
+
+      bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+
+      uris_builder = g_variant_builder_new (G_VARIANT_TYPE ("as"));
+      g_variant_builder_add (uris_builder, "s", uri);
+
+      result = g_dbus_connection_call_sync (bus,
+                                   FILE_MANAGER_DBUS_NAME,
+                                   FILE_MANAGER_DBUS_PATH,
+                                   FILE_MANAGER_DBUS_IFACE,
+                                   "ShowFolders",
+                                   g_variant_new ("(ass)", uris_builder, ""),
+                                   NULL,   /* ignore returned type */
+                                   G_DBUS_CALL_FLAGS_NONE,
+                                   -1,
+                                   NULL,
+                                   &error);
+      if (error)
+        {
+          if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER) ||
+              g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
+            g_debug ("No " FILE_MANAGER_DBUS_NAME " available");
+          else
+            g_warning ("Failed to call ShowFolders: %s", error->message);
+
+          g_error_free (error);
+        }
+
+      if (result)
+        g_variant_unref (result);
+      else
+        gtk_show_uri (toplevel, uri, GDK_CURRENT_TIME);
+
       g_free (uri);
     }
+
+#endif
 
   g_slist_free_full (files, g_object_unref);
 }
