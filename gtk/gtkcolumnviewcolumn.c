@@ -706,7 +706,7 @@ gtk_column_view_column_set_title (GtkColumnViewColumn *self,
   self->title = g_strdup (title);
 
   if (self->header)
-    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+    gtk_column_view_title_set_title (GTK_COLUMN_VIEW_TITLE (self->header), title);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
 }
@@ -765,7 +765,7 @@ gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
   gtk_column_view_column_remove_from_sorter (self);
 
   if (self->header)
-    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+    gtk_column_view_title_update_sort (GTK_COLUMN_VIEW_TITLE (self->header));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
 }
@@ -790,7 +790,7 @@ void
 gtk_column_view_column_notify_sort (GtkColumnViewColumn *self)
 {
   if (self->header)
-    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+    gtk_column_view_title_update_sort (GTK_COLUMN_VIEW_TITLE (self->header));
 }
 
 /**
@@ -862,7 +862,7 @@ gtk_column_view_column_set_header_menu (GtkColumnViewColumn *self,
     return;
 
   if (self->header)
-    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+    gtk_column_view_title_set_menu (GTK_COLUMN_VIEW_TITLE (self->header), menu);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_MENU]);
 }

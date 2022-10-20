@@ -38,7 +38,12 @@ GType                   gtk_column_view_title_get_type          (void) G_GNUC_CO
 
 GtkWidget *             gtk_column_view_title_new               (GtkColumnViewColumn    *column);
 
-void                    gtk_column_view_title_update            (GtkColumnViewTitle     *self);
+void                    gtk_column_view_title_set_title         (GtkColumnViewTitle     *self,
+                                                                 const char             *title);
+void                    gtk_column_view_title_set_menu          (GtkColumnViewTitle     *self,
+                                                                 GMenuModel             *model);
+
+void                    gtk_column_view_title_update_sort       (GtkColumnViewTitle     *self);
 
 GtkColumnViewColumn *   gtk_column_view_title_get_column        (GtkColumnViewTitle     *self);
 
