@@ -56,6 +56,8 @@
  * [method@Gtk.TreeModelFilter.get_model]. Don’t forget to use
  * [method@Gtk.TreeModelFilter.convert_iter_to_child_iter] to obtain a
  * matching iter.
+ *
+ * Deprecated: 4.10
  */
 
 #include "config.h"
@@ -2028,7 +2030,7 @@ static gboolean
 check_completion_callback (GtkEntryCompletion *completion)
 {
   completion->check_completion_idle = NULL;
-  
+
   gtk_entry_completion_complete (completion);
   gtk_entry_completion_insert_prefix (completion);
 
