@@ -48,6 +48,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * renders that pixbuf, if the `GtkCellRenderer:is-expanded` property is %FALSE
  * and the `GtkCellRendererPixbuf:pixbuf-expander-closed` property is set to a
  * pixbuf, it renders that one.
+ *
+ * Deprecated: 4.10: List views use widgets to display their contents. You
+ *   should use [class@Gtk.Image] for icons, and [class@Gtk.Picture] for images
  */
 
 
@@ -321,13 +324,13 @@ take_image_definition (GtkCellRendererPixbuf *cellpixbuf,
 {
   GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   GtkImageType old_storage_type, new_storage_type;
-  
+
   if (def == NULL)
     def = gtk_image_definition_new_empty ();
 
   old_storage_type = gtk_image_definition_get_storage_type (priv->image_def);
   new_storage_type = gtk_image_definition_get_storage_type (def);
- 
+
   if (new_storage_type != old_storage_type)
     notify_storage_type (cellpixbuf, old_storage_type);
 
@@ -401,7 +404,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 
 /**
  * gtk_cell_renderer_pixbuf_new:
- * 
+ *
  * Creates a new `GtkCellRendererPixbuf`. Adjust rendering
  * parameters using object properties. Object properties can be set
  * globally (with g_object_set()). Also, with `GtkTreeViewColumn`, you
@@ -409,7 +412,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
  * can bind the “pixbuf” property on the cell renderer to a pixbuf value
  * in the model, thus rendering a different image in each row of the
  * `GtkTreeView`.
- * 
+ *
  * Returns: the new cell renderer
  *
  * Deprecated: 4.10
@@ -469,7 +472,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRendererPixbuf *self,
       pixbuf_height = gdk_paintable_get_intrinsic_height (paintable);
     }
   else
-    pixbuf_width = pixbuf_height = gtk_icon_helper_get_size (icon_helper); 
+    pixbuf_width = pixbuf_height = gtk_icon_helper_get_size (icon_helper);
 
   g_object_unref (icon_helper);
   gtk_style_context_restore (context);
@@ -488,7 +491,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRendererPixbuf *self,
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
   calc_width  = (int) xpad * 2 + pixbuf_width;
   calc_height = (int) ypad * 2 + pixbuf_height;
-  
+
   if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
       float xalign, yalign;
@@ -516,7 +519,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRendererPixbuf *self,
 
   if (width)
     *width = calc_width;
-  
+
   if (height)
     *height = calc_height;
 }
@@ -540,7 +543,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
 
   gtk_cell_renderer_pixbuf_get_size (cellpixbuf, widget,
                                      cell_area,
-				     &pix_rect.x, 
+				     &pix_rect.x,
                                      &pix_rect.y,
                                      &pix_rect.width,
                                      &pix_rect.height);

@@ -54,6 +54,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * at regular intervals. The usual way to set the cell renderer properties
  * for each cell is to bind them to columns in your tree model using e.g.
  * gtk_tree_view_column_add_attribute().
+ *
+ * Deprecated: 4.10: List views use widgets to display their contents.
+ *   You should use [class@Gtk.Spinner] instead
  */
 
 

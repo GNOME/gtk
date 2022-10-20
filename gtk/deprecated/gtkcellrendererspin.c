@@ -47,7 +47,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * of `GtkCellRendererSpin:digits` to display. Other `GtkSpinButton` properties
  * can be set in a handler for the `GtkCellRenderer::editing-started` signal.
  *
- * The `GtkCellRendererSpin` cell renderer was added in GTK 2.10.
+ * Deprecated: 4.10: List views use widgets to display their contents.
+ *   You should use [class@Gtk.SpinButton] instead
  */
 
 typedef struct _GtkCellRendererSpinClass   GtkCellRendererSpinClass;
@@ -122,7 +123,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
   /**
    * GtkCellRendererSpin:adjustment:
    *
-   * The adjustment that holds the value of the spinbutton. 
+   * The adjustment that holds the value of the spinbutton.
    * This must be non-%NULL for the cell renderer to be editable.
    */
   g_object_class_install_property (object_class,
@@ -141,7 +142,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 				   PROP_CLIMB_RATE,
 				   g_param_spec_double ("climb-rate", NULL, NULL,
 							0.0, G_MAXDOUBLE, 0.0,
-							GTK_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));
   /**
    * GtkCellRendererSpin:digits:
    *
@@ -151,7 +152,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 				   PROP_DIGITS,
 				   g_param_spec_uint ("digits", NULL, NULL,
 						      0, 20, 0,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY)); 
+						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void
@@ -366,7 +367,7 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 /**
  * gtk_cell_renderer_spin_new:
  *
- * Creates a new `GtkCellRendererSpin`. 
+ * Creates a new `GtkCellRendererSpin`.
  *
  * Returns: a new `GtkCellRendererSpin`
  *

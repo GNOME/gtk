@@ -35,7 +35,7 @@
  * Usually users dont have to interact with the `GtkCellArea` directly
  * unless they are implementing a cell-layouting widget themselves.
  *
- * # Requesting area sizes
+ * ## Requesting area sizes
  *
  * As outlined in
  * [GtkWidget’s geometry management section](class.Widget.html#height-for-width-geometry-management),
@@ -186,7 +186,7 @@
  * values while more and more height is required for the row heights
  * that are calculated in the background.
  *
- * # Rendering Areas
+ * ## Rendering Areas
  *
  * Once area sizes have been acquired at least for the rows in the
  * visible area of the layouting widget they can be rendered at
@@ -227,7 +227,7 @@
  * would make sense to calculate the allocation for each row at
  * the time the widget is allocated using [func@Gtk.distribute_natural_allocation].
  *
- * # Handling Events and Driving Keyboard Focus
+ * ## Handling Events and Driving Keyboard Focus
  *
  * Passing events to the area is as simple as handling events on any
  * normal widget and then passing them to the [method@Gtk.CellArea.event]
@@ -316,7 +316,7 @@
  * Note that the layouting widget is responsible for matching the
  * `GtkDirectionType` values to the way it lays out its cells.
  *
- * # Cell Properties
+ * ## Cell Properties
  *
  * The `GtkCellArea` introduces cell properties for `GtkCellRenderer`s.
  * This provides some general interfaces for defining the relationship
@@ -335,6 +335,9 @@
  * [method@Gtk.CellArea.cell_set] or [method@Gtk.CellArea.cell_set_valist]. To obtain
  * the value of a cell property, use [method@Gtk.CellArea.cell_get_property]
  * [method@Gtk.CellArea.cell_get] or [method@Gtk.CellArea.cell_get_valist].
+ *
+ * Deprecated: 4.10: List views use widgets for displaying their
+ *   contents
  */
 
 #include "config.h"

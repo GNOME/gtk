@@ -42,6 +42,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * button is drawn as a radio or a checkbutton, depending on the
  * `GtkCellRendererToggle:radio` property.
  * When activated, it emits the `GtkCellRendererToggle::toggled` signal.
+ *
+ * Deprecated: 4.10: List views use widgets to display their contents.
+ *   You should use [class@Gtk.ToggleButton] instead
  */
 
 
@@ -190,7 +193,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   cell_class->get_preferred_height = gtk_cell_renderer_toggle_get_preferred_height;
   cell_class->snapshot = gtk_cell_renderer_toggle_snapshot;
   cell_class->activate = gtk_cell_renderer_toggle_activate;
-  
+
   g_object_class_install_property (object_class,
 				   PROP_ACTIVE,
 				   g_param_spec_boolean ("active", NULL, NULL,
@@ -202,7 +205,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 				   g_param_spec_boolean ("inconsistent", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   g_object_class_install_property (object_class,
 				   PROP_ACTIVATABLE,
 				   g_param_spec_boolean ("activatable", NULL, NULL,
@@ -215,14 +218,14 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  
+
   /**
    * GtkCellRendererToggle::toggled:
    * @cell_renderer: the object which received the signal
-   * @path: string representation of `GtkTreePath` describing the 
+   * @path: string representation of `GtkTreePath` describing the
    *        event location
    *
-   * The ::toggled signal is emitted when the cell is toggled. 
+   * The ::toggled signal is emitted when the cell is toggled.
    *
    * It is the responsibility of the application to update the model
    * with the correct value to store at @path.  Often this is simply the
@@ -467,7 +470,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
 
   if (priv->inconsistent)
     state |= GTK_STATE_FLAG_INCONSISTENT;
-  
+
   if (priv->active)
     state |= GTK_STATE_FLAG_CHECKED;
 
@@ -528,7 +531,7 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
  * gtk_cell_renderer_toggle_set_radio:
  * @toggle: a `GtkCellRendererToggle`
  * @radio: %TRUE to make the toggle look like a radio button
- * 
+ *
  * If @radio is %TRUE, the cell renderer renders a radio toggle
  * (i.e. a toggle in a group of mutually-exclusive toggles).
  * If %FALSE, it renders a check toggle (a standalone boolean option).
@@ -554,8 +557,8 @@ gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
  * gtk_cell_renderer_toggle_get_radio:
  * @toggle: a `GtkCellRendererToggle`
  *
- * Returns whether we’re rendering radio toggles rather than checkboxes. 
- * 
+ * Returns whether we’re rendering radio toggles rather than checkboxes.
+ *
  * Returns: %TRUE if we’re rendering radio toggles rather than checkboxes
  *
  * Deprecated: 4.10

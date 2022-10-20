@@ -24,7 +24,7 @@
  * want to provide a `GtkTreeViewColumn` like API for packing cells,
  * setting attributes and data funcs.
  *
- * One of the notable features provided by implementations of 
+ * One of the notable features provided by implementations of
  * `GtkCellLayout` are attributes. Attributes let you set the properties
  * in flexible ways. They can just be set to constant values like regular
  * properties. But they can also be mapped to a column of the underlying
@@ -34,7 +34,7 @@
  * gtk_cell_layout_set_cell_data_func() that is called to determine the
  * value of the attribute for each cell that is rendered.
  *
- * # GtkCellLayouts as GtkBuildable
+ * ## GtkCellLayouts as GtkBuildable
  *
  * Implementations of GtkCellLayout which also implement the GtkBuildable
  * interface (`GtkCellView`, `GtkIconView`, `GtkComboBox`,
@@ -78,7 +78,7 @@
  * </object>
  * ```
  *
- * # Subclassing GtkCellLayout implementations
+ * ## Subclassing GtkCellLayout implementations
  *
  * When subclassing a widget that implements `GtkCellLayout` like
  * `GtkIconView` or `GtkComboBox`, there are some considerations related
@@ -126,6 +126,9 @@
  * to support alternative cell areas, you can do so by moving the
  * problematic calls out of `init()` and into a `constructor()`
  * for your class.
+ *
+ * Deprecated: 4.10: List views use widgets to display their contents.
+ *   See [class@Gtk.LayoutManager] for layout manager delegate objects
  */
 
 #include "config.h"
@@ -281,8 +284,8 @@ gtk_cell_layout_default_set_cell_data_func (GtkCellLayout         *cell_layout,
       area = iface->get_area (cell_layout);
 
       if (area)
-	_gtk_cell_area_set_cell_data_func_with_proxy (area, cell, 
-						      (GFunc)func, func_data, destroy, 
+	_gtk_cell_area_set_cell_data_func_with_proxy (area, cell,
+						      (GFunc)func, func_data, destroy,
 						      cell_layout);
       else
 	warn_no_cell_area ("GtkCellLayoutIface->set_cell_data_func()");
@@ -446,7 +449,7 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
  * @cell: a `GtkCellRenderer`
  * @...: a %NULL-terminated list of attributes
  *
- * Sets the attributes in the parameter list as the attributes 
+ * Sets the attributes in the parameter list as the attributes
  * of @cell_layout.
  *
  * See [method@Gtk.CellLayout.add_attribute] for more details.
@@ -531,7 +534,7 @@ gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
   g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
-  GTK_CELL_LAYOUT_GET_IFACE 
+  GTK_CELL_LAYOUT_GET_IFACE
     (cell_layout)->set_cell_data_func (cell_layout, cell, func, func_data, destroy);
 }
 
@@ -619,7 +622,7 @@ gtk_cell_layout_get_area (GtkCellLayout *cell_layout)
 
   g_return_val_if_fail (GTK_IS_CELL_LAYOUT (cell_layout), NULL);
 
-  iface = GTK_CELL_LAYOUT_GET_IFACE (cell_layout);  
+  iface = GTK_CELL_LAYOUT_GET_IFACE (cell_layout);
   if (iface->get_area)
     return iface->get_area (cell_layout);
 
