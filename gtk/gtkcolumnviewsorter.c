@@ -24,6 +24,8 @@
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtktypebuiltins.h"
 
+/* {{{ GObject implementation */
+
 typedef struct
 {
   GtkColumnViewColumn *column;
@@ -31,7 +33,7 @@ typedef struct
   gboolean   inverted;
   gulong     changed_id;
 } Sorter;
- 
+
 static void
 free_sorter (gpointer data)
 {
@@ -43,12 +45,60 @@ free_sorter (gpointer data)
   g_free (s);
 }
 
+/**
+ * GtkColumnViewSorter:
+ *
+ * `GtkColumnViewSorter` is a sorter implementation that
+ * is geared towards the needs of `GtkColumnView`.
+ *
+ * The sorter returned by [method@Gtk.ColumnView.get_sorter] is
+ * a `GtkColumnViewSorter`.
+ *
+ * In column views, sorting can be configured by associating
+ * sorters with columns, and users can invert sort order by clicking
+ * on column headers. The API of `GtkColumnViewSorter` is designed
+ * to allow saving and restoring this configuration.
+ *
+ * If you are only interested in the primary sort column (i.e. the
+ * column where a sort indicator is shown in the header), then
+ * you can just look at [property@Gtk.ColumnViewSorter:primary-sort-column]
+ * and [property@Gtk.ColumnViewSorter:primary-sort-order].
+ *
+ * If you want to store the full sort configuration, including
+ * secondary sort columns that are used for tie breaking, then
+ * you can use [method@Gtk.ColumnViewSorter.get_nth_sort_column].
+ * To get notified about changes, use [signal@Gtk.Sorter::changed].
+ *
+ * To restore a saved sort configuration on a `GtkColumnView`,
+ * use code like:
+ *
+ * ```
+ * sorter = gtk_column_view_get_sorter (view);
+ * for (i = gtk_column_view_sorter_get_n_sort_columns (sorter) - 1; i >= 0; i--)
+ *   {
+ *     column = gtk_column_view_sorter_get_nth_sort_column (sorter, i, &order);
+ *     gtk_column_view_sort_by_column (view, column, order);
+ *   }
+ * ```
+ *
+ * `GtkColumnViewSorter` was added in GTK 4.10
+ */
 struct _GtkColumnViewSorter
 {
   GtkSorter parent_instance;
 
   GSequence *sorters;
 };
+
+enum
+{
+  PROP_PRIMARY_SORT_COLUMN = 1,
+  PROP_PRIMARY_SORT_ORDER,
+
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (GtkColumnViewSorter, gtk_column_view_sorter, GTK_TYPE_SORTER)
 
@@ -128,6 +178,30 @@ gtk_column_view_sorter_dispose (GObject *object)
 }
 
 static void
+gtk_column_view_sorter_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkColumnViewSorter *self = GTK_COLUMN_VIEW_SORTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_PRIMARY_SORT_COLUMN:
+      g_value_set_object (value, gtk_column_view_sorter_get_primary_sort_column (self));
+      break;
+
+    case PROP_PRIMARY_SORT_ORDER:
+      g_value_set_enum (value, gtk_column_view_sorter_get_primary_sort_order (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_column_view_sorter_class_init (GtkColumnViewSorterClass *class)
 {
   GtkSorterClass *sorter_class = GTK_SORTER_CLASS (class);
@@ -137,6 +211,41 @@ gtk_column_view_sorter_class_init (GtkColumnViewSorterClass *class)
   sorter_class->get_order = gtk_column_view_sorter_get_order;
 
   object_class->dispose = gtk_column_view_sorter_dispose;
+  object_class->get_property = gtk_column_view_sorter_get_property;
+
+  /**
+   * GtkColumnViewSorter:primary-sort-column: (attributes org.gtk.Property.get=gtk_column_view_sorter_get_primary_sort_column)
+   *
+   * The primary sort column.
+   *
+   * The primary sort column is the one that displays the triangle
+   * in a column view header.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_PRIMARY_SORT_COLUMN] =
+    g_param_spec_object ("primary-sort-column", NULL, NULL,
+                         GTK_TYPE_COLUMN_VIEW_COLUMN,
+                         G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewSorter:primary-sort-order: (attributes org.gtk.Property.get=gtk_column_view_sorter_get_primary_sort_order)
+   *
+   * The primary sort order.
+   *
+   * The primary sort order determines whether the triangle displayed
+   * in the column view header of the primary sort column points upwards
+   * or downwards.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_PRIMARY_SORT_ORDER] =
+    g_param_spec_enum ("primary-sort-order", NULL, NULL,
+                       GTK_TYPE_SORT_TYPE,
+                       GTK_SORT_ASCENDING,
+                       G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }
 
 static void
@@ -144,6 +253,9 @@ gtk_column_view_sorter_init (GtkColumnViewSorter *self)
 {
   self->sorters = g_sequence_new (free_sorter);
 }
+
+/* }}} */
+/* {{{ Private API */
 
 GtkColumnViewSorter *
 gtk_column_view_sorter_new (void)
@@ -214,14 +326,17 @@ gtk_column_view_sorter_add_column (GtkColumnViewSorter *self,
   s->sorter = g_object_ref (sorter);
   s->changed_id = g_signal_connect (sorter, "changed", G_CALLBACK (gtk_column_view_sorter_changed_cb), self);
   s->inverted = FALSE;
- 
+
   g_sequence_insert_before (iter, s);
 
   /* notify the previous first column to stop drawing an arrow */
   if (first)
     gtk_column_view_column_notify_sort (first->column);
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_COLUMN]);
 out:
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_ORDER]);
+
   gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
 
   gtk_column_view_column_notify_sort (column);
@@ -238,6 +353,9 @@ gtk_column_view_sorter_remove_column (GtkColumnViewSorter *self,
 
   if (remove_column (self, column))
     {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_COLUMN]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_ORDER]);
+
       gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
       gtk_column_view_column_notify_sort (column);
       return TRUE;
@@ -256,7 +374,7 @@ gtk_column_view_sorter_set_column (GtkColumnViewSorter *self,
 
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), FALSE);
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column), FALSE);
-  
+
   sorter = gtk_column_view_column_get_sorter (column);
   if (sorter == NULL)
     return FALSE;
@@ -271,8 +389,11 @@ gtk_column_view_sorter_set_column (GtkColumnViewSorter *self,
   s->sorter = g_object_ref (sorter);
   s->changed_id = g_signal_connect (sorter, "changed", G_CALLBACK (gtk_column_view_sorter_changed_cb), self);
   s->inverted = inverted;
- 
+
   g_sequence_prepend (self->sorters, s);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_COLUMN]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_ORDER]);
 
   gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
 
@@ -302,6 +423,9 @@ gtk_column_view_sorter_clear (GtkColumnViewSorter *self)
 
   g_sequence_remove_range (iter, g_sequence_get_end_iter (self->sorters));
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_COLUMN]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIMARY_SORT_ORDER]);
+
   gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
 
   gtk_column_view_column_notify_sort (column);
@@ -328,3 +452,140 @@ gtk_column_view_sorter_get_sort_column (GtkColumnViewSorter *self,
 
   return s->column;
 }
+
+/* }}} */
+/* {{{ Public API */
+
+/**
+ * gtk_column_view_sorter_get_primary_sort_column:
+ * @self: a `GtkColumnViewSorter`
+ *
+ * Returns the primary sort column.
+ *
+ * The primary sort column is the one that displays the triangle
+ * in a column view header.
+ *
+ * Returns: (nullable) (transfer none): the primary sort column
+ *
+ * Since: 4.10
+ */
+GtkColumnViewColumn *
+gtk_column_view_sorter_get_primary_sort_column (GtkColumnViewSorter *self)
+{
+  GSequenceIter *iter;
+  Sorter *s;
+
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), NULL);
+
+  iter = g_sequence_get_begin_iter (self->sorters);
+  if (g_sequence_iter_is_end (iter))
+    return NULL;
+
+  s = g_sequence_get (iter);
+
+  return s->column;
+}
+
+/**
+ * gtk_column_view_sorter_get_primary_sort_order:
+ * @self: a `GtkColumnViewSorter`
+ *
+ * Returns the primary sort order.
+ *
+ * The primary sort order determines whether the triangle displayed
+ * in the column view header of the primary sort column points upwards
+ * or downwards.
+ *
+ * If there is no primary sort column, then this function returns
+ * `GTK_SORT_ASCENDING`.
+ *
+ * Returns: the primary sort order
+ *
+ * Since: 4.10
+ */
+GtkSortType
+gtk_column_view_sorter_get_primary_sort_order (GtkColumnViewSorter *self)
+{
+  GSequenceIter *iter;
+  Sorter *s;
+
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), GTK_SORT_ASCENDING);
+
+  iter = g_sequence_get_begin_iter (self->sorters);
+  if (g_sequence_iter_is_end (iter))
+    return GTK_SORT_ASCENDING;
+
+  s = g_sequence_get (iter);
+
+  return s->inverted ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
+}
+
+/**
+ * gtk_column_view_sorter_get_n_sort_columns:
+ * @self: a `GtkColumnViewSorter`
+ *
+ * Returns the number of columns by which the sorter sorts.
+ *
+ * If the sorter of the primary sort column does not determine
+ * a total order, then the secondary sorters are consulted to
+ * break the ties.
+ *
+ * Use the [signal@Gtk.Sorter::changed] signal to get notified
+ * when the number of sort columns changes.
+ *
+ * Returns: the number of sort columns
+ *
+ * Since: 4.10
+ */
+guint
+gtk_column_view_sorter_get_n_sort_columns (GtkColumnViewSorter *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), 0);
+
+  return (guint) g_sequence_get_length (self->sorters);
+}
+
+/**
+ * gtk_column_view_sorter_get_nth_sort_column:
+ * @self: a `GtkColumnViewSorter`
+ * @position: the position of the sort column to retrieve (0 for the
+ *     primary sort column)
+ * @sort_order: (out): return location for the sort order
+ *
+ * Gets the @position'th sort column and its associated sort order.
+ *
+ * Use the [signal@Gtk.Sorter::changed] signal to get notified
+ * when sort columns change.
+ *
+ * Returns: (nullable) (transfer none): the @positions sort column
+ *
+ * Since: 4.10
+ */
+GtkColumnViewColumn *
+gtk_column_view_sorter_get_nth_sort_column (GtkColumnViewSorter *self,
+                                            guint                position,
+                                            GtkSortType         *sort_order)
+{
+  GSequenceIter *iter;
+  Sorter *s;
+
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), NULL);
+
+  iter = g_sequence_get_iter_at_pos (self->sorters, (int) position);
+
+  if (g_sequence_iter_is_end (iter))
+    {
+      *sort_order = GTK_SORT_ASCENDING;
+      return NULL;
+    }
+
+  s = g_sequence_get (iter);
+
+  *sort_order = s->inverted ? GTK_SORT_DESCENDING : GTK_SORT_ASCENDING;
+
+  return s->column;
+}
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
