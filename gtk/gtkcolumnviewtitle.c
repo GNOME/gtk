@@ -189,15 +189,15 @@ activate_sort (GtkColumnViewTitle *self)
 {
   GtkSorter *sorter;
   GtkColumnView *view;
-  GtkColumnViewSorter *view_sorter;
+  GtkSorter *view_sorter;
 
   sorter = gtk_column_view_column_get_sorter (self->column);
   if (sorter == NULL)
     return;
 
   view = gtk_column_view_column_get_column_view (self->column);
-  view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
-  gtk_column_view_sorter_add_column (view_sorter, self->column);
+  view_sorter = gtk_column_view_get_sorter (view);
+  gtk_column_view_sorter_activate_column (view_sorter, self->column);
 }
 
 static void
@@ -291,29 +291,35 @@ gtk_column_view_title_new (GtkColumnViewColumn *column)
 void
 gtk_column_view_title_update (GtkColumnViewTitle *self)
 {
-  GtkSorter *sorter;
-  GtkColumnView *view;
-  GtkColumnViewSorter *view_sorter;
-  gboolean inverted;
-  GtkColumnViewColumn *active;
+  GtkInvertibleSorter *sorter;
 
   gtk_label_set_label (GTK_LABEL (self->title), gtk_column_view_column_get_title (self->column));
 
-  sorter = gtk_column_view_column_get_sorter (self->column);
+  sorter = gtk_column_view_column_get_invertible_sorter (self->column);
 
   if (sorter)
     {
+      GtkColumnView *view;
+      GtkSorter *view_sorter;
+      GtkInvertibleSorter *active = NULL;
+      GtkSortType direction = GTK_SORT_ASCENDING;
+
       view = gtk_column_view_column_get_column_view (self->column);
-      view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
-      active = gtk_column_view_sorter_get_sort_column (view_sorter, &inverted);
+      view_sorter = gtk_column_view_get_sorter (view);
+      if (g_list_model_get_n_items (G_LIST_MODEL (view_sorter)) > 0)
+        {
+          active = g_list_model_get_item (G_LIST_MODEL (view_sorter), 0);
+          g_object_unref (active);
+          direction = gtk_invertible_sorter_get_sort_order (active);
+        }
 
       gtk_widget_show (self->sort);
       gtk_widget_remove_css_class (self->sort, "ascending");
       gtk_widget_remove_css_class (self->sort, "descending");
       gtk_widget_remove_css_class (self->sort, "unsorted");
-      if (self->column != active)
+      if (sorter != active)
         gtk_widget_add_css_class (self->sort, "unsorted");
-      else if (inverted)
+      else if (direction == GTK_SORT_DESCENDING)
         gtk_widget_add_css_class (self->sort, "descending");
       else
         gtk_widget_add_css_class (self->sort, "ascending");

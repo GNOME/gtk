@@ -31,7 +31,7 @@
 #include "gtkrbtreeprivate.h"
 #include "gtksizegroup.h"
 #include "gtkwidgetprivate.h"
-#include "gtksorter.h"
+#include "gtkinvertiblesorter.h"
 
 /**
  * GtkColumnViewColumn:
@@ -56,7 +56,7 @@ struct _GtkColumnViewColumn
 
   GtkListItemFactory *factory;
   char *title;
-  GtkSorter *sorter;
+  GtkInvertibleSorter *invertible_sorter;
 
   /* data for the view */
   GtkColumnView *view;
@@ -114,7 +114,7 @@ gtk_column_view_column_dispose (GObject *object)
   g_assert (self->first_cell == NULL); /* no view = no children */
 
   g_clear_object (&self->factory);
-  g_clear_object (&self->sorter);
+  g_clear_object (&self->invertible_sorter);
   g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->menu);
 
@@ -144,7 +144,7 @@ gtk_column_view_column_get_property (GObject    *object,
       break;
 
     case PROP_SORTER:
-      g_value_set_object (value, self->sorter);
+      g_value_set_object (value, gtk_column_view_column_get_sorter (self));
       break;
 
     case PROP_VISIBLE:
@@ -699,24 +699,13 @@ gtk_column_view_column_get_title (GtkColumnViewColumn *self)
   return self->title;
 }
 
-#if 0
-static void
-gtk_column_view_column_add_to_sorter (GtkColumnViewColumn *self)
-{
-  if (self->view == NULL)
-    return;
-  
-  gtk_column_view_sorter_add_column (GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (self->view)), self);
-}
-#endif
-
 static void
 gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
 {
   if (self->view == NULL)
     return;
   
-  gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (self->view)), self);
+  gtk_column_view_sorter_remove_column (gtk_column_view_get_sorter (self->view), self);
 }
 
 /**
@@ -742,8 +731,24 @@ gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
   g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
 
-  if (!g_set_object (&self->sorter, sorter))
+  if (self->invertible_sorter == NULL && sorter == NULL)
     return;
+
+  if (self->invertible_sorter != NULL &&
+      sorter == gtk_invertible_sorter_get_sorter (self->invertible_sorter))
+    return;
+
+  if (sorter)
+    {
+      if (!self->invertible_sorter)
+        {
+          self->invertible_sorter = gtk_invertible_sorter_new (NULL);
+          g_object_set_data (G_OBJECT (self->invertible_sorter), "column", self);
+        }
+      gtk_invertible_sorter_set_sorter (self->invertible_sorter, sorter);
+    }
+  else
+    g_clear_object (&self->invertible_sorter);
 
   gtk_column_view_column_remove_from_sorter (self);
 
@@ -766,7 +771,10 @@ gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)
 {
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
 
-  return self->sorter;
+  if (self->invertible_sorter)
+    return gtk_invertible_sorter_get_sorter (self->invertible_sorter);
+
+  return NULL;
 }
 
 void
@@ -1015,3 +1023,11 @@ gtk_column_view_column_get_header_allocation (GtkColumnViewColumn *self,
   if (size)
     *size = self->allocation_size;
 }
+
+
+GtkInvertibleSorter *
+gtk_column_view_column_get_invertible_sorter (GtkColumnViewColumn *self)
+{
+  return self->invertible_sorter;
+}
+

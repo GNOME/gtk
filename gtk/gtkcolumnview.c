@@ -27,6 +27,7 @@
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
+#include "gtkmultisorter.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtklistviewprivate.h"
@@ -1303,7 +1304,7 @@ gtk_column_view_init (GtkColumnView *self)
   g_signal_connect (controller, "leave", G_CALLBACK (gtk_column_view_drag_leave), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  self->sorter = GTK_SORTER (gtk_column_view_sorter_new ());
+  self->sorter = GTK_SORTER (gtk_multi_sorter_new ());
   self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (g_object_new (GTK_TYPE_COLUMN_LIST_VIEW, NULL));
   gtk_list_view_set_factory (self->listview, GTK_LIST_ITEM_FACTORY (self->factory));
@@ -1537,7 +1538,7 @@ gtk_column_view_remove_column (GtkColumnView       *self,
         break;
     }
 
-  gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (self->sorter), column);
+  gtk_column_view_sorter_remove_column (self->sorter, column);
   gtk_column_view_column_set_column_view (column, NULL);
   g_list_store_remove (self->columns, i);
 }
@@ -1699,11 +1700,9 @@ gtk_column_view_sort_by_column (GtkColumnView       *self,
   g_return_if_fail (column == NULL || gtk_column_view_column_get_column_view (column) == self);
 
   if (column == NULL)
-    gtk_column_view_sorter_clear (GTK_COLUMN_VIEW_SORTER (self->sorter));
+    gtk_column_view_sorter_clear (self->sorter);
   else
-    gtk_column_view_sorter_set_column (GTK_COLUMN_VIEW_SORTER (self->sorter),
-                                       column,
-                                       direction == GTK_SORT_DESCENDING);
+    gtk_column_view_sorter_set_column (self->sorter, column, direction);
 }
 
 /**

@@ -30,28 +30,19 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_COLUMN_VIEW_SORTER             (gtk_column_view_sorter_get_type ())
+void      gtk_column_view_sorter_activate_column (GtkSorter           *self,
+                                                  GtkColumnViewColumn *column);
+void      gtk_column_view_sorter_remove_column   (GtkSorter           *self,
+                                                  GtkColumnViewColumn *column);
 
-G_DECLARE_FINAL_TYPE (GtkColumnViewSorter, gtk_column_view_sorter, GTK, COLUMN_VIEW_SORTER, GtkSorter)
+void      gtk_column_view_sorter_clear           (GtkSorter           *self);
 
-GtkColumnViewSorter *   gtk_column_view_sorter_new              (void);
-
-gboolean                gtk_column_view_sorter_add_column       (GtkColumnViewSorter    *self,
-                                                                 GtkColumnViewColumn    *column);
-gboolean                gtk_column_view_sorter_remove_column    (GtkColumnViewSorter    *self,
-                                                                 GtkColumnViewColumn    *column);
-
-void                    gtk_column_view_sorter_clear            (GtkColumnViewSorter    *self);
-
-GtkColumnViewColumn *   gtk_column_view_sorter_get_sort_column  (GtkColumnViewSorter    *self,
-                                                                 gboolean               *inverted);
-
-gboolean   gtk_column_view_sorter_set_column    (GtkColumnViewSorter *self,
-                                                 GtkColumnViewColumn *column,
-                                                 gboolean             inverted);
+void      gtk_column_view_sorter_set_column      (GtkSorter           *self,
+                                                  GtkColumnViewColumn *column,
+                                                  GtkSortType          direction);
 
 
 G_END_DECLS
 
-#endif /* __GTK_SORTER_H__ */
+#endif /* __GTK_COLUMN_VIEW_SORTER_H__ */
 

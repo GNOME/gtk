@@ -23,6 +23,7 @@
 #include "gtk/gtkcolumnviewcolumn.h"
 
 #include "gtk/gtkcolumnviewcellprivate.h"
+#include "gtk/gtkinvertiblesorter.h"
 
 
 void                    gtk_column_view_column_set_column_view          (GtkColumnViewColumn    *self,
@@ -56,5 +57,7 @@ void                    gtk_column_view_column_set_header_position      (GtkColu
 void                    gtk_column_view_column_get_header_allocation    (GtkColumnViewColumn    *self,
                                                                          int                    *offset,
                                                                          int                    *size);
+
+GtkInvertibleSorter *   gtk_column_view_column_get_invertible_sorter    (GtkColumnViewColumn *self);
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */
