@@ -192,57 +192,57 @@ struct _GtkTreeModelIface
 
 
 /* GtkTreePath operations */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_new              (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_new_from_string  (const char        *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_new_from_indices (int                first_index,
 					     ...);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_new_from_indicesv (int              *indices,
 					      gsize             length);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 char        *gtk_tree_path_to_string        (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_new_first        (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void         gtk_tree_path_append_index     (GtkTreePath       *path,
 					     int                index_);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
 					     int                index_);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int          gtk_tree_path_get_depth        (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int         *gtk_tree_path_get_indices      (GtkTreePath       *path);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int         *gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
 						   int         *depth);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void         gtk_tree_path_free             (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);
 GDK_AVAILABLE_IN_ALL
 GType        gtk_tree_path_get_type         (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int          gtk_tree_path_compare          (const GtkTreePath *a,
 					     const GtkTreePath *b);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void         gtk_tree_path_next             (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean     gtk_tree_path_prev             (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean     gtk_tree_path_up               (GtkTreePath       *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void         gtk_tree_path_down             (GtkTreePath       *path);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
                                              GtkTreePath       *descendant);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
                                              GtkTreePath       *ancestor);
 
@@ -256,147 +256,147 @@ gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
 
 GDK_AVAILABLE_IN_ALL
 GType                gtk_tree_row_reference_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeRowReference *gtk_tree_row_reference_new       (GtkTreeModel        *model,
 						       GtkTreePath         *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *proxy,
 						       GtkTreeModel        *model,
 						       GtkTreePath         *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath         *gtk_tree_row_reference_get_path  (GtkTreeRowReference *reference);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeModel        *gtk_tree_row_reference_get_model (GtkTreeRowReference *reference);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean             gtk_tree_row_reference_valid     (GtkTreeRowReference *reference);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeRowReference *gtk_tree_row_reference_copy      (GtkTreeRowReference *reference);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void                 gtk_tree_row_reference_free      (GtkTreeRowReference *reference);
 /* These two functions are only needed if you created the row reference with a
  * proxy object */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void                 gtk_tree_row_reference_inserted  (GObject     *proxy,
 						       GtkTreePath *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void                 gtk_tree_row_reference_deleted   (GObject     *proxy,
 						       GtkTreePath *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void                 gtk_tree_row_reference_reordered (GObject     *proxy,
 						       GtkTreePath *path,
 						       GtkTreeIter *iter,
 						       int         *new_order);
 
 /* GtkTreeIter operations */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeIter *     gtk_tree_iter_copy             (GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_iter_free             (GtkTreeIter  *iter);
 GDK_AVAILABLE_IN_ALL
 GType             gtk_tree_iter_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GType             gtk_tree_model_get_type        (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreeModelFlags gtk_tree_model_get_flags       (GtkTreeModel *tree_model);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int               gtk_tree_model_get_n_columns   (GtkTreeModel *tree_model);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GType             gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
 						  int           index_);
 
 
 /* Iterator movement */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreePath  *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
 						       const char   *path_string);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 char *           gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model,
                                                        GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  int           column,
 						  GValue       *value);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_previous   (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_next       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_children   (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreeIter  *parent);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_has_child  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 int               gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_nth_child  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreeIter  *parent,
 						  int           n);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 gboolean          gtk_tree_model_iter_parent     (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  GtkTreeIter  *child);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_ref_node        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_unref_node      (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_get             (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  ...);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  va_list       var_args);
 
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void              gtk_tree_model_foreach         (GtkTreeModel            *model,
 						  GtkTreeModelForeachFunc  func,
 						  gpointer                 user_data);
 
 /* Signals */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_row_inserted          (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_row_deleted           (GtkTreeModel *tree_model,
 					   GtkTreePath  *path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_rows_reordered        (GtkTreeModel *tree_model,
 					   GtkTreePath  *path,
 					   GtkTreeIter  *iter,
 					   int          *new_order);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GListModel)
 void gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
 						GtkTreePath  *path,
 						GtkTreeIter  *iter,

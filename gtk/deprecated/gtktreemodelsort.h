@@ -58,30 +58,30 @@ struct _GtkTreeModelSortClass
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_tree_model_sort_get_type                   (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 GtkTreeModel *gtk_tree_model_sort_new_with_model             (GtkTreeModel     *child_model);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 GtkTreeModel *gtk_tree_model_sort_get_model                  (GtkTreeModelSort *tree_model);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 GtkTreePath  *gtk_tree_model_sort_convert_child_path_to_path (GtkTreeModelSort *tree_model_sort,
 							      GtkTreePath      *child_path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 gboolean      gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sort,
 							      GtkTreeIter      *sort_iter,
 							      GtkTreeIter      *child_iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 GtkTreePath  *gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sort,
 							      GtkTreePath      *sorted_path);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 void          gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sort,
 							      GtkTreeIter      *child_iter,
 							      GtkTreeIter      *sorted_iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 void          gtk_tree_model_sort_reset_default_sort_func    (GtkTreeModelSort *tree_model_sort);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 void          gtk_tree_model_sort_clear_cache                (GtkTreeModelSort *tree_model_sort);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkFilterListModel)
 gboolean      gtk_tree_model_sort_iter_is_valid              (GtkTreeModelSort *tree_model_sort,
                                                               GtkTreeIter      *iter);
 
