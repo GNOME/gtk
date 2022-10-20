@@ -45,9 +45,13 @@
  * To track changes in the selected application, use the
  * [signal@Gtk.AppChooserButton::changed] signal.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * `GtkAppChooserButton` has a single CSS node with the name “appchooserbutton”.
+ *
+ * Deprecated: 4.10: The application selection widgets should be
+ *   implemented according to the design of each platform and/or
+ *   application requiring them.
  */
 #include "config.h"
 
