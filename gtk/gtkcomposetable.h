@@ -93,6 +93,8 @@ guint32           gtk_compose_table_data_hash (const guint16 *data,
                                                int            max_seq_len,
                                                int            n_seqs);
 
+char *            gtk_compose_table_get_x11_compose_file_dir (void);
+
 G_END_DECLS
 
 #endif /* __GTK_COMPOSETABLE_H__ */

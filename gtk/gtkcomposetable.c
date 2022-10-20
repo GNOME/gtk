@@ -284,6 +284,20 @@ fail:
 static void parser_parse_file (GtkComposeParser *parser,
                                const char       *path);
 
+char *
+gtk_compose_table_get_x11_compose_file_dir (void)
+{
+  char * compose_file_dir;
+
+#if defined (X11_DATA_PREFIX)
+  compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
+#else
+  compose_file_dir = g_build_filename (_gtk_get_datadir (), "X11", "locale", NULL);
+#endif
+
+  return compose_file_dir;
+}
+
 /* Substitute %H, %L and %S */
 static char *
 handle_substitutions (const char *start,
@@ -305,6 +319,9 @@ handle_substitutions (const char *start,
         }
       else
         {
+          char *x11_compose_file_dir;
+          char *path;
+
           switch (p[1])
             {
             case 'H':
@@ -313,11 +330,17 @@ handle_substitutions (const char *start,
               break;
             case 'L':
               p++;
-              g_string_append_printf (s, "/usr/share/X11/locale/%s/Compose", locale_name);
+              x11_compose_file_dir = gtk_compose_table_get_x11_compose_file_dir ();
+              path = g_build_filename (x11_compose_file_dir, locale_name, "Compose", NULL);
+              g_string_append (s, path);
+              g_free (path);
+              g_free (x11_compose_file_dir);
               break;
             case 'S':
               p++;
-              g_string_append (s, "/usr/share/X11/locale");
+              x11_compose_file_dir = gtk_compose_table_get_x11_compose_file_dir ();
+              g_string_append (s, x11_compose_file_dir);
+              g_free (x11_compose_file_dir);
               break;
             default: ;
               /* do nothing, next iteration handles p[1] */
