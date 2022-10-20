@@ -283,45 +283,56 @@ gtk_column_view_title_new (GtkColumnViewColumn *column)
   title = g_object_new (GTK_TYPE_COLUMN_VIEW_TITLE, NULL);
 
   title->column = g_object_ref (column);
-  gtk_column_view_title_update (title);
+  gtk_column_view_title_update_sort (title);
+  gtk_column_view_title_set_title (title, gtk_column_view_column_get_title (column));
+  gtk_column_view_title_set_menu (title, gtk_column_view_column_get_header_menu (column));
 
   return GTK_WIDGET (title);
 }
 
 void
-gtk_column_view_title_update (GtkColumnViewTitle *self)
+gtk_column_view_title_set_title (GtkColumnViewTitle *self,
+                                 const char         *title)
 {
-  GtkSorter *sorter;
-  GtkColumnView *view;
-  GtkColumnViewSorter *view_sorter;
-  gboolean inverted;
-  GtkColumnViewColumn *active;
+  gtk_label_set_label (GTK_LABEL (self->title), title);
+}
 
-  gtk_label_set_label (GTK_LABEL (self->title), gtk_column_view_column_get_title (self->column));
+void
+gtk_column_view_title_set_menu (GtkColumnViewTitle *self,
+                                GMenuModel         *model)
+{
+  g_clear_pointer (&self->popup_menu, gtk_widget_unparent);
+}
 
-  sorter = gtk_column_view_column_get_sorter (self->column);
-
-  if (sorter)
+void
+gtk_column_view_title_update_sort (GtkColumnViewTitle *self)
+{
+  if (gtk_column_view_column_get_sorter (self->column))
     {
+      GtkColumnView *view;
+      GtkColumnViewSorter *view_sorter;
+      GtkColumnViewColumn *primary;
+      GtkSortType sort_order;
+
       view = gtk_column_view_column_get_column_view (self->column);
       view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
-      active = gtk_column_view_sorter_get_sort_column (view_sorter, &inverted);
+      primary = gtk_column_view_sorter_get_primary_sort_column (view_sorter);
+      sort_order = gtk_column_view_sorter_get_primary_sort_order (view_sorter);
 
       gtk_widget_show (self->sort);
       gtk_widget_remove_css_class (self->sort, "ascending");
       gtk_widget_remove_css_class (self->sort, "descending");
       gtk_widget_remove_css_class (self->sort, "unsorted");
-      if (self->column != active)
+
+      if (self->column != primary)
         gtk_widget_add_css_class (self->sort, "unsorted");
-      else if (inverted)
+      else if (sort_order == GTK_SORT_DESCENDING)
         gtk_widget_add_css_class (self->sort, "descending");
       else
         gtk_widget_add_css_class (self->sort, "ascending");
     }
   else
     gtk_widget_hide (self->sort);
-
-  g_clear_pointer (&self->popup_menu, gtk_widget_unparent);
 }
 
 GtkColumnViewColumn *

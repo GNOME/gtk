@@ -443,6 +443,7 @@ gtk_public_headers = files([
   'gtkcolorutils.h',
   'gtkcolumnview.h',
   'gtkcolumnviewcolumn.h',
+  'gtkcolumnviewsorter.h',
   'gtkconstraintguide.h',
   'gtkconstraintlayout.h',
   'gtkconstraint.h',

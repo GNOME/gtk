@@ -17,22 +17,16 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_COLUMN_VIEW_SORTER_H__
-#define __GTK_COLUMN_VIEW_SORTER_H__
+#ifndef __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__
+#define __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gdk/gdk.h>
-#include <gtk/gtksorter.h>
-#include <gtk/gtkcolumnviewcolumn.h>
+#include <gtk/gtkcolumnviewsorter.h>
 
 G_BEGIN_DECLS
-
-#define GTK_TYPE_COLUMN_VIEW_SORTER             (gtk_column_view_sorter_get_type ())
-
-G_DECLARE_FINAL_TYPE (GtkColumnViewSorter, gtk_column_view_sorter, GTK, COLUMN_VIEW_SORTER, GtkSorter)
 
 GtkColumnViewSorter *   gtk_column_view_sorter_new              (void);
 
@@ -46,12 +40,12 @@ void                    gtk_column_view_sorter_clear            (GtkColumnViewSo
 GtkColumnViewColumn *   gtk_column_view_sorter_get_sort_column  (GtkColumnViewSorter    *self,
                                                                  gboolean               *inverted);
 
-gboolean   gtk_column_view_sorter_set_column    (GtkColumnViewSorter *self,
-                                                 GtkColumnViewColumn *column,
-                                                 gboolean             inverted);
+gboolean                gtk_column_view_sorter_set_column       (GtkColumnViewSorter    *self,
+                                                                 GtkColumnViewColumn    *column,
+                                                                 gboolean                inverted);
 
 
 G_END_DECLS
 
-#endif /* __GTK_SORTER_H__ */
+#endif /* __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__ */
 
