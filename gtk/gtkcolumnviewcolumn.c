@@ -699,17 +699,6 @@ gtk_column_view_column_get_title (GtkColumnViewColumn *self)
   return self->title;
 }
 
-#if 0
-static void
-gtk_column_view_column_add_to_sorter (GtkColumnViewColumn *self)
-{
-  if (self->view == NULL)
-    return;
-  
-  gtk_column_view_sorter_add_column (GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (self->view)), self);
-}
-#endif
-
 static void
 gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
 {
