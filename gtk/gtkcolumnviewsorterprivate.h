@@ -24,15 +24,9 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gdk/gdk.h>
-#include <gtk/gtksorter.h>
-#include <gtk/gtkcolumnviewcolumn.h>
+#include <gtk/gtkcolumnviewsorter.h>
 
 G_BEGIN_DECLS
-
-#define GTK_TYPE_COLUMN_VIEW_SORTER             (gtk_column_view_sorter_get_type ())
-
-G_DECLARE_FINAL_TYPE (GtkColumnViewSorter, gtk_column_view_sorter, GTK, COLUMN_VIEW_SORTER, GtkSorter)
 
 GtkColumnViewSorter *   gtk_column_view_sorter_new              (void);
 
