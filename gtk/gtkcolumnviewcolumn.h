@@ -95,7 +95,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_column_view_column_set_expand               (GtkColumnViewColumn    *self,
                                                                          gboolean                expand);
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_column_view_column_get_expand            (GtkColumnViewColumn    *self);
+gboolean                gtk_column_view_column_get_expand               (GtkColumnViewColumn    *self);
 
 G_END_DECLS
 
