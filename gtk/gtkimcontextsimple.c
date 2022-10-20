@@ -180,20 +180,6 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   init_compose_table_async (NULL, NULL, NULL);
 }
 
-static char *
-get_x11_compose_file_dir (void)
-{
-  char * compose_file_dir;
-
-#if defined (X11_DATA_PREFIX)
-  compose_file_dir = g_strdup (X11_DATA_PREFIX "/share/X11/locale");
-#else
-  compose_file_dir = g_build_filename (_gtk_get_datadir (), "X11", "locale", NULL);
-#endif
-
-  return compose_file_dir;
-}
-
 static int
 gtk_compose_table_find (gconstpointer data1,
                         gconstpointer data2)
@@ -321,7 +307,7 @@ gtk_im_context_simple_init_compose_table (void)
         {
           if (g_ascii_strncasecmp (*lang, *sys_lang, strlen (*sys_lang)) == 0)
             {
-              char *x11_compose_file_dir = get_x11_compose_file_dir ();
+              char *x11_compose_file_dir = gtk_compose_table_get_x11_compose_file_dir ();
               path = g_build_filename (x11_compose_file_dir, *lang, "Compose", NULL);
               g_free (x11_compose_file_dir);
               break;
