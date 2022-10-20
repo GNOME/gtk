@@ -503,3 +503,56 @@ gtk_multi_sorter_remove (GtkMultiSorter *self,
                                 GTK_SORTER_CHANGE_LESS_STRICT,
                                 gtk_multi_sort_keys_new (self));
 }
+
+/**
+ * gtk_multi_sorter_splice:
+ * @self: a `GtkMultiSorter`
+ * @position: the position at which to make the change
+ * @n_removals: the number of items to remove
+ * @additions: (array length=n_additions) (element-type GtkSorter) (transfer full): the sorters to add
+ * @n_additions: the number of sorters to add
+ *
+ * Changes @self by removing @n_removals items and adding @n_additions
+ * sorters to it.
+ *
+ * This is the equivalent of [method@GLib.ListStore.splice].
+ *
+ * Note that @self takes ownership of the added sorters.
+ *
+ * Since: 4.10
+ */
+void
+gtk_multi_sorter_splice (GtkMultiSorter  *self,
+                         guint            position,
+                         guint            n_removals,
+                         GtkSorter      **additions,
+                         guint            n_additions)
+{
+  guint n_items;
+
+  g_return_if_fail (GTK_IS_MULTI_SORTER (self));
+  g_return_if_fail (position + n_removals >= position); /* overflow */
+
+  n_items = gtk_sorters_get_size (&self->sorters);
+  g_return_if_fail (position + n_removals <= n_items);
+
+
+  for (guint i = 0; i < n_removals; i++)
+    {
+      GtkSorter *sorter = gtk_sorters_get (&self->sorters, position + i);
+      g_signal_handlers_disconnect_by_func (sorter, gtk_multi_sorter_changed_cb, self);
+    }
+  for (guint i = 0; i < n_additions; i++)
+    {
+      GtkSorter *sorter = additions[i];
+      g_signal_connect (sorter, "changed", G_CALLBACK (gtk_multi_sorter_changed_cb), self);
+    }
+  gtk_sorters_splice (&self->sorters, position, n_removals, FALSE, additions, n_additions);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, n_removals, n_additions);
+  if (n_removals != n_additions)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+
+  gtk_sorter_changed_with_keys (GTK_SORTER (self),
+                                GTK_SORTER_CHANGE_DIFFERENT,
+                                gtk_multi_sort_keys_new (self));
+}
