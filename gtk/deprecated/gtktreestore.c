@@ -62,6 +62,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   </columns>
  * </object>
  * ```
+ *
+ * Deprecated: 4.10: Use [class@Gtk.TreeListModel] instead
  */
 
 struct _GtkTreeStorePrivate

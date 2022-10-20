@@ -31,13 +31,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * A `GtkTreeModelFilter` is a tree model which wraps another tree model,
  * and can do the following things:
- * 
+ *
  * - Filter specific rows, based on data from a “visible column”, a column
  *   storing booleans indicating whether the row should be filtered or not,
  *   or based on the return value of a “visible function”, which gets a
  *   model, iter and user_data and returns a boolean indicating whether the
  *   row should be filtered or not.
- * 
+ *
  * - Modify the “appearance” of the model, using a modify function.
  *   This is extremely powerful and allows for just changing some
  *   values and also for creating a completely different model based
@@ -94,6 +94,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * because it does not implement reference counting, or for models that
  * do implement reference counting, obtain references on these child levels
  * yourself.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FilterListModel] instead.
  */
 
 /* Notes on this implementation of GtkTreeModelFilter
@@ -588,7 +590,7 @@ gtk_tree_model_filter_finalize (GObject *object)
     gtk_tree_model_filter_free_level (filter, filter->priv->root, TRUE, TRUE, FALSE);
 
   g_free (filter->priv->modify_types);
-  
+
   if (filter->priv->modify_destroy)
     filter->priv->modify_destroy (filter->priv->modify_data);
 
@@ -3801,7 +3803,7 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * %FALSE otherwise.
  *
  * If the condition calculated by the function changes over time (e.g.
- * because it depends on some global parameters), you must call 
+ * because it depends on some global parameters), you must call
  * gtk_tree_model_filter_refilter() to keep the visibility information
  * of the model up-to-date.
  *
@@ -3864,8 +3866,8 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * types for this model (which will be exposed to the parent model/view).
  * The @func, @data and @destroy parameters are for specifying the modify
  * function. The modify function will get called for each
- * data access, the goal of the modify function is to return the data which 
- * should be displayed at the location specified using the parameters of the 
+ * data access, the goal of the modify function is to return the data which
+ * should be displayed at the location specified using the parameters of the
  * modify function.
  *
  * Note that gtk_tree_model_filter_set_modify_func()

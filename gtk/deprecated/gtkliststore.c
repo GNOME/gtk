@@ -175,6 +175,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   </data>
  * </object>
  * ```
+ *
+ * Deprecated: 4.10: Use [class@Gio.ListStore] instead
  */
 
 
