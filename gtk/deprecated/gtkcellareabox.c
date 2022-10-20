@@ -42,6 +42,9 @@
  * configured by configuring the `GtkCellAreaBox` align child cell property
  * with gtk_cell_area_cell_set_property() or by specifying the "align"
  * argument to gtk_cell_area_box_pack_start() and gtk_cell_area_box_pack_end().
+ *
+ * Deprecated: 4.10: List views use widgets for displaying their
+ *   contents
  */
 
 #include "config.h"
@@ -502,7 +505,7 @@ cell_groups_rebuild (GtkCellAreaBox *box)
       CellInfo *info = l->data;
 
       /* A new group starts with any aligned cell, or
-       * at the beginning and end of a fixed size cell. 
+       * at the beginning and end of a fixed size cell.
        * the first group is implied */
       if ((info->align || info->fixed || last_cell_fixed) && l != cells)
         {
@@ -892,7 +895,7 @@ get_allocated_cells (GtkCellAreaBox        *box,
           if (visible_cells == 0)
             continue;
 
-	  /* If were not aligned, place the cell after the last cell 
+	  /* If were not aligned, place the cell after the last cell
 	   * and eat up the extra space
 	   */
 	  if (group->align)
@@ -2086,7 +2089,7 @@ _gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
 {
   GtkCellAreaBoxPrivate *priv = gtk_cell_area_box_get_instance_private (box);
   CellGroup *group;
-  
+
   g_assert (group_idx >= 0 && group_idx < priv->groups->len);
 
   group = &g_array_index (priv->groups, CellGroup, group_idx);

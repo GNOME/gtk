@@ -37,6 +37,10 @@
  *
  * To set the heading that is shown above the `GtkAppChooserWidget`,
  * use [method@Gtk.AppChooserDialog.set_heading].
+ *
+ * Deprecated: 4.10: The application selection widgets should be
+ *   implemented according to the design of each platform and/or
+ *   application requiring them.
  */
 #include "config.h"
 
@@ -216,13 +220,13 @@ set_dialog_properties (GtkAppChooserDialog *self)
   else if (self->content_type)
     {
       /* Translators: %s is a file type description */
-      subtitle = g_strdup_printf (_("Opening “%s” files."), 
+      subtitle = g_strdup_printf (_("Opening “%s” files."),
                                   unknown ? self->content_type : description);
       string = g_strdup_printf (_("No applications found for “%s” files"),
                                 unknown ? self->content_type : description);
     }
 
-  g_object_get (self, "use-header-bar", &use_header, NULL); 
+  g_object_get (self, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
       GtkWidget *box, *label;
@@ -494,7 +498,7 @@ static void
 gtk_app_chooser_dialog_dispose (GObject *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
-  
+
   g_clear_object (&self->gfile);
 
   self->dismissed = TRUE;

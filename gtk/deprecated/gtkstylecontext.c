@@ -48,7 +48,7 @@
  * and RTL/LTR information set. The style context will also be updated
  * automatically if any of these settings change on the widget.
  *
- * # Style Classes
+ * ## Style Classes
  *
  * Widgets can add style classes to their context, which can be used to associate
  * different styles by class. The documentation for individual widgets lists
@@ -71,6 +71,10 @@
  * `XDG_CONFIG_HOME/gtk-4.0/gtk.css` will
  * still take precedence over your changes, as it uses the
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
+ *
+ * Deprecated: 4.10: The relevant API has been moved to [class@Gtk.Widget]
+ *   where applicable; otherwise, there is no replacement for querying the
+ *   style machinery. Stylable UI elements should use widgets.
  */
 
 #define CURSOR_ASPECT_RATIO (0.04)

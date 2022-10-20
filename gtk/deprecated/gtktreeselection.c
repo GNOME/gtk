@@ -55,6 +55,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * Additionally, it may on occasion emit a `GtkTreeSelection`::changed signal
  * when nothing has happened (mostly as a result of programmers calling
  * select_row on an already selected row).
+ *
+ * Deprecated: 4.10: Use [iface@Gtk.SelectionModel] instead
  */
 
 typedef struct _GtkTreeSelectionClass   GtkTreeSelectionClass;
@@ -124,7 +126,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   class->changed = NULL;
 
   /* Properties */
-  
+
   /**
    * GtkTreeSelection:mode:
    *
@@ -138,9 +140,9 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 
   /* Install all properties */
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
-  
+
   /* Signals */
-  
+
   /**
    * GtkTreeSelection::changed:
    * @treeselection: the object which received the signal.
@@ -331,7 +333,7 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 				    anchor_path,
 				    &tree,
 				    &node);
-	  
+
 	  if (node && GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_IS_SELECTED))
 	    selected = TRUE;
 	}
@@ -355,7 +357,7 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
     }
 
   selection->type = type;
-  
+
   g_object_notify_by_pspec (G_OBJECT (selection), properties[PROP_MODE]);
 }
 
@@ -450,9 +452,9 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_tree_view:
  * @selection: A `GtkTreeSelection`
- * 
+ *
  * Returns the tree view associated with @selection.
- * 
+ *
  * Returns: (transfer none): A `GtkTreeView`
  *
  * Deprecated: 4.10: Use GtkListView or GtkColumnView
@@ -629,7 +631,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
 		    {
 		      gtk_tree_path_free (path);
 
-		      goto done; 
+		      goto done;
 		    }
 
 		  gtk_tree_path_up (path);
@@ -778,7 +780,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 					   G_CALLBACK (model_changed),
 				           &stop);
   changed_id = g_signal_connect_swapped (selection->tree_view, "notify::model",
-					 G_CALLBACK (model_changed), 
+					 G_CALLBACK (model_changed),
 					 &stop);
 
   /* find the node internally */
@@ -1001,10 +1003,10 @@ gtk_tree_selection_unselect_iter (GtkTreeSelection *selection,
  * gtk_tree_selection_path_is_selected:
  * @selection: A `GtkTreeSelection`.
  * @path: A `GtkTreePath` to check selection on.
- * 
+ *
  * Returns %TRUE if the row pointed to by @path is currently selected.  If @path
  * does not point to a valid location, %FALSE is returned
- * 
+ *
  * Returns: %TRUE if @path is selected.
  *
  * Deprecated: 4.10: Use GtkListView or GtkColumnView
@@ -1040,9 +1042,9 @@ gtk_tree_selection_path_is_selected (GtkTreeSelection *selection,
  * gtk_tree_selection_iter_is_selected:
  * @selection: A `GtkTreeSelection`
  * @iter: A valid `GtkTreeIter`
- * 
+ *
  * Returns %TRUE if the row at @iter is currently selected.
- * 
+ *
  * Returns: %TRUE, if @iter is selected
  *
  * Deprecated: 4.10: Use GtkListView or GtkColumnView
@@ -1255,7 +1257,7 @@ gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
   if (_gtk_tree_view_get_rbtree (selection->tree_view) == NULL ||
       gtk_tree_view_get_model (selection->tree_view) == NULL)
     return;
-  
+
   if (gtk_tree_selection_real_unselect_all (selection))
     g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
@@ -1357,7 +1359,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
  * @end_path: The final node of the range.
  *
  * Selects a range of nodes, determined by @start_path and @end_path inclusive.
- * @selection must be set to %GTK_SELECTION_MULTIPLE mode. 
+ * @selection must be set to %GTK_SELECTION_MULTIPLE mode.
  *
  * Deprecated: 4.10: Use GtkListView or GtkColumnView
  **/
@@ -1562,14 +1564,14 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     gtk_tree_path_free (anchor_path);
 
   if (dirty)
-    g_signal_emit (selection, tree_selection_signals[CHANGED], 0);  
+    g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
 
 
-void 
+void
 _gtk_tree_selection_emit_changed (GtkTreeSelection *selection)
 {
-  g_signal_emit (selection, tree_selection_signals[CHANGED], 0);  
+  g_signal_emit (selection, tree_selection_signals[CHANGED], 0);
 }
 
 /* NOTE: Any {un,}selection ever done _MUST_ be done through this function!

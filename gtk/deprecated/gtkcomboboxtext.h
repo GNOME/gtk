@@ -35,38 +35,38 @@ typedef struct _GtkComboBoxText GtkComboBoxText;
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_combo_box_text_get_type        (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 GtkWidget*    gtk_combo_box_text_new             (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 GtkWidget*    gtk_combo_box_text_new_with_entry  (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_append_text     (GtkComboBoxText     *combo_box,
                                                   const char          *text);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_insert_text     (GtkComboBoxText     *combo_box,
                                                   int                  position,
                                                   const char          *text);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_prepend_text    (GtkComboBoxText     *combo_box,
                                                   const char          *text);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_remove          (GtkComboBoxText     *combo_box,
                                                   int                  position);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_remove_all      (GtkComboBoxText     *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 char         *gtk_combo_box_text_get_active_text (GtkComboBoxText     *combo_box);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_insert          (GtkComboBoxText     *combo_box,
                                                   int                  position,
                                                   const char          *id,
                                                   const char          *text);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_append          (GtkComboBoxText     *combo_box,
                                                   const char          *id,
                                                   const char          *text);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown and GtkStringList)
 void          gtk_combo_box_text_prepend         (GtkComboBoxText     *combo_box,
                                                   const char          *id,
                                                   const char          *text);

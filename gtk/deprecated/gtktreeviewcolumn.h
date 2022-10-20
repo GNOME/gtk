@@ -80,117 +80,117 @@ typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_tree_view_column_get_type            (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_area       (GtkCellArea             *area);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const char              *title,
 								  GtkCellRenderer         *cell,
 								  ...) G_GNUC_NULL_TERMINATED;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_pack_start          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell,
 								  gboolean                 expand);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_pack_end            (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell,
 								  gboolean                 expand);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_clear               (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_add_attribute       (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  const char              *attribute,
 								  int                      column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_attributes      (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  ...) G_GNUC_NULL_TERMINATED;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_cell_data_func  (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  GtkTreeCellDataFunc      func,
 								  gpointer                 func_data,
 								  GDestroyNotify           destroy);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_spacing         (GtkTreeViewColumn       *tree_column,
 								  int                      spacing);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_spacing         (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_visible         (GtkTreeViewColumn       *tree_column,
 								  gboolean                 visible);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_visible         (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_resizable       (GtkTreeViewColumn       *tree_column,
 								  gboolean                 resizable);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_resizable       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_sizing          (GtkTreeViewColumn       *tree_column,
 								  GtkTreeViewColumnSizing  type);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkTreeViewColumnSizing gtk_tree_view_column_get_sizing          (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_x_offset        (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_width           (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_fixed_width     (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_fixed_width     (GtkTreeViewColumn       *tree_column,
 								  int                      fixed_width);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_min_width       (GtkTreeViewColumn       *tree_column,
 								  int                      min_width);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_min_width       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_max_width       (GtkTreeViewColumn       *tree_column,
 								  int                      max_width);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_max_width       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_clicked             (GtkTreeViewColumn       *tree_column);
 
 
 
 /* Options for manipulating the column headers
  */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_title           (GtkTreeViewColumn       *tree_column,
 								  const char              *title);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 const char *           gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_expand          (GtkTreeViewColumn       *tree_column,
 								  gboolean                 expand);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_expand          (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_clickable       (GtkTreeViewColumn       *tree_column,
 								  gboolean                 clickable);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_clickable       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_widget          (GtkTreeViewColumn       *tree_column,
 								  GtkWidget               *widget);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkWidget              *gtk_tree_view_column_get_widget          (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_alignment       (GtkTreeViewColumn       *tree_column,
 								  float                    xalign);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 float                   gtk_tree_view_column_get_alignment       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_reorderable     (GtkTreeViewColumn       *tree_column,
 								  gboolean                 reorderable);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_reorderable     (GtkTreeViewColumn       *tree_column);
 
 
@@ -198,52 +198,52 @@ gboolean                gtk_tree_view_column_get_reorderable     (GtkTreeViewCol
 /* You probably only want to use gtk_tree_view_column_set_sort_column_id.  The
  * other sorting functions exist primarily to let others do their own custom sorting.
  */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_sort_column_id  (GtkTreeViewColumn       *tree_column,
 								  int                      sort_column_id);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 int                     gtk_tree_view_column_get_sort_column_id  (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_sort_indicator  (GtkTreeViewColumn       *tree_column,
 								  gboolean                 setting);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn       *tree_column,
 								  GtkSortType              order);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkSortType             gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn       *tree_column);
 
 
 /* These functions are meant primarily for interaction between the GtkTreeView and the column.
  */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_cell_set_cell_data  (GtkTreeViewColumn       *tree_column,
 								  GtkTreeModel            *tree_model,
 								  GtkTreeIter             *iter,
 								  gboolean                 is_expander,
 								  gboolean                 is_expanded);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_cell_get_size       (GtkTreeViewColumn       *tree_column,
                                                                   int                     *x_offset,
                                                                   int                     *y_offset,
                                                                   int                     *width,
                                                                   int                     *height);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_cell_is_visible     (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_focus_cell          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 gboolean                gtk_tree_view_column_cell_get_position   (GtkTreeViewColumn       *tree_column,
 					                          GtkCellRenderer         *cell_renderer,
 					                          int                     *x_offset,
 					                          int                     *width);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 void                    gtk_tree_view_column_queue_resize        (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkWidget              *gtk_tree_view_column_get_tree_view       (GtkTreeViewColumn       *tree_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkColumnView and GtkColumnViewColumn)
 GtkWidget              *gtk_tree_view_column_get_button          (GtkTreeViewColumn       *tree_column);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeViewColumn, g_object_unref)

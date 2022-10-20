@@ -69,9 +69,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * [signal@Gtk.AppChooserWidget::application-selected] and
  * [signal@Gtk.AppChooserWidget::application-activated] signals.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * `GtkAppChooserWidget` has a single CSS node with name appchooser.
+ *
+ * Deprecated: 4.10: The application selection widgets should be
+ *   implemented according to the design of each platform and/or
+ *   application requiring them.
  */
 
 typedef struct _GtkAppChooserWidgetClass   GtkAppChooserWidgetClass;
@@ -312,7 +316,7 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
       retval = 1;
       goto out;
     }
-  
+
   /* the recommended one always wins */
   if (a_recommended && !b_recommended)
     {
@@ -444,7 +448,7 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
   retval = FALSE;
   heading_added = FALSE;
   bold_string = g_strdup_printf ("<b>%s</b>", heading_title);
-  
+
   for (l = applications; l != NULL; l = l->next)
     {
       app = l->data;

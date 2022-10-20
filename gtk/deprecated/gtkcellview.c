@@ -40,7 +40,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * A widget displaying a single row of a GtkTreeModel
  *
  * A `GtkCellView` displays a single row of a `GtkTreeModel` using a `GtkCellArea`
- * and `GtkCellAreaContext`. A `GtkCellAreaContext` can be provided to the 
+ * and `GtkCellAreaContext`. A `GtkCellAreaContext` can be provided to the
  * `GtkCellView` at construction time in order to keep the cellview in context
  * of a group of cell views, this ensures that the renderers displayed will
  * be properly aligned with each other (like the aligned cells in the menus
@@ -53,9 +53,12 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * individual heights (left-to-right menus should be allocated vertically since
  * they all share the same height but may have variable widths).
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * GtkCellView has a single CSS node with name cellview.
+ *
+ * Deprecated: 4.10: List views use widgets to display their contents.
+ *   You can use [class@Gtk.Box] instead
  */
 
 static void        gtk_cell_view_constructed              (GObject          *object);
@@ -206,7 +209,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    *
    * The `GtkCellArea` rendering cells
    *
-   * If no area is specified when creating the cell view with gtk_cell_view_new_with_context() 
+   * If no area is specified when creating the cell view with gtk_cell_view_new_with_context()
    * a horizontally oriented `GtkCellArea`Box will be used.
    *
    * since 3.0
@@ -524,19 +527,19 @@ gtk_cell_view_request_model (GtkCellView        *cellview,
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  if (for_size < 0)
-	    gtk_cell_area_get_preferred_width (priv->area, priv->context, 
+	    gtk_cell_area_get_preferred_width (priv->area, priv->context,
 					       GTK_WIDGET (cellview), &min, &nat);
 	  else
-	    gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, 
+	    gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context,
 							  GTK_WIDGET (cellview), for_size, &min, &nat);
 	}
       else
 	{
 	  if (for_size < 0)
-	    gtk_cell_area_get_preferred_height (priv->area, priv->context, 
+	    gtk_cell_area_get_preferred_height (priv->area, priv->context,
 						GTK_WIDGET (cellview), &min, &nat);
 	  else
-	    gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, 
+	    gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context,
 							  GTK_WIDGET (cellview), for_size, &min, &nat);
 	}
 
@@ -550,7 +553,7 @@ gtk_cell_view_request_model (GtkCellView        *cellview,
     }
 }
 
-static GtkSizeRequestMode 
+static GtkSizeRequestMode
 gtk_cell_view_get_request_mode (GtkWidget *widget)
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
@@ -698,13 +701,13 @@ gtk_cell_view_set_cell_data (GtkCellView *cell_view)
   gtk_tree_model_get_iter (priv->model, &iter, path);
   gtk_tree_path_free (path);
 
-  gtk_cell_area_apply_attributes (priv->area, 
-				  priv->model, 
+  gtk_cell_area_apply_attributes (priv->area,
+				  priv->model,
 				  &iter, FALSE, FALSE);
 
   if (priv->draw_sensitive)
     {
-      GList *l, *cells = 
+      GList *l, *cells =
 	gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->area));
 
       for (l = cells; l; l = l->next)
@@ -846,7 +849,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
   g_return_val_if_fail (context == NULL || GTK_IS_CELL_AREA_CONTEXT (context), NULL);
 
-  return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW, 
+  return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW,
 				    "cell-area", area,
 				    "cell-area-context", context,
 				    NULL);
@@ -955,7 +958,7 @@ gtk_cell_view_new_with_texture (GdkTexture *texture)
  * @renderer: one of the renderers of @cell_view
  * @property: the name of the property of @renderer to set
  * @value: the new value to set the property to
- * 
+ *
  * Sets a property of a cell renderer of @cell_view, and
  * makes sure the display of @cell_view is updated.
  *
@@ -1012,7 +1015,7 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
     {
       g_object_ref (priv->model);
 
-      priv->row_changed_id = 
+      priv->row_changed_id =
 	g_signal_connect (priv->model, "row-changed",
 			  G_CALLBACK (row_changed_cb), cell_view);
     }
@@ -1079,8 +1082,8 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
  * gtk_cell_view_get_displayed_row:
  * @cell_view: a `GtkCellView`
  *
- * Returns a `GtkTreePath` referring to the currently 
- * displayed row. If no row is currently displayed, 
+ * Returns a `GtkTreePath` referring to the currently
+ * displayed row. If no row is currently displayed,
  * %NULL is returned.
  *
  * Returns: (nullable) (transfer full): the currently displayed row

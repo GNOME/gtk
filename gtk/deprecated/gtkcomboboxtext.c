@@ -56,7 +56,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * You should not call [method@Gtk.ComboBox.set_model] or attempt to pack more
  * cells into this combo box via its [iface@Gtk.CellLayout] interface.
  *
- * # GtkComboBoxText as GtkBuildable
+ * ## GtkComboBoxText as GtkBuildable
  *
  * The `GtkComboBoxText` implementation of the `GtkBuildable` interface supports
  * adding items directly using the <items> element and specifying <item>
@@ -75,7 +75,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * </object>
  * ```
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * ```
  * combobox
@@ -88,6 +88,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * `GtkComboBoxText` has a single CSS node with name combobox. It adds
  * the style class .combo to the main CSS nodes of its entry and button
  * children, and the .linked class to the node of its internal box.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.DropDown] with a [class@Gtk.StringList]
+ *   instead
  */
 
 typedef struct _GtkComboBoxTextClass GtkComboBoxTextClass;
@@ -353,7 +356,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns: A new `GtkComboBoxText`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_text_new (void)
@@ -369,7 +372,7 @@ gtk_combo_box_text_new (void)
  *
  * Returns: a new `GtkComboBoxText`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_text_new_with_entry (void)
@@ -389,7 +392,7 @@ gtk_combo_box_text_new_with_entry (void)
  * This is the same as calling [method@Gtk.ComboBoxText.insert_text]
  * with a position of -1.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
@@ -408,7 +411,7 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
  * This is the same as calling [method@Gtk.ComboBoxText.insert_text]
  * with a position of 0.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
@@ -430,7 +433,7 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
  * This is the same as calling [method@Gtk.ComboBoxText.insert]
  * with a %NULL ID string.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
@@ -453,7 +456,7 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
  * This is the same as calling [method@Gtk.ComboBoxText.insert]
  * with a position of -1.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_append (GtkComboBoxText *combo_box,
@@ -476,7 +479,7 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
  * This is the same as calling [method@Gtk.ComboBoxText.insert]
  * with a position of 0.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
@@ -501,7 +504,7 @@ gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
  *
  * If @position is negative then @text is appended.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
@@ -554,7 +557,7 @@ gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
  *
  * Removes the string at @position from @combo_box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
@@ -581,7 +584,7 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
  *
  * Removes all the text entries from the combo box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
@@ -609,7 +612,7 @@ gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
  *   string containing the currently active text.
  *   Must be freed with g_free().
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 char *
 gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)

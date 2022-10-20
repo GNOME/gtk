@@ -23,6 +23,9 @@
  * The `GtkCellEditable` interface must be implemented for widgets to be usable
  * to edit the contents of a `GtkTreeView` cell. It provides a way to specify how
  * temporary widgets should be configured for editing, get the new value, etc.
+ *
+ * Deprecated: 4.10: List views use widgets for displaying their
+ *   contents. See [iface@Gtk.Editable] for editable text widgets
  */
 
 #include "config.h"

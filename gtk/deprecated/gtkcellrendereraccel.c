@@ -41,6 +41,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * `GtkCellRendererAccel` displays a keyboard accelerator (i.e. a key
  * combination like `Control + a`). If the cell renderer is editable,
  * the accelerator can be changed by simply typing the new combination.
+ *
+ * Deprecated: 4.10: Applications editing keyboard accelerators should
+ *   provide their own implementation according to platform design
+ *   guidelines
  */
 
 
@@ -52,7 +56,7 @@ static void gtk_cell_renderer_accel_set_property (GObject         *object,
                                                   guint            param_id,
                                                   const GValue    *value,
                                                   GParamSpec      *pspec);
-static void gtk_cell_renderer_accel_get_preferred_width 
+static void gtk_cell_renderer_accel_get_preferred_width
                                                  (GtkCellRenderer *cell,
                                                   GtkWidget       *widget,
                                                   int             *minimum_size,
@@ -177,7 +181,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       G_MAXINT,
                                                       0,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   /**
    * GtkCellRendererAccel:accel-mods:
    *
@@ -196,7 +200,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * The hardware keycode of the accelerator. Note that the hardware keycode is
    * only relevant if the key does not have a keyval. Normally, the keyboard
    * configuration should assign keyvals to all keys.
-   */ 
+   */
   g_object_class_install_property (object_class,
                                    PROP_KEYCODE,
                                    g_param_spec_uint ("keycode", NULL, NULL,
@@ -219,7 +223,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
                                                       GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+
   /**
    * GtkCellRendererAccel::accel-edited:
    * @accel: the object reveiving the signal
@@ -264,7 +268,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
  * gtk_cell_renderer_accel_new:
  *
  * Creates a new `GtkCellRendererAccel`.
- * 
+ *
  * Returns: the new cell renderer
  *
  * Deprecated: 4.10
@@ -288,7 +292,7 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
      * a disabled accelerator key combination.
      */
     return g_strdup (C_("Accelerator", "Disabled"));
-  else 
+  else
     {
       if (priv->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
         {
@@ -301,7 +305,7 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
 
           return gtk_accelerator_get_label (keysym, mask);
         }
-      else 
+      else
         {
           char *name;
 
@@ -402,7 +406,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
           g_object_notify (object, "accel-mode");
         }
       break;
-      
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
     }
@@ -537,7 +541,7 @@ key_controller_key_pressed (GtkEventControllerKey *key,
   event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (key));
   if (!gdk_key_event_get_match (event, &accel_key, &accel_mods))
     return FALSE;
-    
+
   if (accel_mods == 0)
     {
       switch (keyval)
@@ -579,8 +583,8 @@ static void
 gtk_cell_editable_widget_unrealize (GtkWidget *widget)
 {
   gtk_grab_remove (widget);
-  
-  GTK_WIDGET_CLASS (gtk_cell_editable_widget_parent_class)->unrealize (widget); 
+
+  GTK_WIDGET_CLASS (gtk_cell_editable_widget_parent_class)->unrealize (widget);
 }
 
 static void

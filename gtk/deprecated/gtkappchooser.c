@@ -41,6 +41,10 @@
  *
  * To obtain the application that has been selected in a `GtkAppChooser`,
  * use [method@Gtk.AppChooser.get_app_info].
+ *
+ * Deprecated: 4.10: The application selection widgets should be
+ *   implemented according to the design of each platform and/or
+ *   application requiring them.
  */
 
 #include "config.h"

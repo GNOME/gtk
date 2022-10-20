@@ -71,87 +71,87 @@ struct _GtkComboBoxClass
 /* construction */
 GDK_AVAILABLE_IN_ALL
 GType         gtk_combo_box_get_type                 (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkWidget    *gtk_combo_box_new                      (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkWidget    *gtk_combo_box_new_with_entry           (void);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkWidget    *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
 
 /* get/set active item */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 int           gtk_combo_box_get_active       (GtkComboBox     *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_set_active       (GtkComboBox     *combo_box,
                                               int              index_);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 gboolean      gtk_combo_box_get_active_iter  (GtkComboBox     *combo_box,
                                               GtkTreeIter     *iter);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_set_active_iter  (GtkComboBox     *combo_box,
                                               GtkTreeIter     *iter);
 
 /* getters and setters */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_set_model        (GtkComboBox     *combo_box,
                                               GtkTreeModel    *model);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkTreeModel *gtk_combo_box_get_model        (GtkComboBox     *combo_box);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkTreeViewRowSeparatorFunc gtk_combo_box_get_row_separator_func (GtkComboBox                *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void                        gtk_combo_box_set_row_separator_func (GtkComboBox                *combo_box,
                                                                   GtkTreeViewRowSeparatorFunc func,
                                                                   gpointer                    data,
                                                                   GDestroyNotify              destroy);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void               gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
                                                          GtkSensitivityType  sensitivity);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkSensitivityType gtk_combo_box_get_button_sensitivity (GtkComboBox        *combo_box);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 gboolean           gtk_combo_box_get_has_entry          (GtkComboBox        *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *combo_box,
                                                          int                 text_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 int                gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void               gtk_combo_box_set_popup_fixed_width  (GtkComboBox      *combo_box,
                                                          gboolean          fixed);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 gboolean           gtk_combo_box_get_popup_fixed_width  (GtkComboBox      *combo_box);
 
 /* programmatic control */
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_popup            (GtkComboBox     *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_popup_for_device (GtkComboBox     *combo_box,
                                               GdkDevice       *device);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_popdown          (GtkComboBox     *combo_box);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 int           gtk_combo_box_get_id_column        (GtkComboBox *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_set_id_column        (GtkComboBox *combo_box,
                                                   int          id_column);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 const char * gtk_combo_box_get_active_id        (GtkComboBox *combo_box);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 gboolean      gtk_combo_box_set_active_id        (GtkComboBox *combo_box,
                                                   const char *active_id);
 
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 void          gtk_combo_box_set_child            (GtkComboBox *combo_box,
                                                   GtkWidget   *child);
-GDK_DEPRECATED_IN_4_10
+GDK_DEPRECATED_IN_4_10_FOR(GtkDropDown)
 GtkWidget *   gtk_combo_box_get_child            (GtkComboBox *combo_box);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkComboBox, g_object_unref)

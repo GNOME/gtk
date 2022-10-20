@@ -228,6 +228,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   required for levels in which nodes are referenced. For the root level
  *   however, signals must be emitted at all times (however the root level
  *   is always referenced when any view is attached).
+ *
+ * Deprecated: 4.10: Use [iface@Gio.ListModel] instead
  */
 
 #define INITIALIZE_TREE_ITER(Iter) \
@@ -362,7 +364,7 @@ gtk_tree_model_base_init (gpointer g_class)
       tree_model_signals[ROW_CHANGED] =
         g_signal_new (I_("row-changed"),
                       GTK_TYPE_TREE_MODEL,
-                      G_SIGNAL_RUN_LAST, 
+                      G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
                       NULL, NULL,
                       _gtk_marshal_VOID__BOXED_BOXED,

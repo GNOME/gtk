@@ -104,9 +104,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * a button, both with the .combo class added. The button also contains another
  * node with name arrow.
  *
- * # Accessibility
+ * ## Accessibility
  *
  * `GtkComboBox` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.DropDown] instead
  */
 
 typedef struct
@@ -1373,7 +1375,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box)
  *
  * Before calling this, @combo_box must be mapped, or nothing will happen.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_popup (GtkComboBox *combo_box)
@@ -1396,7 +1398,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
  * in GTK 4. However, it is retained in case similar functionality is added
  * back later.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
@@ -1447,7 +1449,7 @@ gtk_combo_box_real_popdown (GtkComboBox *combo_box)
  * This function is mostly intended for use by accessibility technologies;
  * applications should have little use for it.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_popdown (GtkComboBox *combo_box)
@@ -1851,7 +1853,7 @@ gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
  *
  * Returns: A new `GtkComboBox`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_new (void)
@@ -1866,11 +1868,11 @@ gtk_combo_box_new (void)
  *
  * In order to use a combo box with entry, you need to tell it
  * which column of the model contains the text for the entry
- * by calling [method@Gtk.ComboBox.set_entry_text_column]. 
+ * by calling [method@Gtk.ComboBox.set_entry_text_column].
  *
  * Returns: A new `GtkComboBox`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_new_with_entry (void)
@@ -1886,7 +1888,7 @@ gtk_combo_box_new_with_entry (void)
  *
  * Returns: A new `GtkComboBox`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_new_with_model (GtkTreeModel *model)
@@ -1910,7 +1912,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  *
  * Returns: A new `GtkComboBox`
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
@@ -1935,7 +1937,7 @@ gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
  * Returns: An integer which is the index of the currently active item,
  *   or -1 if there’s no active item
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 int
 gtk_combo_box_get_active (GtkComboBox *combo_box)
@@ -1967,7 +1969,7 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
  *
  * Sets the active item of @combo_box to be the item at @index.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_active (GtkComboBox *combo_box,
@@ -2066,7 +2068,7 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
  *
  * Returns: %TRUE if @iter was set, %FALSE otherwise
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 gboolean
 gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
@@ -2097,7 +2099,7 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
  *
  * If @iter is %NULL, the active item is unset.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
@@ -2128,7 +2130,7 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
  * call [method@Gtk.CellLayout.clear] yourself if you need to set up different
  * cell renderers for the new model.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_model (GtkComboBox  *combo_box,
@@ -2191,7 +2193,7 @@ out:
  * Returns: (nullable) (transfer none): A `GtkTreeModel` which was passed
  *   during construction.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkTreeModel *
 gtk_combo_box_get_model (GtkComboBox *combo_box)
@@ -2550,7 +2552,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
  * If @fixed is %TRUE, the popup's width is set to match the
  * allocated width of the combo box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
@@ -2576,7 +2578,7 @@ gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
  *
  * Returns: %TRUE if the popup uses a fixed width
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 gboolean
 gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
@@ -2596,7 +2598,7 @@ gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
  *
  * Returns: (nullable): the current row separator function.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkTreeViewRowSeparatorFunc
 gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
@@ -2621,7 +2623,7 @@ gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
  * If the row separator function is %NULL, no separators are drawn.
  * This is the default value.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
@@ -2655,7 +2657,7 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
  * Sets whether the dropdown button of the combo box should update
  * its sensitivity depending on the model contents.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
@@ -2687,7 +2689,7 @@ gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
  *   if it is only sensitive as long as the model has one item to
  *   be selected.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkSensitivityType
 gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box)
@@ -2707,7 +2709,7 @@ gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box)
  *
  * Returns: whether there is an entry in @combo_box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 gboolean
 gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
@@ -2725,9 +2727,9 @@ gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
  *   the internal entry
  *
  * Sets the model column which @combo_box should use to get strings
- * from to be @text_column. 
+ * from to be @text_column.
  *
- * For this column no separate 
+ * For this column no separate
  * [class@Gtk.CellRenderer] is needed.
  *
  * The column @text_column in the model of @combo_box must be of
@@ -2736,7 +2738,7 @@ gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
  * This is only relevant if @combo_box has been created with
  * [property@Gtk.ComboBox:has-entry] as %TRUE.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
@@ -2771,7 +2773,7 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
  *
  * Returns: A column in the data source model of @combo_box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 int
 gtk_combo_box_get_entry_text_column (GtkComboBox *combo_box)
@@ -2849,7 +2851,7 @@ gtk_combo_box_buildable_get_internal_child (GtkBuildable *buildable,
  * The column @id_column in the model of @combo_box must be of type
  * %G_TYPE_STRING.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_id_column (GtkComboBox *combo_box,
@@ -2880,7 +2882,7 @@ gtk_combo_box_set_id_column (GtkComboBox *combo_box,
  *
  * Returns: A column in the data source model of @combo_box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 int
 gtk_combo_box_get_id_column (GtkComboBox *combo_box)
@@ -2912,7 +2914,7 @@ gtk_combo_box_get_id_column (GtkComboBox *combo_box)
  *
  * Returns: (nullable): the ID of the active row
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 const char *
 gtk_combo_box_get_active_id (GtkComboBox *combo_box)
@@ -2967,7 +2969,7 @@ gtk_combo_box_get_active_id (GtkComboBox *combo_box)
  *   @active_id was given to unset the active row, the function
  *   always returns %TRUE.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 gboolean
 gtk_combo_box_set_active_id (GtkComboBox *combo_box,
@@ -3032,7 +3034,7 @@ gtk_combo_box_get_popup (GtkComboBox *combo_box)
  *
  * Sets the child widget of @combo_box.
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 void
 gtk_combo_box_set_child (GtkComboBox *combo_box,
@@ -3060,7 +3062,7 @@ gtk_combo_box_set_child (GtkComboBox *combo_box,
  *
  * Returns: (nullable) (transfer none): the child widget of @combo_box
  *
- * Deprecated: 4.10: Use GtkDropDown
+ * Deprecated: 4.10: Use [class@Gtk.DropDown]
  */
 GtkWidget *
 gtk_combo_box_get_child (GtkComboBox *combo_box)
