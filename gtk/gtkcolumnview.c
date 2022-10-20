@@ -1689,6 +1689,13 @@ gtk_column_view_get_sorter (GtkColumnView *self)
  * on @column to associate a sorter with the column.
  *
  * If @column is %NULL, the view will be unsorted.
+ *
+ * This function can be called multiple times to set up
+ * sorting with multiple columns:
+ *
+ *     gtk_column_view_sort_by_column (view, NULL, 0);
+ *     gtk_column_view_sort_by_column (view, col1, GTK_SORT_DESCENDING);
+ *     gtk_column_view_sort_by_column (view, col0, GTK_SORT_ASCENDING);
  */
 void
 gtk_column_view_sort_by_column (GtkColumnView       *self,
