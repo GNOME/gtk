@@ -160,6 +160,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * For rubberband selection, a subnode with name `rubberband` is used.
  *
  * For the drop target location during DND, a subnode with name `dndtarget` is used.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ListView] for lists, and [class@Gtk.ColumnView]
+ *   for tabular lists
  */
 
 enum
@@ -503,7 +506,7 @@ typedef struct
   guint enable_search : 1;
   guint disable_popdown : 1;
   guint search_custom_entry_set : 1;
-  
+
   guint hover_selection : 1;
   guint hover_expand : 1;
   guint imcontext_changed : 1;
@@ -1031,10 +1034,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   /**
    * GtkTreeView:fixed-height-mode:
    *
-   * Setting the ::fixed-height-mode property to %TRUE speeds up 
-   * `GtkTreeView` by assuming that all rows have the same height. 
-   * Only enable this option if all rows are the same height.  
-   * Please see gtk_tree_view_set_fixed_height_mode() for more 
+   * Setting the ::fixed-height-mode property to %TRUE speeds up
+   * `GtkTreeView` by assuming that all rows have the same height.
+   * Only enable this option if all rows are the same height.
+   * Please see gtk_tree_view_set_fixed_height_mode() for more
    * information on this option.
    */
   tree_view_props[PROP_FIXED_HEIGHT_MODE] =
@@ -1044,10 +1047,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   /**
    * GtkTreeView:hover-selection:
-   * 
+   *
    * Enables or disables the hover selection mode of @tree_view.
    * Hover selection makes the selected row follow the pointer.
-   * Currently, this works only for the selection modes 
+   * Currently, this works only for the selection modes
    * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
    *
    * This mode is primarily intended for treeviews in popups, e.g.
@@ -1060,9 +1063,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   /**
    * GtkTreeView:hover-expand:
-   * 
+   *
    * Enables or disables the hover expansion mode of @tree_view.
-   * Hover expansion makes rows expand or collapse if the pointer moves 
+   * Hover expansion makes rows expand or collapse if the pointer moves
    * over them.
    *
    * This mode is primarily intended for treeviews in popups, e.g.
@@ -1169,8 +1172,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * GtkTreeView::test-expand-row:
    * @tree_view: the object on which the signal is emitted
    * @iter: the tree iter of the row to expand
-   * @path: a tree path that points to the row 
-   * 
+   * @path: a tree path that points to the row
+   *
    * The given row is about to be expanded (show its children nodes). Use this
    * signal if you need to control the expandability of individual rows.
    *
@@ -1194,8 +1197,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * GtkTreeView::test-collapse-row:
    * @tree_view: the object on which the signal is emitted
    * @iter: the tree iter of the row to collapse
-   * @path: a tree path that points to the row 
-   * 
+   * @path: a tree path that points to the row
+   *
    * The given row is about to be collapsed (hide its children nodes). Use this
    * signal if you need to control the collapsibility of individual rows.
    *
@@ -1219,8 +1222,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * GtkTreeView::row-expanded:
    * @tree_view: the object on which the signal is emitted
    * @iter: the tree iter of the expanded row
-   * @path: a tree path that points to the row 
-   * 
+   * @path: a tree path that points to the row
+   *
    * The given row has been expanded (child nodes are shown).
    */
   tree_view_signals[ROW_EXPANDED] =
@@ -1241,8 +1244,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * GtkTreeView::row-collapsed:
    * @tree_view: the object on which the signal is emitted
    * @iter: the tree iter of the collapsed row
-   * @path: a tree path that points to the row 
-   * 
+   * @path: a tree path that points to the row
+   *
    * The given row has been collapsed (child nodes are hidden).
    */
   tree_view_signals[ROW_COLLAPSED] =
@@ -1261,8 +1264,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   /**
    * GtkTreeView::columns-changed:
-   * @tree_view: the object on which the signal is emitted 
-   * 
+   * @tree_view: the object on which the signal is emitted
+   *
    * The number of columns of the treeview has changed.
    */
   tree_view_signals[COLUMNS_CHANGED] =
@@ -1277,7 +1280,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   /**
    * GtkTreeView::cursor-changed:
    * @tree_view: the object on which the signal is emitted
-   * 
+   *
    * The position of the cursor (focused cell) has changed.
    */
   tree_view_signals[CURSOR_CHANGED] =
@@ -2180,7 +2183,7 @@ gtk_tree_view_realize (GtkWidget *widget)
   gtk_tree_view_set_grid_lines (tree_view, priv->grid_lines);
   gtk_tree_view_set_enable_tree_lines (tree_view, priv->tree_lines_enabled);
 
-  install_presize_handler (tree_view); 
+  install_presize_handler (tree_view);
 }
 
 static void
@@ -2517,13 +2520,13 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
                             page_size * 0.1,
                             page_size * 0.9,
                             page_size);
- 
+
   /* now the adjustments and window sizes are in sync, we can sync toprow/dy again */
   if (gtk_tree_row_reference_valid (priv->top_row))
     gtk_tree_view_top_row_to_dy (tree_view);
   else
     gtk_tree_view_dy_to_top_row (tree_view);
-  
+
   if (gtk_widget_get_realized (widget))
     {
       if (priv->tree == NULL)
@@ -3443,7 +3446,7 @@ do_prelight (GtkTreeView   *tree_view,
 
   if (priv->hover_expand)
     {
-      priv->auto_expand_timeout = 
+      priv->auto_expand_timeout =
         g_timeout_add (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
       gdk_source_set_static_name_by_id (priv->auto_expand_timeout, "[gtk] auto_expand_timeout");
     }
@@ -3459,11 +3462,11 @@ prelight_or_select (GtkTreeView   *tree_view,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkSelectionMode mode = gtk_tree_selection_get_mode (priv->selection);
-  
+
   if (priv->hover_selection &&
       (mode == GTK_SELECTION_SINGLE || mode == GTK_SELECTION_BROWSE) &&
       !(priv->edited_column &&
-        gtk_cell_area_get_edit_widget 
+        gtk_cell_area_get_edit_widget
         (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (priv->edited_column)))))
     {
       if (node)
@@ -4434,7 +4437,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 			   path);
   depth = gtk_tree_path_get_depth (path);
   gtk_tree_path_free (path);
-  
+
   drag_dest_path = NULL;
 
   if (priv->drag_dest_row)
@@ -4478,7 +4481,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
    * start at the first node of the event, and walk the tree in
    * order, drawing each successive node.
    */
-  
+
   parity = !(gtk_tree_rbtree_node_get_index (tree, node) % 2);
 
   do
@@ -4662,7 +4665,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 
                   gtk_style_context_get_color (context, &color);
                   gtk_snapshot_append_color (snapshot,
-                                             &color, 
+                                             &color,
                                              &GRAPHENE_RECT_INIT(
                                                  cell_area.x,
                                                  cell_area.y + cell_area.height / 2,
@@ -4702,7 +4705,7 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 
                   gtk_style_context_get_color (context, &color);
                   gtk_snapshot_append_color (snapshot,
-                                             &color, 
+                                             &color,
                                              &GRAPHENE_RECT_INIT(
                                                  cell_area.x,
                                                  cell_area.y + cell_area.height / 2,
@@ -5012,7 +5015,7 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
     }
 
   gtk_snapshot_pop (snapshot);
-  
+
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
                               0, 0,
@@ -5313,7 +5316,7 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
            focus_column = focus_column->next)
         {
           GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
-	  
+
 	  button = gtk_tree_view_column_get_button (column);
           if (gtk_widget_has_focus (button))
             break;
@@ -5437,7 +5440,7 @@ gtk_tree_view_forward_controller_key_pressed (GtkEventControllerKey *key,
       if (!gtk_widget_is_visible (priv->search_popover))
         {
           priv->imcontext_changed = FALSE;
-          
+
           gtk_event_controller_key_forward (key, priv->search_entry);
 
           if (priv->imcontext_changed)
@@ -5467,7 +5470,7 @@ gtk_tree_view_motion_controller_enter (GtkEventControllerMotion *controller,
   GtkTreeRBTree *tree;
   GtkTreeRBNode *node;
   int new_y;
- 
+
   if (priv->tree == NULL)
     return;
 
@@ -5607,7 +5610,7 @@ validate_row (GtkTreeView   *tree_view,
       if (!gtk_tree_view_column_get_visible (column))
 	continue;
 
-      if (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) && 
+      if (GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_COLUMN_INVALID) &&
 	  !_gtk_tree_view_column_cell_get_dirty (column))
 	continue;
 
@@ -5798,7 +5801,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	  if (path)
 	    gtk_tree_path_free (path);
 	  path = NULL;
-	}      
+	}
     }
 
   /* We didn't have a scroll_to set, so we just handle things normally
@@ -6217,7 +6220,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 
      priv->fixed_height_check = 1;
    }
-  
+
  done:
   if (validated_area)
     {
@@ -6232,7 +6235,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * recursing, we cannot call gtk_widget_get_preferred_size() here because that's
        * not allowed (from inside ->get_preferred_width/height() implementations, one
        * should call the vfuncs directly). However what is desired here is the full
-       * size including any margins and limited by any alignment (i.e. after 
+       * size including any margins and limited by any alignment (i.e. after
        * GtkWidget:adjust_size_request() is called).
        *
        * Currently bypassing this but the real solution is to not update the scroll adjustments
@@ -6344,7 +6347,7 @@ presize_handler_callback (GtkWidget     *widget,
                           gpointer       unused)
 {
   do_presize_handler (GTK_TREE_VIEW (widget));
-		   
+
   return G_SOURCE_REMOVE;
 }
 
@@ -6353,7 +6356,7 @@ validate_rows (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   gboolean retval;
-  
+
   if (priv->presize_handler_tick_cb)
     {
       do_presize_handler (tree_view);
@@ -6361,7 +6364,7 @@ validate_rows (GtkTreeView *tree_view)
     }
 
   retval = do_validate_rows (tree_view, TRUE);
-  
+
   if (! retval && priv->validate_rows_timer)
     {
       g_source_remove (priv->validate_rows_timer);
@@ -7538,16 +7541,16 @@ column_sizing_notify (GObject    *object,
 
 /**
  * gtk_tree_view_set_fixed_height_mode:
- * @tree_view: a `GtkTreeView` 
+ * @tree_view: a `GtkTreeView`
  * @enable: %TRUE to enable fixed height mode
- * 
- * Enables or disables the fixed height mode of @tree_view. 
- * Fixed height mode speeds up `GtkTreeView` by assuming that all 
- * rows have the same height. 
+ *
+ * Enables or disables the fixed height mode of @tree_view.
+ * Fixed height mode speeds up `GtkTreeView` by assuming that all
+ * rows have the same height.
  * Only enable this option if all rows are the same height and all
  * columns are of type %GTK_TREE_VIEW_COLUMN_FIXED.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
@@ -7555,7 +7558,7 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *l;
-  
+
   enable = enable != FALSE;
 
   if (enable == priv->fixed_height_mode)
@@ -7566,19 +7569,19 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
       priv->fixed_height_mode = 0;
       priv->fixed_height = -1;
     }
-  else 
+  else
     {
       /* make sure all columns are of type FIXED */
       for (l = priv->columns; l; l = l->next)
 	{
 	  g_return_if_fail (gtk_tree_view_column_get_sizing (l->data) == GTK_TREE_VIEW_COLUMN_FIXED);
 	}
-      
+
       /* yes, we really have to do this is in a separate loop */
       for (l = priv->columns; l; l = l->next)
 	g_signal_connect (l->data, "notify::sizing",
 			  G_CALLBACK (column_sizing_notify), tree_view);
-      
+
       priv->fixed_height_mode = 1;
       priv->fixed_height = -1;
     }
@@ -7592,12 +7595,12 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_get_fixed_height_mode:
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns whether fixed height mode is turned on for @tree_view.
- * 
+ *
  * Returns: %TRUE if @tree_view is in fixed height mode
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_fixed_height_mode (GtkTreeView *tree_view)
@@ -7674,7 +7677,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	{
 	  if (priv->focus_column != NULL)
 	    button = gtk_tree_view_column_get_button (priv->focus_column);
-	  else 
+	  else
 	    button = NULL;
 
 	  if (button && gtk_widget_get_focusable (button))
@@ -7976,7 +7979,7 @@ gtk_tree_view_put (GtkTreeView       *tree_view,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkTreeViewChild *child;
-  
+
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_WIDGET (child_widget));
 
@@ -8344,7 +8347,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
         cursor_path = NULL;
 
       if (cursor_path == NULL ||
-          ! search_first_focusable_path (tree_view, &cursor_path, TRUE, 
+          ! search_first_focusable_path (tree_view, &cursor_path, TRUE,
                                          &cursor_tree, &cursor_node))
         {
           /* It looks like we reached the end of the view without finding
@@ -9015,7 +9018,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
 
   /* We know there are always 2 slots possbile, as you can always return column. */
   /* If that's all there is, return */
-  if (priv->column_drag_info->next == NULL || 
+  if (priv->column_drag_info->next == NULL ||
       (priv->column_drag_info->next->next == NULL &&
        ((GtkTreeViewColumnReorder *)priv->column_drag_info->data)->right_column == column &&
        ((GtkTreeViewColumnReorder *)priv->column_drag_info->next->data)->left_column == column))
@@ -9456,7 +9459,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
     }
   else
     {
-      gtk_tree_view_clamp_node_visible (tree_view, 
+      gtk_tree_view_clamp_node_visible (tree_view,
                                         priv->cursor_tree,
                                         priv->cursor_node);
 
@@ -9848,7 +9851,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
   if (!priv->extend_selection_pressed)
     gtk_tree_view_row_activated (tree_view, cursor_path,
                                  priv->focus_column);
-    
+
   gtk_tree_path_free (cursor_path);
 
   return TRUE;
@@ -10042,7 +10045,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 }
 
 /* Pops up the interactive search entry.  If keybinding is TRUE then the user
- * started this by typing the start_interactive_search keybinding.  Otherwise, it came from 
+ * started this by typing the start_interactive_search keybinding.  Otherwise, it came from
  */
 static gboolean
 gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
@@ -10082,7 +10085,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 	  break;
 	}
     }
-  
+
   if (gtk_widget_has_focus (GTK_WIDGET (tree_view)))
     found_focus = TRUE;
 
@@ -10172,7 +10175,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
  *
  * Returns: A newly created `GtkTreeView` widget.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkWidget *
 gtk_tree_view_new (void)
@@ -10188,7 +10191,7 @@ gtk_tree_view_new (void)
  *
  * Returns: A newly created `GtkTreeView` widget.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkWidget *
 gtk_tree_view_new_with_model (GtkTreeModel *model)
@@ -10208,7 +10211,7 @@ gtk_tree_view_new_with_model (GtkTreeModel *model)
  *
  * Returns: (transfer none) (nullable): A `GtkTreeModel`
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkTreeModel *
 gtk_tree_view_get_model (GtkTreeView *tree_view)
@@ -10229,7 +10232,7 @@ gtk_tree_view_get_model (GtkTreeView *tree_view)
  * set, it will remove it before setting the new model.  If @model is %NULL,
  * then it will unset the old model.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_model (GtkTreeView  *tree_view,
@@ -10383,7 +10386,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
  *
  * Returns: (transfer none): A `GtkTreeSelection` object.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkTreeSelection *
 gtk_tree_view_get_selection (GtkTreeView *tree_view)
@@ -10468,7 +10471,7 @@ gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
  *
  * Returns: Whether the headers are visible or not.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
@@ -10487,7 +10490,7 @@ gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
  *
  * Sets the visibility state of the headers.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
@@ -10540,7 +10543,7 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
  * Resizes all columns to their optimal width. Only works after the
  * treeview has been realized.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
@@ -10572,7 +10575,7 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
  *
  * Allow the column title buttons to be clicked.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
@@ -10606,14 +10609,14 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
  *
  * Returns: %TRUE if all header columns are clickable, otherwise %FALSE
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-gboolean 
+gboolean
 gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *list;
-  
+
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
   for (list = priv->columns; list; list = list->next)
@@ -10631,7 +10634,7 @@ gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
  * Cause the `GtkTreeView`::row-activated signal to be emitted
  * on a single click instead of a double click.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_activate_on_single_click (GtkTreeView *tree_view,
@@ -10658,7 +10661,7 @@ gtk_tree_view_set_activate_on_single_click (GtkTreeView *tree_view,
  *
  * Returns: %TRUE if row-activated will be emitted on a single click
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_activate_on_single_click (GtkTreeView *tree_view)
@@ -10684,7 +10687,7 @@ gtk_tree_view_get_activate_on_single_click (GtkTreeView *tree_view)
  *
  * Returns: The number of columns in @tree_view after appending.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 int
 gtk_tree_view_append_column (GtkTreeView       *tree_view,
@@ -10706,7 +10709,7 @@ gtk_tree_view_append_column (GtkTreeView       *tree_view,
  *
  * Returns: The number of columns in @tree_view after removing.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 int
 gtk_tree_view_remove_column (GtkTreeView       *tree_view,
@@ -10776,7 +10779,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
  *
  * Returns: The number of columns in @tree_view after insertion.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 int
 gtk_tree_view_insert_column (GtkTreeView       *tree_view,
@@ -10847,7 +10850,7 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
  *
  * Returns: The number of columns in @tree_view after insertion.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 int
 gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
@@ -10906,7 +10909,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  *
  * Returns: number of columns in the tree view post-insert
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 int
 gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
@@ -10941,7 +10944,7 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
  *
  * Returns: The number of columns in the @tree_view
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 guint
 gtk_tree_view_get_n_columns (GtkTreeView *tree_view)
@@ -10963,7 +10966,7 @@ gtk_tree_view_get_n_columns (GtkTreeView *tree_view)
  * Returns: (nullable) (transfer none): The `GtkTreeViewColumn`, or %NULL if the
  * position is outside the range of columns.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkTreeViewColumn *
 gtk_tree_view_get_column (GtkTreeView *tree_view,
@@ -10991,7 +10994,7 @@ gtk_tree_view_get_column (GtkTreeView *tree_view,
  *
  * Returns: (element-type GtkTreeViewColumn) (transfer container): A list of `GtkTreeViewColumn`s
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GList *
 gtk_tree_view_get_columns (GtkTreeView *tree_view)
@@ -11012,7 +11015,7 @@ gtk_tree_view_get_columns (GtkTreeView *tree_view)
  * Moves @column to be after to @base_column.  If @base_column is %NULL, then
  * @column is placed in the first position.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
@@ -11066,14 +11069,14 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
  * @tree_view: A `GtkTreeView`
  * @column: (nullable): %NULL, or the column to draw the expander arrow at.
  *
- * Sets the column to draw the expander arrow at. It must be in @tree_view.  
- * If @column is %NULL, then the expander arrow is always at the first 
+ * Sets the column to draw the expander arrow at. It must be in @tree_view.
+ * If @column is %NULL, then the expander arrow is always at the first
  * visible column.
  *
- * If you do not want expander arrow to appear in your tree, set the 
+ * If you do not want expander arrow to appear in your tree, set the
  * expander column to a hidden column.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
@@ -11102,7 +11105,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
  *
  * Returns: (transfer none) (nullable): The expander column.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GtkTreeViewColumn *
 gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
@@ -11136,7 +11139,7 @@ gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
  * @tree_view reverts to the default behavior of allowing all columns to be
  * dropped everywhere.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
@@ -11170,7 +11173,7 @@ gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
  *
  * If either @tree_x or @tree_y are -1, then that direction isn’t scrolled.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
@@ -11219,7 +11222,7 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
  * model.  If the model changes before the @tree_view is realized, the centered
  * path will be modified to reflect this change.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
@@ -11324,7 +11327,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
  *
  * Activates the cell determined by @path and @column.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_row_activated (GtkTreeView       *tree_view,
@@ -11373,7 +11376,7 @@ gtk_tree_view_expand_all_emission_helper (GtkTreeRBTree *tree,
  *
  * Recursively expands all nodes in the @tree_view.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_expand_all (GtkTreeView *tree_view)
@@ -11407,7 +11410,7 @@ gtk_tree_view_expand_all (GtkTreeView *tree_view)
  *
  * Recursively collapses all visible, expanded nodes in @tree_view.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_collapse_all (GtkTreeView *tree_view)
@@ -11449,7 +11452,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
  * Expands the row at @path. This will also expand all parent rows of
  * @path as necessary.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_expand_to_path (GtkTreeView *tree_view,
@@ -11580,7 +11583,7 @@ gtk_tree_view_real_expand_row (GtkTreeView   *tree_view,
  *
  * Returns: %TRUE if the row existed and had children
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_expand_row (GtkTreeView *tree_view,
@@ -11685,7 +11688,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView   *tree_view,
     }
 
   selection_changed = gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children);
-  
+
   /* Stop a pending double click */
   gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->click_gesture));
 
@@ -11702,7 +11705,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView   *tree_view,
     }
 
   g_signal_emit (tree_view, tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
-  
+
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     update_prelight (tree_view,
                      priv->event_last_x,
@@ -11720,7 +11723,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView   *tree_view,
  *
  * Returns: %TRUE if the row was collapsed.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_collapse_row (GtkTreeView *tree_view,
@@ -11782,7 +11785,7 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
  *
  * Calls @func on all expanded rows.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
@@ -11813,7 +11816,7 @@ gtk_tree_view_map_expanded_rows (GtkTreeView            *tree_view,
  *
  * Returns: %TRUE if #path is expanded.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_row_expanded (GtkTreeView *tree_view,
@@ -11842,7 +11845,7 @@ gtk_tree_view_row_expanded (GtkTreeView *tree_view,
  *
  * Returns: %TRUE if the tree can be reordered.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
@@ -11874,7 +11877,7 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * reordering is allowed.  If more control is needed, you should probably
  * handle drag and drop manually.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
@@ -11931,7 +11934,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
    * path maps to a non-existing path and we will silently bail out.
    * We unset tree and node to avoid further processing.
    */
-  if (path == NULL || 
+  if (path == NULL ||
       row_is_separator (tree_view, NULL, path)
       || _gtk_tree_view_find_node (tree_view,
                                    path,
@@ -12000,7 +12003,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
  * The returned `GtkTreePath` must be freed with gtk_tree_path_free() when
  * you are done with it.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
@@ -12035,17 +12038,17 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
  * useful when you want to focus the user’s attention on a particular row.  If
- * @focus_column is not %NULL, then focus is given to the column specified by 
- * it. Additionally, if @focus_column is specified, and @start_editing is 
- * %TRUE, then editing should be started in the specified cell.  
- * This function is often followed by @gtk_widget_grab_focus (@tree_view) 
- * in order to give keyboard focus to the widget.  Please note that editing 
+ * @focus_column is not %NULL, then focus is given to the column specified by
+ * it. Additionally, if @focus_column is specified, and @start_editing is
+ * %TRUE, then editing should be started in the specified cell.
+ * This function is often followed by @gtk_widget_grab_focus (@tree_view)
+ * in order to give keyboard focus to the widget.  Please note that editing
  * can only happen when the widget is realized.
  *
  * If @path is invalid for @model, the current cursor (if any) will be unset
  * and the function will return without failing.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
@@ -12080,7 +12083,7 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * If @path is invalid for @model, the current cursor (if any) will be unset
  * and the function will return without failing.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
@@ -12168,7 +12171,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
  *
  * Returns: %TRUE if a row exists at that coordinate.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
@@ -12246,7 +12249,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 	    {
 	      if (column)
 		*column = last_column;
-	      
+
 	      if (cell_x)
 		*cell_x = gtk_tree_view_column_get_width (last_column) + remaining_x;
 	    }
@@ -12325,7 +12328,7 @@ gtk_tree_view_get_cell_area_y_offset (GtkTreeView   *tree_view,
  * gtk_cell_renderer_render().  This function is only valid if @tree_view is
  * realized.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
@@ -12453,7 +12456,7 @@ gtk_tree_view_get_row_y_offset (GtkTreeView   *tree_view,
  * returned by gtk_tree_view_get_cell_area(), which returns only the cell
  * itself, excluding surrounding borders and the tree expander area.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
@@ -12505,7 +12508,7 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
  * Tree coordinates start at 0,0 for row 0 of the tree, and cover the entire
  * scrollable area of the tree.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
@@ -12540,7 +12543,7 @@ gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
  * Converts widget coordinates to coordinates for the
  * tree (the full scrollable area of the tree).
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view,
@@ -12572,7 +12575,7 @@ gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view,
  * Converts tree coordinates (coordinates in full scrollable area of the tree)
  * to widget coordinates.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
@@ -12603,7 +12606,7 @@ gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view,
  *
  * Converts widget coordinates to coordinates for the bin_window.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
@@ -12632,7 +12635,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
  *
  * Converts bin_window coordinates to widget relative coordinates.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
@@ -12662,7 +12665,7 @@ gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
  * Converts tree coordinates (coordinates in full scrollable area of the tree)
  * to bin_window coordinates.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
@@ -12692,7 +12695,7 @@ gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view,
  * Converts bin_window coordinates to coordinates for the
  * tree (the full scrollable area of the tree).
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
@@ -12726,7 +12729,7 @@ gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view,
  *
  * Returns: %TRUE, if valid paths were placed in @start_path and @end_path.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
@@ -12737,7 +12740,7 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
   GtkTreeRBTree *tree;
   GtkTreeRBNode *node;
   gboolean retval;
-  
+
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
   if (!priv->tree)
@@ -12810,7 +12813,7 @@ gtk_tree_view_get_visible_range (GtkTreeView  *tree_view,
  * Returns: %TRUE if the area at the given coordinates is blank,
  * %FALSE otherwise.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_is_blank_at_pos (GtkTreeView       *tree_view,
@@ -12906,7 +12909,7 @@ unset_reorderable (GtkTreeView *tree_view)
  * Turns @tree_view into a drag source for automatic DND. Calling this
  * method sets `GtkTreeView`:reorderable to %FALSE.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
@@ -12936,11 +12939,11 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
  * @formats: the target formats that the drag will support
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
- * 
+ *
  * Turns @tree_view into a drop destination for automatic DND. Calling
  * this method sets `GtkTreeView`:reorderable to %FALSE.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
@@ -12981,7 +12984,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
  * gtk_tree_view_enable_model_drag_source(). Calling this method sets
  * `GtkTreeView`:reorderable to %FALSE.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
@@ -13003,7 +13006,7 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
       if (!di->dest_set && !di->source_set)
         remove_info (tree_view);
     }
-  
+
   unset_reorderable (tree_view);
 }
 
@@ -13015,7 +13018,7 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
  * gtk_tree_view_enable_model_drag_dest(). Calling this method sets
  * `GtkTreeView`:reorderable to %FALSE.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
@@ -13054,7 +13057,7 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
  * Sets the row that is highlighted for feedback.
  * If @path is %NULL, an existing highlight is removed.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
@@ -13118,10 +13121,10 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
  * @tree_view: a `GtkTreeView`
  * @path: (out) (optional) (nullable): Return location for the path of the highlighted row
  * @pos: (out) (optional): Return location for the drop position
- * 
+ *
  * Gets information about the row that is highlighted for feedback.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
@@ -13158,16 +13161,16 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  *   the highlighted row
  * @pos: (out) (optional): Return location for the drop position, or
  *   %NULL
- * 
+ *
  * Determines the destination row for a given position.  @drag_x and
  * @drag_y are expected to be in widget coordinates.  This function is only
  * meaningful if @tree_view is realized.  Therefore this function will always
  * return %FALSE if @tree_view is not realized or does not have a model.
- * 
+ *
  * Returns: whether there is a row at the given position, %TRUE if this
  * is indeed the case.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
@@ -13280,7 +13283,7 @@ gtk_treeview_snapshot_border (GtkSnapshot           *snapshot,
  *
  * Returns: (transfer full) (nullable): a newly-allocated surface of the drag icon.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 GdkPaintable *
 gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
@@ -13392,7 +13395,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
               gtk_style_context_get_color (context, &color);
               gtk_snapshot_append_color (snapshot,
-                                         &color, 
+                                         &color,
                                          &GRAPHENE_RECT_INIT(
                                              cell_area.x,
                                              cell_area.y + cell_area.height / 2,
@@ -13434,11 +13437,11 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
  *
  * If @enable_search is set, then the user can type in text to search through
  * the tree interactively (this is sometimes called "typeahead find").
- * 
- * Note that even if this is %FALSE, the user can still initiate a search 
+ *
+ * Note that even if this is %FALSE, the user can still initiate a search
  * using the “start-interactive-search” key binding.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
@@ -13449,7 +13452,7 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   enable_search = !!enable_search;
-  
+
   if (priv->enable_search != enable_search)
     {
        priv->enable_search = enable_search;
@@ -13461,12 +13464,12 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
  * gtk_tree_view_get_enable_search:
  * @tree_view: A `GtkTreeView`
  *
- * Returns whether or not the tree allows to start interactive searching 
+ * Returns whether or not the tree allows to start interactive searching
  * by typing in text.
  *
  * Returns: whether or not to let the user search interactively
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
@@ -13487,7 +13490,7 @@ gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
  *
  * Returns: the column the interactive search code searches in.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 int
 gtk_tree_view_get_search_column (GtkTreeView *tree_view)
@@ -13505,16 +13508,16 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
  * @column: the column of the model to search in, or -1 to disable searching
  *
  * Sets @column as the column where the interactive search code should
- * search in for the current model. 
- * 
+ * search in for the current model.
+ *
  * If the search column is set, users can use the “start-interactive-search”
  * key binding to bring up search popup. The enable-search property controls
  * whether simply typing text will also start an interactive search.
  *
- * Note that @column refers to a column of the current model. The search 
+ * Note that @column refers to a column of the current model. The search
  * column is reset to -1 when the model is changed.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_search_column (GtkTreeView *tree_view,
@@ -13540,7 +13543,7 @@ gtk_tree_view_set_search_column (GtkTreeView *tree_view,
  *
  * Returns: the currently used compare function for the search code.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 
 GtkTreeViewSearchEqualFunc
@@ -13564,7 +13567,7 @@ gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
  * that somewhat like strcmp() returning 0 for equality
  * `GtkTreeView`SearchEqualFunc returns %FALSE on matches.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
@@ -13597,7 +13600,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
  *
  * Returns: (transfer none) (nullable): the entry currently in use as search entry.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 GtkEditable *
 gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
@@ -13623,7 +13626,7 @@ gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
  * @entry will make the interactive search code use the built-in popup
  * entry again.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
@@ -13705,7 +13708,7 @@ gtk_tree_view_search_popover_hide (GtkWidget   *search_popover,
       g_source_remove (priv->typeselect_flush_timeout);
       priv->typeselect_flush_timeout = 0;
     }
-	
+
   if (gtk_widget_get_visible (search_popover))
     {
       gtk_popover_popdown (GTK_POPOVER (search_popover));
@@ -13762,9 +13765,9 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
     {
       path = _gtk_tree_path_new_from_rbtree (priv->cursor_tree,
                                              priv->cursor_node);
-      
+
       gtk_tree_view_row_activated (tree_view, path, priv->focus_column);
-      
+
       gtk_tree_path_free (path);
     }
 }
@@ -14291,12 +14294,12 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
  *
  * Enables or disables the hover selection mode of @tree_view.
  * Hover selection makes the selected row follow the pointer.
- * Currently, this works only for the selection modes 
+ * Currently, this works only for the selection modes
  * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-void     
+void
 gtk_tree_view_set_hover_selection (GtkTreeView *tree_view,
 				   gboolean     hover)
 {
@@ -14315,14 +14318,14 @@ gtk_tree_view_set_hover_selection (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_get_hover_selection:
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns whether hover selection mode is turned on for @tree_view.
- * 
+ *
  * Returns: %TRUE if @tree_view is in hover selection mode
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-gboolean 
+gboolean
 gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -14338,12 +14341,12 @@ gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
  * @expand: %TRUE to enable hover selection mode
  *
  * Enables or disables the hover expansion mode of @tree_view.
- * Hover expansion makes rows expand or collapse if the pointer 
+ * Hover expansion makes rows expand or collapse if the pointer
  * moves over them.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-void     
+void
 gtk_tree_view_set_hover_expand (GtkTreeView *tree_view,
 				gboolean     expand)
 {
@@ -14362,14 +14365,14 @@ gtk_tree_view_set_hover_expand (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_get_hover_expand:
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns whether hover expansion mode is turned on for @tree_view.
- * 
+ *
  * Returns: %TRUE if @tree_view is in hover expansion mode
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-gboolean 
+gboolean
 gtk_tree_view_get_hover_expand (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -14388,7 +14391,7 @@ gtk_tree_view_get_hover_expand (GtkTreeView *tree_view)
  * is %GTK_SELECTION_MULTIPLE, rubber banding will allow the user to select
  * multiple rows by dragging the mouse.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_rubber_banding (GtkTreeView *tree_view,
@@ -14409,14 +14412,14 @@ gtk_tree_view_set_rubber_banding (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_get_rubber_banding:
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns whether rubber banding is turned on for @tree_view.  If the
  * selection mode is %GTK_SELECTION_MULTIPLE, rubber banding will allow the
  * user to select multiple rows by dragging the mouse.
- * 
+ *
  * Returns: %TRUE if rubber banding in @tree_view is enabled.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view)
@@ -14429,14 +14432,14 @@ gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_is_rubber_banding_active:
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns whether a rubber banding operation is currently being done
  * in @tree_view.
  *
  * Returns: %TRUE if a rubber banding operation is currently being
  * done in @tree_view.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 gboolean
 gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view)
@@ -14455,14 +14458,14 @@ gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_get_row_separator_func: (skip)
  * @tree_view: a `GtkTreeView`
- * 
+ *
  * Returns the current row separator function.
- * 
+ *
  * Returns: the current row separator function.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
-GtkTreeViewRowSeparatorFunc 
+GtkTreeViewRowSeparatorFunc
 gtk_tree_view_get_row_separator_func (GtkTreeView *tree_view)
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
@@ -14478,12 +14481,12 @@ gtk_tree_view_get_row_separator_func (GtkTreeView *tree_view)
  * @func: (nullable): a `GtkTreeView`RowSeparatorFunc
  * @data: (nullable): user data to pass to @func
  * @destroy: (nullable): destroy notifier for @data
- * 
+ *
  * Sets the row separator function, which is used to determine
  * whether a row should be drawn as a separator. If the row separator
  * function is %NULL, no separators are drawn. This is the default value.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  **/
 void
 gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
@@ -14516,7 +14519,7 @@ gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
  * Returns: a `GtkTreeView`GridLines value indicating which grid lines
  * are enabled.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 GtkTreeViewGridLines
 gtk_tree_view_get_grid_lines (GtkTreeView *tree_view)
@@ -14536,7 +14539,7 @@ gtk_tree_view_get_grid_lines (GtkTreeView *tree_view)
  *
  * Sets which grid lines to draw in @tree_view.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
@@ -14553,7 +14556,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
   if (old_grid_lines != grid_lines)
     {
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-      
+
       g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_ENABLE_GRID_LINES]);
     }
 }
@@ -14567,7 +14570,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
  * Returns: %TRUE if tree lines are drawn in @tree_view, %FALSE
  * otherwise.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_get_enable_tree_lines (GtkTreeView *tree_view)
@@ -14587,7 +14590,7 @@ gtk_tree_view_get_enable_tree_lines (GtkTreeView *tree_view)
  * Sets whether to draw lines interconnecting the expanders in @tree_view.
  * This does not have any visible effects for lists.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
@@ -14626,7 +14629,7 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
  * gtk_tree_view_set_level_indentation().
  * This does not have any visible effects for lists.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
@@ -14654,7 +14657,7 @@ gtk_tree_view_set_show_expanders (GtkTreeView *tree_view,
  * Returns: %TRUE if expanders are drawn in @tree_view, %FALSE
  * otherwise.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_get_show_expanders (GtkTreeView *tree_view)
@@ -14677,7 +14680,7 @@ gtk_tree_view_get_show_expanders (GtkTreeView *tree_view)
  * indentation will be used.
  * This does not have any visible effects for lists.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_level_indentation (GtkTreeView *tree_view,
@@ -14700,7 +14703,7 @@ gtk_tree_view_set_level_indentation (GtkTreeView *tree_view,
  * Returns: the amount of extra indentation for child levels in
  * @tree_view.  A return value of 0 means that this feature is disabled.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 int
 gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
@@ -14722,7 +14725,7 @@ gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
  * See also gtk_tree_view_set_tooltip_column() for a simpler alternative.
  * See also gtk_tooltip_set_tip_area().
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
@@ -14755,7 +14758,7 @@ gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
  *
  * See also gtk_tree_view_set_tooltip_column() for a simpler alternative.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
@@ -14854,7 +14857,7 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  *
  * Returns: whether or not the given tooltip context points to a row
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 gboolean
 gtk_tree_view_get_tooltip_context (GtkTreeView   *tree_view,
@@ -14973,7 +14976,7 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
  * Note that the signal handler sets the text with gtk_tooltip_set_markup(),
  * so &, <, etc have to be escaped in the text.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 void
 gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
@@ -15017,7 +15020,7 @@ gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view,
  * Returns: the index of the tooltip column that is currently being
  * used, or -1 if this is disabled.
  *
- * Deprecated: 4.10: Use GtkListView and GtkColumnView instead
+ * Deprecated: 4.10: Use [class@Gtk.ListView] or [class@Gtk.ColumnView] instead
  */
 int
 gtk_tree_view_get_tooltip_column (GtkTreeView *tree_view)
