@@ -89,6 +89,7 @@
 #include "gtkcustomsorter.h"
 #include "gtkstringsorter.h"
 #include "gtkmultisorter.h"
+#include "gtkcolumnviewsorter.h"
 #include "gtkexpression.h"
 
 #ifndef G_OS_WIN32
@@ -3063,12 +3064,20 @@ cancel_all_operations (GtkFileChooserWidget *impl)
   search_stop_searching (impl, TRUE);
 }
 
+static void sorter_changed (GtkSorter            *main_sorter,
+                            GParamSpec           *pspec,
+                            GtkFileChooserWidget *impl);
+
 static void
 gtk_file_chooser_widget_dispose (GObject *object)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) object;
+  GtkSorter *sorter;
 
   cancel_all_operations (impl);
+
+  sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (impl->browse_files_column_view));
+  g_signal_handlers_disconnect_by_func (sorter, G_CALLBACK (sorter_changed), impl);
 
   /* browse_files_popover is not a template child */
   g_clear_pointer (&impl->browse_files_popover, gtk_widget_unparent);
@@ -7066,12 +7075,29 @@ get_name (GFileInfo *info)
 }
 
 static void
+sorter_changed (GtkSorter            *sorter,
+                GParamSpec           *pspec,
+                GtkFileChooserWidget *impl)
+{
+  GtkColumnViewSorter *main_sorter = GTK_COLUMN_VIEW_SORTER (sorter);
+  GtkColumnViewColumn *primary;
+
+  primary = gtk_column_view_sorter_get_primary_sort_column (main_sorter);
+  impl->sort_column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (primary), "column"));
+  impl->sort_order = gtk_column_view_sorter_get_primary_sort_order (main_sorter);
+}
+
+static void
 setup_sorting (GtkFileChooserWidget *impl)
 {
   GtkFileSystemModel *fsmodel;
+  GtkSorter *main_sorter;
   GtkSorter *sorter = NULL;
 
   fsmodel = GTK_FILE_SYSTEM_MODEL (get_current_model (impl));
+
+  main_sorter = gtk_column_view_get_sorter (GTK_COLUMN_VIEW (impl->browse_files_column_view));
+  g_signal_handlers_disconnect_by_func (main_sorter, G_CALLBACK (sorter_changed), impl);
 
   gtk_column_view_column_set_sorter (impl->column_view_name_column, NULL);
   gtk_column_view_column_set_sorter (impl->column_view_location_column, NULL);
@@ -7082,6 +7108,7 @@ setup_sorting (GtkFileChooserWidget *impl)
   if (fsmodel == impl->browse_files_model)
     {
       GtkExpression *expression;
+      GtkColumnViewColumn *column;
 
       expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                 0, NULL,
@@ -7107,6 +7134,31 @@ setup_sorting (GtkFileChooserWidget *impl)
       sorter = GTK_SORTER (gtk_multi_sorter_new ());
       gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), GTK_SORTER (gtk_custom_sorter_new (directory_sort_func, impl, NULL)));
       gtk_multi_sorter_append (GTK_MULTI_SORTER (sorter), g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (impl->browse_files_column_view))));
+
+      switch (impl->sort_column)
+        {
+        case 0:
+          column = impl->column_view_name_column;
+          break;
+        case 1:
+          column = impl->column_view_size_column;
+          break;
+        case 2:
+          column = impl->column_view_type_column;
+          break;
+        case 3:
+          column = impl->column_view_time_column;
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (impl->browse_files_column_view),
+                                      column, impl->sort_order);
+
+      sorter_changed (main_sorter, NULL, impl);
+      g_signal_connect (main_sorter, "notify::primary-sort-column", G_CALLBACK (sorter_changed), impl);
+      g_signal_connect (main_sorter, "notify::primary-sort-order", G_CALLBACK (sorter_changed), impl);
     }
   else if (fsmodel == impl->recent_model)
     {
@@ -7165,6 +7217,11 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   gtk_sort_list_model_set_model (impl->sort_model, G_LIST_MODEL (impl->filter_model));
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view), impl->selection_model);
+
+  g_object_set_data (G_OBJECT (impl->column_view_name_column), "column", GINT_TO_POINTER (0));
+  g_object_set_data (G_OBJECT (impl->column_view_size_column), "column", GINT_TO_POINTER (1));
+  g_object_set_data (G_OBJECT (impl->column_view_type_column), "column", GINT_TO_POINTER (2));
+  g_object_set_data (G_OBJECT (impl->column_view_time_column), "column", GINT_TO_POINTER (3));
 
   impl->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
