@@ -56,6 +56,7 @@ struct _GtkColumnViewColumn
 
   GtkListItemFactory *factory;
   char *title;
+  char *id;
   GtkSorter *sorter;
 
   /* data for the view */
@@ -97,6 +98,7 @@ enum
   PROP_RESIZABLE,
   PROP_EXPAND,
   PROP_FIXED_WIDTH,
+  PROP_ID,
 
   N_PROPS
 };
@@ -167,6 +169,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_int (value, self->fixed_width);
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, self->id);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -213,6 +219,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_FIXED_WIDTH:
       gtk_column_view_column_set_fixed_width (self, g_value_get_int (value));
+      break;
+
+    case PROP_ID:
+      gtk_column_view_column_set_id (self, g_value_get_string (value));
       break;
 
     default:
@@ -320,6 +330,24 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
     g_param_spec_int ("fixed-width", NULL, NULL,
                       -1, G_MAXINT, -1,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewColumn:id: (attributes org.gtk.Property.get=gtk_column_view_column_get_id org.gtk.Property.set=gtk_column_view_column_set_id)
+   *
+   * An ID for the column.
+   *
+   * GTK is not currently using the ID for anything, but
+   * it can be used by applications when saving column view
+   * configurations.
+   *
+   * It is up to applications to ensure uniqueness of IDs.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                          NULL,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -1004,3 +1032,51 @@ gtk_column_view_column_get_header_allocation (GtkColumnViewColumn *self,
   if (size)
     *size = self->allocation_size;
 }
+
+/**
+ * gtk_column_view_column_set_id: (attributes org.gtk.Method.set_property=id)
+ * @self: a `GtkColumnViewColumn`
+ * @id: (nullable): ID to use for this column
+ *
+ * Sets the id of this column.
+ *
+ * GTK makes no use of this, but applications can use it when
+ * storing column view configuration.
+ *
+ * It is up to callers to ensure uniqueness of IDs.
+ *
+ * Since: 4.10
+ */
+void
+gtk_column_view_column_set_id (GtkColumnViewColumn *self,
+                               const char          *id)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (g_strcmp0 (self->id, id) == 0)
+    return;
+
+  g_free (self->id);
+  self->id = g_strdup (id);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
+}
+
+/**
+ * gtk_column_view_column_get_id: (attributes org.gtk.Method.get_property=id)
+ * @self: a `GtkColumnViewColumn`
+ *
+ * Returns the ID set with gtk_column_view_column_set_id().
+ *
+ * Returns: (nullable): The column's ID
+ *
+ * Since: 4.10
+ */
+const char *
+gtk_column_view_column_get_id (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
+
+  return self->id;
+}
+
