@@ -88,6 +88,7 @@ file_chooser_cell_clicked (GtkEventController *controller,
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
   GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
 
+  gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
   popup_menu (self, x, y);
 }
 
@@ -99,6 +100,7 @@ file_chooser_cell_long_pressed (GtkEventController *controller,
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
   GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
 
+  gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
   popup_menu (self, x, y);
 }
 
