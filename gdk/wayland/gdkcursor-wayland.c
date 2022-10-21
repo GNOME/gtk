@@ -476,6 +476,8 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
       cursor->surface.scale = (int)sx;
       cursor->surface.width = cairo_image_surface_get_width (surface);
       cursor->surface.height = cairo_image_surface_get_height (surface);
+      cursor->surface.hotspot_x *= sx;
+      cursor->surface.hotspot_y *= sx;
     }
   else
     {
