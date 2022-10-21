@@ -61,7 +61,8 @@ struct _GtkEntryCompletion
 
   gulong completion_timeout;
   gulong changed_id;
-  gulong insert_text_id;
+
+  GSignalGroup *insert_text_signal_group;
 
   int current_selected;
 
