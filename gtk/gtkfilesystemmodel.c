@@ -291,10 +291,7 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
     }
   else
     {
-      guint row;
-
-      row = node_get_tree_row (model, id);
-      g_assert (row < model->files->len);
+      g_assert (node_get_tree_row (model, id) < model->files->len);
 
       node->visible = FALSE;
       node_invalidate_index (model, id);
