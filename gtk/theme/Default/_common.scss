@@ -3369,6 +3369,30 @@ columnview row:not(:selected) cell editablelabel.editing text selection {
   }
 }
 
+/********************************************************
+ * Complex Lists                                        *
+ * Put padding on the cell content so event controllers *
+ * can cover the whole area.                            *
+ ********************************************************/
+
+columnview.complex {
+  > listview > row > cell {
+      padding: 0;
+      > * {
+        padding: 8px 6px;
+      }
+  }
+
+  // shrink vertically for .data-table
+  &.data-table > listview > row > cell {
+    padding: 0;
+    > * {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+  }
+}
+
 /*********************
  * App Notifications *
  *********************/

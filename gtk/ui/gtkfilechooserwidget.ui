@@ -141,6 +141,9 @@
                                         <property name="vexpand">1</property>
                                         <child>
                                           <object class="GtkColumnView" id="browse_files_column_view">
+                                            <style>
+                                              <class name="complex"/>
+                                            </style>
                                             <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_column_view_keynav_failed_cb"/>
                                             <child>
