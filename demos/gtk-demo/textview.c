@@ -11,7 +11,6 @@
 #include <stdlib.h> /* for exit() */
 #include "paintable.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
@@ -431,11 +430,11 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 1)
         {
-          widget = gtk_combo_box_text_new ();
+          const char *options[] = {
+            "Option 1", "Option 2", "Option 3", NULL
+          };
 
-          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 1");
-          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 2");
-          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 3");
+          widget = gtk_drop_down_new_from_strings (options);
         }
       else if (i == 2)
         {
