@@ -25,6 +25,7 @@
 
 #include "gtkcomposetable.h"
 #include "gtkimcontextsimple.h"
+#include "gtkprivate.h"
 
 
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
