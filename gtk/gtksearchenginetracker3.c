@@ -114,7 +114,8 @@ free_hit (gpointer data)
 }
 
 static GFileInfo *
-create_file_info (TrackerSparqlCursor *cursor)
+create_file_info (GFile               *file,
+                  TrackerSparqlCursor *cursor)
 {
   GFileInfo *info;
   const char *str;
@@ -139,6 +140,10 @@ create_file_info (TrackerSparqlCursor *cursor)
       g_file_info_set_modification_date_time (info, creation);
       g_date_time_unref (creation);
     }
+
+  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+  g_file_info_set_attribute_boolean (info, "filechooser::filtered-out", FALSE);
+  g_file_info_set_attribute_boolean (info, "filechooser::visible", TRUE);
 
   return info;
 }
@@ -175,7 +180,7 @@ query_callback (TrackerSparqlStatement *statement,
       url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
       hit = g_slice_new0 (GtkSearchHit);
       hit->file = g_file_new_for_uri (url);
-      hit->info = create_file_info (cursor);
+      hit->info = create_file_info (hit->file, cursor);
       hits = g_list_prepend (hits, hit);
     }
 
