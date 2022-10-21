@@ -16,7 +16,6 @@ enum {
   NUM_PROPERTIES
 };
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 static void
 pixbuf_paintable_snapshot (GdkPaintable *paintable,
                            GdkSnapshot  *snapshot,
@@ -37,7 +36,6 @@ pixbuf_paintable_snapshot (GdkPaintable *paintable,
 
   g_object_unref (texture);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static int
 pixbuf_paintable_get_intrinsic_width (GdkPaintable *paintable)
