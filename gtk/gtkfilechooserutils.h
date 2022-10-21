@@ -58,6 +58,8 @@ GIcon *         _gtk_file_info_get_icon    (GFileInfo    *info,
                                             int           scale,
                                             GtkIconTheme *icon_theme);
 
+GFile *         _gtk_file_info_get_file (GFileInfo *info);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_UTILS_H__ */

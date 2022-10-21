@@ -21,7 +21,6 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
-#include <gtk/deprecated/gtktreemodel.h>
 
 G_BEGIN_DECLS
 
@@ -33,39 +32,13 @@ typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
 GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
 
-typedef gboolean (*GtkFileSystemModelGetValue)   (GtkFileSystemModel *model,
-                                                  GFile              *file,
-                                                  GFileInfo          *info,
-                                                  int                 column,
-                                                  GValue             *value,
-                                                  gpointer            user_data);
-
-GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystemModelGetValue get_func,
-                                                             gpointer            get_data,
-                                                             guint               n_columns,
-                                                             ...);
-GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *             dir,
-                                                             const char *       attributes,
-                                                             GtkFileSystemModelGetValue get_func,
-                                                             gpointer            get_data,
-                                                             guint               n_columns,
-                                                             ...);
+GtkFileSystemModel *_gtk_file_system_model_new              (void);
+GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile              *dir,
+                                                             const char         *attributes);
 GFile *             _gtk_file_system_model_get_directory    (GtkFileSystemModel *model);
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
-gboolean            _gtk_file_system_model_iter_is_visible  (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
-gboolean            _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
-								 GtkTreeIter        *iter);
-GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
-gboolean            _gtk_file_system_model_get_iter_for_file(GtkFileSystemModel *model,
-							     GtkTreeIter        *iter,
+GFileInfo *         _gtk_file_system_model_get_info_for_file(GtkFileSystemModel *model,
 							     GFile              *file);
-GFile *             _gtk_file_system_model_get_file         (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
-const GValue *      _gtk_file_system_model_get_value        (GtkFileSystemModel *model,
-                                                             GtkTreeIter *       iter,
-                                                             int                 column);
 
 void                _gtk_file_system_model_add_and_query_file  (GtkFileSystemModel *model,
                                                                 GFile              *file,
@@ -88,8 +61,6 @@ void                _gtk_file_system_model_set_show_files   (GtkFileSystemModel 
 							     gboolean            show_files);
 void                _gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
 							     gboolean            show_folders);
-void                _gtk_file_system_model_clear_cache      (GtkFileSystemModel *model,
-                                                             int                 column);
 
 void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
                                                              GtkFileFilter      *filter);

@@ -24,6 +24,7 @@
 #include <gdk/gdk.h>
 
 #include "gtksearchenginemodelprivate.h"
+#include "gtkfilechooserutils.h"
 #include "gtkprivate.h"
 
 #include <string.h>
@@ -81,37 +82,33 @@ static gboolean
 do_search (gpointer data)
 {
   GtkSearchEngineModel *model = data;
-  GtkTreeIter iter;
   GList *hits = NULL;
   gboolean got_results = FALSE;
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model->model), &iter))
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model->model)); i++)
     {
-      do
+      GFileInfo *info = g_list_model_get_item (G_LIST_MODEL (model->model), i);
+
+      if (info_matches_query (model->query, info))
         {
-          GFileInfo *info;
+          GFile *file;
+          GtkSearchHit *hit;
 
-          info = _gtk_file_system_model_get_info (model->model, &iter);
-          if (info_matches_query (model->query, info))
-            {
-              GFile *file;
-              GtkSearchHit *hit;
-
-              file = _gtk_file_system_model_get_file (model->model, &iter);
-              hit = g_new (GtkSearchHit, 1);
-              hit->file = g_object_ref (file);
-              hit->info = g_object_ref (info);
-              hits = g_list_prepend (hits, hit);
-            }
+          file = _gtk_file_info_get_file (info);
+          hit = g_new (GtkSearchHit, 1);
+          hit->file = g_object_ref (file);
+          hit->info = g_object_ref (info);
+          hits = g_list_prepend (hits, hit);
         }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (model->model), &iter));
 
-      if (hits)
-        {
-          _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (model), hits);
-          g_list_free_full (hits, (GDestroyNotify)_gtk_search_hit_free);
-          got_results = TRUE;
-        }
+      g_clear_object (&info);
+    }
+
+  if (hits)
+    {
+      _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (model), hits);
+      g_list_free_full (hits, (GDestroyNotify)_gtk_search_hit_free);
+      got_results = TRUE;
     }
 
   model->idle = 0;
