@@ -1259,13 +1259,13 @@ property_editor (GObject                *object,
                                       g_strdup_printf ("%s: %s",
                                                        self->name,
                                                        gtk_label_get_text (GTK_LABEL (prop_edit))),
-                                      NULL);
+                                      -1);
     }
   else
     {
       gtk_accessible_update_property (GTK_ACCESSIBLE (prop_edit),
                                       GTK_ACCESSIBLE_PROPERTY_LABEL, self->name,
-                                      NULL);
+                                      -1);
     }
 
   return prop_edit;

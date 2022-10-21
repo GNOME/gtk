@@ -72,7 +72,7 @@ add_string (GtkInspectorStrvEditor *editor,
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
   gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL, _("Value"),
-                                  NULL);
+                                  -1);
   gtk_widget_show (entry);
   gtk_box_append (GTK_BOX (box), entry);
   g_object_set_data (G_OBJECT (box), "entry", entry);
@@ -83,7 +83,7 @@ add_string (GtkInspectorStrvEditor *editor,
   gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL,
                                   g_strdup_printf (_("Remove %s"), str),
-                                  NULL);
+                                  -1);
   gtk_widget_show (button);
   gtk_box_append (GTK_BOX (box), button);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_string), editor);
@@ -116,7 +116,7 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   gtk_widget_set_halign (editor->button, GTK_ALIGN_END);
   gtk_accessible_update_property (GTK_ACCESSIBLE (editor->button),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL, _("Add"),
-                                  NULL);
+                                  -1);
   gtk_widget_show (editor->button);
   g_signal_connect (editor->button, "clicked", G_CALLBACK (add_cb), editor);
 
