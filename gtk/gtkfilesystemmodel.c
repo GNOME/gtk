@@ -247,7 +247,7 @@ node_validate_rows (GtkFileSystemModel *model, guint up_to_index, guint up_to_ro
   model->n_nodes_valid = i;
 }
 
-static guint
+static guint G_GNUC_UNUSED
 node_get_tree_row (GtkFileSystemModel *model, guint index)
 {
   if (model->n_nodes_valid <= index)
