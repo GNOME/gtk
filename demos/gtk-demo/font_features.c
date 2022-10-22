@@ -163,6 +163,10 @@ demo_free (gpointer data)
   g_clear_pointer (&demo->axes, g_hash_table_unref);
   g_clear_pointer (&demo->text, g_free);
 
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 GTK_STYLE_PROVIDER (demo->provider));
+  g_object_unref (demo->provider);
+
   g_free (demo);
 }
 
@@ -1797,8 +1801,8 @@ do_font_features (GtkWidget *do_widget)
       demo->swin = GTK_WIDGET (gtk_builder_get_object (builder, "swin"));
 
       demo->provider = gtk_css_provider_new ();
-      gtk_style_context_add_provider (gtk_widget_get_style_context (demo->swin),
-                                      GTK_STYLE_PROVIDER (demo->provider), 800);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (demo->provider), 800);
 
       basic_value_changed (demo->size_adjustment, demo->size_entry);
       basic_value_changed (demo->letterspacing_adjustment, demo->letterspacing_entry);
