@@ -520,8 +520,6 @@ on_remove_server_button_clicked (RemoveServerData *data)
   populate_servers (data->view);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 static void
 populate_servers (GtkPlacesView *view)
 {
@@ -616,8 +614,6 @@ populate_servers (GtkPlacesView *view)
   g_strfreev (uris);
   g_bookmark_file_free (server_list);
 }
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 update_view_mode (GtkPlacesView *view)
