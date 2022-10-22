@@ -151,7 +151,7 @@
                                             <style>
                                               <class name="complex"/>
                                             </style>
-                                            <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
+                                            <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
                                             <child>
                                               <object class="GtkColumnViewColumn" id="column_view_name_column">
@@ -669,7 +669,7 @@
     </child>
   </object>
   <object class="GtkGridView" id="browse_files_grid_view">
-    <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
+    <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
     <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
     <binding name="enable-rubberband">
       <lookup name="enable-rubberband">browse_files_column_view</lookup>

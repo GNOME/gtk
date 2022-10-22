@@ -6155,11 +6155,13 @@ browse_files_view_keynav_failed_cb (GtkWidget        *widget,
   return FALSE;
 }
 
-/* Callback used when a row in the file list is activated */
+/* Callback used when a row in the file list is activated. 'view' may
+ * be either a GtkColumnView, or a GtkGridView.
+ */
 static void
-column_view_row_activated_cb (GtkColumnView        *column_view,
-                              guint                 position,
-                              GtkFileChooserWidget *self)
+browse_files_view_row_activated_cb (GtkWidget            *view,
+                                    guint                 position,
+                                    GtkFileChooserWidget *self)
 {
   GFileInfo *info;
 
@@ -6175,9 +6177,9 @@ column_view_row_activated_cb (GtkColumnView        *column_view,
            self->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       /* prevent recursion */
-      g_signal_handlers_block_by_func (column_view, column_view_row_activated_cb, self);
+      g_signal_handlers_block_by_func (view, browse_files_view_row_activated_cb, self);
       gtk_widget_activate_default (GTK_WIDGET (self));
-      g_signal_handlers_unblock_by_func (column_view, column_view_row_activated_cb, self);
+      g_signal_handlers_unblock_by_func (view, browse_files_view_row_activated_cb, self);
     }
 
   g_clear_object (&info);
@@ -6821,6 +6823,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_view_row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, browse_files_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
@@ -6842,7 +6845,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_tooltip_text);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_row_activated_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 
