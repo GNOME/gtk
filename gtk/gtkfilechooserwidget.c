@@ -6139,9 +6139,9 @@ list_items_changed (GListModel           *model,
 }
 
 static gboolean
-browse_files_column_view_keynav_failed_cb (GtkWidget        *widget,
-                                           GtkDirectionType  direction,
-                                           gpointer          user_data)
+browse_files_view_keynav_failed_cb (GtkWidget        *widget,
+                                    GtkDirectionType  direction,
+                                    gpointer          user_data)
 {
  GtkFileChooserWidget *impl = user_data;
 
@@ -6821,7 +6821,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, browse_files_column_view_keynav_failed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
