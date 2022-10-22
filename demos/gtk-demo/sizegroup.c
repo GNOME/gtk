@@ -16,26 +16,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-/* Convenience function to create a combo box holding a number of strings
- */
-GtkWidget *
-create_combo_box (const char **strings)
-{
-  GtkWidget *combo_box;
-  const char **str;
-
-  combo_box = gtk_combo_box_text_new ();
-
-  for (str = strings; *str; str++)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), *str);
-
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
-
-  return combo_box;
-}
-
 static void
 add_row (GtkGrid      *table,
          int           row,
@@ -43,7 +23,7 @@ add_row (GtkGrid      *table,
          const char   *label_text,
          const char  **options)
 {
-  GtkWidget *combo_box;
+  GtkWidget *dropdown;
   GtkWidget *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
@@ -52,12 +32,12 @@ add_row (GtkGrid      *table,
   gtk_widget_set_hexpand (label, TRUE);
   gtk_grid_attach (table, label, 0, row, 1, 1);
 
-  combo_box = create_combo_box (options);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
-  gtk_widget_set_halign (combo_box, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo_box, GTK_ALIGN_BASELINE);
-  gtk_size_group_add_widget (size_group, combo_box);
-  gtk_grid_attach (table, combo_box, 1, row, 1, 1);
+  dropdown = gtk_drop_down_new_from_strings (options);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), dropdown);
+  gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
+  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);
+  gtk_size_group_add_widget (size_group, dropdown);
+  gtk_grid_attach (table, dropdown, 1, row, 1, 1);
 }
 
 static void
