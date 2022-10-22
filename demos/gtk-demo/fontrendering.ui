@@ -116,15 +116,18 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="hinting">
-                    <property name="active">0</property>
+                  <object class="GtkDropDown" id="hinting">
                     <property name="valign">center</property>
-                    <items>
-                      <item translatable="yes" id="none">None</item>
-                      <item translatable="yes" id="slight">Slight</item>
-                      <item translatable="yes" id="medium">Medium</item>
-                      <item translatable="yes" id="full">Full</item>
-                    </items>
+                    <property name="model">
+                      <object class="GtkStringList">
+                        <items>
+                          <item translatable="yes">None</item>
+                          <item translatable="yes">Slight</item>
+                          <item translatable="yes">Medium</item>
+                          <item translatable="yes">Full</item>
+                        </items>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <layout>
