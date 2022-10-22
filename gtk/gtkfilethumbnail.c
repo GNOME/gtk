@@ -35,6 +35,7 @@ struct _GtkFileThumbnail
   GtkWidget parent;
 
   GtkWidget *image;
+  int icon_size;
 
   GCancellable *cancellable;
   GFileInfo *info;
@@ -49,6 +50,7 @@ G_DEFINE_FINAL_TYPE (GtkFileThumbnail, _gtk_file_thumbnail, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
+  PROP_ICON_SIZE,
   PROP_INFO,
   N_PROPS,
 };
@@ -72,6 +74,7 @@ update_image (GtkFileThumbnail *self)
 {
   GtkIconTheme *icon_theme;
   GIcon *icon;
+  int icon_size;
   int scale;
 
   if (!g_file_info_has_attribute (self->info, G_FILE_ATTRIBUTE_STANDARD_ICON))
@@ -80,7 +83,8 @@ update_image (GtkFileThumbnail *self)
   scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
 
-  icon = _gtk_file_info_get_icon (self->info, ICON_SIZE, scale, icon_theme);
+  icon_size = self->icon_size != -1 ? self->icon_size : ICON_SIZE;
+  icon = _gtk_file_info_get_icon (self->info, icon_size, scale, icon_theme);
 
   gtk_image_set_from_gicon (GTK_IMAGE (self->image), icon);
 
@@ -173,6 +177,10 @@ _gtk_file_thumbnail_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ICON_SIZE:
+      g_value_set_int (value, self->icon_size);
+      break;
+
     case PROP_INFO:
       g_value_set_object (value, self->info);
       break;
@@ -192,6 +200,10 @@ _gtk_file_thumbnail_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ICON_SIZE:
+      _gtk_file_thumbnail_set_icon_size (self, g_value_get_int (value));
+      break;
+
     case PROP_INFO:
       _gtk_file_thumbnail_set_info (self, g_value_get_object (value));
       break;
@@ -211,6 +223,11 @@ _gtk_file_thumbnail_class_init (GtkFileThumbnailClass *klass)
   object_class->get_property = _gtk_file_thumbnail_get_property;
   object_class->set_property = _gtk_file_thumbnail_set_property;
 
+  properties[PROP_ICON_SIZE] =
+    g_param_spec_int ("icon-size", NULL, NULL,
+                      -1, G_MAXINT, -1,
+                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   properties[PROP_INFO] =
     g_param_spec_object ("file-info", NULL, NULL,
                          G_TYPE_FILE_INFO,
@@ -226,6 +243,7 @@ _gtk_file_thumbnail_class_init (GtkFileThumbnailClass *klass)
 static void
 _gtk_file_thumbnail_init (GtkFileThumbnail *self)
 {
+  self->icon_size = -1;
   self->image = gtk_image_new ();
   gtk_widget_set_parent (self->image, GTK_WIDGET (self));
 }
@@ -251,5 +269,34 @@ _gtk_file_thumbnail_set_info (GtkFileThumbnail *self,
       get_thumbnail (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INFO]);
     }
+}
+
+int
+_gtk_file_thumbnail_get_icon_size (GtkFileThumbnail *self)
+{
+  g_assert (GTK_IS_FILE_THUMBNAIL (self));
+
+  return self->icon_size;
+}
+
+void
+_gtk_file_thumbnail_set_icon_size (GtkFileThumbnail *self,
+                                   int               icon_size)
+{
+  g_assert (GTK_IS_FILE_THUMBNAIL (self));
+  g_assert (icon_size == -1 || icon_size > 0);
+
+  if (self->icon_size == icon_size)
+    return;
+
+  self->icon_size = icon_size;
+  if (self->icon_size == -1)
+    gtk_image_set_pixel_size (GTK_IMAGE (self->image), ICON_SIZE);
+  else
+    gtk_image_set_pixel_size (GTK_IMAGE (self->image), icon_size);
+
+  cancel_thumbnail (self);
+  get_thumbnail (self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_SIZE]);
 }
 
