@@ -360,7 +360,7 @@ combo_changed (GtkDropDown *combo,
   char **accels;
   char *str;
 
-  action = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (combo)));
+  action = gtk_drop_down_get_selected_string (combo);
 
   if (!action)
     return;
@@ -400,7 +400,7 @@ response (GtkDialog *dialog,
       return;
     }
 
-  action = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (combo)));
+  action = gtk_drop_down_get_selected_string (combo);
 
   if (!action)
     return;
