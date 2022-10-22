@@ -60,6 +60,13 @@
                                           </object>
                                         </child>
                                         <child>
+                                          <object class="GtkButton" id="browse_toggle_view_button">
+                                            <property name="icon-name">view-grid-symbolic</property>
+                                            <property name="action-name">item.toggle-view</property>
+                                            <property name="tooltip-text" translatable="yes">Switch to grid view</property>
+                                          </object>
+                                        </child>
+                                        <child>
                                           <object class="GtkMenuButton" id="browse_new_folder_button">
                                             <property name="tooltip-text" translatable="yes">Create Folder</property>
                                             <property name="popover">new_folder_popover</property>
@@ -660,5 +667,72 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkGridView" id="browse_files_grid_view">
+    <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
+    <binding name="enable-rubberband">
+      <lookup name="enable-rubberband">browse_files_column_view</lookup>
+    </binding>
+    <binding name="model">
+      <lookup name="model">browse_files_column_view</lookup>
+    </binding>
+    <property name="factory">
+      <object class="GtkBuilderListItemFactory">
+        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkFileChooserCell">
+        <binding name="position">
+          <lookup name="position">GtkListItem</lookup>
+        </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <binding name="tooltip-text">
+              <closure type="gchararray" function="column_view_get_tooltip_text">
+                <lookup name="item">GtkListItem</lookup>
+              </closure>
+            </binding>
+            <child>
+              <object class="GtkFileThumbnail">
+                <property name="icon-size">96</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <binding name="file-info">
+                  <lookup name="item">GtkListItem</lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkInscription">
+                <property name="hexpand">1</property>
+                <property name="yalign">0.0</property>
+                <property name="xalign">0.5</property>
+                <property name="min-chars">12</property>
+                <property name="min-lines">2</property>
+                <binding name="text">
+                  <closure type="gchararray" function="column_view_get_file_display_name">
+                    <lookup name="item">GtkListItem</lookup>
+                  </closure>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+    ]]></property>
+      </object>
+    </property>
   </object>
 </interface>
