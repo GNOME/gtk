@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 typedef struct
 {
   GtkApplication parent_instance;
@@ -352,7 +350,8 @@ quit_activated (GSimpleAction *action,
 }
 
 static void
-combo_changed (GtkComboBox *combo,
+combo_changed (GtkDropDown *combo,
+               GParamSpec  *pspec,
                gpointer     user_data)
 {
   GtkDialog *dialog = user_data;
@@ -361,7 +360,7 @@ combo_changed (GtkComboBox *combo,
   char **accels;
   char *str;
 
-  action = gtk_combo_box_get_active_id (combo);
+  action = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (combo)));
 
   if (!action)
     return;
@@ -390,7 +389,7 @@ response (GtkDialog *dialog,
           gpointer   user_data)
 {
   GtkEntry *entry = g_object_get_data (user_data, "entry");
-  GtkComboBox *combo = g_object_get_data (user_data, "combo");
+  GtkDropDown *combo = g_object_get_data (user_data, "combo");
   const char *action;
   const char *str;
   char **accels;
@@ -401,7 +400,7 @@ response (GtkDialog *dialog,
       return;
     }
 
-  action = gtk_combo_box_get_active_id (combo);
+  action = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (combo)));
 
   if (!action)
     return;
@@ -426,6 +425,7 @@ edit_accels (GSimpleAction *action,
   char **actions;
   GtkWidget *dialog;
   int i;
+  GtkStringList *strings;
 
   dialog = gtk_dialog_new_with_buttons ("Accelerators",
                                         NULL,
@@ -437,7 +437,8 @@ edit_accels (GSimpleAction *action,
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
 
-  combo = gtk_combo_box_text_new ();
+  strings = gtk_string_list_new (NULL);
+  combo = gtk_drop_down_new (G_LIST_MODEL (strings), NULL);
   g_object_set (gtk_dialog_get_content_area (GTK_DIALOG (dialog)),
                 "margin-top", 10,
                 "margin-bottom", 10,
@@ -448,8 +449,8 @@ edit_accels (GSimpleAction *action,
 
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
   for (i = 0; actions[i]; i++)
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
-  g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
+    gtk_string_list_append (strings, actions[i]);
+  g_signal_connect (combo, "notify::selected", G_CALLBACK (combo_changed), dialog);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -460,7 +461,7 @@ edit_accels (GSimpleAction *action,
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
   g_object_set_data (G_OBJECT (dialog), "entry", entry);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (combo), 0);
 
   gtk_widget_show (dialog);
 }

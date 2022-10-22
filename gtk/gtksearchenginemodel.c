@@ -29,8 +29,6 @@
 
 #include <string.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 struct _GtkSearchEngineModel
 {
   GtkSearchEngine parent;

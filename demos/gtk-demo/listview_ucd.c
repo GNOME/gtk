@@ -10,8 +10,6 @@
 #include "script-names.h"
 #include "unicode-names.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 #define UCD_TYPE_ITEM (ucd_item_get_type ())
 G_DECLARE_FINAL_TYPE (UcdItem, ucd_item, UCD, ITEM, GObject)
 
@@ -339,6 +337,15 @@ create_ucd_view (GtkWidget *label)
 
 static GtkWidget *window;
 
+static void
+remove_provider (gpointer data)
+{
+  GtkStyleProvider *provider = GTK_STYLE_PROVIDER (data);
+
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (), provider);
+  g_object_unref (provider);
+}
+
 GtkWidget *
 do_listview_ucd (GtkWidget *do_widget)
 {
@@ -361,7 +368,7 @@ do_listview_ucd (GtkWidget *do_widget)
       gtk_widget_add_css_class (label, "enormous");
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_data (provider, "label.enormous { font-size: 80px; }", -1);
-      gtk_style_context_add_provider (gtk_widget_get_style_context (label), GTK_STYLE_PROVIDER (provider), 800);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
       gtk_widget_set_hexpand (label, TRUE);
       gtk_box_append (GTK_BOX (box), label);
 
@@ -371,6 +378,8 @@ do_listview_ucd (GtkWidget *do_widget)
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
       gtk_box_prepend (GTK_BOX (box), sw);
       gtk_window_set_child (GTK_WINDOW (window), box);
+
+      g_object_set_data_full (G_OBJECT (window), "provider", provider, remove_provider);
     }
 
   if (!gtk_widget_get_visible (window))

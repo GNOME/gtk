@@ -11,7 +11,6 @@
 
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_DECLARE_FINAL_TYPE (CanvasItem, canvas_item, CANVAS, ITEM, GtkWidget)
 
@@ -26,6 +25,9 @@ struct _CanvasItem {
   double delta;
 
   GtkWidget *editor;
+
+  GtkStyleProvider *provider;
+  char *css_class;
 };
 
 struct _CanvasItemClass {
@@ -37,31 +39,40 @@ G_DEFINE_TYPE (CanvasItem, canvas_item, GTK_TYPE_WIDGET)
 static int n_items = 0;
 
 static void
+unstyle_item (CanvasItem *item)
+{
+  if (item->provider)
+    {
+      gtk_style_context_remove_provider_for_display (gtk_widget_get_display (item->label), item->provider);
+      g_clear_object (&item->provider);
+    }
+
+  if (item->css_class)
+    {
+      gtk_widget_remove_css_class (item->label, item->css_class);
+      g_clear_pointer (&item->css_class, g_free);
+    }
+}
+
+static void
 set_color (CanvasItem *item,
            GdkRGBA    *color)
 {
   char *css;
   char *str;
-  GtkStyleContext *context;
   GtkCssProvider *provider;
-  const char *old_class;
+  const char *name;
+
+  unstyle_item (item);
 
   str = gdk_rgba_to_string (color);
-  css = g_strdup_printf ("* { background: %s; }", str);
-
-  context = gtk_widget_get_style_context (item->label);
-  provider = g_object_get_data (G_OBJECT (context), "style-provider");
-  if (provider)
-    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
-
-  old_class = (const char *)g_object_get_data (G_OBJECT (item->label), "css-class");
-  if (old_class)
-    gtk_widget_remove_css_class (item->label, old_class);
+  name = gtk_widget_get_name (item->label);
+  css = g_strdup_printf ("#%s { background: %s; }", name, str);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (item->label), GTK_STYLE_PROVIDER (provider), 800);
-  g_object_set_data_full (G_OBJECT (context), "style-provider", provider, g_object_unref);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (item->label), GTK_STYLE_PROVIDER (provider), 700);
+  item->provider = GTK_STYLE_PROVIDER (provider);
 
   g_free (str);
   g_free (css);
@@ -71,21 +82,10 @@ static void
 set_css (CanvasItem *item,
          const char *class)
 {
-  GtkStyleContext *context;
-  GtkCssProvider *provider;
-  const char *old_class;
+  unstyle_item (item);
 
-  context = gtk_widget_get_style_context (item->label);
-  provider = g_object_get_data (G_OBJECT (context), "style-provider");
-  if (provider)
-    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
-
-  old_class = (const char *)g_object_get_data (G_OBJECT (item->label), "css-class");
-  if (old_class)
-    gtk_widget_remove_css_class (item->label, old_class);
-
-  g_object_set_data_full (G_OBJECT (item->label), "css-class", g_strdup (class), g_free);
   gtk_widget_add_css_class (item->label, class);
+  item->css_class = g_strdup (class);
 }
 
 static gboolean
@@ -724,6 +724,7 @@ do_dnd (GtkWidget *do_widget)
       int i;
       int x, y;
       GtkCssProvider *provider;
+      GString *css;
 
       button = gtk_color_button_new ();
       g_object_unref (g_object_ref_sink (button));
@@ -734,6 +735,18 @@ do_dnd (GtkWidget *do_widget)
                                                   GTK_STYLE_PROVIDER (provider),
                                                   800);
       g_object_unref (provider);
+
+      css = g_string_new ("");
+      for (i = 0; colors[i]; i++)
+        g_string_append_printf (css, ".canvasitem.%s { background: %s; }\n", colors[i], colors[i]);
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_data (provider, css->str, css->len);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  800);
+      g_object_unref (provider);
+      g_string_free (css, TRUE);
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
