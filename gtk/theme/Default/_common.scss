@@ -3566,6 +3566,11 @@ filechooser {
   }
 
   #pathbarbox { border-bottom: 1px solid $bg_color; }
+
+  gridview child {
+    border-radius: 12px;
+    margin: 12px;
+  }
 }
 
 
