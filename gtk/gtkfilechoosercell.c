@@ -67,10 +67,14 @@ popup_menu (GtkFileChooserCell *self,
             double              y)
 {
   GtkWidget *widget = GTK_WIDGET (self);
+  GtkSelectionModel *model;
   GtkWidget *impl;
   double xx, yy;
 
   impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
+
+  model = gtk_file_chooser_widget_get_selection_model (GTK_FILE_CHOOSER_WIDGET (impl));
+  gtk_selection_model_select_item (model, self->position, TRUE);
 
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (impl),
                                     x, y, &xx, &yy);
@@ -88,6 +92,7 @@ file_chooser_cell_clicked (GtkEventController *controller,
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
   GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
 
+  gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
   popup_menu (self, x, y);
 }
 
@@ -99,6 +104,7 @@ file_chooser_cell_long_pressed (GtkEventController *controller,
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
   GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
 
+  gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
   popup_menu (self, x, y);
 }
 
@@ -171,6 +177,7 @@ gtk_file_chooser_cell_init (GtkFileChooserCell *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_long_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (file_chooser_cell_long_pressed), NULL);
 
   drag_source = gtk_drag_source_new ();
