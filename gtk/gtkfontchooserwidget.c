@@ -1870,9 +1870,7 @@ find_affected_text (GtkFontChooserWidget *fontchooser,
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+  hb_ot_layout_script_select_language (hb_face, HB_OT_TAG_GSUB, script_index, 1, &lang_tag, &lang_index);
 
   if (hb_ot_layout_language_find_feature (hb_face,
                                           HB_OT_TAG_GSUB,
@@ -2013,9 +2011,7 @@ update_feature_label (GtkFontChooserWidget *fontchooser,
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+  hb_ot_layout_script_select_language (hb_face, HB_OT_TAG_GSUB, script_index, 1, &lang_tag, &lang_index);
 
   if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, item->tag, &feature_index))
     {
@@ -2565,9 +2561,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
         {
           hb_ot_layout_table_find_script (hb_face, table[i], script_tag, &script_index);
 
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          hb_ot_layout_script_find_language (hb_face, table[i], script_index, lang_tag, &lang_index);
-          G_GNUC_END_IGNORE_DEPRECATIONS
+          hb_ot_layout_script_select_language (hb_face, table[i], script_index, 1, &lang_tag, &lang_index);
 
           feat = features + n_features;
           count = G_N_ELEMENTS (features) - n_features;
