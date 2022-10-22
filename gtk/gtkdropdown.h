@@ -52,6 +52,13 @@ guint           gtk_drop_down_get_selected                      (GtkDropDown    
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_drop_down_get_selected_item                 (GtkDropDown            *self);
 
+GDK_AVAILABLE_IN_4_10
+const char *    gtk_drop_down_get_selected_string               (GtkDropDown            *self);
+
+GDK_AVAILABLE_IN_4_10
+void            gtk_drop_down_set_selected_string               (GtkDropDown            *self,
+                                                                 const char             *string);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_drop_down_set_factory                       (GtkDropDown            *self,
                                                                  GtkListItemFactory     *factory);

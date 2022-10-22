@@ -133,6 +133,7 @@ enum
   PROP_MODEL,
   PROP_SELECTED,
   PROP_SELECTED_ITEM,
+  PROP_SELECTED_STRING,
   PROP_ENABLE_SEARCH,
   PROP_EXPRESSION,
   PROP_SHOW_ARROW,
@@ -247,6 +248,7 @@ selection_item_changed (GtkSingleSelection *selection,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_STRING]);
 }
 
 static void
@@ -358,6 +360,10 @@ gtk_drop_down_get_property (GObject    *object,
       g_value_set_object (value, gtk_drop_down_get_selected_item (self));
       break;
 
+    case PROP_SELECTED_STRING:
+      g_value_set_string (value, gtk_drop_down_get_selected_string (self));
+      break;
+
     case PROP_ENABLE_SEARCH:
       g_value_set_boolean (value, self->enable_search);
       break;
@@ -400,6 +406,10 @@ gtk_drop_down_set_property (GObject      *object,
 
     case PROP_SELECTED:
       gtk_drop_down_set_selected (self, g_value_get_uint (value));
+      break;
+
+    case PROP_SELECTED_STRING:
+      gtk_drop_down_set_selected_string (self, g_value_get_string (value));
       break;
 
     case PROP_ENABLE_SEARCH:
@@ -544,6 +554,22 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
     g_param_spec_object ("selected-item", NULL, NULL,
                        G_TYPE_OBJECT,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkDropDown:selected-string: (attributes org.gtk.Property.get=gtk_drop_down_get_selected_string org.gtk.Property.set=gtk_drop_down_set_selected_string)
+   *
+   * The value of the string property of the selected item,
+   * if it is a [class@Gtk.StringObject].
+   *
+   * This is only useful for dropdowns with a [class@Gtk.StringList] as model,
+   * such as those created by [ctor@Gtk.DropDown.new_from_strings].
+   *
+   * Since: 4.10
+   */
+  properties[PROP_SELECTED_STRING] =
+    g_param_spec_string ("selected-string", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkDropDown:enable-search: (attributes org.gtk.Property.get=gtk_drop_down_get_enable_search org.gtk.Property.set=gtk_drop_down_set_enable_search)
@@ -784,8 +810,7 @@ gtk_drop_down_new (GListModel    *model,
  * gtk_drop_down_new_from_strings:
  * @strings: (array zero-terminated=1): The strings to put in the dropdown
  *
- * Creates a new `GtkDropDown` that is populated with
- * the strings.
+ * Creates a new `GtkDropDown` that is populated with the strings.
  *
  * Returns: a new `GtkDropDown`
  */
@@ -1014,6 +1039,81 @@ gtk_drop_down_get_selected_item (GtkDropDown *self)
     return NULL;
 
   return gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
+}
+
+/**
+ * gtk_drop_down_get_selected_string: (attributes org.gtk.Method.get_property=selected-string)
+ * @self: a `GtkDropDown`
+ *
+ * Gets the string value for the selected [class@Gtk.StringObject].
+ *
+ * If no item is selected, or items are of another type, %NULL is returned.
+ *
+ * This function is meant for dropdowns with a [class@Gtk.StringList] as model,
+ * such as those created by [ctor@Gtk.DropDown.new_from_strings].
+ *
+ * Returns: (transfer none) (nullable): The string value for selected item
+ *
+ * Since: 4.10
+ */
+const char *
+gtk_drop_down_get_selected_string (GtkDropDown *self)
+{
+  gpointer item;
+
+  g_return_val_if_fail (GTK_IS_DROP_DOWN (self), NULL);
+
+  if (self->selection == NULL)
+    return NULL;
+
+  item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
+
+  if (GTK_IS_STRING_OBJECT (item))
+    return gtk_string_object_get_string (GTK_STRING_OBJECT (item));
+
+  return NULL;
+}
+
+/**
+ * gtk_drop_down_set_selected_string:
+ * @self: a `GtkDropDown`
+ * @string: the string to select
+ *
+ * Selects the first [class@Gtk.StringObject] whose string property
+ * matches @string.
+ *
+ * If items are not `GtkStringObjects`, the selection is not changed.
+ *
+ * This function is meant for dropdowns with a [class@Gtk.StringList] as model,
+ * such as those created by [ctor@Gtk.DropDown.new_from_strings].
+ *
+ * Since: 4.10
+ */
+void
+gtk_drop_down_set_selected_string (GtkDropDown *self,
+                                   const char  *string)
+{
+  g_return_if_fail (GTK_IS_DROP_DOWN (self));
+  g_return_if_fail (string != NULL);
+
+  if (self->selection == NULL)
+    return;
+
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->selection)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (self->selection), i);
+
+      g_object_unref (item);
+
+      if (!GTK_IS_STRING_OBJECT (item))
+        break;
+
+      if (g_str_equal (gtk_string_object_get_string (GTK_STRING_OBJECT (item)), string))
+        {
+          gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (self->selection), i);
+          break;
+        }
+    }
 }
 
 /**
