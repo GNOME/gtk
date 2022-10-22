@@ -7338,8 +7338,6 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
 
       combo = gtk_drop_down_new_from_strings ((const char * const *)option_labels);
-      g_object_set_data_full (G_OBJECT (combo), "options",
-                              g_strdupv ((char **)options), (GDestroyNotify)g_strfreev);
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
 
@@ -7396,21 +7394,8 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   if (GTK_IS_BOX (widget))
     {
-      guint i;
-      const char **options;
-      GtkWidget *dropdown;
-
-      dropdown = gtk_widget_get_last_child (widget);
-
-      options = (const char **) g_object_get_data (G_OBJECT (dropdown), "options");
-      for (i = 0; options[i]; i++)
-        {
-          if (strcmp (option, options[i]) == 0)
-            {
-              gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), i);
-              break;
-            }
-        }
+      GtkWidget *dropdown = gtk_widget_get_last_child (widget);
+      gtk_drop_down_set_selected_string (GTK_DROP_DOWN (dropdown), option);
     }
   else if (GTK_IS_CHECK_BUTTON (widget))
     gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), g_str_equal (option, "true"));
@@ -7428,19 +7413,9 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
   if (GTK_IS_DROP_DOWN (widget))
-    {
-      const char **options;
-      guint selected;
-
-      options = (const char **) g_object_get_data (G_OBJECT (widget), "options");
-      selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (widget));
-
-      return options[selected];
-    }
+    return gtk_drop_down_get_selected_string (GTK_DROP_DOWN (widget));
   else if (GTK_IS_CHECK_BUTTON (widget))
-    {
-      return gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)) ? "true" : "false";
-    }
+    return gtk_check_button_get_active (GTK_CHECK_BUTTON (widget)) ? "true" : "false";
 
   return NULL;
 }
