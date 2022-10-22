@@ -21,7 +21,75 @@
 #include "script-names.h"
 #include "language-names.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+/* {{{ ScriptLang object */
+
+G_DECLARE_FINAL_TYPE (ScriptLang, script_lang, SCRIPT, LANG, GObject)
+
+struct _ScriptLang
+{
+  GObject parent;
+
+  char *langname;
+  unsigned int script_index;
+  unsigned int lang_index;
+  hb_tag_t lang_tag;
+};
+
+struct _ScriptLangClass
+{
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE (ScriptLang, script_lang, G_TYPE_OBJECT)
+
+static void
+script_lang_init (ScriptLang *self)
+{
+}
+
+static void
+script_lang_finalize (GObject *object)
+{
+  ScriptLang *self = SCRIPT_LANG (object);
+
+  g_free (self->langname);
+
+  G_OBJECT_CLASS (script_lang_parent_class)->finalize (object);
+}
+
+static void
+script_lang_class_init (ScriptLangClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = script_lang_finalize;
+}
+
+static ScriptLang *
+script_lang_new (const char   *langname,
+                 unsigned int  script_index,
+                 unsigned int  lang_index,
+                 hb_tag_t      lang_tag)
+{
+  ScriptLang *self;
+
+  self = g_object_new (script_lang_get_type (), NULL);
+
+  self->langname = g_strdup (langname);
+  self->script_index = script_index;
+  self->lang_index = lang_index;
+  self->lang_tag = lang_tag;
+
+  return self;
+}
+
+static char *
+script_lang_get_langname (ScriptLang *self)
+{
+  return g_strdup (self->langname);
+}
+
+/* }}} */
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 
@@ -94,6 +162,10 @@ demo_free (gpointer data)
   g_clear_pointer (&demo->instances, g_hash_table_unref);
   g_clear_pointer (&demo->axes, g_hash_table_unref);
   g_clear_pointer (&demo->text, g_free);
+
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 GTK_STYLE_PROVIDER (demo->provider));
+  g_object_unref (demo->provider);
 
   g_free (demo);
 }
@@ -472,8 +544,6 @@ update_display (void)
   GString *s;
   char *text;
   gboolean has_feature;
-  GtkTreeIter iter;
-  GtkTreeModel *model;
   PangoFontDescription *desc;
   GList *l;
   PangoAttrList *attrs;
@@ -576,14 +646,13 @@ update_display (void)
 
   features = g_string_free (s, FALSE);
 
-  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
+  if (gtk_drop_down_get_selected (GTK_DROP_DOWN (demo->script_lang)) != 0)
     {
-      hb_tag_t lang_tag;
+      ScriptLang *selected;
 
-      model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
-      gtk_tree_model_get (model, &iter, 3, &lang_tag, -1);
+      selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (demo->script_lang));
 
-      lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
+      lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (selected->lang_tag)));
     }
   else
     lang = NULL;
@@ -740,40 +809,30 @@ tag_pair_equal (gconstpointer a, gconstpointer b)
   return pair_a->script_tag == pair_b->script_tag && pair_a->lang_tag == pair_b->lang_tag;
 }
 
-static int
-script_sort_func (GtkTreeModel *model,
-                  GtkTreeIter  *a,
-                  GtkTreeIter  *b,
-                  gpointer      user_data)
+
+static GtkOrdering
+script_sort (const void *item1,
+             const void *item2,
+             void       *data)
 {
-  char *sa, *sb;
-  int ret;
+  ScriptLang *a = (ScriptLang *)item1;
+  ScriptLang *b = (ScriptLang *)item2;
 
-  gtk_tree_model_get (model, a, 0, &sa, -1);
-  gtk_tree_model_get (model, b, 0, &sb, -1);
-
-  ret = strcmp (sa, sb);
-
-  g_free (sa);
-  g_free (sb);
-
-  return ret;
+  return strcmp (a->langname, b->langname);
 }
 
 static void
 update_script_combo (void)
 {
-  GtkListStore *store;
+  GListStore *store;
+  GtkSortListModel *sortmodel;
   hb_font_t *hb_font;
-  int i, j, k;
   PangoFont *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
   char *lang;
   hb_tag_t active;
-  GtkTreeIter active_iter;
-  gboolean have_active = FALSE;
 
   lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (demo->font));
 
@@ -783,7 +842,7 @@ update_script_combo (void)
 
   g_free (lang);
 
-  store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
+  store = g_list_store_new (script_lang_get_type ());
 
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
@@ -807,19 +866,19 @@ update_script_combo (void)
 
       hb_face = hb_font_get_face (hb_font);
 
-      for (i= 0; i < 2; i++)
+      for (guint i = 0; i < 2; i++)
         {
           hb_tag_t scripts[80];
           unsigned int script_count = G_N_ELEMENTS (scripts);
 
           hb_ot_layout_table_get_script_tags (hb_face, tables[i], 0, &script_count, scripts);
-          for (j = 0; j < script_count; j++)
+          for (guint j = 0; j < script_count; j++)
             {
               hb_tag_t languages[80];
               unsigned int language_count = G_N_ELEMENTS (languages);
 
               hb_ot_layout_script_get_language_tags (hb_face, tables[i], j, 0, &language_count, languages);
-              for (k = 0; k < language_count; k++)
+              for (guint k = 0; k < language_count; k++)
                 {
                   pair = g_new (TagPair, 1);
                   pair->script_tag = scripts[j];
@@ -839,7 +898,6 @@ update_script_combo (void)
     {
       const char *langname;
       char langbuf[5];
-      GtkTreeIter tree_iter;
 
       if (pair->lang_tag == 0 && pair->script_tag == 0)
         langname = NC_("Language", "None");
@@ -856,31 +914,31 @@ update_script_combo (void)
             }
         }
 
-      gtk_list_store_insert_with_values (store, &tree_iter, -1,
-                                         0, langname,
-                                         1, pair->script_index,
-                                         2, pair->lang_index,
-                                         3, pair->lang_tag,
-                                         -1);
-      if (pair->lang_tag == active)
-        {
-          have_active = TRUE;
-          active_iter = tree_iter;
-        }
+      g_list_store_append (store, script_lang_new (langname,
+                                                   pair->script_index,
+                                                   pair->lang_index,
+                                                   pair->lang_tag));
     }
 
   g_hash_table_destroy (tags);
 
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (store),
-                                           script_sort_func, NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-                                        GTK_SORT_ASCENDING);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (demo->script_lang), GTK_TREE_MODEL (store));
-  if (have_active)
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (demo->script_lang), &active_iter);
-  else
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (demo->script_lang), 0);
+  sortmodel = gtk_sort_list_model_new (G_LIST_MODEL (store),
+                                       GTK_SORTER (gtk_custom_sorter_new (script_sort, NULL, NULL)));
+  gtk_drop_down_set_model (GTK_DROP_DOWN (demo->script_lang), G_LIST_MODEL (sortmodel));
+
+  for (guint i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (sortmodel)); i++)
+    {
+      ScriptLang *item = g_list_model_get_item (G_LIST_MODEL (sortmodel), i);
+      g_object_unref (item);
+
+      if (item->lang_tag == active)
+        {
+          gtk_drop_down_set_selected (GTK_DROP_DOWN (demo->script_lang), i);
+          break;
+        }
+    }
+
+  g_object_unref (sortmodel);
 }
 
 static char *
@@ -905,27 +963,19 @@ static void
 update_features (void)
 {
   int i, j;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  guint script_index, lang_index;
-  hb_tag_t lang_tag;
   PangoFont *pango_font;
   hb_font_t *hb_font;
   GList *l;
+  ScriptLang *selected;
 
   /* set feature presence checks from the font features */
 
-  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
+  if (gtk_drop_down_get_selected (GTK_DROP_DOWN (demo->script_lang)) == 0)
     return;
 
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
-  gtk_tree_model_get (model, &iter,
-                      1, &script_index,
-                      2, &lang_index,
-                      3, &lang_tag,
-                      -1);
+  selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (demo->script_lang));
 
-  if (lang_tag == 0) /* None is selected */
+  if (selected->lang_tag == 0) /* None is selected */
     {
       for (l = demo->feature_items; l; l = l->next)
         {
@@ -966,8 +1016,8 @@ update_features (void)
 
           hb_ot_layout_language_get_feature_tags (hb_face,
                                                   tables[i],
-                                                  script_index,
-                                                  lang_index,
+                                                  selected->script_index,
+                                                  selected->lang_index,
                                                   0,
                                                   &count,
                                                   features);
@@ -989,8 +1039,8 @@ update_features (void)
 
                   hb_ot_layout_language_find_feature (hb_face,
                                                       tables[i],
-                                                      script_index,
-                                                      lang_index,
+                                                      selected->script_index,
+                                                      selected->lang_index,
                                                       features[j],
                                                       &feature_index);
 
@@ -1322,10 +1372,9 @@ free_instance (gpointer data)
 }
 
 static void
-add_instance (hb_face_t    *face,
-              unsigned int  index,
-              GtkWidget    *combo,
-              int           pos)
+add_instance (hb_face_t     *face,
+              unsigned int   index,
+              GtkStringList *strings)
 {
   Instance *instance;
   hb_ot_name_id_t name_id;
@@ -1341,20 +1390,20 @@ add_instance (hb_face_t    *face,
   instance->index = index;
 
   g_hash_table_add (demo->instances, instance);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), instance->name);
+  gtk_string_list_append (GTK_STRING_LIST (strings), instance->name);
 }
 
 static void
 unset_instance (GtkAdjustment *adjustment)
 {
   if (demo->instance_combo)
-    gtk_combo_box_set_active (GTK_COMBO_BOX (demo->instance_combo), 0);
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (demo->instance_combo), 0);
 }
 
 static void
-instance_changed (GtkComboBox *combo)
+instance_changed (GtkDropDown *combo)
 {
-  char *text;
+  const char *text;
   Instance *instance;
   Instance ikey;
   int i;
@@ -1366,11 +1415,12 @@ instance_changed (GtkComboBox *combo)
   hb_font_t *hb_font;
   hb_face_t *hb_face;
 
-  text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (combo));
+  text = gtk_string_list_get_string (GTK_STRING_LIST (gtk_drop_down_get_model (combo)),
+                                     gtk_drop_down_get_selected (combo));
   if (text[0] == '\0')
     goto out;
 
-  ikey.name = text;
+  ikey.name = (char *) text;
   instance = g_hash_table_lookup (demo->instances, &ikey);
   if (!instance)
     {
@@ -1411,7 +1461,6 @@ instance_changed (GtkComboBox *combo)
     }
 
 out:
-  g_free (text);
   g_clear_object (&pango_font);
   g_free (ai);
   g_free (coords);
@@ -1521,6 +1570,7 @@ update_font_variations (void)
     {
       GtkWidget *label;
       GtkWidget *combo;
+      GtkStringList *strings;
 
       label = gtk_label_new ("Instance");
       gtk_label_set_xalign (GTK_LABEL (label), 0);
@@ -1528,26 +1578,28 @@ update_font_variations (void)
       gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
       gtk_grid_attach (GTK_GRID (demo->variations_grid), label, 0, -1, 1, 1);
 
-      combo = gtk_combo_box_text_new ();
+      strings = gtk_string_list_new (NULL);
+      combo = gtk_drop_down_new (G_LIST_MODEL (strings), NULL);
+
       gtk_widget_set_halign (combo, GTK_ALIGN_START);
       gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "");
+      gtk_string_list_append (strings, "");
 
       for (i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
-        add_instance (hb_face, i, combo, i);
+        add_instance (hb_face, i, strings);
 
       for (i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
         {
           if (matches_instance (hb_face, i, n_axes, design_coords))
             {
-              gtk_combo_box_set_active (GTK_COMBO_BOX (combo), i + 1);
+              gtk_drop_down_set_selected (GTK_DROP_DOWN (combo), i + 1);
               break;
             }
         }
 
       gtk_grid_attach (GTK_GRID (demo->variations_grid), combo, 1, -1, 3, 1);
-      g_signal_connect (combo, "changed", G_CALLBACK (instance_changed), NULL);
+      g_signal_connect (combo, "notify::selecte", G_CALLBACK (instance_changed), NULL);
       demo->instance_combo = combo;
    }
 
@@ -1694,6 +1746,7 @@ do_font_features (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkBuilderScope *scope;
       GtkEventController *controller;
+      GtkExpression *expression;
 
       builder = gtk_builder_new ();
 
@@ -1727,6 +1780,9 @@ do_font_features (GtkWidget *do_widget)
       demo->description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
       demo->font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
       demo->script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, G_CALLBACK (script_lang_get_langname), NULL, NULL);
+      gtk_drop_down_set_expression (GTK_DROP_DOWN (demo->script_lang), expression);
+      gtk_expression_unref (expression);
       demo->feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
       demo->stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
       demo->entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
@@ -1745,8 +1801,8 @@ do_font_features (GtkWidget *do_widget)
       demo->swin = GTK_WIDGET (gtk_builder_get_object (builder, "swin"));
 
       demo->provider = gtk_css_provider_new ();
-      gtk_style_context_add_provider (gtk_widget_get_style_context (demo->swin),
-                                      GTK_STYLE_PROVIDER (demo->provider), 800);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (demo->provider), 800);
 
       basic_value_changed (demo->size_adjustment, demo->size_entry);
       basic_value_changed (demo->letterspacing_adjustment, demo->letterspacing_entry);
@@ -1824,3 +1880,5 @@ do_font_features (GtkWidget *do_widget)
 
   return window;
 }
+
+/* vim:set foldmethod=marker expandtab: */

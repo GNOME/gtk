@@ -259,16 +259,10 @@
                           <object class="GtkBox" id="feature_list">
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkComboBox" id="script_lang">
+                              <object class="GtkDropDown" id="script_lang">
                                 <property name="tooltip-text" translatable="yes">Language System</property>
                                 <property name="margin-top">10</property>
-                                <signal name="changed" handler="font_features_script_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
+                                <signal name="notify::selected" handler="font_features_script_changed" swapped="no"/>
                               </object>
                             </child>
                           </object>
