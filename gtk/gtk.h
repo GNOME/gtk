@@ -79,6 +79,7 @@
 #include <gtk/gtkcenterlayout.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcolorbutton.h>
+#include <gtk/gtkcolorchoice.h>
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>
 #include <gtk/gtkcolorchooserwidget.h>

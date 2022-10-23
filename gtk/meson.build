@@ -183,6 +183,7 @@ gtk_public_sources = files([
   'gtkcenterlayout.c',
   'gtkcheckbutton.c',
   'gtkcolorbutton.c',
+  'gtkcolorchoice.c',
   'gtkcolorchooser.c',
   'gtkcolorchooserdialog.c',
   'gtkcolorchooserwidget.c',
