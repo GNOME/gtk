@@ -1862,14 +1862,17 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   g_object_unref (item);
 
   item = g_menu_item_new (_("Show _Size Column"), "item.toggle-show-size");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
   item = g_menu_item_new (_("Show T_ype Column"), "item.toggle-show-type");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
   item = g_menu_item_new (_("Show _Time"), "item.toggle-show-time");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
@@ -1918,12 +1921,15 @@ file_list_update_popover (GtkFileChooserWidget *impl)
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_hidden));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-size");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_size_column));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-type");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_type_column));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-time");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_time));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-sort-dirs-first");
