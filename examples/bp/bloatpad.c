@@ -349,6 +349,8 @@ quit_activated (GSimpleAction *action,
   g_application_quit (app);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 combo_changed (GtkDropDown *combo,
                GParamSpec  *pspec,
@@ -465,6 +467,8 @@ edit_accels (GSimpleAction *action,
 
   gtk_widget_show (dialog);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static gboolean
 update_time (gpointer user_data)

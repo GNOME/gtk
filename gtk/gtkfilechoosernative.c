@@ -506,10 +506,15 @@ gtk_file_chooser_native_init (GtkFileChooserNative *self)
    * This way we can reuse that store, plus we always have a dialog we can use
    * in case something makes the native one not work (like the custom widgets) */
   self->dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG, NULL);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   self->cancel_button = gtk_dialog_add_button (GTK_DIALOG (self->dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
   self->accept_button = gtk_dialog_add_button (GTK_DIALOG (self->dialog), _("_Open"), GTK_RESPONSE_ACCEPT);
-
   gtk_dialog_set_default_response (GTK_DIALOG (self->dialog), GTK_RESPONSE_ACCEPT);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   gtk_window_set_hide_on_close (GTK_WINDOW (self->dialog), TRUE);
 
   /* This is used, instead of the standard delegate, to ensure that signals are not delegated. */

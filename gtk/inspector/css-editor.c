@@ -248,7 +248,11 @@ save_clicked (GtkButton             *button,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,
                                         NULL);
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "custom.css");
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (save_response), ce);
   gtk_widget_show (dialog);

@@ -65,7 +65,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkwidgetprivate.h"
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkliststore.h"

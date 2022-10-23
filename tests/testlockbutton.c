@@ -19,6 +19,8 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* a fake permission implementation */
 
 #define G_TYPE_TEST_PERMISSION      (g_test_permission_get_type ())

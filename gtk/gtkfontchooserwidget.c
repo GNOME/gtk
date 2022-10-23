@@ -48,7 +48,7 @@
 #include "gtktextview.h"
 #include "gtkwidgetprivate.h"
 #include "gtksettings.h"
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkroot.h"
@@ -297,9 +297,13 @@ stop_search_cb (GtkSearchEntry       *entry,
       GtkWidget *dialog;
       GtkWidget *button = NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       dialog = gtk_widget_get_ancestor (GTK_WIDGET (fc), GTK_TYPE_DIALOG);
       if (dialog)
         button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (button)
         gtk_widget_activate (button);

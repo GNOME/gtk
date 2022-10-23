@@ -45,7 +45,7 @@
 #include "gtkicontheme.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtkpopover.h"
 #include "gtksnapshot.h"
 #include "gdktextureprivate.h"
@@ -56,6 +56,7 @@
 #include "gtksingleselection.h"
 #include "gtkpicture.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkMountOperation:

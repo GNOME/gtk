@@ -57,7 +57,7 @@
 #include "gtkentry.h"
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtksearchbar.h"
 #include "gtksizegroup.h"
 

@@ -35,7 +35,9 @@
 #include "gtkprintbackendprivate.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkPageSetupUnixDialog:

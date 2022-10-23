@@ -52,10 +52,12 @@
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkPrintUnixDialog:

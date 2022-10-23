@@ -37,11 +37,12 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkprintutils.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 
 #define LEGACY_CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 #define CUSTOM_PAPER_FILENAME "custom-papers"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct
 {

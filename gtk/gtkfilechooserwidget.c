@@ -1166,9 +1166,12 @@ confirm_delete (GtkFileChooserWidget *impl,
                                    name);
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             _("If you delete an item, it will be permanently lost."));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_window_has_group (toplevel))
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
@@ -2113,7 +2116,9 @@ get_accept_action_widget (GtkDialog *dialog,
 
   for (i = 0; i < G_N_ELEMENTS (response); i++)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       widget = gtk_dialog_get_widget_for_response (dialog, response[i]);
+G_GNUC_END_IGNORE_DEPRECATIONS
       if (widget)
         {
           if (!sensitive_only)
@@ -4937,7 +4942,9 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /* Every time we request a response explicitly, we need to save the selection to
@@ -4991,9 +4998,11 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
                                               "overwrite its contents."),
                                             folder_display_name);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
   add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (gtk_window_has_group (toplevel))
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));

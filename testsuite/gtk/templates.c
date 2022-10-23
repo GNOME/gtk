@@ -45,6 +45,7 @@ show_and_wait (GtkWidget *widget)
     g_main_context_iteration (NULL, FALSE);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 test_dialog_basic (void)
 {
@@ -69,6 +70,7 @@ test_dialog_override_property (void)
 
   gtk_window_destroy (GTK_WINDOW (dialog));
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 test_message_dialog_basic (void)

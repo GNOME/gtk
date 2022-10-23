@@ -38,7 +38,7 @@
 #include "gtklabel.h"
 #include "gtkbutton.h"
 #include "gtkenums.h"
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include "gtkrevealer.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"

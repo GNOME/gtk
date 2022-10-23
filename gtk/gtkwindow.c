@@ -6146,8 +6146,14 @@ gtk_window_set_debugging (GdkDisplay *display,
           gtk_widget_show (check);
           gtk_box_append (GTK_BOX (area), check);
           g_object_set_data (G_OBJECT (dialog), "check", check);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
           g_signal_connect (dialog, "response", G_CALLBACK (warn_response), inspector_window);
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
 

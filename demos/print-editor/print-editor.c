@@ -525,7 +525,9 @@ activate_save_as (GSimpleAction *action,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Save", GTK_RESPONSE_OK,
                                         NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_widget_show (dialog);
 
@@ -572,7 +574,9 @@ activate_open (GSimpleAction *action,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Open", GTK_RESPONSE_OK,
                                         NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_widget_show (dialog);
 

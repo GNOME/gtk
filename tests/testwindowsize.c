@@ -1,6 +1,8 @@
 /*  gcc -g -Wall -O2 -o dialog-test dialog-test.c `pkg-config --cflags --libs gtk4` */
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *window;
 static GtkWidget *width_chars_spin;
 static GtkWidget *max_width_chars_spin;

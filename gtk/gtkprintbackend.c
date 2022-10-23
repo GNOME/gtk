@@ -574,6 +574,8 @@ store_entry (GtkEntry  *entry,
   *data = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 password_dialog_response (GtkWidget       *dialog,
                           int              response_id,
@@ -731,6 +733,8 @@ request_password (GtkPrintBackend  *backend,
 
   gtk_widget_show (dialog);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 void
 gtk_print_backend_destroy (GtkPrintBackend *backend)
