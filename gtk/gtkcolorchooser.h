@@ -83,6 +83,32 @@ void     gtk_color_chooser_add_palette    (GtkColorChooser *chooser,
                                            int              n_colors,
                                            GdkRGBA         *colors);
 
+
+typedef void (*GtkColorChooserPrepareCallback) (GtkColorChooser *chooser,
+                                                gpointer         user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_color                 (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_color_full            (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GtkColorChooserPrepareCallback  prepare,
+                                           gpointer                        prepare_data,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_choose_color_finish          (GtkColorChooser                *chooser,
+                                           GAsyncResult                   *result,
+                                           GdkRGBA                        *color,
+                                           GError                        **error);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkColorChooser, g_object_unref)
 
 G_END_DECLS
