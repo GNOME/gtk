@@ -3224,6 +3224,7 @@ settings_load (GtkFileChooserWidget *impl)
   gboolean sort_directories_first;
   DateFormat date_format;
   TypeFormat type_format;
+  ViewType view_type;
   int sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
@@ -3242,6 +3243,7 @@ settings_load (GtkFileChooserWidget *impl)
   sort_directories_first = g_settings_get_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST);
   date_format = g_settings_get_enum (settings, SETTINGS_KEY_DATE_FORMAT);
   type_format = g_settings_get_enum (settings, SETTINGS_KEY_TYPE_FORMAT);
+  view_type = g_settings_get_enum (settings, SETTINGS_KEY_VIEW_TYPE);
 
   set_show_hidden (impl, show_hidden);
 
@@ -3257,6 +3259,8 @@ settings_load (GtkFileChooserWidget *impl)
   impl->show_time = date_format == DATE_FORMAT_WITH_TIME;
   impl->clock_format = g_settings_get_enum (settings, "clock-format");
   impl->type_format = type_format;
+
+  set_view_type (impl, view_type);
 
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
@@ -3294,6 +3298,7 @@ settings_save (GtkFileChooserWidget *impl)
                       gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
   g_settings_set_enum (settings, SETTINGS_KEY_DATE_FORMAT, impl->show_time ? DATE_FORMAT_WITH_TIME : DATE_FORMAT_REGULAR);
   g_settings_set_enum (settings, SETTINGS_KEY_TYPE_FORMAT, impl->type_format);
+  g_settings_set_enum (settings, SETTINGS_KEY_VIEW_TYPE, impl->view_type);
 
   /* Now apply the settings */
   g_settings_apply (settings);

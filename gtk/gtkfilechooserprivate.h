@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_CLOCK_FORMAT           "clock-format"
 #define SETTINGS_KEY_DATE_FORMAT            "date-format"
 #define SETTINGS_KEY_TYPE_FORMAT            "type-format"
+#define SETTINGS_KEY_VIEW_TYPE              "view-type"
 
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
