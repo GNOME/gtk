@@ -183,6 +183,34 @@ GDK_AVAILABLE_IN_ALL
 const char *         gtk_file_chooser_get_choice           (GtkFileChooser      *chooser,
                                                             const char          *id);
 
+
+typedef void (*GtkFileChooserPrepareCallback) (GtkFileChooser  *chooser,
+                                               gpointer         user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_file                  (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GtkFileChooserAction            action,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_file_full             (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GtkFileChooserAction            action,
+                                           GtkFileChooserPrepareCallback   prepare,
+                                           gpointer                        prepare_data,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_choose_file_finish           (GtkFileChooser                 *chooser,
+                                           GAsyncResult                   *result,
+                                           GError                        **error);
+
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_H__ */
