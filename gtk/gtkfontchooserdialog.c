@@ -324,3 +324,127 @@ gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
+
+
+static void
+cancelled_cb (GCancellable *cancellable,
+              GtkDialog    *dialog)
+{
+  gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
+}
+
+static void
+response_cb (GtkDialog *dialog,
+             int        response,
+             GTask     *task)
+{
+  GCancellable *cancellable = g_task_get_cancellable (task);
+
+  if (cancellable)
+    g_signal_handlers_disconnect_by_func (cancellable, cancelled_cb, dialog);
+
+  if (response == GTK_RESPONSE_OK)
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_CANCELLED, "Cancelled");
+
+  g_object_unref (task);
+  gtk_window_destroy (GTK_WINDOW (dialog));
+}
+
+/**
+ * gtk_choose_font:
+ * @parent: (nullable): parent window
+ * @title: title for the font chooser
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @callback: (scope async): callback to call when the action is complete
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function presents a font chooser to let the user
+ * pick a font.
+ *
+ * The @callback will be called when the dialog is closed.
+ * It should call [function@Gtk.choose_font_finish] to
+ * find out whether the operation was completed successfully,
+ * and use [class@Gtk.FontChooser] API to obtain the results.
+ */
+void
+gtk_choose_font (GtkWindow           *parent,
+                 const char          *title,
+                 GCancellable        *cancellable,
+                 GAsyncReadyCallback  callback,
+                 gpointer             user_data)
+{
+  gtk_choose_font_full (parent, title, NULL, NULL, cancellable, callback, user_data);
+}
+
+/**
+ * gtk_choose_font_full:
+ * @parent: (nullable): parent window
+ * @title: title for the font chooser
+ * @prepare: (nullable) (scope call): callback to set up the font chooser
+ * @prepare_data: (closure prepare): data to pass to @prepare
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @callback: (scope async): callback to call when the action is complete
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function presents a font chooser to let the user
+ * choose a font.
+ *
+ * In addition to [function@Gtk.choose_font], this function takes
+ * a @prepare callback that lets you set up the font chooser according
+ * to your needs.
+ *
+ * The @callback will be called when the dialog is closed.
+ * It should use [function@Gtk.choose_font_finish] to find
+ * out whether the operation was completed successfully,
+ * and use [class@Gtk.FontChooser] API to obtain the results.
+ */
+void
+gtk_choose_font_full (GtkWindow                      *parent,
+                      const char                     *title,
+                      GtkFontChooserPrepareCallback   prepare,
+                      gpointer                        prepare_data,
+                      GCancellable                   *cancellable,
+                      GAsyncReadyCallback             callback,
+                      gpointer                        user_data)
+{
+  GtkWidget *dialog;
+  GTask *task;
+
+  dialog = gtk_font_chooser_dialog_new (title, parent);
+  if (prepare)
+    prepare (GTK_FONT_CHOOSER (dialog), prepare);
+
+  if (cancellable)
+    g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), dialog);
+
+  task = g_task_new (dialog, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_choose_font_full);
+
+  g_signal_connect (dialog, "response", G_CALLBACK (response_cb), task);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+/**
+ * gtk_choose_font_finish:
+ * @chooser: the `GtkFontChooser`
+ * @result: `GAsyncResult` that was passed to @callback
+ * @error: return location for an error
+ *
+ * Finishes a gtk_choose_font() or gtk_choose_font_full() call
+ * and returns whether the operation was successful.
+ *
+ * If this function returns `TRUE`, you can use
+ * [class@Gtk.FontChooser] API to get the results.
+ *
+ * Returns: `TRUE` if the operation was successful
+ */
+gboolean
+gtk_choose_font_finish (GtkFontChooser  *chooser,
+                        GAsyncResult     *result,
+                        GError          **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}

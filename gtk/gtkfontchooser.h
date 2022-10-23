@@ -161,6 +161,31 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_language             (GtkFontChooser   *fontchooser,
                                                             const char       *language);
 
+typedef void (*GtkFontChooserPrepareCallback) (GtkFontChooser  *chooser,
+                                               gpointer         user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_font                  (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+void     gtk_choose_font_full             (GtkWindow                      *parent,
+                                           const char                     *title,
+                                           GtkFontChooserPrepareCallback   prepare,
+                                           gpointer                        prepare_data,
+                                           GCancellable                   *cancellable,
+                                           GAsyncReadyCallback             callback,
+                                           gpointer                        user_data);
+
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_choose_font_finish           (GtkFontChooser                 *chooser,
+                                           GAsyncResult                   *result,
+                                           GError                        **error);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFontChooser, g_object_unref)
 
 G_END_DECLS
