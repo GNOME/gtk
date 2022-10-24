@@ -8,8 +8,7 @@ are organized in a hierarchy. The window widget is the main container.
 The user interface is then built by adding buttons, drop-down menus, input
 fields, and other widgets to the window. If you are creating complex user
 interfaces it is recommended to use GtkBuilder and its GTK-specific markup
-description language, instead of assembling the interface manually. You can
-also use a visual user interface editor, like [Glade](https://glade.gnome.org/).
+description language, instead of assembling the interface manually.
 
 GTK is event-driven. The toolkit listens for events such as a click
 on a button, and passes the event to your application.
@@ -712,11 +711,20 @@ A common location to install UI descriptions and similar data is
 `/usr/share/appname`.
 
 It is also possible to embed the UI description in the source code as a
-string and use [`method@Gtk.Builder.add_from_string`] to load it. But keeping the
-UI description in a separate file has several advantages: It is then possible
-to make minor adjustments to the UI without recompiling your program, and,
-more importantly, graphical UI editors such as [Glade](http://glade.gnome.org)
-can load the file and allow you to create and modify your UI by point-and-click.
+string and use [`method@Gtk.Builder.add_from_string`] to load it. But keeping
+the UI description in a separate file has several advantages:
+
+- it is possible to make minor adjustments to the UI without recompiling your
+  program
+- it is easier to isolate the UI code from the business logic of your
+  application
+- it is easier to restructure your UI into separate classes using composite
+  widget templates
+
+Using [GResource](https://docs.gtk.org/gio/struct.Resource.html) it is possible
+to combine the best of both worlds: you can keep the UI definition files
+separate inside your source code repository, and then ship them embedded into
+your application.
 
 ## Building applications
 
