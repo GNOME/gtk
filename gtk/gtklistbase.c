@@ -803,28 +803,6 @@ gtk_list_base_compute_scroll_align (GtkListBase   *self,
 }
 
 static void
-gtk_list_base_update_focus_tracker (GtkListBase *self)
-{
-  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkWidget *focus_child;
-  guint pos;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
-  if (!GTK_IS_LIST_ITEM_WIDGET (focus_child))
-    return;
-
-  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (focus_child));
-  if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
-    {
-      gtk_list_item_tracker_set_position (priv->item_manager,
-                                          priv->focus,
-                                          pos,
-                                          0,
-                                          0);
-    }
-}
-
-static void
 gtk_list_base_scroll_to_item (GtkListBase *self,
                               guint        pos)
 {
@@ -859,14 +837,6 @@ gtk_list_base_scroll_to_item (GtkListBase *self,
                             pos,
                             align_across, side_across,
                             align_along, side_along);
-
-  /* HACK HACK HACK
-   *
-   * GTK has no way to track the focused child. But we now that when a listitem
-   * gets focus, it calls this action. So we update our focus tracker from here
-   * because it's the closest we can get to accurate tracking.
-   */
-  gtk_list_base_update_focus_tracker (self);
 }
 
 static void
@@ -883,6 +853,32 @@ gtk_list_base_scroll_to_item_action (GtkWidget  *widget,
   g_variant_get (parameter, "u", &pos);
 
   gtk_list_base_scroll_to_item (self, pos);
+}
+
+static void
+gtk_list_base_set_focus_child (GtkWidget *widget,
+                               GtkWidget *child)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  guint pos;
+
+  GTK_WIDGET_CLASS (gtk_list_base_parent_class)->set_focus_child (widget, child);
+
+  if (!GTK_IS_LIST_ITEM_WIDGET (child))
+    return;
+
+  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+
+  if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
+    {
+      gtk_list_base_scroll_to_item (self, pos);
+      gtk_list_item_tracker_set_position (priv->item_manager,
+                                          priv->focus,
+                                          pos,
+                                          0,
+                                          0);
+    }
 }
 
 static void
@@ -1143,6 +1139,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
 
   widget_class->focus = gtk_list_base_focus;
   widget_class->grab_focus = gtk_list_base_grab_focus;
+  widget_class->set_focus_child = gtk_list_base_set_focus_child;
 
   gobject_class->dispose = gtk_list_base_dispose;
   gobject_class->get_property = gtk_list_base_get_property;
