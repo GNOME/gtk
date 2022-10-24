@@ -446,6 +446,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (g_type_is_a (type, GTK_TYPE_ICON_THEME))
         check = FALSE;
 
+      /* Non-NULL default */
+      if (g_type_is_a (type, GTK_TYPE_COLOR_DIALOG_BUTTON) &&
+          strcmp (pspec->name, "rgba") == 0)
+        check = FALSE;
+
       if (g_test_verbose ())
         {
           g_print ("Property %s:%s%s\n",
