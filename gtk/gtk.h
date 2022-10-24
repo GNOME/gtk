@@ -83,6 +83,7 @@
 #include <gtk/gtkcolorchooserdialog.h>
 #include <gtk/gtkcolorchooserwidget.h>
 #include <gtk/gtkcolordialog.h>
+#include <gtk/gtkcolordialogbutton.h>
 #include <gtk/gtkcolorutils.h>
 #include <gtk/gtkcolumnview.h>
 #include <gtk/gtkcolumnviewcolumn.h>
