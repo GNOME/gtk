@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcolorchoicebutton.h"
+#include "gtkcolorchoice.h"
 
 #include "gtkbinlayout.h"
 #include "gtkbutton.h"
@@ -27,15 +28,12 @@
 #include "gtkdragsource.h"
 #include "gtkdroptarget.h"
 #include <glib/gi18n-lib.h>
-#include "gtkmain.h"
-#include "gtkmarshalers.h"
+//#include "gtkmain.h"
 #include "gtkprivate.h"
-#include "gtksnapshot.h"
+//#include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
 
-static void     set_color      (GtkColorChoiceButton *self,
-                                GdkRGBA              *color);
 static gboolean drop           (GtkDropTarget        *dest,
                                 const GValue         *value,
                                 double                x,
@@ -54,6 +52,10 @@ struct _GtkColorChoiceButton
 {
   GtkWidget parent_instance;
 
+  GdkRGBA color;
+  gboolean use_alpha;
+  char *title;
+
   GtkWidget *button;
   GtkWidget *swatch;
   GtkColorChoice *choice;
@@ -62,8 +64,9 @@ struct _GtkColorChoiceButton
 /* Properties */
 enum
 {
-  PROP_CHOICE = 1,
-  PROP_COLOR,
+  PROP_COLOR = 1,
+  PROP_USE_ALPHA,
+  PROP_TITLE,
   NUM_PROPERTIES
 };
 
@@ -78,6 +81,9 @@ gtk_color_choice_button_init (GtkColorChoiceButton *self)
   PangoRectangle rect;
   GtkDragSource *source;
   GtkDropTarget *dest;
+
+  self->use_alpha = TRUE;
+  self->title = g_strdup ("");
 
   self->button = gtk_button_new ();
   g_signal_connect_swapped (self->button, "clicked", G_CALLBACK (button_clicked), self);
@@ -122,8 +128,16 @@ gtk_color_choice_button_set_property (GObject      *object,
 
   switch (param_id)
     {
-    case PROP_CHOICE:
-      gtk_color_choice_button_set_choice (self, g_value_get_object (value));
+    case PROP_COLOR:
+      gtk_color_choice_button_set_color (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_USE_ALPHA:
+      gtk_color_choice_button_set_use_alpha (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_TITLE:
+      gtk_color_choice_button_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -142,16 +156,16 @@ gtk_color_choice_button_get_property (GObject    *object,
 
   switch (param_id)
     {
-    case PROP_CHOICE:
-      g_value_set_object (value, self->choice);
+    case PROP_COLOR:
+      g_value_set_boxed (value, &self->color);
       break;
 
-    case PROP_COLOR:
-      {
-        GdkRGBA color;
-        gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (self->swatch), &color);
-        g_value_set_boxed (value, &color);
-      }
+    case PROP_USE_ALPHA:
+      g_value_set_boolean (value, self->use_alpha);
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, self->title);
       break;
 
     default:
@@ -161,11 +175,21 @@ gtk_color_choice_button_get_property (GObject    *object,
 }
 
 static void
+gtk_color_choice_button_dispose (GObject *object)
+{
+  GtkColorChoiceButton *self = GTK_COLOR_CHOICE_BUTTON (object);
+
+  g_clear_pointer (&self->button, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_color_choice_button_parent_class)->dispose (object);
+}
+
+static void
 gtk_color_choice_button_finalize (GObject *object)
 {
   GtkColorChoiceButton *self = GTK_COLOR_CHOICE_BUTTON (object);
 
-  g_clear_object (&self->choice);
+  g_free (self->title);
 
   G_OBJECT_CLASS (gtk_color_choice_button_parent_class)->finalize (object);
 }
@@ -178,20 +202,26 @@ gtk_color_choice_button_class_init (GtkColorChoiceButtonClass *class)
 
   object_class->get_property = gtk_color_choice_button_get_property;
   object_class->set_property = gtk_color_choice_button_set_property;
+  object_class->dispose = gtk_color_choice_button_dispose;
   object_class->finalize = gtk_color_choice_button_finalize;
 
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
 
-  properties[PROP_CHOICE] =
-      g_param_spec_object ("choice", NULL, NULL,
-                           GTK_TYPE_COLOR_CHOICE,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
   properties[PROP_COLOR] =
       g_param_spec_boxed ("color", NULL, NULL,
                           GDK_TYPE_RGBA,
-                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_USE_ALPHA] =
+      g_param_spec_boolean ("use-alpha", NULL, NULL,
+                            TRUE,
+                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_TITLE] =
+      g_param_spec_string ("title", NULL, NULL,
+                           "",
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -227,24 +257,6 @@ accessible_color_name (const GdkRGBA *color)
                             scale_round (color->blue, 100));
 }
 
-static void
-set_color (GtkColorChoiceButton *self,
-           GdkRGBA              *color)
-{
-  char *text;
-
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (self->swatch), color);
-  gtk_color_choice_set_color (self->choice, color);
-
-  text = accessible_color_name (color);
-  gtk_accessible_update_property (GTK_ACCESSIBLE (self->swatch),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, text,
-                                  -1);
-  g_free (text);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
-}
-
 static gboolean
 drop (GtkDropTarget        *dest,
       const GValue         *value,
@@ -254,7 +266,7 @@ drop (GtkDropTarget        *dest,
 {
   GdkRGBA *color = g_value_get_boxed (value);
 
-  set_color (self, color);
+  gtk_color_choice_button_set_color (self, color);
 
   return TRUE;
 }
@@ -265,11 +277,7 @@ drag_prepare (GtkDragSource        *source,
               double                y,
               GtkColorChoiceButton *self)
 {
-  GdkRGBA color;
-
-  gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (self->swatch), &color);
-
-  return gdk_content_provider_new_typed (GDK_TYPE_RGBA, &color);
+  return gdk_content_provider_new_typed (GDK_TYPE_RGBA, &self->color);
 }
 
 static void
@@ -277,14 +285,15 @@ color_chosen (GObject      *source,
               GAsyncResult *result,
               gpointer      data)
 {
+  GtkColorChoice *choice = GTK_COLOR_CHOICE (source);
   GtkColorChoiceButton *self = data;
   GdkRGBA *color;
   GError *error = NULL;
 
-  color = gtk_color_choice_present_finish (self->choice, result, &error);
+  color = gtk_color_choice_choose_finish (choice, result, &error);
   if (color)
     {
-      set_color (self, color);
+      gtk_color_choice_button_set_color (self, color);
       gdk_rgba_free (color);
     }
   else
@@ -297,77 +306,101 @@ color_chosen (GObject      *source,
 static void
 button_clicked (GtkColorChoiceButton *self)
 {
-  if (gtk_color_choice_get_parent (self->choice) == NULL)
-    {
-      GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
+  GtkRoot *root;
+  GtkWindow *parent = NULL;
+  GtkColorChoice *choice;
 
-      if (GTK_IS_WINDOW (root))
-        gtk_color_choice_set_parent (self->choice, GTK_WINDOW (root));
-    }
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  if (GTK_IS_WINDOW (root))
+    parent = GTK_WINDOW (root);
 
-  gtk_color_choice_present (self->choice, NULL, color_chosen, self);
+  choice = gtk_color_choice_new (parent, self->title, self->use_alpha);
+  gtk_color_choice_choose (choice, &self->color, NULL, color_chosen, self);
+  g_object_unref (choice);
 }
 
 /* }}} */
 /* {{{ Public API */
 /* {{{ Constructor */
 
-GtkWidget *
-gtk_color_choice_button_new (GtkColorChoice *choice)
+GtkColorChoiceButton *
+gtk_color_choice_button_new (void)
 {
-  GtkWidget *self;
-
-  g_return_val_if_fail (GTK_IS_COLOR_CHOICE (choice), NULL);
-
-  if (choice == NULL)
-    choice = gtk_color_choice_new ();
-
-  self = g_object_new (GTK_TYPE_COLOR_CHOICE_BUTTON,
-                       "choice", choice,
-                       NULL);
-
-  g_clear_object (&choice);
-
-  return self;
+  return g_object_new (GTK_TYPE_COLOR_CHOICE_BUTTON, NULL);
 }
 
 /* }}} */
 /* {{{ Setters and Getters */
 
 void
-gtk_color_choice_button_set_choice (GtkColorChoiceButton *self,
-                                    GtkColorChoice       *choice)
+gtk_color_choice_button_set_color (GtkColorChoiceButton *self,
+                                   const GdkRGBA        *color)
 {
-  GdkRGBA color;
+  char *text;
 
-  g_return_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self));
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (choice));
-
-  if (!g_set_object (&self->choice, choice))
-    return;
-
-  gtk_color_choice_get_color (choice, &color);
-  set_color (self, &color);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHOICE]);
-}
-
-GtkColorChoice *
-gtk_color_choice_button_get_choice (GtkColorChoiceButton *self)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self), NULL);
-
-  return self->choice;
-}
-
-void
-gtk_color_choice_button_get_color (GtkColorChoiceButton *self,
-                                   GdkRGBA              *color)
-{
   g_return_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self));
   g_return_if_fail (color != NULL);
 
-  gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (self->swatch), color);
+  if (gdk_rgba_equal (&self->color, color))
+    return;
+
+  self->color = *color;
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (self->swatch), color);
+
+  text = accessible_color_name (color);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->swatch),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                  -1);
+  g_free (text);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
+}
+
+const GdkRGBA *
+gtk_color_choice_button_get_color (GtkColorChoiceButton *self)
+{
+  g_return_val_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self), NULL);
+
+  return &self->color;
+}
+
+void
+gtk_color_choice_button_set_use_alpha (GtkColorChoiceButton *self,
+                                       gboolean              use_alpha)
+{
+  g_return_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self));
+
+  if (self->use_alpha == use_alpha)
+    return;
+
+  self->use_alpha = use_alpha;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_ALPHA]);
+}
+
+gboolean
+gtk_color_choice_button_get_use_alpha (GtkColorChoiceButton *self)
+{
+  g_return_val_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self), TRUE);
+
+  return self->use_alpha;
+}
+
+void
+gtk_color_choice_button_set_title (GtkColorChoiceButton *self,
+                                   const char           *title)
+{
+  char *new_title;
+
+  g_return_if_fail (GTK_IS_COLOR_CHOICE_BUTTON (self));
+  g_return_if_fail (title != NULL);
+
+  if (g_str_equal (self->title, title))
+    return;
+
+  new_title = g_strdup (title);
+  g_free (self->title);
+  self->title = new_title;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
 }
 
 /* }}} */

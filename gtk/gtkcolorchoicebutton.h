@@ -23,8 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkcolorchoice.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -34,17 +33,28 @@ GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkColorChoiceButton, gtk_color_choice_button, GTK, COLOR_CHOICE_BUTTON, GtkWidget)
 
 GDK_AVAILABLE_IN_4_10
-GtkWidget *      gtk_color_choice_button_new        (GtkColorChoice       *choice);
+GtkColorChoiceButton *
+                gtk_color_choice_button_new             (void);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_button_set_choice (GtkColorChoiceButton *self,
-                                                     GtkColorChoice       *choice);
+void            gtk_color_choice_button_set_color       (GtkColorChoiceButton *self,
+                                                         const GdkRGBA        *color);
 
 GDK_AVAILABLE_IN_4_10
-GtkColorChoice * gtk_color_choice_button_get_choice (GtkColorChoiceButton *self);
+const GdkRGBA * gtk_color_choice_button_get_color       (GtkColorChoiceButton *self);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_button_get_color  (GtkColorChoiceButton *self,
-                                                     GdkRGBA              *color);
+void            gtk_color_choice_button_set_use_alpha   (GtkColorChoiceButton *self,
+                                                         gboolean              use_alpha);
+
+GDK_AVAILABLE_IN_4_10
+gboolean        gtk_color_choice_button_get_use_alpha   (GtkColorChoiceButton *self);
+
+GDK_AVAILABLE_IN_4_10
+void            gtk_color_choice_button_set_title       (GtkColorChoiceButton *self,
+                                                         const char           *title);
+
+GDK_AVAILABLE_IN_4_10
+const char *    gtk_color_choice_button_get_title       (GtkColorChoiceButton *self);
 
 G_END_DECLS
