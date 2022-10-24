@@ -1,3 +1,64 @@
+Overview of Changes in 4.6.8, 24-10-2022
+========================================
+
+* Input:
+ - Fix problems with input method interactions that caused
+   dead keys not to work
+
+* GtkText:
+ - Respect the no-emoji input hint fully
+
+* GtkNotebook:
+ - Fix an infinite loop in accessibility code
+ - Event handling fixes
+
+* GtkFileChooser:
+ - Restore ~ and .functionality
+
+* GtkTreeView:
+ - Event handling fixes
+
+* GtkTreeListModel:
+ - Prevent possible crashes with collapsed nodes
+
+* GtkGridView:
+ - Fix issues with rubberband selection
+
+* GtkEmojiChooser:
+ - Fix navigation with arrow keys when filtered
+
+* GtkPopover:
+ - Fix problems with focus when dismissing popovers
+ - Fix problems with focusing editable labels in popovers
+
+* GtkStackSidebar:
+ - Improve accessible presentation
+
+* Wayland:
+ - Make gtk_launch_uri more robust
+ - Make monitor bounds handling more robust
+ - Prevent shrinking clients due to wrong toplevel bounds
+
+* Flatpak:
+ - Fix file DND with the FileTransfer portal
+
+* Translation updates
+ Brazilian Portuguese
+ Croatian
+ Czech
+ Georgian
+ German
+ Hungarian
+ Icelandic
+ Lithuanian
+ Polish
+ Portuguese
+ Serbian
+ Slovenian
+ Swedish
+ Turkish
+
+
 Overview of Changes in 4.6.7, 17-08-2022
 ========================================
 
