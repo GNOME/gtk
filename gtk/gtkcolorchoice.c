@@ -32,32 +32,17 @@ struct _GtkColorChoice
 
   GtkWindow *parent;
   char *title;
-  GdkRGBA color;
   gboolean use_alpha;
 
   GTask *task;
   GtkColorChooserWindow *window;
 };
 
-enum
-{
-  PROP_PARENT = 1,
-  PROP_TITLE,
-  PROP_COLOR,
-  PROP_USE_ALPHA,
-
-  NUM_PROPERTIES
-};
-
-static GParamSpec *properties[NUM_PROPERTIES];
-
 G_DEFINE_TYPE (GtkColorChoice, gtk_color_choice, G_TYPE_OBJECT)
 
 static void
 gtk_color_choice_init (GtkColorChoice *self)
 {
-  self->title = g_strdup ("");
-  self->use_alpha = TRUE;
 }
 
 static void
@@ -65,105 +50,18 @@ gtk_color_choice_finalize (GObject *object)
 {
   GtkColorChoice *self = GTK_COLOR_CHOICE (object);
 
+  g_assert (self->task == NULL);
+  g_assert (self->window == NULL);
+
   g_free (self->title);
 
   G_OBJECT_CLASS (gtk_color_choice_parent_class)->finalize (object);
 }
 
 static void
-gtk_color_choice_get_property (GObject    *object,
-                               guint       property_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  GtkColorChoice *self = GTK_COLOR_CHOICE (object);
-
-  switch (property_id)
-    {
-    case PROP_PARENT:
-      g_value_set_object (value, self->parent);
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, self->title);
-      break;
-
-    case PROP_COLOR:
-      g_value_set_boxed (value, &self->color);
-      break;
-
-    case PROP_USE_ALPHA:
-      g_value_set_boolean (value, self->use_alpha);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_color_choice_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
-{
-  GtkColorChoice *self = GTK_COLOR_CHOICE (object);
-
-  switch (prop_id)
-    {
-    case PROP_PARENT:
-      gtk_color_choice_set_parent (self, g_value_get_object (value));
-      break;
-
-    case PROP_TITLE:
-      gtk_color_choice_set_title (self, g_value_get_string (value));
-      break;
-
-    case PROP_COLOR:
-      gtk_color_choice_set_color (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_USE_ALPHA:
-      gtk_color_choice_set_use_alpha (self, g_value_get_boolean (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
 gtk_color_choice_class_init (GtkColorChoiceClass *class)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-  object_class->finalize = gtk_color_choice_finalize;
-  object_class->get_property = gtk_color_choice_get_property;
-  object_class->set_property = gtk_color_choice_set_property;
-
-  properties[PROP_PARENT] =
-      g_param_spec_object ("parent", NULL, NULL,
-                           GTK_TYPE_WINDOW,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  properties[PROP_TITLE] =
-      g_param_spec_string ("title", NULL, NULL,
-                           "",
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  properties[PROP_COLOR] =
-      g_param_spec_boxed ("color", NULL, NULL,
-                          GDK_TYPE_RGBA,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  properties[PROP_USE_ALPHA] =
-      g_param_spec_boolean ("use-alpha", NULL, NULL,
-                            TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
+  G_OBJECT_CLASS (class)->finalize = gtk_color_choice_finalize;
 }
 
 /* }}} */
@@ -171,115 +69,19 @@ gtk_color_choice_class_init (GtkColorChoiceClass *class)
 /* {{{ Constructor */
 
 GtkColorChoice *
-gtk_color_choice_new (void)
+gtk_color_choice_new (GtkWindow  *parent,
+                      const char *title,
+                      gboolean    use_alpha)
 {
-  return g_object_new (GTK_TYPE_COLOR_CHOICE, NULL);
-}
+  GtkColorChoice *self;
 
-/* }}} */
-/* {{{ Setters and getters */
-
-GtkWindow *
-gtk_color_choice_get_parent (GtkColorChoice *self)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_CHOICE (self), NULL);
-
-  return self->parent;
-}
-
-void
-gtk_color_choice_set_parent (GtkColorChoice *self,
-                             GtkWindow      *parent)
-{
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
-
-  if (self->parent == parent)
-    return;
-
-  if (self->parent)
-    g_object_remove_weak_pointer (G_OBJECT (self->parent), (void **)&self->parent);
+  self = g_object_new (GTK_TYPE_COLOR_CHOICE, NULL);
 
   self->parent = parent;
-
-  if (self->parent)
-    g_object_add_weak_pointer (G_OBJECT (self->parent), (void **)&self->parent);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PARENT]);
-}
-
-const char *
-gtk_color_choice_get_title (GtkColorChoice *self)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_CHOICE (self), NULL);
-
-  return self->title;
-}
-
-void
-gtk_color_choice_set_title (GtkColorChoice *self,
-                            const char     *title)
-{
-  char *new_title;
-
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-  g_return_if_fail (title != NULL);
-
-  if (g_str_equal (self->title, title))
-    return;
-
-  new_title = g_strdup (title);
-  g_free (self->title);
-  self->title = new_title;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
-}
-
-void
-gtk_color_choice_get_color (GtkColorChoice *self,
-                            GdkRGBA        *color)
-{
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-  g_return_if_fail (color != NULL);
-
-  *color = self->color;
-}
-
-void
-gtk_color_choice_set_color (GtkColorChoice *self,
-                            GdkRGBA        *color)
-{
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-  g_return_if_fail (color != NULL);
-
-  if (gdk_rgba_equal (&self->color, &color))
-    return;
-
-  self->color = *color;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
-}
-
-gboolean
-gtk_color_choice_get_use_alpha (GtkColorChoice *self)
-{
-  g_return_val_if_fail (GTK_IS_COLOR_CHOICE (self), TRUE);
-
-  return self->use_alpha;
-}
-
-void
-gtk_color_choice_set_use_alpha (GtkColorChoice *self,
-                                gboolean        use_alpha)
-{
-  g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-
-  if (self->use_alpha == use_alpha)
-    return;
-
+  self->title = g_strdup (title);
   self->use_alpha = use_alpha;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_ALPHA]);
+  return self;
 }
 
 /* }}} */
@@ -346,20 +148,21 @@ cancel_button_clicked (GtkButton      *button,
 }
 
 void
-gtk_color_choice_present (GtkColorChoice       *self,
-                          GCancellable         *cancellable,
-                          GAsyncReadyCallback   callback,
-                          gpointer              user_data)
+gtk_color_choice_choose (GtkColorChoice       *self,
+                         const GdkRGBA        *initial_color,
+                         GCancellable         *cancellable,
+                         GAsyncReadyCallback   callback,
+                         gpointer              user_data)
 {
   GtkColorChooserWindow *window;
   GTask *task;
 
   g_return_if_fail (GTK_IS_COLOR_CHOICE (self));
-  g_return_if_fail (self->task == NULL);
 
   window = GTK_COLOR_CHOOSER_WINDOW (gtk_color_chooser_window_new (self->title, self->parent));
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (window), &self->color);
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (window), self->use_alpha);
+  if (initial_color)
+    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (window), initial_color);
 
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), self);
@@ -370,7 +173,7 @@ gtk_color_choice_present (GtkColorChoice       *self,
                     G_CALLBACK (cancel_button_clicked), self);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gtk_color_choice_present);
+  g_task_set_source_tag (task, gtk_color_choice_choose);
 
   self->window = window;
   self->task = task;
@@ -379,9 +182,9 @@ gtk_color_choice_present (GtkColorChoice       *self,
 }
 
 GdkRGBA *
-gtk_color_choice_present_finish (GtkColorChoice  *self,
-                                 GAsyncResult    *result,
-                                 GError         **error)
+gtk_color_choice_choose_finish (GtkColorChoice  *self,
+                                GAsyncResult    *result,
+                                GError         **error)
 {
   return g_task_propagate_pointer (G_TASK (result), error);
 }

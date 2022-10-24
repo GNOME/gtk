@@ -33,46 +33,20 @@ GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkColorChoice, gtk_color_choice, GTK, COLOR_CHOICE, GObject)
 
 GDK_AVAILABLE_IN_4_10
-GtkColorChoice * gtk_color_choice_new                 (void);
+GtkColorChoice * gtk_color_choice_new           (GtkWindow            *parent,
+                                                 const char           *title,
+                                                 gboolean              use_alpha);
 
 GDK_AVAILABLE_IN_4_10
-GtkWindow *      gtk_color_choice_get_parent          (GtkColorChoice       *self);
+void             gtk_color_choice_choose        (GtkColorChoice       *choice,
+                                                 const GdkRGBA        *initial_color,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_set_parent          (GtkColorChoice       *self,
-                                                       GtkWindow            *window);
-
-GDK_AVAILABLE_IN_4_10
-const char *     gtk_color_choice_get_title           (GtkColorChoice       *self);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_set_title           (GtkColorChoice       *self,
-                                                       const char           *title);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_set_color           (GtkColorChoice       *self,
-                                                       GdkRGBA              *color);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_get_color           (GtkColorChoice       *self,
-                                                       GdkRGBA              *color);
-
-GDK_AVAILABLE_IN_4_10
-gboolean         gtk_color_choice_get_use_alpha       (GtkColorChoice       *self);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_set_use_alpha       (GtkColorChoice       *self,
-                                                       gboolean              use_alpha);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_color_choice_present             (GtkColorChoice       *self,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-
-GDK_AVAILABLE_IN_4_10
-GdkRGBA *        gtk_color_choice_present_finish     (GtkColorChoice        *self,
-                                                      GAsyncResult          *result,
-                                                      GError               **error);
+GdkRGBA *        gtk_color_choice_choose_finish (GtkColorChoice        *self,
+                                                 GAsyncResult          *result,
+                                                 GError               **error);
 
 G_END_DECLS
