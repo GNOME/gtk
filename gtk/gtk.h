@@ -127,6 +127,7 @@
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtkfilechoosernative.h>
 #include <gtk/gtkfilechooserwidget.h>
+#include <gtk/gtkfiledialog.h>
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfilter.h>
 #include <gtk/gtkfilterlistmodel.h>
