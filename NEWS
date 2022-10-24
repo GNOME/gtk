@@ -1,5 +1,63 @@
-Overview of Changes in 4.8.2, dd-mm-yyyy
+Overview of Changes in 4.8.2, 24-10-2022
 ========================================
+
+* Input:
+ - Give input methods more control over resets and allow
+   them to preserve state
+ - Align interpretation of modifiers in key events
+   in X11 and Wayland
+
+* GtkColumnView:
+ - Fixes to focus handling
+
+* GtkPopover:
+ - Fix problems with focus when dismissing popovers
+ - Fix problems with focusing editable labels in popovers
+
+* Build:
+ - Fix build problems with resources and non-gnu linkers
+ - Fix gi-docgen detection in cross builds
+ - Require meson 0.60
+
+* Debugging:
+ - Make more debug options available in no-debug builds
+ - Improve consistency of debug logging
+ - Give names to all sources
+
+* Accessibility:
+ - Introduce GtkAccessibleRange
+
+* Wayland:
+ - Make monitor bounds handling more robust
+ - Prevent shrinking clients due to wrong toplevel bounds
+
+* Broadway:
+ - Return correct pointer coordinates from device queries
+
+* Windows:
+ - Use native API to translate key events
+
+* Translation updates:
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Catalan
+ Croatian
+ Czech
+ Friulian
+ Galician
+ Georgian
+ German
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Slovenian
+ Swedish
+ Turkish
+ Ukrainian
 
 
 Overview of Changes in 4.8.1, 16-09-2022
