@@ -451,6 +451,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "rgba") == 0)
         check = FALSE;
 
+      if (g_type_is_a (type, GTK_TYPE_FONT_DIALOG) &&
+          strcmp (pspec->name, "language") == 0)
+        check = FALSE;
+
       if (g_test_verbose ())
         {
           g_print ("Property %s:%s%s\n",
