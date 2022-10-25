@@ -321,14 +321,14 @@
  * The interface description semantics expected in composite template descriptions
  * is slightly different from regular [class@Gtk.Builder] XML.
  *
- * Unlike regular interface descriptions, [method@Gtk.WidgetClass.set_template] will
- * expect a `<template>` tag as a direct child of the toplevel `<interface>`
- * tag. The `<template>` tag must specify the “class” attribute which must be
- * the type name of the widget. Optionally, the “parent” attribute may be
- * specified to specify the direct parent type of the widget type, this is
- * ignored by `GtkBuilder` but required for UI design tools like
- * [Glade](https://glade.gnome.org/) to introspect what kind of properties and
- * internal children exist for a given type when the actual type does not exist.
+ * Unlike regular interface descriptions, [method@Gtk.WidgetClass.set_template]
+ * will expect a `<template>` tag as a direct child of the toplevel
+ * `<interface>` tag. The `<template>` tag must specify the “class” attribute
+ * which must be the type name of the widget. Optionally, the “parent”
+ * attribute may be specified to specify the direct parent type of the widget
+ * type; this is ignored by `GtkBuilder` but can be used by UI design tools to
+ * introspect what kind of properties and internal children exist for a given
+ * type when the actual type does not exist.
  *
  * The XML which is contained inside the `<template>` tag behaves as if it were
  * added to the `<object>` tag defining the widget itself. You may set properties
