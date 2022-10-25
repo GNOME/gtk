@@ -225,6 +225,7 @@
 #include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkdebug.h"
+#include "gtkstringlist.h"
 
 
 static void gtk_builder_finalize       (GObject         *object);
@@ -551,6 +552,19 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
 
           if (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) == GTK_TYPE_EXPRESSION)
             gtk_value_set_expression (&property_value, prop->value);
+          else if (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) == G_TYPE_STRV)
+            {
+              GStrvBuilder *strv = g_strv_builder_new ();
+
+              for (guint j = 0; j < g_list_model_get_n_items (G_LIST_MODEL (prop->value)); j++)
+                {
+                  GtkStringObject *s = g_list_model_get_item (G_LIST_MODEL (prop->value), j);
+                  g_strv_builder_add (strv, gtk_string_object_get_string (s));
+                  g_object_unref (s);
+                }
+
+              g_value_set_boxed (&property_value, g_strv_builder_end (strv));
+            }
           else
             g_assert_not_reached ();
         }

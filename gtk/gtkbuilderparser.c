@@ -1039,6 +1039,10 @@ free_property_info (PropertyInfo *info)
     {
       if (G_PARAM_SPEC_VALUE_TYPE (info->pspec) == GTK_TYPE_EXPRESSION)
         gtk_expression_unref (info->value);
+      else if (G_PARAM_SPEC_VALUE_TYPE (info->pspec) == G_TYPE_STRV)
+        {
+          /* info->value is in the hash table of objects */
+        }
       else
         g_assert_not_reached();
     }
@@ -1723,8 +1727,11 @@ parse_custom (GtkBuildableParseContext  *context,
       object = ((ObjectInfo*)child_info->parent)->object;
       child  = child_info->object;
     }
-  else
-    return FALSE;
+  else if (parent_info->tag_type == TAG_PROPERTY)
+    {
+      g_print ("custom markup in <property>\n");
+      return FALSE;
+    }
 
   if (!gtk_buildable_custom_tag_start (GTK_BUILDABLE (object),
                                        data->builder,
@@ -1947,7 +1954,10 @@ end_element (GtkBuildableParseContext  *context,
       if (child_info)
         child_info->object = object_info->object;
       if (prop_info)
-        g_string_assign (prop_info->text, object_info->id);
+        {
+          g_string_assign (prop_info->text, object_info->id);
+          prop_info->value = object_info->object;
+        }
 
       if (GTK_IS_BUILDABLE (object_info->object) &&
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
@@ -2074,7 +2084,7 @@ end_element (GtkBuildableParseContext  *context,
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_UNHANDLED_TAG,
-                   "Unhandled tag: <%s>", element_name);
+                   "Unhandled end tag: </%s>", element_name);
       _gtk_builder_prefix_error (data->builder, context, error);
     }
 }
