@@ -38,6 +38,7 @@
 #include <gtk/gtkactionable.h>
 #include <gtk/gtkactionbar.h>
 #include <gtk/gtkadjustment.h>
+#include <gtk/gtkalertdialog.h>
 #include <gtk/deprecated/gtkappchooser.h>
 #include <gtk/deprecated/gtkappchooserdialog.h>
 #include <gtk/deprecated/gtkappchooserwidget.h>
