@@ -40,7 +40,8 @@ Some people like the first two solutions better: it makes reading file names
 easier for those with poor eyesight.
 
 The basic conventions for any header which exposes a GType are described in
-the section of the Type system introduction called "Conventions".
+the section of the Type system introduction called
+["Conventions"](concepts.html#conventions).
 
 If you want to declare a type named "file" in the namespace "viewer", name
 the type instance `ViewerFile` and its class `ViewerFileClass` (names are
