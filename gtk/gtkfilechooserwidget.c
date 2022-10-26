@@ -2813,13 +2813,14 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   old_revealer_transition_type = gtk_revealer_get_transition_type (GTK_REVEALER (impl->browse_header_revealer));
   gtk_revealer_set_transition_type (GTK_REVEALER (impl->browse_header_revealer),
                                     GTK_REVEALER_TRANSITION_TYPE_NONE);
-  gtk_revealer_set_reveal_child (GTK_REVEALER (impl->browse_header_revealer), FALSE);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (impl->browse_header_revealer), TRUE);
   gtk_revealer_set_transition_type (GTK_REVEALER (impl->browse_header_revealer),
                                     old_revealer_transition_type);
 
   location_bar_update (impl);
   recent_start_loading (impl);
   file = g_file_new_for_uri ("recent:///");
+  _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
   g_object_notify (G_OBJECT (impl), "subtitle");
   g_object_unref (file);
