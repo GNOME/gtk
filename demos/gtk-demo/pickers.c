@@ -10,25 +10,40 @@
 
 #include <gtk/gtk.h>
 
-static gboolean
-filter_font_cb (const PangoFontFamily *family,
-                const PangoFontFace   *face,
-                gpointer               data)
+static void
+file_opened (GObject *source,
+             GAsyncResult *result,
+             void *data)
 {
-  const char *alias_families[] = {
-    "Cursive",
-    "Fantasy",
-    "Monospace",
-    "Sans",
-    "Serif",
-    "System-ui",
-    NULL
-  };
-  const char *family_name;
+  GFile *file;
+  GError *error = NULL;
+  char *name;
 
-  family_name = pango_font_family_get_name (PANGO_FONT_FAMILY (family));
+  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
 
-  return g_strv_contains (alias_families, family_name);
+  if (!file)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  name = g_file_get_basename (file);
+  gtk_button_set_label (GTK_BUTTON (data), name);
+  g_free (name);
+}
+
+static void
+open_file (GtkButton *picker)
+{
+  GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
+  GtkFileDialog *dialog;
+
+  dialog = gtk_file_dialog_new ();
+
+  gtk_file_dialog_open (dialog, parent, NULL, NULL, file_opened, picker);
+
+  g_object_unref (dialog);
 }
 
 #define COLOR(r,g,b) { r/255., g/255., b/255., 1.0 }
@@ -38,27 +53,6 @@ do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *table, *label, *picker;
-  GdkRGBA solarized[] = {
-    COLOR (0xff, 0xff, 0xff),
-    COLOR (0x07, 0x36, 0x42),
-    COLOR (0xdc, 0x32, 0x2f),
-    COLOR (0x85, 0x99, 0x00),
-    COLOR (0xb5, 0x89, 0x00),
-    COLOR (0x26, 0x8b, 0xd2),
-    COLOR (0xd3, 0x36, 0x82),
-    COLOR (0x2a, 0xa1, 0x98),
-    COLOR (0xee, 0xe8, 0xd5),
-
-    COLOR (0x00, 0x00, 0x00),
-    COLOR (0x00, 0x2b, 0x36),
-    COLOR (0xcb, 0x4b, 0x16),
-    COLOR (0x58, 0x6e, 0x75),
-    COLOR (0x65, 0x7b, 0x83),
-    COLOR (0x83, 0x94, 0x96),
-    COLOR (0x6c, 0x71, 0xc4),
-    COLOR (0x93, 0xa1, 0xa1),
-    COLOR (0xfd, 0xf6, 0xe3),
-  };
 
   if (!window)
   {
@@ -77,30 +71,14 @@ do_pickers (GtkWidget *do_widget)
     gtk_grid_set_column_spacing (GTK_GRID (table), 10);
     gtk_window_set_child (GTK_WINDOW (window), table);
 
-    label = gtk_label_new ("Standard");
-    gtk_widget_add_css_class (label, "title-4");
-    gtk_grid_attach (GTK_GRID (table), label, 1, -1, 1, 1);
-    label = gtk_label_new ("Custom");
-    gtk_widget_add_css_class (label, "title-4");
-    gtk_grid_attach (GTK_GRID (table), label, 2, -1, 1, 1);
-
     label = gtk_label_new ("Color:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
 
-    picker = gtk_color_button_new ();
+    picker = gtk_color_dialog_button_new (gtk_color_dialog_new ());
     gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
-
-    picker = gtk_color_button_new ();
-    gtk_color_button_set_title (GTK_COLOR_BUTTON (picker), "Solarized colors");
-    gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (picker),
-                                   GTK_ORIENTATION_HORIZONTAL,
-                                   9,
-                                   18,
-                                   solarized);
-    gtk_grid_attach (GTK_GRID (table), picker, 2, 0, 1, 1);
 
     label = gtk_label_new ("Font:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
@@ -108,23 +86,25 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
-    picker = gtk_font_button_new ();
+    picker = gtk_font_dialog_button_new (gtk_font_dialog_new ());
     gtk_grid_attach (GTK_GRID (table), picker, 1, 1, 1, 1);
 
-    picker = gtk_font_button_new ();
-    gtk_font_chooser_set_level (GTK_FONT_CHOOSER (picker),
-                                GTK_FONT_CHOOSER_LEVEL_FAMILY |
-                                GTK_FONT_CHOOSER_LEVEL_SIZE);
-    gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (picker), filter_font_cb, NULL, NULL);
+    label = gtk_label_new ("File:");
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
 
-    gtk_grid_attach (GTK_GRID (table), picker, 2, 1, 1, 1);
+    picker = gtk_button_new_with_label ("[...]");
+    g_signal_connect (picker, "clicked", G_CALLBACK (open_file), NULL);
+    gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
     label = gtk_label_new ("Mail:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
     picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
     gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
