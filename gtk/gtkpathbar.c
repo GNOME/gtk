@@ -104,7 +104,8 @@ typedef enum {
   NORMAL_BUTTON,
   ROOT_BUTTON,
   HOME_BUTTON,
-  DESKTOP_BUTTON
+  DESKTOP_BUTTON,
+  RECENT_BUTTON,
 } ButtonType;
 
 #define BUTTON_DATA(x) ((ButtonData *)(x))
@@ -129,7 +130,7 @@ struct _ButtonData
  * All buttons in front of a fake root are automatically hidden when in a
  * directory below a fake root and replaced with the "<" arrow button.
  */
-#define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON)
+#define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON || (button)->type == RECENT_BUTTON)
 
 G_DEFINE_TYPE (GtkPathBar, gtk_path_bar, GTK_TYPE_WIDGET)
 
@@ -865,6 +866,7 @@ set_button_image_get_info_cb (GObject      *source,
         g_set_object (&data->path_bar->desktop_icon, icon);
         break;
 
+      case RECENT_BUTTON:
       case NORMAL_BUTTON:
       case ROOT_BUTTON:
       default:
@@ -963,6 +965,11 @@ set_button_image (GtkPathBar *path_bar,
       add_cancellable (path_bar, button_data->cancellable);
       break;
 
+    case RECENT_BUTTON:
+      gtk_image_set_from_icon_name (GTK_IMAGE (button_data->image),
+                                    "document-open-recent-symbolic");
+      break;
+
     case NORMAL_BUTTON:
     default:
       break;
@@ -1015,6 +1022,19 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
     }
 }
 
+static gboolean
+file_is_recent_uri (GFile *file)
+{
+  GFile *recent;
+  gboolean same;
+
+  recent = g_file_new_for_uri ("recent:///");
+  same = g_file_equal (file, recent);
+  g_object_unref (recent);
+
+  return same;
+}
+
 static ButtonType
 find_button_type (GtkPathBar  *path_bar,
 		  GFile       *file)
@@ -1028,6 +1048,8 @@ find_button_type (GtkPathBar  *path_bar,
   if (path_bar->desktop_file != NULL &&
       g_file_equal (file, path_bar->desktop_file))
     return DESKTOP_BUTTON;
+  if (file_is_recent_uri (file))
+    return RECENT_BUTTON;
 
  return NORMAL_BUTTON;
 }
@@ -1060,6 +1082,7 @@ make_directory_button (GtkPathBar  *path_bar,
       break;
     case HOME_BUTTON:
     case DESKTOP_BUTTON:
+    case RECENT_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
