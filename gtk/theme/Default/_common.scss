@@ -3570,6 +3570,27 @@ filechooser {
   gridview child {
     border-radius: 12px;
     margin: 12px;
+
+    &:hover {
+      background-color: gtkalpha(currentColor, .04);
+    }
+
+    &:active {
+      background-color: gtkalpha(currentColor, .08);
+    }
+
+    &:selected {
+      background-color: gtkalpha($selected_bg_color, .15);
+      color: inherit;
+    }
+
+    &:selected:hover {
+      background-color: gtkalpha($selected_bg_color, .20);
+    }
+
+    &:selected:active {
+      background-color: gtkalpha($selected_bg_color, .25);
+    }
   }
 }
 
