@@ -78,6 +78,7 @@
 #include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcenterlayout.h>
 #include <gtk/gtkcheckbutton.h>
+#include <gtk/gtkchoice.h>
 #include <gtk/gtkcolorbutton.h>
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>
@@ -90,6 +91,7 @@
 #include <gtk/gtkcolumnviewsorter.h>
 #include <gtk/deprecated/gtkcombobox.h>
 #include <gtk/deprecated/gtkcomboboxtext.h>
+#include <gtk/gtkchoice.h>
 #include <gtk/gtkconstraintlayout.h>
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcssprovider.h>
