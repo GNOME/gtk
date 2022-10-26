@@ -36,7 +36,8 @@ gdk_wayland_deps = [
 ]
 
 # wayland protocols
-proto_dir = dependency('wayland-protocols').get_pkgconfig_variable('pkgdatadir')
+wlprotocolsdep = dependency('wayland-protocols')
+proto_dir = wlprotocolsdep.get_pkgconfig_variable('pkgdatadir')
 assert(proto_dir != '', 'Could not get pkgdatadir from wayland-protocols.pc')
 
 wayland_scanner = find_program('wayland-scanner')
@@ -58,6 +59,9 @@ proto_sources = [
   ['xdg-output', 'unstable', 'v1', ],
   ['primary-selection', 'unstable', 'v1', ],
 ]
+if wlprotocolsdep.version().version_compare('>=1.21')
+  proto_sources += [['xdg-activation', 'staging', 'v1', ]]
+endif
 
 gdk_wayland_gen_headers = []
 
@@ -67,6 +71,10 @@ foreach p: proto_sources
 
   if proto_stability == 'stable'
     output_base = proto_name
+    input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+  elif proto_stability == 'staging'
+    proto_version = p.get(2)
+    output_base = '@0@-@1@'.format(proto_name, proto_version)
     input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
   elif proto_stability == 'private'
     output_base = proto_name

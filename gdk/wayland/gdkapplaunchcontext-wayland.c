@@ -30,6 +30,26 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+#ifdef HAVE_XDG_ACTIVATION
+typedef struct {
+  gchar *token;
+} AppLaunchData;
+
+static void
+token_done (gpointer                        data,
+            struct xdg_activation_token_v1 *provider,
+            const char                     *token)
+{
+  AppLaunchData *app_launch_data = data;
+
+  app_launch_data->token = g_strdup (token);
+}
+
+static const struct xdg_activation_token_v1_listener token_listener = {
+  token_done,
+};
+#endif
+
 static char *
 gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                       GAppInfo          *info,
@@ -40,6 +60,46 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
 
   g_object_get (context, "display", &display, NULL);
 
+#ifdef HAVE_XDG_ACTIVATION
+  if (display->xdg_activation)
+    {
+      struct xdg_activation_token_v1 *token;
+      struct wl_event_queue *event_queue;
+      struct wl_surface *wl_surface = NULL;
+      GdkSeat *seat;
+      GdkWindow *focus_window;
+      AppLaunchData app_launch_data = { 0 };
+
+      event_queue = wl_display_create_queue (display->wl_display);
+
+      seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+      token = xdg_activation_v1_get_activation_token (display->xdg_activation);
+      wl_proxy_set_queue ((struct wl_proxy *) token, event_queue);
+
+      xdg_activation_token_v1_add_listener (token,
+                                            &token_listener,
+                                            &app_launch_data);
+      xdg_activation_token_v1_set_serial (token,
+                                          _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
+                                          gdk_wayland_seat_get_wl_seat (seat));
+
+      focus_window = gdk_wayland_device_get_focus (gdk_seat_get_keyboard (seat));
+      if (focus_window)
+        wl_surface = gdk_wayland_window_get_wl_surface (focus_window);
+      if (wl_surface)
+        xdg_activation_token_v1_set_surface (token, wl_surface);
+
+      xdg_activation_token_v1_commit (token);
+
+      while (app_launch_data.token == NULL)
+        wl_display_dispatch_queue (display->wl_display, event_queue);
+
+      xdg_activation_token_v1_destroy (token);
+      id = app_launch_data.token;
+      wl_event_queue_destroy (event_queue);
+    }
+  else
+#endif
   if (display->gtk_shell_version >= 3)
     {
       id = g_uuid_string_random ();
