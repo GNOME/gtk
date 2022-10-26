@@ -2151,21 +2151,12 @@ static char *
 column_view_get_tooltip_text (GtkListItem *list_item,
                               GFileInfo   *info)
 {
-  GtkFileChooserWidget *impl;
   GFile *file;
 
   if (!info)
     return NULL;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (list_item),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  g_assert (impl != NULL);
-
-  if (impl->operation_mode == OPERATION_MODE_BROWSE)
-    return NULL;
-
   file = _gtk_file_info_get_file (info);
-
   return g_file_get_path (file);
 }
 
