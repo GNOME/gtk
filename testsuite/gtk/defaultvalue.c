@@ -442,6 +442,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
            strcmp (pspec->name, "loading") == 0))
         check = FALSE;
 
+      if (g_type_is_a (type, GTK_TYPE_COLOR_DIALOG_BUTTON) &&
+          strcmp (pspec->name, "color") == 0)
+        check = FALSE;
+
+      if (g_type_is_a (type, GTK_TYPE_FONT_DIALOG) &&
+          strcmp (pspec->name, "language") == 0)
+        check = FALSE;
+
+      if (g_type_is_a (type, GTK_TYPE_FONT_DIALOG_BUTTON) &&
+          strcmp (pspec->name, "font-desc") == 0)
+        check = FALSE;
+
       /* All the icontheme properties depend on the environment */
       if (g_type_is_a (type, GTK_TYPE_ICON_THEME))
         check = FALSE;
