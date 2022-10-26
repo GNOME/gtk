@@ -110,8 +110,26 @@
                                           </object>
                                         </child>
                                         <child type="end">
-                                          <object class="GtkSpinner" id="search_spinner">
-                                            <property name="visible">0</property>
+                                          <object class="GtkBox">
+                                            <property name="spacing">6</property>
+
+                                            <child>
+                                              <object class="GtkSpinner" id="search_spinner">
+                                                <property name="visible">0</property>
+                                              </object>
+                                            </child>
+
+                                            <child>
+                                              <object class="GtkButton">
+                                                <property name="action-name">item.toggle-view</property>
+                                                <binding name="icon-name">
+                                                  <lookup name="icon-name">browse_toggle_view_button</lookup>
+                                                </binding>
+                                                <binding name="tooltip-text">
+                                                  <lookup name="tooltip-text">browse_toggle_view_button</lookup>
+                                                </binding>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
