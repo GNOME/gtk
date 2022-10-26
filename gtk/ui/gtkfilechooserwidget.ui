@@ -731,13 +731,16 @@
               </object>
             </child>
             <child>
-              <object class="GtkInscription">
-                <property name="hexpand">1</property>
-                <property name="yalign">0.0</property>
-                <property name="xalign">0.5</property>
-                <property name="min-chars">12</property>
-                <property name="min-lines">2</property>
-                <binding name="text">
+              <object class="GtkLabel">
+                <property name="lines">3</property>
+                <property name="wrap">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="ellipsize">middle</property>
+                <property name="justify">center</property>
+                <attributes>
+                  <attribute name="insert-hyphens" value="false"></attribute>
+                </attributes>
+                <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_display_name">
                     <lookup name="item">GtkListItem</lookup>
                   </closure>
