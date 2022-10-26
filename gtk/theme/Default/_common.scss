@@ -3591,6 +3591,10 @@ filechooser {
     &:selected:active {
       background-color: gtkalpha($selected_bg_color, .25);
     }
+
+    & filethumbnail image {
+      filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.3));
+    }
   }
 }
 
