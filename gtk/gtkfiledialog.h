@@ -124,14 +124,15 @@ GListModel *     gtk_file_dialog_open_multiple_finish (GtkFileDialog       *self
                                                        GError             **error);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_select_folders      (GtkFileDialog        *self,
+void             gtk_file_dialog_select_multiple_folders
+                                                     (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
 
 GDK_AVAILABLE_IN_4_10
-GListModel *     gtk_file_dialog_select_folders_finish
+GListModel *     gtk_file_dialog_select_multiple_folders_finish
                                                      (GtkFileDialog        *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);

@@ -603,9 +603,9 @@ finish_file_op (GtkFileDialog  *self,
 }
 
 static GListModel *
-finish_files_op (GtkFileDialog  *self,
-                 GTask          *task,
-                 GError        **error)
+finish_multiple_files_op (GtkFileDialog  *self,
+                          GTask          *task,
+                          GError        **error)
 {
   return G_LIST_MODEL (g_task_propagate_pointer (task, error));
 }
@@ -906,11 +906,11 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
 
   g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_open_multiple, NULL);
 
-  return finish_files_op (self, task, error);
+  return finish_multiple_files_op (self, task, error);
 }
 
 /**
- * gtk_file_dialog_select_folders:
+ * gtk_file_dialog_select_multiple_folders:
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
@@ -921,17 +921,17 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
  * presenting a file chooser dialog to the user.
  *
  * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.FileDialog.select_folders_finish]
+ * It should call [method@Gtk.FileDialog.select_multiple_folders_finish]
  * to obtain the result.
  *
  * Since: 4.10
  */
 void
-gtk_file_dialog_select_folders (GtkFileDialog       *self,
-                                GtkWindow           *parent,
-                                GCancellable        *cancellable,
-                                GAsyncReadyCallback  callback,
-                                gpointer             user_data)
+gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
+                                         GtkWindow           *parent,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
 {
   GtkFileChooserNative *chooser;
   GTask *task;
@@ -941,7 +941,7 @@ gtk_file_dialog_select_folders (GtkFileDialog       *self,
   chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gtk_file_dialog_select_folder);
+  g_task_set_source_tag (task, gtk_file_dialog_select_multiple_folders);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
   if (cancellable)
@@ -953,13 +953,13 @@ gtk_file_dialog_select_folders (GtkFileDialog       *self,
 }
 
 /**
- * gtk_file_dialog_select_folders_finish:
+ * gtk_file_dialog_select_multiple_folders_finish:
  * @self: a `GtkFileDialog`
  * @result: a `GAsyncResult`
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.FileDialog.select_folders] call
- * and returns the resulting files in a `GListModel`.
+ * Finishes the [method@Gtk.FileDialog.select_multiple_folders]
+ * call and returns the resulting files in a `GListModel`.
  *
  * Returns: (nullable) (transfer full): the file that was selected,
  *   as a `GListModel` of `GFiles`. Otherwise, `NULL` is returned
@@ -968,15 +968,15 @@ gtk_file_dialog_select_folders (GtkFileDialog       *self,
  * Since: 4.10
  */
 GListModel *
-gtk_file_dialog_select_folders_finish (GtkFileDialog   *self,
-                                       GAsyncResult    *result,
-                                       GError         **error)
+gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
+                                                GAsyncResult    *result,
+                                                GError         **error)
 {
   GTask *task = G_TASK (result);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_select_folders, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_select_multiple_folders, NULL);
 
-  return finish_files_op (self, task, error);
+  return finish_multiple_files_op (self, task, error);
 }
 
 /* }}} */
