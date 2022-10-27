@@ -55,6 +55,8 @@ test_one_accel (const char *accel,
 						  *keycodes,
 						  mods);
 
+  g_print ("accel %s, label %s\n", accel, label);
+
   g_assert_cmpstr (label, ==, exp_label);
 
   name = gtk_accelerator_name_with_keycode (NULL,
@@ -83,13 +85,13 @@ accel2 (void)
 static void
 accel3 (void)
 {
-  test_one_accel ("KP_7", "7", TRUE);
+  test_one_accel ("KP_7", "KP 7", TRUE);
 }
 
 static void
 accel4 (void)
 {
-  test_one_accel ("<Primary>KP_7", "Ctrl+7", TRUE);
+  test_one_accel ("<Primary>KP_7", "Ctrl+KP 7", TRUE);
 }
 
 static void
