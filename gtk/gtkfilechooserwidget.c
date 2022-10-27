@@ -6714,6 +6714,13 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                                         "",
                                                         GTK_PARAM_READABLE));
 
+  /**
+   * GtkFileChooserWidget:show-time:
+   *
+   * Whether to show the time.
+   *
+   * Since: 4.10
+   */
   g_object_class_install_property (gobject_class, PROP_SHOW_TIME,
                                    g_param_spec_boolean ("show-time", NULL, NULL,
                                                          FALSE,
