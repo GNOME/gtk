@@ -36,6 +36,9 @@
  * In GTK, the main widgets that implement this interface are
  * [class@Gtk.ColorChooserWidget], [class@Gtk.ColorChooserDialog] and
  * [class@Gtk.ColorButton].
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] and [class@Gtk.ColorDialogButton]
+ *   instead of widgets implementing `GtkColorChooser`
  */
 
 enum
@@ -116,6 +119,8 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
  * @color: (out): a `GdkRGBA` to fill in with the current color
  *
  * Gets the currently-selected color.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 void
 gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
@@ -132,6 +137,8 @@ gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
  * @color: the new color
  *
  * Sets the color.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 void
 gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
@@ -151,6 +158,8 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
  *
  * Returns: %TRUE if the color chooser uses the alpha channel,
  *   %FALSE if not
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 gboolean
 gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
@@ -170,6 +179,8 @@ gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
  * @use_alpha: %TRUE if color chooser should use alpha channel, %FALSE if not
  *
  * Sets whether or not the color chooser should use the alpha channel.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 void
 gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
@@ -207,6 +218,8 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * of removing the default color palette from the color chooser.
  *
  * If @colors is %NULL, removes all previously added palettes.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,

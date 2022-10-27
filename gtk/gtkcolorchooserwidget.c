@@ -18,8 +18,8 @@
 
 #include "config.h"
 
-#include "gtkcolorchooserprivate.h"
-#include "gtkcolorchooserwidget.h"
+#include "deprecated/gtkcolorchooserprivate.h"
+#include "deprecated/gtkcolorchooserwidget.h"
 #include "gtkcoloreditorprivate.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkgrid.h"
@@ -33,6 +33,8 @@
 #include "gdkrgbaprivate.h"
 
 #include <math.h>
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkColorChooserWidget:
@@ -61,6 +63,8 @@
  * # CSS names
  *
  * `GtkColorChooserWidget` has a single CSS node with name colorchooser.
+ *
+ * Deprecated: 4.10: Direct use of `GtkColorChooserWidget` is deprecated.
  */
 
 typedef struct _GtkColorChooserWidgetClass   GtkColorChooserWidgetClass;

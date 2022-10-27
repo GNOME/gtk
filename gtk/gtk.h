@@ -79,10 +79,10 @@
 #include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcenterlayout.h>
 #include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkcolorbutton.h>
-#include <gtk/gtkcolorchooser.h>
-#include <gtk/gtkcolorchooserdialog.h>
-#include <gtk/gtkcolorchooserwidget.h>
+#include <gtk/deprecated/gtkcolorbutton.h>
+#include <gtk/deprecated/gtkcolorchooser.h>
+#include <gtk/deprecated/gtkcolorchooserdialog.h>
+#include <gtk/deprecated/gtkcolorchooserwidget.h>
 #include <gtk/gtkcolordialog.h>
 #include <gtk/gtkcolordialogbutton.h>
 #include <gtk/gtkcolorutils.h>

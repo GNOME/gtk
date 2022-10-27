@@ -726,7 +726,9 @@ do_dnd (GtkWidget *do_widget)
       GtkCssProvider *provider;
       GString *css;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       button = gtk_color_button_new ();
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (g_object_ref_sink (button));
 
       provider = gtk_css_provider_new ();

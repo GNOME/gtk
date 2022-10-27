@@ -21,6 +21,8 @@
 #include "script-names.h"
 #include "language-names.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* {{{ ScriptLang object */
 
 G_DECLARE_FINAL_TYPE (ScriptLang, script_lang, SCRIPT, LANG, GObject)

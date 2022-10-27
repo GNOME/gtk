@@ -21,8 +21,8 @@
 
 #include "gtkcolordialog.h"
 
-#include "gtkcolorchooserdialog.h"
-#include "gtkcolorchooser.h"
+#include "deprecated/gtkcolorchooserdialog.h"
+#include "deprecated/gtkcolorchooser.h"
 #include "gtkbutton.h"
 #include "gtkdialogerror.h"
 #include <glib/gi18n-lib.h>
@@ -379,8 +379,10 @@ response_cb (GTask *task,
       GtkColorChooserDialog *window;
       GdkRGBA color;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       window = GTK_COLOR_CHOOSER_DIALOG (g_task_get_task_data (task));
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (window), &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_task_return_pointer (task, gdk_rgba_copy (&color), (GDestroyNotify) gdk_rgba_free);
     }
@@ -407,11 +409,13 @@ create_color_chooser (GtkColorDialog *self,
   else
     title = _("Pick a Color");
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   window = gtk_color_chooser_dialog_new (title, parent);
   if (initial_color)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (window), initial_color);
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (window), self->with_alpha);
   gtk_window_set_modal (GTK_WINDOW (window), self->modal);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return window;
 }

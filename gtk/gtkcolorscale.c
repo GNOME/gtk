@@ -19,7 +19,7 @@
 
 #include "gtkcolorscaleprivate.h"
 
-#include "gtkcolorchooserprivate.h"
+#include "deprecated/gtkcolorchooserprivate.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgestureclick.h"
 #include "gtkcolorutils.h"

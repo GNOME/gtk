@@ -24,9 +24,11 @@
 #include "gtkprivate.h"
 #include "gtksettings.h"
 
-#include "gtkcolorchooserprivate.h"
-#include "gtkcolorchooserdialog.h"
-#include "gtkcolorchooserwidget.h"
+#include "deprecated/gtkcolorchooserprivate.h"
+#include "deprecated/gtkcolorchooserdialog.h"
+#include "deprecated/gtkcolorchooserwidget.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkColorChooserDialog:
@@ -43,6 +45,8 @@
  * To change the initially selected color, use
  * [method@Gtk.ColorChooser.set_rgba]. To get the selected color use
  * [method@Gtk.ColorChooser.get_rgba].
+ *
+ * `GtkColorChooserDialog` has been deprecated in favor of [class@Gtk.ColorDialog].
  */
 
 typedef struct _GtkColorChooserDialogClass   GtkColorChooserDialogClass;
@@ -281,6 +285,8 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  * Creates a new `GtkColorChooserDialog`.
  *
  * Returns: a new `GtkColorChooserDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 GtkWidget *
 gtk_color_chooser_dialog_new (const char *title,

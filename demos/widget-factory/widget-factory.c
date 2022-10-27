@@ -1096,7 +1096,9 @@ set_color (GtkListBox *box, GtkListBoxRow *row, GtkColorChooser *chooser)
   if (gdk_rgba_parse (&rgba, color))
     {
       g_signal_handlers_block_by_func (chooser, rgba_changed, box);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_color_chooser_set_rgba (chooser, &rgba);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_signal_handlers_unblock_by_func (chooser, rgba_changed, box);
     }
 }
