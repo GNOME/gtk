@@ -90,7 +90,7 @@ struct _GtkColorDialogButton
 enum
 {
   PROP_DIALOG = 1,
-  PROP_COLOR,
+  PROP_RGBA,
   NUM_PROPERTIES
 };
 
@@ -170,8 +170,8 @@ gtk_color_dialog_button_set_property (GObject      *object,
       gtk_color_dialog_button_set_dialog (self, g_value_get_object (value));
       break;
 
-    case PROP_COLOR:
-      gtk_color_dialog_button_set_color (self, g_value_get_boxed (value));
+    case PROP_RGBA:
+      gtk_color_dialog_button_set_rgba (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -194,7 +194,7 @@ gtk_color_dialog_button_get_property (GObject      *object,
       g_value_set_object (value, self->dialog);
       break;
 
-    case PROP_COLOR:
+    case PROP_RGBA:
       g_value_set_boxed (value, &self->color);
       break;
 
@@ -254,7 +254,7 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColorDialogButton:color: (attributes org.gtk.Property.get=gtk_color_dialog_button_get_color org.gtk.Property.set=gtk_color_dialog_button_set_color)
+   * GtkColorDialogButton:rgba: (attributes org.gtk.Property.get=gtk_color_dialog_button_get_rgba org.gtk.Property.set=gtk_color_dialog_button_set_rgba)
    *
    * The selected color.
    *
@@ -262,13 +262,13 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
    * color, and it will be updated to reflect the users choice
    * in the color chooser dialog.
    *
-   * Listen to `notify::color` to get informed about changes
+   * Listen to `notify::rgba` to get informed about changes
    * to the buttons color.
    *
    * Since: 4.10
    */
-  properties[PROP_COLOR] =
-      g_param_spec_boxed ("color", NULL, NULL,
+  properties[PROP_RGBA] =
+      g_param_spec_boxed ("rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -315,7 +315,7 @@ drop (GtkDropTarget        *dest,
 {
   GdkRGBA *color = g_value_get_boxed (value);
 
-  gtk_color_dialog_button_set_color (self, color);
+  gtk_color_dialog_button_set_rgba (self, color);
 
   return TRUE;
 }
@@ -351,7 +351,7 @@ color_chosen (GObject      *source,
 
   if (gtk_color_dialog_choose_rgba_finish (self->dialog, result, &color, &error))
     {
-      gtk_color_dialog_button_set_color (self, &color);
+      gtk_color_dialog_button_set_rgba (self, &color);
     }
   else
     {
@@ -462,7 +462,7 @@ gtk_color_dialog_button_set_dialog (GtkColorDialogButton *self,
 }
 
 /**
- * gtk_color_dialog_button_get_color:
+ * gtk_color_dialog_button_get_rgba:
  * @self: a `GtkColorDialogButton`
  *
  * Returns the color of the button.
@@ -476,7 +476,7 @@ gtk_color_dialog_button_set_dialog (GtkColorDialogButton *self,
  * Since: 4.10
  */
 const GdkRGBA *
-gtk_color_dialog_button_get_color (GtkColorDialogButton *self)
+gtk_color_dialog_button_get_rgba (GtkColorDialogButton *self)
 {
   g_return_val_if_fail (GTK_IS_COLOR_DIALOG_BUTTON (self), NULL);
 
@@ -484,7 +484,7 @@ gtk_color_dialog_button_get_color (GtkColorDialogButton *self)
 }
 
 /**
- * gtk_color_dialog_button_set_color:
+ * gtk_color_dialog_button_set_rgba:
  * @self: a `GtkColorDialogButton`
  * @color: the new color
  *
@@ -493,8 +493,8 @@ gtk_color_dialog_button_get_color (GtkColorDialogButton *self)
  * Since: 4.10
  */
 void
-gtk_color_dialog_button_set_color (GtkColorDialogButton *self,
-                                   const GdkRGBA        *color)
+gtk_color_dialog_button_set_rgba (GtkColorDialogButton *self,
+                                  const GdkRGBA        *color)
 {
   char *text;
 
@@ -513,7 +513,7 @@ gtk_color_dialog_button_set_color (GtkColorDialogButton *self,
                                   -1);
   g_free (text);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RGBA]);
 }
 
 /* }}} */

@@ -44,10 +44,10 @@ void            gtk_color_dialog_button_set_dialog      (GtkColorDialogButton *s
                                                          GtkColorDialog       *dialog);
 
 GDK_AVAILABLE_IN_4_10
-const GdkRGBA * gtk_color_dialog_button_get_color       (GtkColorDialogButton *self);
+const GdkRGBA * gtk_color_dialog_button_get_rgba        (GtkColorDialogButton *self);
 
 GDK_AVAILABLE_IN_4_10
-void            gtk_color_dialog_button_set_color       (GtkColorDialogButton *self,
+void            gtk_color_dialog_button_set_rgba        (GtkColorDialogButton *self,
                                                          const GdkRGBA        *color);
 
 G_END_DECLS
