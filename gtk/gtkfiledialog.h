@@ -50,13 +50,6 @@ void            gtk_file_dialog_set_modal            (GtkFileDialog        *self
                                                       gboolean              modal);
 
 GDK_AVAILABLE_IN_4_10
-gboolean         gtk_file_dialog_get_create_folders  (GtkFileDialog        *self);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_set_create_folders  (GtkFileDialog        *self,
-                                                      gboolean              create_folders);
-
-GDK_AVAILABLE_IN_4_10
 GListModel *     gtk_file_dialog_get_filters         (GtkFileDialog        *self);
 
 GDK_AVAILABLE_IN_4_10

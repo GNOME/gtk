@@ -50,7 +50,6 @@ struct _GtkFileDialog
 
   char *title;
   unsigned int modal : 1;
-  unsigned int create_folders : 1;
 
   GListModel *filters;
   GListModel *shortcut_folders;
@@ -60,7 +59,6 @@ enum
 {
   PROP_TITLE = 1,
   PROP_MODAL,
-  PROP_CREATE_FOLDERS,
   PROP_FILTERS,
   PROP_SHORTCUT_FOLDERS,
 
@@ -76,7 +74,6 @@ gtk_file_dialog_init (GtkFileDialog *self)
 {
   self->title = g_strdup (_("Pick a File"));
   self->modal = TRUE;
-  self->create_folders = TRUE;
 }
 
 static void
@@ -109,10 +106,6 @@ gtk_file_dialog_get_property (GObject      *object,
       g_value_set_boolean (value, self->modal);
       break;
 
-    case PROP_CREATE_FOLDERS:
-      g_value_set_boolean (value, self->create_folders);
-      break;
-
     case PROP_FILTERS:
       g_value_set_object (value, self->filters);
       break;
@@ -143,10 +136,6 @@ gtk_file_dialog_set_property (GObject      *object,
 
     case PROP_MODAL:
       gtk_file_dialog_set_modal (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_CREATE_FOLDERS:
-      gtk_file_dialog_set_create_folders (self, g_value_get_boolean (value));
       break;
 
     case PROP_FILTERS:
@@ -193,18 +182,6 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
    */
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
-                            TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkFileDialog:create-folders: (attributes org.gtk.Property.get=gtk_file_dialog_get_create_folders org.gtk.Property.set=gtk_file_dialog_set_create_folders)
-   *
-   * Whether the file chooser dialog will allow to create new folders.
-   *
-   * Since: 4.10
-   */
-  properties[PROP_CREATE_FOLDERS] =
-      g_param_spec_boolean ("create-folders", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -376,49 +353,6 @@ gtk_file_dialog_set_modal (GtkFileDialog *self,
 }
 
 /**
- * gtk_file_dialog_get_create_folders:
- * @self: a `GtkFileDialog`
- *
- * Returns whether the file chooser dialog
- * allows to create folders.
- *
- * Returns: `TRUE` if the file chooser dialog allows folder creation
- *
- * Since: 4.10
- */
-gboolean
-gtk_file_dialog_get_create_folders (GtkFileDialog *self)
-{
-  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), FALSE);
-
-  return self->create_folders;
-}
-
-/**
- * gtk_file_dialog_set_create_folders:
- * @self: a `GtkFileDialog`
- * @create_folders: the new value
- *
- * Sets whether the file chooser dialog
- * allows to create folders.
- *
- * Since: 4.10
- */
-void
-gtk_file_dialog_set_create_folders (GtkFileDialog *self,
-                                    gboolean       create_folders)
-{
-  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
-
-  if (self->create_folders == create_folders)
-    return;
-
-  self->create_folders = create_folders;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CREATE_FOLDERS]);
-}
-
-/**
  * gtk_file_dialog_get_filters:
  * @self: a `GtkFileDialog`
  *
@@ -571,7 +505,6 @@ create_file_chooser (GtkFileDialog        *self,
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), self->modal);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);
-  gtk_file_chooser_set_create_folders (GTK_FILE_CHOOSER (chooser), self->create_folders);
 
   file_chooser_set_filters (GTK_FILE_CHOOSER (chooser), self->filters);
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
