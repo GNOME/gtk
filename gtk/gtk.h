@@ -135,10 +135,10 @@
 #include <gtk/gtkcustomfilter.h>
 #include <gtk/gtkflattenlistmodel.h>
 #include <gtk/gtkflowbox.h>
-#include <gtk/gtkfontbutton.h>
-#include <gtk/gtkfontchooser.h>
-#include <gtk/gtkfontchooserdialog.h>
-#include <gtk/gtkfontchooserwidget.h>
+#include <gtk/deprecated/gtkfontbutton.h>
+#include <gtk/deprecated/gtkfontchooser.h>
+#include <gtk/deprecated/gtkfontchooserdialog.h>
+#include <gtk/deprecated/gtkfontchooserwidget.h>
 #include <gtk/gtkfontdialog.h>
 #include <gtk/gtkfontdialogbutton.h>
 #include <gtk/gtkframe.h>

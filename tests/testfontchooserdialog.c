@@ -24,6 +24,8 @@
 #include <gtk/gtk.h>
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean
 monospace_filter (const PangoFontFamily *family,
                   const PangoFontFace   *face,

@@ -35,7 +35,7 @@ typedef struct _GtkFontChooserWidget              GtkFontChooserWidget;
 GDK_AVAILABLE_IN_ALL
 GType        gtk_font_chooser_widget_get_type                 (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget*   gtk_font_chooser_widget_new                      (void);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFontChooserWidget, g_object_unref)

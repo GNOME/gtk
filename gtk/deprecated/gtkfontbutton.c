@@ -45,6 +45,8 @@
 #include <stdio.h>
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkFontButton:
  *
@@ -65,6 +67,8 @@
  *
  * `GtkFontButton` has a single CSS node with name fontbutton which
  * contains a button node with the .font style class.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 
 typedef struct _GtkFontButtonClass   GtkFontButtonClass;
@@ -744,6 +748,8 @@ gtk_font_button_get_property (GObject    *object,
  * Creates a new font picker widget.
  *
  * Returns: a new font picker widget.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 GtkWidget *
 gtk_font_button_new (void)
@@ -758,6 +764,8 @@ gtk_font_button_new (void)
  * Creates a new font picker widget showing the given font.
  *
  * Returns: a new font picker widget.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 GtkWidget *
 gtk_font_button_new_with_font (const char *fontname)
@@ -771,6 +779,8 @@ gtk_font_button_new_with_font (const char *fontname)
  * @title: a string containing the font chooser dialog title
  *
  * Sets the title for the font chooser dialog.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 void
 gtk_font_button_set_title (GtkFontButton *font_button,
@@ -797,6 +807,8 @@ gtk_font_button_set_title (GtkFontButton *font_button,
  *
  * Returns: an internal copy of the title string
  *   which must not be freed.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 const char *
 gtk_font_button_get_title (GtkFontButton *font_button)
@@ -812,6 +824,8 @@ gtk_font_button_get_title (GtkFontButton *font_button)
  * @modal: %TRUE to make the dialog modal
  *
  * Sets whether the dialog should be modal.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 void
 gtk_font_button_set_modal (GtkFontButton *font_button,
@@ -837,6 +851,8 @@ gtk_font_button_set_modal (GtkFontButton *font_button,
  * Gets whether the dialog is modal.
  *
  * Returns: %TRUE if the dialog is modal
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 gboolean
 gtk_font_button_get_modal (GtkFontButton *font_button)
@@ -853,6 +869,8 @@ gtk_font_button_get_modal (GtkFontButton *font_button)
  * Returns whether the selected font is used in the label.
  *
  * Returns: whether the selected font is used in the label.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 gboolean
 gtk_font_button_get_use_font (GtkFontButton *font_button)
@@ -869,6 +887,8 @@ gtk_font_button_get_use_font (GtkFontButton *font_button)
  *
  * If @use_font is %TRUE, the font name will be written
  * using the selected font.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 void
 gtk_font_button_set_use_font (GtkFontButton *font_button,
@@ -896,6 +916,8 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
  * Returns whether the selected size is used in the label.
  *
  * Returns: whether the selected size is used in the label.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 gboolean
 gtk_font_button_get_use_size (GtkFontButton *font_button)
@@ -913,6 +935,8 @@ gtk_font_button_get_use_size (GtkFontButton *font_button)
  *
  * If @use_size is %TRUE, the font name will be written using
  * the selected size.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialogButton] instead
  */
 void
 gtk_font_button_set_use_size (GtkFontButton *font_button,

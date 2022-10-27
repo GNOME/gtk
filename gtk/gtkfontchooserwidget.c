@@ -21,7 +21,7 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
-#include "gtkfontchooserwidget.h"
+#include "deprecated/gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
 
 #include "gtkadjustment.h"
@@ -34,7 +34,7 @@
 #include "gtkfilter.h"
 #include "gtkframe.h"
 #include "gtkgrid.h"
-#include "gtkfontchooser.h"
+#include "deprecated/gtkfontchooser.h"
 #include "gtkfontchooserutils.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
@@ -70,6 +70,8 @@
 #include "language-names.h"
 #include "open-type-layout.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkFontChooserWidget:
  *
@@ -90,6 +92,8 @@
  * # CSS nodes
  *
  * `GtkFontChooserWidget` has a single CSS node with name fontchooser.
+ *
+ * Deprecated: 4.10: Direct use of `GtkFontChooserWidget` is deprecated.
  */
 
 typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
@@ -1299,6 +1303,8 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
  * Creates a new `GtkFontChooserWidget`.
  *
  * Returns: a new `GtkFontChooserWidget`
+ *
+ * Deprecated: 4.10: Direct use of `GtkFontChooserWidget` is deprecated.
  */
 GtkWidget *
 gtk_font_chooser_widget_new (void)

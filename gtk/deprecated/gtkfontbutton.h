@@ -43,29 +43,29 @@ typedef struct _GtkFontButton        GtkFontButton;
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_font_button_get_type       (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget            *gtk_font_button_new            (void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget            *gtk_font_button_new_with_font  (const char    *fontname);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char *         gtk_font_button_get_title      (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_font_button_set_title      (GtkFontButton *font_button,
                                                       const char    *title);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean              gtk_font_button_get_modal      (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_font_button_set_modal      (GtkFontButton *font_button,
                                                       gboolean       modal);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean              gtk_font_button_get_use_font   (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_font_button_set_use_font   (GtkFontButton *font_button,
                                                       gboolean       use_font);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean              gtk_font_button_get_use_size   (GtkFontButton *font_button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_font_button_set_use_size   (GtkFontButton *font_button,
                                                       gboolean       use_size);
 

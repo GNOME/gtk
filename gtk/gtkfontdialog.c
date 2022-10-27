@@ -21,7 +21,7 @@
 
 #include "gtkfontdialog.h"
 
-#include "gtkfontchooser.h"
+#include "deprecated/gtkfontchooser.h"
 #include "gtkfontchooserdialogprivate.h"
 #include "gtkbutton.h"
 #include "gtkdialogerror.h"
@@ -502,6 +502,7 @@ typedef struct
   PangoLanguage *language;
 } FontResult;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 response_cb (GTask *task,
              int    response)
@@ -568,6 +569,7 @@ response_cb (GTask *task,
 
   g_object_unref (task);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 dialog_response (GtkDialog *dialog,
@@ -577,6 +579,7 @@ dialog_response (GtkDialog *dialog,
   response_cb (task, response);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkWidget *
 create_font_chooser (GtkFontDialog        *self,
                      GtkWindow            *parent,
@@ -605,6 +608,7 @@ create_font_chooser (GtkFontDialog        *self,
 
   return window;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /* }}} */
 /* {{{ Async API */

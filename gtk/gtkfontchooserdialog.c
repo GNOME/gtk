@@ -22,8 +22,8 @@
 #include <string.h>
 
 #include "gtkfontchooserdialogprivate.h"
-#include "gtkfontchooser.h"
-#include "gtkfontchooserwidget.h"
+#include "deprecated/gtkfontchooser.h"
+#include "deprecated/gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
 #include "gtkfontchooserutils.h"
 #include "gtkbox.h"
@@ -37,6 +37,8 @@
 #include "gtkheaderbar.h"
 #include "gtkactionable.h"
 #include "gtkeventcontrollerkey.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct _GtkFontChooserDialogClass GtkFontChooserDialogClass;
 
@@ -72,6 +74,8 @@ struct _GtkFontChooserDialogClass
  * The `GtkFontChooserDialog` implementation of the `GtkBuildable`
  * interface exposes the buttons with the names “select_button”
  * and “cancel_button”.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialog] instead
  */
 
 static void     gtk_font_chooser_dialog_buildable_interface_init     (GtkBuildableIface *iface);
@@ -288,6 +292,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *dialog)
  * Creates a new `GtkFontChooserDialog`.
  *
  * Returns: a new `GtkFontChooserDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FontDialog] instead
  */
 GtkWidget*
 gtk_font_chooser_dialog_new (const char *title,

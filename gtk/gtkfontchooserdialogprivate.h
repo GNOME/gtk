@@ -18,7 +18,7 @@
 #ifndef __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
 #define __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
 
-#include "gtkfontchooserdialog.h"
+#include "deprecated/gtkfontchooserdialog.h"
 #include "gtkfilter.h"
 
 G_BEGIN_DECLS
