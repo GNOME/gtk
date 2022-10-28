@@ -73,7 +73,6 @@ G_DEFINE_TYPE (GtkColorDialog, gtk_color_dialog, G_TYPE_OBJECT)
 static void
 gtk_color_dialog_init (GtkColorDialog *self)
 {
-  self->title = g_strdup (_("Pick a Color"));
   self->modal = TRUE;
   self->with_alpha = TRUE;
 }
@@ -163,7 +162,7 @@ gtk_color_dialog_class_init (GtkColorDialogClass *class)
    */
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
-                           _("Pick a Color"),
+                           NULL,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -425,10 +424,16 @@ gtk_color_dialog_choose_rgba (GtkColorDialog       *self,
 {
   GtkWidget *window;
   GTask *task;
+  char *title;
 
   g_return_if_fail (GTK_IS_COLOR_DIALOG (self));
 
-  window = gtk_color_chooser_dialog_new (self->title, parent);
+  if (self->title)
+    title = self->title;
+  else
+    title = _("Pick a Color");
+
+  window = gtk_color_chooser_dialog_new (title, parent);
   if (initial_color)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (window), initial_color);
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (window), self->with_alpha);
