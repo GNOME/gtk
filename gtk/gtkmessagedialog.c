@@ -227,13 +227,13 @@ gtk_message_dialog_set_property (GObject      *object,
         if (txt)
           {
             priv->has_secondary_text = TRUE;
-                  gtk_widget_add_css_class (priv->label, "title");
+            gtk_widget_add_css_class (priv->label, "title");
             gtk_widget_show (priv->secondary_label);
           }
         else
           {
             priv->has_secondary_text = FALSE;
-                  gtk_widget_remove_css_class (priv->label, "title");
+            gtk_widget_remove_css_class (priv->label, "title");
             gtk_widget_hide (priv->secondary_label);
           }
       }
