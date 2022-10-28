@@ -28,7 +28,6 @@
 #include "gtksignallistitemfactory.h"
 #include "gtkentry.h"
 #include "gtkfilechooserdialog.h"
-#include "gtkfilechooserprivate.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkcheckbutton.h"
