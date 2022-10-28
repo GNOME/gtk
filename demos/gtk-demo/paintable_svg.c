@@ -13,25 +13,24 @@
 
 
 static void
-open_response_cb (GtkNativeDialog *dialog,
-                  int              response,
-                  GtkPicture      *picture)
+open_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  void *data)
 {
-  gtk_native_dialog_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkPicture *picture = data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
       GdkPaintable *paintable;
 
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       paintable = svg_paintable_new (file);
       gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
       g_object_unref (paintable);
       g_object_unref (file);
     }
-
-  gtk_native_dialog_destroy (dialog);
 }
 
 static void
@@ -39,20 +38,25 @@ show_file_open (GtkWidget  *button,
                 GtkPicture *picture)
 {
   GtkFileFilter *filter;
-  GtkFileChooserNative *dialog;
+  GtkFileDialog *dialog;
+  GListStore *filters;
 
-  dialog = gtk_file_chooser_native_new ("Open node file",
-                                        GTK_WINDOW (gtk_widget_get_root (button)),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Load",
-                                        "_Cancel");
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Open node file");
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/svg+xml");
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), picture);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+  g_object_unref (filters);
+
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (button)),
+                        NULL,
+                        NULL,
+                        open_response_cb, picture);
 }
 
 static GtkWidget *window;

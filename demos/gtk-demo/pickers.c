@@ -1,5 +1,5 @@
 /* Pickers
- * #Keywords: GtkColorChooser, GtkFontChooser, GtkApplicationChooser
+ * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog
  *
  * These widgets are mainly intended for use in preference dialogs.
  * They allow to select colors, fonts and applications.

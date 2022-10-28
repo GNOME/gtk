@@ -83,23 +83,16 @@ progressive_timeout (gpointer data)
 
       if (bytes_read < 0)
         {
-          GtkWidget *dialog;
+          GtkAlertDialog *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failure reading image file 'alphatest.png': %s",
-                                           error->message);
+          dialog = gtk_alert_dialog_new ("Failure reading image file 'alphatest.png': %s",
+                                         error->message);
+          gtk_alert_dialog_show (dialog, NULL);
+          g_object_unref (dialog);
           g_error_free (error);
-
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
-
-          gtk_widget_show (dialog);
 
           load_timeout = 0;
 
@@ -110,24 +103,16 @@ progressive_timeout (gpointer data)
                                     buf, bytes_read,
                                     &error))
         {
-          GtkWidget *dialog;
+          GtkAlertDialog *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failed to load image: %s",
-                                           error->message);
-
+          dialog = gtk_alert_dialog_new ("Failed to load image: %s",
+                                         error->message);
+          gtk_alert_dialog_show (dialog, NULL);
+          g_object_unref (dialog);
           g_error_free (error);
-
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_window_destroy), NULL);
 
           g_object_unref (image_stream);
           image_stream = NULL;
-
-          gtk_widget_show (dialog);
 
           load_timeout = 0;
 
@@ -143,21 +128,13 @@ progressive_timeout (gpointer data)
           error = NULL;
           if (!g_input_stream_close (image_stream, NULL, &error))
             {
-              GtkWidget *dialog;
+              GtkAlertDialog *dialog;
 
-              dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                               GTK_DIALOG_DESTROY_WITH_PARENT,
-                                               GTK_MESSAGE_ERROR,
-                                               GTK_BUTTONS_CLOSE,
-                                               "Failed to load image: %s",
-                                               error->message);
-
+              dialog = gtk_alert_dialog_new ("Failed to load image: %s",
+                                             error->message);
+              gtk_alert_dialog_show (dialog, NULL);
+              g_object_unref (dialog);
               g_error_free (error);
-
-              g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_window_destroy), NULL);
-
-              gtk_widget_show (dialog);
 
               g_object_unref (image_stream);
               image_stream = NULL;
@@ -177,24 +154,15 @@ progressive_timeout (gpointer data)
            * it was incomplete.
            */
           error = NULL;
-          if (!gdk_pixbuf_loader_close (pixbuf_loader,
-                                        &error))
+          if (!gdk_pixbuf_loader_close (pixbuf_loader, &error))
             {
-              GtkWidget *dialog;
+              GtkAlertDialog *dialog;
 
-              dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                               GTK_DIALOG_DESTROY_WITH_PARENT,
-                                               GTK_MESSAGE_ERROR,
-                                               GTK_BUTTONS_CLOSE,
-                                               "Failed to load image: %s",
-                                               error->message);
-
+              dialog = gtk_alert_dialog_new ("Failed to load image: %s",
+                                             error->message);
+              gtk_alert_dialog_show (dialog, NULL);
+              g_object_unref (dialog);
               g_error_free (error);
-
-              g_signal_connect (dialog, "response",
-                                G_CALLBACK (gtk_window_destroy), NULL);
-
-              gtk_widget_show (dialog);
 
               g_object_unref (pixbuf_loader);
               pixbuf_loader = NULL;
@@ -216,19 +184,13 @@ progressive_timeout (gpointer data)
 
       if (image_stream == NULL)
         {
-          GtkWidget *dialog;
+          GtkAlertDialog *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "%s", error->message);
+          dialog = gtk_alert_dialog_new ("%s",
+                                         error->message);
+          gtk_alert_dialog_show (dialog, NULL);
+          g_object_unref (dialog);
           g_error_free (error);
-
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_window_destroy), NULL);
-
-          gtk_widget_show (dialog);
 
           load_timeout = 0;
 

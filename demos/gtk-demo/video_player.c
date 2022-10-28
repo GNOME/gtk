@@ -10,60 +10,63 @@
 static GtkWidget *window = NULL;
 
 static void
-open_dialog_response_cb (GtkNativeDialog *dialog,
-                         int              response,
-                         GtkWidget       *video)
+open_dialog_response_cb (GObject *source,
+                         GAsyncResult *result,
+                         void *user_data)
 {
-  gtk_native_dialog_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkWidget *video = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       gtk_video_set_file (GTK_VIDEO (video), file);
       g_object_unref (file);
     }
-
-  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 open_clicked_cb (GtkWidget *button,
                  GtkWidget *video)
 {
-  GtkFileChooserNative *dialog;
+  GtkFileDialog *dialog;
   GtkFileFilter *filter;
+  GListStore *filters;
 
-  dialog = gtk_file_chooser_native_new ("Select a video",
-                                        GTK_WINDOW (gtk_widget_get_root (button)),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Open",
-                                        "_Cancel");
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Select a video");
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pattern (filter, "*");
   gtk_file_filter_set_name (filter, "All Files");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_list_store_append (filters, filter);
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/*");
   gtk_file_filter_set_name (filter, "Images");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_list_store_append (filters, filter);
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "video/*");
   gtk_file_filter_set_name (filter, "Video");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
-  
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+  g_list_store_append (filters, filter);
+
+  gtk_file_dialog_set_current_filter (dialog, filter);
   g_object_unref (filter);
 
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+  g_object_unref (filters);
+
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (button)),
+                        NULL,
+                        NULL,
+                        open_dialog_response_cb, video);
 }
 
 static void

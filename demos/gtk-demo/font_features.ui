@@ -58,11 +58,14 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkFontButton" id="font">
+                      <object class="GtkFontDialogButton" id="font">
+                        <property name="dialog">
+                          <object class="GtkFontDialog">
+                          </object>
+                        </property>
                         <property name="receives-default">1</property>
-                        <property name="font">Sans 12</property>
-                        <property name="level">family|style</property>
-                        <signal name="font-set" handler="font_features_font_changed" swapped="no"/>
+                        <property name="level">face</property>
+                        <signal name="notify::font-desc" handler="font_features_font_changed" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -192,7 +195,11 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkColorButton" id="foreground">
+                          <object class="GtkColorDialogButton" id="foreground">
+                            <property name="dialog">
+                              <object class="GtkColorDialog">
+                              </object>
+                            </property>
                             <property name="valign">baseline</property>
                             <property name="rgba">black</property>
                             <signal name="notify::rgba" handler="color_set_cb"/>
@@ -214,7 +221,11 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkColorButton" id="background">
+                          <object class="GtkColorDialogButton" id="background">
+                            <property name="dialog">
+                              <object class="GtkColorDialog">
+                              </object>
+                            </property>
                             <property name="valign">baseline</property>
                             <property name="rgba">white</property>
                             <signal name="notify::rgba" handler="color_set_cb"/>
