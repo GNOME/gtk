@@ -27,7 +27,7 @@
 #include "gtklistitem.h"
 #include "gtksignallistitemfactory.h"
 #include "gtkentry.h"
-#include "gtkfilechooserdialog.h"
+#include "gtkfiledialog.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkcheckbutton.h"
@@ -639,19 +639,21 @@ check_toggled_cb (GtkCheckButton         *check_button,
 }
 
 static void
-dialog_response_callback (GtkDialog              *dialog,
-                          int                     response_id,
-                          GtkPrinterOptionWidget *widget)
+dialog_response_callback (GObject *source,
+                          GAsyncResult *result,
+                          gpointer data)
 {
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkPrinterOptionWidget *widget = data;
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   GFile *new_location = NULL;
   char *uri = NULL;
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
+  new_location = gtk_file_dialog_save_finish (dialog, result, NULL);
+  if (new_location)
     {
       GFileInfo *info;
 
-      new_location = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       info = g_file_query_info (new_location,
                                 "standard::display-name",
                                 0,
@@ -680,8 +682,6 @@ dialog_response_callback (GtkDialog              *dialog,
         }
     }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
   if (new_location)
     uri = g_file_get_uri (new_location);
   else
@@ -706,33 +706,46 @@ filesave_choose_cb (GtkWidget              *button,
                     GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  GtkWidget *dialog;
-  GtkWindow *toplevel;
+  GtkFileDialog *dialog;
+  GFile *current_folder = NULL;
+  char *current_name = NULL;
 
   /* this will be unblocked in the dialog_response_callback function */
   g_signal_handler_block (priv->source, priv->source_changed_handler);
-
-  toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (widget)));
-  dialog = gtk_file_chooser_dialog_new (_("Select a filename"),
-                                        toplevel,
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                        _("_Select"), GTK_RESPONSE_ACCEPT,
-                                        NULL);
 
   /* select the current filename in the dialog */
   if (priv->source != NULL && priv->source->value != NULL)
     {
       priv->last_location = g_file_new_for_uri (priv->source->value);
       if (priv->last_location)
-        gtk_file_chooser_set_file (GTK_FILE_CHOOSER (dialog), priv->last_location, NULL);
+        {
+          if (g_file_query_file_type (priv->last_location, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+            {
+              current_folder = g_object_ref (priv->last_location);
+              current_name = NULL;
+            }
+          else
+            {
+              current_folder = g_file_get_parent (priv->last_location);
+              current_name = g_file_get_basename (priv->last_location);
+              if (strcmp (current_name, "/") == 0 ||
+                  !g_utf8_validate (current_name, -1, NULL))
+                g_clear_pointer (&current_name, g_free);
+            }
+        }
     }
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (dialog_response_callback),
-                    widget);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (dialog));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Select a filename"));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (widget))),
+                        current_folder,
+                        current_name,
+                        NULL,
+                        dialog_response_callback, widget);
+
+  g_object_unref (current_folder);
+  g_free (current_name);
 }
 
 static char *

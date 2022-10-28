@@ -24,7 +24,7 @@
 
 #include "gtkshow.h"
 #include "gtkwindowprivate.h"
-#include "gtkmessagedialog.h"
+#include "gtkalertdialog.h"
 #include <glib/gi18n-lib.h>
 
 typedef struct {
@@ -165,21 +165,12 @@ show_uri_done (GObject      *object,
 
   if (!gtk_show_uri_full_finish (parent, result, &error))
     {
-      GtkWidget *dialog;
+      GtkAlertDialog *dialog;
 
-      dialog = gtk_message_dialog_new (parent,
-                                       GTK_DIALOG_DESTROY_WITH_PARENT |
-                                       GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       "%s", _("Could not show link"));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                "%s", error->message);
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_window_destroy), NULL);
-
-      gtk_window_present (GTK_WINDOW (dialog));
+      dialog = gtk_alert_dialog_new ("%s", _("Could not show link"));
+      gtk_alert_dialog_set_detail (dialog, error->message);
+      gtk_alert_dialog_show (dialog, parent);
+      g_object_unref (dialog);
 
       g_error_free (error);
     }
