@@ -42,7 +42,7 @@ update_title_cb (GtkFilterListModel *model)
   title = g_strdup_printf ("%u lines", g_list_model_get_n_items (G_LIST_MODEL (model)));
 
   gtk_widget_set_visible (progress, pending != 0);
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), (total - pending) / (double) total);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), total > 0 ? (total - pending) / (double) total : 0.);
   gtk_window_set_title (GTK_WINDOW (window), title);
   g_free (title);
 }
