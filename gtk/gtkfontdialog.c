@@ -53,7 +53,6 @@ struct _GtkFontDialog
   GObject parent_instance;
 
   char *title;
-  GtkFontDialogLevel level;
   PangoLanguage *language;
   PangoFontMap *fontmap;
 
@@ -68,9 +67,8 @@ enum
 {
   PROP_TITLE = 1,
   PROP_MODAL,
-  PROP_LEVEL,
   PROP_LANGUAGE,
-  PROP_FONTMAP,
+  PROP_FONT_MAP,
 
   NUM_PROPERTIES
 };
@@ -79,16 +77,11 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (GtkFontDialog, gtk_font_dialog, G_TYPE_OBJECT)
 
-#define DEFAULT_LEVEL (GTK_FONT_DIALOG_LEVEL_FAMILY| \
-                       GTK_FONT_DIALOG_LEVEL_STYLE| \
-                       GTK_FONT_DIALOG_LEVEL_SIZE)
-
 static void
 gtk_font_dialog_init (GtkFontDialog *self)
 {
   self->title = g_strdup (_("Pick a Font"));
   self->modal = TRUE;
-  self->level = DEFAULT_LEVEL;
   self->language = pango_language_get_default ();
 }
 
@@ -110,15 +103,11 @@ gtk_font_dialog_get_property (GObject    *object,
       g_value_set_boolean (value, self->modal);
       break;
 
-    case PROP_LEVEL:
-      g_value_set_flags (value, self->level);
-      break;
-
     case PROP_LANGUAGE:
       g_value_set_boxed (value, self->language);
       break;
 
-    case PROP_FONTMAP:
+    case PROP_FONT_MAP:
       g_value_set_object (value, self->fontmap);
       break;
 
@@ -146,16 +135,12 @@ gtk_font_dialog_set_property (GObject      *object,
       gtk_font_dialog_set_modal (self, g_value_get_boolean (value));
       break;
 
-    case PROP_LEVEL:
-      gtk_font_dialog_set_level (self, g_value_get_flags (value));
-      break;
-
     case PROP_LANGUAGE:
       gtk_font_dialog_set_language (self, g_value_get_boxed (value));
       break;
 
-    case PROP_FONTMAP:
-      gtk_font_dialog_set_fontmap (self, g_value_get_object (value));
+    case PROP_FONT_MAP:
+      gtk_font_dialog_set_font_map (self, g_value_get_object (value));
       break;
 
     default:
@@ -210,20 +195,6 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                             TRUE,
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
-
-  /**
-   * GtkFontDialog:level: (attributes org.gtk.Property.get=gtk_font_dialog_get_level org.gtk.Property.set=gtk_font_dialog_set_level)
-   *
-   * The level of granularity to offer for selecting fonts.
-   *
-   * Since: 4.10
-   */
-  properties[PROP_LEVEL] =
-      g_param_spec_flags ("level", NULL, NULL,
-                          GTK_TYPE_FONT_DIALOG_LEVEL,
-                          DEFAULT_LEVEL,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
   /**
    * GtkFontDialog:language: (attributes org.gtk.Property.get=gtk_font_dialog_get_language org.gtk.Property.set=gtk_font_dialog_set_language)
    *
@@ -237,7 +208,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialog:fontmap: (attributes org.gtk.Property.get=gtk_font_dialog_get_fontmap org.gtk.Property.set=gtk_font_dialog_set_fontmap)
+   * GtkFontDialog:font-map: (attributes org.gtk.Property.get=gtk_font_dialog_get_font_map org.gtk.Property.set=gtk_font_dialog_set_font_map)
    *
    * Sets a custom font map to select fonts from.
    *
@@ -246,8 +217,8 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
    *
    * Since: 4.10
    */
-  properties[PROP_FONTMAP] =
-      g_param_spec_object ("fontmap", NULL, NULL,
+  properties[PROP_FONT_MAP] =
+      g_param_spec_object ("font-map", NULL, NULL,
                            PANGO_TYPE_FONT_MAP,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -369,47 +340,6 @@ gtk_font_dialog_set_modal (GtkFontDialog *self,
 }
 
 /**
- * gtk_font_dialog_get_level:
- * @self: a `GtkFontDialog`
- *
- * Returns the level of granularity for selecting fonts.
- *
- * Returns: the level of granularity
- *
- * Since: 4.10
- */
-GtkFontDialogLevel
-gtk_font_dialog_get_level (GtkFontDialog *self)
-{
-  g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), DEFAULT_LEVEL);
-
-  return self->level;
-}
-
-/**
- * gtk_font_dialog_set_level:
- * @self: a `GtkFontDialog`
- * @level: the new value
- *
- * Sets the level of granularity for selecting fonts.
- *
- * Since: 4.10
- */
-void
-gtk_font_dialog_set_level (GtkFontDialog      *self,
-                           GtkFontDialogLevel  level)
-{
-  g_return_if_fail (GTK_IS_FONT_DIALOG (self));
-
-  if (self->level == level)
-    return;
-
-  self->level = level;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LEVEL]);
-}
-
-/**
  * gtk_font_dialog_get_language:
  * @self: a `GtkFontDialog`
  *
@@ -451,7 +381,7 @@ gtk_font_dialog_set_language (GtkFontDialog *self,
 }
 
 /**
- * gtk_font_dialog_get_fontmap:
+ * gtk_font_dialog_get_font_map:
  * @self: a `GtkFontDialog`
  *
  * Returns the fontmap from which fonts are selected,
@@ -462,7 +392,7 @@ gtk_font_dialog_set_language (GtkFontDialog *self,
  * Since: 4.10
  */
 PangoFontMap *
-gtk_font_dialog_get_fontmap (GtkFontDialog *self)
+gtk_font_dialog_get_font_map (GtkFontDialog *self)
 {
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), NULL);
 
@@ -470,7 +400,7 @@ gtk_font_dialog_get_fontmap (GtkFontDialog *self)
 }
 
 /**
- * gtk_font_dialog_set_fontmap:
+ * gtk_font_dialog_set_font_map:
  * @self: a `GtkFontDialog`
  * @fontmap: (nullable): the fontmap
  *
@@ -481,13 +411,13 @@ gtk_font_dialog_get_fontmap (GtkFontDialog *self)
  * Since: 4.10
  */
 void
-gtk_font_dialog_set_fontmap (GtkFontDialog *self,
-                             PangoFontMap  *fontmap)
+gtk_font_dialog_set_font_map (GtkFontDialog *self,
+                              PangoFontMap  *fontmap)
 {
   g_return_if_fail (GTK_IS_FONT_DIALOG (self));
 
   if (g_set_object (&self->fontmap, fontmap))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FONTMAP]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FONT_MAP]);
 }
 
 /**
@@ -534,7 +464,6 @@ typedef struct
 {
   PangoFontDescription *font_desc;
   char *font_features;
-
 } FontResult;
 
 static void
@@ -551,17 +480,42 @@ response_cb (GTask *task,
   if (response == GTK_RESPONSE_OK)
     {
       GtkFontChooserDialog *window;
-      FontResult font_result;
+      GtkFontChooserLevel level;
 
       window = GTK_FONT_CHOOSER_DIALOG (g_task_get_task_data (task));
+      level = gtk_font_chooser_get_level (GTK_FONT_CHOOSER (window));
 
-      font_result.font_desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (window));
-      font_result.font_features = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (window));
+      if (level & GTK_FONT_CHOOSER_LEVEL_FEATURES)
+        {
+           FontResult font_result;
 
-      g_task_return_pointer (task, &font_result, NULL);
+           font_result.font_desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (window));
+           font_result.font_features = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (window));
+           g_task_return_pointer (task, &font_result, NULL);
+           g_clear_pointer (&font_result.font_desc, pango_font_description_free);
+           g_clear_pointer (&font_result.font_features, g_free);
+        }
+      else if (level & GTK_FONT_CHOOSER_LEVEL_SIZE)
+        {
+           PangoFontDescription *font_desc;
 
-      g_clear_pointer (&font_result.font_desc, pango_font_description_free);
-      g_clear_pointer (&font_result.font_features, g_free);
+           font_desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (window));
+           g_task_return_pointer (task, font_desc, (GDestroyNotify) pango_font_description_free);
+        }
+      else if (level & GTK_FONT_CHOOSER_LEVEL_STYLE)
+        {
+           PangoFontFace *face;
+
+           face = gtk_font_chooser_get_font_face (GTK_FONT_CHOOSER (window));
+           g_task_return_pointer (task, face, g_object_unref);
+        }
+      else
+        {
+           PangoFontFamily *family;
+
+           family = gtk_font_chooser_get_font_family (GTK_FONT_CHOOSER (window));
+           g_task_return_pointer (task, family, g_object_unref);
+        }
     }
   else if (response == GTK_RESPONSE_CLOSE)
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED, "Aborted by application");
@@ -585,10 +539,180 @@ dialog_response (GtkDialog *dialog,
 /* {{{ Async API */
 
 /**
+ * gtk_font_dialog_choose_family:
+ * @self: a `GtkFontDialog`
+ * @parent: (nullable): the parent `GtkWindow`
+ * @initial_value: (nullable): the initial value. Note that only the
+ *   family name of the font description will be used
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @callback: (scope async): a callback to call when the operation is complete
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function initiates a font selection operation by
+ * presenting a font chooser dialog to the user.
+ *
+ * The @callback will be called when the dialog is dismissed.
+ * It should call [method@Gtk.FontDialog.choose_family_finish]
+ * to obtain the result.
+ *
+ * Since: 4.10
+ */
+void
+gtk_font_dialog_choose_family (GtkFontDialog        *self,
+                               GtkWindow            *parent,
+                               PangoFontDescription *initial_value,
+                               GCancellable         *cancellable,
+                               GAsyncReadyCallback   callback,
+                               gpointer              user_data)
+{
+  GtkFontChooserDialog *window;
+  GTask *task;
+
+  g_return_if_fail (GTK_IS_FONT_DIALOG (self));
+
+  window = GTK_FONT_CHOOSER_DIALOG (gtk_font_chooser_dialog_new (self->title, parent));
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window), GTK_FONT_CHOOSER_LEVEL_FAMILY);
+  if (self->language)
+    gtk_font_chooser_set_language (GTK_FONT_CHOOSER (window), pango_language_to_string (self->language));
+  if (self->fontmap)
+    gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (window), self->fontmap);
+  if (initial_value)
+    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_value);
+  if (self->filter)
+    gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (window),
+                                      self->filter,
+                                      self->filter_data,
+                                      self->filter_data_destroy);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_font_dialog_choose_family);
+  g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
+
+  if (cancellable)
+    g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
+
+  g_signal_connect (window, "response", G_CALLBACK (dialog_response), task);
+
+  gtk_window_present (GTK_WINDOW (window));
+}
+
+/**
+ * gtk_font_dialog_choose_family_finish:
+ * @self: a `GtkFontDialog`
+ * @result: a `GAsyncResult`
+ * @error: return location for a [enum@Gtk.DialogError] error
+ *
+ * Finishes the [method@Gtk.FontDialog.choose_family] call
+ * and returns the resulting family.
+ *
+ * Returns: (nullable) (transfer full): the selected family.
+ *   Otherwise, `NULL` is returned and @error is set
+ *
+ * Since: 4.10
+ */
+PangoFontFamily *
+gtk_font_dialog_choose_family_finish (GtkFontDialog         *self,
+                                      GAsyncResult          *result,
+                                      GError               **error)
+{
+  GTask *task = G_TASK (result);
+
+  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_font_dialog_choose_family, NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+/**
+ * gtk_font_dialog_choose_face:
+ * @self: a `GtkFontDialog`
+ * @parent: (nullable): the parent `GtkWindow`
+ * @initial_value: (nullable): the initial value. Note that only the
+ *   family name and style of the font description will be used
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @callback: (scope async): a callback to call when the operation is complete
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function initiates a font selection operation by
+ * presenting a font chooser dialog to the user.
+ *
+ * The @callback will be called when the dialog is dismissed.
+ * It should call [method@Gtk.FontDialog.choose_family_finish]
+ * to obtain the result.
+ *
+ * Since: 4.10
+ */
+void
+gtk_font_dialog_choose_face (GtkFontDialog        *self,
+                             GtkWindow            *parent,
+                             PangoFontDescription *initial_value,
+                             GCancellable         *cancellable,
+                             GAsyncReadyCallback   callback,
+                             gpointer              user_data)
+{
+  GtkFontChooserDialog *window;
+  GTask *task;
+
+  g_return_if_fail (GTK_IS_FONT_DIALOG (self));
+
+  window = GTK_FONT_CHOOSER_DIALOG (gtk_font_chooser_dialog_new (self->title, parent));
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window),
+                              GTK_FONT_CHOOSER_LEVEL_FAMILY|
+                              GTK_FONT_CHOOSER_LEVEL_STYLE);
+  if (self->language)
+    gtk_font_chooser_set_language (GTK_FONT_CHOOSER (window), pango_language_to_string (self->language));
+  if (self->fontmap)
+    gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (window), self->fontmap);
+  if (initial_value)
+    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_value);
+  if (self->filter)
+    gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (window),
+                                      self->filter,
+                                      self->filter_data,
+                                      self->filter_data_destroy);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_font_dialog_choose_face);
+  g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
+
+  if (cancellable)
+    g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
+
+  g_signal_connect (window, "response", G_CALLBACK (dialog_response), task);
+
+  gtk_window_present (GTK_WINDOW (window));
+}
+
+/**
+ * gtk_font_dialog_choose_face_finish:
+ * @self: a `GtkFontDialog`
+ * @result: a `GAsyncResult`
+ * @error: return location for a [enum@Gtk.DialogError] error
+ *
+ * Finishes the [method@Gtk.FontDialog.choose_face] call
+ * and returns the resulting font face.
+ *
+ * Returns: (nullable) (transfer full): the selected font face.
+ *   Otherwise, `NULL` is returned and @error is set
+ *
+ * Since: 4.10
+ */
+PangoFontFace *
+gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
+                                    GAsyncResult   *result,
+                                    GError        **error)
+{
+  GTask *task = G_TASK (result);
+
+  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_font_dialog_choose_face, NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
+/**
  * gtk_font_dialog_choose_font:
  * @self: a `GtkFontDialog`
  * @parent: (nullable): the parent `GtkWindow`
- * @initial_font: (nullable): the font to select initially
+ * @initial_value: (nullable): the font to select initially
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
  * @user_data: (closure callback): data to pass to @callback
@@ -608,7 +732,7 @@ dialog_response (GtkDialog *dialog,
 void
 gtk_font_dialog_choose_font (GtkFontDialog        *self,
                              GtkWindow            *parent,
-                             PangoFontDescription *initial_font,
+                             PangoFontDescription *initial_value,
                              GCancellable         *cancellable,
                              GAsyncReadyCallback   callback,
                              gpointer              user_data)
@@ -619,13 +743,17 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
   g_return_if_fail (GTK_IS_FONT_DIALOG (self));
 
   window = GTK_FONT_CHOOSER_DIALOG (gtk_font_chooser_dialog_new (self->title, parent));
-  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window), self->level);
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window),
+                              GTK_FONT_CHOOSER_LEVEL_FAMILY|
+                              GTK_FONT_CHOOSER_LEVEL_STYLE|
+                              GTK_FONT_CHOOSER_LEVEL_SIZE|
+                              GTK_FONT_CHOOSER_LEVEL_VARIATIONS);
   if (self->language)
     gtk_font_chooser_set_language (GTK_FONT_CHOOSER (window), pango_language_to_string (self->language));
   if (self->fontmap)
     gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (window), self->fontmap);
-  if (initial_font)
-    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_font);
+  if (initial_value)
+    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_value);
   if (self->filter)
     gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (window),
                                       self->filter,
@@ -682,7 +810,7 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog         *self,
  * gtk_font_dialog_choose_font_and_features:
  * @self: a `GtkFontDialog`
  * @parent: (nullable): the parent `GtkWindow`
- * @initial_font: (nullable): the font to select initially
+ * @initial_value: (nullable): the font to select initially
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
  * @user_data: (closure callback): data to pass to @callback
@@ -699,7 +827,7 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog         *self,
 void
 gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
                                           GtkWindow            *parent,
-                                          PangoFontDescription *initial_font,
+                                          PangoFontDescription *initial_value,
                                           GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
                                           gpointer              user_data)
@@ -711,13 +839,17 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
 
   window = GTK_FONT_CHOOSER_DIALOG (gtk_font_chooser_dialog_new (self->title, parent));
   gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window),
-                              self->level | GTK_FONT_CHOOSER_LEVEL_FEATURES);
+                              GTK_FONT_CHOOSER_LEVEL_FAMILY|
+                              GTK_FONT_CHOOSER_LEVEL_STYLE|
+                              GTK_FONT_CHOOSER_LEVEL_SIZE|
+                              GTK_FONT_CHOOSER_LEVEL_VARIATIONS|
+                              GTK_FONT_CHOOSER_LEVEL_FEATURES);
   if (self->language)
     gtk_font_chooser_set_language (GTK_FONT_CHOOSER (window), pango_language_to_string (self->language));
   if (self->fontmap)
     gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (window), self->fontmap);
-  if (initial_font)
-    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_font);
+  if (initial_value)
+    gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (window), initial_value);
   if (self->filter)
     gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (window),
                                       self->filter,
