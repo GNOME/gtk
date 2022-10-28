@@ -72,7 +72,6 @@ G_DEFINE_TYPE (GtkFileDialog, gtk_file_dialog, G_TYPE_OBJECT)
 static void
 gtk_file_dialog_init (GtkFileDialog *self)
 {
-  self->title = g_strdup (_("Pick a File"));
   self->modal = TRUE;
 }
 
@@ -170,7 +169,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
    */
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
-                           _("Pick a File"),
+                           NULL,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -496,12 +495,31 @@ create_file_chooser (GtkFileDialog        *self,
                      gboolean              select_multiple)
 {
   GtkFileChooserNative *chooser;
-  const char *accept[] = {
-    N_("_Open"), N_("_Save"), N_("_Select")
-  };
+  const char *accept;
+  const char *title;
 
-  chooser = gtk_file_chooser_native_new (self->title, parent, action,
-                                         _(accept[action]), _("_Cancel"));
+  switch (action)
+    {
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+      accept = _("_Open");
+      title = select_multiple ? _("Pick Files") : _("Pick a File");
+      break;
+
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+      accept = _("_Save");
+      title = _("Save a File");
+      break;
+
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      accept = _("_Select");
+      title = select_multiple ? _("Select Folders") : _("Select a Folder");
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  chooser = gtk_file_chooser_native_new (title, parent, action, accept, _("_Cancel"));
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), self->modal);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);
