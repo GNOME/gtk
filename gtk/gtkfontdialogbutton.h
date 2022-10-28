@@ -33,14 +33,6 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkFontDialogButton, gtk_font_dialog_button, GTK, FONT_DIALOG_BUTTON, GtkWidget)
 
-typedef enum
-{
-  GTK_FONT_LEVEL_FAMILY,
-  GTK_FONT_LEVEL_FACE,
-  GTK_FONT_LEVEL_FONT,
-  GTK_FONT_LEVEL_FEATURES
-} GtkFontLevel;
-
 GDK_AVAILABLE_IN_4_10
 GtkWidget *      gtk_font_dialog_button_new              (GtkFontDialog       *dialog);
 
@@ -50,6 +42,27 @@ GtkFontDialog *  gtk_font_dialog_button_get_dialog       (GtkFontDialogButton *s
 GDK_AVAILABLE_IN_4_10
 void             gtk_font_dialog_button_set_dialog       (GtkFontDialogButton *self,
                                                           GtkFontDialog       *dialog);
+
+/**
+ * GtkFontLevel:
+ * @GTK_FONT_LEVEL_FAMILY: Select a font family
+ * @GTK_FONT_LEVEL_FACE: Select a font face (i.e. a family and a style)
+ * @GTK_FONT_LEVEL_FONT: Select a font (i.e. a face with a size, and possibly font variations)
+ * @GTK_FONT_LEVEL_FEATURES: Select a font and font features
+ *
+ * The level of granularity for the font selection.
+ *
+ * Depending on this value, the `PangoFontDescription` that
+ * is returned by [method@Gtk.FontDialogButton.get_font_desc]
+ * will have more or less fields set.
+ */
+typedef enum
+{
+  GTK_FONT_LEVEL_FAMILY,
+  GTK_FONT_LEVEL_FACE,
+  GTK_FONT_LEVEL_FONT,
+  GTK_FONT_LEVEL_FEATURES
+} GtkFontLevel;
 
 GDK_AVAILABLE_IN_4_10
 GtkFontLevel     gtk_font_dialog_button_get_level        (GtkFontDialogButton *self);
