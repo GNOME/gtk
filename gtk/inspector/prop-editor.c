@@ -30,10 +30,8 @@
 #include "deprecated/gtkcombobox.h"
 #include "deprecated/gtkiconview.h"
 #include "deprecated/gtktreeview.h"
-#include "gtkcolorbutton.h"
-#include "gtkcolorchooser.h"
-#include "gtkfontbutton.h"
-#include "gtkfontchooser.h"
+#include "gtkcolordialogbutton.h"
+#include "gtkfontdialogbutton.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
@@ -745,7 +743,7 @@ object_properties (GtkInspectorPropEditor *self)
 }
 
 static void
-rgba_modified (GtkColorButton *cb, GParamSpec *ignored, ObjectProperty *p)
+rgba_modified (GtkColorDialogButton *cb, GParamSpec *ignored, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
 
@@ -761,25 +759,23 @@ rgba_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkColorChooser *cb = GTK_COLOR_CHOOSER (data);
   GValue val = G_VALUE_INIT;
   GdkRGBA *color;
-  GdkRGBA cb_color;
 
   g_value_init (&val, GDK_TYPE_RGBA);
   get_property_value (object, pspec, &val);
 
   color = g_value_get_boxed (&val);
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cb), &cb_color);
 
-  if (color != NULL && !gdk_rgba_equal (color, &cb_color))
+  if (color != NULL)
     {
       block_controller (G_OBJECT (cb));
-      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cb), color);
+      gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (cb), color);
       unblock_controller (G_OBJECT (cb));
     }
  g_value_unset (&val);
 }
 
 static void
-font_modified (GtkFontChooser *fb, GParamSpec *pspec, ObjectProperty *p)
+font_modified (GtkFontDialogButton *fb, GParamSpec *pspec, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
 
@@ -792,28 +788,20 @@ font_modified (GtkFontChooser *fb, GParamSpec *pspec, ObjectProperty *p)
 static void
 font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkFontChooser *fb = GTK_FONT_CHOOSER (data);
+  GtkFontDialogButton *fb = GTK_FONT_DIALOG_BUTTON (data);
   GValue val = G_VALUE_INIT;
   const PangoFontDescription *font_desc;
-  PangoFontDescription *fb_font_desc;
 
   g_value_init (&val, PANGO_TYPE_FONT_DESCRIPTION);
   get_property_value (object, pspec, &val);
 
   font_desc = g_value_get_boxed (&val);
-  fb_font_desc = gtk_font_chooser_get_font_desc (fb);
 
-  if (font_desc == NULL ||
-      (fb_font_desc != NULL &&
-       !pango_font_description_equal (fb_font_desc, font_desc)))
-    {
-      block_controller (G_OBJECT (fb));
-      gtk_font_chooser_set_font_desc (fb, font_desc);
-      unblock_controller (G_OBJECT (fb));
-    }
+  block_controller (G_OBJECT (fb));
+  gtk_font_dialog_button_set_font_desc (fb, font_desc);
+  unblock_controller (G_OBJECT (fb));
 
   g_value_unset (&val);
-  pango_font_description_free (fb_font_desc);
 }
 
 static char *
@@ -1177,8 +1165,7 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
     {
-      prop_edit = gtk_color_button_new ();
-      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), TRUE);
+      prop_edit = gtk_color_dialog_button_new (gtk_color_dialog_new ());
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (rgba_changed),
@@ -1190,7 +1177,7 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
     {
-      prop_edit = gtk_font_button_new ();
+      prop_edit = gtk_font_dialog_button_new (gtk_font_dialog_new ());
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (font_changed),

@@ -29,8 +29,8 @@
 #include "gtkcssprovider.h"
 #include "gtkstyleprovider.h"
 #include "gtktextview.h"
-#include "gtkmessagedialog.h"
-#include "gtkfilechooserdialog.h"
+#include "gtkalertdialog.h"
+#include "gtkfiledialog.h"
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
 #include "gtktooltip.h"
@@ -201,17 +201,12 @@ save_to_file (GtkInspectorCssEditor *ce,
 
   if (error != NULL)
     {
-      GtkWidget *dialog;
+      GtkAlertDialog *alert;
 
-      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
-                                       GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_INFO,
-                                       GTK_BUTTONS_OK,
-                                       _("Saving CSS failed"));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                "%s", error->message);
-      g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-      gtk_widget_show (dialog);
+      alert = gtk_alert_dialog_new (_("Saving CSS failed"));
+      gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))));
+      g_object_unref (alert);
       g_error_free (error);
     }
 
@@ -219,39 +214,41 @@ save_to_file (GtkInspectorCssEditor *ce,
 }
 
 static void
-save_response (GtkWidget             *dialog,
-               int                    response,
-               GtkInspectorCssEditor *ce)
+save_response (GObject *source,
+               GAsyncResult *result,
+               gpointer data)
 {
-  gtk_widget_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkInspectorCssEditor *ce = data;
+  GError *error = NULL;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (file)
     {
-      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       save_to_file (ce, file);
       g_object_unref (file);
     }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  else
+    {
+      g_print ("Error saving css: %s\n", error->message);
+      g_error_free (error);
+    }
 }
 
 static void
 save_clicked (GtkButton             *button,
               GtkInspectorCssEditor *ce)
 {
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                        _("_Save"), GTK_RESPONSE_ACCEPT,
-                                        NULL);
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "custom.css");
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (save_response), ce);
-  gtk_widget_show (dialog);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
+                        NULL, "custom.css",
+                        NULL,
+                        save_response, ce);
+  g_object_unref (dialog);
 }
 
 static void
