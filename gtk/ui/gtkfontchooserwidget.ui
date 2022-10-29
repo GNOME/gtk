@@ -8,7 +8,7 @@
         <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
         <property name="incremental">1</property>
         <property name="filter">
-          <object class="GtkEveryFilter">
+          <object class="GtkEveryFilter" id="multi_filter">
             <child>
               <object class="GtkStringFilter">
                 <binding name="search">

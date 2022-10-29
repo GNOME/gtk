@@ -21,7 +21,7 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
-#include "gtkfontchooserdialog.h"
+#include "gtkfontchooserdialogprivate.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
@@ -323,4 +323,11 @@ gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
     return G_OBJECT (dialog->cancel_button);
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
+}
+
+void
+gtk_font_chooser_dialog_set_filter (GtkFontChooserDialog *dialog,
+                                    GtkFilter            *filter)
+{
+  gtk_font_chooser_widget_set_filter (GTK_FONT_CHOOSER_WIDGET (dialog->fontchooser), filter);
 }

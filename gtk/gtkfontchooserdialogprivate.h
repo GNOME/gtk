@@ -15,18 +15,16 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FONT_CHOOSER_WIDGET_PRIVATE_H__
-#define __GTK_FONT_CHOOSER_WIDGET_PRIVATE_H__
+#ifndef __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
+#define __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
 
-#include "gtkfontchooserwidget.h"
+#include "gtkfontchooserdialog.h"
 #include "gtkfilter.h"
 
 G_BEGIN_DECLS
 
-GAction *gtk_font_chooser_widget_get_tweak_action (GtkWidget *fontchooser);
-
-void     gtk_font_chooser_widget_set_filter (GtkFontChooserWidget *widget,
-                                             GtkFilter            *filter);
+void gtk_font_chooser_dialog_set_filter (GtkFontChooserDialog *dialog,
+                                         GtkFilter            *filter);
 
 G_END_DECLS
 
