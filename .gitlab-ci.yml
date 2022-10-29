@@ -210,6 +210,7 @@ macos:
             -Dintrospection=disabled
             -Dcpp_std=c++11
             -Dpixman:tests=disabled
+            -Dlibjpeg-turbo:simd=disabled
             _build
     - ninja -C _build
   artifacts:
