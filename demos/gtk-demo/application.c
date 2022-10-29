@@ -33,22 +33,12 @@ static void create_window (GApplication *app, const char *contents);
 static void
 show_action_dialog (GSimpleAction *action)
 {
-  const char *name;
-  GtkWidget *dialog;
+  GtkAlertDialog *dialog;
 
-  name = g_action_get_name (G_ACTION (action));
-
-  dialog = gtk_message_dialog_new (NULL,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "You activated action: \"%s\"",
-                                    name);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_window_destroy), NULL);
-
-  gtk_widget_show (dialog);
+  dialog = gtk_alert_dialog_new ("You activated action: \"%s\n",
+                                 g_action_get_name (G_ACTION (action)));
+  gtk_alert_dialog_show (dialog, NULL);
+  g_object_unref (dialog);
 }
 
 static void
@@ -90,20 +80,19 @@ activate_new (GSimpleAction *action,
 }
 
 static void
-open_response_cb (GtkNativeDialog *dialog,
-                  int              response_id,
-                  gpointer         user_data)
+open_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
 {
-  GtkFileChooserNative *native = user_data;
-  GApplication *app = g_object_get_data (G_OBJECT (native), "app");
-  GtkWidget *message_dialog;
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GApplication *app = G_APPLICATION (user_data);
   GFile *file;
-  char *contents;
   GError *error = NULL;
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (file)
     {
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+      char *contents;
 
       if (g_file_load_contents (file, NULL, &contents, NULL, NULL, &error))
         {
@@ -112,21 +101,16 @@ open_response_cb (GtkNativeDialog *dialog,
         }
       else
         {
-          message_dialog = gtk_message_dialog_new (NULL,
-                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_CLOSE,
-                                                   "Error loading file: \"%s\"",
-                                                   error->message);
-          g_signal_connect (message_dialog, "response",
-                            G_CALLBACK (gtk_window_destroy), NULL);
-          gtk_widget_show (message_dialog);
+          GtkAlertDialog *alert;
+
+          alert = gtk_alert_dialog_new ("Error loading file: \"%s\"", error->message);
+          gtk_alert_dialog_show (alert, NULL);
+          g_object_unref (alert);
           g_error_free (error);
         }
     }
 
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
-  g_object_unref (native);
+  g_object_unref (app);
 }
 
 
@@ -136,21 +120,11 @@ activate_open (GSimpleAction *action,
                gpointer       user_data)
 {
   GApplication *app = user_data;
-  GtkFileChooserNative *native;
+  GtkFileDialog *dialog;
 
-  native = gtk_file_chooser_native_new ("Open File",
-                                        NULL,
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Open",
-                                        "_Cancel");
-
-  g_object_set_data_full (G_OBJECT (native), "app", g_object_ref (app), g_object_unref);
-  g_signal_connect (native,
-                    "response",
-                    G_CALLBACK (open_response_cb),
-                    native);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_open (dialog, NULL, NULL, NULL, open_response_cb, g_object_ref (app));
+  g_object_unref (dialog);
 }
 
 static void

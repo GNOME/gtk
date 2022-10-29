@@ -47,7 +47,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmessagedialog.h"
+#include "deprecated/gtkmessagedialog.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
@@ -6130,6 +6130,7 @@ gtk_window_set_debugging (GdkDisplay *display,
 
       if (warn)
         {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           dialog = gtk_message_dialog_new (GTK_WINDOW (inspector_window),
                                            GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_QUESTION,
@@ -6141,6 +6142,7 @@ gtk_window_set_debugging (GdkDisplay *display,
                 "application to break or crash."));
 
           area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
           gtk_widget_show (check);

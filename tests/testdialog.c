@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 show_message_dialog1 (GtkWindow *parent)
 {

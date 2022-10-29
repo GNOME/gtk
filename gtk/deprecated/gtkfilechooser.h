@@ -85,101 +85,101 @@ typedef enum {
   GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME
 } GtkFileChooserError;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GQuark gtk_file_chooser_error_quark (void);
 
 /* Configuration */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_action          (GtkFileChooser       *chooser,
                                                            GtkFileChooserAction  action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
                                                            gboolean              select_multiple);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
                                                            gboolean              create_folders);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_get_create_folders  (GtkFileChooser       *chooser);
 
 /* Suggested name for the Save-type actions */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_current_name    (GtkFileChooser       *chooser,
                                                            const char           *name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 char *               gtk_file_chooser_get_current_name    (GtkFileChooser       *chooser);
 
 /* GFile manipulation */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GFile *              gtk_file_chooser_get_file            (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_set_file            (GtkFileChooser       *chooser,
                                                            GFile                *file,
                                                            GError              **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GListModel *         gtk_file_chooser_get_files           (GtkFileChooser       *chooser);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_set_current_folder  (GtkFileChooser       *chooser,
                                                            GFile                *file,
                                                            GError              **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GFile *              gtk_file_chooser_get_current_folder  (GtkFileChooser       *chooser);
 
 /* List of user selectable filters */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_add_filter          (GtkFileChooser       *chooser,
                                                            GtkFileFilter        *filter);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_remove_filter       (GtkFileChooser       *chooser,
                                                            GtkFileFilter        *filter);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GListModel *         gtk_file_chooser_get_filters         (GtkFileChooser       *chooser);
 
 /* Current filter */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_filter          (GtkFileChooser       *chooser,
                                                            GtkFileFilter        *filter);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkFileFilter *      gtk_file_chooser_get_filter          (GtkFileChooser       *chooser);
 
 /* Per-application shortcut folders */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_add_shortcut_folder (GtkFileChooser       *chooser,
                                                            GFile                *folder,
                                                            GError              **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean             gtk_file_chooser_remove_shortcut_folder
                                                           (GtkFileChooser       *chooser,
                                                            GFile                *folder,
                                                            GError              **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GListModel *         gtk_file_chooser_get_shortcut_folders (GtkFileChooser      *chooser);
 
 /* Custom widgets */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_add_choice           (GtkFileChooser      *chooser,
                                                             const char          *id,
                                                             const char          *label,
                                                             const char         **options,
                                                             const char         **option_labels);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_remove_choice        (GtkFileChooser      *chooser,
                                                             const char          *id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                 gtk_file_chooser_set_choice           (GtkFileChooser      *chooser,
                                                             const char          *id,
                                                             const char          *option);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char *         gtk_file_chooser_get_choice           (GtkFileChooser      *chooser,
                                                             const char          *id);
 

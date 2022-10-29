@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkfilechooserwidget.h"
+#include "deprecated/gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
 #include "gtkbitset.h"
@@ -32,10 +32,10 @@
 #include "gtkdroptarget.h"
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooser.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkfilethumbnail.h"
 #include "gtkgestureclick.h"
@@ -44,7 +44,7 @@
 #include "gtklabel.h"
 #include "gtklistitem.h"
 #include "gtkmarshalers.h"
-#include "gtkmessagedialog.h"
+#include "gtkalertdialog.h"
 #include "gtkmountoperation.h"
 #include "gtkmultiselection.h"
 #include "gtkpaned.h"
@@ -107,6 +107,8 @@
 #include <io.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkFileChooserWidget:
  *
@@ -119,6 +121,8 @@
  * # CSS nodes
  *
  * `GtkFileChooserWidget` has a single CSS node with name filechooser.
+ *
+ * Deprecated: 4.10: Direct use of `GtkFileChooserWidget` is deprecated
  */
 
 /* 150 mseconds of delay */
@@ -665,26 +669,12 @@ error_message (GtkFileChooserWidget *impl,
                const char            *detail)
 {
   GtkWindow *parent = get_toplevel (GTK_WIDGET (impl));
-  GtkWidget *dialog;
+  GtkAlertDialog *dialog;
 
-  dialog = gtk_message_dialog_new (parent,
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_OK,
-                                   "%s",
-                                   msg);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            "%s", detail);
-
-  if (parent && gtk_window_has_group (parent))
-    gtk_window_group_add_window (gtk_window_get_group (parent),
-                                 GTK_WINDOW (dialog));
-
-  gtk_window_present (GTK_WINDOW (dialog));
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_window_destroy),
-                    NULL);
+  dialog = gtk_alert_dialog_new ("%s", msg);
+  gtk_alert_dialog_set_detail (dialog, detail);
+  gtk_alert_dialog_show (dialog, parent);
+  g_object_unref (dialog);
 }
 
 /* Shows a simple error dialog relative to a path.  Frees the GError as well. */
@@ -1125,15 +1115,16 @@ typedef struct {
 } ConfirmDeleteData;
 
 static void
-on_confirm_delete_response (GtkWidget *dialog,
-                            int        response,
-                            gpointer   user_data)
+on_confirm_delete_response (GObject *source,
+                            GAsyncResult *result,
+                            void *user_data)
 {
   ConfirmDeleteData *data = user_data;
+  int button;
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result);
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  if (button == 1)
     {
       GError *error = NULL;
 
@@ -1150,7 +1141,7 @@ confirm_delete (GtkFileChooserWidget *impl,
                 GFileInfo            *info)
 {
   GtkWindow *toplevel;
-  GtkWidget *dialog;
+  GtkAlertDialog *dialog;
   const char *name;
   ConfirmDeleteData *data;
 
@@ -1158,30 +1149,16 @@ confirm_delete (GtkFileChooserWidget *impl,
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
-  dialog = gtk_message_dialog_new (toplevel,
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   _("Are you sure you want to permanently delete “%s”?"),
-                                   name);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            _("If you delete an item, it will be permanently lost."));
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete"), GTK_RESPONSE_ACCEPT);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-  if (gtk_window_has_group (toplevel))
-    gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
-
-  gtk_widget_show (dialog);
-
   data = g_new (ConfirmDeleteData, 1);
   data->impl = impl;
   data->file = file;
 
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (on_confirm_delete_response),
-                    data);
+  dialog = gtk_alert_dialog_new (_("Are you sure you want to permanently delete “%s”?"), name);
+  gtk_alert_dialog_set_detail (dialog, _("If you delete an item, it will be permanently lost."));
+  gtk_alert_dialog_set_buttons (dialog, (const char *[]) { _("_Cancel"), _("_Delete"), NULL });
+  gtk_alert_dialog_set_cancel_button (dialog, 0);
+  gtk_alert_dialog_set_default_button (dialog, 1);
+  gtk_alert_dialog_choose (dialog, toplevel, NULL, on_confirm_delete_response, data);
 }
 
 static void
@@ -4928,18 +4905,6 @@ get_display_name_from_file_list (GtkFileChooserWidget *impl)
   return g_file_info_get_display_name (info);
 }
 
-static void
-add_custom_button_to_dialog (GtkDialog   *dialog,
-                             const char *mnemonic_label,
-                             int          response_id)
-{
-  GtkWidget *button;
-
-  button = gtk_button_new_with_mnemonic (mnemonic_label);
-
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
-}
-
 /* Every time we request a response explicitly, we need to save the selection to
  * the recently-used list, as requesting a response means, “the dialog is confirmed”.
  */
@@ -4951,13 +4916,16 @@ request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
 }
 
 static void
-on_confirm_overwrite_response (GtkWidget *dialog,
-                               int        response,
-                               gpointer   user_data)
+on_confirm_overwrite_response (GObject *source,
+                               GAsyncResult *result,
+                               void *user_data)
 {
   GtkFileChooserWidget *impl = user_data;
+  int button;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result);
+
+  if (button == 1)
     {
       /* Dialog is now going to be closed, so prevent any button/key presses to
        * file list (will be restablished on next map()). Fixes data loss bug #2288 */
@@ -4965,8 +4933,6 @@ on_confirm_overwrite_response (GtkWidget *dialog,
 
       request_response_and_add_to_recent_list (impl);
     }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 /* Presents an overwrite confirmation dialog */
@@ -4976,33 +4942,24 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
                                        const char            *folder_display_name)
 {
   GtkWindow *toplevel;
-  GtkWidget *dialog;
+  GtkAlertDialog *dialog;
+  char *detail;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
-  dialog = gtk_message_dialog_new (toplevel,
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   _("A file named “%s” already exists.  Do you want to replace it?"),
-                                   file_part);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            _("The file already exists in “%s”.  Replacing it will "
-                                              "overwrite its contents."),
-                                            folder_display_name);
+  dialog = gtk_alert_dialog_new (_("A file named “%s” already exists.  Do you want to replace it?"),
+                                 file_part);
+  detail = g_strdup_printf (_("The file already exists in “%s”.  Replacing it will "
+                              "overwrite its contents."),
+                            folder_display_name);
+  gtk_alert_dialog_set_detail (dialog, detail);
+  g_free (detail);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_RESPONSE_ACCEPT);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-
-  if (gtk_window_has_group (toplevel))
-    gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
-
-  gtk_window_present (GTK_WINDOW (dialog));
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (on_confirm_overwrite_response),
-                    impl);
+  gtk_alert_dialog_set_buttons (dialog, (const char *[]) { _("_Cancel"), _("_Replace"), NULL });
+  gtk_alert_dialog_set_cancel_button (dialog, 0);
+  gtk_alert_dialog_set_default_button (dialog, 1);
+  gtk_alert_dialog_choose (dialog, toplevel, NULL, on_confirm_overwrite_response, impl);
+  g_object_unref (dialog);
 }
 
 struct GetDisplayNameData
@@ -7305,6 +7262,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
  * `GtkFileChooserDialog`.
  *
  * Returns: a new `GtkFileChooserWidget`
+ *
+ * Deprecated: 4.10: Direct use of `GtkFileChooserWidget` is deprecated
  */
 GtkWidget *
 gtk_file_chooser_widget_new (GtkFileChooserAction action)

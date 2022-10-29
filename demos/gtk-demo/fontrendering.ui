@@ -74,7 +74,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkFontButton" id="font_button">
+              <object class="GtkFontDialogButton" id="font_button">
+                <property name="dialog">
+                  <object class="GtkFontDialog">
+                  </object>
+                </property>
                 <layout>
                   <property name="column">2</property>
                   <property name="row">1</property>

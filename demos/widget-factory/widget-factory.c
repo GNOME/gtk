@@ -214,10 +214,19 @@ activate_background (GSimpleAction *action,
 }
 
 static void
-file_chooser_response (GtkNativeDialog *self,
-                       int              response)
+file_chooser_response (GObject *source,
+                       GAsyncResult *result,
+                       void *user_data)
 {
-  gtk_native_dialog_destroy (self);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
+
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
+    {
+      g_print ("File selected: %s", g_file_peek_path (file));
+      g_object_unref (file);
+    }
 }
 
 static void
@@ -225,17 +234,11 @@ activate_open_file (GSimpleAction *action,
                     GVariant      *parameter,
                     gpointer       user_data)
 {
-  GtkFileChooserNative *chooser;
+  GtkFileDialog *dialog;
 
-  chooser = gtk_file_chooser_native_new ("Open file",
-                                         NULL,
-                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         "Open",
-                                         "Cancel");
-
-  g_signal_connect (chooser, "response", G_CALLBACK (file_chooser_response), NULL);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_open (dialog, NULL, NULL, NULL, file_chooser_response, NULL);
+  g_object_unref (dialog);
 }
 
 static void
@@ -1093,7 +1096,9 @@ set_color (GtkListBox *box, GtkListBoxRow *row, GtkColorChooser *chooser)
   if (gdk_rgba_parse (&rgba, color))
     {
       g_signal_handlers_block_by_func (chooser, rgba_changed, box);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_color_chooser_set_rgba (chooser, &rgba);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_signal_handlers_unblock_by_func (chooser, rgba_changed, box);
     }
 }

@@ -19,7 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_NATIVE_PRIVATE_H__
 #define __GTK_FILE_CHOOSER_NATIVE_PRIVATE_H__
 
-#include <gtk/gtkfilechoosernative.h>
+#include <gtk/deprecated/gtkfilechoosernative.h>
 
 G_BEGIN_DECLS
 

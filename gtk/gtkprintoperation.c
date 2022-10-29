@@ -29,7 +29,7 @@
 #include "gtkmarshalers.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
-#include "gtkmessagedialog.h"
+#include "deprecated/gtkmessagedialog.h"
 #include "gtkwindowgroup.h"
 #include "gtktypebuiltins.h"
 
@@ -2848,15 +2848,17 @@ print_pages (GtkPrintOperation       *op,
     {
       GtkWidget *progress;
 
-      progress = gtk_message_dialog_new (parent, 0, 
-					 GTK_MESSAGE_OTHER,
-					 GTK_BUTTONS_CANCEL,
-					 _("Preparing"));
-      g_signal_connect (progress, "response", 
-			G_CALLBACK (handle_progress_response), op);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      progress = gtk_message_dialog_new (parent, 0,
+                                         GTK_MESSAGE_OTHER,
+                                         GTK_BUTTONS_CANCEL,
+                                         _("Preparing"));
+G_GNUC_END_IGNORE_DEPRECATIONS
+      g_signal_connect (progress, "response",
+                        G_CALLBACK (handle_progress_response), op);
 
-      priv->show_progress_timeout_id = 
-	g_timeout_add (SHOW_PROGRESS_TIME,
+      priv->show_progress_timeout_id =
+        g_timeout_add (SHOW_PROGRESS_TIME,
                        (GSourceFunc) show_progress_timeout,
                        data);
       gdk_source_set_static_name_by_id (priv->show_progress_timeout_id, "[gtk] show_progress_timeout");
@@ -2878,6 +2880,7 @@ print_pages (GtkPrintOperation       *op,
         {
           GtkWidget *error_dialog;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           error_dialog = gtk_message_dialog_new (parent,
                                                  GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                                  GTK_MESSAGE_ERROR,
@@ -2886,6 +2889,7 @@ print_pages (GtkPrintOperation       *op,
 
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (error_dialog),
                                                     _("The most probable reason is that a temporary file could not be created."));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
           if (parent && gtk_window_has_group (parent))
             gtk_window_group_add_window (gtk_window_get_group (parent),

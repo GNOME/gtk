@@ -50,10 +50,10 @@ copy_button_clicked (GtkStack *source_stack,
     }
   else if (strcmp (visible_child_name, "Color") == 0)
     {
-      GdkRGBA color;
+      const GdkRGBA *color;
 
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (visible_child), &color);
-      gdk_clipboard_set (clipboard, GDK_TYPE_RGBA, &color);
+      color = gtk_color_dialog_button_get_rgba (GTK_COLOR_DIALOG_BUTTON (visible_child));
+      gdk_clipboard_set (clipboard, GDK_TYPE_RGBA, color);
     }
   else if (strcmp (visible_child_name, "File") == 0)
     {
@@ -215,37 +215,36 @@ file_button_set_file (GtkButton *button,
 }
 
 static void
-file_chooser_response (GtkNativeDialog *dialog,
-                       int              response,
-                       GtkButton       *button)
+file_chooser_response (GObject *source,
+                       GAsyncResult *result,
+                       gpointer user_data)
 {
-  gtk_native_dialog_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkButton *button = GTK_BUTTON (user_data);
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       file_button_set_file (button, file);
       g_object_unref (file);
 
       update_copy_button_sensitivity (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_STACK));
     }
-
-  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 open_file_cb (GtkWidget *button)
 {
-  GtkFileChooserNative *chooser;
+  GtkFileDialog *dialog;
 
-  chooser = gtk_file_chooser_native_new ("Choose a file",
-                                         GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW)),
-                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         "_Open",
-                                         "_Cancel");
+  dialog = gtk_file_dialog_new ();
 
-  g_signal_connect (chooser, "response", G_CALLBACK (file_chooser_response), button);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW)),
+                        NULL,
+                        NULL,
+                        file_chooser_response, button);
 }
 
 static void

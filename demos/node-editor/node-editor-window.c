@@ -548,45 +548,36 @@ node_editor_window_load (NodeEditorWindow *self,
 }
 
 static void
-open_response_cb (GtkWidget        *dialog,
-                  int               response,
-                  NodeEditorWindow *self)
+open_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  gtk_widget_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  NodeEditorWindow *self = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       node_editor_window_load (self, file);
       g_object_unref (file);
     }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
 show_open_filechooser (NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
+  GFile *cwd;
 
-  dialog = gtk_file_chooser_dialog_new ("Open node file",
-                                        GTK_WINDOW (self),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Load", GTK_RESPONSE_ACCEPT,
-                                        NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
-  GFile *cwd = g_file_new_for_path (".");
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Open node file");
+  cwd = g_file_new_for_path (".");
+  gtk_file_dialog_set_current_folder (dialog, cwd);
   g_object_unref (cwd);
-
-  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_file_dialog_open (dialog, GTK_WINDOW (self),
+                        NULL, NULL, open_response_cb, self);
+  g_object_unref (dialog);
 }
 
 static void
@@ -597,21 +588,22 @@ open_cb (GtkWidget        *button,
 }
 
 static void
-save_response_cb (GtkWidget        *dialog,
-                  int               response,
-                  NodeEditorWindow *self)
+save_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  gtk_widget_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  NodeEditorWindow *self = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
       char *text;
       GError *error = NULL;
 
       text = get_current_text (self->text_buffer);
 
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       g_file_replace_contents (file, text, strlen (text),
                                NULL, FALSE,
                                G_FILE_CREATE_NONE,
@@ -620,49 +612,40 @@ save_response_cb (GtkWidget        *dialog,
                                &error);
       if (error != NULL)
         {
-          GtkWidget *message_dialog;
+          GtkAlertDialog *alert;
 
-          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_INFO,
-                                                   GTK_BUTTONS_OK,
-                                                   "Saving failed");
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
-                                                    "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-          gtk_widget_show (message_dialog);
+          alert = gtk_alert_dialog_new ("Saving failed");
+          gtk_alert_dialog_set_detail (alert, error->message);
+          gtk_alert_dialog_show (alert,
+                                 GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
+          g_object_unref (alert);
           g_error_free (error);
         }
 
       g_free (text);
       g_object_unref (file);
     }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
 save_cb (GtkWidget        *button,
          NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
+  GFile *cwd;
 
-  dialog = gtk_file_chooser_dialog_new ("Save node",
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Save", GTK_RESPONSE_ACCEPT,
-                                        NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
-  GFile *cwd = g_file_new_for_path (".");
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Save node");
+  cwd = g_file_new_for_path (".");
+  gtk_file_dialog_set_current_folder (dialog, cwd);
   g_object_unref (cwd);
-
-  g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
+                        NULL,
+                        "demo.node",
+                        NULL,
+                        save_response_cb, self);
+  g_object_unref (dialog);
 }
 
 static GdkTexture *
@@ -724,34 +707,29 @@ create_cairo_texture (NodeEditorWindow *self)
 }
 
 static void
-export_image_response_cb (GtkWidget  *dialog,
-                          int         response,
-                          GdkTexture *texture)
+export_image_response_cb (GObject *source,
+                          GAsyncResult *result,
+                          void *user_data)
 {
-  gtk_widget_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GdkTexture *texture = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       if (!gdk_texture_save_to_png (texture, g_file_peek_path (file)))
         {
-          GtkWidget *message_dialog;
+          GtkAlertDialog *alert;
 
-          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))),
-                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_INFO,
-                                                   GTK_BUTTONS_OK,
-                                                   "Exporting to image failed");
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-          gtk_widget_show (message_dialog);
+          alert = gtk_alert_dialog_new ("Exporting to image failed");
+          gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))));
+          g_object_unref (alert);
         }
 
       g_object_unref (file);
     }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (texture);
 }
 
@@ -760,24 +738,23 @@ export_image_cb (GtkWidget        *button,
                  NodeEditorWindow *self)
 {
   GdkTexture *texture;
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
 
   texture = create_texture (self);
   if (texture == NULL)
     return;
 
-  dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Save", GTK_RESPONSE_ACCEPT,
-                                        NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
-  gtk_widget_show (dialog);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "");
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
+                        NULL,
+                        "example.png",
+                        NULL,
+                        export_image_response_cb, texture);
+  g_object_unref (dialog);
 }
+
 
 static void
 clip_image_cb (GtkWidget        *button,

@@ -7,38 +7,22 @@
 
 #include <gtk/gtk.h>
 
-static void
-response_cb (GtkWidget *dialog,
-             int        response_id,
-             gpointer   data)
-{
-  gtk_window_destroy (GTK_WINDOW (dialog));
-}
-
 static gboolean
-activate_link (GtkWidget   *label,
+activate_link (GtkWidget  *label,
                const char *uri,
-               gpointer     data)
+               gpointer    data)
 {
   if (g_strcmp0 (uri, "keynav") == 0)
     {
-      GtkWidget *dialog;
-      GtkWidget *parent;
+      GtkAlertDialog *dialog;
 
-      parent = GTK_WIDGET (gtk_widget_get_root (label));
-      dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent),
-                 GTK_DIALOG_DESTROY_WITH_PARENT,
-                 GTK_MESSAGE_INFO,
-                 GTK_BUTTONS_OK,
-                 "Keyboard navigation");
-      gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-                 "The term <i>keynav</i> is a shorthand for "
-                 "keyboard navigation and refers to the process of using "
-                 "a program (exclusively) via keyboard input.");
-      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
-      gtk_window_present (GTK_WINDOW (dialog));
-      g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
+      dialog = gtk_alert_dialog_new ("Keyboard navigation");
+      gtk_alert_dialog_set_detail (dialog,
+                                   "The term ‘keynav’ is a shorthand for "
+                                   "keyboard navigation and refers to the process of using "
+                                   "a program (exclusively) via keyboard input.");
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (label)));
+      g_object_unref (dialog);
 
       return TRUE;
     }

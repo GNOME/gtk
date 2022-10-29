@@ -8,6 +8,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *window = NULL;
 static GtkWidget *entry1 = NULL;
 static GtkWidget *entry2 = NULL;

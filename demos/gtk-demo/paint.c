@@ -7,6 +7,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   COLOR_SET,
   N_SIGNALS
@@ -51,8 +53,8 @@ static const char *pad_colors[] = {
 static GType drawing_area_get_type (void);
 G_DEFINE_TYPE (DrawingArea, drawing_area, GTK_TYPE_WIDGET)
 
-static void drawing_area_set_color (DrawingArea *area,
-                                    GdkRGBA     *color);
+static void drawing_area_set_color (DrawingArea   *area,
+                                    const GdkRGBA *color);
 
 static void
 drawing_area_ensure_surface (DrawingArea *area,
@@ -350,8 +352,8 @@ drawing_area_new (void)
 }
 
 static void
-drawing_area_set_color (DrawingArea *area,
-                        GdkRGBA     *color)
+drawing_area_set_color (DrawingArea   *area,
+                        const GdkRGBA *color)
 {
   if (gdk_rgba_equal (&area->draw_color, color))
     return;
@@ -361,21 +363,22 @@ drawing_area_set_color (DrawingArea *area,
 }
 
 static void
-color_button_color_set (GtkColorButton *button,
-                        DrawingArea    *draw_area)
+color_button_color_set (GtkColorDialogButton *button,
+                        GParamSpec           *pspec,
+                        DrawingArea          *draw_area)
 {
-  GdkRGBA color;
+  const GdkRGBA *color;
 
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &color);
-  drawing_area_set_color (draw_area, &color);
+  color = gtk_color_dialog_button_get_rgba (button);
+  drawing_area_set_color (draw_area, color);
 }
 
 static void
-drawing_area_color_set (DrawingArea    *area,
-                        GdkRGBA        *color,
-                        GtkColorButton *button)
+drawing_area_color_set (DrawingArea          *area,
+                        GdkRGBA              *color,
+                        GtkColorDialogButton *button)
 {
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), color);
+  gtk_color_dialog_button_set_rgba (button, color);
 }
 
 GtkWidget *
@@ -394,13 +397,13 @@ do_paint (GtkWidget *toplevel)
 
       headerbar = gtk_header_bar_new ();
 
-      colorbutton = gtk_color_button_new ();
-      g_signal_connect (colorbutton, "color-set",
+      colorbutton = gtk_color_dialog_button_new (gtk_color_dialog_new ());
+      g_signal_connect (colorbutton, "notify::rgba",
                         G_CALLBACK (color_button_color_set), draw_area);
       g_signal_connect (draw_area, "color-set",
                         G_CALLBACK (drawing_area_color_set), colorbutton);
-      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (colorbutton),
-                                  &(GdkRGBA) { 0, 0, 0, 1 });
+      gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (colorbutton),
+                                        &(GdkRGBA) { 0, 0, 0, 1 });
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), colorbutton);
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);

@@ -78,7 +78,7 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GType      gtk_message_dialog_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_message_dialog_new      (GtkWindow      *parent,
                                         GtkDialogFlags  flags,
                                         GtkMessageType  type,
@@ -86,7 +86,7 @@ GtkWidget* gtk_message_dialog_new      (GtkWindow      *parent,
                                         const char     *message_format,
                                         ...) G_GNUC_PRINTF (5, 6);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  GtkDialogFlags  flags,
                                                  GtkMessageType  type,
@@ -94,21 +94,21 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
                                                  const char     *message_format,
                                                  ...) G_GNUC_PRINTF (5, 6);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
                                            const char       *str);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
                                                      const char       *message_format,
                                                      ...) G_GNUC_PRINTF (2, 3);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
                                                        const char       *message_format,
                                                        ...) G_GNUC_PRINTF (2, 3);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMessageDialog, g_object_unref)

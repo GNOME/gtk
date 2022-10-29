@@ -35,7 +35,7 @@
 #include "gtkbox.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
-#include "gtkmessagedialog.h"
+#include "gtkalertdialog.h"
 #include "gtkmountoperation.h"
 #include "gtkprivate.h"
 #include "gtkcheckbutton.h"
@@ -904,27 +904,27 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 }
 
 static void
-question_dialog_button_clicked (GtkDialog       *dialog,
-                                int              button_number,
-                                GMountOperation *op)
+question_dialog_button_clicked (GObject *source,
+                                GAsyncResult *result,
+                                void *user_data)
 {
-  GtkMountOperationPrivate *priv;
+  GtkAlertDialog *dialog = GTK_ALERT_DIALOG (source);
+  GMountOperation *op = user_data;
   GtkMountOperation *operation;
+  int button;
 
   operation = GTK_MOUNT_OPERATION (op);
-  priv = operation->priv;
 
-  if (button_number >= 0)
+  button = gtk_alert_dialog_choose_finish (dialog, result);
+  if (button >= 0)
     {
-      g_mount_operation_set_choice (op, button_number);
+      g_mount_operation_set_choice (op, button);
       g_mount_operation_reply (op, G_MOUNT_OPERATION_HANDLED);
     }
   else
     g_mount_operation_reply (op, G_MOUNT_OPERATION_ABORTED);
 
-  priv->dialog = NULL;
   g_object_notify (G_OBJECT (operation), "is-showing");
-  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (op);
 }
 
@@ -934,10 +934,9 @@ gtk_mount_operation_ask_question_do_gtk (GtkMountOperation *op,
                                          const char        *choices[])
 {
   GtkMountOperationPrivate *priv;
-  GtkWidget  *dialog;
+  GtkAlertDialog *dialog;
   const char *secondary = NULL;
   char       *primary;
-  int        count, len = 0;
 
   g_return_if_fail (GTK_IS_MOUNT_OPERATION (op));
   g_return_if_fail (message != NULL);
@@ -952,36 +951,19 @@ gtk_mount_operation_ask_question_do_gtk (GtkMountOperation *op,
       primary = g_strndup (message, primary - message);
     }
 
-  dialog = gtk_message_dialog_new (priv->parent_window, 0,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE, "%s",
-                                   primary != NULL ? primary : message);
+  dialog = gtk_alert_dialog_new ("%s", primary ? primary : message);
+  if (secondary)
+    gtk_alert_dialog_set_detail (dialog, secondary);
+
+  gtk_alert_dialog_set_buttons (dialog, choices);
+
+  gtk_alert_dialog_choose (dialog, priv->parent_window,
+                           NULL,
+                           question_dialog_button_clicked, g_object_ref (op));
+  g_object_unref (dialog);
   g_free (primary);
 
-  if (secondary)
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                              "%s", secondary);
-
-  /* First count the items in the list then
-   * add the buttons in reverse order */
-
-  while (choices[len] != NULL)
-    len++;
-
-  for (count = len - 1; count >= 0; count--)
-    gtk_dialog_add_button (GTK_DIALOG (dialog), choices[count], count);
-
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (question_dialog_button_clicked), op);
-
-  priv->dialog = GTK_DIALOG (dialog);
   g_object_notify (G_OBJECT (op), "is-showing");
-
-  if (priv->parent_window == NULL && priv->display)
-    gtk_window_set_display (GTK_WINDOW (dialog), priv->display);
-
-  gtk_widget_show (dialog);
-  g_object_ref (op);
 }
 
 static void
@@ -1368,18 +1350,6 @@ update_process_list_store (GtkMountOperation *mount_operation,
 }
 
 static void
-on_dialog_response (GtkDialog *dialog,
-                    int        response)
-{
-  /* GTK_RESPONSE_NONE means the dialog were programmatically destroy, e.g. that
-   * GTK_DIALOG_DESTROY_WITH_PARENT kicked in - so it would trigger a warning to
-   * destroy the dialog in that case
-   */
-  if (response != GTK_RESPONSE_NONE)
-    gtk_window_destroy (GTK_WINDOW (dialog));
-}
-
-static void
 on_end_process_activated (GtkButton         *button,
                           GtkMountOperation *op)
 {
@@ -1406,25 +1376,17 @@ on_end_process_activated (GtkButton         *button,
   error = NULL;
   if (!_gtk_mount_operation_kill_process (data->pid, &error))
     {
-      GtkWidget *dialog;
+      GtkAlertDialog *dialog;
 
       /* Use GTK_DIALOG_DESTROY_WITH_PARENT here since the parent dialog can be
        * indeed be destroyed via the GMountOperation::abort signal... for example,
        * this is triggered if the user yanks the device while we are showing
        * the dialog...
        */
-      dialog = gtk_message_dialog_new (GTK_WINDOW (op->priv->dialog),
-                                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("Unable to end process"));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                "%s",
-                                                error->message);
-
-      gtk_widget_show (dialog);
-
-      g_signal_connect (dialog, "response", G_CALLBACK (on_dialog_response), NULL);
+      dialog = gtk_alert_dialog_new (_("Unable to end process"));
+      gtk_alert_dialog_set_detail (dialog, error->message);
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (op->priv->dialog));
+      g_object_unref (dialog);
 
       g_error_free (error);
     }

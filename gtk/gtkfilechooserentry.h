@@ -19,7 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_ENTRY_H__
 #define __GTK_FILE_CHOOSER_ENTRY_H__
 
-#include "gtkfilechooser.h"
+#include "deprecated/gtkfilechooser.h"
 
 G_BEGIN_DECLS
 

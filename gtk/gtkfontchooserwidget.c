@@ -21,7 +21,7 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
-#include "gtkfontchooserwidget.h"
+#include "deprecated/gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
 
 #include "gtkadjustment.h"
@@ -34,7 +34,7 @@
 #include "gtkfilter.h"
 #include "gtkframe.h"
 #include "gtkgrid.h"
-#include "gtkfontchooser.h"
+#include "deprecated/gtkfontchooser.h"
 #include "gtkfontchooserutils.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
@@ -63,11 +63,14 @@
 #include "gtksortlistmodel.h"
 #include "gtkstringsorter.h"
 #include "gtkdropdown.h"
+#include "gtkmultifilter.h"
 
 #include <hb-ot.h>
 
 #include "language-names.h"
 #include "open-type-layout.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkFontChooserWidget:
@@ -89,6 +92,8 @@
  * # CSS nodes
  *
  * `GtkFontChooserWidget` has a single CSS node with name fontchooser.
+ *
+ * Deprecated: 4.10: Direct use of `GtkFontChooserWidget` is deprecated.
  */
 
 typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
@@ -105,6 +110,7 @@ struct _GtkFontChooserWidget
   GtkSingleSelection *selection;
   GtkCustomFilter      *custom_filter;
   GtkCustomFilter      *user_filter;
+  GtkCustomFilter      *multi_filter;
   GtkFilterListModel   *filter_model;
 
   GtkWidget       *preview;
@@ -143,6 +149,8 @@ struct _GtkFontChooserWidget
   GtkFontFilterFunc filter_func;
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
+
+  GtkFilter *filter;
 
   guint last_fontconfig_timestamp;
 
@@ -1295,6 +1303,8 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
  * Creates a new `GtkFontChooserWidget`.
  *
  * Returns: a new `GtkFontChooserWidget`
+ *
+ * Deprecated: 4.10: Direct use of `GtkFontChooserWidget` is deprecated.
  */
 GtkWidget *
 gtk_font_chooser_widget_new (void)
@@ -1324,6 +1334,8 @@ gtk_font_chooser_widget_finalize (GObject *object)
   g_hash_table_unref (fontchooser->axes);
 
   g_free (fontchooser->font_features);
+
+  g_clear_object (&fontchooser->filter);
 
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
@@ -2975,4 +2987,15 @@ gtk_font_chooser_widget_get_tweak_action (GtkWidget *widget)
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
 
   return fontchooser->tweak_action;
+}
+
+void
+gtk_font_chooser_widget_set_filter (GtkFontChooserWidget *widget,
+                                    GtkFilter            *filter)
+{
+  if (widget->filter)
+    gtk_multi_filter_remove (GTK_MULTI_FILTER (widget->multi_filter), 3);
+  g_set_object (&widget->filter, filter);
+  if (widget->filter)
+    gtk_multi_filter_append (GTK_MULTI_FILTER (widget->multi_filter), g_object_ref (filter));
 }

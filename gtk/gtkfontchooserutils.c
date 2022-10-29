@@ -26,6 +26,8 @@
 
 #include "gtkfontchooserutils.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkFontChooser *
 get_delegate (GtkFontChooser *receiver)
 {

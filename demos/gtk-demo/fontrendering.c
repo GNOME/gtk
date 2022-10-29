@@ -53,7 +53,7 @@ update_image (void)
     context = gtk_widget_create_pango_context (image);
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font_button));
+  desc = gtk_font_dialog_button_get_font_desc (GTK_FONT_DIALOG_BUTTON (font_button));
 
   fopt = cairo_font_options_copy (pango_cairo_context_get_font_options (context));
 
@@ -287,8 +287,6 @@ retry:
   gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
 
   g_object_unref (pixbuf2);
-
-  pango_font_description_free (desc);
 }
 
 static gboolean fading = FALSE;

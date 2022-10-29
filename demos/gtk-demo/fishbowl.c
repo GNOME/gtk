@@ -68,11 +68,13 @@ create_blurred_button (void)
   return w;
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkWidget *
 create_font_button (void)
 {
   return gtk_font_button_new ();
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GtkWidget *
 create_level_bar (void)

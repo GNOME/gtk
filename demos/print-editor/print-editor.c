@@ -96,12 +96,10 @@ set_text (const char *text,
 static void
 load_file (GFile *open_filename)
 {
-  GtkWidget *error_dialog;
   char *contents;
   GError *error;
   gsize len;
 
-  error_dialog = NULL;
   error = NULL;
   g_file_load_contents (open_filename, NULL, &contents, &len, NULL, &error);
   if (error == NULL)
@@ -117,35 +115,27 @@ load_file (GFile *open_filename)
 	{
           GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
           const char *display_name = g_file_info_get_display_name (info);
-	  error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-						 GTK_DIALOG_DESTROY_WITH_PARENT,
-						 GTK_MESSAGE_ERROR,
-						 GTK_BUTTONS_CLOSE,
-						 "Error loading file %s:\n%s",
-						 display_name,
-						 "Not valid utf8");
-         g_object_unref (info);
-	}
+          GtkAlertDialog *alert;
+
+          alert = gtk_alert_dialog_new ("Error loading file %s", display_name);
+          gtk_alert_dialog_set_detail (alert, "Not valid utf8");
+          gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+          g_object_unref (alert);
+          g_object_unref (info);
+        }
     }
   else
     {
       GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
       const char *display_name = g_file_info_get_display_name (info);
-      error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error loading file %s:\n%s",
-					     display_name,
-					     error->message);
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new ("Error loading file %s", display_name);
+      gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      g_object_unref (alert);
       g_object_unref (info);
       g_error_free (error);
-    }
-
-  if (error_dialog)
-    {
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-      gtk_widget_show (error_dialog);
     }
 }
 
@@ -154,7 +144,6 @@ static void
 save_file (GFile *save_filename)
 {
   char *text = get_text ();
-  GtkWidget *error_dialog;
   GError *error;
 
   error = NULL;
@@ -180,18 +169,12 @@ save_file (GFile *save_filename)
     {
       GFileInfo *info = g_file_query_info (save_filename, "standard::display-name", 0, NULL, NULL);
       const char *display_name = g_file_info_get_display_name (info);
+      GtkAlertDialog *alert;
 
-      error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error saving to file %s:\n%s",
-					     display_name,
-					     error->message);
-
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-      gtk_widget_show (error_dialog);
-
+      alert = gtk_alert_dialog_new ("Error saving to file %s", display_name);
+      gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      g_object_unref (alert);
       g_error_free (error);
       g_object_unref (info);
     }
@@ -340,21 +323,24 @@ create_custom_widget (GtkPrintOperation *operation,
 		      PrintData *data)
 {
   GtkWidget *vbox, *hbox, *font, *label;
+  GtkFontDialog *dialog;
+  PangoFontDescription *desc;
 
   gtk_print_operation_set_custom_tab_label (operation, "Other");
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_box_append (GTK_BOX (vbox), hbox);
-  gtk_widget_show (hbox);
 
   label = gtk_label_new ("Font:");
   gtk_box_append (GTK_BOX (hbox), label);
-  gtk_widget_show (label);
 
-  font = gtk_font_button_new_with_font  (data->font);
+  dialog = gtk_font_dialog_new ();
+  font = gtk_font_dialog_button_new (dialog);
+  desc = pango_font_description_from_string (data->font);
+  gtk_font_dialog_button_set_font_desc (GTK_FONT_DIALOG_BUTTON (font), desc);
+  pango_font_description_free (desc);
   gtk_box_append (GTK_BOX (hbox), font);
-  gtk_widget_show (font);
   data->font_button = font;
 
   return vbox;
@@ -365,11 +351,12 @@ custom_widget_apply (GtkPrintOperation *operation,
 		     GtkWidget *widget,
 		     PrintData *data)
 {
-  const char *selected_font;
-  selected_font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (data->font_button));
+  PangoFontDescription *desc;
+
+  desc = gtk_font_dialog_button_get_font_desc (GTK_FONT_DIALOG_BUTTON (data->font_button));
 
   g_free (data->font);
-  data->font = g_strdup (selected_font);
+  data->font = pango_font_description_to_string (desc);
 }
 
 static void
@@ -377,23 +364,18 @@ print_done (GtkPrintOperation *op,
 	    GtkPrintOperationResult res,
 	    PrintData *print_data)
 {
-  GError *error = NULL;
-
   if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
-
-      GtkWidget *error_dialog;
+      GtkAlertDialog *alert;
+      GError *error = NULL;
 
       gtk_print_operation_get_error (op, &error);
 
-      error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
-					     GTK_DIALOG_DESTROY_WITH_PARENT,
-					     GTK_MESSAGE_ERROR,
-					     GTK_BUTTONS_CLOSE,
-					     "Error printing file:\n%s",
-					     error ? error->message : "no details");
-      g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-      gtk_widget_show (error_dialog);
+      alert = gtk_alert_dialog_new ("Error printing file");
+      if (error)
+        gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      g_object_unref (alert);
     }
   else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)
     {
@@ -499,17 +481,19 @@ activate_preview (GSimpleAction *action,
 }
 
 static void
-on_save_response (GtkWidget *dialog,
-                  int        response)
+on_save_response (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  if (response == GTK_RESPONSE_OK)
-    {
-      GFile *save_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      save_file (save_filename);
-      g_object_unref (save_filename);
-    }
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
+  if (file)
+    {
+      save_file (file);
+      g_object_unref (file);
+    }
 }
 
 static void
@@ -517,21 +501,17 @@ activate_save_as (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-                                        GTK_WINDOW (main_window),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Save", GTK_RESPONSE_OK,
-                                        NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_widget_show (dialog);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (on_save_response),
-                    NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Select file");
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (main_window),
+                        NULL,
+                        NULL,
+                        NULL,
+                        on_save_response, NULL);
+  g_object_unref (dialog);
 }
 
 static void
@@ -546,17 +526,19 @@ activate_save (GSimpleAction *action,
 }
 
 static void
-on_open_response (GtkWidget *dialog,
-                  int        response)
+on_open_response (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  if (response == GTK_RESPONSE_OK)
-    {
-      GFile *open_filename = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
-      load_file (open_filename);
-      g_object_unref (open_filename);
-    }
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
+    {
+      load_file (file);
+      g_object_unref (file);
+    }
 }
 
 static void
@@ -564,21 +546,16 @@ activate_open (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-                                        GTK_WINDOW (main_window),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Cancel", GTK_RESPONSE_CANCEL,
-                                        "_Open", GTK_RESPONSE_OK,
-                                        NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_widget_show (dialog);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (on_open_response),
-                    NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Select file");
+  gtk_file_dialog_open (dialog,
+                        GTK_WINDOW (main_window),
+                        NULL,
+                        NULL,
+                        on_open_response, NULL);
+  g_object_unref (dialog);
 }
 
 static void

@@ -44,7 +44,7 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkbuildable.h"
-#include "gtkmessagedialog.h"
+#include "deprecated/gtkmessagedialog.h"
 #include "gtkbutton.h"
 #include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
@@ -637,6 +637,7 @@ error_dialogs (GtkPrintUnixDialog *dialog,
                       dirname = g_file_get_parse_name (parent);
                       g_object_unref (parent);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       message_dialog = gtk_message_dialog_new (toplevel,
                                                                GTK_DIALOG_MODAL |
                                                                GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -658,6 +659,7 @@ error_dialogs (GtkPrintUnixDialog *dialog,
                                              GTK_RESPONSE_ACCEPT);
                       gtk_dialog_set_default_response (GTK_DIALOG (message_dialog),
                                                        GTK_RESPONSE_ACCEPT);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
                       if (gtk_window_has_group (toplevel))
                         gtk_window_group_add_window (gtk_window_get_group (toplevel),

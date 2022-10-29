@@ -22,6 +22,8 @@
 #  include <gtk/gtkunixprint.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean
 main_loop_quit_cb (gpointer data)
 {

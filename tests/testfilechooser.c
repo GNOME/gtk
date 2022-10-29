@@ -35,6 +35,8 @@
 #  endif
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #if 0
 static GtkWidget *preview_label;
 static GtkWidget *preview_image;

@@ -117,19 +117,16 @@ activate_cb (GtkListView  *list,
                           G_APP_LAUNCH_CONTEXT (context),
                           &error))
     {
-      GtkWidget *dialog;
+      GtkAlertDialog *dialog;
 
       /* And because error handling is important, even a simple demo has it:
        * We display an error dialog that something went wrong.
        */
-      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (list))),
-                                       GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       "Could not launch %s", g_app_info_get_display_name (app_info));
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog), "%s", error->message);
+      dialog = gtk_alert_dialog_new ("Could not launch %s", g_app_info_get_display_name (app_info));
+      gtk_alert_dialog_set_detail (dialog, error->message);
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (list))));
+      g_object_unref (dialog);
       g_clear_error (&error);
-      gtk_widget_show (dialog);
     }
 
   g_object_unref (context);

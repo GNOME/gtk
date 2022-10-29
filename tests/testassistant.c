@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget*
 get_test_page (const char *text)
 {

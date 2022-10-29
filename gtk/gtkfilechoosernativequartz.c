@@ -24,9 +24,8 @@
 
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
-#include "gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooserdialog.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
@@ -41,6 +40,8 @@
 #include "macos/gdkmacos.h"
 #include "macos/gdkmacosdisplay-private.h"
 #include "macos/gdkmacossurface-private.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct {
   GtkFileChooserNative *self;

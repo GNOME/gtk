@@ -46,6 +46,8 @@
 #include "gtkwidgetprivate.h"
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkColorButton:
  *
@@ -67,6 +69,8 @@
  * `GtkColorButton` has a single CSS node with name colorbutton which
  * contains a button node. To differentiate it from a plain `GtkButton`,
  * it gets the .color style class.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 
 typedef struct _GtkColorButtonClass     GtkColorButtonClass;
@@ -353,6 +357,8 @@ gtk_color_button_finalize (GObject *object)
  * color when the user finishes.
  *
  * Returns: a new color button
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 GtkWidget *
 gtk_color_button_new (void)
@@ -561,6 +567,8 @@ set_use_alpha (GtkColorButton *button,
  * @title: String containing new window title
  *
  * Sets the title for the color chooser dialog.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 void
 gtk_color_button_set_title (GtkColorButton *button,
@@ -587,6 +595,8 @@ gtk_color_button_set_title (GtkColorButton *button,
  * Gets the title of the color chooser dialog.
  *
  * Returns: An internal string, do not free the return value
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 const char *
 gtk_color_button_get_title (GtkColorButton *button)
@@ -602,6 +612,8 @@ gtk_color_button_get_title (GtkColorButton *button)
  * @modal: %TRUE to make the dialog modal
  *
  * Sets whether the dialog should be modal.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 void
 gtk_color_button_set_modal (GtkColorButton *button,
@@ -627,6 +639,8 @@ gtk_color_button_set_modal (GtkColorButton *button,
  * Gets whether the dialog is modal.
  *
  * Returns: %TRUE if the dialog is modal
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialogButton] instead
  */
 gboolean
 gtk_color_button_get_modal (GtkColorButton *button)

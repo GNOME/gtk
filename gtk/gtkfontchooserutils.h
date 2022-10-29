@@ -25,7 +25,7 @@
 #ifndef __GTK_FONT_CHOOSER_UTILS_H__
 #define __GTK_FONT_CHOOSER_UTILS_H__
 
-#include "gtkfontchooserprivate.h"
+#include "deprecated/gtkfontchooserprivate.h"
 
 G_BEGIN_DECLS
 

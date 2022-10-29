@@ -19,11 +19,13 @@
 
 #include "config.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooser.h"
+#include "deprecated/gtkfilechooser.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include <glib/gi18n-lib.h>
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,
 						       GFile             *file,

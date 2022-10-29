@@ -23,14 +23,14 @@
 #include <gtk/gtkbox.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkeventcontroller.h>
-#include <gtk/gtkfilechooserdialog.h>
+#include <gtk/gtkfiledialog.h>
 #include <gtk/gtkinscription.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtklistview.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkalertdialog.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtksignallistitemfactory.h>
@@ -1803,18 +1803,21 @@ render_node_list_selection_changed (GtkListBox           *list,
 }
 
 static void
-render_node_save_response (GtkWidget     *dialog,
-                           int            response,
-                           GskRenderNode *node)
+render_node_save_response (GObject *source,
+                           GAsyncResult *result,
+                           gpointer data)
 {
-  gtk_widget_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GskRenderNode *node = data;
+  GFile *file;
+  GError *error = NULL;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (file)
     {
       GBytes *bytes = gsk_render_node_serialize (node);
-      GError *error = NULL;
 
-      if (!g_file_replace_contents (gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog)),
+      if (!g_file_replace_contents (file,
                                     g_bytes_get_data (bytes, NULL),
                                     g_bytes_get_size (bytes),
                                     NULL,
@@ -1824,24 +1827,23 @@ render_node_save_response (GtkWidget     *dialog,
                                     NULL,
                                     &error))
         {
-          GtkWidget *message_dialog;
+          GtkAlertDialog *alert;
 
-          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))),
-                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_INFO,
-                                                   GTK_BUTTONS_OK,
-                                                   _("Saving RenderNode failed"));
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
-                                                    "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-          gtk_widget_show (message_dialog);
+          alert = gtk_alert_dialog_new (_("Saving RenderNode failed"));
+          gtk_alert_dialog_set_detail (alert, error->message);
+          gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))));
+          g_object_unref (alert);
           g_error_free (error);
         }
 
       g_bytes_unref (bytes);
+      g_object_unref (file);
     }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  else
+    {
+      g_print ("Error saving nodes: %s\n", error->message);
+      g_error_free (error);
+    }
 }
 
 static void
@@ -1849,28 +1851,23 @@ render_node_save (GtkButton            *button,
                   GtkInspectorRecorder *recorder)
 {
   GskRenderNode *node;
-  GtkWidget *dialog;
+  GtkFileDialog *dialog;
   char *filename, *nodename;
 
   node = get_selected_node (recorder);
   if (node == NULL)
     return;
 
-  dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                        _("_Save"), GTK_RESPONSE_ACCEPT,
-                                        NULL);
   nodename = node_name (node);
   filename = g_strdup_printf ("%s.node", nodename);
-  g_free (nodename);
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
-  g_free (filename);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
-  gtk_widget_show (dialog);
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
+                        NULL, filename,
+                        NULL,
+                        render_node_save_response, node);
+  g_object_unref (dialog);
 }
 
 static void

@@ -31,7 +31,6 @@
 #include <glib/gstdio.h>
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
-#include "gtkmessagedialog.h"
 
 #include <cairo-pdf.h>
 #include <cairo-ps.h>

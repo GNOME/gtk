@@ -20,7 +20,7 @@
 #include "gtkcolorswatchprivate.h"
 
 #include "gtkbox.h"
-#include "gtkcolorchooserprivate.h"
+#include "deprecated/gtkcolorchooserprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdroptarget.h"
 #include "gtkgesturelongpress.h"

@@ -21,6 +21,8 @@
 #include "script-names.h"
 #include "language-names.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* {{{ ScriptLang object */
 
 G_DECLARE_FINAL_TYPE (ScriptLang, script_lang, SCRIPT, LANG, GObject)
@@ -256,10 +258,10 @@ swap_colors (void)
   GdkRGBA fg;
   GdkRGBA bg;
 
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->foreground), &fg);
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->background), &bg);
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->foreground), &bg);
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->background), &fg);
+  fg = *gtk_color_dialog_button_get_rgba (GTK_COLOR_DIALOG_BUTTON (demo->foreground));
+  bg = *gtk_color_dialog_button_get_rgba (GTK_COLOR_DIALOG_BUTTON (demo->background));
+  gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (demo->foreground), &bg);
+  gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (demo->background), &fg);
 }
 
 static void
@@ -268,8 +270,8 @@ font_features_reset_basic (void)
   gtk_adjustment_set_value (demo->size_adjustment, 20);
   gtk_adjustment_set_value (demo->letterspacing_adjustment, 0);
   gtk_adjustment_set_value (demo->line_height_adjustment, 1);
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->foreground), &(GdkRGBA){0.,0.,0.,1.});
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->background), &(GdkRGBA){1.,1.,1.,1.});
+  gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (demo->foreground), &(GdkRGBA){0.,0.,0.,1.});
+  gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (demo->background), &(GdkRGBA){1.,1.,1.,1.});
 }
 
 static void
@@ -277,7 +279,7 @@ update_basic (void)
 {
   PangoFontDescription *desc;
 
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
+  desc = gtk_font_dialog_button_get_font_desc (GTK_FONT_DIALOG_BUTTON (demo->font));
 
   gtk_adjustment_set_value (demo->size_adjustment,
                             pango_font_description_get_size (desc) / (double) PANGO_SCALE);
@@ -588,7 +590,7 @@ update_display (void)
       end = PANGO_ATTR_INDEX_TO_TEXT_END;
     }
 
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
+  desc = gtk_font_dialog_button_get_font_desc (GTK_FONT_DIALOG_BUTTON (demo->font));
 
   value = gtk_adjustment_get_value (demo->size_adjustment);
   pango_font_description_set_size (desc, value * PANGO_SCALE);
@@ -679,7 +681,7 @@ update_display (void)
       GdkRGBA rgba;
       char *fg, *bg, *css;
 
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->foreground), &rgba);
+      rgba = *gtk_color_dialog_button_get_rgba (GTK_COLOR_DIALOG_BUTTON (demo->foreground));
       attr = pango_attr_foreground_new (65535 * rgba.red,
                                         65535 * rgba.green,
                                         65535 * rgba.blue);
@@ -692,7 +694,7 @@ update_display (void)
       pango_attr_list_insert (attrs, attr);
 
       fg = gdk_rgba_to_string (&rgba);
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->background), &rgba);
+      rgba = *gtk_color_dialog_button_get_rgba (GTK_COLOR_DIALOG_BUTTON (demo->background));
       bg = gdk_rgba_to_string (&rgba);
       css = g_strdup_printf (".font_features_background { caret-color: %s; background-color: %s; }", fg, bg);
       gtk_css_provider_load_from_data (demo->provider, css, strlen (css));
@@ -767,7 +769,6 @@ update_display (void)
   gtk_label_set_attributes (GTK_LABEL (demo->the_label), attrs);
 
   g_free (font_desc);
-  pango_font_description_free (desc);
   g_free (features);
   pango_attr_list_unref (attrs);
   g_free (text);
@@ -779,7 +780,7 @@ get_pango_font (void)
   PangoFontDescription *desc;
   PangoContext *context;
 
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
+  desc = gtk_font_dialog_button_get_font_desc (GTK_FONT_DIALOG_BUTTON (demo->font));
   context = gtk_widget_get_pango_context (demo->font);
 
   return pango_context_load_font (context, desc);
@@ -831,16 +832,16 @@ update_script_combo (void)
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
-  char *lang;
+  PangoLanguage *language;
+  const char *lang;
   hb_tag_t active;
 
-  lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (demo->font));
+  language = gtk_font_dialog_button_get_language (GTK_FONT_DIALOG_BUTTON (demo->font));
+  lang = pango_language_to_string (language);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
   G_GNUC_END_IGNORE_DEPRECATIONS
-
-  g_free (lang);
 
   store = g_list_store_new (script_lang_get_type ());
 
@@ -1005,7 +1006,7 @@ update_features (void)
     {
       hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
       hb_face_t *hb_face;
-      char *feat;
+      const char *feat;
 
       hb_face = hb_font_get_face (hb_font);
 
@@ -1098,7 +1099,7 @@ update_features (void)
             }
         }
 
-      feat = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (demo->font));
+      feat = gtk_font_dialog_button_get_font_features (GTK_FONT_DIALOG_BUTTON (demo->font));
       if (feat)
         {
           for (l = demo->feature_items; l; l = l->next)
@@ -1124,8 +1125,6 @@ update_features (void)
                     }
                 }
             }
-
-          g_free (feat);
         }
     }
 
@@ -1780,6 +1779,7 @@ do_font_features (GtkWidget *do_widget)
       demo->description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
       demo->font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
       demo->script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
+      g_assert (GTK_IS_DROP_DOWN (demo->script_lang));
       expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, G_CALLBACK (script_lang_get_langname), NULL, NULL);
       gtk_drop_down_set_expression (GTK_DROP_DOWN (demo->script_lang), expression);
       gtk_expression_unref (expression);

@@ -177,19 +177,12 @@ do_printing (GtkWidget *do_widget)
 
   if (error)
     {
-      GtkWidget *dialog;
+      GtkAlertDialog *dialog;
 
-      dialog = gtk_message_dialog_new (GTK_WINDOW (do_widget),
-                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       "%s", error->message);
+      dialog = gtk_alert_dialog_new ("%s", error->message);
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (do_widget));
+      g_object_unref (dialog);
       g_error_free (error);
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_window_destroy), NULL);
-
-      gtk_widget_show (dialog);
     }
 
 

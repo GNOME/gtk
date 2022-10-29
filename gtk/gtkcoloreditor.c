@@ -19,7 +19,7 @@
 
 #include "gtkcoloreditorprivate.h"
 
-#include "gtkcolorchooserprivate.h"
+#include "deprecated/gtkcolorchooserprivate.h"
 #include "gtkcolorplaneprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkcolorswatchprivate.h"
@@ -37,6 +37,8 @@
 #include "gtkroot.h"
 
 #include <math.h>
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct _GtkColorEditorClass GtkColorEditorClass;
 

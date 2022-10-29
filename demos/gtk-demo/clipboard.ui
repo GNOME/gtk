@@ -64,7 +64,11 @@
                   <object class="GtkStackPage">
                     <property name="name">Color</property>
                     <property name="child">
-                      <object class="GtkColorButton" id="source_color">
+                      <object class="GtkColorDialogButton" id="source_color">
+                        <property name="dialog">
+                          <object class="GtkColorDialog">
+                          </object>
+                        </property>
                         <property name="valign">center</property>
                         <property name="rgba">purple</property>
                       </object>
