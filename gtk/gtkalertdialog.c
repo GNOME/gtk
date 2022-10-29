@@ -663,6 +663,7 @@ gtk_alert_dialog_choose (GtkAlertDialog       *self,
 
   g_return_if_fail (GTK_IS_ALERT_DIALOG (self));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   window = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
                          "transient-for", parent,
                          "destroy-with-parent", TRUE,
@@ -689,6 +690,7 @@ gtk_alert_dialog_choose (GtkAlertDialog       *self,
       gtk_dialog_set_default_response (GTK_DIALOG (window), 0);
       self->cancel_return = 0;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_alert_dialog_choose);

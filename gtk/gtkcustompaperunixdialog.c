@@ -37,7 +37,7 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkprintutils.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 
 #define LEGACY_CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 #define CUSTOM_PAPER_FILENAME "custom-papers"
@@ -283,7 +283,9 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   GListModel *full_list;
   GtkFilter *filter;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   dialog->print_backends = NULL;
 
@@ -318,6 +320,7 @@ gtk_custom_paper_unix_dialog_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_custom_paper_unix_dialog_parent_class)->constructed (object);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_object_get (object, "use-header-bar", &use_header, NULL);
   if (!use_header)
     {
@@ -326,6 +329,7 @@ gtk_custom_paper_unix_dialog_constructed (GObject *object)
                               NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (object), GTK_RESPONSE_CLOSE);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -847,7 +851,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkSelectionModel *model;
   GtkListItemFactory *factory;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   content_area = gtk_dialog_get_content_area (cpu_dialog);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);

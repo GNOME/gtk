@@ -89,3 +89,11 @@ There are also equivalents for some of the 'button' widgets:
 Like the Chooser interfaces, GtkMessageDialog has been replaced by
 a new async API that will be more convenient, in particular for
 language binding. The new API is [class@Gtk.AlertDialog].
+
+## GtkDialog is going away
+
+After gtk_dialog_run() was removed, the usefulness of GtkDialog
+is much reduced, and it has awkward, archaice APIs. Therefore,
+it is dropped. The recommended replacement is to just create
+your own window and add buttons as required, either in the header
+or elsewhere.

@@ -43,6 +43,8 @@
 #include "gtktypebuiltins.h"
 #include "gtksizegroup.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkDialog:
  *

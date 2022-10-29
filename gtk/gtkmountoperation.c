@@ -45,7 +45,7 @@
 #include "gtkicontheme.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtkpopover.h"
 #include "gtksnapshot.h"
 #include "gdktextureprivate.h"
@@ -468,9 +468,11 @@ pw_dialog_verify_input (GtkEditable       *editable,
   gboolean is_valid;
 
   is_valid = pw_dialog_input_is_valid (operation);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_response_sensitive (GTK_DIALOG (priv->dialog),
                                      GTK_RESPONSE_OK,
                                      is_valid);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -493,9 +495,11 @@ pw_dialog_anonymous_toggled (GtkWidget         *widget,
       gtk_widget_set_sensitive (GTK_WIDGET (l->data), !priv->anonymous);
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_response_sensitive (GTK_DIALOG (priv->dialog),
                                      GTK_RESPONSE_OK,
                                      is_valid);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 
@@ -593,6 +597,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
 
   priv->dialog = dialog;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   content_area = gtk_dialog_get_content_area (dialog);
 
   gtk_window_set_resizable (window, FALSE);
@@ -604,6 +609,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
                           _("Co_nnect"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 
   /* Build contents */
@@ -794,7 +800,11 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       g_signal_emit_by_name (priv->anonymous_toggle, "toggled");
     }
   else if (! pw_dialog_input_is_valid (operation))
-    gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
+    {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
+G_GNUC_END_IGNORE_DEPRECATIONS
+    }
 
   g_object_notify (G_OBJECT (operation), "is-showing");
 
@@ -1459,13 +1469,17 @@ create_show_processes_dialog (GtkMountOperation *op,
       primary = g_strndup (message, primary - message);
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   dialog = gtk_dialog_new ();
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->parent_window != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), priv->parent_window);
   gtk_window_set_title (GTK_WINDOW (dialog), "");
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_widget_set_margin_top (vbox, 12);
   gtk_widget_set_margin_bottom (vbox, 12);
