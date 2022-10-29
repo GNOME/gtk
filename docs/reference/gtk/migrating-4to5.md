@@ -72,3 +72,20 @@ added.
 GTK 5 will no longer provide this functionality. The recommendations
 is to use a global stylesheet (i.e. gtk_style_context_add_provider_for_display())
 and rely on style classes to make your CSS apply only where desired.
+
+## Chooser interfaces are going away
+
+The GtkColorChooser, GtkFontChooser, GtkFileChooser and GtkAppChooser
+interfaces and their implementations as dialogs, buttons and widgets
+are phased out. The are being replaced by a new family of async APIs
+that will be more convenient to use from language bindings, in particular
+for languages that have concepts like promises. The new APIs are
+[class@Gtk.ColorDialog], [class@Gtk.FontDialog] and [class@Gtk.FileDialog],
+There are also equivalents for some of the 'button' widgets:
+[class@Gtk.ColorDialogButton], [class@Gtk.FontDialogButton].
+
+## GtkMessageDialog is going away
+
+Like the Chooser interfaces, GtkMessageDialog has been replaced by
+a new async API that will be more convenient, in particular for
+language binding. The new API is [class@Gtk.AlertDialog].
