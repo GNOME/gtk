@@ -202,43 +202,36 @@ constraint_editor_window_load (ConstraintEditorWindow *self,
 }
 
 static void
-open_response_cb (GtkNativeDialog        *dialog,
-                  int                     response,
-                  ConstraintEditorWindow *self)
+open_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  gtk_native_dialog_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  ConstraintEditorWindow *self = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
+  if (file)
     {
-      GFile *file;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       constraint_editor_window_load (self, file);
       g_object_unref (file);
     }
-
-  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 open_cb (GtkWidget              *button,
          ConstraintEditorWindow *self)
 {
-  GtkFileChooserNative *dialog;
+  GtkFileDialog *dialog;
+  GFile *cwd;
 
-  dialog = gtk_file_chooser_native_new ("Open file",
-                                        GTK_WINDOW (self),
-                                        GTK_FILE_CHOOSER_ACTION_OPEN,
-                                        "_Load",
-                                        "_Cancel");
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-
-  GFile *cwd = g_file_new_for_path (".");
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Open file");
+  cwd = g_file_new_for_path (".");
+  gtk_file_dialog_set_current_folder (dialog, cwd);
   g_object_unref (cwd);
-
-  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_open (dialog, GTK_WINDOW (self), NULL, NULL, open_response_cb, self);
+  g_object_unref (dialog);
 }
 
 static void
@@ -294,22 +287,23 @@ serialize_model (GListModel *list)
 
 
 static void
-save_response_cb (GtkNativeDialog        *dialog,
-                  int                     response,
-                  ConstraintEditorWindow *self)
+save_response_cb (GObject *source,
+                  GAsyncResult *result,
+                  void *user_data)
 {
-  gtk_native_dialog_hide (dialog);
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  ConstraintEditorWindow *self = user_data;
+  GFile *file;
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  file = gtk_file_dialog_save_finish (dialog, result, NULL);
+  if (file)
     {
       GListModel *model;
-      GFile *file;
       char *text;
       GError *error = NULL;
 
       model = constraint_view_get_model (CONSTRAINT_VIEW (self->view));
       text = serialize_model (model);
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
       g_file_replace_contents (file, text, strlen (text),
                                NULL, FALSE,
                                G_FILE_CREATE_NONE,
@@ -318,46 +312,39 @@ save_response_cb (GtkNativeDialog        *dialog,
                                &error);
       if (error != NULL)
         {
-          GtkWidget *message_dialog;
+          GtkAlertDialog *alert;
 
-          message_dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
-                                                   GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_INFO,
-                                                   GTK_BUTTONS_OK,
-                                                   "Saving failed");
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message_dialog),
-                                                    "%s", error->message);
-          g_signal_connect (message_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-          gtk_widget_show (message_dialog);
+          alert = gtk_alert_dialog_new ("Saving failed");
+          gtk_alert_dialog_set_detail (alert, error->message);
+          gtk_alert_dialog_show (alert,
+                                 GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
+          g_object_unref (alert);
           g_error_free (error);
         }
 
       g_free (text);
       g_object_unref (file);
     }
-
-  gtk_native_dialog_destroy (dialog);
 }
 
 static void
 save_cb (GtkWidget              *button,
          ConstraintEditorWindow *self)
 {
-  GtkFileChooserNative *dialog;
+  GtkFileDialog *dialog;
+  GFile *cwd;
 
-  dialog = gtk_file_chooser_native_new ("Save constraints",
-                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        "_Save",
-                                        "_Cancel");
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
-
-  GFile *cwd = g_file_new_for_path (".");
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd, NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, "Save constraints");
+  cwd = g_file_new_for_path (".");
+  gtk_file_dialog_set_current_folder (dialog, cwd);
   g_object_unref (cwd);
-
-  g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
+                        NULL, NULL,
+                        NULL,
+                        save_response_cb, self);
+  g_object_unref (dialog);
 }
 
 static void
