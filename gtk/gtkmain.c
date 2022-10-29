@@ -1471,7 +1471,9 @@ handle_pointing_event (GdkEvent *event)
                                      GDK_BUTTON2_MASK |
                                      GDK_BUTTON3_MASK |
                                      GDK_BUTTON4_MASK |
-                                     GDK_BUTTON5_MASK)) == 1)
+                                     GDK_BUTTON5_MASK |
+                                     GDK_BUTTON8_MASK |
+                                     GDK_BUTTON9_MASK)) == 1)
         {
           GtkWidget *new_target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
 

@@ -109,6 +109,8 @@ typedef enum
   GDK_BUTTON3_MASK  = 1 << 10,
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
+  GDK_BUTTON8_MASK  = 1 << 15,
+  GDK_BUTTON9_MASK  = 1 << 16,
 
   GDK_SUPER_MASK    = 1 << 26,
   GDK_HYPER_MASK    = 1 << 27,
