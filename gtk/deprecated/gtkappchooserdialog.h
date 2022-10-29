@@ -29,7 +29,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkdialog.h>
+#include <gtk/deprecated/gtkdialog.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS

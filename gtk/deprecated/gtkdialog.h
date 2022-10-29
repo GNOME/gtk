@@ -127,51 +127,51 @@ struct _GtkDialogClass
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_dialog_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_dialog_new      (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_dialog_new_with_buttons (const char      *title,
                                         GtkWindow       *parent,
                                         GtkDialogFlags   flags,
                                         const char      *first_button_text,
                                         ...) G_GNUC_NULL_TERMINATED;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_dialog_add_action_widget (GtkDialog   *dialog,
                                          GtkWidget   *child,
                                          int          response_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_dialog_add_button        (GtkDialog   *dialog,
                                          const char *button_text,
                                          int          response_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
                                          const char *first_button_text,
                                          ...) G_GNUC_NULL_TERMINATED;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                         int        response_id,
                                         gboolean   setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_dialog_set_default_response   (GtkDialog *dialog,
                                         int        response_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_dialog_get_widget_for_response (GtkDialog *dialog,
                                                int        response_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int gtk_dialog_get_response_for_widget (GtkDialog *dialog,
                                          GtkWidget *widget);
 
 /* Emit response signal */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void gtk_dialog_response           (GtkDialog *dialog,
                                     int        response_id);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget * gtk_dialog_get_header_bar   (GtkDialog *dialog);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDialog, g_object_unref)

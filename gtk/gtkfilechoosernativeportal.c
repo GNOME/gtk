@@ -23,7 +23,7 @@
 #include "gtknativedialogprivate.h"
 
 #include "gtkprivate.h"
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include "gtkfilechooserprivate.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"

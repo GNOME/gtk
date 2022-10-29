@@ -48,7 +48,7 @@
 #include "gtktextview.h"
 #include "gtkwidgetprivate.h"
 #include "gtksettings.h"
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkroot.h"

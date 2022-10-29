@@ -31,7 +31,7 @@
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
 #include "gtkbox.h"

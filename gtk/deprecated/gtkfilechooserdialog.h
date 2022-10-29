@@ -23,7 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkdialog.h>
+#include <gtk/deprecated/gtkdialog.h>
 #include <gtk/deprecated/gtkfilechooser.h>
 
 G_BEGIN_DECLS

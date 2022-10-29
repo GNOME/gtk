@@ -21,7 +21,7 @@
 
 #include "gtkfiledialog.h"
 
-#include "gtkdialog.h"
+#include "deprecated/gtkdialog.h"
 #include "deprecated/gtkfilechoosernative.h"
 #include "gtkdialogerror.h"
 #include <glib/gi18n-lib.h>

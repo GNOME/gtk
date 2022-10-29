@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct
 {
   GtkApplication parent_instance;

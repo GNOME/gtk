@@ -6142,7 +6142,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                 "application to break or crash."));
 
           area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
-G_GNUC_END_IGNORE_DEPRECATIONS
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
           gtk_widget_show (check);
@@ -6154,6 +6153,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
 
           gtk_widget_show (dialog);
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
       if (select)

@@ -32,7 +32,7 @@
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtksettings.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"
 #include "gtkactionable.h"

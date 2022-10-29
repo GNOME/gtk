@@ -22,6 +22,8 @@ feedback on our plans.
 * GtkMessageDialog has been deprecated and
   replaced by a new async dialog API
 
+* GtkDialog has been deprecated
+
 * GtkColorChooser, GtkFontChooser, GtkFileChooser
   interfaces and their implementations have been
   deprecated. A new family of async dialog APIs

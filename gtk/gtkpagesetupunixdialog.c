@@ -35,7 +35,7 @@
 #include "gtkprintbackendprivate.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 
 /**
  * GtkPageSetupUnixDialog:
@@ -276,12 +276,15 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   dialog->print_backends = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           _("_Cancel"), GTK_RESPONSE_CANCEL,
                           _("_Apply"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   dialog->page_setup_list = g_list_store_new (GTK_TYPE_PAGE_SETUP);
   dialog->custom_paper_list = g_list_store_new (GTK_TYPE_PAGE_SETUP);

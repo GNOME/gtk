@@ -1467,7 +1467,9 @@ close_selection_dialog (GtkWidget *dialog, int response, GtkWidget *tv)
   if (response == GTK_RESPONSE_CANCEL)
     return;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   box = gtk_widget_get_first_child (gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert (GTK_IS_FLOW_BOX (box));
   children = gtk_flow_box_get_selected_children (GTK_FLOW_BOX (box));
 

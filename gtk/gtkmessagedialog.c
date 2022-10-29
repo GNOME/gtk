@@ -29,7 +29,7 @@
 
 #include "gtkbox.h"
 #include "gtkbuildable.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialogprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkprivate.h"

@@ -17,8 +17,8 @@
 
 #include "config.h"
 
-#include "gtkdialog.h"
-#include "gtkdialogprivate.h"
+#include "deprecated/gtkdialog.h"
+#include "deprecated/gtkdialogprivate.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"

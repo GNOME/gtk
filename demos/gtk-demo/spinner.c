@@ -35,6 +35,7 @@ do_spinner (GtkWidget *do_widget)
 
   if (!window)
   {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     window = gtk_dialog_new_with_buttons ("Spinner",
                                           GTK_WINDOW (do_widget),
                                           0,
@@ -48,6 +49,7 @@ do_spinner (GtkWidget *do_widget)
     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_widget_set_margin_start (vbox, 5);

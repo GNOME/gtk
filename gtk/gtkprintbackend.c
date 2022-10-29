@@ -633,12 +633,14 @@ request_password (GtkPrintBackend  *backend,
   priv->auth_info = g_new0 (char *, length + 1);
   priv->store_auth_info = FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 
                                          _("_Cancel"), GTK_RESPONSE_CANCEL,
                                          _("_OK"), GTK_RESPONSE_OK,
                                          NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -665,7 +667,9 @@ request_password (GtkPrintBackend  *backend,
   g_free (markup);
 
   /* Packing */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_box_append (GTK_BOX (content_area), main_box);
 
   gtk_box_append (GTK_BOX (main_box), icon);
