@@ -28,7 +28,9 @@
 #include <glib/gi18n-lib.h>
 
 #include "gtkbookmarksmanagerprivate.h"
-#include "gtkfilechooser.h" /* for the GError types */
+#include "deprecated/gtkfilechooser.h" /* for the GError types */
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static void
 _gtk_bookmark_free (gpointer data)

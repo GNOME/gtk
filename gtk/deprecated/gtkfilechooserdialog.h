@@ -24,7 +24,7 @@
 #endif
 
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkfilechooser.h>
+#include <gtk/deprecated/gtkfilechooser.h>
 
 G_BEGIN_DECLS
 
@@ -36,7 +36,7 @@ typedef struct _GtkFileChooserDialog        GtkFileChooserDialog;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_file_chooser_dialog_get_type         (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *gtk_file_chooser_dialog_new              (const char           *title,
 						     GtkWindow            *parent,
 						     GtkFileChooserAction  action,

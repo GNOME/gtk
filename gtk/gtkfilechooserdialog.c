@@ -19,10 +19,10 @@
 
 #include "config.h"
 
-#include "gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooserdialog.h"
 
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserwidget.h"
+#include "deprecated/gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
@@ -38,6 +38,8 @@
 
 #include <stdarg.h>
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkFileChooserDialog:
@@ -209,6 +211,8 @@
  *
  * To summarize, make sure you use a predefined response code
  * when you use `GtkFileChooserDialog` to ensure proper operation.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 
 typedef struct _GtkFileChooserDialogPrivate GtkFileChooserDialogPrivate;
@@ -716,6 +720,8 @@ gtk_file_chooser_dialog_new_valist (const char           *title,
  * This function is analogous to [ctor@Gtk.Dialog.new_with_buttons].
  *
  * Returns: a new `GtkFileChooserDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GtkWidget *
 gtk_file_chooser_dialog_new (const char           *title,

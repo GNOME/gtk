@@ -22,11 +22,6 @@
 #include "gtknativedialogprivate.h"
 
 #include "gtkprivate.h"
-#include "gtkfilechooserdialog.h"
-#include "gtkfilechooserprivate.h"
-#include "gtkfilechooserwidget.h"
-#include "gtkfilechooserwidgetprivate.h"
-#include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtksettings.h"

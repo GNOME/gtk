@@ -47,6 +47,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * [method@Gtk.ColorChooser.get_rgba].
  *
  * `GtkColorChooserDialog` has been deprecated in favor of [class@Gtk.ColorDialog].
+ *
+ * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 
 typedef struct _GtkColorChooserDialogClass   GtkColorChooserDialogClass;

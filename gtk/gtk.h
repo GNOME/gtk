@@ -124,10 +124,10 @@
 #include <gtk/gtkexpression.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfixedlayout.h>
-#include <gtk/gtkfilechooser.h>
-#include <gtk/gtkfilechooserdialog.h>
-#include <gtk/gtkfilechoosernative.h>
-#include <gtk/gtkfilechooserwidget.h>
+#include <gtk/deprecated/gtkfilechooser.h>
+#include <gtk/deprecated/gtkfilechooserdialog.h>
+#include <gtk/deprecated/gtkfilechoosernative.h>
+#include <gtk/deprecated/gtkfilechooserwidget.h>
 #include <gtk/gtkfiledialog.h>
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfilter.h>

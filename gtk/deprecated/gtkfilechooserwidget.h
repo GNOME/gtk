@@ -23,7 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkfilechooser.h>
+#include <gtk/deprecated/gtkfilechooser.h>
 #include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
@@ -36,7 +36,7 @@ typedef struct _GtkFileChooserWidget        GtkFileChooserWidget;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_file_chooser_widget_get_type         (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *gtk_file_chooser_widget_new              (GtkFileChooserAction  action);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFileChooserWidget, g_object_unref)

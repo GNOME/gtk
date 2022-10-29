@@ -19,7 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_PRIVATE_H__
 #define __GTK_FILE_CHOOSER_PRIVATE_H__
 
-#include "gtkfilechooser.h"
+#include "deprecated/gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 #include "deprecated/gtkliststore.h"
 #include "gtkrecentmanager.h"

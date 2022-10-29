@@ -21,8 +21,8 @@
 
 #include "gtkfiledialog.h"
 
-#include "gtk/gtkdialog.h"
-#include "gtkfilechoosernative.h"
+#include "gtkdialog.h"
+#include "deprecated/gtkfilechoosernative.h"
 #include "gtkdialogerror.h"
 #include <glib/gi18n-lib.h>
 
@@ -274,7 +274,9 @@ file_chooser_set_filters (GtkFileChooser *chooser,
   for (unsigned int i = 0; i < g_list_model_get_n_items (filters); i++)
     {
       GtkFileFilter *filter = g_list_model_get_item (filters, i);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_file_chooser_add_filter (chooser, filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (filter);
     }
 }
@@ -291,11 +293,13 @@ file_chooser_set_shortcut_folders (GtkFileChooser *chooser,
       GFile *folder = g_list_model_get_item (shortcut_folders, i);
       GError *error = NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       if (!gtk_file_chooser_add_shortcut_folder (chooser, folder, &error))
         {
           g_critical ("%s", error->message);
           g_clear_error (&error);
         }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_object_unref (folder);
     }
@@ -613,12 +617,14 @@ response_cb (GTask *task,
 
   if (response == GTK_RESPONSE_ACCEPT)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       GtkFileChooser *chooser;
       GListModel *files;
 
       chooser = GTK_FILE_CHOOSER (g_task_get_task_data (task));
       files = gtk_file_chooser_get_files (chooser);
       g_task_return_pointer (task, files, g_object_unref);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else if (response == GTK_RESPONSE_CLOSE)
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED, "Aborted by application");
@@ -638,10 +644,13 @@ dialog_response (GtkDialog *dialog,
   response_cb (task, response);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkFileChooserNative *
 create_file_chooser (GtkFileDialog        *self,
                      GtkWindow            *parent,
                      GtkFileChooserAction  action,
+                     GFile                *current_file,
+                     const char           *current_name,
                      gboolean              select_multiple)
 {
   GtkFileChooserNative *chooser;
@@ -680,9 +689,14 @@ create_file_chooser (GtkFileDialog        *self,
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
   if (self->current_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->current_folder, NULL);
+  if (current_file)
+    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), current_file, NULL);
+  else if (current_name)
+    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), current_name);
 
   return chooser;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GFile *
 finish_file_op (GtkFileDialog  *self,
@@ -753,10 +767,8 @@ gtk_file_dialog_open (GtkFileDialog       *self,
 
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
-  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_OPEN, FALSE);
-
-  if (current_file)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), current_file, NULL);
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 current_file, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_file_dialog_open);
@@ -831,10 +843,8 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
 
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
-  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FALSE);
-
-  if (current_folder)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), current_folder, NULL);
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                 current_folder, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_file_dialog_select_folder);
@@ -914,12 +924,8 @@ gtk_file_dialog_save (GtkFileDialog       *self,
 
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
-  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SAVE, FALSE);
-
-  if (current_file)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), current_file, NULL);
-  else if (current_name)
-    gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), current_name);
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SAVE,
+                                 current_file, current_name, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_file_dialog_save);
@@ -991,7 +997,8 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
 
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
-  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_OPEN, TRUE);
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_OPEN,
+                                 NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_file_dialog_open_multiple);
@@ -1064,7 +1071,8 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
 
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
-  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, TRUE);
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                 NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_file_dialog_select_multiple_folders);

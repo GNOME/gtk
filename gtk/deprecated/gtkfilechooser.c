@@ -24,6 +24,8 @@
 #include "gtkmarshalers.h"
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkFileChooser:
  *
@@ -67,6 +69,8 @@
  * options. If a choice has no option, it will be rendered as a
  * check button with the given label; if a choice has options, it will
  * be rendered as a combo box.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 
 
@@ -173,6 +177,8 @@ gtk_file_chooser_error_quark (void)
  * For example, an option to create a new folder might be shown
  * if the action is %GTK_FILE_CHOOSER_ACTION_SAVE but not if the
  * action is %GTK_FILE_CHOOSER_ACTION_OPEN.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  **/
 void
 gtk_file_chooser_set_action (GtkFileChooser       *chooser,
@@ -190,6 +196,8 @@ gtk_file_chooser_set_action (GtkFileChooser       *chooser,
  * Gets the type of operation that the file chooser is performing.
  *
  * Returns: the action that the file selector is performing
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GtkFileChooserAction
 gtk_file_chooser_get_action (GtkFileChooser *chooser)
@@ -213,6 +221,8 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
  * This is only relevant if the action is set to be
  * %GTK_FILE_CHOOSER_ACTION_OPEN or
  * %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
@@ -231,6 +241,8 @@ gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
  * chooser.
  *
  * Returns: %TRUE if multiple files can be selected.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
@@ -253,6 +265,8 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
  *
  * This is only relevant if the action is not set to be
  * %GTK_FILE_CHOOSER_ACTION_OPEN.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_set_create_folders (GtkFileChooser *chooser,
@@ -270,6 +284,8 @@ gtk_file_chooser_set_create_folders (GtkFileChooser *chooser,
  * Gets whether file chooser will offer to create new folders.
  *
  * Returns: %TRUE if the Create Folder button should be displayed.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
@@ -301,6 +317,8 @@ gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
  *
  * Please see the documentation for those functions for an example
  * of using [method@Gtk.FileChooser.set_current_name] as well.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  **/
 void
 gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
@@ -326,6 +344,8 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
  *   whatever the contents of the entry are. Note also that this string is
  *   in UTF-8 encoding, which is not necessarily the system’s encoding for
  *   filenames.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 char *
 gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
@@ -362,6 +382,8 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
  *
  * Returns: %TRUE if the folder could be changed successfully, %FALSE
  *   otherwise.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_set_current_folder (GtkFileChooser  *chooser,
@@ -382,6 +404,8 @@ gtk_file_chooser_set_current_folder (GtkFileChooser  *chooser,
  * Gets the current folder of @chooser as `GFile`.
  *
  * Returns: (transfer full) (nullable): the `GFile` for the current folder.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GFile *
 gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
@@ -423,6 +447,8 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
  * Returns: (transfer full): a list model containing a `GFile` for each
  *   selected file and subfolder in the current folder. Free the returned
  *   list with g_object_unref().
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GListModel *
 gtk_file_chooser_get_files (GtkFileChooser *chooser)
@@ -482,6 +508,8 @@ gtk_file_chooser_get_files (GtkFileChooser *chooser)
  * ```
  *
  * Returns: Not useful
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_set_file (GtkFileChooser  *chooser,
@@ -511,6 +539,8 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
  *
  * Returns: (transfer full) (nullable): a selected `GFile`. You own the
  *   returned file; use g_object_unref() to release it.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GFile *
 gtk_file_chooser_get_file (GtkFileChooser *chooser)
@@ -539,6 +569,8 @@ gtk_file_chooser_get_file (GtkFileChooser *chooser)
  *
  * Returns: %TRUE if the folder could be added successfully,
  *   %FALSE otherwise.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_add_shortcut_folder (GtkFileChooser  *chooser,
@@ -561,6 +593,8 @@ gtk_file_chooser_add_shortcut_folder (GtkFileChooser  *chooser,
  *
  * Returns: %TRUE if the folder could be removed successfully,
  *   %FALSE otherwise.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 gboolean
 gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
@@ -601,6 +635,8 @@ gtk_file_chooser_add_filter (GtkFileChooser *chooser,
  * @filter: a `GtkFileFilter`
  *
  * Removes @filter from the list of filters that the user can select between.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
@@ -648,6 +684,8 @@ gtk_file_chooser_get_filters (GtkFileChooser *chooser)
  * Setting the current filter when the list of filters is
  * empty is useful if you want to restrict the displayed
  * set of files without letting the user change it.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_set_filter (GtkFileChooser *chooser,
@@ -666,6 +704,8 @@ gtk_file_chooser_set_filter (GtkFileChooser *chooser,
  * Gets the current filter.
  *
  * Returns: (nullable) (transfer none): the current filter
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GtkFileFilter *
 gtk_file_chooser_get_filter (GtkFileChooser *chooser)
@@ -695,6 +735,8 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
  * @chooser may or may not affect the returned model.
  *
  * Returns: (transfer full): A list model of `GFile`s
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GListModel *
 gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser)
@@ -720,6 +762,8 @@ gtk_file_chooser_get_shortcut_folders (GtkFileChooser *chooser)
  * and you can obtain the user-selected value in the
  * [signal@Gtk.Dialog::response] signal handler using
  * [method@Gtk.FileChooser.get_choice].
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
@@ -740,6 +784,8 @@ gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
  * @id: the ID of the choice to remove
  *
  * Removes a 'choice' that has been added with gtk_file_chooser_add_choice().
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
@@ -761,6 +807,8 @@ gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
  * gtk_file_chooser_add_choice().
  *
  * For a boolean choice, the possible options are "true" and "false".
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
@@ -781,6 +829,8 @@ gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
  * Gets the currently selected option in the 'choice' with the given ID.
  *
  * Returns: (nullable): the ID of the currently selected option
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 const char *
 gtk_file_chooser_get_choice (GtkFileChooser  *chooser,

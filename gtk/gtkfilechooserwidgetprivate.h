@@ -22,7 +22,7 @@
 #define __GTK_FILE_CHOOSER_WIDGET_PRIVATE_H__
 
 #include <glib.h>
-#include "gtkfilechooserwidget.h"
+#include "deprecated/gtkfilechooserwidget.h"
 #include "gtkselectionmodel.h"
 
 G_BEGIN_DECLS

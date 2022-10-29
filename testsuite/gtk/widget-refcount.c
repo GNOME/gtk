@@ -59,7 +59,9 @@ static void
 filechooserwidget (void)
 {
   /* We use GtkFileChooserWidget simply because it's a complex widget, that's it. */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   GtkWidget *w = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gboolean finalized = FALSE;
 
   g_assert_true (g_object_is_floating (w));

@@ -30,7 +30,6 @@
 #include "gtklistitem.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
 struct _GtkFileChooserCell

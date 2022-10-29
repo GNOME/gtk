@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkfilechooserwidget.h"
+#include "deprecated/gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
 #include "gtkbitset.h"
@@ -32,10 +32,10 @@
 #include "gtkdroptarget.h"
 #include "gtkentry.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooserdialog.h"
+#include "deprecated/gtkfilechooser.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 #include "gtkfilethumbnail.h"
 #include "gtkgestureclick.h"
@@ -107,6 +107,8 @@
 #include <io.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkFileChooserWidget:
  *
@@ -119,6 +121,8 @@
  * # CSS nodes
  *
  * `GtkFileChooserWidget` has a single CSS node with name filechooser.
+ *
+ * Deprecated: 4.10: Direct use of `GtkFileChooserWidget` is deprecated
  */
 
 /* 150 mseconds of delay */
@@ -7258,6 +7262,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
  * `GtkFileChooserDialog`.
  *
  * Returns: a new `GtkFileChooserWidget`
+ *
+ * Deprecated: 4.10: Direct use of `GtkFileChooserWidget` is deprecated
  */
 GtkWidget *
 gtk_file_chooser_widget_new (GtkFileChooserAction action)

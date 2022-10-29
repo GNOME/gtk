@@ -23,11 +23,8 @@
 #include "gtknativedialogprivate.h"
 
 #include "gtkprivate.h"
-#include "gtkfilechooserdialog.h"
+#include "gtkdialog.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserwidget.h"
-#include "gtkfilechooserwidgetprivate.h"
-#include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtksettings.h"
@@ -38,6 +35,8 @@
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct {
   GtkFileChooserNative *self;
