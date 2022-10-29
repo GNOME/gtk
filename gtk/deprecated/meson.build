@@ -77,6 +77,7 @@ gtk_deprecated_headers = [
   'deprecated/gtkfontchooserwidget.h',
   'deprecated/gtkiconview.h',
   'deprecated/gtkliststore.h',
+  'deprecated/gtkmessagedialog.h',
   'deprecated/gtkrender.h',
   'deprecated/gtkstylecontext.h',
   'deprecated/gtktreednd.h',

@@ -22,7 +22,7 @@
 #include "gtkalertdialog.h"
 
 #include "gtkbutton.h"
-#include "gtkmessagedialog.h"
+#include "deprecated/gtkmessagedialog.h"
 #include <glib/gi18n-lib.h>
 
 /**

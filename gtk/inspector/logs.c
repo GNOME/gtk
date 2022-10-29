@@ -27,7 +27,6 @@
 #include "window.h"
 
 #include "gtktextview.h"
-#include "gtkmessagedialog.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkcheckbutton.h"
 #include "gtklabel.h"

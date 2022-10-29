@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#include "gtkmessagedialog.h"
+#include "deprecated/gtkmessagedialog.h"
 
 #include "gtkbox.h"
 #include "gtkbuildable.h"
@@ -36,6 +36,8 @@
 #include "gtktypebuiltins.h"
 
 #include <string.h>
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * GtkMessageDialog:
@@ -96,6 +98,8 @@
  *
  * The `GtkMessageDialog` implementation of the `GtkBuildable` interface exposes
  * the message area as an internal child with the name “message_area”.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 
 typedef struct
@@ -479,6 +483,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
  * for more details.
  *
  * Returns: (transfer none): a new `GtkMessageDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 GtkWidget*
 gtk_message_dialog_new (GtkWindow     *parent,
@@ -565,6 +571,8 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * ```
  *
  * Returns: a new `GtkMessageDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  **/
 GtkWidget*
 gtk_message_dialog_new_with_markup (GtkWindow     *parent,
@@ -602,6 +610,8 @@ gtk_message_dialog_new_with_markup (GtkWindow     *parent,
  * @str: string with Pango markup
  *
  * Sets the text of the message dialog.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 void
 gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
@@ -622,6 +632,8 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
  * @...: arguments for @message_format
  *
  * Sets the secondary text of the message dialog.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 void
 gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
@@ -679,6 +691,8 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  *                                             "%s", msg);
  * g_free (msg);
  * ```
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 void
 gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
@@ -726,6 +740,8 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  *
  * Returns: (transfer none): A `GtkBox` corresponding to the
  *   “message area” in the @message_dialog
+ *
+ * Deprecated: 4.10: Use [class@Gtk.AlertDialog] instead
  */
 GtkWidget *
 gtk_message_dialog_get_message_area (GtkMessageDialog *message_dialog)

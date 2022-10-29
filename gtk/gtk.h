@@ -183,7 +183,7 @@
 #include <gtk/gtkmediafile.h>
 #include <gtk/gtkmediastream.h>
 #include <gtk/gtkmenubutton.h>
-#include <gtk/gtkmessagedialog.h>
+#include <gtk/deprecated/gtkmessagedialog.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtkmultifilter.h>
 #include <gtk/gtkmultiselection.h>

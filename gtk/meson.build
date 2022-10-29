@@ -535,7 +535,6 @@ gtk_public_headers = files([
   'gtkmediafile.h',
   'gtkmediastream.h',
   'gtkmenubutton.h',
-  'gtkmessagedialog.h',
   'gtkmountoperation.h',
   'gtkmultifilter.h',
   'gtkmultiselection.h',

@@ -17,6 +17,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 value_changed (GtkWidget *button,
                double volume,
