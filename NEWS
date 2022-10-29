@@ -1,9 +1,11 @@
 Overview of Changes in 4.9.1, dd-mm-yyyy
 ========================================
 
-Note that deprecations are an early outlook
-at changes that will appear in an eventual
-GTK 5 release, which is still far away.
+Note that deprecations are an early outlook at changes
+that will appear in an eventual GTK 5 release, which is
+still far away. We are introducing deprecations in 4.10
+as a way to give users time to adapt, and to provide
+feedback on our plans.
 
 * GtkTreeView, GtkIconView, GtkComboBox and
   auxiliary classes have been deprecated
@@ -15,7 +17,19 @@ GTK 5 release, which is still far away.
 * gtk_render_ and gtk_snapshot_render_ APIs
   have been deprecated
 
-* GtkAppChooser widgets hae been deprecated
+* GtkAppChooser widgets have been deprecated
+
+* GtkMessageDialog has been deprecated and
+  replaced by a new async dialog API
+
+* GtkColorChooser, GtkFontChooser, GtkFileChooser
+  interfaces and their implementations have been
+  deprecated. A new family of async dialog APIs
+  has been introduced to replace them
+
+* GtkColorDialog, GtkFontDialog, GtkFileDialog
+  and GtkAlertDialog are new dialog classes with
+  a consistent and well-bindable API
 
 * GtkMountOperation:
  - Fix the dialog to look reasonable
