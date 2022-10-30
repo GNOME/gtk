@@ -120,6 +120,7 @@ gtk_private_sources = files([
   'gtkmenusectionbox.c',
   'gtkmenutracker.c',
   'gtkmenutrackeritem.c',
+  'gtkmessagewindow.c',
   'gtkpanedhandle.c',
   'gtkpango.c',
   'gskpango.c',
