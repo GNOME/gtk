@@ -1,11 +1,8 @@
 /* Pickers
- * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog
+ * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog, GtkColorDialogButton, GtkFontDialogButton, chooser, button
  *
- * These widgets are mainly intended for use in preference dialogs.
- * They allow to select colors, fonts and applications.
- *
- * This demo shows both the default appearance for these dialogs,
- * as well as some of the customizations that are possible.
+ * These widgets and async APIs are mainly intended for use in preference dialogs.
+ * They allow to select colors, fonts, files and applications.
  */
 
 #include <gtk/gtk.h>
@@ -16,21 +13,16 @@ file_opened (GObject *source,
              void *data)
 {
   GFile *file;
-  GError *error = NULL;
-  char *name;
 
-  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
+  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, NULL);
 
-  if (!file)
+  if (file)
     {
-      g_print ("%s\n", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  name = g_file_get_basename (file);
-  gtk_button_set_label (GTK_BUTTON (data), name);
-  g_free (name);
+      char *name = g_file_get_basename (file);
+      gtk_button_set_label (GTK_BUTTON (data), name);
+      g_object_set_data_full (G_OBJECT (data), "file", file, g_object_unref);
+      g_free (name);
+   }
 }
 
 static void
@@ -38,10 +30,13 @@ open_file (GtkButton *picker)
 {
   GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
   GtkFileDialog *dialog;
+  GFile *file;
 
   dialog = gtk_file_dialog_new ();
 
-  gtk_file_dialog_open (dialog, parent, NULL, NULL, file_opened, picker);
+  file = (GFile *) g_object_get_data (G_OBJECT (picker), "file");
+
+  gtk_file_dialog_open (dialog, parent, file, NULL, file_opened, picker);
 
   g_object_unref (dialog);
 }
@@ -95,7 +90,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
 
-    picker = gtk_button_new_with_label ("[...]");
+    picker = gtk_button_new_with_label ("None");
     g_signal_connect (picker, "clicked", G_CALLBACK (open_file), NULL);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
 
