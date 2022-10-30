@@ -299,6 +299,13 @@ foreach test : focus_chain_tests
   )
 endforeach
 
+# Test that po/POTFILES.in and po/POTFILES.skip are up-to-date
+
+make_pot = find_program ('make-pot', dirs: meson.project_source_root())
+
+test('potfiles', make_pot,
+     workdir: meson.project_source_root(),
+     suite: ['gtk', 'translations' ])
 
 if get_option('install-tests')
   foreach t : tests
