@@ -70,6 +70,8 @@ static void     update_button_sensitivity
  * `GtkColorDialogButton` has a single CSS node with name colorbutton which
  * contains a button node. To differentiate it from a plain `GtkButton`,
  * it gets the .color style class.
+ *
+ * Since: 4.10
  */
 
 /* {{{ GObject implementation */
