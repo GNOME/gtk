@@ -628,40 +628,11 @@ dialog_response (GtkDialog *dialog,
   response_cb (task, response);
 }
 
-/* }}} */
-/* {{{ Async API */
-
-/**
- * gtk_alert_dialog_choose:
- * @self: a `GtkAlertDialog`
- * @parent: (nullable): the parent `GtkWindow`
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (nullable) (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
- *
- * This function shows the alert to the user.
- *
- * The @callback will be called when the alert is dismissed.
- * It should call [method@Gtk.AlertDialog.choose_finish]
- * to obtain the result.
- *
- * It is ok to pass `NULL` for the callback if the alert
- * does not have more than one button. A simpler API for
- * this case is [method@Gtk.AlertDialog.show].
- *
- * Since: 4.10
- */
-void
-gtk_alert_dialog_choose (GtkAlertDialog       *self,
-                         GtkWindow           *parent,
-                         GCancellable        *cancellable,
-                         GAsyncReadyCallback  callback,
-                         gpointer             user_data)
+static GtkWidget *
+create_message_dialog (GtkAlertDialog *self,
+                       GtkWindow      *parent)
 {
-  GtkMessageDialog *window;
-  GTask *task;
-
-  g_return_if_fail (GTK_IS_ALERT_DIALOG (self));
+  GtkWidget *window;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   window = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
@@ -691,6 +662,46 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       self->cancel_return = 0;
     }
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+  return window;
+}
+
+/* }}} */
+/* {{{ Async API */
+
+/**
+ * gtk_alert_dialog_choose:
+ * @self: a `GtkAlertDialog`
+ * @parent: (nullable): the parent `GtkWindow`
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @callback: (nullable) (scope async): a callback to call when the operation is complete
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function shows the alert to the user.
+ *
+ * The @callback will be called when the alert is dismissed.
+ * It should call [method@Gtk.AlertDialog.choose_finish]
+ * to obtain the result.
+ *
+ * It is ok to pass `NULL` for the callback if the alert
+ * does not have more than one button. A simpler API for
+ * this case is [method@Gtk.AlertDialog.show].
+ *
+ * Since: 4.10
+ */
+void
+gtk_alert_dialog_choose (GtkAlertDialog      *self,
+                         GtkWindow           *parent,
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
+{
+  GtkWidget *window;
+  GTask *task;
+
+  g_return_if_fail (GTK_IS_ALERT_DIALOG (self));
+
+  window = create_message_dialog (self, parent);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_alert_dialog_choose);
