@@ -47,7 +47,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "deprecated/gtkmessagedialog.h"
+#include "gtkmessagewindowprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
@@ -6079,24 +6079,27 @@ static void gtk_window_set_debugging (GdkDisplay *display,
                                       gboolean    warn);
 
 static void
-warn_response (GtkDialog *dialog,
-               int        response)
+warn_response (GtkWidget *button,
+               GtkWindow *dialog)
 {
+  GtkWidget *inspector_window;
   GtkWidget *check;
   gboolean remember;
-  GtkWidget *inspector_window;
   GdkDisplay *display;
+  int response;
 
-  inspector_window = GTK_WIDGET (gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+  response = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "response"));
+
+  inspector_window = GTK_WIDGET (gtk_window_get_transient_for (dialog));
   display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (inspector_window));
 
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_check_button_get_active (GTK_CHECK_BUTTON (check));
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  gtk_window_destroy (dialog);
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
 
-  if (response == GTK_RESPONSE_NO)
+  if (response == 0)
     gtk_window_set_debugging (display, FALSE, FALSE, FALSE, FALSE);
   else
     set_warn_again (!remember);
@@ -6110,8 +6113,8 @@ gtk_window_set_debugging (GdkDisplay *display,
                           gboolean    warn)
 {
   GtkWidget *dialog = NULL;
-  GtkWidget *area;
   GtkWidget *check;
+  GtkWidget *button;
   GtkWidget *inspector_window;
   gboolean was_debugging;
 
@@ -6130,30 +6133,31 @@ gtk_window_set_debugging (GdkDisplay *display,
 
       if (warn)
         {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          dialog = gtk_message_dialog_new (GTK_WINDOW (inspector_window),
-                                           GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_QUESTION,
-                                           GTK_BUTTONS_NONE,
-                                           _("Do you want to use GTK Inspector?"));
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+          dialog = GTK_WIDGET (gtk_message_window_new ());
+          gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+          gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (inspector_window));
+          gtk_message_window_set_detail (GTK_MESSAGE_WINDOW (dialog),
               _("GTK Inspector is an interactive debugger that lets you explore and "
                 "modify the internals of any GTK application. Using it may cause the "
                 "application to break or crash."));
 
-          area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
-          gtk_widget_show (check);
-          gtk_box_append (GTK_BOX (area), check);
+          gtk_message_window_add_extra_widget (GTK_MESSAGE_WINDOW (dialog), check);
           g_object_set_data (G_OBJECT (dialog), "check", check);
-          gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
-          gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
-          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), inspector_window);
+
+          button = gtk_button_new_with_mnemonic (_("_Cancel"));
+          g_signal_connect (button, "clicked", G_CALLBACK (warn_response), dialog);
+          gtk_message_window_add_button (GTK_MESSAGE_WINDOW (dialog), button);
+
+          button = gtk_button_new_with_mnemonic (_("_OK"));
+          g_object_set_data (G_OBJECT (button), "response", GINT_TO_POINTER (1));
+          g_signal_connect (button, "clicked", G_CALLBACK (warn_response), dialog);
+          gtk_message_window_add_button (GTK_MESSAGE_WINDOW (dialog), button);
+
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
 
-          gtk_widget_show (dialog);
-G_GNUC_END_IGNORE_DEPRECATIONS
+          gtk_window_present (GTK_WINDOW (dialog));
         }
 
       if (select)
