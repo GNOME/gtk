@@ -22,7 +22,7 @@
 #include "gtkalertdialog.h"
 
 #include "gtkbutton.h"
-#include "deprecated/gtkmessagedialog.h"
+#include "gtkmessagewindowprivate.h"
 #include <glib/gi18n-lib.h>
 
 /**
@@ -592,7 +592,7 @@ static void
 cancelled_cb (GCancellable *cancellable,
               GTask        *task)
 {
-  response_cb (task, GTK_RESPONSE_CLOSE);
+  response_cb (task, -1);
 }
 
 static void
@@ -600,6 +600,7 @@ response_cb (GTask *task,
              int    response)
 {
   GCancellable *cancellable;
+  GtkWindow *window;
 
   cancellable = g_task_get_cancellable (task);
 
@@ -613,7 +614,6 @@ response_cb (GTask *task,
   else
     {
       GtkAlertDialog *self = GTK_ALERT_DIALOG (g_task_get_source_object (task));
-
       g_task_return_int (task, self->cancel_return);
     }
 
@@ -621,47 +621,55 @@ response_cb (GTask *task,
 }
 
 static void
-dialog_response (GtkDialog *dialog,
-                 int        response,
+button_response (GtkButton *button,
                  GTask     *task)
 {
+  int response = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "response"));
+
   response_cb (task, response);
 }
 
-static GtkWidget *
-create_message_dialog (GtkAlertDialog *self,
-                       GtkWindow      *parent)
+static GtkMessageWindow *
+create_message_window (GtkAlertDialog *self,
+                       GtkWindow      *parent,
+                       GTask          *task)
 {
-  GtkWidget *window;
+  GtkMessageWindow *window;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  window = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
-                         "transient-for", parent,
-                         "destroy-with-parent", TRUE,
-                         "modal", self->modal,
-                         "text", self->message,
-                         "secondary-text", self->detail,
-                         NULL);
+  window = gtk_message_window_new ();
+  if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (window), parent);
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gtk_message_window_set_message (window, self->message);
+  gtk_message_window_set_detail (window, self->detail);
 
   if (self->buttons && self->buttons[0])
     {
       self->cancel_return = -1;
       for (int i = 0; self->buttons[i]; i++)
         {
-          gtk_dialog_add_button (GTK_DIALOG (window), self->buttons[i], i);
+          GtkWidget *button;
+
+          button = gtk_button_new_with_mnemonic (self->buttons[i]);
+          g_object_set_data (G_OBJECT (button), "response", GINT_TO_POINTER (i));
+          g_signal_connect (button, "clicked", G_CALLBACK (button_response), task);
+          gtk_message_window_add_button (window, button);
           if (self->default_button == i)
-            gtk_dialog_set_default_response (GTK_DIALOG (window), i);
+            gtk_window_set_default_widget (GTK_WINDOW (window), button);
           if (self->cancel_button == i)
             self->cancel_return = i;
         }
     }
   else
     {
-      gtk_dialog_add_button (GTK_DIALOG (window), _("_Close"), 0);
-      gtk_dialog_set_default_response (GTK_DIALOG (window), 0);
+      GtkWidget *button;
+
+      button = gtk_button_new_with_mnemonic (_("_Close"));
+      g_signal_connect (button, "clicked", G_CALLBACK (button_response), task);
+      gtk_message_window_add_button (window, button);
+      gtk_window_set_default_widget (GTK_WINDOW (window), button);
       self->cancel_return = 0;
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   return window;
 }
@@ -701,16 +709,15 @@ gtk_alert_dialog_choose (GtkAlertDialog      *self,
 
   g_return_if_fail (GTK_IS_ALERT_DIALOG (self));
 
-  window = create_message_dialog (self, parent);
-
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gtk_alert_dialog_choose);
-  g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
 
-  g_signal_connect (window, "response", G_CALLBACK (dialog_response), task);
+  window = GTK_WIDGET (create_message_window (self, parent, task));
+
+  g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
   gtk_window_present (GTK_WINDOW (window));
 }
