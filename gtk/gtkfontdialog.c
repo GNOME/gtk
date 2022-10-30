@@ -44,7 +44,7 @@
  * See [class@Gtk.FontDialogButton] for a convenient control
  * that uses `GtkFontDialog` and presents the results.
  *
- * `GtkFontDialog was added in GTK 4.10.
+ * Since: 4.10
  */
 
 /* {{{ GObject implementation */

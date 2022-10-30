@@ -57,6 +57,8 @@ static void     update_button_sensitivity
  *
  * `GtkFontDialogButton` has a single CSS node with name fontbutton which
  * contains a button node with the .font style class.
+ *
+ * Since: 4.10
  */
 
 /* {{{ GObject implementation */

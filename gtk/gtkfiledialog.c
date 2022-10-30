@@ -40,7 +40,7 @@
  * the corresponding finish function, for example
  * [method@Gtk.FileDialog.open_finish].
  *
- * `GtkFileDialog was added in GTK 4.10.
+ * Since: 4.10
  */
 
 /* {{{ GObject implementation */

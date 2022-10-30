@@ -38,7 +38,7 @@
  * If you don't need to wait for a button to be clicked, you can use
  * [method@Gtk.AlertDialog.show].
  *
- * `GtkAlertDialog was added in GTK 4.10.
+ * Since: 4.10
  */
 
 /* {{{ GObject implementation */
@@ -402,7 +402,7 @@ gtk_alert_dialog_set_message (GtkAlertDialog *self,
 
   if (g_strcmp0 (self->message, message) == 0)
     return;
- 
+
   new_message = g_strdup (message);
   g_free (self->message);
   self->message = new_message;

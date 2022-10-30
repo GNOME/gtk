@@ -43,7 +43,7 @@
  * See [class@Gtk.ColorDialogButton] for a convenient control
  * that uses `GtkColorDialog` and presents the results.
  *
- * `GtkColorDialog was added in GTK 4.10.
+ * Since: 4.10
  */
 /* {{{ GObject implementation */
 
