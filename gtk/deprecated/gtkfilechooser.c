@@ -84,6 +84,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * GtkFileChooser:action: (attributes org.gtk.Property.get=gtk_file_chooser_get_action org.gtk.Property.set=gtk_file_chooser_set_action)
    *
    * The type of operation that the file chooser is performing.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_enum ("action", NULL, NULL,
@@ -96,6 +98,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * GtkFileChooser:filter: (attributes org.gtk.Property.get=gtk_file_chooser_get_filter org.gtk.Property.set=gtk_file_chooser_set_filter)
    *
    * The current filter for selecting files that are displayed.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("filter", NULL, NULL,
@@ -106,6 +110,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * GtkFileChooser:select-multiple: (attributes org.gtk.Property.get=gtk_file_chooser_get_select_multiple org.gtk.Property.set=gtk_file_chooser_set_select_multiple)
    *
    * Whether to allow multiple files to be selected.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("select-multiple", NULL, NULL,
@@ -120,6 +126,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * The returned object should not be modified. It may
    * or may not be updated for later changes.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("filters", NULL, NULL,
@@ -134,6 +142,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * The returned object should not be modified. It may
    * or may not be updated for later changes.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("shortcut-folders", NULL, NULL,
@@ -145,6 +155,8 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * Whether a file chooser not in %GTK_FILE_CHOOSER_ACTION_OPEN mode
    * will offer the user to create new folders.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
    */
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("create-folders", NULL, NULL,
@@ -156,7 +168,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
  * gtk_file_chooser_error_quark:
  *
  * Registers an error quark for `GtkFileChooser` errors.
- * 
+ *
  * Returns: The error quark used for `GtkFileChooser` errors.
  **/
 GQuark
@@ -203,7 +215,7 @@ GtkFileChooserAction
 gtk_file_chooser_get_action (GtkFileChooser *chooser)
 {
   GtkFileChooserAction action;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
   g_object_get (chooser, "action", &action, NULL);
@@ -248,7 +260,7 @@ gboolean
 gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
 {
   gboolean select_multiple;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
   g_object_get (chooser, "select-multiple", &select_multiple, NULL);
@@ -291,7 +303,7 @@ gboolean
 gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
 {
   gboolean create_folders;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
   g_object_get (chooser, "create-folders", &create_folders, NULL);
@@ -326,7 +338,7 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
   g_return_if_fail (name != NULL);
-  
+
   GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_name (chooser, name);
 }
 
@@ -359,7 +371,7 @@ void
 gtk_file_chooser_select_all (GtkFileChooser *chooser)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  
+
   GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_all (chooser);
 }
 
@@ -368,7 +380,7 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
 {
 
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  
+
   GTK_FILE_CHOOSER_GET_IFACE (chooser)->unselect_all (chooser);
 }
 
@@ -619,6 +631,8 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser  *chooser,
  *
  * Note that the @chooser takes ownership of the filter if it is floating,
  * so you have to ref and sink it if you want to keep a reference.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 void
 gtk_file_chooser_add_filter (GtkFileChooser *chooser,
@@ -661,6 +675,8 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
  *
  * Returns: (transfer full): a `GListModel` containing the current set
  *   of user-selectable filters.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.FileDialog] instead
  */
 GListModel *
 gtk_file_chooser_get_filters (GtkFileChooser *chooser)
@@ -711,7 +727,7 @@ GtkFileFilter *
 gtk_file_chooser_get_filter (GtkFileChooser *chooser)
 {
   GtkFileFilter *filter;
-  
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   g_object_get (chooser, "filter", &filter, NULL);
