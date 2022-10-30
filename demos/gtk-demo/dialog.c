@@ -18,19 +18,23 @@ static void
 message_dialog_clicked (GtkButton *button,
                         gpointer   user_data)
 {
-  GtkWidget *dialog;
-  static int i = 1;
+  GtkAlertDialog *dialog;
+  GtkWindow *parent;
+  static int count = 1;
+  char *detail;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_OK_CANCEL,
-                                   "Test message");
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            ngettext ("Has been shown once", "Has been shown %d times", i), i);
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-  gtk_widget_show (dialog);
-  i++;
+  parent = GTK_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_WINDOW));
+
+  dialog = gtk_alert_dialog_new ("Test message");
+  detail = g_strdup_printf (ngettext ("Has been shown once", "Has been shown %d times", count), count);
+  gtk_alert_dialog_set_detail (dialog, detail);
+  g_free (detail);
+  gtk_alert_dialog_set_buttons (dialog, (const char *[]) {"_Cancel", "_OK", NULL });
+  gtk_alert_dialog_set_cancel_button (dialog, 0);
+  gtk_alert_dialog_set_default_button (dialog, 1);
+
+  gtk_alert_dialog_show (dialog, parent);
+  count++;
 }
 
 typedef struct {
