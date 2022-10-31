@@ -801,11 +801,11 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
                              GAsyncResult    *result,
                              GError         **error)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open, NULL);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_open, NULL);
-
-  return finish_file_op (self, task, error);
+  return finish_file_op (self, G_TASK (result), error);
 }
 
 /**
@@ -877,11 +877,11 @@ gtk_file_dialog_select_folder_finish (GtkFileDialog  *self,
                                       GAsyncResult   *result,
                                       GError        **error)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_folder, NULL);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_select_folder, NULL);
-
-  return finish_file_op (self, task, error);
+  return finish_file_op (self, G_TASK (result), error);
 }
 
 /**
@@ -958,11 +958,11 @@ gtk_file_dialog_save_finish (GtkFileDialog   *self,
                              GAsyncResult    *result,
                              GError         **error)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_save, NULL);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_save, NULL);
-
-  return finish_file_op (self, task, error);
+  return finish_file_op (self, G_TASK (result), error);
 }
 
 /**
@@ -1032,11 +1032,11 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
                                       GAsyncResult    *result,
                                       GError         **error)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open_multiple, NULL);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_open_multiple, NULL);
-
-  return finish_multiple_files_op (self, task, error);
+  return finish_multiple_files_op (self, G_TASK (result), error);
 }
 
 /**
@@ -1106,11 +1106,11 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
                                                 GAsyncResult    *result,
                                                 GError         **error)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_multiple_folders, NULL);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_file_dialog_select_multiple_folders, NULL);
-
-  return finish_multiple_files_op (self, task, error);
+  return finish_multiple_files_op (self, G_TASK (result), error);
 }
 
 /* }}} */

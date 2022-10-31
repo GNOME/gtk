@@ -691,6 +691,7 @@ gtk_font_dialog_choose_family_finish (GtkFontDialog  *self,
                                       GError        **error)
 {
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_family, NULL);
 
   return g_task_propagate_pointer (G_TASK (result), error);
@@ -769,6 +770,7 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
                                     GError        **error)
 {
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_face, NULL);
 
   return g_task_propagate_pointer (G_TASK (result), NULL);
@@ -845,6 +847,7 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
                                     GError        **error)
 {
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font, NULL);
 
   return g_task_propagate_pointer (G_TASK (result), NULL);
@@ -932,6 +935,7 @@ gtk_font_dialog_choose_font_and_features_finish (GtkFontDialog         *self,
   FontResult *font_result;
 
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font_and_features, FALSE);
 
   font_result = g_task_propagate_pointer (G_TASK (result), error);

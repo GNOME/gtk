@@ -487,6 +487,7 @@ gtk_color_dialog_choose_rgba_finish (GtkColorDialog  *self,
                                      GError         **error)
 {
   g_return_val_if_fail (GTK_IS_COLOR_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_color_dialog_choose_rgba, NULL);
 
   return g_task_propagate_pointer (G_TASK (result), error);

@@ -125,7 +125,7 @@ gtk_show_uri_full (GtkWindow           *parent,
   data->context = G_APP_LAUNCH_CONTEXT (context);
   data->uri = g_strdup (uri);
   data->task = g_task_new (parent, cancellable, callback, user_data);
-  g_task_set_source_tag (data->task, gtk_show_uri);
+  g_task_set_source_tag (data->task, gtk_show_uri_full);
 
   if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
     window_handle_exported (parent, NULL, data);
@@ -150,7 +150,7 @@ gtk_show_uri_full_finish (GtkWindow     *parent,
 {
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (g_task_is_valid (result, parent), FALSE);
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_show_uri, FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_show_uri_full, FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
