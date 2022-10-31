@@ -733,11 +733,11 @@ int
 gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
                                 GAsyncResult   *result)
 {
-  GTask *task = G_TASK (result);
+  g_return_val_if_fail (GTK_IS_ALERT_DIALOG (self), -1);
+  g_return_val_if_fail (g_task_is_valid (result, self), -1);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_alert_dialog_choose, -1);
 
-  g_return_val_if_fail (g_task_get_source_tag (task) == gtk_alert_dialog_choose, -1);
-
-  return (int) g_task_propagate_int (task, NULL);
+  return (int) g_task_propagate_int (G_TASK (result), NULL);
 }
 
 /**
