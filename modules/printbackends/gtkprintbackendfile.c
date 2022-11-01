@@ -103,6 +103,7 @@ static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter  
 
 G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND)
 
+G_MODULE_EXPORT
 void
 g_io_module_load (GIOModule *module)
 {
@@ -116,11 +117,13 @@ g_io_module_load (GIOModule *module)
                                   10);
 }
 
+G_MODULE_EXPORT
 void
 g_io_module_unload (GIOModule *module)
 {
 }
 
+G_MODULE_EXPORT
 char **
 g_io_module_query (void)
 {
