@@ -8,7 +8,6 @@ printbackends_args = [
   '-DGTK_COMPILATION',
   '-DGTK_DISABLE_DEPRECATION_WARNINGS',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-  '-D_GLIB_EXTERN=@0@'.format(visibility_define),
 ] + common_cflags
 
 cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))

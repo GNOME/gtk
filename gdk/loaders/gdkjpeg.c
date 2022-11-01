@@ -161,7 +161,8 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   jpeg_create_decompress (&info);
 
-  info.mem->max_memory_to_use = 300 * 1024 * 1024;
+  /* Limit to 1GB to avoid OOM with large images */
+  info.mem->max_memory_to_use = 1024 * 1024 * 1024;
 
   jpeg_mem_src (&info,
                 g_bytes_get_data (input_bytes, NULL),
