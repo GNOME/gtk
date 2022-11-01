@@ -311,5 +311,12 @@ get_language_name_for_tag (guint32 tag)
   lang = hb_ot_tag_to_language (tag);
   s = hb_language_to_string (lang);
 
+  if (strcmp (s, "und-fonipa") == 0)
+    return "International Phonetic Alphabet";
+  else if (strcmp (s, "und-fonnapa") == 0)
+    return "North-American Phonetic Alphabet";
+  else if (strcmp (s, "ro-md") == 0)
+    return "Moldavian";
+
   return get_language_name (pango_language_from_string (s));
 }
