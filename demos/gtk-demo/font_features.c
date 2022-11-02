@@ -855,11 +855,6 @@ update_script_combo (void)
   pair->lang_tag = 0;
   g_hash_table_add (tags, pair);
 
-  pair = g_new (TagPair, 1);
-  pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
-  pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
-  g_hash_table_add (tags, pair);
-
   if (hb_font)
     {
       hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
@@ -971,9 +966,6 @@ update_features (void)
 
   /* set feature presence checks from the font features */
 
-  if (gtk_drop_down_get_selected (GTK_DROP_DOWN (demo->script_lang)) == 0)
-    return;
-
   selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (demo->script_lang));
 
   if (selected->lang_tag == 0) /* None is selected */
@@ -1002,6 +994,8 @@ update_features (void)
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
 
+  g_print ("language %s\n", selected->langname);
+
   if (hb_font)
     {
       hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
@@ -1028,9 +1022,6 @@ update_features (void)
               char buf[5];
               hb_tag_to_string (features[j], buf);
               buf[4] = 0;
-#if 0
-              g_print ("%s present in %s\n", buf, i == 0 ? "GSUB" : "GPOS");
-#endif
 
               if (g_str_has_prefix (buf, "ss") || g_str_has_prefix (buf, "cv"))
                 {
@@ -1422,10 +1413,7 @@ instance_changed (GtkDropDown *combo)
   ikey.name = (char *) text;
   instance = g_hash_table_lookup (demo->instances, &ikey);
   if (!instance)
-    {
-      g_print ("did not find instance %s\n", text);
-      goto out;
-    }
+    goto out;
 
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
