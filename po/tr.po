@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-10-01 10:17+0000\n"
-"PO-Revision-Date: 2022-10-01 17:56+0300\n"
+"POT-Creation-Date: 2022-11-01 01:10+0000\n"
+"PO-Revision-Date: 2022-11-02 09:05+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -537,12 +537,12 @@ msgstr "Askıya Al"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG resim dosyası yorumlanırken hata (%s)"
 
-#: gdk/loaders/gdkjpeg.c:192
+#: gdk/loaders/gdkjpeg.c:193
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Desteklenmeyen JPEG renk uzayı (%d)"
 
-#: gdk/loaders/gdkjpeg.c:201 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:202 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "%ux%u resim boyutu için yeterli bellek yok"
@@ -576,7 +576,7 @@ msgid "Reading data failed at row %d"
 msgstr "Veri okunurken %d. satırda hata"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:335
+#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:336
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
@@ -940,107 +940,232 @@ msgstr "Bozuk veri: URL"
 msgid "Could not unescape string"
 msgstr "Dizge unescape yapılamadı"
 
-#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
+#: gtk/deprecated/gtkappchooserbutton.c:323
+msgid "Other application…"
+msgstr "Diğer Uygulama…"
+
+#: gtk/deprecated/gtkappchooserdialog.c:210
+#: gtk/deprecated/gtkappchooserdialog.c:261 gtk/ui/gtkappchooserdialog.ui:4
+msgid "Select Application"
+msgstr "Uygulama Seç"
+
+#. Translators: %s is a filename
+#: gtk/deprecated/gtkappchooserdialog.c:217
+#, c-format
+msgid "Opening “%s”."
+msgstr "“%s” açılıyor."
+
+#: gtk/deprecated/gtkappchooserdialog.c:218
+#, c-format
+msgid "No applications found for “%s”"
+msgstr "“%s” için hiçbir uygulama bulunamadı"
+
+#. Translators: %s is a file type description
+#: gtk/deprecated/gtkappchooserdialog.c:223
+#, c-format
+msgid "Opening “%s” files."
+msgstr "“%s” dosyaları açılıyor."
+
+#: gtk/deprecated/gtkappchooserdialog.c:225
+#, c-format
+msgid "No applications found for “%s” files"
+msgstr "“%s” dosyaları için hiçbir uygulama bulunamadı"
+
+#: gtk/deprecated/gtkappchooserdialog.c:427
+msgid "Failed to start GNOME Software"
+msgstr "GNOME Yazılımlar başlatılamadı"
+
+#: gtk/deprecated/gtkappchooserwidget.c:525
+msgid "Default Application"
+msgstr "Öntanımlı Uygulama"
+
+#: gtk/deprecated/gtkappchooserwidget.c:575
+#, c-format
+msgid "No applications found for “%s”."
+msgstr "“%s” için hiçbir uygulama bulunamadı."
+
+#: gtk/deprecated/gtkappchooserwidget.c:658
+msgid "Recommended Applications"
+msgstr "Önerilen Uygulamalar"
+
+#: gtk/deprecated/gtkappchooserwidget.c:673
+msgid "Related Applications"
+msgstr "İlgili Uygulamalar"
+
+#: gtk/deprecated/gtkappchooserwidget.c:687
+msgid "Other Applications"
+msgstr "Diğer Uygulamalar"
+
+#. This label is displayed in a treeview cell displaying
+#. * a disabled accelerator key combination.
+#.
+#: gtk/deprecated/gtkcellrendereraccel.c:294
+msgctxt "Accelerator"
+msgid "Disabled"
+msgstr "Kapalı"
+
+#. This label is displayed in a treeview cell displaying
+#. * an accelerator key combination that is not valid according
+#. * to gtk_accelerator_valid().
+#.
+#: gtk/deprecated/gtkcellrendereraccel.c:304
+msgctxt "Accelerator"
+msgid "Invalid"
+msgstr "Geçersiz"
+
+#. This label is displayed in a treeview cell displaying an accelerator
+#. * when the cell is clicked to change the acelerator.
+#.
+#: gtk/deprecated/gtkcellrendereraccel.c:436
+#: gtk/deprecated/gtkcellrendereraccel.c:729
+msgid "New accelerator…"
+msgstr "Yeni hızlandırıcı…"
+
+#: gtk/deprecated/gtkcellrendererprogress.c:132
+#: gtk/deprecated/gtkcellrendererprogress.c:322
+#: gtk/deprecated/gtkcellrendererprogress.c:352
+#, c-format
+msgctxt "progress bar label"
+msgid "%d %%"
+msgstr "%% %d"
+
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/gtkcolordialog.c:410
+msgid "Pick a Color"
+msgstr "Renk Seç"
+
+#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:312
+#: gtk/gtkcolordialogbutton.c:299
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d, Alfa %%%d"
+
+#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:318
+#: gtk/gtkcolordialogbutton.c:305
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%"
+msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d"
+
+#: gtk/deprecated/gtkfontbutton.c:396
+msgid "Sans 12"
+msgstr "Sans 12"
+
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/gtkfontdialog.c:595
+msgid "Pick a Font"
+msgstr "Yazı Tipi Seç"
+
+#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3814
+#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:170
+msgid "Font"
+msgstr "Yazı Tipi"
+
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:608
+msgctxt "font"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: gtk/gtkaboutdialog.c:126 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "Lisans"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:127
 msgid "Custom License"
 msgstr "Özel Lisans"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU General Public License, version 2 or later"
 msgstr "GNU Genel Kamu Lisansı, sürüm 2 ya da sonrası"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 3 or later"
 msgstr "GNU Genel Kamu Lisansı, sürüm 3 ya da sonrası"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "Kısıtlı GNU Genel Kamu Lisansı, sürüm 2.1 ya da sonrası"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "Kısıtlı GNU Genel Kamu Lisansı, sürüm 3 ya da sonrası"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:132
 msgid "BSD 2-Clause License"
 msgstr "BSD 2-Clause Lisans"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:133
 msgid "The MIT License (MIT)"
 msgstr "MIT Lisans (MIT)"
 
-#: gtk/gtkaboutdialog.c:132
+#: gtk/gtkaboutdialog.c:134
 msgid "Artistic License 2.0"
 msgstr "Sanatsal Lisans 2.0"
 
-#: gtk/gtkaboutdialog.c:133
+#: gtk/gtkaboutdialog.c:135
 msgid "GNU General Public License, version 2 only"
 msgstr "GNU Genel Kamu Lisansı, yalnızca sürüm 2"
 
-#: gtk/gtkaboutdialog.c:134
+#: gtk/gtkaboutdialog.c:136
 msgid "GNU General Public License, version 3 only"
 msgstr "GNU Genel Kamu Lisansı, yalnızca sürüm 3"
 
-#: gtk/gtkaboutdialog.c:135
+#: gtk/gtkaboutdialog.c:137
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "GNU Kısıtlı Genel Kamu Lisansı, yalnızca sürüm 2.1"
 
-#: gtk/gtkaboutdialog.c:136
+#: gtk/gtkaboutdialog.c:138
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Kısıtlı Genel Kamu Lisansı, yalnızca sürüm 3"
 
-#: gtk/gtkaboutdialog.c:137
+#: gtk/gtkaboutdialog.c:139
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero Genel Kamu Lisansı, sürüm 3 ya da sonrası"
 
-#: gtk/gtkaboutdialog.c:138
+#: gtk/gtkaboutdialog.c:140
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero Genel Kamu Lisansı, yalnızca sürüm 3"
 
-#: gtk/gtkaboutdialog.c:139
+#: gtk/gtkaboutdialog.c:141
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause Lisansı"
 
-#: gtk/gtkaboutdialog.c:140
+#: gtk/gtkaboutdialog.c:142
 msgid "Apache License, Version 2.0"
 msgstr "Apache Lisansı, Sürüm 2.0"
 
-#: gtk/gtkaboutdialog.c:141
+#: gtk/gtkaboutdialog.c:143
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Kamu Lisansı 2.0"
 
-#: gtk/gtkaboutdialog.c:937
+#: gtk/gtkaboutdialog.c:960
 msgid "Website"
 msgstr "Web sitesi"
 
-#: gtk/gtkaboutdialog.c:973 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:996 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s Hakkında"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2093
 msgid "Created by"
 msgstr "Oluşturan"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2096
 msgid "Documented by"
 msgstr "Belgelendiren"
 
-#: gtk/gtkaboutdialog.c:2087
+#: gtk/gtkaboutdialog.c:2106
 msgid "Translated by"
 msgstr "Çeviren"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2111
 msgid "Design by"
 msgstr "Tasarlayan"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2257
+#: gtk/gtkaboutdialog.c:2276
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1524,61 +1649,10 @@ msgctxt "accessibility"
 msgid "window"
 msgstr "pencere"
 
-#: gtk/gtkappchooserbutton.c:317
-msgid "Other application…"
-msgstr "Diğer Uygulama…"
-
-#: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:255
-#: gtk/ui/gtkappchooserdialog.ui:4
-msgid "Select Application"
-msgstr "Uygulama Seç"
-
-#. Translators: %s is a filename
-#: gtk/gtkappchooserdialog.c:211
-#, c-format
-msgid "Opening “%s”."
-msgstr "“%s” açılıyor."
-
-#: gtk/gtkappchooserdialog.c:212
-#, c-format
-msgid "No applications found for “%s”"
-msgstr "“%s” için hiçbir uygulama bulunamadı"
-
-#. Translators: %s is a file type description
-#: gtk/gtkappchooserdialog.c:217
-#, c-format
-msgid "Opening “%s” files."
-msgstr "“%s” dosyaları açılıyor."
-
-#: gtk/gtkappchooserdialog.c:219
-#, c-format
-msgid "No applications found for “%s” files"
-msgstr "“%s” dosyaları için hiçbir uygulama bulunamadı"
-
-#: gtk/gtkappchooserdialog.c:421
-msgid "Failed to start GNOME Software"
-msgstr "GNOME Yazılımlar başlatılamadı"
-
-#: gtk/gtkappchooserwidget.c:519
-msgid "Default Application"
-msgstr "Öntanımlı Uygulama"
-
-#: gtk/gtkappchooserwidget.c:569
-#, c-format
-msgid "No applications found for “%s”."
-msgstr "“%s” için hiçbir uygulama bulunamadı."
-
-#: gtk/gtkappchooserwidget.c:652
-msgid "Recommended Applications"
-msgstr "Önerilen Uygulamalar"
-
-#: gtk/gtkappchooserwidget.c:667
-msgid "Related Applications"
-msgstr "İlgili Uygulamalar"
-
-#: gtk/gtkappchooserwidget.c:681
-msgid "Other Applications"
-msgstr "Diğer Uygulamalar"
+#: gtk/gtkalertdialog.c:660 gtk/gtkcustompaperunixdialog.c:328
+#: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
+msgid "_Close"
+msgstr "_Kapat"
 
 #. Translators: This is the 'reason' given when inhibiting
 #. * suspend or screen locking, and the caller hasn't specified
@@ -1588,12 +1662,12 @@ msgstr "Diğer Uygulamalar"
 msgid "Reason not specified"
 msgstr "Neden belirtilmedi"
 
-#: gtk/gtkbookmarksmanager.c:51
+#: gtk/gtkbookmarksmanager.c:53
 #, c-format
 msgid "%s does not exist in the bookmarks list"
 msgstr "%s yer imleri listesinde bulunmuyor"
 
-#: gtk/gtkbookmarksmanager.c:412
+#: gtk/gtkbookmarksmanager.c:414
 #, c-format
 msgid "%s already exists in the bookmarks list"
 msgstr "%s zaten yer imleri listesinde bulunuyor"
@@ -1676,287 +1750,242 @@ msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
-#. This label is displayed in a treeview cell displaying
-#. * a disabled accelerator key combination.
-#.
-#: gtk/gtkcellrendereraccel.c:287
-msgctxt "Accelerator"
-msgid "Disabled"
-msgstr "Kapalı"
-
-#. This label is displayed in a treeview cell displaying
-#. * an accelerator key combination that is not valid according
-#. * to gtk_accelerator_valid().
-#.
-#: gtk/gtkcellrendereraccel.c:297
-msgctxt "Accelerator"
-msgid "Invalid"
-msgstr "Geçersiz"
-
-#. This label is displayed in a treeview cell displaying an accelerator
-#. * when the cell is clicked to change the acelerator.
-#.
-#: gtk/gtkcellrendereraccel.c:429 gtk/gtkcellrendereraccel.c:722
-msgid "New accelerator…"
-msgstr "Yeni hızlandırıcı…"
-
-#: gtk/gtkcellrendererprogress.c:128 gtk/gtkcellrendererprogress.c:318
-#: gtk/gtkcellrendererprogress.c:348
-#, c-format
-msgctxt "progress bar label"
-msgid "%d %%"
-msgstr "%% %d"
-
-#: gtk/gtkcolorbutton.c:179 gtk/gtkcolorbutton.c:307
-msgid "Pick a Color"
-msgstr "Renk Seç"
-
-#: gtk/gtkcolorbutton.c:496 gtk/gtkcolorchooserwidget.c:308
-#, c-format
-msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d, Alfa %%%d"
-
-#: gtk/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:314
-#, c-format
-msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d"
-
-#: gtk/gtkcolorchooserwidget.c:371
+#: gtk/gtkcolorchooserwidget.c:375
 #, c-format
 msgid "Color: %s"
 msgstr "Renk: %s"
 
-#: gtk/gtkcolorchooserwidget.c:436
+#: gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "Çok Açık Mavi"
 
-#: gtk/gtkcolorchooserwidget.c:437
+#: gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "Açık Mavi"
 
-#: gtk/gtkcolorchooserwidget.c:438
+#: gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Mavi"
 
-#: gtk/gtkcolorchooserwidget.c:439
+#: gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "Koyu Mavi"
 
-#: gtk/gtkcolorchooserwidget.c:440
+#: gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "Çok Koyu Mavi"
 
-#: gtk/gtkcolorchooserwidget.c:441
+#: gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "Çok Açık Yeşil"
 
-#: gtk/gtkcolorchooserwidget.c:442
+#: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "Açık Yeşil"
 
-#: gtk/gtkcolorchooserwidget.c:443
+#: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Green"
 msgstr "Yeşil"
 
-#: gtk/gtkcolorchooserwidget.c:444
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "Koyu Yeşil"
 
-#: gtk/gtkcolorchooserwidget.c:445
+#: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "Çok Koyu Yeşil"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "Çok Açık Sarı"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "Açık Sarı"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "Sarı"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "Koyu Sarı"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "Çok Koyu Sarı"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "Çok Açık Turuncu"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Açık Turuncu"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Turuncu"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Koyu Turuncu"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "Çok Koyu Turuncu"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "Çok Açık Kırmızı"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "Açık Kırmızı"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Red"
 msgstr "Kırmızı"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "Koyu Kırmızı"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "Çok Koyu Kırmızı"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "Çok Açık Mor"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "Açık Mor"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Purple"
 msgstr "Mor"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "Koyu Mor"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "Çok Koyu Mor"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "Çok Açık Kahverengi"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Açık Kahverengi"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Kahverengi"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "Koyu Kahverengi"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "Çok Koyu Kahverengi"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "White"
 msgstr "Beyaz"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "Açık Gri 1"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "Açık Gri 2"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "Açık Gri 3"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "Açık Gri 4"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "Koyu Gri 1"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "Koyu Gri 2"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "Koyu Gri 3"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "Koyu Gri 4"
 
-#: gtk/gtkcolorchooserwidget.c:480
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Black"
 msgstr "Siyah"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:552
+#: gtk/gtkcolorchooserwidget.c:556
 msgid "Custom"
 msgstr "Özel"
 
-#: gtk/gtkcolorchooserwidget.c:585
+#: gtk/gtkcolorchooserwidget.c:589
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Özel renk %d: %s"
@@ -1975,70 +2004,65 @@ msgstr "Özelleştir"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: gtk/gtkcustompaperunixdialog.c:318
+#: gtk/gtkcustompaperunixdialog.c:297
 msgid "Margins from Printer…"
 msgstr "Yazıcıdan Gelen Kenar Boşlukları…"
 
-#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
-#: gtk/ui/gtkassistant.ui:40
-msgid "_Close"
-msgstr "_Kapat"
-
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:3016
+#: gtk/gtkcustompaperunixdialog.c:383 gtk/gtkprintunixdialog.c:3042
 msgid "Manage Custom Sizes"
 msgstr "Özel Boyutları Yönet"
 
-#: gtk/gtkcustompaperunixdialog.c:466 gtk/gtkpagesetupunixdialog.c:720
+#: gtk/gtkcustompaperunixdialog.c:447 gtk/gtkpagesetupunixdialog.c:721
 msgid "inch"
 msgstr "inç"
 
-#: gtk/gtkcustompaperunixdialog.c:468 gtk/gtkpagesetupunixdialog.c:718
+#: gtk/gtkcustompaperunixdialog.c:449 gtk/gtkpagesetupunixdialog.c:719
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:625
+#: gtk/gtkcustompaperunixdialog.c:606
 #, c-format
 msgid "Custom Size %d"
 msgstr "Özel Boyut %d"
 
-#: gtk/gtkcustompaperunixdialog.c:939
+#: gtk/gtkcustompaperunixdialog.c:923
 msgid "_Width:"
 msgstr "_Genişlik:"
 
-#: gtk/gtkcustompaperunixdialog.c:950
+#: gtk/gtkcustompaperunixdialog.c:934
 msgid "_Height:"
 msgstr "_Yükseklik:"
 
-#: gtk/gtkcustompaperunixdialog.c:961
+#: gtk/gtkcustompaperunixdialog.c:945
 msgid "Paper Size"
 msgstr "Kağıt Boyutu"
 
-#: gtk/gtkcustompaperunixdialog.c:970
+#: gtk/gtkcustompaperunixdialog.c:954
 msgid "_Top:"
 msgstr "_Üst:"
 
-#: gtk/gtkcustompaperunixdialog.c:981
+#: gtk/gtkcustompaperunixdialog.c:965
 msgid "_Bottom:"
 msgstr "_Alt:"
 
-#: gtk/gtkcustompaperunixdialog.c:992
+#: gtk/gtkcustompaperunixdialog.c:976
 msgid "_Left:"
 msgstr "_Sol:"
 
-#: gtk/gtkcustompaperunixdialog.c:1003
+#: gtk/gtkcustompaperunixdialog.c:987
 msgid "_Right:"
 msgstr "_Sağ:"
 
-#: gtk/gtkcustompaperunixdialog.c:1039
+#: gtk/gtkcustompaperunixdialog.c:1023
 msgid "Paper Margins"
 msgstr "Kağıt Boşlukları"
 
-#: gtk/gtkentry.c:3665
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Emoji Ekle"
 
-#: gtk/gtkfilechooserdialog.c:549
+#: gtk/gtkfilechooserdialog.c:553
 msgid "_Name"
 msgstr "_Ad"
 
@@ -2098,31 +2122,29 @@ msgstr "Bu adda klasör zaten var"
 msgid "A file with that name already exists"
 msgstr "Bu adda dosya zaten var"
 
-#: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
-#: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
-#: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
-#: gtk/gtkprintbackend.c:637 gtk/gtkprinteroptionwidget.c:721
-#: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6116 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:593
+#: gtk/gtkfilechooserwidget.c:1158 gtk/gtkfilechooserwidget.c:4958
+#: gtk/gtkfiledialog.c:681 gtk/gtkmessagedialog.c:170
+#: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
+#: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:638
+#: gtk/gtkprintunixdialog.c:657 gtk/gtkprintunixdialog.c:814
+#: gtk/gtkwindow.c:6150 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_İptal Et"
 
-#: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
-#: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
-#: gtk/gtkplacesview.c:1659
+#: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:587
+#: gtk/gtkfiledialog.c:663 gtk/gtkplacessidebar.c:3145
+#: gtk/gtkplacessidebar.c:3230 gtk/gtkplacesview.c:1645
 msgid "_Open"
 msgstr "_Aç"
 
-#: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1724
+#: gtk/gtkfilechoosernative.c:587 gtk/gtkfiledialog.c:668
 msgid "_Save"
 msgstr "_Kaydet"
 
-#: gtk/gtkfilechoosernativequartz.c:339 gtk/ui/gtkfilechooserwidget.ui:346
+#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:521
 msgid "Select which types of files are shown"
 msgstr "Hangi türdeki dosyaların gösterileceğini seç"
 
@@ -2130,387 +2152,394 @@ msgstr "Hangi türdeki dosyaların gösterileceğini seç"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:362
+#: gtk/gtkfilechooserutils.c:364
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s üzerindeki %1$s"
 
-#: gtk/gtkfilechooserwidget.c:319
+#: gtk/gtkfilechooserwidget.c:337
 msgid "Type name of new folder"
 msgstr "Yeni klasörün adını gir"
 
-#: gtk/gtkfilechooserwidget.c:724
+#: gtk/gtkfilechooserwidget.c:700
 msgid "The folder could not be created"
 msgstr "Klasör oluşturulamadı"
 
-#: gtk/gtkfilechooserwidget.c:737
+#: gtk/gtkfilechooserwidget.c:713
 msgid "You need to choose a valid filename."
 msgstr "Geçerli dosya adı seçmeniz gerekiyor."
 
-#: gtk/gtkfilechooserwidget.c:740
+#: gtk/gtkfilechooserwidget.c:716
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s klasör olmadığından altında dosya oluşturulamıyor"
 
-#: gtk/gtkfilechooserwidget.c:750
+#: gtk/gtkfilechooserwidget.c:726
 msgid "Cannot create file as the filename is too long"
 msgstr "Dosya adı çok uzun olduğundan oluşturulamıyor"
 
-#: gtk/gtkfilechooserwidget.c:751
+#: gtk/gtkfilechooserwidget.c:727
 msgid "Try using a shorter name."
 msgstr "Daha kısa ad kullanmayı deneyin."
 
-#: gtk/gtkfilechooserwidget.c:761
+#: gtk/gtkfilechooserwidget.c:737
 msgid "You may only select folders"
 msgstr "Yalnızca klasörleri seçebilirsiniz"
 
-#: gtk/gtkfilechooserwidget.c:762
+#: gtk/gtkfilechooserwidget.c:738
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Seçtiğiniz öge klasör değil, başka öge kullanmayı deneyin."
 
-#: gtk/gtkfilechooserwidget.c:770
+#: gtk/gtkfilechooserwidget.c:746
 msgid "Invalid file name"
 msgstr "Geçersiz dosya adı"
 
-#: gtk/gtkfilechooserwidget.c:779
+#: gtk/gtkfilechooserwidget.c:755
 msgid "The folder contents could not be displayed"
 msgstr "Klasör içeriği gösterilemiyor"
 
-#: gtk/gtkfilechooserwidget.c:787
+#: gtk/gtkfilechooserwidget.c:763
 msgid "The file could not be deleted"
 msgstr "Dosya silinemedi"
 
-#: gtk/gtkfilechooserwidget.c:795
+#: gtk/gtkfilechooserwidget.c:771
 msgid "The file could not be moved to the Trash"
 msgstr "Dosya çöpe taşınamadı"
 
-#: gtk/gtkfilechooserwidget.c:1206
+#: gtk/gtkfilechooserwidget.c:1156
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "“%s”i kalıcı olarak silmek istediğinizden emin misiniz?"
 
-#: gtk/gtkfilechooserwidget.c:1209
-#, c-format
+#: gtk/gtkfilechooserwidget.c:1157
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
-#: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6049 gtk/gtktextview.c:8966
+#: gtk/gtkfilechooserwidget.c:1158 gtk/gtkfilechooserwidget.c:1754
+#: gtk/gtklabel.c:5655 gtk/gtktext.c:6060 gtk/gtktextview.c:8965
 msgid "_Delete"
 msgstr "_Sil"
 
-#: gtk/gtkfilechooserwidget.c:1334
+#: gtk/gtkfilechooserwidget.c:1271
 msgid "The file could not be renamed"
 msgstr "Dosya yeniden adlandırılamadı"
 
-#: gtk/gtkfilechooserwidget.c:1594
+#: gtk/gtkfilechooserwidget.c:1531
 msgid "Could not select file"
 msgstr "Dosya seçilemedi"
 
-#: gtk/gtkfilechooserwidget.c:1807
+#: gtk/gtkfilechooserwidget.c:1734
 msgid "_Visit File"
 msgstr "Dosyayı _Ziyaret Et"
 
-#: gtk/gtkfilechooserwidget.c:1811
+#: gtk/gtkfilechooserwidget.c:1738
 msgid "_Open With File Manager"
 msgstr "Dosya Yöneticisiyle _Aç"
 
-#: gtk/gtkfilechooserwidget.c:1815
+#: gtk/gtkfilechooserwidget.c:1742
 msgid "_Copy Location"
 msgstr "Konumu _Kopyala"
 
-#: gtk/gtkfilechooserwidget.c:1819
+#: gtk/gtkfilechooserwidget.c:1746
 msgid "_Add to Bookmarks"
 msgstr "Yer İmlerine _Ekle"
 
-#: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3267 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkfilechooserwidget.c:1750 gtk/gtkplacessidebar.c:2309
+#: gtk/gtkplacessidebar.c:3266 gtk/ui/gtkfilechooserwidget.ui:640
 msgid "_Rename"
 msgstr "_Yeniden Adlandır"
 
-#: gtk/gtkfilechooserwidget.c:1831
+#: gtk/gtkfilechooserwidget.c:1758
 msgid "_Move to Trash"
 msgstr "_Çöpe Taşı"
 
-#: gtk/gtkfilechooserwidget.c:1840
+#: gtk/gtkfilechooserwidget.c:1767
 msgid "Show _Hidden Files"
 msgstr "_Gizli Dosyaları Göster"
 
-#: gtk/gtkfilechooserwidget.c:1844
+#: gtk/gtkfilechooserwidget.c:1771
 msgid "Show _Size Column"
 msgstr "_Boyut Sütununu Göster"
 
-#: gtk/gtkfilechooserwidget.c:1848
+#: gtk/gtkfilechooserwidget.c:1775
 msgid "Show T_ype Column"
 msgstr "T_ür Sütununu Göster"
 
-#: gtk/gtkfilechooserwidget.c:1852
+#: gtk/gtkfilechooserwidget.c:1779
 msgid "Show _Time"
 msgstr "_Saati Göster"
 
-#: gtk/gtkfilechooserwidget.c:1856
+#: gtk/gtkfilechooserwidget.c:1783
 msgid "Sort _Folders Before Files"
 msgstr "_Klasörleri Dosyalardan Önce Sırala"
 
+#: gtk/gtkfilechooserwidget.c:1913 gtk/gtkfilechooserwidget.c:1949
+#: gtk/gtkfilechooserwidget.c:3857
+msgid "Unknown"
+msgstr "Bilinmeyen"
+
+#: gtk/gtkfilechooserwidget.c:2007 gtk/gtkplacessidebar.c:1026
+msgid "Home"
+msgstr "Başlangıç"
+
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:114
+#: gtk/gtkfilechooserwidget.c:2183 gtk/inspector/css-node-tree.ui:76
+#: gtk/ui/gtkfilechooserwidget.ui:213 gtk/ui/gtkprintunixdialog.ui:114
 msgid "Location"
 msgstr "Konum"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2363
+#: gtk/gtkfilechooserwidget.c:2290
 msgid "_Name:"
 msgstr "_Ad:"
 
-#: gtk/gtkfilechooserwidget.c:2897 gtk/gtkfilechooserwidget.c:2911
+#: gtk/gtkfilechooserwidget.c:2833 gtk/gtkfilechooserwidget.c:2847
 #, c-format
 msgid "Searching in %s"
 msgstr "%s içinde arama"
 
-#: gtk/gtkfilechooserwidget.c:2917
+#: gtk/gtkfilechooserwidget.c:2853
 msgid "Searching"
 msgstr "Arama"
 
-#: gtk/gtkfilechooserwidget.c:2923
+#: gtk/gtkfilechooserwidget.c:2859
 msgid "Enter location or URL"
 msgstr "Konum ya da URL gir"
 
-#: gtk/gtkfilechooserwidget.c:3813 gtk/gtkfilechooserwidget.c:6637
-#: gtk/ui/gtkfilechooserwidget.ui:226
+#: gtk/gtkfilechooserwidget.c:3420 gtk/gtkfilechooserwidget.c:5743
+#: gtk/ui/gtkfilechooserwidget.ui:358
 msgid "Modified"
 msgstr "Değiştirilmiş"
 
-#: gtk/gtkfilechooserwidget.c:4072
+#: gtk/gtkfilechooserwidget.c:3601
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s içerikleri okunamadı"
 
-#: gtk/gtkfilechooserwidget.c:4076
+#: gtk/gtkfilechooserwidget.c:3605
 msgid "Could not read the contents of the folder"
 msgstr "Klasörün içeriği okunamadı"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:4259
+#: gtk/gtkfilechooserwidget.c:3752 gtk/gtkfilechooserwidget.c:3795
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4218 gtk/gtkfilechooserwidget.c:4261
+#: gtk/gtkfilechooserwidget.c:3754 gtk/gtkfilechooserwidget.c:3797
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4222
+#: gtk/gtkfilechooserwidget.c:3758
 msgid "Yesterday"
 msgstr "Dün"
 
-#: gtk/gtkfilechooserwidget.c:4230
+#: gtk/gtkfilechooserwidget.c:3766
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4234
+#: gtk/gtkfilechooserwidget.c:3770
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfilechooserwidget.c:4331
+#: gtk/gtkfilechooserwidget.c:3812 gtk/gtkfilechooserwidget.c:3820
 msgid "Program"
 msgstr "Program"
 
-#: gtk/gtkfilechooserwidget.c:4324
+#: gtk/gtkfilechooserwidget.c:3813
 msgid "Audio"
 msgstr "Ses"
 
-#: gtk/gtkfilechooserwidget.c:4325 gtk/gtkfontbutton.c:596
-#: gtk/inspector/visual.ui:170
-msgid "Font"
-msgstr "Yazı Tipi"
-
-#: gtk/gtkfilechooserwidget.c:4326
+#: gtk/gtkfilechooserwidget.c:3815
 msgid "Image"
 msgstr "Görüntü"
 
-#: gtk/gtkfilechooserwidget.c:4327
+#: gtk/gtkfilechooserwidget.c:3816
 msgid "Archive"
 msgstr "Arşiv"
 
-#: gtk/gtkfilechooserwidget.c:4328
+#: gtk/gtkfilechooserwidget.c:3817
 msgid "Markup"
 msgstr "Biçimleme (Markup)"
 
-#: gtk/gtkfilechooserwidget.c:4329 gtk/gtkfilechooserwidget.c:4330
+#: gtk/gtkfilechooserwidget.c:3818 gtk/gtkfilechooserwidget.c:3819
 msgid "Text"
 msgstr "Metin"
 
-#: gtk/gtkfilechooserwidget.c:4332
+#: gtk/gtkfilechooserwidget.c:3821
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:4333
+#: gtk/gtkfilechooserwidget.c:3822
 msgid "Contacts"
 msgstr "Kişiler"
 
-#: gtk/gtkfilechooserwidget.c:4334
+#: gtk/gtkfilechooserwidget.c:3823
 msgid "Calendar"
 msgstr "Takvim"
 
-#: gtk/gtkfilechooserwidget.c:4335
+#: gtk/gtkfilechooserwidget.c:3824
 msgid "Document"
 msgstr "Belge"
 
-#: gtk/gtkfilechooserwidget.c:4336
+#: gtk/gtkfilechooserwidget.c:3825
 msgid "Presentation"
 msgstr "Sunum"
 
-#: gtk/gtkfilechooserwidget.c:4337
+#: gtk/gtkfilechooserwidget.c:3826
 msgid "Spreadsheet"
 msgstr "Çizelge"
 
-#: gtk/gtkfilechooserwidget.c:4368 gtk/gtkfilechooserwidget.c:4561
-msgid "Unknown"
-msgstr "Bilinmeyen"
-
-#: gtk/gtkfilechooserwidget.c:4600 gtk/gtkplacessidebar.c:1027
-msgid "Home"
-msgstr "Ev"
-
-#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:642
+#: gtk/gtkfilechooserwidget.c:4950 gtk/gtkprintunixdialog.c:648
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr ""
 "“%s” adında dosya zaten var.  Var olan dosya ile değiştirmek ister misiniz?"
 
-#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:646
+#: gtk/gtkfilechooserwidget.c:4952 gtk/gtkprintunixdialog.c:652
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
-"“%s” adında dosya zaten var.  Değiştirilerek dosya içeriğinin üzerine "
+"“%s” içinde dosya zaten var.  Değiştirilerek dosya içeriğinin üzerine "
 "yazılacak."
 
-#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:654
+#: gtk/gtkfilechooserwidget.c:4958 gtk/gtkprintunixdialog.c:660
 msgid "_Replace"
 msgstr "_Yerine Koy"
 
-#: gtk/gtkfilechooserwidget.c:5962
+#: gtk/gtkfilechooserwidget.c:5113
 msgid "You do not have access to the specified folder."
 msgstr "Belirtilen klasöre erişiminiz yok."
 
-#: gtk/gtkfilechooserwidget.c:6566
+#: gtk/gtkfilechooserwidget.c:5690
 msgid "Could not send the search request"
 msgstr "Arama isteği gönderilemedi"
 
-#: gtk/gtkfilechooserwidget.c:6877
+#: gtk/gtkfilechooserwidget.c:5966
 msgid "Accessed"
 msgstr "Erişildi"
 
-#: gtk/gtkfontbutton.c:395
-msgid "Sans 12"
-msgstr "Sans 12"
+#: gtk/gtkfiledialog.c:664
+msgid "Pick Files"
+msgstr "Dosya Seç"
 
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:620
-msgid "Pick a Font"
-msgstr "Yazı Tipi Seç"
+#: gtk/gtkfiledialog.c:664
+msgid "Pick a File"
+msgstr "Dosya Seç"
 
-#: gtk/gtkfontbutton.c:1323
-msgctxt "font"
-msgid "None"
-msgstr "Hiçbiri"
+#: gtk/gtkfiledialog.c:669
+msgid "Save a File"
+msgstr "Dosya Kaydet"
 
-#: gtk/gtkfontchooserdialog.c:184
+#: gtk/gtkfiledialog.c:673 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
+msgid "_Select"
+msgstr "_Seç"
+
+#: gtk/gtkfiledialog.c:674
+msgid "Select Folders"
+msgstr "Klasör Seç"
+
+#: gtk/gtkfiledialog.c:674
+msgid "Select a Folder"
+msgstr "Klasör Seç"
+
+#: gtk/gtkfontchooserdialog.c:188
 msgid "Change Font Features"
 msgstr "Yazı Tipi Özelliklerini Değiştir"
 
-#: gtk/gtkfontchooserwidget.c:1534
+#: gtk/gtkfontchooserwidget.c:1546
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Genişlik"
 
-#: gtk/gtkfontchooserwidget.c:1535
+#: gtk/gtkfontchooserwidget.c:1547
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Ağırlık"
 
-#: gtk/gtkfontchooserwidget.c:1536
+#: gtk/gtkfontchooserwidget.c:1548
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Eğik"
 
-#: gtk/gtkfontchooserwidget.c:1537
+#: gtk/gtkfontchooserwidget.c:1549
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Eğrilik"
 
-#: gtk/gtkfontchooserwidget.c:1538
+#: gtk/gtkfontchooserwidget.c:1550
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Optik Boyut"
 
-#: gtk/gtkfontchooserwidget.c:2094
+#: gtk/gtkfontchooserwidget.c:2102
 msgctxt "Font feature value"
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/gtkfontchooserwidget.c:2111
+#: gtk/gtkfontchooserwidget.c:2119
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Etkin"
 
-#: gtk/gtkfontchooserwidget.c:2439
+#: gtk/gtkfontchooserwidget.c:2447
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/gtkfontchooserwidget.c:2501
+#: gtk/gtkfontchooserwidget.c:2509
 msgid "Ligatures"
 msgstr "Bağlamalar"
 
-#: gtk/gtkfontchooserwidget.c:2502
+#: gtk/gtkfontchooserwidget.c:2510
 msgid "Letter Case"
 msgstr "Harf Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2503
+#: gtk/gtkfontchooserwidget.c:2511
 msgid "Number Case"
 msgstr "Sayı Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2504
+#: gtk/gtkfontchooserwidget.c:2512
 msgid "Number Spacing"
 msgstr "Numara Boşluklama"
 
-#: gtk/gtkfontchooserwidget.c:2505
+#: gtk/gtkfontchooserwidget.c:2513
 msgid "Fractions"
 msgstr "Kesirler"
 
-#: gtk/gtkfontchooserwidget.c:2506
+#: gtk/gtkfontchooserwidget.c:2514
 msgid "Style Variations"
 msgstr "Biçem Değişkeleri"
 
-#: gtk/gtkfontchooserwidget.c:2508
+#: gtk/gtkfontchooserwidget.c:2516
 msgid "Character Variations"
 msgstr "Karakter Değişkeleri"
 
-#: gtk/gtkglarea.c:284
+#: gtk/gtkglarea.c:286
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6037 gtk/gtktextview.c:8954
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6048 gtk/gtktextview.c:8953
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6041 gtk/gtktextview.c:8958
+#: gtk/gtklabel.c:5653 gtk/gtktext.c:6052 gtk/gtktextview.c:8957
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6045 gtk/gtktextview.c:8962
+#: gtk/gtklabel.c:5654 gtk/gtktext.c:6056 gtk/gtktextview.c:8961
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6058 gtk/gtktextview.c:8987
+#: gtk/gtklabel.c:5660 gtk/gtktext.c:6069 gtk/gtktextview.c:8986
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: gtk/gtklabel.c:5662
+#: gtk/gtklabel.c:5665
 msgid "_Open Link"
 msgstr "Bağlantı _Aç"
 
-#: gtk/gtklabel.c:5666
+#: gtk/gtklabel.c:5669
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
@@ -2611,16 +2640,16 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d.%02d"
 
-#: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6117
+#: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
+#: gtk/gtkprintbackend.c:639 gtk/gtkwindow.c:6151
 msgid "_OK"
 msgstr "_Tamam"
 
-#: gtk/gtkmessagedialog.c:170
+#: gtk/gtkmessagedialog.c:174
 msgid "_No"
 msgstr "_Hayır"
 
-#: gtk/gtkmessagedialog.c:171
+#: gtk/gtkmessagedialog.c:175
 msgid "_Yes"
 msgstr "_Evet"
 
@@ -2628,69 +2657,73 @@ msgstr "_Evet"
 msgid "Co_nnect"
 msgstr "Ba_ğlan"
 
-#: gtk/gtkmountoperation.c:675
+#: gtk/gtkmountoperation.c:676
 msgid "Connect As"
 msgstr "Olarak Bağlan"
 
-#: gtk/gtkmountoperation.c:684
+#: gtk/gtkmountoperation.c:685
 msgid "_Anonymous"
 msgstr "_Anonim"
 
-#: gtk/gtkmountoperation.c:691
+#: gtk/gtkmountoperation.c:692
 msgid "Registered U_ser"
 msgstr "Kayıtlı K_ullanıcı"
 
-#: gtk/gtkmountoperation.c:701
+#: gtk/gtkmountoperation.c:702
 msgid "_Username"
 msgstr "_Kullanıcı Adı"
 
-#: gtk/gtkmountoperation.c:706
+#: gtk/gtkmountoperation.c:707
 msgid "_Domain"
 msgstr "_Alan"
 
-#: gtk/gtkmountoperation.c:715
+#: gtk/gtkmountoperation.c:716
 msgid "Volume type"
 msgstr "Birim türü"
 
-#: gtk/gtkmountoperation.c:725
+#: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
 msgstr "_Gizli"
 
-#: gtk/gtkmountoperation.c:728
+#: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
 msgstr "_Windows sistemi"
 
-#: gtk/gtkmountoperation.c:731
+#: gtk/gtkmountoperation.c:732
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:737
+#: gtk/gtkmountoperation.c:738
 msgid "_Password"
 msgstr "_Parola"
 
-#: gtk/gtkmountoperation.c:759
+#: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
 msgstr "Parolayı _anında unut"
 
-#: gtk/gtkmountoperation.c:769
+#: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
 msgstr "Parolayı _çıkış yapana dek anımsa"
 
-#: gtk/gtkmountoperation.c:780
+#: gtk/gtkmountoperation.c:781
 msgid "Remember _forever"
 msgstr "_Sürekli anımsa"
 
-#: gtk/gtkmountoperation.c:1206
+#: gtk/gtkmountoperation.c:1251
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Bilinmeyen Uygulama (İşlem Kimliği %d)"
 
-#: gtk/gtkmountoperation.c:1405
-#, c-format
+#. Use GTK_DIALOG_DESTROY_WITH_PARENT here since the parent dialog can be
+#. * indeed be destroyed via the GMountOperation::abort signal... for example,
+#. * this is triggered if the user yanks the device while we are showing
+#. * the dialog...
+#.
+#: gtk/gtkmountoperation.c:1396
 msgid "Unable to end process"
 msgstr "İşlem sonlandırılamadı"
 
-#: gtk/gtkmountoperation.c:1435
+#: gtk/gtkmountoperation.c:1546
 msgid "_End Process"
 msgstr "İşlemi _Sonlandır"
 
@@ -2700,27 +2733,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "%d işlem kimlikli süreç öldürülemiyor. İşlem gerçekleştirilemedi."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:984
+#: gtk/gtkmountoperation-x11.c:987
 msgid "Terminal Pager"
 msgstr "Uçbirim Sayfalayıcı"
 
-#: gtk/gtkmountoperation-x11.c:985
+#: gtk/gtkmountoperation-x11.c:988
 msgid "Top Command"
 msgstr "Üst Komut"
 
-#: gtk/gtkmountoperation-x11.c:986
+#: gtk/gtkmountoperation-x11.c:989
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:987
+#: gtk/gtkmountoperation-x11.c:990
 msgid "Bourne Shell"
 msgstr "Bourne Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:988
+#: gtk/gtkmountoperation-x11.c:991
 msgid "Z Shell"
 msgstr "Z Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:1085
+#: gtk/gtkmountoperation-x11.c:1091
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "%d işlem kimlikli işlem durdurulamıyor: %s"
@@ -2729,23 +2762,23 @@ msgstr "%d işlem kimlikli işlem durdurulamıyor: %s"
 msgid "GTK could not find a media module. Check your installation."
 msgstr "GTK, ortam modülü bulamadı. Kurulumunuzu gözden geçirin."
 
-#: gtk/gtknotebook.c:1491
+#: gtk/gtknotebook.c:1490
 msgid "Tab list"
 msgstr "Sekme listesi"
 
-#: gtk/gtknotebook.c:3214
+#: gtk/gtknotebook.c:3213
 msgid "Previous tab"
 msgstr "Önceki sekme"
 
-#: gtk/gtknotebook.c:3218
+#: gtk/gtknotebook.c:3217
 msgid "Next tab"
 msgstr "Sonraki sekme"
 
-#: gtk/gtknotebook.c:4038
+#: gtk/gtknotebook.c:4037
 msgid "Tab"
 msgstr "Sekme"
 
-#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
+#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
 #, c-format
 msgid "Page %u"
 msgstr "%u. Sayfa"
@@ -2754,7 +2787,7 @@ msgstr "%u. Sayfa"
 msgid "Not a valid page setup file"
 msgstr "Geçerli bir sayfa ayar dosyası değil"
 
-#: gtk/gtkpagesetupunixdialog.c:201 gtk/gtkprintunixdialog.c:736
+#: gtk/gtkpagesetupunixdialog.c:199 gtk/gtkprintunixdialog.c:743
 msgid "Manage Custom Sizes…"
 msgstr "Özel Boyutları Yönet…"
 
@@ -2762,15 +2795,15 @@ msgstr "Özel Boyutları Yönet…"
 msgid "_Apply"
 msgstr "_Uygula"
 
-#: gtk/gtkpagesetupunixdialog.c:318 gtk/gtkpagesetupunixdialog.c:570
+#: gtk/gtkpagesetupunixdialog.c:319 gtk/gtkpagesetupunixdialog.c:571
 msgid "Any Printer"
 msgstr "Her Yazıcı"
 
-#: gtk/gtkpagesetupunixdialog.c:319
+#: gtk/gtkpagesetupunixdialog.c:320
 msgid "For portable documents"
 msgstr "Taşınabilir belgeler için"
 
-#: gtk/gtkpagesetupunixdialog.c:738
+#: gtk/gtkpagesetupunixdialog.c:739
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2785,7 +2818,7 @@ msgstr ""
 " Üst: %s %s\n"
 " Alt: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/gtkpagesetupunixdialog.c:785 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
 msgstr "Sayfa Ayarı"
@@ -2807,82 +2840,82 @@ msgid "_Show Text"
 msgstr "Metni _Göster"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:913
 #, c-format
 msgid "Open %s"
 msgstr "%s’i aç"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1004
 msgid "Recent"
 msgstr "Son"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent files"
 msgstr "Son dosyalar"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1015
 msgid "Starred"
 msgstr "Yıldızlı"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred files"
 msgstr "Yıldızlı dosyalar"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1028
 msgid "Open your personal folder"
 msgstr "Kişisel klasörünüzü açın"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1041
 msgid "Desktop"
 msgstr "Masaüstü"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1043
 msgid "Open the contents of your desktop in a folder"
 msgstr "Masaüstünüzün içeriğini klasörde açın"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1057
 msgid "Enter Location"
 msgstr "Konum Gir"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1059
 msgid "Manually enter a location"
 msgstr "Elle konum gir"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1069
 msgid "Trash"
 msgstr "Çöp"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1071
 msgid "Open the trash"
 msgstr "Çöpü aç"
 
-#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
-#: gtk/gtkplacessidebar.c:1411
+#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
+#: gtk/gtkplacessidebar.c:1410
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s” aygıtını bağla ve aç"
 
-#: gtk/gtkplacessidebar.c:1306
+#: gtk/gtkplacessidebar.c:1305
 msgid "Open the contents of the file system"
 msgstr "Dosya sisteminin içeriklerini aç"
 
-#: gtk/gtkplacessidebar.c:1389
+#: gtk/gtkplacessidebar.c:1388
 msgid "New bookmark"
 msgstr "Yeni yer imi"
 
-#: gtk/gtkplacessidebar.c:1391
+#: gtk/gtkplacessidebar.c:1390
 msgid "Add a new bookmark"
 msgstr "Yeni yer imi ekle"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1455
 msgid "Other Locations"
 msgstr "Diğer Konumlar"
 
-#: gtk/gtkplacessidebar.c:1457
+#: gtk/gtkplacessidebar.c:1456
 msgid "Show other locations"
 msgstr "Diğer konumları göster"
 
-#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2981
+#: gtk/gtkplacessidebar.c:1961 gtk/gtkplacessidebar.c:2980
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s” başlatılamadı"
@@ -2890,214 +2923,214 @@ msgstr "“%s” başlatılamadı"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:1998
+#: gtk/gtkplacessidebar.c:1997
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "“%s” kilidi kaldırılırken hata"
 
-#: gtk/gtkplacessidebar.c:2000
+#: gtk/gtkplacessidebar.c:1999
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s” erişilemedi"
 
-#: gtk/gtkplacessidebar.c:2231
+#: gtk/gtkplacessidebar.c:2230
 msgid "This name is already taken"
 msgstr "Bu ad zaten kullanılıyor"
 
-#: gtk/gtkplacessidebar.c:2304 gtk/inspector/actions.ui:19
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
-#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
+#: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
+#: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
+#: gtk/ui/gtkfilechooserwidget.ui:151 gtk/ui/gtkfilechooserwidget.ui:615
 #: gtk/ui/gtkprintunixdialog.ui:83
 msgid "Name"
 msgstr "Ad"
 
-#: gtk/gtkplacessidebar.c:2522
+#: gtk/gtkplacessidebar.c:2521
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "“%s” ayrılamadı"
 
-#: gtk/gtkplacessidebar.c:2698
+#: gtk/gtkplacessidebar.c:2697
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "“%s” durdurulamadı"
 
-#: gtk/gtkplacessidebar.c:2727
+#: gtk/gtkplacessidebar.c:2726
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "“%s” çıkartılamadı"
 
-#: gtk/gtkplacessidebar.c:2756 gtk/gtkplacessidebar.c:2785
+#: gtk/gtkplacessidebar.c:2755 gtk/gtkplacessidebar.c:2784
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s çıkartılamadı"
 
-#: gtk/gtkplacessidebar.c:2933
+#: gtk/gtkplacessidebar.c:2932
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ortam değişiklikleri için “%s” sorgulanamadı"
 
-#: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
-#: gtk/gtkplacesview.c:1663
+#: gtk/gtkplacessidebar.c:3151 gtk/gtkplacessidebar.c:3238
+#: gtk/gtkplacesview.c:1649
 msgid "Open in New _Tab"
 msgstr "Yeni _Sekmede Aç"
 
-#: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
-#: gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3247
+#: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
 msgstr "Yeni _Pencerede Aç"
 
-#: gtk/gtkplacessidebar.c:3259
+#: gtk/gtkplacessidebar.c:3258
 msgid "_Add Bookmark"
 msgstr "Yer İmi _Ekle"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3262
 msgid "_Remove"
 msgstr "_Kaldır"
 
-#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1693
+#: gtk/gtkplacessidebar.c:3278 gtk/gtkplacesview.c:1679
 msgid "_Mount"
 msgstr "_Bağla"
 
-#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3287 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
 msgstr "_Bağı Kaldır"
 
-#: gtk/gtkplacessidebar.c:3295
+#: gtk/gtkplacessidebar.c:3294
 msgid "_Eject"
 msgstr "_Çıkart"
 
-#: gtk/gtkplacessidebar.c:3305
+#: gtk/gtkplacessidebar.c:3304
 msgid "_Detect Media"
 msgstr "_Ortamı Keşfet"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3313
 msgid "_Start"
 msgstr "_Başlat"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3315
 msgid "_Power On"
 msgstr "_Aç"
 
-#: gtk/gtkplacessidebar.c:3317
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Connect Drive"
 msgstr "Sürücüye _Bağlan"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Start Multi-disk Device"
 msgstr "Çoklu-disk Aygıtını _Başlat"
 
-#: gtk/gtkplacessidebar.c:3319
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Unlock Device"
 msgstr "Aygıtın Kilidini _Aç"
 
-#: gtk/gtkplacessidebar.c:3329
+#: gtk/gtkplacessidebar.c:3328
 msgid "_Stop"
 msgstr "_Durdur"
 
-#: gtk/gtkplacessidebar.c:3331
+#: gtk/gtkplacessidebar.c:3330
 msgid "_Safely Remove Drive"
 msgstr "Sürücüyü _Güvenle Kaldır"
 
-#: gtk/gtkplacessidebar.c:3332
+#: gtk/gtkplacessidebar.c:3331
 msgid "_Disconnect Drive"
 msgstr "Sürücü _Bağlantısını Kes"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Stop Multi-disk Device"
 msgstr "Çoklu-disk Aygıtını _Durdur"
 
-#: gtk/gtkplacessidebar.c:3334
+#: gtk/gtkplacessidebar.c:3333
 msgid "_Lock Device"
 msgstr "Aygıtı _Kilitle"
 
-#: gtk/gtkplacessidebar.c:3823 gtk/gtkplacesview.c:1103
+#: gtk/gtkplacessidebar.c:3822 gtk/gtkplacesview.c:1089
 msgid "Computer"
 msgstr "Bilgisayar"
 
-#: gtk/gtkplacesview.c:889
+#: gtk/gtkplacesview.c:875
 msgid "Searching for network locations"
 msgstr "Ağ konumları aranıyor"
 
-#: gtk/gtkplacesview.c:896
+#: gtk/gtkplacesview.c:882
 msgid "No network locations found"
 msgstr "Hiçbir ağ konumu bulunamadı"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1210 gtk/gtkplacesview.c:1307
+#: gtk/gtkplacesview.c:1196 gtk/gtkplacesview.c:1293
 msgid "Unable to access location"
 msgstr "Konuma erişilemedi"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1214 gtk/ui/gtkplacesview.ui:250
 msgid "Con_nect"
 msgstr "Ba_ğlan"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1367
+#: gtk/gtkplacesview.c:1353
 msgid "Unable to unmount volume"
 msgstr "Birim ayrılamıyor"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1459
+#: gtk/gtkplacesview.c:1445
 msgid "Cance_l"
 msgstr "İpta_l"
 
-#: gtk/gtkplacesview.c:1606
+#: gtk/gtkplacesview.c:1592
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1612
+#: gtk/gtkplacesview.c:1598
 msgid "File Transfer Protocol"
 msgstr "Dosya Aktarım İletişim Kuralı (FTP)"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1614
+#: gtk/gtkplacesview.c:1600
 msgid "ftp:// or ftps://"
 msgstr "ftp:// veya ftps://"
 
-#: gtk/gtkplacesview.c:1620
+#: gtk/gtkplacesview.c:1606
 msgid "Network File System"
 msgstr "Ağ Dosya Sistemi (NFS)"
 
-#: gtk/gtkplacesview.c:1626
+#: gtk/gtkplacesview.c:1612
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1632
+#: gtk/gtkplacesview.c:1618
 msgid "SSH File Transfer Protocol"
 msgstr "SSH Dosya Aktarım İletişim Kuralı"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1620
 msgid "sftp:// or ssh://"
 msgstr "sftp:// veya ssh://"
 
-#: gtk/gtkplacesview.c:1640
+#: gtk/gtkplacesview.c:1626
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1642
+#: gtk/gtkplacesview.c:1628
 msgid "dav:// or davs://"
 msgstr "dav:// veya davs://"
 
-#: gtk/gtkplacesview.c:1677
+#: gtk/gtkplacesview.c:1663
 msgid "_Disconnect"
 msgstr "_Bağlantıyı Kes"
 
-#: gtk/gtkplacesview.c:1688
+#: gtk/gtkplacesview.c:1674
 msgid "_Connect"
 msgstr "_Bağlan"
 
-#: gtk/gtkplacesview.c:1905
+#: gtk/gtkplacesview.c:1891
 msgid "Unable to get remote server location"
 msgstr "Uzak sunucu konumu alınamıyor"
 
-#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
+#: gtk/gtkplacesview.c:2034 gtk/gtkplacesview.c:2043
 msgid "Networks"
 msgstr "Ağlar"
 
-#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
+#: gtk/gtkplacesview.c:2034 gtk/gtkplacesview.c:2043
 msgid "On This Computer"
 msgstr "Bu Bilgisayarda"
 
@@ -3120,24 +3153,19 @@ msgstr "Bağlantıyı Kes"
 msgid "Unmount"
 msgstr "Bağı Kaldır"
 
-#: gtk/gtkprintbackend.c:636
+#: gtk/gtkprintbackend.c:637
 msgid "Authentication"
 msgstr "Kimlik Doğrulama"
 
-#: gtk/gtkprintbackend.c:712
+#: gtk/gtkprintbackend.c:716
 msgid "_Remember password"
 msgstr "Parolayı _anımsa"
 
-#: gtk/gtkprinteroptionwidget.c:718
+#: gtk/gtkprinteroptionwidget.c:739
 msgid "Select a filename"
 msgstr "Dosya adı seç"
 
-#: gtk/gtkprinteroptionwidget.c:722 gtk/ui/gtkappchooserdialog.ui:50
-#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
-msgid "_Select"
-msgstr "_Seç"
-
-#: gtk/gtkprinteroptionwidget.c:936
+#: gtk/gtkprinteroptionwidget.c:947
 msgid "Not available"
 msgstr "Kullanılamaz"
 
@@ -3200,7 +3228,7 @@ msgstr "Hata ile tamamlandı"
 msgid "Preparing %d"
 msgstr "%d hazırlanıyor"
 
-#: gtk/gtkprintoperation.c:2236 gtk/gtkprintoperation.c:2854
+#: gtk/gtkprintoperation.c:2236 gtk/gtkprintoperation.c:2855
 #, c-format
 msgid "Preparing"
 msgstr "Hazırlanıyor"
@@ -3210,23 +3238,23 @@ msgstr "Hazırlanıyor"
 msgid "Printing %d"
 msgstr "%d yazdırılıyor"
 
-#: gtk/gtkprintoperation.c:2885
+#: gtk/gtkprintoperation.c:2888
 #, c-format
 msgid "Error creating print preview"
 msgstr "Baskı ön izleme oluşturulurken hata"
 
-#: gtk/gtkprintoperation.c:2888
+#: gtk/gtkprintoperation.c:2891
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3056
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3082
 msgid "Print"
 msgstr "Yazdır"
 
-#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1504
+#: gtk/gtkprintoperation-unix.c:478 gtk/gtkprintoperation-win32.c:1504
 msgid "Application"
 msgstr "Uygulama"
 
@@ -3240,7 +3268,7 @@ msgstr "Kağıt bitti"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:639
-#: modules/printbackends/gtkprintbackendcups.c:2639
+#: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Paused"
 msgstr "Duraklatıldı"
 
@@ -3285,19 +3313,19 @@ msgstr "PrintDlgEx için geçersiz işleyici"
 msgid "Unspecified error"
 msgstr "Belirsiz hata"
 
-#: gtk/gtkprintunixdialog.c:806
+#: gtk/gtkprintunixdialog.c:813
 msgid "Pre_view"
 msgstr "Ön İzl_e"
 
-#: gtk/gtkprintunixdialog.c:808
+#: gtk/gtkprintunixdialog.c:815
 msgid "_Print"
 msgstr "_Yazdır"
 
-#: gtk/gtkprintunixdialog.c:936
+#: gtk/gtkprintunixdialog.c:943
 msgid "Getting printer information failed"
 msgstr "Yazıcı bilgileri alınamadı"
 
-#: gtk/gtkprintunixdialog.c:1875
+#: gtk/gtkprintunixdialog.c:1882
 msgid "Getting printer information…"
 msgstr "Yazıcı bilgileri alınıyor…"
 
@@ -3307,67 +3335,67 @@ msgstr "Yazıcı bilgileri alınıyor…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2801
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: gtk/gtkprintunixdialog.c:2827
+#: modules/printbackends/gtkprintbackendcups.c:5650
 msgid "Left to right, top to bottom"
 msgstr "Soldan sağa, yukarıdan aşağıya"
 
-#: gtk/gtkprintunixdialog.c:2801
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: gtk/gtkprintunixdialog.c:2827
+#: modules/printbackends/gtkprintbackendcups.c:5650
 msgid "Left to right, bottom to top"
 msgstr "Soldan sağa, aşağıdan yukarıya"
 
-#: gtk/gtkprintunixdialog.c:2802
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: gtk/gtkprintunixdialog.c:2828
+#: modules/printbackends/gtkprintbackendcups.c:5651
 msgid "Right to left, top to bottom"
 msgstr "Sağdan sola, yukarıdan aşağıya"
 
-#: gtk/gtkprintunixdialog.c:2802
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: gtk/gtkprintunixdialog.c:2828
+#: modules/printbackends/gtkprintbackendcups.c:5651
 msgid "Right to left, bottom to top"
 msgstr "Sağdan sola, aşağıdan yukarıya"
 
-#: gtk/gtkprintunixdialog.c:2803
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: gtk/gtkprintunixdialog.c:2829
+#: modules/printbackends/gtkprintbackendcups.c:5652
 msgid "Top to bottom, left to right"
 msgstr "Yukarıdan aşağıya, soldan sağa"
 
-#: gtk/gtkprintunixdialog.c:2803
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: gtk/gtkprintunixdialog.c:2829
+#: modules/printbackends/gtkprintbackendcups.c:5652
 msgid "Top to bottom, right to left"
 msgstr "Yukarıdan aşağıya, sağdan sola"
 
-#: gtk/gtkprintunixdialog.c:2804
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: gtk/gtkprintunixdialog.c:2830
+#: modules/printbackends/gtkprintbackendcups.c:5653
 msgid "Bottom to top, left to right"
 msgstr "Aşağıdan yukarıya, soldan sağ"
 
-#: gtk/gtkprintunixdialog.c:2804
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: gtk/gtkprintunixdialog.c:2830
+#: modules/printbackends/gtkprintbackendcups.c:5653
 msgid "Bottom to top, right to left"
 msgstr "Aşağıdan yukarıya, sağdan sola"
 
-#: gtk/gtkprintunixdialog.c:2808 gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2834 gtk/gtkprintunixdialog.c:2847
 msgid "Page Ordering"
 msgstr "Sayfa Sıralaması"
 
-#: gtk/gtkprintunixdialog.c:2837
+#: gtk/gtkprintunixdialog.c:2863
 msgid "Left to right"
 msgstr "Soldan sağa"
 
-#: gtk/gtkprintunixdialog.c:2838
+#: gtk/gtkprintunixdialog.c:2864
 msgid "Right to left"
 msgstr "Sağdan sola"
 
-#: gtk/gtkprintunixdialog.c:2850
+#: gtk/gtkprintunixdialog.c:2876
 msgid "Top to bottom"
 msgstr "Yukarıdan aşağıya"
 
-#: gtk/gtkprintunixdialog.c:2851
+#: gtk/gtkprintunixdialog.c:2877
 msgid "Bottom to top"
 msgstr "Aşağıdan yukarıya"
 
-#: gtk/gtkprogressbar.c:606
+#: gtk/gtkprogressbar.c:608
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3390,7 +3418,7 @@ msgstr "“%s” URI’li öge “%s”e taşınamadı"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "“%2$s” URIʼli öge için “%1$s” adında kayıtlı uygulama bulunamadı"
 
-#: gtk/gtksearchentry.c:639
+#: gtk/gtksearchentry.c:638
 msgid "Clear entry"
 msgstr "Girdiyi temizle"
 
@@ -3466,16 +3494,16 @@ msgid "Search Shortcuts"
 msgstr "Kısayolları Ara"
 
 #: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
-#: gtk/ui/gtkfilechooserwidget.ui:297
+#: gtk/ui/gtkfilechooserwidget.ui:472
 msgid "No Results Found"
 msgstr "Hiçbir Sonuç Bulunamadı"
 
 #: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
-#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
+#: gtk/ui/gtkfilechooserwidget.ui:485 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Başka arama deneyin"
 
-#: gtk/gtkshow.c:175
+#: gtk/gtkshow.c:170
 msgid "Could not show link"
 msgstr "Bağlantı gösterilemedi"
 
@@ -3484,15 +3512,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Kenar Çubuğu"
 
-#: gtk/gtktext.c:6063 gtk/gtktextview.c:8992
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8991
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
-#: gtk/gtktextview.c:8974
+#: gtk/gtktextview.c:8973
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gtk/gtktextview.c:8978
+#: gtk/gtktextview.c:8977
 msgid "_Redo"
 msgstr "_Yinele"
 
@@ -3519,12 +3547,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%% %d"
 
-#: gtk/gtkwindow.c:6104
+#: gtk/gtkwindow.c:6138
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK Denetleyicisi kullanmak istiyor musunuz?"
 
-#: gtk/gtkwindow.c:6106
+#: gtk/gtkwindow.c:6140
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3535,7 +3563,7 @@ msgstr ""
 "izin veren etkileşimli hata ayıklayıcıdır. Bunun kullanılması uygulamanın "
 "kesilmesine ya da çökmesine neden olabilir."
 
-#: gtk/gtkwindow.c:6111
+#: gtk/gtkwindow.c:6145
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
@@ -3571,17 +3599,17 @@ msgstr "Geri Yükle"
 msgid "Role"
 msgstr "Rol"
 
-#: gtk/inspector/a11y.ui:40
+#: gtk/inspector/a11y.ui:43
 msgid "Object path"
 msgstr "Nesne yolu"
 
-#: gtk/inspector/a11y.ui:66
+#: gtk/inspector/a11y.ui:72
 msgid "Attribute"
 msgstr "Öznitelik"
 
-#: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
-#: gtk/inspector/recorder.ui:221
+#: gtk/inspector/a11y.ui:84 gtk/inspector/css-node-tree.ui:70
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
+#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:74
 msgid "Value"
 msgstr "Değer"
 
@@ -3601,7 +3629,7 @@ msgstr "Etkin"
 msgid "Parameter Type"
 msgstr "Parametre Türü"
 
-#: gtk/inspector/actions.ui:52 gtk/inspector/css-node-tree.ui:74
+#: gtk/inspector/actions.ui:52 gtk/inspector/css-node-tree.ui:41
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Durum"
@@ -3666,11 +3694,11 @@ msgctxt "propagation limit"
 msgid "Native"
 msgstr "Doğal"
 
-#: gtk/inspector/css-editor.c:129
+#: gtk/inspector/css-editor.c:128
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Burada GTK tarafından tanınan CSS kuralları yazabilirsiniz."
 
-#: gtk/inspector/css-editor.c:130
+#: gtk/inspector/css-editor.c:129
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3678,13 +3706,12 @@ msgstr ""
 "Bu özel CSSʼi yukarıdaki “Duraklat” düğmesine tıklayarak geçici olarak devre "
 "dışı bırakabilirsiniz."
 
-#: gtk/inspector/css-editor.c:131
+#: gtk/inspector/css-editor.c:130
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 "Değişiklikler tüm uygulamalar için doğrudan ve küresel olarak uygulandı."
 
-#: gtk/inspector/css-editor.c:211
-#, c-format
+#: gtk/inspector/css-editor.c:206
 msgid "Saving CSS failed"
 msgstr "CSS kaydetme başarısız"
 
@@ -3696,16 +3723,16 @@ msgstr "Özel CSSʼleri devre dışı bırak"
 msgid "Save the current CSS"
 msgstr "Geçerli CSSʼleri kaydet"
 
-#: gtk/inspector/css-node-tree.ui:48 tools/gtk-builder-tool-preview.c:178
+#: gtk/inspector/css-node-tree.ui:28 tools/gtk-builder-tool-preview.c:178
 #: tools/gtk-builder-tool-screenshot.c:358
 msgid "ID"
 msgstr "Kimlik"
 
-#: gtk/inspector/css-node-tree.ui:61
+#: gtk/inspector/css-node-tree.ui:34
 msgid "Style Classes"
 msgstr "Biçem Sınıfları"
 
-#: gtk/inspector/css-node-tree.ui:104
+#: gtk/inspector/css-node-tree.ui:64
 msgid "CSS Property"
 msgstr "CSS Özelliği"
 
@@ -3785,7 +3812,7 @@ msgstr "Uygulama Kimliği"
 msgid "Resource Path"
 msgstr "Kaynak Yolu"
 
-#: gtk/inspector/general.ui:268 gtk/ui/gtkplacesview.ui:79
+#: gtk/inspector/general.ui:268 gtk/ui/gtkplacesview.ui:67
 msgid "Prefix"
 msgstr "Ön Ek"
 
@@ -3821,23 +3848,23 @@ msgstr "Vulkan API sürümü"
 msgid "Vulkan driver version"
 msgstr "Vulkan sürücü sürümü"
 
-#: gtk/inspector/menu.c:95
+#: gtk/inspector/menu.c:264
 msgid "Unnamed section"
 msgstr "Adsız bölüm"
 
-#: gtk/inspector/menu.ui:23
+#: gtk/inspector/menu.ui:26
 msgid "Label"
 msgstr "Etiket"
 
-#: gtk/inspector/menu.ui:36 gtk/inspector/shortcuts.ui:23
+#: gtk/inspector/menu.ui:31 gtk/inspector/shortcuts.ui:23
 msgid "Action"
 msgstr "Eylem"
 
-#: gtk/inspector/menu.ui:49
+#: gtk/inspector/menu.ui:36
 msgid "Target"
 msgstr "Hedef"
 
-#: gtk/inspector/menu.ui:62
+#: gtk/inspector/menu.ui:41
 msgid "Icon"
 msgstr "Simge"
 
@@ -3846,7 +3873,7 @@ msgid "Address"
 msgstr "Adres"
 
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
+#: gtk/inspector/statistics.ui:36 gtk/ui/gtkfilechooserwidget.ui:311
 msgid "Type"
 msgstr "Tür"
 
@@ -3887,8 +3914,8 @@ msgid "Surface"
 msgstr "Yüzey"
 
 #: gtk/inspector/misc-info.ui:415 gtk/inspector/misc-info.ui:454
-#: gtk/inspector/misc-info.ui:493 gtk/inspector/prop-editor.c:1162
-#: gtk/inspector/prop-editor.c:1531 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:493 gtk/inspector/prop-editor.c:1152
+#: gtk/inspector/prop-editor.c:1537 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Özellikler"
 
@@ -3936,7 +3963,7 @@ msgstr "İmleç: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:834
+#: gtk/inspector/prop-editor.c:824
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "\"%2$s\" değeriyle %1$s"
@@ -3944,7 +3971,7 @@ msgstr "\"%2$s\" değeriyle %1$s"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:845
+#: gtk/inspector/prop-editor.c:835
 #, c-format
 msgid "%s with type %s"
 msgstr "%2$s türüyle %1$s"
@@ -3952,7 +3979,7 @@ msgstr "%2$s türüyle %1$s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:858
+#: gtk/inspector/prop-editor.c:848
 #, c-format
 msgid "%s for %s %p"
 msgstr "%2$s %3$p için %1$s"
@@ -3960,71 +3987,71 @@ msgstr "%2$s %3$p için %1$s"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:888
+#: gtk/inspector/prop-editor.c:878
 #, c-format
 msgid "%s with value type %s"
 msgstr "%2$s değer türüyle %1$s"
 
-#: gtk/inspector/prop-editor.c:1242
+#: gtk/inspector/prop-editor.c:1231
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Düzenlenemeyen özellik türü: %s"
 
-#: gtk/inspector/prop-editor.c:1383
+#: gtk/inspector/prop-editor.c:1389
 msgctxt "column number"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/prop-editor.c:1420
+#: gtk/inspector/prop-editor.c:1426
 msgid "Attribute:"
 msgstr "Öznitelik:"
 
-#: gtk/inspector/prop-editor.c:1423
+#: gtk/inspector/prop-editor.c:1429
 msgid "Model"
 msgstr "Model"
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1434
 msgid "Column:"
 msgstr "Sütun:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1527
+#: gtk/inspector/prop-editor.c:1533
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Şuradan eylem: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1582
+#: gtk/inspector/prop-editor.c:1588
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: gtk/inspector/prop-editor.c:1590
+#: gtk/inspector/prop-editor.c:1596
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/inspector/prop-editor.c:1593
+#: gtk/inspector/prop-editor.c:1599
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1596
+#: gtk/inspector/prop-editor.c:1602
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1600
+#: gtk/inspector/prop-editor.c:1606
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Uygulama"
 
-#: gtk/inspector/prop-editor.c:1603
+#: gtk/inspector/prop-editor.c:1609
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: gtk/inspector/prop-editor.c:1606
+#: gtk/inspector/prop-editor.c:1612
 msgid "Source:"
 msgstr "Kaynak:"
 
@@ -4032,8 +4059,7 @@ msgstr "Kaynak:"
 msgid "Defined At"
 msgstr "Şurada Tanımlanmış"
 
-#: gtk/inspector/recorder.c:1694
-#, c-format
+#: gtk/inspector/recorder.c:1832
 msgid "Saving RenderNode failed"
 msgstr "RenderNode kaydetme başarısız"
 
@@ -4065,7 +4091,7 @@ msgstr "Seçilen düğümü kaydet"
 msgid "Copy to clipboard"
 msgstr "Panoya kopyala"
 
-#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
+#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
 msgid "Property"
 msgstr "Özellikler"
 
@@ -4077,7 +4103,7 @@ msgstr "Yol"
 msgid "Count"
 msgstr "Say"
 
-#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:265
 #: gtk/ui/gtkfontchooserwidget.ui:204 gtk/ui/gtkfontchooserwidget.ui:351
 msgid "Size"
 msgstr "Boyut"
@@ -4122,37 +4148,46 @@ msgstr "İkisi de"
 msgid "Mode"
 msgstr "Kip"
 
-#: gtk/inspector/statistics.c:400
+#: gtk/inspector/statistics.c:814
 msgid "GLib must be configured with -Dbuildtype=debug"
 msgstr "GLib, -Dbuildtype=debug ile yapılandırılmış olmalı"
 
-#: gtk/inspector/statistics.ui:60
+#: gtk/inspector/statistics.ui:41
 msgid "Self 1"
 msgstr "Kendi 1"
 
-#: gtk/inspector/statistics.ui:71
+#: gtk/inspector/statistics.ui:46
 msgid "Cumulative 1"
 msgstr "Toplam 1"
 
-#: gtk/inspector/statistics.ui:82
+#: gtk/inspector/statistics.ui:51
 msgid "Self 2"
 msgstr "Kendi 2"
 
-#: gtk/inspector/statistics.ui:93
+#: gtk/inspector/statistics.ui:56
 msgid "Cumulative 2"
 msgstr "Toplam 2"
 
-#: gtk/inspector/statistics.ui:104
+#: gtk/inspector/statistics.ui:61
 msgid "Self"
 msgstr "Kendisi"
 
-#: gtk/inspector/statistics.ui:120
+#: gtk/inspector/statistics.ui:66
 msgid "Cumulative"
 msgstr "Birikimli"
 
-#: gtk/inspector/statistics.ui:151
+#: gtk/inspector/statistics.ui:88
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "GOBJECT_DEBUG=instance-count ile istatistikleri etkinleştir"
+
+#: gtk/inspector/strv-editor.c:85
+#, c-format
+msgid "Remove %s"
+msgstr "%s kaldır"
+
+#: gtk/inspector/strv-editor.c:118
+msgid "Add"
+msgstr "Ekle"
 
 #: gtk/inspector/tree-data.ui:10
 msgid "Show data"
@@ -6072,15 +6107,15 @@ msgstr "Son"
 msgid "Create Folder"
 msgstr "Klasör Oluştur"
 
-#: gtk/ui/gtkfilechooserwidget.ui:249
+#: gtk/ui/gtkfilechooserwidget.ui:424
 msgid "Remote location — only searching the current folder"
 msgstr "Uzak konum — yalnızca şimdiki klasörde aranıyor"
 
-#: gtk/ui/gtkfilechooserwidget.ui:378
+#: gtk/ui/gtkfilechooserwidget.ui:553
 msgid "Folder Name"
 msgstr "Klasör Adı"
 
-#: gtk/ui/gtkfilechooserwidget.ui:404
+#: gtk/ui/gtkfilechooserwidget.ui:579
 msgid "_Create"
 msgstr "_Oluştur"
 
@@ -6107,10 +6142,6 @@ msgstr "Dil"
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
 msgid "Preview Font"
 msgstr "Yazı Tipi Ön İzle"
-
-#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
-msgid "horizontal"
-msgstr "yatay"
 
 #: gtk/ui/gtkfontchooserwidget.ui:270
 msgid "No Fonts Found"
@@ -6144,38 +6175,38 @@ msgstr "Yatay"
 msgid "Reverse landscape"
 msgstr "Ters yatay"
 
-#: gtk/ui/gtkplacesview.ui:28
+#: gtk/ui/gtkplacesview.ui:16
 msgid "Server Addresses"
 msgstr "Sunucu Adresleri"
 
-#: gtk/ui/gtkplacesview.ui:40
+#: gtk/ui/gtkplacesview.ui:28
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
 "Sunucu adresleri, iletişim kuralı ön ekinden ve adresten oluşur. Örneğin:"
 
-#: gtk/ui/gtkplacesview.ui:66
+#: gtk/ui/gtkplacesview.ui:54
 msgid "Available Protocols"
 msgstr "Uygun İletişim Kuralları"
 
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:118
+#: gtk/ui/gtkplacesview.ui:106
 msgid "No recent servers found"
 msgstr "Son kullanılan sunucu bulunamadı"
 
-#: gtk/ui/gtkplacesview.ui:141
+#: gtk/ui/gtkplacesview.ui:129
 msgid "Recent Servers"
 msgstr "Son Kullanılan Sunucular"
 
-#: gtk/ui/gtkplacesview.ui:221
+#: gtk/ui/gtkplacesview.ui:209
 msgid "No results found"
 msgstr "Sonuç bulunamadı"
 
-#: gtk/ui/gtkplacesview.ui:252
+#: gtk/ui/gtkplacesview.ui:240
 msgid "Connect to _Server"
 msgstr "_Sunucuya Bağlan"
 
-#: gtk/ui/gtkplacesview.ui:277
+#: gtk/ui/gtkplacesview.ui:265
 msgid "Enter server address…"
 msgstr "Sunucu adresi gir…"
 
@@ -6409,442 +6440,442 @@ msgstr "Yeniden örnekleyici bağlamı bölüştürülemedi"
 msgid "No audio output found"
 msgstr "Ses çıkışı bulunamadı"
 
-#: modules/printbackends/gtkprintbackendcups.c:1142
-#: modules/printbackends/gtkprintbackendcups.c:1449
+#: modules/printbackends/gtkprintbackendcups.c:1145
+#: modules/printbackends/gtkprintbackendcups.c:1452
 msgid "Username:"
 msgstr "Kullanıcı Adı:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1143
-#: modules/printbackends/gtkprintbackendcups.c:1458
+#: modules/printbackends/gtkprintbackendcups.c:1146
+#: modules/printbackends/gtkprintbackendcups.c:1461
 msgid "Password:"
 msgstr "Parola:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1181
-#: modules/printbackends/gtkprintbackendcups.c:1471
+#: modules/printbackends/gtkprintbackendcups.c:1184
+#: modules/printbackends/gtkprintbackendcups.c:1474
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "“%s” belgesini %s yazıcısında yazdırmak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1183
+#: modules/printbackends/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s üzerinde bir belge yazdırmak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1187
+#: modules/printbackends/gtkprintbackendcups.c:1190
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "“%s” işinin özniteliklerini almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1189
+#: modules/printbackends/gtkprintbackendcups.c:1192
 msgid "Authentication is required to get attributes of a job"
 msgstr "İşin özniteliklerini almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1193
+#: modules/printbackends/gtkprintbackendcups.c:1196
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "%s yazıcısının özniteliklerini almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1195
+#: modules/printbackends/gtkprintbackendcups.c:1198
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Yazıcının özniteliklerini almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1198
+#: modules/printbackends/gtkprintbackendcups.c:1201
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s yazıcısının öntanımını almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1201
+#: modules/printbackends/gtkprintbackendcups.c:1204
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s üzerinden yazıcıları almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1206
+#: modules/printbackends/gtkprintbackendcups.c:1209
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s üzerinden dosya almak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1208
+#: modules/printbackends/gtkprintbackendcups.c:1211
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s üzerinde kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1443
+#: modules/printbackends/gtkprintbackendcups.c:1446
 msgid "Domain:"
 msgstr "Alan:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1473
+#: modules/printbackends/gtkprintbackendcups.c:1476
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "“%s” belgesini yazdırmak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1478
+#: modules/printbackends/gtkprintbackendcups.c:1481
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "%s yazıcısında bu belgeyi yazdırmak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:1480
+#: modules/printbackends/gtkprintbackendcups.c:1483
 msgid "Authentication is required to print this document"
 msgstr "Bu belgeyi yazdırmak için kimlik doğrulama gereklidir"
 
-#: modules/printbackends/gtkprintbackendcups.c:2568
+#: modules/printbackends/gtkprintbackendcups.c:2571
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "“%s” yazıcısında toner azalmış."
 
-#: modules/printbackends/gtkprintbackendcups.c:2572
+#: modules/printbackends/gtkprintbackendcups.c:2575
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "“%s” yazıcısında toner kalmamış."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2577
+#: modules/printbackends/gtkprintbackendcups.c:2580
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "“%s” yazıcısında film banyosu ilacı azalmış."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2582
+#: modules/printbackends/gtkprintbackendcups.c:2585
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "“%s” yazıcısında film banyosu ilacı bitmiş."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2587
+#: modules/printbackends/gtkprintbackendcups.c:2590
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "“%s” yazıcısında en az bir renk azalmış."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2592
+#: modules/printbackends/gtkprintbackendcups.c:2595
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "“%s” yazıcısında en az bir renk bitmiş."
 
-#: modules/printbackends/gtkprintbackendcups.c:2596
+#: modules/printbackends/gtkprintbackendcups.c:2599
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "“%s” yazıcısında kapak açık kalmış."
 
-#: modules/printbackends/gtkprintbackendcups.c:2600
+#: modules/printbackends/gtkprintbackendcups.c:2603
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "“%s” yazıcısında kapı açık kalmış."
 
-#: modules/printbackends/gtkprintbackendcups.c:2604
+#: modules/printbackends/gtkprintbackendcups.c:2607
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "“%s” yazıcısında kağıt azalmış."
 
-#: modules/printbackends/gtkprintbackendcups.c:2608
+#: modules/printbackends/gtkprintbackendcups.c:2611
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "“%s” yazıcısında kağıt bitmiş."
 
-#: modules/printbackends/gtkprintbackendcups.c:2612
+#: modules/printbackends/gtkprintbackendcups.c:2615
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "“%s” yazıcısı şu anda çevrim dışı."
 
-#: modules/printbackends/gtkprintbackendcups.c:2616
+#: modules/printbackends/gtkprintbackendcups.c:2619
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "“%s” yazıcısıyla ilgili sorun var."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2636
+#: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused; Rejecting Jobs"
 msgstr "Duraklatıldı; İşler Reddediliyor"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2642
+#: modules/printbackends/gtkprintbackendcups.c:2645
 msgid "Rejecting Jobs"
 msgstr "İşler Reddediliyor"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2683
+#: modules/printbackends/gtkprintbackendcups.c:2686
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4584
-#: modules/printbackends/gtkprintbackendcups.c:4651
+#: modules/printbackends/gtkprintbackendcups.c:4587
+#: modules/printbackends/gtkprintbackendcups.c:4654
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Çift Taraflı"
 
-#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4588
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Kağıt Türü"
 
-#: modules/printbackends/gtkprintbackendcups.c:4586
+#: modules/printbackends/gtkprintbackendcups.c:4589
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Kağıt Kaynağı"
 
-#: modules/printbackends/gtkprintbackendcups.c:4587
-#: modules/printbackends/gtkprintbackendcups.c:4652
+#: modules/printbackends/gtkprintbackendcups.c:4590
+#: modules/printbackends/gtkprintbackendcups.c:4655
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Çıktı Tepsisi"
 
-#: modules/printbackends/gtkprintbackendcups.c:4588
+#: modules/printbackends/gtkprintbackendcups.c:4591
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Çözünürlük"
 
-#: modules/printbackends/gtkprintbackendcups.c:4589
+#: modules/printbackends/gtkprintbackendcups.c:4592
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript ön-süzme"
 
-#: modules/printbackends/gtkprintbackendcups.c:4598
+#: modules/printbackends/gtkprintbackendcups.c:4601
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Tek Taraflı"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4600
+#: modules/printbackends/gtkprintbackendcups.c:4603
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Uzun Kenar (Standart)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4602
+#: modules/printbackends/gtkprintbackendcups.c:4605
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Kısa Kenar (Ters)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4604
-#: modules/printbackends/gtkprintbackendcups.c:4606
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4607
+#: modules/printbackends/gtkprintbackendcups.c:4609
+#: modules/printbackends/gtkprintbackendcups.c:4617
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Kendiliğinden Seçim"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4608
-#: modules/printbackends/gtkprintbackendcups.c:4610
-#: modules/printbackends/gtkprintbackendcups.c:4612
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4611
+#: modules/printbackends/gtkprintbackendcups.c:4613
+#: modules/printbackends/gtkprintbackendcups.c:4615
+#: modules/printbackends/gtkprintbackendcups.c:4619
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Yazıcı Öntanımlısı"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4618
+#: modules/printbackends/gtkprintbackendcups.c:4621
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Yalnızca GhostScript yazı tiplerini göm"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4620
+#: modules/printbackends/gtkprintbackendcups.c:4623
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "PS düzey 1 olarak dönüştür"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4625
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "PS düzey 2 olarak dönüştür"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4624
+#: modules/printbackends/gtkprintbackendcups.c:4627
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Ön-süzme yok"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4636
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Diğer"
 
-#: modules/printbackends/gtkprintbackendcups.c:4660
+#: modules/printbackends/gtkprintbackendcups.c:4663
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Tek Taraflı"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4662
+#: modules/printbackends/gtkprintbackendcups.c:4665
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Uzun Kenar (Standart)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4664
+#: modules/printbackends/gtkprintbackendcups.c:4667
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kısa Kenar (Çevrilmiş)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4667
+#: modules/printbackends/gtkprintbackendcups.c:4670
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Üst Kutu"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4669
+#: modules/printbackends/gtkprintbackendcups.c:4672
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Orta Kutu"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4671
+#: modules/printbackends/gtkprintbackendcups.c:4674
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Alt Kutu"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4673
+#: modules/printbackends/gtkprintbackendcups.c:4676
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Yan Kutu"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4675
+#: modules/printbackends/gtkprintbackendcups.c:4678
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Sol Kutu"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4677
+#: modules/printbackends/gtkprintbackendcups.c:4680
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Sağ Kutu"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4682
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Merkez Kutu"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4681
+#: modules/printbackends/gtkprintbackendcups.c:4684
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Arka Kutu"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4683
+#: modules/printbackends/gtkprintbackendcups.c:4686
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Yukarı Bakan Kutu"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4685
+#: modules/printbackends/gtkprintbackendcups.c:4688
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Aşağı Bakan Kutu"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4687
+#: modules/printbackends/gtkprintbackendcups.c:4690
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Büyük Kapasiteli Kutu"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4709
+#: modules/printbackends/gtkprintbackendcups.c:4712
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "%d. Yığıcı"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4713
+#: modules/printbackends/gtkprintbackendcups.c:4716
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "%d. Posta Kutusu"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4717
+#: modules/printbackends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Posta Kutum"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4721
+#: modules/printbackends/gtkprintbackendcups.c:4724
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "%d. Tepsi"
 
-#: modules/printbackends/gtkprintbackendcups.c:5198
+#: modules/printbackends/gtkprintbackendcups.c:5201
 msgid "Printer Default"
 msgstr "Yazıcı Öntanımlısı"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Urgent"
 msgstr "Acil"
 
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "High"
 msgstr "Yüksek"
 
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Medium"
 msgstr "Orta"
 
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Low"
 msgstr "Düşük"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Job Priority"
 msgstr "İş Önceliği"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5683
+#: modules/printbackends/gtkprintbackendcups.c:5686
 msgid "Billing Info"
 msgstr "Fatura Bilgisi"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5707
+#: modules/printbackends/gtkprintbackendcups.c:5710
 msgctxt "cover page"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5711
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Sınıflandırılmış"
 
-#: modules/printbackends/gtkprintbackendcups.c:5709
+#: modules/printbackends/gtkprintbackendcups.c:5712
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Kişiye Özel"
 
-#: modules/printbackends/gtkprintbackendcups.c:5710
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Gizli"
 
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5714
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/gtkprintbackendcups.c:5712
+#: modules/printbackends/gtkprintbackendcups.c:5715
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Çok Gizli"
 
-#: modules/printbackends/gtkprintbackendcups.c:5713
+#: modules/printbackends/gtkprintbackendcups.c:5716
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Sınıflandırılmamış"
@@ -6852,7 +6883,7 @@ msgstr "Sınıflandırılmamış"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5725
+#: modules/printbackends/gtkprintbackendcups.c:5728
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Yaprak Başına Sayfa"
@@ -6860,7 +6891,7 @@ msgstr "Yaprak Başına Sayfa"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5742
+#: modules/printbackends/gtkprintbackendcups.c:5745
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Sayfa Sıralaması"
@@ -6868,7 +6899,7 @@ msgstr "Sayfa Sıralaması"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5784
+#: modules/printbackends/gtkprintbackendcups.c:5787
 msgctxt "printer option"
 msgid "Before"
 msgstr "Önce"
@@ -6876,7 +6907,7 @@ msgstr "Önce"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5799
+#: modules/printbackends/gtkprintbackendcups.c:5802
 msgctxt "printer option"
 msgid "After"
 msgstr "Sonra"
@@ -6885,7 +6916,7 @@ msgstr "Sonra"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5819
+#: modules/printbackends/gtkprintbackendcups.c:5822
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Yazdırılma"
@@ -6893,7 +6924,7 @@ msgstr "Yazdırılma"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5830
+#: modules/printbackends/gtkprintbackendcups.c:5833
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Yazdırılma zamanı"
@@ -6903,64 +6934,64 @@ msgstr "Yazdırılma zamanı"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5877
+#: modules/printbackends/gtkprintbackendcups.c:5880
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Özel %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5988
+#: modules/printbackends/gtkprintbackendcups.c:5991
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Yazıcı Profili"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5995
+#: modules/printbackends/gtkprintbackendcups.c:5998
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Erişilemez"
 
-#: modules/printbackends/gtkprintbackendfile.c:235
+#: modules/printbackends/gtkprintbackendfile.c:238
 msgid "output"
 msgstr "çıktı"
 
-#: modules/printbackends/gtkprintbackendfile.c:507
+#: modules/printbackends/gtkprintbackendfile.c:510
 msgid "Print to File"
 msgstr "Dosyaya Yazdır"
 
-#: modules/printbackends/gtkprintbackendfile.c:633
+#: modules/printbackends/gtkprintbackendfile.c:636
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/gtkprintbackendfile.c:633
+#: modules/printbackends/gtkprintbackendfile.c:636
 msgid "PostScript"
 msgstr "PostScript"
 
-#: modules/printbackends/gtkprintbackendfile.c:633
+#: modules/printbackends/gtkprintbackendfile.c:636
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/gtkprintbackendfile.c:646
+#: modules/printbackends/gtkprintbackendfile.c:649
 msgid "Pages per _sheet:"
 msgstr "_Yaprak başına sayfa:"
 
-#: modules/printbackends/gtkprintbackendfile.c:706
+#: modules/printbackends/gtkprintbackendfile.c:709
 msgid "File"
 msgstr "Dosya"
 
-#: modules/printbackends/gtkprintbackendfile.c:716
+#: modules/printbackends/gtkprintbackendfile.c:719
 msgid "_Output format"
 msgstr "_Çıktı biçimi"
 
-#: modules/printbackends/gtkprintbackendlpr.c:372
+#: modules/printbackends/gtkprintbackendlpr.c:375
 msgid "Print to LPR"
 msgstr "LPRʼye Yazdır"
 
-#: modules/printbackends/gtkprintbackendlpr.c:401
+#: modules/printbackends/gtkprintbackendlpr.c:404
 msgid "Pages Per Sheet"
 msgstr "Yaprak Başına Sayfa"
 
-#: modules/printbackends/gtkprintbackendlpr.c:407
+#: modules/printbackends/gtkprintbackendlpr.c:410
 msgid "Command Line"
 msgstr "Komut Satırı"
 
@@ -7037,16 +7068,16 @@ msgstr ""
 "  screenshot   Dosyanın ekran görüntüsünü al\n"
 "\n"
 
-#: tools/gtk-builder-tool-enumerate.c:54 tools/gtk-builder-tool-preview.c:179
+#: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:359
 #: tools/gtk-builder-tool-screenshot.c:362
-#: tools/gtk-builder-tool-simplify.c:2360 tools/gtk-builder-tool-validate.c:159
+#: tools/gtk-builder-tool-simplify.c:2362 tools/gtk-builder-tool-validate.c:260
 msgid "FILE"
 msgstr "DOSYA"
 
-#: tools/gtk-builder-tool-enumerate.c:62
-msgid "List all named objects."
-msgstr "Tüm adlandırılan nesneleri listele."
+#: tools/gtk-builder-tool-enumerate.c:64
+msgid "Print all named objects."
+msgstr "Tüm adlandırılan nesneleri yazdır."
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
@@ -7076,66 +7107,66 @@ msgstr "Var olan dosyanın üstüne yaz"
 msgid "Take a screenshot of the file."
 msgstr "Dosyanın ekran görüntüsünü al."
 
-#: tools/gtk-builder-tool-simplify.c:442
+#: tools/gtk-builder-tool-simplify.c:444
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: '%s' için değer ayrıştırılamadı: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:651
+#: tools/gtk-builder-tool-simplify.c:653
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sproperty %s::%s bulunamadı\n"
 
-#: tools/gtk-builder-tool-simplify.c:2288
+#: tools/gtk-builder-tool-simplify.c:2290
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "“%s” yüklenemedi: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2299
-#: tools/gtk-builder-tool-simplify.c:2305
+#: tools/gtk-builder-tool-simplify.c:2301
+#: tools/gtk-builder-tool-simplify.c:2307
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "“%s” ayrıştırılamadı: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2311
+#: tools/gtk-builder-tool-simplify.c:2313
 #, c-format
 msgid "Can’t parse “%s”\n"
 msgstr "“%s” ayrıştırılamadı\n"
 
-#: tools/gtk-builder-tool-simplify.c:2335
+#: tools/gtk-builder-tool-simplify.c:2337
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "“%s” okunamadı: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2341
+#: tools/gtk-builder-tool-simplify.c:2343
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "%s yazılamadı: “%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2358
+#: tools/gtk-builder-tool-simplify.c:2360
 msgid "Replace the file"
 msgstr "Dosyayı değiştir"
 
-#: tools/gtk-builder-tool-simplify.c:2359
+#: tools/gtk-builder-tool-simplify.c:2361
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "GTK 3’ten GTK 4’e dönüştür"
 
-#: tools/gtk-builder-tool-simplify.c:2370
+#: tools/gtk-builder-tool-simplify.c:2372
 msgid "Simplify the file."
 msgstr "Dosyayı yalınlaştır."
 
-#: tools/gtk-builder-tool-simplify.c:2383
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "No .ui file specified\n"
 msgstr ".ui dosyası belirtilmedi\n"
 
 # Buradaki --replace yi çevirmedim, çevrilmesi gerekiyor mu bilemedim.
-#: tools/gtk-builder-tool-simplify.c:2389
+#: tools/gtk-builder-tool-simplify.c:2391
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "--replace olmadan yalnızca tek bir .ui dosyasını basitleştirebilir\n"
 
-#: tools/gtk-builder-tool-validate.c:168
+#: tools/gtk-builder-tool-validate.c:269
 msgid "Validate the file."
 msgstr "Dosyayı doğrula."
 
@@ -7303,9 +7334,3 @@ msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
 "Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
 "theme-indexʼi kullanın.\n"
-
-#~ msgid "GL rendering is disabled"
-#~ msgstr "GL gerçeklemesi kapatıldı"
-
-#~ msgid "Software GL"
-#~ msgstr "Yazılım GL"
