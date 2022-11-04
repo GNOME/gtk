@@ -106,34 +106,7 @@ _gdk_win32_get_setting (const char *name,
    * XXX : if these values get changed through the Windoze UI the
    *       respective gdk_events are not generated yet.
    */
-  if (strcmp ("gtk-double-click-time", name) == 0)
-    {
-      int i = GetDoubleClickTime ();
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-double-click-distance", name) == 0)
-    {
-      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
-    {
-      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-split-cursor", name) == 0)
-    {
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : FALSE\n", name));
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-alternative-button-order", name) == 0)
+  if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
@@ -145,65 +118,25 @@ _gdk_win32_get_setting (const char *name,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
-  else if (strcmp ("gtk-shell-shows-desktop", name) == 0)
+  else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
     {
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
-      g_value_set_boolean (value, TRUE);
+      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
       return TRUE;
     }
-  else if (strcmp ("gtk-xft-hinting", name) == 0)
+  else if (strcmp ("gtk-double-click-distance", name) == 0)
     {
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
-      g_value_set_int (value, 1);
+      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
       return TRUE;
     }
-  else if (strcmp ("gtk-xft-antialias", name) == 0)
+  else if (strcmp ("gtk-double-click-time", name) == 0)
     {
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
-      g_value_set_int (value, 1);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-xft-dpi", name) == 0)
-    {
-      GdkWin32Display *display = GDK_WIN32_DISPLAY (_gdk_display);
-
-      if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
-          !display->has_fixed_scale)
-        {
-          int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
-          if (dpi >= 96)
-            {
-              int xft_dpi = 1024 * dpi / display->surface_scale;
-              g_value_set_int (value, xft_dpi);
-              GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
-              return TRUE;
-            }
-        }
-
-      return FALSE;
-    }
-  else if (strcmp ("gtk-xft-hintstyle", name) == 0)
-    {
-      g_value_set_static_string (value, "hintfull");
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
-      return TRUE;
-    }
-  else if (strcmp ("gtk-xft-rgba", name) == 0)
-    {
-      unsigned int orientation = 0;
-      if (SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &orientation, 0))
-        {
-          if (orientation == FE_FONTSMOOTHINGORIENTATIONRGB)
-            g_value_set_static_string (value, "rgb");
-          else if (orientation == FE_FONTSMOOTHINGORIENTATIONBGR)
-            g_value_set_static_string (value, "bgr");
-          else
-            g_value_set_static_string (value, "none");
-        }
-      else
-        g_value_set_static_string (value, "none");
-
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
+      int i = GetDoubleClickTime ();
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-font-name", name) == 0)
@@ -252,6 +185,73 @@ _gdk_win32_get_setting (const char *name,
           g_value_set_boolean (value, val != 0);
           return TRUE;
         }
+    }
+  else if (strcmp ("gtk-shell-shows-desktop", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-split-cursor", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : FALSE\n", name));
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-antialias", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
+      g_value_set_int (value, 1);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-dpi", name) == 0)
+    {
+      GdkWin32Display *display = GDK_WIN32_DISPLAY (_gdk_display);
+
+      if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
+          !display->has_fixed_scale)
+        {
+          int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
+          if (dpi >= 96)
+            {
+              int xft_dpi = 1024 * dpi / display->surface_scale;
+              g_value_set_int (value, xft_dpi);
+              GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
+              return TRUE;
+            }
+        }
+
+      return FALSE;
+    }
+  else if (strcmp ("gtk-xft-hinting", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
+      g_value_set_int (value, 1);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-hintstyle", name) == 0)
+    {
+      g_value_set_static_string (value, "hintfull");
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-rgba", name) == 0)
+    {
+      unsigned int orientation = 0;
+      if (SystemParametersInfoW (SPI_GETFONTSMOOTHINGORIENTATION, 0, &orientation, 0))
+        {
+          if (orientation == FE_FONTSMOOTHINGORIENTATIONRGB)
+            g_value_set_static_string (value, "rgb");
+          else if (orientation == FE_FONTSMOOTHINGORIENTATIONBGR)
+            g_value_set_static_string (value, "bgr");
+          else
+            g_value_set_static_string (value, "none");
+        }
+      else
+        g_value_set_static_string (value, "none");
+
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
+      return TRUE;
     }
 
   return FALSE;
