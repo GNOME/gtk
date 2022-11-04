@@ -60,52 +60,10 @@ _get_system_font_name (HDC hdc)
   return result;
 }
 
-/*
-  For reference, from gdk/x11/gdksettings.c:
-
-  "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
-  "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
-  "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
-  "Net/CursorBlink\0"         "gtk-cursor-blink\0"
-  "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
-  "Net/ThemeName\0"           "gtk-theme-name\0"
-  "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
-  "Gtk/ColorPalette\0"        "gtk-color-palette\0"
-  "Gtk/FontName\0"            "gtk-font-name\0"
-  "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
-  "Gtk/Modules\0"             "gtk-modules\0"
-  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
-  "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
-  "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
-  "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
-  "Gtk/EnableAnimations\0"    "gtk-enable-animations\0"
-  "Xft/Antialias\0"           "gtk-xft-antialias\0"
-  "Xft/Hinting\0"             "gtk-xft-hinting\0"
-  "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
-  "Xft/RGBA\0"                "gtk-xft-rgba\0"
-  "Xft/DPI\0"                 "gtk-xft-dpi\0"
-  "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
-  "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
-  "Gtk/IMModule\0"            "gtk-im-module\0"
-  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
-  "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
-  "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
-
-  More, from various places in gtk sources:
-
-  gtk-entry-select-on-focus
-  gtk-split-cursor
-
-*/
 gboolean
 _gdk_win32_get_setting (const char *name,
                         GValue      *value)
 {
-  /*
-   * XXX : if these values get changed through the Windoze UI the
-   *       respective gdk_events are not generated yet.
-   */
   if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
