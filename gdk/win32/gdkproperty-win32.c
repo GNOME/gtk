@@ -127,6 +127,14 @@ _gdk_win32_get_setting (const char *name,
           return FALSE;
         }
     }
+  else if (strcmp ("gtk-hint-font-metrics", name) == 0)
+    {
+      gboolean hint_font_metrics = TRUE;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name,
+                             hint_font_metrics ? "TRUE" : "FALSE"));
+      g_value_set_boolean (value, hint_font_metrics);
+      return TRUE;
+    }
   else if (strcmp ("gtk-im-module", name) == 0)
     {
       if (_gdk_input_locale_is_ime)
