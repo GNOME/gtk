@@ -137,11 +137,9 @@ _gdk_win32_get_setting (const char *name,
     }
   else if (strcmp ("gtk-im-module", name) == 0)
     {
-      if (_gdk_input_locale_is_ime)
-        g_value_set_static_string (value, "ime");
-      else
-        g_value_set_static_string (value, "");
-
+      const char *im_module = _gdk_input_locale_is_ime ? "ime" : "";
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, im_module));
+      g_value_set_static_string (value, im_module);
       return TRUE;
     }
   else if (strcmp ("gtk-overlay-scrolling", name) == 0)
@@ -153,7 +151,10 @@ _gdk_win32_get_setting (const char *name,
       ret = RegGetValueW (HKEY_CURRENT_USER, L"Control Panel\\Accessibility", L"DynamicScrollbars", RRF_RT_DWORD, NULL, &val, &sz);
       if (ret == ERROR_SUCCESS)
         {
-          g_value_set_boolean (value, val != 0);
+          gboolean overlay_scrolling = val != 0;
+          GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name,
+                                 overlay_scrolling ? "TRUE" : "FALSE"));
+          g_value_set_boolean (value, overlay_scrolling);
           return TRUE;
         }
     }
