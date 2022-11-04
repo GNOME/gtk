@@ -147,6 +147,23 @@ _gdk_win32_get_setting (const char *name,
       g_value_set_boolean (value, FALSE);
       return TRUE;
     }
+  else if (strcmp ("gtk-theme-name", name) == 0)
+    {
+      HIGHCONTRASTW hc;
+      memset (&hc, 0, sizeof (hc));
+      hc.cbSize = sizeof (hc);
+      if (API_CALL (SystemParametersInfoW, (SPI_GETHIGHCONTRAST, sizeof (hc), &hc, 0)))
+        {
+          if (hc.dwFlags & HCF_HIGHCONTRASTON)
+            {
+              const char *theme_name = "Default-hc";
+
+              GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %s\n", name, theme_name));
+              g_value_set_string (value, theme_name);
+              return TRUE;
+            }
+        }
+    }
   else if (strcmp ("gtk-xft-antialias", name) == 0)
     {
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
