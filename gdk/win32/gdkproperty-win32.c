@@ -76,6 +76,13 @@ _gdk_win32_get_setting (const char *name,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
+  else if (strcmp ("gtk-cursor-blink", name) == 0)
+    {
+      gboolean blinks = (GetCaretBlinkTime () != INFINITE);
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %s\n", name, blinks ? "TRUE" : "FALSE"));
+      g_value_set_boolean (value, blinks);
+      return TRUE;
+    }
   else if (strcmp ("gtk-cursor-theme-size", name) == 0)
     {
       int cursor_size = GetSystemMetrics (SM_CXCURSOR);
