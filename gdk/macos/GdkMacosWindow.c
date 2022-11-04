@@ -398,8 +398,7 @@ typedef NSString *CALayerContentsGravity;
    * in from a display-side change. We need to request a layout in
    * addition to the configure event.
    */
-  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface) &&
-      GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface)->decorated)
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface))
     gdk_surface_request_layout (GDK_SURFACE (gdk_surface));
 }
 
@@ -875,12 +874,21 @@ typedef NSString *CALayerContentsGravity;
 {
   NSWindowStyleMask style_mask = [self styleMask];
 
-  [self setHasShadow:decorated];
-
   if (decorated)
-    style_mask |= NSWindowStyleMaskTitled;
+    {
+      style_mask &= ~NSWindowStyleMaskFullSizeContentView;
+      [self setTitleVisibility:NSWindowTitleVisible];
+    }
   else
-    style_mask &= ~NSWindowStyleMaskTitled;
+    {
+      style_mask |= NSWindowStyleMaskFullSizeContentView;
+      [self setTitleVisibility:NSWindowTitleHidden];
+    }
+
+  [self setTitlebarAppearsTransparent:!decorated];
+  [[self standardWindowButton:NSWindowCloseButton] setHidden:!decorated];
+  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:!decorated];
+  [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
 
   [self setStyleMask:style_mask];
 }
