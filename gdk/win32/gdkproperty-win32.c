@@ -103,22 +103,13 @@ _gdk_win32_get_setting (const char *name,
 
       if (font_name)
         {
-          /* The pango font fallback list got fixed during 1.43, before that
-           * using anything but "Segoe UI" would lead to a poor glyph coverage */
-          if (pango_version_check (1, 43, 0) != NULL &&
-              g_ascii_strncasecmp (font_name, "Segoe UI", strlen ("Segoe UI")) != 0)
-            {
-              g_free (font_name);
-              return FALSE;
-            }
-
           GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, font_name));
           g_value_take_string (value, font_name);
           return TRUE;
         }
       else
         {
-          g_warning ("gdk_screen_get_setting: Detecting the system font failed");
+          g_warning ("gdk_win32_get_setting: Detecting the system font failed");
           return FALSE;
         }
     }
