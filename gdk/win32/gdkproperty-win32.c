@@ -160,17 +160,22 @@ _gdk_win32_get_setting (const char *name,
       if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
           !display->has_fixed_scale)
         {
-          int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
-          if (dpi >= 96)
+          HDC hdc = GetDC (NULL);
+
+          if (hdc != NULL)
             {
-              int xft_dpi = 1024 * dpi / display->surface_scale;
-              g_value_set_int (value, xft_dpi);
-              GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
-              return TRUE;
+              int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
+              ReleaseDC (NULL, hdc);
+
+              if (dpi >= 96)
+                {
+                  int xft_dpi = 1024 * dpi / display->surface_scale;
+                  GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
+                  g_value_set_int (value, xft_dpi);
+                  return TRUE;
+                }
             }
         }
-
-      return FALSE;
     }
   else if (strcmp ("gtk-xft-hinting", name) == 0)
     {
