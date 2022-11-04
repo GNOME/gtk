@@ -60,80 +60,11 @@ _get_system_font_name (HDC hdc)
   return result;
 }
 
-/*
-  For reference, from gdk/x11/gdksettings.c:
-
-  "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
-  "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
-  "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
-  "Net/CursorBlink\0"         "gtk-cursor-blink\0"
-  "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
-  "Net/ThemeName\0"           "gtk-theme-name\0"
-  "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
-  "Gtk/ColorPalette\0"        "gtk-color-palette\0"
-  "Gtk/FontName\0"            "gtk-font-name\0"
-  "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
-  "Gtk/Modules\0"             "gtk-modules\0"
-  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
-  "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
-  "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
-  "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
-  "Gtk/EnableAnimations\0"    "gtk-enable-animations\0"
-  "Xft/Antialias\0"           "gtk-xft-antialias\0"
-  "Xft/Hinting\0"             "gtk-xft-hinting\0"
-  "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
-  "Xft/RGBA\0"                "gtk-xft-rgba\0"
-  "Xft/DPI\0"                 "gtk-xft-dpi\0"
-  "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
-  "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
-  "Gtk/IMModule\0"            "gtk-im-module\0"
-  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
-  "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
-  "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
-
-  More, from various places in gtk sources:
-
-  gtk-entry-select-on-focus
-  gtk-split-cursor
-
-*/
 gboolean
 _gdk_win32_get_setting (const char *name,
                         GValue      *value)
 {
-  /*
-   * XXX : if these values get changed through the Windoze UI the
-   *       respective gdk_events are not generated yet.
-   */
-  if (strcmp ("gtk-double-click-time", name) == 0)
-    {
-      int i = GetDoubleClickTime ();
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-double-click-distance", name) == 0)
-    {
-      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
-    {
-      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
-      g_value_set_int (value, i);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-split-cursor", name) == 0)
-    {
-      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : FALSE\n", name));
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-alternative-button-order", name) == 0)
+  if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
@@ -145,17 +76,116 @@ _gdk_win32_get_setting (const char *name,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
+  else if (strcmp ("gtk-cursor-blink", name) == 0)
+    {
+      gboolean blinks = (GetCaretBlinkTime () != INFINITE);
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %s\n", name, blinks ? "TRUE" : "FALSE"));
+      g_value_set_boolean (value, blinks);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-cursor-theme-size", name) == 0)
+    {
+      int cursor_size = GetSystemMetrics (SM_CXCURSOR);
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, cursor_size));
+      g_value_set_int (value, cursor_size);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
+    {
+      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-double-click-distance", name) == 0)
+    {
+      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-double-click-time", name) == 0)
+    {
+      int i = GetDoubleClickTime ();
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-font-name", name) == 0)
+    {
+      char *font_name = _get_system_font_name (_gdk_display_hdc);
+
+      if (font_name)
+        {
+          GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, font_name));
+          g_value_take_string (value, font_name);
+          return TRUE;
+        }
+      else
+        {
+          g_warning ("gdk_win32_get_setting: Detecting the system font failed");
+          return FALSE;
+        }
+    }
+  else if (strcmp ("gtk-hint-font-metrics", name) == 0)
+    {
+      gboolean hint_font_metrics = TRUE;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name,
+                             hint_font_metrics ? "TRUE" : "FALSE"));
+      g_value_set_boolean (value, hint_font_metrics);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-im-module", name) == 0)
+    {
+      const char *im_module = _gdk_input_locale_is_ime ? "ime" : "";
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, im_module));
+      g_value_set_static_string (value, im_module);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-overlay-scrolling", name) == 0)
+    {
+      DWORD val = 0;
+      DWORD sz = sizeof (val);
+      LSTATUS ret = 0;
+
+      ret = RegGetValueW (HKEY_CURRENT_USER, L"Control Panel\\Accessibility", L"DynamicScrollbars", RRF_RT_DWORD, NULL, &val, &sz);
+      if (ret == ERROR_SUCCESS)
+        {
+          gboolean overlay_scrolling = val != 0;
+          GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name,
+                                 overlay_scrolling ? "TRUE" : "FALSE"));
+          g_value_set_boolean (value, overlay_scrolling);
+          return TRUE;
+        }
+    }
   else if (strcmp ("gtk-shell-shows-desktop", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
-  else if (strcmp ("gtk-xft-hinting", name) == 0)
+  else if (strcmp ("gtk-split-cursor", name) == 0)
     {
-      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
-      g_value_set_int (value, 1);
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : FALSE\n", name));
+      g_value_set_boolean (value, FALSE);
       return TRUE;
+    }
+  else if (strcmp ("gtk-theme-name", name) == 0)
+    {
+      HIGHCONTRASTW hc;
+      memset (&hc, 0, sizeof (hc));
+      hc.cbSize = sizeof (hc);
+      if (API_CALL (SystemParametersInfoW, (SPI_GETHIGHCONTRAST, sizeof (hc), &hc, 0)))
+        {
+          if (hc.dwFlags & HCF_HIGHCONTRASTON)
+            {
+              const char *theme_name = "Default-hc";
+
+              GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %s\n", name, theme_name));
+              g_value_set_string (value, theme_name);
+              return TRUE;
+            }
+        }
     }
   else if (strcmp ("gtk-xft-antialias", name) == 0)
     {
@@ -170,17 +200,28 @@ _gdk_win32_get_setting (const char *name,
       if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
           !display->has_fixed_scale)
         {
-          int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
-          if (dpi >= 96)
+          HDC hdc = GetDC (NULL);
+
+          if (hdc != NULL)
             {
-              int xft_dpi = 1024 * dpi / display->surface_scale;
-              g_value_set_int (value, xft_dpi);
-              GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
-              return TRUE;
+              int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
+              ReleaseDC (NULL, hdc);
+
+              if (dpi >= 96)
+                {
+                  int xft_dpi = 1024 * dpi / display->surface_scale;
+                  GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
+                  g_value_set_int (value, xft_dpi);
+                  return TRUE;
+                }
             }
         }
-
-      return FALSE;
+    }
+  else if (strcmp ("gtk-xft-hinting", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
+      g_value_set_int (value, 1);
+      return TRUE;
     }
   else if (strcmp ("gtk-xft-hintstyle", name) == 0)
     {
@@ -205,53 +246,6 @@ _gdk_win32_get_setting (const char *name,
 
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %s\n", name, g_value_get_string (value)));
       return TRUE;
-    }
-  else if (strcmp ("gtk-font-name", name) == 0)
-    {
-      char *font_name = _get_system_font_name (_gdk_display_hdc);
-
-      if (font_name)
-        {
-          /* The pango font fallback list got fixed during 1.43, before that
-           * using anything but "Segoe UI" would lead to a poor glyph coverage */
-          if (pango_version_check (1, 43, 0) != NULL &&
-              g_ascii_strncasecmp (font_name, "Segoe UI", strlen ("Segoe UI")) != 0)
-            {
-              g_free (font_name);
-              return FALSE;
-            }
-
-          GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, font_name));
-          g_value_take_string (value, font_name);
-          return TRUE;
-        }
-      else
-        {
-          g_warning ("gdk_screen_get_setting: Detecting the system font failed");
-          return FALSE;
-        }
-    }
-  else if (strcmp ("gtk-im-module", name) == 0)
-    {
-      if (_gdk_input_locale_is_ime)
-        g_value_set_static_string (value, "ime");
-      else
-        g_value_set_static_string (value, "");
-
-      return TRUE;
-    }
-  else if (strcmp ("gtk-overlay-scrolling", name) == 0)
-    {
-      DWORD val = 0;
-      DWORD sz = sizeof (val);
-      LSTATUS ret = 0;
-
-      ret = RegGetValueW (HKEY_CURRENT_USER, L"Control Panel\\Accessibility", L"DynamicScrollbars", RRF_RT_DWORD, NULL, &val, &sz);
-      if (ret == ERROR_SUCCESS)
-        {
-          g_value_set_boolean (value, val != 0);
-          return TRUE;
-        }
     }
 
   return FALSE;
