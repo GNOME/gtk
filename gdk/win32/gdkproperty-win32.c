@@ -76,6 +76,13 @@ _gdk_win32_get_setting (const char *name,
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
+  else if (strcmp ("gtk-cursor-theme-size", name) == 0)
+    {
+      int cursor_size = GetSystemMetrics (SM_CXCURSOR);
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, cursor_size));
+      g_value_set_int (value, cursor_size);
+      return TRUE;
+    }
   else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
     {
       int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
