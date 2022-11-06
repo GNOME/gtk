@@ -5236,6 +5236,72 @@ gdk_wayland_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 }
 
 static void
+xdg_exported_handle2 (void                    *data,
+                      struct zxdg_exported_v1 *zxdg_exported_v1,
+                      const char              *handle)
+{
+  g_task_return_pointer (G_TASK (data), g_strdup (handle), g_free);
+  g_object_unref (data);
+}
+
+static const struct zxdg_exported_v1_listener xdg_exported_listener2 = {
+  xdg_exported_handle2
+};
+
+static void
+gdk_wayland_toplevel_real_export_handle (GdkToplevel          *toplevel,
+                                         GCancellable         *cancellable,
+                                         GAsyncReadyCallback   callback,
+                                         gpointer              user_data)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  struct zxdg_exported_v1 *xdg_exported;
+  GTask *task;
+
+  task = g_task_new (toplevel, cancellable, callback, user_data);
+
+  if (!display_wayland->xdg_exporter)
+    {
+      g_task_return_pointer (task, NULL, NULL);
+      g_object_unref (task);
+      return;
+    }
+
+  xdg_exported =
+    zxdg_exporter_v1_export (display_wayland->xdg_exporter,
+                             gdk_wayland_surface_get_wl_surface (surface));
+
+  zxdg_exported_v1_add_listener (xdg_exported, &xdg_exported_listener2, task);
+  wayland_toplevel->xdg_exported = xdg_exported;
+}
+
+static char *
+gdk_wayland_toplevel_real_export_handle_finish (GdkToplevel   *toplevel,
+                                                GAsyncResult  *result,
+                                                GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel)
+{
+  GdkWaylandToplevel *wayland_toplevel;
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
+  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  g_return_if_fail (wayland_toplevel->xdg_exported);
+
+  g_clear_pointer (&wayland_toplevel->xdg_exported,
+                   zxdg_exported_v1_destroy);
+}
+
+static void
 gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_wayland_toplevel_present;
@@ -5249,6 +5315,9 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;
   iface->begin_resize = gdk_wayland_toplevel_begin_resize;
   iface->begin_move = gdk_wayland_toplevel_begin_move;
+  iface->export_handle = gdk_wayland_toplevel_real_export_handle;
+  iface->export_handle_finish = gdk_wayland_toplevel_real_export_handle_finish;
+  iface->unexport_handle = gdk_wayland_toplevel_real_unexport_handle;
 }
 
 static void

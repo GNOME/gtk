@@ -114,6 +114,32 @@ gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
 }
 
 static void
+gdk_toplevel_default_export_handle (GdkToplevel          *toplevel,
+                                    GCancellable         *cancellable,
+                                    GAsyncReadyCallback   callback,
+                                    gpointer              user_data)
+{
+  GTask *task;
+
+  task = g_task_new (toplevel, cancellable, callback, user_data);
+  g_task_return_pointer (task, NULL, NULL);
+  g_object_unref (task);
+}
+
+static char *
+gdk_toplevel_default_export_handle_finish (GdkToplevel   *toplevel,
+                                           GAsyncResult  *result,
+                                           GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+gdk_toplevel_default_unexport_handle (GdkToplevel *toplevel)
+{
+}
+
+static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
@@ -125,6 +151,9 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->inhibit_system_shortcuts = gdk_toplevel_default_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_toplevel_default_restore_system_shortcuts;
   iface->titlebar_gesture = gdk_toplevel_default_titlebar_gesture;
+  iface->export_handle = gdk_toplevel_default_export_handle;
+  iface->export_handle_finish = gdk_toplevel_default_export_handle_finish;
+  iface->unexport_handle = gdk_toplevel_default_unexport_handle;
 
   /**
    * GdkToplevel:state: (attributes org.gtk.Property.get=gdk_toplevel_get_state)
@@ -723,4 +752,73 @@ gdk_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
 
   return GDK_TOPLEVEL_GET_IFACE (toplevel)->titlebar_gesture (toplevel,
                                                               gesture);
+}
+
+/*< private >
+ * gdk_toplevel_export_handle:
+ * @toplevel: a `GdkToplevel`
+ * @cancellable: (nullable): a `GCancellable`
+ * @callback: ithe callback to call when the handle has been exported
+ * @user_data: (closure callback): data to pass to @callback
+ *
+ * This function asynchronously obtains a handle for a toplevel surface
+ * that can be passed to other processes.
+ *
+ * When a handle has been obtained, @callback will be called, and can
+ * receive the handle via [method@Gdk.Toplevel.export_handle_finish].
+ *
+ * It is an error to call this function on a surface that is already
+ * exported.
+ *
+ * When the handle is no longer needed, [method@Gdk.Toplevel.unexport_handle]
+ * should be called to clean up resources.
+ *
+ * Since: 4.10
+ */
+void
+gdk_toplevel_export_handle (GdkToplevel         *toplevel,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
+{
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->export_handle (toplevel, cancellable, callback, user_data);
+}
+
+/*< private >
+ * gdk_toplevel_export_handle_finish:
+ * @toplevel: a `GdkToplevel`
+ * @result: the `GAsyncResult`
+ * @error: return location for an error
+ *
+ * Finishes the [method@Gdk.Toplevel.export_handle] cal and
+ * returns the resulting handle.
+ *
+ * Returns: (nullable) (transfer full): the exported handle,
+ *   or `NULL` and @error is set
+ *
+ * Since: 4.10
+ */
+char *
+gdk_toplevel_export_handle_finish (GdkToplevel   *toplevel,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->export_handle_finish (toplevel, result, error);
+}
+
+/*< private >
+ * gdk_toplevel_unexport_handle:
+ * @toplevel: a `GdkToplevel`
+ *
+ * Destroys the handle that was obtained with [method@Gdk.Toplevel.export_handle].
+ *
+ * It is an error to call this function on a surface that
+ * does not have a handle.
+ *
+ * Since: 4.10
+ */
+void
+gdk_toplevel_unexport_handle (GdkToplevel *toplevel)
+{
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel);
 }
