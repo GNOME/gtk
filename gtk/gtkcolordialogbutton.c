@@ -401,7 +401,7 @@ gtk_color_dialog_button_new (GtkColorDialog *dialog)
 {
   GtkWidget *self;
 
-  g_return_val_if_fail (GTK_IS_COLOR_DIALOG (dialog), NULL);
+  g_return_val_if_fail (dialog == NULL || GTK_IS_COLOR_DIALOG (dialog), NULL);
 
   self = g_object_new (GTK_TYPE_COLOR_DIALOG_BUTTON,
                        "dialog", dialog,

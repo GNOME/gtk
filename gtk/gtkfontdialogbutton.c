@@ -697,7 +697,7 @@ gtk_font_dialog_button_new (GtkFontDialog *dialog)
 {
   GtkWidget *self;
 
-  g_return_val_if_fail (GTK_IS_FONT_DIALOG (dialog), NULL);
+  g_return_val_if_fail (dialog == NULL || GTK_IS_FONT_DIALOG (dialog), NULL);
 
   self = g_object_new (GTK_TYPE_FONT_DIALOG_BUTTON,
                        "dialog", dialog,
