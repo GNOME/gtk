@@ -60,6 +60,7 @@ tests = [
   { 'name': 'listlistmodel' },
   { 'name': 'main' },
   { 'name': 'maplistmodel' },
+  { 'name': 'misc' },
   { 'name': 'multiselection' },
   { 'name': 'noselection' },
   { 'name': 'notify' },
