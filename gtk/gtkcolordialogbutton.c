@@ -449,7 +449,7 @@ gtk_color_dialog_button_set_dialog (GtkColorDialogButton *self,
                                     GtkColorDialog       *dialog)
 {
   g_return_if_fail (GTK_IS_COLOR_DIALOG_BUTTON (self));
-  g_return_if_fail (GTK_IS_COLOR_DIALOG (dialog));
+  g_return_if_fail (dialog == NULL || GTK_IS_COLOR_DIALOG (dialog));
 
   if (!g_set_object (&self->dialog, dialog))
     return;
