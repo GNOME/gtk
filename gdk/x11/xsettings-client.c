@@ -457,16 +457,31 @@ read_settings (GdkX11Screen *x11_screen,
 	}
     }
 
-  if (do_notify)
-    notify_changes (x11_screen, old_list);
-  if (old_list)
-    g_hash_table_unref (old_list);
-
   g_value_init (&value, G_TYPE_INT);
 
   if (!x11_screen->fixed_surface_scale &&
       gdk_display_get_setting (display, "gdk-window-scaling-factor", &value))
     _gdk_x11_screen_set_surface_scale (x11_screen, g_value_get_int (&value));
+
+  /* XSettings gives us the cursor theme size in physical pixel size,
+   * while we want logical pixel values instead.
+   */
+  if (x11_screen->surface_scale > 1 &&
+      gdk_display_get_setting (display, "gtk-cursor-theme-size", &value))
+    {
+      int cursor_theme_size = g_value_get_int (&value);
+
+      copy = g_new0 (GValue, 1);
+      g_value_init (copy, G_TYPE_INT);
+      g_value_set_int (copy, cursor_theme_size / x11_screen->surface_scale);
+      g_hash_table_insert (x11_screen->xsettings,
+                           (gpointer) "gtk-cursor-theme-size", copy);
+    }
+
+  if (do_notify)
+    notify_changes (x11_screen, old_list);
+  if (old_list)
+    g_hash_table_unref (old_list);
 }
 
 static Atom

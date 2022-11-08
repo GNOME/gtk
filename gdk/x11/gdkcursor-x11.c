@@ -281,27 +281,32 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                   const int    size)
 {
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
+  GdkX11Screen *x11_screen;
   Display *xdisplay;
   char *old_theme;
+  int real_size;
   int old_size;
   gpointer cursor, xcursor;
   GHashTableIter iter;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
+  x11_screen = gdk_x11_display_get_screen (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  real_size = size * x11_screen->surface_scale;
 
   old_theme = XcursorGetTheme (xdisplay);
   old_size = XcursorGetDefaultSize (xdisplay);
 
-  if (old_size == size &&
+  if (old_size == real_size &&
       (old_theme == theme ||
        (old_theme && theme && strcmp (old_theme, theme) == 0)))
     return;
 
   XcursorSetTheme (xdisplay, theme);
-  if (size > 0)
-    XcursorSetDefaultSize (xdisplay, size);
+  if (real_size > 0)
+    XcursorSetDefaultSize (xdisplay, real_size);
 
   if (GDK_X11_DISPLAY (display)->cursors == NULL)
     return;
