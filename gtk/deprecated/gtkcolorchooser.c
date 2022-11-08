@@ -61,6 +61,9 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    *
    * The property can be set to change the current selection
    * programmatically.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.ColorDialog] and [class@Gtk.ColorDialogButton]
+   *   instead of widgets implementing `GtkColorChooser`
    */
   g_object_interface_install_property (iface,
       g_param_spec_boxed ("rgba", NULL, NULL,
@@ -78,6 +81,9 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    *
    * Implementations are expected to show alpha by rendering the color
    * over a non-uniform background (like a checkerboard pattern).
+   *
+   * Deprecated: 4.10: Use [class@Gtk.ColorDialog] and [class@Gtk.ColorDialogButton]
+   *   instead of widgets implementing `GtkColorChooser`
    */
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("use-alpha", NULL, NULL,
@@ -94,6 +100,9 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    * This usually happens when the user clicks a color swatch,
    * or a color is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.ColorDialog] and [class@Gtk.ColorDialogButton]
+   *   instead of widgets implementing `GtkColorChooser`
    */
   signals[COLOR_ACTIVATED] =
     g_signal_new (I_("color-activated"),
