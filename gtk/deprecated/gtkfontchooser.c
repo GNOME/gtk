@@ -59,6 +59,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:font: (attributes org.gtk.Property.get=gtk_font_chooser_get_font org.gtk.Property.set=gtk_font_chooser_set_font)
    *
    * The font description as a string, e.g. "Sans Italic 12".
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -70,6 +72,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:font-desc: (attributes org.gtk.Property.get=gtk_font_chooser_get_font_desc org.gtk.Property.set=gtk_font_chooser_set_font_desc)
    *
    * The font description as a `PangoFontDescription`.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -81,6 +85,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:preview-text: (attributes org.gtk.Property.get=gtk_font_chooser_get_preview_text org.gtk.Property.set=gtk_font_chooser_set_preview_text)
    *
    * The string with which to preview the font.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -92,6 +98,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:show-preview-entry: (attributes org.gtk.Property.get=gtk_font_chooser_get_show_preview_entry org.gtk.Property.set=gtk_font_chooser_set_show_preview_entry)
    *
    * Whether to show an entry to change the preview text.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -103,6 +111,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:level: (attributes org.gtk.Property.get=gtk_font_chooser_get_level org.gtk.Property.set=gtk_font_chooser_set_level)
    *
    * The level of granularity to offer for selecting fonts.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -120,6 +130,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    *
    * The format of the string is compatible with
    * CSS and with Pango attributes.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -131,6 +143,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * GtkFontChooser:language: (attributes org.gtk.Property.get=gtk_font_chooser_get_language org.gtk.Property.set=gtk_font_chooser_set_language)
    *
    * The language for which the font features were selected.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
    */
   g_object_interface_install_property
      (iface,
@@ -148,7 +162,9 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * This usually happens when the user double clicks an item,
    * or an item is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
-    */
+   *
+   * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@GtkFontDialogButton] instead
+   */
   chooser_signals[SIGNAL_FONT_ACTIVATED] =
     g_signal_new (I_("font-activated"),
                   GTK_TYPE_FONT_CHOOSER,
