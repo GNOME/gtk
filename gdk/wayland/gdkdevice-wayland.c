@@ -83,6 +83,10 @@
 #define BTN_STYLUS3 0x149 /* Linux 4.15 */
 #endif
 
+#define ALL_BUTTONS_MASK (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | \
+                          GDK_BUTTON3_MASK | GDK_BUTTON4_MASK | \
+                          GDK_BUTTON5_MASK)
+
 #define GDK_SEAT_DEBUG(seat,type,...) GDK_DISPLAY_DEBUG(gdk_seat_get_display (GDK_SEAT (seat)),type,__VA_ARGS__)
 
 typedef struct _GdkWaylandDevicePad GdkWaylandDevicePad;
@@ -1716,7 +1720,8 @@ pointer_handle_button (void              *data,
 
   gdk_wayland_seat_set_frame_event (seat, event);
 
-  modifier = 1 << (8 + gdk_button - 1);
+  modifier = (GDK_BUTTON1_MASK << (button - BUTTON_BASE - 1)) & ALL_BUTTONS_MASK;
+
   if (state)
     seat->pointer_info.button_modifiers |= modifier;
   else
