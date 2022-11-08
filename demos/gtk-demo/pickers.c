@@ -29,19 +29,20 @@ file_opened (GObject *source,
     }
 
   name = g_file_get_basename (file);
-  gtk_button_set_label (GTK_BUTTON (data), name);
+  gtk_label_set_label (GTK_LABEL (data), name);
   g_free (name);
 }
 
 static void
-open_file (GtkButton *picker)
+open_file (GtkButton *picker,
+           GtkLabel  *label)
 {
   GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
   GtkFileDialog *dialog;
 
   dialog = gtk_file_dialog_new ();
 
-  gtk_file_dialog_open (dialog, parent, NULL, NULL, file_opened, picker);
+  gtk_file_dialog_open (dialog, parent, NULL, NULL, file_opened, label);
 
   g_object_unref (dialog);
 }
@@ -52,7 +53,7 @@ GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *table, *label, *picker;
+  GtkWidget *table, *label, *picker, *button;
 
   if (!window)
   {
@@ -95,8 +96,15 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
 
-    picker = gtk_button_new_with_label ("[...]");
-    g_signal_connect (picker, "clicked", G_CALLBACK (open_file), NULL);
+    picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    button = gtk_button_new_from_icon_name ("document-open-symbolic");
+    label = gtk_label_new ("None");
+    gtk_label_set_xalign (GTK_LABEL (label), 0.);
+    gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
+    gtk_widget_set_hexpand (label, TRUE);
+    g_signal_connect (button, "clicked", G_CALLBACK (open_file), label);
+    gtk_box_append (GTK_BOX (picker), label);
+    gtk_box_append (GTK_BOX (picker), button);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
