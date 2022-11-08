@@ -662,7 +662,7 @@ gtk_aspect_frame_set_child (GtkAspectFrame  *self,
  *
  * Gets the child widget of @self.
  *
- * Returns: (nullable) (transfer none): the child widget of self@
+ * Returns: (nullable) (transfer none): the child widget of @self
  */
 GtkWidget *
 gtk_aspect_frame_get_child (GtkAspectFrame *self)
