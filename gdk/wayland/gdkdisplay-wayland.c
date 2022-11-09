@@ -52,6 +52,7 @@
 #include "tablet-unstable-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v1-client-protocol.h>
+#include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <wayland/server-decoration-client-protocol.h>
 
 #include "wm-button-layout-translation.h"
@@ -454,6 +455,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->xdg_exporter =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_exporter_v1_interface, 1);
+    }
+  else if (strcmp (interface, "zxdg_exporter_v2") == 0)
+    {
+      display_wayland->xdg_exporter_v2 =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zxdg_exporter_v2_interface, 1);
     }
   else if (strcmp (interface, "zxdg_importer_v1") == 0)
     {
