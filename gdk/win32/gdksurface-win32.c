@@ -3750,8 +3750,6 @@ gdk_win32_get_window_size_and_position_from_client_rect (GdkSurface *window,
                                                          SIZE      *window_size,
                                                          POINT     *window_position)
 {
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
   /* Turn client area into window area */
   _gdk_win32_adjust_client_rect (window, window_rect);
 
@@ -5074,7 +5072,6 @@ gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
                                           RECT       *return_window_rect)
 {
   RECT window_rect;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
   _gdk_win32_get_window_client_area_rect (surface, scale, &window_rect);
 
