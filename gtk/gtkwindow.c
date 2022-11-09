@@ -6276,15 +6276,20 @@ export_handle_done (GObject      *source,
   ExportHandleData *data = (ExportHandleData *)user_data;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (data->window);
   char *handle;
-  char *prefixed;
 
   handle = gdk_toplevel_export_handle_finish (GDK_TOPLEVEL (priv->surface), result, NULL);
-  prefixed = prefix_handle (priv->display, handle);
+  if (handle)
+    {
+      char *prefixed;
 
-  data->callback (data->window, prefixed, data->user_data);
+      prefixed = prefix_handle (priv->display, handle);
+      data->callback (data->window, prefixed, data->user_data);
+      g_free (prefixed);
+      g_free (handle);
+    }
+  else
+    data->callback (data->window, NULL, data->user_data);
 
-  g_free (handle);
-  g_free (prefixed);
 
   g_free (data);
 }
