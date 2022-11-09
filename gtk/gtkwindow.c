@@ -72,6 +72,7 @@
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdktoplevelprivate.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -6244,26 +6245,49 @@ gtk_window_enable_debugging (GtkWindow *window,
   return TRUE;
 }
 
-#ifdef GDK_WINDOWING_WAYLAND
 typedef struct {
   GtkWindow *window;
   GtkWindowHandleExported callback;
   gpointer user_data;
-} WaylandSurfaceHandleExportedData;
+} ExportHandleData;
+
+static char *
+prefix_handle (GdkDisplay *display,
+               char       *handle)
+{
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return g_strconcat ("wayland:", handle, NULL);
+  else
+#endif
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    return g_strconcat ("x11:", handle, NULL);
+  else
+#endif
+    return NULL;
+}
 
 static void
-wayland_surface_handle_exported (GdkToplevel *toplevel,
-				 const char  *wayland_handle_str,
-				 gpointer     user_data)
+export_handle_done (GObject      *source,
+                    GAsyncResult *result,
+                    void         *user_data)
 {
-  WaylandSurfaceHandleExportedData *data = user_data;
-  char *handle_str;
+  ExportHandleData *data = (ExportHandleData *)user_data;
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (data->window);
+  char *handle;
+  char *prefixed;
 
-  handle_str = g_strdup_printf ("wayland:%s", wayland_handle_str);
-  data->callback (data->window, handle_str, data->user_data);
-  g_free (handle_str);
+  handle = gdk_toplevel_export_handle_finish (GDK_TOPLEVEL (priv->surface), result, NULL);
+  prefixed = prefix_handle (priv->display, handle);
+
+  data->callback (data->window, prefixed, data->user_data);
+
+  g_free (handle);
+  g_free (prefixed);
+
+  g_free (data);
 }
-#endif
 
 gboolean
 gtk_window_export_handle (GtkWindow               *window,
@@ -6271,70 +6295,16 @@ gtk_window_export_handle (GtkWindow               *window,
                           gpointer                 user_data)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  ExportHandleData *data;
 
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      char *handle_str;
-      guint32 xid = (guint32) gdk_x11_surface_get_xid (priv->surface);
+  data = g_new (ExportHandleData, 1);
+  data->window = window;
+  data->callback = callback;
+  data->user_data = user_data;
 
-      handle_str = g_strdup_printf ("x11:%x", xid);
-      callback (window, handle_str, user_data);
-      g_free (handle_str);
+  gdk_toplevel_export_handle (GDK_TOPLEVEL (priv->surface), NULL, export_handle_done, data);
 
-      return TRUE;
-    }
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      WaylandSurfaceHandleExportedData *data;
-
-      data = g_new0 (WaylandSurfaceHandleExportedData, 1);
-      data->window = window;
-      data->callback = callback;
-      data->user_data = user_data;
-
-      if (!gdk_wayland_toplevel_export_handle (GDK_TOPLEVEL (priv->surface),
-					       wayland_surface_handle_exported,
-					       data,
-					       g_free))
-        {
-          g_free (data);
-          return FALSE;
-        }
-      else
-        {
-          return TRUE;
-        }
-    }
-#endif
-#ifdef GDK_WINDOWING_MACOS
-  if (GDK_IS_MACOS_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      callback (window, NULL, user_data);
-      return TRUE;
-    }
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      callback (window, NULL, user_data);
-      return TRUE;
-    }
-#endif
-#ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      callback (window, NULL, user_data);
-      return TRUE;
-    }
-#endif
-
-  g_warning ("Couldn't export handle for %s surface, unsupported windowing system",
-             G_OBJECT_TYPE_NAME (priv->surface));
-
-  return FALSE;
+  return TRUE;
 }
 
 void
@@ -6342,32 +6312,7 @@ gtk_window_unexport_handle (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    {
-      gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface));
-      return;
-    }
-#endif
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return;
-#endif
-#ifdef GDK_WINDOWING_MACOS
-  if (GDK_IS_MACOS_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return;
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return;
-#endif
-#ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return;
-#endif
-
-  g_warning ("Couldn't unexport handle for %s surface, unsupported windowing system",
-             G_OBJECT_TYPE_NAME (priv->surface));
+  gdk_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface));
 }
 
 static GtkPointerFocus *
