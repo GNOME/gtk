@@ -4542,9 +4542,9 @@ _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
 }
 
 static void
-xdg_exported_handle (void                    *data,
-                     struct zxdg_exported_v1 *zxdg_exported_v1,
-                     const char              *handle)
+xdg_exported_handle1 (void                    *data,
+                      struct zxdg_exported_v1 *zxdg_exported_v1,
+                      const char              *handle)
 {
   GdkToplevel *toplevel = data;
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
@@ -4557,8 +4557,8 @@ xdg_exported_handle (void                    *data,
     }
 }
 
-static const struct zxdg_exported_v1_listener xdg_exported_listener = {
-  xdg_exported_handle
+static const struct zxdg_exported_v1_listener xdg_exported_listener1 = {
+  xdg_exported_handle1
 };
 
 static void
@@ -4665,7 +4665,7 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
       xdg_exported =
         zxdg_exporter_v1_export (display_wayland->xdg_exporter,
                                  gdk_wayland_surface_get_wl_surface (surface));
-      zxdg_exported_v1_add_listener (xdg_exported, &xdg_exported_listener, wayland_toplevel);
+      zxdg_exported_v1_add_listener (xdg_exported, &xdg_exported_listener1, wayland_toplevel);
       wayland_toplevel->xdg_exported = xdg_exported;
     }
   else
@@ -5325,7 +5325,7 @@ gdk_wayland_toplevel_real_export_handle (GdkToplevel          *toplevel,
     }
   else
     {
-      g_task_return_pointer (task, NULL, NULL);
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED, "Exporting surface handles not supported");
       g_object_unref (task);
       return;
     }
@@ -5343,14 +5343,13 @@ static void
 gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel)
 {
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  g_return_if_fail (wayland_toplevel->xdg_exported_v2 || wayland_toplevel->xdg_exported);
 
-  if (display_wayland->xdg_exporter_v2)
+  if (wayland_toplevel->xdg_exported_v2)
     g_clear_pointer (&wayland_toplevel->xdg_exported_v2, zxdg_exported_v2_destroy);
-  else if (display_wayland->xdg_exporter)
+  else
     g_clear_pointer (&wayland_toplevel->xdg_exported, zxdg_exported_v1_destroy);
 }
 
