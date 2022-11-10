@@ -309,11 +309,13 @@ gdk_wayland_get_display (GdkWaylandDisplay *display_wayland)
 }
 
 gboolean
-gdk_wayland_display_init_gl (GdkDisplay *display)
+gdk_wayland_display_init_gl (GdkDisplay *display,
+                             GdkGLContext *share)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint major, minor;
   EGLDisplay dpy;
+  gboolean use_es;
 
   if (display_wayland->have_egl)
     return TRUE;
@@ -326,8 +328,10 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   if (!eglInitialize (dpy, &major, &minor))
     return FALSE;
 
-  if (!eglBindAPI (EGL_OPENGL_API))
-    return FALSE;
+  use_es = (_gdk_gl_flags & GDK_GL_GLES) != 0 ||
+           (share != NULL && gdk_gl_context_get_use_es (share));
+  if (!eglBindAPI (use_es ? EGL_OPENGL_ES_API : EGL_OPENGL_API))
+      return FALSE;
 
   display_wayland->egl_display = dpy;
   display_wayland->egl_major_version = major;
@@ -461,7 +465,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   GdkWaylandGLContext *context;
   EGLConfig config;
 
-  if (!gdk_wayland_display_init_gl (display))
+  if (!gdk_wayland_display_init_gl (display, share))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
