@@ -8,14 +8,15 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdisplay-wayland.c',
   'gdkdrag-wayland.c',
+  'gdkdragsurface-wayland.c',
   'gdkdrop-wayland.c',
   'gdkeventsource.c',
   'gdkglcontext-wayland.c',
   'gdkkeys-wayland.c',
   'gdkmonitor-wayland.c',
   'gdkprimary-wayland.c',
-  'gdkvulkancontext-wayland.c',
   'gdksurface-wayland.c',
+  'gdkvulkancontext-wayland.c',
   'wm-button-layout-translation.c',
 ])
 
