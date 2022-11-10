@@ -191,8 +191,6 @@ void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
 
 void gdk_wayland_surface_update_scale (GdkSurface *surface);
 
-GdkSurface * create_dnd_surface (GdkDisplay *display);
-
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       guint32    mods);
 

@@ -4873,19 +4873,6 @@ gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
   g_hash_table_remove (impl->shortcuts_inhibitors, gdk_seat);
 }
 
-GdkSurface *
-create_dnd_surface (GdkDisplay *display)
-{
-  GdkSurface *surface;
-
-  surface = _gdk_wayland_display_create_surface (display,
-                                                 GDK_SURFACE_DRAG,
-                                                 NULL,
-                                                 0, 0, 100, 100);
-
-  return surface;
-}
-
 #define LAST_PROP 1
 
 static void

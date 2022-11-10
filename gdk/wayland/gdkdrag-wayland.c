@@ -367,10 +367,10 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
   GdkWaylandDrag *drag_wayland;
   GdkDrag *drag;
   GdkSeat *seat;
-  GdkWaylandDisplay *display_wayland;
+  GdkDisplay *display;
   GdkCursor *cursor;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
+  display = gdk_device_get_display (device);
   seat = gdk_device_get_seat (device);
 
   drag_wayland = g_object_new (GDK_TYPE_WAYLAND_DRAG,
@@ -382,17 +382,13 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   drag = GDK_DRAG (drag_wayland);
 
-  drag_wayland->dnd_surface = create_dnd_surface (gdk_surface_get_display (surface));
+  drag_wayland->dnd_surface = _gdk_wayland_display_create_surface (display, GDK_SURFACE_DRAG, NULL, 0, 0, 100, 100);
   drag_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface);
-  
+
   gdk_wayland_drag_create_data_source (drag);
 
-  if (display_wayland->data_device_manager_version >=
-      WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
-    {
-      wl_data_source_set_actions (drag_wayland->data_source,
-                                  gdk_to_wl_actions (actions));
-    }
+  if (GDK_WAYLAND_DISPLAY (display)->data_device_manager_version >= WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
+    wl_data_source_set_actions (drag_wayland->data_source, gdk_to_wl_actions (actions));
 
   gdk_wayland_seat_set_drag (seat, drag);
 
