@@ -60,6 +60,7 @@ static void compute_toplevel_size      (GdkSurface *surface,
                                         gboolean    update_geometry,
                                         int        *width,
                                         int        *height);
+static void gdk_win32_toplevel_state_callback (GdkSurface *surface);
 
 static gpointer parent_class = NULL;
 static GSList *modal_window_stack = NULL;
@@ -210,6 +211,10 @@ gdk_surface_win32_finalize (GObject *object)
 
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
+
+  g_signal_handlers_disconnect_by_func (GDK_SURFACE (object),
+                                        gdk_win32_toplevel_state_callback,
+                                        NULL);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -661,6 +666,13 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   g_object_unref (frame_clock);
   impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
+
+  if (surface_type == GDK_SURFACE_TOPLEVEL)
+    {
+      g_signal_connect (surface, "notify::state",
+                        G_CALLBACK (gdk_win32_toplevel_state_callback),
+                        NULL);
+    }
 
   return surface;
 }
@@ -3750,8 +3762,6 @@ gdk_win32_get_window_size_and_position_from_client_rect (GdkSurface *window,
                                                          SIZE      *window_size,
                                                          POINT     *window_position)
 {
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
   /* Turn client area into window area */
   _gdk_win32_adjust_client_rect (window, window_rect);
 
@@ -4706,6 +4716,10 @@ gdk_win32_popup_get_property (GObject    *object,
       g_value_set_boolean (value, surface->autohide);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      g_value_set_boolean (value, surface->shortcuts_inhibited);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4730,6 +4744,9 @@ gdk_win32_popup_set_property (GObject      *object,
 
     case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       surface->autohide = g_value_get_boolean (value);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       break;
 
     default:
@@ -5009,6 +5026,65 @@ gdk_win32_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 }
 
 static void
+gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
+                                             GdkEvent    *gdk_event)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkSeat *gdk_seat;
+  GdkGrabStatus status;
+
+  if (surface->shortcuts_inhibited)
+    return; /* Already inhibited */
+
+  if (!(surface->state & GDK_TOPLEVEL_STATE_FOCUSED))
+    return;
+
+  gdk_seat = gdk_surface_get_seat_from_event (surface, gdk_event);
+
+  if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
+    return;
+
+  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
+                          TRUE, NULL, gdk_event, NULL, NULL);
+
+  if (status != GDK_GRAB_SUCCESS)
+    return;
+
+  // TODO: install a WH_KEYBOARD_LL hook to take alt-tab/win etc.
+
+  surface->shortcuts_inhibited = TRUE;
+  surface->current_shortcuts_inhibited_seat = gdk_seat;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
+gdk_win32_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkSeat *gdk_seat;
+
+  if (!surface->shortcuts_inhibited)
+    return; /* Not inhibited */
+
+  gdk_seat = surface->current_shortcuts_inhibited_seat;
+  gdk_seat_ungrab (gdk_seat);
+  surface->current_shortcuts_inhibited_seat = NULL;
+
+  surface->shortcuts_inhibited = FALSE;
+  g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
+}
+
+static void
+gdk_win32_toplevel_state_callback (GdkSurface *surface)
+{
+  if (surface->state & GDK_TOPLEVEL_STATE_FOCUSED)
+    return;
+
+  if (surface->shortcuts_inhibited)
+    gdk_win32_toplevel_restore_system_shortcuts (GDK_TOPLEVEL (surface));
+}
+
+static void
 gdk_win32_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_win32_toplevel_present;
@@ -5017,6 +5093,8 @@ gdk_win32_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->focus = gdk_win32_toplevel_focus;
   iface->show_window_menu = gdk_win32_toplevel_show_window_menu;
   iface->supports_edge_constraints = gdk_win32_toplevel_supports_edge_constraints;
+  iface->inhibit_system_shortcuts = gdk_win32_toplevel_inhibit_system_shortcuts;
+  iface->restore_system_shortcuts = gdk_win32_toplevel_restore_system_shortcuts;
   iface->begin_resize = gdk_win32_toplevel_begin_resize;
   iface->begin_move = gdk_win32_toplevel_begin_move;
 }
@@ -5074,7 +5152,6 @@ gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
                                           RECT       *return_window_rect)
 {
   RECT window_rect;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
   _gdk_win32_get_window_client_area_rect (surface, scale, &window_rect);
 
