@@ -30,8 +30,8 @@ G_BEGIN_DECLS
 typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_TEMP,
-  GDK_SURFACE_POPUP
+  GDK_SURFACE_POPUP,
+  GDK_SURFACE_DRAG
 } GdkSurfaceType;
 
 struct _GdkSurface

@@ -1393,7 +1393,7 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
 
   self->leader_gdk_surface =
       _gdk_x11_display_create_surface (display,
-                                       GDK_SURFACE_TEMP,
+                                       GDK_SURFACE_DRAG,
                                        NULL,
                                        -100, -100, 1, 1);
 
