@@ -39,6 +39,7 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkseat-wayland.h"
+#include "gdksurface-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
@@ -745,8 +746,8 @@ gdk_wayland_display_system_bell (GdkDisplay *display,
   if (!display_wayland->gtk_shell)
     return;
 
-  if (window)
-    gtk_surface = gdk_wayland_surface_get_gtk_surface (window);
+  if (window && GDK_IS_WAYLAND_TOPLEVEL (window))
+    gtk_surface = gdk_wayland_toplevel_get_gtk_surface (GDK_WAYLAND_TOPLEVEL (window));
   else
     gtk_surface = NULL;
 
