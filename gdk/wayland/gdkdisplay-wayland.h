@@ -104,6 +104,7 @@ struct _GdkWaylandDisplay
   struct zwp_primary_selection_device_manager_v1 *primary_selection_manager;
   struct zwp_tablet_manager_v2 *tablet_manager;
   struct zxdg_exporter_v1 *xdg_exporter;
+  struct zxdg_exporter_v2 *xdg_exporter_v2;
   struct zxdg_importer_v1 *xdg_importer;
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;

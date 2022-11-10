@@ -40,6 +40,17 @@ struct _GdkToplevelInterface
                                          guint32            timestamp);
   gboolean      (* titlebar_gesture)    (GdkToplevel       *toplevel,
                                          GdkTitlebarGesture gesture);
+
+  void          (* export_handle)          (GdkToplevel          *toplevel,
+                                            GCancellable         *cancellable,
+                                            GAsyncReadyCallback   callback,
+                                            gpointer              user_data);
+
+  char *        (* export_handle_finish)   (GdkToplevel          *toplevel,
+                                            GAsyncResult         *result,
+                                            GError              **error);
+
+  void          (* unexport_handle)        (GdkToplevel          *toplevel);
 };
 
 typedef enum
@@ -62,6 +73,17 @@ guint gdk_toplevel_install_properties (GObjectClass *object_class,
 
 void gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
                                        GdkToplevelSize *size);
+
+void  gdk_toplevel_export_handle        (GdkToplevel          *toplevel,
+                                         GCancellable         *cancellable,
+                                         GAsyncReadyCallback   callback,
+                                         gpointer              user_data);
+
+char *gdk_toplevel_export_handle_finish (GdkToplevel          *toplevel,
+                                         GAsyncResult         *result,
+                                         GError              **error);
+
+void  gdk_toplevel_unexport_handle      (GdkToplevel          *toplevel);
 
 G_END_DECLS
 

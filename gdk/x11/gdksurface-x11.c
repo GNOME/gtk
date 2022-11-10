@@ -5274,6 +5274,35 @@ gdk_x11_toplevel_event_callback (GdkSurface *surface,
 }
 
 static void
+gdk_x11_toplevel_export_handle (GdkToplevel          *toplevel,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data)
+{
+  guint32 xid;
+  GTask *task;
+
+  xid = (guint32) gdk_x11_surface_get_xid (GDK_SURFACE (toplevel));
+
+  task = g_task_new (toplevel, cancellable, callback, user_data);
+  g_task_return_pointer (task, g_strdup_printf ("%x", xid), g_free);
+  g_object_unref (task);
+}
+
+static char *
+gdk_x11_toplevel_export_handle_finish (GdkToplevel   *toplevel,
+                                       GAsyncResult  *result,
+                                       GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+gdk_x11_toplevel_unexport_handle (GdkToplevel *toplevel)
+{
+}
+
+static void
 gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_x11_toplevel_present;
@@ -5286,6 +5315,9 @@ gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->restore_system_shortcuts = gdk_x11_toplevel_restore_system_shortcuts;
   iface->begin_resize = gdk_x11_toplevel_begin_resize;
   iface->begin_move = gdk_x11_toplevel_begin_move;
+  iface->export_handle = gdk_x11_toplevel_export_handle;
+  iface->export_handle_finish = gdk_x11_toplevel_export_handle_finish;
+  iface->unexport_handle = gdk_x11_toplevel_unexport_handle;
 }
 
 typedef struct {
