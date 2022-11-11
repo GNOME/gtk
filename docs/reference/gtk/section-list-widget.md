@@ -229,24 +229,24 @@ specialized requirements.
 Finally here's a quick list of equivalent functionality to look for when
 transitioning code for easy lookup:
 
-| Old                  | New                                  |
-| -------------------- | ------------------------------------ |
-| `GtkTreeModel`       | `GListModel`                         |
-| `GtkTreePath`        | `guint` position, `GtkTreeListRow`   |
-| `GtkTreeIter`        | `guint` position                     |
-| `GtkTreeRowReference`| `GObject` item                       |
-| `GtkListStore`       | `GListStore`                         |
-| `GtkTreeStore`       | `GtkTreeListModel`, `GtkTreeExpander`|
-| `GtkTreeSelection`   | `GtkSelectionModel`                  |
-| `GtkTreeViewColumn`  | `GtkColumnView`                      |
-| `GtkTreeView`        | `GtkListView`, `GtkColumnView`       |
-| `GtkCellView`        | `GtkListItemWidget`                  |
-| `GtkComboBox`        | `GtkDropDown`                        |
-| `GtkIconView`        | `GtkGridView`                        |
-| `GtkTreeSortable`    | `GtkColumnView`                      |
-| `GtkTreeModelSort`   | `GtkSortListModel`                   |
-| `GtkTreeModelFilter` | `GtkFilterListModel`                 |
-| `GtkCellLayout`      | `GtkListItemFactory`                 |
-| `GtkCellArea`        | `GtkWidget`                          |
-| `GtkCellRenderer`    | `GtkWidget`                          |
+| Old                  | New                                                     |
+| -------------------- | ------------------------------------------------------- |
+| `GtkTreeModel`       | [`iface@Gio.ListModel`]                                 |
+| `GtkTreePath`        | `guint` position, [`class@Gtk.TreeListRow`]             |
+| `GtkTreeIter`        | `guint` position                                        |
+| `GtkTreeRowReference`| [`class@GObject.Object`] item                           |
+| `GtkListStore`       | [`class@Gio.ListStore`]                                 |
+| `GtkTreeStore`       | [`class@Gtk.TreeListModel`], [`class@Gtk.TreeExpander`] |
+| `GtkTreeSelection`   | [`iface@Gtk.SelectionModel`]                            |
+| `GtkTreeViewColumn`  | [`class@Gtk.ColumnView`]                                |
+| `GtkTreeView`        | [`class@Gtk.ListView`], [`class@Gtk.ColumnView`]        |
+| `GtkCellView`        | [`class@Gtk.ListItem`]                                  |
+| `GtkComboBox`        | [`class@Gtk.DropDown`]                                  |
+| `GtkIconView`        | [`class@Gtk.GridView`]                                  |
+| `GtkTreeSortable`    | [`class@Gtk.ColumnView`]                                |
+| `GtkTreeModelSort`   | [`class@Gtk.SortListModel`]                             |
+| `GtkTreeModelFilter` | [`class@Gtk.FilterListModel`]                           |
+| `GtkCellLayout`      | [`class@Gtk.ListItemFactory`]                           |
+| `GtkCellArea`        | [`class@Gtk.Widget`]                                    |
+| `GtkCellRenderer`    | [`class@Gtk.Widget`]                                    |
 
