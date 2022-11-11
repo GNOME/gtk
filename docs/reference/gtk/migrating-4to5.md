@@ -39,7 +39,7 @@ all cell renderer-based widgets.
 
 The old GTK 2 era rendering APIs for theme components like
 gtk_render_frame() or gtk_render_check() have not been used by
-GTK itself even in later GTK 3, but they have been kepy around
+GTK itself even in later GTK 3, but they have been kept around
 for the benefit of "external drawing" users - applications that
 want their controls to look like GTK without using widgets.
 

@@ -311,9 +311,11 @@ the question you have, this list is a good place to start.
     and the required formatting flexibility.
 
     If you want to display a large amount of data in a uniform way, your best
-    option is a [class@Gtk.TreeView] widget. See the [tree widget overview](#TreeWidget).
-    A list is just a tree with no branches, so the treeview widget is used for
-    lists as well.
+    option is a [class@Gtk.ListView] widget. The list view can have different
+    types of models: [class@Gtk.TreeListModel] can serve as a model for a tree
+    structure, while a simple [iface@Gio.ListModel] can be used for simple lists.
+    The section [List Widget Overview](section-list-widget.html) helps you get started.
+    It replaces [class@Gtk.TreeView], which has been deprecated since GTK 4.10.
 
     If you want to display a small amount of items, but need flexible formatting
     and widgetry inside the list, then you probably want to use a [class@Gtk.ListBox],
