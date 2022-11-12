@@ -276,10 +276,8 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
         {
           UInt32 state = 0;
           OSStatus err;
-          UInt16 key_code;
           UniChar uc;
 
-          key_code = modifiers[j] | i;
           err = UCKeyTranslate (chr_data, i, kUCKeyActionDisplay,
                                 (modifiers[j] >> 8) & 0xFF,
                                 LMGetKbdType(),
@@ -369,7 +367,7 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
       if (p[0] == known_numeric_keys[i].normal_keyval)
         p[0] = known_numeric_keys[i].keypad_keyval;
     }
-      
+
   for (i = 0; i < G_N_ELEMENTS (jis_keys); i++)
     {
       p = keyval_array + jis_keys[i].keycode * KEYVALS_PER_KEYCODE;

@@ -760,15 +760,8 @@ find_surface_under_pointer (GdkMacosDisplay *self,
                             int             *x,
                             int             *y)
 {
-  GdkPointerSurfaceInfo *info;
   GdkMacosSurface *surface;
-  GdkDevice *pointer;
-  GdkSeat *seat;
   int x_tmp, y_tmp;
-
-  seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
-  pointer = gdk_seat_get_pointer (seat);
-  info = _gdk_display_get_pointer_info (GDK_DISPLAY (self), pointer);
 
   surface = _gdk_macos_display_get_surface_at_display_coords (self,
                                                               screen_point.x,
