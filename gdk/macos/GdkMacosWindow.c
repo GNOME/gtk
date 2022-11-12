@@ -576,6 +576,8 @@ typedef NSString *CALayerContentsGravity;
   initialResizeLocation = convert_nspoint_to_screen (self, [self mouseLocationOutsideOfEventStream]);
 }
 
+// NSDraggingDestination protocol
+
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
   NSPoint location = [sender draggingLocation];
@@ -665,9 +667,9 @@ typedef NSString *CALayerContentsGravity;
   return NO;
 }
 
--(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
-{
-}
+// NSDraggingSource protocol
+// ...
+// end
 
 -(void)setStyleMask:(NSWindowStyleMask)styleMask
 {
