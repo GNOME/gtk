@@ -5286,7 +5286,7 @@ gtk_window_present_with_time (GtkWindow *window,
  *
  * Note that you shouldn’t assume the window is definitely minimized
  * afterward, because the windowing system might not support this
- * functionality; other entities (e.g. the user or the window manager
+ * functionality; other entities (e.g. the user or the window manager)
  * could unminimize it again, or there may not be a window manager in
  * which case minimization isn’t possible, etc.
  *
@@ -5318,7 +5318,7 @@ gtk_window_minimize (GtkWindow *window)
  *
  * Note that you shouldn’t assume the window is definitely unminimized
  * afterward, because the windowing system might not support this
- * functionality; other entities (e.g. the user or the window manager
+ * functionality; other entities (e.g. the user or the window manager)
  * could minimize it again, or there may not be a window manager in
  * which case minimization isn’t possible, etc.
  *
@@ -5345,7 +5345,7 @@ gtk_window_unminimize (GtkWindow *window)
  * Asks to maximize @window, so that it fills the screen.
  *
  * Note that you shouldn’t assume the window is definitely maximized
- * afterward, because other entities (e.g. the user or window manager
+ * afterward, because other entities (e.g. the user or window manager)
  * could unmaximize it again, and not all window managers support
  * maximization.
  *
@@ -5387,7 +5387,7 @@ gtk_window_maximize (GtkWindow *window)
  * Asks to unmaximize @window.
  *
  * Note that you shouldn’t assume the window is definitely unmaximized
- * afterward, because other entities (e.g. the user or window manager
+ * afterward, because other entities (e.g. the user or window manager)
  * maximize it again, and not all window managers honor requests to
  * unmaximize.
  *
@@ -5437,7 +5437,7 @@ unset_fullscreen_monitor (GtkWindow *window)
  * Asks to place @window in the fullscreen state.
  *
  * Note that you shouldn’t assume the window is definitely fullscreen
- * afterward, because other entities (e.g. the user or window manager
+ * afterward, because other entities (e.g. the user or window manager)
  * unfullscreen it again, and not all window managers honor requests
  * to fullscreen windows.
  *
@@ -5526,7 +5526,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  *
  * Note that you shouldn’t assume the window is definitely not
  * fullscreen afterward, because other entities (e.g. the user or
- * window manager could fullscreen it again, and not all window
+ * window manager) could fullscreen it again, and not all window
  * managers honor requests to unfullscreen windows; normally the
  * window will end up restored to its normal state. Just don’t
  * write code that crashes if not.

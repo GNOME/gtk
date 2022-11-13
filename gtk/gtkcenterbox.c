@@ -272,7 +272,7 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
  *
  * Sets the center widget.
  *
- * To remove the existing center widget, pas %NULL.
+ * To remove the existing center widget, pass %NULL.
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,

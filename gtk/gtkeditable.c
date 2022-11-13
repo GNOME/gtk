@@ -463,7 +463,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
 /**
  * gtk_editable_insert_text: (virtual do_insert_text)
  * @editable: a `GtkEditable`
- * @text: the text to append
+ * @text: the text to insert
  * @length: the length of the text in bytes, or -1
  * @position: (inout): location of the position text will be inserted at
  *
