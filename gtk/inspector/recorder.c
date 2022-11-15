@@ -1443,8 +1443,11 @@ event_type_name (GdkEventType type)
     "Pad Button Release",
     "Pad Rind",
     "Pad Strip",
-    "Pad Group Mode"
+    "Pad Group Mode",
+    "Touchpad Hold",
   };
+
+  G_STATIC_ASSERT (G_N_ELEMENTS (event_name) == GDK_EVENT_LAST);
 
   return event_name[type];
 }
