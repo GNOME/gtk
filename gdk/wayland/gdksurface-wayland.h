@@ -21,6 +21,8 @@
 #pragma once
 
 #include "gdkwaylandsurface.h"
+#include "gdkwaylandtoplevel.h"
+#include "gdkwaylandpopup.h"
 
 G_BEGIN_DECLS
 
