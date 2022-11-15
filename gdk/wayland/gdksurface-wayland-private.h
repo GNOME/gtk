@@ -54,8 +54,6 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
-  GdkSeat *grab_input_seat;
-
   gint64 pending_frame_counter;
   guint32 scale;
 

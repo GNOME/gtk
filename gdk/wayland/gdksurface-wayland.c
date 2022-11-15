@@ -168,6 +168,8 @@ struct _GdkWaylandPopup
 
   uint32_t reposition_token;
   uint32_t received_reposition_token;
+
+  GdkSeat *grab_input_seat;
 };
 
 typedef struct
@@ -2775,22 +2777,25 @@ static GdkWaylandSeat *
 find_grab_input_seat (GdkSurface *surface,
                       GdkSurface *parent)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandSurface *tmp_impl;
+  GdkWaylandPopup *popup = GDK_WAYLAND_POPUP (surface);
+  GdkWaylandPopup *tmp_popup;
 
   /* Use the device that was used for the grab as the device for
    * the popup surface setup - so this relies on GTK taking the
    * grab before showing the popup surface.
    */
-  if (impl->grab_input_seat)
-    return GDK_WAYLAND_SEAT (impl->grab_input_seat);
+  if (popup->grab_input_seat)
+    return GDK_WAYLAND_SEAT (popup->grab_input_seat);
 
   while (parent)
     {
-      tmp_impl = GDK_WAYLAND_SURFACE (parent);
+      if (!GDK_IS_WAYLAND_POPUP (parent))
+        break;
 
-      if (tmp_impl->grab_input_seat)
-        return GDK_WAYLAND_SEAT (tmp_impl->grab_input_seat);
+      tmp_popup = GDK_WAYLAND_POPUP (parent);
+
+      if (tmp_popup->grab_input_seat)
+        return GDK_WAYLAND_SEAT (tmp_popup->grab_input_seat);
 
       parent = parent->parent;
     }
@@ -4348,12 +4353,12 @@ void
 _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
                                     GdkSeat    *seat)
 {
-  GdkWaylandSurface *impl;
+  GdkWaylandPopup *popup;
 
   g_return_if_fail (surface != NULL);
 
-  impl = GDK_WAYLAND_SURFACE (surface);
-  impl->grab_input_seat = seat;
+  popup = GDK_WAYLAND_POPUP (surface);
+  popup->grab_input_seat = seat;
 }
 
 /**
