@@ -45,9 +45,6 @@ struct _GdkWaylandSurface
 
   struct wl_event_queue *event_queue;
 
-  uint32_t reposition_token;
-  uint32_t received_reposition_token;
-
   unsigned int initial_configure_received : 1;
   unsigned int has_uncommitted_ack_configure : 1;
   unsigned int mapped : 1;

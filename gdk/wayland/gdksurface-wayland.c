@@ -165,6 +165,9 @@ struct _GdkWaylandPopup
     uint32_t repositioned_token;
     gboolean has_repositioned_token;
   } pending;
+
+  uint32_t reposition_token;
+  uint32_t received_reposition_token;
 };
 
 typedef struct
@@ -1508,12 +1511,12 @@ gdk_wayland_surface_configure_popup (GdkWaylandPopup *wayland_popup)
     }
 
   if (wayland_popup->pending.has_repositioned_token)
-    wayland_surface->received_reposition_token = wayland_popup->pending.repositioned_token;
+    wayland_popup->received_reposition_token = wayland_popup->pending.repositioned_token;
 
   switch (wayland_popup->state)
     {
     case POPUP_STATE_WAITING_FOR_REPOSITIONED:
-      if (wayland_surface->received_reposition_token != wayland_surface->reposition_token)
+      if (wayland_popup->received_reposition_token != wayland_popup->reposition_token)
         return;
       else
         gdk_surface_thaw_updates (surface);
@@ -3093,7 +3096,7 @@ do_queue_relayout (GdkWaylandPopup *wayland_popup,
                                           TRUE);
   xdg_popup_reposition (wayland_surface->display_server.xdg_popup,
                         positioner,
-                        ++wayland_surface->reposition_token);
+                        ++wayland_popup->reposition_token);
   xdg_positioner_destroy (positioner);
 
   gdk_surface_freeze_updates (GDK_SURFACE (wayland_popup));
@@ -3122,8 +3125,12 @@ is_relayout_finished (GdkSurface *surface)
   if (!impl->initial_configure_received)
     return FALSE;
 
-  if (impl->reposition_token != impl->received_reposition_token)
-    return FALSE;
+  if (GDK_IS_WAYLAND_POPUP (surface))
+    {
+      GdkWaylandPopup *popup = GDK_WAYLAND_POPUP (surface);
+      if (popup->reposition_token != popup->received_reposition_token)
+        return FALSE;
+    }
 
   return TRUE;
 }
