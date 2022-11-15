@@ -93,6 +93,17 @@ struct _GdkWaylandToplevel
   struct zxdg_exported_v2 *xdg_exported_v2;
 
   struct {
+    int width;
+    int height;
+    GdkToplevelState state;
+    gboolean is_resizing;
+
+    int bounds_width;
+    int bounds_height;
+    gboolean has_bounds;
+  } pending;
+
+  struct {
     GdkWaylandToplevelExported callback;
     gpointer user_data;
     GDestroyNotify destroy_func;
@@ -1393,16 +1404,16 @@ gdk_wayland_surface_configure_toplevel (GdkWaylandToplevel *wayland_toplevel)
   gboolean was_fixed_size;
   gboolean saved_size;
 
-  new_state = wayland_surface->pending.toplevel.state;
-  wayland_surface->pending.toplevel.state = 0;
+  new_state = wayland_toplevel->pending.state;
+  wayland_toplevel->pending.state = 0;
 
-  is_resizing = wayland_surface->pending.toplevel.is_resizing;
-  wayland_surface->pending.toplevel.is_resizing = FALSE;
+  is_resizing = wayland_toplevel->pending.is_resizing;
+  wayland_toplevel->pending.is_resizing = FALSE;
 
-  if (wayland_surface->pending.toplevel.has_bounds)
+  if (wayland_toplevel->pending.has_bounds)
     {
-      wayland_toplevel->bounds_width = wayland_surface->pending.toplevel.bounds_width;
-      wayland_toplevel->bounds_height = wayland_surface->pending.toplevel.bounds_height;
+      wayland_toplevel->bounds_width = wayland_toplevel->pending.bounds_width;
+      wayland_toplevel->bounds_height = wayland_toplevel->pending.bounds_height;
       wayland_toplevel->has_bounds = TRUE;
     }
 
@@ -1417,8 +1428,8 @@ gdk_wayland_surface_configure_toplevel (GdkWaylandToplevel *wayland_toplevel)
                       GDK_TOPLEVEL_STATE_FULLSCREEN |
                       GDK_TOPLEVEL_STATE_TILED);
 
-  width = wayland_surface->pending.toplevel.width;
-  height = wayland_surface->pending.toplevel.height;
+  width = wayland_toplevel->pending.width;
+  height = wayland_toplevel->pending.height;
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1621,11 +1632,11 @@ gdk_wayland_surface_handle_configure_toplevel (GdkSurface      *surface,
                                                int32_t          height,
                                                GdkToplevelState  state)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
-  impl->pending.toplevel.state |= state;
-  impl->pending.toplevel.width = width;
-  impl->pending.toplevel.height = height;
+  toplevel->pending.state |= state;
+  toplevel->pending.width = width;
+  toplevel->pending.height = height;
 }
 
 static void
@@ -1711,11 +1722,11 @@ xdg_toplevel_configure (void                *data,
                         struct wl_array     *states)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
   uint32_t *p;
   GdkToplevelState pending_state = 0;
 
-  impl->pending.toplevel.is_resizing = FALSE;
+  toplevel->pending.is_resizing = FALSE;
 
   wl_array_for_each (p, states)
     {
@@ -1733,7 +1744,7 @@ xdg_toplevel_configure (void                *data,
           pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case XDG_TOPLEVEL_STATE_RESIZING:
-          impl->pending.toplevel.is_resizing = TRUE;
+          toplevel->pending.is_resizing = TRUE;
           break;
         case XDG_TOPLEVEL_STATE_TILED_TOP:
           pending_state |= (GDK_TOPLEVEL_STATE_TILED |
@@ -1757,8 +1768,7 @@ xdg_toplevel_configure (void                *data,
         }
     }
 
-  gdk_wayland_surface_handle_configure_toplevel (surface, width, height,
-                                                 pending_state);
+  gdk_wayland_surface_handle_configure_toplevel (surface, width, height, pending_state);
 }
 
 static void
@@ -1777,11 +1787,11 @@ xdg_toplevel_configure_bounds (void                *data,
                                int32_t              height)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
-  impl->pending.toplevel.bounds_width = width;
-  impl->pending.toplevel.bounds_height = height;
-  impl->pending.toplevel.has_bounds = TRUE;
+  toplevel->pending.bounds_width = width;
+  toplevel->pending.bounds_height = height;
+  toplevel->pending.has_bounds = TRUE;
 }
 
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {
@@ -1810,11 +1820,11 @@ zxdg_toplevel_v6_configure (void                    *data,
                             struct wl_array         *states)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
   uint32_t *p;
   GdkToplevelState pending_state = 0;
 
-  impl->pending.toplevel.is_resizing = FALSE;
+  toplevel->pending.is_resizing = FALSE;
 
   wl_array_for_each (p, states)
     {
@@ -1832,7 +1842,7 @@ zxdg_toplevel_v6_configure (void                    *data,
           pending_state |= GDK_TOPLEVEL_STATE_FOCUSED;
           break;
         case ZXDG_TOPLEVEL_V6_STATE_RESIZING:
-          impl->pending.toplevel.is_resizing = TRUE;
+          toplevel->pending.is_resizing = TRUE;
           break;
         default:
           /* Unknown state */
@@ -1840,8 +1850,7 @@ zxdg_toplevel_v6_configure (void                    *data,
         }
     }
 
-  gdk_wayland_surface_handle_configure_toplevel (surface, width, height,
-                                                 pending_state);
+  gdk_wayland_surface_handle_configure_toplevel (surface, width, height, pending_state);
 }
 
 static void
@@ -3515,7 +3524,7 @@ gtk_surface_configure (void                *data,
                        struct wl_array     *states)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
   GdkToplevelState new_state = 0;
   uint32_t *p;
 
@@ -3548,7 +3557,7 @@ gtk_surface_configure (void                *data,
         }
     }
 
-  impl->pending.toplevel.state |= new_state;
+  toplevel->pending.state |= new_state;
 }
 
 static void
@@ -3557,7 +3566,7 @@ gtk_surface_configure_edges (void                *data,
                              struct wl_array     *edge_constraints)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
   GdkToplevelState new_state = 0;
   uint32_t *p;
 
@@ -3585,7 +3594,7 @@ gtk_surface_configure_edges (void                *data,
         }
     }
 
-  impl->pending.toplevel.state |= new_state;
+  toplevel->pending.state |= new_state;
 }
 
 static const struct gtk_surface1_listener gtk_surface_listener = {
