@@ -104,6 +104,11 @@ struct _GdkWaylandToplevel
   } pending;
 
   struct {
+      gboolean should_constrain;
+      gboolean size_is_fixed;
+  } next_layout;
+
+  struct {
     GdkWaylandToplevelExported callback;
     gpointer user_data;
     GDestroyNotify destroy_func;
@@ -176,6 +181,11 @@ struct _GdkWaylandPopup
     uint32_t repositioned_token;
     gboolean has_repositioned_token;
   } pending;
+
+  struct {
+    int x;
+    int y;
+  } next_layout;
 
   uint32_t reposition_token;
   uint32_t received_reposition_token;
@@ -549,8 +559,8 @@ configure_popup_geometry (GdkWaylandPopup *wayland_popup)
   int x, y;
   int width, height;
 
-  x = wayland_surface->next_layout.popup.x - wayland_surface->shadow_left;
-  y = wayland_surface->next_layout.popup.y - wayland_surface->shadow_top;
+  x = wayland_popup->next_layout.x - wayland_surface->shadow_left;
+  y = wayland_popup->next_layout.y - wayland_surface->shadow_top;
   width =
     wayland_surface->next_layout.configured_width +
     (wayland_surface->shadow_left + wayland_surface->shadow_right);
@@ -1349,7 +1359,7 @@ configure_toplevel_geometry (GdkWaylandToplevel *wayland_toplevel)
       height = wayland_surface->next_layout.configured_height +
         wayland_surface->shadow_top + wayland_surface->shadow_bottom;
 
-      if (wayland_surface->next_layout.toplevel.should_constrain)
+      if (wayland_toplevel->next_layout.should_constrain)
         {
           gdk_surface_constrain_size (&wayland_toplevel->geometry_hints,
                                       wayland_toplevel->geometry_mask,
@@ -1358,9 +1368,9 @@ configure_toplevel_geometry (GdkWaylandToplevel *wayland_toplevel)
         }
       gdk_wayland_surface_update_size (surface, width, height, wayland_surface->scale);
 
-      if (!wayland_surface->next_layout.toplevel.size_is_fixed)
+      if (!wayland_toplevel->next_layout.size_is_fixed)
         {
-          wayland_surface->next_layout.toplevel.should_constrain = FALSE;
+          wayland_toplevel->next_layout.should_constrain = FALSE;
           wayland_surface->next_layout.configured_width = 0;
           wayland_surface->next_layout.configured_height = 0;
         }
@@ -1450,28 +1460,28 @@ gdk_wayland_surface_configure_toplevel (GdkWaylandToplevel *wayland_toplevel)
     {
       if (!saved_size)
         {
-          wayland_surface->next_layout.toplevel.should_constrain = TRUE;
+          wayland_toplevel->next_layout.should_constrain = TRUE;
 
           /* Save size for next time we get 0x0 */
           _gdk_wayland_surface_save_size (surface);
         }
       else if (is_resizing)
         {
-          wayland_surface->next_layout.toplevel.should_constrain = TRUE;
+          wayland_toplevel->next_layout.should_constrain = TRUE;
         }
       else
         {
-          wayland_surface->next_layout.toplevel.should_constrain = FALSE;
+          wayland_toplevel->next_layout.should_constrain = FALSE;
         }
 
-      wayland_surface->next_layout.toplevel.size_is_fixed = fixed_size;
+      wayland_toplevel->next_layout.size_is_fixed = fixed_size;
       wayland_surface->next_layout.configured_width = width;
       wayland_surface->next_layout.configured_height = height;
     }
   else
     {
-      wayland_surface->next_layout.toplevel.should_constrain = FALSE;
-      wayland_surface->next_layout.toplevel.size_is_fixed = FALSE;
+      wayland_toplevel->next_layout.should_constrain = FALSE;
+      wayland_toplevel->next_layout.size_is_fixed = FALSE;
       wayland_surface->next_layout.configured_width = 0;
       wayland_surface->next_layout.configured_height = 0;
     }
@@ -1558,8 +1568,8 @@ gdk_wayland_surface_configure_popup (GdkWaylandPopup *wayland_popup)
                              width, height,
                              wayland_popup->layout);
 
-  wayland_surface->next_layout.popup.x = x;
-  wayland_surface->next_layout.popup.y = y;
+  wayland_popup->next_layout.x = x;
+  wayland_popup->next_layout.y = y;
   wayland_surface->next_layout.configured_width = width;
   wayland_surface->next_layout.configured_height = height;
   wayland_surface->next_layout.surface_geometry_dirty = TRUE;

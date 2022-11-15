@@ -74,32 +74,12 @@ struct _GdkWaylandSurface
   int saved_height;
 
   struct {
-    struct {
-      int width;
-      int height;
-      GdkToplevelState state;
-      gboolean is_resizing;
-
-      int bounds_width;
-      int bounds_height;
-      gboolean has_bounds;
-    } toplevel;
-
     gboolean is_initial_configure;
-
     uint32_t serial;
     gboolean is_dirty;
   } pending;
 
   struct {
-    struct {
-      gboolean should_constrain;
-      gboolean size_is_fixed;
-    } toplevel;
-    struct {
-      int x;
-      int y;
-    } popup;
     int configured_width;
     int configured_height;
     gboolean surface_geometry_dirty;
