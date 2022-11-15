@@ -33,13 +33,7 @@ struct _GdkWaylandSurface
     GSList *outputs;
     struct wl_surface *wl_surface;
     struct xdg_surface *xdg_surface;
-    struct xdg_toplevel *xdg_toplevel;
-    struct xdg_popup *xdg_popup;
-
     struct zxdg_surface_v6 *zxdg_surface_v6;
-    struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
-    struct zxdg_popup_v6 *zxdg_popup_v6;
-
     struct wl_egl_window *egl_window;
   } display_server;
 
