@@ -57,8 +57,6 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
-  char *title;
-
   GdkGeometry geometry_hints;
   GdkSurfaceHints geometry_mask;
 

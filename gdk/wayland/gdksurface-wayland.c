@@ -123,6 +123,8 @@ struct _GdkWaylandToplevel
   int bounds_width;
   int bounds_height;
   gboolean has_bounds;
+
+  char *title;
 };
 
 typedef struct
@@ -675,9 +677,6 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
                                     scale);
 }
 
-static void gdk_wayland_surface_set_title      (GdkSurface *surface,
-                                                const char *title);
-
 GdkSurface *
 _gdk_wayland_display_create_surface (GdkDisplay     *display,
                                      GdkSurfaceType  surface_type,
@@ -703,6 +702,7 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
                               "display", display,
                               "frame-clock", frame_clock,
+                              "title", get_default_title (),
                               NULL);
       display_wayland->toplevels = g_list_prepend (display_wayland->toplevels,
                                                    surface);
@@ -756,9 +756,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
           g_object_unref (monitor);
         }
     }
-
-  gdk_wayland_surface_set_title (surface, get_default_title ());
-
 
   gdk_wayland_surface_create_wl_surface (surface);
 
@@ -890,8 +887,6 @@ gdk_wayland_surface_finalize (GObject *object)
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (object));
 
   impl = GDK_WAYLAND_SURFACE (object);
-
-  g_free (impl->title);
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
@@ -1034,27 +1029,25 @@ gdk_wayland_surface_sync_parent_of_imported (GdkWaylandSurface *impl)
 }
 
 static void
-gdk_wayland_surface_sync_title (GdkSurface *surface)
+gdk_wayland_toplevel_sync_title (GdkWaylandToplevel *toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
 
   if (!is_realized_toplevel (impl))
     return;
 
-  if (!impl->title)
+  if (!toplevel->title)
     return;
 
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      xdg_toplevel_set_title (impl->display_server.xdg_toplevel,
-                              impl->title);
+      xdg_toplevel_set_title (impl->display_server.xdg_toplevel, toplevel->title);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      zxdg_toplevel_v6_set_title (impl->display_server.zxdg_toplevel_v6,
-                                  impl->title);
+      zxdg_toplevel_v6_set_title (impl->display_server.zxdg_toplevel_v6, toplevel->title);
       break;
     default:
       g_assert_not_reached ();
@@ -1929,7 +1922,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 
   gdk_wayland_surface_sync_parent (surface, NULL);
   gdk_wayland_surface_sync_parent_of_imported (wayland_surface);
-  gdk_wayland_surface_sync_title (surface);
+  gdk_wayland_toplevel_sync_title (wayland_toplevel);
 
   switch (display_wayland->shell_variant)
     {
@@ -3698,39 +3691,36 @@ gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
 }
 
 static void
-gdk_wayland_surface_set_title (GdkSurface  *surface,
-                               const char *title)
+gdk_wayland_toplevel_set_title (GdkWaylandToplevel *toplevel,
+                                const char         *title)
 {
-  GdkWaylandSurface *impl;
   const char *end;
   gsize title_length;
 
   g_return_if_fail (title != NULL);
 
-  if (GDK_SURFACE_DESTROYED (surface))
+  if (GDK_SURFACE_DESTROYED (GDK_SURFACE (toplevel)))
     return;
 
-  impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (g_strcmp0 (impl->title, title) == 0)
+  if (g_strcmp0 (toplevel->title, title) == 0)
     return;
 
-  g_free (impl->title);
+  g_free (toplevel->title);
 
   title_length = MIN (strlen (title), MAX_WL_BUFFER_SIZE);
   if (g_utf8_validate (title, title_length, &end))
     {
-      impl->title = g_malloc (end - title + 1);
-      memcpy (impl->title, title, end - title);
-      impl->title[end - title] = '\0';
+      toplevel->title = g_malloc (end - title + 1);
+      memcpy (toplevel->title, title, end - title);
+      toplevel->title[end - title] = '\0';
     }
   else
     {
-      impl->title = g_utf8_make_valid (title, title_length);
+      toplevel->title = g_utf8_make_valid (title, title_length);
       g_warning ("Invalid utf8 passed to gdk_surface_set_title: '%s'", title);
     }
 
-  gdk_wayland_surface_sync_title (surface);
+  gdk_wayland_toplevel_sync_title (toplevel);
 }
 
 static void
@@ -4861,7 +4851,7 @@ gdk_wayland_toplevel_set_property (GObject      *object,
   switch (prop_id)
     {
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      gdk_wayland_surface_set_title (surface, g_value_get_string (value));
+      gdk_wayland_toplevel_set_title (toplevel, g_value_get_string (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
@@ -4911,7 +4901,6 @@ gdk_wayland_toplevel_get_property (GObject    *object,
                                    GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
 
   switch (prop_id)
@@ -4921,7 +4910,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      g_value_set_string (value, impl->title);
+      g_value_set_string (value, toplevel->title);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
@@ -4978,6 +4967,8 @@ gdk_wayland_toplevel_finalize (GObject *object)
   g_free (wayland_toplevel->application.window_object_path);
   g_free (wayland_toplevel->application.application_object_path);
   g_free (wayland_toplevel->application.unique_bus_name);
+
+  g_free (wayland_toplevel->title);
 
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
 }
@@ -5217,3 +5208,5 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->export_handle_finish = gdk_wayland_toplevel_real_export_handle_finish;
   iface->unexport_handle = gdk_wayland_toplevel_real_unexport_handle;
 }
+
+/* vim:set foldmethod=marker expandtab: */
