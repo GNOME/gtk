@@ -57,9 +57,6 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
-  GdkGeometry geometry_hints;
-  GdkSurfaceHints geometry_mask;
-
   GdkSeat *grab_input_seat;
 
   gint64 pending_frame_counter;
@@ -77,10 +74,6 @@ struct _GdkWaylandSurface
   gboolean input_region_dirty;
 
   GdkRectangle last_sent_window_geometry;
-  int last_sent_min_width;
-  int last_sent_min_height;
-  int last_sent_max_width;
-  int last_sent_max_height;
 
   int saved_width;
   int saved_height;
