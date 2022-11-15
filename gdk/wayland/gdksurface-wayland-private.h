@@ -114,8 +114,6 @@ struct _GdkWaylandSurface
 
   int state_freeze_count;
 
-  struct zxdg_imported_v1 *imported_transient_for;
-  struct zxdg_imported_v2 *imported_transient_for_v2;
   GHashTable *shortcuts_inhibitors;
 };
 
