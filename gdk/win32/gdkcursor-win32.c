@@ -911,7 +911,7 @@ gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
   
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
   
-  icon = pixbuf_to_hicon (pixbuf, TRUE, 0, 0);
+  icon = pixbuf_to_hicon (pixbuf, FALSE, x, y);
   
   g_object_unref (pixbuf);
   
@@ -1471,16 +1471,6 @@ _gdk_win32_texture_to_hicon (GdkTexture *texture)
   
   return icon;
 }
-
-HICON
-_gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
-			      int        x_hotspot,
-			      int        y_hotspot)
-{
-  return pixbuf_to_hicon (pixbuf, FALSE, x_hotspot, y_hotspot);
-}
-
-
 
 /**
  * gdk_win32_display_get_win32hcursor:
