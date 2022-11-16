@@ -612,7 +612,6 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   GList *l;
   GdkSurface *surface = NULL;
   GdkDevice *device = NULL;
-  GdkEvent *last_event = NULL;
   GList *scrolls = NULL;
   GArray *history = NULL;
   GdkScrollUnit scroll_unit = GDK_SCROLL_UNIT_WHEEL;
@@ -644,9 +643,6 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
       if (scroll_unit_defined &&
           scroll_unit != scroll_event->unit)
         break;
-
-      if (!last_event)
-        last_event = event;
 
       surface = event->surface;
       device = event->device;
