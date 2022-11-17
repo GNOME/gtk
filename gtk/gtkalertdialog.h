@@ -33,8 +33,8 @@ GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkAlertDialog, gtk_alert_dialog, GTK, ALERT_DIALOG, GObject)
 
 GDK_AVAILABLE_IN_4_10
-GtkAlertDialog *gtk_alert_dialog_new               (const char *format,
-                                                     ...) G_GNUC_PRINTF (1, 2);
+GtkAlertDialog *gtk_alert_dialog_new               (const char           *format,
+                                                    ...) G_GNUC_PRINTF (1, 2);
 
 GDK_AVAILABLE_IN_4_10
 gboolean        gtk_alert_dialog_get_modal          (GtkAlertDialog      *self);

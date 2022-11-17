@@ -7360,20 +7360,17 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
 
-  if (GTK_IS_BOX (widget))
+  if (GTK_IS_DROP_DOWN (widget))
     {
       guint i;
       const char **options;
-      GtkWidget *dropdown;
 
-      dropdown = gtk_widget_get_last_child (widget);
-
-      options = (const char **) g_object_get_data (G_OBJECT (dropdown), "options");
+      options = (const char **) g_object_get_data (G_OBJECT (widget), "options");
       for (i = 0; options[i]; i++)
         {
           if (strcmp (option, options[i]) == 0)
             {
-              gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), i);
+              gtk_drop_down_set_selected (GTK_DROP_DOWN (widget), i);
               break;
             }
         }
