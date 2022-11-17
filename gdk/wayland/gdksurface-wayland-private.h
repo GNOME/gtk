@@ -98,6 +98,17 @@ void gdk_wayland_surface_update_size       (GdkSurface *surface,
 void gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface);
 void _gdk_wayland_surface_save_size (GdkSurface *surface);
 
+void gdk_wayland_surface_hide_surface (GdkSurface *surface);
+void gdk_wayland_surface_move_resize (GdkSurface *surface,
+                                      int         x,
+                                      int         y,
+                                      int         width,
+                                      int         height);
+void gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
+                                              GdkRectangle *geometry);
+void gdk_wayland_surface_freeze_state (GdkSurface *surface);
+void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
+
 
 #define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
