@@ -232,8 +232,8 @@
  *
  * ```c
  * const char *text =
- * "Go to the"
- * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
+ * "Go to the "
+ * "<a href=\"https://www.gtk.org\" title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
  * "GTK website</a> for more...";
  * GtkWidget *label = gtk_label_new (NULL);
  * gtk_label_set_markup (GTK_LABEL (label), text);
