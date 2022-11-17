@@ -330,9 +330,6 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
  * Windows XP, thresholds alpha otherwise.
  */
 HICON _gdk_win32_texture_to_hicon  (GdkTexture *texture);
-HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
-                                    int        x_hotspot,
-                                    int        y_hotspot);
 
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
