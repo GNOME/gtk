@@ -4747,6 +4747,9 @@ maybe_unset_focus_and_default (GtkWindow *window)
           parent = _gtk_widget_get_parent (parent);
         }
 
+      if (!parent)
+        gtk_widget_child_focus (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD);
+
       priv->move_focus = FALSE;
       g_clear_object (&priv->move_focus_widget);
     }
