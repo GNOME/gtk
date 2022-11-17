@@ -1,4 +1,5 @@
 /* Clipboard
+ * #Keywords: drag-and-drop, dnd
  *
  * GdkClipboard is used for clipboard handling. This demo shows how to
  * copy and paste text, images, colors or files to and from the clipboard.

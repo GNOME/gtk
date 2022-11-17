@@ -1,5 +1,5 @@
 /* Peg Solitaire
- * #Keywords: GtkGridView, game
+ * #Keywords: GtkGridView, game, drag-and-drop, dnd
  *
  * This demo demonstrates how to use drag-and-drop to implement peg solitaire.
  *
