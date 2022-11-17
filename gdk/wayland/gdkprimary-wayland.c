@@ -292,7 +292,8 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
         }
 
       seat = gdk_display_get_default_seat (GDK_DISPLAY (wdisplay));
-      serial = _gdk_wayland_seat_get_implicit_grab_serial (seat, NULL);
+      serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat),
+                                                                NULL);
       zwp_primary_selection_device_v1_set_selection (cb->primary_data_device,
                                                      cb->source,
                                                      serial);

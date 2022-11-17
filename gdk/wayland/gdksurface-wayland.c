@@ -1416,21 +1416,22 @@ configure_toplevel_geometry (GdkSurface *surface)
   else
     {
       GdkMonitor *monitor;
-      GdkRectangle monitor_geometry;
+      GListModel *monitors;
+      GdkRectangle monitor_geometry, display_geometry = { 0 };
+      guint i;
 
-      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      if (monitor)
+      monitors = gdk_display_get_monitors (display);
+
+      for (i = 0; i < g_list_model_get_n_items (monitors); i++)
         {
+          monitor = g_list_model_get_item (monitors, i);
           gdk_monitor_get_geometry (monitor, &monitor_geometry);
-          bounds_width = monitor_geometry.width;
-          bounds_height = monitor_geometry.height;
+          gdk_rectangle_union (&display_geometry, &monitor_geometry, &display_geometry);
           g_object_unref (monitor);
         }
-      else
-        {
-          bounds_width = 0;
-          bounds_height = 0;
-        }
+
+      bounds_width = display_geometry.width;
+      bounds_height = display_geometry.height;
     }
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
