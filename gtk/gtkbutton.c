@@ -688,7 +688,7 @@ gtk_button_new_with_mnemonic (const char *label)
  *
  * Sets the style of the button.
  *
- * Buttons can has a flat appearance or have a frame drawn around them.
+ * Buttons can have a flat appearance or have a frame drawn around them.
  */
 void
 gtk_button_set_has_frame (GtkButton *button,

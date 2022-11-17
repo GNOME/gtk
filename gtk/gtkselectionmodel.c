@@ -547,7 +547,7 @@ gtk_selection_model_set_selection (GtkSelectionModel *model,
  *
  * Helper function for implementations of `GtkSelectionModel`.
  *
- * Call this when a the selection changes to emit the
+ * Call this when the selection changes to emit the
  * [signal@Gtk.SelectionModel::selection-changed] signal.
  */
 void

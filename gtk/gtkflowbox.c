@@ -4918,7 +4918,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
  * should come first.
  *
  * Returns: < 0 if @child1 should be before @child2, 0 if
- *   the are equal, and > 0 otherwise
+ *   they are equal, and > 0 otherwise
  */
 
 /**
