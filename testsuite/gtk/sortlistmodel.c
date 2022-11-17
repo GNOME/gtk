@@ -583,10 +583,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/create", test_create);
   g_test_add_func ("/sortlistmodel/set-model", test_set_model);
   g_test_add_func ("/sortlistmodel/set-sorter", test_set_sorter);
-#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/sortlistmodel/add_items", test_add_items);
   g_test_add_func ("/sortlistmodel/remove_items", test_remove_items);
-#endif
   g_test_add_func ("/sortlistmodel/stability", test_stability);
   g_test_add_func ("/sortlistmodel/incremental/remove", test_incremental_remove);
   g_test_add_func ("/sortlistmodel/oob-access", test_out_of_bounds_access);

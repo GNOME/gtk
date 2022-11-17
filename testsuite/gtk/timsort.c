@@ -21,10 +21,6 @@
 
 #include "gtk/timsort/gtktimsortprivate.h"
 
-#if !GLIB_CHECK_VERSION (2, 67, 3)
-# define g_memdup2(mem,size)    g_memdup((mem), (size))
-#endif
-
 #define assert_sort_equal(a, b, size, n) \
   g_assert_cmpmem (a, sizeof (size) * n, b, sizeof (size) * n)
 

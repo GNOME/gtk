@@ -415,12 +415,10 @@ main (int argc, char *argv[])
   g_test_add_func ("/flattenlistmodel/create_empty", test_create_empty);
   g_test_add_func ("/flattenlistmodel/create", test_create);
   g_test_add_func ("/flattenlistmodel/model/add", test_model_add);
-#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/flattenlistmodel/submodel/add", test_submodel_add);
   g_test_add_func ("/flattenlistmodel/submodel/add2", test_submodel_add2);
   g_test_add_func ("/flattenlistmodel/model/remove", test_model_remove);
   g_test_add_func ("/flattenlistmodel/submodel/remove", test_submodel_remove);
-#endif
 
   return g_test_run ();
 }
