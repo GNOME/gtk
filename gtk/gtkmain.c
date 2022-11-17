@@ -25,8 +25,9 @@
 #include "config.h"
 
 #include "gdk/gdk.h"
-#include "gdk/gdkprivate.h"
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkdebugprivate.h"
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gtknative.h"

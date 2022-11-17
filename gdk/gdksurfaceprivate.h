@@ -344,6 +344,9 @@ void       gdk_surface_request_compute_size (GdkSurface      *surface);
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
 
+gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);
+
+
 
 G_END_DECLS
 

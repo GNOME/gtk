@@ -29,7 +29,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 
-#include "gdk/gdkprivate.h"
+#include "gdk/gdkdisplayprivate.h"
 
 #include <string.h>
 
