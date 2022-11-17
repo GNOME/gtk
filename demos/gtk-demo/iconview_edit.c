@@ -1,4 +1,5 @@
 /* Icon View/Editing and Drag-and-Drop
+ * #Keywords: dnd
  *
  * The GtkIconView widget supports Editing and Drag-and-Drop.
  * This example also demonstrates using the generic GtkCellLayout

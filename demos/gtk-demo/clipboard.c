@@ -1,4 +1,5 @@
 /* Clipboard
+ * #Keywords: drag-and-drop, dnd
  *
  * GdkClipboard is used for clipboard handling. This demo shows how to
  * copy and paste text, images, colors or files to and from the clipboard.
@@ -248,6 +249,38 @@ open_file_cb (GtkWidget *button)
 }
 
 static void
+folder_chooser_response (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkButton *button = GTK_BUTTON (user_data);
+  GFile *file;
+
+  file = gtk_file_dialog_select_folder_finish (dialog, result, NULL);
+  if (file)
+    {
+      file_button_set_file (button, file);
+      g_object_unref (file);
+
+      update_copy_button_sensitivity (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_STACK));
+    }
+}
+
+static void
+open_folder_cb (GtkWidget *button)
+{
+  GtkFileDialog *dialog;
+
+  dialog = gtk_file_dialog_new ();
+
+  gtk_file_dialog_select_folder (dialog,
+                                 GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW)),
+                                 NULL,
+                                 NULL,
+                                 folder_chooser_response, button);
+}
+static void
 update_paste_button_sensitivity (GdkClipboard *clipboard,
                                  GtkWidget    *paste_button)
 {
@@ -345,6 +378,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, source_changed_cb);
       gtk_builder_cscope_add_callback (scope, text_changed_cb);
       gtk_builder_cscope_add_callback (scope, open_file_cb);
+      gtk_builder_cscope_add_callback (scope, open_folder_cb);
       gtk_builder_cscope_add_callback (scope, on_drop);
       gtk_builder_cscope_add_callback (scope, drag_prepare);
       builder = gtk_builder_new ();
