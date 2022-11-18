@@ -22,7 +22,7 @@
 #include "gtkfiledialog.h"
 
 #include "deprecated/gtkdialog.h"
-#include "deprecated/gtkfilechoosernative.h"
+#include "gtkfilechoosernativeprivate.h"
 #include "gtkdialogerror.h"
 #include <glib/gi18n-lib.h>
 
@@ -679,6 +679,7 @@ create_file_chooser (GtkFileDialog        *self,
     }
 
   chooser = gtk_file_chooser_native_new (title, parent, action, accept, _("_Cancel"));
+  gtk_file_chooser_native_set_use_portal (chooser, TRUE);
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), self->modal);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);

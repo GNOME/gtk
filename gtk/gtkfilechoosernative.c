@@ -561,6 +561,13 @@ gtk_file_chooser_native_new (const char           *title,
   return result;
 }
 
+void
+gtk_file_chooser_native_set_use_portal (GtkFileChooserNative *self,
+                                        gboolean              use_portal)
+{
+  self->use_portal = use_portal;
+}
+
 static void
 dialog_response_cb (GtkDialog *dialog,
                     int response_id,
