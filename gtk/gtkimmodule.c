@@ -66,8 +66,10 @@
 #include <windows.h>
 #endif
 
-#define SIMPLE_ID "gtk-im-context-simple"
-#define NONE_ID   "gtk-im-context-none"
+#define SIMPLE_ID     "gtk-im-context-simple"
+#define ALT_SIMPLE_ID "simple"
+#define NONE_ID       "gtk-im-context-none"
+#define ALT_NONE_ID   "none"
 
 /**
  * _gtk_im_module_create:
@@ -151,9 +153,11 @@ lookup_immodule (GdkDisplay  *display,
       if (!match_backend (display, immodules_list[i]))
         continue;
 
-      if (g_strcmp0 (immodules_list[i], SIMPLE_ID) == 0)
+      if (g_strcmp0 (immodules_list[i], SIMPLE_ID) == 0 ||
+          g_strcmp0 (immodules_list[i], ALT_SIMPLE_ID) == 0)
         return SIMPLE_ID;
-      else if (g_strcmp0 (immodules_list[i], NONE_ID) == 0)
+      else if (g_strcmp0 (immodules_list[i], NONE_ID) == 0 ||
+               g_strcmp0 (immodules_list[i], ALT_NONE_ID) == 0)
         return NONE_ID;
       else
         {
