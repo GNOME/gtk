@@ -2756,8 +2756,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       GdkDevice *source;
       guint state;
 
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
       sel_start = priv->selection_bound;
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
@@ -2792,6 +2790,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                     gtk_text_selection_bubble_popup_unset (self);
                   else
                     gtk_text_selection_bubble_popup_set (self);
+
+                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
               else if (extend_selection)
                 {
@@ -2803,6 +2803,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
                   /* all done, so skip the extend_to_left stuff later */
                   extend_selection = FALSE;
+
+                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
               else
                 {
@@ -2810,6 +2812,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                   priv->in_drag = TRUE;
                   priv->drag_start_x = x;
                   priv->drag_start_y = y;
+                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
             }
           else
@@ -2818,7 +2821,13 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
               if (!extend_selection)
                 {
-                  gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
+                  if (priv->current_pos != tmp_pos ||
+                      priv->selection_bound != tmp_pos)
+                    {
+                      gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
+                      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+                    }
+
                   priv->handle_place_time = g_get_monotonic_time ();
                 }
               else
@@ -2828,6 +2837,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                     sel_start = sel_end = priv->current_pos;
 
                   gtk_text_set_positions (self, tmp_pos, tmp_pos);
+                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
             }
 
@@ -2836,11 +2846,13 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
         case 2:
           priv->select_words = TRUE;
           gtk_text_select_word (self);
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           break;
 
         case 3:
           priv->select_lines = TRUE;
           gtk_text_select_line (self);
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           break;
 
         default:
