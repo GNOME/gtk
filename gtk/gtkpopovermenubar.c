@@ -707,7 +707,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
                                      GMenuModel        *model)
 {
   g_return_if_fail (GTK_IS_POPOVER_MENU_BAR (bar));
-  g_return_if_fail (G_IS_MENU_MODEL (model));
+  g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
 
   if (g_set_object (&bar->model, model))
     {
