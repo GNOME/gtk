@@ -2800,10 +2800,10 @@ check_autohide (GdkEvent *event)
     // grabs, it will be delivered to the same place as the
     // press, and will cause the auto dismissal to be triggered.
     case GDK_BUTTON_RELEASE:
-#endif
-    case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
+#endif
+    case GDK_TOUCH_BEGIN:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
       display = gdk_event_get_display (event);
