@@ -199,6 +199,16 @@ _gtk_im_module_get_default_context_id (GdkDisplay *display)
 
       if (context_id)
         return context_id;
+      else
+        {
+          static gboolean warned;
+
+          if (!warned)
+            {
+              g_warning ("No IM module matching GTK_IM_MODULE=%s found", envvar);
+              warned = TRUE;
+            }
+        }
     }
 
   /* Check if the certain immodule is set in XSETTINGS. */
