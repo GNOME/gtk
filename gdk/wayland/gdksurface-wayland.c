@@ -1862,6 +1862,22 @@ xdg_toplevel_configure (void                *data,
         case XDG_TOPLEVEL_STATE_RESIZING:
           impl->pending.toplevel.is_resizing = TRUE;
           break;
+        case XDG_TOPLEVEL_STATE_TILED_TOP:
+          pending_state |= (GDK_TOPLEVEL_STATE_TILED |
+                            GDK_TOPLEVEL_STATE_TOP_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_RIGHT:
+          pending_state |= (GDK_TOPLEVEL_STATE_TILED |
+                            GDK_TOPLEVEL_STATE_RIGHT_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_BOTTOM:
+          pending_state |= (GDK_TOPLEVEL_STATE_TILED |
+                            GDK_TOPLEVEL_STATE_BOTTOM_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_LEFT:
+          pending_state |= (GDK_TOPLEVEL_STATE_TILED |
+                            GDK_TOPLEVEL_STATE_LEFT_TILED);
+          break;
         default:
           /* Unknown state */
           break;
