@@ -86,14 +86,20 @@ gtk_string_sorter_get_key (GtkExpression *expression,
   switch (collation)
     {
     case GTK_COLLATION_NONE:
-      key = s;
+      if (ignore_case)
+        key = g_steal_pointer (&s);
+      else
+        key = g_strdup (s);
       break;
+
     case GTK_COLLATION_UNICODE:
       key = g_utf8_collate_key (s, -1);
       break;
+
     case GTK_COLLATION_FILENAME:
       key = g_utf8_collate_key_for_filename (s, -1);
       break;
+
     default:
       g_assert_not_reached ();
       break;
