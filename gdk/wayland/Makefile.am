@@ -10,6 +10,7 @@ AM_CPPFLAGS =					\
 	-DGDK_COMPILATION			\
 	-I$(top_srcdir)				\
 	-I$(top_srcdir)/gdk			\
+	-I$(top_srcdir)/gdk/wayland/cursor	\
 	-I$(top_builddir)/gdk			\
 	$(GDK_HIDDEN_VISIBILITY_CFLAGS)		\
 	$(GTK_DEBUG_FLAGS)			\
@@ -76,6 +77,14 @@ libgdk_wayland_la_SOURCES =			\
 	gdkprivate-wayland.h			\
 	wm-button-layout-translation.c		\
 	wm-button-layout-translation.h
+
+libgdk_wayland_la_SOURCES +=			\
+	cursor/os-compatibility.c		\
+	cursor/os-compatibility.h		\
+	cursor/wayland-cursor.c			\
+	cursor/wayland-cursor.h			\
+	cursor/xcursor.c			\
+	cursor/xcursor.h
 
 libgdkinclude_HEADERS =				\
 	gdkwayland.h

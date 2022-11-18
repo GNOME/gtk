@@ -439,7 +439,7 @@ fi
 
 PKG_PROG_PKG_CONFIG
 
-WAYLAND_RUNTIME_DEPENDENCIES="wayland-client >= wayland_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version wayland-egl"
+WAYLAND_RUNTIME_DEPENDENCIES="wayland-client >= wayland_required_version xkbcommon >= 0.2.0 wayland-egl"
 WAYLAND_DEPENDENCIES="wayland-protocols >= wayland_protocols_required_version $WAYLAND_RUNTIME_DEPENDENCIES"
 if test "$enable_wayland_backend" = "maybe" ; then
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
