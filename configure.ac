@@ -480,6 +480,7 @@ if test "$enable_wayland_backend" = "yes"; then
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
+  AM_CONDITIONAL(USE_XDG_ACTIVATION, false)
 fi
 
 # strip leading space
