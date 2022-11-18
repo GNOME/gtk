@@ -1473,7 +1473,7 @@ gdk_x11_display_open (const char *display_name)
    * as we care about GLX details such as alpha/depth/stencil depth,
    * stereo and double buffering
    *
-   * Note that this also sets up the leader surface while creating the inital
+   * Note that this also sets up the leader surface while creating the initial
    * GL context.
    */
   if (!gdk_display_prepare_gl (display, NULL))

@@ -3560,7 +3560,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListBoxRow:child: (attributes org.gtk.Proeprty.get=gtk_list_box_row_get_child org.gtk.Property.set=gtk_list_box_row_set_child)
+   * GtkListBoxRow:child: (attributes org.gtk.Property.get=gtk_list_box_row_get_child org.gtk.Property.set=gtk_list_box_row_set_child)
    *
    * The child widget.
    */

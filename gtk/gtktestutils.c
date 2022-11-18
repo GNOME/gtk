@@ -160,7 +160,7 @@ gtk_test_list_all_types (guint *n_types)
  *
  * Force registration of all core GTK object types.
  *
- * This allowes to refer to any of those object types via
+ * This allows to refer to any of those object types via
  * g_type_from_name() after calling this function.
  **/
 void

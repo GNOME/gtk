@@ -466,7 +466,7 @@ gtk_color_dialog_button_set_dialog (GtkColorDialogButton *self,
  * Returns the color of the button.
  *
  * This function is what should be used to obtain
- * the color that was choosen by the user. To get
+ * the color that was chosen by the user. To get
  * informed about changes, listen to "notify::color".
  *
  * Returns: the color

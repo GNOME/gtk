@@ -869,7 +869,7 @@ gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
   shader_node = NULL;
 
   if (n_collected_nodes != 0)
-    g_warning ("Unexpected children when poping gl shader.");
+    g_warning ("Unexpected children when popping gl shader.");
 
   if (state->data.glshader.nodes)
     nodes = state->data.glshader.nodes;

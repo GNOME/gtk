@@ -330,7 +330,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRevealer:reveal-child: (attributes org.gtk.Proeprty.get=gtk_revealer_get_reveal_child org.gtk.Property.set=gtk_revealer_set_reveal_child)
+   * GtkRevealer:reveal-child: (attributes org.gtk.Property.get=gtk_revealer_get_reveal_child org.gtk.Property.set=gtk_revealer_set_reveal_child)
    *
    * Whether the revealer should reveal the child.
    */

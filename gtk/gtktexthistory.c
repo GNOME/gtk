@@ -225,7 +225,7 @@ action_chain (Action   *action,
       if (other->kind == ACTION_KIND_BARRIER)
         {
           /* If we're not in a user action, this barrier is meant to
-           * stop items from coallescing into this group.
+           * stop items from coalescing into this group.
            */
           if (!in_user_action && action->u.group.depth == 0)
             return FALSE;

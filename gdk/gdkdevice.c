@@ -943,7 +943,7 @@ _gdk_device_translate_surface_coord (GdkDevice *device,
 
   /*
    * Some drivers incorrectly report the resolution of the device
-   * as zero (in partiular linuxwacom < 0.5.3 with usb tablets).
+   * as zero (in particular linuxwacom < 0.5.3 with usb tablets).
    * This causes the device_aspect to become NaN and totally
    * breaks windowed mode.  If this is the case, the best we can
    * do is to assume the resolution is non-zero is equal in both

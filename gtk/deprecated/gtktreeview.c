@@ -9016,7 +9016,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   if (priv->column_drag_info == NULL)
     return;
 
-  /* We know there are always 2 slots possbile, as you can always return column. */
+  /* We know there are always 2 slots possible, as you can always return column. */
   /* If that's all there is, return */
   if (priv->column_drag_info->next == NULL ||
       (priv->column_drag_info->next->next == NULL &&

@@ -153,7 +153,7 @@ gsk_gl_program_delete (GskGLProgram *self)
  * @self: a `GskGLProgram`
  * @has_attachments: if any uniform is for a bind/texture attachment
  *
- * This function should be called after all of the uniforms ahve
+ * This function should be called after all of the uniforms have
  * been added with gsk_gl_program_add_uniform().
  *
  * This function will setup the uniform state so that the program

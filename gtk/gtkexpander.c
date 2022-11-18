@@ -1142,7 +1142,7 @@ gtk_expander_get_label_widget (GtkExpander *expander)
  * @resize_toplevel: whether to resize the toplevel
  *
  * Sets whether the expander will resize the toplevel widget
- * containing the expander upon resizing and collpasing.
+ * containing the expander upon resizing and collapsing.
  */
 void
 gtk_expander_set_resize_toplevel (GtkExpander *expander,
@@ -1162,7 +1162,7 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
  * @expander: a `GtkExpander`
  *
  * Returns whether the expander will resize the toplevel widget
- * containing the expander upon resizing and collpasing.
+ * containing the expander upon resizing and collapsing.
  *
  * Returns: the “resize toplevel” setting.
  */

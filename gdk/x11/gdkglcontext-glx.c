@@ -390,7 +390,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
         {
           /* We assume that if the fence has been signaled, that this damage
            * event is the damage event that was triggered by the GL drawing
-           * associated with the fence. That's, technically, not necessarly
+           * associated with the fence. That's, technically, not necessarily
            * always true. The X server could have generated damage for
            * an unrelated event (say the size of the window changing), at
            * just the right moment such that we're picking it up instead.

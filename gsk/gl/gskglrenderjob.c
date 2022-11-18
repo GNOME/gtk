@@ -1488,7 +1488,7 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
   program = CHOOSE_PROGRAM (job, coloring);
   batch = gsk_gl_command_queue_get_batch (job->command_queue);
 
-  /* Limit the size, or we end up with a coordinate overflow somwhere. */
+  /* Limit the size, or we end up with a coordinate overflow somewhere. */
   if (node->bounds.size.width < 300 &&
       node->bounds.size.height < 300 &&
       batch->any.kind == GSK_GL_COMMAND_KIND_DRAW &&

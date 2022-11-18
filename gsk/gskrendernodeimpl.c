@@ -553,7 +553,7 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
  *
  * The radial gradient
  * starts around @center. The size of the gradient is dictated by @hradius
- * in horizontal orientation and by @vradius in vertial orientation.
+ * in horizontal orientation and by @vradius in vertical orientation.
  *
  * Returns: (transfer full) (type GskRadialGradientNode): A new `GskRenderNode`
  */
@@ -622,7 +622,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
  *
  * The radial gradient starts around @center. The size of the gradient
  * is dictated by @hradius in horizontal orientation and by @vradius
- * in vertial orientation.
+ * in vertical orientation.
  *
  * Returns: (transfer full) (type GskRepeatingRadialGradientNode): A new `GskRenderNode`
  */
@@ -730,7 +730,7 @@ gsk_radial_gradient_node_get_center (const GskRenderNode *node)
  * gsk_radial_gradient_node_get_hradius:
  * @node: (type GskRadialGradientNode): a `GskRenderNode` for a radial gradient
  *
- * Retrieves the horizonal radius for the gradient.
+ * Retrieves the horizontal radius for the gradient.
  *
  * Returns: the horizontal radius for the gradient
  */
@@ -2890,7 +2890,7 @@ gsk_transform_node_draw (GskRenderNode *node,
       /* broken matrix here. This can happen during transitions
        * (like when flipping an axis at the point where scale == 0)
        * and just means that nothing should be drawn.
-       * But Cairo thows lots of ugly errors instead of silently
+       * But Cairo throws lots of ugly errors instead of silently
        * going on. So We silently go on.
        */
       return;
@@ -5178,7 +5178,7 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
  * @args: Arguments for the uniforms
  * @children: (nullable) (array length=n_children): array of child nodes,
  *   these will be rendered to textures and used as input.
- * @n_children: Length of @children (currenly the GL backend supports
+ * @n_children: Length of @children (currently the GL backend supports
  *   up to 4 children)
  *
  * Creates a `GskRenderNode` that will render the given @shader into the

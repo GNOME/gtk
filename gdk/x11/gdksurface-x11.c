@@ -3428,7 +3428,7 @@ gdk_x11_surface_apply_fullscreen_mode (GdkSurface *surface)
 	   * Successfully tested on mutter/metacity, kwin, compiz and xfwm4.
 	   *
 	   * Note, this (non documented) mechanism is unlikely to be an issue
-	   * as it's used only for transitionning back from "all monitors" to
+	   * as it's used only for transitioning back from "all monitors" to
 	   * "current monitor" mode.
 	   *
 	   * Applications who don't change the default mode won't trigger this
