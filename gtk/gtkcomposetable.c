@@ -963,6 +963,7 @@ parser_get_compose_table (GtkComposeParser *parser)
           if (char_data->len >= 0x8000)
             {
               g_warning ("GTK can't handle compose tables this large (%s)", parser->compose_file ? parser->compose_file : "");
+              g_free (data);
               g_string_free (char_data, TRUE);
               return NULL;
             }
