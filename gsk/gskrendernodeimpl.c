@@ -4818,6 +4818,8 @@ blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
   cairo_surface_t *tmp;
   int width, height;
 
+  g_assert (radius >= 0);
+
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
   tmp = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
