@@ -106,6 +106,7 @@ struct _GdkWaylandDisplay
   struct zxdg_exporter_v1 *xdg_exporter;
   struct zxdg_exporter_v2 *xdg_exporter_v2;
   struct zxdg_importer_v1 *xdg_importer;
+  struct zxdg_importer_v2 *xdg_importer_v2;
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
   struct zxdg_output_manager_v1 *xdg_output_manager;
