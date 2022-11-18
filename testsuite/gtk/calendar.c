@@ -10,11 +10,7 @@ test_calendar_set_day (void)
 
   cal = gtk_calendar_new ();
 
-#if GLIB_CHECK_VERSION(2,68,0)
   tz = g_time_zone_new_identifier ("MET");
-#else
-  tz = g_time_zone_new ("MET");
-#endif
   g_assert_nonnull (tz);
   dt = g_date_time_new (tz, 1970, 3, 1, 0, 0, 0);
   g_assert_nonnull (dt);

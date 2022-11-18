@@ -72,7 +72,7 @@ struct _GtkIMContextIMEPrivate
    * cleared before commit() is called, otherwise it leads to an assertion
    * failure in Pango. However, since we emit the commit() signal while
    * handling the WM_IME_COMPOSITION message, the IME buffer will be non-empty,
-   * so we temporarily set this flag while emmiting the appropriate signals.
+   * so we temporarily set this flag while emitting the appropriate signals.
    *
    * See also:
    *   https://bugzilla.gnome.org/show_bug.cgi?id=787142

@@ -3771,7 +3771,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   /**
    * GtkFlowBox::move-cursor:
    * @box: the `GtkFlowBox` on which the signal is emitted
-   * @step: the granularity fo the move, as a `GtkMovementStep`
+   * @step: the granularity of the move, as a `GtkMovementStep`
    * @count: the number of @step units to move
    * @extend: whether to extend the selection
    * @modify: whether to modify the selection
@@ -4892,7 +4892,7 @@ gtk_flow_box_set_filter_func (GtkFlowBox           *box,
  * Updates the filtering for all children.
  *
  * Call this function when the result of the filter
- * function on the @box is changed due ot an external
+ * function on the @box is changed due to an external
  * factor. For instance, this would be used if the
  * filter function just looked for a specific search
  * term, and the entry with the string has changed.

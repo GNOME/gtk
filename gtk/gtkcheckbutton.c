@@ -777,7 +777,7 @@ gtk_check_button_new_with_mnemonic (const char *label)
  *
  * Sets the `GtkCheckButton` to inconsistent state.
  *
- * You shoud turn off the inconsistent state again if the user checks
+ * You should turn off the inconsistent state again if the user checks
  * the check button. This has to be done manually.
  */
 void

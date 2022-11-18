@@ -1326,7 +1326,7 @@ gdk_event_get_display (GdkEvent *event)
  * gdk_event_get_event_sequence:
  * @event: a `GdkEvent`
  *
- * Retuns the event sequence to which the event belongs.
+ * Returns the event sequence to which the event belongs.
  *
  * Related touch events are connected in a sequence. Other
  * events typically don't have event sequence information.

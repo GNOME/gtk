@@ -641,7 +641,7 @@ gsk_gl_driver_after_frame (GskGLDriver *self)
       self->texture_pool->len = 0;
     }
 
-  /* Reset command queue to our shared queue incase we have operations
+  /* Reset command queue to our shared queue in case we have operations
    * that need to be processed outside of a frame (such as callbacks
    * from external systems such as GDK).
    */

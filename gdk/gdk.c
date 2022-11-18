@@ -30,7 +30,7 @@
 
 #include "gdkconstructorprivate.h"
 #include "gdkdebugprivate.h"
-#include "gdkdisplay.h"
+#include "gdkdisplayprivate.h"
 #include "gdkglcontextprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gdkprivate.h"

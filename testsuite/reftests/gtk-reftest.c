@@ -69,13 +69,7 @@ static gboolean
 would_drop (GLogLevelFlags  level,
             const char     *domain)
 {
-#if GLIB_CHECK_VERSION (2, 68, 0)
   return g_log_writer_default_would_drop (level, domain);
-#else
-  return (level & (G_LOG_LEVEL_ERROR |
-                   G_LOG_LEVEL_CRITICAL |
-                   G_LOG_LEVEL_WARNING)) == 0;
-#endif
 }
 
 static gboolean

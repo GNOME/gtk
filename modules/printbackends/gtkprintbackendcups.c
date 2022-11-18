@@ -89,10 +89,6 @@ typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 #define _CUPS_MAP_ATTR_INT(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].integer;}
 #define _CUPS_MAP_ATTR_STR(attr, v, a) {if (!g_ascii_strcasecmp (attr->name, (a))) v = attr->values[0].string.text;}
 
-#if !GLIB_CHECK_VERSION (2, 67, 3)
-# define g_memdup2(mem,size)    g_memdup((mem), (size))
-#endif
-
 typedef void (* GtkPrintCupsResponseCallbackFunc) (GtkPrintBackend *print_backend,
                                                    GtkCupsResult   *result,
                                                    gpointer         user_data);

@@ -247,7 +247,7 @@ pool_alloc (void)
 		if (pages == MAP_FAILED)
 			return NULL;
 
-		/* Fill in the block header, and inlude in block list */
+		/* Fill in the block header, and include in block list */
 		pool = pages;
 		pool->next = GTK_SECURE_GLOBALS.pool_data;
 		GTK_SECURE_GLOBALS.pool_data = pool;
@@ -1408,7 +1408,7 @@ gtk_secure_records (unsigned int *count)
 		if (records == NULL)
 			break;
 
-		/* Make sure this actualy accounts for all memory */
+		/* Make sure this actually accounts for all memory */
 		g_assert (total == block->n_words);
 	}
 

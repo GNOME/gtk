@@ -258,6 +258,16 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GdkEvent         *event,
                                               gulong            serial);
 
+GdkDisplay *    gdk_display_open_default        (void);
+
+void gdk_display_set_double_click_time     (GdkDisplay   *display,
+                                            guint         msec);
+void gdk_display_set_double_click_distance (GdkDisplay   *display,
+                                            guint         distance);
+void gdk_display_set_cursor_theme          (GdkDisplay   *display,
+                                            const char   *theme,
+                                            int           size);
+
 G_END_DECLS
 
 #endif  /* __GDK_DISPLAY_PRIVATE_H__ */

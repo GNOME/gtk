@@ -838,7 +838,7 @@ gtk_font_dialog_button_set_font_desc (GtkFontDialogButton        *self,
  * Returns the font of the button.
  *
  * This function is what should be used to obtain
- * the font that was choosen by the user. To get
+ * the font that was chosen by the user. To get
  * informed about changes, listen to "notify::font-desc".
  *
  * Returns: (transfer none) (nullable): the font
@@ -889,7 +889,7 @@ gtk_font_dialog_button_set_font_features (GtkFontDialogButton *self,
  * Returns the font features of the button.
  *
  * This function is what should be used to obtain the font features
- * that were choosen by the user. To get informed about changes, listen
+ * that were chosen by the user. To get informed about changes, listen
  * to "notify::font-features".
  *
  * Note that the button will only let users choose font features

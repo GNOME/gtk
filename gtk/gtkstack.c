@@ -894,7 +894,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:visible-child-name: (attributes org.gtk.Property.get=gtk_stack_get_visible_child_name org.gtk.Poperty.set=gtk_stack_set_visible_child_name)
+   * GtkStack:visible-child-name: (attributes org.gtk.Property.get=gtk_stack_get_visible_child_name org.gtk.Property.set=gtk_stack_set_visible_child_name)
    *
    * The name of the widget currently visible in the stack.
    */

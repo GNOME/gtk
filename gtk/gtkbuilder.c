@@ -1409,7 +1409,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
  * gtk_builder_add_from_resource:
  * @builder: a `GtkBuilder`
  * @resource_path: the path of the resource file to parse
- * @error: (nullable): return location for an erro
+ * @error: (nullable): return location for an error
  *
  * Parses a resource file containing a UI definition
  * and merges it with the current contents of @builder.

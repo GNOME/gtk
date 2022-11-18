@@ -810,7 +810,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
               /* We prune fully clipped children, but we only do this for container_node, as
                * we don't have a way for any other nodes to say there are children missing (i.e.
                * bins always assume there is a child).
-               * Pruning is really only useful for large sets of children anyway, so thats
+               * Pruning is really only useful for large sets of children anyway, so that's
                * probably fine. */
               GskRenderNode *child = gsk_container_node_get_child (node, i);
               if (node_is_visible (child, clip_bounds))

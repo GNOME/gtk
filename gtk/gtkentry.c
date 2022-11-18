@@ -509,7 +509,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:has-frame: (attributes org.gtk.Property.get=gtk_entry_get_has_frame org.gtk.Property.set=gtk_entry_set_has_frame)
    *
-   * Whehter the entry should draw a frame.
+   * Whether the entry should draw a frame.
    */
   entry_props[PROP_HAS_FRAME] =
       g_param_spec_boolean ("has-frame", NULL, NULL,
@@ -909,7 +909,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry::show-emoji-icon: 
    *
-   * Whether the entry will sohw an Emoji icon in the secondary icon position
+   * Whether the entry will show an Emoji icon in the secondary icon position
    * to open the Emoji chooser.
    */
   entry_props[PROP_SHOW_EMOJI_ICON] =

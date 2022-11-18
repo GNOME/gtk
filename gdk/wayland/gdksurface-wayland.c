@@ -852,7 +852,7 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
                               "frame-clock", frame_clock,
                               NULL);
       break;
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
                               "display", display,
                               "frame-clock", frame_clock,
@@ -4811,7 +4811,7 @@ create_dnd_surface (GdkDisplay *display)
   GdkSurface *surface;
 
   surface = _gdk_wayland_display_create_surface (display,
-                                                 GDK_SURFACE_TEMP,
+                                                 GDK_SURFACE_DRAG,
                                                  NULL,
                                                  0, 0, 100, 100);
 

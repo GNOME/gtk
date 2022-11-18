@@ -1845,7 +1845,7 @@ get_cell_allocation (GtkCellRenderer        *renderer,
  * @allocation: (out): where to store the allocation for @renderer
  *
  * Derives the allocation of @renderer inside @area if @area
- * were to be renderered in @cell_area.
+ * were to be rendered in @cell_area.
  *
  * Deprecated: 4.10
  */

@@ -421,7 +421,7 @@ RegisterGdkClass (GdkSurfaceType wtype)
       klass = klassTOPLEVEL;
       break;
 
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       if (klassTEMP == 0)
         {
           wcl.lpszClassName = L"gdkSurfaceTemp";
@@ -486,8 +486,8 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   GDK_NOTE (MISC,
             g_print ("_gdk_surface_new: %s\n", (surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
-                                                       (surface_type == GDK_SURFACE_TEMP ? "TEMP" :
-                                                      (surface_type == GDK_SURFACE_TEMP ? "POPUP" : "???")))));
+                                                       (surface_type == GDK_SURFACE_DRAG? "TEMP" :
+                                                      (surface_type == GDK_SURFACE_DRAG ? "POPUP" : "???")))));
 
   display_win32 = GDK_WIN32_DISPLAY (display);
 
@@ -511,7 +511,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                            "frame-clock", frame_clock,
                            NULL);
       break;
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       impl = g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
                            "display", display,
                            "frame-clock", frame_clock,
@@ -542,7 +542,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       dwStyle |= WS_OVERLAPPEDWINDOW;
       break;
 
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       /* fall through */
     case GDK_SURFACE_POPUP:
@@ -646,7 +646,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   gdk_surface_set_egl_native_window (surface, (void *) impl->handle);
 
-  if (surface_type != GDK_SURFACE_TEMP)
+  if (surface_type != GDK_SURFACE_DRAG)
     {
       if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
         gdk_winpointer_initialize_surface (surface);

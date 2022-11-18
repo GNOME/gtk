@@ -47,10 +47,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#if !GLIB_CHECK_VERSION (2, 67, 3)
-# define g_memdup2(mem,size)    g_memdup((mem), (size))
-#endif
-
 /* Forward declarations */
 static void        gdk_broadway_surface_finalize   (GObject            *object);
 
@@ -239,7 +235,7 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
     case GDK_SURFACE_POPUP:
       type = GDK_TYPE_BROADWAY_POPUP;
       break;
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       type = GDK_TYPE_BROADWAY_DRAG_SURFACE;
       break;
     default:
@@ -1115,7 +1111,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 
   mv_resize->moveresize_emulation_surface =
       _gdk_broadway_display_create_surface (mv_resize->display,
-                                            GDK_SURFACE_TEMP,
+                                            GDK_SURFACE_DRAG,
                                             NULL,
                                             -100, -100, 1, 1);
 

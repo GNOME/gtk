@@ -1393,7 +1393,7 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
 
   self->leader_gdk_surface =
       _gdk_x11_display_create_surface (display,
-                                       GDK_SURFACE_TEMP,
+                                       GDK_SURFACE_DRAG,
                                        NULL,
                                        -100, -100, 1, 1);
 
@@ -1473,7 +1473,7 @@ gdk_x11_display_open (const char *display_name)
    * as we care about GLX details such as alpha/depth/stencil depth,
    * stereo and double buffering
    *
-   * Note that this also sets up the leader surface while creating the inital
+   * Note that this also sets up the leader surface while creating the initial
    * GL context.
    */
   if (!gdk_display_prepare_gl (display, NULL))

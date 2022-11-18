@@ -105,7 +105,7 @@
  * ```
  *
  * This samples a texture (e.g. u_texture1) at the specified
- * coordinates, and containes some helper ifdefs to ensure that
+ * coordinates, and contains some helper ifdefs to ensure that
  * it works on all OpenGL versions.
  *
  * You can compile the shader yourself using [method@Gsk.GLShader.compile],

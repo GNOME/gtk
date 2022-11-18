@@ -933,7 +933,7 @@ gtk_im_context_get_surrounding_with_selection (GtkIMContext  *context,
  * have deleted all the characters that were requested to be deleted.
  *
  * This function is used by an input method that wants to make
- * subsitutions in the existing text in response to new input.
+ * substitutions in the existing text in response to new input.
  * It is not useful for applications.
  *
  * Returns: %TRUE if the signal was handled.

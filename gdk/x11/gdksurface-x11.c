@@ -1194,7 +1194,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
                               "frame-clock", frame_clock,
                               NULL);
       break;
-    case GDK_SURFACE_TEMP:
+    case GDK_SURFACE_DRAG:
       surface = g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
                               "display", display,
                               "frame-clock", frame_clock,
@@ -1233,7 +1233,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
   xattributes_mask |= CWColormap;
 
-  if (surface_type == GDK_SURFACE_TEMP ||
+  if (surface_type == GDK_SURFACE_DRAG ||
       surface_type == GDK_SURFACE_POPUP)
     {
       xattributes.save_under = True;
@@ -3428,7 +3428,7 @@ gdk_x11_surface_apply_fullscreen_mode (GdkSurface *surface)
 	   * Successfully tested on mutter/metacity, kwin, compiz and xfwm4.
 	   *
 	   * Note, this (non documented) mechanism is unlikely to be an issue
-	   * as it's used only for transitionning back from "all monitors" to
+	   * as it's used only for transitioning back from "all monitors" to
 	   * "current monitor" mode.
 	   *
 	   * Applications who don't change the default mode won't trigger this
@@ -4371,7 +4371,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 
   mv_resize->moveresize_emulation_surface =
       _gdk_x11_display_create_surface (mv_resize->display,
-                                       GDK_SURFACE_TEMP,
+                                       GDK_SURFACE_DRAG,
                                        NULL,
                                        -100, -100, 1, 1);
 

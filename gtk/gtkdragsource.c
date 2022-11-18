@@ -317,7 +317,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   class->prepare = gtk_drag_source_prepare;
 
   /**
-   * GtkDragSource:content: (attributes org.gtk.Property.get=gtk_drag_source_get_content org.gtk.Propery.set=gtk_drag_source_set_content)
+   * GtkDragSource:content: (attributes org.gtk.Property.get=gtk_drag_source_get_content org.gtk.Property.set=gtk_drag_source_set_content)
    *
    * The data that is offered by drag operations from this source.
    */
@@ -345,7 +345,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * GtkDragSource::prepare:
    * @source: the `GtkDragSource`
    * @x: the X coordinate of the drag starting point
-   * @y: the Y coordinate fo the drag starting point
+   * @y: the Y coordinate of the drag starting point
    *
    * Emitted when a drag is about to be initiated.
    *

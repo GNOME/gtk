@@ -588,7 +588,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   /**
    * GtkNotebookPage:tab:
    *
-   * The tab widget for tihs page.
+   * The tab widget for this page.
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB,
@@ -599,7 +599,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   /**
    * GtkNotebookPage:menu:
    *
-   * The label widget displayed in the childs menu entry.
+   * The label widget displayed in the child's menu entry.
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_MENU,
@@ -643,7 +643,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   /**
    * GtkNotebookPage:tab-expand:
    *
-   * Whether to expand the childs tab.
+   * Whether to expand the child's tab.
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_EXPAND,
@@ -654,7 +654,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   /**
    * GtkNotebookPage:tab-fill:
    *
-   * Whether the childs tab should fill the allocated area.
+   * Whether the child's tab should fill the allocated area.
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_FILL,
@@ -3301,7 +3301,7 @@ gtk_notebook_switch_page_timeout (gpointer data)
   if (switch_page)
     {
       /* FIXME: hack, we don't want the
-       * focus to move fom the source widget
+       * focus to move from the source widget
        */
       notebook->child_has_focus = FALSE;
       gtk_notebook_switch_focus_tab (notebook,

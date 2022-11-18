@@ -2236,7 +2236,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel::copy-clipboard:
    * @self: the object which received the signal
    *
-   * Gets emitted to copy the slection to the clipboard.
+   * Gets emitted to copy the selection to the clipboard.
    *
    * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *

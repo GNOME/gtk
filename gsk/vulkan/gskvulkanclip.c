@@ -132,7 +132,7 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
           gsk_rounded_rect_init_copy (&dest->rect, rounded);
           return TRUE;
         }
-      /* XXX: Can be improved for the case where one of the rects is a slighty shrunk version of the other */
+      /* XXX: Can be improved for the case where one of the rects is a slightly shrunk version of the other */
       return FALSE;
 
     default:

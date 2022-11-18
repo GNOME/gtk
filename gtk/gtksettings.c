@@ -29,7 +29,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 
-#include "gdk/gdkprivate.h"
+#include "gdk/gdkdisplayprivate.h"
 
 #include <string.h>
 
@@ -725,7 +725,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-fontconfig-timestamp:
    *
-   * Timestamp of the curent fontconfig configuration.
+   * Timestamp of the current fontconfig configuration.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-fontconfig-timestamp", NULL, NULL,

@@ -30,8 +30,8 @@ G_BEGIN_DECLS
 typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_TEMP,
-  GDK_SURFACE_POPUP
+  GDK_SURFACE_POPUP,
+  GDK_SURFACE_DRAG
 } GdkSurfaceType;
 
 struct _GdkSurface
@@ -343,6 +343,9 @@ void       gdk_surface_request_compute_size (GdkSurface      *surface);
 
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
+
+gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);
+
 
 
 G_END_DECLS

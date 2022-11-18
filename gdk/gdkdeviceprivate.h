@@ -194,6 +194,10 @@ GdkAxisUse gdk_device_get_axis_use  (GdkDevice         *device,
 void gdk_device_set_timestamp (GdkDevice *device,
                                guint32    timestamp);
 
+gboolean gdk_device_grab_info (GdkDisplay  *display,
+                               GdkDevice   *device,
+                               GdkSurface  **grab_surface,
+                               gboolean    *owner_events);
 
 G_END_DECLS
 

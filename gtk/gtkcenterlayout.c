@@ -663,7 +663,7 @@ gtk_center_layout_set_start_widget (GtkCenterLayout *self,
  * gtk_center_layout_get_start_widget:
  * @self: a `GtkCenterLayout`
  *
- * Returns the start widget fo the layout.
+ * Returns the start widget of the layout.
  *
  * Returns: (nullable) (transfer none): The current start widget of @self
  */

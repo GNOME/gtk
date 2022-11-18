@@ -12577,7 +12577,7 @@ determine_type (GParamSpec *pspec)
  * Installs an action called @action_name on @widget_class and
  * binds its state to the value of the @property_name property.
  *
- * This function will perform a few santity checks on the property selected
+ * This function will perform a few sanity checks on the property selected
  * via @property_name. Namely, the property must exist, must be readable,
  * writable and must not be construct-only. There are also restrictions
  * on the type of the given property, it must be boolean, int, unsigned int,

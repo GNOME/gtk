@@ -132,7 +132,7 @@
 
 #define	MAX_DIGITS	(64)	/* don't change this,
 				 * a) you don't need to and
-				 * b) you might cause buffer owerflows in
+				 * b) you might cause buffer overflows in
 				 *    unrelated code portions otherwise
 				 */
 

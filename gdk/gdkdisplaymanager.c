@@ -285,7 +285,7 @@ static GdkBackend gdk_backends[] = {
  * with multiple backends).
  *
  * Applications can use [func@set_allowed_backends] to limit what
- * backends wil be used.
+ * backends will be used.
  *
  * Returns: (transfer none): The global `GdkDisplayManager` singleton
  */

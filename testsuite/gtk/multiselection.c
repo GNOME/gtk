@@ -745,9 +745,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/multiselection/create", test_create);
   g_test_add_func ("/multiselection/create-empty", test_create_empty);
-#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/multiselection/changes", test_changes);
-#endif
   g_test_add_func ("/multiselection/selection", test_selection);
   g_test_add_func ("/multiselection/select-range", test_select_range);
   g_test_add_func ("/multiselection/readd", test_readd);

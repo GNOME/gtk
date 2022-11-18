@@ -36,10 +36,6 @@
 #include <string.h>
 #endif
 
-#if !GLIB_CHECK_VERSION (2, 67, 3)
-# define g_memdup2(mem,size)    g_memdup((mem), (size))
-#endif
-
 typedef struct {
   int id;
   guint32 tag;
