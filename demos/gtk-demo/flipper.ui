@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title">Flipper</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <child>
+          <object class="GtkDropDown" id="content">
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Picture</item>
+                  <item>Label</item>
+                </items>
+              </object>
+            </property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="flip_h">
+            <property name="label">Flip horizontally</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="flip_v">
+            <property name="label">Flip vertically</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="rotate">
+            <property name="label">Rotate</property>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="vexpand">1</property>
+            <layout>
+              <property name="row">4</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStack">
+            <binding name="visible-child-name">
+              <lookup name='string' type='GtkStringObject'><lookup name='selected-item'>content</lookup></lookup>
+            </binding>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">Picture</property>
+                <property name="child">
+                  <object class="GtkFlipper">
+                    <property name="flip-horizontal" bind-source="flip_h" bind-property="active"/>
+                    <property name="flip-vertical" bind-source="flip_v" bind-property="active"/>
+                    <property name="rotate" bind-source="rotate" bind-property="active"/>
+                    <property name="child">
+                      <object class="GtkPicture">
+                        <property name="file">resource:///css_blendmodes/ducky.png</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">Label</property>
+                <property name="child">
+                  <object class="GtkFlipper">
+                    <property name="halign">fill</property>
+                    <property name="valign">fill</property>
+                    <property name="flip-horizontal" bind-source="flip_h" bind-property="active"/>
+                    <property name="flip-vertical" bind-source="flip_v" bind-property="active"/>
+                    <property name="rotate" bind-source="rotate" bind-property="active"/>
+                    <property name="child">
+                      <object class="GtkLabel">
+                        <property name="label">This is not a rubber duck!</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">1</property>
+              <property name="row-span">5</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

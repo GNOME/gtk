@@ -128,6 +128,9 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
   </gresource>
+  <gresource prefix="/flipper">
+    <file>flipper.ui</file>
+  </gresource>
   <gresource prefix="/frames">
     <file>frames.ui</file>
   </gresource>
@@ -278,6 +281,7 @@
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
     <file>fixed.c</file>
+    <file>flipper.c</file>
     <file>flowbox.c</file>
     <file>frames.c</file>
     <file>font_features.c</file>
