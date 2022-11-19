@@ -462,7 +462,7 @@ gtk_alert_dialog_set_detail (GtkAlertDialog *self,
  *
  * Returns the button labels for the alert.
  *
- * Returns: (nullable) (transfer none): the button labels
+ * Returns: (nullable) (transfer none) (array zero-terminated=1): the button labels
  *
  * Since: 4.10
  */
@@ -477,7 +477,7 @@ gtk_alert_dialog_get_buttons (GtkAlertDialog *self)
 /**
  * gtk_alert_dialog_set_buttons:
  * @self: a `GtkAlertDialog`
- * @labels: the new button labels
+ * @labels: (array zero-terminated=1): the new button labels
  *
  * Sets the button labels for the alert.
  *
