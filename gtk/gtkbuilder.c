@@ -2325,6 +2325,23 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         {
           g_value_take_boxed (value, g_bytes_new (string, strlen (string)));
         }
+      else if (G_VALUE_HOLDS (value, PANGO_TYPE_ATTR_LIST))
+        {
+          PangoAttrList *attrs;
+
+          attrs = pango_attr_list_from_string (string);
+          if (attrs)
+            g_value_take_boxed (value, attrs);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse PangoAttrList '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else
         {
           g_set_error (error,
