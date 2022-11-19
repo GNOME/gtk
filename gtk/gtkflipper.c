@@ -21,7 +21,7 @@
 
 #include "gtkflipper.h"
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 
 /**
@@ -76,7 +76,7 @@ G_DEFINE_TYPE (GtkFlipper, gtk_flipper, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
-static GtkSizeRequestMode 
+static GtkSizeRequestMode
 gtk_flipper_get_request_mode (GtkWidget *widget)
 {
   GtkFlipper *self = GTK_FLIPPER (widget);
@@ -290,9 +290,7 @@ gtk_flipper_class_init (GtkFlipperClass *klass)
    * The child to display
    */
   properties[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("the child to display"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -302,9 +300,7 @@ gtk_flipper_class_init (GtkFlipperClass *klass)
    * If the flipper should automatically begin playing.
    */
   properties[PROP_FLIP_HORIZONTAL] =
-    g_param_spec_boolean ("flip-horizontal",
-                          P_("Flip horizontal"),
-                          P_("Swap the left and right of the child"),
+    g_param_spec_boolean ("flip-horizontal", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -314,9 +310,7 @@ gtk_flipper_class_init (GtkFlipperClass *klass)
    * If the flipper should automatically begin playing.
    */
   properties[PROP_FLIP_VERTICAL] =
-    g_param_spec_boolean ("flip-vertical",
-                          P_("Flip vertical"),
-                          P_("Swap the top and bottom of the child"),
+    g_param_spec_boolean ("flip-vertical", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -326,9 +320,7 @@ gtk_flipper_class_init (GtkFlipperClass *klass)
    * Rotates the child by 90° if set. This is applied after any flipping.
    */
   properties[PROP_ROTATE] =
-    g_param_spec_boolean ("rotate",
-                          P_("Rotate"),
-                          P_("Rotate the child clockwise by 90°"),
+    g_param_spec_boolean ("rotate", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
