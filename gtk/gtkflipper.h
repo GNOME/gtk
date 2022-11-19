@@ -30,30 +30,30 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FLIPPER         (gtk_flipper_get_type ())
 
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkFlipper, gtk_flipper, GTK, FLIPPER, GtkWidget)
 
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 GtkWidget *     gtk_flipper_new                                 (GtkWidget              *child);
 
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 GtkWidget *     gtk_flipper_get_child                           (GtkFlipper             *self);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 void            gtk_flipper_set_child                           (GtkFlipper             *self,
                                                                  GtkWidget              *child);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 gboolean        gtk_flipper_get_flip_horizontal                 (GtkFlipper             *self);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 void            gtk_flipper_set_flip_horizontal                 (GtkFlipper             *self,
                                                                  gboolean                flip_horizontal);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 gboolean        gtk_flipper_get_flip_vertical                   (GtkFlipper             *self);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 void            gtk_flipper_set_flip_vertical                   (GtkFlipper             *self,
                                                                  gboolean                flip_vertical);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 gboolean        gtk_flipper_get_rotate                          (GtkFlipper             *self);
-GDK_AVAILABLE_IN_4_6
+GDK_AVAILABLE_IN_4_10
 void            gtk_flipper_set_rotate                          (GtkFlipper             *self,
                                                                  gboolean                rotate);
 

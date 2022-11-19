@@ -42,12 +42,12 @@
  * for the child widget.
  *
  * The order that operations on the child are performed when enabled is:
- * 
+ *
  *  * flip horizontally
- * 
  *  * flip vertically
- * 
  *  * rotate
+ *
+ *  `GtkFlipper` was added in GTK 4.10.
  */
 
 struct _GtkFlipper
@@ -341,6 +341,8 @@ gtk_flipper_init (GtkFlipper *self)
  * Creates a new `GtkFlipper` containing @child.
  *
  * Returns: a new `GtkFlipper`
+ *
+ * Since: 4.10
  */
 GtkWidget *
 gtk_flipper_new (GtkWidget *child)
@@ -357,6 +359,8 @@ gtk_flipper_new (GtkWidget *child)
  * Returns the child of the flipper if one is set.
  *
  * Returns: (transfer none) (nullable): The child
+ *
+ * Since: 4.10
  */
 GtkWidget *
 gtk_flipper_get_child (GtkFlipper *self)
@@ -372,6 +376,8 @@ gtk_flipper_get_child (GtkFlipper *self)
  * @child (nullable): the child to display
  *
  * Sets the child to display.
+ *
+ * Since: 4.10
  */
 void
 gtk_flipper_set_child (GtkFlipper *self,
@@ -403,6 +409,8 @@ gtk_flipper_set_child (GtkFlipper *self,
  * Returns %TRUE if flipper should flip the child's left and right side.
  *
  * Returns: %TRUE if the child should flip horizontally
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_flipper_get_flip_horizontal (GtkFlipper *self)
@@ -420,6 +428,8 @@ gtk_flipper_get_flip_horizontal (GtkFlipper *self)
  * Sets whether the child should swap its left and right sides.
  *
  * The flipping is applied before rotating.
+ *
+ * Since: 4.10
  */
 void
 gtk_flipper_set_flip_horizontal (GtkFlipper *self,
@@ -446,6 +456,8 @@ gtk_flipper_set_flip_horizontal (GtkFlipper *self,
  * Returns %TRUE if flipper should flip the child's top and bottom side.
  *
  * Returns: %TRUE if the child should flip vertically
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_flipper_get_flip_vertical (GtkFlipper *self)
@@ -463,6 +475,8 @@ gtk_flipper_get_flip_vertical (GtkFlipper *self)
  * Sets whether the child should swap its top and bottom sides.
  *
  * The flipping is applied before rotating.
+ *
+ * Since: 4.10
  */
 void
 gtk_flipper_set_flip_vertical (GtkFlipper *self,
@@ -489,6 +503,8 @@ gtk_flipper_set_flip_vertical (GtkFlipper *self,
  * Returns %TRUE if flipper should rotate the child clockwise by 90°.
  *
  * Returns: %TRUE if the child should rotate
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_flipper_get_rotate (GtkFlipper *self)
@@ -506,6 +522,8 @@ gtk_flipper_get_rotate (GtkFlipper *self)
  * Sets whether the child should rotate the child clockwise by 90°.
  *
  * The rotation is done after any eventual flipping.
+ *
+ * Since: 4.10
  */
 void
 gtk_flipper_set_rotate (GtkFlipper *self,
@@ -524,4 +542,3 @@ gtk_flipper_set_rotate (GtkFlipper *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ROTATE]);
 }
-
