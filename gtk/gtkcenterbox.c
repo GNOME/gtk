@@ -82,9 +82,17 @@ struct _GtkCenterBoxClass
 
 enum {
   PROP_0,
+  PROP_START_WIDGET,
+  PROP_CENTER_WIDGET,
+  PROP_END_WIDGET,
   PROP_BASELINE_POSITION,
-  PROP_ORIENTATION
+
+  /* orientable */
+  PROP_ORIENTATION,
+  LAST_PROP = PROP_ORIENTATION
 };
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -147,6 +155,18 @@ gtk_center_box_set_property (GObject      *object,
       }
       break;
 
+   case PROP_START_WIDGET:
+     gtk_center_box_set_start_widget (self, GTK_WIDGET (g_value_get_object (value)));
+     break;
+
+   case PROP_CENTER_WIDGET:
+     gtk_center_box_set_center_widget (self, GTK_WIDGET (g_value_get_object (value)));
+     break;
+
+   case PROP_END_WIDGET:
+     gtk_center_box_set_end_widget (self, GTK_WIDGET (g_value_get_object (value)));
+     break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -159,6 +179,7 @@ gtk_center_box_get_property (GObject    *object,
                              GValue     *value,
                              GParamSpec *pspec)
 {
+  GtkCenterBox *self = GTK_CENTER_BOX (object);
   GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (object));
 
   switch (prop_id)
@@ -169,6 +190,18 @@ gtk_center_box_get_property (GObject    *object,
 
     case PROP_ORIENTATION:
       g_value_set_enum (value, gtk_center_layout_get_orientation (GTK_CENTER_LAYOUT (layout)));
+      break;
+
+    case PROP_START_WIDGET:
+      g_value_set_object (value, self->start_widget);
+      break;
+
+    case PROP_CENTER_WIDGET:
+      g_value_set_object (value, self->center_widget);
+      break;
+
+    case PROP_END_WIDGET:
+      g_value_set_object (value, self->end_widget);
       break;
 
     default:
@@ -206,12 +239,57 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
    *
    * The position of the baseline aligned widget if extra space is available.
    */
-  g_object_class_install_property (object_class, PROP_BASELINE_POSITION,
-          g_param_spec_enum ("baseline-position", NULL, NULL,
-                             GTK_TYPE_BASELINE_POSITION,
-                             GTK_BASELINE_POSITION_CENTER,
-                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_BASELINE_POSITION] =
+      g_param_spec_enum ("baseline-position", NULL, NULL,
+                         GTK_TYPE_BASELINE_POSITION,
+                         GTK_BASELINE_POSITION_CENTER,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkCenterBox:start-widget: (attributes org.gtk.Property.get=gtk_center_box_get_start_widget org.gtk.Property.set=gtk_center_box_set_start_widget)
+   *
+   * The widget that is placed at the start position.
+   *
+   * In vertical orientation, the start position is at the top.
+   * In horizontal orientation, the start position is at the leading
+   * edge wrt. to the text direction.
+   *
+   * Since: 4.10
+   */
+  props[PROP_START_WIDGET] =
+      g_param_spec_object ("start-widget", NULL, NULL,
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkCenterBox:center-widget: (attributes org.gtk.Property.get=gtk_center_box_get_center_widget org.gtk.Property.set=gtk_center_box_set_center_widget)
+   *
+   * The widget that is placed at the center position.
+   *
+   * Since: 4.10
+   */
+  props[PROP_CENTER_WIDGET] =
+      g_param_spec_object ("center-widget", NULL, NULL,
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkCenterBox:end-widget: (attributes org.gtk.Property.get=gtk_center_box_get_end_widget org.gtk.Property.set=gtk_center_box_set_end_widget)
+   *
+   * The widget that is placed at the end position.
+   *
+   * In vertical orientation, the end position is at the bottom.
+   * In horizontal orientation, the end position is at the trailing
+   * edge wrt. to the text direction.
+   *
+   * Since: 4.10
+   */
+  props[PROP_END_WIDGET] =
+      g_param_spec_object ("end-widget", NULL, NULL,
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CENTER_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("box"));
@@ -263,6 +341,8 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 
   layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
   gtk_center_layout_set_start_widget (GTK_CENTER_LAYOUT (layout_manager), child);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_START_WIDGET]);
 }
 
 /**
@@ -289,6 +369,8 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 
   layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
   gtk_center_layout_set_center_widget (GTK_CENTER_LAYOUT (layout_manager), child);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CENTER_WIDGET]);
 }
 
 /**
@@ -315,6 +397,8 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
 
   layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
   gtk_center_layout_set_end_widget (GTK_CENTER_LAYOUT (layout_manager), child);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_END_WIDGET]);
 }
 
 /**
@@ -386,7 +470,7 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
   if (current_position != position)
     {
       gtk_center_layout_set_baseline_position (GTK_CENTER_LAYOUT (layout), position);
-      g_object_notify (G_OBJECT (self), "baseline-position");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_BASELINE_POSITION]);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
