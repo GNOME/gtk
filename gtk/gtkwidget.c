@@ -608,9 +608,6 @@ static gboolean         gtk_widget_real_mnemonic_activate       (GtkWidget      
                                                                  gboolean            group_cycling);
 static void             gtk_widget_accessible_interface_init    (GtkAccessibleInterface *iface);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
-static void             gtk_widget_buildable_set_id             (GtkBuildable       *buildable,
-                                                                 const char         *id);
-static const char *     gtk_widget_buildable_get_id             (GtkBuildable       *buildable);
 static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
                                                                  const char         *childname);
@@ -654,7 +651,6 @@ static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
-static GQuark           quark_builder_set_id = 0;
 
 GType
 gtk_widget_get_type (void)
@@ -8498,30 +8494,12 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
-  quark_builder_set_id = g_quark_from_static_string ("gtk-builder-set-id");
-
-  iface->set_id = gtk_widget_buildable_set_id;
-  iface->get_id = gtk_widget_buildable_get_id;
   iface->get_internal_child = gtk_widget_buildable_get_internal_child;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
   iface->add_child = gtk_widget_buildable_add_child;
-}
-
-static void
-gtk_widget_buildable_set_id (GtkBuildable *buildable,
-                             const char   *id)
-{
-  g_object_set_qdata_full (G_OBJECT (buildable), quark_builder_set_id,
-                           g_strdup (id), g_free);
-}
-
-static const char *
-gtk_widget_buildable_get_id (GtkBuildable *buildable)
-{
-  return g_object_get_qdata (G_OBJECT (buildable), quark_builder_set_id);
 }
 
 static GObject *
