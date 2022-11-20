@@ -850,10 +850,43 @@ find_window_for_ns_event (NSEvent *nsevent,
       /* Only handle our own entered/exited events, not the ones for the
        * titlebar buttons.
        */
-      if ([view trackingRect] == [nsevent trackingNumber])
-        return toplevel;
-      else
-        return NULL;
+      if ([view trackingRect] == nsevent.trackingNumber)
+          return toplevel;
+
+      /* MacOS 13 isn't sending the trackingArea events so we have to
+       * rely on the cursorRect events that we discarded in earlier
+       * macOS versions. These trigger 4 pixels out from the window's
+       * frame so we obtain that rect and adjust it for hit testing.
+       */
+      if (!nsevent.trackingArea && gdk_quartz_osx_version >= GDK_OSX_VENTURA)
+        {
+          static const int border_width = 4;
+          NSRect frame = nsevent.window.frame;
+          gboolean inside, at_edge;
+
+          frame.origin.x -= border_width;
+          frame.origin.y -= border_width;
+          frame.size.width += 2 * border_width;
+          frame.size.height += 2 * border_width;
+          inside =
+               screen_point.x >= frame.origin.x &&
+               screen_point.x <= frame.origin.x + frame.size.width &&
+               screen_point.y >= frame.origin.y &&
+               screen_point.y <= frame.origin.y + frame.size.height;
+          at_edge =
+               screen_point.x >= frame.origin.x - 1 &&
+               screen_point.x <= frame.origin.x + frame.size.width + 1 &&
+               screen_point.y >= frame.origin.y - 1 &&
+               screen_point.y <= frame.origin.y + frame.size.height + 1;
+
+          if ((event_type == GDK_QUARTZ_MOUSE_ENTERED && inside) ||
+              at_edge)
+            return toplevel;
+          else
+            return NULL;
+        }
+
+      return NULL;
 
     case GDK_QUARTZ_KEY_DOWN:
     case GDK_QUARTZ_KEY_UP:
