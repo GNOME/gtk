@@ -627,8 +627,6 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
                                                                  GObject            *child,
                                                                  const char         *tagname,
                                                                  gpointer            data);
-static void             gtk_widget_buildable_parser_finished    (GtkBuildable       *buildable,
-                                                                 GtkBuilder         *builder);
 static void             gtk_widget_set_usize_internal           (GtkWidget          *widget,
                                                                  int                 width,
                                                                  int                 height);
@@ -8495,7 +8493,6 @@ static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
   iface->get_internal_child = gtk_widget_buildable_get_internal_child;
-  iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
@@ -8542,11 +8539,6 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
   return NULL;
 }
 
-static void
-gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
-                                      GtkBuilder   *builder)
-{
-}
 
 typedef struct
 {
