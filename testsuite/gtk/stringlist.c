@@ -171,6 +171,25 @@ test_create_builder (void)
 }
 
 static void
+test_create_builder2 (void)
+{
+  const char *ui =
+"<interface>"
+"  <object class=\"GtkStringList\" id=\"list\">"
+"    <property name=\"strings\">a\nb\nc</property>"
+"  </object>"
+"</interface>";
+  GtkBuilder *builder;
+  GtkStringList *list;
+
+  builder = gtk_builder_new_from_string (ui, -1);
+  list = GTK_STRING_LIST (gtk_builder_get_object (builder, "list"));
+  assert_model (list, "a b c");
+
+  g_object_unref (builder);
+}
+
+static void
 test_get_string (void)
 {
   GtkStringList *list;
@@ -253,6 +272,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/stringlist/create/empty", test_create_empty);
   g_test_add_func ("/stringlist/create/strv", test_create_strv);
   g_test_add_func ("/stringlist/create/builder", test_create_builder);
+  g_test_add_func ("/stringlist/create/builder2", test_create_builder2);
   g_test_add_func ("/stringlist/get_string", test_get_string);
   g_test_add_func ("/stringlist/splice", test_splice);
   g_test_add_func ("/stringlist/add_remove", test_add_remove);
