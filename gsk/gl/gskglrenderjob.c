@@ -2938,7 +2938,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
   const PangoFont *font = gsk_text_node_get_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
-  float text_scale = MAX (job->scale_x, job->scale_y); /* TODO: Fix for uneven scales? */
+  float text_scale = MAX (fabs (job->scale_x), fabs (job->scale_y)); /* TODO: Fix for uneven scales? */
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   float x = offset->x + job->offset_x;
   float y = offset->y + job->offset_y;

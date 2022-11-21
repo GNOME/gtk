@@ -85,6 +85,7 @@ compare_render_tests = [
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'unaligned-offscreen',
+  'upside-down-label-3d', # not really 3d, but cairo fails it
   'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
 ]
 
