@@ -120,6 +120,9 @@ struct _FilterRule
 enum {
   PROP_0,
   PROP_NAME,
+  PROP_PATTERNS,
+  PROP_MIME_TYPES,
+  PROP_SUFFIXES,
   NUM_PROPERTIES
 };
 
@@ -149,12 +152,35 @@ gtk_file_filter_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
+  const char * const *strv;
 
   switch (prop_id)
     {
     case PROP_NAME:
       gtk_file_filter_set_name (filter, g_value_get_string (value));
       break;
+
+    case PROP_PATTERNS:
+      strv = (const char * const *) g_value_get_boxed (value);
+      if (strv)
+        for (int i = 0; strv[i]; i++)
+          gtk_file_filter_add_pattern (filter, strv[i]);
+      break;
+
+    case PROP_MIME_TYPES:
+      strv = (const char * const *) g_value_get_boxed (value);
+      if (strv)
+        for (int i = 0; strv[i]; i++)
+          gtk_file_filter_add_mime_type (filter, strv[i]);
+      break;
+
+    case PROP_SUFFIXES:
+      strv = (const char * const *) g_value_get_boxed (value);
+      if (strv)
+        for (int i = 0; strv[i]; i++)
+          gtk_file_filter_add_suffix (filter, strv[i]);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -174,6 +200,7 @@ gtk_file_filter_get_property (GObject    *object,
     case PROP_NAME:
       g_value_set_string (value, filter->name);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -237,6 +264,42 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkFileFilter:patterns:
+   *
+   * The patterns that this filter matches.
+   *
+   * Since: 4.10
+   */
+  props[PROP_PATTERNS] =
+      g_param_spec_boxed ("patterns", NULL, NULL,
+                          G_TYPE_STRV,
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkFileFilter:mime-types:
+   *
+   * The MIME types that this filter matches.
+   *
+   * Since: 4.10
+   */
+  props[PROP_MIME_TYPES] =
+      g_param_spec_boxed ("mime-types", NULL, NULL,
+                          G_TYPE_STRV,
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkFileFilter:suffixes:
+   *
+   * The suffixes that this filter matches.
+   *
+   * Since: 4.10
+   */
+  props[PROP_SUFFIXES] =
+      g_param_spec_boxed ("suffixes", NULL, NULL,
+                          G_TYPE_STRV,
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 }
