@@ -97,8 +97,7 @@ int
 main (int   argc,
       char *argv[])
 {
-  GtkApplication *application = gtk_application_new ("org.gtk.test.modelbutton",
-                                                     G_APPLICATION_DEFAULT_FLAGS);
+  GtkApplication *application = gtk_application_new ("org.gtk.test.modelbutton", 0);
   int result;
 
   g_signal_connect (application, "activate",

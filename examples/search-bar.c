@@ -2,15 +2,15 @@
 
 static gboolean
 window_key_press_event_cb (GtkWidget *window,
-    GdkEvent *event,
-    GtkSearchBar *search_bar)
+                           GdkEvent *event,
+                           GtkSearchBar *search_bar)
 {
   return gtk_search_bar_handle_event (search_bar, event);
 }
 
 static void
 activate_cb (GtkApplication *app,
-    gpointer user_data)
+             gpointer user_data)
 {
   GtkWidget *window;
   GtkWidget *search_bar;
@@ -40,19 +40,18 @@ activate_cb (GtkApplication *app,
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (search_bar), GTK_ENTRY (entry));
 
   g_signal_connect (window, "key-press-event",
-      G_CALLBACK (window_key_press_event_cb), search_bar);
+                    G_CALLBACK (window_key_press_event_cb),
+                    search_bar);
 }
 
-gint
-main (gint argc,
-    gchar *argv[])
+int
+main (int   argc,
+      char *argv[])
 {
   GtkApplication *app;
 
-  app = gtk_application_new ("org.gtk.Example.GtkSearchBar",
-      G_APPLICATION_DEFAULT_FLAGS);
-  g_signal_connect (app, "activate",
-      G_CALLBACK (activate_cb), NULL);
+  app = gtk_application_new ("org.gtk.Example.GtkSearchBar", 0);
+  g_signal_connect (app, "activate", G_CALLBACK (activate_cb), NULL);
 
   return g_application_run (G_APPLICATION (app), argc, argv);
 }
