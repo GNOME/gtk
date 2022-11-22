@@ -99,11 +99,10 @@ main (int   argc,
   GtkApplication *application;
   int result;
 
-  application = gtk_application_new ("org.gtk.test.infobar",
-                                     G_APPLICATION_DEFAULT_FLAGS);
+  application = gtk_application_new ("org.gtk.test.infobar", 0);
   g_signal_connect (application, "activate", G_CALLBACK (on_activate), NULL);
-
   result = g_application_run (G_APPLICATION (application), argc, argv);
   g_object_unref (application);
+
   return result;
 }
