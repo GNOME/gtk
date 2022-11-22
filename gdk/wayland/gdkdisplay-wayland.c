@@ -93,6 +93,7 @@
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 #define XDG_ACTIVATION_VERSION   1
+#define OUTPUT_VERSION           3
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -397,8 +398,10 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "wl_output") == 0)
     {
       output =
-       wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 3));
-      gdk_wayland_display_add_output (display_wayland, id, output, MIN (version, 3));
+       wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface,
+                         MIN (version, OUTPUT_VERSION));
+      gdk_wayland_display_add_output (display_wayland, id, output,
+                                      MIN (version, OUTPUT_VERSION));
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "wl_seat") == 0)
