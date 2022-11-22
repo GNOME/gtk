@@ -366,7 +366,7 @@ get_index_in (GtkAccessible *parent,
 static int
 get_index_in_parent (GtkAccessible *accessible)
 {
-  GtkAccessible *parent = gtk_accessible_get_parent (accessible);
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
   return get_index_in(parent, accessible);
 }
 
@@ -402,7 +402,7 @@ get_parent_context_ref (GtkAccessible *accessible)
 {
   GVariant *res = NULL;
 
-  GtkAccessible *parent = gtk_accessible_get_parent (accessible);
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
 
   if (parent == NULL)
     {
@@ -873,7 +873,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         }
       else
         {
-          parent = gtk_accessible_get_parent (accessible);
+          parent = gtk_accessible_get_accessible_parent (accessible);
 
           context = gtk_accessible_get_at_context (parent);
           gtk_at_context_child_changed (context, change, accessible);
@@ -1123,7 +1123,7 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   if (child_context == NULL)
     return;
 
-  if (gtk_accessible_get_parent (child) != accessible)
+  if (gtk_accessible_get_accessible_parent (child) != accessible)
     {
       idx = 0;
     }

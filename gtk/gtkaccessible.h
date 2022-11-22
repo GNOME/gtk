@@ -96,14 +96,14 @@ struct _GtkAccessibleInterface
                                                  GtkAccessiblePlatformState  state);
 
   /**
-   * GtkAccessibleInterface::get_parent:
+   * GtkAccessibleInterface::get_accessible_parent:
    * @self: a `GtkAccessible`
    * 
    * Returns the parent `GtkAccessible` of @self.
    * Be sure not to return %NULL, as a top-level `GtkAccessible` which is not a
    * top-level window is not supported.
    */
-  GtkAccessible *       (* get_parent)  (GtkAccessible *self);
+  GtkAccessible *       (* get_accessible_parent)  (GtkAccessible *self);
   
   /**
    * GtkaccessibleInterface::get_child_at_index:
@@ -139,7 +139,7 @@ gboolean        gtk_accessible_get_platform_state (GtkAccessible              *s
                                                    GtkAccessiblePlatformState  state);
 
 GDK_AVAILABLE_IN_4_10
-GtkAccessible * gtk_accessible_get_parent(GtkAccessible *self);
+GtkAccessible * gtk_accessible_get_accessible_parent(GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
 GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint idx);

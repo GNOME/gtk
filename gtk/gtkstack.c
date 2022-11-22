@@ -257,7 +257,7 @@ gtk_stack_page_accessible_get_platform_state (GtkAccessible              *self,
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_parent (GtkAccessible *accessible)
+gtk_stack_page_accessible_get_accessible_parent (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
 
@@ -298,7 +298,7 @@ gtk_stack_page_accessible_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_stack_page_accessible_get_at_context;
   iface->get_platform_state = gtk_stack_page_accessible_get_platform_state;
-  iface->get_parent = gtk_stack_page_accessible_get_parent;
+  iface->get_accessible_parent = gtk_stack_page_accessible_get_accessible_parent;
   iface->get_child_at_index = gtk_stack_page_accessible_get_child_at_index;
   iface->get_bounds = gtk_stack_page_accessible_get_bounds;
 }

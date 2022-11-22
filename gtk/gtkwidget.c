@@ -8466,7 +8466,7 @@ gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
 }
 
 static GtkAccessible *
-gtk_widget_accessible_get_parent (GtkAccessible *self)
+gtk_widget_accessible_get_accessible_parent (GtkAccessible *self)
 {
   return GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self)));
 }
@@ -8525,7 +8525,7 @@ gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_widget_accessible_get_at_context;
   iface->get_platform_state = gtk_widget_accessible_get_platform_state;
-  iface->get_parent = gtk_widget_accessible_get_parent;
+  iface->get_accessible_parent = gtk_widget_accessible_get_accessible_parent;
   iface->get_child_at_index = gtk_widget_accessible_get_child_at_index;
   iface->get_bounds = gtk_widget_accessible_get_bounds;
 }

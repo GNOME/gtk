@@ -40,7 +40,7 @@
  *
  * Every accessible implementation is part of a tree of accessible objects.
  * Normally, this tree corresponds to the widget tree, but can be customized
- * by reimplementing the [vfunc@Gtk.Accessible.get_parent]
+ * by reimplementing the [vfunc@Gtk.Accessible.get_accessible_parent]
  * and [vfunc@Gtk.Accessible.get_child_at_index] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
@@ -98,7 +98,7 @@ gtk_accessible_get_at_context (GtkAccessible *self)
 }
 
 /*
- * gtk_accessible_get_parent:
+ * gtk_accessible_get_accessible_parent:
  * @self: a `GtkAccessible`
  *
  * Retrieves the parent `GtkAccessible` for the given `GtkAccessible`.
@@ -106,11 +106,11 @@ gtk_accessible_get_at_context (GtkAccessible *self)
  * Returns: (transfer none): the parent `GtkAccessible`, which can not be %NULL
  */
 GtkAccessible *
-gtk_accessible_get_parent (GtkAccessible *self)
+gtk_accessible_get_accessible_parent (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_parent (self);
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
 }
 
 
@@ -755,7 +755,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (gtk_accessible_get_parent (self));
+    context = gtk_accessible_get_at_context (gtk_accessible_get_accessible_parent (self));
 
   if (context == NULL)
     return;
@@ -900,7 +900,7 @@ gtk_accessible_update_children (GtkAccessible           *self,
 
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (gtk_accessible_get_parent (self));
+    context = gtk_accessible_get_at_context (gtk_accessible_get_accessible_parent (self));
 
   if (context == NULL)
     return;
