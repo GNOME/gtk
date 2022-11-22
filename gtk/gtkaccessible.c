@@ -832,8 +832,11 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
  * Since: 4.10
  */
 gboolean
-gtk_accessible_get_bounds (GtkAccessible              *self,
-                                   int *x, int *y, int *width, int *height)
+gtk_accessible_get_bounds (GtkAccessible *self,
+                           int           *x,
+                           int           *y,
+                           int           *width,
+                           int           *height)
 {
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_bounds (self, x, y, width, height);
 }

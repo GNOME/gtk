@@ -290,7 +290,7 @@ gtk_stack_page_accessible_get_bounds (GtkAccessible *accessible,
   if (page->widget != NULL)
     return gtk_accessible_get_bounds (GTK_ACCESSIBLE (page->widget), x, y, width, height);
   else
-    return false;
+    return FALSE;
 }
 
 static void
