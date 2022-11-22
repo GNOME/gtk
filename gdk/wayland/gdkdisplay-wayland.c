@@ -397,8 +397,8 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "wl_output") == 0)
     {
       output =
-       wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
-      gdk_wayland_display_add_output (display_wayland, id, output, MIN (version, 2));
+       wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 3));
+      gdk_wayland_display_add_output (display_wayland, id, output, MIN (version, 3));
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "wl_seat") == 0)
