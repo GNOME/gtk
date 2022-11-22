@@ -1,3 +1,56 @@
+Overview of Changes in GTK+ 3.24.35, 11-22-2022
+===============================================
+
+* GtkFontChooserWidget:
+ - Fix a critical
+
+* GtkAccelLabel:
+ - Differentiate keypad keysyms in accelerators
+
+* Input:
+ - Recognize stylus devices as pens
+ - Fix problems with motion compression
+
+* Windows:
+ - Build system improvements
+
+* Wayland:
+ - Fix problems with unreliable DND
+ - Use GLES if required
+ - Add support for titlebar gestures
+ - Refactor handling of IM client updates
+ - Fix cursor hotspots with scaled surfaces
+ - Use the xdg-activation protocol
+ - Load cursors on demand
+ - Fix cursor size on hi-dpi displays
+
+* MacOS:
+ - Use a CVDisplayLink based frame clock
+
+- Translation updates:
+ Abkhazian
+ Bulgarian
+ Catalan
+ Chinese (Taiwan)
+ Croatian
+ Dutch
+ Friulian
+ Georgian
+ German
+ Hungarian
+ Indonesian
+ Occitan
+ Persian
+ Portuguese
+ Polish
+ Russian
+ Serbian
+ Slovenian
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.24.34, 05-18-2022
 ===============================================
 
