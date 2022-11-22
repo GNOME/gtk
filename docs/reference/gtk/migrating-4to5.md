@@ -97,3 +97,11 @@ is much reduced, and it has awkward, archaice APIs. Therefore,
 it is dropped. The recommended replacement is to just create
 your own window and add buttons as required, either in the header
 or elsewhere.
+
+## GtkInfoBar is going away
+
+GtkInfoBar had a dialog API, and with dialogs going away, it was time to
+retire it. If you need such a widget, it is relatively trivial to create one
+using a [class@Gtk.Revealer] with labels and buttons.
+
+Other libraries, such as libadwaita, may provide replacements as well.

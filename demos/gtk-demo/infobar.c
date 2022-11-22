@@ -7,6 +7,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 on_bar_response (GtkInfoBar *info_bar,
                  int         response_id,
