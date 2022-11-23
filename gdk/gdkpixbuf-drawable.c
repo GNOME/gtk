@@ -104,7 +104,7 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
    * by external applications.
    * So be on the safe side and:
    */
-  cairo_surface_mark_dirty (surface);
+  cairo_surface_flush (surface);
 
   if (cairo_surface_get_content (surface) & CAIRO_CONTENT_ALPHA)
     copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
