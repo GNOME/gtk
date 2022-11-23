@@ -181,7 +181,12 @@ installed_test_data = [
 ]
 
 a11y_installed_tests = [
-  'a11ytests.test',
+  # This is the equivalent of a11y_state_tests above, and does not seem
+  # to be reliable enough to act as a QA gate in practice. We install the
+  # test executable and the data needed to run it, but don't hook it up
+  # to ginsttest-runner.
+  #'a11ytests.test',
+
   'a11ychildren.test',
   'a11ytree.test',
   'a11yvalue.test',

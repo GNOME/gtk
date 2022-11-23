@@ -146,6 +146,11 @@ endif
 if get_option('installed_tests')
   foreach t : tests
     test_name = t.get(0)
+
+    if flaky.contains(test_name) or xfail.contains(test_name)
+      continue
+    endif
+
     conf = configuration_data()
     conf.set('testexecdir', installed_test_bindir)
     conf.set('test', test_name)

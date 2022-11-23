@@ -16,7 +16,10 @@ test_data = [
 
 
 a11y_installed_tests = [
-  'a11ystate.test',
+  # This is not run at build time at all, and consistently fails on
+  # Debian's CI infrastructure, so don't set it up to be run by
+  # ginsttest-runner.
+  #'a11ystate.test',
 ]
 
 if get_option('installed_tests')
