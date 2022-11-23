@@ -19,11 +19,21 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
+                --no-suite=failing \
+                --no-suite=flaky \
                 --no-suite=gsk-compare-broadway
 
     # Store the exit code for the CI run, but always
     # generate the reports
     exit_code=$?
+
+    xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
+          meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend}_unstable \
+                --suite=flaky \
+                --suite=failing || true
     ;;
 
   wayland)
@@ -38,9 +48,18 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
+                --no-suite=failing \
+                --no-suite=flaky \
                 --no-suite=gsk-compare-broadway
-
     exit_code=$?
+
+    meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend}_unstable \
+                --suite=flaky \
+                --suite=failing || true
+
     kill ${compositor}
     ;;
 
@@ -56,9 +75,18 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
+                --no-suite=failing \
+                --no-suite=flaky \
                 --no-suite=gsk-compare-broadway
-
     exit_code=$?
+
+    meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend}_unstable \
+                --suite=flaky \
+                --suite=failing || true
+
     kill ${compositor}
     ;;
 
@@ -74,10 +102,20 @@ case "${backend}" in
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
+                --no-suite=failing \
+                --no-suite=flaky \
                 --no-suite=gsk-compare-opengl
 
     # don't let Broadway failures fail the run, for now
     exit_code=0
+
+    meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend}_unstable \
+                --suite=flaky \
+                --suite=failing || true
+
     kill ${server}
     ;;
 
@@ -90,18 +128,20 @@ esac
 
 cd ${builddir}
 
-$srcdir/.gitlab-ci/meson-junit-report.py \
-        --project-name=gtk \
-        --backend=${backend} \
-        --job-id="${CI_JOB_NAME}" \
-        --output=report-${backend}.xml \
-        meson-logs/testlog-${backend}.json
-$srcdir/.gitlab-ci/meson-html-report.py \
-        --project-name=gtk \
-        --backend=${backend} \
-        --job-id="${CI_JOB_NAME}" \
-        --reftest-output-dir="testsuite/reftests/output/${backend}" \
-        --output=report-${backend}.html \
-        meson-logs/testlog-${backend}.json
+for suffix in "" "_unstable"; do
+    $srcdir/.gitlab-ci/meson-junit-report.py \
+            --project-name=gtk \
+            --backend="${backend}${suffix}" \
+            --job-id="${CI_JOB_NAME}" \
+            --output="report-${backend}${suffix}.xml" \
+            "meson-logs/testlog-${backend}${suffix}.json"
+    $srcdir/.gitlab-ci/meson-html-report.py \
+            --project-name=gtk \
+            --backend="${backend}${suffix}" \
+            --job-id="${CI_JOB_NAME}" \
+            --reftest-output-dir="testsuite/reftests/output/${backend}${suffix}" \
+            --output="report-${backend}${suffix}.html" \
+            "meson-logs/testlog-${backend}${suffix}.json"
+done
 
 exit $exit_code
