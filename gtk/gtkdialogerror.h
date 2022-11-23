@@ -39,8 +39,8 @@ G_BEGIN_DECLS
  * GtkDialogError:
  * @GTK_DIALOG_ERROR_FAILED: Generic error condition for when
  *   an operation fails and no more specific code is applicable
- * @GTK_DIALOG_ERROR_ABORTED: The async function call was aborted
- *   programmatically (via its `GCancellable`)
+ * @GTK_DIALOG_ERROR_CANCELLED: The async function call was cancelled
+ *   via its `GCancellable`
  * @GTK_DIALOG_ERROR_DISMISSED: The operation was cancelled
  *   by the user (via a Cancel or Close button)
  *
@@ -52,7 +52,7 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_DIALOG_ERROR_FAILED,
-  GTK_DIALOG_ERROR_ABORTED,
+  GTK_DIALOG_ERROR_CANCELLED,
   GTK_DIALOG_ERROR_DISMISSED
 } GtkDialogError;
 

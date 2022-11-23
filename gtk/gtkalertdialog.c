@@ -606,7 +606,11 @@ response_cb (GTask *task,
   if (cancellable)
     g_signal_handlers_disconnect_by_func (cancellable, cancelled_cb, task);
 
-  if (response >= 0)
+  if (response == GTK_RESPONSE_CLOSE)
+    {
+      g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "Cancelled by application");
+    }
+  else if (response >= 0)
     {
       g_task_return_int (task, response);
     }
