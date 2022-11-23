@@ -63,14 +63,14 @@ static void gtk_gesture_stylus_get_property (GObject    *object,
 {
 	GtkGestureStylus *gesture = GTK_GESTURE_STYLUS (object);
 
-	switch (prop_id)
-	  {
-	  case PROP_STYLUS_ONLY:
-		g_value_set_boolean (value, gtk_gesture_stylus_get_stylus_only (gesture));
-		break;
-	  default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-	  }
+    switch (prop_id)
+      {
+      case PROP_STYLUS_ONLY:
+        g_value_set_boolean (value, gtk_gesture_stylus_get_stylus_only (gesture));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      }
 }
 
 static void gtk_gesture_stylus_set_property (GObject      *object,
@@ -78,16 +78,16 @@ static void gtk_gesture_stylus_set_property (GObject      *object,
                                              const GValue *value,
                                              GParamSpec   *pspec)
 {
-	GtkGestureStylus *gesture = GTK_GESTURE_STYLUS (object);
+    GtkGestureStylus *gesture = GTK_GESTURE_STYLUS (object);
 
-	switch (prop_id)
-	  {
-	  case PROP_STYLUS_ONLY:
-		gtk_gesture_stylus_set_stylus_only (gesture, g_value_get_boolean (value));
-		break;
-	  default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-	  }
+    switch (prop_id)
+      {
+      case PROP_STYLUS_ONLY:
+        gtk_gesture_stylus_set_stylus_only (gesture, g_value_get_boolean (value));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      }
 }
 
 static gboolean
@@ -145,10 +145,14 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
    * GtkGestureStylus:stylus-only: (attributes org.gtk.Property.get=gtk_gesture_stylus_get_stylus_only org.gtk.Property.set=gtk_gesture_stylus_set_stylus_only)
    *
    * If this gesture should exclusively react to stylus input devices.
+   *
+   * Since: 4.10
    */
   obj_properties[PROP_STYLUS_ONLY] = g_param_spec_boolean ("stylus-only", NULL, NULL,
                                                      TRUE,
-                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_CONSTRUCT);
+                                                     G_PARAM_READWRITE |
+                                                     G_PARAM_EXPLICIT_NOTIFY |
+                                                     G_PARAM_CONSTRUCT);
   g_object_class_install_properties (object_class,  N_PROPERTIES, obj_properties);
 
   event_controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
@@ -259,44 +263,45 @@ gtk_gesture_stylus_new (void)
 
 /**
  * gtk_gesture_stylus_get_stylus_only: (attributes org.gtk.Method.get_property=stylus-only)
- * @gesture: A `GtkGestureStylus`
+ * @gesture: the gesture
  *
- * gets the state of stylus-only, based on which the gesture will
- * either exclusively signal events from stylus input devices or
- * for any input devices (e.g. mice).
+ * Checks whether the gesture is for styluses only.
  *
- * Returns: The state of stylus-only set via [method@Gtk.GestureStylus.set_stylus_only]
+ * Stylus-only gestures will signal events exclusively from stylus
+ * input devices.
+ *
+ * Returns: %TRUE if the gesture is only for stylus events
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_gesture_stylus_get_stylus_only (GtkGestureStylus *gesture)
 {
-  GtkGestureStylusPrivate *priv;
+  GtkGestureStylusPrivate *priv = gtk_gesture_stylus_get_instance_private (gesture);
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
-
-  priv = gtk_gesture_stylus_get_instance_private (gesture);
 
   return priv->stylus_only;
 }
 
 /**
  * gtk_gesture_stylus_set_stylus_only: (attributes org.gtk.Method.set_property=stylus-only)
- * @gesture: A `GtkGestureStylus`
- * @stylus_only: %TRUE if the gesture should process exclusivly handle events from styluses
+ * @gesture: the gesture
+ * @stylus_only: whether the gesture is used exclusivly for stylus events
  *
- * sets the state of stylus-only
+ * Sets the state of stylus-only
  *
  * If true, the gesture will exclusivly handle events from stylus input deivces,
  * otherwise it'll handle events from any pointing device.
+ *
+ * Since: 4.10
  */
 void
 gtk_gesture_stylus_set_stylus_only (GtkGestureStylus *gesture, gboolean stylus_only)
 {
-  GtkGestureStylusPrivate *priv;
+  GtkGestureStylusPrivate *priv = gtk_gesture_stylus_get_instance_private (gesture);
 
   g_return_if_fail (GTK_IS_GESTURE_STYLUS (gesture));
-
-  priv = gtk_gesture_stylus_get_instance_private (gesture);
 
   if (priv->stylus_only == stylus_only)
     return;
