@@ -299,6 +299,12 @@ test('potfiles', make_pot,
 if get_option('install-tests')
   foreach t : tests
     test_name = t.get('name')
+    suites = t.get('suites', [])
+
+    if suites.contains('flaky') or suites.contains('failing')
+      continue
+    endif
+
     conf = configuration_data()
     conf.set('testexecdir', testexecdir)
     conf.set('test', test_name)

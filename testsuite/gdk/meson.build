@@ -83,6 +83,12 @@ endforeach
 if get_option('install-tests')
   foreach t : tests
     test_name = t.get('name')
+    suites = t.get('suites', [])
+
+    if suites.contains('flaky') or suites.contains('failing')
+      continue
+    endif
+
     test_cdata = configuration_data()
     test_cdata.set('testexecdir', testexecdir)
     test_cdata.set('test', test_name)
