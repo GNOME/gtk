@@ -128,7 +128,8 @@ xdg-activation-v1-client-protocol.h : $(WAYLAND_PROTOCOLS_DATADIR)/staging/xdg-a
 EXTRA_DIST += 					\
 	protocol/gtk-primary-selection.xml	\
 	protocol/gtk-shell.xml			\
-	protocol/server-decoration.xml	\
+	protocol/server-decoration.xml		\
+	cursor/meson.build			\
 	meson.build
 
 -include $(top_srcdir)/git.mk
