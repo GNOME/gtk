@@ -563,7 +563,7 @@ response_cb (GTask *task,
   else if (response == GTK_RESPONSE_CLOSE)
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED, "Aborted by application");
   else if (response == GTK_RESPONSE_CANCEL)
-  g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "Cancelled by user");
+    g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED, "Dismissed by user");
   else
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED, "Unknown failure (%d)", response);
 

@@ -655,7 +655,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED, "Aborted by application");
   else if (response == GTK_RESPONSE_CANCEL ||
            response == GTK_RESPONSE_DELETE_EVENT)
-    g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "Cancelled by user");
+    g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED, "Dismissed by user");
   else
     g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED, "Unknown failure (%d)", response);
 

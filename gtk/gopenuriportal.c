@@ -151,7 +151,7 @@ response_received (GDBusConnection *connection,
       g_task_return_boolean (task, TRUE);
       break;
     case XDG_DESKTOP_PORTAL_CANCELLED:
-      g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "The portal dialog was closed");
+      g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED, "The portal dialog was dismissed by the user");
       break;
     case XDG_DESKTOP_PORTAL_FAILED:
     default:
