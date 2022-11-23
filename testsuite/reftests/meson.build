@@ -419,7 +419,7 @@ test_data = [
 ]
 
 # Depending on the environment these fail, feel free to fix them
-somehow_broken = [
+flaky = [
   'button-wrapping.ui',
   'cellrenderer-pixbuf-stock-rtl.ui',
   'label-sizing.ui',
@@ -428,9 +428,21 @@ somehow_broken = [
   'symbolic-icon-translucent-color.ui',
   'window-height-for-width.ui',
 ]
+xfail = [
+]
 
 foreach testname : test_data
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
+    suites = ['reftest']
+
+    if flaky.contains(testname)
+      suites += 'flaky'
+    endif
+
+    if xfail.contains(testname)
+      suites += 'failing'
+    endif
+
     # reftests fail when multiple windows open at the same time stealing the focus,
     # so set is_parallel to false
     test('reftest ' + testname, gtk_reftest,
@@ -450,8 +462,7 @@ foreach testname : test_data
                 'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
                 'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
               ],
-         suite: 'reftest',
-         should_fail: somehow_broken.contains(testname),
+         suite: suites,
          is_parallel: false)
   endif
 endforeach
