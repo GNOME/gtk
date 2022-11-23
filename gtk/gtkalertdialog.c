@@ -22,6 +22,7 @@
 #include "gtkalertdialog.h"
 
 #include "gtkbutton.h"
+#include "gtkdialogerror.h"
 #include "deprecated/gtkmessagedialog.h"
 #include <glib/gi18n-lib.h>
 
@@ -618,7 +619,10 @@ response_cb (GTask *task,
     {
       GtkAlertDialog *self = GTK_ALERT_DIALOG (g_task_get_source_object (task));
 
-      g_task_return_int (task, self->cancel_return);
+      if (self->cancel_return >= 0)
+        g_task_return_int (task, self->cancel_return);
+      else
+        g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED, "Dismissed by user");
     }
 
   g_object_unref (task);
@@ -723,6 +727,7 @@ gtk_alert_dialog_choose (GtkAlertDialog      *self,
  * gtk_alert_dialog_choose_finish:
  * @self: a `GtkAlertDialog`
  * @result: a `GAsyncResult`
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.AlertDialog.choose] call
  * and returns the index of the button that was clicked.
@@ -735,13 +740,14 @@ gtk_alert_dialog_choose (GtkAlertDialog      *self,
  */
 int
 gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
-                                GAsyncResult   *result)
+                                GAsyncResult    *result,
+                                GError         **error)
 {
   g_return_val_if_fail (GTK_IS_ALERT_DIALOG (self), -1);
   g_return_val_if_fail (g_task_is_valid (result, self), -1);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_alert_dialog_choose, -1);
 
-  return (int) g_task_propagate_int (G_TASK (result), NULL);
+  return (int) g_task_propagate_int (G_TASK (result), error);
 }
 
 /**
