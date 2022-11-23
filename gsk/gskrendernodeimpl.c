@@ -2160,7 +2160,7 @@ gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
 {
   float clip_radius;
 
-  clip_radius = gsk_cairo_blur_compute_pixels (self->blur_radius / 2.0);
+  clip_radius = gsk_cairo_blur_compute_pixels (ceil (self->blur_radius / 2.0));
   *top = MAX (0, ceil (clip_radius + self->spread - self->dy));
   *right = MAX (0, ceil (clip_radius + self->spread + self->dx));
   *bottom = MAX (0, ceil (clip_radius + self->spread + self->dy));
