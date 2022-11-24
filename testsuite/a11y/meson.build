@@ -100,7 +100,7 @@ foreach t: a11y_tests
                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
                'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
              ],
-        suite: ['a11y', 'flaky'])
+        suite: ['a11y'])
 endforeach
 
 installed_test_data = [
