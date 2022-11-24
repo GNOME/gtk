@@ -121,4 +121,18 @@ AM_DISTCHECK_CONFIGURE_FLAGS =		\
 GITIGNORE_TRANSLATION_DIRS = po-properties
 GITIGNOREFILES = po-properties/gtk30-properties.pot
 
+distcheck-hook: distcheck-hook-meson
+distcheck-hook-meson:
+	set -e; if command -v meson > /dev/null; then \
+		cd $(distdir); \
+		meson setup _build/meson; \
+		meson compile -C _build/meson -v; \
+		meson test -C _build/meson \
+			--timeout-multiplier 4 \
+			--print-errorlogs \
+			--suite=gtk+-3.0 \
+			--no-suite=gtk+-3.0:a11y; \
+		rm -fr _build/meson; \
+	fi
+
 -include $(top_srcdir)/git.mk

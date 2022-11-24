@@ -31,5 +31,6 @@ make -j${N_PROCS}
 
 if [ -n "${DO_DISTCHECK-}" ]; then
   make -j${N_PROCS} check SKIP_GDKTARGET="echo Not actually running tests for now"
-  make -j${N_PROCS} distcheck SKIP_GDKTARGET="echo Not actually running tests for now"
+  xvfb-run -a -s "-screen 0 1024x768x24" \
+    make -j${N_PROCS} distcheck SKIP_GDKTARGET="echo Not actually running tests for now"
 fi
