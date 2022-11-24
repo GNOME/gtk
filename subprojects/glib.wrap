@@ -2,5 +2,5 @@
 directory=glib
 url=https://gitlab.gnome.org/GNOME/glib.git
 push-url=ssh://git@gitlab.gnome.org:GNOME/glib.git
-revision=main
+revision=glib-2-74
 depth=1
