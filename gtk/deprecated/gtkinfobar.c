@@ -46,6 +46,8 @@
 #include "gtkbinlayout.h"
 #include "gtkgestureclick.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkInfoBar:
  *
@@ -122,6 +124,11 @@
  * on the message type.
  * If the info bar shows a close button, that button will have the .close
  * style class applied.
+ *
+ * Deprecated: 4.10: There is no replacement in GTK for an "info bar" widget;
+ *   you can use [class@Gtk.Revealer] with a [class@GtkBox] containing a
+ *   [class@Gtk.Label] and an optional [class@Gtk.Button], according to
+ *   your application's design.
  */
 
 enum
@@ -532,6 +539,8 @@ action_widget_activated (GtkWidget  *widget,
  * [signal@Gtk.InfoBar::response] signal on the message area
  * when the widget is activated. The widget is appended to the
  * end of the message areas action area.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
@@ -577,6 +586,8 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
  *
  * The widget must have been put there by a call to
  * [method@Gtk.InfoBar.add_action_widget] or [method@Gtk.InfoBar.add_button].
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
@@ -606,6 +617,8 @@ gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
  *
  * Returns: (transfer none) (type Gtk.Button): the `GtkButton` widget
  * that was added
+ *
+ * Deprecated: 4.10
  */
 GtkWidget*
 gtk_info_bar_add_button (GtkInfoBar  *info_bar,
@@ -668,6 +681,8 @@ add_buttons_valist (GtkInfoBar  *info_bar,
  * repeatedly. The variable argument list should be %NULL-terminated
  * as with [ctor@Gtk.InfoBar.new_with_buttons]. Each button must have both
  * text and response ID.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_add_buttons (GtkInfoBar  *info_bar,
@@ -687,6 +702,8 @@ gtk_info_bar_add_buttons (GtkInfoBar  *info_bar,
  * Creates a new `GtkInfoBar` object.
  *
  * Returns: a new `GtkInfoBar` object
+ *
+ * Deprecated: 4.10
  */
 GtkWidget *
 gtk_info_bar_new (void)
@@ -710,6 +727,8 @@ gtk_info_bar_new (void)
  * response ID.
  *
  * Returns: a new `GtkInfoBar`
+ *
+ * Deprecated: 4.10
  */
 GtkWidget*
 gtk_info_bar_new_with_buttons (const char *first_button_text,
@@ -752,6 +771,8 @@ update_default_response (GtkInfoBar *info_bar,
  * Calls `gtk_widget_set_sensitive (widget, setting)` for each
  * widget in the info bars’s action area with the given @response_id.
  * A convenient way to sensitize/desensitize buttons.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
@@ -788,6 +809,8 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
  *
  * Note that this function currently requires @info_bar to
  * be added to a widget hierarchy.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
@@ -824,6 +847,8 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
  * @response_id: a response ID
  *
  * Emits the “response” signal with the given @response_id.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_response (GtkInfoBar *info_bar,
@@ -1070,6 +1095,8 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
  * Sets the message type of the message area.
  *
  * GTK uses this type to determine how the message is displayed.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
@@ -1108,6 +1135,8 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
  * Returns the message type of the message area.
  *
  * Returns: the message type of the message area.
+ *
+ * Deprecated: 4.10
  */
 GtkMessageType
 gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
@@ -1126,6 +1155,8 @@ gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
  * If true, a standard close button is shown.
  *
  * When clicked it emits the response %GTK_RESPONSE_CLOSE.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_set_show_close_button (GtkInfoBar *info_bar,
@@ -1147,6 +1178,8 @@ gtk_info_bar_set_show_close_button (GtkInfoBar *info_bar,
  * Returns whether the widget will display a standard close button.
  *
  * Returns: %TRUE if the widget displays standard close button
+ *
+ * Deprecated: 4.10
  */
 gboolean
 gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
@@ -1169,6 +1202,8 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
  * Note: this does not show or hide @info_bar in the
  * [property@Gtk.Widget:visible] sense, so revealing has no effect
  * if [property@Gtk.Widget:visible] is %FALSE.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
@@ -1190,6 +1225,8 @@ gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
  * Returns whether the info bar is currently revealed.
  *
  * Returns: the current value of the [property@Gtk.InfoBar:revealed] property
+ *
+ * Deprecated: 4.10
  */
 gboolean
 gtk_info_bar_get_revealed (GtkInfoBar *info_bar)
@@ -1205,6 +1242,8 @@ gtk_info_bar_get_revealed (GtkInfoBar *info_bar)
  * @widget: the child to be added
  *
  * Adds a widget to the content area of the info bar.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_add_child (GtkInfoBar *info_bar,
@@ -1222,6 +1261,8 @@ gtk_info_bar_add_child (GtkInfoBar *info_bar,
  * @widget: a child that has been added to the content area
  *
  * Removes a widget from the content area of the info bar.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_info_bar_remove_child (GtkInfoBar *info_bar,

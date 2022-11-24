@@ -211,7 +211,7 @@ gtk/gtkimcontext.c
 gtk/gtkimcontextsimple.c
 gtk/gtkimmodule.c
 gtk/gtkimmulticontext.c
-gtk/gtkinfobar.c
+gtk/deprecated/gtkinfobar.c
 gtk/gtklabel.c
 gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
