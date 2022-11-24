@@ -66,7 +66,7 @@ foreach t: a11y_state_tests
         'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
         'GTK_TEST_MESON=1',
       ],
-      suite: 'a11y',
+      suite: ['a11y', 'flaky'],
     )
   endif
 endforeach
@@ -100,7 +100,7 @@ foreach t: a11y_tests
                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
                'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
              ],
-        suite: 'a11y')
+        suite: ['a11y'])
 endforeach
 
 installed_test_data = [
@@ -181,7 +181,12 @@ installed_test_data = [
 ]
 
 a11y_installed_tests = [
-  'a11ytests.test',
+  # This is the equivalent of a11y_state_tests above, and does not seem
+  # to be reliable enough to act as a QA gate in practice. We install the
+  # test executable and the data needed to run it, but don't hook it up
+  # to ginsttest-runner.
+  #'a11ytests.test',
+
   'a11ychildren.test',
   'a11ytree.test',
   'a11yvalue.test',

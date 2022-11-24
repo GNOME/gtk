@@ -50,7 +50,9 @@ tests = [
   ['revealer-size'],
 ]
 
-# Tests that are expected to fail
+# Tests that are expected to fail, sometimes or always
+flaky = [
+]
 xfail = [
 ]
 
@@ -83,7 +85,15 @@ foreach t : tests
     install: get_option('installed_tests'),
     install_dir: installed_test_bindir)
 
-  expect_fail = xfail.contains(test_name)
+  suites = ['gtk']
+
+  if flaky.contains(test_name)
+    suites += 'flaky'
+  endif
+
+  if xfail.contains(test_name)
+    suites += 'failing'
+  endif
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
@@ -97,8 +107,7 @@ foreach t : tests
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
               'GTK_TEST_MESON=1',
             ],
-       suite: 'gtk',
-       should_fail: expect_fail,
+       suite: suites,
   )
 endforeach
 
@@ -137,6 +146,11 @@ endif
 if get_option('installed_tests')
   foreach t : tests
     test_name = t.get(0)
+
+    if flaky.contains(test_name) or xfail.contains(test_name)
+      continue
+    endif
+
     conf = configuration_data()
     conf.set('testexecdir', installed_test_bindir)
     conf.set('test', test_name)
