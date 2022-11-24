@@ -237,14 +237,24 @@ text_input_delete_surrounding_text (void                     *data,
 {
   GtkIMContextWaylandGlobal *global = data;
   GtkIMContextWayland *context;
+  char *cursor_pointer;
+  uint32_t char_before_length;
+  uint32_t char_after_length;
 
   if (!global->current)
       return;
   
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
 
-  context->pending_surrounding_delete.before_length = before_length;
-  context->pending_surrounding_delete.after_length = after_length;
+  /* We already got byte lengths from text_input_v3, but GTK uses char lengths
+   * for delete_surrounding, So convert it here.
+   */
+  cursor_pointer = context->surrounding.text + context->surrounding.cursor_idx;
+  char_before_length = g_utf8_pointer_to_offset (cursor_pointer - before_length, cursor_pointer);
+  char_after_length = g_utf8_pointer_to_offset (cursor_pointer, cursor_pointer + after_length);
+
+  context->pending_surrounding_delete.before_length = char_before_length;
+  context->pending_surrounding_delete.after_length = char_after_length;
 }
 
 static void
