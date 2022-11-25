@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "gtkaccessible.h"
 #include "gtklistitemprivate.h"
 
 
@@ -320,7 +321,13 @@ gtk_list_item_set_child (GtkListItem *self,
       self->child = child;
 
       if (self->owner)
-        gtk_list_item_widget_add_child (self->owner, child);
+        {
+          gtk_list_item_widget_add_child (self->owner, child);
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (self->owner),
+                                          GTK_ACCESSIBLE_RELATION_LABELLED_BY, child, NULL,
+                                          -1);
+        }
+
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);

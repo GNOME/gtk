@@ -689,6 +689,9 @@ gtk_list_item_widget_add_child (GtkListItemWidget *self,
                                 GtkWidget         *child)
 {
   gtk_widget_set_parent (child, GTK_WIDGET (self));
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, child, NULL,
+                                  -1);
 }
 
 void
