@@ -82,7 +82,7 @@ RUN dnf -y install \
     python3-markdown \
     python3-pip \
     python3-pygments \
-    python3-toml \
+    python3-tomli \
     python3-typogrify \
     python3-wheel \
     redhat-rpm-config \
