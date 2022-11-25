@@ -100,20 +100,28 @@ struct _GtkAccessibleInterface
    * @self: a `GtkAccessible`
    * 
    * Returns the parent `GtkAccessible` of @self.
-   * Be sure not to return %NULL, as a top-level `GtkAccessible` which is not a
-   * top-level window is not supported.
+   * A return value of %NULL implies that the accessible represents a top-level
+   * accessible object, which currently also implies that the accessible
+   * represents something which is in the list of top-level widgets.
    */
   GtkAccessible *       (* get_accessible_parent)  (GtkAccessible *self);
   
   /**
-   * GtkaccessibleInterface::get_child_at_index:
+   * GtkaccessibleInterface::get_first_accessible_child:
    * @self: a `GtkAccessible`
-   * @idx: the index of the child
    * 
-   * Returns the child of @self whose position corresponds to @index.
-   * If @index is not valid for @self's children, return -1.
+   * Returns the first accessible child of @self, or %NULL if @self has none
    */
-  GtkAccessible *       (* get_child_at_index)  (GtkAccessible *self, guint idx);
+  GtkAccessible *       (* get_first_accessible_child)  (GtkAccessible *self);
+
+
+  /**
+   * GtkaccessibleInterface::get_next_accessible_sibling:
+   * @self: a `GtkAccessible`
+   * 
+   * Returns the next accessible sibling of @self, or %NULL if @self has none
+   */
+  GtkAccessible *       (* get_next_accessible_sibling)  (GtkAccessible *self);
 
   /**
    * GtkAccessibleInterface::get_bounds:
@@ -142,7 +150,10 @@ GDK_AVAILABLE_IN_4_10
 GtkAccessible * gtk_accessible_get_accessible_parent(GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
-GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint idx);
+GtkAccessible * gtk_accessible_get_first_accessible_child(GtkAccessible *self);
+
+GDK_AVAILABLE_IN_4_10
+GtkAccessible * gtk_accessible_get_next_accessible_sibling(GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
 gboolean gtk_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height);

@@ -212,6 +212,8 @@ struct _GtkStackPage
   char *icon_name;
   GtkWidget *last_focus;
 
+  GtkStackPage *next_page;
+
   GtkATContext *at_context;
 
   guint needs_attention : 1;
@@ -268,15 +270,22 @@ gtk_stack_page_accessible_get_accessible_parent (GtkAccessible *accessible)
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_child_at_index(GtkAccessible *accessible,
-                                             guint          idx)
+gtk_stack_page_accessible_get_first_accessible_child(GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
 
-  if (idx == 0 && page->widget != NULL)
+  if (page->widget != NULL)
     return GTK_ACCESSIBLE (page->widget);
   else
     return NULL;
+}
+
+static GtkAccessible *
+gtk_stack_page_accessible_get_next_accessible_sibling(GtkAccessible *accessible)
+{
+  GtkStackPage *page = GTK_STACK_PAGE (accessible);
+
+  return GTK_ACCESSIBLE (page->next_page);
 }
 
 static gboolean
@@ -299,7 +308,8 @@ gtk_stack_page_accessible_init (GtkAccessibleInterface *iface)
   iface->get_at_context = gtk_stack_page_accessible_get_at_context;
   iface->get_platform_state = gtk_stack_page_accessible_get_platform_state;
   iface->get_accessible_parent = gtk_stack_page_accessible_get_accessible_parent;
-  iface->get_child_at_index = gtk_stack_page_accessible_get_child_at_index;
+  iface->get_first_accessible_child = gtk_stack_page_accessible_get_first_accessible_child;
+  iface->get_next_accessible_sibling = gtk_stack_page_accessible_get_next_accessible_sibling;
   iface->get_bounds = gtk_stack_page_accessible_get_bounds;
 }
 
@@ -669,7 +679,7 @@ gtk_stack_pages_get_property (GObject    *object,
 
     case PAGES_PROP_N_ITEMS:
       g_value_set_uint (value, gtk_stack_pages_get_n_items (G_LIST_MODEL (self)));
-      break;  
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -776,18 +786,18 @@ gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 static GtkAccessible *
-gtk_stack_accessible_get_child_at_index (GtkAccessible *accessible, guint idx)
+gtk_stack_accessible_get_first_accessible_child (GtkAccessible *accessible)
 {
   GtkStack *stack = GTK_STACK (accessible);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackPage *page = g_ptr_array_index (priv->children, idx);
+  GtkStackPage *page = g_ptr_array_index (priv->children, 0);
   return GTK_ACCESSIBLE (page);
 }
 
 static void
 gtk_stack_accessible_init (GtkAccessibleInterface *iface)
 {
-  iface->get_child_at_index = gtk_stack_accessible_get_child_at_index;
+  iface->get_first_accessible_child = gtk_stack_accessible_get_first_accessible_child;
 }
 
 static void stack_remove (GtkStack  *stack,
@@ -1657,6 +1667,18 @@ gtk_stack_add_page (GtkStack     *stack,
         }
     }
 
+
+  if (priv->children->len > 0)
+    {
+      GtkStackPage *prev_last = g_ptr_array_index (priv->children, priv->children->len - 1);
+
+      prev_last->next_page = child_info;
+    }
+  else
+    {
+      child_info->next_page = NULL;
+    }
+
   g_ptr_array_add (priv->children, g_object_ref (child_info));
 
   gtk_widget_set_child_visible (child_info->widget, FALSE);
@@ -1709,6 +1731,16 @@ stack_remove (GtkStack  *stack,
   g_clear_object (&child_info->widget);
 
     g_ptr_array_remove (priv->children, child_info);
+
+  for (guint prev_idx = 0; prev_idx < priv->children->len; prev_idx++)
+    {
+      GtkStackPage *prev_page = g_ptr_array_index (priv->children, prev_idx);
+      if (prev_page->next_page == child_info)
+        {
+          prev_page->next_page = child_info->next_page;
+          break;
+        }
+    }
 
   g_object_unref (child_info);
 

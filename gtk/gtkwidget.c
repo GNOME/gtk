@@ -8472,20 +8472,15 @@ gtk_widget_accessible_get_accessible_parent (GtkAccessible *self)
 }
 
 static GtkAccessible *
-gtk_widget_accessible_get_child_at_index (GtkAccessible *self,
-                                          guint          idx)
+gtk_widget_accessible_get_next_accessible_sibling (GtkAccessible *self)
 {
-  guint i = 0;
-  GtkWidget *child;
-  for (child = gtk_widget_get_first_child (GTK_WIDGET (self));
-               child != NULL;
-               child = gtk_widget_get_next_sibling (child))
-    {
-      if (i == idx)
-        return GTK_ACCESSIBLE (child);
-      i++;
-    }
-  return NULL;
+  return GTK_ACCESSIBLE (gtk_widget_get_next_sibling (GTK_WIDGET (self)));
+}
+
+static GtkAccessible *
+gtk_widget_accessible_get_first_accessible_child (GtkAccessible *self)
+{
+  return GTK_ACCESSIBLE (gtk_widget_get_first_child (GTK_WIDGET (self)));
 }
 
 static gboolean
@@ -8526,7 +8521,8 @@ gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
   iface->get_at_context = gtk_widget_accessible_get_at_context;
   iface->get_platform_state = gtk_widget_accessible_get_platform_state;
   iface->get_accessible_parent = gtk_widget_accessible_get_accessible_parent;
-  iface->get_child_at_index = gtk_widget_accessible_get_child_at_index;
+  iface->get_first_accessible_child = gtk_widget_accessible_get_first_accessible_child;
+  iface->get_next_accessible_sibling = gtk_widget_accessible_get_next_accessible_sibling;
   iface->get_bounds = gtk_widget_accessible_get_bounds;
 }
 

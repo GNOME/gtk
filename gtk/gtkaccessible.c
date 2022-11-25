@@ -40,8 +40,8 @@
  *
  * Every accessible implementation is part of a tree of accessible objects.
  * Normally, this tree corresponds to the widget tree, but can be customized
- * by reimplementing the [vfunc@Gtk.Accessible.get_accessible_parent]
- * and [vfunc@Gtk.Accessible.get_child_at_index] virtual functions.
+ * by reimplementing the [vfunc@Gtk.Accessible.get_accessible_parent],
+ * [vfunc@Gtk.Accessible.get_first_accessible_child] and [vfunc@Gtk.Accessible.get_next_accessible_sibling] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
  */
@@ -115,22 +115,39 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
 
 
 /**
- * gtk_accessible_get_child_at_index:
+ * gtk_accessible_get_first_accessible_child:
  * @self: a `GtkAccessible`
- * @idx: the index of the child to get
  *
- * Retrieves the child `GtkAccessible` for this `GtkAccessible` with the given @index.
+ * Retrieves the first child `GtkAccessible` for this `GtkAccessible`.
  *
- * Returns: (transfer none) (nullable): the child `GtkAccessible` with the given @index or %NULL if the index is outside range
+ * Returns: (transfer none) (nullable): the first `GtkAccessible` child of @self, if @self has accessible children, %NULL otherwise
  *
  * since: 4.10
  */
 GtkAccessible *
-gtk_accessible_get_child_at_index (GtkAccessible *self, guint idx)
+gtk_accessible_get_first_accessible_child (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_child_at_index (self, idx);
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_first_accessible_child (self);
+}
+
+/**
+ * gtk_accessible_get_next_accessible_sibling:
+ * @self: a `GtkAccessible`
+ *
+ * Retrieves the next `GtkAccessible` sibling of this `GtkAccessible`.
+ *
+ * Returns: (transfer none) (nullable): the next `GtkAccessible` sibling of @self, if @self has a next sibling, %NULL otherwise
+ *
+ * since: 4.10
+ */
+GtkAccessible *
+gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
+
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
 }
 
 /**
