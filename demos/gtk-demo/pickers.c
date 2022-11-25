@@ -33,17 +33,35 @@ file_opened (GObject *source,
   g_free (name);
 }
 
+static gboolean
+abort_mission (gpointer data)
+{
+  GCancellable *cancellable = data;
+
+  g_cancellable_cancel (cancellable);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 open_file (GtkButton *picker,
            GtkLabel  *label)
 {
   GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
   GtkFileDialog *dialog;
+  GCancellable *cancellable;
 
   dialog = gtk_file_dialog_new ();
 
-  gtk_file_dialog_open (dialog, parent, NULL, NULL, file_opened, label);
+  cancellable = g_cancellable_new ();
 
+  g_timeout_add_seconds_full (G_PRIORITY_DEFAULT,
+                              20,
+                              abort_mission, g_object_ref (cancellable), g_object_unref);
+
+  gtk_file_dialog_open (dialog, parent, NULL, cancellable, file_opened, label);
+
+  g_object_unref (cancellable);
   g_object_unref (dialog);
 }
 
