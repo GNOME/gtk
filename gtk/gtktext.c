@@ -3237,8 +3237,12 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
   if (gtk_event_controller_focus_is_focus (controller))
     {
       if (keyboard)
-        g_signal_connect (keyboard, "notify::direction",
-                          G_CALLBACK (direction_changed), self);
+        {
+          /* Work around unexpected notify::direction emissions */
+          gdk_device_get_direction (keyboard);
+          g_signal_connect (keyboard, "notify::direction",
+                            G_CALLBACK (direction_changed), self);
+        }
 
       gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
