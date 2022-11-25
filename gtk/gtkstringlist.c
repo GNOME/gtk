@@ -454,6 +454,11 @@ gtk_string_list_class_init (GtkStringListClass *class)
   gobject_class->dispose = gtk_string_list_dispose;
   gobject_class->set_property = gtk_string_list_set_property;
 
+  /**
+   * GtkStringList:strings:
+   *
+   * Since: 4.10
+   */
   g_object_class_install_property (gobject_class, PROP_STRINGS,
       g_param_spec_boxed ("strings", NULL, NULL,
                           G_TYPE_STRV,
