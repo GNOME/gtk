@@ -51,8 +51,11 @@ style-check-diff:
     reports:
       junit:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
+        - "${CI_PROJECT_DIR}/_build/report-x11_unstable.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
+        - "${CI_PROJECT_DIR}/_build/report-wayland_unstable.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
+        - "${CI_PROJECT_DIR}/_build/report-broadway_unstable.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"

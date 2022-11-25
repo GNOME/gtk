@@ -35,10 +35,6 @@ tests = [
 ]
 
 
-# Tests that are expected to fail
-xfail = [
-]
-
 is_debug = get_option('buildtype').startswith('debug')
 
 test_cargs = []
@@ -76,8 +72,6 @@ foreach t : tests
     install_dir: testexecdir,
   )
 
-  expect_fail = xfail.contains(test_name)
-
   if test_extra_suites.contains('slow')
     test_timeout = 90
   endif
@@ -88,6 +82,5 @@ foreach t : tests
     timeout: test_timeout,
     env: test_env,
     suite: ['a11y'] + test_extra_suites,
-    should_fail: expect_fail,
   )
 endforeach

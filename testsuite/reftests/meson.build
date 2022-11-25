@@ -137,11 +137,9 @@ testdata = [
   'border-image-url-scaled.css',
   'border-image-url-scaled.ref.ui',
   'border-image-url-scaled.ui',
-  # this seems to make assumptions on text positioning
-  # that are not valid with subpixel positioning
-  #'border-image-url.css',
-  #'border-image-url.ref.ui',
-  #'border-image-url.ui',
+  'border-image-url.css',
+  'border-image-url.ref.ui',
+  'border-image-url.ui',
   'border-radius-clamp.css',
   'border-radius-clamp.ref.ui',
   'border-radius-clamp.ui',
@@ -382,11 +380,9 @@ testdata = [
   'label-attribute-preference.css',
   'label-attribute-preference.ref.ui',
   'label-attribute-preference.ui',
-  # makes assumptions about text positioning that are not
-  # valid with subpixel positioning
-  #'label-background.css',
-  #'label-background.ref.ui',
-  #'label-background.ui',
+  'label-background.css',
+  'label-background.ref.ui',
+  'label-background.ui',
   'label-box-shadow-clip.css',
   'label-box-shadow-clip.ref.ui',
   'label-box-shadow-clip.ui',
@@ -432,10 +428,8 @@ testdata = [
   'label-wrap-word-char-natural-size.ui',
   'label-wrapped-huge-max-width-chars.ref.ui',
   'label-wrapped-huge-max-width-chars.ui',
-  # this seems to make assumptions on text positioning
-  # that are not valid with subpixel positioning
-  #'label-wrap-justify.ref.ui',
-  #'label-wrap-justify.ui',
+  'label-wrap-justify.ref.ui',
+  'label-wrap-justify.ui',
   'late-binding.ui',
   'late-binding.ref.ui',
   'late-property.ui',
@@ -559,23 +553,18 @@ testdata = [
   'textview-border-windows.css',
   'textview-border-windows.ref.ui',
   'textview-border-windows.ui',
-  # these tests needs a better way to perform delayed actions
-  # they are not in xfail since they succeed on some platforms
-  #'textview-margins.css',
-  #'textview-margins.ref.ui',
-  #'textview-margins.ui',
-  #'textview-tags.ref.ui',
-  #'textview-tags.ui',
+  'textview-margins.css',
+  'textview-margins.ref.ui',
+  'textview-margins.ui',
+  'textview-tags.ref.ui',
+  'textview-tags.ui',
   'treeview-crash-too-wide.ref.ui',
   'treeview-crash-too-wide.ui',
   'treeview-fixed-height.css',
   'treeview-fixed-height.ref.ui',
   'treeview-fixed-height.ui',
-  # this test fails with an off-by-one in ci too frequently
-  # to be left enabled. Remove it until somebody figures out
-  # what is going on there.
-  #'treeview-headers-hidden.ref.ui',
-  #'treeview-headers-hidden.ui',
+  'treeview-headers-hidden.ref.ui',
+  'treeview-headers-hidden.ui',
   'unresolvable.css',
   'unresolvable.ref.ui',
   'unresolvable.ui',
@@ -589,21 +578,36 @@ testdata = [
   'window-default-size.ui',
   'window-height-for-width.ref.ui',
   'window-height-for-width.ui',
-  # this test needs a better way to perform delayed actions
-  # it is not in xfail since it succeeds on some platforms
-  #'window-show-contents-on-map.ref.ui',
-  #'window-show-contents-on-map.ui',
+  'window-show-contents-on-map.ref.ui',
+  'window-show-contents-on-map.ui',
   'wrap-margin-align-critical.ref.ui',
   'wrap-margin-align-critical.ui',
   'wrapping-in-boxes-in-boxes.ref.ui',
   'wrapping-in-boxes-in-boxes.ui',
 ]
 
-# These need to be fixed but the issue hasn't been tracked down.
 xfails = [
+  # needs to be fixed but the issue hasn't been tracked down
   'sizegroups-evolution-identity-page.ui',
   # the NGL renderer can't deal with non-integer sizes
-  'border-half-pixel.ui'
+  'border-half-pixel.ui',
+
+  # makes assumptions about text positioning that are not
+  # valid with subpixel positioning
+  'border-image-url.ui',
+  'label-background.ui',
+  'label-wrap-justify.ui',
+]
+flaky = [
+  # these tests need a better way to perform delayed actions
+  # they are not in xfails since they succeed on some platforms
+  'textview-margins.ui',
+  'textview-tags.ui',
+  'window-show-contents-on-map.ui',
+  # this test fails with an off-by-one in ci too frequently
+  # to be left enabled. Remove it until somebody figures out
+  # what is going on there.
+  'treeview-headers-hidden.ui',
 ]
 
 reftest_env = environment()
@@ -616,6 +620,16 @@ reftest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 reftest_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
 
 foreach testname : testdata
+  suites = ['reftest']
+
+  if flaky.contains(testname)
+    suites += 'flaky'
+  endif
+
+  if xfails.contains(testname)
+    suites += 'failing'
+  endif
+
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
     test('reftest ' + testname, gtk_reftest,
       args: [
@@ -626,8 +640,7 @@ foreach testname : testdata
       ],
       protocol: 'tap',
       env: reftest_env,
-      suite: 'reftest',
-      should_fail: xfails.contains(testname),
+      suite: suites,
     )
   endif
 endforeach

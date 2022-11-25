@@ -10,47 +10,45 @@ common_env = [
   'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
   'GDK_DEBUG=default-settings',
 ]
+exclude_unstable = ['flaky', 'failing']
 
-if x11_enabled
-  add_test_setup ('x11',
-                  env: common_env + [
-                       'GDK_BACKEND=x11',
-                       'TEST_OUTPUT_SUBDIR=x11',
-                       ])
-endif
+setups = [
+  { 'backend': 'x11', 'if': x11_enabled, },
+  { 'backend': 'wayland', 'if': wayland_enabled, 'is_default': true, },
+  { 'name': 'waylandgles', 'backend': 'wayland', 'if': wayland_enabled,
+    'env': ['GDK_DEBUG=gl-gles,default-settings'], },
+  { 'backend': 'win32', 'if': os_win32 },
+  { 'backend': 'broadway', 'if': broadway_enabled, },
+]
 
-if wayland_enabled
-  add_test_setup ('wayland',
-                  is_default: true,
-                  env: common_env + [
-                        'GDK_BACKEND=wayland',
-                        'TEST_OUTPUT_SUBDIR=wayland',
-                        ])
+foreach setup : setups
+  if setup.get('if')
+    backend = setup.get('backend')
+    name = setup.get('name', backend)
+    exclude = []
 
-  add_test_setup ('waylandgles',
-                  env: common_env + [
-                        'GDK_BACKEND=wayland',
-                        'TEST_OUTPUT_SUBDIR=waylandgles',
-                        'GDK_DEBUG=gl-gles,default-settings',
-                        ])
+    if backend != 'broadway'
+      exclude += 'gsk-compare-broadway'
+    endif
 
-endif
+    env = common_env + [
+      'GDK_BACKEND=@0@'.format(backend),
+    ] + setup.get('env', [])
 
-if os_win32
-  add_test_setup ('win32',
-                  env: common_env + [
-                        'GDK_BACKEND=win32',
-                        'TEST_OUTPUT_SUBDIR=win32',
-                        ])
-endif
+    add_test_setup(
+      name,
+      env: env + ['TEST_OUTPUT_SUBDIR=@0@'.format(name)],
+      exclude_suites: exclude_unstable + exclude,
+      is_default: setup.get('is_default', false),
+    )
 
-if broadway_enabled
-  add_test_setup ('broadway',
-                  env: common_env + [
-                        'GDK_BACKEND=broadway',
-                        'TEST_OUTPUT_SUBDIR=broadway',
-                        ])
-endif
+    add_test_setup(
+      '@0@_unstable'.format(name),
+      env: env + ['TEST_OUTPUT_SUBDIR=@0@_unstable'.format(name)],
+      exclude_suites: exclude,
+    )
+  endif
+endforeach
 
 subdir('performance')
 subdir('gdk')

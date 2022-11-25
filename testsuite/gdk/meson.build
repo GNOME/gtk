@@ -39,6 +39,8 @@ foreach t : tests
     install_dir: testexecdir,
   )
 
+  suites = ['gdk'] + t.get('suites', [])
+
   test(test_name, test_exe,
     args: [ '--tap', '-k' ],
     protocol: 'tap',
@@ -48,7 +50,7 @@ foreach t : tests
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
       'DBUS_SESSION_BUS_ADDRESS=',
     ],
-    suite: 'gdk',
+    suite: suites,
   )
 endforeach
 
@@ -81,6 +83,12 @@ endforeach
 if get_option('install-tests')
   foreach t : tests
     test_name = t.get('name')
+    suites = t.get('suites', [])
+
+    if suites.contains('flaky') or suites.contains('failing')
+      continue
+    endif
+
     test_cdata = configuration_data()
     test_cdata.set('testexecdir', testexecdir)
     test_cdata.set('test', test_name)
