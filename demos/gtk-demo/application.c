@@ -89,7 +89,7 @@ open_response_cb (GObject *source,
   GFile *file;
   GError *error = NULL;
 
-  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  file = gtk_file_dialog_open_finish (dialog, result, &error);
   if (file)
     {
       char *contents;
@@ -99,15 +99,16 @@ open_response_cb (GObject *source,
           create_window (app, contents);
           g_free (contents);
         }
-      else
-        {
-          GtkAlertDialog *alert;
+    }
 
-          alert = gtk_alert_dialog_new ("Error loading file: \"%s\"", error->message);
-          gtk_alert_dialog_show (alert, NULL);
-          g_object_unref (alert);
-          g_error_free (error);
-        }
+  if (error)
+    {
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new ("Error loading file: \"%s\"", error->message);
+      gtk_alert_dialog_show (alert, NULL);
+      g_object_unref (alert);
+      g_error_free (error);
     }
 
   g_object_unref (app);
