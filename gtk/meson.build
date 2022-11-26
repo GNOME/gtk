@@ -800,7 +800,7 @@ endif
 objcopy_supports_add_symbol = false
 objcopy = find_program('objcopy', required : false)
 if objcopy.found()
-  objcopy_supports_add_symbol = run_command(objcopy, '--help').stdout().contains('--add-symbol')
+  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
 endif
 
 ld = find_program('ld', required : false)
