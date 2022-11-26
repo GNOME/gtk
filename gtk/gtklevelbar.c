@@ -1136,7 +1136,7 @@ gtk_level_bar_get_max_value (GtkLevelBar *self)
  * Returns the `value` of the `GtkLevelBar`.
  *
  * Returns: a value in the interval between
- *   [property@Gtk.LevelBar:min-value[ and [property@Gtk.LevelBar:max-value]
+ *   [property@Gtk.LevelBar:min-value] and [property@Gtk.LevelBar:max-value]
  */
 double
 gtk_level_bar_get_value (GtkLevelBar *self)
