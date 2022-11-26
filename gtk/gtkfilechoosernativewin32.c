@@ -610,6 +610,10 @@ filechooser_win32_thread (gpointer _data)
       if (FAILED (hr))
         g_warning_hr ("Can't set file types", hr);
 
+      hr = IFileDialog_SetDefaultExtension (pfd, L"");
+      if (FAILED (hr))
+        g_warning_hr ("Can't set default extension", hr);
+
       if (data->self->current_filter)
         {
           GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (data->self));
