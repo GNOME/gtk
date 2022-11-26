@@ -65,8 +65,6 @@ open_file (GtkButton *picker,
   g_object_unref (dialog);
 }
 
-#define COLOR(r,g,b) { r/255., g/255., b/255., 1.0 }
-
 GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
