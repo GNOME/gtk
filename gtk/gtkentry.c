@@ -2229,7 +2229,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  * Sets the maximum allowed length of the contents of the widget.
  *
  * If the current contents are longer than the given length, then
- * they will be truncated to fit. The length is is in characters.
+ * they will be truncated to fit. The length is in characters.
  *
  * This is equivalent to getting @entry's `GtkEntryBuffer` and
  * calling [method@Gtk.EntryBuffer.set_max_length] on it.
@@ -3563,7 +3563,7 @@ gtk_entry_get_input_hints (GtkEntry *entry)
  *
  * The attributes in the list are applied to the entry text.
  *
- * Since the attributes will be applies to text that changes
+ * Since the attributes will be applied to text that changes
  * as the user types, it makes most sense to use attributes
  * with unlimited extent.
  */
@@ -3623,7 +3623,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  * gtk_entry_get_tabs: (attributes org.gtk.Method.get_property=tabs)
  * @entry: a `GtkEntry`
  *
- * Gets the tabstops of the `GtkEntry.
+ * Gets the tabstops of the `GtkEntry`.
  *
  * See [method@Gtk.Entry.set_tabs].
  *
