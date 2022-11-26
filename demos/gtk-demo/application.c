@@ -89,7 +89,7 @@ open_response_cb (GObject *source,
   GFile *file;
   GError *error = NULL;
 
-  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  file = gtk_file_dialog_open_finish (dialog, result, NULL);
   if (file)
     {
       char *contents;
