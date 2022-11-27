@@ -777,7 +777,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
  * from those on the right. Recognized button names are minimize,
  * maximize, close and icon (the window icon).
  *
- * For example, “icon:minimize,maximize,close” specifies a icon
+ * For example, “icon:minimize,maximize,close” specifies an icon
  * on the left, and minimize, maximize and close buttons on the right.
  */
 void
