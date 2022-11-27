@@ -130,6 +130,7 @@
 #include <gtk/deprecated/gtkfilechooserwidget.h>
 #include <gtk/gtkfiledialog.h>
 #include <gtk/gtkfilefilter.h>
+#include <gtk/gtkfilelauncher.h>
 #include <gtk/gtkfilter.h>
 #include <gtk/gtkfilterlistmodel.h>
 #include <gtk/gtkcustomfilter.h>
