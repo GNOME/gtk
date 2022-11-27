@@ -105,9 +105,9 @@ enum
   PROP_CHILD,
   PROP_HIDE_EXPANDER,
   PROP_INDENT_FOR_DEPTH,
+  PROP_INDENT_FOR_ICON,
   PROP_ITEM,
   PROP_LIST_ROW,
-  PROP_INDENT_FOR_ICON,
 
   N_PROPS
 };
@@ -413,16 +413,16 @@ gtk_tree_expander_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_tree_expander_get_indent_for_depth (self));
       break;
 
+    case PROP_INDENT_FOR_ICON:
+      g_value_set_boolean (value, gtk_tree_expander_get_indent_for_icon (self));
+      break;
+
     case PROP_ITEM:
       g_value_take_object (value, gtk_tree_expander_get_item (self));
       break;
 
     case PROP_LIST_ROW:
       g_value_set_object (value, self->list_row);
-      break;
-
-    case PROP_INDENT_FOR_ICON:
-      g_value_set_boolean (value, gtk_tree_expander_get_indent_for_icon (self));
       break;
 
     default:
@@ -453,12 +453,12 @@ gtk_tree_expander_set_property (GObject      *object,
       gtk_tree_expander_set_indent_for_depth (self, g_value_get_boolean (value));
       break;
 
-    case PROP_LIST_ROW:
-      gtk_tree_expander_set_list_row (self, g_value_get_object (value));
-      break;
-
     case PROP_INDENT_FOR_ICON:
       gtk_tree_expander_set_indent_for_icon (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_LIST_ROW:
+      gtk_tree_expander_set_list_row (self, g_value_get_object (value));
       break;
 
     default:
@@ -589,6 +589,18 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkTreeExpander:indent-for-icon: (attributes org.gtk.Property.get=gtk_tree_expander_get_indent_for_icon org.gtk.Property.set=gtk_tree_expander_set_indent_for_icon)
+   *
+   * TreeExpander indents the child by the width of an expander-icon if it is not expandable.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_INDENT_FOR_ICON] =
+      g_param_spec_boolean ("indent-for-icon", NULL, NULL,
+                            TRUE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkTreeExpander:item: (attributes org.gtk.Property.get=gtk_tree_expander_get_item)
    *
    * The item held by this expander's row.
@@ -607,18 +619,6 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
     g_param_spec_object ("list-row", NULL, NULL,
                          GTK_TYPE_TREE_LIST_ROW,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkTreeExpander:indent-for-icon: (attributes org.gtk.Property.get=gtk_tree_expander_get_indent_for_icon org.gtk.Property.set=gtk_tree_expander_set_indent_for_icon)
-   *
-   * TreeExpander indents the child by the width of an expander-icon if it is not expandable.
-   *
-   * Since: 4.6
-   */
-  properties[PROP_INDENT_FOR_ICON] =
-      g_param_spec_boolean ("indent-for-icon", NULL, NULL,
-                            TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -978,7 +978,7 @@ gtk_tree_expander_get_indent_for_icon (GtkTreeExpander *self)
  */
 void
 gtk_tree_expander_set_indent_for_icon (GtkTreeExpander *self,
-                                       gboolean indent_for_icon)
+                                       gboolean         indent_for_icon)
 {
   g_return_if_fail (GTK_IS_TREE_EXPANDER (self));
 
