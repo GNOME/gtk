@@ -974,6 +974,20 @@ gtk_im_context_wayland_commit (GtkIMContext *context,
 }
 
 static void
+gtk_im_context_wayland_activate_osk (GtkIMContext *context)
+{
+  GtkIMContextWaylandGlobal *global;
+
+  global = gtk_im_context_wayland_get_global (GTK_IM_CONTEXT_WAYLAND (context));
+  if (global == NULL)
+    return;
+
+  zwp_text_input_v3_enable (global->text_input);
+  notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+}
+
+static void
 gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -992,6 +1006,7 @@ gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
   im_context_class->set_surrounding_with_selection = gtk_im_context_wayland_set_surrounding;
   im_context_class->get_surrounding_with_selection = gtk_im_context_wayland_get_surrounding;
   im_context_class->commit = gtk_im_context_wayland_commit;
+  im_context_class->activate_osk = gtk_im_context_wayland_activate_osk;
 }
 
 static void
