@@ -40,6 +40,7 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtksettings.h"
 #include "gtktextiterprivate.h"
+#include "gtkimcontextprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
 #include "gtktextutilprivate.h"
@@ -410,10 +411,15 @@ static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 					        GtkStateFlags     previous_state);
 
 static void gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
-                                                      int                   n_press,
-                                                      double                x,
-                                                      double                y,
-                                                      GtkTextView          *text_view);
+                                                 int                   n_press,
+                                                 double                x,
+                                                 double                y,
+                                                 GtkTextView          *text_view);
+static void gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
+                                                  int                   n_press,
+                                                  double                x,
+                                                  double                y,
+                                                  GtkTextView          *text_view);
 static void gtk_text_view_drag_gesture_update        (GtkGestureDrag *gesture,
                                                       double          offset_x,
                                                       double          offset_y,
@@ -1964,6 +1970,9 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_view_click_gesture_pressed),
+                    widget);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (gtk_text_view_click_gesture_released),
                     widget);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
@@ -5700,6 +5709,25 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 
   if (n_press >= 3)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+}
+
+static void
+gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
+                                      int              n_press,
+                                      double           x,
+                                      double           y,
+                                      GtkTextView     *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+
+  buffer = get_buffer (text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+
+  if (gtk_text_iter_compare (&start, &end) == 0 &&
+      gtk_text_iter_can_insert (&start, priv->editable))
+    gtk_im_context_activate_osk (priv->im_context);
 }
 
 static void
