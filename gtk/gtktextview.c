@@ -7418,6 +7418,9 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   SelectionData *data;
   GdkDevice *device;
   GtkTextIter cursor;
+  GtkTextIter orig_start, orig_end;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
 
   data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -7477,22 +7480,19 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   g_assert (data != NULL);
 
+  buffer = get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
+  gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
+
   /* Text selection */
   if (data->granularity == SELECT_CHARACTERS)
     {
       move_mark_to_pointer_and_scroll (text_view, "insert");
+      gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
     }
   else
     {
-      GtkTextIter start, end;
-      GtkTextIter orig_start, orig_end;
-      GtkTextBuffer *buffer;
-
-      buffer = get_buffer (text_view);
-
-      gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
-      gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
-
       get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
                              &cursor, NULL, NULL);
 
@@ -7508,6 +7508,10 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       gtk_text_view_scroll_mark_onscreen (text_view,
 					  gtk_text_buffer_get_insert (buffer));
     }
+
+  if (gtk_text_iter_compare (&orig_start, &start) != 0 ||
+      gtk_text_iter_compare (&orig_end, &end) != 0)
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If we had to scroll offscreen, insert a timeout to do so
    * again. Note that in the timeout, even if the mouse doesn't
