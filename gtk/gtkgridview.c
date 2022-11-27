@@ -1238,7 +1238,7 @@ gtk_grid_view_get_model (GtkGridView *self)
  * @self: a `GtkGridView`
  * @model: (nullable) (transfer none): the model to use
  *
- * Sets the imodel to use.
+ * Sets the model to use.
  *
  * This must be a [iface@Gtk.SelectionModel].
  */
