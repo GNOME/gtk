@@ -70,7 +70,6 @@ struct _GtkIMContextWayland
 {
   GtkIMContextSimple parent_instance;
   GtkWidget *widget;
-  GtkWidget *controller_widget;
 
   GtkGesture *gesture;
   double press_x;
@@ -576,19 +575,19 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
   if (context_wayland->widget)
     gtk_im_context_wayland_focus_out (context);
 
-  if (context_wayland->controller_widget)
+  if (context_wayland->widget && context_wayland->gesture)
     {
-      gtk_widget_remove_controller (context_wayland->controller_widget,
+      gtk_widget_remove_controller (context_wayland->widget,
                                     GTK_EVENT_CONTROLLER (context_wayland->gesture));
       context_wayland->gesture = NULL;
-      g_clear_object (&context_wayland->controller_widget);
     }
 
   g_set_object (&context_wayland->widget, widget);
 
-  if (widget)
+  if (widget &&
+      !GTK_IS_TEXT (widget) &&
+      !GTK_IS_TEXT_VIEW (widget))
     {
-      GtkWidget *parent;
       GtkGesture *gesture;
 
       gesture = gtk_gesture_click_new ();
@@ -600,16 +599,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
       g_signal_connect (gesture, "released",
                         G_CALLBACK (released_cb), context);
 
-      parent = gtk_widget_get_parent (widget);
-
-      if (parent &&
-          GTK_IS_EDITABLE (widget) &&
-          GTK_IS_EDITABLE (parent))
-        g_set_object (&context_wayland->controller_widget, parent);
-      else
-        g_set_object (&context_wayland->controller_widget, widget);
-
-      gtk_widget_add_controller (context_wayland->controller_widget,
+      gtk_widget_add_controller (context_wayland->widget,
                                  GTK_EVENT_CONTROLLER (gesture));
       context_wayland->gesture = gesture;
     }
