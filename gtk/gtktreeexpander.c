@@ -93,6 +93,7 @@ struct _GtkTreeExpander
   guint notify_handler;
 
   gboolean hide_expander;
+  gboolean indent_for_depth;
   gboolean indent_for_icon;
 
   guint expand_timer;
@@ -103,6 +104,7 @@ enum
   PROP_0,
   PROP_CHILD,
   PROP_HIDE_EXPANDER,
+  PROP_INDENT_FOR_DEPTH,
   PROP_ITEM,
   PROP_LIST_ROW,
   PROP_INDENT_FOR_ICON,
@@ -178,7 +180,7 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
       GtkWidget *child;
       guint i, depth;
 
-      depth = gtk_tree_list_row_get_depth (self->list_row);
+      depth = self->indent_for_depth ? gtk_tree_list_row_get_depth (self->list_row) : 0;
       if (gtk_tree_list_row_is_expandable (self->list_row) && !self->hide_expander)
         {
           if (self->expander_icon == NULL)
@@ -407,6 +409,10 @@ gtk_tree_expander_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_tree_expander_get_hide_expander (self));
       break;
 
+    case PROP_INDENT_FOR_DEPTH:
+      g_value_set_boolean (value, gtk_tree_expander_get_indent_for_depth (self));
+      break;
+
     case PROP_ITEM:
       g_value_take_object (value, gtk_tree_expander_get_item (self));
       break;
@@ -441,6 +447,10 @@ gtk_tree_expander_set_property (GObject      *object,
 
     case PROP_HIDE_EXPANDER:
       gtk_tree_expander_set_hide_expander (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_INDENT_FOR_DEPTH:
+      gtk_tree_expander_set_indent_for_depth (self, g_value_get_boolean (value));
       break;
 
     case PROP_LIST_ROW:
@@ -564,6 +574,18 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_HIDE_EXPANDER] =
       g_param_spec_boolean ("hide-expander", NULL, NULL,
                             FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkTreeExpander:indent-for-depth: (attributes org.gtk.Property.get=gtk_tree_expander_get_indent_for_depth org.gtk.Property.set=gtk_tree_expander_set_indent_for_depth)
+   *
+   * TreeExpander indents the child according to its depth.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_INDENT_FOR_DEPTH] =
+      g_param_spec_boolean ("indent-for-depth", NULL, NULL,
+                            TRUE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -731,6 +753,7 @@ gtk_tree_expander_init (GtkTreeExpander *self)
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
   self->indent_for_icon = TRUE;
+  self->indent_for_depth = TRUE;
 
   controller = gtk_drop_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_tree_expander_drag_enter), self);
@@ -881,6 +904,49 @@ gtk_tree_expander_set_list_row (GtkTreeExpander *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 
   g_object_thaw_notify (G_OBJECT (self));
+}
+
+/**
+ * gtk_tree_expander_get_indent_for_depth: (attributes org.gtk.Method.get_property=indent-for-depth)
+ * @self: a `GtkTreeExpander`
+ *
+ * TreeExpander indents each level of depth with an additional indent.
+ *
+ * Returns: TRUE if the child should be indented . Otherwise FALSE.
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_tree_expander_get_indent_for_depth (GtkTreeExpander *self)
+{
+  g_return_val_if_fail (GTK_IS_TREE_EXPANDER (self), FALSE);
+
+  return self->indent_for_depth;
+}
+
+/**
+ * gtk_tree_expander_set_indent_for_depth: (attributes org.gtk.Method.set_property=indent-for-depth)
+ * @self: a `GtkTreeExpander` widget
+ * @indent_for_depth: TRUE if the child should be indented. Otherwise FALSE.
+ *
+ * Sets if the TreeExpander should indent the child according to its depth.
+ *
+ * Since: 4.10
+ */
+void
+gtk_tree_expander_set_indent_for_depth (GtkTreeExpander *self,
+                                        gboolean         indent_for_depth)
+{
+  g_return_if_fail (GTK_IS_TREE_EXPANDER (self));
+
+  if (indent_for_depth == self->indent_for_depth)
+    return;
+
+  self->indent_for_depth = indent_for_depth;
+
+  gtk_tree_expander_update_for_list_row (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INDENT_FOR_DEPTH]);
 }
 
 /**
