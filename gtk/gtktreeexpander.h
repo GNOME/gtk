@@ -55,6 +55,11 @@ gboolean                gtk_tree_expander_get_indent_for_icon (GtkTreeExpander  
 GDK_AVAILABLE_IN_4_6
 void                    gtk_tree_expander_set_indent_for_icon (GtkTreeExpander        *self,
                                                                gboolean               indent_for_icon);
+GDK_AVAILABLE_IN_4_10
+gboolean                gtk_tree_expander_get_hide_expander   (GtkTreeExpander *self);
+GDK_AVAILABLE_IN_4_10
+void                    gtk_tree_expander_set_hide_expander   (GtkTreeExpander *self,
+                                                               gboolean         hide_expander);
 
 G_END_DECLS
 

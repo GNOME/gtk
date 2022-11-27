@@ -52,6 +52,13 @@
  * [method@Gtk.TreeExpander.set_child] sets the widget that displays
  * the actual row contents.
  *
+ * `GtkTreeExpander` can be modified with properties such as [property@Gtk.indent-for-icon],
+ * [property@Gtk.indent-for-depth], and [property@Gtk.hide-expander] to achieve a
+ * different appearance. This can even be done to influence individual rows, for example
+ * by binding the [property@Gtk.hide-expander] property to the treelistrow's model's
+ * item count to hide the expander for rows without children, even if the row is
+ * expandable.
+ *
  * # CSS nodes
  *
  * ```
@@ -85,6 +92,7 @@ struct _GtkTreeExpander
   GtkWidget *expander_icon;
   guint notify_handler;
 
+  gboolean hide_expander;
   gboolean indent_for_icon;
 
   guint expand_timer;
@@ -94,6 +102,7 @@ enum
 {
   PROP_0,
   PROP_CHILD,
+  PROP_HIDE_EXPANDER,
   PROP_ITEM,
   PROP_LIST_ROW,
   PROP_INDENT_FOR_ICON,
@@ -170,7 +179,7 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
       guint i, depth;
 
       depth = gtk_tree_list_row_get_depth (self->list_row);
-      if (gtk_tree_list_row_is_expandable (self->list_row))
+      if (gtk_tree_list_row_is_expandable (self->list_row) && !self->hide_expander)
         {
           if (self->expander_icon == NULL)
             {
@@ -394,6 +403,10 @@ gtk_tree_expander_get_property (GObject    *object,
       g_value_set_object (value, self->child);
       break;
 
+    case PROP_HIDE_EXPANDER:
+      g_value_set_boolean (value, gtk_tree_expander_get_hide_expander (self));
+      break;
+
     case PROP_ITEM:
       g_value_take_object (value, gtk_tree_expander_get_item (self));
       break;
@@ -424,6 +437,10 @@ gtk_tree_expander_set_property (GObject      *object,
     {
     case PROP_CHILD:
       gtk_tree_expander_set_child (self, g_value_get_object (value));
+      break;
+
+    case PROP_HIDE_EXPANDER:
+      gtk_tree_expander_set_hide_expander (self, g_value_get_boolean (value));
       break;
 
     case PROP_LIST_ROW:
@@ -531,6 +548,23 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkTreeExpander:hide-expander: (attributes org.gtk.Property.get=gtk_tree_expander_get_hide_expander org.gtk.Property.set=gtk_tree_expander_set_hide_expander)
+   *
+   * Whether the expander icon should be hidden in a GtkTreeListRow.
+   * Note that this property simply hides the icon.  The actions and keybinding
+   * (i.e. collapse and expand) are not affected by this property.
+   *
+   * A common use for this property would be to bind to the number of children in a
+   * GtkTreeListRow's model in order to hide the expander when a row has no children.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_HIDE_EXPANDER] =
+      g_param_spec_boolean ("hide-expander", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeExpander:item: (attributes org.gtk.Property.get=gtk_tree_expander_get_item)
@@ -890,4 +924,47 @@ gtk_tree_expander_set_indent_for_icon (GtkTreeExpander *self,
   gtk_tree_expander_update_for_list_row (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INDENT_FOR_ICON]);
+}
+
+/**
+ * gtk_tree_expander_get_hide_expander: (attributes org.gtk.Method.get_property=hide-expander)
+ * @self: a `GtkTreeExpander`
+ *
+ * Gets whether the TreeExpander should be hidden in a GtkTreeListRow.
+ *
+ * Returns: TRUE if the expander icon should be hidden. Otherwise FALSE.
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_tree_expander_get_hide_expander (GtkTreeExpander *self)
+{
+  g_return_val_if_fail (GTK_IS_TREE_EXPANDER (self), FALSE);
+
+  return self->hide_expander;
+}
+
+/**
+ * gtk_tree_expander_set_hide_expander: (attributes org.gtk.Method.set_property=hide-expander)
+ * @self: a `GtkTreeExpander` widget
+ * @hide_expander: TRUE if the expander should be hidden. Otherwise FALSE.
+ *
+ * Sets whether the expander icon should be visible in a GtkTreeListRow.
+ *
+ * Since: 4.10
+ */
+void
+gtk_tree_expander_set_hide_expander (GtkTreeExpander *self,
+                                     gboolean         hide_expander)
+{
+  g_return_if_fail (GTK_IS_TREE_EXPANDER (self));
+
+  if (hide_expander == self->hide_expander)
+    return;
+
+  self->hide_expander = hide_expander;
+
+  gtk_tree_expander_update_for_list_row (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HIDE_EXPANDER]);
 }
