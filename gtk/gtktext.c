@@ -42,6 +42,7 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkimageprivate.h"
+#include "gtkimcontextprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
 #include <glib/gi18n-lib.h>
@@ -465,10 +466,15 @@ static void     gtk_text_motion_controller_motion   (GtkEventControllerMotion *c
                                                      double                    y,
                                                      GtkText                  *self);
 static void     gtk_text_click_gesture_pressed (GtkGestureClick     *gesture,
-                                                     int                       n_press,
-                                                     double                    x,
-                                                     double                    y,
-                                                     GtkText                  *self);
+                                                int                       n_press,
+                                                double                    x,
+                                                double                    y,
+                                                GtkText                  *self);
+static void     gtk_text_click_gesture_released (GtkGestureClick     *gesture,
+                                                 int                       n_press,
+                                                 double                    x,
+                                                 double                    y,
+                                                 GtkText                  *self);
 static void     gtk_text_drag_gesture_update        (GtkGestureDrag           *gesture,
                                                      double                    offset_x,
                                                      double                    offset_y,
@@ -1897,6 +1903,8 @@ gtk_text_init (GtkText *self)
   gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (gesture), "gtk-text-click-gesture");
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_click_gesture_pressed), self);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (gtk_text_click_gesture_released), self);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
@@ -2756,6 +2764,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       GdkDevice *source;
       guint state;
 
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
       sel_start = priv->selection_bound;
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
@@ -2790,8 +2800,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                     gtk_text_selection_bubble_popup_unset (self);
                   else
                     gtk_text_selection_bubble_popup_set (self);
-
-                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
               else if (extend_selection)
                 {
@@ -2803,8 +2811,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
                   /* all done, so skip the extend_to_left stuff later */
                   extend_selection = FALSE;
-
-                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
               else
                 {
@@ -2812,7 +2818,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                   priv->in_drag = TRUE;
                   priv->drag_start_x = x;
                   priv->drag_start_y = y;
-                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
             }
           else
@@ -2821,13 +2826,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
               if (!extend_selection)
                 {
-                  if (priv->current_pos != tmp_pos ||
-                      priv->selection_bound != tmp_pos)
-                    {
-                      gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
-                      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-                    }
-
+                  gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
                   priv->handle_place_time = g_get_monotonic_time ();
                 }
               else
@@ -2837,7 +2836,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
                     sel_start = sel_end = priv->current_pos;
 
                   gtk_text_set_positions (self, tmp_pos, tmp_pos);
-                  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
                 }
             }
 
@@ -2846,13 +2844,11 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
         case 2:
           priv->select_words = TRUE;
           gtk_text_select_word (self);
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           break;
 
         case 3:
           priv->select_lines = TRUE;
           gtk_text_select_line (self);
-          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           break;
 
         default:
@@ -2886,6 +2882,21 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
   if (n_press >= 3)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+}
+
+static void
+gtk_text_click_gesture_released (GtkGestureClick *gesture,
+                                 int              n_press,
+                                 double           widget_x,
+                                 double           widget_y,
+                                 GtkText         *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (n_press == 1 &&
+      !priv->in_drag &&
+      priv->current_pos == priv->selection_bound)
+    gtk_im_context_activate_osk (priv->im_context);
 }
 
 static char *
@@ -3063,8 +3074,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       GdkDevice *source;
       guint length;
       int tmp_pos;
-
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      int pos, bound;
 
       length = gtk_entry_buffer_get_length (get_buffer (self));
 
@@ -3082,7 +3092,6 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
         {
           int min, max;
           int old_min, old_max;
-          int pos, bound;
 
           min = gtk_text_move_backward_word (self, tmp_pos, TRUE);
           max = gtk_text_move_forward_word (self, tmp_pos, TRUE);
@@ -3113,11 +3122,17 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
               if (priv->current_pos != max)
                 pos = min;
             }
-
-          gtk_text_set_positions (self, pos, bound);
         }
       else
-        gtk_text_set_positions (self, tmp_pos, -1);
+        {
+          pos = tmp_pos;
+          bound = -1;
+        }
+
+      if (pos != priv->current_pos)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+      gtk_text_set_positions (self, pos, bound);
 
       /* Update touch handles' position */
       if (gtk_simulate_touchscreen () ||

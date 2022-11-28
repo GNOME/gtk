@@ -20,6 +20,7 @@
 #include <string.h>
 #include <locale.h>
 
+#include "gtkimcontextprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkimmoduleprivate.h"
 #include "gtklabel.h"
@@ -105,6 +106,7 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     int                offset,
 							     int                n_chars,
 							     GtkIMMulticontext *multicontext);
+static void gtk_im_multicontext_activate_osk (GtkIMContext *context);
 
 static void propagate_purpose (GtkIMMulticontext *context);
 
@@ -128,6 +130,7 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->set_use_preedit = gtk_im_multicontext_set_use_preedit;
   im_context_class->set_surrounding_with_selection = gtk_im_multicontext_set_surrounding_with_selection;
   im_context_class->get_surrounding_with_selection = gtk_im_multicontext_get_surrounding_with_selection;
+  im_context_class->activate_osk = gtk_im_multicontext_activate_osk;
 
   gobject_class->finalize = gtk_im_multicontext_finalize;
 }
@@ -511,6 +514,16 @@ gtk_im_multicontext_set_surrounding_with_selection (GtkIMContext *context,
 
   if (delegate)
     gtk_im_context_set_surrounding_with_selection (delegate, text, len, cursor_index, anchor_index);
+}
+
+static void
+gtk_im_multicontext_activate_osk (GtkIMContext *context)
+{
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  GtkIMContext *delegate = gtk_im_multicontext_get_delegate (multicontext);
+
+  if (delegate)
+    gtk_im_context_activate_osk (delegate);
 }
 
 static void

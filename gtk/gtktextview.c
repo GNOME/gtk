@@ -40,6 +40,7 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtksettings.h"
 #include "gtktextiterprivate.h"
+#include "gtkimcontextprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
 #include "gtktextutilprivate.h"
@@ -410,10 +411,15 @@ static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 					        GtkStateFlags     previous_state);
 
 static void gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
-                                                      int                   n_press,
-                                                      double                x,
-                                                      double                y,
-                                                      GtkTextView          *text_view);
+                                                 int                   n_press,
+                                                 double                x,
+                                                 double                y,
+                                                 GtkTextView          *text_view);
+static void gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
+                                                  int                   n_press,
+                                                  double                x,
+                                                  double                y,
+                                                  GtkTextView          *text_view);
 static void gtk_text_view_drag_gesture_update        (GtkGestureDrag *gesture,
                                                       double          offset_x,
                                                       double          offset_y,
@@ -1964,6 +1970,9 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_view_click_gesture_pressed),
+                    widget);
+  g_signal_connect (gesture, "released",
+                    G_CALLBACK (gtk_text_view_click_gesture_released),
                     widget);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
@@ -5703,6 +5712,25 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
 }
 
 static void
+gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
+                                      int              n_press,
+                                      double           x,
+                                      double           y,
+                                      GtkTextView     *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkTextBuffer *buffer;
+  GtkTextIter start, end;
+
+  buffer = get_buffer (text_view);
+  gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+
+  if (gtk_text_iter_compare (&start, &end) == 0 &&
+      gtk_text_iter_can_insert (&start, priv->editable))
+    gtk_im_context_activate_osk (priv->im_context);
+}
+
+static void
 direction_changed (GdkDevice  *device,
                    GParamSpec *pspec,
                    GtkTextView *text_view)
@@ -7418,6 +7446,9 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   SelectionData *data;
   GdkDevice *device;
   GtkTextIter cursor;
+  GtkTextIter orig_start, orig_end;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
 
   data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -7477,22 +7508,19 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   g_assert (data != NULL);
 
+  buffer = get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
+  gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
+
   /* Text selection */
   if (data->granularity == SELECT_CHARACTERS)
     {
       move_mark_to_pointer_and_scroll (text_view, "insert");
+      gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
     }
   else
     {
-      GtkTextIter start, end;
-      GtkTextIter orig_start, orig_end;
-      GtkTextBuffer *buffer;
-
-      buffer = get_buffer (text_view);
-
-      gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
-      gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
-
       get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
                              &cursor, NULL, NULL);
 
@@ -7508,6 +7536,10 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       gtk_text_view_scroll_mark_onscreen (text_view,
 					  gtk_text_buffer_get_insert (buffer));
     }
+
+  if (gtk_text_iter_compare (&orig_start, &start) != 0 ||
+      gtk_text_iter_compare (&orig_end, &end) != 0)
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If we had to scroll offscreen, insert a timeout to do so
    * again. Note that in the timeout, even if the mouse doesn't

@@ -18,6 +18,7 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
+#include "gtkimcontextprivate.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
@@ -1004,4 +1005,13 @@ gtk_im_context_set_property (GObject      *obj,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
     }
+}
+
+void
+gtk_im_context_activate_osk (GtkIMContext *context)
+{
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+
+  if (GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk)
+    GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk (context);
 }
