@@ -81,7 +81,7 @@ free_sorter (gpointer data)
  *   }
  * ```
  *
- * `GtkColumnViewSorter` was added in GTK 4.10
+ * Since: 4.10
  */
 struct _GtkColumnViewSorter
 {
