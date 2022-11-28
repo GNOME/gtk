@@ -192,26 +192,13 @@ item_activated (GtkGridView       *view,
   set_image (win->image5, name, 32);
   set_image (win->image6, name, 48);
   set_image (win->image7, name, 64);
+  gtk_widget_set_visible (win->image8, symbolic);
+  gtk_widget_set_visible (win->label8, symbolic);
   if (symbolic)
-    {
-      gtk_widget_show (win->image8);
-      gtk_widget_show (win->label8);
-      set_image (win->image8, name, 64);
-    }
-  else
-    {
-      gtk_widget_hide (win->image8);
-      gtk_widget_hide (win->label8);
-    }
+    set_image (win->image8, name, 64);
+  gtk_widget_set_visible (win->description, description && description[0]);
   if (description && description[0])
-    {
-      gtk_label_set_text (GTK_LABEL (win->description), description);
-      gtk_widget_show (win->description);
-    }
-  else
-    {
-      gtk_widget_hide (win->description);
-    }
+    gtk_label_set_text (GTK_LABEL (win->description), description);
 
   gtk_window_present (GTK_WINDOW (win->details));
 
