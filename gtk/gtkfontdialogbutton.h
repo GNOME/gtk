@@ -55,6 +55,8 @@ void             gtk_font_dialog_button_set_dialog       (GtkFontDialogButton *s
  * Depending on this value, the `PangoFontDescription` that
  * is returned by [method@Gtk.FontDialogButton.get_font_desc]
  * will have more or less fields set.
+ *
+ * Since: 4.10
  */
 typedef enum
 {
