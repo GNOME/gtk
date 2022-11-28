@@ -427,7 +427,7 @@ edit_constraint (ConstraintEditorWindow *win,
 
   g_signal_connect (editor, "done", G_CALLBACK (constraint_editor_done), win);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -460,7 +460,7 @@ edit_guide (ConstraintEditorWindow *win,
   gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (editor));
 
   g_signal_connect (editor, "done", G_CALLBACK (guide_editor_done), win);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
