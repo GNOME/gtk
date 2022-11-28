@@ -2660,6 +2660,8 @@ gtk_widget_pop_paintables (GtkWidget *widget)
  * When a toplevel container is shown, it is immediately realized and
  * mapped; other shown widgets are realized and mapped when their
  * toplevel container is realized and mapped.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.set_visible] instead
  */
 void
 gtk_widget_show (GtkWidget *widget)
@@ -2726,6 +2728,8 @@ gtk_widget_real_show (GtkWidget *widget)
  * Reverses the effects of gtk_widget_show().
  *
  * This is causing the widget to be hidden (invisible to the user).
+ *
+ * Deprecated: 4.10: Use [method@Gtk.Widget.set_visible] instead
  */
 void
 gtk_widget_hide (GtkWidget *widget)

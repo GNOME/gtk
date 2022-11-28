@@ -269,9 +269,9 @@ GDK_AVAILABLE_IN_ALL
 GType      gtk_widget_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_unparent            (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gtk_widget_set_visible or gtk_window_present)
 void       gtk_widget_show                (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gtk_widget_set_visible)
 void       gtk_widget_hide                (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_map                 (GtkWidget           *widget);
