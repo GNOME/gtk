@@ -626,7 +626,10 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
 static const char *
 object_get_id (GObject *object)
 {
-  return g_object_get_data (object, "gtk-builder-id");
+  if (GTK_IS_BUILDABLE (object))
+    return gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
+  else
+    return g_object_get_data (object, "gtk-builder-id");
 }
 
 static GObject *
@@ -669,7 +672,10 @@ static inline void
 object_set_id (GObject     *object,
                  const char *id)
 {
-  g_object_set_data_full (object, "gtk-builder-id", g_strdup (id), g_free);
+  if (GTK_IS_BUILDABLE (object))
+    gtk_buildable_set_buildable_id (GTK_BUILDABLE (object), id);
+  else
+    g_object_set_data_full (object, "gtk-builder-id", g_strdup (id), g_free);
 }
 
 void
