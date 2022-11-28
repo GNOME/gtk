@@ -3997,7 +3997,7 @@ gtk_flow_box_bound_model_changed (GListModel *list,
       if (g_object_is_floating (widget))
         g_object_ref_sink (widget);
 
-      gtk_widget_show (widget);
+      gtk_widget_set_visible (widget, TRUE);
       gtk_flow_box_insert (box, widget, position + i);
 
       g_object_unref (widget);

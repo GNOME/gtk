@@ -184,7 +184,7 @@ update_window_icon (GtkWindow *window,
     {
       gtk_image_set_from_paintable (GTK_IMAGE (icon), paintable);
       g_object_unref (paintable);
-      gtk_widget_show (icon);
+      gtk_widget_set_visible (icon, TRUE);
 
       return TRUE;
     }

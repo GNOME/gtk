@@ -576,7 +576,7 @@ dialog_response_cb (GtkDialog *dialog,
   GtkFileChooserNative *self = data;
 
   g_signal_handlers_disconnect_by_func (self->dialog, dialog_response_cb, self);
-  gtk_widget_hide (self->dialog);
+  gtk_widget_set_visible (self->dialog, FALSE);
 
   _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), response_id);
 }
@@ -622,7 +622,7 @@ static void
 hide_dialog (GtkFileChooserNative *self)
 {
   g_signal_handlers_disconnect_by_func (self->dialog, dialog_response_cb, self);
-  gtk_widget_hide (self->dialog);
+  gtk_widget_set_visible (self->dialog, FALSE);
 }
 
 static gboolean

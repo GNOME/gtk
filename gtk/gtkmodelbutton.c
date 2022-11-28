@@ -760,9 +760,9 @@ gtk_model_button_set_iconic (GtkModelButton *self,
   self->iconic = iconic;
 
   widget_node = gtk_widget_get_css_node (widget);
+  gtk_widget_set_visible (self->start_box, !iconic);
   if (iconic)
     {
-      gtk_widget_hide (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
       gtk_widget_add_css_class (widget, "model");
       gtk_widget_add_css_class (widget, "image-button");
@@ -770,7 +770,6 @@ gtk_model_button_set_iconic (GtkModelButton *self,
     }
   else
     {
-      gtk_widget_show (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("modelbutton"));
       gtk_widget_remove_css_class (widget, "model");
       gtk_widget_remove_css_class (widget, "image-button");

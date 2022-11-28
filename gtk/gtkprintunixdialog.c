@@ -1235,7 +1235,6 @@ wrap_in_frame (const char *label,
   label_widget = gtk_label_new (NULL);
   gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
   gtk_widget_set_valign (label_widget, GTK_ALIGN_CENTER);
-  gtk_widget_show (label_widget);
 
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
   gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
@@ -1274,7 +1273,6 @@ add_option_to_extension_point (GtkPrinterOption *option,
   GtkWidget *widget;
 
   widget = gtk_printer_option_widget_new (option);
-  gtk_widget_show (widget);
 
   if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
     {
@@ -1283,7 +1281,7 @@ add_option_to_extension_point (GtkPrinterOption *option,
       gtk_widget_set_valign (widget, GTK_ALIGN_BASELINE);
 
       label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
-      gtk_widget_show (label);
+      gtk_widget_set_visible (label, TRUE);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
@@ -1292,7 +1290,6 @@ add_option_to_extension_point (GtkPrinterOption *option,
       gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
       gtk_box_append (GTK_BOX (hbox), label);
       gtk_box_append (GTK_BOX (hbox), widget);
-      gtk_widget_show (hbox);
 
       gtk_box_append (GTK_BOX (extension_point), hbox);
     }
@@ -1346,12 +1343,11 @@ add_option_to_table (GtkPrinterOption *option,
   row = grid_rows (table);
 
   widget = gtk_printer_option_widget_new (option);
-  gtk_widget_show (widget);
 
   if (gtk_printer_option_widget_has_external_label (GTK_PRINTER_OPTION_WIDGET (widget)))
     {
       label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
-      gtk_widget_show (label);
+      gtk_widget_set_visible (label, TRUE);
 
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
@@ -1377,10 +1373,7 @@ setup_page_table (GtkPrinterOptionSet *options,
                                            table);
 
   nrows = grid_rows (GTK_GRID (table));
-  if (nrows == 0)
-    gtk_widget_hide (page);
-  else
-    gtk_widget_show (page);
+  gtk_widget_set_visible (page, nrows > 0);
 }
 
 static void
@@ -1471,11 +1464,11 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   if (dialog->current_printer == NULL)
     {
        clear_per_printer_ui (dialog);
-       gtk_widget_hide (dialog->job_page);
-       gtk_widget_hide (dialog->advanced_page);
-       gtk_widget_hide (dialog->image_quality_page);
-       gtk_widget_hide (dialog->finishing_page);
-       gtk_widget_hide (dialog->color_page);
+       gtk_widget_set_visible (dialog->job_page, FALSE);
+       gtk_widget_set_visible (dialog->advanced_page, FALSE);
+       gtk_widget_set_visible (dialog->image_quality_page, FALSE);
+       gtk_widget_set_visible (dialog->finishing_page, FALSE);
+       gtk_widget_set_visible (dialog->color_page, FALSE);
        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 
        return;
@@ -1495,10 +1488,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   has_job |= setup_option (dialog, "gtk-cover-after", dialog->cover_after);
   has_job |= setup_print_at (dialog);
 
-  if (has_job)
-    gtk_widget_show (dialog->job_page);
-  else
-    gtk_widget_hide (dialog->job_page);
+  gtk_widget_set_visible (dialog->job_page, has_job);
 
   setup_page_table (dialog->options,
                     "ImageQualityPage",
@@ -1567,10 +1557,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
         }
     }
 
-  if (has_advanced)
-    gtk_widget_show (dialog->advanced_page);
-  else
-    gtk_widget_hide (dialog->advanced_page);
+  gtk_widget_set_visible (dialog->advanced_page, has_advanced);
 
   g_list_free_full (groups, g_free);
 }
@@ -1762,10 +1749,7 @@ mark_conflicts (GtkPrintUnixDialog *dialog)
       g_signal_handler_unblock (dialog->options, dialog->options_changed_handler);
     }
 
-  if (have_conflict)
-    gtk_widget_show (dialog->conflicts_widget);
-  else
-    gtk_widget_hide (dialog->conflicts_widget);
+  gtk_widget_set_visible (dialog->conflicts_widget, have_conflict);
 }
 
 static gboolean
@@ -3377,8 +3361,8 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
 {
   gtk_notebook_insert_page (GTK_NOTEBOOK (dialog->notebook),
                             child, tab_label, 2);
-  gtk_widget_show (child);
-  gtk_widget_show (tab_label);
+  gtk_widget_set_visible (child, TRUE);
+  gtk_widget_set_visible (tab_label, TRUE);
 }
 
 /**
@@ -3449,16 +3433,8 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
 
       if (dialog->selection_radio)
         {
-          if (support_selection)
-            {
-              gtk_widget_set_sensitive (dialog->selection_radio, dialog->has_selection);
-              gtk_widget_show (dialog->selection_radio);
-            }
-          else
-            {
-              gtk_widget_set_sensitive (dialog->selection_radio, FALSE);
-              gtk_widget_hide (dialog->selection_radio);
-            }
+          gtk_widget_set_visible (dialog->selection_radio, support_selection);
+          gtk_widget_set_sensitive (dialog->selection_radio, support_selection && dialog->has_selection);
         }
 
       g_object_notify (G_OBJECT (dialog), "support-selection");

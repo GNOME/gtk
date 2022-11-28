@@ -201,7 +201,7 @@ gtk_popover_item_activate (GtkWidget *button,
 
   if (popover != NULL)
     {
-      gtk_widget_hide (popover);
+      gtk_widget_set_visible (popover, FALSE);
       g_object_unref (popover);
     }
 }

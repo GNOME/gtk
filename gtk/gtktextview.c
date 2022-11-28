@@ -2041,7 +2041,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_popover_set_child (GTK_POPOVER (priv->magnifier_popover), priv->magnifier);
-  gtk_widget_show (priv->magnifier);
+  gtk_widget_set_visible (priv->magnifier, TRUE);
 }
 
 /**
@@ -5204,14 +5204,14 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
        */
-      gtk_widget_hide (GTK_WIDGET (handle));
+      gtk_widget_set_visible (GTK_WIDGET (handle), FALSE);
     }
   else
     {
       GtkTextDirection dir = GTK_TEXT_DIR_LTR;
       GtkTextAttributes attributes = { 0 };
 
-      gtk_widget_show (GTK_WIDGET (handle));
+      gtk_widget_set_visible (GTK_WIDGET (handle), TRUE);
 
       rect.x = CLAMP (x, 0, SCREEN_WIDTH (text_view));
       rect.y = CLAMP (y, 0, SCREEN_HEIGHT (text_view));
@@ -5406,9 +5406,9 @@ gtk_text_view_update_handles (GtkTextView *text_view)
   if (!priv->text_handles_enabled)
     {
       if (priv->text_handles[TEXT_HANDLE_CURSOR])
-	gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+	gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]), FALSE);
       if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
-	gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+	gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]), FALSE);
     }
   else
     {
@@ -5423,7 +5423,7 @@ gtk_text_view_update_handles (GtkTextView *text_view)
       if (gtk_text_iter_compare (&cursor, &bound) == 0 && priv->editable)
         {
           /* Cursor mode */
-          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+          gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]), FALSE);
 
           gtk_text_view_set_handle_position (text_view,
                                              priv->text_handles[TEXT_HANDLE_CURSOR],
@@ -5448,8 +5448,8 @@ gtk_text_view_update_handles (GtkTextView *text_view)
         }
       else
         {
-          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
-          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+          gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]), FALSE);
+          gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]), FALSE);
         }
     }
 }
@@ -7558,7 +7558,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
     }
 
   if (priv->magnifier_popover)
-    gtk_widget_hide (priv->magnifier_popover);
+    gtk_widget_set_visible (priv->magnifier_popover, FALSE);
 
   if (!drag_gesture_get_text_surface_coords (gesture, text_view,
                                              &start_x, &start_y, &x, &y))
@@ -7686,7 +7686,7 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
     }
 
   if (priv->magnifier_popover)
-    gtk_widget_hide (priv->magnifier_popover);
+    gtk_widget_set_visible (priv->magnifier_popover, FALSE);
 
   return TRUE;
 }
@@ -8419,7 +8419,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
         {
           if (priv->selection_bubble)
-            gtk_widget_hide (priv->selection_bubble);
+            gtk_widget_set_visible (priv->selection_bubble, FALSE);
         }
     }
 
@@ -8793,7 +8793,7 @@ hide_selection_bubble (GtkTextView *text_view)
   GtkTextViewPrivate *priv = text_view->priv;
 
   if (priv->selection_bubble && gtk_widget_get_visible (priv->selection_bubble))
-    gtk_widget_hide (priv->selection_bubble);
+    gtk_widget_set_visible (priv->selection_bubble, FALSE);
 }
 
 static void
@@ -9273,7 +9273,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   rect.height += 10;
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
-  gtk_widget_show (priv->selection_bubble);
+  gtk_widget_set_visible (priv->selection_bubble, TRUE);
 
   return G_SOURCE_REMOVE;
 }
@@ -9286,7 +9286,7 @@ gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view)
   priv = text_view->priv;
 
   if (priv->selection_bubble)
-    gtk_widget_hide (priv->selection_bubble);
+    gtk_widget_set_visible (priv->selection_bubble, FALSE);
 
   if (priv->selection_bubble_timeout_id)
     {

@@ -956,7 +956,6 @@ gtk_expander_set_label (GtkExpander *expander,
       child = gtk_label_new (label);
       gtk_label_set_use_underline (GTK_LABEL (child), expander->use_underline);
       gtk_label_set_use_markup (GTK_LABEL (child), expander->use_markup);
-      gtk_widget_show (child);
 
       gtk_expander_set_label_widget (expander, child);
     }

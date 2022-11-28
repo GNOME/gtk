@@ -120,7 +120,7 @@
  *   button = gtk_spin_button_new (adjustment, 1.0, 0);
  *   gtk_window_set_child (GTK_WINDOW (window), button);
  *
- *   gtk_widget_show (window);
+ *   gtk_window_present (GTK_WINDOW (window));
  * }
  * ```
  *
@@ -151,7 +151,7 @@
  *   button = gtk_spin_button_new (adjustment, 0.001, 3);
  *   gtk_window_set_child (GTK_WINDOW (window), button);
  *
- *   gtk_widget_show (window);
+ *   gtk_window_present (GTK_WINDOW (window));
  * }
  * ```
  *

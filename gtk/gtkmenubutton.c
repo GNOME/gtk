@@ -283,7 +283,7 @@ gtk_menu_button_state_flags_changed (GtkWidget    *widget,
   if (!gtk_widget_is_sensitive (widget))
     {
       if (self->popover)
-        gtk_widget_hide (self->popover);
+        gtk_widget_set_visible (self->popover, FALSE);
     }
 }
 
@@ -572,10 +572,7 @@ set_arrow_type (GtkWidget    *arrow,
       break;
     }
 
-  if (visible)
-    gtk_widget_show (arrow);
-  else
-    gtk_widget_hide (arrow);
+  gtk_widget_set_visible (arrow, visible);
 }
 
 static void
@@ -917,8 +914,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 
   if (menu_button->popover)
     {
-      if (gtk_widget_get_visible (menu_button->popover))
-        gtk_widget_hide (menu_button->popover);
+      gtk_widget_set_visible (menu_button->popover, FALSE);
 
       g_signal_handlers_disconnect_by_func (menu_button->popover,
                                             menu_deactivate_cb,

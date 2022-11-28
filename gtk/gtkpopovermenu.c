@@ -210,7 +210,7 @@ gtk_popover_menu_close_submenus (GtkPopoverMenu *menu)
   if (submenu)
     {
       gtk_popover_menu_close_submenus (GTK_POPOVER_MENU (submenu));
-      gtk_widget_hide (submenu);
+      gtk_widget_set_visible (submenu, FALSE);
       gtk_popover_menu_set_open_submenu (menu, NULL);
     }
 }

@@ -1416,8 +1416,8 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
       gtk_box_append (GTK_BOX (plug), op->priv->custom_widget);
-      gtk_widget_show (op->priv->custom_widget);
-      gtk_widget_show (plug);
+      gtk_widget_set_visible (op->priv->custom_widget, TRUE);
+      gtk_widget_set_visible (plug, TRUE);
 
       /* This dialog is modal, so we grab the embed widget */
       gtk_grab_add (plug);

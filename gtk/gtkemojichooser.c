@@ -380,7 +380,7 @@ add_recent_item (GtkEmojiChooser *chooser,
   add_emoji (chooser->recent.box, TRUE, item, modifier, chooser);
 
   /* Enable recent */
-  gtk_widget_show (chooser->recent.box);
+  gtk_widget_set_visible (chooser->recent.box, TRUE);
   gtk_widget_set_sensitive (chooser->recent.button, TRUE);
 
   g_settings_set_value (chooser->settings, "recent-emoji", g_variant_builder_end (&builder));

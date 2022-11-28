@@ -639,15 +639,9 @@ bind_value_widgets (GtkSignalListItemFactory *factory,
   label = gtk_widget_get_first_child (box);
   picture = gtk_widget_get_next_sibling (label);
   gtk_label_set_text (GTK_LABEL (label), property->value);
+  gtk_widget_set_visible (picture, property->texture != NULL);
   if (property->texture)
-    {
-      gtk_widget_show (picture);
-      gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (property->texture));
-    }
-  else
-    {
-      gtk_widget_hide (picture);
-    }
+    gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (property->texture));
 }
 
 static GskRenderNode *

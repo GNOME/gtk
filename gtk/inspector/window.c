@@ -276,8 +276,6 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 
       gtk_stack_add_titled (GTK_STACK (iw->top_stack), widget, name, title);
       gtk_stack_add_named (GTK_STACK (iw->button_stack), button, name);
-      gtk_widget_show (widget);
-      gtk_widget_show (button);
 
       g_free (title);
     }
@@ -947,7 +945,7 @@ update_go_buttons (GtkInspectorWindow *iw)
       update_go_button (iw->go_next_button,
                         GTK_IS_WIDGET (object) && gtk_widget_get_next_sibling (GTK_WIDGET (object)) != NULL,
                         "Next sibling");
-      gtk_widget_hide (iw->list_position_label);
+      gtk_widget_set_visible (iw->list_position_label, FALSE);
       break;
     case CHILD_KIND_LISTITEM:
       update_go_button (iw->go_down_button, FALSE, NULL);
@@ -957,7 +955,7 @@ update_go_buttons (GtkInspectorWindow *iw)
         char *text = g_strdup_printf ("%u", position);
         gtk_label_set_label (GTK_LABEL (iw->list_position_label), text);
         g_free (text);
-        gtk_widget_show (iw->list_position_label);
+        gtk_widget_set_visible (iw->list_position_label, TRUE);
       }
       break;
     case CHILD_KIND_PROPERTY:
@@ -966,7 +964,7 @@ update_go_buttons (GtkInspectorWindow *iw)
       update_go_button (iw->go_down_button, FALSE, NULL);
       update_go_button (iw->go_previous_button, FALSE, NULL);
       update_go_button (iw->go_next_button, FALSE, NULL);
-      gtk_widget_hide (iw->list_position_label);
+      gtk_widget_set_visible (iw->list_position_label, FALSE);
       break;
     default:
       g_assert_not_reached ();

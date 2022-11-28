@@ -747,7 +747,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   gtk_tooltip_position (tooltip, display, tooltip_widget, device);
 
-  gtk_widget_show (GTK_WIDGET (tooltip->window));
+  gtk_widget_set_visible (GTK_WIDGET (tooltip->window), TRUE);
 
   /* Now a tooltip is visible again on the display, make sure browse
    * mode is enabled.
@@ -793,7 +793,7 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
     }
 
   if (tooltip->window)
-    gtk_widget_hide (tooltip->window);
+    gtk_widget_set_visible (tooltip->window, FALSE);
 }
 
 static int

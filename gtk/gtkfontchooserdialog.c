@@ -154,10 +154,9 @@ update_tweak_button (GtkFontChooserDialog *dialog)
     return;
 
   g_object_get (dialog->fontchooser, "level", &level, NULL);
-  if ((level & (GTK_FONT_CHOOSER_LEVEL_FEATURES | GTK_FONT_CHOOSER_LEVEL_VARIATIONS)) != 0)
-    gtk_widget_show (dialog->tweak_button);
-  else
-    gtk_widget_hide (dialog->tweak_button);
+  gtk_widget_set_visible (dialog->tweak_button,
+                          (level & (GTK_FONT_CHOOSER_LEVEL_FEATURES |
+                                    GTK_FONT_CHOOSER_LEVEL_VARIATIONS)) != 0);
 }
 
 static void

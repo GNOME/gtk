@@ -285,15 +285,9 @@ gtk_shortcuts_shortcut_set_icon (GtkShortcutsShortcut *self,
 static void
 update_visible_from_direction (GtkShortcutsShortcut *self)
 {
-  if (self->direction == GTK_TEXT_DIR_NONE ||
-      self->direction == gtk_widget_get_direction (GTK_WIDGET (self)))
-    {
-      gtk_widget_show (GTK_WIDGET (self));
-    }
-  else
-    {
-      gtk_widget_hide (GTK_WIDGET (self));
-    }
+  gtk_widget_set_visible (GTK_WIDGET (self),
+                          self->direction == GTK_TEXT_DIR_NONE ||
+                          self->direction == gtk_widget_get_direction (GTK_WIDGET (self)));
 }
 
 static void

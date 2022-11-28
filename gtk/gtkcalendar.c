@@ -752,7 +752,7 @@ gtk_calendar_init (GtkCalendar *calendar)
       gtk_grid_attach (GTK_GRID (calendar->grid), label, 0, 1 + i, 1, 1);
 
       calendar->week_number_labels[i] = label;
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
     }
 
   {

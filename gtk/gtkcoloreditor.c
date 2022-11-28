@@ -184,7 +184,7 @@ dismiss_current_popup (GtkColorEditor *editor)
 {
   if (editor->current_popup)
     {
-      gtk_widget_hide (editor->current_popup);
+      gtk_widget_set_visible (editor->current_popup, FALSE);
       editor->current_popup = NULL;
       editor->popup_position = 0;
       if (editor->popdown_focus)
@@ -245,7 +245,7 @@ popup_edit (GtkWidget  *widget,
       g_set_object (&editor->popdown_focus, gtk_root_get_focus (root));
       editor->current_popup = popup;
       editor->popup_position = position;
-      gtk_widget_show (popup);
+      gtk_widget_set_visible (popup, TRUE);
       gtk_widget_grab_focus (focus);
     }
 }
@@ -432,8 +432,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_widget_remove_css_class (editor->swatch, "activatable");
 
   editor->picker = gtk_color_picker_new ();
-  if (editor->picker == NULL)
-    gtk_widget_hide (editor->picker_button);
+  gtk_widget_set_visible (editor->picker_button, editor->picker != NULL);
 }
 
 static void

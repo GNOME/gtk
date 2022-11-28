@@ -2289,7 +2289,7 @@ gtk_popover_popup (GtkPopover *popover)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
-  gtk_widget_show (GTK_WIDGET (popover));
+  gtk_widget_set_visible (GTK_WIDGET (popover), TRUE);
 }
 
 static void
@@ -2308,7 +2308,7 @@ cascade_popdown (GtkPopover *popover)
       if (GTK_IS_POPOVER (parent))
         {
           if (gtk_popover_get_cascade_popdown (GTK_POPOVER (parent)))
-            gtk_widget_hide (parent);
+            gtk_widget_set_visible (parent, FALSE);
           else
             break;
         }
@@ -2331,7 +2331,7 @@ gtk_popover_popdown (GtkPopover *popover)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
-  gtk_widget_hide (GTK_WIDGET (popover));
+  gtk_widget_set_visible (GTK_WIDGET (popover), FALSE);
 
   cascade_popdown (popover);
 }

@@ -1473,7 +1473,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                           "css-name", "header",
                                           NULL);
   gtk_widget_add_css_class (notebook->header_widget, "top");
-  gtk_widget_hide (notebook->header_widget);
+  gtk_widget_set_visible (notebook->header_widget, FALSE);
   gtk_widget_set_parent (notebook->header_widget, GTK_WIDGET (notebook));
 
   notebook->tabs_widget = gtk_gizmo_new_with_role ("tabs",
@@ -2169,7 +2169,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
           vis_pages++;
 
           if (!gtk_widget_get_visible (page->tab_label))
-            gtk_widget_show (page->tab_label);
+            gtk_widget_set_visible (page->tab_label, TRUE);
 
           gtk_widget_measure (page->tab_widget,
                               GTK_ORIENTATION_HORIZONTAL,
@@ -2200,7 +2200,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
             }
         }
       else if (gtk_widget_get_visible (page->tab_label))
-        gtk_widget_hide (page->tab_label);
+        gtk_widget_set_visible (page->tab_label, FALSE);
     }
 
   children = notebook->children;
@@ -4070,10 +4070,8 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
 
   if (page->tab_label)
     {
-      if (notebook->show_tabs && gtk_widget_get_visible (page->child))
-        gtk_widget_show (page->tab_label);
-      else
-        gtk_widget_hide (page->tab_label);
+      gtk_widget_set_visible (page->tab_label,
+                              notebook->show_tabs && gtk_widget_get_visible (page->child));
 
     page->mnemonic_activate_signal =
       g_signal_connect (page->tab_label,
@@ -5606,7 +5604,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   g_signal_connect (menu_item, "clicked",
                     G_CALLBACK (gtk_notebook_menu_switch_page), page);
   if (!gtk_widget_get_visible (page->child))
-    gtk_widget_hide (menu_item);
+    gtk_widget_set_visible (menu_item, FALSE);
 }
 
 static void
@@ -6164,16 +6162,14 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
               page->tab_label = NULL;
             }
           else
-            gtk_widget_hide (page->tab_label);
+            gtk_widget_set_visible (page->tab_label, FALSE);
         }
-
-      gtk_widget_hide (notebook->header_widget);
     }
   else
     {
       gtk_notebook_update_labels (notebook);
-      gtk_widget_show (notebook->header_widget);
     }
+  gtk_widget_set_visible (notebook->header_widget, show_tabs);
 
   for (i = 0; i < N_ACTION_WIDGETS; i++)
     {
@@ -6557,7 +6553,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 
   if (notebook->show_tabs && gtk_widget_get_visible (child))
     {
-      gtk_widget_show (page->tab_label);
+      gtk_widget_set_visible (page->tab_label, TRUE);
       gtk_widget_queue_resize (GTK_WIDGET (notebook));
     }
 

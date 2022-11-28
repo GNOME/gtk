@@ -360,7 +360,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_valign (bar->close_button, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (bar->close_button, "close");
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (bar->box_center), bar->close_button);
-  gtk_widget_hide (bar->close_button);
+  gtk_widget_set_visible (bar->close_button, FALSE);
 
   gtk_revealer_set_child (GTK_REVEALER (bar->revealer), bar->box_center);
 

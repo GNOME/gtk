@@ -628,10 +628,9 @@ update_font_info (GtkFontDialogButton *self)
 
       gtk_label_set_text (GTK_LABEL (self->size_label), size);
       g_free (size);
-      gtk_widget_show (self->font_size_box);
     }
-  else
-    gtk_widget_hide (self->font_size_box);
+
+  gtk_widget_set_visible (self->font_size_box, self->level >= GTK_FONT_LEVEL_FONT);
 }
 
 static void

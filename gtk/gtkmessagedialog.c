@@ -232,14 +232,14 @@ gtk_message_dialog_set_property (GObject      *object,
           {
             priv->has_secondary_text = TRUE;
             gtk_widget_add_css_class (priv->label, "title");
-            gtk_widget_show (priv->secondary_label);
           }
         else
           {
             priv->has_secondary_text = FALSE;
             gtk_widget_remove_css_class (priv->label, "title");
-            gtk_widget_hide (priv->secondary_label);
           }
+
+        gtk_widget_set_visible (priv->secondary_label, priv->has_secondary_text);
       }
       break;
     case PROP_SECONDARY_USE_MARKUP:
@@ -329,10 +329,9 @@ gtk_message_dialog_constructed (GObject *object)
       GtkWidget *label;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_widget_show (box);
       gtk_widget_set_size_request (box, -1, 16);
       label = gtk_label_new ("");
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
       gtk_widget_set_margin_top (label, 6);
       gtk_widget_set_margin_bottom (label, 6);
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
@@ -655,7 +654,6 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_widget_show (priv->secondary_label);
       gtk_label_set_text (GTK_LABEL (priv->secondary_label), msg);
 
       g_free (msg);
@@ -664,8 +662,9 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
     {
       priv->has_secondary_text = FALSE;
       gtk_widget_remove_css_class (priv->label, "title");
-      gtk_widget_hide (priv->secondary_label);
     }
+
+  gtk_widget_set_visible (priv->secondary_label, priv->has_secondary_text);
 }
 
 /**
@@ -714,7 +713,6 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_widget_show (priv->secondary_label);
       gtk_label_set_markup (GTK_LABEL (priv->secondary_label), msg);
 
       g_free (msg);
@@ -723,8 +721,9 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
     {
       priv->has_secondary_text = FALSE;
       gtk_widget_remove_css_class (priv->label, "title");
-      gtk_widget_hide (priv->secondary_label);
     }
+
+  gtk_widget_set_visible (priv->secondary_label, priv->has_secondary_text);
 }
 
 /**

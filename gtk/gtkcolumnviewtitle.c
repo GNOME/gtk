@@ -319,7 +319,7 @@ gtk_column_view_title_update_sort (GtkColumnViewTitle *self)
       primary = gtk_column_view_sorter_get_primary_sort_column (view_sorter);
       sort_order = gtk_column_view_sorter_get_primary_sort_order (view_sorter);
 
-      gtk_widget_show (self->sort);
+      gtk_widget_set_visible (self->sort, TRUE);
       gtk_widget_remove_css_class (self->sort, "ascending");
       gtk_widget_remove_css_class (self->sort, "descending");
       gtk_widget_remove_css_class (self->sort, "unsorted");
@@ -332,7 +332,7 @@ gtk_column_view_title_update_sort (GtkColumnViewTitle *self)
         gtk_widget_add_css_class (self->sort, "ascending");
     }
   else
-    gtk_widget_hide (self->sort);
+    gtk_widget_set_visible (self->sort, FALSE);
 }
 
 GtkColumnViewColumn *
