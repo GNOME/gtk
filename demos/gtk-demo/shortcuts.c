@@ -21,7 +21,6 @@ show_shortcuts (GtkWidget   *window,
   overlay = GTK_WIDGET (gtk_builder_get_object (builder, id));
   gtk_window_set_transient_for (GTK_WINDOW (overlay), GTK_WINDOW (window));
   g_object_set (overlay, "view-name", view, NULL);
-  gtk_widget_show (overlay);
   g_object_unref (builder);
 }
 
@@ -95,7 +94,7 @@ do_shortcuts (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

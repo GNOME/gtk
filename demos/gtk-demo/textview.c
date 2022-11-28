@@ -523,7 +523,7 @@ do_textview (GtkWidget *do_widget)
 
   if (!gtk_widget_get_visible (window))
     {
-      gtk_widget_show (window);
+      gtk_widget_set_visible (window, TRUE);
     }
   else
     {
@@ -606,5 +606,5 @@ easter_egg_callback (GtkWidget *button,
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }

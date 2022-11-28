@@ -63,11 +63,10 @@ do_links (GtkWidget *do_widget)
       gtk_widget_set_margin_top (label, 20);
       gtk_widget_set_margin_bottom (label, 20);
       gtk_window_set_child (GTK_WINDOW (window), label);
-      gtk_widget_show (label);
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

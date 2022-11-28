@@ -57,7 +57,7 @@ show_action_infobar (GSimpleAction *action,
   text = g_strdup_printf ("You activated radio action: \"%s\".\n"
                           "Current value: %s", name, value);
   gtk_label_set_text (GTK_LABEL (window->message), text);
-  gtk_widget_show (window->infobar);
+  gtk_widget_set_visible (window->infobar, TRUE);
   g_free (text);
 }
 
@@ -295,7 +295,7 @@ static GActionEntry win_entries[] = {
 static void
 clicked_cb (GtkWidget *widget, DemoApplicationWindow *window)
 {
-  gtk_widget_hide (window->infobar);
+  gtk_widget_set_visible (window->infobar, FALSE);
 }
 
 static void

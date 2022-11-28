@@ -164,14 +164,14 @@ strings_bind_item (GtkSignalListItemFactory *factory,
   popup = gtk_widget_get_ancestor (title, GTK_TYPE_POPOVER);
   if (popup && gtk_widget_is_ancestor (popup, GTK_WIDGET (dropdown)))
     {
-      gtk_widget_show (checkmark);
+      gtk_widget_set_visible (checkmark, TRUE);
       g_signal_connect (dropdown, "notify::selected-item",
                         G_CALLBACK (selected_item_changed), item);
       selected_item_changed (dropdown, NULL, item);
     }
   else
     {
-      gtk_widget_hide (checkmark);
+      gtk_widget_set_visible (checkmark, FALSE);
     }
 }
 
@@ -563,7 +563,7 @@ do_dropdown (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

@@ -42,12 +42,12 @@ mode_switch_state_set (GtkSwitch *sw,
   if (!state ||
       (gtk_range_get_value (GTK_RANGE (scale)) > 50))
     {
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
       gtk_switch_set_state (sw, state);
     }
   else
     {
-      gtk_widget_show (label);
+      gtk_widget_set_visible (label, TRUE);
     }
 
   return TRUE;
@@ -65,7 +65,7 @@ level_scale_value_changed (GtkRange *range,
       !gtk_switch_get_state (GTK_SWITCH (sw)) &&
       (gtk_range_get_value (range) > 50))
     {
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
       gtk_switch_set_state (GTK_SWITCH (sw), TRUE);
     }
   else if (gtk_switch_get_state (GTK_SWITCH (sw)) &&
@@ -113,7 +113,7 @@ do_errorstates (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

@@ -294,13 +294,11 @@ do_search_entry (GtkWidget *do_widget)
       g_signal_connect (find_button, "clicked",
                         G_CALLBACK (start_search), entry);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), find_button, NULL);
-      gtk_widget_show (find_button);
 
       cancel_button = gtk_button_new_with_label ("Cancel");
       g_signal_connect (cancel_button, "clicked",
                         G_CALLBACK (stop_search), NULL);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), cancel_button, NULL);
-      gtk_widget_show (cancel_button);
 
       /* Set up the search icon */
       gtk_entry_set_icon_activatable (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
@@ -314,7 +312,7 @@ do_search_entry (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     {
       g_clear_object (&actions);

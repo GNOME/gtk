@@ -140,7 +140,6 @@ create_page3 (GtkWidget *assistant)
 
   label = gtk_label_new ("This is a confirmation page, press 'Apply' to apply changes");
 
-  gtk_widget_show (label);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), label);
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), label, GTK_ASSISTANT_PAGE_CONFIRM);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
@@ -157,7 +156,6 @@ create_page4 (GtkWidget *assistant)
   gtk_widget_set_margin_start (progress_bar, 40);
   gtk_widget_set_margin_end (progress_bar, 40);
 
-  gtk_widget_show (progress_bar);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), progress_bar);
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), progress_bar, GTK_ASSISTANT_PAGE_PROGRESS);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), progress_bar, "Applying changes");
@@ -199,7 +197,7 @@ do_assistant (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (assistant))
-    gtk_widget_show (assistant);
+    gtk_widget_set_visible (assistant, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (assistant));
 

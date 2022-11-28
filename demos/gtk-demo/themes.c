@@ -88,7 +88,7 @@ warning_closed (GtkDialog *warning,
   GtkWidget *window;
   GtkWidget *button;
 
-  gtk_widget_hide (GTK_WIDGET (warning));
+  gtk_widget_set_visible (GTK_WIDGET (warning), FALSE);
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (data), GTK_TYPE_WINDOW);
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "button"));
@@ -130,7 +130,7 @@ do_themes (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 
