@@ -106,7 +106,7 @@ activate (GApplication *app,
   gtk_widget_set_halign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
   gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_START);
   gtk_window_set_child (GTK_WINDOW (window), button);
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   g_object_unref (button_menu);
   g_object_unref (doc_actions);

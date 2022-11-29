@@ -164,7 +164,7 @@ activate (GtkApplication *app,
 
   g_signal_connect (press, "pressed", G_CALLBACK (pressed), drawing_area);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 int

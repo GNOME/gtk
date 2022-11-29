@@ -2,7 +2,7 @@
 
 static void
 activate_cb (GtkApplication *app,
-    gpointer user_data)
+             gpointer        user_data)
 {
   GtkWidget *window;
   GtkWidget *search_bar;
@@ -11,12 +11,11 @@ activate_cb (GtkApplication *app,
   GtkWidget *menu_button;
 
   window = gtk_application_window_new (app);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   search_bar = gtk_search_bar_new ();
   gtk_widget_set_valign (search_bar, GTK_ALIGN_START);
   gtk_window_set_child (GTK_WINDOW (window), search_bar);
-  gtk_widget_show (search_bar);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_search_bar_set_child (GTK_SEARCH_BAR (search_bar), box);
