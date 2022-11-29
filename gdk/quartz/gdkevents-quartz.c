@@ -388,7 +388,7 @@ get_window_point_from_screen_point (GdkWindow *window,
   NSPoint point;
   GdkQuartzNSWindow *nswindow;
 
-  nswindow = gdk_quartz_window_get_nswindow (window);
+  nswindow = (GdkQuartzNSWindow*)gdk_quartz_window_get_nswindow (window);
   point = [nswindow convertPointFromScreen:screen_point];
   *x = point.x;
   *y = window->height - point.y;
@@ -793,12 +793,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
       if (toplevel_under_pointer
           && WINDOW_IS_TOPLEVEL (toplevel_under_pointer))
         {
-          GdkWindowImplQuartz *toplevel_impl;
-
           toplevel = toplevel_under_pointer;
-
-          toplevel_impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
-
           *x = x_tmp;
           *y = y_tmp;
         }
@@ -1140,9 +1135,6 @@ fill_scroll_event (GdkWindow          *window,
                    GdkScrollDirection  direction)
 {
   GdkSeat *seat = gdk_display_get_default_seat (_gdk_display);
-  NSPoint point;
-
-  point = [nsevent locationInWindow];
 
   event->any.type = GDK_SCROLL;
   event->scroll.window = window;

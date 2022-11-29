@@ -515,14 +515,12 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
 
 -(void)createBackingStoreWithWidth: (CGFloat) width andHeight: (CGFloat) height
 {
-  CVReturn rv;
-
   g_return_if_fail (width && height);
 
   CVPixelBufferRelease (pixels);
-  rv = CVPixelBufferCreate (NULL, width, height,
-                            kCVPixelFormatType_32BGRA,
-                            cfpb_props, &pixels);
+  CVPixelBufferCreate (NULL, width, height,
+                       kCVPixelFormatType_32BGRA,
+                       cfpb_props, &pixels);
 
 }
 
