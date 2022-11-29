@@ -61,7 +61,7 @@ init_openuri_portal (void)
                                                   NULL, &error);
           if (openuri == NULL)
             {
-              g_warning ("Cannot create document portal proxy: %s", error->message);
+              g_warning ("Cannot create OpenURI portal proxy: %s", error->message);
               g_error_free (error);
             }
 
@@ -69,7 +69,7 @@ init_openuri_portal (void)
         }
       else
         {
-          g_warning ("Cannot connect to session bus when initializing document portal: %s",
+          g_warning ("Cannot connect to session bus when initializing OpenURI portal: %s",
                      error->message);
           g_error_free (error);
         }
