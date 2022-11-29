@@ -40,6 +40,8 @@
 #include "gtksettingsprivate.h"
 #include "gtkgesturesingle.h"
 
+#define MIN_TIME_TO_DND 100
+
 /**
  * GtkDragSource:
  *
@@ -135,6 +137,8 @@ struct _GtkDragSource
   double start_x;
   double start_y;
 
+  guint timeout_id;
+
   GdkDrag *drag;
 };
 
@@ -192,6 +196,7 @@ gtk_drag_source_finalize (GObject *object)
 
   g_clear_object (&source->content);
   g_clear_object (&source->paintable);
+  g_clear_handle_id (&source->timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_drag_source_parent_class)->finalize (object);
 }
@@ -264,6 +269,16 @@ gtk_drag_source_filter_event (GtkEventController *controller,
   return GTK_EVENT_CONTROLLER_CLASS (gtk_drag_source_parent_class)->filter_event (controller, event);
 }
 
+static gboolean
+drag_timeout (gpointer user_data)
+{
+  GtkDragSource *source = user_data;
+
+  source->timeout_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gtk_drag_source_begin (GtkGesture       *gesture,
                        GdkEventSequence *sequence)
@@ -272,6 +287,7 @@ gtk_drag_source_begin (GtkGesture       *gesture,
   GdkEventSequence *current;
 
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  source->timeout_id = g_timeout_add (MIN_TIME_TO_DND, drag_timeout, source);
 
   gtk_gesture_get_point (gesture, current, &source->start_x, &source->start_y);
 }
@@ -291,7 +307,8 @@ gtk_drag_source_update (GtkGesture       *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  if (gtk_drag_check_threshold_double (widget, source->start_x, source->start_y, x, y))
+  if (gtk_drag_check_threshold_double (widget, source->start_x, source->start_y, x, y) &&
+      !source->timeout_id)
     {
       gtk_drag_source_drag_begin (source);
     }
@@ -465,6 +482,7 @@ drag_end (GtkDragSource *source,
 
   gdk_drag_drop_done (source->drag, success);
   g_clear_object (&source->drag);
+  g_clear_handle_id (&source->timeout_id, g_source_remove);
   g_object_unref (source);
 }
 
