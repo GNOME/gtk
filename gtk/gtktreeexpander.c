@@ -127,8 +127,6 @@ gtk_tree_expander_click_gesture_pressed (GtkGestureClick *gesture,
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  gtk_widget_activate_action (widget, "listitem.toggle-expand", NULL);
-
   gtk_widget_set_state_flags (widget,
                               GTK_STATE_FLAG_ACTIVE,
                               FALSE);
@@ -143,8 +141,12 @@ gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
                                           double           y,
                                           gpointer         unused)
 {
-  gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                GTK_STATE_FLAG_ACTIVE);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
+
+  if (gtk_widget_contains (widget, x, y))
+    gtk_widget_activate_action (widget, "listitem.toggle-expand", NULL);
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
