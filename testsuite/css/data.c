@@ -30,43 +30,22 @@ struct _Test
   const char *mimetype;
   const char *contents;
   gsize contents_len;
+  const char *charset;
 };
 
 #define CONTENTS(data) (data), sizeof(data) - 1
 Test tests[] = {
-  { "simple",
-    "data:,HelloWorld",
-    NULL, CONTENTS("HelloWorld") },
-  { "nodata",
-    "data:,",
-    NULL, CONTENTS("") },
-  { "case_sensitive",
-    "dATa:,HelloWorld",
-    NULL, CONTENTS("HelloWorld") },
-  { "semicolon_after_comma",
-    "data:,;base64",
-    NULL, CONTENTS(";base64") },
-  { "mimetype",
-    "data:image/png,nopng",
-    "image/png", CONTENTS("nopng") },
-  { "charset",
-    "data:text/plain;charset=ISO-8859-1,Timm B\344der",
-    "text/plain", CONTENTS("Timm Bäder") },
-  { "charset_escaped",
-    "data:text/plain;charset=ISO-8859-1,Timm%20B%E4der",
-    "text/plain", CONTENTS("Timm Bäder") },
-  { "charset_base64",
-    "data:text/plain;charset=ISO-8859-5;base64,wOPh29DdILjW0ePb0OLe0g==",
-    "text/plain", CONTENTS("Руслан Ижбулатов") },
-  { "wrong_scheme",
-    "duda:,Hello",
-    NULL, NULL, 0 },
-  { "missing_comma",
-    "data:text/plain;charset=ISO-8859-1:bla",
-    NULL, NULL, 0 },
-  { "bad_escape",
-    "data:,abc%00",
-    NULL, NULL, -1 },
+  { "simple", "data:,HelloWorld", NULL, CONTENTS("HelloWorld"), NULL },
+  { "nodata", "data:,", NULL, CONTENTS(""), NULL },
+  { "case_sensitive", "dATa:,HelloWorld", NULL, CONTENTS("HelloWorld"), NULL },
+  { "semicolon_after_comma", "data:,;base64", NULL, CONTENTS(";base64"), NULL },
+  { "mimetype", "data:image/png,nopng", "image/png", CONTENTS("nopng"), NULL },
+  { "charset", "data:text/plain;charset=ISO-8859-1,Timm B\344der", "text/plain", CONTENTS("Timm Bäder"), "ISO-8859-1" },
+  { "charset_escaped", "data:text/plain;charset=ISO-8859-1,Timm%20B%E4der", "text/plain", CONTENTS("Timm Bäder"), "ISO-8859-1" },
+  { "charset_base64", "data:text/plain;charset=ISO-8859-5;base64,wOPh29DdILjW0ePb0OLe0g==", "text/plain", CONTENTS("Руслан Ижбулатов"), "ISO-8859-5" },
+  { "wrong_scheme", "duda:,Hello", NULL, NULL, 0, NULL },
+  { "missing_comma", "data:text/plain;charset=ISO-8859-1:bla", NULL, NULL, 0, "ISO-8859-1" },
+  { "bad_escape", "data:,abc%00", NULL, NULL, -1, NULL },
 };
 
 static void
@@ -76,6 +55,20 @@ test_parse (gconstpointer data)
   GError *error = NULL;
   char *mimetype = NULL;
   GBytes *bytes;
+
+  if (test->charset)
+    {
+      GIConv iconv;
+
+      iconv = g_iconv_open ("UTF-8", test->charset);
+      if (iconv == (GIConv) -1)
+        {
+          g_test_skip_printf ("Conversion from %s to UTF-8 not supported", test->charset);
+          return;
+        }
+
+      g_iconv_close (iconv);
+    }
 
   bytes = gtk_css_data_url_parse (test->url, &mimetype, &error);
 
