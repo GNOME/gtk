@@ -1732,6 +1732,12 @@ get_bus_address (GdkDisplay *display)
 #endif
 
 out:
+
+  if (bus_address == NULL)
+    g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
+                            g_strdup (""),
+                            g_free);
+
   return bus_address;
 }
 
