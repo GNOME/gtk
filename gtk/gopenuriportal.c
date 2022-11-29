@@ -80,6 +80,12 @@ init_openuri_portal (void)
   return openuri != NULL;
 }
 
+gboolean
+g_openuri_portal_is_available (void)
+{
+  return init_openuri_portal ();
+}
+
 enum {
   XDG_DESKTOP_PORTAL_SUCCESS   = 0,
   XDG_DESKTOP_PORTAL_CANCELLED = 1,
