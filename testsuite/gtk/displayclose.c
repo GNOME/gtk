@@ -30,7 +30,7 @@ main (int argc, char **argv)
                             G_CALLBACK (gtk_window_destroy), win);
   gtk_window_set_child (GTK_WINDOW (win), but);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   gtk_test_widget_wait_for_draw (win);
 

@@ -96,7 +96,7 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   done = FALSE;
   if (!interactive)
@@ -131,8 +131,8 @@ test_default_size (void)
   g_assert_cmpint (h, ==, 300);
 
   /* check that even hide/show does not pull in the new default */
-  gtk_widget_hide (window);
-  gtk_widget_show (window);
+  gtk_widget_set_visible (window, FALSE);
+  gtk_widget_set_visible (window, TRUE);
 
   done = FALSE;
   if (!interactive)
@@ -162,7 +162,7 @@ test_resize_popup (void)
   g_assert_cmpint (w, ==, 1);
   g_assert_cmpint (h, ==, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   done = FALSE;
   if (!interactive)
@@ -190,7 +190,7 @@ test_show_hide (void)
 
   window = gtk_window_new ();
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   done = FALSE;
   if (!interactive)
@@ -212,7 +212,7 @@ test_show_hide (void)
   g_assert_cmpint (w, ==, w1);
   g_assert_cmpint (h, ==, h1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   done = FALSE;
   if (!interactive)
