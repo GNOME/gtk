@@ -612,7 +612,7 @@ gtk_info_bar_remove_action_widget (GtkInfoBar *info_bar,
  *
  * Clicking the button will emit the [signal@Gtk.InfoBar::response]
  * signal with the given response_id. The button is appended to the
- * end of the info bars's action area. The button widget is returned,
+ * end of the info bar's action area. The button widget is returned,
  * but usually you don't need it.
  *
  * Returns: (transfer none) (type Gtk.Button): the `GtkButton` widget

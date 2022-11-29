@@ -1466,7 +1466,7 @@ gtk_list_box_set_activate_on_single_click (GtkListBox *box,
 }
 
 /**
- * gtk_list_box_get_activate_on_single_click: (attributes org.gtk.Metthod.get_property=activate-on-single-click)
+ * gtk_list_box_get_activate_on_single_click: (attributes org.gtk.Method.get_property=activate-on-single-click)
  * @box: a `GtkListBox`
  *
  * Returns whether rows activate on single clicks.

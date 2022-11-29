@@ -3139,7 +3139,7 @@ gtk_label_recalculate (GtkLabel *self)
  * It overwrites any text that was there before.
  *
  * This function will clear any previously set mnemonic accelerators,
- * and set the [property@Gtk.Label:use-underline property] to %FALSE as
+ * and set the [property@Gtk.Label:use-underline] property to %FALSE as
  * a side effect.
  *
  * This function will set the [property@Gtk.Label:use-markup] property
@@ -3207,7 +3207,7 @@ gtk_label_set_attributes (GtkLabel         *self,
  * gtk_label_get_attributes: (attributes org.gtk.Method.get_property=attributes)
  * @self: a `GtkLabel`
  *
- * Gets the labels attribute list.
+ * Gets the label's attribute list.
  *
  * This is the [struct@Pango.AttrList] that was set on the label using
  * [method@Gtk.Label.set_attributes], if any. This function does not

@@ -360,7 +360,7 @@ gtk_bitset_add (GtkBitset *self,
 /**
  * gtk_bitset_remove:
  * @self: a `GtkBitset`
- * @value: value to add
+ * @value: value to remove
  *
  * Removes @value from @self if it was part of it before.
  *
