@@ -1390,7 +1390,7 @@ open_folder_cb (GSimpleAction *action,
   else
     {
       GDBusConnection *bus;
-      GVariantBuilder *uris_builder;
+      GVariantBuilder uris_builder;
       GVariant *result;
       GError *error = NULL;
 
@@ -1398,20 +1398,20 @@ open_folder_cb (GSimpleAction *action,
 
       bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
 
-      uris_builder = g_variant_builder_new (G_VARIANT_TYPE ("as"));
-      g_variant_builder_add (uris_builder, "s", uri);
+      g_variant_builder_init (&uris_builder, G_VARIANT_TYPE ("as"));
+      g_variant_builder_add (&uris_builder, "s", uri);
 
       result = g_dbus_connection_call_sync (bus,
-                                   FILE_MANAGER_DBUS_NAME,
-                                   FILE_MANAGER_DBUS_PATH,
-                                   FILE_MANAGER_DBUS_IFACE,
-                                   "ShowFolders",
-                                   g_variant_new ("(ass)", uris_builder, ""),
-                                   NULL,   /* ignore returned type */
-                                   G_DBUS_CALL_FLAGS_NONE,
-                                   -1,
-                                   NULL,
-                                   &error);
+                                            FILE_MANAGER_DBUS_NAME,
+                                            FILE_MANAGER_DBUS_PATH,
+                                            FILE_MANAGER_DBUS_IFACE,
+                                            "ShowFolders",
+                                            g_variant_new ("(ass)", &uris_builder, ""),
+                                            NULL,   /* ignore returned type */
+                                            G_DBUS_CALL_FLAGS_NONE,
+                                            -1,
+                                            NULL,
+                                            &error);
       if (error)
         {
           if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER) ||
