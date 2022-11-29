@@ -150,9 +150,9 @@ gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
 }
 
 static void
-gtk_tree_expander_click_gesture_canceled (GtkGestureClick  *gesture,
-                                          GdkEventSequence *sequence,
-                                          gpointer          unused)
+gtk_tree_expander_click_gesture_cancelled (GtkGesture       *gesture,
+                                           GdkEventSequence *sequence,
+                                           gpointer          unused)
 {
   gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
                                 GTK_STATE_FLAG_ACTIVE);
@@ -207,7 +207,7 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
               g_signal_connect (gesture, "released",
                                 G_CALLBACK (gtk_tree_expander_click_gesture_released), NULL);
               g_signal_connect (gesture, "cancel",
-                                G_CALLBACK (gtk_tree_expander_click_gesture_canceled), NULL);
+                                G_CALLBACK (gtk_tree_expander_click_gesture_cancelled), NULL);
               gtk_widget_add_controller (self->expander_icon, GTK_EVENT_CONTROLLER (gesture));
 
               gtk_widget_insert_before (self->expander_icon,
