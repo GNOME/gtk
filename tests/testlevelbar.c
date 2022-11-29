@@ -106,7 +106,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box2), sw);
   g_signal_connect (sw, "notify::active", G_CALLBACK (toggle), bar);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 

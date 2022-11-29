@@ -123,7 +123,7 @@ main (int argc, char *argv[])
 
   g_print ("\n");
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

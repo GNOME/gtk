@@ -177,7 +177,7 @@ main (int argc, char *argv[])
       gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
     }
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

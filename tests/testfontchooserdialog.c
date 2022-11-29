@@ -163,7 +163,7 @@ main (int argc, char *argv[])
   g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
   gtk_box_append (GTK_BOX (box), toggle);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   g_signal_connect (font_button, "notify::font",
                     G_CALLBACK (notify_font_cb), NULL);

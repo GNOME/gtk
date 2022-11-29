@@ -75,7 +75,7 @@ window_creation_function (GtkNotebook *source_notebook,
   gtk_window_set_child (GTK_WINDOW (window), notebook);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   return GTK_NOTEBOOK (notebook);
 }
@@ -320,7 +320,7 @@ main (int argc, char *argv[])
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

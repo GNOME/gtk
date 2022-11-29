@@ -218,7 +218,7 @@ main(int argc, char **argv)
                     G_CALLBACK (on_map), NULL);
   on_frame (0.);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

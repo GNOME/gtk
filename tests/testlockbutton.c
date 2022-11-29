@@ -263,8 +263,8 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
   gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
 
-  gtk_widget_show (window);
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (window));
+  gtk_window_present (GTK_WINDOW (dialog));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

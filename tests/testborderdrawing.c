@@ -166,7 +166,7 @@ main (int argc, char **argv)
   gtk_box_append (GTK_BOX (box), bottom);
   gtk_window_set_child (GTK_WINDOW (window), box);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

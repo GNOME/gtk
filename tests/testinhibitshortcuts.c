@@ -96,7 +96,7 @@ main (int argc, char *argv[])
   g_signal_connect (G_OBJECT (surface), "notify::shortcuts-inhibited",
                     G_CALLBACK (on_shortcuts_inhibit_change), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

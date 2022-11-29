@@ -283,7 +283,7 @@ main (int argc, char **argv)
                                MAX (500, node_bounds.size.height));
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

@@ -386,7 +386,7 @@ popdown_cb (gpointer data)
 {
   popdown_timer = 0;
 
-  gtk_widget_hide (popup_window);
+  gtk_widget_set_visible (popup_window, FALSE);
   popped_up = FALSE;
 
   return FALSE;
@@ -465,7 +465,7 @@ popup_cb (gpointer data)
 	      }
 	  gtk_window_set_child (GTK_WINDOW (popup_window), grid);
 	}
-      gtk_widget_show (popup_window);
+      gtk_widget_set_visible (popup_window, TRUE);
       popped_up = TRUE;
     }
 
@@ -588,7 +588,7 @@ main (int argc, char **argv)
   gtk_widget_set_vexpand (button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

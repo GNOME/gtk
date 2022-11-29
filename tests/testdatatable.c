@@ -286,7 +286,7 @@ main (int argc, char **argv)
                                     NULL);
     }
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   g_signal_connect (window, "destroy",
                     G_CALLBACK (quit_cb), &done);
 

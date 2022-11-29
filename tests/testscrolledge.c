@@ -58,7 +58,7 @@ add_rows (gpointer data)
 {
   GtkListBox *list = data;
 
-  gtk_widget_hide (popup);
+  gtk_widget_set_visible (popup, FALSE);
   gtk_spinner_stop (GTK_SPINNER (spinner));
 
   populate_list (list);
@@ -75,7 +75,7 @@ edge_overshot (GtkScrolledWindow *sw,
   if (pos == GTK_POS_BOTTOM)
     {
       gtk_spinner_start (GTK_SPINNER (spinner));
-      gtk_widget_show (popup);
+      gtk_widget_set_visible (popup, TRUE);
 
       if (add_rows_id == 0)
         add_rows_id = g_timeout_add (2000, add_rows, list);
@@ -118,7 +118,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (popup), spinner);
 
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), popup);
-  gtk_widget_hide (popup);
+  gtk_widget_set_visible (popup, FALSE);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -133,7 +133,7 @@ main (int argc, char *argv[])
   g_signal_connect (sw, "edge-overshot", G_CALLBACK (edge_overshot), list);
   g_signal_connect (sw, "edge-reached", G_CALLBACK (edge_reached), list);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

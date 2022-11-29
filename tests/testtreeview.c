@@ -757,7 +757,7 @@ main (int    argc,
   
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), tv);
   
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   
   while (!done)
     g_main_context_iteration (NULL, TRUE);

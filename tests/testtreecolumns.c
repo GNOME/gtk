@@ -766,7 +766,7 @@ main (int argc, char *argv[])
   swindow = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_top);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done); 
@@ -775,7 +775,7 @@ main (int argc, char *argv[])
   swindow = gtk_scrolled_window_new ();
   gtk_window_set_child (GTK_WINDOW (window), swindow);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), sample_tree_view_bottom);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   /* Set up the main window */
   window = gtk_window_new ();
@@ -912,7 +912,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (add_clicked), left_tree_model);
   gtk_box_append (GTK_BOX (hbox), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

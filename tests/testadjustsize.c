@@ -96,7 +96,7 @@ open_test_window (void)
       gtk_grid_attach (GTK_GRID (grid), test_widgets[i], i % 3, i / 3, 1, 1);
     }
 
-  gtk_widget_show (test_window);
+  gtk_window_present (GTK_WINDOW (test_window));
 }
 
 static void
@@ -163,7 +163,7 @@ open_control_window (void)
   gtk_box_append (GTK_BOX (box), toggle);
 
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 #define TEST_WIDGET(outer) (gtk_overlay_get_child (GTK_OVERLAY (gtk_overlay_get_child (GTK_OVERLAY (outer)))))
@@ -268,7 +268,7 @@ open_alignment_window (void)
         }
     }
 
-  gtk_widget_show (test_window);
+  gtk_window_present (GTK_WINDOW (test_window));
 }
 
 static GtkWidget*
@@ -318,7 +318,7 @@ open_margin_window (void)
       gtk_box_append (GTK_BOX (box), child);
     }
 
-  gtk_widget_show (test_window);
+  gtk_window_present (GTK_WINDOW (test_window));
 }
 
 static void
