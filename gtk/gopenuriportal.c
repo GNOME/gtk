@@ -130,17 +130,19 @@ open_call_done (GObject      *source,
   GDBusConnection *connection;
   GTask *task = user_data;
   GError *error = NULL;
-  gboolean open_file;
+  const char *call;
   gboolean res;
   char *path = NULL;
   const char *handle;
   guint signal_id;
 
   connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (portal));
-  open_file = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "open-file"));
+  call = (const char *) g_object_get_data (G_OBJECT (task), "call");
 
-  if (open_file)
+  if (g_str_equal (call, "OpenFile"))
     res = gxdp_open_uri_call_open_file_finish (portal, &path, NULL, result, &error);
+  else if (g_str_equal (call, "OpenDirectory"))
+    res = gxdp_open_uri_call_open_directory_finish (portal, &path, NULL, result, &error);
   else
     res = gxdp_open_uri_call_open_uri_finish (portal, &path, result, &error);
 
@@ -174,6 +176,7 @@ open_call_done (GObject      *source,
 
 static void
 open_uri (GFile               *file,
+          gboolean             open_folder,
           const char          *parent_window,
           GCancellable        *cancellable,
           GAsyncReadyCallback  callback,
@@ -233,9 +236,6 @@ open_uri (GFile               *file,
       GUnixFDList *fd_list = NULL;
       int fd, fd_id, errsv;
 
-      if (task)
-        g_object_set_data (G_OBJECT (task), "open-file", GINT_TO_POINTER (TRUE));
-
       path = g_file_peek_path (file);
       fd = g_open (path, O_RDONLY | O_CLOEXEC);
       errsv = errno;
@@ -254,19 +254,43 @@ open_uri (GFile               *file,
       fd = -1;
       fd_id = 0;
 
-      gxdp_open_uri_call_open_file (openuri,
-                                    parent_window ? parent_window : "",
-                                    g_variant_new ("h", fd_id),
-                                    opts,
-                                    fd_list,
-                                    cancellable,
-                                    task ? open_call_done : NULL,
-                                    task);
+      if (open_folder)
+        {
+          if (task)
+            g_object_set_data (G_OBJECT (task), "call", (gpointer) "OpenDirectory");
+
+          gxdp_open_uri_call_open_directory (openuri,
+                                             parent_window ? parent_window : "",
+                                             g_variant_new ("h", fd_id),
+                                             opts,
+                                             fd_list,
+                                             cancellable,
+                                             task ? open_call_done : NULL,
+                                             task);
+        }
+      else
+        {
+          if (task)
+            g_object_set_data (G_OBJECT (task), "call", (gpointer) "OpenFile");
+
+          gxdp_open_uri_call_open_file (openuri,
+                                        parent_window ? parent_window : "",
+                                        g_variant_new ("h", fd_id),
+                                        opts,
+                                        fd_list,
+                                        cancellable,
+                                        task ? open_call_done : NULL,
+                                        task);
+        }
+
       g_object_unref (fd_list);
     }
   else
     {
       char *uri = g_file_get_uri (file);
+
+      if (task)
+        g_object_set_data (G_OBJECT (task), "call", (gpointer) "OpenURI");
 
       gxdp_open_uri_call_open_uri (openuri,
                                    parent_window ? parent_window : "",
@@ -283,6 +307,7 @@ open_uri (GFile               *file,
 typedef struct {
   GtkWindow *parent;
   GFile *file;
+  gboolean open_folder;
   GTask *task;
 } OpenUriData;
 
@@ -320,11 +345,12 @@ window_handle_exported (GtkWindow  *window,
 {
   OpenUriData *data = user_data;
 
-  open_uri (data->file, handle, g_task_get_cancellable (data->task), open_uri_done, data);
+  open_uri (data->file, data->open_folder, handle, g_task_get_cancellable (data->task), open_uri_done, data);
 }
 
 void
 g_openuri_portal_open_async (GFile               *file,
+                             gboolean             open_folder,
                              GtkWindow           *parent,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
@@ -343,6 +369,7 @@ g_openuri_portal_open_async (GFile               *file,
   data = g_new0 (OpenUriData, 1);
   data->parent = parent ? g_object_ref (parent) : NULL;
   data->file = g_object_ref (file);
+  data->open_folder = open_folder;
   data->task = g_task_new (parent, cancellable, callback, user_data);
   g_task_set_source_tag (data->task, g_openuri_portal_open_async);
 

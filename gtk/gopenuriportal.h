@@ -27,6 +27,7 @@
 G_BEGIN_DECLS
 
 void     g_openuri_portal_open_async  (GFile               *file,
+                                       gboolean             open_folder,
                                        GtkWindow           *window,
                                        GCancellable        *cancellable,
                                        GAsyncReadyCallback  callback,

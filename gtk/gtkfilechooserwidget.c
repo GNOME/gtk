@@ -1385,7 +1385,7 @@ open_folder_cb (GSimpleAction *action,
 
   if (gdk_should_use_portal ())
     {
-      g_openuri_portal_open_async (file, toplevel, NULL, NULL, NULL);
+      g_openuri_portal_open_async (file, TRUE, toplevel, NULL, NULL, NULL);
     }
   else
     {
