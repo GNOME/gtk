@@ -52,14 +52,16 @@
  * [method@Gtk.TreeExpander.set_child] sets the widget that displays
  * the actual row contents.
  *
- * `GtkTreeExpander` can be modified with properties such as [property@Gtk.indent-for-icon],
- * [property@Gtk.indent-for-depth], and [property@Gtk.hide-expander] to achieve a
- * different appearance. This can even be done to influence individual rows, for example
- * by binding the [property@Gtk.hide-expander] property to the treelistrow's model's
- * item count to hide the expander for rows without children, even if the row is
- * expandable.
+ * `GtkTreeExpander` can be modified with properties such as
+ * [property@Gtk.TreeExpander:indent-for-icon],
+ * [property@Gtk.TreeExpander:indent-for-depth], and
+ * [property@Gtk.TreeExpander:hide-expander] to achieve a different appearance.
+ * This can even be done to influence individual rows, for example by binding
+ * the [property@Gtk.TreeExpander:hide-expander] property to the item count of
+ * the model of the treelistrow, to hide the expander for rows without children,
+ * even if the row is expandable.
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * ```
  * treeexpander
@@ -75,7 +77,7 @@
  *
  * For every level of depth, another "indent" node is prepended.
  *
- * # Accessibility
+ * ## Accessibility
  *
  * `GtkTreeExpander` uses the %GTK_ACCESSIBLE_ROLE_GROUP role. The expander icon
  * is represented as a %GTK_ACCESSIBLE_ROLE_BUTTON, labelled by the expander's
