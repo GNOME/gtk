@@ -255,7 +255,7 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
       char *uri = g_file_get_uri (file);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_show_uri_full (parent, uri, self->timestamp, cancellable, show_uri_done, task);
+      gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, cancellable, show_uri_done, task);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_free (uri);

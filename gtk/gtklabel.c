@@ -40,7 +40,7 @@
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
-#include "gtkshow.h"
+#include "gtkfilelauncher.h"
 #include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
@@ -2102,11 +2102,17 @@ gtk_label_activate_link (GtkLabel    *self,
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  GFile *file;
+  GtkFileLauncher *launcher;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  gtk_show_uri (GTK_WINDOW (toplevel), uri, GDK_CURRENT_TIME);
+  file = g_file_new_for_uri (uri);
+  launcher = gtk_file_launcher_new ();
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), file, NULL, NULL, NULL);
+  g_object_unref (launcher);
+  g_object_unref (file);
 
   return TRUE;
 }
@@ -2281,7 +2287,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * Gets emitted to activate a URI.
      *
      * Applications may connect to it to override the default behaviour,
-     * which is to call gtk_show_uri().
+     * which is to call [method@Gtk.FileLauncher.launch].
      *
      * Returns: %TRUE if the link has been activated
      */

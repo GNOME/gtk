@@ -34,7 +34,7 @@
 #include "gtkprintsettings.h"
 #include "gtkpagesetup.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkshow.h"
+#include "gtkfilelauncher.h"
 #include <glib/gi18n-lib.h>
 #include "gtkwindowprivate.h"
 #include "gtkprivate.h"
@@ -677,9 +677,12 @@ gtk_print_operation_portal_launch_preview (GtkPrintOperation *op,
                                            GtkWindow         *parent,
                                            const char        *filename)
 {
-  char *uri;
+  GFile *file;
+  GtkFileLauncher *launcher;
 
-  uri = g_filename_to_uri (filename, NULL, NULL);
-  gtk_show_uri (parent, uri, GDK_CURRENT_TIME);
-  g_free (uri);
+  file = g_file_new_for_path (filename);
+  launcher = gtk_file_launcher_new ();
+  gtk_file_launcher_launch (launcher, parent, file, NULL, NULL, NULL);
+  g_object_unref (launcher);
+  g_object_unref (file);
 }
