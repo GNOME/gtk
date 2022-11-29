@@ -10,6 +10,8 @@
 
 #include <gtk/gtk.h>
 
+static GtkWidget *app_picker;
+
 static void
 file_opened (GObject *source,
              GAsyncResult *result,
@@ -25,12 +27,17 @@ file_opened (GObject *source,
     {
       g_print ("%s\n", error->message);
       g_error_free (error);
+      gtk_widget_set_sensitive (app_picker, FALSE);
+      g_object_set_data (G_OBJECT (app_picker), "file", NULL);
       return;
     }
 
   name = g_file_get_basename (file);
   gtk_label_set_label (GTK_LABEL (data), name);
   g_free (name);
+
+  gtk_widget_set_sensitive (app_picker, TRUE);
+  g_object_set_data_full (G_OBJECT (app_picker), "file", g_object_ref (file), g_object_unref);
 }
 
 static gboolean
@@ -63,6 +70,37 @@ open_file (GtkButton *picker,
 
   g_object_unref (cancellable);
   g_object_unref (dialog);
+}
+
+static void
+launch_done (GObject      *source,
+             GAsyncResult *result,
+             gpointer      data)
+{
+  GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source);
+  GError *error = NULL;
+
+  if (!gtk_file_launcher_launch_finish (launcher, result, &error))
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+open_app (GtkButton *picker)
+{
+  GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
+  GtkFileLauncher *launcher;
+  GFile *file;
+
+  launcher = gtk_file_launcher_new ();
+
+  file = G_FILE (g_object_get_data (G_OBJECT (picker), "file"));
+
+  gtk_file_launcher_launch (launcher, parent, file, NULL, launch_done, NULL);
+
+  g_object_unref (launcher);
 }
 
 GtkWidget *
@@ -123,20 +161,17 @@ do_pickers (GtkWidget *do_widget)
     gtk_box_append (GTK_BOX (picker), button);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-    label = gtk_label_new ("Mail:");
+    label = gtk_label_new ("Application:");
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 4, 1, 1);
 
-    picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
-    gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
-
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-    gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
+    app_picker = gtk_button_new_from_icon_name ("emblem-system-symbolic");
+    gtk_widget_set_halign (app_picker, GTK_ALIGN_END);
+    gtk_widget_set_sensitive (app_picker, FALSE);
+    g_signal_connect (app_picker, "clicked", G_CALLBACK (open_app), NULL);
+    gtk_grid_attach (GTK_GRID (table), app_picker, 1, 4, 1, 1);
   }
 
   if (!gtk_widget_get_visible (window))
