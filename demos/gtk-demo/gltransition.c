@@ -33,7 +33,7 @@ static void
 text_changed (GtkTextBuffer *buffer,
               GtkWidget     *button)
 {
-  gtk_widget_show (button);
+  gtk_widget_set_visible (button, TRUE);
 }
 
 static void
@@ -58,7 +58,7 @@ apply_text (GtkWidget     *button,
   g_object_unref (shader);
   g_bytes_unref (bytes);
 
-  gtk_widget_hide (button);
+  gtk_widget_set_visible (button, FALSE);
 }
 
 static void
@@ -237,7 +237,7 @@ make_shader_stack (const char *name,
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (button, "small");
-  gtk_widget_hide (button);
+  gtk_widget_set_visible (button, FALSE);
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (widget), button);
 
   gtk_box_append (GTK_BOX (vbox), widget);
@@ -354,7 +354,7 @@ do_gltransition (GtkWidget *do_widget)
     demo_window = create_gltransition_window (do_widget);
 
   if (!gtk_widget_get_visible (demo_window))
-    gtk_widget_show (demo_window);
+    gtk_widget_set_visible (demo_window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (demo_window));
 

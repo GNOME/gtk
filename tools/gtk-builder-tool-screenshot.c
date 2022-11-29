@@ -285,7 +285,7 @@ screenshot_file (const char *filename,
       target = widget;
     }
 
-  gtk_widget_show (window);
+  gtk_widget_set_visible (window, TRUE);
   if (menu_button)
     gtk_menu_button_popup (GTK_MENU_BUTTON (menu_button));
 

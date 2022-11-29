@@ -2297,7 +2297,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
   location_entry_create (impl);
   gtk_widget_set_hexpand (impl->location_entry, TRUE);
   gtk_grid_attach (GTK_GRID (impl->save_widgets_table), impl->location_entry, 1, 0, 1, 1);
-  gtk_widget_show (impl->location_entry);
+  gtk_widget_set_visible (impl->location_entry, TRUE);
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), impl->location_entry);
 
   impl->save_widgets = vbox;
@@ -2357,7 +2357,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
 
-  gtk_widget_show (impl->location_entry);
+  gtk_widget_set_visible (impl->location_entry, TRUE);
 
   gtk_stack_set_visible_child_name (GTK_STACK (impl->browse_header_stack), "location");
 
@@ -2492,13 +2492,9 @@ set_extra_widget (GtkFileChooserWidget *impl,
     }
 
   impl->extra_widget = extra_widget;
+  gtk_widget_set_visible (impl->extra_align, extra_widget != NULL);
   if (impl->extra_widget)
-    {
-      gtk_box_append (GTK_BOX (impl->extra_align), impl->extra_widget);
-      gtk_widget_show (impl->extra_align);
-    }
-  else
-    gtk_widget_hide (impl->extra_align);
+    gtk_box_append (GTK_BOX (impl->extra_align), impl->extra_widget);
 
   /* Calls update_extra_and_filters */
   show_filters (impl, impl->filters != NULL);
@@ -2638,7 +2634,7 @@ operation_mode_stop (GtkFileChooserWidget *impl,
       g_clear_object (&impl->model_for_search);
       search_stop_searching (impl, TRUE);
       search_clear_model (impl, TRUE);
-      gtk_widget_hide (impl->remote_warning_bar);
+      gtk_widget_set_visible (impl->remote_warning_bar, FALSE);
     }
 }
 
@@ -5664,7 +5660,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
 
   set_busy_cursor (impl, FALSE);
-  gtk_widget_hide (impl->search_spinner);
+  gtk_widget_set_visible (impl->search_spinner, FALSE);
 
   if (impl->show_progress_timeout)
     {
@@ -5721,7 +5717,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
       g_clear_object (&impl->search_engine);
 
       set_busy_cursor (impl, FALSE);
-      gtk_widget_hide (impl->search_spinner);
+      gtk_widget_set_visible (impl->search_spinner, FALSE);
     }
 
   if (impl->show_progress_timeout)
@@ -5748,7 +5744,7 @@ show_spinner (gpointer data)
 {
   GtkFileChooserWidget *impl = data;
 
-  gtk_widget_show (impl->search_spinner);
+  gtk_widget_set_visible (impl->search_spinner, TRUE);
   gtk_spinner_start (GTK_SPINNER (impl->search_spinner));
   impl->show_progress_timeout = 0;
 
@@ -5808,7 +5804,7 @@ search_start_query (GtkFileChooserWidget *impl,
 
   if (gtk_query_get_location (impl->search_query) &&
       _gtk_file_consider_as_remote (gtk_query_get_location (impl->search_query)))
-    gtk_widget_show (impl->remote_warning_bar);
+    gtk_widget_set_visible (impl->remote_warning_bar, TRUE);
 
   /* We're not showing the file list here already and instead rely on the
    * GtkSearchEntry timeout and the ::hits-added signal from above to

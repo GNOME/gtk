@@ -700,14 +700,14 @@ bind_item (GtkSignalListItemFactory *factory,
 
   if (gtk_widget_get_ancestor (box, GTK_TYPE_POPOVER) == self->popup)
     {
-      gtk_widget_show (icon);
+      gtk_widget_set_visible (icon, TRUE);
       g_signal_connect (self, "notify::selected-item",
                         G_CALLBACK (selected_item_changed), list_item);
       selected_item_changed (self, NULL, list_item);
     }
   else
     {
-      gtk_widget_hide (icon);
+      gtk_widget_set_visible (icon, FALSE);
     }
 }
 

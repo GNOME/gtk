@@ -185,7 +185,7 @@ init_app_id (GtkInspectorGeneral *gen)
   app = g_application_get_default ();
   if (!app)
     {
-      gtk_widget_hide (gen->app_id_frame);
+      gtk_widget_set_visible (gen->app_id_frame, FALSE);
       return;
     }
 
@@ -552,7 +552,7 @@ set_path_label (GtkWidget   *w,
     {
        GtkWidget *r;
        r = gtk_widget_get_ancestor (w, GTK_TYPE_LIST_BOX_ROW);
-       gtk_widget_hide (r);
+       gtk_widget_set_visible (r, FALSE);
     }
 }
 
@@ -591,7 +591,7 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
   GtkWidget *child;
   GtkListBox *list;
 
-  gtk_widget_show (gen->display_composited);
+  gtk_widget_set_visible (gen->display_composited, TRUE);
   list = GTK_LIST_BOX (gen->display_box);
   children = NULL;
   for (child = gtk_widget_get_first_child (GTK_WIDGET (list));

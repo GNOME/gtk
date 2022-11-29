@@ -816,7 +816,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   else if (priv->display)
     gtk_window_set_display (GTK_WINDOW (dialog), priv->display);
 
-  gtk_widget_show (GTK_WIDGET (dialog));
+  gtk_window_present (GTK_WINDOW (dialog));
 
   g_object_ref (operation);
 }
@@ -1655,9 +1655,7 @@ gtk_mount_operation_show_processes_do_gtk (GtkMountOperation *op,
                              processes);
 
   if (dialog != NULL)
-    {
-      gtk_widget_show (dialog);
-    }
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 

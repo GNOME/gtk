@@ -788,7 +788,7 @@ show_help_overlay (GSimpleAction *action,
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
 
   if (priv->help_overlay)
-    gtk_widget_show (GTK_WIDGET (priv->help_overlay));
+    gtk_window_present (GTK_WINDOW (priv->help_overlay));
 }
 
 /**

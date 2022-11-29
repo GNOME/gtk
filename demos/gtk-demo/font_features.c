@@ -973,8 +973,8 @@ update_features (void)
       for (l = demo->feature_items; l; l = l->next)
         {
           FeatureItem *item = l->data;
-          gtk_widget_show (item->feat);
-          gtk_widget_show (gtk_widget_get_parent (item->feat));
+          gtk_widget_set_visible (item->feat, TRUE);
+          gtk_widget_set_visible (gtk_widget_get_parent (item->feat), TRUE);
           if (strcmp (item->name, "xxxx") == 0)
             gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
         }
@@ -985,8 +985,8 @@ update_features (void)
   for (l = demo->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
-      gtk_widget_hide (item->feat);
-      gtk_widget_hide (gtk_widget_get_parent (item->feat));
+      gtk_widget_set_visible (item->feat, FALSE);
+      gtk_widget_set_visible (gtk_widget_get_parent (item->feat), FALSE);
       if (strcmp (item->name, "xxxx") == 0)
         gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
     }
@@ -1071,15 +1071,15 @@ update_features (void)
 
                   if (item->tag == features[j])
                     {
-                      gtk_widget_show (item->feat);
-                      gtk_widget_show (gtk_widget_get_parent (item->feat));
+                      gtk_widget_set_visible (item->feat, TRUE);
+                      gtk_widget_set_visible (gtk_widget_get_parent (item->feat), TRUE);
                       if (GTK_IS_CHECK_BUTTON (item->feat))
                         {
                           GtkWidget *def = GTK_WIDGET (g_object_get_data (G_OBJECT (item->feat), "default"));
                           if (def)
                             {
-                              gtk_widget_show (def);
-                              gtk_widget_show (gtk_widget_get_parent (def));
+                              gtk_widget_set_visible (def, TRUE);
+                              gtk_widget_set_visible (gtk_widget_get_parent (def), TRUE);
                               gtk_check_button_set_active (GTK_CHECK_BUTTON (def), TRUE);
                             }
                           else

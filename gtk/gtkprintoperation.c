@@ -2797,7 +2797,7 @@ handle_progress_response (GtkWidget *dialog,
 {
   GtkPrintOperation *op = (GtkPrintOperation *)data;
 
-  gtk_widget_hide (dialog);
+  gtk_widget_set_visible (dialog, FALSE);
   gtk_print_operation_cancel (op);
 }
 
@@ -2898,7 +2898,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           g_signal_connect (error_dialog, "response",
                             G_CALLBACK (gtk_window_destroy), NULL);
 
-          gtk_widget_show (error_dialog);
+          gtk_window_present (GTK_WINDOW (error_dialog));
 
           print_pages_idle_done (data);
 
@@ -3024,7 +3024,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * 					     error->message);
  *    g_signal_connect (error_dialog, "response",
  *                      G_CALLBACK (gtk_window_destroy), NULL);
- *    gtk_widget_show (error_dialog);
+ *    gtk_window_present (GTK_WINDOW (error_dialog));
  *    g_error_free (error);
  *  }
  * else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)

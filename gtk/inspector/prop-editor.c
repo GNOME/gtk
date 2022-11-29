@@ -1090,7 +1090,6 @@ property_editor (GObject                *object,
                       "vscrollbar-policy", GTK_POLICY_NEVER,
                       NULL);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_widget_show (box);
         gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
 
         fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
@@ -1101,7 +1100,6 @@ property_editor (GObject                *object,
 
             b = gtk_check_button_new_with_label (fclass->values[j].value_nick);
             g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
-            gtk_widget_show (b);
             gtk_box_append (GTK_BOX (box), b);
             connect_controller (G_OBJECT (b), "toggled",
                                 object, spec, G_CALLBACK (flags_modified));
@@ -1155,8 +1153,6 @@ property_editor (GObject                *object,
                                 self);
       gtk_box_append (GTK_BOX (prop_edit), label);
       gtk_box_append (GTK_BOX (prop_edit), button);
-      gtk_widget_show (label);
-      gtk_widget_show (button);
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (object_changed),

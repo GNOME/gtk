@@ -160,7 +160,7 @@ do_fixed (GtkWidget *do_widget)
     demo_window = create_demo_window (do_widget);
 
   if (!gtk_widget_get_visible (demo_window))
-    gtk_widget_show (demo_window);
+    gtk_widget_set_visible (demo_window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (demo_window));
 

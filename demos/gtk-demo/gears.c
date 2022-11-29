@@ -54,7 +54,6 @@ create_axis_slider (GtkGears *gears,
 
   label = gtk_label_new (text);
   gtk_box_append (GTK_BOX (box), label);
-  gtk_widget_show (label);
 
   adj = gtk_adjustment_new (gtk_gears_get_axis (gears, axis), 0.0, 360.0, 1.0, 12.0, 0.0);
   g_object_set_data (G_OBJECT (adj), "axis", GINT_TO_POINTER (axis));
@@ -65,9 +64,6 @@ create_axis_slider (GtkGears *gears,
   gtk_scale_set_draw_value (GTK_SCALE (slider), FALSE);
   gtk_box_append (GTK_BOX (box), slider);
   gtk_widget_set_vexpand (slider, TRUE);
-  gtk_widget_show (slider);
-
-  gtk_widget_show (box);
 
   return box;
 }
@@ -129,7 +125,7 @@ do_gears (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

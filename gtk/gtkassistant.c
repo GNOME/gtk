@@ -767,10 +767,8 @@ static void
 compute_last_button_state (GtkAssistant *assistant)
 {
   gtk_widget_set_sensitive (assistant->last, assistant->current_page->complete);
-  if (last_button_visible (assistant, assistant->current_page))
-    gtk_widget_show (assistant->last);
-  else
-    gtk_widget_hide (assistant->last);
+  gtk_widget_set_visible (assistant->last,
+                          last_button_visible (assistant, assistant->current_page));
 }
 
 static void
@@ -782,11 +780,7 @@ compute_progress_state (GtkAssistant *assistant)
   page_num = gtk_assistant_get_current_page (assistant);
 
   page_num = (assistant->forward_function) (page_num, assistant->forward_function_data);
-
-  if (page_num >= 0 && page_num < n_pages)
-    gtk_widget_show (assistant->forward);
-  else
-    gtk_widget_hide (assistant->forward);
+  gtk_widget_set_visible (assistant->forward, page_num >= 0 && page_num < n_pages);
 }
 
 static void
@@ -801,10 +795,10 @@ update_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->cancel, TRUE);
       gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
       gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
-      gtk_widget_show (assistant->forward);
-      gtk_widget_hide (assistant->back);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
+      gtk_widget_set_visible (assistant->forward, TRUE);
+      gtk_widget_set_visible (assistant->back, FALSE);
+      gtk_widget_set_visible (assistant->apply, FALSE);
+      gtk_widget_set_visible (assistant->close, FALSE);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_CONFIRM:
@@ -812,68 +806,68 @@ update_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->back, TRUE);
       gtk_widget_set_sensitive (assistant->apply, assistant->current_page->complete);
       gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->apply);
-      gtk_widget_show (assistant->back);
-      gtk_widget_show (assistant->apply);
-      gtk_widget_hide (assistant->forward);
-      gtk_widget_hide (assistant->close);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_visible (assistant->back, TRUE);
+      gtk_widget_set_visible (assistant->apply, TRUE);
+      gtk_widget_set_visible (assistant->forward, FALSE);
+      gtk_widget_set_visible (assistant->close, FALSE);
+      gtk_widget_set_visible (assistant->last, FALSE);
       break;
     case GTK_ASSISTANT_PAGE_CONTENT:
       gtk_widget_set_sensitive (assistant->cancel, TRUE);
       gtk_widget_set_sensitive (assistant->back, TRUE);
       gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
       gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
-      gtk_widget_show (assistant->back);
-      gtk_widget_show (assistant->forward);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
+      gtk_widget_set_visible (assistant->back, TRUE);
+      gtk_widget_set_visible (assistant->forward, TRUE);
+      gtk_widget_set_visible (assistant->apply, FALSE);
+      gtk_widget_set_visible (assistant->close, FALSE);
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_SUMMARY:
       gtk_widget_set_sensitive (assistant->close, assistant->current_page->complete);
       gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->close);
-      gtk_widget_show (assistant->close);
-      gtk_widget_hide (assistant->back);
-      gtk_widget_hide (assistant->forward);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_visible (assistant->close, TRUE);
+      gtk_widget_set_visible (assistant->back, FALSE);
+      gtk_widget_set_visible (assistant->forward, FALSE);
+      gtk_widget_set_visible (assistant->apply, FALSE);
+      gtk_widget_set_visible (assistant->last, FALSE);
       break;
     case GTK_ASSISTANT_PAGE_PROGRESS:
       gtk_widget_set_sensitive (assistant->cancel, assistant->current_page->complete);
       gtk_widget_set_sensitive (assistant->back, assistant->current_page->complete);
       gtk_widget_set_sensitive (assistant->forward, assistant->current_page->complete);
       gtk_window_set_default_widget (GTK_WINDOW (assistant), assistant->forward);
-      gtk_widget_show (assistant->back);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->close);
-      gtk_widget_hide (assistant->last);
+      gtk_widget_set_visible (assistant->back, TRUE);
+      gtk_widget_set_visible (assistant->apply, FALSE);
+      gtk_widget_set_visible (assistant->close, FALSE);
+      gtk_widget_set_visible (assistant->last, FALSE);
       compute_progress_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_CUSTOM:
-      gtk_widget_hide (assistant->cancel);
-      gtk_widget_hide (assistant->back);
-      gtk_widget_hide (assistant->forward);
-      gtk_widget_hide (assistant->apply);
-      gtk_widget_hide (assistant->last);
-      gtk_widget_hide (assistant->close);
+      gtk_widget_set_visible (assistant->cancel, FALSE);
+      gtk_widget_set_visible (assistant->back, FALSE);
+      gtk_widget_set_visible (assistant->forward, FALSE);
+      gtk_widget_set_visible (assistant->apply, FALSE);
+      gtk_widget_set_visible (assistant->last, FALSE);
+      gtk_widget_set_visible (assistant->close, FALSE);
       break;
     default:
       g_assert_not_reached ();
     }
 
   if (assistant->committed)
-    gtk_widget_hide (assistant->cancel);
+    gtk_widget_set_visible (assistant->cancel, FALSE);
   else if (assistant->current_page->type == GTK_ASSISTANT_PAGE_SUMMARY ||
            assistant->current_page->type == GTK_ASSISTANT_PAGE_CUSTOM)
-    gtk_widget_hide (assistant->cancel);
+    gtk_widget_set_visible (assistant->cancel, FALSE);
   else
-    gtk_widget_show (assistant->cancel);
+    gtk_widget_set_visible (assistant->cancel, TRUE);
 
   /* this is quite general, we don't want to
    * go back if it's the first page
    */
   if (!assistant->visited_pages)
-    gtk_widget_hide (assistant->back);
+    gtk_widget_set_visible (assistant->back, FALSE);
 }
 
 static gboolean
@@ -1711,8 +1705,8 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   gtk_label_set_xalign (GTK_LABEL (page_info->regular_title), 0.0);
   gtk_label_set_xalign (GTK_LABEL (page_info->current_title), 0.0);
 
-  gtk_widget_show (page_info->regular_title);
-  gtk_widget_hide (page_info->current_title);
+  gtk_widget_set_visible (page_info->regular_title, TRUE);
+  gtk_widget_set_visible (page_info->current_title, FALSE);
 
   gtk_widget_add_css_class (page_info->current_title, "highlight");
 

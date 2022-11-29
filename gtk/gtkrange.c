@@ -2348,10 +2348,7 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
   double upper = gtk_adjustment_get_upper (priv->adjustment);
   double lower = gtk_adjustment_get_lower (priv->adjustment);
 
-  if (upper == lower && GTK_IS_SCALE (range))
-    gtk_widget_hide (priv->slider_widget);
-  else
-    gtk_widget_show (priv->slider_widget);
+  gtk_widget_set_visible (priv->slider_widget, upper != lower || !GTK_IS_SCALE (range));
 
   gtk_widget_queue_allocate (priv->trough_widget);
 

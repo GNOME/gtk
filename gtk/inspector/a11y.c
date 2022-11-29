@@ -339,10 +339,7 @@ update_attributes (GtkInspectorA11y *sl)
   gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->attributes), GTK_SELECTION_MODEL (selection));
   g_object_unref (selection);
 
-  if (g_list_model_get_n_items (G_LIST_MODEL (filter_model)) > 0)
-    gtk_widget_show (sl->attributes);
-  else
-    gtk_widget_hide (sl->attributes);
+  gtk_widget_set_visible (sl->attributes, g_list_model_get_n_items (G_LIST_MODEL (filter_model)) > 0);
 }
 
 static void

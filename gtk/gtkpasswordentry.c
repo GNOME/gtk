@@ -123,13 +123,10 @@ caps_lock_state_changed (GdkDevice  *device,
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
 
-  if (gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
-      gtk_widget_has_focus (entry->entry) &&
-      !gtk_text_get_visibility (GTK_TEXT (entry->entry)) &&
-      gdk_device_get_caps_lock_state (device))
-    gtk_widget_show (entry->icon);
-  else
-    gtk_widget_hide (entry->icon);
+  gtk_widget_set_visible (entry->icon, gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
+                                       gtk_widget_has_focus (entry->entry) &&
+                                       !gtk_text_get_visibility (GTK_TEXT (entry->entry)) &&
+                                       gdk_device_get_caps_lock_state (device));
 }
 
 static void

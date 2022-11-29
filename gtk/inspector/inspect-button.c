@@ -183,7 +183,7 @@ void
 gtk_inspector_on_inspect (GtkWidget          *button,
                           GtkInspectorWindow *iw)
 {
-  gtk_widget_hide (GTK_WIDGET (iw));
+  gtk_widget_set_visible (GTK_WIDGET (iw), FALSE);
 
   g_signal_connect (iw, "event", G_CALLBACK (handle_event), NULL);
 }

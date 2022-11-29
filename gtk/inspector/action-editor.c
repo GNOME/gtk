@@ -126,7 +126,7 @@ gtk_inspector_action_editor_init (GtkInspectorActionEditor *r)
   gtk_box_append (GTK_BOX (activate), r->activate_button);
 
   r->parameter_entry = gtk_inspector_variant_editor_new (NULL, parameter_changed, r);
-  gtk_widget_hide (r->parameter_entry);
+  gtk_widget_set_visible (r->parameter_entry, FALSE);
   gtk_box_append (GTK_BOX (activate), r->parameter_entry);
 
   gtk_widget_set_parent (row, GTK_WIDGET (r));
@@ -137,7 +137,7 @@ gtk_inspector_action_editor_init (GtkInspectorActionEditor *r)
   r->state_entry = gtk_inspector_variant_editor_new (NULL, state_changed, r);
   gtk_box_append (GTK_BOX (r->state_editor), r->state_entry);
   gtk_widget_set_parent (r->state_editor, GTK_WIDGET (r));
-  gtk_widget_hide (r->state_editor);
+  gtk_widget_set_visible (r->state_editor, FALSE);
 }
 
 static void
@@ -199,26 +199,19 @@ update_widgets (GtkInspectorActionEditor *r)
     state = NULL;
 
   gtk_widget_set_sensitive (r->activate_button, r->enabled);
-
+  gtk_widget_set_sensitive (r->parameter_entry, r->enabled);
+  gtk_widget_set_visible (r->parameter_entry, r->parameter_type != NULL);
   if (r->parameter_type)
-    {
-      gtk_inspector_variant_editor_set_type (r->parameter_entry, r->parameter_type);
-      gtk_widget_show (r->parameter_entry);
-      gtk_widget_set_sensitive (r->parameter_entry, r->enabled);
-    }
-  else
-    gtk_widget_hide (r->parameter_entry);
+    gtk_inspector_variant_editor_set_type (r->parameter_entry, r->parameter_type);
 
+  gtk_widget_set_visible (r->state_editor, state != NULL);
   if (state)
     {
       if (r->state_type)
         g_variant_type_free (r->state_type);
       r->state_type = g_variant_type_copy (g_variant_get_type (state));
       gtk_inspector_variant_editor_set_value (r->state_entry, state);
-      gtk_widget_show (r->state_editor);
     }
-  else
-    gtk_widget_hide (r->state_editor);
 
   if (G_IS_ACTION_GROUP (r->owner))
     {

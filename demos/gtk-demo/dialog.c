@@ -29,7 +29,7 @@ message_dialog_clicked (GtkButton *button,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             ngettext ("Has been shown once", "Has been shown %d times", i), i);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
   i++;
 }
 
@@ -116,7 +116,7 @@ interactive_dialog_clicked (GtkButton *button,
                          data, (GClosureNotify) g_free,
                          0);
 
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 GtkWidget *
@@ -186,7 +186,7 @@ do_dialog (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

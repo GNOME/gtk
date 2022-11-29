@@ -181,7 +181,7 @@ mapped_changed (GdkSurface *surface,
                 GtkWidget  *widget)
 {
   if (!gdk_surface_get_mapped (surface))
-    gtk_widget_hide (widget);
+    gtk_widget_set_visible (widget, FALSE);
 }
 
 static gboolean
@@ -430,12 +430,9 @@ gtk_tooltip_window_set_label_markup (GtkTooltipWindow *window,
     {
       gtk_label_set_markup (GTK_LABEL (window->label), markup);
       update_label_width (GTK_LABEL (window->label));
-      gtk_widget_show (window->label);
     }
-  else
-    {
-      gtk_widget_hide (window->label);
-    }
+
+  gtk_widget_set_visible (window->label, markup != NULL);
 }
 
 void
@@ -446,12 +443,9 @@ gtk_tooltip_window_set_label_text (GtkTooltipWindow *window,
     {
       gtk_label_set_text (GTK_LABEL (window->label), text);
       update_label_width (GTK_LABEL (window->label));
-      gtk_widget_show (window->label);
     }
-  else
-    {
-      gtk_widget_hide (window->label);
-    }
+
+  gtk_widget_set_visible (window->label, text != NULL);
 }
 
 void
@@ -459,44 +453,27 @@ gtk_tooltip_window_set_image_icon (GtkTooltipWindow *window,
                                    GdkPaintable     *paintable)
 {
   if (paintable != NULL)
-    {
-      gtk_image_set_from_paintable (GTK_IMAGE (window->image), paintable);
-      gtk_widget_show (window->image);
-    }
-  else
-    {
-      gtk_widget_hide (window->image);
-    }
+    gtk_image_set_from_paintable (GTK_IMAGE (window->image), paintable);
+
+  gtk_widget_set_visible (window->image, paintable != NULL);
 }
 
 void
 gtk_tooltip_window_set_image_icon_from_name (GtkTooltipWindow *window,
                                              const char       *icon_name)
 {
+  gtk_widget_set_visible (window->image, icon_name != NULL);
   if (icon_name)
-    {
-      gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name);
-      gtk_widget_show (window->image);
-    }
-  else
-    {
-      gtk_widget_hide (window->image);
-    }
+    gtk_image_set_from_icon_name (GTK_IMAGE (window->image), icon_name);
 }
 
 void
 gtk_tooltip_window_set_image_icon_from_gicon (GtkTooltipWindow *window,
                                               GIcon            *gicon)
 {
+  gtk_widget_set_visible (window->image, gicon != NULL);
   if (gicon != NULL)
-    {
-      gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon);
-      gtk_widget_show (window->image);
-    }
-  else
-    {
-      gtk_widget_hide (window->image);
-    }
+    gtk_image_set_from_gicon (GTK_IMAGE (window->image), gicon);
 }
 
 void
@@ -525,9 +502,9 @@ gtk_tooltip_window_set_custom_widget (GtkTooltipWindow *window,
       window->custom_widget = g_object_ref (custom_widget);
 
       gtk_box_append (GTK_BOX (window->box), custom_widget);
-      gtk_widget_show (custom_widget);
-      gtk_widget_hide (window->image);
-      gtk_widget_hide (window->label);
+      gtk_widget_set_visible (custom_widget, TRUE);
+      gtk_widget_set_visible (window->image, FALSE);
+      gtk_widget_set_visible (window->label, FALSE);
     }
 }
 

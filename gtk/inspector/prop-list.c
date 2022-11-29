@@ -624,7 +624,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   gtk_sort_list_model_set_sorter (sorted, gtk_column_view_get_sorter (GTK_COLUMN_VIEW (pl->priv->list)));
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (pl->priv->list), pl->priv->name, GTK_SORT_ASCENDING);
 
-  gtk_widget_show (GTK_WIDGET (pl));
+  gtk_widget_set_visible (GTK_WIDGET (pl), TRUE);
 
   g_object_unref (list);
 

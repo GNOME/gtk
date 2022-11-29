@@ -242,13 +242,12 @@ gtk_sidebar_row_set_property (GObject      *object,
           {
             self->end_icon = G_ICON (g_object_ref (object));
             gtk_image_set_from_gicon (GTK_IMAGE (self->end_icon_widget), self->end_icon);
-            gtk_widget_show (self->end_icon_widget);
           }
         else
           {
             gtk_image_clear (GTK_IMAGE (self->end_icon_widget));
-            gtk_widget_hide (self->end_icon_widget);
           }
+          gtk_widget_set_visible (self->end_icon_widget, object != NULL);
         break;
       }
 
@@ -266,10 +265,7 @@ gtk_sidebar_row_set_property (GObject      *object,
 
     case PROP_EJECTABLE:
       self->ejectable = g_value_get_boolean (value);
-      if (self->ejectable)
-        gtk_widget_show (self->eject_button);
-      else
-        gtk_widget_hide (self->eject_button);
+      gtk_widget_set_visible (self->eject_button, self->ejectable);
       break;
 
     case PROP_ORDER_INDEX:
@@ -369,13 +365,13 @@ on_child_revealed (GObject    *self,
   * still allocate the paddings, even if the revealer is not revealed, and
   * therefore the row will be still somewhat visible. */
   if (!gtk_revealer_get_reveal_child (GTK_REVEALER (self)))
-    gtk_widget_hide (GTK_WIDGET (GTK_SIDEBAR_ROW (user_data)));
+    gtk_widget_set_visible (GTK_WIDGET (GTK_SIDEBAR_ROW (user_data)), FALSE);
 }
 
 void
 gtk_sidebar_row_reveal (GtkSidebarRow *self)
 {
-  gtk_widget_show (GTK_WIDGET (self));
+  gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->revealer), TRUE);
 }
 

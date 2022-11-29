@@ -380,7 +380,6 @@ do_listbox (GtkWidget *do_widget)
         {
           message = gtk_message_new (lines[i]);
           row = gtk_message_row_new (message);
-          gtk_widget_show (GTK_WIDGET (row));
           gtk_list_box_insert (GTK_LIST_BOX (listbox), GTK_WIDGET (row), -1);
         }
 
@@ -389,7 +388,7 @@ do_listbox (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

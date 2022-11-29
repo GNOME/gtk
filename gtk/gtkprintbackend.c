@@ -733,7 +733,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_signal_connect (G_OBJECT (dialog), "response",
                     G_CALLBACK (password_dialog_response), backend);
 
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 void

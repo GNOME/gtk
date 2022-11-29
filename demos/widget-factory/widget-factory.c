@@ -189,7 +189,7 @@ activate_delete (GSimpleAction *action,
     return;
 
   infobar = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "infobar"));
-  gtk_widget_show (infobar);
+  gtk_widget_set_visible (infobar, TRUE);
 }
 
 static void populate_flowbox (GtkWidget *flowbox);
@@ -209,7 +209,7 @@ activate_background (GSimpleAction *action,
   dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "selection_dialog"));
   flowbox = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "selection_flowbox"));
 
-  gtk_widget_show (dialog);
+  gtk_widget_set_visible (dialog, TRUE);
   populate_flowbox (flowbox);
 }
 
@@ -776,19 +776,19 @@ static void
 info_bar_response (GtkWidget *infobar, int response_id)
 {
   if (response_id == GTK_RESPONSE_CLOSE)
-    gtk_widget_hide (infobar);
+    gtk_widget_set_visible (infobar, FALSE);
 }
 
 static void
 show_dialog (GtkWidget *button, GtkWidget *dialog)
 {
-  gtk_widget_show (dialog);
+  gtk_widget_set_visible (dialog, TRUE);
 }
 
 static void
 close_dialog (GtkWidget *dialog)
 {
-  gtk_widget_hide (dialog);
+  gtk_widget_set_visible (dialog, FALSE);
 }
 
 static void
@@ -989,7 +989,7 @@ update_title_header (GtkListBoxRow *row,
       gtk_widget_set_margin_start (header, 6);
       gtk_widget_set_margin_end (header, 6);
       gtk_widget_set_margin_bottom (header, 6);
-      gtk_widget_show (header);
+      gtk_widget_set_visible (header, TRUE);
 
       gtk_list_box_row_set_header (row, header);
 
@@ -1462,7 +1462,7 @@ close_selection_dialog (GtkWidget *dialog, int response, GtkWidget *tv)
   const char *filename;
   gboolean is_resource;
 
-  gtk_widget_hide (dialog);
+  gtk_widget_set_visible (dialog, FALSE);
 
   if (response == GTK_RESPONSE_CANCEL)
     return;
@@ -1730,14 +1730,14 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
 static gboolean
 show_page_again (gpointer data)
 {
-  gtk_widget_show (GTK_WIDGET (data));
+  gtk_widget_set_visible (GTK_WIDGET (data), TRUE);
   return G_SOURCE_REMOVE;
 }
 
 static void
 tab_close_cb (GtkWidget *page)
 {
-  gtk_widget_hide (page);
+  gtk_widget_set_visible (page, FALSE);
   g_timeout_add (2500, show_page_again, page);
 }
 
@@ -2018,12 +2018,12 @@ mode_switch_state_set (GtkSwitch *sw, gboolean state)
   if (!state ||
       (gtk_range_get_value (GTK_RANGE (scale)) > 50))
     {
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
       gtk_switch_set_state (sw, state);
     }
   else
     {
-      gtk_widget_show (label);
+      gtk_widget_set_visible (label, TRUE);
     }
 
   return TRUE;
@@ -2040,7 +2040,7 @@ level_scale_value_changed (GtkRange *range)
       !gtk_switch_get_state (GTK_SWITCH (sw)) &&
       (gtk_range_get_value (range) > 50))
     {
-      gtk_widget_hide (label);
+      gtk_widget_set_visible (label, FALSE);
       gtk_switch_set_state (GTK_SWITCH (sw), TRUE);
     }
   else if (gtk_switch_get_state (GTK_SWITCH (sw)) &&
@@ -2048,6 +2048,12 @@ level_scale_value_changed (GtkRange *range)
     {
       gtk_switch_set_state (GTK_SWITCH (sw), FALSE);
     }
+}
+
+static void
+hide_widget (GtkWidget *widget)
+{
+  gtk_widget_set_visible (widget, FALSE);
 }
 
 static void
@@ -2350,7 +2356,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   widget3 = (GtkWidget *)gtk_builder_get_object (builder, "open_popover_button");
   gtk_popover_set_default_widget (GTK_POPOVER (widget), widget3);
   g_signal_connect (widget2, "notify::text", G_CALLBACK (open_popover_text_changed), widget3);
-  g_signal_connect_swapped (widget3, "clicked", G_CALLBACK (gtk_widget_hide), widget);
+  g_signal_connect_swapped (widget3, "clicked", G_CALLBACK (hide_widget), widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "open_menubutton");
   g_object_set_data (G_OBJECT (window), "open_menubutton", widget);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "record_button");

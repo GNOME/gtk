@@ -939,7 +939,7 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
 static void
 update_website (GtkAboutDialog *about)
 {
-  gtk_widget_show (about->website_label);
+  gtk_widget_set_visible (about->website_label, TRUE);
 
   if (about->website_url)
     {
@@ -968,7 +968,7 @@ update_website (GtkAboutDialog *about)
       if (about->website_text)
         gtk_label_set_text (GTK_LABEL (about->website_label), about->website_text);
       else
-        gtk_widget_hide (about->website_label);
+        gtk_widget_set_visible (about->website_label, FALSE);
     }
 }
 
@@ -997,13 +997,9 @@ update_name_version (GtkAboutDialog *about)
   gtk_window_set_title (GTK_WINDOW (about), title_string);
   g_free (title_string);
 
+  gtk_widget_set_visible (about->version_label, about->version != NULL);
   if (about->version != NULL)
-    {
-      gtk_label_set_markup (GTK_LABEL (about->version_label), about->version);
-      gtk_widget_show (about->version_label);
-    }
-  else
-    gtk_widget_hide (about->version_label);
+    gtk_label_set_markup (GTK_LABEL (about->version_label), about->version);
 
   name_string = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>",
                                          about->name);
@@ -1116,17 +1112,14 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
   about->copyright = g_strdup (copyright);
   g_free (tmp);
 
+  gtk_widget_set_visible (about->copyright_label, about->copyright != NULL);
   if (about->copyright != NULL)
     {
       copyright_string = g_markup_printf_escaped ("<span size=\"small\">%s</span>",
                                                   about->copyright);
       gtk_label_set_markup (GTK_LABEL (about->copyright_label), copyright_string);
       g_free (copyright_string);
-
-      gtk_widget_show (about->copyright_label);
     }
-  else
-    gtk_widget_hide (about->copyright_label);
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_COPYRIGHT]);
 }
@@ -1169,13 +1162,13 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
     {
       about->comments = g_strdup (comments);
       gtk_label_set_text (GTK_LABEL (about->comments_label), about->comments);
-      gtk_widget_show (about->comments_label);
     }
   else
     {
       about->comments = NULL;
-      gtk_widget_hide (about->comments_label);
     }
+
+  gtk_widget_set_visible (about->comments_label, about->comments != NULL);
   g_free (tmp);
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_COMMENTS]);
@@ -1228,7 +1221,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
     }
   g_free (tmp);
 
-  gtk_widget_hide (about->license_label);
+  gtk_widget_set_visible (about->license_label, FALSE);
 
   update_license_button_visibility (about);
 
@@ -2072,7 +2065,7 @@ add_credits_section (GtkAboutDialog  *about,
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_grid_attach (grid, label, 1, *row, 1, 1);
-      gtk_widget_show (label);
+      gtk_widget_set_visible (label, TRUE);
       (*row)++;
     }
 
@@ -2167,8 +2160,7 @@ close_cb (GtkAboutDialog *about,
           gpointer        user_data)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (about->stack), "main");
-
-  gtk_widget_hide (GTK_WIDGET (about));
+  gtk_widget_set_visible (GTK_WIDGET (about), FALSE);
 
   return TRUE;
 }
@@ -2256,6 +2248,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
       about->license_type = license_type;
 
+      gtk_widget_set_visible (about->license_label, TRUE);
       /* custom licenses use the contents of the :license property */
       if (about->license_type != GTK_LICENSE_CUSTOM)
         {
@@ -2283,14 +2276,9 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
                                             about->license);
           gtk_label_set_markup (GTK_LABEL (about->license_label), license_string);
           g_free (license_string);
-          gtk_widget_show (about->license_label);
 
           g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WRAP_LICENSE]);
           g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE]);
-        }
-      else
-        {
-          gtk_widget_show (about->license_label);
         }
 
       update_license_button_visibility (about);

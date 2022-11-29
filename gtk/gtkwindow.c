@@ -3664,7 +3664,7 @@ gtk_window_close_request (GtkWindow *window)
 
   if (priv->hide_on_close)
     {
-      gtk_widget_hide (GTK_WIDGET (window));
+      gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
       return TRUE;
     }
 
@@ -5271,7 +5271,7 @@ gtk_window_present_with_time (GtkWindow *window,
   else
     {
       priv->initial_timestamp = timestamp;
-      gtk_widget_show (widget);
+      gtk_widget_set_visible (widget, TRUE);
     }
 
   g_assert (priv->surface != NULL);
@@ -6148,7 +6148,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
           gtk_widget_set_margin_start (check, 10);
-          gtk_widget_show (check);
           gtk_box_append (GTK_BOX (area), check);
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
@@ -6156,7 +6155,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           g_signal_connect (dialog, "response", G_CALLBACK (warn_response), inspector_window);
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
 
-          gtk_widget_show (dialog);
+          gtk_window_present (GTK_WINDOW (dialog));
 G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
@@ -6167,7 +6166,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     {
       inspector_window = gtk_inspector_window_get (display);
 
-      gtk_widget_hide (inspector_window);
+      gtk_widget_set_visible (inspector_window, FALSE);
     }
 }
 

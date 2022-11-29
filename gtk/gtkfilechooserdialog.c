@@ -98,7 +98,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *                                         GTK_RESPONSE_ACCEPT,
  *                                         NULL);
  *
- *   gtk_widget_show (dialog);
+ *   gtk_window_present (GTK_WINDOW (dialog));
  *
  *   g_signal_connect (dialog, "response",
  *                     G_CALLBACK (on_open_response),
@@ -144,7 +144,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   else
  *     gtk_file_chooser_set_file (chooser, existing_filename);
  *
- *   gtk_widget_show (dialog);
+ *   gtk_window_present (GTK_WINDOW (dialog));
  *
  *   g_signal_connect (dialog, "response",
  *                     G_CALLBACK (on_save_response),
@@ -470,7 +470,6 @@ setup_search (GtkFileChooserDialog *dialog)
       gtk_widget_set_focus_on_click (button, FALSE);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "edit-find-symbolic");
-      gtk_widget_show (button);
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);

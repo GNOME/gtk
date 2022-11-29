@@ -62,7 +62,6 @@ do_markup (GtkWidget *do_widget)
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       stack = gtk_stack_new ();
-      gtk_widget_show (stack);
       gtk_window_set_child (GTK_WINDOW (window), stack);
 
       show_source = gtk_check_button_new_with_label ("Source");
@@ -118,12 +117,10 @@ do_markup (GtkWidget *do_widget)
       gtk_text_buffer_end_irreversible_action (buffer);
 
       g_bytes_unref (bytes);
-
-      gtk_widget_show (stack);
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_widget_set_visible (window, TRUE);
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

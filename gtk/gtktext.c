@@ -2038,7 +2038,7 @@ gtk_text_ensure_magnifier (GtkText *self)
   gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_popover_set_child (GTK_POPOVER (priv->magnifier_popover), priv->magnifier);
-  gtk_widget_show (priv->magnifier);
+  gtk_widget_set_visible (priv->magnifier, TRUE);
 }
 
 static void
@@ -2274,7 +2274,7 @@ gtk_text_move_handle (GtkText       *self,
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
        */
-      gtk_widget_hide (GTK_WIDGET (handle));
+      gtk_widget_set_visible (GTK_WIDGET (handle), FALSE);
     }
   else
     {
@@ -2287,7 +2287,7 @@ gtk_text_move_handle (GtkText       *self,
 
       gtk_text_handle_set_position (handle, &rect);
       gtk_widget_set_direction (GTK_WIDGET (handle), priv->resolved_dir);
-      gtk_widget_show (GTK_WIDGET (handle));
+      gtk_widget_set_visible (GTK_WIDGET (handle), TRUE);
     }
 }
 
@@ -2325,9 +2325,9 @@ gtk_text_update_handles (GtkText *self)
   if (!priv->text_handles_enabled)
     {
       if (priv->text_handles[TEXT_HANDLE_CURSOR])
-        gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+        gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]), FALSE);
       if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
-        gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+        gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]), FALSE);
     }
   else
     {
@@ -2366,7 +2366,7 @@ gtk_text_update_handles (GtkText *self)
         }
       else
         {
-          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+          gtk_widget_set_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]), FALSE);
           gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
                                     GTK_TEXT_HANDLE_ROLE_CURSOR);
           gtk_text_move_handle (self,
@@ -5957,7 +5957,7 @@ hide_selection_bubble (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->selection_bubble && gtk_widget_get_visible (priv->selection_bubble))
-    gtk_widget_hide (priv->selection_bubble);
+    gtk_widget_set_visible (priv->selection_bubble, FALSE);
 }
 
 static void
@@ -6190,11 +6190,9 @@ append_bubble_item (GtkText    *self,
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_widget_show (image);
   gtk_button_set_child (GTK_BUTTON (item), image);
   gtk_widget_add_css_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
-  gtk_widget_show (GTK_WIDGET (item));
   gtk_box_append (GTK_BOX (toolbar), item);
 }
 
@@ -6239,7 +6237,6 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   gtk_widget_set_margin_end (box, 10);
   gtk_widget_set_margin_top (box, 10);
   gtk_widget_set_margin_bottom (box, 10);
-  gtk_widget_show (box);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_add_css_class (toolbar, "linked");
   gtk_popover_set_child (GTK_POPOVER (priv->selection_bubble), box);
@@ -6294,7 +6291,7 @@ gtk_text_selection_bubble_popup_unset (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->selection_bubble)
-    gtk_widget_hide (priv->selection_bubble);
+    gtk_widget_set_visible (priv->selection_bubble, FALSE);
 
   if (priv->selection_bubble_timeout_id)
     {
