@@ -776,7 +776,7 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_face, NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), NULL);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
@@ -854,7 +854,7 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font, NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), NULL);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
