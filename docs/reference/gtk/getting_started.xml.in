@@ -450,7 +450,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
  ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application2/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application2/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>You may have noticed that we used the <literal>_from_resource(<!-- -->)</literal> variant
@@ -518,7 +518,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application3/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application3/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Now we revisit the example_app_window_open() function that
@@ -567,7 +567,7 @@ example_app_window_open (ExampleAppWindow *win,
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application3/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application3/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Note that we did not have to touch the stack switcher
@@ -665,7 +665,7 @@ example_app_class_init (ExampleAppClass *class)
 
 ...
         </programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application4/exampleapp.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application4/exampleapp.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Our preferences menu item does not do anything yet,
@@ -731,7 +731,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application5/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application5/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>The code to connect the font setting is a little more involved,
@@ -780,7 +780,7 @@ preferences_activated (GSimpleAction *action,
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application6/exampleapp.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application6/exampleapp.c">full source</ulink>)</para>
       </informalexample>
 
       <para>After all this work, our application can now show
@@ -866,7 +866,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application7/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application7/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>With the search bar, our application now looks like this:</para>
@@ -926,7 +926,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         ]]></programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application8/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application8/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>What our application looks like now:</para>
@@ -989,12 +989,12 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
         </programlisting>
-        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application9/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application9/exampleappwin.c">full source</ulink>)</para>
       </informalexample>
 
       <para>We also need a function that counts the lines of the currently
       active tab, and updates the @lines label. See the
-      <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-22/examples/application9/exampleappwin.c">full source</ulink>
+      <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/gtk-3-24/examples/application9/exampleappwin.c">full source</ulink>
       if you are interested in the details.</para>
 
       <para>This brings our example application to this appearance:</para>
