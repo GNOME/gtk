@@ -674,7 +674,7 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
  * gtk_font_dialog_choose_family_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_family] call
  * and returns the resulting family.
@@ -758,7 +758,7 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
  * gtk_font_dialog_choose_face_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_face] call
  * and returns the resulting font face.
@@ -836,7 +836,7 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
  * gtk_font_dialog_choose_font_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_font] call
  * and returns the resulting font description.
@@ -919,7 +919,7 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
  * @font_desc: (out caller-allocates): return location for font description
  * @font_features: (out caller-allocates): return location for font features
  * @language: (out caller-allocates): return location for the language
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_font_and_features]
  * call and returns the resulting font description and font features.
