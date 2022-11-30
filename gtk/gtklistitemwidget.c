@@ -303,6 +303,20 @@ gtk_list_item_widget_select_action (GtkWidget  *widget,
 }
 
 static void
+gtk_list_item_widget_scroll_to_action (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *parameter)
+{
+  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  gtk_widget_activate_action (GTK_WIDGET (self),
+                              "list.scroll-to-item",
+                              "u",
+                              priv->position);
+}
+
+static void
 gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -358,6 +372,17 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
                                    "listitem.select",
                                    "(bb)",
                                    gtk_list_item_widget_select_action);
+
+  /**
+   * GtkListItem|listitem.scroll-to:
+   *
+   * Moves the visible area of the list to this item with the minimum amount
+   * of scrolling required. If the item is already visible, nothing happens.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.scroll-to",
+                                   NULL,
+                                   gtk_list_item_widget_scroll_to_action);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
                                        "activate-keybinding", 0);
