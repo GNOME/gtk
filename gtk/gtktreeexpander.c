@@ -118,23 +118,6 @@ G_DEFINE_TYPE (GtkTreeExpander, gtk_tree_expander, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
-static void
-gtk_tree_expander_click_gesture_pressed (GtkGestureClick *gesture,
-                                         int              n_press,
-                                         double           x,
-                                         double           y,
-                                         gpointer         unused)
-{
-  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-
-  gtk_widget_activate_action (widget, "listitem.toggle-expand", NULL);
-
-  gtk_widget_set_state_flags (widget,
-                              GTK_STATE_FLAG_ACTIVE,
-                              FALSE);
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-}
 
 static void
 gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
@@ -143,21 +126,13 @@ gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
                                           double           y,
                                           gpointer         unused)
 {
-  gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                GTK_STATE_FLAG_ACTIVE);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-}
-
-static void
-gtk_tree_expander_click_gesture_canceled (GtkGestureClick  *gesture,
-                                          GdkEventSequence *sequence,
-                                          gpointer          unused)
-{
-  gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                GTK_STATE_FLAG_ACTIVE);
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  if (gtk_widget_contains (widget, x, y))
+    {
+      gtk_widget_activate_action (widget, "listitem.toggle-expand", NULL);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
 }
 
 static void
@@ -202,12 +177,8 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
                                                  FALSE);
               gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                              GDK_BUTTON_PRIMARY);
-              g_signal_connect (gesture, "pressed",
-                                G_CALLBACK (gtk_tree_expander_click_gesture_pressed), NULL);
               g_signal_connect (gesture, "released",
                                 G_CALLBACK (gtk_tree_expander_click_gesture_released), NULL);
-              g_signal_connect (gesture, "cancel",
-                                G_CALLBACK (gtk_tree_expander_click_gesture_canceled), NULL);
               gtk_widget_add_controller (self->expander_icon, GTK_EVENT_CONTROLLER (gesture));
 
               gtk_widget_insert_before (self->expander_icon,
@@ -501,11 +472,17 @@ gtk_tree_expander_toggle_expand (GtkWidget  *widget,
                                  GVariant   *parameter)
 {
   GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+  gboolean expand;
 
   if (self->list_row == NULL)
     return;
 
-  gtk_tree_list_row_set_expanded (self->list_row, !gtk_tree_list_row_get_expanded (self->list_row));
+  expand = !gtk_tree_list_row_get_expanded (self->list_row);
+
+  if (expand)
+    gtk_widget_activate_action (widget, "listitem.scroll-to", NULL);
+
+  gtk_tree_list_row_set_expanded (self->list_row, expand);
 }
 
 static gboolean

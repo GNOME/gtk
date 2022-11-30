@@ -303,6 +303,20 @@ gtk_list_item_widget_select_action (GtkWidget  *widget,
 }
 
 static void
+gtk_list_item_widget_scroll_to_action (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *parameter)
+{
+  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  gtk_widget_activate_action (GTK_WIDGET (self),
+                              "list.scroll-to-item",
+                              "u",
+                              priv->position);
+}
+
+static void
 gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -358,6 +372,17 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
                                    "listitem.select",
                                    "(bb)",
                                    gtk_list_item_widget_select_action);
+
+  /**
+   * GtkListItem|listitem.scroll-to:
+   *
+   * Moves the visible area of the list to this item with the minimum amount
+   * of scrolling required. If the item is already visible, nothing happens.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.scroll-to",
+                                   NULL,
+                                   gtk_list_item_widget_scroll_to_action);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
                                        "activate-keybinding", 0);
@@ -418,8 +443,6 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
         }
     }
 
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-
   if (gtk_widget_get_focus_on_click (widget))
     gtk_widget_grab_focus (widget);
 }
@@ -463,8 +486,6 @@ gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
                                   "(ubb)",
                                   priv->position, modify, extend);
     }
-
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -501,14 +522,6 @@ gtk_list_item_widget_hover_cb (GtkEventControllerMotion *controller,
 }
 
 static void
-gtk_list_item_widget_click_gesture_canceled (GtkGestureClick   *gesture,
-                                             GdkEventSequence  *sequence,
-                                             GtkListItemWidget *self)
-{
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
 gtk_list_item_widget_init (GtkListItemWidget *self)
 {
   GtkEventController *controller;
@@ -527,8 +540,6 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
                     G_CALLBACK (gtk_list_item_widget_click_gesture_pressed), self);
   g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_list_item_widget_click_gesture_released), self);
-  g_signal_connect (gesture, "cancel",
-                    G_CALLBACK (gtk_list_item_widget_click_gesture_canceled), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_focus_new ();
