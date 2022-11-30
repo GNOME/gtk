@@ -338,8 +338,9 @@ drag_prepare (GtkDragSource        *source,
 static void
 update_button_sensitivity (GtkColorDialogButton *self)
 {
-  gtk_widget_set_sensitive (self->button,
-                            self->dialog != NULL && self->cancellable == NULL);
+  if (self->button)
+    gtk_widget_set_sensitive (self->button,
+                              self->dialog != NULL && self->cancellable == NULL);
 }
 
 static void
@@ -347,10 +348,11 @@ color_chosen (GObject      *source,
               GAsyncResult *result,
               gpointer      data)
 {
+  GtkColorDialog *dialog = GTK_COLOR_DIALOG (source);
   GtkColorDialogButton *self = data;
   GdkRGBA *color;
 
-  color = gtk_color_dialog_choose_rgba_finish (self->dialog, result, NULL);
+  color = gtk_color_dialog_choose_rgba_finish (dialog, result, NULL);
   if (color)
     {
       gtk_color_dialog_button_set_rgba (self, color);
