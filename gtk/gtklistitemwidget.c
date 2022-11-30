@@ -443,8 +443,6 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
         }
     }
 
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-
   if (gtk_widget_get_focus_on_click (widget))
     gtk_widget_grab_focus (widget);
 }
@@ -488,8 +486,6 @@ gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
                                   "(ubb)",
                                   priv->position, modify, extend);
     }
-
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
@@ -526,14 +522,6 @@ gtk_list_item_widget_hover_cb (GtkEventControllerMotion *controller,
 }
 
 static void
-gtk_list_item_widget_click_gesture_canceled (GtkGestureClick   *gesture,
-                                             GdkEventSequence  *sequence,
-                                             GtkListItemWidget *self)
-{
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
 gtk_list_item_widget_init (GtkListItemWidget *self)
 {
   GtkEventController *controller;
@@ -552,8 +540,6 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
                     G_CALLBACK (gtk_list_item_widget_click_gesture_pressed), self);
   g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_list_item_widget_click_gesture_released), self);
-  g_signal_connect (gesture, "cancel",
-                    G_CALLBACK (gtk_list_item_widget_click_gesture_canceled), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_focus_new ();
