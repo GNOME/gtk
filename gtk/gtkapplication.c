@@ -113,7 +113,7 @@
  *
  * ## A simple application ## {#gtkapplication}
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bp/bloatpad.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/examples/bp/bloatpad.c)
  *
  * GtkApplication optionally registers with a session manager
  * of the users session (if you set the #GtkApplication:register-session
