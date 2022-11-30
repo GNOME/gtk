@@ -503,11 +503,17 @@ gtk_tree_expander_toggle_expand (GtkWidget  *widget,
                                  GVariant   *parameter)
 {
   GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+  gboolean expand;
 
   if (self->list_row == NULL)
     return;
 
-  gtk_tree_list_row_set_expanded (self->list_row, !gtk_tree_list_row_get_expanded (self->list_row));
+  expand = !gtk_tree_list_row_get_expanded (self->list_row);
+
+  if (expand)
+    gtk_widget_activate_action (widget, "listitem.scroll-to", NULL);
+
+  gtk_tree_list_row_set_expanded (self->list_row, expand);
 }
 
 static gboolean
