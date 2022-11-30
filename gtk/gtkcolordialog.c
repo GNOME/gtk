@@ -473,7 +473,7 @@ gtk_color_dialog_choose_rgba (GtkColorDialog       *self,
  * gtk_color_dialog_choose_rgba_finish:
  * @self: a `GtkColorDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.ColorDialog.choose_rgba] call and
  * returns the resulting color.
