@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 11:37+0000\n"
+"POT-Creation-Date: 2022-11-24 13:43+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -469,19 +469,19 @@ msgstr ""
 msgid "Unable to create a GL context"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/wayland/gdkglcontext-wayland.c:422
+#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
 #: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1491
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:476
+#: gdk/wayland/gdkglcontext-wayland.c:480
 msgid "Core GL is not available on EGL implementation"
 msgstr ""
 
@@ -1675,7 +1675,7 @@ msgstr ""
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
 #: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
 msgid "Application"
-msgstr ""
+msgstr "Аҧшьы"
 
 #: gtk/gtkbookmarksmanager.c:51
 #, c-format
@@ -1860,7 +1860,7 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:185 gtk/gtkcolorbutton.c:398
 msgid "Pick a Color"
-msgstr ""
+msgstr "Аԥштәы алшәх"
 
 #: gtk/gtkcolorchooserwidget.c:304
 #, c-format
@@ -2172,7 +2172,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:1120
 msgid "_Width:"
-msgstr ""
+msgstr "_Аҭбаара"
 
 #: gtk/gtkcustompaperunixdialog.c:1131
 msgid "_Height:"
@@ -2188,15 +2188,15 @@ msgstr "_Хыхьтәи:"
 
 #: gtk/gtkcustompaperunixdialog.c:1162
 msgid "_Bottom:"
-msgstr ""
+msgstr "_Ҵаҟа"
 
 #: gtk/gtkcustompaperunixdialog.c:1173
 msgid "_Left:"
-msgstr ""
+msgstr "А_рмарахь:"
 
 #: gtk/gtkcustompaperunixdialog.c:1184
 msgid "_Right:"
-msgstr ""
+msgstr "А_рӷьарахь"
 
 #: gtk/gtkcustompaperunixdialog.c:1223
 msgid "Paper Margins"
@@ -2237,11 +2237,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:9810 gtk/gtktextview.c:9791
 msgid "Copy"
-msgstr ""
+msgstr "Ахкьыҧхьаара"
 
 #: gtk/gtkentry.c:9813 gtk/gtktextview.c:9794
 msgid "Paste"
-msgstr ""
+msgstr "Абжьаргылара"
 
 #: gtk/gtkentry.c:10885
 msgid "Caps Lock is on"
@@ -2638,7 +2638,7 @@ msgstr ""
 #.
 #: gtk/gtkfilesystem.c:49
 msgid "File System"
-msgstr ""
+msgstr "Афаилтә система"
 
 #: gtk/gtkfontbutton.c:379 gtk/gtkfontbutton.c:509
 msgid "Sans 12"
@@ -2745,7 +2745,7 @@ msgstr ""
 
 #: gtk/gtkinfobar.c:1307 gtk/gtkmessagedialog.c:385
 msgid "Information"
-msgstr ""
+msgstr "Аинформациа"
 
 #: gtk/gtkinfobar.c:1311 gtk/gtkmessagedialog.c:389
 msgid "Question"
@@ -3067,7 +3067,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:1085
 msgid "Starred"
-msgstr ""
+msgstr "Иалкаау"
 
 #. TODO: Rename to 'Starred files'
 #: gtk/gtkplacessidebar.c:1088
@@ -3367,7 +3367,7 @@ msgstr[1] ""
 
 #: gtk/gtkplacesviewrow.c:481
 msgid "Disconnect"
-msgstr ""
+msgstr "Аҿыхра"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
 #: gtk/ui/gtksidebarrow.ui:62
@@ -3754,11 +3754,11 @@ msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:144
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Асааҭхыц иқәланы аргьежьра"
 
 #: gtk/gtkshortcutsshortcut.c:148
 msgid "Rotate counterclockwise"
-msgstr ""
+msgstr "Асааҭхыц иаҿагыланы аргьежьра"
 
 #: gtk/gtkshortcutsshortcut.c:152
 msgid "Two finger swipe left"
@@ -4060,7 +4060,7 @@ msgstr ""
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
 #: gtk/ui/gtkcoloreditor.ui:320
 msgid "Value"
-msgstr ""
+msgstr "Аҵакы"
 
 #: gtk/inspector/data-list.ui:15
 msgid "Show data"
@@ -4497,15 +4497,15 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:309
 msgid "Text Direction"
-msgstr ""
+msgstr "Атекст ахырхарҭа"
 
 #: gtk/inspector/visual.ui:322
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Арымарахьтә арӷьарахь"
 
 #: gtk/inspector/visual.ui:323
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Арӷьарахьтә арымарахь"
 
 #: gtk/inspector/visual.ui:347
 msgid "Window scaling"
@@ -4589,7 +4589,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:54 gtk/inspector/window.ui:134
 msgid "Show Details"
-msgstr ""
+msgstr "Аԥкаарақәа рырбара"
 
 #: gtk/inspector/window.ui:77
 msgid "Show all Objects"
@@ -4645,7 +4645,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:452
 msgid "Actions"
-msgstr ""
+msgstr "Аҟаҵарақәа"
 
 #: gtk/inspector/window.ui:468
 msgid "Gestures"
@@ -7180,7 +7180,7 @@ msgstr ""
 
 #: gtk/ui/gtkfontchooserdialog.ui:6
 msgid "Select Font"
-msgstr ""
+msgstr "Ашрифт алхра"
 
 #: gtk/ui/gtkfontchooserwidget.ui:53
 msgid "Search font name"
@@ -7220,7 +7220,7 @@ msgstr ""
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:224 gtk/ui/gtkprintunixdialog.ui:795
 msgid "Landscape"
-msgstr ""
+msgstr "Аҭыҧсахьатә"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:259 gtk/ui/gtkprintunixdialog.ui:797
 msgid "Reverse landscape"
@@ -7260,7 +7260,7 @@ msgstr ""
 
 #: gtk/ui/gtkplacesview.ui:261
 msgid "No results found"
-msgstr ""
+msgstr "Алҵшәақәа ԥшааӡам"
 
 #: gtk/ui/gtkplacesview.ui:307
 msgid "Connect to _Server"
@@ -8299,820 +8299,3 @@ msgstr ""
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
