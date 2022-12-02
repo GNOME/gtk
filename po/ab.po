@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-10-26 22:10+0000\n"
+"POT-Creation-Date: 2022-11-18 18:26+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -553,7 +553,7 @@ msgid "Reading data failed at row %d"
 msgstr ""
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:335
+#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:336
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
@@ -1560,7 +1560,7 @@ msgstr ""
 #.
 #: gtk/gtkapplication-dbus.c:706
 msgid "Reason not specified"
-msgstr ""
+msgstr "Амзыз арбаӡам"
 
 #: gtk/gtkbookmarksmanager.c:51
 #, c-format
@@ -1683,7 +1683,7 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:179 gtk/gtkcolorbutton.c:307
 msgid "Pick a Color"
-msgstr ""
+msgstr "Аԥштәы алшәх"
 
 #: gtk/gtkcolorbutton.c:496 gtk/gtkcolorchooserwidget.c:308
 #, c-format
@@ -1978,7 +1978,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:939
 msgid "_Width:"
-msgstr ""
+msgstr "_Аҭбаара"
 
 #: gtk/gtkcustompaperunixdialog.c:950
 msgid "_Height:"
@@ -1994,15 +1994,15 @@ msgstr "_Хыхьтәи:"
 
 #: gtk/gtkcustompaperunixdialog.c:981
 msgid "_Bottom:"
-msgstr ""
+msgstr "_Ҵаҟа"
 
 #: gtk/gtkcustompaperunixdialog.c:992
 msgid "_Left:"
-msgstr ""
+msgstr "А_рмарахь:"
 
 #: gtk/gtkcustompaperunixdialog.c:1003
 msgid "_Right:"
-msgstr ""
+msgstr "А_рӷьарахь"
 
 #: gtk/gtkcustompaperunixdialog.c:1039
 msgid "Paper Margins"
@@ -2078,7 +2078,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:637 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6149 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6152 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2169,7 +2169,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6049 gtk/gtktextview.c:8966
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6061 gtk/gtktextview.c:8966
 msgid "_Delete"
 msgstr "_Аныхра"
 
@@ -2224,7 +2224,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:1856
 msgid "Sort _Folders Before Files"
-msgstr ""
+msgstr "Афаилқәа раԥхьа аҭаӡқәа_ реилыԥшаара"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
@@ -2388,7 +2388,7 @@ msgstr ""
 
 #: gtk/gtkfontchooserdialog.c:184
 msgid "Change Font Features"
-msgstr ""
+msgstr "Ашрифт аҟазшьарбагақәа рыԥсахра"
 
 #: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
@@ -2455,7 +2455,7 @@ msgstr "Анимациа"
 
 #: gtk/gtkfontchooserwidget.c:2506
 msgid "Style Variations"
-msgstr ""
+msgstr "Астильқәа рыхкеиҭагара"
 
 #: gtk/gtkfontchooserwidget.c:2508
 msgid "Character Variations"
@@ -2465,19 +2465,19 @@ msgstr "Асимволқәа рвариантқәа"
 msgid "OpenGL context creation failed"
 msgstr ""
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6037 gtk/gtktextview.c:8954
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6049 gtk/gtktextview.c:8954
 msgid "Cu_t"
 msgstr "_Агәылԥҟара "
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6041 gtk/gtktextview.c:8958
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6053 gtk/gtktextview.c:8958
 msgid "_Copy"
 msgstr "_Ахкьыҧхьаара"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6045 gtk/gtktextview.c:8962
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6057 gtk/gtktextview.c:8962
 msgid "_Paste"
 msgstr "_Абжьаргылара"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6058 gtk/gtktextview.c:8987
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6070 gtk/gtktextview.c:8987
 msgid "Select _All"
 msgstr "З_егьы алхра"
 
@@ -2581,7 +2581,7 @@ msgid "%d:%02d"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6150
+#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6153
 msgid "_OK"
 msgstr "_OK"
 
@@ -2700,15 +2700,15 @@ msgstr ""
 
 #: gtk/gtknotebook.c:1491
 msgid "Tab list"
-msgstr ""
+msgstr "Агәылаҵақәа рыхьӡынҵа"
 
 #: gtk/gtknotebook.c:3214
 msgid "Previous tab"
-msgstr ""
+msgstr "Иаԥхьааиуа агәылаҵа"
 
 #: gtk/gtknotebook.c:3218
 msgid "Next tab"
-msgstr ""
+msgstr "Анаҩстәи агәылаҵа"
 
 #: gtk/gtknotebook.c:4038
 msgid "Tab"
@@ -2768,7 +2768,7 @@ msgstr "Caps Lock аҿакуп"
 
 #: gtk/gtkpasswordentry.c:698
 msgid "_Show Text"
-msgstr ""
+msgstr "_Атекст арбара"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:914
@@ -2786,11 +2786,11 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:1016
 msgid "Starred"
-msgstr ""
+msgstr "Иалкаау"
 
 #: gtk/gtkplacessidebar.c:1018
 msgid "Starred files"
-msgstr ""
+msgstr "Иалкаау афаилқаә"
 
 #: gtk/gtkplacessidebar.c:1029
 msgid "Open your personal folder"
@@ -3078,7 +3078,7 @@ msgstr[1] ""
 
 #: gtk/gtkplacesviewrow.c:471
 msgid "Disconnect"
-msgstr ""
+msgstr "Аҿыхра"
 
 #: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53
 #: gtk/ui/gtksidebarrow.ui:50
@@ -3193,7 +3193,7 @@ msgstr "Print"
 
 #: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1504
 msgid "Application"
-msgstr ""
+msgstr "Аҧшьы"
 
 #: gtk/gtkprintoperation-win32.c:635
 msgid "Printer offline"
@@ -3343,12 +3343,12 @@ msgstr ""
 #: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
 #, c-format
 msgid "Unable to find an item with URI “%s”"
-msgstr ""
+msgstr "URI «%s» змоу аелемент аԥшаара залымшеит"
 
 #: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
-msgstr ""
+msgstr "аелемент URI «%s» аҟынтә «%s» ахь аиагара залымшахеит"
 
 #: gtk/gtkrecentmanager.c:2319
 #, c-format
@@ -3357,7 +3357,7 @@ msgstr ""
 
 #: gtk/gtksearchentry.c:639
 msgid "Clear entry"
-msgstr ""
+msgstr "Анҵамҭа арыцқьара"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3393,11 +3393,11 @@ msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:151
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Асааҭхыц иқәланы аргьежьра"
 
 #: gtk/gtkshortcutsshortcut.c:155
 msgid "Rotate counterclockwise"
-msgstr ""
+msgstr "Асааҭхыц иаҿагыланы аргьежьра"
 
 #: gtk/gtkshortcutsshortcut.c:159
 msgid "Two finger swipe left"
@@ -3409,11 +3409,11 @@ msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:167
 msgid "Swipe left"
-msgstr ""
+msgstr "Арӷьарахь аҟьара"
 
 #: gtk/gtkshortcutsshortcut.c:171
 msgid "Swipe right"
-msgstr ""
+msgstr "Армарахь аҟьара"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
 #: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
@@ -3449,7 +3449,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr ""
 
-#: gtk/gtktext.c:6063 gtk/gtktextview.c:8992
+#: gtk/gtktext.c:6075 gtk/gtktextview.c:8992
 msgid "Insert _Emoji"
 msgstr ""
 
@@ -3463,7 +3463,7 @@ msgstr "Ар_хынҳәра"
 
 #: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:287
 msgid "Expand"
-msgstr ""
+msgstr "Аиҵыхра"
 
 #: gtk/gtkvolumebutton.c:228
 msgid "Muted"
@@ -3484,12 +3484,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr ""
 
-#: gtk/gtkwindow.c:6137
+#: gtk/gtkwindow.c:6140
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Шәхы иашәырхәар шәҭахума GTK Inspector?"
 
-#: gtk/gtkwindow.c:6139
+#: gtk/gtkwindow.c:6142
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3497,7 +3497,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:6144
+#: gtk/gtkwindow.c:6147
 msgid "Don’t show this message again"
 msgstr ""
 
@@ -3523,7 +3523,7 @@ msgstr "Аркра"
 
 #: gtk/gtkwindowcontrols.c:359
 msgid "Close the window"
-msgstr ""
+msgstr "Аԥенџьвр аркра"
 
 #: gtk/gtkwindowhandle.c:223
 msgid "Restore"
@@ -3531,11 +3531,11 @@ msgstr "Аиҭашьақәыргылара"
 
 #: gtk/inspector/a11y.ui:16
 msgid "Role"
-msgstr ""
+msgstr "Ароль"
 
 #: gtk/inspector/a11y.ui:40
 msgid "Object path"
-msgstr ""
+msgstr "Аобиект ахь амҩа"
 
 #: gtk/inspector/a11y.ui:66
 msgid "Attribute"
@@ -3545,7 +3545,7 @@ msgstr "Аҟазшьарбага"
 #: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
 #: gtk/inspector/recorder.ui:221
 msgid "Value"
-msgstr ""
+msgstr "Аҵакы"
 
 #: gtk/inspector/action-editor.c:123
 msgid "Activate"
@@ -3553,7 +3553,7 @@ msgstr "Активациа азура"
 
 #: gtk/inspector/action-editor.c:135
 msgid "Set State"
-msgstr ""
+msgstr "Аҭагылазаашьа ашьақәыргылара "
 
 #: gtk/inspector/actions.ui:30
 msgid "Enabled"
@@ -3574,7 +3574,7 @@ msgstr "Агәарҿыхарақәа"
 
 #: gtk/inspector/clipboard.c:228
 msgid "Hover to load"
-msgstr ""
+msgstr "Аҭагаларазы ахырхага ақәышәк"
 
 #: gtk/inspector/clipboard.c:278
 msgctxt "clipboard"
@@ -3593,7 +3593,7 @@ msgstr ""
 
 #: gtk/inspector/clipboard.ui:31
 msgid "Drag and hold here"
-msgstr ""
+msgstr "Иқәырҳәазаны абраҟа ишәкыз"
 
 #: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
 msgid "Clipboard"
@@ -3601,7 +3601,7 @@ msgstr "Аԥсахра абуфер"
 
 #: gtk/inspector/clipboard.ui:114
 msgid "Primary"
-msgstr ""
+msgstr "Ихадоу"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -3722,19 +3722,19 @@ msgstr ""
 
 #: gtk/inspector/general.ui:84
 msgid "GSK Renderer"
-msgstr ""
+msgstr "Арендер GSK"
 
 #: gtk/inspector/general.ui:110
 msgid "Pango Fontmap"
-msgstr ""
+msgstr "Pango ашрифтқәа рыхсаала"
 
 #: gtk/inspector/general.ui:136
 msgid "Media Backend"
-msgstr ""
+msgstr "Амедиа бенкед"
 
 #: gtk/inspector/general.ui:162
 msgid "Input Method"
-msgstr ""
+msgstr "Аҭагалашьа"
 
 #: gtk/inspector/general.ui:202
 msgid "Application ID"
@@ -3754,7 +3754,7 @@ msgstr "Аԥшра"
 
 #: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
-msgstr ""
+msgstr "Лаԥшылатәи RGBA"
 
 #: gtk/inspector/general.ui:523
 msgid "Composited"
@@ -3770,7 +3770,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
-msgstr ""
+msgstr "Аиҿартәыра Vulkan"
 
 #: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
@@ -3778,7 +3778,7 @@ msgstr "Аверсиа API Vulkan"
 
 #: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
-msgstr ""
+msgstr "Vulkan адраивер аверсиа"
 
 #: gtk/inspector/menu.c:95
 msgid "Unnamed section"
@@ -3811,11 +3811,11 @@ msgstr "Ахкы"
 
 #: gtk/inspector/misc-info.ui:91
 msgid "Reference Count"
-msgstr ""
+msgstr "Азхьаԥшрақәа рхыԥхьаӡара"
 
 #: gtk/inspector/misc-info.ui:151
 msgid "Direction"
-msgstr ""
+msgstr "Ахырхарҭа"
 
 #: gtk/inspector/misc-info.ui:181
 msgid "Buildable ID"
@@ -3827,11 +3827,11 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:240
 msgid "Request Mode"
-msgstr ""
+msgstr "Адҵаалара арежим"
 
 #: gtk/inspector/misc-info.ui:269
 msgid "Measure map"
-msgstr ""
+msgstr "Ашәагақәа рыхсаала"
 
 #: gtk/inspector/misc-info.ui:338
 msgid "Allocation"
@@ -3865,11 +3865,11 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:543
 msgid "Frame Count"
-msgstr ""
+msgstr "Акадрқәа рхыԥхьаӡара"
 
 #: gtk/inspector/misc-info.ui:572
 msgid "Frame Rate"
-msgstr ""
+msgstr "Акадрқәа рыласра"
 
 #: gtk/inspector/misc-info.ui:601
 msgid "Mapped"
@@ -3922,7 +3922,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:888
 #, c-format
 msgid "%s with value type %s"
-msgstr ""
+msgstr "%s аҵакы ахкы змоу %s"
 
 #: gtk/inspector/prop-editor.c:1242
 #, c-format
@@ -3952,7 +3952,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:1527
 #, c-format
 msgid "Action from: %p (%s)"
-msgstr ""
+msgstr "Аҟаҵара :%p (%s) аҟынтә"
 
 #: gtk/inspector/prop-editor.c:1582
 msgid "Reset"
@@ -3994,11 +3994,11 @@ msgstr ""
 #: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
-msgstr ""
+msgstr "RenderNode аиқәырхараан иҟалеит агха"
 
 #: gtk/inspector/recorder.ui:20
 msgid "Record frames"
-msgstr ""
+msgstr "Анҵамҭа акадрқәа"
 
 #: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
@@ -4022,7 +4022,7 @@ msgstr ""
 
 #: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Абуфер ахь ахькьыпхьаара"
 
 #: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
@@ -4159,15 +4159,15 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:240
 msgid "Text Direction"
-msgstr ""
+msgstr "Атекст ахырхарҭа"
 
 #: gtk/inspector/visual.ui:255
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Арымарахьтә арӷьарахь"
 
 #: gtk/inspector/visual.ui:256
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Арӷьарахьтә арымарахь"
 
 #: gtk/inspector/visual.ui:274
 msgid "Window Scaling"
@@ -4235,7 +4235,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
 msgid "Show Details"
-msgstr ""
+msgstr "Аԥкаарақәа рырбара"
 
 #: gtk/inspector/window.ui:57
 msgid "Show all Objects"
@@ -4303,7 +4303,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:457
 msgid "Actions"
-msgstr ""
+msgstr "Аҟаҵарақәа"
 
 #: gtk/inspector/window.ui:468
 msgid "Menu"
@@ -4319,7 +4319,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:508
 msgid "Accessibility"
-msgstr ""
+msgstr "Ахархәара аманшәалара"
 
 #: gtk/inspector/window.ui:532
 msgid "Global"
@@ -4327,11 +4327,11 @@ msgstr ""
 
 #: gtk/inspector/window.ui:545
 msgid "Information"
-msgstr ""
+msgstr "Аинформациа"
 
 #: gtk/inspector/window.ui:554
 msgid "Settings"
-msgstr ""
+msgstr "Архиарақәа"
 
 #: gtk/inspector/window.ui:563
 msgid "Resources"
@@ -6045,7 +6045,7 @@ msgstr ""
 
 #: gtk/ui/gtkfontchooserdialog.ui:4
 msgid "Select Font"
-msgstr ""
+msgstr "Ашрифт алхра"
 
 #: gtk/ui/gtkfontchooserwidget.ui:64
 msgid "Search font name"
@@ -6097,7 +6097,7 @@ msgstr ""
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:676
 msgid "Landscape"
-msgstr ""
+msgstr "Аҭыҧсахьатә"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:678
 msgid "Reverse landscape"
@@ -6129,7 +6129,7 @@ msgstr ""
 
 #: gtk/ui/gtkplacesview.ui:221
 msgid "No results found"
-msgstr ""
+msgstr "Алҵшәақәа ԥшааӡам"
 
 #: gtk/ui/gtkplacesview.ui:252
 msgid "Connect to _Server"
@@ -7239,824 +7239,3 @@ msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
