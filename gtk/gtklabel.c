@@ -5222,7 +5222,8 @@ gtk_label_drag_gesture_begin (GtkGestureDrag *gesture,
     {
       if (min < max && min <= index && index <= max)
         {
-          info->in_drag = TRUE;
+          if (!info->select_words)
+            info->in_drag = TRUE;
           info->drag_start_x = start_x;
           info->drag_start_y = start_y;
         }
