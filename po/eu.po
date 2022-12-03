@@ -4,13 +4,13 @@
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015, 2016, 2017, 2018.
-# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2019, 2020.
+# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2019, 2020, 2022.
 # Ibai Oihanguren Sala <ibai@oihanguren.com>, 2020, 2021, 2022.
 msgid ""
 msgstr "Project-Id-Version: gtk+ gtk-3-22\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-26 16:15+0000\n"
-"PO-Revision-Date: 2022-02-27 21:00+0100\n"
+"POT-Creation-Date: 2022-11-24 13:43+0000\n"
+"PO-Revision-Date: 2022-12-03 21:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -477,19 +477,19 @@ msgstr "Ezin da GL pixel formatua sortu"
 msgid "Unable to create a GL context"
 msgstr "Ezin da GL testuingurua sortu"
 
-#: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/wayland/gdkglcontext-wayland.c:422
+#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
 #: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Ez dago emandako pixel formatuaren konfiguraziorik erabilgarri"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1491
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Ez dago GL inplementaziorik erabilgarri"
 
-#: gdk/wayland/gdkglcontext-wayland.c:476
+#: gdk/wayland/gdkglcontext-wayland.c:480
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL nukleoa ez dago erabilgarri EGL inplementazioan"
 
@@ -654,15 +654,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "It_xi"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9320
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
 msgid "Minimize"
 msgstr "Minimizatu"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9329
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
 msgid "Maximize"
 msgstr "Maximizatu"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9286
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
 msgid "Restore"
 msgstr "Leheneratu"
 
@@ -1197,7 +1197,7 @@ msgstr "Egin klik paleta-sarrera honetan uneko kolore bihurtzeko. Sarrera hori a
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12790 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1246,7 +1246,7 @@ msgid "_Apply"
 msgstr "_Aplikatu"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
 msgid "_OK"
 msgstr "_Ados"
 
@@ -1602,12 +1602,21 @@ msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:889
+#. Translators: "KP" means "numeric key pad". This string will
+#. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
+#. * and therefore the translation needs to be very short.
+#.
+#: gtk/gtkaccellabel.c:893
+msgctxt "keyboard label"
+msgid "KP"
+msgstr "ZT"
+
+#: gtk/gtkaccellabel.c:900
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Zuriunea"
 
-#: gtk/gtkaccellabel.c:892 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:903 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Alderantzizko barra"
@@ -2218,52 +2227,52 @@ msgstr "E_skuinean:"
 msgid "Paper Margins"
 msgstr "Paper-marjinak"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6687 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "_Moztu"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9529
+#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6688 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9531
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6689 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1500
+#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "Ez_abatu"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9548
+#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6700 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9558
+#: gtk/gtkentry.c:9628 gtk/gtktextview.c:9561
 msgid "Insert _Emoji"
 msgstr "Txertatu _emojia"
 
-#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9782
+#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9785
 msgid "Select all"
 msgstr "Hautatu dena"
 
-#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9785
+#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9788
 msgid "Cut"
 msgstr "Ebaki"
 
-#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9788
+#: gtk/gtkentry.c:9810 gtk/gtktextview.c:9791
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9791
+#: gtk/gtkentry.c:9813 gtk/gtktextview.c:9794
 msgid "Paste"
 msgstr "Itsatsi"
 
-#: gtk/gtkentry.c:10880
+#: gtk/gtkentry.c:10885
 msgid "Caps Lock is on"
 msgstr "Maiuskulen blokeoaren tekla aktibatuta dago"
 
-#: gtk/gtkentry.c:11158
+#: gtk/gtkentry.c:11163
 msgid "Insert Emoji"
 msgstr "Txertatu emojia"
 
@@ -2669,51 +2678,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/gtkfontchooserwidget.c:1602
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Width"
 msgstr "Zabalera"
 
-#: gtk/gtkfontchooserwidget.c:1603
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Weight"
 msgstr "Pisua"
 
-#: gtk/gtkfontchooserwidget.c:1604
+#: gtk/gtkfontchooserwidget.c:1606
 msgid "Italic"
 msgstr "Etzana"
 
-#: gtk/gtkfontchooserwidget.c:1605
+#: gtk/gtkfontchooserwidget.c:1607
 msgid "Slant"
 msgstr "Makurdura"
 
-#: gtk/gtkfontchooserwidget.c:1606
+#: gtk/gtkfontchooserwidget.c:1608
 msgid "Optical Size"
 msgstr "Tamaina optikoa"
 
-#: gtk/gtkfontchooserwidget.c:2306 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2308 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: gtk/gtkfontchooserwidget.c:2353
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Ligatures"
 msgstr "Hizki-loturak"
 
-#: gtk/gtkfontchooserwidget.c:2354
+#: gtk/gtkfontchooserwidget.c:2356
 msgid "Letter Case"
 msgstr "Maiuskula/minuskula"
 
-#: gtk/gtkfontchooserwidget.c:2355
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Case"
 msgstr "Zenbakien tamaina"
 
-#: gtk/gtkfontchooserwidget.c:2356
+#: gtk/gtkfontchooserwidget.c:2358
 msgid "Number Spacing"
 msgstr "Zenbakien tartea"
 
-#: gtk/gtkfontchooserwidget.c:2357
+#: gtk/gtkfontchooserwidget.c:2359
 msgid "Number Formatting"
 msgstr "Zenbakien formatua"
 
-#: gtk/gtkfontchooserwidget.c:2358
+#: gtk/gtkfontchooserwidget.c:2360
 msgid "Character Variants"
 msgstr "Karaktere-aldaerak"
 
@@ -2725,7 +2734,7 @@ msgstr "Huts egin du OpenGL-ren testuingurua sortzean"
 msgid "Application menu"
 msgstr "Aplikazioaren menua"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9356
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
 msgid "Close"
 msgstr "Itxi"
 
@@ -3992,24 +4001,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkwindow.c:9304
+#: gtk/gtkwindow.c:9329
 msgid "Move"
 msgstr "Mugitu"
 
-#: gtk/gtkwindow.c:9312
+#: gtk/gtkwindow.c:9337
 msgid "Resize"
 msgstr "Aldatu tamaina"
 
-#: gtk/gtkwindow.c:9343
+#: gtk/gtkwindow.c:9368
 msgid "Always on Top"
 msgstr "Beti gainean"
 
-#: gtk/gtkwindow.c:12778
+#: gtk/gtkwindow.c:12803
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Nahi duzu GTK+ ikuskatzailea erabiltzea?"
 
-#: gtk/gtkwindow.c:12780
+#: gtk/gtkwindow.c:12805
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4017,7 +4026,7 @@ msgid ""
 "break or crash."
 msgstr "GTK+ ikuskatzailea arazketa elkarreragile bat da, edozer GTk+ aplikazioren barnekoak arakatzea eta aldatzea baimentzen dizu. Hori erabiltzean aplikazioa hondatu edo kraskatu dezakezu."
 
-#: gtk/gtkwindow.c:12785
+#: gtk/gtkwindow.c:12810
 msgid "Don't show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
@@ -7708,7 +7717,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnamdarra (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
@@ -8326,124 +8335,3 @@ msgstr "irteerako-proba.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Inprimatu probako inprimagailuan"
-
-#~ msgid "Don't batch GDI requests"
-#~ msgstr "Ez jarri GDI eskaerak batch gisa"
-
-#~ msgid "Don't use the Wintab API for tablet support"
-#~ msgstr "Ez erabili Wintab APIa taulak onartzeko"
-
-#~ msgid "Same as --no-wintab"
-#~ msgstr "'--no-wintab' bezala ere"
-
-#~ msgid "Do use the Wintab API [default]"
-#~ msgstr "Erabili Wintab APIa [lehenetsia]"
-
-#~ msgid "Size of the palette in 8 bit mode"
-#~ msgstr "8-bit motako paletaren tamaina"
-
-#~ msgid "COLORS"
-#~ msgstr "KOLOREAK"
-
-#~ msgid "Online"
-#~ msgstr "Konektatuta"
-
-#~ msgid "Offline"
-#~ msgstr "Deskonektatuta"
-
-#~ msgid "Dormant"
-#~ msgstr "Lotan"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark"
-#~ msgstr "Iluna"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Scarlet Red"
-#~ msgstr "Gorri eskarlata argia"
-
-#~ msgctxt "Color name"
-#~ msgid "Scarlet Red"
-#~ msgstr "Gorri eskarlata"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Butter"
-#~ msgstr "Gurin argia"
-
-#~ msgctxt "Color name"
-#~ msgid "Butter"
-#~ msgstr "Gurina"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chameleon"
-#~ msgstr "Kameleoi argia"
-
-#~ msgctxt "Color name"
-#~ msgid "Chameleon"
-#~ msgstr "Kameleoia"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chameleon"
-#~ msgstr "Kameleoi iluna"
-
-#~ msgctxt "Color name"
-#~ msgid "Sky Blue"
-#~ msgstr "Zeru urdina"
-
-#~ msgctxt "Color name"
-#~ msgid "Plum"
-#~ msgstr "Arana"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chocolate"
-#~ msgstr "Txokolate argia"
-
-#~ msgctxt "Color name"
-#~ msgid "Chocolate"
-#~ msgstr "Txokolatea"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chocolate"
-#~ msgstr "Txokolate iluna"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 1"
-#~ msgstr "Aluminio argia 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 1"
-#~ msgstr "Aluminioa 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 1"
-#~ msgstr "Aluminio iluna 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 2"
-#~ msgstr "Aluminio argia 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 2"
-#~ msgstr "Aluminioa 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 2"
-#~ msgstr "Aluminio iluna 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Darker Gray"
-#~ msgstr "Gris ilunagoa"
-
-#~ msgctxt "Color name"
-#~ msgid "Medium Gray"
-#~ msgstr "Tarteko grisa"
-
-#~ msgctxt "Color name"
-#~ msgid "Lighter Gray"
-#~ msgstr "Gris argiagoa"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "3.2 nukleoa GL profila ez dago erabilgarri EGL inplementazioan"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "Ez dago X SEan garatuta"
