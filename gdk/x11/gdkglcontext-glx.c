@@ -232,6 +232,12 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
                     g_message ("Making GLX context %p current to drawable %lu",
                                context, (unsigned long) drawable));
 
+  /* Work around a glitch, see
+   * https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5281
+   */
+  if (glXGetCurrentContext () != self->glx_context)
+    glXMakeContextCurrent (dpy, None, None, NULL);
+
   if (!glXMakeContextCurrent (dpy, drawable, drawable, self->glx_context))
     return FALSE;
 
