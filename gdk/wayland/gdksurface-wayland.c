@@ -3583,6 +3583,8 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
         {
           struct xdg_activation_token_v1 *token;
           struct wl_event_queue *event_queue;
+          struct wl_surface *wl_surface = NULL;
+          GdkSurface *focus_surface;
 
           event_queue = wl_display_create_queue (display_wayland->wl_display);
 
@@ -3595,8 +3597,13 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
           xdg_activation_token_v1_set_serial (token,
                                               _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
                                               gdk_wayland_seat_get_wl_seat (GDK_SEAT (seat)));
-          xdg_activation_token_v1_set_surface (token,
-                                               gdk_wayland_surface_get_wl_surface (surface));
+
+          focus_surface = gdk_wayland_device_get_focus (gdk_seat_get_keyboard (GDK_SEAT (seat)));
+          if (focus_surface)
+            wl_surface = gdk_wayland_surface_get_wl_surface (focus_surface);
+          if (wl_surface)
+            xdg_activation_token_v1_set_surface (token, wl_surface);
+
           xdg_activation_token_v1_commit (token);
 
           while (startup_id == NULL)
