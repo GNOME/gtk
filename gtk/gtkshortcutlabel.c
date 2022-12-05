@@ -144,7 +144,11 @@ get_labels (guint key, GdkModifierType modifier, guint *n_mods)
   if (modifier & GDK_HYPER_MASK)
     labels[i++] = C_("keyboard label", "Hyper");
   if (modifier & GDK_META_MASK)
+#ifndef GDK_WINDOWING_MACOS
     labels[i++] = C_("keyboard label", "Meta");
+#else
+    labels[i++] = C_("keyboard label", "⌘");
+#endif
 
   *n_mods = i;
 
