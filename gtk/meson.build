@@ -1147,8 +1147,6 @@ gtk_launch = executable(
 )
 gtk_tools += gtk_launch
 
-if meson.version().version_compare('>=0.54.0')
-  foreach tool: gtk_tools
-    meson.override_find_program(tool.name(), tool)
-  endforeach
-endif
+foreach tool: gtk_tools
+  meson.override_find_program(tool.name(), tool)
+endforeach
