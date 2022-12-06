@@ -41,3 +41,7 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --suite=flaky \
         --suite=failing \
     || true
+
+if [ -n "${DO_DISTCHECK-}" ]; then
+  meson dist --no-tests
+fi

@@ -19,7 +19,7 @@ fedora-distcheck:
   when: manual
   stage: build
   script:
-    - bash -x ./.gitlab-ci/test-docker-autotools.sh
+    - bash -x ./.gitlab-ci/test-docker-meson.sh
 
 fedora-meson:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v3
