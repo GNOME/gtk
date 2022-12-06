@@ -32,10 +32,6 @@
 #include "gsk/vulkan/gskvulkanrenderer.h"
 #endif
 
-#ifndef NODE_EDITOR_SOURCE_DIR
-#define NODE_EDITOR_SOURCE_DIR "." /* Fallback */
-#endif
-
 typedef struct
 {
   gsize  start_chars;
@@ -788,12 +784,54 @@ testcase_name_entry_changed_cb (GtkWidget        *button,
     gtk_widget_set_sensitive (self->testcase_save_button, FALSE);
 }
 
+/* Returns the location where gsk test cases are stored in
+ * the GTK testsuite, if we can determine it.
+ *
+ * When running node editor outside of a GTK build, you can
+ * set GTK_SOURCE_DIR to point it at the checkout.
+ */
+static char *
+get_source_dir (void)
+{
+  const char *subdir = "testsuite/gsk/compare";
+  const char *source_dir;
+  char *current_dir;
+  char *dir;
+
+  source_dir = g_getenv ("GTK_SOURCE_DIR");
+  current_dir = g_get_current_dir ();
+
+  if (source_dir)
+    {
+      char *abs_source_dir = g_canonicalize_filename (source_dir, NULL);
+      dir = g_canonicalize_filename (subdir, abs_source_dir);
+      g_free (abs_source_dir);
+    }
+  else
+    {
+      dir = g_canonicalize_filename (subdir, current_dir);
+    }
+
+  if (g_file_test (dir, G_FILE_TEST_EXISTS))
+    {
+      g_print ("file exists: %s\n", dir);
+      g_free (current_dir);
+
+      return dir;
+    }
+
+  g_print ("file does not exists: %s\n", dir);
+  g_free (dir);
+
+  return current_dir;
+}
+
 static void
 testcase_save_clicked_cb (GtkWidget        *button,
                           NodeEditorWindow *self)
 {
   const char *testcase_name = gtk_editable_get_text (GTK_EDITABLE (self->testcase_name_entry));
-  char *source_dir = g_canonicalize_filename (NODE_EDITOR_SOURCE_DIR, NULL);
+  char *source_dir = get_source_dir ();
   char *node_file_name;
   char *node_file;
   char *png_file_name;
@@ -805,6 +843,8 @@ testcase_save_clicked_cb (GtkWidget        *button,
   node_file_name = g_strconcat (testcase_name, ".node", NULL);
   node_file = g_build_filename (source_dir, node_file_name, NULL);
   g_free (node_file_name);
+
+  g_debug ("Saving testcase in %s", node_file);
 
   png_file_name = g_strconcat (testcase_name, ".png", NULL);
   png_file = g_build_filename (source_dir, png_file_name, NULL);
