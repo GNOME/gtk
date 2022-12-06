@@ -2227,7 +2227,7 @@ _gtk_clipboard_store_all (void)
  *
  * Gets the selection that this clipboard is for.
  *
- * Returns: the selection
+ * Returns: (transfer none): the selection
  *
  * Since: 3.22
  */
