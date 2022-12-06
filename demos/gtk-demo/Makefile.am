@@ -92,6 +92,7 @@ appsicon24dir = $(iconthemedir)/24x24/apps
 appsicon32dir = $(iconthemedir)/32x32/apps
 appsicon48dir = $(iconthemedir)/48x48/apps
 appsicon256dir = $(iconthemedir)/256x256/apps
+appsicon512dir = $(iconthemedir)/512x512/apps
 appsiconscalabledir = $(iconthemedir)/scalable/apps
 
 dist_appsicon16_DATA = data/16x16/gtk3-demo.png data/16x16/gtk3-demo-symbolic.symbolic.png
@@ -100,6 +101,7 @@ dist_appsicon24_DATA = data/24x24/gtk3-demo.png data/24x24/gtk3-demo-symbolic.sy
 dist_appsicon32_DATA = data/32x32/gtk3-demo.png data/32x32/gtk3-demo-symbolic.symbolic.png
 dist_appsicon48_DATA = data/48x48/gtk3-demo.png data/48x48/gtk3-demo-symbolic.symbolic.png
 dist_appsicon256_DATA = data/256x256/gtk3-demo.png data/256x256/gtk3-demo-symbolic.symbolic.png
+dist_appsicon512_DATA = data/512x512/gtk3-demo.png data/512x512/gtk3-demo-symbolic.symbolic.png
 
 update_icon_cache = $(top_builddir)/gtk/gtk-update-icon-cache$(EXEEXT) --ignore-theme-index --force
 
