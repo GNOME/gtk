@@ -7,7 +7,7 @@ export CCACHE_BASEDIR="$(pwd)"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
 export PATH="${HOME}/.local/bin:${PATH}"
-python3 -m pip install --user meson==0.49.2
+python3 -m pip install --user meson==0.60
 
 meson \
     -Dinstalled_tests=true \

@@ -1,11 +1,12 @@
-project('gtk+-3.0', 'c',
-        version: '3.24.35',
-        default_options: [
-          'buildtype=debugoptimized',
-          'warning_level=1'
-        ],
-        meson_version : '>= 0.48.0',
-        license: 'LGPLv2.1+')
+project('gtk+', 'c',
+  version: '3.24.35',
+  default_options: [
+    'buildtype=debugoptimized',
+    'warning_level=1'
+  ],
+  meson_version : '>= 0.60.0',
+  license: 'LGPL-2.1-or-later',
+)
 
 glib_major_req = 2
 glib_minor_req = 57
