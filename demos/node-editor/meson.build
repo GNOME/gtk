@@ -15,7 +15,7 @@ executable('gtk4-node-editor',
   dependencies: [ libgtk_dep, demo_conf_h ],
   include_directories: confinc,
   c_args: [
-    '-DNODE_EDITOR_SOURCE_DIR="@0@/../../testsuite/gsk/compare/"'.format(meson.current_source_dir())
+    '-DNODE_EDITOR_SOURCE_DIR="testsuite/gsk/compare/"'
   ] + common_cflags,
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
