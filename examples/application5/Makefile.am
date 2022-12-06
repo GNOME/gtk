@@ -15,8 +15,8 @@ exampleapp_LDADD = $(GTK_LIBS)
 exampleapp_SOURCES = 				\
 	main.c 					\
 	exampleapp.c exampleapp.h 		\
-	exampleappwin.c exampleappwin.h 	\
-	resources.c
+	exampleappwin.c exampleappwin.h
+nodist_exampleapp_SOURCES = resources.c
 
 BUILT_SOURCES = 				\
 	resources.c 				\
@@ -38,7 +38,7 @@ EXTRA_DIST = 					\
 	window.ui 				\
 	app-menu.ui 				\
 	exampleapp.gresource.xml 		\
-	org.gtk.exampleapp.gschema.xml	\
+	org.gtk.exampleapp.gschema.xml		\
 	meson.build
 
 CLEANFILES = 					\

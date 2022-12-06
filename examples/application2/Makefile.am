@@ -15,8 +15,8 @@ exampleapp_LDADD = $(GTK_LIBS)
 exampleapp_SOURCES = 				\
 	main.c 					\
 	exampleapp.c exampleapp.h 		\
-	exampleappwin.c exampleappwin.h 	\
-	resources.c
+	exampleappwin.c exampleappwin.h
+nodist_exampleapp_SOURCES = resources.c
 
 BUILT_SOURCES = resources.c
 
@@ -26,7 +26,7 @@ resources.c: exampleapp.gresource.xml window.ui
 
 EXTRA_DIST = 					\
 	window.ui 				\
-	exampleapp.gresource.xml	\
+	exampleapp.gresource.xml		\
 	meson.build
 
 -include $(top_srcdir)/git.mk

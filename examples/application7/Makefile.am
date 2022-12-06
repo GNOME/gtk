@@ -16,8 +16,8 @@ exampleapp_SOURCES = 				\
 	main.c 					\
 	exampleapp.c exampleapp.h 		\
 	exampleappwin.c exampleappwin.h 	\
-	exampleappprefs.c exampleappprefs.h 	\
-	resources.c
+	exampleappprefs.c exampleappprefs.h
+nodist_exampleapp_SOURCES = resources.c
 
 BUILT_SOURCES = 				\
 	resources.c 				\
@@ -40,7 +40,7 @@ EXTRA_DIST = 					\
 	app-menu.ui 				\
 	prefs.ui 				\
 	exampleapp.gresource.xml 		\
-	org.gtk.exampleapp.gschema.xml	\
+	org.gtk.exampleapp.gschema.xml		\
 	meson.build
 
 CLEANFILES = 					\
