@@ -6,12 +6,6 @@ cache:
   paths:
     - _ccache/
 
-fedora-autotools:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v3
-  stage: build
-  script:
-    - bash -x ./.gitlab-ci/test-docker-autotools.sh
-
 fedora-distcheck:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v3
   variables:
@@ -81,15 +75,3 @@ msys2-mingw64-meson:
       - "_build/meson-logs"
       - "_build/gdk/libgdk-3-0.dll"
       - "_build/gtk/libgtk-3-0.dll"
-
-msys2-mingw64-autotools:
-  when: manual
-  variables:
-    MSYSTEM: "MINGW64"
-    CHERE_INVOKING: "yes"
-  stage: build
-  tags:
-    - win32-ps
-  script:
-    - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
-    - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2-autotools.sh"

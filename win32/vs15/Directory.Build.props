@@ -1,5 +1,0 @@
-<Project>
-  <PropertyGroup Label="Globals">
-    <WindowsTargetPlatformVersion Condition="'$(Platform)' == 'arm64'">10.0.19041.0</WindowsTargetPlatformVersion>
-  </PropertyGroup>
-</Project>

@@ -1030,16 +1030,6 @@ if host_machine.system() != 'windows'
     install_dir : join_paths(gtk_datadir, 'gtk-3.0', 'valgrind'))
 endif
 
-test(
-  'version-check',
-  find_program('check-version.py'),
-  args: [
-    join_paths(meson.current_source_dir(), 'configure.ac'),
-    join_paths(meson.current_source_dir(), 'meson.build'),
-  ],
-  suite: 'gtk',
-)
-
 summary = [
   '',
   '------',
