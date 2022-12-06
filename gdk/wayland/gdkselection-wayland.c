@@ -941,20 +941,41 @@ gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
 
 static gboolean
 gdk_wayland_selection_source_handles_target (GdkWaylandSelection *wayland_selection,
-                                             GdkAtom              target)
+                                             GdkAtom             *target)
 {
   GdkAtom atom;
+  GdkAtom string_atom, utf8_string_atom;
+  GdkAtom string_mimetype, utf8_string_mimetype;
   guint i;
 
-  if (target == GDK_NONE)
+  if (*target == GDK_NONE)
     return FALSE;
+
+  string_atom = gdk_atom_intern ("STRING", FALSE);
+  utf8_string_atom = gdk_atom_intern ("UTF8_STRING", FALSE);
+  string_mimetype = gdk_atom_intern (STRING_MIMETYPE, FALSE);
+  utf8_string_mimetype = gdk_atom_intern (UTF8_STRING_MIMETYPE, FALSE);
 
   for (i = 0; i < wayland_selection->source_targets->len; i++)
     {
       atom = g_array_index (wayland_selection->source_targets, GdkAtom, i);
 
-      if (atom == target)
+      if (atom == *target)
         return TRUE;
+
+      /* We might have converted (UTF8_)STRING to mimetypes when issuing
+       * the source.target requests, convert them back if needed.
+       */
+      if (atom == string_atom && *target == string_mimetype)
+        {
+          *target = string_atom;
+          return TRUE;
+        }
+      else if (atom == utf8_string_atom && *target == utf8_string_mimetype)
+        {
+          *target = utf8_string_atom;
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -993,7 +1014,7 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
   AsyncWriteData *write_data;
 
   if (!window ||
-      !gdk_wayland_selection_source_handles_target (wayland_selection, target))
+      !gdk_wayland_selection_source_handles_target (wayland_selection, &target))
     {
       close (fd);
       return FALSE;
