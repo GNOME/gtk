@@ -759,6 +759,8 @@ gdk_x11_surface_finalize (GObject *object)
     }
 
   g_clear_pointer (&impl->surface_is_on_monitor, g_list_free);
+  g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+  g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
 
   g_free (impl->toplevel);
 
