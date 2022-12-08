@@ -866,7 +866,10 @@ if os_darwin
   module_suffix = 'so'
 endif
 
-build_gir = get_option('introspection')
+# Introspection
+gir = find_program('g-ir-scanner', required : get_option('introspection'))
+build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection'))
+
 subdir('gdk')
 subdir('gtk')
 subdir('modules')
