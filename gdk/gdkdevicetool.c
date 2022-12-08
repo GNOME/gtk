@@ -197,7 +197,7 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
  *
  * Gets the hardware ID of this tool, or 0 if it's not known.
  *
- * When non-zero, the identificator is unique for the given tool model,
+ * When non-zero, the identifier is unique for the given tool model,
  * meaning that two identical tools will share the same @hardware_id,
  * but will have different serial numbers (see
  * [method@Gdk.DeviceTool.get_serial]).
@@ -205,9 +205,9 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
  * This is a more concrete (and device specific) method to identify
  * a `GdkDeviceTool` than [method@Gdk.DeviceTool.get_tool_type],
  * as a tablet may support multiple devices with the same
- * `GdkDeviceToolType`, but different hardware identificators.
+ * `GdkDeviceToolType`, but different hardware identifiers.
  *
- * Returns: The hardware identificator of this tool.
+ * Returns: The hardware identifier of this tool.
  */
 guint64
 gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)

@@ -1051,7 +1051,7 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
 /**
  * gtk_menu_button_set_always_show_arrow: (attributes org.gtk.Method.set_property=always-show-arrow)
  * @menu_button: a `GtkMenuButton`
- * @always_show_arrow: hether to show a dropdown arrow even when using an icon
+ * @always_show_arrow: whether to show a dropdown arrow even when using an icon
  *
  * Sets whether to show a dropdown arrow even when using an icon or a custom
  * child.

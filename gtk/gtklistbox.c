@@ -864,7 +864,7 @@ gtk_list_box_select_row (GtkListBox    *box,
 /**
  * gtk_list_box_unselect_row:
  * @box: a `GtkListBox`
- * @row: the row to unselected
+ * @row: the row to unselect
  *
  * Unselects a single row of @box, if the selection mode allows it.
  */
