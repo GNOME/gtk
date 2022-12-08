@@ -460,12 +460,10 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
   GdkMacosBuffer *buffer;
-  cairo_region_t *copy;
   GdkSurface *surface;
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
-  copy = cairo_region_copy (region);
   surface = gdk_draw_context_get_surface (context);
   buffer = _gdk_macos_surface_get_buffer (GDK_MACOS_SURFACE (surface));
 

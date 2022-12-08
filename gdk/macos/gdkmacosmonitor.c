@@ -215,7 +215,6 @@ gdk_macos_monitor_display_link_cb (GdkMacosMonitor *self)
 {
   gint64 presentation_time;
   gint64 refresh_interval;
-  gint64 now;
   GList *iter;
 
   g_assert (GDK_IS_MACOS_MONITOR (self));
@@ -225,7 +224,6 @@ gdk_macos_monitor_display_link_cb (GdkMacosMonitor *self)
 
   presentation_time = self->display_link->presentation_time;
   refresh_interval = self->display_link->refresh_interval;
-  now = g_source_get_time ((GSource *)self->display_link);
 
   iter = self->awaiting_frames.head;
 
