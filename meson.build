@@ -886,9 +886,10 @@ if get_option('examples')
 endif
 
 # config.h
-configure_file(input: 'config.h.meson',
-               output: 'config.h',
-               configuration: cdata)
+configure_file(
+  output: 'config.h',
+  configuration: cdata,
+)
 
 # pkg-config files - bit of a mess all of this
 pkgconf = configuration_data()
