@@ -151,7 +151,7 @@ populate_recent_section (GtkEmojiChooser *chooser)
   GVariant *variant;
   GVariant *item;
   GVariantIter iter;
-  gboolean empty = FALSE;
+  gboolean empty = TRUE;
 
   variant = g_settings_get_value (chooser->settings, "recent-emoji");
   g_variant_iter_init (&iter, variant);
