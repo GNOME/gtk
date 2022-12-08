@@ -656,28 +656,33 @@ create_file_chooser (GtkFileDialog        *self,
 {
   GtkFileChooserNative *chooser;
   const char *accept;
-  const char *title;
+  const char *default_title, *title;
 
   switch (action)
     {
     case GTK_FILE_CHOOSER_ACTION_OPEN:
       accept = _("_Open");
-      title = select_multiple ? _("Pick Files") : _("Pick a File");
+      default_title = select_multiple ? _("Pick Files") : _("Pick a File");
       break;
 
     case GTK_FILE_CHOOSER_ACTION_SAVE:
       accept = _("_Save");
-      title = _("Save a File");
+      default_title = _("Save a File");
       break;
 
     case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
       accept = _("_Select");
-      title = select_multiple ? _("Select Folders") : _("Select a Folder");
+      default_title = select_multiple ? _("Select Folders") : _("Select a Folder");
       break;
 
     default:
       g_assert_not_reached ();
     }
+
+  if (self->title)
+    title = self->title;
+  else
+    title = default_title;
 
   chooser = gtk_file_chooser_native_new (title, parent, action, accept, _("_Cancel"));
   gtk_file_chooser_native_set_use_portal (chooser, TRUE);
