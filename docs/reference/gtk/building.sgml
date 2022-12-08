@@ -35,64 +35,37 @@ How to compile GTK+ itself
       already.
     </para>
     <para>
-      On UNIX-like systems GTK+ uses the standard GNU build system,
-      using <application>autoconf</application> for package
-      configuration and resolving portability issues,
-      <application>automake</application> for building makefiles that
-      comply with the GNU Coding Standards, and
-      <application>libtool</application> for building shared libraries
-      on multiple platforms.
-    </para>
-    <para>
-      If you are building GTK+ from the distributed source packages,
-      then you won't need these tools installed; the necessary pieces
-      of the tools are already included in the source packages. But
-      it's useful to know a bit about how packages that use these
-      tools work. A source package is distributed as a
-      <literal>tar.bz2</literal> or <literal>tar.xz</literal> file
-      which you unpack into a directory full of the source files as follows:
+      On all supported platforms, GTK+ uses the Meson build system.
     </para>
     <programlisting>
-      tar xvfj gtk+-3.2.0.tar.bz2
-      tar xvfJ gtk+-3.2.0.tar.xz
+      tar xvfJ gtk+-3.24.0.tar.xz
     </programlisting>
     <para>
-      In the toplevel directory that is created, there will be
-      a shell script called <filename>configure</filename> which
-      you then run to take the template makefiles called
-      <filename>Makefile.in</filename> in the package and create
-      makefiles customized for your operating system.
-      The <filename>configure</filename> script can be passed
-      various command line arguments to determine how the package
-      is built and installed. The most commonly useful argument is
-      the <systemitem>--prefix</systemitem> argument which
-      determines where the package is installed. To install a package
-      in <filename>/opt/gtk</filename> you would run configure as:
+      Once you have extracted the files from the release archive, and
+      you entered the source directory, you can use the <command>meson</command>
+      command to configure the project.
     </para>
     <programlisting>
-      ./configure --prefix=/opt/gtk
+      meson setup --prefix=/opt/gtk _builddir .
     </programlisting>
     <para>
       A full list of options can be found by running
-      <filename>configure</filename> with the
-      <systemitem>--help</systemitem> argument. In general, the defaults are
-      right and should be trusted. After you've run
-      <filename>configure</filename>, you then run the
-      <command>make</command> command to build the package and install
-      it.
+      <command>meson configure</command> from within the build directory.
+      In general, the defaults are right and should be trusted.
+    </para>
+    <para>
+      After you've run <command>meson setup</command>, you then run the
+      <command>meson compile</command> command to build the project and
+      install it.
     </para>
     <programlisting>
-      make
-      make install
+      meson compile -C _builddir
+      meson install -C _builddir
     </programlisting>
     <para>
       If you don't have permission to write to the directory you are
       installing in, you may have to change to root temporarily before
-      running <literal>make install</literal>. Also, if you are
-      installing in a system directory, on some systems (such as
-      Linux), you will need to run <command>ldconfig</command> after
-      <literal>make install</literal> so that the newly installed
-      libraries will be found.
+      running <command>meson install</command>.
     </para>
     <para>
       Several environment variables are useful to pass to set before
@@ -131,10 +104,10 @@ How to compile GTK+ itself
     <para>
       Before you can compile the GTK+ widget toolkit, you need to have
       various other tools and libraries installed on your
-      system. The two tools needed during the build process (as
+      system. The main tool needed during the build process (as
       differentiated from the tools used in when creating GTK+
-      mentioned above such as <application>autoconf</application>)
-      are <command>pkg-config</command> and GNU make.
+      mentioned above such as <application>meson</application>)
+      is <command>pkg-config</command>.
     </para>
     <itemizedlist>
       <listitem>
@@ -148,17 +121,6 @@ How to compile GTK+ itself
           needed for that library along with version number information.)
         </para>
       </listitem>
-      <listitem>
-        <para>
-          The GTK+ makefiles will mostly work with different versions
-          of <command>make</command>, however, there tends to be
-          a few incompatibilities, so the GTK+ team recommends
-          installing <ulink url="https://www.gnu.org/software/make">GNU
-            make</ulink> if you don't already have it on your system
-          and using it. (It may be called <command>gmake</command>
-          rather than <command>make</command>.)
-        </para>
-      </listitem>
     </itemizedlist>
     <para>
       Some of the libraries that GTK+ depends on are maintained by
@@ -168,17 +130,15 @@ How to compile GTK+ itself
     <itemizedlist>
       <listitem>
         <para>
-          The GLib library provides core non-graphical functionality
-          such as high level data types, Unicode manipulation, and
-          an object and type system to C programs. It is available
-          from the <ulink url="https://ftp.gtk.org/pub/glib/">GTK+
-          FTP site</ulink> or
-          <ulink url="https://download.gnome.org/sources/glib/">here</ulink>.
+          The <ulink url="https://gitlab.gnome.org/GNOME/glib">GLib library</ulink>
+          provides core non-graphical functionality such as high level data types,
+          Unicode manipulation, and an object and type system to C programs. It is
+          available <ulink url="https://download.gnome.org/sources/glib/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <ulink url="https://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
+          The <ulink url="https://gitlab.gnome.org/GNOME/gdk-pixbuf/">GdkPixbuf library</ulink>
           provides facilities for loading images in a variety of file formats.
           It is available
           <ulink url="https://download.gnome.org/sources/gdk-pixbuf/">here</ulink>.
@@ -186,14 +146,15 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          <ulink url="http://www.pango.org">Pango</ulink> is a library
+          <ulink url="https://gitlab.gnome.org/GNOME/pango">Pango</ulink> is a library
           for internationalized text handling. It is available
           <ulink url="https://download.gnome.org/sources/pango/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
-          ATK is the Accessibility Toolkit. It provides a set of generic
+          <ulink url="https://gitlab.gnome.org/GNOME/atk">ATK</ulink> is the
+          Accessibility Toolkit. It provides a set of generic
           interfaces allowing accessibility technologies such as
           screen readers to interact with a graphical user interface.
           It is available
@@ -202,7 +163,7 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          <ulink url="https://wiki.gnome.org/Projects/GObjectIntrospection">Gobject Introspection</ulink>
+          <ulink url="https://gitlab.gnome.org/GNOME/gobject-introspection">Gobject Introspection</ulink>
           is a framework for making introspection data available to
           language bindings. It is available
           <ulink url="https://download.gnome.org/sources/gobject-introspection/">here</ulink>.
@@ -304,244 +265,80 @@ How to compile GTK+ itself
       GTK+ installs.
     </para>
     <para>
-      If one of the <filename>configure</filename> scripts fails or running
-      <command>make</command> fails, look closely at the error
-      messages printed; these will often provide useful information
-      as to what went wrong. When <filename>configure</filename>
-      fails, extra information, such as errors that a test compilation
-      ran into, is found in the file <filename>config.log</filename>.
-      Looking at the last couple of hundred lines in this file will
-      frequently make clear what went wrong. If all else fails, you
-      can ask for help on the gtk-list mailing list.
-      See <xref linkend="gtk-resources"/> for more information.
+      If either the <command>meson setup</command> or the
+      <command>meson compile</command> commands fail, look closely
+      at the error messages printed; these will often provide useful
+      information as to what went wrong.
     </para>
   </refsect1>
-      <refsect1 id="extra-configuration-options">
+
+  <refsect1 id="extra-configuration-options">
       <title>Extra Configuration Options</title>
 
       <para>
-        In addition to the normal options, the
-        <command>configure</command> script for the GTK+ library
-        supports a number of additional arguments. (Command line
-        arguments for the other GTK+ libraries are described in
-        the documentation distributed with the those libraries.)
+        In addition to the standard <command>meson</command> options
+        when configuring the GTK+ project, you have a number of
+        additional arguments. (Command line arguments for the other
+        libraries are described in the documentation distributed with
+        the those libraries.)
 
         <cmdsynopsis>
-          <command>configure</command>
+          <command>meson setup</command>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-modules</arg>
-            <arg choice="plain">--enable-modules</arg>
+            <arg choice="plain">-Dxinerama=[yes/no/auto]</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
+            <arg choice="plain">-Dgtk_doc=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--enable-debug=[no/minimum/yes]</arg>
+            <arg choice="plain">-Dprint_backends=["cups,file,lpr,papi,test,auto"]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-Bsymbolic</arg>
-            <arg choice="plain">--enable-Bsymbolic</arg>
+            <arg choice="plain">-Dx11_backend=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-xkb</arg>
-            <arg choice="plain">--enable-xkb</arg>
+            <arg choice="plain">-Dwin32_backend=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-xinerama</arg>
-            <arg choice="plain">--enable-xinerama</arg>
+            <arg choice="plain">-Dquartz_backend=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-gtk-doc</arg>
-            <arg choice="plain">--enable-gtk-doc</arg>
+            <arg choice="plain">-Dbroadway_backend=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-cups</arg>
-            <arg choice="plain">--enable-cups</arg>
+            <arg choice="plain">-Dwayland_backend=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--disable-papi</arg>
-            <arg choice="plain">--enable-papi</arg>
+            <arg choice="plain">-Dintrospection=[false/true]</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--enable-xinput</arg>
-            <arg choice="plain">--disable-xinput</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-packagekit</arg>
-            <arg choice="plain">--disable-packagekit</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-x11-backend</arg>
-            <arg choice="plain">--disable-x11-backend</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-win32-backend</arg>
-            <arg choice="plain">--disable-win32-backend</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-quartz-backend</arg>
-            <arg choice="plain">--disable-quartz-backend</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-broadway-backend</arg>
-            <arg choice="plain">--disable-broadway-backend</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-wayland-backend</arg>
-            <arg choice="plain">--disable-wayland-backend</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-introspection=[no/auto/yes]</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">--enable-installed-tests</arg>
-            <arg choice="plain">--disable-installed-tests</arg>
+            <arg choice="plain">-Dinstalled_tests=[false/true]</arg>
           </group>
         </cmdsynopsis>
       </para>
 
       <formalpara>
-        <title><systemitem>--disable-modules</systemitem> and
-          <systemitem>--enable-modules</systemitem></title>
+        <title><systemitem>-Dxinerama</systemitem></title>
 
         <para>
-          Normally GTK+ will try to build the input method modules
-          as little shared libraries that are loaded on demand.
-          The <systemitem>--disable-modules</systemitem> argument
-          indicates that they should all be built statically
-          into the GTK+ library instead. This is useful for
-          people who need to produce statically-linked binaries.
-          If neither <systemitem>--disable-modules</systemitem> nor
-          <systemitem>--enable-modules</systemitem> is specified,
-          then the <command>configure</command> script will try to
-          auto-detect whether shared modules work on your system.
+          By default GTK will try to link against the Xinerama libraries
+          if they are found. This option can be used to explicitly control
+          whether Xinerama should be used.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--with-included-immodules</systemitem></title>
-
-        <para>
-         This option allows you to specify which input method modules you
-         want to include directly into the GTK+ shared library, as opposed
-         to building them as loadable modules.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--enable-debug</systemitem></title>
-
-        <para>
-         Turns on various amounts of debugging support. Setting this to
-         'no' disables g_assert(), g_return_if_fail(), g_return_val_if_fail()           and all cast checks between different object types. Setting it
-         to 'minimum' disables only cast checks. Setting it to 'yes' enables
-         <link linkend="GTK-Debug-Options">runtime debugging</link>.
-         The default is 'minimum'.
-         Note that 'no' is fast, but dangerous as it tends to destabilize
-         even mostly bug-free software by changing the effect of many bugs
-         from simple warnings into fatal crashes. Thus
-         <option>--enable-debug=no</option> should <emphasis>not</emphasis>
-         be used for stable releases of GTK+.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-Bsymbolic</systemitem> and
-          <systemitem>--enable-Bsymbolic</systemitem></title>
-        <para>
-          The option <systemitem>--disable-Bsymbolic</systemitem>
-          turns off the use of the -Bsymbolic-functions linker flag.
-          This is only necessary if you want to override GTK+ functions
-          by using <envar>LD_PRELOAD</envar>.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--enable-explicit-deps</systemitem> and
-          <systemitem>--disable-explicit-deps</systemitem></title>
-        <para>
-          If <systemitem>--enable-explicit-deps</systemitem> is
-          specified then GTK+ will write the full set of libraries
-          that GTK+ depends upon into its <literal>.pc</literal> files to be used when
-          programs depending on GTK+ are linked. Otherwise, GTK+
-          only will include the GTK+ libraries themselves, and
-          will depend on system library dependency facilities to
-          bring in the other libraries.
-          By default GTK+ will disable explicit dependencies unless
-          it detects that they are needed on the system. (If you
-          specify <systemitem>--enable-static</systemitem> to force
-          building of static libraries, then explicit dependencies
-          will be written since library dependencies don't work
-          for static libraries.) Specifying
-          <systemitem>--enable-explicit-deps</systemitem> or
-          <systemitem>--enable-static</systemitem> can cause
-          compatibility
-          problems when libraries that GTK+ depends upon change
-          their versions, and should be avoided if possible.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xkb</systemitem> and
-          <systemitem>--enable-xkb</systemitem></title>
-
-        <para>
-          By default the <command>configure</command> script will try
-          to auto-detect whether the XKB extension is supported by
-          the X libraries GTK+ is linked with.
-          These options can be used to explicitly control whether
-          GTK+ will support the XKB extension.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xinerama</systemitem> and
-          <systemitem>--enable-xinerama</systemitem></title>
-
-        <para>
-          By default the <command>configure</command> script will try
-          to link against the Xinerama libraries if they are found.
-          These options can be used to explicitly control whether
-          Xinerama should be used.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xinput</systemitem> and
-           <systemitem>--enable-xinput</systemitem></title>
-        <para>
-          Controls whether GTK+ is built with support for the XInput
-          or XInput2 extension. These extensions provide an extended
-          interface to input devices such as graphics tablets.
-          When this support is compiled in, specially written
-          GTK+ programs can get access to subpixel positions,
-          multiple simultaneous input devices, and extra "axes"
-          provided by the device such as pressure and tilt
-          information.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-gtk-doc</systemitem> and
-          <systemitem>--enable-gtk-doc</systemitem></title>
+        <title><systemitem>-Dgtk_doc</systemitem></title>
 
         <para>
           The <application>gtk-doc</application> package is
@@ -552,88 +349,57 @@ How to compile GTK+ itself
           <application>gtk-doc</application> installed and
           are modifying GTK+, you may want to enable
           <application>gtk-doc</application> support by passing
-          in <systemitem>--enable-gtk-doc</systemitem>. If not
+          in <systemitem>-Dgtk_doc=true</systemitem>. If not
           enabled, pre-generated HTML files distributed with GTK+
           will be installed.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--disable-cups</systemitem> and
-          <systemitem>--enable-cups</systemitem></title>
+        <title><systemitem>-Dprint_backends</systemitem></title>
 
         <para>
-          By default the <command>configure</command> script will try
-          to build the cups print backend if the cups libraries are found.
-          These options can be used to explicitly control whether
-          the cups print backend should be built.
+          By default GTK will try to build the appropriate print backend
+          for the system. You can specify the print backends manually to
+          explicitly control which backends should be build.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--disable-papi</systemitem> and
-          <systemitem>--enable-papi</systemitem></title>
+        <title><systemitem>-Dx11_backend</systemitem>,
+          <systemitem>-Dwin32_backend</systemitem>,
+          <systemitem>-Dquartz_backend</systemitem>,
+          <systemitem>-Dbroadway_backend</systemitem>,
+          <systemitem>-Dwayland_backend</systemitem></title>
 
         <para>
-          By default the <command>configure</command> script will try
-          to build the papi print backend if the papi libraries are found.
-          These options can be used to explicitly control whether
-          the papi print backend should be built.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-packagekit</systemitem> and
-           <systemitem>--enable-packagekit</systemitem></title>
-        <para>
-          By default the <command>configure</command> script will try
-          to build the PackageKit support for the open-with dialog if
-          the PackageKit libraries are found.
-          These options can be used to explicitly control whether
-          PackageKit support should be built.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--enable-x11-backend</systemitem>,
-          <systemitem>--disable-x11-backend</systemitem>,
-          <systemitem>--enable-win32-backend</systemitem>,
-          <systemitem>--disable-win32-backend</systemitem>,
-          <systemitem>--enable-quartz-backend</systemitem>,
-          <systemitem>--disable-quartz-backend</systemitem>,
-          <systemitem>--enable-broadway-backend</systemitem>,
-          <systemitem>--disable-broadway-backend</systemitem>,
-          <systemitem>--enable-wayland-backend</systemitem>,
-          <systemitem>--disable-wayland-backend</systemitem></title>
-
-        <para>
-          Enables specific backends for GDK.  If none of these options
+          Enable specific backends for GDK.  If none of these options
           are given, the x11 backend will be enabled by default,
           unless the platform is Windows, in which case the default is
           win32.  If any backend is explicitly enabled or disabled, no
           other platform will be enabled automatically.  Other
-          supported backends are the quartz backend for OS X.
+          supported backends are the quartz backend for macOS, and the
+          HTML-based Broadway backend.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--enable-introspection</systemitem></title>
+        <title><systemitem>-Dintrospection</systemitem></title>
 
         <para>
           Build with or without introspection support.
-          The default is 'auto'.
+          The default is 'true'.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--enable-installed-tests</systemitem> or
-           <systemitem>--disable-installed-tests</systemitem></title>
+        <title><systemitem>-Dinstalled-tests</systemitem></title>
 
         <para>
           Whether to install tests on the system. If enabled, tests
           and their data are installed in <filename>${libexecdir}/gtk+/installed-tests</filename>.
           Metadata for the tests is installed in <filename>${prefix}/share/installed-tests/gtk+</filename>.
-          To run the installed tests, gnome-desktop-testing-runner
+          To run the installed tests, <command>gnome-desktop-testing-runner</command>
           can be used.
         </para>
       </formalpara>
