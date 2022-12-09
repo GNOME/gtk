@@ -1631,7 +1631,7 @@ get_bus_address_dbus (GdkDisplay *display)
 
   if (error != NULL)
     {
-      GTK_DEBUG (A11Y, "Unable to acquire session bus: %s", error->message);
+      g_warning ("Unable to acquire session bus: %s", error->message);
       g_error_free (error);
       return NULL;
     }
@@ -1648,8 +1648,10 @@ get_bus_address_dbus (GdkDisplay *display)
                                   &error);
   if (error != NULL)
     {
-      GTK_DEBUG (A11Y, "Unable to acquire the address of the accessibility bus: %s",
-                       error->message);
+      g_warning ("Unable to acquire the address of the accessibility bus: %s. "
+                 "If you are attempting to run GTK without a11y support, "
+                 "GTK_A11Y should be set to 'none'.",
+                 error->message);
       g_error_free (error);
     }
 
@@ -1732,6 +1734,12 @@ get_bus_address (GdkDisplay *display)
 #endif
 
 out:
+
+  if (bus_address == NULL)
+    g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
+                            g_strdup (""),
+                            g_free);
+
   return bus_address;
 }
 
