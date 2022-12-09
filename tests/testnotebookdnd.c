@@ -230,7 +230,6 @@ create_notebook_with_notebooks (const char      **labels,
                                 GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page;
-  int count = 0;
 
   notebook = gtk_notebook_new ();
   g_signal_connect (notebook, "create-window",
@@ -251,7 +250,6 @@ create_notebook_with_notebooks (const char      **labels,
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
       gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
 
-      count++;
       labels++;
     }
 
