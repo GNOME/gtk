@@ -26,14 +26,17 @@
 
 G_BEGIN_DECLS
 
-void     g_openuri_portal_open_async  (GFile               *file,
-                                       GtkWindow           *window,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data);
+gboolean g_openuri_portal_is_available (void);
 
-gboolean g_openuri_portal_open_finish (GAsyncResult        *result,
-                                       GError             **error);
+void     g_openuri_portal_open_async   (GFile               *file,
+                                        gboolean             open_folder,
+                                        GtkWindow           *window,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data);
+
+gboolean g_openuri_portal_open_finish  (GAsyncResult        *result,
+                                        GError             **error);
 
 G_END_DECLS
 

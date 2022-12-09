@@ -458,6 +458,7 @@ gtk_color_dialog_choose_rgba (GtkColorDialog       *self,
   window = create_color_chooser (self, parent, initial_color);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_color_dialog_choose_rgba);
   g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
@@ -472,7 +473,7 @@ gtk_color_dialog_choose_rgba (GtkColorDialog       *self,
  * gtk_color_dialog_choose_rgba_finish:
  * @self: a `GtkColorDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.ColorDialog.choose_rgba] call and
  * returns the resulting color.

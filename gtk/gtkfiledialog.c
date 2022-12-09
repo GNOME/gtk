@@ -778,6 +778,7 @@ gtk_file_dialog_open (GtkFileDialog       *self,
                                  current_file, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_open);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -854,6 +855,7 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
                                  current_folder, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_select_folder);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -935,6 +937,7 @@ gtk_file_dialog_save (GtkFileDialog       *self,
                                  current_file, current_name, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_save);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -1008,6 +1011,7 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
                                  NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_open_multiple);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -1082,6 +1086,7 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
                                  NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_select_multiple_folders);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
