@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gtk_file_launcher_launch)
 void gtk_show_uri_full (GtkWindow           *parent,
                         const char          *uri,
                         guint32              timestamp,
@@ -37,12 +37,12 @@ void gtk_show_uri_full (GtkWindow           *parent,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gtk_file_launcher_launch)
 gboolean gtk_show_uri_full_finish (GtkWindow     *parent,
                                    GAsyncResult  *result,
                                    GError       **error);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gtk_file_launcher_launch)
 void gtk_show_uri (GtkWindow  *parent,
                    const char *uri,
                    guint32     timestamp);
