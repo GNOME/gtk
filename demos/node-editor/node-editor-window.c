@@ -814,13 +814,11 @@ get_source_dir (void)
 
   if (g_file_test (dir, G_FILE_TEST_EXISTS))
     {
-      g_print ("file exists: %s\n", dir);
       g_free (current_dir);
 
       return dir;
     }
 
-  g_print ("file does not exists: %s\n", dir);
   g_free (dir);
 
   return current_dir;
