@@ -1428,11 +1428,9 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
 {
   int index_stride = table->max_seq_len + 2;
   gunichar *sequence;
-  int seqno;
 
   sequence = g_newa (gunichar, table->max_seq_len + 1);
 
-  seqno = 0;
   for (int idx = 0; idx < table->n_index_size; idx++)
     {
       const guint16 *seq_index = table->data + (idx * index_stride);
@@ -1471,7 +1469,6 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
                 }
 
               callback (sequence, len, value, data);
-              seqno++;
             }
         }
     }

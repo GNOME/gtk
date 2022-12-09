@@ -1094,11 +1094,14 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * emitted when the set of accelerators or mnemonics that
    * are associated with @window changes.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.Shortcut] and [class@Gtk.EventController]
+   * to implement keyboard shortcuts
    */
   window_signals[KEYS_CHANGED] =
     g_signal_new (I_("keys-changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_FIRST,
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_DEPRECATED,
                   G_STRUCT_OFFSET (GtkWindowClass, keys_changed),
                   NULL, NULL,
                   NULL,

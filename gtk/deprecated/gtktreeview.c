@@ -4395,7 +4395,6 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
   GList *first_column, *last_column;
   gboolean has_can_focus_cell;
   gboolean rtl;
-  int n_visible_columns;
   int expander_size;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
@@ -4455,14 +4454,6 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
     || priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH;
   expander_size = gtk_tree_view_get_expander_size (tree_view);
 
-  n_visible_columns = 0;
-  for (list = priv->columns; list; list = list->next)
-    {
-      if (!gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (list->data)))
-	continue;
-      n_visible_columns ++;
-    }
-
   /* Find the last column */
   for (last_column = g_list_last (priv->columns);
        last_column &&
@@ -4487,7 +4478,6 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
   do
     {
       gboolean is_separator = FALSE;
-      int n_col = 0;
 
       parity = !parity;
       is_separator = row_is_separator (tree_view, &iter, NULL);
@@ -4537,7 +4527,6 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 	  if (!gtk_tree_view_column_get_visible (column))
             continue;
 
-          n_col++;
           width = gtk_tree_view_column_get_width (column);
 
 	  if (cell_offset > clip.x + clip.width ||
@@ -6098,7 +6087,6 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   GTimer *timer;
-  int i = 0;
 
   int y = -1;
   int prev_height = -1;
@@ -6208,8 +6196,6 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 	  else if (prev_height != height)
 	    fixed_height = FALSE;
 	}
-
-      i++;
     }
   while (g_timer_elapsed (timer, NULL) < GTK_TREE_VIEW_TIME_MS_PER_IDLE / 1000.);
 
