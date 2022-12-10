@@ -598,7 +598,13 @@ present_popup (GtkPopover *popover)
  * gtk_popover_present:
  * @popover: a `GtkPopover`
  *
- * Presents the popover to the user.
+ * Allocate a size for the `GtkPopover`.
+ *
+ * This function needs to be called in size-allocate by widgets
+ * who have a `GtkPopover` as child. When using a layout manager,
+ * this is happening automatically.
+ *
+ * To make a popover appear on screen, use [method@Gtk.Popover.popup].
  */
 void
 gtk_popover_present (GtkPopover *popover)
