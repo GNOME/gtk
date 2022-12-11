@@ -266,6 +266,9 @@
   if (trackingRect)
     {
       [self removeTrackingRect: trackingRect];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10500
+      [(NSTrackingArea*)trackingRect release];
+#endif
       trackingRect = 0;
     }
 
@@ -479,13 +482,19 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
   NSRect rect;
-
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10500
+  NSTrackingArea *trackingArea;
+#endif
+  
   if (!impl || !impl->toplevel)
     return;
 
   if (trackingRect)
     {
       [self removeTrackingRect: trackingRect];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10500
+      [(NSTrackingArea*)trackingRect release];
+#endif
       trackingRect = 0;
     }
 
@@ -497,10 +506,19 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
    */
 
   rect = [self bounds];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10500
+  trackingArea = [[NSTrackingArea alloc] initWithRect: rect
+                  options: NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingCursorUpdate | NSTrackingActiveInActiveApp | NSTrackingInVisibleRect | NSTrackingEnabledDuringMouseDrag
+                  owner: self
+                  userInfo: nil];
+  [self addTrackingArea: trackingArea];
+  trackingRect = (NSInteger)[trackingArea retain];
+#else
   trackingRect = [self addTrackingRect: rect
 		  owner: self
 		  userData: nil
 		  assumeInside: NO];
+#endif
 }
 
 -(void)viewDidMoveToWindow
@@ -516,20 +534,21 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
   if (newWindow == nil && trackingRect)
     {
       [self removeTrackingRect: trackingRect];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10500
+      [(NSTrackingArea*)trackingRect release];
+#endif
       trackingRect = 0;
     }
 }
 
 -(void)createBackingStoreWithWidth: (CGFloat) width andHeight: (CGFloat) height
 {
-  CVReturn rv;
-
   g_return_if_fail (width && height);
 
   CVPixelBufferRelease (pixels);
-  rv = CVPixelBufferCreate (NULL, width, height,
-                            kCVPixelFormatType_32BGRA,
-                            cfpb_props, &pixels);
+  CVPixelBufferCreate (NULL, width, height,
+                       kCVPixelFormatType_32BGRA,
+                       cfpb_props, &pixels);
 
 }
 
