@@ -522,7 +522,7 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
   gboolean unref_icon;
 
   unref_icon = FALSE;
-  string = g_strdup_printf ("<b>%s</b>", _("Default Application"));
+  string = g_strdup_printf ("<b>%s</b>", _("Default App"));
 
   gtk_list_store_append (self->program_list_store, &iter);
   gtk_list_store_set (self->program_list_store, &iter,
@@ -572,7 +572,7 @@ update_no_applications_label (GtkAppChooserWidget *self)
       if (self->content_type)
 	desc = g_content_type_get_description (self->content_type);
 
-      string = text = g_strdup_printf (_("No applications found for “%s”."), desc);
+      string = text = g_strdup_printf (_("No apps found for “%s”."), desc);
       g_free (desc);
     }
   else
@@ -655,7 +655,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
       if (self->content_type)
 	recommended_apps = g_app_info_get_recommended_for_type (self->content_type);
 
-      apps_added |= gtk_app_chooser_widget_add_section (self, _("Recommended Applications"),
+      apps_added |= gtk_app_chooser_widget_add_section (self, _("Recommended Apps"),
                                                         show_headings,
                                                         !self->show_all, /* mark as recommended */
                                                         FALSE, /* mark as fallback */
@@ -670,7 +670,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
       if (self->content_type)
 	fallback_apps = g_app_info_get_fallback_for_type (self->content_type);
 
-      apps_added |= gtk_app_chooser_widget_add_section (self, _("Related Applications"),
+      apps_added |= gtk_app_chooser_widget_add_section (self, _("Related Apps"),
                                                         show_headings,
                                                         FALSE, /* mark as recommended */
                                                         !self->show_all, /* mark as fallback */
@@ -684,7 +684,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
     {
       all_applications = g_app_info_get_all ();
 
-      apps_added |= gtk_app_chooser_widget_add_section (self, _("Other Applications"),
+      apps_added |= gtk_app_chooser_widget_add_section (self, _("Other Apps"),
                                                         show_headings,
                                                         FALSE,
                                                         FALSE,
