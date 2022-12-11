@@ -326,7 +326,14 @@
   [super viewWillDraw];
 }
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10900
 -(BOOL)wantsUpdateLayer
+{
+     return YES;
+}
+#endif
+
+-(BOOL)wantsLayer
 {
      return YES;
 }
