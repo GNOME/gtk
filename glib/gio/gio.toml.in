@@ -1,6 +1,6 @@
 [library]
 name = "Gio"
-version = "2.72"
+version = "2.74"
 browse_url = "https://gitlab.gnome.org/GNOME/glib/"
 repository_url = "https://gitlab.gnome.org/GNOME/glib.git"
 website_url = "https://www.gtk.org"
