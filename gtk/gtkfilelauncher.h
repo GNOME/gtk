@@ -33,12 +33,17 @@ GDK_AVAILABLE_IN_4_10
 G_DECLARE_FINAL_TYPE (GtkFileLauncher, gtk_file_launcher, GTK, FILE_LAUNCHER, GObject)
 
 GDK_AVAILABLE_IN_4_10
-GtkFileLauncher * gtk_file_launcher_new                          (void);
+GtkFileLauncher * gtk_file_launcher_new                          (GFile               *file);
+
+GDK_AVAILABLE_IN_4_10
+GFile           * gtk_file_launcher_get_file                     (GtkFileLauncher     *self);
+GDK_AVAILABLE_IN_4_10
+void              gtk_file_launcher_set_file                     (GtkFileLauncher     *self,
+                                                                  GFile               *file);
 
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_launcher_launch                        (GtkFileLauncher     *self,
                                                                   GtkWindow           *parent,
-                                                                  GFile               *file,
                                                                   GCancellable        *cancellable,
                                                                   GAsyncReadyCallback  callback,
                                                                   gpointer             user_data);
@@ -51,7 +56,6 @@ gboolean         gtk_file_launcher_launch_finish                 (GtkFileLaunche
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_launcher_open_containing_folder        (GtkFileLauncher     *self,
                                                                   GtkWindow           *parent,
-                                                                  GFile               *file,
                                                                   GCancellable        *cancellable,
                                                                   GAsyncReadyCallback  callback,
                                                                   gpointer             user_data);

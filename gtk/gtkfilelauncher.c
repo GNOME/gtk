@@ -48,7 +48,17 @@
 struct _GtkFileLauncher
 {
   GObject parent_instance;
+
+  GFile *file;
 };
+
+enum {
+  PROP_FILE = 1,
+
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (GtkFileLauncher, gtk_file_launcher, G_TYPE_OBJECT)
 
@@ -66,11 +76,67 @@ gtk_file_launcher_finalize (GObject *object)
 }
 
 static void
+gtk_file_launcher_get_property (GObject      *object,
+                                unsigned int  property_id,
+                                GValue       *value,
+                                GParamSpec   *pspec)
+{
+  GtkFileLauncher *self = GTK_FILE_LAUNCHER (object);
+
+  switch (property_id)
+    {
+    case PROP_FILE:
+      g_value_set_object (value, self->file);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_file_launcher_set_property (GObject      *object,
+                                unsigned int  property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GtkFileLauncher *self = GTK_FILE_LAUNCHER (object);
+
+  switch (property_id)
+    {
+    case PROP_FILE:
+      gtk_file_launcher_set_file (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_file_launcher_class_init (GtkFileLauncherClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = gtk_file_launcher_finalize;
+  object_class->get_property = gtk_file_launcher_get_property;
+  object_class->set_property = gtk_file_launcher_set_property;
+
+  /**
+   * GtkFileLauncher:file: (attributes org.gtk.Property.get=gtk_file_launcher_get_file org.gtk.Property.set=gtk_file_launcher_set_file)
+   *
+   * The file to launch.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_FILE] =
+      g_param_spec_object ("file", NULL, NULL,
+                           G_TYPE_FILE,
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }
 
 /* }}} */
@@ -78,6 +144,7 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
 
 /**
  * gtk_file_launcher_new:
+ * @file: (nullable): the file to open
  *
  * Creates a new `GtkFileLauncher` object.
  *
@@ -86,12 +153,57 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
  * Since: 4.10
  */
 GtkFileLauncher *
-gtk_file_launcher_new (void)
+gtk_file_launcher_new (GFile *file)
 {
-  return g_object_new (GTK_TYPE_FILE_LAUNCHER, NULL);
+  return g_object_new (GTK_TYPE_FILE_LAUNCHER,
+                       "file", file,
+                       NULL);
 }
 
  /* }}} */
+/* {{{ API: Getters and setters */
+
+/**
+ * gtk_file_launcher_get_file:
+ * @self: a `GtkFileLauncher`
+ *
+ * Gets the file that will be opened.
+ *
+ * Returns: (transfer none) (nullable): the file
+ *
+ * Since: 4.10
+ */
+GFile *
+gtk_file_launcher_get_file (GtkFileLauncher *self)
+{
+  g_return_val_if_fail (GTK_IS_FILE_LAUNCHER (self), NULL);
+
+  return self->file;
+}
+
+/**
+ * gtk_file_launcher_set_file:
+ * @self: a `GtkFileLauncher`
+ * @file: a `GFile`
+ *
+ * Sets the file that will be opened.
+ *
+ * Since: 4.10
+ */
+void
+gtk_file_launcher_set_file (GtkFileLauncher *self,
+                            GFile           *file)
+{
+  g_return_if_fail (GTK_IS_FILE_LAUNCHER (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  if (!g_set_object (&self->file, file))
+    return;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
+}
+
+/* }}} */
 /* {{{ Async implementation */
 
 #ifndef G_OS_WIN32
@@ -213,7 +325,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * gtk_file_launcher_launch:
  * @self: a `GtkFileLauncher`
  * @parent: (nullable): the parent `GtkWindow`
- * @file: (nullable): the `GFile` to open
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
  * @user_data: (closure callback): data to pass to @callback
@@ -231,7 +342,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 void
 gtk_file_launcher_launch (GtkFileLauncher     *self,
                           GtkWindow           *parent,
-                          GFile               *file,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -244,15 +354,23 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_launcher_launch);
 
+  if (self->file == NULL)
+    {
+      g_task_return_new_error (task,
+                               GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                               "No file to launch");
+      return;
+    }
+
 #ifndef G_OS_WIN32
   if (g_openuri_portal_is_available ())
     {
-      g_openuri_portal_open_async (file, FALSE, parent, cancellable, open_done, task);
+      g_openuri_portal_open_async (self->file, FALSE, parent, cancellable, open_done, task);
     }
   else
 #endif
     {
-      char *uri = g_file_get_uri (file);
+      char *uri = g_file_get_uri (self->file);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, cancellable, show_uri_done, task);
@@ -292,7 +410,6 @@ gtk_file_launcher_launch_finish (GtkFileLauncher  *self,
  * gtk_file_launcher_open_containing_folder:
  * @self: a `GtkFileLauncher`
  * @parent: (nullable): the parent `GtkWindow`
- * @file: (nullable): the `GFile` to open
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
  * @user_data: (closure callback): data to pass to @callback
@@ -311,7 +428,6 @@ gtk_file_launcher_launch_finish (GtkFileLauncher  *self,
 void
 gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
                                           GtkWindow           *parent,
-                                          GFile               *file,
                                           GCancellable        *cancellable,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
@@ -324,7 +440,15 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_launcher_open_containing_folder);
 
-  if (!g_file_is_native (file))
+  if (self->file == NULL)
+    {
+      g_task_return_new_error (task,
+                               GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                               "No file to open");
+      return;
+    }
+
+  if (!g_file_is_native (self->file))
     {
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
@@ -335,12 +459,12 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
 #ifndef G_OS_WIN32
   if (g_openuri_portal_is_available ())
     {
-      g_openuri_portal_open_async (file, TRUE, parent, cancellable, open_done, task);
+      g_openuri_portal_open_async (self->file, TRUE, parent, cancellable, open_done, task);
     }
   else
 #endif
     {
-      char *uri = g_file_get_uri (file);
+      char *uri = g_file_get_uri (self->file);
 
       show_folder (parent, uri, cancellable, show_folder_done, task);
 
