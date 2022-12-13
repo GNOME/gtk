@@ -1332,6 +1332,7 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
        || event->keyval == GDK_KEY_period
 #ifdef G_OS_UNIX
        || event->keyval == GDK_KEY_asciitilde
+       || event->keyval == GDK_KEY_dead_tilde
 #endif
        ) && !(event->state & no_text_input_mask))
     return TRUE;
@@ -1348,6 +1349,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
                                  GdkEventKey *event,
                                  gpointer     data)
 {
+  gchar *path;
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -1358,7 +1360,8 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
-      location_popup_handler (impl, event->string);
+      path = event->keyval == GDK_KEY_dead_tilde ? "~" : event->string;
+      location_popup_handler (impl, path);
       return TRUE;
     }
 
