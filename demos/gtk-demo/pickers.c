@@ -94,11 +94,10 @@ open_app (GtkButton *picker)
   GtkFileLauncher *launcher;
   GFile *file;
 
-  launcher = gtk_file_launcher_new ();
-
   file = G_FILE (g_object_get_data (G_OBJECT (picker), "file"));
+  launcher = gtk_file_launcher_new (file);
 
-  gtk_file_launcher_launch (launcher, parent, file, NULL, launch_done, NULL);
+  gtk_file_launcher_launch (launcher, parent, NULL, launch_done, NULL);
 
   g_object_unref (launcher);
 }
