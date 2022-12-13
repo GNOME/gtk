@@ -1018,6 +1018,10 @@ Our application now looks like this:
 In this step, we make our application show the content of all the files
 that it is given on the commandline.
 
+**Note: Providing filenames (e.g. `./exampleapp examplewin.c examplewin.h`) at
+the command line is a requirement for example apps 3-9 to display as shown in
+the screenshots below.**
+
 To this end, we add a member to the struct of our application window subclass
 and keep a reference to the `GtkStack` there. The first member of the struct
 should be the parent type from which the class is derived. Here,
