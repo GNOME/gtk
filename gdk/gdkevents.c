@@ -1174,9 +1174,16 @@ gdk_event_get_axes (GdkEvent  *event,
                     double   **axes,
                     guint     *n_axes)
 {
+  gboolean ret;
+
   g_return_val_if_fail (GDK_IS_EVENT (event), FALSE);
 
-  return GDK_EVENT_GET_CLASS (event)->get_axes (event, axes, n_axes);
+  ret = GDK_EVENT_GET_CLASS (event)->get_axes (event, axes, n_axes);
+
+  if (*axes == NULL)
+    return FALSE;
+
+  return ret;
 }
 
 double *
