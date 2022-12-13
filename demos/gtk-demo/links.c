@@ -21,7 +21,7 @@ activate_link (GtkWidget  *label,
                                    "The term ‘keynav’ is a shorthand for "
                                    "keyboard navigation and refers to the process of using "
                                    "a program (exclusively) via keyboard input.");
-      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (label)));
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (label)), NULL);
       g_object_unref (dialog);
 
       return TRUE;

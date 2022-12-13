@@ -169,7 +169,7 @@ show_uri_done (GObject      *object,
 
       dialog = gtk_alert_dialog_new ("%s", _("Could not show link"));
       gtk_alert_dialog_set_detail (dialog, error->message);
-      gtk_alert_dialog_show (dialog, parent);
+      gtk_alert_dialog_show (dialog, parent, NULL);
       g_object_unref (dialog);
 
       g_error_free (error);

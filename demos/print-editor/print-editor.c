@@ -119,7 +119,7 @@ load_file (GFile *open_filename)
 
           alert = gtk_alert_dialog_new ("Error loading file %s", display_name);
           gtk_alert_dialog_set_detail (alert, "Not valid utf8");
-          gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+          gtk_alert_dialog_show (alert, GTK_WINDOW (main_window), NULL);
           g_object_unref (alert);
           g_object_unref (info);
         }
@@ -132,7 +132,7 @@ load_file (GFile *open_filename)
 
       alert = gtk_alert_dialog_new ("Error loading file %s", display_name);
       gtk_alert_dialog_set_detail (alert, error->message);
-      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window), NULL);
       g_object_unref (alert);
       g_object_unref (info);
       g_error_free (error);
@@ -173,7 +173,7 @@ save_file (GFile *save_filename)
 
       alert = gtk_alert_dialog_new ("Error saving to file %s", display_name);
       gtk_alert_dialog_set_detail (alert, error->message);
-      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window), NULL);
       g_object_unref (alert);
       g_error_free (error);
       g_object_unref (info);
@@ -374,7 +374,7 @@ print_done (GtkPrintOperation *op,
       alert = gtk_alert_dialog_new ("Error printing file");
       if (error)
         gtk_alert_dialog_set_detail (alert, error->message);
-      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
+      gtk_alert_dialog_show (alert, GTK_WINDOW (main_window), NULL);
       g_object_unref (alert);
     }
   else if (res == GTK_PRINT_OPERATION_RESULT_APPLY)

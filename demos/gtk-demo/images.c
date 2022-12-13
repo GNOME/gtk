@@ -87,7 +87,7 @@ progressive_timeout (gpointer data)
 
           dialog = gtk_alert_dialog_new ("Failure reading image file 'alphatest.png': %s",
                                          error->message);
-          gtk_alert_dialog_show (dialog, NULL);
+          gtk_alert_dialog_show (dialog, NULL, NULL);
           g_object_unref (dialog);
           g_error_free (error);
 
@@ -107,7 +107,7 @@ progressive_timeout (gpointer data)
 
           dialog = gtk_alert_dialog_new ("Failed to load image: %s",
                                          error->message);
-          gtk_alert_dialog_show (dialog, NULL);
+          gtk_alert_dialog_show (dialog, NULL, NULL);
           g_object_unref (dialog);
           g_error_free (error);
 
@@ -132,7 +132,7 @@ progressive_timeout (gpointer data)
 
               dialog = gtk_alert_dialog_new ("Failed to load image: %s",
                                              error->message);
-              gtk_alert_dialog_show (dialog, NULL);
+              gtk_alert_dialog_show (dialog, NULL, NULL);
               g_object_unref (dialog);
               g_error_free (error);
 
@@ -160,7 +160,7 @@ progressive_timeout (gpointer data)
 
               dialog = gtk_alert_dialog_new ("Failed to load image: %s",
                                              error->message);
-              gtk_alert_dialog_show (dialog, NULL);
+              gtk_alert_dialog_show (dialog, NULL, NULL);
               g_object_unref (dialog);
               g_error_free (error);
 
@@ -188,7 +188,7 @@ progressive_timeout (gpointer data)
 
           dialog = gtk_alert_dialog_new ("%s",
                                          error->message);
-          gtk_alert_dialog_show (dialog, NULL);
+          gtk_alert_dialog_show (dialog, NULL, NULL);
           g_object_unref (dialog);
           g_error_free (error);
 

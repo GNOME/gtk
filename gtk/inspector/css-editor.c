@@ -205,7 +205,7 @@ save_to_file (GtkInspectorCssEditor *ce,
 
       alert = gtk_alert_dialog_new (_("Saving CSS failed"));
       gtk_alert_dialog_set_detail (alert, error->message);
-      gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))));
+      gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))), NULL);
       g_object_unref (alert);
       g_error_free (error);
     }

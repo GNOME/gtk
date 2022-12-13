@@ -124,7 +124,7 @@ activate_cb (GtkListView  *list,
        */
       dialog = gtk_alert_dialog_new ("Could not launch %s", g_app_info_get_display_name (app_info));
       gtk_alert_dialog_set_detail (dialog, error->message);
-      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (list))));
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (list))), NULL);
       g_object_unref (dialog);
       g_clear_error (&error);
     }

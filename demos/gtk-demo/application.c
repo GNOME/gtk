@@ -37,7 +37,7 @@ show_action_dialog (GSimpleAction *action)
 
   dialog = gtk_alert_dialog_new ("You activated action: \"%s\n",
                                  g_action_get_name (G_ACTION (action)));
-  gtk_alert_dialog_show (dialog, NULL);
+  gtk_alert_dialog_show (dialog, NULL, NULL);
   g_object_unref (dialog);
 }
 
@@ -106,7 +106,7 @@ open_response_cb (GObject *source,
       GtkAlertDialog *alert;
 
       alert = gtk_alert_dialog_new ("Error loading file: \"%s\"", error->message);
-      gtk_alert_dialog_show (alert, NULL);
+      gtk_alert_dialog_show (alert, NULL, NULL);
       g_object_unref (alert);
       g_error_free (error);
     }

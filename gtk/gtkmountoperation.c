@@ -1395,7 +1395,7 @@ on_end_process_activated (GtkButton         *button,
        */
       dialog = gtk_alert_dialog_new (_("Unable to end process"));
       gtk_alert_dialog_set_detail (dialog, error->message);
-      gtk_alert_dialog_show (dialog, GTK_WINDOW (op->priv->dialog));
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (op->priv->dialog), NULL);
       g_object_unref (dialog);
 
       g_error_free (error);

@@ -744,6 +744,7 @@ gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
  * gtk_alert_dialog_show:
  * @self: a `GtkAlertDialog`
  * @parent: (nullable): the parent `GtkWindow`
+ * @cancellable: (nullable): a `GCancellable` to cancel the operation
  *
  * This function shows the alert to the user.
  *
@@ -755,9 +756,10 @@ gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
  */
 void
 gtk_alert_dialog_show (GtkAlertDialog *self,
-                       GtkWindow      *parent)
+                       GtkWindow      *parent,
+                       GCancellable   *cancellable)
 {
-  gtk_alert_dialog_choose (self, parent, NULL, NULL, NULL);
+  gtk_alert_dialog_choose (self, parent, cancellable, NULL, NULL);
 }
 
 /* }}} */

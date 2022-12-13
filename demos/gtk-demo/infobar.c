@@ -27,7 +27,7 @@ on_bar_response (GtkInfoBar *info_bar,
   detail = g_strdup_printf ("Your response has been %d", response_id);
   gtk_alert_dialog_set_detail (dialog, detail);
   g_free (detail);
-  gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (info_bar))));
+  gtk_alert_dialog_show (dialog, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (info_bar))), NULL);
   g_object_unref (dialog);
 }
 

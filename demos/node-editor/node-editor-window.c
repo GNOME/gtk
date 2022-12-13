@@ -613,7 +613,8 @@ save_response_cb (GObject *source,
           alert = gtk_alert_dialog_new ("Saving failed");
           gtk_alert_dialog_set_detail (alert, error->message);
           gtk_alert_dialog_show (alert,
-                                 GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
+                                 GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                                 NULL);
           g_object_unref (alert);
           g_error_free (error);
         }
@@ -719,7 +720,9 @@ export_image_response_cb (GObject *source,
           GtkAlertDialog *alert;
 
           alert = gtk_alert_dialog_new ("Exporting to image failed");
-          gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))));
+          gtk_alert_dialog_show (alert,
+                                 GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))),
+                                 NULL);
           g_object_unref (alert);
         }
 

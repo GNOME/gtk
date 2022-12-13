@@ -91,6 +91,7 @@ int             gtk_alert_dialog_choose_finish      (GtkAlertDialog      *self,
 
 GDK_AVAILABLE_IN_4_10
 void            gtk_alert_dialog_show               (GtkAlertDialog      *self,
-                                                     GtkWindow           *parent);
+                                                     GtkWindow           *parent,
+                                                     GCancellable        *cancellable);
 
 G_END_DECLS

@@ -673,7 +673,7 @@ error_message (GtkFileChooserWidget *impl,
 
   dialog = gtk_alert_dialog_new ("%s", msg);
   gtk_alert_dialog_set_detail (dialog, detail);
-  gtk_alert_dialog_show (dialog, parent);
+  gtk_alert_dialog_show (dialog, parent, NULL);
   g_object_unref (dialog);
 }
 

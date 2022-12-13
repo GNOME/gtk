@@ -180,7 +180,7 @@ do_printing (GtkWidget *do_widget)
       GtkAlertDialog *dialog;
 
       dialog = gtk_alert_dialog_new ("%s", error->message);
-      gtk_alert_dialog_show (dialog, GTK_WINDOW (do_widget));
+      gtk_alert_dialog_show (dialog, GTK_WINDOW (do_widget), NULL);
       g_object_unref (dialog);
       g_error_free (error);
     }
