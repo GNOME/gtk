@@ -1113,26 +1113,6 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
 }
 
 static struct wl_cursor_theme *
-try_load_theme (GdkWaylandDisplay *display_wayland,
-                const char        *dir,
-                gboolean           dotdir,
-                const char        *name,
-                int                size)
-{
-  struct wl_cursor_theme *theme = NULL;
-  char *path;
-
-  path = g_build_filename (dir, dotdir ? ".icons" : "icons", name, "cursors", NULL);
-
-  if (g_file_test (path, G_FILE_TEST_IS_DIR))
-    theme = wl_cursor_theme_create (path, size, display_wayland->shm);
-
-  g_free (path);
-
-  return theme;
-}
-
-static struct wl_cursor_theme *
 get_cursor_theme (GdkWaylandDisplay *display_wayland,
                   const char *name,
                   int size)
@@ -1141,18 +1121,16 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
   struct wl_cursor_theme *theme = NULL;
   int i;
 
-  theme = try_load_theme (display_wayland, g_get_user_data_dir (), FALSE, name, size);
-  if (theme)
-    return theme;
-
-  theme = try_load_theme (display_wayland, g_get_home_dir (), TRUE, name, size);
-  if (theme)
-    return theme;
-
   xdg_data_dirs = g_get_system_data_dirs ();
   for (i = 0; xdg_data_dirs[i]; i++)
     {
-      theme = try_load_theme (display_wayland, xdg_data_dirs[i], FALSE, name, size);
+      char *path = g_build_filename (xdg_data_dirs[i], "icons", name, "cursors", NULL);
+
+      if (g_file_test (path, G_FILE_TEST_IS_DIR))
+        theme = wl_cursor_theme_create (path, size, display_wayland->shm);
+
+      g_free (path);
+
       if (theme)
         return theme;
     }
