@@ -681,8 +681,8 @@ gtk_print_operation_portal_launch_preview (GtkPrintOperation *op,
   GtkFileLauncher *launcher;
 
   file = g_file_new_for_path (filename);
-  launcher = gtk_file_launcher_new ();
-  gtk_file_launcher_launch (launcher, parent, file, NULL, NULL, NULL);
+  launcher = gtk_file_launcher_new (file);
+  gtk_file_launcher_launch (launcher, parent, NULL, NULL, NULL);
   g_object_unref (launcher);
   g_object_unref (file);
 }

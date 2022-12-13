@@ -312,8 +312,8 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
       g_clear_error (&error);
 
       file = g_file_new_for_path (filename);
-      launcher = gtk_file_launcher_new ();
-      gtk_file_launcher_launch (launcher, parent, file, NULL, NULL, NULL);
+      launcher = gtk_file_launcher_new (file);
+      gtk_file_launcher_launch (launcher, parent, NULL, NULL, NULL);
       g_object_unref (launcher);
       g_object_unref (file);
     }

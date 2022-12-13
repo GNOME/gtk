@@ -935,10 +935,10 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
   GtkFileLauncher *launcher;
   GFile *file;
 
-  launcher = gtk_file_launcher_new ();
   file = g_file_new_for_uri (uri);
+  launcher = gtk_file_launcher_new (file);
 
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (about), file, NULL, NULL, NULL);
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (about), NULL, NULL, NULL);
 
   g_object_unref (launcher);
   g_object_unref (file);

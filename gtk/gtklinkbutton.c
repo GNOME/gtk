@@ -485,8 +485,8 @@ gtk_link_button_activate_link (GtkLinkButton *link_button)
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
   file = g_file_new_for_uri (link_button->uri);
-  launcher = gtk_file_launcher_new ();
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), file, NULL, NULL, NULL);
+  launcher = gtk_file_launcher_new (file);
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
   g_object_unref (launcher);
   g_object_unref (file);
 

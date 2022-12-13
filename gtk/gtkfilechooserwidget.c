@@ -1375,8 +1375,8 @@ open_folder_cb (GSimpleAction *action,
   info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
   file = _gtk_file_info_get_file (info);
 
-  launcher = gtk_file_launcher_new ();
-  gtk_file_launcher_open_containing_folder (launcher, toplevel, file, NULL, NULL, NULL);
+  launcher = gtk_file_launcher_new (file);
+  gtk_file_launcher_open_containing_folder (launcher, toplevel, NULL, NULL, NULL);
   g_object_unref (launcher);
 
   g_clear_object (&info);
