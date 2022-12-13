@@ -1,5 +1,3 @@
-subdir('cursor')
-
 gdk_wayland_sources = files(
   'gdkapplaunchcontext-wayland.c',
   'gdkcursor-wayland.c',
@@ -33,6 +31,7 @@ gdk_wayland_deps = [
   xkbdep,
   wlclientdep,
   wlprotocolsdep,
+  wlcursordep,
   wlegldep,
 ]
 
@@ -113,5 +112,4 @@ libgdk_wayland = static_library('gdk-wayland',
                                   '-DG_LOG_DOMAIN="Gdk"',
                                 ] + common_cflags,
                                 link_args: common_ldflags,
-                                link_with: [libwayland_cursor, ],
                                 dependencies: [ gdk_deps, gdk_wayland_deps, ])

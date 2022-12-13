@@ -537,6 +537,7 @@ wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req)
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+  wlcursordep    = dependency('wayland-cursor', version: wayland_req)
   wlegldep       = dependency('wayland-egl')
   backend_immodules += ['wayland']
 
@@ -545,6 +546,7 @@ if wayland_enabled
   wayland_pkgs = [
     'wayland-client', wayland_req,
     'xkbcommon', xkbcommon_req,
+    'wayland-cursor', wayland_req,
     'wayland-egl',
   ]
 endif
