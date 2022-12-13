@@ -69,11 +69,11 @@ GDK_AVAILABLE_IN_3_24
 GtkEventController *gtk_event_controller_scroll_new (GtkWidget                     *widget,
                                                      GtkEventControllerScrollFlags  flags);
 GDK_AVAILABLE_IN_3_24
-void                gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *controller,
+void                gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
                                                            GtkEventControllerScrollFlags  flags);
 GDK_AVAILABLE_IN_3_24
 GtkEventControllerScrollFlags
-                    gtk_event_controller_scroll_get_flags (GtkEventControllerScroll      *controller);
+                    gtk_event_controller_scroll_get_flags (GtkEventControllerScroll      *scroll);
 
 G_END_DECLS
 

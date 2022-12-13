@@ -1,11 +1,12 @@
-project('gtk+-3.0', 'c',
-        version: '3.24.35',
-        default_options: [
-          'buildtype=debugoptimized',
-          'warning_level=1'
-        ],
-        meson_version : '>= 0.48.0',
-        license: 'LGPLv2.1+')
+project('gtk+', 'c',
+  version: '3.24.35',
+  default_options: [
+    'buildtype=debugoptimized',
+    'warning_level=1'
+  ],
+  meson_version : '>= 0.60.0',
+  license: 'LGPL-2.1-or-later',
+)
 
 glib_major_req = 2
 glib_minor_req = 57
@@ -189,11 +190,6 @@ cdata.set_quoted('GTK_DATADIR', gtk_datadir)
 cdata.set_quoted('GTK_LIBDIR', gtk_libdir)
 cdata.set_quoted('GTK_SYSCONFDIR', gtk_sysconfdir)
 cdata.set_quoted('GETTEXT_PACKAGE', 'gtk30')
-cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
-cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
-cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
-cdata.set('GTK_BINARY_AGE', gtk_binary_age)
-cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
 cdata.set_quoted('PACKAGE_URL', '')
 cdata.set_quoted('PACKAGE_NAME', 'gtk+')
@@ -420,25 +416,9 @@ if pangoft_dep.found()
   # We get the dependency itself from pango, but pango doesn't care
   # about ft2 version, so an extra check is needed.
 
-  # Update once Meson can have deps declared in a declarative manner
-  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: false)
-
-  if not ft2_dep.found() and cc.get_id() == 'msvc'
-    if cc.has_header('ft2build.h') and cc.has_header('freetype/ftmm.h')
-      ft_lib = cc.find_library('freetype', required: false)
-      if ft_lib.found()
-        if cc.has_function('FT_Get_Var_Design_Coordinates', dependencies: ft_lib,
-                           prefix: '''#include <ft2build.h>
-                                      #include FT_MULTIPLE_MASTERS_H''')
-          ft2_dep = ft_lib
-        endif
-      endif
-    endif
-  endif
-
-  if not ft2_dep.found()
-    ft2_dep      = dependency('freetype2', version: '>= 2.7.1', fallback : ['freetype2', 'freetype_dep'])
-  endif
+  ft2_dep      = dependency(['freetype2','FreeType'],
+                            version: '>= 2.7.1',
+                            fallback : ['freetype2', 'freetype_dep'])
 endif
 
 if win32_enabled
@@ -497,7 +477,7 @@ if tracker3_enabled
 endif
 
 if iso_codes_dep.found()
-  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
 else
   cdata.set_quoted('ISO_CODES_PREFIX', get_option('prefix'))
 endif
@@ -865,7 +845,10 @@ if os_darwin
   module_suffix = 'so'
 endif
 
-build_gir = get_option('introspection')
+# Introspection
+gir = find_program('g-ir-scanner', required : get_option('introspection'))
+build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection'))
+
 subdir('gdk')
 subdir('gtk')
 subdir('modules')
@@ -882,9 +865,10 @@ if get_option('examples')
 endif
 
 # config.h
-configure_file(input: 'config.h.meson',
-               output: 'config.h',
-               configuration: cdata)
+configure_file(
+  output: 'config.h',
+  configuration: cdata,
+)
 
 # pkg-config files - bit of a mess all of this
 pkgconf = configuration_data()
@@ -1010,21 +994,11 @@ subdir('docs/reference')
 install_data('m4macros/gtk-3.0.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
 if not meson.is_cross_build()
-  if meson.version().version_compare('>=0.57.0')
-    gnome.post_install(
-      glib_compile_schemas: true,
-      gio_querymodules: gio_module_dirs,
-      gtk_update_icon_cache: get_option('demos'),
-    )
-  else
-    # Keep this in sync with post-install.py expected arguments
-    meson.add_install_script('build-aux/meson/post-install.py',
-                             gtk_api_version,
-                             gtk_binary_version,
-                             join_paths(gtk_prefix, get_option('bindir')),
-                             gtk_libdir,
-                             gtk_datadir)
-  endif
+  gnome.post_install(
+    glib_compile_schemas: true,
+    gio_querymodules: gio_module_dirs,
+    gtk_update_icon_cache: get_option('demos'),
+  )
 else
   message('Not executing post-install steps automatically when cross compiling')
 endif
@@ -1035,16 +1009,6 @@ if host_machine.system() != 'windows'
   install_data('gtk.supp',
     install_dir : join_paths(gtk_datadir, 'gtk-3.0', 'valgrind'))
 endif
-
-test(
-  'version-check',
-  find_program('check-version.py'),
-  args: [
-    join_paths(meson.current_source_dir(), 'configure.ac'),
-    join_paths(meson.current_source_dir(), 'meson.build'),
-  ],
-  suite: 'gtk',
-)
 
 summary = [
   '',

@@ -348,7 +348,7 @@ stored_selection_new (GdkWaylandSelection *wayland_selection,
 static void
 stored_selection_add_data (StoredSelection *stored_selection,
                            GdkPropMode      mode,
-                           guchar          *data,
+                           const guchar    *data,
                            gsize            data_len)
 {
   if (mode == GDK_PROP_MODE_REPLACE)

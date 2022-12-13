@@ -7,7 +7,7 @@ export CCACHE_BASEDIR="$(pwd)"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
 export PATH="${HOME}/.local/bin:${PATH}"
-python3 -m pip install --user meson==0.49.2
+python3 -m pip install --user meson==0.60
 
 meson \
     -Dinstalled_tests=true \
@@ -41,3 +41,7 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --suite=flaky \
         --suite=failing \
     || true
+
+if [ -n "${DO_DISTCHECK-}" ]; then
+  meson dist --no-tests
+fi

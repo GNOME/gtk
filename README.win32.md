@@ -25,293 +25,134 @@ Building GTK+ on Win32
 ===
 
 First you obviously need developer packages for the compile-time
-dependencies: GDK-Pixbuf, Pango, atk, glib, gettext-runtime, libiconv at least.
-See http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies .
+dependencies: `GDK-Pixbuf`, `Pango`*, `HarfBuzz`**, `atk`, `cairo`* and `glib`.
+You will also need `libffi`, `gettext-runtime`, `libiconv` and PCRE (or PCRE2
+for glib-2.74.x and later) and `zlib` for GLib; Cairo with DirectWrite support
+and/or FontConfig support for best font shaping and display supportin Pango*;
+and `librsvg`, `libpng`, `libjpeg-turbo` and `libtiff` for loading the
+various icons via GDK-Pixbuf that are common to GTK.  You will need a Rust
+installation with the appropriate toolchain installed as well, if building
+librsvg-2.42.x or later.
+
+(MinGW users should also look at the following section on the dependencies
+that are required, either built from source or installed using `pacman`.
+
+Notes on building with Visual Studio
+===
+
+You may wish to build the dependencies from the sources (all are required
+for the best use experience unless noted).
+
+For Visual Studio, it is possible to build the following with CMake:
+
+*  zlib
+*  libpng
+*  FreeType (used in FontConfig, optionally used in Cairo and HarfBuzz)
+*  libexpat (used in FontConfig)
+*  libxml2 (needed for GResource support during build time and librsvg/libcroco)
+*  libbrotlidec (optional, used in FreeType, requires Visual Studio 2013 or later)
+*  libjpeg-turbo (you also need NASM, unless building for ARM64)
+*  libtiff (requires libjpeg-turbo and zlib)
+*  HarfBuzz** (for pre-2.6.0, using Meson is recommended for 2.6.0 or later)
+*  PCRE (for glib-2.72.x and earlier), or PCRE2 (for glib-2.74.x or later)
+
+It is possible to build the following items using Meson:
+*  HarfBuzz** (2.6.0 and later)
+*  Cairo (1.17.x or later; for 1.16.x, you need mozilla-build to build from the MSVC Makefiles,
+   building cairo-gobject is required)
+*  FontConfig (needed if PangoFT2 is used.  Note building Cairo with FontConfig is required,
+   requires Visual Studio 2015 or later)
+*  fribidi (required for Pango)
+*  GLib, ATK, Pango, GDK-Pixbuf
+*  gobject-introspection (recommended, if using language bindings or gedit is desired, requires GLib and libffi)
+*  pixman (required for Cairo)
+*  libepoxy***
+
+For Visual Studio, Visual Studio projects or NMake Makefiles are provided with the following:
+*  librsvg (runtime, 2.42.x or later require Visual Studio 2013 or later with a Rust
+   MSVC toolchain installed; requires libxml2)
+*  libcroco (required for librsvg-2.40.x or earlier, requires libxml2)
+*  libbz2 (optional for FreeType)
+*  nasm (needed for building libjpeg-turbo on x86/x64)
+*  adwaita-icon-theme (run-time, after building GTK and librsvg)
+
+NMake Makefiles are provided as an add-on with patches to build the sources,
+at https://github.com/fanc999/gtk-deps-msvc/, under $(dependency) / $(dep_version)
+*  libiconv (used by gettext-runtime)
+*  gettext-runtime (and gettext-tools; an alternative is to use proxy-intl during the GLib
+   build, at the cost of not having translations being built, VS2015 or later is required for
+   0.21.1 and later)
+*  libffi (currently, manually adapting the pkg-config .pc.in template is needed; an older
+   x86/x64 version can be built in-place if building GLib without libffi installed)
+
+You also need a copy of stdint.h and inttypes.h from msinttypes for Visual Studio 2012
+or earlier (stdint.h is optional on VS2010 or later), as well as an implementation of
+stdbool.h.
+
+Bleeding-edge versions of the dependencies may require Visual Studio 2015/2017 or later.
+
+ARM64 builds are supported in addition to x86 and x64 builds, albeit without SIMD optimizations
+in pixman and libjpeg-turbo (SIMD support may need to be explicitly disabled).  Please see
+the Meson documentation on how to set up a cross-build from an x86-based Windows system.
+Introspection support is not supported in this configuration.
+
+Building just using Meson without the dependencies installed may work if the following
+conditions are met:
+
+* Visual Studio 2017 15.9.x or later is installed
+* `git` is accessible in the `%PATH%`, to pull in the depedencies
+* The CMake-built dependencies should be pre-built.
+* Only building for x86/x64 is supported this way, ARM64 builds should at least have
+  pixman and libffi prebuilt.
+* librsvg and adwaita-icon-theme must be built separately
+* gettext-runtime and libiconv must also be prebuilt if translations support is desired.
+
+Notes on certain dependencies:
+---
+
+*  (*)DirectWrite support in Pango requires pango-1.50.12 or later with Cairo
+   1.17.6 or later.  Visual Studio 2015 or later is required to build Pango
+   1.50.x or later.
+* (**)HarfBuzz is required if using Pango-1.44.x or later, or if building
+   PangoFT2.  If using Visual Studio 2013 or earlier, only HarfBuzz 2.4.0
+   or earlier is supported.  Visual Studio 2017 15.9.x or later is required
+   for 3.3.0 or later.  You may wish to build FreeType prior to building
+   HarfBuzz, and then building FreeType again linking to HarfBuzz for a
+   more comprehensive FreeType build.  Font features support is only enabled
+   if PangoFT2 is built or Pango-1.44.x and HarfBuzz 2.2.0 or later are installed.
+*  (***)For building with GLES support (currently supported via libANGLE), you
+   will need to obtain libANGLE from its latest GIT checkout or from QT 5.10.x.
+   You will need to build libepoxy with EGL enabled using `-Degl=yes` when
+   configuring the build.
+
+Some outdated builds of the dependencies may be found at
+http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies .
 
 For people compiling GTK+ with Visual C++, it is recommended that
 the same compiler is used for at least GDK-Pixbuf, Pango, atk and glib
 so that crashes and errors caused by different CRTs can be avoided. 
-
-Currently building with Visual Studio 2008 or later is supported,
-either via Visual Studio project files or via the Meson build system,
-as described in the below sections.
 
 For Visual Studio 2008 and 2010, a special setup making use of the Windows 
 8.0 SDK is required, see at the bottom of this document for guidance.
 Interchanging between Visual Studio 2015, 2017, 2019 and 2022 builds 
 should be fine as they use the same CRT (UCRT) DLLs.
 
-After installing the dependencies, there are two ways to build GTK+
-for win32.
-
-GNU tools, ./configure && make install (info here may be out of date,
-consider using Meson instead)
----
-
-This requires you have mingw and MSYS.
-
-Use the configure script, and the resulting Makefiles (which use
-libtool and gcc to do the compilation). I use this myself, but it can
-be hard to setup correctly.
-
-The full script I run to build GTK+ 2.16 unpacked from a source
-distribution is as below. This is from bulding GTK+ 2.16.5. I don't
-use any script like this to build the development branch, as I don't
-distribute any binaries from development branches.
-
-```
-# This is a shell script that calls functions and scripts from
-# tml@iki.fi's personal work envíronment. It is not expected to be
-# usable unmodified by others, and is included only for reference.
-
-MOD=gtk+
-VER=2.16.5
-REV=1
-ARCH=win32
-
-THIS=${MOD}_${VER}-${REV}_${ARCH}
-
-RUNZIP=${MOD}_${VER}-${REV}_${ARCH}.zip
-DEVZIP=${MOD}-dev_${VER}-${REV}_${ARCH}.zip
-
-HEX=`echo $THIS | md5sum | cut -d' ' -f1`
-TARGET=c:/devel/target/$HEX
-
-usedev
-usemsvs6
-
-(
-
-set -x
-
-DEPS=`latest --arch=${ARCH} glib atk cairo pango libpng zlib libtiff jpeg`
-PROXY_LIBINTL=`latest --arch=${ARCH} proxy-libintl`
-
-PKG_CONFIG_PATH=
-for D in $DEPS; do
-    PATH=/devel/dist/${ARCH}/$D/bin:$PATH
-    [ -d /devel/dist/${ARCH}/$D/lib/pkgconfig ] && PKG_CONFIG_PATH=/devel/dist/${ARCH}/$D/lib/pkgconfig:$PKG_CONFIG_PATH
-done
-
-LIBPNG=`latest --arch=${ARCH} libpng`
-ZLIB=`latest --arch=${ARCH} zlib`
-LIBTIFF=`latest --arch=${ARCH} libtiff`
-JPEG=`latest --arch=${ARCH} jpeg`
-
-patch -p0 <<'EOF'
-EOF
-
-lt_cv_deplibs_check_method='pass_all' \
-CC='gcc -mtune=pentium3 -mthreads' \
-CPPFLAGS="-I/devel/dist/${ARCH}/${LIBPNG}/include \
--I/devel/dist/${ARCH}/${ZLIB}/include \
--I/devel/dist/${ARCH}/${LIBTIFF}/include \
--I/devel/dist/${ARCH}/${JPEG}/include \
--I/devel/dist/${ARCH}/${PROXY_LIBINTL}/include" \
-LDFLAGS="-L/devel/dist/${ARCH}/${LIBPNG}/lib \
--L/devel/dist/${ARCH}/${ZLIB}/lib \
--L/devel/dist/${ARCH}/${LIBTIFF}/lib \
--L/devel/dist/${ARCH}/${JPEG}/lib \
--L/devel/dist/${ARCH}/${PROXY_LIBINTL}/lib -Wl,--exclude-libs=libintl.a \
--Wl,--enable-auto-image-base" \
-LIBS=-lintl \
-CFLAGS=-O2 \
-./configure \
---enable-win32-backend \
---disable-gdiplus \
---with-included-immodules \
---without-libjasper \
---enable-debug=yes \
---enable-explicit-deps=no \
---disable-gtk-doc \
---disable-static \
---prefix=$TARGET &&
-
-libtoolcacheize &&
-rm gtk/gtk.def &&
-(PATH="$PWD/gdk-pixbuf/.libs:/devel/target/$HEX/bin:$PATH" make -j3 install || (rm .libtool-cache* && PATH="/devel/target/$HEX/bin:$PATH" make -j3 install)) &&
-
-PATH="/devel/target/$HEX/bin:$PATH" gdk-pixbuf-query-loaders >/devel/target/$HEX/etc/gtk-2.0/gdk-pixbuf.loaders &&
-
-grep -v -E 'Automatically generated|Created by|LoaderDir =' <$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp &&
-    mv $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
-grep -v -E 'Automatically generated|Created by|ModulesPath =' <$TARGET/etc/gtk-2.0/gtk.immodules >$TARGET/etc/gtk-2.0/gtk.immodules.temp &&
-    mv $TARGET/etc/gtk-2.0/gtk.immodules.temp $TARGET/etc/gtk-2.0/gtk.immodules &&
-
-./gtk-zip.sh &&
-
-mv /tmp/${MOD}-${VER}.zip /tmp/$RUNZIP &&
-mv /tmp/${MOD}-dev-${VER}.zip /tmp/$DEVZIP
-
-) 2>&1 | tee /devel/src/tml/packaging/$THIS.log
-
-(cd /devel && zip /tmp/$DEVZIP src/tml/packaging/$THIS.{sh,log}) &&
-manifestify /tmp/$RUNZIP /tmp/$DEVZIP
-```
-
-You should not just copy the above blindly. There are some things in
-the script that are very specific to *my* build setup on *my* current
-machine. For instance the "latest" command, the "usedev" and
-"usemsvs6" shell functions, the `/devel/dist` folder. The above script
-is really just meant for reference, to give an idea. You really need
-to understand what things like `PKG_CONFIG_PATH` are and set them up
-properly after installing the dependencies before building GTK+.
-
-As you see above, after running configure, one can just say "make
-install", like on Unix. A post-build fix is needed, running
-gdk-pixbuf-query-loaders once more to get a correct `gdk-pixbuf.loaders`
-file.
-
-For a 64-bit build you need to remove the `gtk/gtk.def` file and let it
-be regenerated by the makefilery. This is because the 64-bit GTK dll
-has a slightly different list of exported function names. This is on
-purpose and not a bug. The API is the same at the source level, and
-the same #defines of some function names to actually have a _utf8
-suffix is used (just to keep the header simpler). But the
-corresponding non-suffixed function to maintain ABI stability are not
-needed in the 64-bit case (because there are no older EXEs around that
-would require such for ABI stability).
-
-
-Microsoft's tools
----
-
-There are VS 2008~2022 solution and project files to build GTK+, which
-are maintained by Chun-wei Fan.  They should build GTK+ out of the box,
-provided that the afore-mentioned dependencies are installed.  They will
-build GDK with the Win32 backend, GTK+ itself (with GAIL/a11y built in),
-the GAIL-Util library and the gtk3-demo program.  Please also refer to the
-README_FEATURES_MSVC.md file that reside in win32 on how to enable 
-additional features that are not enabled by default, such as EGL support 
-via libANGLE, which emulate the GL/EGL calls using Direct3D 9/11.
-
-Please refer to the following GNOME Live! page for a more detailed ouline
-on the process of building the GTK+ stack and its dependencies with Visual
-C++:
-
-https://wiki.gnome.org/Projects/GTK+/Win32/MSVCCompilationOfGTKStack
-
-Alternative 1 also generates Microsoft import libraries (.lib), if you
-have lib.exe available. It might also work for cross-compilation from
-Unix.
-
-I (Tor) use method 1 myself. Hans Breuer has been taking care of the MSVC
-makefiles. At times, we disagree a bit about various issues, and for
-instance the makefile.msc files might not produce identically named
-DLLs and import libraries as the "autoconfiscated" makefiles and
-libtool do. If this bothers you, you will have to fix the makefiles.
-
-You may need or wish to update `gtk3-build-defines.[vs]props` (under the 
-entry `GenerateRequiredSourcesBase` and/or `GtkIntrospectNMakeCmd` and/or
-`InstallBuildsBase`) to pass in the variables if they are not in:
-
-* `$(PREFIX)\bin` (used for generating code for the build):
-   * `GLIB_MKENUMS` (path to your glib-mkenums script)
-   * `GLIB_GENMARSHAL` (path to your glib-genmarshal script)
-   * `GDBUS_CODEGEN` (path to your gdbus-codegen script)
-   * `GLIB_COMPILE_RESOURCES` (path to your glib-compile-resources program)
-
-* `%PATH%`:
-   * `PYTHON` (path to your Python interpreter, for generating code for 
-     the build as well as for introspection; for introspection, this must 
-     match the version series and architecture for the Python that is used 
-     to build gobject-introspection)
-   * `PKG_CONFIG` (path to your pkg-config or compatible tool, for 
-     building introspection files in the `gtk3-introspect` project)
-   * `MSGFMT` (path to your msgfmt program, if building translations 
-     during install; append ` install-translations` to `InstallBuildsBase`
-     in `gtk3-build-defines.[vs]props])
-
-`LIBDIR` and `INCLUDEDIR` can also be passed in if they are not under 
-`$(PREFIX)\lib` and `$(PREFIX)\include` respectively.  Note that 
-`$(LIBDIR)` is architecture-dependent.
-
-If desiring to build binaries for ARM64 (`aarch64`), one needs to use the
-Visual Studio 2017 or 2019 or 2022 solution files, or use Meson with a
-cross-compilation file, with a Windows 10 SDK that supports ARM64
-builds.  At this point, building the introspection files is not supported
-for ARM64 builds, and you will need a Python 3.x interpreter and
-glib-compile-resources binaries that run on the build machine.
-
-For Visual Studio 2017 ARM64 builds, do also check the 
-`Directory.Build.props` file in `$(srcroot)/win32/vs15`
-indicates a Windows 10 SDK version that supports ARM64 builds
-exists on the build machine.
-
-For building ARM64 binaries with the Visual Studio projects, prior to the 
-build, you may need to update `gtk3-build-defines.props` to pass in the variables as indicated earlier:
-
-* GLIB_MKENUMS
-* GLIB_GENMARSHAL
-* GDBUS_CODEGEN
-* GLIB_COMPILE_RESOURCES
-* PYTHON
-
-in the nmake command line indicated by `<GenerateRequiredSourcesBase>` so
-that they point to the respective tools and scripts that will run on the
-build machine.  You may also need to update `gtk3-version-paths.props` to 
-update `<PythonDir>` to the installation of the Python 3.x interpreter 
-that will run on the build machine (or just update `PYTHON=...` in the 
-command line in `<GenerateRequiredSourcesBase>`).  To carry out the actual 
-build using the solution files, use the "Configuration Manager" to add the
-ARM64 build configs by copying the settings from the x64 configs, and then
-build the solution.
-The build instructions for such builds otherwise follow the standard Win32
-(x86) and x64 builds, but you need to ensure that you have ARM64 builds of
-the various dependencies.
-
-It may still be possible to carry out the build and build the 
-introspection files with Python 2.7.x using older versions of GLib and 
-GObject-Introspection, but please note that this is not recommended
-and one is on his/her own by doing so.
-
-It is now supported to build with the Visual Studio projects directly
-from a GIT checkout.  Run in a Visual Studio command prompt, in 
-$(srcroot)/win32:
-
-`nmake /f bootstrap-msvc.mak [PYTHON=...] [PERL=...] [FONT_FEATURES_DEMO=1] [FONT_FEATURES_USE_PANGOFT2=1] [USE_EGL=1]`
-
-where `PYTHON` and `PERL` are the respective paths to the Python and PERL
-interpreters, if they are not in your `%PATH%`-they are both required to
-generate the full sets of project files, as well as the auxiliary build
-files and headers that is not available in a GIT checkout and must be
-generated prior to opening the project files.
-
-For `FONT_FEATURES_DEMO`, `FONT_FEATURES_USE_PANGOFT2` and `USE_EGL`, 
-please refer to `win32\README_FEATURES_MSVC.md` for more details, to 
-enable features that is optional and not enabled by default (i.e. in the 
-release tarballs).
-
-It is also possible to regenerate some or all of the visual studio 
-projects with the following, if necessary:
-
-`nmake /f generate-msvc.mak [PYTHON=...] [FONT_FEATURES_DEMO=1] [FONT_FEATURES_USE_PANGOFT2=1] [USE_EGL=1] <target>`
-
-Where target can be (they will update all related VS2008~2022 projects):
-
-* `regenerate-demos-h-win32`: Regenerate the `gtk3-demo` projects along 
-   with `demos.h.win32`, useful to enable or disable the Font Features 
-   demo.
-*  `regenerate-gdk-vsproj`: Regenerate all the GDK projects with 
-   `broadwayd`, useful to enable or disable EGL on Windows.
-*  `regenerate-gtk-vsproj`: Regenerate the `gtk-3` and `gailutil-3` library
-   projects.
-*  `regenerate-all-msvc-projs`: Re-generate all project files, and re-copy 
-   all the Visual Studio 2010 project files for VS 2012~2022.
+The following describes how one can build GTK with MinGW or Visual Studio
+2008 or later using Meson.
 
 Using Meson (for Visual Studio and MinGW builds)
----
+===
 
 Meson can now be used to build GTK+-3.x with either MinGW or Visual Studio.
 You will need the following items in addition to all the dependencies
 listed above:
 
-* Python 3.5 or later
-* Meson build system, 0.48.0 or later
+* Python 3.6.x or later (later Meson versions require Python 3.7.x)
+* Meson build system, 0.60.0 or later
 * Ninja (if not using the Visual Studio project generator for
          Visual Studio 2010 or later)
-* CMake (optional, used for dependency searching)
-* pkg-config (optional, or some compatible tool, highly recommended)
+* CMake (recommended for Visual Studio builds, used for dependency searching)
+* pkg-config (or some compatible tool, highly recommended)
 
 For all Windows builds, note that unless `-Dbuiltin_immodules=no` is 
 specified, the input modules (immodules) are built directly into the GTK 
@@ -324,14 +165,14 @@ For building with Meson using Visual Studio, do the following:
   matches the build configuration (Visual Studio version and architecture),
   and run the following:
 
-* Ensure that both the installation directory of Python 3.5+ and its script
+* Ensure that both the installation directory of Python 3.6+ and its script
   directory is in your `%PATH%`, as well as the Ninja, CMake and pkg-config
   executables (if used).  If a pkg-config compatible drop-in replacement
   tool is being used, ensure that `PKG_CONFIG` is set to point to the
   executable of that tool as well.
 
 * For non-GNOME dependencies (such as Cairo and Harfbuzz), where pkg-config
-  files or CMake files could not be properly located, set `%INCLUDE%` and 
+  files or CMake files may not be properly located, set `%INCLUDE%` and 
   `%LIB%` to ensure that their header files and .lib files can be found 
   respectively. The DLLs of those dependencies should also be in the 
   `%PATH%` during the build as well, especially if introspection files ar
@@ -439,10 +280,9 @@ configured (using the Windows 8.1 SDK is also possible for Visual Studio
    the DirectX SDK installed, you should remove its utility directory from
    your `%PATH%` as well.
 
-*  The Windows 8.0 SDK headers may contain an `roapi.h` that cannot be 
+*  The Windows 8.0/8.1 SDK headers may contain an `roapi.h` that cannot be 
    used under plain C, so to remedy that, change the following lines
-   (around lines 55-57) (this is not necessary for the Windows 8.1 or
-   later SDKs):
+   (around lines 55-57):
 
 ```
   // RegisterActivationFactory/RevokeActivationFactory registration cookie

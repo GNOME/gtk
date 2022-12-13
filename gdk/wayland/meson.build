@@ -38,7 +38,7 @@ gdk_wayland_deps = [
 
 # wayland protocols
 wlprotocolsdep = dependency('wayland-protocols')
-proto_dir = wlprotocolsdep.get_pkgconfig_variable('pkgdatadir')
+proto_dir = wlprotocolsdep.get_variable(pkgconfig: 'pkgdatadir')
 assert(proto_dir != '', 'Could not get pkgdatadir from wayland-protocols.pc')
 
 wayland_scanner = find_program('wayland-scanner')
