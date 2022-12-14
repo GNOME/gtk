@@ -34,7 +34,7 @@
 #include "gdkwayland.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#include <cursor/wayland-cursor.h>
+#include <wayland-cursor.h>
 
 #define GDK_TYPE_WAYLAND_CURSOR              (_gdk_wayland_cursor_get_type ())
 #define GDK_WAYLAND_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_CURSOR, GdkWaylandCursor))
@@ -149,8 +149,9 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
   if (cursor->name == NULL)
     return FALSE;
 
-  theme = _gdk_wayland_display_get_cursor_theme (display_wayland);
-  c = wl_cursor_theme_get_cursor (theme, cursor->name, cursor->scale);
+  theme = _gdk_wayland_display_get_scaled_cursor_theme (display_wayland,
+                                                        cursor->scale);
+  c = wl_cursor_theme_get_cursor (theme, cursor->name);
   if (!c)
     {
       const char *fallback;
@@ -158,9 +159,9 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
       fallback = name_fallback (cursor->name);
       if (fallback)
         {
-          c = wl_cursor_theme_get_cursor (theme, fallback, cursor->scale);
+          c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
           if (!c)
-            c = wl_cursor_theme_get_cursor (theme, "left_ptr", cursor->scale);
+            c = wl_cursor_theme_get_cursor (theme, "left_ptr");
         }
     }
 
@@ -222,6 +223,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
   if (wayland_cursor->wl_cursor)
     {
       struct wl_cursor_image *image;
+      int cursor_scale;
 
       if (image_index >= wayland_cursor->wl_cursor->image_count)
         {
@@ -233,12 +235,22 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       image = wayland_cursor->wl_cursor->images[image_index];
 
-      *hotspot_x = image->hotspot_x / wayland_cursor->scale;
-      *hotspot_y = image->hotspot_y / wayland_cursor->scale;
+      cursor_scale = wayland_cursor->scale;
+      if ((image->width % cursor_scale != 0) ||
+          (image->height % cursor_scale != 0))
+        {
+          g_warning (G_STRLOC " cursor image size (%dx%d) not an integer"
+                     "multiple of scale (%d)", image->width, image->height,
+                     cursor_scale);
+          cursor_scale = 1;
+        }
 
-      *w = image->width / wayland_cursor->scale;
-      *h = image->height / wayland_cursor->scale;
-      *scale = wayland_cursor->scale;
+      *hotspot_x = image->hotspot_x / cursor_scale;
+      *hotspot_y = image->hotspot_y / cursor_scale;
+
+      *w = image->width / cursor_scale;
+      *h = image->height / cursor_scale;
+      *scale = cursor_scale;
 
       return wl_cursor_image_get_buffer (image);
     }
@@ -303,6 +315,12 @@ _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_cursor_get_display (cursor));
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
+
+  if (scale > GDK_WAYLAND_MAX_THEME_SCALE)
+    {
+      g_warning (G_STRLOC ": cursor theme size %u too large", scale);
+      scale = GDK_WAYLAND_MAX_THEME_SCALE;
+    }
 
   if (wayland_cursor->scale == scale)
     return;
