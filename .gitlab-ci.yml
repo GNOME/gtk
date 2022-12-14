@@ -81,7 +81,7 @@ fedora-x86_64:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - .gitlab-ci/show-info-linux.sh
     - pip3 install --user meson~=0.64
@@ -106,11 +106,11 @@ release-build:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - .gitlab-ci/show-info-linux.sh
     - pip3 install --user meson~=0.64
-    - meson subprojects update
+    - meson subprojects update --reset
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
     - ninja -C _build
@@ -132,10 +132,11 @@ fedora-mingw64:
             mingw64-libepoxy
             mingw64-pango
             # mingw64-graphene (rawhide)
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - .gitlab-ci/show-info-linux.sh
     - pip3 install --user meson~=0.64
-    - meson subprojects update
+    - meson subprojects update --reset
     - mkdir _build && cd _build
     - mingw64-meson -Dintrospection=disabled -Dgraphene:introspection=disabled
     - ninja
@@ -148,11 +149,11 @@ installed-tests:
     EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
     G_TEST_ACCESSIBLE: 1
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - .gitlab-ci/show-info-linux.sh
     - pip3 install --user meson~=0.64
-    - meson subprojects update
+    - meson subprojects update --reset
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
     - ninja -C _build
@@ -345,7 +346,7 @@ static-scan:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _scan_build
     - ninja -C _scan_build scan-build
@@ -363,7 +364,7 @@ asan-build:
   needs: []
   variables:
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
     - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled _build
     - ninja -C _build
@@ -380,8 +381,9 @@ reference:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release --force-fallback-for=gdk-pixbuf,pango"
   before_script:
-    - PATH="$PATH:/home/user/.local/bin"
+    - PATH="/home/user/.local/bin:$PATH"
   script:
+    - pip3 install --user meson~=0.64
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true -Dgdk-pixbuf:gtk_doc=true -Dpango:gtk_doc=true _build
     - meson compile -C _build
     - mkdir -p _reference/
