@@ -110,6 +110,8 @@ release-build:
   script:
     - .gitlab-ci/show-info-linux.sh
     - pip3 install --user meson~=0.64
+    - rm -rf subprojects/glib
+    - meson subprojects download glib
     - meson subprojects update --reset
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
