@@ -37,7 +37,7 @@
  * The URI bound to a `GtkLinkButton` can be set specifically using
  * [method@Gtk.LinkButton.set_uri].
  *
- * By default, `GtkLinkButton` calls [func@Gtk.show_uri] when the button
+ * By default, `GtkLinkButton` calls [method@Gtk.FileLauncher.launch] when the button
  * is clicked. This behaviour can be overridden by connecting to the
  * [signal@Gtk.LinkButton::activate-link] signal and returning %TRUE from
  * the signal handler.
@@ -65,7 +65,7 @@
 #include "gtkmarshalers.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtkshow.h"
+#include "gtkfilelauncher.h"
 #include "gtksizerequest.h"
 #include "gtktooltip.h"
 #include "gtkwidgetprivate.h"
@@ -198,7 +198,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    *
    * Emitted each time the `GtkLinkButton` is clicked.
    *
-   * The default handler will call [func@Gtk.show_uri] with the URI
+   * The default handler will call [method@Gtk.FileLauncher.launch] with the URI
    * stored inside the [property@Gtk.LinkButton:uri] property.
    *
    * To override the default behavior, you can connect to the
@@ -479,10 +479,17 @@ static gboolean
 gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
   GtkWidget *toplevel;
+  GFile *file;
+  GtkFileLauncher *launcher;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
-  gtk_show_uri (GTK_WINDOW (toplevel), link_button->uri, GDK_CURRENT_TIME);
+  file = g_file_new_for_uri (link_button->uri);
+  launcher = gtk_file_launcher_new (file);
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+  g_object_unref (launcher);
+  g_object_unref (file);
+
   gtk_link_button_set_visited (link_button, TRUE);
 
   return TRUE;

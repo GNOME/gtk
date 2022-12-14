@@ -64,7 +64,7 @@
 #include "gtkcheckbutton.h"
 #include "gtkwindowgroup.h"
 #include <glib/gi18n-lib.h>
-#include "gtkshow.h"
+#include "gtkfilelauncher.h"
 #include "gtkmain.h"
 #include "gtkscrollable.h"
 #include "gtkpopover.h"
@@ -1370,68 +1370,14 @@ open_folder_cb (GSimpleAction *action,
   GtkWindow *toplevel = GTK_IS_WINDOW (root) ? GTK_WINDOW (root) : NULL;
   GFileInfo *info;
   GFile *file;
-  char *uri;
+  GtkFileLauncher *launcher;
 
   info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), impl->browse_files_popover_item);
   file = _gtk_file_info_get_file (info);
 
-#ifdef G_OS_WIN32
-
-  uri = g_file_get_uri (file);
-  gtk_show_uri (toplevel, uri, GDK_CURRENT_TIME);
-  g_free (uri);
-
-#else
-
-  if (gdk_should_use_portal ())
-    {
-      g_openuri_portal_open_async (file, TRUE, toplevel, NULL, NULL, NULL);
-    }
-  else
-    {
-      GDBusConnection *bus;
-      GVariantBuilder uris_builder;
-      GVariant *result;
-      GError *error = NULL;
-
-      uri = g_file_get_uri (file);
-
-      bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-
-      g_variant_builder_init (&uris_builder, G_VARIANT_TYPE ("as"));
-      g_variant_builder_add (&uris_builder, "s", uri);
-
-      result = g_dbus_connection_call_sync (bus,
-                                            FILE_MANAGER_DBUS_NAME,
-                                            FILE_MANAGER_DBUS_PATH,
-                                            FILE_MANAGER_DBUS_IFACE,
-                                            "ShowFolders",
-                                            g_variant_new ("(ass)", &uris_builder, ""),
-                                            NULL,   /* ignore returned type */
-                                            G_DBUS_CALL_FLAGS_NONE,
-                                            -1,
-                                            NULL,
-                                            &error);
-      if (error)
-        {
-          if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER) ||
-              g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
-            g_debug ("No " FILE_MANAGER_DBUS_NAME " available");
-          else
-            g_warning ("Failed to call ShowFolders: %s", error->message);
-
-          g_error_free (error);
-        }
-
-      if (result)
-        g_variant_unref (result);
-      else
-        gtk_show_uri (toplevel, uri, GDK_CURRENT_TIME);
-
-      g_free (uri);
-    }
-
-#endif
+  launcher = gtk_file_launcher_new (file);
+  gtk_file_launcher_open_containing_folder (launcher, toplevel, NULL, NULL, NULL);
+  g_object_unref (launcher);
 
   g_clear_object (&info);
 }

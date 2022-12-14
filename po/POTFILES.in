@@ -88,6 +88,7 @@ gtk/deprecated/gtkfontbutton.c
 gtk/deprecated/gtkfontchooser.c
 gtk/deprecated/gtkiconview.c
 gtk/deprecated/gtkliststore.c
+gtk/deprecated/gtkshow.c
 gtk/deprecated/gtkstylecontext.c
 gtk/deprecated/gtktreednd.c
 gtk/deprecated/gtktreemodel.c
@@ -177,6 +178,7 @@ gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
 gtk/gtkfiledialog.c
 gtk/gtkfilefilter.c
+gtk/gtkfilelauncher.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfilethumbnail.c
 gtk/gtkfilter.c
@@ -298,7 +300,6 @@ gtk/gtkshortcutssection.c
 gtk/gtkshortcutsshortcut.c
 gtk/gtkshortcutswindow.c
 gtk/gtkshortcuttrigger.c
-gtk/gtkshow.c
 gtk/gtksidebarrow.c
 gtk/gtksignallistitemfactory.c
 gtk/gtksingleselection.c
