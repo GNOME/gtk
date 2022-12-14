@@ -82,6 +82,7 @@ fedora-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - pip3 install --user meson~=0.64
     - meson subprojects update --reset
     - mkdir _install
     - meson --prefix=${CI_PROJECT_DIR}/_install
@@ -104,6 +105,7 @@ release-build:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - pip3 install --user meson~=0.64
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
@@ -128,6 +130,7 @@ fedora-mingw64:
             # mingw64-graphene (rawhide)
   script:
     - .gitlab-ci/show-info-linux.sh
+    - pip3 install --user meson~=0.64
     - meson subprojects update
     - mkdir _build && cd _build
     - mingw64-meson -Dintrospection=disabled -Dgraphene:introspection=disabled
@@ -142,6 +145,7 @@ installed-tests:
     G_TEST_ACCESSIBLE: 1
   script:
     - .gitlab-ci/show-info-linux.sh
+    - pip3 install --user meson~=0.64
     - meson subprojects update
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
@@ -197,7 +201,7 @@ macos:
   needs: []
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - pip3 install --user meson==0.60.3
+    - pip3 install --user meson~=0.64
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
     - export MESON_FORCE_BACKTRACE=1
