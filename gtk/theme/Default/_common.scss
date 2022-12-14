@@ -1652,7 +1652,15 @@ window.devel {
  * Pathbars *
  ************/
 
-pathbar > button {
+pathbar scrolledwindow undershoot.left {
+  border-left: solid 1px $borders_color;
+}
+
+pathbar scrolledwindow undershoot.right {
+  border-right: solid 1px $borders_color;
+}
+
+pathbar button {
   &.text-button, &.image-button, & {
     padding-left: 4px;
     padding-right: 4px;
@@ -3566,6 +3574,36 @@ filechooser {
   }
 
   #pathbarbox { border-bottom: 1px solid $bg_color; }
+
+  gridview child {
+    border-radius: 12px;
+    margin: 12px;
+
+    &:hover {
+      background-color: gtkalpha(currentColor, .04);
+    }
+
+    &:active {
+      background-color: gtkalpha(currentColor, .08);
+    }
+
+    &:selected {
+      background-color: gtkalpha($selected_bg_color, .15);
+      color: inherit;
+    }
+
+    &:selected:hover {
+      background-color: gtkalpha($selected_bg_color, .20);
+    }
+
+    &:selected:active {
+      background-color: gtkalpha($selected_bg_color, .25);
+    }
+
+    & filethumbnail image {
+      filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.3));
+    }
+  }
 }
 
 
