@@ -825,21 +825,13 @@ gtk_list_base_update_focus_tracker (GtkListBase *self)
 }
 
 static void
-gtk_list_base_scroll_to_item (GtkWidget  *widget,
-                              const char *action_name,
-                              GVariant   *parameter)
+gtk_list_base_scroll_to_item (GtkListBase *self,
+                              guint        pos)
 {
-  GtkListBase *self = GTK_LIST_BASE (widget);
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
-  guint pos;
-
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
-    return;
-
-  g_variant_get (parameter, "u", &pos);
 
   /* figure out primary orientation and if position is valid */
   if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
@@ -875,6 +867,22 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
    * because it's the closest we can get to accurate tracking.
    */
   gtk_list_base_update_focus_tracker (self);
+}
+
+static void
+gtk_list_base_scroll_to_item_action (GtkWidget  *widget,
+                                     const char *action_name,
+                                     GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  gtk_list_base_scroll_to_item (self, pos);
 }
 
 static void
@@ -1179,7 +1187,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_install_action (widget_class,
                                    "list.scroll-to-item",
                                    "u",
-                                   gtk_list_base_scroll_to_item);
+                                   gtk_list_base_scroll_to_item_action);
 
   /**
    * GtkListBase|list.select-item:
