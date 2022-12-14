@@ -22,7 +22,6 @@
 #include "gtklistitemwidgetprivate.h"
 
 #include "gtkbinlayout.h"
-#include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtklistitemfactoryprivate.h"
@@ -489,19 +488,6 @@ gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
 }
 
 static void
-gtk_list_item_widget_enter_cb (GtkEventControllerFocus *controller,
-                               GtkListItemWidget       *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
-
-  gtk_widget_activate_action (widget,
-                              "list.scroll-to-item",
-                              "u",
-                              priv->position);
-}
-
-static void
 gtk_list_item_widget_hover_cb (GtkEventControllerMotion *controller,
                                double                    x,
                                double                    y,
@@ -541,10 +527,6 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
   g_signal_connect (gesture, "released",
                     G_CALLBACK (gtk_list_item_widget_click_gesture_released), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-
-  controller = gtk_event_controller_focus_new ();
-  g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_widget_enter_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_widget_hover_cb), self);
