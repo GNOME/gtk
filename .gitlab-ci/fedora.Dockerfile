@@ -1,4 +1,4 @@
-FROM fedora:36
+FROM fedora:37
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -82,7 +82,6 @@ RUN dnf -y install \
     python3-markdown \
     python3-pip \
     python3-pygments \
-    python3-toml \
     python3-typogrify \
     python3-wheel \
     redhat-rpm-config \

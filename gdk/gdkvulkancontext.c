@@ -94,7 +94,7 @@ gdk_vulkan_strerror (VkResult result)
    * Because the Vulkan people don't make adding this too easy, here's
    * the process to manage it:
    * 1. go to
-   *    https://github.com/KhronosGroup/Vulkan-Headers/blob/master/include/vulkan/vulkan_core.h
+   *    https://github.com/KhronosGroup/Vulkan-Headers/blob/main/include/vulkan/vulkan_core.h
    * 2. Find the line where this enum value was added.
    * 3. Click the commit that added this line.
    * 4. The commit you're looking at now should also change
@@ -214,6 +214,10 @@ gdk_vulkan_strerror (VkResult result)
       return "A deferred operation was requested and no operations were deferred. (VK_OPERATION_NOT_DEFERRED_KHR)";
     case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
       return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed. (VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT)";
+#endif
+#if VK_HEADER_VERSION >= 213
+    case VK_ERROR_COMPRESSION_EXHAUSTED_EXT:
+      return "An image creation failed because internal resources required for compression are exhausted. (VK_ERROR_COMPRESSION_EXHAUSTED_EXT)";
 #endif
 #if VK_HEADER_VERSION < 140
     case VK_RESULT_RANGE_SIZE:
@@ -488,7 +492,7 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                            priv->draw_semaphore
                                        },
                                        .swapchainCount = 1,
-                                       .pSwapchains = (VkSwapchainKHR[]) { 
+                                       .pSwapchains = (VkSwapchainKHR[]) {
                                            priv->swapchain
                                        },
                                        .pImageIndices = (uint32_t[]) {
@@ -608,7 +612,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
         {
           g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                                "No supported image format found.");
-          goto out_surface;  
+          goto out_surface;
         }
       priv->image_format = formats[i];
       priv->has_present_region = device_supports_incremental_present (display->vk_physical_device);
@@ -1037,8 +1041,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   GDK_VK_CHECK (vkEnumerateInstanceExtensionProperties, NULL, &n_extensions, extensions);
 
   used_extensions = g_ptr_array_new ();
-  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME); 
-  g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name); 
+  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME);
+  g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name);
 
   for (i = 0; i < n_extensions; i++)
     {
@@ -1118,7 +1122,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   if (have_debug_report)
     {
       PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
-      
+
       vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT) vkGetInstanceProcAddr (display->vk_instance, "vkCreateDebugReportCallbackEXT" );
       GDK_VK_CHECK (vkCreateDebugReportCallbackEXT, display->vk_instance,
                                                     &(VkDebugReportCallbackCreateInfoEXT) {
@@ -1167,7 +1171,7 @@ gdk_display_ref_vulkan (GdkDisplay *display,
     }
 
   display->vulkan_refcount++;
-    
+
   return TRUE;
 }
 
@@ -1180,7 +1184,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vulkan_refcount--;
   if (display->vulkan_refcount > 0)
     return;
-  
+
   vkDestroyDevice (display->vk_device, NULL);
   display->vk_device = VK_NULL_HANDLE;
   if (display->vk_debug_callback != VK_NULL_HANDLE)
