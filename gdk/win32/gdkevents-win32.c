@@ -2731,22 +2731,15 @@ gdk_event_translate (MSG *msg,
     }
     break;
 
-     case WM_MOUSEACTIVATE:
-       {
-	 if (GDK_IS_DRAG_SURFACE (window))
-	   {
-	     *ret_valp = MA_NOACTIVATE;
-	     return_val = TRUE;
-	   }
+    case WM_MOUSEACTIVATE:
+      if (GDK_IS_DRAG_SURFACE (window) ||
+          _gdk_modal_blocked (window))
+        {
+          *ret_valp = MA_NOACTIVATE;
+          return_val = TRUE;
+        }
 
-	 if (_gdk_modal_blocked (window))
-	   {
-	     *ret_valp = MA_NOACTIVATEANDEAT;
-	     return_val = TRUE;
-	   }
-       }
-
-       break;
+      break;
 
     case WM_POINTERACTIVATE:
       if (GDK_IS_DRAG_SURFACE (window) ||
