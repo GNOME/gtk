@@ -26,7 +26,7 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v38"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v39"
   FLATPAK_IMAGE: "quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master"
 
 .only-default:
@@ -82,7 +82,7 @@ fedora-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
-    - meson subprojects update
+    - meson subprojects update --reset
     - mkdir _install
     - meson --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
