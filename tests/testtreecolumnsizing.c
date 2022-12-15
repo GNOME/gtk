@@ -243,7 +243,7 @@ main (int argc, char **argv)
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   /* Done */
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

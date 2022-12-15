@@ -15,7 +15,7 @@ test_hidden (void)
 
   gtk_test_accessible_assert_state (widget, GTK_ACCESSIBLE_STATE_HIDDEN, FALSE);
 
-  gtk_widget_hide (widget);
+  gtk_widget_set_visible (widget, FALSE);
 
   gtk_test_accessible_assert_state (widget, GTK_ACCESSIBLE_STATE_HIDDEN, TRUE);
 

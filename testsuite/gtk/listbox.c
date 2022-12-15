@@ -59,7 +59,6 @@ test_sort (void)
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
-  gtk_widget_show (GTK_WIDGET (list));
 
   for (i = 0; i < 100; i++)
     {
@@ -116,7 +115,6 @@ test_selection (void)
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
-  gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
   g_assert_null (gtk_list_box_get_selected_row (list));
@@ -204,7 +202,6 @@ test_multi_selection (void)
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
-  gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
   g_assert_null (gtk_list_box_get_selected_rows (list));
@@ -318,7 +315,6 @@ test_filter (void)
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
-  gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
   g_assert_null (gtk_list_box_get_selected_row (list));
@@ -410,7 +406,6 @@ test_header (void)
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
-  gtk_widget_show (GTK_WIDGET (list));
 
   g_assert_cmpint (gtk_list_box_get_selection_mode (list), ==, GTK_SELECTION_SINGLE);
   g_assert_null (gtk_list_box_get_selected_row (list));

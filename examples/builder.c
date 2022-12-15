@@ -37,7 +37,7 @@ activate (GtkApplication *app,
   button = gtk_builder_get_object (builder, "quit");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (quit_cb), window);
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_window_present (GTK_WINDOW (window));
   g_object_unref (builder);
 }
 

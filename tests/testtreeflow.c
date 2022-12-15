@@ -180,7 +180,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (futz), NULL);
   g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   g_timeout_add (1000, (GSourceFunc) futz, NULL);
   while (!done)
     g_main_context_iteration (NULL, TRUE);

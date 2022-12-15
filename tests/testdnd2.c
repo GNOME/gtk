@@ -429,7 +429,7 @@ main (int argc, char *Argv[])
 
   gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-information", CENTER), 1, 3, 1, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);
 

@@ -19,7 +19,7 @@ window_state (void)
 
   gtk_test_accessible_assert_state (window, GTK_ACCESSIBLE_STATE_HIDDEN, FALSE);
 
-  gtk_widget_hide (window);
+  gtk_widget_set_visible (window, FALSE);
 
   gtk_test_accessible_assert_state (window, GTK_ACCESSIBLE_STATE_HIDDEN, TRUE);
 

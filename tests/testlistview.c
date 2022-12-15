@@ -647,7 +647,7 @@ main (int argc, char *argv[])
 
   g_object_unref (selectionmodel);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))

@@ -66,7 +66,7 @@ main (int argc, char *argv[])
 
   gtk_box_append (GTK_BOX (box), sb);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

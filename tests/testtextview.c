@@ -201,7 +201,7 @@ main (int argc, char **argv)
   gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (textview),
                                      button2, anchor);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

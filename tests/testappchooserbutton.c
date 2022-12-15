@@ -147,7 +147,7 @@ main (int argc,
   gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (button),
                                                  CUSTOM_ITEM);
 #endif
-  gtk_widget_show (toplevel);
+  gtk_window_present (GTK_WINDOW (toplevel));
 
   g_signal_connect (toplevel, "destroy", G_CALLBACK (quit_cb), &done);
 

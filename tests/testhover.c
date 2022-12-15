@@ -117,7 +117,7 @@ test1 (void)
 
   gtk_box_append (GTK_BOX (box), gtk_image_new_from_icon_name ("start-here"));
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), NULL);
 }
@@ -129,8 +129,8 @@ enter2_cb (GtkEventController *controller)
 {
   GtkWidget *box = gtk_event_controller_get_widget (controller);
 
-  gtk_widget_hide (gtk_widget_get_first_child (box));
-  gtk_widget_show (gtk_widget_get_last_child (box));
+  gtk_widget_set_visible (gtk_widget_get_first_child (box), FALSE);
+  gtk_widget_set_visible (gtk_widget_get_last_child (box), TRUE);
 }
 
 static void
@@ -138,8 +138,8 @@ leave2_cb (GtkEventController *controller)
 {
   GtkWidget *box = gtk_event_controller_get_widget (controller);
 
-  gtk_widget_show (gtk_widget_get_first_child (box));
-  gtk_widget_hide (gtk_widget_get_last_child (box));
+  gtk_widget_set_visible (gtk_widget_get_first_child (box), TRUE);
+  gtk_widget_set_visible (gtk_widget_get_last_child (box), FALSE);
 }
 
 static void
@@ -161,9 +161,9 @@ test2 (void)
 
   gtk_box_append (GTK_BOX (box), gtk_image_new_from_icon_name ("start-here"));
   gtk_box_append (GTK_BOX (box), gtk_label_new ("HOVER!"));
-  gtk_widget_hide (gtk_widget_get_last_child (box));
+  gtk_widget_set_visible (gtk_widget_get_last_child (box), FALSE);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), NULL);
 }
@@ -207,7 +207,7 @@ test3 (void)
   gtk_stack_add_named (GTK_STACK (stack), gtk_label_new ("HOVER!"), "enter");
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "leave");
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), NULL);
 }
@@ -252,7 +252,7 @@ test4 (void)
   gtk_fixed_put (GTK_FIXED (fixed), gtk_image_new_from_icon_name ("start-here"), 0, 0);
   gtk_fixed_put (GTK_FIXED (fixed), gtk_label_new ("HOVER!"), -1000, -1000);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), NULL);
 }

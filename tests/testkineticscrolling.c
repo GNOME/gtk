@@ -122,7 +122,7 @@ kinetic_scrolling (void)
 
   gtk_window_set_child (GTK_WINDOW (window), grid);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 int

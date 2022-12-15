@@ -312,7 +312,7 @@ reftest_snapshot_ui_file (const char *ui_file)
   g_object_unref (builder);
   g_assert_true (window);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   return snapshot_widget (window);
 }

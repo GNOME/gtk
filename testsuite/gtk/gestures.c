@@ -427,7 +427,7 @@ test_phases (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -479,7 +479,7 @@ test_mixed (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -538,7 +538,7 @@ test_early_exit (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -593,7 +593,7 @@ test_claim_capture (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -640,7 +640,7 @@ test_claim_target (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -687,7 +687,7 @@ test_claim_bubble (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -741,7 +741,7 @@ test_early_claim_capture (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -798,7 +798,7 @@ test_late_claim_capture (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -857,7 +857,7 @@ test_group (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -908,10 +908,10 @@ test_gestures_outside_grab (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   D = gtk_window_new ();
-  gtk_widget_show (D);
+  gtk_window_present (GTK_WINDOW (D));
 
   str = g_string_new ("");
 
@@ -968,7 +968,7 @@ test_gestures_inside_grab (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -1028,7 +1028,7 @@ test_multitouch_on_single (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -1079,7 +1079,7 @@ test_multitouch_activation (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 
@@ -1155,7 +1155,7 @@ test_multitouch_interaction (void)
   gtk_box_append (GTK_BOX (A), B);
   gtk_box_append (GTK_BOX (B), C);
 
-  gtk_widget_show (A);
+  gtk_window_present (GTK_WINDOW (A));
 
   str = g_string_new ("");
 

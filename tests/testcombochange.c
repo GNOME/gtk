@@ -257,7 +257,7 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (close_button, TRUE);
   gtk_box_append (GTK_BOX (content_area), close_button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   GMainLoop *loop = g_main_loop_new (NULL, FALSE);
 

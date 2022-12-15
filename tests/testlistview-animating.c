@@ -178,7 +178,7 @@ main (int   argc,
   g_timeout_add (100, do_stuff, store);
   g_timeout_add_seconds (3, revert_sort, sorter);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))

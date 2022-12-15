@@ -43,7 +43,7 @@ new_window (GApplication *app,
         }
     }
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void

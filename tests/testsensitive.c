@@ -79,7 +79,7 @@ int main (int argc, char *argv[])
 
   g_object_bind_property (c, "active", w, "sensitive", G_BINDING_BIDIRECTIONAL);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

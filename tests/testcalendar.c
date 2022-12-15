@@ -314,7 +314,7 @@ create_calendar(void)
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 0);
   g_signal_connect (window, "close-request", G_CALLBACK (quit_cb), &done);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

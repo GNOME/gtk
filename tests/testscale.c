@@ -232,13 +232,13 @@ int main (int argc, char *argv[])
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   g_signal_connect (button, "toggled", G_CALLBACK (trough), NULL);
   gtk_box_append (GTK_BOX (box2), button);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   button = gtk_toggle_button_new_with_label ("Extra");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
   g_signal_connect (button, "toggled", G_CALLBACK (extra), NULL);
   gtk_box_append (GTK_BOX (box2), button);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

@@ -27,7 +27,7 @@ activate (GtkApplication *app,
 
   gtk_window_set_child (GTK_WINDOW (window), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 int

@@ -41,7 +41,7 @@ create_regular (GtkApplication *app)
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_window_set_child (GTK_WINDOW (window), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -59,7 +59,7 @@ create_headerbar_as_titlebar (GtkApplication *app)
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_window_set_child (GTK_WINDOW (window), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -82,7 +82,7 @@ create_headerbar_inside_window (GtkApplication *app)
   gtk_widget_set_vexpand (label, TRUE);
   gtk_box_append (GTK_BOX (box), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -130,7 +130,7 @@ create_headerbar_overlay (GtkApplication *app)
   gtk_widget_set_vexpand (label, TRUE);
   gtk_box_append (GTK_BOX (box), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -174,7 +174,7 @@ create_hiding_headerbar (GtkApplication *app)
   label = gtk_label_new ("Show headerbar");
   gtk_box_append (GTK_BOX (hbox), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
@@ -209,7 +209,7 @@ create_fake_headerbar (GtkApplication *app)
   gtk_widget_set_vexpand (label, TRUE);
   gtk_box_append (GTK_BOX (box), label);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 /* split headerbar  */
@@ -414,7 +414,7 @@ on_bookmark_clicked (GtkButton *button, gpointer data)
   g_signal_connect (chooser, "response",
                     G_CALLBACK (gtk_window_destroy), NULL);
 
-  gtk_widget_show (chooser);
+  gtk_window_present (GTK_WINDOW (chooser));
 }
 
 static void
@@ -522,7 +522,7 @@ create_technorama (GtkApplication *app)
   gtk_action_bar_pack_end (GTK_ACTION_BAR (footer), button);
   g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
   gtk_box_append (GTK_BOX (box), footer);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 struct {
@@ -571,7 +571,7 @@ app_activate_cb (GtkApplication *app)
       gtk_box_append (GTK_BOX (box), btn);
     }
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 int

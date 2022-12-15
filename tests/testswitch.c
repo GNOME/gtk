@@ -170,7 +170,7 @@ int main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "GtkSwitch");
   gtk_window_set_default_size (GTK_WINDOW (window), 400, -1);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_window_set_child (GTK_WINDOW (window), vbox);

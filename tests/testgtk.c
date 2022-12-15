@@ -244,7 +244,7 @@ create_alpha_window (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -257,10 +257,7 @@ static void
 button_window (GtkWidget *widget,
               GtkWidget *button)
 {
-  if (!gtk_widget_get_visible (button))
-    gtk_widget_show (button);
-  else
-    gtk_widget_hide (button);
+  gtk_widget_set_visible (button, !gtk_widget_get_visible (button));
 }
 
 static void
@@ -339,7 +336,7 @@ create_buttons (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -396,7 +393,7 @@ create_toggle_buttons (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -514,7 +511,7 @@ create_check_buttons (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -595,7 +592,7 @@ create_radio_buttons (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -791,7 +788,7 @@ create_statusbar (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1063,7 +1060,7 @@ static void create_labels (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1184,7 +1181,7 @@ create_rotated_text (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1265,7 +1262,7 @@ create_pixbuf (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1355,7 +1352,7 @@ create_tooltips (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1413,7 +1410,7 @@ create_image (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1575,7 +1572,7 @@ create_listbox (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -1609,7 +1606,7 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
                       G_CALLBACK (gtk_window_destroy), NULL);
     
     /* wait until destroy calls gtk_main_quit */
-    gtk_widget_show (csd);    
+    gtk_window_present (GTK_WINDOW (csd));
     while (!done)
       g_main_context_iteration (NULL, TRUE);
 }
@@ -1689,7 +1686,7 @@ create_modal_window (GtkWidget *widget)
                     G_CALLBACK (cmw_file), window);
 
   /* Show widgets */
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   /* wait until dialog get destroyed */
   while (!done)
@@ -1891,7 +1888,7 @@ create_scrolled_windows (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -2079,7 +2076,7 @@ create_entry (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -2114,7 +2111,7 @@ create_expander (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -2685,7 +2682,7 @@ create_spins (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -2993,7 +2990,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				window);
       gtk_box_append (GTK_BOX (hbox), button);
 
-      gtk_widget_show (window);
+      gtk_window_present (GTK_WINDOW (window));
 
       gtk_editable_set_text (GTK_EDITABLE (entry), "arrow");
     }
@@ -3039,7 +3036,7 @@ create_color_selection (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -3166,7 +3163,7 @@ create_flipping (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -3209,7 +3206,7 @@ create_font_selection (GtkWidget *widget)
     }
   
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -3418,7 +3415,7 @@ create_display_screen (GtkWidget *widget)
 		    G_CALLBACK (screen_display_destroy_diag), window);
   g_signal_connect (applyb, "clicked", 
 		    G_CALLBACK (screen_display_check), scr_dpy_data);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 /*
@@ -3525,7 +3522,7 @@ create_range_controls (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -3899,7 +3896,7 @@ create_notebook (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -4049,7 +4046,7 @@ create_panes (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -4524,7 +4521,7 @@ create_wmhints (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -4761,7 +4758,7 @@ create_surface_states (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -4976,7 +4973,7 @@ create_window_sizing (GtkWidget *widget)
    */
   
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -5372,7 +5369,7 @@ create_timeout_test (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -5728,7 +5725,7 @@ create_native_dialogs (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 }
@@ -5887,7 +5884,7 @@ create_main_window (void)
   gtk_box_append (GTK_BOX (box2), button);
   gtk_window_set_default_widget (GTK_WINDOW (window), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static char *

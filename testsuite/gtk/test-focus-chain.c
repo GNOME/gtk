@@ -79,7 +79,7 @@ generate_focus_chain (GtkWidget        *window,
   GtkWidget *focus;
   int count = 0;
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   /* start without focus */
   gtk_window_set_focus (GTK_WINDOW (window), NULL);
@@ -203,7 +203,7 @@ load_ui_file (GFile *ui_file,
 
   g_assert_nonnull (window);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   timeout_handle_id = g_timeout_add (2000,
                                      quit_iteration_loop,

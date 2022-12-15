@@ -51,7 +51,7 @@ show_error (gpointer data)
   g_signal_connect_object (G_OBJECT (dialog),
                            "response",
                            G_CALLBACK (response_cb), NULL, 0);
-  gtk_widget_show (dialog);
+  gtk_window_present (GTK_WINDOW (dialog));
 
   return G_SOURCE_REMOVE;
 }
@@ -84,7 +84,7 @@ main (int    argc,
   gtk_box_append (GTK_BOX (box), button);
   gtk_box_append (GTK_BOX (box), button2);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   g_timeout_add (4000, (GSourceFunc) show_error, window);
 
   while (TRUE)

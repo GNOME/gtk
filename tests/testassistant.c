@@ -178,7 +178,7 @@ create_simple_assistant (GtkWidget *widget)
     }
 
   if (!gtk_widget_get_visible (assistant))
-    gtk_widget_show (assistant);
+    gtk_window_present (GTK_WINDOW (assistant));
   else
     {
       gtk_window_destroy (GTK_WINDOW (assistant));
@@ -710,7 +710,7 @@ main (int argc, char *argv[])
       gtk_box_append (GTK_BOX (box), button);
     }
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

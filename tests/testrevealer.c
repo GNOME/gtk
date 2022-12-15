@@ -162,7 +162,7 @@ main (int argc,
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
   gtk_grid_attach (GTK_GRID (box), revealer, 3, 4, 1, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);
 
