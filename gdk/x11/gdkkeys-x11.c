@@ -603,7 +603,7 @@ update_direction (GdkX11Keymap *keymap_x11,
       keymap_x11->have_direction = TRUE;
     }
 
-  if (!had_direction || old_direction != keymap_x11->current_direction)
+  if (had_direction && old_direction != keymap_x11->current_direction)
     {
       g_object_notify (G_OBJECT (keyboard), "direction");
       return TRUE;

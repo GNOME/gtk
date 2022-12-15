@@ -953,22 +953,30 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     {
       value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_CHECKED);
 
-      switch (gtk_tristate_accessible_value_get (value))
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_TRISTATE)
         {
-        case GTK_ACCESSIBLE_TRISTATE_TRUE:
-          emit_state_changed (self, "checked", TRUE);
-          emit_state_changed (self, "indeterminate", FALSE);
-          break;
-        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          switch (gtk_tristate_accessible_value_get (value))
+            {
+            case GTK_ACCESSIBLE_TRISTATE_TRUE:
+              emit_state_changed (self, "checked", TRUE);
+              emit_state_changed (self, "indeterminate", FALSE);
+              break;
+            case GTK_ACCESSIBLE_TRISTATE_MIXED:
+              emit_state_changed (self, "checked", FALSE);
+              emit_state_changed (self, "indeterminate", TRUE);
+              break;
+            case GTK_ACCESSIBLE_TRISTATE_FALSE:
+              emit_state_changed (self, "checked", FALSE);
+              emit_state_changed (self, "indeterminate", FALSE);
+              break;
+            default:
+              break;
+            }
+        }
+      else
+        {
           emit_state_changed (self, "checked", FALSE);
           emit_state_changed (self, "indeterminate", TRUE);
-          break;
-        case GTK_ACCESSIBLE_TRISTATE_FALSE:
-          emit_state_changed (self, "checked", FALSE);
-          emit_state_changed (self, "indeterminate", FALSE);
-          break;
-        default:
-          break;
         }
     }
 
@@ -1011,22 +1019,31 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_PRESSED)
     {
       value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_PRESSED);
-      switch (gtk_tristate_accessible_value_get (value))
+
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_TRISTATE)
         {
-        case GTK_ACCESSIBLE_TRISTATE_TRUE:
-          emit_state_changed (self, "pressed", TRUE);
-          emit_state_changed (self, "indeterminate", FALSE);
-          break;
-        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          switch (gtk_tristate_accessible_value_get (value))
+            {
+            case GTK_ACCESSIBLE_TRISTATE_TRUE:
+              emit_state_changed (self, "pressed", TRUE);
+              emit_state_changed (self, "indeterminate", FALSE);
+              break;
+            case GTK_ACCESSIBLE_TRISTATE_MIXED:
+              emit_state_changed (self, "pressed", FALSE);
+              emit_state_changed (self, "indeterminate", TRUE);
+              break;
+            case GTK_ACCESSIBLE_TRISTATE_FALSE:
+              emit_state_changed (self, "pressed", FALSE);
+              emit_state_changed (self, "indeterminate", FALSE);
+              break;
+            default:
+              break;
+            }
+        }
+      else
+        {
           emit_state_changed (self, "pressed", FALSE);
           emit_state_changed (self, "indeterminate", TRUE);
-          break;
-        case GTK_ACCESSIBLE_TRISTATE_FALSE:
-          emit_state_changed (self, "pressed", FALSE);
-          emit_state_changed (self, "indeterminate", FALSE);
-          break;
-        default:
-          break;
         }
     }
 
