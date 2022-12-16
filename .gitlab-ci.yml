@@ -85,7 +85,6 @@ fedora-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
-    - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
     - mkdir _install
