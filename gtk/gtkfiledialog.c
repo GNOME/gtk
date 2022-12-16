@@ -658,7 +658,7 @@ create_file_chooser (GtkFileDialog        *self,
   GtkFileChooserNative *chooser;
   const char *accept;
   const char *default_title, *title;
-  GdkDisplay *display;
+  GdkDisplay *display G_GNUC_UNUSED;
 
   switch (action)
     {
