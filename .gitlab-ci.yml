@@ -11,6 +11,8 @@ reference:
   stage: docs
   needs: []
   script:
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson
     - sh -x ./download-reference.sh
     - sh -x ./prepare-docs.sh docs
   artifacts:
