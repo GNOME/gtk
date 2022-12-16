@@ -85,10 +85,16 @@ fedora-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
     - meson subprojects download
     - mkdir _install
-    - meson --prefix=${CI_PROJECT_DIR}/_install
-            ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
+    - meson setup
+            --prefix=${CI_PROJECT_DIR}/_install
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
     - meson install -C _build
@@ -107,10 +113,11 @@ release-build:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
     - meson subprojects download
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
-            _build
-    - ninja -C _build
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS} _build
+    - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build x11
 
 fedora-mingw64:
@@ -131,6 +138,8 @@ fedora-mingw64:
             # mingw64-graphene (rawhide)
   script:
     - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
     - meson subprojects download
     - mkdir _build && cd _build
     - mingw64-meson -Dintrospection=disabled -Dgraphene:introspection=disabled
@@ -141,19 +150,28 @@ installed-tests:
   stage: build
   needs: []
   variables:
-    EXTRA_MESON_FLAGS: "--prefix=/usr --libdir=/usr/lib64 -Dinstall-tests=true"
+    EXTRA_MESON_FLAGS: "-Dinstall-tests=true"
     G_TEST_ACCESSIBLE: 1
   script:
     - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
     - meson subprojects download
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
-            _build
-    - ninja -C _build
-    - sudo ninja -C _build install
+    - meson setup
+        --prefix="${CI_PROJECT_DIR}/_installed"
+        ${COMMON_MESON_FLAGS}
+        ${EXTRA_MESON_FLAGS}
+        ${BACKEND_FLAGS}
+        ${FEATURE_FLAGS}
+        _build
+    - meson compile -C _build
+    - meson install -C _build
+    - export LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64
     - dbus-run-session xvfb-run -a -s "-screen 0 1024x768x24"
             gnome-desktop-testing-runner
                    --report-directory=_build/installed-tests-report/failed/
                    --parallel=0
+                   --dirs "${CI_PROJECT_DIR}/_installed/share"
                    gtk-4.0
   artifacts:
     paths:
@@ -200,12 +218,13 @@ macos:
   needs: []
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - pip3 install --user meson==0.60.3
+    - pip3 install --user meson~=0.64
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
     - export MESON_FORCE_BACKTRACE=1
   script:
-    - meson -Dx11-backend=false
+    - meson setup
+            -Dx11-backend=false
             -Dbroadway-backend=true
             -Dmacos-backend=true
             -Dmedia-gstreamer=disabled
@@ -214,7 +233,7 @@ macos:
             -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
             _build
-    - ninja -C _build
+    - meson compile -C _build
   artifacts:
     when: always
     paths:
@@ -339,7 +358,9 @@ static-scan:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _scan_build
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _scan_build
     - ninja -C _scan_build scan-build
   artifacts:
     paths:
@@ -355,7 +376,9 @@ asan-build:
   needs: []
   variables:
   script:
-    - CC=clang meson --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled _build
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
+    - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
   artifacts:
@@ -370,7 +393,9 @@ reference:
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release --force-fallback-for=gdk-pixbuf,pango"
   script:
-    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true -Dgdk-pixbuf:gtk_doc=true -Dpango:gtk_doc=true _build
+    - export PATH="$HOME/.local/bin:$PATH"
+    - pip3 install --user meson~=0.64
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true -Dgdk-pixbuf:gtk_doc=true -Dpango:gtk_doc=true _build
     - meson compile -C _build
     - mkdir -p _reference/
     - mv _build/docs/reference/gdk/gdk4/ _reference/gdk4/
