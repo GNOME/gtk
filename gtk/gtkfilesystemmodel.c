@@ -457,11 +457,9 @@ remove_file (GtkFileSystemModel *model,
   node_invalidate_index (model, id);
 
   g_hash_table_remove (model->file_lookup, file);
-  g_object_unref (node->file);
+  g_clear_object (&node->file);
   adjust_file_lookup (model, id, -1);
-
-  if (node->info)
-    g_object_unref (node->info);
+  g_clear_object (&node->info);
 
   g_array_remove_index (model->files, id);
 
@@ -550,8 +548,7 @@ gtk_file_system_model_got_files (GObject      *object,
                                          NULL);
           if (model->dir_thaw_source != 0)
             {
-              g_source_remove (model->dir_thaw_source);
-              model->dir_thaw_source = 0;
+              g_clear_handle_id (&model->dir_thaw_source, g_source_remove);
               thaw_updates (model);
             }
 
@@ -732,11 +729,7 @@ gtk_file_system_model_dispose (GObject *object)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
 
-  if (model->dir_thaw_source)
-    {
-      g_source_remove (model->dir_thaw_source);
-      model->dir_thaw_source = 0;
-    }
+  g_clear_handle_id (&model->dir_thaw_source, g_source_remove);
 
   g_cancellable_cancel (model->cancellable);
   if (model->dir_monitor)
