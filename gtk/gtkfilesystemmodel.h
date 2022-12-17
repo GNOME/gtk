@@ -24,13 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_FILE_SYSTEM_MODEL             (_gtk_file_system_model_get_type ())
-#define GTK_FILE_SYSTEM_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModel))
-#define GTK_IS_FILE_SYSTEM_MODEL(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_SYSTEM_MODEL))
-
-typedef struct _GtkFileSystemModel      GtkFileSystemModel;
-
-GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
+#define GTK_TYPE_FILE_SYSTEM_MODEL (gtk_file_system_model_get_type ())
+G_DECLARE_FINAL_TYPE (GtkFileSystemModel, gtk_file_system_model, GTK, FILE_SYSTEM_MODEL, GObject)
 
 GtkFileSystemModel *_gtk_file_system_model_new              (void);
 GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile              *dir,

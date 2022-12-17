@@ -38,7 +38,6 @@
 #define FILES_PER_QUERY 100
 
 typedef struct _FileModelNode           FileModelNode;
-typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
 
 struct _FileModelNode
 {
@@ -82,19 +81,6 @@ struct _GtkFileSystemModel
   guint                 show_folders :1;/* whether to show folders */
   guint                 show_files :1;  /* whether to show files */
   guint                 filter_folders :1;/* whether filter applies to folders */
-};
-
-#define GTK_FILE_SYSTEM_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModelClass))
-#define GTK_IS_FILE_SYSTEM_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SYSTEM_MODEL))
-#define GTK_FILE_SYSTEM_MODEL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModelClass))
-
-struct _GtkFileSystemModelClass
-{
-  GObjectClass parent_class;
-
-  /* Signals */
-
-  void (*finished_loading) (GtkFileSystemModel *model, GError *error);
 };
 
 static void freeze_updates (GtkFileSystemModel *model);
@@ -326,7 +312,7 @@ enum {
 
 static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, gtk_file_system_model, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
 						g_list_model_iface_init))
 
@@ -756,7 +742,7 @@ gtk_file_system_model_dispose (GObject *object)
   if (model->dir_monitor)
     g_file_monitor_cancel (model->dir_monitor);
 
-  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_file_system_model_parent_class)->dispose (object);
 }
 
 static void
@@ -780,11 +766,11 @@ gtk_file_system_model_finalize (GObject *object)
   g_clear_pointer (&model->file_lookup, g_hash_table_destroy);
   g_clear_object (&model->filter);
 
-  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_file_system_model_parent_class)->finalize (object);
 }
 
 static void
-_gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
+gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
@@ -795,14 +781,13 @@ _gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
     g_signal_new (I_("finished-loading"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
-		  NULL, NULL,
+		  0, NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 1, G_TYPE_ERROR);
 }
 
 static void
-_gtk_file_system_model_init (GtkFileSystemModel *model)
+gtk_file_system_model_init (GtkFileSystemModel *model)
 {
   model->show_files = TRUE;
   model->show_folders = TRUE;
