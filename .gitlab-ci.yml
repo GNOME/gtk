@@ -150,15 +150,13 @@ installed-tests:
     - .gitlab-ci/show-info-linux.sh
     - meson subprojects download
     - meson setup
-        --prefix="${CI_PROJECT_DIR}/_installed"
         ${COMMON_MESON_FLAGS}
         ${EXTRA_MESON_FLAGS}
         ${BACKEND_FLAGS}
         ${FEATURE_FLAGS}
         _build
     - meson compile -C _build
-    - meson install -C _build
-    - export LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64
+    - sudo meson install -C _build
     - dbus-run-session xvfb-run -a -s "-screen 0 1024x768x24"
             gnome-desktop-testing-runner
                    --report-directory=_build/installed-tests-report/failed/
