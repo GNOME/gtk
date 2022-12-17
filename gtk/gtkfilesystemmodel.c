@@ -484,6 +484,32 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     }
 }
 
+static void
+_gtk_file_system_model_update_file (GtkFileSystemModel *model,
+                                    GFile              *file,
+                                    GFileInfo          *info)
+{
+  FileModelNode *node;
+  guint id;
+
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (G_IS_FILE_INFO (info));
+
+  id = node_get_for_file (model, file);
+  if (id == 0)
+    {
+      add_file (model, file, info);
+      id = node_get_for_file (model, file);
+    }
+
+  node = get_node (model, id);
+
+  g_set_object (&node->info, info);
+
+  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+}
+
 /* Helper for gtk_file_system_model_query_done and
  * gtk_file_system_model_one_query_done */
 static void
@@ -954,41 +980,15 @@ remove_file (GtkFileSystemModel *model,
 }
 
 /**
- * _gtk_file_system_model_update_file:
+ * _gtk_file_system_model_update_files:
  * @model: the model
- * @file: the file
- * @info: the new file info
+ * @files: the files
+ * @infos: the new file infos
  *
- * Tells the file system model that the file changed and that the 
- * new @info should be used for it now.  If the file is not part of 
- * @model, it will get added automatically.
+ * Tells the file system model that the files changed and that the
+ * new @infos should be used for it now.  If these files are not
+ * part of @model, it will get added automatically.
  **/
-void
-_gtk_file_system_model_update_file (GtkFileSystemModel *model,
-                                    GFile              *file,
-                                    GFileInfo          *info)
-{
-  FileModelNode *node;
-  guint id;
-
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (G_IS_FILE_INFO (info));
-
-  id = node_get_for_file (model, file);
-  if (id == 0)
-    {
-      add_file (model, file, info);
-      id = node_get_for_file (model, file);
-    }
-
-  node = get_node (model, id);
-
-  g_set_object (&node->info, info);
-
-  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
-}
-
 void
 _gtk_file_system_model_update_files (GtkFileSystemModel *model,
                                      GList              *files,
