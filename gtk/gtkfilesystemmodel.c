@@ -109,21 +109,6 @@ static void add_file (GtkFileSystemModel *model,
 static void remove_file (GtkFileSystemModel *model,
 			 GFile              *file);
 
-/* iter setup:
- * @user_data: the model
- * @user_data2: GUINT_TO_POINTER of array index of current entry
- *
- * All other fields are unused. Note that the array index does not correspond
- * 1:1 with the path index as entries might not be visible.
- */
-#define ITER_INDEX(iter) GPOINTER_TO_UINT((iter)->user_data2)
-#define ITER_IS_VALID(model, iter) ((model) == (iter)->user_data)
-#define ITER_INIT_FROM_INDEX(model, _iter, _index) G_STMT_START {\
-  g_assert (_index < (model)->files->len); \
-  (_iter)->user_data = (model); \
-  (_iter)->user_data2 = GUINT_TO_POINTER (_index); \
-}G_STMT_END
-
 /*** FileModelNode ***/
 
 /* Get a FileModelNode structure given an index in the model->files array of nodes */
