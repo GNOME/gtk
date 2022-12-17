@@ -100,15 +100,6 @@ struct _GtkFileSystemModelClass
 static void freeze_updates (GtkFileSystemModel *model);
 static void thaw_updates (GtkFileSystemModel *model);
 
-static guint node_get_for_file (GtkFileSystemModel *model,
-				GFile              *file);
-
-static void add_file (GtkFileSystemModel *model,
-		      GFile              *file,
-		      GFileInfo          *info);
-static void remove_file (GtkFileSystemModel *model,
-			 GFile              *file);
-
 /*** FileModelNode ***/
 
 /* Get a FileModelNode structure given an index in the model->files array of nodes */
@@ -125,7 +116,9 @@ static void remove_file (GtkFileSystemModel *model,
  * G_MAXUINT for both arguments for “validate everything”.
  */
 static void
-node_validate_rows (GtkFileSystemModel *model, guint up_to_index, guint up_to_row)
+node_validate_rows (GtkFileSystemModel *model,
+                    guint               up_to_index,
+                    guint               up_to_row)
 {
   guint i, row;
 
@@ -152,7 +145,8 @@ node_validate_rows (GtkFileSystemModel *model, guint up_to_index, guint up_to_ro
 }
 
 static guint G_GNUC_UNUSED
-node_get_tree_row (GtkFileSystemModel *model, guint index)
+node_get_tree_row (GtkFileSystemModel *model,
+                   guint               index)
 {
   if (model->n_nodes_valid <= index)
     node_validate_rows (model, index, G_MAXUINT);
@@ -161,13 +155,17 @@ node_get_tree_row (GtkFileSystemModel *model, guint index)
 }
 
 static void 
-node_invalidate_index (GtkFileSystemModel *model, guint id)
+node_invalidate_index (GtkFileSystemModel *model,
+                       guint               id)
 {
   model->n_nodes_valid = MIN (model->n_nodes_valid, id);
 }
 
 static void
-node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean visible, gboolean filtered_out)
+node_set_visible_and_filtered_out (GtkFileSystemModel *model,
+                                   guint               id,
+                                   gboolean            visible,
+                                   gboolean            filtered_out)
 {
   FileModelNode *node = get_node (model, id);
 
@@ -203,7 +201,8 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
 }
 
 static gboolean
-node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
+node_should_be_filtered_out (GtkFileSystemModel *model,
+                             guint               id)
 {
   FileModelNode *node = get_node (model, id);
 
@@ -219,7 +218,9 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
 }
 
 static gboolean
-node_should_be_visible (GtkFileSystemModel *model, guint id, gboolean filtered_out)
+node_should_be_visible (GtkFileSystemModel *model,
+                        guint               id,
+                        gboolean            filtered_out)
 {
   FileModelNode *node = get_node (model, id);
   gboolean result;
@@ -251,7 +252,8 @@ node_should_be_visible (GtkFileSystemModel *model, guint id, gboolean filtered_o
 }
 
 static void
-node_compute_visibility_and_filters (GtkFileSystemModel *model, guint id)
+node_compute_visibility_and_filters (GtkFileSystemModel *model,
+                                     guint               id)
 {
   gboolean filtered_out;
   gboolean visible;
@@ -260,6 +262,20 @@ node_compute_visibility_and_filters (GtkFileSystemModel *model, guint id)
   visible = node_should_be_visible (model, id, filtered_out);
 
   node_set_visible_and_filtered_out (model, id, visible, filtered_out);
+}
+
+static guint
+node_get_for_file (GtkFileSystemModel *model,
+                   GFile              *file)
+{
+  gpointer position;
+
+  if (!g_hash_table_lookup_extended (model->file_lookup,
+                                     file, NULL,
+                                     &position))
+    return GTK_INVALID_LIST_POSITION;
+
+  return GPOINTER_TO_UINT (position);
 }
 
 /*** GListModel ***/
@@ -310,89 +326,166 @@ enum {
 
 static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
 
-
-
 G_DEFINE_TYPE_WITH_CODE (GtkFileSystemModel, _gtk_file_system_model, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
 						g_list_model_iface_init))
 
 static void
-gtk_file_system_model_dispose (GObject *object)
+gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
 {
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
-
-  if (model->dir_thaw_source)
-    {
-      g_source_remove (model->dir_thaw_source);
-      model->dir_thaw_source = 0;
-    }
-
-  g_cancellable_cancel (model->cancellable);
-  if (model->dir_monitor)
-    g_file_monitor_cancel (model->dir_monitor);
-
-  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->dispose (object);
-}
-
-
-static void
-gtk_file_system_model_finalize (GObject *object)
-{
-  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
   guint i;
 
-  for (i = 0; i < model->files->len; i++)
+  if (model->frozen)
     {
-      FileModelNode *node = get_node (model, i);
-      g_clear_object (&node->file);
-      g_clear_object (&node->info);
+      model->filter_on_thaw = TRUE;
+      return;
     }
-  g_array_free (model->files, TRUE);
 
-  g_clear_object (&model->cancellable);
-  g_clear_pointer (&model->attributes, g_free);
-  g_clear_object (&model->dir);
-  g_clear_object (&model->dir_monitor);
-  g_clear_pointer (&model->file_lookup, g_hash_table_destroy);
-  g_clear_object (&model->filter);
+  freeze_updates (model);
 
-  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->finalize (object);
+  for (i = 0; i < model->files->len; i++)
+    node_compute_visibility_and_filters (model, i);
+
+  model->filter_on_thaw = FALSE;
+  thaw_updates (model);
 }
 
 static void
-_gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
+freeze_updates (GtkFileSystemModel *model)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
 
-  gobject_class->finalize = gtk_file_system_model_finalize;
-  gobject_class->dispose = gtk_file_system_model_dispose;
-
-  file_system_model_signals[FINISHED_LOADING] =
-    g_signal_new (I_("finished-loading"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1, G_TYPE_ERROR);
+  model->frozen++;
 }
 
 static void
-_gtk_file_system_model_init (GtkFileSystemModel *model)
+thaw_updates (GtkFileSystemModel *model)
 {
-  model->show_files = TRUE;
-  model->show_folders = TRUE;
-  model->show_hidden = FALSE;
-  model->filter_folders = FALSE;
+  gboolean stuff_added = FALSE;
 
-  model->file_lookup = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
-  model->cancellable = g_cancellable_new ();
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (model->frozen > 0);
+
+  model->frozen--;
+  if (model->frozen > 0)
+    return;
+
+  if (model->files->len > 0)
+    stuff_added = get_node (model, model->files->len - 1)->frozen_add;
+
+  if (model->filter_on_thaw)
+    gtk_file_system_model_refilter_all (model);
+  if (stuff_added)
+    {
+      guint i;
+
+      for (i = 0; i < model->files->len; i++)
+        {
+          FileModelNode *node = get_node (model, i);
+
+          if (!node->frozen_add)
+            continue;
+          node->frozen_add = FALSE;
+          node_compute_visibility_and_filters (model, i);
+        }
+    }
 }
 
-/*** API ***/
+/* When an element is added or removed to the model->files array, we need to
+ * update the model->file_lookup mappings of (node, index), as the indexes
+ * change.  This function adds the specified increment to the index in that pair
+ * if the index is equal or after the specified id.  We use this to slide the
+ * mappings up or down when a node is added or removed, respectively.
+ */
+static void
+adjust_file_lookup (GtkFileSystemModel *model,
+                    guint               id,
+                    int                 increment)
+{
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_hash_table_iter_init (&iter, model->file_lookup);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      guint index = GPOINTER_TO_UINT (value);
+
+      if (index >= id)
+	{
+	  index += increment;
+	  g_hash_table_iter_replace (&iter, GUINT_TO_POINTER (index));
+	}
+    }
+}
 
 static void
-gtk_file_system_model_closed_enumerator (GObject *object, GAsyncResult *res, gpointer data)
+add_file (GtkFileSystemModel *model,
+	  GFile              *file,
+	  GFileInfo          *info)
+{
+  FileModelNode *node;
+  guint position;
+
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (G_IS_FILE_INFO (info));
+
+  node = g_slice_alloc0 (sizeof (FileModelNode));
+  node->file = g_object_ref (file);
+  if (info)
+    {
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+      node->info = g_object_ref (info);
+    }
+  node->frozen_add = model->frozen ? TRUE : FALSE;
+
+  g_array_append_vals (model->files, node, 1);
+  g_slice_free1 (sizeof (FileModelNode), node);
+
+  position = model->files->len - 1;
+
+  if (!model->frozen)
+    node_compute_visibility_and_filters (model, position);
+
+  g_list_model_items_changed (G_LIST_MODEL (model), position, 0, 1);
+}
+
+static void
+remove_file (GtkFileSystemModel *model,
+             GFile              *file)
+{
+  FileModelNode *node;
+  guint id;
+
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (G_IS_FILE (file));
+
+  id = node_get_for_file (model, file);
+  if (id == GTK_INVALID_LIST_POSITION)
+    return;
+
+  node = get_node (model, id);
+
+  node_invalidate_index (model, id);
+
+  g_hash_table_remove (model->file_lookup, file);
+  g_object_unref (node->file);
+  adjust_file_lookup (model, id, -1);
+
+  if (node->info)
+    g_object_unref (node->info);
+
+  g_array_remove_index (model->files, id);
+
+  g_list_model_items_changed (G_LIST_MODEL (model), id, 1, 0);
+}
+
+static void
+gtk_file_system_model_closed_enumerator (GObject      *object,
+                                         GAsyncResult *res,
+                                         gpointer      data)
 {
   g_file_enumerator_close_finish (G_FILE_ENUMERATOR (object), res, NULL);
 }
@@ -409,7 +502,9 @@ thaw_func (gpointer data)
 }
 
 static void
-gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer data)
+gtk_file_system_model_got_files (GObject      *object,
+                                 GAsyncResult *res,
+                                 gpointer      data)
 {
   GFileEnumerator *enumerator = G_FILE_ENUMERATOR (object);
   GtkFileSystemModel *model = data;
@@ -511,7 +606,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 /* Helper for gtk_file_system_model_query_done and
  * gtk_file_system_model_one_query_done */
 static void
-query_done_helper (GObject *     object,
+query_done_helper (GObject      *object,
                    GAsyncResult *res,
                    gpointer      data,
                    gboolean      do_thaw_updates)
@@ -532,7 +627,7 @@ query_done_helper (GObject *     object,
 }
 
 static void
-gtk_file_system_model_query_done (GObject *     object,
+gtk_file_system_model_query_done (GObject      *object,
                                   GAsyncResult *res,
                                   gpointer      data)
 {
@@ -540,9 +635,9 @@ gtk_file_system_model_query_done (GObject *     object,
 }
 
 static void
-gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
-                                      GFile *             file,
-                                      GFile *             other_file,
+gtk_file_system_model_monitor_change (GFileMonitor       *monitor,
+                                      GFile              *file,
+                                      GFile              *other_file,
                                       GFileMonitorEvent   type,
                                       GtkFileSystemModel *model)
 {
@@ -578,7 +673,9 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
 }
 
 static void
-gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer data)
+gtk_file_system_model_got_enumerator (GObject      *dir,
+                                      GAsyncResult *res,
+                                      gpointer      data)
 {
   GtkFileSystemModel *model = data;
   GFileEnumerator *enumerator;
@@ -616,8 +713,8 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
 
 static void
 gtk_file_system_model_set_directory (GtkFileSystemModel *model,
-                                     GFile *             dir,
-			             const char *       attributes)
+                                     GFile              *dir,
+                                     const char         *attributes)
 {
   g_assert (G_IS_FILE (dir));
 
@@ -633,6 +730,90 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
                                    model);
 
 }
+
+static void
+gtk_file_system_model_one_query_done (GObject      *object,
+                                      GAsyncResult *res,
+                                      gpointer      data)
+{
+  query_done_helper (object, res, data, TRUE);
+}
+
+/* GObject overrides */
+
+static void
+gtk_file_system_model_dispose (GObject *object)
+{
+  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
+
+  if (model->dir_thaw_source)
+    {
+      g_source_remove (model->dir_thaw_source);
+      model->dir_thaw_source = 0;
+    }
+
+  g_cancellable_cancel (model->cancellable);
+  if (model->dir_monitor)
+    g_file_monitor_cancel (model->dir_monitor);
+
+  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->dispose (object);
+}
+
+static void
+gtk_file_system_model_finalize (GObject *object)
+{
+  GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
+  guint i;
+
+  for (i = 0; i < model->files->len; i++)
+    {
+      FileModelNode *node = get_node (model, i);
+      g_clear_object (&node->file);
+      g_clear_object (&node->info);
+    }
+  g_array_free (model->files, TRUE);
+
+  g_clear_object (&model->cancellable);
+  g_clear_pointer (&model->attributes, g_free);
+  g_clear_object (&model->dir);
+  g_clear_object (&model->dir_monitor);
+  g_clear_pointer (&model->file_lookup, g_hash_table_destroy);
+  g_clear_object (&model->filter);
+
+  G_OBJECT_CLASS (_gtk_file_system_model_parent_class)->finalize (object);
+}
+
+static void
+_gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->finalize = gtk_file_system_model_finalize;
+  gobject_class->dispose = gtk_file_system_model_dispose;
+
+  file_system_model_signals[FINISHED_LOADING] =
+    g_signal_new (I_("finished-loading"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
+		  NULL, NULL,
+		  NULL,
+		  G_TYPE_NONE, 1, G_TYPE_ERROR);
+}
+
+static void
+_gtk_file_system_model_init (GtkFileSystemModel *model)
+{
+  model->show_files = TRUE;
+  model->show_folders = TRUE;
+  model->show_hidden = FALSE;
+  model->filter_folders = FALSE;
+
+  model->file_lookup = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
+  model->cancellable = g_cancellable_new ();
+}
+
+/*** API ***/
 
 /**
  * _gtk_file_system_model_new:
@@ -681,26 +862,6 @@ _gtk_file_system_model_new_for_directory (GFile      *dir,
   gtk_file_system_model_set_directory (model, dir, attributes);
 
   return model;
-}
-
-static void
-gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
-{
-  guint i;
-
-  if (model->frozen)
-    {
-      model->filter_on_thaw = TRUE;
-      return;
-    }
-
-  freeze_updates (model);
-
-  for (i = 0; i < model->files->len; i++)
-    node_compute_visibility_and_filters (model, i);
-
-  model->filter_on_thaw = FALSE;
-  thaw_updates (model);
 }
 
 /**
@@ -783,7 +944,7 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
  */
 void
 _gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
-					   gboolean            filter_folders)
+                                           gboolean            filter_folders)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
 
@@ -815,20 +976,6 @@ _gtk_file_system_model_get_cancellable (GtkFileSystemModel *model)
   return model->cancellable;
 }
 
-static guint
-node_get_for_file (GtkFileSystemModel *model,
-                   GFile *             file)
-{
-  gpointer position;
-
-  if (!g_hash_table_lookup_extended (model->file_lookup,
-                                     file, NULL,
-                                     &position))
-    return GTK_INVALID_LIST_POSITION;
-
-  return GPOINTER_TO_UINT (position);
-}
-
 GFileInfo *
 _gtk_file_system_model_get_info_for_file (GtkFileSystemModel *model,
                                           GFile              *file)
@@ -846,113 +993,6 @@ _gtk_file_system_model_get_info_for_file (GtkFileSystemModel *model,
 
   node = get_node (model, i);
   return node->info;
-}
-
-/* When an element is added or removed to the model->files array, we need to
- * update the model->file_lookup mappings of (node, index), as the indexes
- * change.  This function adds the specified increment to the index in that pair
- * if the index is equal or after the specified id.  We use this to slide the
- * mappings up or down when a node is added or removed, respectively.
- */
-static void
-adjust_file_lookup (GtkFileSystemModel *model, guint id, int increment)
-{
-  GHashTableIter iter;
-  gpointer key;
-  gpointer value;
-
-  g_hash_table_iter_init (&iter, model->file_lookup);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      guint index = GPOINTER_TO_UINT (value);
-
-      if (index >= id)
-	{
-	  index += increment;
-	  g_hash_table_iter_replace (&iter, GUINT_TO_POINTER (index));
-	}
-    }
-}
-
-/**
- * add_file:
- * @model: the model
- * @file: the file to add
- * @info: the information to associate with the file
- *
- * Adds the given @file with its associated @info to the @model. 
- * If the model is frozen, the file will only show up after it is thawn.
- **/
-static void
-add_file (GtkFileSystemModel *model,
-	  GFile              *file,
-	  GFileInfo          *info)
-{
-  FileModelNode *node;
-  guint position;
-  
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (G_IS_FILE_INFO (info));
-
-  node = g_slice_alloc0 (sizeof (FileModelNode));
-  node->file = g_object_ref (file);
-  if (info)
-    {
-      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
-      node->info = g_object_ref (info);
-    }
-  node->frozen_add = model->frozen ? TRUE : FALSE;
-
-  g_array_append_vals (model->files, node, 1);
-  g_slice_free1 (sizeof (FileModelNode), node);
-
-  position = model->files->len - 1;
-
-  if (!model->frozen)
-    node_compute_visibility_and_filters (model, position);
-
-  g_list_model_items_changed (G_LIST_MODEL (model), position, 0, 1);
-}
-
-/**
- * remove_file:
- * @model: the model
- * @file: file to remove from the model. The file must have been 
- *        added to the model previously
- *
- * Removes the given file from the model. If the file is not part of 
- * @model, this function does nothing.
- **/
-static void
-remove_file (GtkFileSystemModel *model,
-	     GFile              *file)
-{
-  FileModelNode *node;
-  guint id;
-
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (G_IS_FILE (file));
-
-  id = node_get_for_file (model, file);
-  if (id == GTK_INVALID_LIST_POSITION)
-    return;
-
-  node = get_node (model, id);
-
-  node_invalidate_index (model, id);
-
-  g_hash_table_remove (model->file_lookup, file);
-  g_object_unref (node->file);
-  adjust_file_lookup (model, id, -1);
-
-  if (node->info)
-    g_object_unref (node->info);
-
-  g_array_remove_index (model->files, id);
-
-  g_list_model_items_changed (G_LIST_MODEL (model), id, 1, 0);
 }
 
 /**
@@ -992,70 +1032,14 @@ _gtk_file_system_model_update_files (GtkFileSystemModel *model,
  * _gtk_file_system_model_set_filter_folders().
  **/
 void
-_gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
-				   GtkFileFilter *          filter)
+_gtk_file_system_model_set_filter (GtkFileSystemModel *model,
+                                   GtkFileFilter      *filter)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (filter == NULL || GTK_IS_FILE_FILTER (filter));
   
   g_set_object (&model->filter, filter);
   gtk_file_system_model_refilter_all (model);
-}
-
-/**
- * freeze_updates:
- * @model: a `GtkFileSystemModel`
- *
- * Freezes most updates on the model, so that performing multiple operations on
- * the files in the model do not cause any events.  Use thaw_updates() to resume
- * proper operations. It is fine to call this function multiple times as long as
- * freeze and thaw calls are balanced.
- **/
-static void
-freeze_updates (GtkFileSystemModel *model)
-{
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-
-  model->frozen++;
-}
-
-/**
- * thaw_updates:
- * @model: a `GtkFileSystemModel`
- *
- * Undoes the effect of a previous call to freeze_updates() 
- **/
-static void
-thaw_updates (GtkFileSystemModel *model)
-{
-  gboolean stuff_added = FALSE;
-
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (model->frozen > 0);
-
-  model->frozen--;
-  if (model->frozen > 0)
-    return;
-
-  if (model->files->len > 0)
-    stuff_added = get_node (model, model->files->len - 1)->frozen_add;
-
-  if (model->filter_on_thaw)
-    gtk_file_system_model_refilter_all (model);
-  if (stuff_added)
-    {
-      guint i;
-
-      for (i = 0; i < model->files->len; i++)
-        {
-          FileModelNode *node = get_node (model, i);
-
-          if (!node->frozen_add)
-            continue;
-          node->frozen_add = FALSE;
-          node_compute_visibility_and_filters (model, i);
-        }
-    }
 }
 
 /**
@@ -1070,8 +1054,8 @@ thaw_updates (GtkFileSystemModel *model)
  **/
 void
 _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
-                                           GFile *             file,
-                                           const char *        attributes)
+                                           GFile              *file,
+                                           const char         *attributes)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1084,14 +1068,6 @@ _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
                            model->cancellable,
                            gtk_file_system_model_query_done,
                            model);
-}
-
-static void
-gtk_file_system_model_one_query_done (GObject *     object,
-                                      GAsyncResult *res,
-                                      gpointer      data)
-{
-  query_done_helper (object, res, data, TRUE);
 }
 
 void
