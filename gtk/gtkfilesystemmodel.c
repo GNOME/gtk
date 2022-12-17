@@ -275,7 +275,7 @@ list_model_get_n_items (GListModel *list_model)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (list_model);
 
-  return model->files->len - 1;
+  return model->files->len;
 }
 
 static gpointer
@@ -285,12 +285,10 @@ list_model_get_item (GListModel *list_model,
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (list_model);
   FileModelNode *node;
 
-  /* The first items of GtkFileSystemModel is not really a file,
-   * so ignore it. */
-  if (position + 1 >= model->files->len)
+  if (position >= model->files->len)
     return NULL;
 
-  node = get_node (model, position + 1);
+  node = get_node (model, position);
   return g_object_ref (node->info);
 }
 
@@ -497,7 +495,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE_INFO (info));
 
   id = node_get_for_file (model, file);
-  if (id == 0)
+  if (id == GTK_INVALID_LIST_POSITION)
     {
       add_file (model, file, info);
       id = node_get_for_file (model, file);
@@ -651,11 +649,7 @@ _gtk_file_system_model_new (void)
   GtkFileSystemModel *model;
 
   model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
-
   model->files = g_array_sized_new (FALSE, FALSE, sizeof (FileModelNode), FILES_PER_QUERY);
-  /* add editable node at start */
-  g_array_set_size (model->files, 1);
-  memset (get_node (model, 0), 0, sizeof (FileModelNode));
 
   return model;
 }
@@ -702,8 +696,7 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
 
   freeze_updates (model);
 
-  /* start at index 1, don't change the editable */
-  for (i = 1; i < model->files->len; i++)
+  for (i = 0; i < model->files->len; i++)
     node_compute_visibility_and_filters (model, i);
 
   model->filter_on_thaw = FALSE;
@@ -826,30 +819,14 @@ static guint
 node_get_for_file (GtkFileSystemModel *model,
                    GFile *             file)
 {
-  guint i;
+  gpointer position;
 
-  i = GPOINTER_TO_UINT (g_hash_table_lookup (model->file_lookup, file));
-  if (i != 0)
-    return i;
+  if (!g_hash_table_lookup_extended (model->file_lookup,
+                                     file, NULL,
+                                     &position))
+    return GTK_INVALID_LIST_POSITION;
 
-  /* Node 0 is the editable row and has no associated file or entry in the table, so we start counting from 1.
-   *
-   * The invariant here is that the files in model->files[n] for n < g_hash_table_size (model->file_lookup)
-   * are already added to the hash table. this loop merely rebuilds our (file -> index) mapping on demand.
-   *
-   * If we exit the loop, the next pending batch of mappings will be resolved when this function gets called again
-   * with another file that is not yet in the mapping.
-   */
-  for (i = g_hash_table_size (model->file_lookup) + 1; i < model->files->len; i++)
-    {
-      FileModelNode *node = get_node (model, i);
-
-      g_hash_table_insert (model->file_lookup, node->file, GUINT_TO_POINTER (i));
-      if (g_file_equal (node->file, file))
-        return i;
-    }
-
-  return 0;
+  return GPOINTER_TO_UINT (position);
 }
 
 GFileInfo *
@@ -864,7 +841,7 @@ _gtk_file_system_model_get_info_for_file (GtkFileSystemModel *model,
 
   i = node_get_for_file (model, file);
 
-  if (i == 0)
+  if (i == GTK_INVALID_LIST_POSITION)
     return NULL;
 
   node = get_node (model, i);
@@ -934,10 +911,9 @@ add_file (GtkFileSystemModel *model,
   position = model->files->len - 1;
 
   if (!model->frozen)
-    node_compute_visibility_and_filters (model, model->files->len -1);
+    node_compute_visibility_and_filters (model, position);
 
-  /* Ignore the first item */
-  g_list_model_items_changed (G_LIST_MODEL (model), position - 1, 0, 1);
+  g_list_model_items_changed (G_LIST_MODEL (model), position, 0, 1);
 }
 
 /**
@@ -960,7 +936,7 @@ remove_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE (file));
 
   id = node_get_for_file (model, file);
-  if (id == 0)
+  if (id == GTK_INVALID_LIST_POSITION)
     return;
 
   node = get_node (model, id);
@@ -976,7 +952,7 @@ remove_file (GtkFileSystemModel *model,
 
   g_array_remove_index (model->files, id);
 
-  g_list_model_items_changed (G_LIST_MODEL (model), id - 1, 1, 0);
+  g_list_model_items_changed (G_LIST_MODEL (model), id, 1, 0);
 }
 
 /**
@@ -1019,20 +995,10 @@ void
 _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
 				   GtkFileFilter *          filter)
 {
-  GtkFileFilter *old_filter;
-
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (filter == NULL || GTK_IS_FILE_FILTER (filter));
   
-  if (filter)
-    g_object_ref (filter);
-
-  old_filter = model->filter;
-  model->filter = filter;
-
-  if (old_filter)
-    g_object_unref (old_filter);
-
+  g_set_object (&model->filter, filter);
   gtk_file_system_model_refilter_all (model);
 }
 
@@ -1062,7 +1028,7 @@ freeze_updates (GtkFileSystemModel *model)
 static void
 thaw_updates (GtkFileSystemModel *model)
 {
-  gboolean stuff_added;
+  gboolean stuff_added = FALSE;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (model->frozen > 0);
@@ -1071,7 +1037,8 @@ thaw_updates (GtkFileSystemModel *model)
   if (model->frozen > 0)
     return;
 
-  stuff_added = get_node (model, model->files->len - 1)->frozen_add;
+  if (model->files->len > 0)
+    stuff_added = get_node (model, model->files->len - 1)->frozen_add;
 
   if (model->filter_on_thaw)
     gtk_file_system_model_refilter_all (model);
