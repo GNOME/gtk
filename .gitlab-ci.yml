@@ -141,9 +141,20 @@ fedora-mingw64:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
-    - mkdir _build && cd _build
-    - mingw64-meson -Dintrospection=disabled -Dgraphene:introspection=disabled
-    - ninja
+      # Test that mingw64-meson still fails. If it has stopped failing, the CI
+      # will fail and now you should remove the hack that follows this.
+    - FAILED=false
+    - mingw64-meson --version || FAILED=true
+    - test $FAILED = false && echo "mingw64-meson works now, remove the hack" && exit 1
+      # HACK: Running mingw64-meson directly fails on the CI with:
+      #  /usr/bin/mingw64-meson: line 92: fg: no job control
+      # Because rpm is not evaluating %__meson and it gets interpreted as a job
+      # specifier. So we fix that and run it ourselves.
+    - rpm --eval "%{mingw64_meson}" > mingw64-meson.sh
+    - sed -i -e 's/%__meson/meson/' mingw64-meson.sh
+    - chmod +x mingw64-meson.sh
+    - ./mingw64-meson.sh -Dintrospection=disabled -Dgraphene:introspection=disabled _build
+    - ninja -C _build
 
 installed-tests:
   extends: .build-fedora-default
