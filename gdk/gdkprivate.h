@@ -23,7 +23,7 @@ void gdk_source_set_static_name_by_id (guint       tag,
 #define I_(string) g_intern_static_string (string)
 #endif
 
-#if !GLIB_CHECK_VERSION (2, 76, 0)
+#if !GLIB_CHECK_VERSION (2, 75, 1)
 static inline gboolean
 g_set_str (char       **str_pointer,
            const char  *new_str)
