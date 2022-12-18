@@ -1,5 +1,8 @@
 [wrap-git]
-directory=libepoxy
-url=https://github.com/anholt/libepoxy.git
-revision=master
-depth=1
+directory = libepoxy
+url = https://github.com/anholt/libepoxy.git
+revision = master
+depth = 1
+
+[provide]
+dependency_names = epoxy

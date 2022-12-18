@@ -1,6 +1,10 @@
 [wrap-git]
-directory=cairo
-url=https://gitlab.freedesktop.org/cairo/cairo.git
-push-url=ssh://git@gitlab.freedesktop.org:cairo/cairo.git
-revision=master
-depth=1
+directory = cairo
+url = https://gitlab.freedesktop.org/cairo/cairo.git
+push-url = ssh://git@gitlab.freedesktop.org:cairo/cairo.git
+revision = master
+depth = 1
+
+[provide]
+cairo = libcairo_dep
+cairo-gobject = libcairogobject_dep

@@ -12,7 +12,7 @@ project('gtk', 'c',
 
 glib_req           = '>= 2.72.0'
 pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
-harfbuzz_req	   = '>= 2.6.0'
+harfbuzz_req	     = '>= 2.6.0'
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
@@ -368,65 +368,42 @@ gtkinc = include_directories('gtk')
 testinc = include_directories('tests')
 
 # Dependencies
-glib_dep       = dependency('glib-2.0', version: glib_req,
-                            fallback : ['glib', 'libglib_dep'])
-gobject_dep    = dependency('gobject-2.0', version: glib_req,
-                            fallback : ['glib', 'libgobject_dep'])
+glib_dep       = dependency('glib-2.0', version: glib_req)
+gobject_dep    = dependency('gobject-2.0', version: glib_req)
 if os_win32
-  giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
-                            fallback : ['glib', 'libgio_dep'])
+  giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled)
 endif
 if os_unix
-  giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
-                            fallback : ['glib', 'libgio_dep'])
+  giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false)
 endif
-gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
-                            fallback : ['glib', 'libgmodule_dep'])
+gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 cairo_dep      = dependency('cairo', version: cairo_req,
-                            fallback : ['cairo', 'libcairo_dep'],
                             default_options: ['zlib=enabled', 'tests=disabled'])
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
-                            fallback : ['cairo', 'libcairogobject_dep'])
-pango_dep      = dependency('pango', version: pango_req,
-                            fallback : ['pango', 'libpango_dep'])
-fribidi_dep    = dependency('fribidi', version: fribidi_req,
-                            fallback : ['fribidi', 'libfribidi_dep'])
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
+pango_dep      = dependency('pango', version: pango_req)
+fribidi_dep    = dependency('fribidi', version: fribidi_req)
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
                             default_options: ['coretext=enabled'])
 
 # Require PangoFT2 if on X11 or wayland
-require_pangoft2 = wayland_enabled or x11_enabled
-
-if require_pangoft2
-  pangoft_dep    = dependency('pangoft2', version: pango_req,
-                              fallback : ['pango', 'libpangoft2_dep'])
-else
-  pangoft_dep    = dependency('pangoft2', required: false)
-endif
+pangoft_dep    = dependency('pangoft2', version: pango_req,
+                            required: wayland_enabled or x11_enabled)
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
   pangowin32_dep = dependency('pangowin32')
 endif
 
-pangocairo_dep = dependency('pangocairo', version: pango_req,
-                            fallback : ['pango', 'libpangocairo_dep'])
+pangocairo_dep = dependency('pangocairo', version: pango_req)
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
-                            fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
-png_dep        = dependency('libpng', 'png',
-                            fallback: ['libpng', 'libpng_dep'])
-tiff_dep       = dependency('libtiff-4', 'tiff',
-                            fallback: ['libtiff', 'libtiff4_dep'])
-jpeg_dep       = dependency('libjpeg', 'jpeg',
-                            fallback: ['libjpeg-turbo', 'jpeg_dep'])
+png_dep        = dependency('libpng', 'png')
+tiff_dep       = dependency('libtiff-4', 'tiff')
+jpeg_dep       = dependency('libjpeg', 'jpeg')
 
-epoxy_dep      = dependency('epoxy', version: epoxy_req,
-                            fallback: ['libepoxy', 'libepoxy_dep'])
+epoxy_dep      = dependency('epoxy', version: epoxy_req)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            fallback: ['graphene', 'graphene_dep'],
                             default_options: ['tests=false'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
@@ -506,11 +483,9 @@ cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req,
-                              fallback: 'wayland',
                               default_options: ['documentation=false'])
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
-  wlegldep       = dependency('wayland-egl',
-                              fallback: 'wayland')
+  wlegldep       = dependency('wayland-egl')
 
   wlproto_dir = wlprotocolsdep.get_variable('pkgdatadir')
 
@@ -646,10 +621,6 @@ endif
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
   version: cloudproviders_req,
-  fallback: [
-    'libcloudproviders',
-    'libcloudproviders_dep',
-  ],
   default_options: [
     'vapigen=false',
   ])
@@ -669,7 +640,6 @@ if not get_option('sysprof').disabled()
       'sysprofd=none',
       'help=false',
     ],
-    fallback: ['sysprof', 'libsysprof_capture_dep'],
   )
   cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
   libsysprof_dep = dependency('sysprof-4',
@@ -684,7 +654,6 @@ if not get_option('sysprof').disabled()
       'sysprofd=none',
       'help=false',
     ],
-    fallback: ['sysprof', 'libsysprof_dep'],
   )
   profiler_enabled = true
 else
