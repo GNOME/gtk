@@ -406,11 +406,6 @@ xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayla
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             default_options: ['tests=false'])
 iso_codes_dep  = dependency('iso-codes', required: false)
-
-gidocgen_dep    = dependency('gi-docgen', version: '>= 2021.1',
-                             fallback: ['gi-docgen', 'dummy_dep'],
-                             required: get_option('gtk_doc') and get_option('introspection').enabled(),
-                             native: true)
 gi_dep         = dependency('gobject-introspection-1.0', version: introspection_req,
                             required: get_option('introspection').enabled() and
                                       get_option('build-tests'))
