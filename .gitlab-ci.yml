@@ -88,6 +88,7 @@ fedora-x86_64:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
+    - meson subprojects update --reset
     - mkdir _install
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
@@ -116,6 +117,7 @@ release-build:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
+    - meson subprojects update --reset
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS} _build
     - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build x11
@@ -141,6 +143,7 @@ fedora-mingw64:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
+    - meson subprojects update --reset
       # Test that mingw64-meson still fails. If it has stopped failing, the CI
       # will fail and now you should remove the hack that follows this.
     - FAILED=false
@@ -168,6 +171,7 @@ installed-tests:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
     - meson subprojects download
+    - meson subprojects update --reset
     - meson setup
         --prefix="${CI_PROJECT_DIR}/_installed"
         ${COMMON_MESON_FLAGS}
