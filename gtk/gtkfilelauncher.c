@@ -184,7 +184,7 @@ gtk_file_launcher_get_file (GtkFileLauncher *self)
 /**
  * gtk_file_launcher_set_file:
  * @self: a `GtkFileLauncher`
- * @file: a `GFile`
+ * @file: (nullable): a `GFile`
  *
  * Sets the file that will be opened.
  *
@@ -195,7 +195,7 @@ gtk_file_launcher_set_file (GtkFileLauncher *self,
                             GFile           *file)
 {
   g_return_if_fail (GTK_IS_FILE_LAUNCHER (self));
-  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (file == NULL || G_IS_FILE (file));
 
   if (!g_set_object (&self->file, file))
     return;
