@@ -307,6 +307,7 @@ gdk_save_jpeg (GdkTexture *texture)
   g_object_unref (memtex);
   g_free (input);
   jpeg_destroy_compress (&info);
+  free (data);
 
   return g_bytes_new_with_free_func (data, size, (GDestroyNotify) free, NULL);
 }
