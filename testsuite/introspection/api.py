@@ -14,7 +14,10 @@ if hasattr(os, 'add_dll_directory'):
         if path != '' and os.path.isdir(path):
             os.add_dll_directory(path)
 
-import gi
+try:
+    import gi
+except ImportError:
+    sys.exit(77) # skip this test, gi module is not available
 
 gi.require_version('Gtk', '4.0')
 
