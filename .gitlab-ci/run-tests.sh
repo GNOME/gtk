@@ -8,7 +8,7 @@ builddir=$1
 backend=$2
 
 # Ignore memory leaks lower in dependencies
-export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0
+export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:verbosity=1:log_threads=1
 export G_SLICE=always-malloc
 
 case "${backend}" in
