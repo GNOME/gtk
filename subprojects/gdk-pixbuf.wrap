@@ -1,6 +1,10 @@
 [wrap-git]
-directory=gdk-pixbuf
-url=https://gitlab.gnome.org/GNOME/gdk-pixbuf.git
-push-url=ssh://git@gitlab.gnome.org:GNOME/gdk-pixbuf.git
-revision=master
-depth=1
+directory = gdk-pixbuf
+url = https://gitlab.gnome.org/GNOME/gdk-pixbuf.git
+push-url = ssh://git@ssh.gitlab.gnome.org:GNOME/gdk-pixbuf.git
+revision = master
+depth = 1
+
+[provide]
+dependency_names = gdk-pixbuf-2.0
+program_names = gdk-pixbuf-query-loaders, gdk-pixbuf-pixdata, gdk-pixbuf-csource, gdk-pixbuf-thumbnailer
