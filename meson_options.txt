@@ -123,8 +123,3 @@ option('build-tests',
        type: 'boolean',
        value: true,
        description : 'Build tests')
-
-option('install-tests',
-       type: 'boolean',
-       value: false,
-       description : 'Install tests')

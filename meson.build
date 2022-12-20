@@ -885,7 +885,6 @@ summary('Introspection', build_gir, section: 'Build')
 summary('Documentation', get_option('gtk_doc'), section: 'Build')
 summary('Man pages', get_option('man-pages'), section: 'Build')
 summary('Tests', get_option('build-tests'), section: 'Build')
-summary('Install tests', get_option('install-tests'), section: 'Build')
 summary('Demos', get_option('demos'), section: 'Build')
 summary('Examples', get_option('build-examples'), section: 'Build')
 
