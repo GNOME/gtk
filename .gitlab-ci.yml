@@ -345,8 +345,8 @@ static-scan:
       - _scan_build/meson-logs
   allow_failure: true
 
-# Run tests with the address sanitizer. We need to turn off introspection,
-# since it is incompatible with asan
+# Run tests with the address sanitizer. We need to turn off introspection
+# and f16c, since they are incompatible with asan
 asan-build:
   image: $FEDORA_IMAGE
   tags: [ asan ]
@@ -356,7 +356,7 @@ asan-build:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
-    - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled _build
+    - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled -Df16c=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
   artifacts:
