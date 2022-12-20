@@ -608,6 +608,8 @@ flaky = [
   # to be left enabled. Remove it until somebody figures out
   # what is going on there.
   'treeview-headers-hidden.ui',
+  # this consistently times out in the ci
+  'shorthand-entry-border.ui',
 ]
 
 reftest_env = environment()
