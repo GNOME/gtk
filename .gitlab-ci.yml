@@ -185,6 +185,8 @@ msys2-mingw64:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
 macos:
+  # Sadly, this fails regularly, and its failure is never enlightening
+  allow_failure: true
   extends: .only-default
   only:
     - branches@GNOME/gtk
