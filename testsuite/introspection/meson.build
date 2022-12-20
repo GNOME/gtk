@@ -1,5 +1,3 @@
-py = import('python').find_installation('python3', modules: ['gi'])
-
 env = environment()
 env.prepend('GI_TYPELIB_PATH',
   project_build_root / 'gtk',
