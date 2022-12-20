@@ -1,6 +1,3 @@
-testexecdir = join_paths(installed_test_bindir, 'gtk')
-testdatadir = join_paths(installed_test_datadir, 'gtk')
-
 gtk_tests_export_dynamic_ldflag = []
 
 if cc.get_id() != 'msvc'
@@ -172,8 +169,6 @@ foreach t : tests
     c_args: test_cargs + test_extra_cargs,
     link_args: test_extra_ldflags,
     dependencies: libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   if test_extra_suites.contains('slow')
@@ -202,8 +197,6 @@ foreach t : internal_tests
     c_args: test_cargs + test_extra_cargs,
     link_args: test_extra_ldflags,
     dependencies: libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   if test_extra_suites.contains('slow')
@@ -222,10 +215,8 @@ endforeach
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
 if add_languages('cpp', required: false, native: false)
   test_exe = executable('autotestkeywords',
-    sources: 'autotestkeywords.cc',
+    sources: ['autotestkeywords.cc'],
     dependencies: libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
   test('c++ keywords', test_exe,
     args: [ '--tap', '-k' ],
@@ -233,16 +224,6 @@ if add_languages('cpp', required: false, native: false)
     env: test_env,
     suite: 'gtk',
   )
-  if get_option('install-tests')
-    conf = configuration_data()
-    conf.set('testexecdir', testexecdir)
-    conf.set('test', 'autotestkeywords')
-    configure_file(input: 'gtk.test.in',
-      output: 'autotestkeywords.test',
-      configuration: conf,
-      install_dir: testdatadir,
-    )
-  endif
 endif
 
 
@@ -268,13 +249,10 @@ focus_chain_tests = [
   #[ 'widget-factory3', 'tab-backward' ],
 ]
 
-focus_chain = executable(
-  'test-focus-chain',
+focus_chain = executable('test-focus-chain',
   sources: ['test-focus-chain.c', '../testutils.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
-  install: get_option('install-tests'),
-  install_dir: testexecdir
 )
 
 foreach test : focus_chain_tests
@@ -295,30 +273,6 @@ make_pot = find_program ('make-pot', dirs: meson.project_source_root())
 test('potfiles', make_pot,
      workdir: meson.project_source_root(),
      suite: ['gtk', 'translations' ])
-
-if get_option('install-tests')
-  foreach t : tests
-    test_name = t.get('name')
-    suites = t.get('suites', [])
-
-    if suites.contains('flaky') or suites.contains('failing')
-      continue
-    endif
-
-    conf = configuration_data()
-    conf.set('testexecdir', testexecdir)
-    conf.set('test', test_name)
-    configure_file(input: 'gtk.test.in',
-      output: '@0@.test'.format(test_name),
-      configuration: conf,
-      install_dir: testdatadir,
-    )
-  endforeach
-
-  install_subdir('icons', install_dir: testexecdir)
-  install_subdir('icons2', install_dir: testexecdir)
-  install_subdir('ui', install_dir: testexecdir)
-endif
 
 if false and get_option ('profiler')
 

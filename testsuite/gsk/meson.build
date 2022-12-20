@@ -1,22 +1,12 @@
-testexecdir = join_paths(installed_test_bindir, 'gsk')
-testdatadir = join_paths(installed_test_datadir, 'gsk')
-
-compare_render = executable(
-  'compare-render',
+compare_render = executable('compare-render',
   ['compare-render.c', '../reftests/reftest-compare.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
-  install: get_option('install-tests'),
-  install_dir: testexecdir
 )
 
-node_parser = executable(
-  'node-parser',
-  ['node-parser.c'],
+node_parser = executable('node-parser', 'node-parser.c',
   dependencies: libgtk_dep,
   c_args: common_cflags,
-  install: get_option('install-tests'),
-  install_dir: testexecdir
 )
 
 compare_render_tests = [
@@ -266,11 +256,9 @@ foreach t : tests
   test_extra_ldflags = t.get(3, [])
 
   test_exe = executable(test_name, test_srcs,
+    dependencies : libgtk_dep,
     c_args : test_cargs + test_extra_cargs + common_cflags,
     link_args : test_extra_ldflags,
-    dependencies : libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   test(test_name, test_exe,
@@ -299,12 +287,11 @@ foreach t : internal_tests
   test_extra_cargs = t.get(2, [])
   test_extra_ldflags = t.get(3, [])
 
-  test_exe = executable(test_name, test_srcs,
+  test_exe = executable(test_name,
+    sources: test_srcs,
+    dependencies : libgtk_static_dep,
     c_args : test_cargs + test_extra_cargs + common_cflags,
     link_args : test_extra_ldflags,
-    dependencies : libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   test(test_name, test_exe,
