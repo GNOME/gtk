@@ -728,6 +728,11 @@ int main () {
   endif
 endif
 
+# Introspection
+gir = find_program('g-ir-scanner', required : get_option('introspection'))
+build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
+
+
 project_build_root = meson.current_build_dir()
 
 subdir('gtk/css')

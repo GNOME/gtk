@@ -1180,9 +1180,6 @@ libgtk = shared_library('gtk-4',
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 
 # Introspection
-gir = find_program('g-ir-scanner', required : get_option('introspection'))
-build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
-
 if build_gir
   gir_args = [
     '-DGTK_COMPILATION',
