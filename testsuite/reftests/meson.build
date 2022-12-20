@@ -598,6 +598,7 @@ xfails = [
   'label-background.ui',
   'label-wrap-justify.ui',
 ]
+
 flaky = [
   # these tests need a better way to perform delayed actions
   # they are not in xfails since they succeed on some platforms
@@ -610,6 +611,8 @@ flaky = [
   'treeview-headers-hidden.ui',
   # this consistently times out in the ci
   'shorthand-entry-border.ui',
+  # blinking cursors and timing issues make this unreliable
+  'fixed-widget-stacking.ui',
 ]
 
 reftest_env = environment()
