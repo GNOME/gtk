@@ -286,6 +286,8 @@ struct _GtkLabel
   int      width_chars;
   int      max_width_chars;
   int      lines;
+
+  gboolean is_ellipsized;
 };
 
 struct _GtkLabelClass
@@ -398,6 +400,7 @@ enum {
   PROP_YALIGN,
   PROP_EXTRA_MENU,
   PROP_TABS,
+  PROP_IS_ELLIPSIZED,
   NUM_PROPERTIES
 };
 
@@ -603,6 +606,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_TABS:
       g_value_set_boxed (value, self->tabs);
       break;
+    case PROP_IS_ELLIPSIZED:
+      g_value_set_boolean (value, self->is_ellipsized);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -638,6 +644,8 @@ gtk_label_init (GtkLabel *self)
   self->mnemonic_widget = NULL;
 
   self->mnemonics_visible = FALSE;
+
+  self->is_ellipsized = FALSE;
 }
 
 static const GtkBuildableParser pango_parser =
@@ -1357,6 +1365,7 @@ gtk_label_size_allocate (GtkWidget *widget,
                          int        baseline)
 {
   GtkLabel *self = GTK_LABEL (widget);
+  gboolean layout_ellipsized;
 
   if (self->layout)
     {
@@ -1364,6 +1373,13 @@ gtk_label_size_allocate (GtkWidget *widget,
         pango_layout_set_width (self->layout, width * PANGO_SCALE);
       else
         pango_layout_set_width (self->layout, -1);
+
+      layout_ellipsized = pango_layout_is_ellipsized (self->layout);
+      if (self->is_ellipsized != layout_ellipsized)
+        {
+          self->is_ellipsized = layout_ellipsized;
+          g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_IS_ELLIPSIZED]);
+        }
     }
 
   if (self->popup_menu)
@@ -2578,6 +2594,18 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkLabel:is-ellipsized: (attributes org.gtk.Property.get=gtk_label_is_ellipsized)
+   *
+   * Whether the label is currently ellipsized
+   *
+   * Since: 4.10
+   */
+  label_props[PROP_IS_ELLIPSIZED] =
+      g_param_spec_boolean ("is-ellipsized", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
@@ -6005,4 +6033,22 @@ gtk_label_get_tabs (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
 
   return self->tabs ? pango_tab_array_copy (self->tabs) : NULL;
+}
+
+/**
+ * gtk_label_is_ellipsized: (attributes org.gtk.Method.get_property=is-ellipsized)
+ * @self: a `GtkLabel`
+ *
+ * Gets whether the label is currently ellipsized.
+ *
+ * Returns: whether the label is currently ellipsized
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_label_is_ellipsized (GtkLabel     *self)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (self), FALSE);
+
+  return self->is_ellipsized;
 }

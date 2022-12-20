@@ -184,7 +184,8 @@ void             gtk_label_set_tabs (GtkLabel      *self,
 GDK_AVAILABLE_IN_4_8
 PangoTabArray * gtk_label_get_tabs  (GtkLabel      *self);
 
-
+GDK_AVAILABLE_IN_4_10
+gboolean     gtk_label_is_ellipsized (GtkLabel     *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
 
