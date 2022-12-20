@@ -71,11 +71,6 @@ style-check-diff:
     key: "$CI_JOB_NAME"
     paths:
       - _ccache/
-      - subprojects/gdk-pixbuf/
-      - subprojects/glib/
-      - subprojects/graphene/
-      - subprojects/libepoxy/
-      - subprojects/pango/
 
 fedora-x86_64:
   extends: .build-fedora-default
