@@ -1703,6 +1703,49 @@ gtk_icon_theme_get_theme_name (GtkIconTheme *self)
   return theme_name;
 }
 
+static const char builtin_hicolor_index[] =
+"[Icon Theme]\n"
+"Name=Hicolor\n"
+"Hidden=True\n"
+"Directories=16x16/actions,16x16/status,22x22/actions,24x24/actions,24x24/status,32x32/actions,32x32/status,48x48/status,64x64/actions,scalable/status,scalable/actions\n"
+"[16x16/actions]\n"
+"Size=16\n"
+"Type=Threshold\n"
+"[16x16/status]\n"
+"Size=16\n"
+"Type=Threshold\n"
+"[22x22/actions]\n"
+"Size=22\n"
+"Type=Threshold\n"
+"[24x24/actions]\n"
+"Size=24\n"
+"Type=Threshold\n"
+"[24x24/status]\n"
+"Size=24\n"
+"Type=Threshold\n"
+"[32x32/actions]\n"
+"Size=32\n"
+"Type=Threshold\n"
+"[32x32/status]\n"
+"Size=32\n"
+"Type=Threshold\n"
+"[48x48/status]\n"
+"Size=48\n"
+"Type=Threshold\n"
+"[64x64/actions]\n"
+"Size=64\n"
+"Type=Threshold\n"
+"[scalable/status]\n"
+"MinSize=1\n"
+"Size=128\n"
+"MaxSize=256\n"
+"Type=Scalable\n"
+"[scalable/actions]\n"
+"MinSize=1\n"
+"Size=128\n"
+"MaxSize=256\n"
+"Type=Scalable\n";
+
 static void
 insert_theme (GtkIconTheme *self,
               const char   *theme_name)
@@ -1769,20 +1812,9 @@ insert_theme (GtkIconTheme *self,
     {
       if (strcmp (theme_name, FALLBACK_ICON_THEME) == 0)
         {
-          const char *resource_path = "/org/gtk/libgtk/icons/hicolor.index.theme";
-          GBytes *index;
-
-          index = g_resources_lookup_data (resource_path,
-                                           G_RESOURCE_LOOKUP_FLAGS_NONE,
-                                           NULL);
-          if (!index)
-            g_error ("Cannot find resource %s", resource_path);
-
           theme_file = g_key_file_new ();
           g_key_file_set_list_separator (theme_file, ',');
-          g_key_file_load_from_bytes (theme_file, index, G_KEY_FILE_NONE, NULL);
-
-          g_bytes_unref (index);
+          g_key_file_load_from_data (theme_file, builtin_hicolor_index, -1, 0, NULL);
         }
       else
         return;
