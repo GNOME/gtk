@@ -1699,13 +1699,13 @@ set_view_type (GtkFileChooserWidget *impl,
     case VIEW_TYPE_LIST:
       child = impl->browse_files_column_view;
       icon_name = "view-grid-symbolic";
-      tooltip_text = _("Switch to grid view");
+      tooltip_text = _("Grid View");
       break;
 
     case VIEW_TYPE_GRID:
       child = impl->browse_files_grid_view;
       icon_name = "view-list-symbolic";
-      tooltip_text = _("Switch to list view");
+      tooltip_text = _("List View");
       break;
 
     default:

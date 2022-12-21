@@ -63,7 +63,7 @@
                                           <object class="GtkButton" id="browse_toggle_view_button">
                                             <property name="icon-name">view-grid-symbolic</property>
                                             <property name="action-name">item.toggle-view</property>
-                                            <property name="tooltip-text" translatable="yes">Switch to grid view</property>
+                                            <property name="tooltip-text" translatable="yes">Grid View</property>
                                           </object>
                                         </child>
                                         <child>
