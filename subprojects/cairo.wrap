@@ -2,7 +2,7 @@
 directory = cairo
 url = https://gitlab.freedesktop.org/cairo/cairo.git
 push-url = ssh://git@gitlab.freedesktop.org:cairo/cairo.git
-revision = master
+revision = 1.17.6
 depth = 1
 
 [provide]
