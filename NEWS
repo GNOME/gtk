@@ -1,3 +1,42 @@
+Overview of Changes in GTK+ 3.24.36, 12-22-2022
+===============================================
+
+This release is the first GTK 3 release to exclusively
+use the meson build system.
+
+* GtkLabel:
+ - Tweak selection behavior
+
+* GtkEmojiChooser:
+ - Properly handle empty recent section
+
+* GtkFileChooser:
+ - Make ~ key work regardless of dead keys
+
+* build:
+ - Improve handling of flaky tests
+ - Drop the autotools build
+
+* Wayland:
+ - Fix problems with X<>Wayland DND
+ - Revert cursor changes from 3.24.35
+ - Fix handling of surrounding text in input
+
+* Windows:
+ - Improve handling of line ends in clipboard
+
+* MacOS:
+ - Use NSTrackingArea
+
+* Translation updates:
+ Abkhazian
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Interlingue
+ Persian
+
+
 Overview of Changes in GTK+ 3.24.35, 11-22-2022
 ===============================================
 
