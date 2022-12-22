@@ -1,5 +1,43 @@
-Overview of Changes in 4.8.3, xx-xx-xxxx
+Overview of Changes in 4.8.3, 12-22-2022
 ========================================
+
+* GtkText:
+ - Claim gestures more selectively
+ - Prevent unexpected notify::direction emissions
+
+* Accessibility:
+ - Remember if we don't find the a11y bus
+
+* DND:
+ - Prefer file:// urls over other protocols
+
+* GtkMountOperation:
+ - Work on Wayland
+
+* GtkListView:
+ - Cancel rubberband if not handling drag
+
+* Wayland:
+ - Fix button masks
+
+* Windows:
+ - Fix resizes with native decorations
+
+* X11:
+ - Fix some ordering problems with surface destruction
+
+* Translation updates
+ Abkhazian
+ Basque
+ Dutch
+ Hungarian
+ Interlingue
+ Georgian
+ Persian
+ Russian
+ Spanish
+ Turkish
+
 
 Overview of Changes in 4.8.2, 24-10-2022
 ========================================
