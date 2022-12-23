@@ -57,7 +57,7 @@ struct _GtkFileDialog
 
   GListModel *filters;
   GListModel *shortcut_folders;
-  GtkFileFilter *current_filter;
+  GtkFileFilter *default_filter;
   GFile *initial_folder;
   char *initial_name;
   GFile *initial_file;
@@ -67,7 +67,7 @@ enum
 {
   PROP_0,
   PROP_ACCEPT_LABEL,
-  PROP_CURRENT_FILTER,
+  PROP_DEFAULT_FILTER,
   PROP_FILTERS,
   PROP_INITIAL_FILE,
   PROP_INITIAL_FOLDER,
@@ -98,7 +98,7 @@ gtk_file_dialog_finalize (GObject *object)
   g_free (self->accept_label);
   g_clear_object (&self->filters);
   g_clear_object (&self->shortcut_folders);
-  g_clear_object (&self->current_filter);
+  g_clear_object (&self->default_filter);
   g_clear_object (&self->initial_folder);
   g_free (self->initial_name);
 
@@ -131,8 +131,8 @@ gtk_file_dialog_get_property (GObject      *object,
       g_value_set_object (value, self->shortcut_folders);
       break;
 
-    case PROP_CURRENT_FILTER:
-      g_value_set_object (value, self->current_filter);
+    case PROP_DEFAULT_FILTER:
+      g_value_set_object (value, self->default_filter);
       break;
 
     case PROP_INITIAL_FILE:
@@ -183,8 +183,8 @@ gtk_file_dialog_set_property (GObject      *object,
       gtk_file_dialog_set_shortcut_folders (self, g_value_get_object (value));
       break;
 
-    case PROP_CURRENT_FILTER:
-      gtk_file_dialog_set_current_filter (self, g_value_get_object (value));
+    case PROP_DEFAULT_FILTER:
+      gtk_file_dialog_set_default_filter (self, g_value_get_object (value));
       break;
 
     case PROP_INITIAL_FILE:
@@ -267,15 +267,15 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:current-filter: (attributes org.gtk.Property.get=gtk_file_dialog_get_current_filter org.gtk.Property.set=gtk_file_dialog_set_current_filter)
+   * GtkFileDialog:default-filter: (attributes org.gtk.Property.get=gtk_file_dialog_get_default_filter org.gtk.Property.set=gtk_file_dialog_set_default_filter)
    *
-   * The current filter, that is, the filter that is initially
+   * The default filter, that is, the filter that is initially
    * active in the file chooser dialog.
    *
    * Since: 4.10
    */
-  properties[PROP_CURRENT_FILTER] =
-      g_param_spec_object ("current-filter", NULL, NULL,
+  properties[PROP_DEFAULT_FILTER] =
+      g_param_spec_object ("default-filter", NULL, NULL,
                            GTK_TYPE_FILE_FILTER,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -581,7 +581,7 @@ gtk_file_dialog_set_shortcut_folders (GtkFileDialog *self,
 }
 
 /**
- * gtk_file_dialog_get_current_filter:
+ * gtk_file_dialog_get_default_filter:
  * @self: a `GtkFileDialog`
  *
  * Gets the filter that will be selected by default
@@ -592,34 +592,34 @@ gtk_file_dialog_set_shortcut_folders (GtkFileDialog *self,
  * Since: 4.10
  */
 GtkFileFilter *
-gtk_file_dialog_get_current_filter (GtkFileDialog *self)
+gtk_file_dialog_get_default_filter (GtkFileDialog *self)
 {
   g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
 
-  return self->current_filter;
+  return self->default_filter;
 }
 
 /**
- * gtk_file_dialog_set_current_filter:
+ * gtk_file_dialog_set_default_filter:
  * @self: a `GtkFileDialog`
  * @filter: (nullable): a `GtkFileFilter`
  *
- * Sets the filters that will be selected by default
+ * Sets the filter that will be selected by default
  * in the file chooser dialog.
  *
  * Since: 4.10
  */
 void
-gtk_file_dialog_set_current_filter (GtkFileDialog *self,
+gtk_file_dialog_set_default_filter (GtkFileDialog *self,
                                     GtkFileFilter *filter)
 {
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
   g_return_if_fail (filter == NULL || GTK_IS_FILE_FILTER (filter));
 
-  if (!g_set_object (&self->current_filter, filter))
+  if (!g_set_object (&self->default_filter, filter))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CURRENT_FILTER]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DEFAULT_FILTER]);
 }
 
 /**
@@ -931,8 +931,8 @@ create_file_chooser (GtkFileDialog        *self,
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);
 
   file_chooser_set_filters (GTK_FILE_CHOOSER (chooser), self->filters);
-  if (self->current_filter)
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser), self->current_filter);
+  if (self->default_filter)
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser), self->default_filter);
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
   if (self->initial_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);

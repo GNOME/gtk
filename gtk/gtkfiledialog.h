@@ -58,10 +58,10 @@ void             gtk_file_dialog_set_filters         (GtkFileDialog        *self
                                                       GListModel           *filters);
 
 GDK_AVAILABLE_IN_4_10
-GtkFileFilter *  gtk_file_dialog_get_current_filter  (GtkFileDialog        *self);
+GtkFileFilter *  gtk_file_dialog_get_default_filter  (GtkFileDialog        *self);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_set_current_filter  (GtkFileDialog        *self,
+void             gtk_file_dialog_set_default_filter  (GtkFileDialog        *self,
                                                       GtkFileFilter        *filter);
 
 GDK_AVAILABLE_IN_4_10
