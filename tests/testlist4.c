@@ -174,7 +174,7 @@ new_window (GApplication *app)
                     G_CALLBACK (row_without_gaction_activated_cb), label);
 
   /* let the show begin */
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_window_present (GTK_WINDOW (window));
 }
 
 static void

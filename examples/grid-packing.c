@@ -49,7 +49,7 @@ activate (GtkApplication *app,
    */
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 2, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
 }
 

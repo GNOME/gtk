@@ -85,7 +85,7 @@ main (int argc, char *argv[])
   gtk_widget_set_size_request (spinner, 50, 50);
   gtk_fixed_put (GTK_FIXED (fixed), spinner, 110, 150);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

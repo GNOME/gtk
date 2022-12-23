@@ -25,6 +25,8 @@
 #include "gtkfilechoosernativeprivate.h"
 #include "gtkdialogerror.h"
 #include <glib/gi18n-lib.h>
+#include "gdk/gdkprivate.h"
+#include "gdk/gdkdebugprivate.h"
 
 /**
  * GtkFileDialog:
@@ -50,6 +52,7 @@ struct _GtkFileDialog
   GObject parent_instance;
 
   char *title;
+  char *accept_label;
   unsigned int modal : 1;
 
   GListModel *filters;
@@ -66,6 +69,7 @@ enum
   PROP_SHORTCUT_FOLDERS,
   PROP_CURRENT_FILTER,
   PROP_CURRENT_FOLDER,
+  PROP_ACCEPT_LABEL,
 
   NUM_PROPERTIES
 };
@@ -86,6 +90,7 @@ gtk_file_dialog_finalize (GObject *object)
   GtkFileDialog *self = GTK_FILE_DIALOG (object);
 
   g_free (self->title);
+  g_free (self->accept_label);
   g_clear_object (&self->filters);
   g_clear_object (&self->shortcut_folders);
   g_clear_object (&self->current_filter);
@@ -128,6 +133,10 @@ gtk_file_dialog_get_property (GObject      *object,
       g_value_set_object (value, self->current_folder);
       break;
 
+    case PROP_ACCEPT_LABEL:
+      g_value_set_string (value, self->accept_label);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -166,6 +175,10 @@ gtk_file_dialog_set_property (GObject      *object,
 
     case PROP_CURRENT_FOLDER:
       gtk_file_dialog_set_current_folder (self, g_value_get_object (value));
+      break;
+
+    case PROP_ACCEPT_LABEL:
+      gtk_file_dialog_set_accept_label (self, g_value_get_string (value));
       break;
 
     default:
@@ -256,6 +269,18 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_CURRENT_FOLDER] =
       g_param_spec_object ("current-folder", NULL, NULL,
                            G_TYPE_FILE,
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkFileDialog:accept-label: (attributes org.gtk.Property.get=gtk_file_dialog_get_accept_label org.gtk.Property.set=gtk_file_dialog_set_accept_label)
+   *
+   * Label for the file chooser's accept button.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_ACCEPT_LABEL] =
+      g_param_spec_string ("accept-label", NULL, NULL,
+                           NULL,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -655,32 +680,52 @@ create_file_chooser (GtkFileDialog        *self,
                      gboolean              select_multiple)
 {
   GtkFileChooserNative *chooser;
-  const char *accept;
-  const char *title;
+  const char *default_accept_label, *accept;
+  const char *default_title, *title;
+  GdkDisplay *display G_GNUC_UNUSED;
 
   switch (action)
     {
     case GTK_FILE_CHOOSER_ACTION_OPEN:
-      accept = _("_Open");
-      title = select_multiple ? _("Pick Files") : _("Pick a File");
+      default_accept_label = _("_Open");
+      default_title = select_multiple ? _("Pick Files") : _("Pick a File");
       break;
 
     case GTK_FILE_CHOOSER_ACTION_SAVE:
-      accept = _("_Save");
-      title = _("Save a File");
+      default_accept_label = _("_Save");
+      default_title = _("Save a File");
       break;
 
     case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-      accept = _("_Select");
-      title = select_multiple ? _("Select Folders") : _("Select a Folder");
+      default_accept_label = _("_Select");
+      default_title = select_multiple ? _("Select Folders") : _("Select a Folder");
       break;
 
     default:
       g_assert_not_reached ();
     }
 
+  if (self->title)
+    title = self->title;
+  else
+    title = default_title;
+
+  if (self->accept_label)
+    accept = self->accept_label;
+  else
+    accept = default_accept_label;
+
   chooser = gtk_file_chooser_native_new (title, parent, action, accept, _("_Cancel"));
-  gtk_file_chooser_native_set_use_portal (chooser, TRUE);
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (GDK_DISPLAY_DEBUG_CHECK (display, NO_PORTALS))
+    gtk_file_chooser_native_set_use_portal (chooser, FALSE);
+  else
+    gtk_file_chooser_native_set_use_portal (chooser, TRUE);
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), self->modal);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);
@@ -773,6 +818,7 @@ gtk_file_dialog_open (GtkFileDialog       *self,
                                  current_file, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_open);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -849,6 +895,7 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
                                  current_folder, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_select_folder);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -930,6 +977,7 @@ gtk_file_dialog_save (GtkFileDialog       *self,
                                  current_file, current_name, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_save);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -1003,6 +1051,7 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
                                  NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_open_multiple);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -1077,6 +1126,7 @@ gtk_file_dialog_select_multiple_folders (GtkFileDialog       *self,
                                  NULL, NULL, TRUE);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_file_dialog_select_multiple_folders);
   g_task_set_task_data (task, chooser, (GDestroyNotify) gtk_native_dialog_destroy);
 
@@ -1113,6 +1163,44 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_multiple_folders, NULL);
 
   return finish_multiple_files_op (self, G_TASK (result), error);
+}
+
+/**
+ * gtk_file_dialog_get_accept_label:
+ * @self: a `GtkFileDialog`
+ *
+ * Returns: (nullable): the label shown on the file chooser's accept button.
+ *
+ * Since: 4.10
+ */
+const char *
+gtk_file_dialog_get_accept_label (GtkFileDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+
+  return self->accept_label;
+}
+
+/**
+ * gtk_file_dialog_set_accept_label:
+ * @self: a `GtkFileDialog`
+ * @accept_label: (nullable): the new accept label
+ *
+ * Sets the label shown on the file chooser's accept button.
+ *
+ * Leaving the accept label unset or setting it as `NULL` will fall back to
+ * a default label, depending on what API is used to launch the file dialog.
+ *
+ * Since: 4.10
+ */
+void
+gtk_file_dialog_set_accept_label (GtkFileDialog *self,
+                                  const char    *accept_label)
+{
+  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
+
+  if (g_set_str (&self->accept_label, accept_label))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCEPT_LABEL]);
 }
 
 /* }}} */

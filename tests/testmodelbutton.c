@@ -77,7 +77,7 @@ on_application_activate (GApplication *gapplication,
 
   widget = gtk_window_new ();
   gtk_box_append (GTK_BOX (widget), box);
-  gtk_widget_show (widget);
+  gtk_window_present (GTK_WINDOW (widget))
   gtk_application_add_window (GTK_APPLICATION (application), GTK_WINDOW (widget));
 }
 

@@ -70,6 +70,10 @@ for f in get_files('ui', '.ui'):
 
 xml += '\n'
 
+xml += '''
+    <file compressed="true">icons/hicolor.index.theme</file>
+'''
+
 for s in ['16x16', '32x32', '64x64', 'scalable']:
   for c in ['actions', 'categories', 'emblems', 'emotes', 'devices', 'mimetypes', 'places', 'status']:
     icons_dir = 'icons/{0}/{1}'.format(s,c)

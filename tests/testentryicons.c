@@ -300,7 +300,7 @@ main (int argc, char **argv)
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, cssdata, -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

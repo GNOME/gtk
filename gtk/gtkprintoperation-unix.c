@@ -41,6 +41,7 @@
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
 #include "gtklabel.h"
+#include "gtkfilelauncher.h"
 #include <glib/gi18n-lib.h>
 
 
@@ -304,15 +305,17 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
 
   if (error != NULL)
     {
-      char * uri;
+      GFile *file;
+      GtkFileLauncher *launcher;
 
       g_warning ("Error launching preview: %s", error->message);
+      g_clear_error (&error);
 
-      g_error_free (error);
-      error = NULL;
-      uri = g_filename_to_uri (filename, NULL, NULL);
-      gtk_show_uri (parent, uri, GDK_CURRENT_TIME);
-      g_free (uri);
+      file = g_file_new_for_path (filename);
+      launcher = gtk_file_launcher_new (file);
+      gtk_file_launcher_launch (launcher, parent, NULL, NULL, NULL);
+      g_object_unref (launcher);
+      g_object_unref (file);
     }
 
  out:

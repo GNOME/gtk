@@ -114,9 +114,9 @@ selection_mode_enter (GtkButton *button, GtkBuilder *builder)
  
   gtk_widget_add_css_class (header, "selection-mode");
   gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
-  gtk_widget_hide (headerbutton);
-  gtk_widget_hide (selectbutton);
-  gtk_widget_show (cancelbutton);
+  gtk_widget_set_visible (headerbutton, FALSE);
+  gtk_widget_set_visible (selectbutton, FALSE);
+  gtk_widget_set_visible (cancelbutton, TRUE);
   gtk_stack_set_visible_child_name (GTK_STACK (titlestack), "selection");
 
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (list), FALSE);
@@ -147,9 +147,9 @@ selection_mode_leave (GtkButton *button, GtkBuilder *builder)
 
   gtk_widget_remove_css_class (header, "selection-mode");
   gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
-  gtk_widget_show (headerbutton);
-  gtk_widget_show (selectbutton);
-  gtk_widget_hide (cancelbutton);
+  gtk_widget_set_visible (headerbutton, TRUE);
+  gtk_widget_set_visible (selectbutton, TRUE);
+  gtk_widget_set_visible (cancelbutton, FALSE);
   gtk_stack_set_visible_child_name (GTK_STACK (titlestack), "title");
 
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (list), TRUE);
@@ -225,7 +225,7 @@ main (int argc, char *argv[])
 
   g_signal_connect (list, "selected-rows-changed", G_CALLBACK (selected_rows_changed), NULL);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
  
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

@@ -238,7 +238,7 @@ main (int argc, char *argv[])
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   /**
    * Second window - GtkTreeModelSort wrapping the GtkTreeStore
@@ -303,7 +303,7 @@ main (int argc, char *argv[])
 
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window2), tree_view2);
       gtk_window_set_default_size (GTK_WINDOW (window2), 400, 400);
-      gtk_widget_show (window2);
+      gtk_window_present (GTK_WINDOW (window2));
     }
   
   /**
@@ -370,7 +370,7 @@ main (int argc, char *argv[])
 
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolled_window3), tree_view3);
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
-      gtk_widget_show (window3);
+      gtk_window_present (GTK_WINDOW (window3));
     }
 
   for (i = 0; data[i].word_1 != NULL; i++)

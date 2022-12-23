@@ -404,7 +404,7 @@ main(int argc, char **argv)
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_window_set_child (GTK_WINDOW (window), da);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   frame_queue = g_queue_new ();
   g_mutex_init (&frame_mutex);

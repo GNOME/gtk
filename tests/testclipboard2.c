@@ -452,7 +452,7 @@ main (int argc, char **argv)
                      get_window_contents (gtk_widget_get_display (window),
                                           alt_display));
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

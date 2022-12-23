@@ -596,6 +596,7 @@ create_font_chooser (GtkFontDialog        *self,
 
   window = gtk_font_chooser_dialog_new (title, parent);
   gtk_font_chooser_set_level (GTK_FONT_CHOOSER (window), level);
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
   if (self->language)
     gtk_font_chooser_set_language (GTK_FONT_CHOOSER (window),
                                    pango_language_to_string (self->language));
@@ -657,6 +658,7 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
   g_clear_pointer (&desc, pango_font_description_free);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_font_dialog_choose_family);
   g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
@@ -672,7 +674,7 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
  * gtk_font_dialog_choose_family_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_family] call
  * and returns the resulting family.
@@ -740,6 +742,7 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
   g_clear_pointer (&desc, pango_font_description_free);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_font_dialog_choose_face);
   g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
@@ -755,7 +758,7 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
  * gtk_font_dialog_choose_face_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_face] call
  * and returns the resulting font face.
@@ -773,7 +776,7 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_face, NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), NULL);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
@@ -817,6 +820,7 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
                                 GTK_FONT_CHOOSER_LEVEL_VARIATIONS);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_font_dialog_choose_font);
   g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
@@ -832,7 +836,7 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
  * gtk_font_dialog_choose_font_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_font] call
  * and returns the resulting font description.
@@ -850,7 +854,7 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font, NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), NULL);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 /**
@@ -896,6 +900,7 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
                                 GTK_FONT_CHOOSER_LEVEL_FEATURES);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, gtk_font_dialog_choose_font_and_features);
   g_task_set_task_data (task, window, (GDestroyNotify) gtk_window_destroy);
 
@@ -914,7 +919,7 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
  * @font_desc: (out caller-allocates): return location for font description
  * @font_features: (out caller-allocates): return location for font features
  * @language: (out caller-allocates): return location for the language
- * @error: return location for an error
+ * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_font_and_features]
  * call and returns the resulting font description and font features.

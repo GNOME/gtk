@@ -51,7 +51,7 @@ main (int    argc,
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
@@ -189,7 +189,7 @@ main (int    argc,
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
@@ -338,7 +338,7 @@ main (int    argc,
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
@@ -560,7 +560,7 @@ main (int    argc,
   GtkApplication *app;
   int status;
 
-  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
@@ -641,7 +641,7 @@ main (int   argc,
   g_chdir (GTK_SRCDIR);
 #endif
 
-  GtkApplication *app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  GtkApplication *app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   int status = g_application_run (G_APPLICATION (app), argc, argv);
@@ -1017,6 +1017,10 @@ Our application now looks like this:
 
 In this step, we make our application show the content of all the files
 that it is given on the commandline.
+
+**Note: Providing filenames (e.g. `./exampleapp examplewin.c examplewin.h`) at
+the command line is a requirement for example apps 3-9 to display as shown in
+the screenshots below.**
 
 To this end, we add a member to the struct of our application window subclass
 and keep a reference to the `GtkStack` there. The first member of the struct

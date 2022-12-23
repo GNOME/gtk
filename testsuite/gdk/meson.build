@@ -1,13 +1,10 @@
-testexecdir = join_paths(installed_test_bindir, 'gdk')
-testdatadir = join_paths(installed_test_datadir, 'gdk')
-
 clipboard_client = executable('clipboard-client',
-                              sources: ['clipboard-client.c'],
-                              include_directories: [confinc],
-                              c_args: common_cflags,
-                              dependencies: [ libgtk_dep ],
-                              install: get_option('install-tests'),
-                              install_dir: testexecdir)
+  sources: ['clipboard-client.c'],
+  include_directories: [confinc],
+  c_args: common_cflags,
+  dependencies: [ libgtk_dep ],
+  install: false,
+)
 
 tests = [
   { 'name': 'array' },
@@ -35,8 +32,7 @@ foreach t : tests
     sources: '@0@.c'.format(test_name),
     c_args: common_cflags,
     dependencies: libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
+    install: false,
   )
 
   suites = ['gdk'] + t.get('suites', [])
@@ -63,8 +59,7 @@ foreach t : internal_tests
   test_exe = executable(t, '@0@.c'.format(t),
     c_args: common_cflags,
     dependencies: libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
+    install: false,
   )
 
   test(t, test_exe,
@@ -78,28 +73,3 @@ foreach t : internal_tests
     suite: 'gdk',
   )
 endforeach
-
-
-if get_option('install-tests')
-  foreach t : tests
-    test_name = t.get('name')
-    suites = t.get('suites', [])
-
-    if suites.contains('flaky') or suites.contains('failing')
-      continue
-    endif
-
-    test_cdata = configuration_data()
-    test_cdata.set('testexecdir', testexecdir)
-    test_cdata.set('test', test_name)
-    configure_file(input: 'gdk.test.in',
-      output: '@0@.test'.format(test_name),
-      configuration: test_cdata,
-      install: true,
-      install_dir: testdatadir,
-    )
-  endforeach
-
-  install_subdir('clipboard-data', install_dir: testexecdir)
-  install_subdir('image-data', install_dir: testexecdir)
-endif

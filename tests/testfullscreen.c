@@ -82,7 +82,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (remove_fullscreen_cb), NULL);
   gtk_box_append (GTK_BOX (vbox), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);

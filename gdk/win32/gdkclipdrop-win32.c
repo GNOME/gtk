@@ -2081,23 +2081,30 @@ transmute_cf_unicodetext_to_utf8_string (const guchar    *data,
                                          gsize           *set_data_length,
                                          GDestroyNotify  *set_data_destroy)
 {
-  wchar_t *ptr, *p, *q;
+  wchar_t *ptr, *p, *q, *endp;
   char *result;
   glong wclen, u8_len;
 
-  /* Strip out \r */
+  /* Replace CR and CR+LF with LF */
   ptr = (wchar_t *) data;
   p = ptr;
   q = ptr;
+  endp = ptr + length / 2;
   wclen = 0;
 
-  while (p < ptr + length / 2)
+  while (p < endp)
     {
       if (*p != L'\r')
         {
           *q++ = *p;
           wclen++;
         }
+      else if (p + 1 >= endp || *(p + 1) != L'\n')
+        {
+          *q++ = L'\n';
+          wclen++;
+        }
+
       p++;
     }
 
@@ -2282,7 +2289,7 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
                                   gsize           *set_data_length,
                                   GDestroyNotify  *set_data_destroy)
 {
-  char *ptr, *p, *q;
+  char *ptr, *p, *q, *endp;
   char *result;
   glong wclen, u8_len;
   wchar_t *wstr;
@@ -2291,15 +2298,22 @@ transmute_cf_text_to_utf8_string (const guchar    *data,
   ptr = (char *) data;
   p = ptr;
   q = ptr;
+  endp = ptr + length / 2;
   wclen = 0;
 
-  while (p < ptr + length / 2)
+  while (p < endp)
     {
       if (*p != '\r')
         {
           *q++ = *p;
           wclen++;
         }
+      else if (p + 1 > endp || *(p + 1) != '\n')
+        {
+          *q++ = '\n';
+          wclen++;
+        }
+
       p++;
     }
 

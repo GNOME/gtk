@@ -294,7 +294,7 @@ is mainly useful for shortening turnaround times on developer
 systems. Installed builds of GTK should always have introspection
 support.
 
-### `build-tests`, `install-tests`, `demos`
+### `build-tests`, `demos`
 
 By default, GTK will build quite a few tests and demos.
 While these are useful on a developer system, they are not

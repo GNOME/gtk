@@ -6595,7 +6595,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  * @child.
  *
  * Returns: (nullable): the text of the tab label, or %NULL if
- *   the tab label idget is not a `GtkLabel`. The string is owned
+ *   the tab label widget is not a `GtkLabel`. The string is owned
  *   by the widget and must not be freed.
  */
 const char *
@@ -6983,7 +6983,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  * Sets whether the tab can be detached from @notebook to another
  * notebook or widget.
  *
- * Note that two notebooks must share a common group identificator
+ * Note that two notebooks must share a common group identifier
  * (see [method@Gtk.Notebook.set_group_name]) to allow automatic tabs
  * interchange between them.
  *

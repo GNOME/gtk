@@ -44,7 +44,7 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtktextview.h"
-#include "gtkshow.h"
+#include "gtkfilelauncher.h"
 #include "gtkmain.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
@@ -78,7 +78,7 @@
  * ![An example GtkAboutDialog](aboutdialog.png)
  *
  * About dialogs often contain links and email addresses. `GtkAboutDialog`
- * displays these as clickable links. By default, it calls [func@Gtk.show_uri]
+ * displays these as clickable links. By default, it calls [method@Gtk.FileLauncher.launch]
  * when a user clicks one. The behaviour can be overridden with the
  * [signal@Gtk.AboutDialog::activate-link] signal.
  *
@@ -361,7 +361,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Emitted every time a URL is activated.
    *
    * Applications may connect to it to override the default behaviour,
-   * which is to call [func@Gtk.show_uri].
+   * which is to call [method@Gtk.FileLauncher.launch].
    *
    * Returns: `TRUE` if the link has been activated
    */
@@ -932,7 +932,17 @@ static gboolean
 gtk_about_dialog_activate_link (GtkAboutDialog *about,
                                 const char     *uri)
 {
-  gtk_show_uri (GTK_WINDOW (about), uri, GDK_CURRENT_TIME);
+  GtkFileLauncher *launcher;
+  GFile *file;
+
+  file = g_file_new_for_uri (uri);
+  launcher = gtk_file_launcher_new (file);
+
+  gtk_file_launcher_launch (launcher, GTK_WINDOW (about), NULL, NULL, NULL);
+
+  g_object_unref (launcher);
+  g_object_unref (file);
+
   return TRUE;
 }
 

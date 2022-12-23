@@ -100,7 +100,7 @@ int main (int argc, char **argv)
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_grid_attach (grid, widget, 1, 0, 1, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

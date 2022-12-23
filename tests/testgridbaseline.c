@@ -52,7 +52,7 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), label3, 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), label4, 1, 1, 1, 1);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);
   return 0;

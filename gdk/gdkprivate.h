@@ -23,4 +23,23 @@ void gdk_source_set_static_name_by_id (guint       tag,
 #define I_(string) g_intern_static_string (string)
 #endif
 
+#if !GLIB_CHECK_VERSION (2, 75, 1)
+static inline gboolean
+g_set_str (char       **str_pointer,
+           const char  *new_str)
+{
+  char *copy;
+
+  if (*str_pointer == new_str ||
+      (*str_pointer && new_str && strcmp (*str_pointer, new_str) == 0))
+    return FALSE;
+
+  copy = g_strdup (new_str);
+  g_free (*str_pointer);
+  *str_pointer = copy;
+
+  return TRUE;
+}
+#endif
+
 #endif /* __GDK__PRIVATE_H__ */

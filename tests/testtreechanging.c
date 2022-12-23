@@ -519,7 +519,7 @@ main (int    argc,
     add (GTK_TREE_VIEW (treeview));
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), treeview);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   g_idle_add (dance, treeview);
   

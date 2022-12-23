@@ -795,6 +795,22 @@ file_serializer_finish (GObject      *source,
     gdk_content_serializer_return_success (serializer);
 }
 
+static char *
+file_get_native_uri (GFile *file)
+{
+  char *path;
+
+  path = g_file_get_path (file);
+  if (path != NULL)
+    {
+      char *uri = g_filename_to_uri (path, NULL, NULL);
+      g_free (path);
+      return uri;
+    }
+
+  return g_file_get_uri (file);
+}
+
 static void
 file_uri_serializer (GdkContentSerializer *serializer)
 {
@@ -811,7 +827,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
       file = g_value_get_object (gdk_content_serializer_get_value (serializer));
       if (file)
         {
-          uri = g_file_get_uri (file);
+          uri = file_get_native_uri (file);
           g_string_append (str, uri);
           g_free (uri);
         }
@@ -827,7 +843,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
 
       for (l = g_value_get_boxed (value); l; l = l->next)
         {
-          uri = g_file_get_uri (l->data);
+          uri = file_get_native_uri (l->data);
           g_string_append (str, uri);
           g_free (uri);
           g_string_append (str, "\r\n");

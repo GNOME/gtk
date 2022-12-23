@@ -1103,7 +1103,6 @@ main (int argc, char **argv)
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
         tmp = gtk_cell_view_new ();
-        gtk_widget_show (tmp);
         gtk_cell_view_set_model (GTK_CELL_VIEW (tmp), model);
 
         renderer = gtk_cell_renderer_text_new ();
@@ -1298,7 +1297,7 @@ main (int argc, char **argv)
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 53);
         gtk_frame_set_child (GTK_FRAME (tmp), combobox);
 
-        gtk_widget_show (window);
+        gtk_window_present (GTK_WINDOW (window));
 
         while (!done)
           g_main_context_iteration (NULL, TRUE);

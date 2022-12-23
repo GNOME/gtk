@@ -320,7 +320,7 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 
   gtk_list_store_insert_after (self->store, &iter, &iter2);
   real_insert_custom_item (self, CUSTOM_ITEM_OTHER_APP,
-                           _("Other application…"), NULL,
+                           _("Other app…"), NULL,
                            FALSE, &iter);
 }
 

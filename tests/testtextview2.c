@@ -242,7 +242,7 @@ main (int argc, char *argv[])
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cursor), NULL);
   gtk_box_append (GTK_BOX (box2), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

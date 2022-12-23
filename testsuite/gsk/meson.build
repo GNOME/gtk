@@ -1,22 +1,12 @@
-testexecdir = join_paths(installed_test_bindir, 'gsk')
-testdatadir = join_paths(installed_test_datadir, 'gsk')
-
-compare_render = executable(
-  'compare-render',
+compare_render = executable('compare-render',
   ['compare-render.c', '../reftests/reftest-compare.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
-  install: get_option('install-tests'),
-  install_dir: testexecdir
 )
 
-node_parser = executable(
-  'node-parser',
-  ['node-parser.c'],
+node_parser = executable('node-parser', 'node-parser.c',
   dependencies: libgtk_dep,
   c_args: common_cflags,
-  install: get_option('install-tests'),
-  install_dir: testexecdir
 )
 
 compare_render_tests = [
@@ -84,8 +74,6 @@ compare_render_tests = [
   'repeat-texture',
   'transform-in-transform',
   'transform-in-transform-in-transform',
-  'unaligned-offscreen',
-  'upside-down-label-3d', # not really 3d, but cairo fails it
   'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
 ]
 
@@ -98,29 +86,49 @@ informative_render_tests = [
 ]
 
 renderers = [
-  # name          exclude term
-  [ 'gl', ''           ],
-  [ 'broadway',   '-3d' ],
-  [ 'cairo',      '-3d' ],
+  { 'name': 'gl' },
+  { 'name': 'broadway', 'exclude_term': '-3d' },
+  { 'name': 'cairo', 'exclude_term': '-3d' },
+]
+
+compare_xfails = [
+  # Both tests fail because of some font rendering issue
+  'unaligned-offscreen',
+  'upside-down-label-3d', # not really 3d, but cairo fails it
 ]
 
 foreach renderer : renderers
-  foreach test : compare_render_tests
-    if ((renderer[1] == '' or not test.contains(renderer[1])) and
-        (renderer[0] != 'broadway' or broadway_enabled))
-      test(renderer[0] + ' ' + test, compare_render,
+  foreach testname : compare_render_tests
+
+    renderer_name = renderer.get('name')
+    exclude_term = renderer.get('exclude_term', '')
+
+    suites = [
+      'gsk',
+      'gsk-compare',
+      'gsk-' + renderer_name,
+      'gsk-compare-' + renderer_name,
+    ]
+
+    if compare_xfails.contains(testname)
+      suites += 'failing'
+    endif
+
+    if ((exclude_term == '' or not testname.contains(exclude_term)) and
+        (renderer_name != 'broadway' or broadway_enabled))
+      test(renderer_name + ' ' + testname, compare_render,
         args: [
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
-          join_paths(meson.current_source_dir(), 'compare', test + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', test + '.png'),
+          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
         env: [
-          'GSK_RENDERER=' + renderer[0],
+          'GSK_RENDERER=' + renderer_name,
           'GTK_A11Y=test',
           'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
           'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
         ],
-        suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer[0], 'gsk-compare-' + renderer[0] ],
+        suite: suites,
       )
     endif
   endforeach
@@ -248,11 +256,9 @@ foreach t : tests
   test_extra_ldflags = t.get(3, [])
 
   test_exe = executable(test_name, test_srcs,
+    dependencies : libgtk_dep,
     c_args : test_cargs + test_extra_cargs + common_cflags,
     link_args : test_extra_ldflags,
-    dependencies : libgtk_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   test(test_name, test_exe,
@@ -281,12 +287,11 @@ foreach t : internal_tests
   test_extra_cargs = t.get(2, [])
   test_extra_ldflags = t.get(3, [])
 
-  test_exe = executable(test_name, test_srcs,
+  test_exe = executable(test_name,
+    sources: test_srcs,
+    dependencies : libgtk_static_dep,
     c_args : test_cargs + test_extra_cargs + common_cflags,
     link_args : test_extra_ldflags,
-    dependencies : libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
   )
 
   test(test_name, test_exe,

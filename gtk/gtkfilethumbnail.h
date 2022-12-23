@@ -40,6 +40,10 @@ GFileInfo *_gtk_file_thumbnail_get_info (GtkFileThumbnail *self);
 void _gtk_file_thumbnail_set_info (GtkFileThumbnail *self,
                                    GFileInfo        *info);
 
+int _gtk_file_thumbnail_get_icon_size (GtkFileThumbnail *self);
+void _gtk_file_thumbnail_set_icon_size (GtkFileThumbnail *self,
+                                        int               icon_size);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_THUMBNAIL_H__ */

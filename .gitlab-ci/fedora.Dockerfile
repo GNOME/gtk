@@ -1,4 +1,4 @@
-FROM fedora:36
+FROM fedora:37
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -18,7 +18,9 @@ RUN dnf -y install \
     dejavu-sans-mono-fonts \
     desktop-file-utils \
     diffutils \
+    docbook-style-xsl \
     elfutils-libelf-devel \
+    expat-devel \
     fribidi-devel \
     gcc \
     gcc-c++ \
@@ -31,6 +33,7 @@ RUN dnf -y install \
     glibc-devel \
     glibc-headers \
     gnome-desktop-testing \
+    gnupg2 \
     gobject-introspection-devel \
     graphene-devel \
     graphviz \
@@ -70,7 +73,6 @@ RUN dnf -y install \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libGLES-devel \
-    meson \
     ninja-build \
     pango-devel \
     pcre-devel \
@@ -82,7 +84,6 @@ RUN dnf -y install \
     python3-markdown \
     python3-pip \
     python3-pygments \
-    python3-toml \
     python3-typogrify \
     python3-wheel \
     redhat-rpm-config \
@@ -94,8 +95,6 @@ RUN dnf -y install \
     weston-libs \
     which \
     xorg-x11-server-Xvfb \
- && dnf install -y 'dnf-command(builddep)' \
- && dnf builddep -y wayland \
  && dnf clean all
 
 # Enable sudo for wheel users

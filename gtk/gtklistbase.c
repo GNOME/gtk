@@ -803,43 +803,13 @@ gtk_list_base_compute_scroll_align (GtkListBase   *self,
 }
 
 static void
-gtk_list_base_update_focus_tracker (GtkListBase *self)
+gtk_list_base_scroll_to_item (GtkListBase *self,
+                              guint        pos)
 {
-  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkWidget *focus_child;
-  guint pos;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
-  if (!GTK_IS_LIST_ITEM_WIDGET (focus_child))
-    return;
-
-  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (focus_child));
-  if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
-    {
-      gtk_list_item_tracker_set_position (priv->item_manager,
-                                          priv->focus,
-                                          pos,
-                                          0,
-                                          0);
-    }
-}
-
-static void
-gtk_list_base_scroll_to_item (GtkWidget  *widget,
-                              const char *action_name,
-                              GVariant   *parameter)
-{
-  GtkListBase *self = GTK_LIST_BASE (widget);
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
-  guint pos;
-
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
-    return;
-
-  g_variant_get (parameter, "u", &pos);
 
   /* figure out primary orientation and if position is valid */
   if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
@@ -867,14 +837,48 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
                             pos,
                             align_across, side_across,
                             align_along, side_along);
+}
 
-  /* HACK HACK HACK
-   *
-   * GTK has no way to track the focused child. But we now that when a listitem
-   * gets focus, it calls this action. So we update our focus tracker from here
-   * because it's the closest we can get to accurate tracking.
-   */
-  gtk_list_base_update_focus_tracker (self);
+static void
+gtk_list_base_scroll_to_item_action (GtkWidget  *widget,
+                                     const char *action_name,
+                                     GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  gtk_list_base_scroll_to_item (self, pos);
+}
+
+static void
+gtk_list_base_set_focus_child (GtkWidget *widget,
+                               GtkWidget *child)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  guint pos;
+
+  GTK_WIDGET_CLASS (gtk_list_base_parent_class)->set_focus_child (widget, child);
+
+  if (!GTK_IS_LIST_ITEM_WIDGET (child))
+    return;
+
+  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+
+  if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
+    {
+      gtk_list_base_scroll_to_item (self, pos);
+      gtk_list_item_tracker_set_position (priv->item_manager,
+                                          priv->focus,
+                                          pos,
+                                          0,
+                                          0);
+    }
 }
 
 static void
@@ -1135,6 +1139,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
 
   widget_class->focus = gtk_list_base_focus;
   widget_class->grab_focus = gtk_list_base_grab_focus;
+  widget_class->set_focus_child = gtk_list_base_set_focus_child;
 
   gobject_class->dispose = gtk_list_base_dispose;
   gobject_class->get_property = gtk_list_base_get_property;
@@ -1179,7 +1184,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_install_action (widget_class,
                                    "list.scroll-to-item",
                                    "u",
-                                   gtk_list_base_scroll_to_item);
+                                   gtk_list_base_scroll_to_item_action);
 
   /**
    * GtkListBase|list.select-item:
@@ -1567,24 +1572,15 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 }
 
 static void
-gtk_list_base_stop_rubberband (GtkListBase *self,
-                               gboolean     modify,
-                               gboolean     extend)
+gtk_list_base_apply_rubberband_selection (GtkListBase *self,
+                                          gboolean     modify,
+                                          gboolean     extend)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
   GtkSelectionModel *model;
 
   if (!priv->rubberband)
     return;
-
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
-    {
-      if (item->widget)
-        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
-    }
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
   if (model != NULL)
@@ -1645,6 +1641,24 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
       gtk_bitset_unref (selected);
       gtk_bitset_unref (mask);
       gtk_bitset_unref (rubberband_selection);
+    }
+}
+
+static void
+gtk_list_base_stop_rubberband (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListItemManagerItem *item;
+
+  if (!priv->rubberband)
+    return;
+
+  for (item = gtk_list_item_manager_get_first (priv->item_manager);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->widget)
+        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
     }
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
@@ -1758,14 +1772,23 @@ gtk_list_base_drag_end (GtkGestureDrag *gesture,
                         GtkListBase    *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GdkEventSequence *sequence;
   gboolean modify, extend;
 
   if (!priv->rubberband)
     return;
 
+  sequence = gtk_gesture_get_last_updated_sequence (GTK_GESTURE (gesture));
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    {
+      gtk_list_base_stop_rubberband (self);
+      return;
+    }
+
   gtk_list_base_drag_update (gesture, offset_x, offset_y, self);
   get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
-  gtk_list_base_stop_rubberband (self, modify, extend);
+  gtk_list_base_apply_rubberband_selection (self, modify, extend);
+  gtk_list_base_stop_rubberband (self);
 }
 
 void

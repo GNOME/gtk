@@ -127,7 +127,7 @@ activate (GtkApplication *app,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
-  gtk_widget_show (win);
+  gtk_window_present (GTK_WINDOW (win));
 
   gtk_application_add_window (app, GTK_WINDOW (win));
 }

@@ -227,6 +227,7 @@ gtk_public_sources = files([
   'gtkfilechooserwidget.c',
   'gtkfiledialog.c',
   'gtkfilefilter.c',
+  'gtkfilelauncher.c',
   'gtkfilter.c',
   'gtkfilterlistmodel.c',
   'gtkfixed.c',
@@ -345,7 +346,6 @@ gtk_public_sources = files([
   'gtkshortcutsshortcut.c',
   'gtkshortcutswindow.c',
   'gtkshortcuttrigger.c',
-  'gtkshow.c',
   'gtksidebarrow.c',
   'gtksignallistitemfactory.c',
   'gtksingleselection.c',
@@ -478,6 +478,7 @@ gtk_public_headers = files([
   'gtkexpression.h',
   'gtkfiledialog.h',
   'gtkfilefilter.h',
+  'gtkfilelauncher.h',
   'gtkfilter.h',
   'gtkfilterlistmodel.h',
   'gtkfixed.h',
@@ -578,7 +579,6 @@ gtk_public_headers = files([
   'gtkshortcutsshortcut.h',
   'gtkshortcutswindow.h',
   'gtkshortcuttrigger.h',
-  'gtkshow.h',
   'gtksignallistitemfactory.h',
   'gtksingleselection.h',
   'gtksizegroup.h',
@@ -779,28 +779,21 @@ theme_deps = []
 # For git checkouts, but not for tarballs...
 if not fs.exists('theme/Default/Default-light.css')
   # ... build the theme files
-  sassc = find_program('sassc', required: false)
-  if not sassc.found()
-    subproject('sassc')
-    sassc = find_program('sassc', required: true)
-  endif
+  sassc = find_program('sassc', native: true)
+  sassc_opts = [ '-a', '-M', '-t', 'compact' ]
 
-  if sassc.found()
-    sassc_opts = [ '-a', '-M', '-t', 'compact' ]
+  subdir('theme/Default')
 
-    subdir('theme/Default')
-
-    theme_deps += [
-      default_theme_deps,
-    ]
-  endif
+  theme_deps += [
+    default_theme_deps,
+  ]
 endif
 
 
 objcopy_supports_add_symbol = false
 objcopy = find_program('objcopy', required : false)
 if objcopy.found()
-  objcopy_supports_add_symbol = run_command(objcopy, '--help').stdout().contains('--add-symbol')
+  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
 endif
 
 ld = find_program('ld', required : false)
@@ -1187,9 +1180,6 @@ libgtk = shared_library('gtk-4',
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 
 # Introspection
-gir = find_program('g-ir-scanner', required : get_option('introspection'))
-build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
-
 if build_gir
   gir_args = [
     '-DGTK_COMPILATION',

@@ -393,8 +393,9 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
 static void
 update_button_sensitivity (GtkFontDialogButton *self)
 {
-  gtk_widget_set_sensitive (self->button,
-                            self->dialog != NULL && self->cancellable == NULL);
+  if (self->button)
+    gtk_widget_set_sensitive (self->button,
+                              self->dialog != NULL && self->cancellable == NULL);
 }
 
 static void
@@ -402,10 +403,11 @@ family_chosen (GObject      *source,
                GAsyncResult *result,
                gpointer      data)
 {
+  GtkFontDialog *dialog = GTK_FONT_DIALOG (source);
   GtkFontDialogButton *self = data;
   PangoFontFamily *family;
 
-  family = gtk_font_dialog_choose_family_finish (self->dialog, result, NULL);
+  family = gtk_font_dialog_choose_family_finish (dialog, result, NULL);
   if (family)
     {
       PangoFontDescription *desc;
@@ -428,10 +430,11 @@ face_chosen (GObject      *source,
              GAsyncResult *result,
              gpointer      data)
 {
+  GtkFontDialog *dialog = GTK_FONT_DIALOG (source);
   GtkFontDialogButton *self = data;
   PangoFontFace *face;
 
-  face = gtk_font_dialog_choose_face_finish (self->dialog, result, NULL);
+  face = gtk_font_dialog_choose_face_finish (dialog, result, NULL);
   if (face)
     {
       PangoFontDescription *desc;
@@ -453,10 +456,11 @@ font_chosen (GObject      *source,
              GAsyncResult *result,
              gpointer      data)
 {
+  GtkFontDialog *dialog = GTK_FONT_DIALOG (source);
   GtkFontDialogButton *self = data;
   PangoFontDescription *desc;
 
-  desc = gtk_font_dialog_choose_font_finish (self->dialog, result, NULL);
+  desc = gtk_font_dialog_choose_font_finish (dialog, result, NULL);
   if (desc)
     {
       gtk_font_dialog_button_set_font_desc (self, desc);
@@ -472,12 +476,13 @@ font_and_features_chosen (GObject      *source,
                           GAsyncResult *result,
                           gpointer      data)
 {
+  GtkFontDialog *dialog = GTK_FONT_DIALOG (source);
   GtkFontDialogButton *self = data;
   PangoFontDescription *desc;
   char *features;
   PangoLanguage *language;
 
-  if (gtk_font_dialog_choose_font_and_features_finish (self->dialog, result,
+  if (gtk_font_dialog_choose_font_and_features_finish (dialog, result,
                                                        &desc, &features, &language,
                                                        NULL))
     {

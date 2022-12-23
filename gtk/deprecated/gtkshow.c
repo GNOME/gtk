@@ -27,6 +27,8 @@
 #include "gtkalertdialog.h"
 #include <glib/gi18n-lib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct {
   GtkWindow *parent;
   GAppLaunchContext *context;
@@ -96,6 +98,8 @@ window_handle_exported (GtkWindow  *window,
  *
  * This is the recommended call to be used as it passes information
  * necessary for sandbox helpers to parent their dialogs properly.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.FileLauncher.launch] instead
  */
 void
 gtk_show_uri_full (GtkWindow           *parent,
@@ -142,6 +146,8 @@ gtk_show_uri_full (GtkWindow           *parent,
  *
  * Returns: %TRUE if the URI was shown successfully.
  *   Otherwise, %FALSE is returned and @error is set
+ *
+ * Deprecated: 4.10: Use [method@Gtk.FileLauncher.launch_finish] instead
  */
 gboolean
 gtk_show_uri_full_finish (GtkWindow     *parent,
@@ -184,6 +190,8 @@ show_uri_done (GObject      *object,
  *
  * This function launches the default application for showing
  * a given uri, or shows an error dialog if that fails.
+ *
+ * Deprecated: 4.10: Use [method@Gtk.FileLauncher.launch] instead
  */
 void
 gtk_show_uri (GtkWindow  *parent,

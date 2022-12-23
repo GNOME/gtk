@@ -55,6 +55,11 @@
     <value nick='category' value='2'/>
   </enum>
 
+  <enum id='org.gtk.gtk4.Settings.FileChooser.ViewType'>
+    <value nick='list' value='0'/>
+    <value nick='grid' value='1'/>
+  </enum>
+
   <schema id='org.gtk.gtk4.Settings.FileChooser' path='/org/gtk/gtk4/settings/file-chooser/'>
     <key name='location-mode' enum='org.gtk.gtk4.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
@@ -167,6 +172,13 @@
         'mime' -> 'video/mp4'
         'description' -> 'MPEG-4 video'
         'category' -> 'Video'
+      </description>
+    </key>
+    <key name="view-type" enum="org.gtk.gtk4.Settings.FileChooser.ViewType">
+      <default>'list'</default>
+      <summary>View type</summary>
+      <description>
+        Whether the files are shown in a list or in a grid.
       </description>
     </key>
   </schema>

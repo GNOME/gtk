@@ -1,7 +1,7 @@
 toml_conf = configuration_data()
 toml_conf.set('version', meson.project_version())
 
-gidocgen = find_program('gi-docgen', required: get_option('gtk_doc'))
+gidocgen = find_program('gi-docgen', required: get_option('gtk_doc'), native: true)
 
 gidocgen_common_args = [
   '--quiet',

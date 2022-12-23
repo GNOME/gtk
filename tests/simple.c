@@ -59,7 +59,7 @@ main (int argc, char *argv[])
 
   gtk_window_set_child (GTK_WINDOW (window), button);
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);

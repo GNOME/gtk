@@ -258,7 +258,7 @@ main (int argc,
                     (GCallback)update_forward_button_sensitivity, button);
 
 
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
   while (TRUE)
     g_main_context_iteration (NULL, TRUE);
 

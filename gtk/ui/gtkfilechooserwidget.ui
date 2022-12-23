@@ -60,6 +60,13 @@
                                           </object>
                                         </child>
                                         <child>
+                                          <object class="GtkButton" id="browse_toggle_view_button">
+                                            <property name="icon-name">view-grid-symbolic</property>
+                                            <property name="action-name">item.toggle-view</property>
+                                            <property name="tooltip-text" translatable="yes">Grid View</property>
+                                          </object>
+                                        </child>
+                                        <child>
                                           <object class="GtkMenuButton" id="browse_new_folder_button">
                                             <property name="tooltip-text" translatable="yes">Create Folder</property>
                                             <property name="popover">new_folder_popover</property>
@@ -103,8 +110,26 @@
                                           </object>
                                         </child>
                                         <child type="end">
-                                          <object class="GtkSpinner" id="search_spinner">
-                                            <property name="visible">0</property>
+                                          <object class="GtkBox">
+                                            <property name="spacing">6</property>
+
+                                            <child>
+                                              <object class="GtkSpinner" id="search_spinner">
+                                                <property name="visible">0</property>
+                                              </object>
+                                            </child>
+
+                                            <child>
+                                              <object class="GtkButton">
+                                                <property name="action-name">item.toggle-view</property>
+                                                <binding name="icon-name">
+                                                  <lookup name="icon-name">browse_toggle_view_button</lookup>
+                                                </binding>
+                                                <binding name="tooltip-text">
+                                                  <lookup name="tooltip-text">browse_toggle_view_button</lookup>
+                                                </binding>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
@@ -144,8 +169,8 @@
                                             <style>
                                               <class name="complex"/>
                                             </style>
-                                            <signal name="activate" handler="column_view_row_activated_cb" swapped="no"/>
-                                            <signal name="keynav-failed" handler="browse_files_column_view_keynav_failed_cb"/>
+                                            <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
+                                            <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
                                             <child>
                                               <object class="GtkColumnViewColumn" id="column_view_name_column">
                                                 <property name="title" translatable="yes">Name</property>
@@ -660,5 +685,76 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkGridView" id="browse_files_grid_view">
+    <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
+    <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
+    <binding name="enable-rubberband">
+      <lookup name="enable-rubberband">browse_files_column_view</lookup>
+    </binding>
+    <binding name="model">
+      <lookup name="model">browse_files_column_view</lookup>
+    </binding>
+    <property name="factory">
+      <object class="GtkBuilderListItemFactory">
+        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkFileChooserCell">
+        <binding name="position">
+          <lookup name="position">GtkListItem</lookup>
+        </binding>
+        <binding name="item">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="selected">
+          <lookup name="selected">GtkListItem</lookup>
+        </binding>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <binding name="tooltip-text">
+              <closure type="gchararray" function="column_view_get_tooltip_text">
+                <lookup name="item">GtkListItem</lookup>
+              </closure>
+            </binding>
+            <child>
+              <object class="GtkFileThumbnail">
+                <property name="icon-size">96</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <binding name="file-info">
+                  <lookup name="item">GtkListItem</lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="lines">3</property>
+                <property name="wrap">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="ellipsize">middle</property>
+                <property name="justify">center</property>
+                <attributes>
+                  <attribute name="insert-hyphens" value="false"></attribute>
+                </attributes>
+                <binding name="label">
+                  <closure type="gchararray" function="column_view_get_file_display_name">
+                    <lookup name="item">GtkListItem</lookup>
+                  </closure>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+    ]]></property>
+      </object>
+    </property>
   </object>
 </interface>

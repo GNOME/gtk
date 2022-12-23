@@ -215,7 +215,7 @@ test_row_separator_height (void)
                                                NULL);
 
   gtk_window_set_child (GTK_WINDOW (window), tree_view);
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   gtk_test_widget_wait_for_draw (window);
 
