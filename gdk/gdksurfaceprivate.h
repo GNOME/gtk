@@ -77,6 +77,7 @@ struct _GdkSurface
   guint autohide : 1;
   guint shortcuts_inhibited : 1;
   guint request_motion : 1;
+  guint has_pointer : 1;
 
   guint request_motion_id;
 
