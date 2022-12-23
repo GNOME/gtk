@@ -755,11 +755,13 @@ gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
  * @self: a `GtkAlertDialog`
  * @parent: (nullable): the parent `GtkWindow`
  *
- * This function shows the alert to the user.
+ * Show the alert to the user.
  *
- * If the alert has more than one button, you should use
- * [method@Gtk.AlertDialog.choose] instead and provide
- * a callback that can react to the button that was clicked.
+ * This function is a simple version of [method@Gtk.AlertDialog.choose]
+ * intended for dialogs with a single button.
+ * If you want to cancel the dialog or if the alert has more than one button,
+ * you should use that function instead and provide it with a #GCancellable or
+ * callback respectively.
  *
  * Since: 4.10
  */
