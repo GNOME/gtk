@@ -247,6 +247,8 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
    *
    * The list of filters.
    *
+   * See [property@Gtk.FileDialog:default-filter] about how those two properties interact.
+   *
    * Since: 4.10
    */
   properties[PROP_FILTERS] =
@@ -271,6 +273,13 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
    *
    * The default filter, that is, the filter that is initially
    * active in the file chooser dialog.
+   *
+   * If the default filter is %NULL, the first filter of [property@Gtk.FileDialog:filters]
+   * is used as the default filter. If that property contains no filter, the dialog will
+   * be unfiltered.
+   *
+   * If [property@Gtk.FileDialog:filters] is not %NULL, the default filter should be part
+   * of the list. If it is not, the dialog may choose to not make it available.
    *
    * Since: 4.10
    */
@@ -607,6 +616,10 @@ gtk_file_dialog_get_default_filter (GtkFileDialog *self)
  * Sets the filter that will be selected by default
  * in the file chooser dialog.
  *
+ * If set to %NULL, the first item in [property@Gtk.FileDialog:filters]
+ * will be used as the default filter. If that list is empty, the dialog
+ * will be unfiltered.
+ *
  * Since: 4.10
  */
 void
@@ -933,6 +946,16 @@ create_file_chooser (GtkFileDialog        *self,
   file_chooser_set_filters (GTK_FILE_CHOOSER (chooser), self->filters);
   if (self->default_filter)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser), self->default_filter);
+  else if (self->filters)
+    {
+      GtkFileFilter *filter = g_list_model_get_item (self->filters, 0);
+      if (filter)
+        {
+          gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser), filter);
+          g_object_unref (filter);
+        }
+    }
+
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
   if (self->initial_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);
