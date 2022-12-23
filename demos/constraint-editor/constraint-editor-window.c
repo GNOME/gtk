@@ -342,7 +342,6 @@ save_cb (GtkWidget              *button,
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                         NULL, NULL,
-                        NULL,
                         save_response_cb, self);
   g_object_unref (dialog);
 }

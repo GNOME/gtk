@@ -243,10 +243,10 @@ save_clicked (GtkButton             *button,
   GtkFileDialog *dialog;
 
   dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_initial_name (dialog, "custom.css");
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
-                        NULL, "custom.css",
-                        NULL,
+                        NULL, NULL,
                         save_response, ce);
   g_object_unref (dialog);
 }

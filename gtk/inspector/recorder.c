@@ -1859,12 +1859,14 @@ render_node_save (GtkButton            *button,
   filename = g_strdup_printf ("%s.node", nodename);
 
   dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_initial_name (dialog, filename);
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
-                        NULL, filename,
-                        NULL,
+                        NULL, NULL,
                         render_node_save_response, node);
   g_object_unref (dialog);
+  g_free (filename);
+  g_free (nodename);
 }
 
 static void

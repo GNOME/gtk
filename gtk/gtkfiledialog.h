@@ -81,6 +81,13 @@ void             gtk_file_dialog_set_initial_folder  (GtkFileDialog        *self
                                                       GFile                *folder);
 
 GDK_AVAILABLE_IN_4_10
+const char *     gtk_file_dialog_get_initial_name    (GtkFileDialog        *self);
+
+GDK_AVAILABLE_IN_4_10
+void             gtk_file_dialog_set_initial_name    (GtkFileDialog        *self,
+                                                      const char           *name);
+
+GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_open                (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
                                                       GFile                *current_file,
@@ -111,7 +118,6 @@ GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_save                (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
                                                       GFile                *current_file,
-                                                      const char           *current_name,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);

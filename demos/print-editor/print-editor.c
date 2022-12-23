@@ -509,7 +509,6 @@ activate_save_as (GSimpleAction *action,
                         GTK_WINDOW (main_window),
                         NULL,
                         NULL,
-                        NULL,
                         on_save_response, NULL);
   g_object_unref (dialog);
 }

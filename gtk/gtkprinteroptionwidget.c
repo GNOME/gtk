@@ -737,10 +737,10 @@ filesave_choose_cb (GtkWidget              *button,
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, _("Select a filename"));
+  gtk_file_dialog_set_initial_name (dialog, current_name);
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (widget))),
                         current_folder,
-                        current_name,
                         NULL,
                         dialog_response_callback, widget);
 
