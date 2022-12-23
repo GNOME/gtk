@@ -127,7 +127,6 @@
  * `GtkScrolledWindow` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
 
-
 /* scrolled window policy and size requisition handling:
  *
  * gtk size requisition works as follows:
