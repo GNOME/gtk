@@ -422,7 +422,7 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
  * @bar: a `GtkSearchBar`
  * @entry: a `GtkEditable`
  *
- * Connects the `GtkEditable widget passed as the one to be used in
+ * Connects the `GtkEditable` widget passed as the one to be used in
  * this search bar.
  *
  * The entry should be a descendant of the search bar. Calling this

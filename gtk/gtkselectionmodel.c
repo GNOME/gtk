@@ -313,7 +313,7 @@ gtk_selection_model_get_selection (GtkSelectionModel *model)
 /**
  * gtk_selection_model_get_selection_in_range:
  * @model: a `GtkSelectionModel`
- * @position: start of the queired range
+ * @position: start of the queried range
  * @n_items: number of items in the queried range
  *
  * Gets the set of selected items in a range.

@@ -2497,7 +2497,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
 }
 
 /**
- * gtk_paned_set_wide_handle: (attributes org.gtk.Method.set_propery=wide-handle)
+ * gtk_paned_set_wide_handle: (attributes org.gtk.Method.set_property=wide-handle)
  * @paned: a `GtkPaned`
  * @wide: the new value for the [property@Gtk.Paned:wide-handle] property
  *
