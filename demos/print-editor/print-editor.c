@@ -508,7 +508,6 @@ activate_save_as (GSimpleAction *action,
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (main_window),
                         NULL,
-                        NULL,
                         on_save_response, NULL);
   g_object_unref (dialog);
 }
@@ -551,7 +550,6 @@ activate_open (GSimpleAction *action,
   gtk_file_dialog_set_title (dialog, "Select file");
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (main_window),
-                        NULL,
                         NULL,
                         on_open_response, NULL);
   g_object_unref (dialog);

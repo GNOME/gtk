@@ -230,7 +230,7 @@ open_cb (GtkWidget              *button,
   cwd = g_file_new_for_path (".");
   gtk_file_dialog_set_initial_folder (dialog, cwd);
   g_object_unref (cwd);
-  gtk_file_dialog_open (dialog, GTK_WINDOW (self), NULL, NULL, open_response_cb, self);
+  gtk_file_dialog_open (dialog, GTK_WINDOW (self), NULL, open_response_cb, self);
   g_object_unref (dialog);
 }
 
@@ -341,7 +341,7 @@ save_cb (GtkWidget              *button,
   g_object_unref (cwd);
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                        NULL, NULL,
+                        NULL,
                         save_response_cb, self);
   g_object_unref (dialog);
 }

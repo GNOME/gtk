@@ -1862,7 +1862,7 @@ render_node_save (GtkButton            *button,
   gtk_file_dialog_set_initial_name (dialog, filename);
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
-                        NULL, NULL,
+                        NULL,
                         render_node_save_response, node);
   g_object_unref (dialog);
   g_free (filename);

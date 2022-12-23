@@ -65,7 +65,6 @@ open_clicked_cb (GtkWidget *button,
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (gtk_widget_get_root (button)),
                         NULL,
-                        NULL,
                         open_dialog_response_cb, video);
 }
 

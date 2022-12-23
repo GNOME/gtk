@@ -66,7 +66,7 @@ open_file (GtkButton *picker,
                               20,
                               abort_mission, g_object_ref (cancellable), g_object_unref);
 
-  gtk_file_dialog_open (dialog, parent, NULL, cancellable, file_opened, label);
+  gtk_file_dialog_open (dialog, parent, cancellable, file_opened, label);
 
   g_object_unref (cancellable);
   g_object_unref (dialog);

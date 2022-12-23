@@ -88,9 +88,16 @@ void             gtk_file_dialog_set_initial_name    (GtkFileDialog        *self
                                                       const char           *name);
 
 GDK_AVAILABLE_IN_4_10
+GFile *          gtk_file_dialog_get_initial_file    (GtkFileDialog        *self);
+
+GDK_AVAILABLE_IN_4_10
+void             gtk_file_dialog_set_initial_file    (GtkFileDialog        *self,
+                                                      GFile                *file);
+
+
+GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_open                (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
-                                                      GFile                *current_file,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
@@ -103,7 +110,6 @@ GFile *          gtk_file_dialog_open_finish         (GtkFileDialog        *self
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_select_folder       (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
-                                                      GFile                *initial_folder,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
@@ -117,7 +123,6 @@ GFile *          gtk_file_dialog_select_folder_finish
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_save                (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
-                                                      GFile                *current_file,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
