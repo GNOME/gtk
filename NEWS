@@ -1,3 +1,20 @@
+Overview of Changes in 4.6.9, 23-12-2022
+========================================
+
+* GtkText:
+ - Prevent unexpected notify::direction emissions
+
+* Wayland:
+ - Fix button masks
+
+* X11:
+ - Fix some ordering problems with surface destruction
+
+* Translation updates
+ Georgian
+ Indonesian
+
+
 Overview of Changes in 4.6.8, 24-10-2022
 ========================================
 
