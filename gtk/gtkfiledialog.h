@@ -74,10 +74,10 @@ void             gtk_file_dialog_set_shortcut_folders
                                                       GListModel           *shortcut_folders);
 
 GDK_AVAILABLE_IN_4_10
-GFile *          gtk_file_dialog_get_current_folder  (GtkFileDialog        *self);
+GFile *          gtk_file_dialog_get_initial_folder  (GtkFileDialog        *self);
 
 GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_set_current_folder  (GtkFileDialog        *self,
+void             gtk_file_dialog_set_initial_folder  (GtkFileDialog        *self,
                                                       GFile                *folder);
 
 GDK_AVAILABLE_IN_4_10
@@ -96,7 +96,7 @@ GFile *          gtk_file_dialog_open_finish         (GtkFileDialog        *self
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_select_folder       (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
-                                                      GFile                *current_folder,
+                                                      GFile                *initial_folder,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);

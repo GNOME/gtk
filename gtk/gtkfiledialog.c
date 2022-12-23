@@ -58,7 +58,7 @@ struct _GtkFileDialog
   GListModel *filters;
   GListModel *shortcut_folders;
   GtkFileFilter *current_filter;
-  GFile *current_folder;
+  GFile *initial_folder;
 };
 
 enum
@@ -68,7 +68,7 @@ enum
   PROP_FILTERS,
   PROP_SHORTCUT_FOLDERS,
   PROP_CURRENT_FILTER,
-  PROP_CURRENT_FOLDER,
+  PROP_INITIAL_FOLDER,
   PROP_ACCEPT_LABEL,
 
   NUM_PROPERTIES
@@ -94,7 +94,7 @@ gtk_file_dialog_finalize (GObject *object)
   g_clear_object (&self->filters);
   g_clear_object (&self->shortcut_folders);
   g_clear_object (&self->current_filter);
-  g_clear_object (&self->current_folder);
+  g_clear_object (&self->initial_folder);
 
   G_OBJECT_CLASS (gtk_file_dialog_parent_class)->finalize (object);
 }
@@ -129,8 +129,8 @@ gtk_file_dialog_get_property (GObject      *object,
       g_value_set_object (value, self->current_filter);
       break;
 
-    case PROP_CURRENT_FOLDER:
-      g_value_set_object (value, self->current_folder);
+    case PROP_INITIAL_FOLDER:
+      g_value_set_object (value, self->initial_folder);
       break;
 
     case PROP_ACCEPT_LABEL:
@@ -173,8 +173,8 @@ gtk_file_dialog_set_property (GObject      *object,
       gtk_file_dialog_set_current_filter (self, g_value_get_object (value));
       break;
 
-    case PROP_CURRENT_FOLDER:
-      gtk_file_dialog_set_current_folder (self, g_value_get_object (value));
+    case PROP_INITIAL_FOLDER:
+      gtk_file_dialog_set_initial_folder (self, g_value_get_object (value));
       break;
 
     case PROP_ACCEPT_LABEL:
@@ -258,16 +258,16 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:current-folder: (attributes org.gtk.Property.get=gtk_file_dialog_get_current_folder org.gtk.Property.set=gtk_file_dialog_set_current_folder)
+   * GtkFileDialog:initial-folder: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_folder org.gtk.Property.set=gtk_file_dialog_set_initial_folder)
    *
-   * The current folder, that is, the directory that is initially
+   * The inital folder, that is, the directory that is initially
    * opened in the file chooser dialog, unless overridden by parameters
    * of the async call.
    *
    * Since: 4.10
    */
-  properties[PROP_CURRENT_FOLDER] =
-      g_param_spec_object ("current-folder", NULL, NULL,
+  properties[PROP_INITIAL_FOLDER] =
+      g_param_spec_object ("initial-folder", NULL, NULL,
                            G_TYPE_FILE,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -573,7 +573,7 @@ gtk_file_dialog_set_current_filter (GtkFileDialog *self,
 }
 
 /**
- * gtk_file_dialog_get_current_folder:
+ * gtk_file_dialog_get_initial_folder:
  * @self: a `GtkFileDialog`
  *
  * Gets the folder that will be set as the
@@ -584,15 +584,15 @@ gtk_file_dialog_set_current_filter (GtkFileDialog *self,
  * Since: 4.10
  */
 GFile *
-gtk_file_dialog_get_current_folder (GtkFileDialog *self)
+gtk_file_dialog_get_initial_folder (GtkFileDialog *self)
 {
   g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
 
-  return self->current_folder;
+  return self->initial_folder;
 }
 
 /**
- * gtk_file_dialog_set_current_folder:
+ * gtk_file_dialog_set_initial_folder:
  * @self: a `GtkFileDialog`
  * @folder: (nullable): a `GFile`
  *
@@ -604,16 +604,16 @@ gtk_file_dialog_get_current_folder (GtkFileDialog *self)
  * Since: 4.10
  */
 void
-gtk_file_dialog_set_current_folder (GtkFileDialog *self,
+gtk_file_dialog_set_initial_folder (GtkFileDialog *self,
                                     GFile         *folder)
 {
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
   g_return_if_fail (folder == NULL || G_IS_FILE (folder));
 
-  if (!g_set_object (&self->current_folder, folder))
+  if (!g_set_object (&self->initial_folder, folder))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CURRENT_FOLDER]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_FOLDER]);
 }
 
 /* }}} */
@@ -734,8 +734,8 @@ create_file_chooser (GtkFileDialog        *self,
   if (self->current_filter)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (chooser), self->current_filter);
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
-  if (self->current_folder)
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->current_folder, NULL);
+  if (self->initial_folder)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);
   if (current_file)
     gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), current_file, NULL);
   else if (current_name)
@@ -793,7 +793,7 @@ finish_multiple_files_op (GtkFileDialog  *self,
  *
  * If you pass @current_file, the file chooser will initially be
  * opened in the parent directory of that file, otherwise, it
- * will be in the directory [property@Gtk.FileDialog:current-folder].
+ * will be in the directory [property@Gtk.FileDialog:initial-folder].
  *
  * The @callback will be called when the dialog is dismissed.
  * It should call [method@Gtk.FileDialog.open_finish]
@@ -860,7 +860,7 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
  * gtk_file_dialog_select_folder:
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
- * @current_folder: (nullable): the folder to select initially
+ * @initial_folder: (nullable): the folder to select initially
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
  * @callback: (scope async): a callback to call when the operation is complete
  * @user_data: (closure callback): data to pass to @callback
@@ -868,9 +868,9 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
  * This function initiates a directory selection operation by
  * presenting a file chooser dialog to the user.
  *
- * If you pass @current_folder, the file chooser will initially be
+ * If you pass @initial_folder, the file chooser will initially be
  * opened in the parent directory of that folder, otherwise, it
- * will be in the directory [property@Gtk.FileDialog:current-folder].
+ * will be in the directory [property@Gtk.FileDialog:initial-folder].
  *
  * The @callback will be called when the dialog is dismissed.
  * It should call [method@Gtk.FileDialog.select_folder_finish]
@@ -881,7 +881,7 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
 void
 gtk_file_dialog_select_folder (GtkFileDialog       *self,
                                GtkWindow           *parent,
-                               GFile               *current_folder,
+                               GFile               *initial_folder,
                                GCancellable        *cancellable,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
@@ -892,7 +892,7 @@ gtk_file_dialog_select_folder (GtkFileDialog       *self,
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
 
   chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                 current_folder, NULL, FALSE);
+                                 initial_folder, NULL, FALSE);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_check_cancellable (task, FALSE);
@@ -951,7 +951,7 @@ gtk_file_dialog_select_folder_finish (GtkFileDialog  *self,
  *
  * If you pass @current_file, the file chooser will initially be
  * opened in the parent directory of that file, otherwise, it
- * will be in the directory [property@Gtk.FileDialog:current-folder].
+ * will be in the directory [property@Gtk.FileDialog:initial-folder].
  *
  * The @callback will be called when the dialog is dismissed.
  * It should call [method@Gtk.FileDialog.save_finish]
@@ -1027,7 +1027,7 @@ gtk_file_dialog_save_finish (GtkFileDialog   *self,
  * presenting a file chooser dialog to the user.
  *
  * The file chooser will initially be opened in the directory
- * [property@Gtk.FileDialog:current-folder].
+ * [property@Gtk.FileDialog:initial-folder].
  *
  * The @callback will be called when the dialog is dismissed.
  * It should call [method@Gtk.FileDialog.open_multiple_finish]
@@ -1102,7 +1102,7 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
  * presenting a file chooser dialog to the user.
  *
  * The file chooser will initially be opened in the directory
- * [property@Gtk.FileDialog:current-folder].
+ * [property@Gtk.FileDialog:initial-folder].
  *
  * The @callback will be called when the dialog is dismissed.
  * It should call [method@Gtk.FileDialog.select_multiple_folders_finish]
