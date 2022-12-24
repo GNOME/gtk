@@ -151,7 +151,7 @@ response_received (GDBusConnection *connection,
       g_task_return_boolean (task, TRUE);
       break;
     case XDG_DESKTOP_PORTAL_CANCELLED:
-      g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "The portal dialog was closed");
+      g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED, "The portal dialog was dismissed by the user");
       break;
     case XDG_DESKTOP_PORTAL_FAILED:
     default:
@@ -252,8 +252,8 @@ canceled (GCancellable *cancellable,
   send_close (data);
 
   g_task_return_new_error (task,
-                           GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED,
-                           "The OpenURI portal call was cancelled programmatically");
+                           GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED,
+                           "The OpenURI portal call was cancelled by the application");
   g_object_unref (task);
 }
 
@@ -390,8 +390,8 @@ open_uri_done (GObject      *source,
         {
           g_error_free (error);
           g_task_return_new_error (data->task,
-                                   GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_ABORTED,
-                                   "The operation was aborted programmatically");
+                                   GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED,
+                                   "The operation was cancelled by the application");
         }
       else
         g_task_return_error (data->task, error);

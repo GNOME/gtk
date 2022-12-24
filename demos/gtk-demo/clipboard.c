@@ -244,8 +244,9 @@ open_file_cb (GtkWidget *button)
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW)),
                         NULL,
-                        NULL,
                         file_chooser_response, button);
+
+  g_object_unref (dialog);
 }
 
 static void
@@ -277,9 +278,11 @@ open_folder_cb (GtkWidget *button)
   gtk_file_dialog_select_folder (dialog,
                                  GTK_WINDOW (gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW)),
                                  NULL,
-                                 NULL,
                                  folder_chooser_response, button);
+
+  g_object_unref (dialog);
 }
+
 static void
 update_paste_button_sensitivity (GdkClipboard *clipboard,
                                  GtkWidget    *paste_button)

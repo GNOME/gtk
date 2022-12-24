@@ -569,10 +569,10 @@ show_open_filechooser (NodeEditorWindow *self)
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "Open node file");
   cwd = g_file_new_for_path (".");
-  gtk_file_dialog_set_current_folder (dialog, cwd);
+  gtk_file_dialog_set_initial_folder (dialog, cwd);
   g_object_unref (cwd);
   gtk_file_dialog_open (dialog, GTK_WINDOW (self),
-                        NULL, NULL, open_response_cb, self);
+                        NULL, open_response_cb, self);
   g_object_unref (dialog);
 }
 
@@ -633,12 +633,11 @@ save_cb (GtkWidget        *button,
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "Save node");
   cwd = g_file_new_for_path (".");
-  gtk_file_dialog_set_current_folder (dialog, cwd);
+  gtk_file_dialog_set_initial_folder (dialog, cwd);
+  gtk_file_dialog_set_initial_name (dialog, "demo.node");
   g_object_unref (cwd);
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                        NULL,
-                        "demo.node",
                         NULL,
                         save_response_cb, self);
   g_object_unref (dialog);
@@ -742,10 +741,9 @@ export_image_cb (GtkWidget        *button,
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "");
+  gtk_file_dialog_set_initial_name (dialog, "example.png");
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
-                        NULL,
-                        "example.png",
                         NULL,
                         export_image_response_cb, texture);
   g_object_unref (dialog);

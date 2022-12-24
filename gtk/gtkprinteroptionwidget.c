@@ -707,11 +707,12 @@ filesave_choose_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   GtkFileDialog *dialog;
-  GFile *current_folder = NULL;
-  char *current_name = NULL;
 
   /* this will be unblocked in the dialog_response_callback function */
   g_signal_handler_block (priv->source, priv->source_changed_handler);
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Select a filename"));
 
   /* select the current filename in the dialog */
   if (priv->source != NULL && priv->source->value != NULL)
@@ -720,32 +721,16 @@ filesave_choose_cb (GtkWidget              *button,
       if (priv->last_location)
         {
           if (g_file_query_file_type (priv->last_location, 0, NULL) == G_FILE_TYPE_DIRECTORY)
-            {
-              current_folder = g_object_ref (priv->last_location);
-              current_name = NULL;
-            }
+            gtk_file_dialog_set_initial_folder (dialog, priv->last_location);
           else
-            {
-              current_folder = g_file_get_parent (priv->last_location);
-              current_name = g_file_get_basename (priv->last_location);
-              if (strcmp (current_name, "/") == 0 ||
-                  !g_utf8_validate (current_name, -1, NULL))
-                g_clear_pointer (&current_name, g_free);
-            }
+            gtk_file_dialog_set_initial_file (dialog, priv->last_location);
         }
     }
 
-  dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, _("Select a filename"));
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (widget))),
-                        current_folder,
-                        current_name,
                         NULL,
                         dialog_response_callback, widget);
-
-  g_object_unref (current_folder);
-  g_free (current_name);
 }
 
 static char *

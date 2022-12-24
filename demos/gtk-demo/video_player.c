@@ -56,7 +56,7 @@ open_clicked_cb (GtkWidget *button,
   gtk_file_filter_set_name (filter, "Video");
   g_list_store_append (filters, filter);
 
-  gtk_file_dialog_set_current_filter (dialog, filter);
+  gtk_file_dialog_set_default_filter (dialog, filter);
   g_object_unref (filter);
 
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
@@ -64,7 +64,6 @@ open_clicked_cb (GtkWidget *button,
 
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (gtk_widget_get_root (button)),
-                        NULL,
                         NULL,
                         open_dialog_response_cb, video);
 }

@@ -237,7 +237,7 @@ activate_open_file (GSimpleAction *action,
   GtkFileDialog *dialog;
 
   dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_open (dialog, NULL, NULL, NULL, file_chooser_response, NULL);
+  gtk_file_dialog_open (dialog, NULL, NULL, file_chooser_response, NULL);
   g_object_unref (dialog);
 }
 

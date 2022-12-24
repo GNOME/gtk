@@ -87,7 +87,8 @@ void            gtk_alert_dialog_choose             (GtkAlertDialog      *self,
 
 GDK_AVAILABLE_IN_4_10
 int             gtk_alert_dialog_choose_finish      (GtkAlertDialog      *self,
-                                                     GAsyncResult        *result);
+                                                     GAsyncResult        *result,
+                                                     GError             **error);
 
 GDK_AVAILABLE_IN_4_10
 void            gtk_alert_dialog_show               (GtkAlertDialog      *self,

@@ -1125,14 +1125,14 @@ typedef struct {
 } ConfirmDeleteData;
 
 static void
-on_confirm_delete_response (GObject *source,
+on_confirm_delete_response (GObject      *source,
                             GAsyncResult *result,
-                            void *user_data)
+                            void         *user_data)
 {
   ConfirmDeleteData *data = user_data;
   int button;
 
-  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result);
+  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result, NULL);
 
   if (button == 1)
     {
@@ -4955,14 +4955,14 @@ request_response_and_add_to_recent_list (GtkFileChooserWidget *impl)
 }
 
 static void
-on_confirm_overwrite_response (GObject *source,
+on_confirm_overwrite_response (GObject      *source,
                                GAsyncResult *result,
-                               void *user_data)
+                               void         *user_data)
 {
   GtkFileChooserWidget *impl = user_data;
   int button;
 
-  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result);
+  button = gtk_alert_dialog_choose_finish (GTK_ALERT_DIALOG (source), result, NULL);
 
   if (button == 1)
     {

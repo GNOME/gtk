@@ -914,9 +914,9 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 }
 
 static void
-question_dialog_button_clicked (GObject *source,
+question_dialog_button_clicked (GObject      *source,
                                 GAsyncResult *result,
-                                void *user_data)
+                                void         *user_data)
 {
   GtkAlertDialog *dialog = GTK_ALERT_DIALOG (source);
   GMountOperation *op = user_data;
@@ -925,7 +925,7 @@ question_dialog_button_clicked (GObject *source,
 
   operation = GTK_MOUNT_OPERATION (op);
 
-  button = gtk_alert_dialog_choose_finish (dialog, result);
+  button = gtk_alert_dialog_choose_finish (dialog, result, NULL);
   if (button >= 0)
     {
       g_mount_operation_set_choice (op, button);
