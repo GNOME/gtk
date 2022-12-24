@@ -73,7 +73,7 @@
  * just add any child widget and not worry about the details.
  *
  * If [method@Gtk.ScrolledWindow.set_child] has added a `GtkViewport` for you,
- * it will be automatically removed hen you unset the child.
+ * it will be automatically removed when you unset the child.
  * Unless [property@Gtk.ScrolledWindow:hscrollbar-policy] and
  * [property@Gtk.ScrolledWindow:vscrollbar-policy] are %GTK_POLICY_NEVER or
  * %GTK_POLICY_EXTERNAL, `GtkScrolledWindow` adds internal `GtkScrollbar` widgets
@@ -126,7 +126,6 @@
  *
  * `GtkScrolledWindow` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
  */
-
 
 /* scrolled window policy and size requisition handling:
  *

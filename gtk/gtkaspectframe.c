@@ -454,7 +454,7 @@ gtk_aspect_frame_get_ratio (GtkAspectFrame *self)
  * gtk_aspect_frame_set_obey_child: (attributes org.gtk.Method.set_propery=obey-child)
  * @self: a `GtkAspectFrame`
  * @obey_child: If %TRUE, @ratio is ignored, and the aspect
- *    ratio is taken from the requistion of the child.
+ *    ratio is taken from the requisition of the child.
  *
  * Sets whether the aspect ratio of the child's size
  * request should override the set aspect ratio of
