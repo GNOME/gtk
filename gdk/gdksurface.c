@@ -2789,9 +2789,10 @@ check_autohide (GdkEvent *event)
 {
   GdkDisplay *display;
   GdkDevice *device;
-  GdkSurface *grab_surface;
+  GdkSurface *grab_surface, *event_surface;
+  GdkEventType evtype = gdk_event_get_event_type (event);
 
- switch ((guint) gdk_event_get_event_type (event))
+ switch ((guint) evtype)
     {
     case GDK_BUTTON_PRESS:
 #if 0
@@ -2810,13 +2811,15 @@ check_autohide (GdkEvent *event)
       device = gdk_event_get_device (event);
       if (gdk_device_grab_info (display, device, &grab_surface, NULL))
         {
-          GdkSurface *event_surface;
-
           event_surface = gdk_event_get_surface (event);
+          if (event_surface->autohide &&
+              !event_surface->has_pointer)
+            event_surface = NULL;
 
-          if (grab_surface != event_surface &&
-              grab_surface != event_surface->parent &&
-              grab_surface->autohide)
+          if (grab_surface->autohide &&
+              (!event_surface ||
+               (grab_surface != event_surface &&
+                grab_surface != event_surface->parent)))
             {
               GdkSurface *surface = grab_surface;
 
@@ -2830,6 +2833,13 @@ check_autohide (GdkEvent *event)
               return TRUE;
             }
         }
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      event_surface = gdk_event_get_surface (event);
+      if (event_surface->autohide &&
+          gdk_crossing_event_get_mode (event) == GDK_CROSSING_NORMAL)
+        event_surface->has_pointer = evtype == GDK_ENTER_NOTIFY;
       break;
     default:;
     }
