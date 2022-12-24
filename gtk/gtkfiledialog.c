@@ -674,7 +674,7 @@ gtk_file_dialog_set_initial_folder (GtkFileDialog *self,
   if (!g_set_object (&self->initial_folder, folder))
     return;
 
-  if (self->initial_name)
+  if (self->initial_name && self->initial_folder)
     {
       g_clear_object (&self->initial_file);
       self->initial_file = g_file_get_child_for_display_name (self->initial_folder,
@@ -725,7 +725,7 @@ gtk_file_dialog_set_initial_name (GtkFileDialog *self,
   if (!g_set_str (&self->initial_name, name))
     return;
 
-  if (self->initial_name)
+  if (self->initial_name && self->initial_folder)
     {
       g_clear_object (&self->initial_file);
       self->initial_file = g_file_get_child_for_display_name (self->initial_folder,
