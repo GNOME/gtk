@@ -1,6 +1,71 @@
 Overview of Changes in 4.9.2, xx-xx-xxxx
 ========================================
 
+* GtkFileChooserWidget:
+ - Add a grid view
+
+* GtkText, GtkTextView:
+ - Fix activation of the on-screen keyboard
+ - Prevent unexpected text direction changes
+
+* GtkCenterBox:
+ - Add properties for children
+
+* GtkTreeExpander:
+ - Add a hide-expander property
+
+* GtkStringList:
+ - Add a construct-only strings property
+
+* GtkBuilder:
+ - Support parsing Pango attributes in string form
+
+* GtkGestureStylus:
+ - Add a stylus-only property
+
+* GtkFileLauncher:
+ - New async-style api to replace gtk_show_uri
+
+* GtkColorDialog, GtkFontDialog, GtkFileDialog,
+  GtkAlertDialog:
+ - APIs have seen some tweaks
+ - Prefer portals when available
+ - Fixes for cancellation
+
+* Add GDK_DEBUG=no-portals
+
+* Improve file DND with remote files
+
+* GtkInfoBar has been deprecated
+
+* gtk_widget_show/hide have been deprecated
+
+* gtk_show_uri has been deprecated
+
+* Wayland:
+ - Fix button mask handling
+ - Fix problems with cursor size on hi-dpi screens
+ - Support newer versions of some protocols
+ - Fix handling of surrounding text in input methods
+
+* X11:
+ - Fix some ordering problems with surface destruction
+
+* Windows:
+ - Improved system settings integration
+ - Fix window resizing work with native decorations
+ - Include a full hicolor index.theme file as a resource
+
+* Translation updates
+ Croatian
+ Dutch
+ Hungarian
+ Interlingua
+ Persian
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.9.1, 31-10-2022
 ========================================
 
