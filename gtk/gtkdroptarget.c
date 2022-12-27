@@ -292,9 +292,13 @@ gtk_drop_target_load_local (GtkDropTarget *self,
   if (gdk_content_provider_get_value (gdk_drag_get_content (drag),
                                       &self->value,
                                       NULL))
-    return TRUE;
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VALUE]);
+      return TRUE;
+    }
 
   g_value_unset (&self->value);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VALUE]);
   return FALSE;
 }
 
