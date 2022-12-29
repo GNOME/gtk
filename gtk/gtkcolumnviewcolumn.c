@@ -579,7 +579,8 @@ gtk_column_view_column_remove_header (GtkColumnViewColumn *self)
 static void
 gtk_column_view_column_ensure_cells (GtkColumnViewColumn *self)
 {
-  if (self->view && gtk_widget_get_root (GTK_WIDGET (self->view)))
+  if (self->view && gtk_widget_get_root (GTK_WIDGET (self->view)) &&
+      gtk_column_view_column_get_visible (self))
     gtk_column_view_column_create_cells (self);
   else
     gtk_column_view_column_remove_cells (self);
@@ -804,8 +805,6 @@ void
 gtk_column_view_column_set_visible (GtkColumnViewColumn *self,
                                     gboolean             visible)
 {
-  GtkColumnViewCell *cell;
-
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
 
   if (self->visible == visible)
@@ -819,10 +818,7 @@ gtk_column_view_column_set_visible (GtkColumnViewColumn *self,
   if (self->header)
     gtk_widget_set_visible (GTK_WIDGET (self->header), visible);
 
-  for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
-    {
-      gtk_widget_set_visible (GTK_WIDGET (cell), visible);
-    }
+  gtk_column_view_column_ensure_cells (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VISIBLE]);
 }
