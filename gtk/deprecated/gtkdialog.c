@@ -169,6 +169,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * # Accessibility
  *
  * `GtkDialog` uses the %GTK_ACCESSIBLE_ROLE_DIALOG role.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 
 typedef struct _ResponseData ResponseData;
@@ -511,6 +513,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * delete event, and when [method@Gtk.Dialog.response] is called.
    * On a delete event, the response ID is %GTK_RESPONSE_DELETE_EVENT.
    * Otherwise, it depends on which action widget was clicked.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.Window] instead
    */
   dialog_signals[RESPONSE] =
     g_signal_new (I_("response"),
@@ -530,6 +534,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is the Escape key.
+   *
+   * Deprecated: 4.10: Use [class@Gtk.Window] instead
    */
   dialog_signals[CLOSE] =
     g_signal_new (I_("close"),
@@ -561,6 +567,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * g_object_get (settings, "gtk-dialogs-use-header", &header, NULL);
    * dialog = g_object_new (GTK_TYPE_DIALOG, header, TRUE, NULL);
    * ```
+   *
+   * Deprecated: 4.10: Use [class@Gtk.Window] instead
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
@@ -690,6 +698,8 @@ gtk_dialog_close (GtkDialog *dialog)
  * as described above.
  *
  * Returns: the new dialog as a `GtkWidget`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget*
 gtk_dialog_new (void)
@@ -766,6 +776,8 @@ gtk_dialog_new_empty (const char      *title,
  * ```
  *
  * Returns: a new `GtkDialog`
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget*
 gtk_dialog_new_with_buttons (const char     *title,
@@ -857,6 +869,8 @@ get_response_data (GtkDialog *dialog,
  *
  * If you want to add a non-activatable widget, simply pack it into
  * the @action_area field of the `GtkDialog` struct.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 void
 gtk_dialog_add_action_widget (GtkDialog *dialog,
@@ -898,6 +912,8 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * The button widget is returned, but usually you don’t need it.
  *
  * Returns: (transfer none): the `GtkButton` widget that was added
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
@@ -956,6 +972,8 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
  * repeatedly. The variable argument list should be %NULL-terminated
  * as with [ctor@Gtk.Dialog.new_with_buttons]. Each button must have both
  * text and response ID.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
@@ -983,6 +1001,8 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  *
  * Calls `gtk_widget_set_sensitive (widget, @setting)`
  * for each widget in the dialog’s action area with the given @response_id.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 void
 gtk_dialog_set_response_sensitive (GtkDialog *dialog,
@@ -1009,6 +1029,8 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  * Sets the default widget for the dialog based on the response ID.
  *
  * Pressing “Enter” normally activates the default widget.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 void
 gtk_dialog_set_default_response (GtkDialog *dialog,
@@ -1037,6 +1059,8 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
  * Emits the ::response signal with the given response ID.
  *
  * Used to indicate that the user has responded to the dialog in some way.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 void
 gtk_dialog_response (GtkDialog *dialog,
@@ -1060,6 +1084,8 @@ gtk_dialog_response (GtkDialog *dialog,
  *
  * Returns: (nullable) (transfer none): the @widget button that uses the given
  *   @response_id
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget*
 gtk_dialog_get_widget_for_response (GtkDialog *dialog,
@@ -1089,6 +1115,8 @@ gtk_dialog_get_widget_for_response (GtkDialog *dialog,
  *
  * Returns: the response id of @widget, or %GTK_RESPONSE_NONE
  *  if @widget doesn’t have a response id set.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 int
 gtk_dialog_get_response_for_widget (GtkDialog *dialog,
@@ -1398,6 +1426,8 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  * [property@Gtk.Dialog:use-header-bar] property is %TRUE.
  *
  * Returns: (type Gtk.HeaderBar) (transfer none): the header bar
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget *
 gtk_dialog_get_header_bar (GtkDialog *dialog)
@@ -1416,6 +1446,8 @@ gtk_dialog_get_header_bar (GtkDialog *dialog)
  * Returns the content area of @dialog.
  *
  * Returns: (type Gtk.Box) (transfer none): the content area `GtkBox`.
+ *
+ * Deprecated: 4.10: Use [class@Gtk.Window] instead
  */
 GtkWidget *
 gtk_dialog_get_content_area (GtkDialog *dialog)
