@@ -256,6 +256,8 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (label), 25);
   gtk_box_append (GTK_BOX (box), label);
 
   row = gtk_list_box_row_new ();
