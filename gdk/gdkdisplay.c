@@ -1114,7 +1114,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
 
 /**
  * gdk_display_open:
- * @display_name: the name of the display to open
+ * @display_name: (nullable): the name of the display to open
  *
  * Opens a display.
  *
