@@ -1,7 +1,7 @@
 [wrap-git]
 directory = libepoxy
 url = https://github.com/anholt/libepoxy.git
-revision = master
+revision = 2df68f811fc1a5f0a6d372ecdb887333ad3f540f
 depth = 1
 
 [provide]
