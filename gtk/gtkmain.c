@@ -48,6 +48,8 @@
 #undef STRICT
 #endif
 
+#include <hb-glib.h>
+
 #include <glib/gi18n-lib.h>
 
 #include "gtkbox.h"
@@ -781,20 +783,37 @@ gtk_is_initialized (void)
 GtkTextDirection
 gtk_get_locale_direction (void)
 {
-  /* Translate to default:RTL if you want your widgets
-   * to be RTL, otherwise translate to default:LTR.
-   * Do *not* translate it to "predefinito:LTR", if it
-   * it isn't default:LTR or default:RTL it will not work
-   */
-  char             *e   = _("default:LTR");
-  GtkTextDirection  dir = GTK_TEXT_DIR_LTR;
+  PangoLanguage *language;
+  const PangoScript *scripts;
+  int n_scripts;
 
-  if (g_strcmp0 (e, "default:RTL") == 0)
-    dir = GTK_TEXT_DIR_RTL;
-  else if (g_strcmp0 (e, "default:LTR") != 0)
-    g_warning ("Whoever translated default:LTR did so wrongly. Defaulting to LTR.");
+  language = gtk_get_default_language ();
+  scripts = pango_language_get_scripts (language, &n_scripts);
 
-  return dir;
+  if (n_scripts > 0)
+    {
+      for (int i = 0; i < n_scripts; i++)
+        {
+          hb_script_t script;
+
+          script = hb_glib_script_to_script ((GUnicodeScript) scripts[i]);
+
+          switch (hb_script_get_horizontal_direction (script))
+            {
+            case HB_DIRECTION_LTR:
+              return GTK_TEXT_DIR_LTR;
+            case HB_DIRECTION_RTL:
+              return GTK_TEXT_DIR_RTL;
+            case HB_DIRECTION_TTB:
+            case HB_DIRECTION_BTT:
+            case HB_DIRECTION_INVALID:
+            default:
+              break;
+            }
+        }
+    }
+
+  return GTK_TEXT_DIR_LTR;
 }
 
 /**
