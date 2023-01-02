@@ -113,7 +113,12 @@ release-build:
     - pip3 install --user meson~=0.64
     - meson subprojects download
     - meson subprojects update --reset
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS} _build
+    - meson setup
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
+            _build
     - meson compile -C _build
     - .gitlab-ci/run-tests.sh _build x11
 
@@ -338,7 +343,10 @@ static-scan:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _scan_build
+    - meson setup
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
+            _scan_build
     - ninja -C _scan_build scan-build
   artifacts:
     paths:
@@ -368,12 +376,18 @@ reference:
   image: $FEDORA_IMAGE
   stage: docs
   needs: []
-  variables:
-    EXTRA_MESON_FLAGS: "--buildtype=release --force-fallback-for=gdk-pixbuf,pango"
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=0.64
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} -Dgtk_doc=true -Dgdk-pixbuf:gtk_doc=true -Dpango:gtk_doc=true _build
+    - meson setup
+            ${COMMON_MESON_FLAGS}
+            --buildtype=release
+            --force-fallback-for=gdk-pixbuf,pango
+            -Dintrospection=enabled
+            -Dgtk_doc=true
+            -Dgdk-pixbuf:gtk_doc=true
+            -Dpango:gtk_doc=true
+            _build
     - meson compile -C _build
     - mkdir -p _reference/
     - mv _build/docs/reference/gdk/gdk4/ _reference/gdk4/
