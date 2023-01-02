@@ -2,7 +2,7 @@
 directory = pango
 url = https://gitlab.gnome.org/GNOME/pango.git
 push-url = ssh://git@ssh.gitlab.gnome.org:GNOME/pango.git
-revision = main
+revision = 1.50.12
 depth = 1
 
 [provide]
