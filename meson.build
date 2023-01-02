@@ -404,7 +404,7 @@ jpeg_dep       = dependency('libjpeg', 'jpeg')
 epoxy_dep      = dependency('epoxy', version: epoxy_req)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            default_options: ['tests=false'])
+                            default_options: ['tests=false', 'gobject_types=true'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 gi_dep         = dependency('gobject-introspection-1.0', version: introspection_req,
                             required: get_option('introspection').enabled() and
