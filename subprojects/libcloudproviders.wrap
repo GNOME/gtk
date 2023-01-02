@@ -2,7 +2,7 @@
 directory = libcloudproviders
 url = https://gitlab.gnome.org/World/libcloudproviders.git
 push-url = ssh://git@ssh.gitlab.gnome.org:World/libcloudproviders.git
-revision = master
+revision = 0.3.1
 depth = 1
 
 [provide]

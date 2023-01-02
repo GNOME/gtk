@@ -2,7 +2,7 @@
 directory = wayland
 url = https://gitlab.freedesktop.org/wayland/wayland.git
 push-url = git@gitlab.freedesktop.org:wayland/wayland
-revision = main
+revision = 1.21.0
 depth = 1
 
 [provide]
