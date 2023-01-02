@@ -139,7 +139,7 @@ gtk_accessible_update_state (GtkAccessible      *self,
                              GtkAccessibleState  first_state,
                              ...)
 {
-  GtkAccessibleState state;
+  int state;
   GtkATContext *context;
   va_list args;
 
@@ -157,7 +157,7 @@ gtk_accessible_update_state (GtkAccessible      *self,
     {
       GError *error = NULL;
       GtkAccessibleValue *value =
-        gtk_accessible_value_collect_for_state (state, &error, &args);
+        gtk_accessible_value_collect_for_state ((GtkAccessibleState) state, &error, &args);
 
       if (error != NULL)
         {
@@ -168,7 +168,7 @@ gtk_accessible_update_state (GtkAccessible      *self,
           goto out;
         }
 
-      gtk_at_context_set_accessible_state (context, state, value);
+      gtk_at_context_set_accessible_state (context, (GtkAccessibleState) state, value);
 
       if (value != NULL)
         gtk_accessible_value_unref (value);
@@ -286,7 +286,7 @@ gtk_accessible_update_property (GtkAccessible         *self,
                                 GtkAccessibleProperty  first_property,
                                 ...)
 {
-  GtkAccessibleProperty property;
+  int property;
   GtkATContext *context;
   va_list args;
 
@@ -304,7 +304,7 @@ gtk_accessible_update_property (GtkAccessible         *self,
     {
       GError *error = NULL;
       GtkAccessibleValue *value =
-        gtk_accessible_value_collect_for_property (property, &error, &args);
+        gtk_accessible_value_collect_for_property ((GtkAccessibleProperty) property, &error, &args);
 
       if (error != NULL)
         {
@@ -315,7 +315,7 @@ gtk_accessible_update_property (GtkAccessible         *self,
           goto out;
         }
 
-      gtk_at_context_set_accessible_property (context, property, value);
+      gtk_at_context_set_accessible_property (context, (GtkAccessibleProperty) property, value);
 
       if (value != NULL)
         gtk_accessible_value_unref (value);
@@ -433,7 +433,7 @@ gtk_accessible_update_relation (GtkAccessible         *self,
                                 GtkAccessibleRelation  first_relation,
                                 ...)
 {
-  GtkAccessibleRelation relation;
+  int relation;
   GtkATContext *context;
   va_list args;
 
@@ -451,7 +451,7 @@ gtk_accessible_update_relation (GtkAccessible         *self,
     {
       GError *error = NULL;
       GtkAccessibleValue *value =
-        gtk_accessible_value_collect_for_relation (relation, &error, &args);
+        gtk_accessible_value_collect_for_relation ((GtkAccessibleRelation) relation, &error, &args);
 
       if (error != NULL)
         {
@@ -462,7 +462,7 @@ gtk_accessible_update_relation (GtkAccessible         *self,
           goto out;
         }
 
-      gtk_at_context_set_accessible_relation (context, relation, value);
+      gtk_at_context_set_accessible_relation (context, (GtkAccessibleRelation) relation, value);
 
       if (value != NULL)
         gtk_accessible_value_unref (value);
