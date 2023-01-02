@@ -3491,7 +3491,7 @@ gtk_text_buffer_get_modified (GtkTextBuffer *buffer)
  * Whenever the buffer is saved to disk, call
  * `gtk_text_buffer_set_modified (@buffer, FALSE)`.
  * When the buffer is modified, it will automatically
- * toggled on the modified bit again. When the modified
+ * toggle on the modified bit again. When the modified
  * bit flips, the buffer emits the
  * [signal@Gtk.TextBuffer::modified-changed] signal.
  */
@@ -3871,7 +3871,7 @@ gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer,
  *   [method@Gtk.TextBuffer.add_selection_clipboard]
  *
  * Removes a `GdkClipboard` added with
- * gtk_text_buffer_add_selection_clipboard().
+ * [method@Gtk.TextBuffer.add_selection_clipboard]
  */
 void
 gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer,
@@ -4882,7 +4882,7 @@ gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
  *
  * Gets whether there is a redoable action in the history.
  *
- * Returns: %TRUE if there is an redoable action
+ * Returns: %TRUE if there is a redoable action
  */
 gboolean
 gtk_text_buffer_get_can_redo (GtkTextBuffer *buffer)
@@ -5003,6 +5003,8 @@ gtk_text_buffer_redo (GtkTextBuffer *buffer)
  * See [method@Gtk.TextBuffer.begin_irreversible_action] and
  * [method@Gtk.TextBuffer.end_irreversible_action] to create
  * changes to the buffer that cannot be undone.
+ *
+ * Returns: %TRUE if undoing and redoing changes to the buffer is allowed.
  */
 gboolean
 gtk_text_buffer_get_enable_undo (GtkTextBuffer *buffer)
@@ -5100,6 +5102,8 @@ gtk_text_buffer_end_irreversible_action (GtkTextBuffer *buffer)
  * If 0, unlimited undo actions may be performed. Note that this may
  * have a memory usage impact as it requires storing an additional
  * copy of the inserted or removed text within the text buffer.
+ *
+ * Returns: The max number of undo levels allowed (0 indicates unlimited).
  */
 guint
 gtk_text_buffer_get_max_undo_levels (GtkTextBuffer *buffer)
