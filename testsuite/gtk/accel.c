@@ -55,14 +55,13 @@ test_one_accel (const char *accel,
 						  *keycodes,
 						  mods);
 
-  g_print ("accel %s, label %s\n", accel, label);
-
-  g_assert_cmpstr (label, ==, exp_label);
-
   name = gtk_accelerator_name_with_keycode (NULL,
 					    accel_key,
 					    *keycodes,
 					    mods);
+  g_print ("accel %s, label %s, name %s, modes %d\n", accel, label, name, mods);
+
+  g_assert_cmpstr (label, ==, exp_label);
   g_assert_cmpstr (name, ==, accel);
 
   g_free (keycodes);
