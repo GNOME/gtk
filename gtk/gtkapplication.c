@@ -342,17 +342,6 @@ static void
 gtk_application_after_emit (GApplication *application,
                             GVariant     *platform_data)
 {
-  const char *startup_notification_id = NULL;
-
-  g_variant_lookup (platform_data, "desktop-startup-id", "&s", &startup_notification_id);
-  if (startup_notification_id)
-    {
-      GdkDisplay *display;
-
-      display = gdk_display_get_default ();
-      if (display)
-        gdk_display_notify_startup_complete (display, startup_notification_id);
-    }
 }
 
 static void
