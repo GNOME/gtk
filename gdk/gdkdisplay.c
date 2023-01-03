@@ -1148,6 +1148,8 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  * with custom startup-notification identifier unless
  * [method@Gtk.Window.set_auto_startup_notification]
  * is called to disable that feature.
+ *
+ * Deprecated: 4.10. Using gdk_toplevel_set_startup_id() is sufficient.
  */
 void
 gdk_display_notify_startup_complete (GdkDisplay  *display,

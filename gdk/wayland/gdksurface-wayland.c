@@ -3871,6 +3871,25 @@ static void
 gdk_wayland_surface_set_startup_id (GdkSurface  *surface,
                                     const char *startup_id)
 {
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  gchar *free_me = NULL;
+
+  if (!startup_id)
+    {
+      free_me = g_steal_pointer (&display_wayland->startup_notification_id);
+      startup_id = free_me;
+    }
+
+  if (startup_id)
+    {
+      xdg_activation_v1_activate (display_wayland->xdg_activation,
+                                  startup_id,
+                                  wayland_surface->display_server.wl_surface);
+    }
+
+  g_free (free_me);
 }
 
 static gboolean
