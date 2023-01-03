@@ -3896,6 +3896,28 @@ gtk_window_update_toplevel (GtkWindow         *window,
 }
 
 static void
+gtk_window_notify_startup (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (!disable_startup_notification)
+    {
+      /* Do we have a custom startup-notification id? */
+      if (priv->startup_id != NULL)
+        {
+          /* Make sure we have a "real" id */
+          if (!startup_id_is_fake (priv->startup_id))
+            gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
+
+          g_free (priv->startup_id);
+          priv->startup_id = NULL;
+        }
+      else
+        gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), NULL);
+    }
+}
+
+static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -3919,21 +3941,7 @@ gtk_window_map (GtkWidget *widget)
 
   gtk_window_set_theme_variant (window);
 
-  if (!disable_startup_notification)
-    {
-      /* Do we have a custom startup-notification id? */
-      if (priv->startup_id != NULL)
-        {
-          /* Make sure we have a "real" id */
-          if (!startup_id_is_fake (priv->startup_id))
-            gdk_display_notify_startup_complete (gtk_widget_get_display (widget), priv->startup_id);
-
-          g_free (priv->startup_id);
-          priv->startup_id = NULL;
-        }
-       else
-         gdk_display_notify_startup_complete (gtk_widget_get_display (widget), NULL);
-    }
+  gtk_window_notify_startup (window);
 
   /* inherit from transient parent, so that a dialog that is
    * opened via keynav shows focus initially
