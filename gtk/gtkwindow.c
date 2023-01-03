@@ -247,7 +247,7 @@ typedef struct
   guint    in_emit_close_request     : 1;
   guint    move_focus                : 1;
   guint    unset_default             : 1;
-
+  guint    in_present                : 1;
 
   GtkGesture *click_gesture;
   GtkEventController *application_shortcut_controller;
@@ -2265,11 +2265,9 @@ gtk_window_set_startup_id (GtkWindow   *window,
 	gtk_window_present_with_time (window, timestamp);
       else
         {
-          gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
-
-          /* If window is mapped, terminate the startup-notification too */
+          /* If window is mapped, terminate the startup-notification */
           if (_gtk_widget_get_mapped (widget) && !disable_startup_notification)
-            gdk_display_notify_startup_complete (gtk_widget_get_display (widget), priv->startup_id);
+            gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
         }
     }
 
@@ -3941,7 +3939,8 @@ gtk_window_map (GtkWidget *widget)
 
   gtk_window_set_theme_variant (window);
 
-  gtk_window_notify_startup (window);
+  if (!priv->in_present)
+    gtk_window_notify_startup (window);
 
   /* inherit from transient parent, so that a dialog that is
    * opened via keynav shows focus initially
@@ -4365,8 +4364,6 @@ gtk_window_realize (GtkWidget *widget)
             gdk_x11_surface_set_user_time (surface, timestamp);
         }
 #endif
-      if (!startup_id_is_fake (priv->startup_id))
-        gdk_toplevel_set_startup_id (GDK_TOPLEVEL (surface), priv->startup_id);
     }
 
 #ifdef GDK_WINDOWING_X11
@@ -5282,11 +5279,14 @@ gtk_window_present_with_time (GtkWindow *window,
   else
     {
       priv->initial_timestamp = timestamp;
+      priv->in_present = TRUE;
       gtk_widget_set_visible (widget, TRUE);
+      priv->in_present = FALSE;
     }
 
   g_assert (priv->surface != NULL);
   gdk_toplevel_focus (GDK_TOPLEVEL (priv->surface), timestamp);
+  gtk_window_notify_startup (window);
 }
 
 /**
