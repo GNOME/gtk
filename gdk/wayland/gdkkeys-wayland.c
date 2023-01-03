@@ -296,7 +296,7 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3")))
     state |= GDK_MOD3_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO)))
-    state |= GDK_MOD4_MASK;
+    state |= GDK_MOD4_MASK | GDK_SUPER_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5")))
     state |= GDK_MOD5_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Super")))
@@ -384,7 +384,7 @@ gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
   xkb_mod_index_t idx;
   uint32_t mods, real;
   struct { const char *name; GdkModifierType mask; } vmods[] = {
-    { "Super", GDK_SUPER_MASK },
+    { "Super", GDK_SUPER_MASK | GDK_MOD4_MASK },
     { "Hyper", GDK_HYPER_MASK },
     { "Meta", GDK_META_MASK },
     { NULL, 0 }
