@@ -5896,7 +5896,7 @@ _gtk_window_set_is_active (GtkWindow *window,
  * Sets whether the window should request startup notification.
  *
  * By default, after showing the first `GtkWindow`, GTK calls
- * [method@Gdk.Display.notify_startup_complete]. Call this function
+ * [method@Gdk.Toplevel.set_startup_id]. Call this function
  * to disable the automatic startup notification. You might do this
  * if your first window is a splash screen, and you want to delay
  * notification until after your real main window has been shown,
