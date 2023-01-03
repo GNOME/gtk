@@ -2648,6 +2648,7 @@ gdk_x11_surface_set_startup_id (GdkSurface   *surface,
 			       const char *startup_id)
 {
   GdkDisplay *display;
+  char *free_this = NULL;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -2664,6 +2665,23 @@ gdk_x11_surface_set_startup_id (GdkSurface   *surface,
   else
     XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface),
                      gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
+
+  if (startup_id == NULL)
+    {
+      GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+      startup_id = free_this = display_x11->startup_notification_id;
+      display_x11->startup_notification_id = NULL;
+
+      if (startup_id == NULL)
+        return;
+    }
+
+  gdk_x11_display_broadcast_startup_message (display, "remove",
+                                             "ID", startup_id,
+                                             NULL);
+
+  g_free (free_this);
 }
 
 static void
