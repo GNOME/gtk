@@ -77,7 +77,7 @@ void       gtk_toggle_button_set_active        (GtkToggleButton *toggle_button,
                                                 gboolean         is_active);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_toggle_button_get_active        (GtkToggleButton *toggle_button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_toggle_button_toggled           (GtkToggleButton *toggle_button);
 GDK_AVAILABLE_IN_ALL
 void       gtk_toggle_button_set_group         (GtkToggleButton *toggle_button,

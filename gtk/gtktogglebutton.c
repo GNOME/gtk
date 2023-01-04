@@ -426,7 +426,7 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
                                GTK_ACCESSIBLE_STATE_PRESSED, is_active,
                                -1);
 
-  gtk_toggle_button_toggled (toggle_button);
+  g_signal_emit (toggle_button, toggle_button_signals[TOGGLED], 0);
 
   g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_ACTIVE]);
 }
@@ -458,7 +458,7 @@ gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
  *
  * Emits the ::toggled signal on the `GtkToggleButton`.
  *
- * There is no good reason for an application ever to call this function.
+ * Deprecated: 4.10: There is no good reason for an application ever to call this function.
  */
 void
 gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
