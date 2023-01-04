@@ -261,6 +261,7 @@ static void
 open_uri (GFile               *file,
           gboolean             open_folder,
           const char          *parent_window,
+          const char          *activation_token,
           GAsyncReadyCallback  callback,
           gpointer             user_data)
 {
@@ -305,6 +306,9 @@ open_uri (GFile               *file,
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&opt_builder, "{sv}", "handle_token", g_variant_new_string (token));
   g_free (token);
+
+  if (activation_token)
+    g_variant_builder_add (&opt_builder, "{sv}", "activation_token", g_variant_new_string (activation_token));
 
   opts = g_variant_builder_end (&opt_builder);
 
@@ -408,8 +412,28 @@ window_handle_exported (GtkWindow  *window,
                         gpointer    user_data)
 {
   OpenUriData *data = user_data;
+  GdkDisplay *display;
+  GAppLaunchContext *context;
+  char *activation_token = NULL;
 
-  open_uri (data->file, data->open_folder, handle, open_uri_done, data);
+  if (window)
+    display = gtk_widget_get_display (GTK_WIDGET (window));
+  else
+    display = gdk_display_get_default ();
+
+  /* FIXME
+   * Call the vfunc directly since g_app_launch_context_get_startup_notify_id
+   * has NULL checks.
+   *
+   * We should have a more direct way to do this.
+   */
+  context = G_APP_LAUNCH_CONTEXT (gdk_display_get_app_launch_context (display));
+  activation_token = G_APP_LAUNCH_CONTEXT_GET_CLASS (context)->get_startup_notify_id (context, NULL, NULL);
+  g_object_unref (context);
+
+  open_uri (data->file, data->open_folder, handle, activation_token, open_uri_done, data);
+
+  g_free (activation_token);
 }
 
 void
