@@ -224,7 +224,6 @@ gtk/gtklistitemwidget.c
 gtk/gtklistview.c
 gtk/gtklockbutton.c
 gtk/gtkmagnifier.c
-gtk/gtkmain.c
 gtk/gtkmaplistmodel.c
 gtk/gtkmediacontrols.c
 gtk/gtkmediafile.c
