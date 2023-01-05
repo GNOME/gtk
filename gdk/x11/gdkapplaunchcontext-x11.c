@@ -283,6 +283,9 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   GFileInfo *fileinfo;
   GdkAppLaunchContext *ctx;
 
+  if (!info)
+    return NULL;
+
   ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
   display = ctx->display;
