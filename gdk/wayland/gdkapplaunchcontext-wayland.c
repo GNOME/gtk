@@ -65,6 +65,8 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       GdkSurface *focus_surface;
       AppLaunchData app_launch_data = { 0 };
 
+      g_print("gdk_wayland_app_launch_context_get_startup_notify_id: %s\n", display->xdg_activation);
+
       event_queue = wl_display_create_queue (display->wl_display);
 
       seat = GDK_WAYLAND_SEAT (gdk_display_get_default_seat (GDK_DISPLAY (display)));

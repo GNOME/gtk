@@ -296,6 +296,7 @@ gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                               GAppInfo          *info,
                                               GList             *files)
 {
+ g_print("gdk_app_launch_context_get_startup_notify_id: Empty func\n");
  return NULL;
 }
 

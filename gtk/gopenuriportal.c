@@ -429,6 +429,7 @@ window_handle_exported (GtkWindow  *window,
    */
   context = G_APP_LAUNCH_CONTEXT (gdk_display_get_app_launch_context (display));
   activation_token = G_APP_LAUNCH_CONTEXT_GET_CLASS (context)->get_startup_notify_id (context, NULL, NULL);
+  g_print("window_handle_exported: activation_token: %s\n", activation_token);
   g_object_unref (context);
 
   open_uri (data->file, data->open_folder, handle, activation_token, open_uri_done, data);
