@@ -8492,7 +8492,9 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
 {
   GtkWidget *widget;
   GtkWidget *parent;
+  GtkWidget *bounds_relative_to;
   double translated_x, translated_y;
+  graphene_rect_t *bounds;
    
   widget = GTK_WIDGET (self);
   if (!gtk_widget_get_realized (widget))
@@ -8505,12 +8507,20 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
       gtk_widget_translate_coordinates (widget, parent, 0., 0., &translated_x, &translated_y);
       *x = (int)translated_x;
       *y = (int)translated_y;
+      bounds_relative_to = parent;
     }
   else
-    *x = *y = 0;
+    {
+      *x = *y = 0;
+      bounds_relative_to = widget;
+    }
 
-  *width = gtk_widget_get_width (widget);
-  *height = gtk_widget_get_height (widget);
+  bounds = graphene_rect_alloc ();
+  if (!gtk_widget_compute_bounds (widget, bounds_relative_to, bounds))
+    *width, *height = 0;
+    *width = (int)graphene_rect_get_width (bounds);
+  *height = (int)graphene_rect_get_height (bounds);
+  graphene_rect_free (bounds);
 
   return true;
 }
