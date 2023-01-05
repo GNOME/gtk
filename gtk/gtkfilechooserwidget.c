@@ -4914,17 +4914,31 @@ gtk_file_chooser_widget_get_shortcut_folders (GtkFileChooser *chooser)
 static void
 switch_to_selected_folder (GtkFileChooserWidget *impl)
 {
-  GFileInfo *info;
-  GFile *file;
+  GtkBitsetIter iter;
+  GtkBitset *bitset;
+  unsigned int i;
 
-  g_assert (!impl->select_multiple);
-  g_assert (GTK_IS_SINGLE_SELECTION (impl->selection_model));
+  bitset = gtk_selection_model_get_selection (impl->selection_model);
 
-  info = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (impl->selection_model));
-  g_assert (info != NULL);
+  for (gtk_bitset_iter_init_first (&iter, bitset, &i);
+       gtk_bitset_iter_is_valid (&iter);
+       gtk_bitset_iter_next (&iter, &i))
+    {
+      GFileInfo *info;
 
-  file = _gtk_file_info_get_file (info);
-  change_folder_and_display_error (impl, file, FALSE);
+      info = g_list_model_get_item (G_LIST_MODEL (impl->selection_model), i);
+      if (_gtk_file_info_consider_as_directory (info))
+        {
+          GFile *file;
+
+          file = _gtk_file_info_get_file (info);
+          change_folder_and_display_error (impl, file, FALSE);
+          g_object_unref (info);
+          return;
+        }
+
+      g_clear_object (&info);
+    }
 }
 
 /* Gets the display name of the selected file in the file list; assumes single
