@@ -858,7 +858,7 @@ find_window_for_ns_event (NSEvent *nsevent,
        * macOS versions. These trigger 4 pixels out from the window's
        * frame so we obtain that rect and adjust it for hit testing.
        */
-      if (!nsevent.trackingArea && gdk_quartz_osx_version >= GDK_OSX_VENTURA)
+      if (!nsevent.trackingArea && gdk_quartz_osx_version() >= GDK_OSX_VENTURA)
         {
           static const int border_width = 4;
           NSRect frame = nsevent.window.frame;
