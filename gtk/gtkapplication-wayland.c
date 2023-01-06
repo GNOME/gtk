@@ -27,6 +27,7 @@
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 #include <gdk/wayland/gdksurface-wayland.h>
+#include <gdk/wayland/gdktoplevel-wayland-private.h>
 #include <gdk/wayland/idle-inhibit-unstable-v1-client-protocol.h>
 
 typedef struct

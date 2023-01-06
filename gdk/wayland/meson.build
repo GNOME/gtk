@@ -16,6 +16,7 @@ gdk_wayland_sources = files([
   'gdkmonitor-wayland.c',
   'gdkprimary-wayland.c',
   'gdksurface-wayland.c',
+  'gdktoplevel-wayland.c',
   'gdkvulkancontext-wayland.c',
   'wm-button-layout-translation.c',
 ])

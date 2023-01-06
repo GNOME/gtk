@@ -95,6 +95,9 @@ void gdk_wayland_surface_update_size       (GdkSurface *surface,
                                             int32_t     width,
                                             int32_t     height,
                                             int         scale);
+void gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface);
+void _gdk_wayland_surface_save_size (GdkSurface *surface);
+
 
 #define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
