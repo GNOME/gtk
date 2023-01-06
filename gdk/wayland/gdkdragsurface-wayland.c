@@ -71,7 +71,6 @@ gdk_wayland_drag_surface_init (GdkWaylandDragSurface *surface)
 {
 }
 
-
 static gboolean
 gdk_wayland_drag_surface_compute_size (GdkSurface *surface)
 {
@@ -93,9 +92,9 @@ gdk_wayland_drag_surface_compute_size (GdkSurface *surface)
 static void
 gdk_wayland_drag_surface_class_init (GdkWaylandDragSurfaceClass *class)
 {
-  GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (class);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (class);
 
-  impl_class->compute_size = gdk_wayland_drag_surface_compute_size;
+  surface_class->compute_size = gdk_wayland_drag_surface_compute_size;
 }
 
 static void

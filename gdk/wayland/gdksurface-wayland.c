@@ -185,8 +185,6 @@ static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
   impl->scale = 1;
-  impl->saved_width = -1;
-  impl->saved_height = -1;
 }
 
 void
@@ -211,35 +209,6 @@ gdk_wayland_surface_thaw_state (GdkSurface *surface)
 
   if (impl->pending.is_dirty)
     gdk_wayland_surface_configure (surface);
-}
-
-void
-_gdk_wayland_surface_save_size (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
-                        GDK_TOPLEVEL_STATE_MAXIMIZED |
-                        GDK_TOPLEVEL_STATE_TILED))
-    return;
-
-  if (surface->width <= 1 || surface->height <= 1)
-    return;
-
-  impl->saved_width = surface->width - impl->shadow_left - impl->shadow_right;
-  impl->saved_height = surface->height - impl->shadow_top - impl->shadow_bottom;
-}
-
-static void
-_gdk_wayland_surface_clear_saved_size (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN | GDK_TOPLEVEL_STATE_MAXIMIZED))
-    return;
-
-  impl->saved_width = -1;
-  impl->saved_height = -1;
 }
 
 void
@@ -391,26 +360,6 @@ configure_drag_surface_geometry (GdkSurface *surface)
                                    impl->next_layout.configured_width,
                                    impl->next_layout.configured_height,
                                    impl->scale);
-}
-
-static gboolean
-gdk_wayland_surface_compute_size (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (impl->next_layout.surface_geometry_dirty)
-    {
-      if (GDK_IS_WAYLAND_TOPLEVEL (impl))
-        configure_toplevel_geometry (GDK_WAYLAND_TOPLEVEL (surface));
-      else if (GDK_IS_WAYLAND_POPUP (impl))
-        configure_popup_geometry (GDK_WAYLAND_POPUP (surface));
-      else if (GDK_IS_DRAG_SURFACE (impl))
-        configure_drag_surface_geometry (surface);
-
-      impl->next_layout.surface_geometry_dirty = FALSE;
-    }
-
-  return FALSE;
 }
 
 static void
@@ -1136,8 +1085,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   unset_transient_for_exported (surface);
 
   impl->last_sent_window_geometry = (GdkRectangle) { 0 };
-
-  _gdk_wayland_surface_clear_saved_size (surface);
   impl->mapped = FALSE;
 }
 
@@ -1325,26 +1272,25 @@ static void
 gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
   object_class->constructed = gdk_wayland_surface_constructed;
   object_class->dispose = gdk_wayland_surface_dispose;
   object_class->finalize = gdk_wayland_surface_finalize;
 
-  impl_class->hide = gdk_wayland_surface_hide;
-  impl_class->get_geometry = gdk_wayland_surface_get_geometry;
-  impl_class->get_root_coords = gdk_wayland_surface_get_root_coords;
-  impl_class->get_device_state = gdk_wayland_surface_get_device_state;
-  impl_class->set_input_region = gdk_wayland_surface_set_input_region;
-  impl_class->destroy = gdk_wayland_surface_destroy;
-  impl_class->beep = gdk_wayland_surface_beep;
+  surface_class->hide = gdk_wayland_surface_hide;
+  surface_class->get_geometry = gdk_wayland_surface_get_geometry;
+  surface_class->get_root_coords = gdk_wayland_surface_get_root_coords;
+  surface_class->get_device_state = gdk_wayland_surface_get_device_state;
+  surface_class->set_input_region = gdk_wayland_surface_set_input_region;
+  surface_class->destroy = gdk_wayland_surface_destroy;
+  surface_class->beep = gdk_wayland_surface_beep;
 
-  impl_class->destroy_notify = gdk_wayland_surface_destroy_notify;
-  impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
-  impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
-  impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
-  impl_class->request_layout = gdk_wayland_surface_request_layout;
-  impl_class->compute_size = gdk_wayland_surface_compute_size;
+  surface_class->destroy_notify = gdk_wayland_surface_destroy_notify;
+  surface_class->drag_begin = _gdk_wayland_surface_drag_begin;
+  surface_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
+  surface_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
+  surface_class->request_layout = gdk_wayland_surface_request_layout;
 }
 
 /* }}} */

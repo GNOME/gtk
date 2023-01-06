@@ -20,7 +20,6 @@
 
 gboolean gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *wayland_toplevel);
 
-void configure_toplevel_geometry                  (GdkWaylandToplevel *toplevel);
 void gdk_wayland_surface_create_xdg_toplevel      (GdkWaylandToplevel *toplevel);
 void gdk_wayland_surface_configure_toplevel       (GdkWaylandToplevel *toplevel);
 void gdk_wayland_toplevel_sync_parent             (GdkWaylandToplevel *toplevel);

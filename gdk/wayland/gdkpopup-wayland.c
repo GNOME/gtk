@@ -350,23 +350,29 @@ frame_callback_popup (GdkWaylandPopup *wayland_popup)
         }
 }
 
-void
-configure_popup_geometry (GdkWaylandPopup *wayland_popup)
+static gboolean
+gdk_wayland_popup_compute_size (GdkSurface *surface)
 {
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_popup);
-  int x, y;
-  int width, height;
+  GdkWaylandPopup *wayland_popup = GDK_WAYLAND_POPUP (surface);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (surface);
 
-  x = wayland_popup->next_layout.x - wayland_surface->shadow_left;
-  y = wayland_popup->next_layout.y - wayland_surface->shadow_top;
-  width =
-    wayland_surface->next_layout.configured_width +
-    (wayland_surface->shadow_left + wayland_surface->shadow_right);
-  height =
-    wayland_surface->next_layout.configured_height +
-    (wayland_surface->shadow_top + wayland_surface->shadow_bottom);
+  if (wayland_surface->next_layout.surface_geometry_dirty)
+    {
+      int x, y, width, height;
 
-  gdk_wayland_surface_move_resize (GDK_SURFACE (wayland_popup), x, y, width, height);
+      x = wayland_popup->next_layout.x - wayland_surface->shadow_left;
+      y = wayland_popup->next_layout.y - wayland_surface->shadow_top;
+      width = wayland_surface->next_layout.configured_width +
+              (wayland_surface->shadow_left + wayland_surface->shadow_right);
+      height = wayland_surface->next_layout.configured_height +
+               (wayland_surface->shadow_top + wayland_surface->shadow_bottom);
+
+      gdk_wayland_surface_move_resize (surface, x, y, width, height);
+
+      wayland_surface->next_layout.surface_geometry_dirty = FALSE;
+    }
+
+  return FALSE;
 }
 
 void
@@ -1070,9 +1076,12 @@ static void
 gdk_wayland_popup_class_init (GdkWaylandPopupClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (class);
 
   object_class->get_property = gdk_wayland_popup_get_property;
   object_class->set_property = gdk_wayland_popup_set_property;
+
+  surface_class->compute_size = gdk_wayland_popup_compute_size;
 
   gdk_popup_install_properties (object_class, 1);
 }

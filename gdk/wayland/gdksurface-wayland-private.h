@@ -64,9 +64,6 @@ struct _GdkWaylandSurface
 
   GdkRectangle last_sent_window_geometry;
 
-  int saved_width;
-  int saved_height;
-
   struct {
     gboolean is_initial_configure;
     uint32_t serial;

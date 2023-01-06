@@ -25,7 +25,6 @@ void update_popup_layout_state (GdkWaylandPopup *wayland_popup,
                                 int              height,
                                 GdkPopupLayout  *layout);
 
-void configure_popup_geometry                     (GdkWaylandPopup *popup);
 void gdk_wayland_surface_configure_popup          (GdkWaylandPopup *popup);
 void frame_callback_popup                         (GdkWaylandPopup *popup);
 void gdk_wayland_popup_hide_surface               (GdkWaylandPopup *popup);
