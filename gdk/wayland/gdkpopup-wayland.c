@@ -46,7 +46,6 @@
 #include <unistd.h>
 
 #include "gdksurface-wayland-private.h"
-#include "gdkpopup-wayland-private.h"
 
 static void update_popup_layout_state (GdkWaylandPopup *wayland_popup,
                                        int              x,

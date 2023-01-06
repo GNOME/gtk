@@ -47,7 +47,6 @@
 
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
-#include "gdkpopup-wayland-private.h"
 
 /**
  * GdkWaylandSurface:
