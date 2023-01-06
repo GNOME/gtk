@@ -48,6 +48,13 @@
 #include "gdksurface-wayland-private.h"
 #include "gdkpopup-wayland-private.h"
 
+static void update_popup_layout_state (GdkWaylandPopup *wayland_popup,
+                                       int              x,
+                                       int              y,
+                                       int              width,
+                                       int              height,
+                                       GdkPopupLayout  *layout);
+
 /* {{{ Utilities */
 
 static gboolean
@@ -644,7 +651,7 @@ calculate_popup_rect (GdkWaylandPopup *wayland_popup,
   };
 }
 
-void
+static void
 update_popup_layout_state (GdkWaylandPopup *wayland_popup,
                            int              x,
                            int              y,
