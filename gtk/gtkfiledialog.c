@@ -959,9 +959,7 @@ create_file_chooser (GtkFileDialog        *self,
   file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
   if (self->initial_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);
-  if (self->initial_file)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), self->initial_file, NULL);
-  else if (self->initial_name)
+  if (self->initial_name && action == GTK_FILE_CHOOSER_ACTION_SAVE)
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), self->initial_name);
 
   return chooser;
