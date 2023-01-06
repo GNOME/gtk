@@ -149,7 +149,6 @@ main (int argc, char *argv[])
   GCancellable *cancellable;
   char *title = NULL;
   gboolean modal = TRUE;
-  char **shortcut_folders = NULL;
   char *initial_folder = NULL;
   char *initial_name = NULL;
   char *initial_file = NULL;
@@ -158,7 +157,6 @@ main (int argc, char *argv[])
   GOptionEntry options[] = {
     { "title", 0, 0, G_OPTION_ARG_STRING, &title, "Title", "TITLE" },
     { "nonmodal", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &modal, "Non-modal", NULL },
-    { "shortcut-folders", 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &shortcut_folders, "Shortcut folders", "FOLDER" },
     { "initial-folder", 0, 0, G_OPTION_ARG_FILENAME, &initial_folder, "Initial folder", "FOLDER" },
     { "initial-name", 0, 0, G_OPTION_ARG_STRING, &initial_name, "Initial name", "NAME" },
     { "initial-file", 0, 0, G_OPTION_ARG_FILENAME, &initial_file, "Initial file", "FILE" },
@@ -187,21 +185,6 @@ main (int argc, char *argv[])
   if (title)
     gtk_file_dialog_set_title (dialog, title);
   gtk_file_dialog_set_modal (dialog, modal);
-  if (shortcut_folders)
-    {
-      GListStore *store;
-
-      store = g_list_store_new (G_TYPE_FILE);
-      for (int i = 0; shortcut_folders[i]; i++)
-        {
-          GFile *file = g_file_new_for_commandline_arg (shortcut_folders[i]);
-
-          g_list_store_append (store, file);
-          g_object_unref (file);
-        }
-      gtk_file_dialog_set_shortcut_folders (dialog, G_LIST_MODEL (store));
-      g_object_unref (store);
-    }
   if (initial_folder)
     {
       GFile *file = g_file_new_for_commandline_arg (initial_folder);

@@ -65,15 +65,6 @@ void             gtk_file_dialog_set_default_filter  (GtkFileDialog        *self
                                                       GtkFileFilter        *filter);
 
 GDK_AVAILABLE_IN_4_10
-GListModel *     gtk_file_dialog_get_shortcut_folders
-                                                     (GtkFileDialog        *self);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_set_shortcut_folders
-                                                     (GtkFileDialog        *self,
-                                                      GListModel           *shortcut_folders);
-
-GDK_AVAILABLE_IN_4_10
 GFile *          gtk_file_dialog_get_initial_folder  (GtkFileDialog        *self);
 
 GDK_AVAILABLE_IN_4_10
