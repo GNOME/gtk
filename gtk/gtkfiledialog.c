@@ -56,7 +56,6 @@ struct _GtkFileDialog
   unsigned int modal : 1;
 
   GListModel *filters;
-  GListModel *shortcut_folders;
   GtkFileFilter *default_filter;
   GFile *initial_folder;
   char *initial_name;
@@ -73,7 +72,6 @@ enum
   PROP_INITIAL_FOLDER,
   PROP_INITIAL_NAME,
   PROP_MODAL,
-  PROP_SHORTCUT_FOLDERS,
   PROP_TITLE,
 
   NUM_PROPERTIES
@@ -97,7 +95,6 @@ gtk_file_dialog_finalize (GObject *object)
   g_free (self->title);
   g_free (self->accept_label);
   g_clear_object (&self->filters);
-  g_clear_object (&self->shortcut_folders);
   g_clear_object (&self->default_filter);
   g_clear_object (&self->initial_folder);
   g_free (self->initial_name);
@@ -125,10 +122,6 @@ gtk_file_dialog_get_property (GObject      *object,
 
     case PROP_FILTERS:
       g_value_set_object (value, self->filters);
-      break;
-
-    case PROP_SHORTCUT_FOLDERS:
-      g_value_set_object (value, self->shortcut_folders);
       break;
 
     case PROP_DEFAULT_FILTER:
@@ -177,10 +170,6 @@ gtk_file_dialog_set_property (GObject      *object,
 
     case PROP_FILTERS:
       gtk_file_dialog_set_filters (self, g_value_get_object (value));
-      break;
-
-    case PROP_SHORTCUT_FOLDERS:
-      gtk_file_dialog_set_shortcut_folders (self, g_value_get_object (value));
       break;
 
     case PROP_DEFAULT_FILTER:
@@ -253,18 +242,6 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
    */
   properties[PROP_FILTERS] =
       g_param_spec_object ("filters", NULL, NULL,
-                           G_TYPE_LIST_MODEL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkFileDialog:shortcut-folders: (attributes org.gtk.Property.get=gtk_file_dialog_get_shortcut_folders org.gtk.Property.set=gtk_file_dialog_set_shortcut_folders)
-   *
-   * The list of shortcut folders.
-   *
-   * Since: 4.10
-   */
-  properties[PROP_SHORTCUT_FOLDERS] =
-      g_param_spec_object ("shortcut-folders", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -362,30 +339,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_file_chooser_add_filter (chooser, filter);
 G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (filter);
-    }
-}
-
-static void
-file_chooser_set_shortcut_folders (GtkFileChooser *chooser,
-                                   GListModel     *shortcut_folders)
-{
-  if (!shortcut_folders)
-    return;
-
-  for (unsigned int i = 0; i < g_list_model_get_n_items (shortcut_folders); i++)
-    {
-      GFile *folder = g_list_model_get_item (shortcut_folders, i);
-      GError *error = NULL;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      if (!gtk_file_chooser_add_shortcut_folder (chooser, folder, &error))
-        {
-          g_critical ("%s", error->message);
-          g_clear_error (&error);
-        }
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      g_object_unref (folder);
     }
 }
 
@@ -544,49 +497,6 @@ gtk_file_dialog_set_filters (GtkFileDialog *self,
     return;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILTERS]);
-}
-
-/**
- * gtk_file_dialog_get_shortcut_folders:
- * @self: a `GtkFileDialog`
- *
- * Gets the shortcut folders that will be available to
- * the user in the file chooser dialog.
- *
- * Returns: (nullable) (transfer none): the shortcut
- *   folders, as a `GListModel` of `GFiles`
- *
- * Since: 4.10
- */
-GListModel *
-gtk_file_dialog_get_shortcut_folders (GtkFileDialog *self)
-{
-  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
-
-  return self->shortcut_folders;
-}
-
-/**
- * gtk_file_dialog_set_shortcut_folders:
- * @self: a `GtkFileDialog`
- * @shortcut_folders: a `GListModel` of `GFiles`
- *
- * Sets the shortcut folders that will be available to
- * the user in the file chooser dialog.
- *
- * Since: 4.10
- */
-void
-gtk_file_dialog_set_shortcut_folders (GtkFileDialog *self,
-                                      GListModel    *shortcut_folders)
-{
-  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
-  g_return_if_fail (G_IS_LIST_MODEL (shortcut_folders));
-
-  if (!g_set_object (&self->shortcut_folders, shortcut_folders))
-    return;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHORTCUT_FOLDERS]);
 }
 
 /**
@@ -956,7 +866,6 @@ create_file_chooser (GtkFileDialog        *self,
         }
     }
 
-  file_chooser_set_shortcut_folders (GTK_FILE_CHOOSER (chooser), self->shortcut_folders);
   if (self->initial_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);
   if (self->initial_file)
