@@ -68,9 +68,6 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
 
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
-static void gdk_wayland_surface_show (GdkSurface *surface);
-static void gdk_wayland_surface_hide (GdkSurface *surface);
-
 static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
 static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
 static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
@@ -349,17 +346,6 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
     }
 
   gdk_surface_apply_state_change (surface);
-}
-
-static void
-configure_drag_surface_geometry (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  gdk_wayland_surface_update_size (surface,
-                                   impl->next_layout.configured_width,
-                                   impl->next_layout.configured_height,
-                                   impl->scale);
 }
 
 static void
@@ -692,8 +678,7 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                   int         scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  gboolean is_xdg_popup;
-  gboolean is_visible;
+  gboolean hide_temporarily;
 
   if (surface->width == width &&
       surface->height == height &&
@@ -705,17 +690,17 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
    * the initial configure is received, so hide and show the surface again
    * force the new size onto the compositor. See bug #772505.
    */
+  hide_temporarily = GDK_IS_WAYLAND_POPUP (surface) &&
+                     gdk_surface_get_mapped (surface) &&
+                     !impl->initial_configure_received;
 
-  is_xdg_popup = GDK_IS_WAYLAND_POPUP (surface);
-  is_visible = gdk_surface_get_mapped (surface);
-
-  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_wayland_surface_hide (surface);
+  if (hide_temporarily)
+    gdk_surface_hide (surface);
 
   gdk_wayland_surface_update_size (surface, width, height, scale);
 
-  if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_wayland_surface_show (surface);
+  if (hide_temporarily)
+    gdk_wayland_surface_create_wl_surface (surface);
 }
 
 static void
@@ -975,33 +960,6 @@ gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface)
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-gdk_wayland_surface_map_toplevel (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (!GDK_IS_WAYLAND_TOPLEVEL (surface))
-    return;
-
-  if (impl->mapped)
-    return;
-
-  gdk_wayland_surface_create_xdg_toplevel (GDK_WAYLAND_TOPLEVEL (surface));
-
-  impl->mapped = TRUE;
-}
-
-static void
-gdk_wayland_surface_show (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (!impl->display_server.wl_surface)
-    gdk_wayland_surface_create_wl_surface (surface);
-
-  gdk_wayland_surface_map_toplevel (surface);
 }
 
 static void
