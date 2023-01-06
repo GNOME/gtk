@@ -94,6 +94,12 @@ GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_set_initial_file    (GtkFileDialog        *self,
                                                       GFile                *file);
 
+GDK_AVAILABLE_IN_4_10
+const char *    gtk_file_dialog_get_accept_label     (GtkFileDialog        *self);
+
+GDK_AVAILABLE_IN_4_10
+void             gtk_file_dialog_set_accept_label    (GtkFileDialog        *self,
+                                                      const char           *accept_label);
 
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_dialog_open                (GtkFileDialog        *self,
@@ -159,11 +165,5 @@ GListModel *     gtk_file_dialog_select_multiple_folders_finish
                                                       GAsyncResult         *result,
                                                       GError              **error);
 
-GDK_AVAILABLE_IN_4_10
-const char *    gtk_file_dialog_get_accept_label     (GtkFileDialog        *self);
-
-GDK_AVAILABLE_IN_4_10
-void             gtk_file_dialog_set_accept_label    (GtkFileDialog        *self,
-                                                      const char           *accept_label);
 
 G_END_DECLS
