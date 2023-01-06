@@ -50,6 +50,13 @@
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
+static void gdk_wayland_toplevel_sync_parent             (GdkWaylandToplevel *toplevel);
+static void gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *toplevel);
+static void gdk_wayland_surface_create_xdg_toplevel      (GdkWaylandToplevel *toplevel);
+static void gdk_wayland_toplevel_sync_title              (GdkWaylandToplevel *toplevel);
+static gboolean gdk_wayland_toplevel_is_exported         (GdkWaylandToplevel *toplevel);
+static void unset_transient_for_exported                 (GdkWaylandToplevel *toplevel);
+
 /* {{{ GdkWaylandToplevel definition */
 
 /**
@@ -225,6 +232,8 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandToplevel *toplevel)
   toplevel->last_sent_geometry_hints.max_height = 0;
 
   gdk_wayland_toplevel_clear_saved_size (toplevel);
+
+  unset_transient_for_exported (toplevel);
 }
 
 static gboolean
@@ -241,7 +250,7 @@ is_realized_toplevel (GdkWaylandSurface *impl)
           toplevel->display_server.zxdg_toplevel_v6);
 }
 
-void
+static void
 gdk_wayland_toplevel_sync_parent (GdkWaylandToplevel *toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
@@ -292,7 +301,7 @@ gdk_wayland_toplevel_sync_parent (GdkWaylandToplevel *toplevel)
     }
 }
 
-void
+static void
 gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *toplevel)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
@@ -311,7 +320,7 @@ gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *toplevel)
                                     impl->display_server.wl_surface);
 }
 
-void
+static void
 gdk_wayland_toplevel_sync_title (GdkWaylandToplevel *toplevel)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
@@ -618,16 +627,7 @@ xdg_toplevel_configure (void                *data,
         }
     }
 
-  gdk_wayland_toplevel_handle_configure (toplevel, width, height, pending_state);
-}
-
-void
-gdk_wayland_toplevel_handle_configure (GdkWaylandToplevel *toplevel,
-                                       int32_t             width,
-                                       int32_t             height,
-                                       GdkToplevelState    state)
-{
-  toplevel->pending.state |= state;
+  toplevel->pending.state |= pending_state;
   toplevel->pending.width = width;
   toplevel->pending.height = height;
 }
@@ -724,7 +724,9 @@ zxdg_toplevel_v6_configure (void                    *data,
         }
     }
 
-  gdk_wayland_toplevel_handle_configure (toplevel, width, height, pending_state);
+  toplevel->pending.state |= pending_state;
+  toplevel->pending.width = width;
+  toplevel->pending.height = height;
 }
 
 static void
@@ -751,7 +753,7 @@ create_zxdg_toplevel_v6_resources (GdkWaylandToplevel *toplevel)
                                  toplevel);
 }
 
-void
+static void
 gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
@@ -1132,7 +1134,7 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
         }
     }
 
-  unset_transient_for_exported (GDK_SURFACE (toplevel));
+  unset_transient_for_exported (toplevel);
 
   if (parent)
     toplevel->transient_for = GDK_WAYLAND_TOPLEVEL (parent);
@@ -2358,10 +2360,10 @@ gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
  * marking surfaces as transient for out-of-process surfaces.
  */
 
-gboolean
-gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *wayland_toplevel)
+static gboolean
+gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *toplevel)
 {
-  return wayland_toplevel->xdg_exported != NULL || wayland_toplevel->xdg_exported_v2 != NULL;
+  return toplevel->xdg_exported != NULL || toplevel->xdg_exported_v2 != NULL;
 }
 
 typedef struct {
@@ -2458,23 +2460,18 @@ gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
   gdk_toplevel_unexport_handle (toplevel);
 }
 
-void
-unset_transient_for_exported (GdkSurface *surface)
+static void
+unset_transient_for_exported (GdkWaylandToplevel *toplevel)
 {
-  if (GDK_IS_WAYLAND_TOPLEVEL (surface))
-    {
-      GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
-
-      g_clear_pointer (&toplevel->imported_transient_for, zxdg_imported_v1_destroy);
-      g_clear_pointer (&toplevel->imported_transient_for_v2, zxdg_imported_v2_destroy);
-    }
+  g_clear_pointer (&toplevel->imported_transient_for, zxdg_imported_v1_destroy);
+  g_clear_pointer (&toplevel->imported_transient_for_v2, zxdg_imported_v2_destroy);
 }
 
 static void
 xdg_imported_destroyed (void                    *data,
                         struct zxdg_imported_v1 *zxdg_imported_v1)
 {
-  unset_transient_for_exported (GDK_SURFACE (data));
+  unset_transient_for_exported (GDK_WAYLAND_TOPLEVEL (data));
 }
 
 static const struct zxdg_imported_v1_listener xdg_imported_listener = {
@@ -2485,7 +2482,7 @@ static void
 xdg_imported_v2_destroyed (void                    *data,
                            struct zxdg_imported_v2 *zxdg_imported_v1)
 {
-  unset_transient_for_exported (GDK_SURFACE (data));
+  unset_transient_for_exported (GDK_WAYLAND_TOPLEVEL (data));
 }
 
 static const struct zxdg_imported_v2_listener xdg_imported_listener_v2 = {

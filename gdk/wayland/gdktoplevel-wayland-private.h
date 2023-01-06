@@ -18,22 +18,11 @@
 #pragma once
 
 
-gboolean gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *wayland_toplevel);
-
-void gdk_wayland_surface_create_xdg_toplevel      (GdkWaylandToplevel *toplevel);
 void gdk_wayland_surface_configure_toplevel       (GdkWaylandToplevel *toplevel);
-void gdk_wayland_toplevel_sync_parent             (GdkWaylandToplevel *toplevel);
-void gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *toplevel);
-void gdk_wayland_toplevel_sync_title              (GdkWaylandToplevel *toplevel);
 void gdk_wayland_toplevel_set_geometry_hints      (GdkWaylandToplevel *toplevel,
                                                    const GdkGeometry  *geometry,
                                                    GdkSurfaceHints     geom_mask);
-void gdk_wayland_toplevel_handle_configure        (GdkWaylandToplevel *toplevel,
-                                                   int32_t             width,
-                                                   int32_t             height,
-                                                   GdkToplevelState    state);
 void gdk_wayland_toplevel_hide_surface            (GdkWaylandToplevel *toplevel);
-void unset_transient_for_exported                 (GdkSurface         *surface);
 
 struct gtk_surface1 *
      gdk_wayland_toplevel_get_gtk_surface         (GdkWaylandToplevel *wayland_toplevel);
