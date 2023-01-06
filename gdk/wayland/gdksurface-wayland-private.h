@@ -85,7 +85,17 @@ typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 struct _GdkWaylandSurfaceClass
 {
   GdkSurfaceClass parent_class;
+
+  void (* handle_configure) (GdkWaylandSurface *surface);
+
+  void (* handle_frame) (GdkWaylandSurface *surface);
+
+  void (* hide_surface) (GdkWaylandSurface *surface);
 };
+
+#define GDK_WAYLAND_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
+
+#define GDK_WAYLAND_SURFACE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
 
 void gdk_wayland_surface_create_wl_surface (GdkSurface *surface);
 void gdk_wayland_surface_update_size       (GdkSurface *surface,

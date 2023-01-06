@@ -268,8 +268,7 @@ frame_callback (void               *data,
   if (!impl->awaiting_frame)
     return;
 
-  if (GDK_IS_WAYLAND_POPUP (surface))
-    frame_callback_popup (GDK_WAYLAND_POPUP (surface));
+  GDK_WAYLAND_SURFACE_GET_CLASS (impl)->handle_frame (impl);
 
   impl->awaiting_frame = FALSE;
   if (impl->awaiting_frame_frozen)
@@ -881,12 +880,7 @@ gdk_wayland_surface_configure (GdkSurface *surface)
 
   impl->has_uncommitted_ack_configure = TRUE;
 
-  if (GDK_IS_WAYLAND_POPUP (surface))
-    gdk_wayland_surface_configure_popup (GDK_WAYLAND_POPUP (surface));
-  else if (GDK_IS_WAYLAND_TOPLEVEL (surface))
-    gdk_wayland_surface_configure_toplevel (GDK_WAYLAND_TOPLEVEL (surface));
-  else
-    g_warn_if_reached ();
+  GDK_WAYLAND_SURFACE_GET_CLASS (impl)->handle_configure (impl);
 
   impl->last_configure_serial = impl->pending.serial;
 
@@ -1024,11 +1018,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           gdk_surface_thaw_updates (surface);
         }
 
-      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
-        gdk_wayland_toplevel_hide_surface (GDK_WAYLAND_TOPLEVEL (surface));
-
-      if (GDK_IS_WAYLAND_POPUP (surface))
-        gdk_wayland_popup_hide_surface (GDK_WAYLAND_POPUP (surface));
+      GDK_WAYLAND_SURFACE_GET_CLASS (impl)->hide_surface (impl);
 
       g_clear_pointer (&impl->display_server.wl_surface, wl_surface_destroy);
 
@@ -1225,6 +1215,21 @@ gdk_wayland_surface_set_opaque_region (GdkSurface     *surface,
 }
 
 static void
+gdk_wayland_surface_default_handle_configure (GdkWaylandSurface *surface)
+{
+}
+
+static void
+gdk_wayland_surface_default_handle_frame (GdkWaylandSurface *surface)
+{
+}
+
+static void
+gdk_wayland_surface_default_hide_surface (GdkWaylandSurface *surface)
+{
+}
+
+static void
 gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1247,6 +1252,10 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   surface_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
   surface_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   surface_class->request_layout = gdk_wayland_surface_request_layout;
+
+  klass->handle_configure = gdk_wayland_surface_default_handle_configure;
+  klass->handle_frame = gdk_wayland_surface_default_handle_frame;
+  klass->hide_surface = gdk_wayland_surface_default_hide_surface;
 }
 
 /* }}} */

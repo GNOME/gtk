@@ -205,9 +205,10 @@ gdk_wayland_toplevel_clear_saved_size (GdkWaylandToplevel *toplevel)
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel);
 static void maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel);
 
-void
-gdk_wayland_toplevel_hide_surface (GdkWaylandToplevel *toplevel)
+static void
+gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 {
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (wayland_surface);
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
@@ -459,11 +460,11 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
   return FALSE;
 }
 
-void
-gdk_wayland_surface_configure_toplevel (GdkWaylandToplevel *wayland_toplevel)
+static void
+gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
 {
-  GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
+  GdkSurface *surface = GDK_SURFACE (wayland_surface);
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (wayland_surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkToplevelState new_state;
@@ -1285,12 +1286,16 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (class);
+  GdkWaylandSurfaceClass *wayland_surface_class = GDK_WAYLAND_SURFACE_CLASS (class);
 
   object_class->get_property = gdk_wayland_toplevel_get_property;
   object_class->set_property = gdk_wayland_toplevel_set_property;
   object_class->finalize = gdk_wayland_toplevel_finalize;
 
   surface_class->compute_size = gdk_wayland_toplevel_compute_size;
+
+  wayland_surface_class->handle_configure = gdk_wayland_toplevel_handle_configure;
+  wayland_surface_class->hide_surface = gdk_wayland_toplevel_hide_surface;
 
   gdk_toplevel_install_properties (object_class, 1);
 }

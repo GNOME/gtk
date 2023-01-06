@@ -18,11 +18,9 @@
 #pragma once
 
 
-void gdk_wayland_surface_configure_toplevel       (GdkWaylandToplevel *toplevel);
 void gdk_wayland_toplevel_set_geometry_hints      (GdkWaylandToplevel *toplevel,
                                                    const GdkGeometry  *geometry,
                                                    GdkSurfaceHints     geom_mask);
-void gdk_wayland_toplevel_hide_surface            (GdkWaylandToplevel *toplevel);
 
 struct gtk_surface1 *
      gdk_wayland_toplevel_get_gtk_surface         (GdkWaylandToplevel *wayland_toplevel);

@@ -16,9 +16,3 @@
  */
 
 #pragma once
-
-
-void gdk_wayland_surface_configure_popup          (GdkWaylandPopup *popup);
-void frame_callback_popup                         (GdkWaylandPopup *popup);
-void gdk_wayland_popup_hide_surface               (GdkWaylandPopup *popup);
-
