@@ -377,7 +377,7 @@ demonstrates input event handling with event controllers.
 
 ### Drawing in response to input
 
-Create a new file with the following content named `example-4.c`.
+Create a new file with the following content named `example-3.c`.
 
 ```c
 #include <gtk/gtk.h>
@@ -572,7 +572,7 @@ main (int    argc,
 You can compile the program above with GCC using:
 
 ```
-gcc $( pkg-config --cflags gtk4 ) -o example-4 example-4.c $( pkg-config --libs gtk4 )
+gcc $( pkg-config --cflags gtk4 ) -o example-3 example-3.c $( pkg-config --libs gtk4 )
 ```
 
 ## Building user interfaces
@@ -587,7 +587,7 @@ XML format that can be parsed by the [class@Gtk.Builder] class.
 
 ### Packing buttons with GtkBuilder
 
-Create a new file with the following content named `example-3.c`.
+Create a new file with the following content named `example-4.c`.
 
 ```c
 #include <gtk/gtk.h>
@@ -697,7 +697,7 @@ Create a new file with the following content named `builder.ui`.
 You can compile the program above with GCC using:
 
 ```
-gcc $( pkg-config --cflags gtk4 ) -o example-3 example-3.c $( pkg-config --libs gtk4 )
+gcc $( pkg-config --cflags gtk4 ) -o example-4 example-4.c $( pkg-config --libs gtk4 )
 ```
 
 Note that `GtkBuilder` can also be used to construct objects that are
