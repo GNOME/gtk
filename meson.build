@@ -433,9 +433,6 @@ jpeg_dep       = dependency(is_msvc_like ? 'jpeg' : 'libjpeg',
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 2.1.0', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
-                            default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'],
