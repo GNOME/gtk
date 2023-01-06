@@ -231,18 +231,21 @@ main (int argc, char *argv[])
     }
   else if (strcmp (action, "open") == 0)
     gtk_file_dialog_open (dialog, NULL, cancellable, open_done, NULL);
-  else if (strcmp (action, "select_folder") == 0)
+  else if (g_pattern_match_simple ("select?folder", action) &&
+           strchr ("-_", action[strlen ("select")]))
     gtk_file_dialog_select_folder (dialog, NULL, cancellable, select_done, NULL);
   else if (strcmp (action, "save") == 0)
     gtk_file_dialog_save (dialog, NULL, cancellable, save_done, NULL);
-  else if (strcmp (action, "open_multiple") == 0)
+  else if (g_pattern_match_simple ("open?multiple", action) &&
+           strchr ("-_", action[strlen ("open")]))
     gtk_file_dialog_open_multiple (dialog, NULL, cancellable, open_multiple_done, NULL);
-  else if (strcmp (action, "select_multiple_folders") == 0)
+  else if (g_pattern_match_simple ("select?multiple", action) &&
+           strchr ("-_", action[strlen ("select")]))
     gtk_file_dialog_select_multiple_folders (dialog, NULL, cancellable, select_multiple_done, NULL);
   else
     {
       g_print ("invalid action: %s\n", action);
-      g_print ("one of open, select_folder, save, open_multiple, select_multiple_folders\n");
+      g_print ("one of open, select-folder, save, open-multiple, select-multiple\n");
       exit (1);
     }
 
