@@ -49,6 +49,7 @@
 #include "gdkvulkancontext-wayland.h"
 #include "gdkwaylandmonitor.h"
 #include "gdkprofilerprivate.h"
+#include "gdktoplevel-wayland-private.h"
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-unstable-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>

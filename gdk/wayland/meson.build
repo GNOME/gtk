@@ -8,14 +8,17 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdisplay-wayland.c',
   'gdkdrag-wayland.c',
+  'gdkdragsurface-wayland.c',
   'gdkdrop-wayland.c',
   'gdkeventsource.c',
   'gdkglcontext-wayland.c',
   'gdkkeys-wayland.c',
   'gdkmonitor-wayland.c',
   'gdkprimary-wayland.c',
-  'gdkvulkancontext-wayland.c',
   'gdksurface-wayland.c',
+  'gdktoplevel-wayland.c',
+  'gdkpopup-wayland.c',
+  'gdkvulkancontext-wayland.c',
   'wm-button-layout-translation.c',
 ])
 
@@ -24,8 +27,10 @@ gdk_wayland_public_headers = files([
   'gdkwaylanddisplay.h',
   'gdkwaylandglcontext.h',
   'gdkwaylandmonitor.h',
+  'gdkwaylandpopup.h',
   'gdkwaylandseat.h',
   'gdkwaylandsurface.h',
+  'gdkwaylandtoplevel.h',
 ])
 
 install_headers(gdk_wayland_public_headers, 'gdkwayland.h', subdir: 'gtk-4.0/gdk/wayland/')

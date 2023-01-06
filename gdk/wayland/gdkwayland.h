@@ -31,10 +31,12 @@
 
 #include <gdk/wayland/gdkwaylanddevice.h>
 #include <gdk/wayland/gdkwaylanddisplay.h>
+#include <gdk/wayland/gdkwaylandglcontext.h>
 #include <gdk/wayland/gdkwaylandmonitor.h>
+#include <gdk/wayland/gdkwaylandpopup.h>
 #include <gdk/wayland/gdkwaylandseat.h>
 #include <gdk/wayland/gdkwaylandsurface.h>
-#include <gdk/wayland/gdkwaylandglcontext.h>
+#include <gdk/wayland/gdkwaylandtoplevel.h>
 
 #undef __GDKWAYLAND_H_INSIDE__
 
