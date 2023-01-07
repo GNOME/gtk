@@ -602,6 +602,10 @@ filechooser_win32_thread (gpointer _data)
       if (FAILED (hr))
         g_warning_hr ("Can't set file types", hr);
 
+      hr = IFileDialog_SetDefaultExtension (pfd, L"");
+      if (FAILED (hr))
+        g_warning_hr ("Can't set default extension", hr);
+
       if (data->self->current_filter)
         {
           GListModel *filters;
