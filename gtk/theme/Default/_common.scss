@@ -3510,6 +3510,10 @@ calendar {
         @extend %selected_items;
         border-radius: 3px;
       }
+
+      &:checked {
+        background-color: gtkalpha($selected_bg_color, 0.3);
+      }
     }
 
     > label.day-number.other-month {
