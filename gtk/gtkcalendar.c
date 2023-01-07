@@ -1438,7 +1438,8 @@ gtk_calendar_select_day (GtkCalendar *calendar,
         else
           gtk_widget_remove_css_class (label, "other-month");
 
-        if (calendar->marked_date[day-1])
+        if (calendar->marked_date[day-1] &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
@@ -1538,7 +1539,7 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
  * @calendar: a `GtkCalendar`
  * @day: the day number to mark between 1 and 31.
  *
- * Places a visual marker on a particular day.
+ * Places a visual marker on a particular day of the current month.
  */
 void
 gtk_calendar_mark_day (GtkCalendar *calendar,
