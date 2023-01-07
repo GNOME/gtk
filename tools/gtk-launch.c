@@ -49,8 +49,10 @@ main (int argc, char *argv[])
   GOptionContext *context = NULL;
   char *summary;
   char *app_name;
-#ifdef G_OS_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
   char *desktop_file_name;
+#endif
+#ifdef G_OS_UNIX
   char *bus_name = NULL;
 #endif
   GAppInfo *info = NULL;
@@ -132,7 +134,6 @@ main (int argc, char *argv[])
   info = G_APP_INFO (g_desktop_app_info_new (desktop_file_name));
   g_free (desktop_file_name);
 #else
-#warning Please add support for creating AppInfo from id for your OS
   g_printerr (_("Creating AppInfo from id not supported on non unix operating systems"));
 #endif
   args++;

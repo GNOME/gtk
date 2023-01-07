@@ -504,8 +504,8 @@ gdk_gl_context_real_is_shared (GdkGLContext *self,
 static gboolean
 gdk_gl_context_real_clear_current (GdkGLContext *context)
 {
-  GdkDisplay *display = gdk_gl_context_get_display (context);
 #ifdef HAVE_EGL
+  GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->egl_context == NULL)

@@ -271,6 +271,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wno-c++11-extensions',
     '-Wno-missing-include-dirs',
     '-Wno-typedef-redefinition',
+    '-Wno-tautological-constant-out-of-range-compare',
     '-Wduplicated-branches',
     '-Wduplicated-cond',
     '-Wformat=2',
