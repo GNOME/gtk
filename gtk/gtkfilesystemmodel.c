@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkfilesystemmodel.h"
+#include "gtkfilesystemmodelprivate.h"
 
 #include <stdlib.h>
 #include <string.h>

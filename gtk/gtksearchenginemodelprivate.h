@@ -21,7 +21,7 @@
 #define __GTK_SEARCH_ENGINE_MODEL_H__
 
 #include "gtksearchengineprivate.h"
-#include "gtkfilesystemmodel.h"
+#include "gtkfilesystemmodelprivate.h"
 
 G_BEGIN_DECLS
 
