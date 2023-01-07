@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilesystemmodel.h: GtkTreeModel wrapping a GtkFileSystem
+ * gtkfilesystemmodelprivate.h: GtkTreeModel wrapping a GtkFileSystem
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_SYSTEM_MODEL_H__
-#define __GTK_FILE_SYSTEM_MODEL_H__
+#ifndef __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__
+#define __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
@@ -59,4 +59,4 @@ void                _gtk_file_system_model_set_filter       (GtkFileSystemModel 
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_SYSTEM_MODEL_H__ */
+#endif /* __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__ */

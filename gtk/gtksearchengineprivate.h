@@ -23,7 +23,7 @@
 #define __GTK_SEARCH_ENGINE_H__
 
 #include "gtkquery.h"
-#include "gtkfilesystemmodel.h"
+#include "gtkfilesystemmodelprivate.h"
 #include <gio/gio.h>
 
 G_BEGIN_DECLS

@@ -24,7 +24,7 @@
 
 #include <gio/gio.h>
 
-#include "gtkfilesystemmodel.h"
+#include "gtkfilesystemmodelprivate.h"
 
 G_BEGIN_DECLS
 

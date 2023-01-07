@@ -36,7 +36,7 @@
 #include "deprecated/gtkfilechooser.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
-#include "gtkfilesystemmodel.h"
+#include "gtkfilesystemmodelprivate.h"
 #include "gtkfilethumbnail.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
