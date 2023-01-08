@@ -5664,10 +5664,6 @@ gtk_widget_get_state_flags (GtkWidget *widget)
  *
  * Note that setting this to %TRUE doesn’t mean the widget is
  * actually viewable, see [method@Gtk.Widget.get_visible].
- *
- * This function simply calls [method@Gtk.Widget.show] or
- * [method@Gtk.Widget.hide] but is nicer to use when the
- * visibility of the widget depends on some condition.
  */
 void
 gtk_widget_set_visible (GtkWidget *widget,
