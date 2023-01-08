@@ -221,7 +221,7 @@ drag_ungrab (GdkMacosDrag *self)
   if (self->drag_seat)
     {
       gdk_seat_ungrab (self->drag_seat);
-      g_clear_object(&self->drag_seat);
+      g_clear_object (&self->drag_seat);
     }
 
   display = gdk_drag_get_display (GDK_DRAG (self));
