@@ -5206,9 +5206,12 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
  *
  * Presents a window to the user.
  *
- * This function should not be used as when it is called,
- * it is too late to gather a valid timestamp to allow focus
- * stealing prevention to work correctly.
+ * This may mean raising the window in the stacking order,
+ * unminimizing it, moving it to the current desktop and/or
+ * giving it the keyboard focus (possibly dependent on the user’s
+ * platform, window manager and preferences).
+ *
+ * If @window is hidden, this function also makes it visible.
  */
 void
 gtk_window_present (GtkWindow *window)
@@ -5222,23 +5225,10 @@ gtk_window_present (GtkWindow *window)
  * @timestamp: the timestamp of the user interaction (typically a
  *   button or key press event) which triggered this call
  *
- * Presents a window to the user.
+ * Presents a window to the user in response to an user interaction.
  *
- * This may mean raising the window in the stacking order,
- * unminimizing it, moving it to the current desktop, and/or
- * giving it the keyboard focus, possibly dependent on the user’s
- * platform, window manager, and preferences.
+ * See [method@Gtk.Window.present] for more details.
  *
- * If @window is hidden, this function calls [method@Gtk.Widget.show]
- * as well.
- *
- * This function should be used when the user tries to open a window
- * that’s already open. Say for example the preferences dialog is
- * currently open, and the user chooses Preferences from the menu
- * a second time; use [method@Gtk.Window.present] to move the
- * already-open dialog where the user can see it.
- *
- * Presents a window to the user in response to a user interaction.
  * The timestamp should be gathered when the window was requested
  * to be shown (when clicking a link for example), rather than once
  * the window is ready to be shown.
