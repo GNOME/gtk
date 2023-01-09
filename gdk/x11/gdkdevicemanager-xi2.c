@@ -1450,7 +1450,9 @@ _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,
       GdkEvent *event;
 
       event = gdk_focus_event_new (surface, device, focus_in);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gdk_display_put_event (gdk_surface_get_display (surface), event);
+G_GNUC_END_IGNORE_DEPRECATIONS
       gdk_event_unref (event);
     }
 }

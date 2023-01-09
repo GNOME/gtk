@@ -471,8 +471,8 @@ gdk_display_get_event (GdkDisplay *display)
  * Appends the given event onto the front of the event
  * queue for @display.
  *
- * This function is only useful in very special situations
- * and should not be used by applications.
+ * Deprecated: 4.10: This function is only useful in very
+ * special situations and should not be used by applications.
  **/
 void
 gdk_display_put_event (GdkDisplay *display,
