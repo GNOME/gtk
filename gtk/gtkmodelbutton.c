@@ -832,6 +832,8 @@ update_accel (GtkModelButton *self,
                                             "css-name", "accelerator",
                                             NULL);
           gtk_widget_insert_before (self->accel_label, GTK_WIDGET (self), NULL);
+          gtk_widget_set_hexpand (self->accel_label, TRUE),
+          gtk_widget_set_halign (self->accel_label, GTK_ALIGN_END);
         }
 
       gtk_accelerator_parse (accel, &key, &mods);
