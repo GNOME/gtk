@@ -104,7 +104,7 @@ GDK_AVAILABLE_IN_ALL
 GdkMonitor * gdk_display_get_monitor_at_surface (GdkDisplay *display,
                                                 GdkSurface  *surface);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void      gdk_display_put_event  (GdkDisplay     *display,
                                   GdkEvent       *event);
 
