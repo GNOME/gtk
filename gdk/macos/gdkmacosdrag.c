@@ -218,6 +218,12 @@ drag_ungrab (GdkMacosDrag *self)
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
+  if (self->drag_seat)
+    {
+      gdk_seat_ungrab (self->drag_seat);
+      g_clear_object (&self->drag_seat);
+    }
+
   display = gdk_drag_get_display (GDK_DRAG (self));
   _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), GDK_CURRENT_TIME);
 }
@@ -536,7 +542,11 @@ gdk_macos_drag_finalize (GObject *object)
   GdkMacosDragSurface *drag_surface = g_steal_pointer (&self->drag_surface);
 
   g_clear_object (&self->cursor);
-  g_clear_object (&self->drag_seat);
+  if (self->drag_seat)
+    {
+      gdk_seat_ungrab (self->drag_seat);
+      g_clear_object (&self->drag_seat);
+    }
 
   G_OBJECT_CLASS (gdk_macos_drag_parent_class)->finalize (object);
 

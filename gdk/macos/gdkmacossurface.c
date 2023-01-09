@@ -431,7 +431,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
   drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
                                          GDK_SURFACE_DRAG,
-                                         surface,
+                                         NULL,
                                          sx, sy, 1, 1);
   drag = g_object_new (GDK_TYPE_MACOS_DRAG,
                        "drag-surface", drag_surface,
