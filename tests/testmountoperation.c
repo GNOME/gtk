@@ -148,11 +148,11 @@ main (int argc, char *argv[])
       GPid pid;
 
       pids = g_array_new (TRUE, FALSE, sizeof (GPid));
-      pid = 1000;
+      pid = (GPid)1000;
       g_array_append_val (pids, pid);
-      pid = 2000;
+      pid = (GPid)2000;
       g_array_append_val (pids, pid);
-      pid = 3000;
+      pid = (GPid)3000;
       g_array_append_val (pids, pid);
 
       g_signal_emit_by_name (op, "show-processes", "Foo\nbar", pids, choices);
