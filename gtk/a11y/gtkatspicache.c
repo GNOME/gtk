@@ -444,6 +444,9 @@ gtk_at_spi_cache_remove_context (GtkAtSpiCache   *self,
   g_return_if_fail (GTK_IS_AT_SPI_CONTEXT (context));
 
   const char *path = gtk_at_spi_context_get_context_path (context);
+  if (path == NULL)
+    return;
+
   if (!g_hash_table_contains (self->contexts_by_path, path))
     return;
 
