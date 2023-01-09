@@ -25,6 +25,7 @@
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdragsurface-private.h"
+#include "gdkmacospasteboard-private.h"
 
 #include "gdk/gdkdeviceprivate.h"
 #include "gdk/gdkeventsprivate.h"
@@ -624,11 +625,101 @@ gdk_macos_drag_init (GdkMacosDrag *self)
 }
 
 gboolean
-_gdk_macos_drag_begin (GdkMacosDrag *self)
+_gdk_macos_drag_begin (GdkMacosDrag       *self,
+                       GdkContentProvider *content,
+                       GdkMacosWindow     *window)
 {
+  NSArray<NSDraggingItem *> *items;
+  NSDraggingSession *session;
+  NSPasteboardItem *item;
+  NSEvent *nsevent;
+
   g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), FALSE);
+  g_return_val_if_fail (GDK_IS_MACOS_WINDOW (window), FALSE);
 
-  _gdk_macos_surface_show (GDK_MACOS_SURFACE (self->drag_surface));
+  GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  return drag_grab (self);
+  item = [[GdkMacosPasteboardItem alloc] initForDrag:GDK_DRAG (self) withContentProvider:content];
+  items = [NSArray arrayWithObject:item];
+  nsevent = _gdk_macos_display_get_last_nsevent ();
+
+  session = [[window contentView] beginDraggingSessionWithItems:items
+                                                          event:nsevent
+                                                         source:window];
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (gdk_drag_get_display (GDK_DRAG (self))),
+                               [session draggingSequenceNumber],
+                               GDK_DRAG (self));
+
+  return TRUE;
+}
+
+NSDragOperation
+_gdk_macos_drag_operation (GdkMacosDrag *self)
+{
+  NSDragOperation operation = NSDragOperationNone;
+  GdkDragAction actions;
+
+  g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), NSDragOperationNone);
+
+  actions = gdk_drag_get_actions (GDK_DRAG (self));
+
+  if (actions & GDK_ACTION_LINK)
+    operation |= NSDragOperationLink;
+
+  if (actions & GDK_ACTION_MOVE)
+    operation |= NSDragOperationMove;
+
+  if (actions & GDK_ACTION_COPY)
+    operation |= NSDragOperationCopy;
+
+  return operation;
+}
+
+void
+_gdk_macos_drag_surface_move (GdkMacosDrag *self,
+                              int           x_root,
+                              int           y_root)
+{
+  g_return_if_fail (GDK_IS_MACOS_DRAG (self));
+
+  self->last_x = x_root;
+  self->last_y = y_root;
+
+  if (GDK_IS_MACOS_SURFACE (self->drag_surface))
+    _gdk_macos_surface_move (GDK_MACOS_SURFACE (self->drag_surface),
+                             x_root - self->hot_x,
+                             y_root - self->hot_y);
+}
+
+void
+_gdk_macos_drag_set_start_position (GdkMacosDrag *self,
+                                    int           start_x,
+                                    int           start_y)
+{
+  g_return_if_fail (GDK_IS_MACOS_DRAG (self));
+
+  self->start_x = start_x;
+  self->start_y = start_y;
+}
+
+void
+_gdk_macos_drag_set_actions (GdkMacosDrag    *self,
+                             GdkModifierType  mods)
+{
+  GdkDragAction suggested_action;
+  GdkDragAction possible_actions;
+
+  g_assert (GDK_IS_MACOS_DRAG (self));
+
+  gdk_drag_get_current_actions (mods,
+                                GDK_BUTTON_PRIMARY,
+                                gdk_drag_get_actions (GDK_DRAG (self)),
+                                &suggested_action,
+                                &possible_actions);
+
+  gdk_drag_set_selected_action (GDK_DRAG (self), suggested_action);
+  gdk_drag_set_actions (GDK_DRAG (self), possible_actions);
 }

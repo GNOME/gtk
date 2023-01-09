@@ -32,7 +32,7 @@
 
 #define GDK_IS_MACOS_WINDOW(obj) ([obj isKindOfClass:[GdkMacosWindow class]])
 
-@interface GdkMacosWindow : NSWindow {
+@interface GdkMacosWindow : NSWindow <NSDraggingSource, NSDraggingDestination> {
   GdkMacosSurface *gdk_surface;
 
   BOOL             inMove;

@@ -28,6 +28,7 @@
 #import "GdkMacosWindow.h"
 
 #include "gdkmacosdisplay-private.h"
+#include "gdkmacosdrag-private.h"
 #include "gdkmacosdrop-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospasteboard-private.h"
@@ -668,7 +669,56 @@ typedef NSString *CALayerContentsGravity;
 }
 
 // NSDraggingSource protocol
-// ...
+
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
+{
+  NSInteger sequence_number = [session draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+  GdkModifierType state = _gdk_macos_display_get_current_keyboard_modifiers (GDK_MACOS_DISPLAY (display));
+
+  _gdk_macos_drag_set_actions (GDK_MACOS_DRAG (drag), state);
+
+  return _gdk_macos_drag_operation (GDK_MACOS_DRAG (drag));
+}
+
+- (void)draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint
+{
+  NSInteger sequence_number = [session draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+  int x, y;
+
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display), screenPoint.x, screenPoint.y, &x, &y);
+  _gdk_macos_drag_set_start_position (GDK_MACOS_DRAG (drag), x, y);
+  _gdk_macos_drag_surface_move (GDK_MACOS_DRAG (drag), x, y);
+}
+
+- (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint
+{
+  NSInteger sequence_number = [session draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+  int x, y;
+
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display), screenPoint.x, screenPoint.y, &x, &y);
+  _gdk_macos_drag_surface_move (GDK_MACOS_DRAG (drag), x, y);
+}
+
+- (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
+{
+  NSInteger sequence_number = [session draggingSequenceNumber];
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+
+  if (gdk_drag_get_selected_action (drag) != 0)
+    g_signal_emit_by_name (drag, "drop-performed");
+  else
+    gdk_drag_cancel (drag, GDK_DRAG_CANCEL_NO_TARGET);
+
+  _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (display), [session draggingSequenceNumber], NULL);
+}
+
 // end
 
 -(void)setStyleMask:(NSWindowStyleMask)styleMask
