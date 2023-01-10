@@ -1770,7 +1770,7 @@ test_undo2 (void)
   g_object_unref (buffer);
 }
 
-/* Simulate typing, check that words get batched togethe */
+/* Simulate typing, check that words get batched together */
 static void
 test_undo3 (void)
 {
@@ -1815,6 +1815,86 @@ test_undo3 (void)
 
   check_buffer_contents (buffer, "");
   g_assert_false (gtk_text_buffer_get_can_undo (buffer));
+
+  g_object_unref (buffer);
+}
+
+static void
+test_undo4 (void)
+{
+  GtkTextBuffer *buffer;
+  int count;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "0\n", -1, TRUE);
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "1\n", -1, TRUE);
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "2\n", -1, TRUE);
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "3\n", -1, TRUE);
+  gtk_text_buffer_insert_interactive_at_cursor (buffer, "4\n", -1, TRUE);
+
+  check_buffer_contents (buffer, "0\n1\n2\n3\n4\n");
+
+  count = 0;
+  while (gtk_text_buffer_get_can_undo (buffer))
+    {
+      count++;
+      gtk_text_buffer_undo (buffer);
+    }
+
+  g_assert_cmpint (count, ==, 5);
+
+  check_buffer_contents (buffer, "");
+
+  count = 0;
+  while (gtk_text_buffer_get_can_redo (buffer))
+    {
+      count++;
+      gtk_text_buffer_redo (buffer);
+    }
+
+  g_assert_cmpint (count, ==, 5);
+
+  check_buffer_contents (buffer, "0\n1\n2\n3\n4\n");
+
+  g_object_unref (buffer);
+}
+
+static void
+test_undo5 (void)
+{
+  GtkTextBuffer *buffer;
+  int count;
+  GtkTextIter start, end;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_set_text (buffer, "0\n1\n2\n3\n4\n", -1);
+
+  check_buffer_contents (buffer, "0\n1\n2\n3\n4\n");
+
+  count = 0;
+  while (TRUE)
+    {
+      gtk_text_buffer_get_end_iter (buffer, &end);
+      start = end;
+      if (!gtk_text_iter_backward_line (&start))
+        break;
+      count++;
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_delete_interactive (buffer, &start, &end, TRUE);
+      gtk_text_buffer_end_user_action (buffer);
+    }
+
+  g_assert_cmpint (count, ==, 5);
+
+  check_buffer_contents (buffer, "");
+
+  g_assert_true (gtk_text_buffer_get_can_undo (buffer));
+
+  gtk_text_buffer_undo (buffer);
+
+  check_buffer_contents (buffer, "0\n1\n2\n3\n4\n");
 
   g_object_unref (buffer);
 }
@@ -1901,6 +1981,8 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
   g_test_add_func ("/TextBuffer/Undo 2", test_undo2);
   g_test_add_func ("/TextBuffer/Undo 3", test_undo3);
+  g_test_add_func ("/TextBuffer/Undo 4", test_undo4);
+  g_test_add_func ("/TextBuffer/Undo 5", test_undo5);
   g_test_add_func ("/TextBuffer/Serialize wrap-mode", test_serialize_wrap_mode);
 
   return g_test_run();
