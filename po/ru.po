@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-12-17 12:46+0000\n"
-"PO-Revision-Date: 2022-12-17 18:37+0300\n"
+"POT-Creation-Date: 2023-01-02 15:08+0000\n"
+"PO-Revision-Date: 2023-01-03 18:49+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1082,7 +1082,7 @@ msgid "Sans 12"
 msgstr "Sans 12"
 
 #: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
-#: gtk/gtkfontdialog.c:595
+#: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Выбрать шрифт"
 
@@ -1684,7 +1684,7 @@ msgctxt "accessibility"
 msgid "window"
 msgstr "окно"
 
-#: gtk/gtkalertdialog.c:660 gtk/gtkcustompaperunixdialog.c:328
+#: gtk/gtkalertdialog.c:668 gtk/gtkcustompaperunixdialog.c:328
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Закрыть"
@@ -2159,7 +2159,7 @@ msgstr "Файл с таким именем уже существует"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
 #: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:4997
-#: gtk/gtkfiledialog.c:718 gtk/gtkmessagedialog.c:170
+#: gtk/gtkfiledialog.c:931 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:638
 #: gtk/gtkprintunixdialog.c:657 gtk/gtkprintunixdialog.c:814
@@ -2170,12 +2170,12 @@ msgid "_Cancel"
 msgstr "_Отмена"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfiledialog.c:690 gtk/gtkplacessidebar.c:3145
+#: gtk/gtkfiledialog.c:903 gtk/gtkplacessidebar.c:3145
 #: gtk/gtkplacessidebar.c:3230 gtk/gtkplacesview.c:1645
 msgid "_Open"
 msgstr "_Открыть"
 
-#: gtk/gtkfilechoosernative.c:594 gtk/gtkfiledialog.c:695
+#: gtk/gtkfilechoosernative.c:594 gtk/gtkfiledialog.c:908
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -2264,12 +2264,12 @@ msgid "Could not select file"
 msgstr "Не удалось выделить файл"
 
 #: gtk/gtkfilechooserwidget.c:1702 gtk/ui/gtkfilechooserwidget.ui:66
-msgid "Switch to grid view"
-msgstr "Переключиться на вид сеткой"
+msgid "Grid View"
+msgstr "Вид сеткой"
 
 #: gtk/gtkfilechooserwidget.c:1708
-msgid "Switch to list view"
-msgstr "Переключиться на вид списком"
+msgid "List View"
+msgstr "Вид списком"
 
 #: gtk/gtkfilechooserwidget.c:1773
 msgid "_Visit File"
@@ -2462,28 +2462,28 @@ msgstr "Не удалось послать запрос на поиск"
 msgid "Accessed"
 msgstr "Доступ"
 
-#: gtk/gtkfiledialog.c:691
+#: gtk/gtkfiledialog.c:904
 msgid "Pick Files"
 msgstr "Выбрать файлы"
 
-#: gtk/gtkfiledialog.c:691
+#: gtk/gtkfiledialog.c:904
 msgid "Pick a File"
 msgstr "Выбрать файл"
 
-#: gtk/gtkfiledialog.c:696
+#: gtk/gtkfiledialog.c:909
 msgid "Save a File"
 msgstr "Сохранить файл"
 
-#: gtk/gtkfiledialog.c:700 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkfiledialog.c:913 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Выбрать"
 
-#: gtk/gtkfiledialog.c:701
+#: gtk/gtkfiledialog.c:914
 msgid "Select Folders"
 msgstr "Выбрать папки"
 
-#: gtk/gtkfiledialog.c:701
+#: gtk/gtkfiledialog.c:914
 msgid "Select a Folder"
 msgstr "Выбрать папку"
 
@@ -3094,16 +3094,16 @@ msgstr "Компьютер"
 
 #: gtk/gtkplacesview.c:875
 msgid "Searching for network locations"
-msgstr "Поиск сетевых местоположений"
+msgstr "Поиск сетевых расположений"
 
 #: gtk/gtkplacesview.c:882
 msgid "No network locations found"
-msgstr "Сетевые местоположения не найдены"
+msgstr "Сетевые расположения не найдены"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1196 gtk/gtkplacesview.c:1293
 msgid "Unable to access location"
-msgstr "Не удалось получить доступ к местоположению"
+msgstr "Не удалось получить доступ к расположению"
 
 #. Restore from Cancel to Connect
 #: gtk/gtkplacesview.c:1214 gtk/ui/gtkplacesview.ui:250
@@ -3169,7 +3169,7 @@ msgstr "_Подключиться"
 
 #: gtk/gtkplacesview.c:1891
 msgid "Unable to get remote server location"
-msgstr "Не удалось подключиться к удалённому местоположение на сервере"
+msgstr "Невозможно получить расположение удаленного сервера"
 
 # имеется ввиду
 # другие места:
@@ -3212,11 +3212,11 @@ msgstr "Проверка доступа"
 msgid "_Remember password"
 msgstr "_Запомнить пароль"
 
-#: gtk/gtkprinteroptionwidget.c:739
+#: gtk/gtkprinteroptionwidget.c:715
 msgid "Select a filename"
 msgstr "Выбрать имя файла"
 
-#: gtk/gtkprinteroptionwidget.c:947
+#: gtk/gtkprinteroptionwidget.c:932
 msgid "Not available"
 msgstr "Недоступно"
 
@@ -3786,47 +3786,47 @@ msgstr "Классы стилей"
 msgid "CSS Property"
 msgstr "Свойство CSS"
 
-#: gtk/inspector/general.c:330 gtk/inspector/general.c:411
+#: gtk/inspector/general.c:332 gtk/inspector/general.c:413
 msgctxt "GL version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:339
+#: gtk/inspector/general.c:341
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:340
+#: gtk/inspector/general.c:342
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:412
+#: gtk/inspector/general.c:414
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:463
+#: gtk/inspector/general.c:465
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:464 gtk/inspector/general.c:465
+#: gtk/inspector/general.c:466 gtk/inspector/general.c:467
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:521
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:522 gtk/inspector/general.c:523
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:793
+#: gtk/inspector/general.c:795
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст IM жестко кодируется GTK_IM_MODULE"
 
@@ -6166,7 +6166,7 @@ msgstr "Создать папку"
 
 #: gtk/ui/gtkfilechooserwidget.ui:449
 msgid "Remote location — only searching the current folder"
-msgstr "Удалённое местоположение — поиск только в текущей папке"
+msgstr "Удалённое расположение — поиск только в текущей папке"
 
 #: gtk/ui/gtkfilechooserwidget.ui:578
 msgid "Folder Name"
@@ -7392,6 +7392,12 @@ msgstr ""
 "Нет индексного файла темы в «%s».\n"
 "Если действительно хотите создать здесь кэш значков, используйте --ignore-"
 "theme-index.\n"
+
+#~ msgid "Switch to grid view"
+#~ msgstr "Переключиться на вид сеткой"
+
+#~ msgid "Switch to list view"
+#~ msgstr "Переключиться на вид списком"
 
 #~ msgid "Default Application"
 #~ msgstr "Приложение по умолчанию"
