@@ -1661,6 +1661,14 @@ add_text_attrs (GtkTextLayout      *layout,
 
   pango_attr_list_insert (attrs, attr);
 
+#if PANGO_VERSION_CHECK (1, 44, 0)
+  attr = pango_attr_insert_hyphens_new (FALSE);
+  attr->start_index = start;
+  attr->end_index = start + byte_count;
+
+  pango_attr_list_insert (attrs, attr);
+#endif
+
   if (style->font_scale != 1.0)
     {
       attr = pango_attr_scale_new (style->font_scale);
