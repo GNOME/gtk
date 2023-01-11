@@ -13,22 +13,22 @@
 # Çağatay Yiğit Şahin <cyigitsahin@outlook.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2018.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2018, 2019, 2020, 2021.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2018-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-02-25 13:51+0000\n"
-"PO-Revision-Date: 2021-02-25 17:33+0300\n"
+"POT-Creation-Date: 2022-09-18 06:27+0000\n"
+"PO-Revision-Date: 2023-01-11 10:11+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
-"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:133
 #, c-format
@@ -127,7 +127,7 @@ msgstr "Escape"
 #: gdk/keyname-table.h:6850
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Çoklu Tuş"
+msgstr "Compose"
 
 #: gdk/keyname-table.h:6851
 msgctxt "keyboard label"
@@ -218,7 +218,7 @@ msgstr "Sol (numerik klavye)"
 #: gdk/keyname-table.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Up (numerik klavye)"
+msgstr "Yukarı (numerik klavye)"
 
 #: gdk/keyname-table.h:6870
 msgctxt "keyboard label"
@@ -283,7 +283,7 @@ msgstr "Monitör Parlaklığını Artır"
 #: gdk/keyname-table.h:6882
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
-msgstr "Monitör Parlaklığını Azalt"
+msgstr "Monitör Parlaklığını Düşür"
 
 #: gdk/keyname-table.h:6883
 msgctxt "keyboard label"
@@ -293,7 +293,7 @@ msgstr "Klavye Parlaklığını Artır"
 #: gdk/keyname-table.h:6884
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "Klavye Parlaklığını Azalt"
+msgstr "Klavye Parlaklığını Düşür"
 
 #: gdk/keyname-table.h:6885
 msgctxt "keyboard label"
@@ -313,7 +313,7 @@ msgstr "Sesi Azalt"
 #: gdk/keyname-table.h:6888
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "Sesi Yükselt"
+msgstr "Sesi Artır"
 
 #: gdk/keyname-table.h:6889
 msgctxt "keyboard label"
@@ -1002,7 +1002,7 @@ msgstr "Meta"
 #: gtk/gtkaccelgroup.c:939
 msgctxt "keyboard label"
 msgid "KP"
-msgstr "Numerik Klavye"
+msgstr "NK"
 
 #: gtk/gtkaccelgroup.c:946
 msgctxt "keyboard label"
@@ -9034,8 +9034,8 @@ msgstr "Belirtilmemiş profil"
 #~ msgstr "\"%s\" geçerli bir öznitelik adı değil"
 
 #~ msgid ""
-#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s"
-#~ "\""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
+#~ "\"%s\""
 #~ msgstr "\"%s\", \"%s\" özniteliği için \"%s\" değer türüne çevirilemedi"
 
 #~ msgid "\"%s\" is not a valid value for attribute \"%s\""
