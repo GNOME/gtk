@@ -156,8 +156,6 @@ gtk_text_history_printf_action (Action  *action,
                                 GString *str,
                                 guint    depth)
 {
-  g_autofree char *escaped = NULL;
-
   gtk_text_history_printf_space (str, depth);
   g_string_append_printf (str, "%s {\n", action_kind_name (action->kind));
 
@@ -177,31 +175,41 @@ gtk_text_history_printf_action (Action  *action,
     case ACTION_KIND_DELETE_KEY:
     case ACTION_KIND_DELETE_PROGRAMMATIC:
     case ACTION_KIND_DELETE_SELECTION:
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append_printf (str, "begin: %u\n", action->u.delete.begin);
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append_printf (str, "end: %u\n", action->u.delete.end);
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append (str, "selection {\n");
-      gtk_text_history_printf_space (str, depth+2);
-      g_string_append_printf (str, "insert: %d\n", action->u.delete.selection.insert);
-      gtk_text_history_printf_space (str, depth+2);
-      g_string_append_printf (str, "bound: %d\n", action->u.delete.selection.bound);
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append (str, "}\n");
-      gtk_text_history_printf_space (str, depth+1);
-      escaped = g_strescape (istring_str (&action->u.delete.istr), NULL);
-      g_string_append_printf (str, "text: \"%s\"\n", escaped);
+      {
+        char *escaped;
+
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append_printf (str, "begin: %u\n", action->u.delete.begin);
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append_printf (str, "end: %u\n", action->u.delete.end);
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append (str, "selection {\n");
+        gtk_text_history_printf_space (str, depth+2);
+        g_string_append_printf (str, "insert: %d\n", action->u.delete.selection.insert);
+        gtk_text_history_printf_space (str, depth+2);
+        g_string_append_printf (str, "bound: %d\n", action->u.delete.selection.bound);
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append (str, "}\n");
+        gtk_text_history_printf_space (str, depth+1);
+        escaped = g_strescape (istring_str (&action->u.delete.istr), NULL);
+        g_string_append_printf (str, "text: \"%s\"\n", escaped);
+        g_free (escaped);
+      }
       break;
 
     case ACTION_KIND_INSERT:
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append_printf (str, "begin: %u\n", action->u.insert.begin);
-      gtk_text_history_printf_space (str, depth+1);
-      g_string_append_printf (str, "end: %u\n", action->u.insert.end);
-      gtk_text_history_printf_space (str, depth+1);
-      escaped = g_strescape (istring_str (&action->u.insert.istr), NULL);
-      g_string_append_printf (str, "text: \"%s\"\n", escaped);
+      {
+        char *escaped;
+
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append_printf (str, "begin: %u\n", action->u.insert.begin);
+        gtk_text_history_printf_space (str, depth+1);
+        g_string_append_printf (str, "end: %u\n", action->u.insert.end);
+        gtk_text_history_printf_space (str, depth+1);
+        escaped = g_strescape (istring_str (&action->u.insert.istr), NULL);
+        g_string_append_printf (str, "text: \"%s\"\n", escaped);
+        g_free (escaped);
+      }
       break;
 
     case ACTION_KIND_GROUP:
