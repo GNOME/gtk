@@ -372,7 +372,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
   serializable = gdk_content_formats_union_serialize_mime_types (serializable);
   mime_types = gdk_content_formats_get_mime_types (serializable, &n_mime_types);
 
-  for (guint i = 0; mime_types[i]; i++)
+  for (gsize i = 0; i < n_mime_types; i++)
     {
       const char *mime_type = mime_types[i];
       NSPasteboardType type;
@@ -384,6 +384,25 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
           if (alternate)
             [ret addObject:alternate];
         }
+    }
+
+  gdk_content_formats_unref (serializable);
+
+  /* Default to an url type (think gobject://internal)
+   * to support internal, GType-based DnD.
+   */
+  if (n_mime_types == 0)
+    {
+      GdkContentFormats *formats;
+      gsize n_gtypes;
+
+      formats = gdk_content_provider_ref_formats (self->_contentProvider);
+      gdk_content_formats_get_gtypes (formats, &n_gtypes);
+
+      if (n_gtypes)
+        [ret addObject:NSPasteboardTypeURL];
+
+      gdk_content_formats_unref (formats);
     }
 
   return g_steal_pointer (&ret);
