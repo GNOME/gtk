@@ -16,14 +16,14 @@
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2018.
 # Sabri Ünal <libreajans@gmail.com>, 2022, 2023.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2018, 2019, 2020, 2021, 2022, 2023.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2018-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-01-08 14:30+0000\n"
-"PO-Revision-Date: 2023-01-11 08:36+0300\n"
+"PO-Revision-Date: 2023-01-11 10:00+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -204,7 +204,7 @@ msgstr "Escape"
 #: gdk/keynamesprivate.h:6850
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Çoklu Tuş"
+msgstr "Compose"
 
 #: gdk/keynamesprivate.h:6851
 msgctxt "keyboard label"
@@ -360,7 +360,7 @@ msgstr "Monitör Parlaklığını Artır"
 #: gdk/keynamesprivate.h:6882
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
-msgstr "Monitör Parlaklığını Azalt"
+msgstr "Monitör Parlaklığını Düşür"
 
 #: gdk/keynamesprivate.h:6883
 msgctxt "keyboard label"
@@ -370,7 +370,7 @@ msgstr "Klavye Parlaklığını Artır"
 #: gdk/keynamesprivate.h:6884
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "Klavye Parlaklığını Azalt"
+msgstr "Klavye Parlaklığını Düşür"
 
 #: gdk/keynamesprivate.h:6885
 msgctxt "keyboard label"
@@ -390,7 +390,7 @@ msgstr "Sesi Azalt"
 #: gdk/keynamesprivate.h:6888
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "Sesi Yükselt"
+msgstr "Sesi Artır"
 
 #: gdk/keynamesprivate.h:6889
 msgctxt "keyboard label"
