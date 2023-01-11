@@ -41,7 +41,6 @@ struct _GdkMacosDrag
   GdkDrag parent_instance;
 
   GdkMacosDragSurface *drag_surface;
-  GdkSeat *drag_seat;
   GdkCursor *cursor;
 
   int hot_x;

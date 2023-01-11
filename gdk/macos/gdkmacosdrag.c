@@ -188,47 +188,6 @@ gdk_macos_drag_set_cursor (GdkDrag   *drag,
     [nscursor set];
 }
 
-static gboolean
-drag_grab (GdkMacosDrag *self)
-{
-  GdkSeat *seat;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  seat = gdk_device_get_seat (gdk_drag_get_device (GDK_DRAG (self)));
-
-  if (gdk_seat_grab (seat,
-                     GDK_SURFACE (self->drag_surface),
-                     GDK_SEAT_CAPABILITY_ALL_POINTING,
-                     FALSE,
-                     self->cursor,
-                     NULL,
-                     NULL,
-                     NULL) != GDK_GRAB_SUCCESS)
-    return FALSE;
-
-  g_set_object (&self->drag_seat, seat);
-
-  return TRUE;
-}
-
-static void
-drag_ungrab (GdkMacosDrag *self)
-{
-  GdkDisplay *display;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  if (self->drag_seat)
-    {
-      gdk_seat_ungrab (self->drag_seat);
-      g_clear_object (&self->drag_seat);
-    }
-
-  display = gdk_drag_get_display (GDK_DRAG (self));
-  _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), GDK_CURRENT_TIME);
-}
-
 static void
 gdk_macos_drag_cancel (GdkDrag             *drag,
                        GdkDragCancelReason  reason)
@@ -241,7 +200,6 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
     return;
 
   self->cancelled = TRUE;
-  drag_ungrab (self);
   gdk_drag_drop_done (drag, FALSE);
 }
 
@@ -254,7 +212,6 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
   g_assert (GDK_IS_MACOS_DRAG (self));
 
   g_object_ref (self);
-  drag_ungrab (self);
   g_signal_emit_by_name (drag, "dnd-finished");
   gdk_drag_drop_done (drag, TRUE);
   g_object_unref (self);
@@ -543,11 +500,6 @@ gdk_macos_drag_finalize (GObject *object)
   GdkMacosDragSurface *drag_surface = g_steal_pointer (&self->drag_surface);
 
   g_clear_object (&self->cursor);
-  if (self->drag_seat)
-    {
-      gdk_seat_ungrab (self->drag_seat);
-      g_clear_object (&self->drag_seat);
-    }
 
   G_OBJECT_CLASS (gdk_macos_drag_parent_class)->finalize (object);
 
