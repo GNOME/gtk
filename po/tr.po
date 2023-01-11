@@ -16,22 +16,22 @@
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2018.
 # Sabri Ünal <libreajans@gmail.com>, 2022.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2018, 2019, 2020, 2021, 2022.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2018-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-01-02 15:10+0000\n"
-"PO-Revision-Date: 2023-01-10 12:35+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
-"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
+"PO-Revision-Date: 2023-01-11 09:58+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -204,7 +204,7 @@ msgstr "Escape"
 #: gdk/keynamesprivate.h:6850
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Çoklu Tuş"
+msgstr "Compose"
 
 #: gdk/keynamesprivate.h:6851
 msgctxt "keyboard label"
@@ -275,7 +275,7 @@ msgstr "Boşluk (numerik klavye)"
 #: gdk/keynamesprivate.h:6865
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "Tab (numerik klavye)"
+msgstr "Sekme (numerik klavye)"
 
 #: gdk/keynamesprivate.h:6866
 msgctxt "keyboard label"
@@ -295,7 +295,7 @@ msgstr "Sol (numerik klavye)"
 #: gdk/keynamesprivate.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Up (numerik klavye)"
+msgstr "Yukarı (numerik klavye)"
 
 #: gdk/keynamesprivate.h:6870
 msgctxt "keyboard label"
@@ -360,7 +360,7 @@ msgstr "Monitör Parlaklığını Artır"
 #: gdk/keynamesprivate.h:6882
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
-msgstr "Monitör Parlaklığını Azalt"
+msgstr "Monitör Parlaklığını Düşür"
 
 #: gdk/keynamesprivate.h:6883
 msgctxt "keyboard label"
@@ -370,7 +370,7 @@ msgstr "Klavye Parlaklığını Artır"
 #: gdk/keynamesprivate.h:6884
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "Klavye Parlaklığını Azalt"
+msgstr "Klavye Parlaklığını Düşür"
 
 #: gdk/keynamesprivate.h:6885
 msgctxt "keyboard label"
@@ -390,7 +390,7 @@ msgstr "Sesi Azalt"
 #: gdk/keynamesprivate.h:6888
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "Sesi Yükselt"
+msgstr "Sesi Artır"
 
 #: gdk/keynamesprivate.h:6889
 msgctxt "keyboard label"
@@ -460,7 +460,7 @@ msgstr "WWW"
 #: gdk/keynamesprivate.h:6902
 msgctxt "keyboard label"
 msgid "Search"
-msgstr "Arama"
+msgstr "Ara"
 
 #: gdk/keynamesprivate.h:6903
 msgctxt "keyboard label"
@@ -1122,7 +1122,7 @@ msgstr "Meta"
 #: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
-msgstr "NK"
+msgstr "Numerik Klavye"
 
 #: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
