@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-10-01 14:56+0000\n"
-"PO-Revision-Date: 2022-10-01 17:55+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-01-02 15:10+0000\n"
+"PO-Revision-Date: 2023-01-10 12:35+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -121,12 +121,12 @@ msgstr "Diğer uygulamalardan sürükle ve bırak desteklenmemektedir."
 msgid "No compatible formats to transfer contents."
 msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 
-#: gdk/gdkglcontext.c:394 gdk/x11/gdkglcontext-glx.c:604
+#: gdk/gdkglcontext.c:394 gdk/x11/gdkglcontext-glx.c:610
 msgid "No GL API allowed."
 msgstr "İzin verilen GP API yok."
 
 #: gdk/gdkglcontext.c:418 gdk/win32/gdkglcontext-win32-wgl.c:611
-#: gdk/x11/gdkglcontext-glx.c:638
+#: gdk/x11/gdkglcontext-glx.c:644
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
@@ -576,7 +576,7 @@ msgid "Reading data failed at row %d"
 msgstr "Veri okunurken %d. satırda hata"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:335
+#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:336
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
@@ -773,15 +773,15 @@ msgstr "Pano yöneticisi seçimi depolayamadı."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Pano depolanamadı. Aktif pano yöneticisi yok."
 
-#: gdk/x11/gdkglcontext-glx.c:754
+#: gdk/x11/gdkglcontext-glx.c:760
 msgid "No GLX configurations available"
 msgstr "Kullanılabilir GLX yapılandırması yok"
 
-#: gdk/x11/gdkglcontext-glx.c:827
+#: gdk/x11/gdkglcontext-glx.c:833
 msgid "No GLX configuration with required features found"
 msgstr "Gerekli özellikleri olan GLX yapılandırması bulunamadı"
 
-#: gdk/x11/gdkglcontext-glx.c:901
+#: gdk/x11/gdkglcontext-glx.c:907
 msgid "GLX is not supported"
 msgstr "GLX desteklenmiyor"
 
@@ -1122,7 +1122,7 @@ msgstr "Meta"
 #: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
-msgstr "Numerik Klavye"
+msgstr "NK"
 
 #: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
@@ -2101,10 +2101,10 @@ msgstr "Bu adda dosya zaten var"
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
+#: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:637 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6116 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6152 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2195,7 +2195,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6049 gtk/gtktextview.c:8966
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6065 gtk/gtktextview.c:8966
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2490,19 +2490,19 @@ msgstr "Karakter Değişkeleri"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6037 gtk/gtktextview.c:8954
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6053 gtk/gtktextview.c:8954
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6041 gtk/gtktextview.c:8958
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6057 gtk/gtktextview.c:8958
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6045 gtk/gtktextview.c:8962
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6061 gtk/gtktextview.c:8962
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6058 gtk/gtktextview.c:8987
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6074 gtk/gtktextview.c:8987
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
@@ -2612,7 +2612,7 @@ msgid "%d:%02d"
 msgstr "%d.%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6117
+#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6153
 msgid "_OK"
 msgstr "_Tamam"
 
@@ -2624,73 +2624,73 @@ msgstr "_Hayır"
 msgid "_Yes"
 msgstr "_Evet"
 
-#: gtk/gtkmountoperation.c:609
+#: gtk/gtkmountoperation.c:605
 msgid "Co_nnect"
 msgstr "Ba_ğlan"
 
-#: gtk/gtkmountoperation.c:675
+#: gtk/gtkmountoperation.c:671
 msgid "Connect As"
 msgstr "Olarak Bağlan"
 
-#: gtk/gtkmountoperation.c:684
+#: gtk/gtkmountoperation.c:680
 msgid "_Anonymous"
 msgstr "_Anonim"
 
-#: gtk/gtkmountoperation.c:691
+#: gtk/gtkmountoperation.c:687
 msgid "Registered U_ser"
 msgstr "Kayıtlı K_ullanıcı"
 
-#: gtk/gtkmountoperation.c:701
+#: gtk/gtkmountoperation.c:697
 msgid "_Username"
 msgstr "_Kullanıcı Adı"
 
-#: gtk/gtkmountoperation.c:706
+#: gtk/gtkmountoperation.c:702
 msgid "_Domain"
 msgstr "_Alan"
 
-#: gtk/gtkmountoperation.c:715
+#: gtk/gtkmountoperation.c:711
 msgid "Volume type"
 msgstr "Birim türü"
 
-#: gtk/gtkmountoperation.c:725
+#: gtk/gtkmountoperation.c:721
 msgid "_Hidden"
 msgstr "_Gizli"
 
-#: gtk/gtkmountoperation.c:728
+#: gtk/gtkmountoperation.c:724
 msgid "_Windows system"
 msgstr "_Windows sistemi"
 
-#: gtk/gtkmountoperation.c:731
+#: gtk/gtkmountoperation.c:727
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:737
+#: gtk/gtkmountoperation.c:733
 msgid "_Password"
 msgstr "_Parola"
 
-#: gtk/gtkmountoperation.c:759
+#: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
 msgstr "Parolayı _anında unut"
 
-#: gtk/gtkmountoperation.c:769
+#: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
 msgstr "Parolayı _çıkış yapana dek anımsa"
 
-#: gtk/gtkmountoperation.c:780
+#: gtk/gtkmountoperation.c:776
 msgid "Remember _forever"
 msgstr "_Sürekli anımsa"
 
-#: gtk/gtkmountoperation.c:1206
+#: gtk/gtkmountoperation.c:1260
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Bilinmeyen Uygulama (İşlem Kimliği %d)"
 
-#: gtk/gtkmountoperation.c:1405
+#: gtk/gtkmountoperation.c:1421
 #, c-format
 msgid "Unable to end process"
 msgstr "İşlem sonlandırılamadı"
 
-#: gtk/gtkmountoperation.c:1435
+#: gtk/gtkmountoperation.c:1571
 msgid "_End Process"
 msgstr "İşlemi _Sonlandır"
 
@@ -2700,27 +2700,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "%d işlem kimlikli süreç öldürülemiyor. İşlem gerçekleştirilemedi."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:984
+#: gtk/gtkmountoperation-x11.c:987
 msgid "Terminal Pager"
 msgstr "Uçbirim Sayfalayıcı"
 
-#: gtk/gtkmountoperation-x11.c:985
+#: gtk/gtkmountoperation-x11.c:988
 msgid "Top Command"
 msgstr "Üst Komut"
 
-#: gtk/gtkmountoperation-x11.c:986
+#: gtk/gtkmountoperation-x11.c:989
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:987
+#: gtk/gtkmountoperation-x11.c:990
 msgid "Bourne Shell"
 msgstr "Bourne Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:988
+#: gtk/gtkmountoperation-x11.c:991
 msgid "Z Shell"
 msgstr "Z Kabuğu"
 
-#: gtk/gtkmountoperation-x11.c:1085
+#: gtk/gtkmountoperation-x11.c:1091
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "%d işlem kimlikli işlem durdurulamıyor: %s"
@@ -3484,7 +3484,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Kenar Çubuğu"
 
-#: gtk/gtktext.c:6063 gtk/gtktextview.c:8992
+#: gtk/gtktext.c:6079 gtk/gtktextview.c:8992
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
@@ -3519,12 +3519,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%% %d"
 
-#: gtk/gtkwindow.c:6104
+#: gtk/gtkwindow.c:6140
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK Denetleyicisi kullanmak istiyor musunuz?"
 
-#: gtk/gtkwindow.c:6106
+#: gtk/gtkwindow.c:6142
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3535,7 +3535,7 @@ msgstr ""
 "izin veren etkileşimli hata ayıklayıcıdır. Bunun kullanılması uygulamanın "
 "kesilmesine ya da çökmesine neden olabilir."
 
-#: gtk/gtkwindow.c:6111
+#: gtk/gtkwindow.c:6147
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
