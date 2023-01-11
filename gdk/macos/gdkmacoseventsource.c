@@ -1018,7 +1018,10 @@ run_loop_observer_callback (CFRunLoopObserverRef observer,
       break;
     }
 
-  if (getting_events > 0) /* Activity we triggered */
+  /* DnD starts a nested runloop, or so it seems.
+     If we have such a loop, we still want to run
+     our idle handlers. */
+  if (getting_events > 0 && current_loop_level < 2)
     return;
 
   switch (activity)
