@@ -127,6 +127,126 @@ G_DEFINE_TYPE (GtkTextHistory, gtk_text_history, G_TYPE_OBJECT)
       return;                            \
   } G_STMT_END
 
+static const char *
+action_kind_name (ActionKind kind)
+{
+  switch (kind)
+    {
+    case ACTION_KIND_BARRIER: return "Barrier";
+    case ACTION_KIND_DELETE_BACKSPACE: return "Delete_Backspace";
+    case ACTION_KIND_DELETE_KEY: return "Delete_Key";
+    case ACTION_KIND_DELETE_PROGRAMMATIC: return "Delete_Programmatic";
+    case ACTION_KIND_DELETE_SELECTION: return "Delete_Selection";
+    case ACTION_KIND_GROUP: return "Group";
+    case ACTION_KIND_INSERT: return "Insert";
+    default: return "unknown";
+    }
+}
+
+static inline void
+gtk_text_history_printf_space (GString *str,
+                               guint    depth)
+{
+  for (guint i = 0; i < depth; i++)
+    g_string_append (str, "  ");
+}
+
+static void
+gtk_text_history_printf_action (Action  *action,
+                                GString *str,
+                                guint    depth)
+{
+  g_autofree char *escaped = NULL;
+
+  gtk_text_history_printf_space (str, depth);
+  g_string_append_printf (str, "%s {\n", action_kind_name (action->kind));
+
+  gtk_text_history_printf_space (str, depth+1);
+  g_string_append_printf (str, "is_modified: %s\n", action->is_modified ? "true" : "false");
+  gtk_text_history_printf_space (str, depth+1);
+  g_string_append_printf (str, "is_modified_set: %s\n", action->is_modified_set ? "true" : "false");
+
+  switch (action->kind)
+    {
+    case ACTION_KIND_BARRIER:
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "depth: %u\n", action->u.group.depth);
+      break;
+
+    case ACTION_KIND_DELETE_BACKSPACE:
+    case ACTION_KIND_DELETE_KEY:
+    case ACTION_KIND_DELETE_PROGRAMMATIC:
+    case ACTION_KIND_DELETE_SELECTION:
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "begin: %u\n", action->u.delete.begin);
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "end: %u\n", action->u.delete.end);
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append (str, "selection {\n");
+      gtk_text_history_printf_space (str, depth+2);
+      g_string_append_printf (str, "insert: %d\n", action->u.delete.selection.insert);
+      gtk_text_history_printf_space (str, depth+2);
+      g_string_append_printf (str, "bound: %d\n", action->u.delete.selection.bound);
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append (str, "}\n");
+      gtk_text_history_printf_space (str, depth+1);
+      escaped = g_strescape (istring_str (&action->u.delete.istr), NULL);
+      g_string_append_printf (str, "text: \"%s\"\n", escaped);
+      break;
+
+    case ACTION_KIND_INSERT:
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "begin: %u\n", action->u.insert.begin);
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "end: %u\n", action->u.insert.end);
+      gtk_text_history_printf_space (str, depth+1);
+      escaped = g_strescape (istring_str (&action->u.insert.istr), NULL);
+      g_string_append_printf (str, "text: \"%s\"\n", escaped);
+      break;
+
+    case ACTION_KIND_GROUP:
+      gtk_text_history_printf_space (str, depth+1);
+      g_string_append_printf (str, "depth: %u\n", action->u.group.depth);
+
+      for (const GList *iter = action->u.group.actions.head; iter; iter = iter->next)
+        {
+          Action *child = iter->data;
+
+          gtk_text_history_printf_space (str, depth+1);
+          g_string_append (str, "children {\n");
+          gtk_text_history_printf_action (child, str, depth+2);
+          gtk_text_history_printf_space (str, depth+1);
+          g_string_append (str, "}\n");
+        }
+
+      break;
+
+    default:
+      break;
+    }
+
+  gtk_text_history_printf_space (str, depth);
+  g_string_append (str, "}\n");
+}
+
+G_GNUC_UNUSED static char *
+gtk_text_history_printf (GtkTextHistory *history)
+{
+  GString *str = g_string_new (NULL);
+
+  g_string_append (str, "undo {\n");
+  for (const GList *iter = history->undo_queue.head; iter; iter = iter->next)
+    gtk_text_history_printf_action (iter->data, str, 1);
+  g_string_append (str, "}\n");
+
+  g_string_append (str, "redo {\n");
+  for (const GList *iter = history->redo_queue.head; iter; iter = iter->next)
+    gtk_text_history_printf_action (iter->data, str, 1);
+  g_string_append (str, "}\n");
+
+  return g_string_free (str, FALSE);
+}
+
 static inline void
 uint_order (guint *a,
             guint *b)
@@ -718,6 +838,14 @@ gtk_text_history_undo (GtkTextHistory *self)
   return_if_not_enabled (self);
   return_if_applying (self);
   return_if_irreversible (self);
+
+#if 0
+  {
+    char *str = gtk_text_history_printf (self);
+    g_print ("%s\n", str);
+    g_free (str);
+  }
+#endif
 
   if (gtk_text_history_get_can_undo (self))
     {
