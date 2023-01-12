@@ -1777,11 +1777,11 @@ gdk_display_init_egl (GdkDisplay  *self,
 gpointer
 gdk_display_get_egl_display (GdkDisplay *self)
 {
+#ifdef HAVE_EGL
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
   g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
 
-#ifdef HAVE_EGL
   if (!priv->egl_display &&
       !gdk_display_prepare_gl (self, NULL))
     return NULL;
