@@ -1715,7 +1715,6 @@ insert_theme (GtkIconTheme *self,
   IconTheme *theme = NULL;
   char *path;
   GKeyFile *theme_file;
-  GError *error = NULL;
   GStatBuf stat_buf;
 
   for (l = self->themes; l != NULL; l = l->next)
@@ -1725,6 +1724,7 @@ insert_theme (GtkIconTheme *self,
         return;
     }
 
+  theme_file = NULL;
   for (i = 0; self->search_path[i]; i++)
     {
       IconThemeDirMtime dir_mtime;
@@ -1736,6 +1736,22 @@ insert_theme (GtkIconTheme *self,
         {
           dir_mtime.mtime = stat_buf.st_mtime;
           dir_mtime.exists = TRUE;
+
+          if (!theme_file)
+            {
+              char *file = g_build_filename (path, "index.theme", NULL);
+              if (g_file_test (file, G_FILE_TEST_IS_REGULAR))
+                {
+                  theme_file = g_key_file_new ();
+                  g_key_file_set_list_separator (theme_file, ',');
+                  if (!g_key_file_load_from_file (theme_file, file, 0, NULL))
+                    {
+                      g_key_file_free (theme_file);
+                      theme_file = NULL;
+                    }
+                }
+              g_free (file);
+            }
         }
       else
         {
@@ -1744,25 +1760,6 @@ insert_theme (GtkIconTheme *self,
         }
 
       g_array_insert_val (self->dir_mtimes, 0, dir_mtime);
-    }
-
-  theme_file = NULL;
-  for (i = 0; self->search_path[i] && !theme_file; i++)
-    {
-      path = g_build_filename (self->search_path[i], theme_name, "index.theme", NULL);
-      if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
-        {
-          theme_file = g_key_file_new ();
-          g_key_file_set_list_separator (theme_file, ',');
-          if (!g_key_file_load_from_file (theme_file, path, 0, &error))
-            {
-              g_key_file_free (theme_file);
-              theme_file = NULL;
-              g_error_free (error);
-              error = NULL;
-            }
-        }
-      g_free (path);
     }
 
   if (theme_file == NULL)
