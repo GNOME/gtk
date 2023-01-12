@@ -418,7 +418,7 @@ parse_string (GtkCssParser *parser,
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
     return FALSE;
 
-  s = g_strdup (token->string.string);
+  s = g_strdup (gtk_css_token_get_string (token));
   gtk_css_parser_consume_token (parser);
 
   g_free (*(char **) out_string);
@@ -931,7 +931,7 @@ parse_declarations (GtkCssParser      *parser,
         {
           if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
             gtk_css_parser_error_syntax (parser, "No variable named \"%s\"",
-                                         gtk_css_parser_get_token (parser)->string.string);
+                                         gtk_css_token_get_string (gtk_css_parser_get_token (parser)));
           else
             gtk_css_parser_error_syntax (parser, "Expected a variable name");
         }
@@ -1894,7 +1894,7 @@ parse_node (GtkCssParser *parser,
 
   if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     gtk_css_parser_error_value (parser, "\"%s\" is not a valid node name",
-                                gtk_css_parser_get_token (parser)->string.string);
+                                gtk_css_token_get_string (gtk_css_parser_get_token (parser)));
   else
     gtk_css_parser_error_syntax (parser, "Expected a node name");
 

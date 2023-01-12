@@ -586,7 +586,7 @@ gdk_rgba_parser_parse (GtkCssParser *parser,
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
            gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED))
     {
-      const char *s = token->string.string;
+      const char *s = gtk_css_token_get_string (token);
 
       switch (strlen (s))
         {
@@ -637,13 +637,13 @@ gdk_rgba_parser_parse (GtkCssParser *parser,
         {
           *rgba = (GdkRGBA) { 0, 0, 0, 0 };
         }
-      else if (gdk_rgba_parse (rgba, token->string.string))
+      else if (gdk_rgba_parse (rgba, gtk_css_token_get_string (token)))
         {
           /* everything's fine */
         }
       else
         {
-          gtk_css_parser_error_syntax (parser, "\"%s\" is not a valid color name.", token->string.string);
+          gtk_css_parser_error_syntax (parser, "\"%s\" is not a valid color name.", gtk_css_token_get_string (token));
           return FALSE;
         }
 

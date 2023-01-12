@@ -81,7 +81,11 @@ typedef struct _GtkCssDimensionToken GtkCssDimensionToken;
 
 struct _GtkCssStringToken {
   GtkCssTokenType  type;
-  char            *string;
+  int len;
+  union {
+    char             buf[16];
+    char            *string;
+  } u;
 };
 
 struct _GtkCssDelimToken {
@@ -97,7 +101,7 @@ struct _GtkCssNumberToken {
 struct _GtkCssDimensionToken {
   GtkCssTokenType  type;
   double           value;
-  char            *dimension;
+  char             dimension[8];
 };
 
 union _GtkCssToken {
@@ -107,6 +111,15 @@ union _GtkCssToken {
   GtkCssNumberToken number;
   GtkCssDimensionToken dimension;
 };
+
+static inline const char *
+gtk_css_token_get_string (const GtkCssToken *token)
+{
+  if (token->string.len < 16)
+    return token->string.u.buf;
+  else
+    return token->string.u.string;
+}
 
 void                    gtk_css_token_clear                     (GtkCssToken            *token);
 

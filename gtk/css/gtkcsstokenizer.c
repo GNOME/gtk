@@ -50,18 +50,14 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      g_free (token->string.string);
+      if (token->string.len >= 16)
+        g_free (token->string.u.string);
       break;
 
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNED_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
-      g_free (token->dimension.dimension);
-      break;
-
-    default:
-      g_assert_not_reached ();
     case GTK_CSS_TOKEN_EOF:
     case GTK_CSS_TOKEN_WHITESPACE:
     case GTK_CSS_TOKEN_OPEN_PARENS:
@@ -91,6 +87,9 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_BAD_URL:
     case GTK_CSS_TOKEN_COMMENT:
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   token->type = GTK_CSS_TOKEN_EOF;
@@ -296,7 +295,7 @@ gtk_css_token_is_ident (const GtkCssToken *token,
                         const char        *ident)
 {
   return gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT)
-      && (g_ascii_strcasecmp (token->string.string, ident) == 0);
+      && (g_ascii_strcasecmp (gtk_css_token_get_string (token), ident) == 0);
 }
 
 gboolean
@@ -304,7 +303,7 @@ gtk_css_token_is_function (const GtkCssToken *token,
                            const char        *ident)
 {
   return gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION)
-      && (g_ascii_strcasecmp (token->string.string, ident) == 0);
+      && (g_ascii_strcasecmp (gtk_css_token_get_string (token), ident) == 0);
 }
 
 gboolean
@@ -324,33 +323,33 @@ gtk_css_token_print (const GtkCssToken *token,
   switch (token->type)
     {
     case GTK_CSS_TOKEN_STRING:
-      append_string (string, token->string.string);
+      append_string (string, gtk_css_token_get_string (token));
       break;
 
     case GTK_CSS_TOKEN_IDENT:
-      append_ident (string, token->string.string);
+      append_ident (string, gtk_css_token_get_string (token));
       break;
 
     case GTK_CSS_TOKEN_URL:
       g_string_append (string, "url(");
-      append_ident (string, token->string.string);
+      append_ident (string, gtk_css_token_get_string (token));
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_TOKEN_FUNCTION:
-      append_ident (string, token->string.string);
+      append_ident (string, gtk_css_token_get_string (token));
       g_string_append_c (string, '(');
       break;
 
     case GTK_CSS_TOKEN_AT_KEYWORD:
       g_string_append_c (string, '@');
-      append_ident (string, token->string.string);
+      append_ident (string, gtk_css_token_get_string (token));
       break;
 
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
       g_string_append_c (string, '#');
-      append_ident (string, token->string.string);
+      append_ident (string, gtk_css_token_get_string (token));
       break;
 
     case GTK_CSS_TOKEN_DELIM:
@@ -492,7 +491,7 @@ gtk_css_token_to_string (const GtkCssToken *token)
 static void
 gtk_css_token_init_string (GtkCssToken     *token,
                            GtkCssTokenType  type,
-                           char            *string)
+                           GString         *string)
 {
   token->type = type;
 
@@ -505,7 +504,11 @@ gtk_css_token_init_string (GtkCssToken     *token,
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      token->string.string = string;
+      token->string.len = string->len;
+      if (string->len < 16)
+        g_strlcpy (token->string.u.buf, string->str, 16);
+      else
+        token->string.u.string = g_strdup (string->str);
       break;
     default:
       g_assert_not_reached ();
@@ -545,7 +548,7 @@ static void
 gtk_css_token_init_dimension (GtkCssToken     *token,
                               GtkCssTokenType  type,
                               double           value,
-                              char            *dimension)
+                              GString         *string)
 {
   token->type = type;
 
@@ -556,7 +559,7 @@ gtk_css_token_init_dimension (GtkCssToken     *token,
     case GTK_CSS_TOKEN_SIGNED_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       token->dimension.value = value;
-      token->dimension.dimension = dimension;
+      g_strlcpy (token->dimension.dimension, string->str, 8);
       break;
     default:
       g_assert_not_reached ();
@@ -630,7 +633,7 @@ gtk_css_tokenizer_parse_error (GError     **error,
   va_end (args);
 }
 
-static gboolean
+static inline gboolean
 is_newline (char c)
 {
   return c == '\n'
@@ -638,7 +641,7 @@ is_newline (char c)
       || c == '\f';
 }
 
-static gboolean
+static inline gboolean
 is_whitespace (char c)
 {
   return is_newline (c)
@@ -646,13 +649,13 @@ is_whitespace (char c)
       || c == ' ';
 }
 
-static gboolean
+static inline gboolean
 is_multibyte (char c)
 {
   return c & 0x80;
 }
 
-static gboolean
+static inline gboolean
 is_name_start (char c)
 {
    return is_multibyte (c)
@@ -660,7 +663,7 @@ is_name_start (char c)
        || c == '_';
 }
 
-static gboolean
+static inline gboolean
 is_name (char c)
 {
   return is_name_start (c)
@@ -668,7 +671,7 @@ is_name (char c)
       || c == '-';
 }
 
-static gboolean
+static inline gboolean
 is_non_printable (char c)
 {
   return (c >= 0 && c <= 0x08)
@@ -678,7 +681,7 @@ is_non_printable (char c)
       || c == 0x7F;
 }
 
-static gboolean
+static inline gboolean
 is_valid_escape (const char *data,
                  const char *end)
 {
@@ -703,7 +706,7 @@ gtk_css_tokenizer_remaining (GtkCssTokenizer *tokenizer)
   return tokenizer->end - tokenizer->data;
 }
 
-static gboolean
+static inline gboolean
 gtk_css_tokenizer_has_valid_escape (GtkCssTokenizer *tokenizer)
 {
   return is_valid_escape (tokenizer->data, tokenizer->end);
@@ -875,7 +878,7 @@ gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
   return value;
 }
 
-static char *
+static void
 gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 {
   g_string_set_size (tokenizer->name_buffer, 0);
@@ -911,8 +914,6 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
         }
     }
   while (tokenizer->data != tokenizer->end);
-
-  return g_strndup (tokenizer->name_buffer->str, tokenizer->name_buffer->len);
 }
 
 static void
@@ -1005,7 +1006,8 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
         }
     }
 
-  gtk_css_token_init_string (token, GTK_CSS_TOKEN_URL, g_string_free (url, FALSE));
+  gtk_css_token_init_string (token, GTK_CSS_TOKEN_URL, url);
+  g_string_free (url, TRUE);
 
   return TRUE;
 }
@@ -1015,12 +1017,12 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
                                    GtkCssToken      *token,
                                    GError          **error)
 {
-  char *name = gtk_css_tokenizer_read_name (tokenizer);
+  gtk_css_tokenizer_read_name (tokenizer);
 
   if (*tokenizer->data == '(')
     {
       gtk_css_tokenizer_consume_ascii (tokenizer);
-      if (g_ascii_strcasecmp (name, "url") == 0)
+      if (g_ascii_strcasecmp (tokenizer->name_buffer->str, "url") == 0)
         {
           const char *data = tokenizer->data;
 
@@ -1028,18 +1030,15 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
             data++;
 
           if (*data != '"' && *data != '\'')
-            {
-              g_free (name);
-              return gtk_css_tokenizer_read_url (tokenizer, token, error);
-            }
+            return gtk_css_tokenizer_read_url (tokenizer, token, error);
         }
 
-      gtk_css_token_init_string (token, GTK_CSS_TOKEN_FUNCTION, name);
+      gtk_css_token_init_string (token, GTK_CSS_TOKEN_FUNCTION, tokenizer->name_buffer);
       return TRUE;
     }
   else
     {
-      gtk_css_token_init_string (token, GTK_CSS_TOKEN_IDENT, name);
+      gtk_css_token_init_string (token, GTK_CSS_TOKEN_IDENT, tokenizer->name_buffer);
       return TRUE;
     }
 }
@@ -1129,7 +1128,8 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       else
         type = has_sign ? GTK_CSS_TOKEN_SIGNED_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_DIMENSION;
 
-      gtk_css_token_init_dimension (token, type, value, gtk_css_tokenizer_read_name (tokenizer));
+      gtk_css_tokenizer_read_name (tokenizer);
+      gtk_css_token_init_dimension (token, type, value, tokenizer->name_buffer);
     }
   else if (gtk_css_tokenizer_remaining (tokenizer) > 0 && *tokenizer->data == '%')
     {
@@ -1145,7 +1145,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       else
         type = has_sign ? GTK_CSS_TOKEN_SIGNED_NUMBER : GTK_CSS_TOKEN_SIGNLESS_NUMBER;
 
-      gtk_css_token_init_number (token, type,value);
+      gtk_css_token_init_number (token, type, value);
     }
 }
 
@@ -1196,7 +1196,8 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
                                GtkCssToken      *token,
                                GError          **error)
 {
-  GString *string = g_string_new (NULL);
+  g_string_set_size (tokenizer->name_buffer, 0);
+
   char end = *tokenizer->data;
 
   gtk_css_tokenizer_consume_ascii (tokenizer);
@@ -1222,23 +1223,22 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
             }
           else
             {
-              g_string_append_unichar (string, gtk_css_tokenizer_read_escape (tokenizer));
+              g_string_append_unichar (tokenizer->name_buffer, gtk_css_tokenizer_read_escape (tokenizer));
             }
         }
       else if (is_newline (*tokenizer->data))
         {
-          g_string_free (string, TRUE);
           gtk_css_token_init (token, GTK_CSS_TOKEN_BAD_STRING);
           gtk_css_tokenizer_parse_error (error, "Newlines inside strings must be escaped");
           return FALSE;
         }
       else
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
         }
     }
 
-  gtk_css_token_init_string (token, GTK_CSS_TOKEN_STRING, g_string_free (string, FALSE));
+  gtk_css_token_init_string (token, GTK_CSS_TOKEN_STRING, tokenizer->name_buffer);
 
   return TRUE;
 }
@@ -1322,9 +1322,8 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
           else
             type = GTK_CSS_TOKEN_HASH_UNRESTRICTED;
 
-          gtk_css_token_init_string (token,
-                                     type,
-                                     gtk_css_tokenizer_read_name (tokenizer));
+          gtk_css_tokenizer_read_name (tokenizer);
+          gtk_css_token_init_string (token, type, tokenizer->name_buffer);
         }
       else
         {
@@ -1404,9 +1403,8 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
       gtk_css_tokenizer_consume_ascii (tokenizer);
       if (gtk_css_tokenizer_has_identifier (tokenizer))
         {
-          gtk_css_token_init_string (token,
-                                     GTK_CSS_TOKEN_AT_KEYWORD,
-                                     gtk_css_tokenizer_read_name (tokenizer));
+          gtk_css_tokenizer_read_name (tokenizer);
+          gtk_css_token_init_string (token, GTK_CSS_TOKEN_AT_KEYWORD, tokenizer->name_buffer);
         }
       else
         {

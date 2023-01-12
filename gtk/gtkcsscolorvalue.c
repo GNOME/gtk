@@ -722,7 +722,7 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
     {
       const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
-      value = _gtk_css_color_value_new_name (token->string.string);
+      value = _gtk_css_color_value_new_name (gtk_css_token_get_string (token));
       gtk_css_parser_consume_token (parser);
 
       return value;
