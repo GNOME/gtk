@@ -1196,7 +1196,8 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
                                GtkCssToken      *token,
                                GError          **error)
 {
-  GString *string = g_string_new (NULL);
+  g_string_set_size (tokenizer->name_buffer, 0);
+
   char end = *tokenizer->data;
 
   gtk_css_tokenizer_consume_ascii (tokenizer);
@@ -1222,23 +1223,22 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
             }
           else
             {
-              g_string_append_unichar (string, gtk_css_tokenizer_read_escape (tokenizer));
+              g_string_append_unichar (tokenizer->name_buffer, gtk_css_tokenizer_read_escape (tokenizer));
             }
         }
       else if (is_newline (*tokenizer->data))
         {
-          g_string_free (string, TRUE);
           gtk_css_token_init (token, GTK_CSS_TOKEN_BAD_STRING);
           gtk_css_tokenizer_parse_error (error, "Newlines inside strings must be escaped");
           return FALSE;
         }
       else
         {
-          gtk_css_tokenizer_consume_char (tokenizer, string);
+          gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
         }
     }
 
-  gtk_css_token_init_string (token, GTK_CSS_TOKEN_STRING, g_string_free (string, FALSE));
+  gtk_css_token_init_string (token, GTK_CSS_TOKEN_STRING, g_strdup (tokenizer->name_buffer->str));
 
   return TRUE;
 }
