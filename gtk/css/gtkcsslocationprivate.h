@@ -25,13 +25,33 @@
 
 G_BEGIN_DECLS
 
-void                    gtk_css_location_init                   (GtkCssLocation         *location);
+static inline void
+gtk_css_location_init (GtkCssLocation *location)
+{
+  memset (location, 0, sizeof (GtkCssLocation));
+}
 
-void                    gtk_css_location_advance                (GtkCssLocation         *location,
-                                                                 gsize                   bytes,
-                                                                 gsize                   chars);
-void                    gtk_css_location_advance_newline        (GtkCssLocation         *location,
-                                                                 gboolean                is_windows);
+static inline void
+gtk_css_location_advance (GtkCssLocation *location,
+                          gsize           bytes,
+                          gsize           chars)
+{
+  location->bytes += bytes;
+  location->chars += chars;
+  location->line_bytes += bytes;
+  location->line_chars += chars;
+}
+
+static inline void
+gtk_css_location_advance_newline (GtkCssLocation *location,
+                                  gboolean        is_windows)
+{
+  location->bytes += is_windows ? 2 : 1;
+  location->chars += is_windows ? 2 : 1;
+  location->line_bytes = 0;
+  location->line_chars = 0;
+  location->lines++;
+}
 
 G_END_DECLS
 

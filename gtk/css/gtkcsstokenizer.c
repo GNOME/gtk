@@ -630,7 +630,7 @@ gtk_css_tokenizer_parse_error (GError     **error,
   va_end (args);
 }
 
-static gboolean
+static inline gboolean
 is_newline (char c)
 {
   return c == '\n'
@@ -638,7 +638,7 @@ is_newline (char c)
       || c == '\f';
 }
 
-static gboolean
+static inline gboolean
 is_whitespace (char c)
 {
   return is_newline (c)
@@ -646,13 +646,13 @@ is_whitespace (char c)
       || c == ' ';
 }
 
-static gboolean
+static inline gboolean
 is_multibyte (char c)
 {
   return c & 0x80;
 }
 
-static gboolean
+static inline gboolean
 is_name_start (char c)
 {
    return is_multibyte (c)
@@ -660,7 +660,7 @@ is_name_start (char c)
        || c == '_';
 }
 
-static gboolean
+static inline gboolean
 is_name (char c)
 {
   return is_name_start (c)
@@ -668,7 +668,7 @@ is_name (char c)
       || c == '-';
 }
 
-static gboolean
+static inline gboolean
 is_non_printable (char c)
 {
   return (c >= 0 && c <= 0x08)
@@ -678,7 +678,7 @@ is_non_printable (char c)
       || c == 0x7F;
 }
 
-static gboolean
+static inline gboolean
 is_valid_escape (const char *data,
                  const char *end)
 {
@@ -703,7 +703,7 @@ gtk_css_tokenizer_remaining (GtkCssTokenizer *tokenizer)
   return tokenizer->end - tokenizer->data;
 }
 
-static gboolean
+static inline gboolean
 gtk_css_tokenizer_has_valid_escape (GtkCssTokenizer *tokenizer)
 {
   return is_valid_escape (tokenizer->data, tokenizer->end);
