@@ -188,6 +188,7 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
   guint32 image_list_offset, n_images;
   int i, j;
   GHashTable *icons = NULL;
+  GString *string;
 
   directory_index = get_directory_index (cache, directory);
 
@@ -196,6 +197,8 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
 
   hash_offset = GET_UINT32 (cache->buffer, 4);
   n_buckets = GET_UINT32 (cache->buffer, hash_offset);
+
+  string = g_string_new ("");
 
   for (i = 0; i < n_buckets; i++)
     {
@@ -223,15 +226,18 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
               const char *name = cache->buffer + name_offset;
               const char *interned_name;
               guint32 hash_flags = 0;
+              int len;
 
               /* Icons named foo.symbolic.png are stored in the cache as "foo.symbolic" with ICON_CACHE_FLAG_PNG,
                * but we convert it internally to ICON_CACHE_FLAG_SYMBOLIC_PNG.
                * Otherwise we use the same enum values and names as on disk. */
-              if (g_str_has_suffix (name, ".symbolic") && (flags & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
+
+              len = strlen (name);
+              if (g_str_equal (name + len - strlen (".symbolic"), ".symbolic") && (flags & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
                 {
-                  char *converted_name = g_strndup (name, strlen (name) - 9);
-                  interned_name = gtk_string_set_add (set, converted_name);
-                  g_free (converted_name);
+                  g_string_set_size (string, 0);
+                  g_string_append_len (string, name, len - strlen (".symbolic"));
+                  interned_name = gtk_string_set_add (set, string->str);
                   flags |= ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
                   flags &= ~ICON_CACHE_FLAG_PNG_SUFFIX;
                 }
@@ -248,6 +254,8 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
           chain_offset = GET_UINT32 (cache->buffer, chain_offset);
         }
     }
+
+  g_string_free (string, TRUE);
 
   return icons;
 }
