@@ -97,7 +97,7 @@ struct _GtkCssNumberToken {
 struct _GtkCssDimensionToken {
   GtkCssTokenType  type;
   double           value;
-  char            *dimension;
+  char             dimension[8];
 };
 
 union _GtkCssToken {

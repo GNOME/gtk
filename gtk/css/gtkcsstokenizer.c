@@ -57,11 +57,6 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNED_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
-      g_free (token->dimension.dimension);
-      break;
-
-    default:
-      g_assert_not_reached ();
     case GTK_CSS_TOKEN_EOF:
     case GTK_CSS_TOKEN_WHITESPACE:
     case GTK_CSS_TOKEN_OPEN_PARENS:
@@ -91,6 +86,9 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_BAD_URL:
     case GTK_CSS_TOKEN_COMMENT:
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   token->type = GTK_CSS_TOKEN_EOF;
@@ -545,7 +543,8 @@ static void
 gtk_css_token_init_dimension (GtkCssToken     *token,
                               GtkCssTokenType  type,
                               double           value,
-                              char            *dimension)
+                              const char      *dimension,
+                              int              len)
 {
   token->type = type;
 
@@ -556,7 +555,13 @@ gtk_css_token_init_dimension (GtkCssToken     *token,
     case GTK_CSS_TOKEN_SIGNED_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       token->dimension.value = value;
-      token->dimension.dimension = dimension;
+      for (int i = 0; i < MIN (8, len); i++)
+        {
+          token->dimension.dimension[i] = dimension[i];
+          if (dimension[i] == 0)
+            break;
+        }
+      token->dimension.dimension[7] = 0;
       break;
     default:
       g_assert_not_reached ();
@@ -1129,7 +1134,8 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       else
         type = has_sign ? GTK_CSS_TOKEN_SIGNED_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_DIMENSION;
 
-      gtk_css_token_init_dimension (token, type, value, gtk_css_tokenizer_read_name (tokenizer));
+      char *name = gtk_css_tokenizer_read_name (tokenizer);
+      gtk_css_token_init_dimension (token, type, value, name, strlen (name));
     }
   else if (gtk_css_tokenizer_remaining (tokenizer) > 0 && *tokenizer->data == '%')
     {
