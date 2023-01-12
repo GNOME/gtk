@@ -947,7 +947,7 @@ gtk_css_selector_parse_selector_class (GtkCssParser   *parser,
       selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_CLASS
                                               : &GTK_CSS_SELECTOR_CLASS,
                                        selector);
-      selector->style_class.style_class = g_quark_from_string (token->string.string);
+      selector->style_class.style_class = g_quark_from_string (gtk_css_token_get_string (token));
       gtk_css_parser_consume_token (parser);
       return selector;
     }
@@ -1060,7 +1060,7 @@ parse_n_plus_b (GtkCssParser *parser,
       return parse_plus_b (parser, TRUE, b);
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
-           string_has_number (token->string.string, "n-", b))
+           string_has_number (gtk_css_token_get_string (token), "n-", b))
     {
       *a = before;
       *b = -*b;
@@ -1156,7 +1156,7 @@ parse_a_n_plus_b (GtkCssParser *parser,
     }
   else if (!seen_sign &&
            gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
-           string_has_number (token->string.string, "-n-", b))
+           string_has_number (gtk_css_token_get_string (token), "-n-", b))
     {
       *a = -1;
       *b = -*b;
@@ -1169,7 +1169,7 @@ parse_a_n_plus_b (GtkCssParser *parser,
       return parse_n_plus_b (parser, seen_sign ? seen_sign : 1, a, b);
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
-           string_has_number (token->string.string, "n-", b))
+           string_has_number (gtk_css_token_get_string (token), "n-", b))
     {
       *a = seen_sign ? seen_sign : 1;
       *b = -*b;
@@ -1177,7 +1177,7 @@ parse_a_n_plus_b (GtkCssParser *parser,
       return TRUE;
     }
   else if (!seen_sign && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
-           string_has_number (token->string.string, "-n-", b))
+           string_has_number (gtk_css_token_get_string (token), "-n-", b))
     {
       *a = -1;
       *b = -*b;
@@ -1288,7 +1288,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
 
       for (i = 0; i < G_N_ELEMENTS (pseudo_classes); i++)
         {
-          if (g_ascii_strcasecmp (pseudo_classes[i].name, token->string.string) == 0)
+          if (g_ascii_strcasecmp (pseudo_classes[i].name, gtk_css_token_get_string (token)) == 0)
             {
               if (pseudo_classes[i].state_flag)
                 {
@@ -1380,13 +1380,13 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_NAME, selector);
-                  selector->name.name = g_quark_from_string (token->string.string);
+                  selector->name.name = g_quark_from_string (gtk_css_token_get_string (token));
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ID, selector);
-                  selector->id.name = g_quark_from_string (token->string.string);
+                  selector->id.name = g_quark_from_string (gtk_css_token_get_string (token));
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is_delim (token, '.'))
@@ -1499,13 +1499,13 @@ gtk_css_selector_parse_simple_selector (GtkCssParser   *parser,
       else if (!parsed_something && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME, selector);
-          selector->name.name = g_quark_from_string (token->string.string);
+          selector->name.name = g_quark_from_string (gtk_css_token_get_string (token));
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ID, selector);
-          selector->id.name = g_quark_from_string (token->string.string);
+          selector->id.name = g_quark_from_string (gtk_css_token_get_string (token));
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is_delim (token, '.'))

@@ -648,7 +648,7 @@ gtk_css_parser_consume_function (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
   g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
 
-  g_strlcpy (function_name, token->string.string, 64);
+  g_strlcpy (function_name, gtk_css_token_get_string (token), 64);
   gtk_css_parser_start_block (self);
 
   arg = 0;
@@ -733,7 +733,7 @@ gtk_css_parser_has_ident (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
 
   return gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) &&
-         g_ascii_strcasecmp (token->string.string, ident) == 0;
+         g_ascii_strcasecmp (gtk_css_token_get_string (token), ident) == 0;
 }
 
 gboolean
@@ -765,7 +765,7 @@ gtk_css_parser_has_function (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
 
   return gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION) &&
-         g_ascii_strcasecmp (token->string.string, name) == 0;
+         g_ascii_strcasecmp (gtk_css_token_get_string (token), name) == 0;
 }
 
 /**
@@ -818,7 +818,7 @@ gtk_css_parser_try_ident (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
 
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) ||
-      g_ascii_strcasecmp (token->string.string, ident) != 0)
+      g_ascii_strcasecmp (gtk_css_token_get_string (token), ident) != 0)
     return FALSE;
 
   gtk_css_parser_consume_token (self);
@@ -845,7 +845,7 @@ gtk_css_parser_try_at_keyword (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
 
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_AT_KEYWORD) ||
-      g_ascii_strcasecmp (token->string.string, keyword) != 0)
+      g_ascii_strcasecmp (gtk_css_token_get_string (token), keyword) != 0)
     return FALSE;
 
   gtk_css_parser_consume_token (self);
@@ -907,7 +907,7 @@ gtk_css_parser_consume_ident (GtkCssParser *self)
       return NULL;
     }
 
-  ident = g_strdup (token->string.string);
+  ident = g_strdup (gtk_css_token_get_string (token));
   gtk_css_parser_consume_token (self);
 
   return ident;
@@ -938,7 +938,7 @@ gtk_css_parser_consume_string (GtkCssParser *self)
       return NULL;
     }
 
-  ident = g_strdup (token->string.string);
+  ident = g_strdup (gtk_css_token_get_string (token));
   gtk_css_parser_consume_token (self);
 
   return ident;
@@ -979,7 +979,7 @@ gtk_css_parser_consume_url (GtkCssParser *self)
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_URL))
     {
-      url = g_strdup (token->string.string);
+      url = g_strdup (gtk_css_token_get_string (token));
       gtk_css_parser_consume_token (self);
     }
   else if (gtk_css_token_is_function (token, "url"))
