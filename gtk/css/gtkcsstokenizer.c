@@ -1145,7 +1145,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       else
         type = has_sign ? GTK_CSS_TOKEN_SIGNED_NUMBER : GTK_CSS_TOKEN_SIGNLESS_NUMBER;
 
-      gtk_css_token_init_number (token, type,value);
+      gtk_css_token_init_number (token, type, value);
     }
 }
 
