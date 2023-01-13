@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include "gdktests.h"
 
 static void
 test_set_source_big_pixbuf (void)
@@ -28,13 +29,8 @@ test_set_source_big_pixbuf (void)
   cairo_surface_destroy (surface);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_cairo_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-  gtk_init ();
-
   g_test_add_func ("/drawing/set-source-big-pixbuf", test_set_source_big_pixbuf);
-
-  return g_test_run ();
 }

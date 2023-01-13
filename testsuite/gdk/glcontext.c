@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 #define ALL_APIS (GDK_GL_API_GL | GDK_GL_API_GLES)
 
 static GdkGLAPI
@@ -68,15 +70,11 @@ test_allowed_backends (gconstpointer data)
   g_object_unref (context);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_glcontext_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_data_func ("/allowed-apis/none", GSIZE_TO_POINTER (0), test_allowed_backends);
   g_test_add_data_func ("/allowed-apis/gl", GSIZE_TO_POINTER (GDK_GL_API_GL), test_allowed_backends);
   g_test_add_data_func ("/allowed-apis/gles", GSIZE_TO_POINTER (GDK_GL_API_GLES), test_allowed_backends);
   g_test_add_data_func ("/allowed-apis/all", GSIZE_TO_POINTER (GDK_GL_API_GL | GDK_GL_API_GLES), test_allowed_backends);
-
-  return g_test_run ();
 }

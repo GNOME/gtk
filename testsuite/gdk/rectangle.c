@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <cairo-gobject.h>
 
+#include "gdktests.h"
+
 static void
 test_rectangle_equal (void)
 {
@@ -107,18 +109,12 @@ test_rectangle_contains (void)
   g_assert_false (gdk_rectangle_contains_point (&b, 10, 6));
 }
 
-int
-main (int argc, char *argv[])
+void
+add_rectangle_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
-  gtk_init ();
-
   g_test_add_func ("/rectangle/equal", test_rectangle_equal);
   g_test_add_func ("/rectangle/intersect", test_rectangle_intersect);
   g_test_add_func ("/rectangle/union", test_rectangle_union);
   g_test_add_func ("/rectangle/type", test_rectangle_type);
   g_test_add_func ("/rectangle/contains", test_rectangle_contains);
-
-  return g_test_run ();
 }

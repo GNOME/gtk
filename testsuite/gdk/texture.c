@@ -2,6 +2,8 @@
 
 #include "gdk/gdkmemorytextureprivate.h"
 
+#include "gdkinternaltests.h"
+
 static void
 compare_pixels (int     width,
                 int     height,
@@ -160,16 +162,11 @@ test_texture_subtexture (void)
   g_object_unref (texture);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_texture_tests (void)
 {
-  /* We want to use resources from libgtk, so we need gtk initialized */
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/texture/from-pixbuf", test_texture_from_pixbuf);
   g_test_add_func ("/texture/from-resource", test_texture_from_resource);
   g_test_add_func ("/texture/save-to-png", test_texture_save_to_png);
   g_test_add_func ("/texture/subtexture", test_texture_subtexture);
-
-  return g_test_run ();
 }

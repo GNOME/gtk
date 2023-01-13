@@ -3,6 +3,8 @@
 #include <gdk/x11/gdkx.h>
 #endif
 
+#include "gdktests.h"
+
 static void
 test_to_text_list (void)
 {
@@ -34,13 +36,8 @@ test_to_text_list (void)
 #endif
 }
 
-int
-main (int argc, char *argv[])
+void
+add_encoding_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-  gtk_init ();
-
   g_test_add_func ("/encoding/to-text-list", test_to_text_list);
-
-  return g_test_run ();
 }

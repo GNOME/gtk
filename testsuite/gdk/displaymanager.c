@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 static void
 test_basic (void)
 {
@@ -40,16 +42,9 @@ test_set_default (void)
   g_assert_true (d == d2);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_display_manager_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
-  /* Open default display */
-  gdk_display_open (NULL);
-
   g_test_add_func ("/displaymanager/basic", test_basic);
   g_test_add_func ("/displaymanager/set-default", test_set_default);
-
-  return g_test_run ();
 }

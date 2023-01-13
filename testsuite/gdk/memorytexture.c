@@ -2,6 +2,8 @@
 
 #include "gsk/gl/gskglrenderer.h"
 
+#include "gdktests.h"
+
 #define N 20
 
 static GskRenderer *gl_renderer = NULL;
@@ -636,31 +638,30 @@ add_test (const char    *name,
     }
 }
 
-int
-main (int argc, char *argv[])
+static void
+clear_gl_renderer (void)
 {
-  int result;
-
-  gtk_test_init (&argc, &argv, NULL);
-
-  add_test ("/memorytexture/download_1x1", test_download_1x1);
-  add_test ("/memorytexture/download_4x4", test_download_4x4);
-  add_test ("/memorytexture/download_192x192", test_download_192x192);
-
-  gl_renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
-    {
-      g_clear_object (&gl_renderer);
-    }
-
-  result = g_test_run ();
-
   if (gl_renderer)
     {
       gsk_renderer_unrealize (gl_renderer);
       g_clear_object (&gl_renderer);
     }
   gdk_gl_context_clear_current ();
+}
 
-  return result;
+void
+add_memory_texture_tests (void)
+{
+  add_test ("/memorytexture/download_1x1", test_download_1x1);
+  add_test ("/memorytexture/download_4x4", test_download_4x4);
+  add_test ("/memorytexture/download_192x192", test_download_192x192);
+
+  if (!g_test_subprocess ())
+    {
+      gl_renderer = gsk_gl_renderer_new ();
+      if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
+        g_clear_object (&gl_renderer);
+
+      atexit (clear_gl_renderer);
+    }
 }

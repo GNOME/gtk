@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <cairo-gobject.h>
 
+#include "gdktests.h"
+
 static void
 test_cursor_named (void)
 {
@@ -54,16 +56,10 @@ test_cursor_fallback (void)
   g_object_unref (fallback);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_cursor_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
-  gtk_init ();
-
   g_test_add_func ("/cursor/named", test_cursor_named);
   g_test_add_func ("/cursor/texture", test_cursor_texture);
   g_test_add_func ("/cursor/fallback", test_cursor_fallback);
-
-  return g_test_run ();
 }

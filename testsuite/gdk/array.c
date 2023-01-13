@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 static void
 int_free_func (int data)
 {
@@ -78,12 +80,9 @@ int_free_func (int data)
 #define GDK_ARRAY_NULL_TERMINATED 1
 #include "arrayimpl.c"
 
-int
-main (int argc, char *argv[])
+void
+add_array_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-  setlocale (LC_ALL, "C");
-
   g_test_add_func ("/intarray/simple", int_array_test_simple);
   g_test_add_func ("/intarray/prealloc/simple", pre_int_array_test_simple);
   g_test_add_func ("/intarray/freefunc/simple", free_int_array_test_simple);
@@ -100,6 +99,4 @@ main (int argc, char *argv[])
   g_test_add_func ("/intarray/null/prealloc/splice", null_pre_int_array_test_splice);
   g_test_add_func ("/intarray/null/freefunc/splice", null_free_int_array_test_splice);
   g_test_add_func ("/intarray/null/prealloc/freefunc/splice", null_pre_free_int_array_test_splice);
-
-  return g_test_run ();
 }

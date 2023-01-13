@@ -1,6 +1,8 @@
 #include <locale.h>
 #include <gdk/gdk.h>
 
+#include "gdktests.h"
+
 static void
 test_color_parse (void)
 {
@@ -207,16 +209,12 @@ test_color_hash (void)
   g_assert_cmpuint (hash1, !=, hash2);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_rgba_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
   g_test_add_func ("/rgba/parse", test_color_parse);
   g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);
   g_test_add_func ("/rgba/to-string", test_color_to_string);
   g_test_add_func ("/rgba/copy", test_color_copy);
   g_test_add_func ("/rgba/hash", test_color_hash);
-
-  return g_test_run ();
 }

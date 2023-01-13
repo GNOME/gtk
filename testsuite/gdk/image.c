@@ -3,6 +3,8 @@
 #include "gdk/loaders/gdktiffprivate.h"
 #include "gdk/loaders/gdkjpegprivate.h"
 
+#include "gdkinternaltests.h"
+
 static void
 assert_texture_equal (GdkTexture *t1,
                       GdkTexture *t2)
@@ -118,11 +120,9 @@ test_save_image (gconstpointer test_data)
   g_free (path);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_image_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
   g_test_add_data_func ("/image/load/png", "image.png", test_load_image);
   g_test_add_data_func ("/image/load/png2", "image-gray.png", test_load_image);
   g_test_add_data_func ("/image/load/png3", "image-palette.png", test_load_image);
@@ -136,6 +136,4 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/image/save/png", "image.png", test_save_image);
   g_test_add_data_func ("/image/save/tiff", "image.tiff", test_save_image);
   g_test_add_data_func ("/image/save/jpeg", "image.jpeg", test_save_image);
-
-  return g_test_run ();
 }

@@ -1,6 +1,8 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 static void
 test_keysyms_basic (void)
 {
@@ -123,19 +125,12 @@ test_key_unicode (void)
     }
 }
 
-int
-main (int argc, char *argv[])
+void
+add_keysyms_tests (void)
 {
-  setlocale (LC_ALL, "");
-
-  (g_test_init) (&argc, &argv, NULL);
-  gtk_init ();
-
   g_test_add_func ("/keysyms/basic", test_keysyms_basic);
   g_test_add_func ("/keysyms/void", test_keysyms_void);
   g_test_add_func ("/keysyms/xf86", test_keysyms_xf86);
   g_test_add_func ("/keys/case", test_key_case);
   g_test_add_func ("/keys/unicode", test_key_unicode);
-
-  return g_test_run ();
 }

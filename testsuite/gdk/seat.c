@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 static void
 test_list_seats (void)
 {
@@ -124,15 +126,9 @@ test_default_seat (void)
   g_list_free (tools);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_seat_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
-  gtk_init ();
-
   g_test_add_func ("/seat/list", test_list_seats);
   g_test_add_func ("/seat/default", test_default_seat);
-
-  return g_test_run ();
 }

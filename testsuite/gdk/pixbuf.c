@@ -1,5 +1,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+#include "gdktests.h"
+
 static void
 test_format (gconstpointer d)
 {
@@ -29,14 +31,9 @@ test_format (gconstpointer d)
   g_assert_true (found);
 }
 
-
-int
-main (int argc, char *argv[])
+void
+add_pixbuf_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
   g_test_add_data_func ("/pixbuf/format/png", "png", test_format);
   g_test_add_data_func ("/pixbuf/format/jpeg", "jpeg", test_format);
-
-  return g_test_run ();
 }

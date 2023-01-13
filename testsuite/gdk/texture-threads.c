@@ -2,6 +2,8 @@
 
 #include "gsk/gl/gskglrenderer.h"
 
+#include "gdktests.h"
+
 /* This function will be called from a thread and/or the main loop.
  * Textures are threadsafe after all. */
 static void
@@ -111,12 +113,8 @@ texture_threads (void)
   gdk_gl_context_clear_current ();
 }
 
-int
-main (int argc, char *argv[])
+void
+add_texture_threads_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/texture-threads", texture_threads);
-
-  return g_test_run ();
 }

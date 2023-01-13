@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 static GType
 string_type (void)
 {
@@ -218,17 +220,11 @@ test_parse_fail (void)
   }
 }
 
-int
-main (int argc, char *argv[])
+void
+add_content_formats_tests (void)
 {
-  gsize i;
-
-  (g_test_init) (&argc, &argv, NULL);
-
-  gtk_init ();
-
   /* Ensure all the types we care about to exist */
-  for (i = 0; i < G_N_ELEMENTS(possible_types); i++)
+  for (gsize i = 0; i < G_N_ELEMENTS(possible_types); i++)
     {
       if (possible_types[i].type_func)
         g_type_ensure (possible_types[i].type_func ());
@@ -238,6 +234,4 @@ main (int argc, char *argv[])
   g_test_add_func ("/contentformats/parse_fail", test_parse_fail);
   g_test_add_func ("/contentformats/print_and_parse", test_print_and_parse);
   g_test_add_func ("/contentformats/union", test_union);
-
-  return g_test_run ();
 }

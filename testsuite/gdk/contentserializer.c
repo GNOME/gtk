@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gdktests.h"
+
 typedef gboolean (* ValueCompareFunc) (GValue *v1, GValue *v2);
 
 typedef struct {
@@ -463,13 +465,9 @@ test_custom_format (void)
   g_free (data);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_content_serializer_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
-  gtk_init ();
-
   g_test_add_func ("/content/text_plain_utf8", test_content_text_plain_utf8);
   g_test_add_func ("/content/text_plain", test_content_text_plain);
   g_test_add_func ("/content/color", test_content_color);
@@ -478,6 +476,4 @@ main (int argc, char *argv[])
   g_test_add_func ("/content/file", test_content_file);
   g_test_add_func ("/content/files", test_content_files);
   g_test_add_func ("/content/custom", test_custom_format);
-
-  return g_test_run ();
 }
