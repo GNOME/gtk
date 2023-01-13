@@ -236,23 +236,17 @@ By default, GTK will try to build with support for the Vulkan graphics
 API in addition to cairo and OpenGL. This option can be used to explicitly
 control whether Vulkan should be used.
 
-### `xinerama`
-
-By default, GTK will try to link against the Xinerama libraries
-if they are found. This option can be used to explicitly control
-whether Xinerama should be used.
-
-### `media`
+### `media-gstreamer` and `media-ffmpeg`
 
 By default, GTK will try to build the gstreamer backend for
-media playback support. This option can be used to explicitly
+media playback support. These option can be used to explicitly
 control which media backends should be built.
 
-### `print`
+### `print-cups`
 
 By default, GTK will try to build various print backends
 if their dependencies are found. This option can be used
-to explicitly control which print backends should be built.
+to explicitly control whether the cups print backend should be built.
 
 ### `cloudproviders`
 
@@ -274,18 +268,13 @@ support in the file chooser.
 This option controls whether GTK should use colord for color
 calibration support in the cups print backend.
 
-### `gtk_doc` and `man-pages`
+### `gtk_doc`, `man-pages` and `update_screenshots`
 
-The *gtk-doc* package is used to generate the reference documentation
-included with GTK. By default support for *gtk-doc* is disabled
+The *gi-docgen* package is used to generate the reference documentation
+included with GTK. By default support for *gi-docgen* is disabled
 because it requires various extra dependencies to be installed.
-If you have *gtk-doc* and *pandoc* installed and are modifying GTK,
-you may want to enable *gtk-doc* support by passing in `-Dgtk_doc=true`.
-
-Additionally, some tools provided by GTK have their own
-manual pages generated using a similar set of dependencies;
-if you have *xsltproc* then you can generate manual pages by
-passing `-Dman-pages=true` when configuring the build.
+Introspection needs to be enabled, since the documentation is generated
+from introspection data.
 
 ### `introspection`
 
@@ -294,9 +283,14 @@ is mainly useful for shortening turnaround times on developer
 systems. Installed builds of GTK should always have introspection
 support.
 
-### `build-tests`, `demos`
+### `build-testsuite`
 
-By default, GTK will build quite a few tests and demos.
+If you want to run the testsuite to ensure that your GTK build
+works, you should enable it with this option.
+
+### `build-tests`, `build-examples`, `demos`
+
+By default, GTK will build quite a few tests, examples and demos.
 While these are useful on a developer system, they are not
 needed when GTK is built e.g. for a flatpak runtime. These
 options allow to disable building tests and demos.
