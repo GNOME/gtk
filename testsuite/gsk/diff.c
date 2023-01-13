@@ -20,6 +20,8 @@
 #include <gtk/gtk.h>
 #include "gsk/gskrendernodeprivate.h"
 
+#include "gskinternaltests.h"
+
 static void
 test_can_diff_basic (void)
 {
@@ -95,14 +97,9 @@ test_can_diff_transform (void)
   gsk_transform_unref (t2);
 }
 
-int
-main (int   argc,
-      char *argv[])
+void
+add_diff_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/node/can-diff/basic", test_can_diff_basic);
   g_test_add_func ("/node/can-diff/transform", test_can_diff_transform);
-
-  return g_test_run ();
 }

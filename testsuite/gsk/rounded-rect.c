@@ -22,6 +22,8 @@
 #include <gtk/gtk.h>
 #include <gsk/gskroundedrectprivate.h>
 
+#include "gskinternaltests.h"
+
 static void
 test_contains_rect (void)
 {
@@ -160,17 +162,12 @@ test_to_float (void)
   g_assert_true (flt[10] == 9. && flt[11] == 11.);
 }
 
-int
-main (int   argc,
-      char *argv[])
+void
+add_rounded_rect_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/rounded-rect/contains-rect", test_contains_rect);
   g_test_add_func ("/rounded-rect/intersects-rect", test_intersects_rect);
   g_test_add_func ("/rounded-rect/contains-point", test_contains_point);
   g_test_add_func ("/rounded-rect/is-circular", test_is_circular);
   g_test_add_func ("/rounded-rect/to-float", test_to_float);
-
-  return g_test_run ();
 }

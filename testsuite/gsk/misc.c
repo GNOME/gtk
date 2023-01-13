@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include "gsk/gskrendernodeprivate.h"
 
+#include "gskinternaltests.h"
+
 static void
 test_rendernode_gvalue (void)
 {
@@ -82,15 +84,10 @@ test_conic_gradient_angle (void)
   gsk_render_node_unref (node);
 }
 
-int
-main (int argc, char *argv[])
+void
+add_misc_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-  gtk_init ();
-
   g_test_add_func ("/rendernode/gvalue", test_rendernode_gvalue);
   g_test_add_func ("/rendernode/border/uniform", test_bordernode_uniform);
   g_test_add_func ("/rendernode/conic-gradient/angle", test_conic_gradient_angle);
-
-  return g_test_run ();
 }

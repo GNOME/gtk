@@ -2,6 +2,8 @@
 
 #include "gsk/gl/fp16private.h"
 
+#include "gskinternaltests.h"
+
 static void
 test_constants (void)
 {
@@ -95,14 +97,10 @@ test_many (void)
     }
 }
 
-int
-main (int argc, char *argv[])
+void
+add_half_float_tests (void)
 {
-  (g_test_init) (&argc, &argv, NULL);
-
   g_test_add_func ("/half-float/constants", test_constants);
   g_test_add_func ("/half-float/roundtrip", test_roundtrip);
   g_test_add_func ("/half-float/many", test_many);
-
-  return g_test_run ();
 }

@@ -21,6 +21,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gsktests.h"
+
 #define EPSILON (1.f / 1024 / 32) /* 2^-15 */
 
 /* macros stolen from graphene testsuite, so they get to keep their names */
@@ -843,12 +845,9 @@ test_rotate3d_transform (void)
   gsk_transform_unref (t2);
 }
 
-int
-main (int   argc,
-      char *argv[])
+void
+add_transform_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
   g_test_add_func ("/transform/identity", test_identity);
@@ -865,6 +864,4 @@ main (int   argc,
   g_test_add_func ("/transform/perspective", test_perspective_transform);
   g_test_add_func ("/transform/rotate", test_rotate_transform);
   g_test_add_func ("/transform/rotate3d", test_rotate3d_transform);
-
-  return g_test_run ();
 }

@@ -242,69 +242,52 @@ foreach test : node_parser_tests
   endif
 endforeach
 
-tests = [
-  ['transform'],
-  ['shader'],
+test_sources = [
+  'transform.c',
+  'shader.c',
+  'gsktests.c',
 ]
 
-test_cargs = []
+gsktests = executable('gsktests',
+  test_sources,
+  dependencies: libgtk_dep,
+  c_args: common_cflags,
+)
 
-foreach t : tests
-  test_name = t.get(0)
-  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
-  test_extra_cargs = t.get(2, [])
-  test_extra_ldflags = t.get(3, [])
-
-  test_exe = executable(test_name, test_srcs,
-    dependencies : libgtk_dep,
-    c_args : test_cargs + test_extra_cargs + common_cflags,
-    link_args : test_extra_ldflags,
-  )
-
-  test(test_name, test_exe,
-    args: [ '--tap', '-k' ],
-    protocol: 'tap',
-    env: [
+test('gsktests', gsktests,
+  args: [ '--tap', '-k' ],
+  protocol: 'tap',
+  env: [
       'GSK_RENDERER=cairo',
       'GTK_A11Y=test',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-    ],
-    suite: 'gsk',
-  )
-endforeach
+  ],
+  suite: 'gsk',
+)
 
-internal_tests = [
-  [ 'diff' ],
-  [ 'half-float' ],
-  ['rounded-rect'],
-  ['misc'],
+internal_test_sources = [
+  'diff',
+  'half-float',
+  'rounded-rect',
+  'misc',
+  'gskinternaltests.c',
 ]
 
-foreach t : internal_tests
-  test_name = t.get(0)
-  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
-  test_extra_cargs = t.get(2, [])
-  test_extra_ldflags = t.get(3, [])
+gskinternaltests = executable('gskinternaltests',
+  test_sources,
+  dependencies: libgtk_static_dep,
+  c_args: common_cflags,
+)
 
-  test_exe = executable(test_name,
-    sources: test_srcs,
-    dependencies : libgtk_static_dep,
-    c_args : test_cargs + test_extra_cargs + common_cflags,
-    link_args : test_extra_ldflags,
-  )
-
-  test(test_name, test_exe,
-    args: [ '--tap', '-k' ],
-    protocol: 'tap',
-    env: [
+test('gskinternaltests', gskinternaltests,
+  args: [ '--tap', '-k' ],
+  protocol: 'tap',
+  env: [
       'GSK_RENDERER=cairo',
       'GTK_A11Y=test',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-    ],
-    suite: 'gsk',
-  )
-endforeach
-
-
+  ],
+  suite: 'gsk',
+)

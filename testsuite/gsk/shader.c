@@ -19,6 +19,8 @@
 
 #include <gtk/gtk.h>
 
+#include "gsktests.h"
+
 /* shader fragment as found in nature */
 const char shader0[] =
 "// author: bobylito\n"
@@ -290,16 +292,11 @@ test_compile (void)
   g_bytes_unref (bytes);
 }
 
-int
-main (int   argc,
-      char *argv[])
+void
+add_shader_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add_func ("/shader/create/simple", test_create_simple);
   g_test_add_func ("/shader/create/data", test_create_data);
   g_test_add_func ("/shader/format-args", test_format_args);
   g_test_add_func ("/shader/compile", test_compile);
-
-  return g_test_run ();
 }
