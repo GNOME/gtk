@@ -937,8 +937,11 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (source), NULL);
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base_style), NULL);
 
-  if (timestamp == 0 || timestamp == source->current_time)
+  if (timestamp == 0)
     return g_object_ref (source->style);
+
+  if (timestamp == source->current_time)
+    return g_object_ref (GTK_CSS_STYLE (source));
 
   gtk_internal_return_val_if_fail (timestamp > source->current_time, NULL);
 
