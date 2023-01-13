@@ -1325,9 +1325,7 @@ gtk_compose_table_check (const GtkComposeTable *table,
   if (n_compose == 1)
     return TRUE;
 
-  seq = NULL;
   match = FALSE;
-  value = 0;
 
   for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
