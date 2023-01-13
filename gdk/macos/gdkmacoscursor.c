@@ -23,6 +23,10 @@
 
 #include "gdkmacoscursor-private.h"
 
+@interface NSCursor()
+-(long long)_coreCursorType;
+@end
+
 /* OS X only exports a number of cursor types in its public NSCursor interface.
  * By overriding the private _coreCursorType method, we can tell OS X to load
  * one of its internal cursors instead (since cursor images are loaded on demand

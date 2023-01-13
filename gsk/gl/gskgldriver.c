@@ -184,7 +184,7 @@ gsk_gl_driver_shader_weak_cb (gpointer  data,
     }
 }
 
-G_GNUC_NULL_TERMINATED static inline GBytes *
+G_GNUC_UNUSED G_GNUC_NULL_TERMINATED static inline GBytes *
 join_sources (GBytes *first_bytes,
               ...)
 {
