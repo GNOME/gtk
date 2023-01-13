@@ -39,6 +39,8 @@ test_trigger_basic (void)
 
   trigger = gtk_never_trigger_get ();
 
+  g_assert_true (GTK_IS_SHORTCUT_TRIGGER (trigger));
+
   trigger = gtk_keyval_trigger_new (GDK_KEY_a, GDK_CONTROL_MASK);
   g_assert_cmpint (gtk_keyval_trigger_get_keyval (GTK_KEYVAL_TRIGGER (trigger)), ==, GDK_KEY_a);
   g_assert_cmpint (gtk_keyval_trigger_get_modifiers (GTK_KEYVAL_TRIGGER (trigger)), ==, GDK_CONTROL_MASK);
