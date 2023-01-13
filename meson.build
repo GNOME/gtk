@@ -747,6 +747,8 @@ endif
 subdir('tools')
 if get_option('build-tests')
   subdir('tests')
+endif
+if get_option('build-testsuite')
   subdir('testsuite')
 endif
 if get_option('build-examples')
