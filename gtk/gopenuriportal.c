@@ -258,14 +258,13 @@ canceled (GCancellable *cancellable,
 }
 
 static void
-open_uri (GFile               *file,
-          gboolean             open_folder,
+open_uri (OpenUriData         *data,
           const char          *parent_window,
           const char          *activation_token,
-          GAsyncReadyCallback  callback,
-          gpointer             user_data)
+          GAsyncReadyCallback  callback)
 {
-  OpenUriData *data = user_data;
+  GFile *file = data->file;
+  gboolean open_folder = data->open_folder;
   GTask *task;
   GVariant *opts = NULL;
   int i;
@@ -277,9 +276,9 @@ open_uri (GFile               *file,
   connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (openuri));
   data->connection = g_object_ref (connection);
 
-  task = g_task_new (NULL, NULL, callback, user_data);
+  task = g_task_new (NULL, NULL, callback, data);
   g_task_set_check_cancellable (task, FALSE);
-  g_task_set_task_data (task, user_data, NULL);
+  g_task_set_task_data (task, data, NULL);
   if (data->cancellable)
     data->cancel_handler = g_signal_connect (data->cancellable, "cancelled", G_CALLBACK (canceled), task);
 
@@ -431,7 +430,7 @@ window_handle_exported (GtkWindow  *window,
   activation_token = G_APP_LAUNCH_CONTEXT_GET_CLASS (context)->get_startup_notify_id (context, NULL, NULL);
   g_object_unref (context);
 
-  open_uri (data->file, data->open_folder, handle, activation_token, open_uri_done, data);
+  open_uri (data, handle, activation_token, open_uri_done);
 
   g_free (activation_token);
 }
