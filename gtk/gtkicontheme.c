@@ -3329,6 +3329,7 @@ theme_subdir_load (GtkIconTheme *self,
   IconThemeDirSize *dir_size;
   int scale;
   guint i;
+  GString *str;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
@@ -3376,18 +3377,22 @@ theme_subdir_load (GtkIconTheme *self,
   dir_size_index = theme_ensure_dir_size (theme, type, size, min_size, max_size, threshold, scale);
   dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, dir_size_index);
 
+  str = g_string_sized_new (256);
+
   for (i = 0; i < self->dir_mtimes->len; i++)
     {
       IconThemeDirMtime *dir_mtime = &g_array_index (self->dir_mtimes, IconThemeDirMtime, i);
-      char *full_dir;
 
       if (!dir_mtime->exists)
         continue; /* directory doesn't exist */
 
-      full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
+      g_string_assign (str, dir_mtime->dir);
+      if (str->str[str->len - 1] != '/')
+        g_string_append_c (str, '/');
+      g_string_append (str, subdir);
 
       /* First, see if we have a cache for the directory */
-      if (dir_mtime->cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
+      if (dir_mtime->cache != NULL || g_file_test (str->str, G_FILE_TEST_IS_DIR))
         {
           GHashTable *icons = NULL;
 
@@ -3398,50 +3403,52 @@ theme_subdir_load (GtkIconTheme *self,
             }
 
           if (dir_mtime->cache != NULL)
-            icons = gtk_icon_cache_list_icons_in_directory (dir_mtime->cache, subdir, &theme->icons);
+            icons = gtk_icon_cache_list_icons_in_directory (dir_mtime->cache, subdir, &self->icons);
           else
-            icons = scan_directory (self, full_dir, &theme->icons);
+            icons = scan_directory (self, str->str, &self->icons);
 
           if (icons)
             {
               theme_add_dir_with_icons (theme,
                                         dir_size,
                                         FALSE,
-                                        g_steal_pointer (&full_dir),
+                                        g_strdup (str->str),
                                         icons);
               g_hash_table_destroy (icons);
             }
         }
-
-      g_free (full_dir);
     }
 
   if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
     {
       int r;
+
       for (r = 0; self->resource_path[r]; r++)
         {
           GHashTable *icons;
-          char *full_dir;
 
+          g_string_assign (str, self->resource_path[r]);
+          if (str->str[str->len - 1] != '/')
+            g_string_append_c (str, '/');
+          g_string_append (str, subdir);
           /* Force a trailing / here, to avoid extra copies in GResource */
-          full_dir = g_build_filename (self->resource_path[r], subdir, " ", NULL);
-          full_dir[strlen (full_dir) - 1] = '\0';
+          if (str->str[str->len - 1] != '/')
+            g_string_append_c (str, '/');
 
-          icons = scan_resource_directory (self, full_dir, &theme->icons);
+          icons = scan_resource_directory (self, str->str, &self->icons);
           if (icons)
             {
               theme_add_dir_with_icons (theme,
                                         dir_size,
                                         TRUE,
-                                        g_steal_pointer (&full_dir),
+                                        g_strdup (str->str),
                                         icons);
               g_hash_table_destroy (icons);
             }
-
-          g_free (full_dir);
         }
     }
+
+  g_string_free (str, TRUE);
 }
 
 /*
