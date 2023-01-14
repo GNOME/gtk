@@ -70,7 +70,9 @@ gtk_file_launcher_init (GtkFileLauncher *self)
 static void
 gtk_file_launcher_finalize (GObject *object)
 {
-  //GtkFileLauncher *self = GTK_FILE_LAUNCHER (object);
+  GtkFileLauncher *self = GTK_FILE_LAUNCHER (object);
+
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (gtk_file_launcher_parent_class)->finalize (object);
 }
