@@ -19,7 +19,7 @@ dependencies = ["Graphene-1.0", "Gdk-4.0"]
   docs_url = "https://ebassi.github.io/graphene/docs/"
 
   [dependencies."Gdk-4.0"]
-  name = "GDK"
+  name = "Gdk"
   description = "The GTK windowing system abstraction"
   docs_url = "https://docs.gtk.org/gdk4/"
 

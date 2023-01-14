@@ -14,12 +14,12 @@ search_index = true
 dependencies = ["Gdk-4.0", "Gsk-4.0"]
 
   [dependencies."Gdk-4.0"]
-  name = "GDK"
+  name = "Gdk"
   description = "The GTK windowing system abstraction"
   docs_url = "https://docs.gtk.org/gdk4/"
 
   [dependencies."Gsk-4.0"]
-  name = "GSK"
+  name = "Gsk"
   description = "The GTK rendering abstraction"
   docs_url = "https://docs.gtk.org/gsk4/"
 
