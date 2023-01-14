@@ -4150,6 +4150,81 @@ gtk_window_compute_min_size (GtkWidget      *window,
 }
 
 static void
+gtk_window_compute_default_width_for_height (GtkWindow *window,
+                                             int        cur_width,
+                                             int        cur_height,
+                                             int        max_width,
+                                             int        max_height,
+                                             int       *min_width,
+                                             int       *min_height,
+                                             int       *width,
+                                             int       *height,
+                                             gboolean  *did_fit)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+  int minimum, natural;
+
+  gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                      &minimum, &natural,
+                      NULL, NULL);
+  *min_height = minimum;
+  if (cur_height <= 0)
+    cur_height = natural;
+  *height = MAX (minimum, MIN (max_height, cur_height));
+
+  gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                      *height,
+                      &minimum, &natural,
+                      NULL, NULL);
+  *min_width = minimum;
+  if (cur_width <= 0)
+    cur_width = natural;
+
+  *width = MAX (minimum, MIN (max_width, cur_width));
+  *did_fit = cur_width <= max_width;
+
+  gtk_window_compute_min_size (widget, GTK_ORIENTATION_VERTICAL, (double) *height / *width, min_height, min_width);
+}
+
+static void
+gtk_window_compute_default_height_for_width (GtkWindow *window,
+                                             int        cur_width,
+                                             int        cur_height,
+                                             int        max_width,
+                                             int        max_height,
+                                             int       *min_width,
+                                             int       *min_height,
+                                             int       *width,
+                                             int       *height,
+                                             gboolean  *did_fit)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+  int minimum, natural;
+
+  gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &minimum, &natural,
+                      NULL, NULL);
+  *min_width = minimum;
+  if (cur_width <= 0)
+    cur_width = natural;
+  *width = MAX (minimum, MIN (max_width, cur_width));
+
+  gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                      *width,
+                      &minimum, &natural,
+                      NULL, NULL);
+  *min_height = minimum;
+  if (cur_height <= 0)
+    cur_height = natural;
+
+  *height = MAX (minimum, MIN (max_height, cur_height));
+  *did_fit = cur_height <= max_height;
+
+  if (gtk_widget_get_request_mode (widget) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    gtk_window_compute_min_size (widget, GTK_ORIENTATION_HORIZONTAL, (double) *width / *height, min_width, min_height);
+}
+
+static void
 gtk_window_compute_default_size (GtkWindow *window,
                                  int        cur_width,
                                  int        cur_height,
@@ -4160,56 +4235,64 @@ gtk_window_compute_default_size (GtkWindow *window,
                                  int       *width,
                                  int       *height)
 {
-  GtkWidget *widget = GTK_WIDGET (window);
-  GtkSizeRequestMode request_mode = gtk_widget_get_request_mode (widget);
+  GtkSizeRequestMode request_mode = gtk_widget_get_request_mode (GTK_WIDGET (window));
+  gboolean did_fit;
 
   if (request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
-      int minimum, natural;
+      gtk_window_compute_default_width_for_height (window,
+                                                   cur_width, cur_height,
+                                                   max_width, max_height,
+                                                   min_width, min_height,
+                                                   width, height,
+                                                   &did_fit);
+      if (!did_fit)
+        {
+          int min_opposite_width, min_opposite_height;
+          int opposite_width, opposite_height;
 
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *min_height = minimum;
-      if (cur_height <= 0)
-        cur_height = natural;
-      *height = MAX (minimum, MIN (max_height, cur_height));
-
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          *height,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *min_width = minimum;
-      if (cur_width <= 0)
-        cur_width = natural;
-      *width = MAX (minimum, MIN (max_width, cur_width));
-
-      gtk_window_compute_min_size (widget, GTK_ORIENTATION_VERTICAL, (double) *height / *width, min_height, min_width);
+          gtk_window_compute_default_height_for_width (window,
+                                                       cur_width, cur_height,
+                                                       max_width, max_height,
+                                                       &min_opposite_width, &min_opposite_height,
+                                                       &opposite_width, &opposite_height,
+                                                       &did_fit);
+          if (did_fit)
+            {
+              *min_width = min_opposite_width;
+              *min_height = min_opposite_height;
+              *width = opposite_width;
+              *height = opposite_height;
+            }
+        }
     }
-  else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
+  else
     {
-      int minimum, natural;
+      gtk_window_compute_default_height_for_width (window,
+                                                   cur_width, cur_height,
+                                                   max_width, max_height,
+                                                   min_width, min_height,
+                                                   width, height,
+                                                   &did_fit);
+      if (!did_fit)
+        {
+          int min_opposite_width, min_opposite_height;
+          int opposite_width, opposite_height;
 
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *min_width = minimum;
-      if (cur_width <= 0)
-        cur_width = natural;
-      *width = MAX (minimum, MIN (max_width, cur_width));
-
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          *width,
-                          &minimum, &natural,
-                          NULL, NULL);
-      *min_height = minimum;
-      if (cur_height <= 0)
-        cur_height = natural;
-
-      *height = MAX (minimum, MIN (max_height, cur_height));
-
-      if (request_mode != GTK_SIZE_REQUEST_CONSTANT_SIZE)
-        gtk_window_compute_min_size (widget, GTK_ORIENTATION_HORIZONTAL, (double) *width / *height, min_width, min_height);
+          gtk_window_compute_default_width_for_height (window,
+                                                       cur_width, cur_height,
+                                                       max_width, max_height,
+                                                       &min_opposite_width, &min_opposite_height,
+                                                       &opposite_width, &opposite_height,
+                                                       &did_fit);
+          if (did_fit)
+            {
+              *min_width = min_opposite_width;
+              *min_height = min_opposite_height;
+              *width = opposite_width;
+              *height = opposite_height;
+            }
+        }
     }
 }
 
