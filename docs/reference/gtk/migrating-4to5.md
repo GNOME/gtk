@@ -105,3 +105,7 @@ retire it. If you need such a widget, it is relatively trivial to create one
 using a [class@Gtk.Revealer] with labels and buttons.
 
 Other libraries, such as libadwaita, may provide replacements as well.
+
+## gtk_show_uri is being replaced
+
+Instead of gtk_show_uri(), you should use GtkUriLauncher or GtkFileLauncher.
