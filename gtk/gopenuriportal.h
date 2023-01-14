@@ -38,6 +38,15 @@ void     g_openuri_portal_open_async   (GFile               *file,
 gboolean g_openuri_portal_open_finish  (GAsyncResult        *result,
                                         GError             **error);
 
+void     g_openuri_portal_open_uri_async  (const char          *uri,
+                                           GtkWindow           *window,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data);
+
+gboolean g_openuri_portal_open_uri_finish (GAsyncResult        *result,
+                                           GError             **error);
+
 G_END_DECLS
 
 #endif
