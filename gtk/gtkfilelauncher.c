@@ -29,8 +29,8 @@
 /**
  * GtkFileLauncher:
  *
- * A `GtkFileLauncher` object collects the arguments that are needed to open a uri
- * with an application.
+ * A `GtkFileLauncher` object collects the arguments that are needed to open a
+ * file with an application.
  *
  * Depending on system configuration, user preferences and available APIs, this
  * may or may not show an app chooser dialog or launch the default application
@@ -39,6 +39,8 @@
  * The operation is started with the [method@Gtk.FileLauncher.launch] function.
  * This API follows the GIO async pattern, and the result can be obtained by
  * calling [method@Gtk.FileLauncher.launch_finish].
+ *
+ * To launch uris that don't represent files, use [class@Gtk.UriLauncher].
  *
  * Since: 4.10
  */

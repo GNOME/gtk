@@ -40,6 +40,8 @@
  * This API follows the GIO async pattern, and the result can be obtained by
  * calling [method@Gtk.UriLauncher.launch_finish].
  *
+ * To launch a file, use [class@Gtk.FileLauncher].
+ *
  * Since: 4.10
  */
 
