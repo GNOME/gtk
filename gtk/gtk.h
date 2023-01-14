@@ -286,6 +286,7 @@
 #include <gtk/deprecated/gtktreeviewcolumn.h>
 #include <gtk/gtktypebuiltins.h>
 #include <gtk/gtktypes.h>
+#include <gtk/gtkurilauncher.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkvideo.h>
 #include <gtk/gtkviewport.h>
