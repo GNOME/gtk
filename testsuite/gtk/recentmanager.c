@@ -55,9 +55,8 @@ recent_manager_add (void)
   recent_data->app_exec = (char *)"testrecentchooser %u";
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
-      res = gtk_recent_manager_add_full (manager,
-                                         uri,
-                                         recent_data);
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
     }
   g_test_trap_assert_failed ();
 
@@ -67,9 +66,8 @@ recent_manager_add (void)
   recent_data->app_exec = (char *)"testrecentchooser %u";
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
-      res = gtk_recent_manager_add_full (manager,
-                                         uri,
-                                         recent_data);
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
     }
   g_test_trap_assert_failed ();
 
@@ -79,9 +77,8 @@ recent_manager_add (void)
   recent_data->app_exec = NULL;
   if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
     {
-      res = gtk_recent_manager_add_full (manager,
-                                         uri,
-                                         recent_data);
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
     }
   g_test_trap_assert_failed ();
 
@@ -90,9 +87,7 @@ recent_manager_add (void)
   recent_data->mime_type = (char *)"text/plain";
   recent_data->app_name = (char *)"testrecentchooser";
   recent_data->app_exec = (char *)"testrecentchooser %u";
-  res = gtk_recent_manager_add_full (manager,
-                                     uri,
-                                     recent_data);
+  res = gtk_recent_manager_add_full (manager, uri, recent_data);
   g_assert_true (res);
 
   g_slice_free (GtkRecentData, recent_data);

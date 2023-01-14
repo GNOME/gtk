@@ -500,6 +500,7 @@ test_iter (void)
   g_assert_false (gtk_bitset_iter_next (&iter, &value));
 
   ret = gtk_bitset_iter_init_at (&iter, set, 0, &value);
+  g_assert_false (ret);
 
   g_assert_false (gtk_bitset_iter_is_valid (&iter));
   g_assert_cmpuint (gtk_bitset_iter_get_value (&iter), ==, 0);
