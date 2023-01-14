@@ -103,6 +103,7 @@ enum {
 typedef struct {
   GtkWindow *parent;
   GFile *file;
+  char *uri;
   gboolean open_folder;
   GDBusConnection *connection;
   GCancellable *cancellable;
@@ -125,6 +126,7 @@ open_uri_data_free (OpenUriData *data)
     gtk_window_unexport_handle (data->parent);
   g_clear_object (&data->parent);
   g_clear_object (&data->file);
+  g_free (data->uri);
   g_clear_object (&data->cancellable);
   g_clear_object (&data->task);
   g_free (data->handle);
@@ -311,7 +313,7 @@ open_uri (OpenUriData         *data,
 
   opts = g_variant_builder_end (&opt_builder);
 
-  if (g_file_is_native (file))
+  if (file && g_file_is_native (file))
     {
       const char *path = NULL;
       GUnixFDList *fd_list = NULL;
@@ -365,12 +367,15 @@ open_uri (OpenUriData         *data,
     }
   else
     {
-      char *uri = g_file_get_uri (file);
+      char *uri = NULL;
+
+      if (file)
+        uri = g_file_get_uri (file);
 
       data->call = OPEN_URI;
       gxdp_open_uri_call_open_uri (openuri,
                                    parent_window ? parent_window : "",
-                                   uri,
+                                   uri ? uri : data->uri,
                                    opts,
                                    NULL,
                                    open_call_done,
@@ -470,5 +475,45 @@ gboolean
 g_openuri_portal_open_finish (GAsyncResult  *result,
                               GError       **error)
 {
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == g_openuri_portal_open_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+void
+g_openuri_portal_open_uri_async (const char          *uri,
+                                 GtkWindow           *parent,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  OpenUriData *data;
+
+  if (!init_openuri_portal ())
+    {
+      g_task_report_new_error (NULL, callback, user_data, NULL,
+                               GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                               "The OpenURI portal is not available");
+      return;
+    }
+
+  data = g_new0 (OpenUriData, 1);
+  data->parent = parent ? g_object_ref (parent) : NULL;
+  data->uri = g_strdup (uri);
+  data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+  data->task = g_task_new (parent, cancellable, callback, user_data);
+  g_task_set_check_cancellable (data->task, FALSE);
+  g_task_set_source_tag (data->task, g_openuri_portal_open_uri_async);
+
+  if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
+    window_handle_exported (parent, NULL, data);
+}
+
+gboolean
+g_openuri_portal_open_uri_finish (GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == g_openuri_portal_open_uri_async, FALSE);
+
   return g_task_propagate_boolean (G_TASK (result), error);
 }
