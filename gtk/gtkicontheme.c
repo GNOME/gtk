@@ -501,7 +501,8 @@ static gboolean          rescan_themes                    (GtkIconTheme     *sel
 static GtkIconPaintable *icon_paintable_new               (const char       *icon_name,
                                                            int               desired_size,
                                                            int               desired_scale);
-static IconCacheFlag     suffix_from_name                 (const char       *name);
+static inline IconCacheFlag
+                         suffix_from_name                 (const char       *name);
 static void              icon_ensure_texture__locked      (GtkIconPaintable *icon,
                                                            gboolean          in_thread);
 static void              gtk_icon_theme_unset_display     (GtkIconTheme     *self);
@@ -1859,34 +1860,25 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
   g_slice_free (UnthemedIcon, unthemed_icon);
 }
 
-static void
-strip_suffix_inline (char *filename)
+static inline void
+strip_suffix_inline (char          *filename,
+                     IconCacheFlag  suffix)
 {
-  char *dot;
-
-  if (g_str_has_suffix (filename, ".symbolic.png"))
-    filename[strlen(filename)-13] = 0;
-
-  dot = strrchr (filename, '.');
-
-  if (dot != NULL)
-    *dot = 0;
+  if (suffix & ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX)
+    filename[strlen (filename) - strlen (".symbolic.png")] = 0;
+  else if (suffix & (ICON_CACHE_FLAG_XPM_SUFFIX|
+                     ICON_CACHE_FLAG_SVG_SUFFIX|
+                     ICON_CACHE_FLAG_PNG_SUFFIX))
+    filename[strlen (filename) - 4] = 0;
 }
 
-static char *
-strip_suffix (const char *filename)
+static inline char *
+strip_suffix (const char    *filename,
+              IconCacheFlag  suffix)
 {
-  const char *dot;
-
-  if (g_str_has_suffix (filename, ".symbolic.png"))
-    return g_strndup (filename, strlen(filename)-13);
-
-  dot = strrchr (filename, '.');
-
-  if (dot == NULL)
-    return g_strdup (filename);
-
-  return g_strndup (filename, dot - filename);
+  char *dup = g_strdup (filename);
+  strip_suffix_inline (dup, suffix);
+  return dup;
 }
 
 static void
@@ -1906,7 +1898,7 @@ add_unthemed_icon (GtkIconTheme *self,
     return;
 
   abs_file = g_build_filename (dir, file, NULL);
-  base_name = strip_suffix (file);
+  base_name = strip_suffix (file, new_suffix);
 
   unthemed_icon = g_hash_table_lookup (self->unthemed_icons, base_name);
 
@@ -3141,14 +3133,13 @@ scan_directory (GtkIconTheme  *self,
       if (suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
-      strip_suffix_inline ((char *)name);
+      strip_suffix_inline ((char *)name, suffix);
       interned = gtk_string_set_add (set, name);
 
       if (!icons)
         icons = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
       hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, interned));
-      /* takes ownership of base_name */
       g_hash_table_replace (icons, (char *)interned, GUINT_TO_POINTER (hash_suffix|suffix));
     }
 
@@ -3185,11 +3176,10 @@ scan_resource_directory (GtkIconTheme  *self,
           if (!icons)
             icons = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-          strip_suffix_inline (name);
+          strip_suffix_inline (name, suffix);
           interned = gtk_string_set_add (set, name);
 
           hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, interned));
-          /* takes ownership of base_name */
           g_hash_table_replace (icons, (char *)interned, GUINT_TO_POINTER (hash_suffix|suffix));
         }
 
