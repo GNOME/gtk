@@ -982,7 +982,7 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
               GOutputStream *stream;
 
               if (special_targets[i].mime_type)
-                mime_type = gdk_intern_mime_type (special_targets[i].mime_type);
+                gdk_intern_mime_type (special_targets[i].mime_type);
               stream = gdk_x11_selection_output_stream_new (display,
                                                             notify,
                                                             requestor,

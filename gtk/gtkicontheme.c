@@ -3840,7 +3840,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 
   if (!icon->texture)
     {
-      g_warning ("Failed to load icon %s: %s", icon->filename, load_error->message);
+      g_warning ("Failed to load icon %s: %s", icon->filename, load_error ? load_error->message : "");
       g_clear_error (&load_error);
       icon->texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
       icon->icon_name = g_strdup ("image-missing");
