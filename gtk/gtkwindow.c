@@ -4149,6 +4149,12 @@ gtk_window_compute_min_size (GtkWidget      *window,
   *min_height = other;
 }
 
+/* The maximum size we pick for windows if we have free choice.
+ * We don't want them to get so big that they hug the screen edges and
+ * look like they are maximized.
+ */
+#define MAX_DEFAULT_SIZE (0.85)
+
 static void
 gtk_window_compute_default_width_for_height (GtkWindow *window,
                                              int        cur_width,
@@ -4169,8 +4175,10 @@ gtk_window_compute_default_width_for_height (GtkWindow *window,
                       NULL, NULL);
   *min_height = minimum;
   if (cur_height <= 0)
-    cur_height = natural;
-  *height = MAX (minimum, MIN (max_height, cur_height));
+    cur_height = MIN (natural, max_height * MAX_DEFAULT_SIZE);
+  else
+    cur_height = MIN (max_height, cur_height);
+  *height = MAX (minimum, cur_height);
 
   gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                       *height,
@@ -4206,8 +4214,10 @@ gtk_window_compute_default_height_for_width (GtkWindow *window,
                       NULL, NULL);
   *min_width = minimum;
   if (cur_width <= 0)
-    cur_width = natural;
-  *width = MAX (minimum, MIN (max_width, cur_width));
+    cur_width = MIN (natural, max_width * MAX_DEFAULT_SIZE);
+  else
+    cur_width = MIN (max_width, cur_width);
+  *width = MAX (minimum, cur_width);
 
   gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                       *width,
