@@ -2057,6 +2057,67 @@ hide_widget (GtkWidget *widget)
 }
 
 static void
+load_texture_thread (GTask *task,
+                     gpointer source_object,
+                     gpointer task_data,
+                     GCancellable *cancellable)
+{
+  const char *resource_path = (const char *) task_data;
+  GBytes *bytes;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  bytes = g_resources_lookup_data (resource_path, 0, &error);
+  if (!bytes)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  texture = gdk_texture_new_from_bytes (bytes, &error);
+  g_bytes_unref (bytes);
+
+  if (!texture)
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_pointer (task, texture, g_object_unref);
+}
+
+static void
+load_texture_done (GObject *source,
+                   GAsyncResult *result,
+                   gpointer data)
+{
+  GtkWidget *picture = GTK_WIDGET (source);
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  texture = g_task_propagate_pointer (G_TASK (result), &error);
+  if (!texture)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (texture));
+  g_object_unref (texture);
+}
+
+static void
+load_texture_in_thread (GtkWidget  *picture,
+                        const char *resource_path)
+{
+  GTask *task = g_task_new (picture, NULL, load_texture_done, NULL);
+  g_task_set_task_data (task, (gpointer)resource_path, NULL);
+  g_task_run_in_thread (task, load_texture_thread);
+  g_object_unref (task);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -2154,6 +2215,13 @@ activate (GApplication *app)
     }
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
+
+  load_texture_in_thread ((GtkWidget *)gtk_builder_get_object (builder, "notebook_sunset"),
+                          "/org/gtk/WidgetFactory4/sunset.jpg");
+  load_texture_in_thread ((GtkWidget *)gtk_builder_get_object (builder, "notebook_nyc"),
+                          "/org/gtk/WidgetFactory4/nyc.jpg");
+  load_texture_in_thread ((GtkWidget *)gtk_builder_get_object (builder, "notebook_beach"),
+                          "/org/gtk/WidgetFactory4/beach.jpg");
 
   if (g_strcmp0 (PROFILE, "devel") == 0)
     gtk_widget_add_css_class (GTK_WIDGET (window), "devel");
