@@ -65,9 +65,9 @@
 #include "gtkmarshalers.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtkfilelauncher.h"
 #include "gtksizerequest.h"
 #include "gtktooltip.h"
+#include "gtkurilauncher.h"
 #include "gtkwidgetprivate.h"
 
 #include <string.h>
@@ -479,16 +479,13 @@ static gboolean
 gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
   GtkWidget *toplevel;
-  GFile *file;
-  GtkFileLauncher *launcher;
+  GtkUriLauncher *launcher;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
-  file = g_file_new_for_uri (link_button->uri);
-  launcher = gtk_file_launcher_new (file);
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+  launcher = gtk_uri_launcher_new (link_button->uri);
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
   g_object_unref (launcher);
-  g_object_unref (file);
 
   gtk_link_button_set_visited (link_button, TRUE);
 
