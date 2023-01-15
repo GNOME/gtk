@@ -463,7 +463,7 @@ gdk_texture_new_from_resource (const char *resource_path)
  * Creates a new texture by loading an image from a file.
  *
  * The file format is detected automatically. The supported formats
- * are PNG and JPEG, though more formats might be available.
+ * are PNG, JPEG and TIFF, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
  *
@@ -556,7 +556,7 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
  * Creates a new texture by loading an image from memory,
  *
  * The file format is detected automatically. The supported formats
- * are PNG and JPEG, though more formats might be available.
+ * are PNG, JPEG and TIFF, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
  *
@@ -602,7 +602,7 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * Creates a new texture by loading an image from a file.
  *
  * The file format is detected automatically. The supported formats
- * are PNG and JPEG, though more formats might be available.
+ * are PNG, JPEG and TIFF, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
  *
