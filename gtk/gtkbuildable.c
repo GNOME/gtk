@@ -80,7 +80,7 @@ gtk_buildable_set_buildable_id (GtkBuildable *buildable,
  * Gets the ID of the @buildable object.
  *
  * `GtkBuilder` sets the name based on the ID attribute
- * of the <object> tag used to construct the @buildable.
+ * of the `<object>` tag used to construct the @buildable.
  *
  * Returns: (nullable): the ID of the buildable object
  **/
@@ -193,7 +193,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * @data: (out): return location for user data that will be passed in
  *   to parser functions
  *
- * This is called for each unknown element under <child>.
+ * This is called for each unknown element under `<child>`.
  *
  * Returns: %TRUE if an object has a custom implementation, %FALSE
  *   if it doesn't.

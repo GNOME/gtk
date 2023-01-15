@@ -135,8 +135,8 @@
  * # GtkEntry as GtkBuildable
  *
  * The `GtkEntry` implementation of the `GtkBuildable` interface supports a
- * custom <attributes> element, which supports any number of <attribute>
- * elements. The <attribute> element has attributes named “name“, “value“,
+ * custom `<attributes>` element, which supports any number of `<attribute>`
+ * elements. The `<attribute>` element has attributes named “name“, “value“,
  * “start“ and “end“ and allows you to specify `PangoAttribute` values for
  * this label.
  *

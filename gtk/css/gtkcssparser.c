@@ -962,7 +962,7 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
  * gtk_css_parser_consume_url:
  * @self: a `GtkCssParser`
  *
- * If the parser matches the <url> token from the [CSS
+ * If the parser matches the `<url>` token from the [CSS
  * specification](https://drafts.csswg.org/css-values-4/#url-value),
  * consumes it, resolves the URL and returns the resulting `GFile`.
  * On failure, an error is emitted and %NULL is returned.

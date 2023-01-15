@@ -64,8 +64,8 @@
  *
  * # GtkScale as GtkBuildable
  *
- * `GtkScale` supports a custom <marks> element, which can contain multiple
- * <mark\> elements. The “value” and “position” attributes have the same
+ * `GtkScale` supports a custom `<marks>` element, which can contain multiple
+ * `<mark\>` elements. The “value” and “position” attributes have the same
  * meaning as [method@Gtk.Scale.add_mark] parameters of the same name. If
  * the element is not empty, its content is taken as the markup to show at
  * the mark. It can be translated with the usual ”translatable” and

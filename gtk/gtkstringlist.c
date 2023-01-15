@@ -38,8 +38,8 @@
  * # GtkStringList as GtkBuildable
  *
  * The `GtkStringList` implementation of the `GtkBuildable` interface
- * supports adding items directly using the <items> element and
- * specifying <item> elements for each item. Each <item> element
+ * supports adding items directly using the `<items>` element and
+ * specifying `<item>` elements for each item. Each `<item>` element
  * supports the regular translation attributes “translatable”,
  * “context” and “comments”.
  *

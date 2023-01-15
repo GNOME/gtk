@@ -119,7 +119,7 @@
  *
  * The `GtkWindow` implementation of the [iface@Gtk.Buildable] interface supports
  * setting a child as the titlebar by specifying “titlebar” as the “type”
- * attribute of a <child> element.
+ * attribute of a `<child>` element.
  *
  * # CSS nodes
  *
