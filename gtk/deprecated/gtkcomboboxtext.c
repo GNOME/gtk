@@ -59,8 +59,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * ## GtkComboBoxText as GtkBuildable
  *
  * The `GtkComboBoxText` implementation of the `GtkBuildable` interface supports
- * adding items directly using the <items> element and specifying <item>
- * elements for each item. Each <item> element can specify the “id”
+ * adding items directly using the `<items>` element and specifying `<item>`
+ * elements for each item. Each `<item>` element can specify the “id”
  * corresponding to the appended text and also supports the regular
  * translation attributes “translatable”, “context” and “comments”.
  *

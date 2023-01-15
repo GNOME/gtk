@@ -192,9 +192,9 @@
  *
  * Beyond this general structure, several object classes define their
  * own XML DTD fragments for filling in the ANY placeholders in the DTD
- * above. Note that a custom element in a <child> element gets parsed by
+ * above. Note that a custom element in a `<child>` element gets parsed by
  * the custom tag handler of the parent object, while a custom element in
- * an <object> element gets parsed by the custom tag handler of the object.
+ * an `<object>` element gets parsed by the custom tag handler of the object.
  *
  * These XML fragments are explained in the documentation of the
  * respective objects.

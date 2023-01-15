@@ -47,8 +47,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * ## GtkTreeStore as GtkBuildable
  *
  * The GtkTreeStore implementation of the `GtkBuildable` interface allows
- * to specify the model columns with a <columns> element that may contain
- * multiple <column> elements, each specifying one model column. The “type”
+ * to specify the model columns with a `<columns>` element that may contain
+ * multiple `<column>` elements, each specifying one model column. The “type”
  * attribute specifies the data type for the column.
  *
  * An example of a UI Definition fragment for a tree store:

@@ -94,7 +94,7 @@
  * # GtkLabel as GtkBuildable
  *
  * The GtkLabel implementation of the GtkBuildable interface supports a
- * custom <attributes> element, which supports any number of <attribute>
+ * custom `<attributes>` element, which supports any number of `<attribute>`
  * elements. The <attribute> element has attributes named “name“, “value“,
  * “start“ and “end“ and allows you to specify [struct@Pango.Attribute]
  * values for this label.

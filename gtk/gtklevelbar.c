@@ -90,8 +90,8 @@
  * # GtkLevelBar as GtkBuildable
  *
  * The `GtkLevelBar` implementation of the `GtkBuildable` interface supports a
- * custom <offsets> element, which can contain any number of <offset> elements,
- * each of which must have name and value attributes.
+ * custom `<offsets>` element, which can contain any number of `<offset>` elements,
+ * each of which must have "name" and "value" attributes.
  *
  * # CSS nodes
  *

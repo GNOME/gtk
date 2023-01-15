@@ -378,10 +378,10 @@ gtk_list_base_get_allocation_across (GtkListBase *self,
  * @pos: item to select
  * @modify: %TRUE if the selection should be modified, %FALSE
  *   if a new selection should be done. This is usually set
- *   to %TRUE if the user keeps the <Shift> key pressed.
+ *   to %TRUE if the user keeps the `<Shift>` key pressed.
  * @extend_pos: %TRUE if the selection should be extended.
  *   Selections are usually extended from the last selected
- *   position if the user presses the <Ctrl> key.
+ *   position if the user presses the `<Ctrl>` key.
  *
  * Selects the item at @pos according to how GTK list widgets modify
  * selections, both when clicking rows with the mouse or when using
