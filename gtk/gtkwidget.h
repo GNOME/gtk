@@ -937,7 +937,7 @@ void                    gtk_widget_get_color            (GtkWidget   *widget,
  * GtkWidgetActionActivateFunc:
  * @widget: the widget to which the action belongs
  * @action_name: the action name
- * @parameter: parameter for activation
+ * @parameter: (nullable): parameter for activation
  *
  * The type of the callback functions used for activating
  * actions installed with gtk_widget_class_install_action().
