@@ -40,7 +40,6 @@
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
-#include "gtkfilelauncher.h"
 #include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
@@ -48,6 +47,7 @@
 #include "gtktextutilprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
+#include "gtkurilauncher.h"
 #include "gtkwidgetprivate.h"
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
@@ -2102,17 +2102,14 @@ gtk_label_activate_link (GtkLabel    *self,
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  GFile *file;
-  GtkFileLauncher *launcher;
+  GtkUriLauncher *launcher;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  file = g_file_new_for_uri (uri);
-  launcher = gtk_file_launcher_new (file);
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+  launcher = gtk_uri_launcher_new (uri);
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
   g_object_unref (launcher);
-  g_object_unref (file);
 
   return TRUE;
 }

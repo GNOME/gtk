@@ -44,13 +44,13 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtktextview.h"
-#include "gtkfilelauncher.h"
 #include "gtkmain.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
 #include "gtkstackswitcher.h"
 #include "gtksettings.h"
+#include "gtkurilauncher.h"
 #include "gtkheaderbar.h"
 #include "gtkprivate.h"
 #include <glib/gi18n-lib.h>
@@ -932,16 +932,13 @@ static gboolean
 gtk_about_dialog_activate_link (GtkAboutDialog *about,
                                 const char     *uri)
 {
-  GtkFileLauncher *launcher;
-  GFile *file;
+  GtkUriLauncher *launcher;
 
-  file = g_file_new_for_uri (uri);
-  launcher = gtk_file_launcher_new (file);
+  launcher = gtk_uri_launcher_new (uri);
 
-  gtk_file_launcher_launch (launcher, GTK_WINDOW (about), NULL, NULL, NULL);
+  gtk_uri_launcher_launch (launcher, GTK_WINDOW (about), NULL, NULL, NULL);
 
   g_object_unref (launcher);
-  g_object_unref (file);
 
   return TRUE;
 }
