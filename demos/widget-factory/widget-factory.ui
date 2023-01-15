@@ -1263,8 +1263,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/sunset.jpg</property>
+                                  <object class="GtkPicture" id="notebook_sunset">
                                     <property name="content-fit">cover</property>
                                     <child>
                                       <object class="GtkDragSource">
@@ -1290,8 +1289,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/nyc.jpg</property>
+                                  <object class="GtkPicture" id="notebook_nyc">
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
@@ -1316,8 +1314,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/beach.jpg</property>
+                                  <object class="GtkPicture" id="notebook_beach">
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
