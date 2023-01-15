@@ -221,7 +221,7 @@ open_done (GObject      *source,
   GTask *task = G_TASK (data);
   GError *error = NULL;
 
-  if (!g_openuri_portal_open_finish (result, &error))
+  if (!g_openuri_portal_open_uri_finish (result, &error))
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
