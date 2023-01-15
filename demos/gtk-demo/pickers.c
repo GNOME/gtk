@@ -1,11 +1,11 @@
-/* Pickers
- * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog
+/* Pickers and Launchers
+ * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog, GtkFileLauncher, GtkUriLauncher
  *
- * These widgets are mainly intended for use in preference dialogs.
+ * The dialogs are mainly intended for use in preference dialogs.
  * They allow to select colors, fonts and applications.
  *
- * This demo shows both the default appearance for these dialogs,
- * as well as some of the customizations that are possible.
+ * The launchers let you open files or URIs in applications that
+ * can handle them.
  */
 
 #include <gtk/gtk.h>
@@ -73,9 +73,9 @@ open_file (GtkButton *picker,
 }
 
 static void
-launch_done (GObject      *source,
-             GAsyncResult *result,
-             gpointer      data)
+open_app_done (GObject      *source,
+               GAsyncResult *result,
+               gpointer      data)
 {
   GtkFileLauncher *launcher = GTK_FILE_LAUNCHER (source);
   GError *error = NULL;
@@ -97,7 +97,35 @@ open_app (GtkButton *picker)
   file = G_FILE (g_object_get_data (G_OBJECT (picker), "file"));
   launcher = gtk_file_launcher_new (file);
 
-  gtk_file_launcher_launch (launcher, parent, NULL, launch_done, NULL);
+  gtk_file_launcher_launch (launcher, parent, NULL, open_app_done, NULL);
+
+  g_object_unref (launcher);
+}
+
+static void
+open_uri_done (GObject      *source,
+               GAsyncResult *result,
+               gpointer      data)
+{
+  GtkUriLauncher *launcher = GTK_URI_LAUNCHER (source);
+  GError *error = NULL;
+
+  if (!gtk_uri_launcher_launch_finish (launcher, result, &error))
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+launch_uri (GtkButton *picker)
+{
+  GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (picker)));
+  GtkUriLauncher *launcher;
+
+  launcher = gtk_uri_launcher_new ("http://www.gtk.org");
+
+  gtk_uri_launcher_launch (launcher, parent, NULL, open_uri_done, NULL);
 
   g_object_unref (launcher);
 }
@@ -113,7 +141,7 @@ do_pickers (GtkWidget *do_widget)
     window = gtk_window_new ();
     gtk_window_set_display (GTK_WINDOW (window),
                             gtk_widget_get_display (do_widget));
-    gtk_window_set_title (GTK_WINDOW (window), "Pickers");
+    gtk_window_set_title (GTK_WINDOW (window), "Pickers and Launchers");
     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
     table = gtk_grid_new ();
@@ -121,8 +149,8 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_margin_end (table, 20);
     gtk_widget_set_margin_top (table, 20);
     gtk_widget_set_margin_bottom (table, 20);
-    gtk_grid_set_row_spacing (GTK_GRID (table), 3);
-    gtk_grid_set_column_spacing (GTK_GRID (table), 10);
+    gtk_grid_set_row_spacing (GTK_GRID (table), 6);
+    gtk_grid_set_column_spacing (GTK_GRID (table), 6);
     gtk_window_set_child (GTK_WINDOW (window), table);
 
     label = gtk_label_new ("Color:");
@@ -149,7 +177,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_hexpand (label, TRUE);
     gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
 
-    picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
     button = gtk_button_new_from_icon_name ("document-open-symbolic");
     label = gtk_label_new ("None");
     gtk_label_set_xalign (GTK_LABEL (label), 0.);
@@ -158,19 +186,23 @@ do_pickers (GtkWidget *do_widget)
     g_signal_connect (button, "clicked", G_CALLBACK (open_file), label);
     gtk_box_append (GTK_BOX (picker), label);
     gtk_box_append (GTK_BOX (picker), button);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
-
-    label = gtk_label_new ("Application:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 4, 1, 1);
-
     app_picker = gtk_button_new_from_icon_name ("emblem-system-symbolic");
     gtk_widget_set_halign (app_picker, GTK_ALIGN_END);
     gtk_widget_set_sensitive (app_picker, FALSE);
     g_signal_connect (app_picker, "clicked", G_CALLBACK (open_app), NULL);
-    gtk_grid_attach (GTK_GRID (table), app_picker, 1, 4, 1, 1);
+    gtk_box_append (GTK_BOX (picker), app_picker);
+    gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
+
+
+    label = gtk_label_new ("URI:");
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
+
+    picker = gtk_button_new_with_label ("www.gtk.org");
+    g_signal_connect (picker, "clicked", G_CALLBACK (launch_uri), NULL);
+    gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
   }
 
   if (!gtk_widget_get_visible (window))
