@@ -587,10 +587,12 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 
   if (gdk_texture_can_load (bytes))
     {
-      /* We know these formats can't be scaled */
       texture = gdk_texture_new_from_bytes (bytes, NULL);
       if (texture == NULL)
         return NULL;
+
+      /* We know these formats can't be scaled */
+      paintable = GDK_PAINTABLE (texture);
     }
   else
     {
@@ -610,14 +612,14 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 
       texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
       g_object_unref (loader);
+
+      if (loader_data.scale_factor != 1)
+        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
+      else
+        paintable = g_object_ref (GDK_PAINTABLE (texture));
+
+      g_object_unref (texture);
     }
-
-  if (loader_data.scale_factor != 1)
-    paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
-  else
-    paintable = g_object_ref ((GdkPaintable *)texture);
-
-  g_object_unref (texture);
 
   return paintable;
 }
