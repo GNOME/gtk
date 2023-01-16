@@ -30,6 +30,7 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdrag-private.h"
 #include "gdkmacosdrop-private.h"
+#include "gdkmacoseventsource-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospasteboard-private.h"
 #include "gdkmacossurface-private.h"
@@ -701,6 +702,8 @@ typedef NSString *CALayerContentsGravity;
   GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
   int x, y;
 
+  _gdk_macos_event_source_queue_event ([NSApp currentEvent]);
+
   _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display), screenPoint.x, screenPoint.y, &x, &y);
   _gdk_macos_drag_surface_move (GDK_MACOS_DRAG (drag), x, y);
 }
@@ -710,6 +713,8 @@ typedef NSString *CALayerContentsGravity;
   NSInteger sequence_number = [session draggingSequenceNumber];
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
   GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+
+  _gdk_macos_event_source_queue_event ([NSApp currentEvent]);
 
   if (gdk_drag_get_selected_action (drag) != 0)
     g_signal_emit_by_name (drag, "drop-performed");

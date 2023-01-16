@@ -640,6 +640,23 @@ _gdk_macos_event_source_get_pending (void)
   return event;
 }
 
+void
+_gdk_macos_event_source_queue_event (NSEvent *event)
+{
+  /* Just used to wake us up; if an event and a FD arrived at the same
+    * time; could have come from a previous iteration in some cases,
+    * but the spurious wake up is harmless if a little inefficient.
+    */
+  if (!event ||
+      ([event type] == NSEventTypeApplicationDefined &&
+       [event subtype] == GDK_MACOS_EVENT_SUBTYPE_EVENTLOOP))
+    return;
+
+  if (!current_events)
+    current_events = g_queue_new ();
+  g_queue_push_head (current_events, [event retain]);
+}
+
 static gboolean
 gdk_macos_event_source_prepare (GSource *source,
                                 int     *timeout)
@@ -782,23 +799,7 @@ poll_func (GPollFD *ufds,
   if (last_ufds == ufds && n_ready < 0)
     n_ready = select_thread_collect_poll (ufds, nfds);
 
-  if (event &&
-      [event type] == NSEventTypeApplicationDefined &&
-      [event subtype] == GDK_MACOS_EVENT_SUBTYPE_EVENTLOOP)
-    {
-      /* Just used to wake us up; if an event and a FD arrived at the same
-       * time; could have come from a previous iteration in some cases,
-       * but the spurious wake up is harmless if a little inefficient.
-       */
-      event = NULL;
-    }
-
-  if (event)
-    {
-      if (!current_events)
-        current_events = g_queue_new ();
-      g_queue_push_head (current_events, [event retain]);
-    }
+  _gdk_macos_event_source_queue_event (event);
 
   return n_ready;
 }
