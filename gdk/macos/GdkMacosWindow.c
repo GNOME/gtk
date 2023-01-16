@@ -715,6 +715,7 @@ typedef NSString *CALayerContentsGravity;
   GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
 
   _gdk_macos_event_source_queue_event ([NSApp currentEvent]);
+  gdk_drag_set_selected_action (drag, _gdk_macos_drag_ns_operation_to_action (operation));
 
   if (gdk_drag_get_selected_action (drag) != 0)
     g_signal_emit_by_name (drag, "drop-performed");

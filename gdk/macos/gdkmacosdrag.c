@@ -410,6 +410,18 @@ _gdk_macos_drag_operation (GdkMacosDrag *self)
   return operation;
 }
 
+GdkDragAction
+_gdk_macos_drag_ns_operation_to_action (NSDragOperation operation)
+{
+  if (operation & NSDragOperationCopy)
+    return GDK_ACTION_COPY;
+  if (operation & NSDragOperationMove)
+    return GDK_ACTION_MOVE;
+  if (operation & NSDragOperationLink)
+    return GDK_ACTION_LINK;
+  return 0;
+}
+
 void
 _gdk_macos_drag_surface_move (GdkMacosDrag *self,
                               int           x_root,

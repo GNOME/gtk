@@ -66,6 +66,7 @@ gboolean        _gdk_macos_drag_begin       (GdkMacosDrag       *self,
                                              GdkContentProvider *content,
                                              GdkMacosWindow     *window);
 NSDragOperation _gdk_macos_drag_operation   (GdkMacosDrag       *self);
+GdkDragAction   _gdk_macos_drag_ns_operation_to_action (NSDragOperation operation);
 void     _gdk_macos_drag_surface_move       (GdkMacosDrag   *self,
                                              int             x_root,
                                              int             y_root);
