@@ -1046,7 +1046,6 @@ run_loop_observer_callback (CFRunLoopObserverRef observer,
       run_loop_exit ();
       break;
     case kCFRunLoopAllActivities:
-      /* TODO: Do most of the above? */
     default:
       break;
     }
