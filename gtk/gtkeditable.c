@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /**
@@ -485,7 +485,7 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   if (length < 0)
     length = strlen (text);
-  
+
   GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, text, length, position);
 }
 
@@ -1180,4 +1180,55 @@ gtk_editable_delegate_get_property (GObject    *object,
     }
 
   return TRUE;
+}
+
+/**
+ * gtk_editable_delegate_get_accessible_platform_state:
+ * @editable: a `GtkEditable` implementation
+ * @state: what kind of accessible state to retrieve
+ *
+ * Retrieves the accessible platform state from the editable delegate.
+ *
+ * This is an helper function to retrieve the accessible state for
+ * `GtkEditable` interface implementations using a delegate pattern.
+ *
+ * You should call this function in your editable widget implementation
+ * of the [vfunc@Gtk.Accessible.get_platform_state] virtual function, for
+ * instance:
+ *
+ * ```c
+ * static void
+ * accessible_interface_init (GtkAccessibleInterface *iface)
+ * {
+ *   iface->get_platform_state = your_editable_get_accessible_platform_state;
+ * }
+ *
+ * static gboolean
+ * your_editable_get_accessible_platform_state (GtkAccessible *accessible,
+ *                                              GtkAccessiblePlatformState state)
+ * {
+ *   return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (accessible), state);
+ * }
+ * ```
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_editable_delegate_get_accessible_platform_state (GtkEditable                *editable,
+                                                     GtkAccessiblePlatformState  state)
+{
+  GtkWidget *delegate = GTK_WIDGET (gtk_editable_get_delegate (editable));
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      return gtk_widget_get_focusable (delegate);
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      return gtk_widget_has_focus (delegate);
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
 }
