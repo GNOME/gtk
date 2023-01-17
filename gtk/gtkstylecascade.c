@@ -30,6 +30,7 @@ struct _GtkStyleCascadeIter {
   int  n_cascades;
   int *cascade_index;  /* each one points at last index that was returned, */
                        /* not next one that should be returned */
+  int index_[20];
 };
 
 struct _GtkStyleProviderData
@@ -83,7 +84,11 @@ gtk_style_cascade_iter_init (GtkStyleCascade     *cascade,
   while ((cas = cas->parent) != NULL)
     iter->n_cascades++;
 
-  iter->cascade_index = g_new (int, iter->n_cascades);
+  if (iter->n_cascades < 20)
+    iter->cascade_index = iter->index_;
+  else
+    iter->cascade_index = g_new (int, iter->n_cascades);
+
   for (cas = cascade, ix = 0; ix < iter->n_cascades; cas = cas->parent, ix++)
     iter->cascade_index[ix] = cas->providers->len;
 
@@ -93,7 +98,8 @@ gtk_style_cascade_iter_init (GtkStyleCascade     *cascade,
 static void
 gtk_style_cascade_iter_clear (GtkStyleCascadeIter *iter)
 {
-  g_free (iter->cascade_index);
+  if (iter->cascade_index != iter->index_)
+    g_free (iter->cascade_index);
 }
 
 static GtkSettings *

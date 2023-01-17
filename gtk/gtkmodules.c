@@ -146,18 +146,16 @@ get_module_path (void)
 char **
 _gtk_get_module_path (const char *type)
 {
-  char **paths = get_module_path();
+  char **paths = get_module_path ();
   char **path;
   char **result;
   int count = 0;
 
-  for (path = paths; *path; path++)
-    count++;
-
+  count = g_strv_length (paths);
   result = g_new (char *, count * 4 + 1);
 
   count = 0;
-  for (path = get_module_path (); *path; path++)
+  for (path = paths; *path; path++)
     {
       result[count++] = g_build_filename (*path, GTK_BINARY_VERSION, GTK_HOST, type, NULL);
       result[count++] = g_build_filename (*path, GTK_BINARY_VERSION, type, NULL);
