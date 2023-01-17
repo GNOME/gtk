@@ -238,7 +238,6 @@ static void settings_update_provider             (GdkDisplay            *display
 
 /* --- variables --- */
 static GQuark            quark_gtk_settings = 0;
-static GSList           *object_list = NULL;
 static guint             class_n_properties = 0;
 
 static GPtrArray *display_settings;
@@ -259,7 +258,6 @@ gtk_settings_init (GtkSettings *settings)
   const char * const *config_dirs;
 
   g_datalist_init (&settings->queued_settings);
-  object_list = g_slist_prepend (object_list, settings);
 
   settings->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
   settings->theme_provider = gtk_css_provider_new ();
@@ -1074,8 +1072,6 @@ gtk_settings_finalize (GObject *object)
   GtkSettings *settings = GTK_SETTINGS (object);
   guint i;
 
-  object_list = g_slist_remove (object_list, settings);
-
   for (i = 0; i < class_n_properties; i++)
     g_value_unset (&settings->property_values[i].value);
   g_free (settings->property_values);
@@ -1435,8 +1431,6 @@ static guint
 settings_install_property_parser (GtkSettingsClass   *class,
                                   GParamSpec         *pspec)
 {
-  GSList *node, *next;
-
   switch (G_TYPE_FUNDAMENTAL (G_PARAM_SPEC_VALUE_TYPE (pspec)))
     {
     case G_TYPE_BOOLEAN:
@@ -1464,33 +1458,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
       return 0;
     }
 
-  for (node = object_list; node; node = node->next)
-    g_object_freeze_notify (node->data);
-
   g_object_class_install_property (G_OBJECT_CLASS (class), ++class_n_properties, pspec);
-
-  for (node = object_list; node; node = node->next)
-    {
-      GtkSettings *settings = node->data;
-      GtkSettingsValue *qvalue;
-
-      settings->property_values = g_renew (GtkSettingsPropertyValue, settings->property_values, class_n_properties);
-      settings->property_values[class_n_properties - 1].value.g_type = 0;
-      g_value_init (&settings->property_values[class_n_properties - 1].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      g_param_value_set_default (pspec, &settings->property_values[class_n_properties - 1].value);
-      settings->property_values[class_n_properties - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
-      g_object_notify_by_pspec (G_OBJECT (settings), pspec);
-
-      qvalue = g_datalist_id_dup_data (&settings->queued_settings, g_param_spec_get_name_quark (pspec), NULL, NULL);
-      if (qvalue)
-        apply_queued_setting (settings, pspec, qvalue);
-    }
-
-  for (node = object_list; node; node = next)
-    {
-      next = node->next;
-      g_object_thaw_notify (node->data);
-    }
 
   return class_n_properties;
 }
