@@ -37,11 +37,15 @@
 /*
  * This file implementations integration between the GLib main loop and
  * the native system of the Core Foundation run loop and Cocoa event
- * handling. There are basically two different cases that we need to
- * handle: either the GLib main loop is in control (the application
- * has called gtk_main(), or is otherwise iterating the main loop), or
- * CFRunLoop is in control (we are in a modal operation such as window
- * resizing or drag-and-drop.)
+ * handling. There are basically three different cases that we need to
+ * handle:
+ *
+ * - the GLib main loop is in control. The application has called
+ *   gtk_main(), or is otherwise iterating the main loop.
+ * - CFRunLoop is in control. We are in a modal operation such as window
+ *   resizing.
+ * - CFRunLoop is running a nested loop. This happens when a drag-and-drop
+ *   operation has been initiated.
  *
  * When the GLib main loop is in control we integrate in native event
  * handling in two ways: first we add a GSource that handles checking
@@ -57,14 +61,23 @@
  * stages of the GLib main loop (prepare, check, dispatch), and make the
  * appropriate calls into GLib.
  *
- * Both cases share a single problem: the OS X API’s don’t allow us to
+ * When initiating a drag operation, a nested CFRunLoop is executed.
+ * The nested run loop is started when fetching a native event in our GLib
+ * main loop. The application does not receive any events until the nested loop
+ * is finished. We work around this by forwarding the
+ * events that trigger the callbacks of the NSDraggingSource protocol.
+ * The "run loop observer" is executing the GLib main loop stages as long as we're
+ * in the nested run loop, as if CFRunLoop were in control.
+ * See also GdkMacosWindow.
+ *
+ * All cases share a single problem: the macOS API’s don’t allow us to
  * wait simultaneously for file descriptors and for events. So when we
  * need to do a blocking wait that includes file descriptor activity, we
  * push the actual work of calling select() to a helper thread (the
  * "select thread") and wait for native events in the main thread.
  *
  * The main known limitation of this code is that if a callback is triggered
- * via the OS X run loop while we are "polling" (in either case described
+ * via the macOS run loop while we are "polling" (in either case described
  * above), iteration of the GLib main loop is not possible from within
  * that callback. If the programmer tries to do so explicitly, then they
  * will get a warning from GLib "main loop already active in another thread".
