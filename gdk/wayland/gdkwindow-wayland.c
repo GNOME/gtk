@@ -4160,6 +4160,27 @@ static void
 gdk_wayland_window_set_startup_id (GdkWindow   *window,
                                    const gchar *startup_id)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  gchar *free_me = NULL;
+
+  if (!startup_id)
+    {
+      free_me = g_steal_pointer (&display_wayland->startup_notification_id);
+      startup_id = free_me;
+    }
+
+#ifdef HAVE_XDG_ACTIVATION
+  if (startup_id)
+    {
+      xdg_activation_v1_activate (display_wayland->xdg_activation,
+                                  startup_id,
+				  impl->display_server.wl_surface);
+    }
+#endif
+
+  g_free (free_me);
 }
 
 static gboolean
