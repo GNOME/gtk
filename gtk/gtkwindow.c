@@ -6280,6 +6280,32 @@ popover_map (GtkWidget        *widget,
 }
 
 static void
+gtk_window_notify_startup (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (!disable_startup_notification &&
+      !GTK_IS_OFFSCREEN_WINDOW (window) &&
+      priv->type != GTK_WINDOW_POPUP)
+    {
+      /* Do we have a custom startup-notification id? */
+      if (priv->startup_id != NULL)
+        {
+          /* Make sure we have a "real" id */
+          if (!startup_id_is_fake (priv->startup_id))
+            gdk_notify_startup_complete_with_id (priv->startup_id);
+
+          g_free (priv->startup_id);
+          priv->startup_id = NULL;
+        }
+      else
+        {
+          gdk_notify_startup_complete ();
+        }
+    }
+}
+
+static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -6354,25 +6380,7 @@ gtk_window_map (GtkWidget *widget)
 
   gdk_window_show (gdk_window);
 
-  if (!disable_startup_notification &&
-      !GTK_IS_OFFSCREEN_WINDOW (window) &&
-      priv->type != GTK_WINDOW_POPUP)
-    {
-      /* Do we have a custom startup-notification id? */
-      if (priv->startup_id != NULL)
-        {
-          /* Make sure we have a "real" id */
-          if (!startup_id_is_fake (priv->startup_id))
-            gdk_notify_startup_complete_with_id (priv->startup_id);
-
-          g_free (priv->startup_id);
-          priv->startup_id = NULL;
-        }
-      else
-        {
-          gdk_notify_startup_complete ();
-        }
-    }
+  gtk_window_notify_startup (window);
 
   /* if mnemonics visible is not already set
    * (as in the case of popup menus), then hide mnemonics initially
