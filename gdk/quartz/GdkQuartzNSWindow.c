@@ -229,6 +229,9 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkEvent *event;
   gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+  /* Alignment to 4 pixels is on scaled pixels and these are unscaled pixels so divide by scale to compensate. */
+  const gint scale = gdk_window_get_scale_factor (window);
+  const guint align = GDK_WINDOW_QUARTZ_ALIGNMENT / scale;
 
   /* see same in windowDidMove */
   if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
@@ -241,13 +244,18 @@
   window->width = content_rect.size.width;
   window->height = content_rect.size.height;
 
+  if(window->width % align)
+    content_rect.size.width += align - window->width % align;
+
+  content_rect.origin.x = 0;
+  content_rect.origin.y = 0;
+
+  [[self contentView] setFrame:content_rect];
+
   /* Certain resize operations (e.g. going fullscreen), also move the
    * origin of the window.
    */
   _gdk_quartz_window_update_position (window);
-
-  [[self contentView] setFrame:NSMakeRect (0, 0, window->width, window->height)];
-
   _gdk_window_update_size (window);
 
   /* Synthesize a configure event */

@@ -27,7 +27,8 @@
 #include "config.h"
 
 #define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindow *)win)->impl))
-
+/* Cairo surface widths must be 4-pixel byte aligned so that the image will transfer to the CPU. */
+#define GDK_WINDOW_QUARTZ_ALIGNMENT 16
 
 /* Display */
 

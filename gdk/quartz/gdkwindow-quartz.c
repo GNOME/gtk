@@ -306,9 +306,10 @@ gdk_quartz_ref_cairo_surface (GdkWindow *window)
       gint height = gdk_window_get_height (impl->wrapper);
       gint scale = gdk_window_get_scale_factor (impl->wrapper);
       gint scaled_width = width * scale;
+      const gint align = GDK_WINDOW_QUARTZ_ALIGNMENT;
 
-      if (scaled_width % 16)
-          scaled_width += 16 - scaled_width % 16; // Surface widths must be 4-pixel aligned
+      if (scaled_width % align)
+          scaled_width += align - scaled_width % align; // Surface widths must be 4-pixel aligned
 
       impl->cairo_surface = gdk_quartz_create_cairo_surface (impl,
                                                              scaled_width,
@@ -929,6 +930,8 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
         NSUInteger style_mask;
         int nx, ny;
         const char *title;
+        const gint scale = gdk_window_get_scale_factor (window);
+        const guint align = GDK_WINDOW_QUARTZ_ALIGNMENT / scale;
 
         /* initWithContentRect will place on the mainScreen by default.
          * We want to select the screen to place on ourselves.  We need
@@ -941,6 +944,9 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
         screen_rect = [screen frame];
         nx -= screen_rect.origin.x;
         ny -= screen_rect.origin.y;
+
+        if (window->width % align)
+          window->width += align - window->width % align;
 
         content_rect = NSMakeRect (nx, ny - window->height,
                                    window->width,
