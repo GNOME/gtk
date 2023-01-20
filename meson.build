@@ -385,6 +385,8 @@ pango_dep      = dependency('pango', version: pango_req)
 fribidi_dep    = dependency('fribidi', version: fribidi_req)
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             default_options: ['coretext=enabled'])
+hbgobj_dep     = dependency('harfbuzz-gobject', version: harfbuzz_req)
+hbcairo_dep    = dependency('harfbuzz-cairo', version: harfbuzz_req)
 
 # Require PangoFT2 if on X11 or wayland
 pangoft_dep    = dependency('pangoft2', version: pango_req,
@@ -462,6 +464,10 @@ endif
 cairo_csi_dep = dependency('cairo-script-interpreter', required: false)
 if not cairo_csi_dep.found()
   cairo_csi_dep = cc.find_library('cairo-script-interpreter', required: get_option('build-tests'))
+endif
+
+if cairo_dep.type_name() == 'internal' or cc.has_function('cairo_font_options_set_custom_palette_color', dependencies: cairo_dep)
+  cdata.set('HAVE_CAIRO_FONT_OPTIONS_SET_CUSTOM_PALETTE_COLOR', 1)
 endif
 
 have_egl = epoxy_dep.get_variable(

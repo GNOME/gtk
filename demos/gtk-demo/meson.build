@@ -100,9 +100,10 @@ demos = files([
   'tree_store.c',
   'video_player.c',
   'font_features.c',
+  'paintable_glyph.c',
 ])
 
-gtkdemo_deps = [ libgtk_dep, ]
+gtkdemo_deps = [ libgtk_dep, hbgobj_dep, hbcairo_dep ]
 
 extra_demo_sources = files([
   'main.c',
@@ -131,6 +132,12 @@ extra_demo_sources = files([
   'unicode-names.c',
   'suggestionentry.c',
   'language-names.c',
+  'glyphpaintable.c',
+  'fontvariations.c',
+  'rangeedit.c',
+  'fontcolors.c',
+  'glyphpicker.c',
+  'colorpicker.c',
 ])
 
 if os_unix

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ColorPicker" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="label" translatable="yes">Foreground</property>
+            <property name="xalign">0</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkColorButton" id="fg">
+            <property name="hexpand">1</property>
+            <property name="use-alpha">1</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Background</property>
+            <property name="xalign">0</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkColorButton" id="bg">
+            <property name="hexpand">1</property>
+            <property name="use-alpha">1</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="swap">
+            <property name="icon-name">object-flip-vertical-symbolic</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="circular"/>
+            </style>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">2</property>
+              <property name="row-span">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

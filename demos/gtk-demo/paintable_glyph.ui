@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GlyphPaintable" id="paintable">
+    <property name="glyph" bind-source="glyph_picker" bind-property="glyph"/>
+    <property name="variations" bind-source="font_variations" bind-property="variations"/>
+    <property name="palette-index" bind-source="font_colors" bind-property="palette-index"/>
+    <property name="custom-colors" bind-source="font_colors" bind-property="custom-colors"/>
+    <property name="color" bind-source="color_picker" bind-property="foreground"/>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="title">Paintable — Glyph</property>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkButton">
+            <property name="tooltip-text">Reset</property>
+            <property name="icon-name">view-refresh-symbolic</property>
+            <property name="action-name">win.reset</property>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkCenterBox">
+            <style>
+              <class name="toolbar"/>
+            </style>
+            <property name="start-widget">
+              <object class="GtkToggleButton" id="toggle">
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </property>
+            <property name="center-widget">
+              <object class="GtkLabel" id="font_name"/>
+            </property>
+            <property name="end-widget">
+              <object class="GtkLabel">
+                <property name="label" bind-source="glyph_picker" bind-property="glyph-name"/>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkBox" id="box">
+            <style>
+              <class name="picture-parent-box"/>
+            </style>
+            <child>
+              <object class="GtkRevealer">
+                <property name="reveal-child" bind-source="toggle" bind-property="active"/>
+                <property name="transition-type">slide-right</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow">
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <style>
+                          <class name="sidebar"/>
+                        </style>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="label">_Font</property>
+                            <property name="use-underline">1</property>
+                            <signal name="clicked" handler="show_file_open" object="paintable" swapped="false"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <style>
+                              <class name="row"/>
+                            </style>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label">Glyph</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GlyphPicker" id="glyph_picker">
+                                <property name="face" bind-source="paintable" bind-property="face"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="ColorPicker" id="color_picker">
+                            <signal name="notify::background" handler="background_changed" object="box" swapped="false"/>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="FontVariations" id="font_variations">
+                            <property name="face" bind-source="paintable" bind-property="face"/>
+                          </object>
+                        </child>
+
+                        <child>
+                          <object class="FontColors" id="font_colors">
+                            <property name="face" bind-source="paintable" bind-property="face"/>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPicture" id="picture">
+                <property name="paintable">paintable</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-start">20</property>
+                <property name="margin-end">20</property>
+                <property name="margin-top">20</property>
+                <property name="margin-bottom">20</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>

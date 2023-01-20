@@ -220,6 +220,26 @@
     <file>svgpaintable.c</file>
     <file>org.gtk.gtk4.NodeEditor.Devel.svg</file>
   </gresource>
+  <gresource prefix="/paintable_glyph">
+    <file>paintable_glyph.ui</file>
+    <file>paintable_glyph.css</file>
+    <file>glyphpaintable.h</file>
+    <file>glyphpaintable.c</file>
+    <file>fontvariations.h</file>
+    <file>fontvariations.c</file>
+    <file>fontvariations.ui</file>
+    <file>rangeedit.h</file>
+    <file>rangeedit.c</file>
+    <file>rangeedit.ui</file>
+    <file>fontcolors.h</file>
+    <file>fontcolors.c</file>
+    <file>fontcolors.ui</file>
+    <file>glyphpicker.h</file>
+    <file>glyphpicker.c</file>
+    <file>colorpicker.h</file>
+    <file>colorpicker.c</file>
+    <file>colorpicker.ui</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -319,6 +339,7 @@
     <file>paintable.c</file>
     <file>paintable_animated.c</file>
     <file>paintable_emblem.c</file>
+    <file>paintable_glyph.c</file>
     <file>paintable_mediastream.c</file>
     <file>paintable_svg.c</file>
     <file>paintable_symbolic.c</file>
