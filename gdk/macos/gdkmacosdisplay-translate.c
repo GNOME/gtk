@@ -1104,15 +1104,11 @@ find_surface_for_ns_event (GdkMacosDisplay *self,
   GdkMacosBaseView *view;
   GdkSurface *surface;
   NSPoint point;
-  int x_tmp;
-  int y_tmp;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
   g_assert (nsevent != NULL);
   g_assert (x != NULL);
   g_assert (y != NULL);
-
-  _gdk_macos_display_from_display_coords (self, point.x, point.y, &x_tmp, &y_tmp);
 
   switch ((int)[nsevent type])
     {
