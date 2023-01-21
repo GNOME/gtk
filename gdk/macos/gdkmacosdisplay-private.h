@@ -155,7 +155,7 @@ void             _gdk_macos_display_surface_became_key             (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_clear_sorting                  (GdkMacosDisplay *self);
 const GList     *_gdk_macos_display_get_surfaces                   (GdkMacosDisplay *self);
-void             _gdk_macos_display_send_button_event              (GdkMacosDisplay *self,
+void             _gdk_macos_display_send_event                     (GdkMacosDisplay *self,
                                                                     NSEvent         *nsevent);
 void             _gdk_macos_display_warp_pointer                   (GdkMacosDisplay *self,
                                                                     int              x,

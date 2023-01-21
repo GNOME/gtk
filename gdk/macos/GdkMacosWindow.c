@@ -146,7 +146,7 @@ typedef NSString *CALayerContentsGravity;
        *
        * TODO: Can we improve grab breaking to fix this?
        */
-      _gdk_macos_display_send_button_event ([self gdkDisplay], event);
+      _gdk_macos_display_send_event ([self gdkDisplay], event);
 
       _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
 
@@ -698,23 +698,23 @@ typedef NSString *CALayerContentsGravity;
 - (void)draggingSession:(NSDraggingSession *)session movedToPoint:(NSPoint)screenPoint
 {
   NSInteger sequence_number = [session draggingSequenceNumber];
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (gdk_surface)));
   GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
   int x, y;
 
-  _gdk_macos_event_source_queue_event ([NSApp currentEvent]);
+  _gdk_macos_display_send_event (display, [NSApp currentEvent]);
 
-  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display), screenPoint.x, screenPoint.y, &x, &y);
+  _gdk_macos_display_from_display_coords (display, screenPoint.x, screenPoint.y, &x, &y);
   _gdk_macos_drag_surface_move (GDK_MACOS_DRAG (drag), x, y);
 }
 
 - (void)draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
 {
   NSInteger sequence_number = [session draggingSequenceNumber];
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
-  GdkDrag *drag = _gdk_macos_display_find_drag (GDK_MACOS_DISPLAY (display), sequence_number);
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (gdk_surface)));
+  GdkDrag *drag = _gdk_macos_display_find_drag (display, sequence_number);
 
-  _gdk_macos_event_source_queue_event ([NSApp currentEvent]);
+  _gdk_macos_display_send_event (display, [NSApp currentEvent]);
   gdk_drag_set_selected_action (drag, _gdk_macos_drag_ns_operation_to_action (operation));
 
   if (gdk_drag_get_selected_action (drag) != 0)
@@ -722,7 +722,7 @@ typedef NSString *CALayerContentsGravity;
   else
     gdk_drag_cancel (drag, GDK_DRAG_CANCEL_NO_TARGET);
 
-  _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (display), [session draggingSequenceNumber], NULL);
+  _gdk_macos_display_set_drag (display, [session draggingSequenceNumber], NULL);
 }
 
 // end

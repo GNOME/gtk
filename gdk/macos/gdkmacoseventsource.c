@@ -653,7 +653,7 @@ _gdk_macos_event_source_get_pending (void)
   return event;
 }
 
-void
+static void
 _gdk_macos_event_source_queue_event (NSEvent *event)
 {
   /* Just used to wake us up; if an event and a FD arrived at the same
