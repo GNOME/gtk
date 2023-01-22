@@ -36,10 +36,12 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static void
-glyph_paintable_snapshot (GdkPaintable *paintable,
-                          GdkSnapshot  *snapshot,
-                          double        width,
-                          double        height)
+glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
+                                   GdkSnapshot           *snapshot,
+                                   double                 width,
+                                   double                 height,
+                                   const GdkRGBA         *colors,
+                                   gsize                  n_colors)
 {
   GlyphPaintable *self = GLYPH_PAINTABLE (paintable);
   cairo_t *cr;
@@ -51,6 +53,7 @@ glyph_paintable_snapshot (GdkPaintable *paintable,
   cairo_glyph_t glyph;
   hb_glyph_extents_t extents;
   double draw_scale;
+  GdkRGBA foreground;
 
   if (self->face == NULL)
     return;
@@ -81,12 +84,25 @@ glyph_paintable_snapshot (GdkPaintable *paintable,
           unsigned int r, g, b, a;
 
           if (sscanf (entries[i], "%2x%2x%2x%2x", &r, &g, &b, &a) == 4)
-            cairo_font_options_set_custom_palette_color (font_options, i, r / 255., g / 255., b / 255. , a / 255.);
+            cairo_font_options_set_custom_palette_color (font_options, i,
+                                                          r / 255., g / 255., b / 255. , a / 255.);
         }
 
        g_strfreev (entries);
     }
+
+  for (int i = 0; i +1 < MIN (4, n_colors); i++)
+    cairo_font_options_set_custom_palette_color (font_options, i,
+                                                 colors[i + 1].red,
+                                                 colors[i + 1].green,
+                                                 colors[i + 1].blue,
+                                                 colors[i + 1].alpha);
 #endif
+
+  if (n_colors > 0)
+    foreground = colors[0];
+  else
+    foreground = self->color;
 
   scaled_font = cairo_scaled_font_create (cairo_face, &font_matrix, &ctm, font_options);
 
@@ -102,7 +118,7 @@ glyph_paintable_snapshot (GdkPaintable *paintable,
   cairo_set_source_rgba (cr, 0, 0, 0, 0);
   cairo_paint (cr);
 
-  gdk_cairo_set_source_rgba (cr, &self->color);
+  gdk_cairo_set_source_rgba (cr, &foreground);
 
   glyph.index = self->glyph;
   glyph.x = - extents.x_bearing / (1 << self->subpixel_bits);
@@ -115,6 +131,16 @@ glyph_paintable_snapshot (GdkPaintable *paintable,
   cairo_font_face_destroy (cairo_face);
 
   cairo_destroy (cr);
+}
+
+static void
+glyph_paintable_snapshot (GdkPaintable *paintable,
+                          GdkSnapshot  *snapshot,
+                          double        width,
+                          double        height)
+{
+  glyph_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable),
+                                     snapshot, width, height, NULL, 0);
 }
 
 static int
@@ -155,9 +181,17 @@ glyph_paintable_init_interface (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = glyph_paintable_get_intrinsic_height;
 }
 
+static void
+glyph_symbolic_paintable_init_interface (GtkSymbolicPaintableInterface *iface)
+{
+  iface->snapshot_symbolic = glyph_paintable_snapshot_symbolic;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GlyphPaintable, glyph_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                glyph_paintable_init_interface))
+                                                glyph_paintable_init_interface)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
+                                                glyph_symbolic_paintable_init_interface))
 
 static void
 glyph_paintable_init (GlyphPaintable *self)
