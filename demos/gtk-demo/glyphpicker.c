@@ -4,6 +4,11 @@
 #include <hb-ot.h>
 #include <hb-gobject.h>
 
+static void glyph_picker_set_face  (GlyphPicker  *self,
+                                    hb_face_t    *face);
+static void glyph_picker_set_glyph (GlyphPicker  *self,
+                                    unsigned int  glyph);
+
 enum {
   PROP_FACE = 1,
   PROP_GLYPH,
@@ -106,6 +111,18 @@ update_font (GlyphPicker *self)
 }
 
 static void
+update_glyph (GlyphPicker *self)
+{
+  hb_codepoint_t glyph;
+
+  if (hb_font_get_glyph_from_name (self->font, "icon0", -1, &glyph) ||
+      hb_font_get_glyph_from_name (self->font, "A", -1, &glyph))
+    {
+      glyph_picker_set_glyph (self, glyph);
+    }
+}
+
+static void
 glyph_picker_set_property (GObject      *object,
                            unsigned int  prop_id,
                            const GValue *value,
@@ -116,25 +133,11 @@ glyph_picker_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FACE:
-      {
-        hb_face_t *face = g_value_get_boxed (value);
-
-        if (self->face == face)
-          return;
-
-        if (self->face)
-          hb_face_destroy (self->face);
-        self->face = face;
-        if (self->face)
-          hb_face_reference (self->face);
-
-        update_bounds (self);
-        update_font (self);
-      }
+      glyph_picker_set_face (self, (hb_face_t *) g_value_get_boxed (value));
       break;
 
     case PROP_GLYPH:
-      gtk_spin_button_set_value (self->spin, g_value_get_uint (value));
+      glyph_picker_set_glyph (self, g_value_get_uint (value));
       break;
 
     default:
@@ -182,12 +185,12 @@ glyph_picker_class_init (GlyphPickerClass *class)
   properties[PROP_FACE] =
       g_param_spec_boxed ("face", "", "",
                           HB_GOBJECT_TYPE_FACE,
-                          G_PARAM_READWRITE);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_GLYPH] =
       g_param_spec_uint ("glyph", "", "",
                          0, G_MAXUINT, 0,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_GLYPH_NAME] =
       g_param_spec_string ("glyph-name", "", "",
@@ -198,4 +201,36 @@ glyph_picker_class_init (GlyphPickerClass *class)
 
   gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (class), GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "glyphpicker");
+}
+
+static void
+glyph_picker_set_face (GlyphPicker *self,
+                       hb_face_t   *face)
+{
+  if (self->face == face)
+    return;
+
+  if (self->face)
+    hb_face_destroy (self->face);
+  self->face = face;
+  if (self->face)
+    hb_face_reference (self->face);
+
+  update_bounds (self);
+  update_font (self);
+  update_glyph (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACE]);
+}
+
+static void
+glyph_picker_set_glyph (GlyphPicker  *self,
+                        unsigned int  glyph)
+{
+  if (get_glyph (self) == glyph)
+    return;
+
+  gtk_spin_button_set_value (self->spin, glyph);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
 }

@@ -365,6 +365,19 @@ update_font (GlyphPaintable *self)
     }
 }
 
+static void
+update_glyph (GlyphPaintable *self)
+{
+  hb_codepoint_t glyph;
+
+  if (hb_font_get_glyph_from_name (self->font, "icon0", -1, &glyph) ||
+      hb_font_get_glyph_from_name (self->font, "A", -1, &glyph))
+    {
+      self->glyph = glyph;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
+    }
+}
+
 void
 glyph_paintable_set_face (GlyphPaintable *self,
                           hb_face_t      *face)
@@ -377,8 +390,10 @@ glyph_paintable_set_face (GlyphPaintable *self,
     self->face = hb_face_reference (face);
 
   update_font (self);
+  update_glyph (self);
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACE]);
 }
 
@@ -399,6 +414,7 @@ glyph_paintable_set_glyph (GlyphPaintable *self,
   self->glyph = glyph;
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
 }
 
@@ -442,6 +458,7 @@ glyph_paintable_set_variations (GlyphPaintable *self,
   update_font (self);
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VARIATIONS]);
 }
 

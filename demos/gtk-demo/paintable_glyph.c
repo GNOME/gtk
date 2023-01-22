@@ -57,13 +57,6 @@ set_font_from_path (GdkPaintable *paintable,
 }
 
 static void
-set_glyph (GtkWidget      *widget,
-           hb_codepoint_t  glyph)
-{
-  g_object_set (GLYPH_PICKER (widget), "glyph", glyph, NULL);
-}
-
-static void
 open_response_cb (GObject *source,
                   GAsyncResult *result,
                   void *data)
@@ -244,7 +237,6 @@ do_paintable_glyph (GtkWidget *do_widget)
       create_reset_action ();
 
       set_font_from_path (paintable, "/usr/share/fonts/abattis-cantarell-vf-fonts/Cantarell-VF.otf");
-      set_glyph (glyph_picker, 1);
 
       g_object_unref (builder);
       g_object_unref (scope);
