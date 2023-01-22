@@ -66,6 +66,8 @@ struct _GtkTooltipWindowClass
   GtkWidgetClass parent_class;
 };
 
+#define CHARS_WRAP_LIMIT 50
+
 static void gtk_tooltip_window_native_init (GtkNativeInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTooltipWindow, gtk_tooltip_window, GTK_TYPE_WIDGET,
@@ -417,7 +419,10 @@ update_label_width (GtkLabel *label)
 
       len = g_utf8_strlen (text, -1);
 
-      gtk_label_set_max_width_chars (label, MIN (len, 50));
+      if (len > CHARS_WRAP_LIMIT)
+        gtk_label_set_width_chars (label, CHARS_WRAP_LIMIT);
+
+      gtk_label_set_max_width_chars (label, MIN (len, CHARS_WRAP_LIMIT));
       gtk_label_set_wrap (label, TRUE);
     }
 }
