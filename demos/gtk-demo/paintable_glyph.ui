@@ -125,6 +125,20 @@
                 <property name="margin-bottom">20</property>
               </object>
             </child>
+            <child>
+              <object class="GtkImage" id="image">
+                <style>
+                  <class name="demo-image"/>
+                </style>
+                <property name="paintable">paintable</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-start">20</property>
+                <property name="margin-end">20</property>
+                <property name="margin-top">20</property>
+                <property name="margin-bottom">20</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
