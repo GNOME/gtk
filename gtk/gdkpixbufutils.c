@@ -19,8 +19,11 @@
 #include <gdk/gdk.h>
 #include "gdkpixbufutilsprivate.h"
 #include "gtkscalerprivate.h"
+#include "gtkglyphpaintable.h"
 
 #include "gdk/gdktextureprivate.h"
+
+#include <hb-glib.h>
 
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
@@ -575,6 +578,24 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
                               height * loader_data->scale_factor);
 }
 
+static gboolean
+face_from_blob (GBytes *bytes, hb_face_t **face_out)
+{
+  hb_blob_t *blob;
+  hb_face_t *face;
+
+  blob = hb_glib_blob_create (bytes);
+  face = hb_face_create (blob, 0);
+  hb_blob_destroy (blob);
+
+  if (face == hb_face_get_empty ())
+    face = NULL;
+
+  *face_out = face;
+
+  return face != NULL;
+}
+
 GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      int     scale_factor)
@@ -582,6 +603,7 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
   LoaderData loader_data;
   GdkTexture *texture;
   GdkPaintable *paintable;
+  hb_face_t *face;
 
   loader_data.scale_factor = scale_factor;
 
@@ -593,6 +615,16 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 
       /* We know these formats can't be scaled */
       paintable = GDK_PAINTABLE (texture);
+    }
+  else if (face_from_blob (bytes, &face))
+    {
+      paintable = gtk_glyph_paintable_new (face);
+      if (scale_factor != 1)
+        {
+          GdkPaintable *tmp = paintable;
+          paintable = gtk_scaler_new (tmp, scale_factor);
+          g_object_unref (tmp);
+        }
     }
   else
     {
