@@ -154,6 +154,7 @@
 #include <gtk/gtkgestureswipe.h>
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkglarea.h>
+#include <gtk/gtkglyphpaintable.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkgridlayout.h>
 #include <gtk/gtkgridview.h>

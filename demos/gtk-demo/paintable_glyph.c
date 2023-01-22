@@ -9,7 +9,6 @@
 #include <gtk/gtk.h>
 #include <hb-ot.h>
 
-#include "glyphpaintable.h"
 #include "fontvariations.h"
 #include "fontcolors.h"
 #include "glyphpicker.h"
@@ -49,7 +48,7 @@ set_font_from_path (GdkPaintable *paintable,
   face = hb_face_create (blob, 0);
   hb_blob_destroy (blob);
 
-  glyph_paintable_set_face (GLYPH_PAINTABLE (paintable), face);
+  gtk_glyph_paintable_set_face (GTK_GLYPH_PAINTABLE (paintable), face);
 
   update_font_name (font_name, face);
 
@@ -205,7 +204,6 @@ do_paintable_glyph (GtkWidget *do_widget)
                                                   800);
       g_object_unref (provider);
 
-      g_type_ensure (GLYPH_TYPE_PAINTABLE);
       g_type_ensure (FONT_VARIATIONS_TYPE);
       g_type_ensure (FONT_COLORS_TYPE);
       g_type_ensure (GLYPH_PICKER_TYPE);

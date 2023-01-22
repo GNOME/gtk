@@ -223,8 +223,6 @@
   <gresource prefix="/paintable_glyph">
     <file>paintable_glyph.ui</file>
     <file>paintable_glyph.css</file>
-    <file>glyphpaintable.h</file>
-    <file>glyphpaintable.c</file>
     <file>fontvariations.h</file>
     <file>fontvariations.c</file>
     <file>fontvariations.ui</file>

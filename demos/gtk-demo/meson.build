@@ -132,7 +132,6 @@ extra_demo_sources = files([
   'unicode-names.c',
   'suggestionentry.c',
   'language-names.c',
-  'glyphpaintable.c',
   'fontvariations.c',
   'rangeedit.c',
   'fontcolors.c',

@@ -1,11 +1,11 @@
 #include "config.h"
 
-#include "glyphpaintable.h"
+#include "gtkglyphpaintable.h"
 #include <hb-gobject.h>
 #include <hb-cairo.h>
 #include <hb-ot.h>
 
-struct _GlyphPaintable
+struct _GtkGlyphPaintable
 {
   GObject parent_instance;
   hb_face_t *face;
@@ -18,7 +18,7 @@ struct _GlyphPaintable
   GdkRGBA color;
 };
 
-struct _GlyphPaintableClass
+struct _GtkGlyphPaintableClass
 {
   GObjectClass parent_class;
 };
@@ -36,14 +36,14 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static void
-glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
-                                   GdkSnapshot           *snapshot,
-                                   double                 width,
-                                   double                 height,
-                                   const GdkRGBA         *colors,
-                                   gsize                  n_colors)
+gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
+                                       GdkSnapshot           *snapshot,
+                                       double                 width,
+                                       double                 height,
+                                       const GdkRGBA         *colors,
+                                       gsize                  n_colors)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (paintable);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paintable);
   cairo_t *cr;
   unsigned int upem;
   cairo_font_face_t *cairo_face;
@@ -91,7 +91,7 @@ glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
        g_strfreev (entries);
     }
 
-  for (int i = 0; i +1 < MIN (4, n_colors); i++)
+  for (int i = 0; i + 1 < MIN (4, n_colors); i++)
     cairo_font_options_set_custom_palette_color (font_options, i,
                                                  colors[i + 1].red,
                                                  colors[i + 1].green,
@@ -134,19 +134,19 @@ glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
 }
 
 static void
-glyph_paintable_snapshot (GdkPaintable *paintable,
-                          GdkSnapshot  *snapshot,
-                          double        width,
-                          double        height)
+gtk_glyph_paintable_snapshot (GdkPaintable *paintable,
+                              GdkSnapshot  *snapshot,
+                              double        width,
+                              double        height)
 {
-  glyph_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable),
-                                     snapshot, width, height, NULL, 0);
+  gtk_glyph_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable),
+                                         snapshot, width, height, NULL, 0);
 }
 
 static int
-glyph_paintable_get_intrinsic_width (GdkPaintable *paintable)
+gtk_glyph_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (paintable);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paintable);
   hb_glyph_extents_t extents;
 
   if (!self->font)
@@ -159,9 +159,9 @@ glyph_paintable_get_intrinsic_width (GdkPaintable *paintable)
 }
 
 static int
-glyph_paintable_get_intrinsic_height (GdkPaintable *paintable)
+gtk_glyph_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (paintable);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paintable);
   hb_glyph_extents_t extents;
 
   if (!self->font)
@@ -174,77 +174,77 @@ glyph_paintable_get_intrinsic_height (GdkPaintable *paintable)
 }
 
 static void
-glyph_paintable_init_interface (GdkPaintableInterface *iface)
+gtk_glyph_paintable_init_interface (GdkPaintableInterface *iface)
 {
-  iface->snapshot = glyph_paintable_snapshot;
-  iface->get_intrinsic_width = glyph_paintable_get_intrinsic_width;
-  iface->get_intrinsic_height = glyph_paintable_get_intrinsic_height;
+  iface->snapshot = gtk_glyph_paintable_snapshot;
+  iface->get_intrinsic_width = gtk_glyph_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = gtk_glyph_paintable_get_intrinsic_height;
 }
 
 static void
 glyph_symbolic_paintable_init_interface (GtkSymbolicPaintableInterface *iface)
 {
-  iface->snapshot_symbolic = glyph_paintable_snapshot_symbolic;
+  iface->snapshot_symbolic = gtk_glyph_paintable_snapshot_symbolic;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GlyphPaintable, glyph_paintable, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkGlyphPaintable, gtk_glyph_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                glyph_paintable_init_interface)
+                                                gtk_glyph_paintable_init_interface)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
                                                 glyph_symbolic_paintable_init_interface))
 
 static void
-glyph_paintable_init (GlyphPaintable *self)
+gtk_glyph_paintable_init (GtkGlyphPaintable *self)
 {
   self->subpixel_bits = 6;
   self->color = (GdkRGBA) { 0, 0, 0, 1 };
 }
 
 static void
-glyph_paintable_dispose (GObject *object)
+gtk_glyph_paintable_dispose (GObject *object)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (object);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (object);
 
   g_clear_pointer (&self->face, hb_face_destroy);
   g_clear_pointer (&self->font, hb_font_destroy);
   g_free (self->variations);
   g_free (self->custom_colors);
 
-  G_OBJECT_CLASS (glyph_paintable_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_glyph_paintable_parent_class)->dispose (object);
 }
 
 static void
-glyph_paintable_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+gtk_glyph_paintable_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (object);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (object);
 
   switch (prop_id)
     {
     case PROP_FACE:
-      glyph_paintable_set_face (self, (hb_face_t *)g_value_get_boxed (value));
+      gtk_glyph_paintable_set_face (self, (hb_face_t *)g_value_get_boxed (value));
       break;
 
     case PROP_GLYPH:
-      glyph_paintable_set_glyph (self, g_value_get_uint (value));
+      gtk_glyph_paintable_set_glyph (self, g_value_get_uint (value));
       break;
 
     case PROP_VARIATIONS:
-      glyph_paintable_set_variations (self, g_value_get_string (value));
+      gtk_glyph_paintable_set_variations (self, g_value_get_string (value));
       break;
 
     case PROP_COLOR:
-      glyph_paintable_set_color (self, g_value_get_boxed (value));
+      gtk_glyph_paintable_set_color (self, g_value_get_boxed (value));
       break;
 
     case PROP_PALETTE_INDEX:
-      glyph_paintable_set_palette_index (self, g_value_get_uint (value));
+      gtk_glyph_paintable_set_palette_index (self, g_value_get_uint (value));
       break;
 
     case PROP_CUSTOM_COLORS:
-      glyph_paintable_set_custom_colors (self, g_value_get_string (value));
+      gtk_glyph_paintable_set_custom_colors (self, g_value_get_string (value));
       break;
 
     default:
@@ -253,12 +253,12 @@ glyph_paintable_set_property (GObject      *object,
 }
 
 static void
-glyph_paintable_get_property (GObject    *object,
-                              guint       prop_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+gtk_glyph_paintable_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
-  GlyphPaintable *self = GLYPH_PAINTABLE (object);
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (object);
 
   switch (prop_id)
     {
@@ -293,13 +293,13 @@ glyph_paintable_get_property (GObject    *object,
 
 
 static void
-glyph_paintable_class_init (GlyphPaintableClass *class)
+gtk_glyph_paintable_class_init (GtkGlyphPaintableClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->dispose = glyph_paintable_dispose;
-  object_class->set_property = glyph_paintable_set_property;
-  object_class->get_property = glyph_paintable_get_property;
+  object_class->dispose = gtk_glyph_paintable_dispose;
+  object_class->set_property = gtk_glyph_paintable_set_property;
+  object_class->get_property = gtk_glyph_paintable_get_property;
 
   properties[PROP_FACE] = g_param_spec_boxed ("face", NULL, NULL,
                                               HB_GOBJECT_TYPE_FACE,
@@ -329,12 +329,10 @@ glyph_paintable_class_init (GlyphPaintableClass *class)
 }
 
 GdkPaintable *
-glyph_paintable_new (hb_face_t      *face,
-                     hb_codepoint_t  glyph)
+gtk_glyph_paintable_new (hb_face_t *face)
 {
-  return g_object_new (GLYPH_TYPE_PAINTABLE,
+  return g_object_new (GTK_TYPE_GLYPH_PAINTABLE,
                        "face", face,
-                       "glyph", glyph,
                        NULL);
 }
 
@@ -373,7 +371,7 @@ count_variations (const char *string)
 }
 
 static void
-update_font (GlyphPaintable *self)
+update_font (GtkGlyphPaintable *self)
 {
   unsigned int upem;
   int scale;
@@ -400,7 +398,7 @@ update_font (GlyphPaintable *self)
 }
 
 static void
-update_glyph (GlyphPaintable *self)
+guess_default_glyph (GtkGlyphPaintable *self)
 {
   hb_codepoint_t glyph;
 
@@ -413,10 +411,10 @@ update_glyph (GlyphPaintable *self)
 }
 
 void
-glyph_paintable_set_face (GlyphPaintable *self,
+gtk_glyph_paintable_set_face (GtkGlyphPaintable *self,
                           hb_face_t      *face)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   g_clear_pointer (&self->face, hb_face_destroy);
 
@@ -424,7 +422,7 @@ glyph_paintable_set_face (GlyphPaintable *self,
     self->face = hb_face_reference (face);
 
   update_font (self);
-  update_glyph (self);
+  guess_default_glyph (self);
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
@@ -432,18 +430,18 @@ glyph_paintable_set_face (GlyphPaintable *self,
 }
 
 hb_face_t *
-glyph_paintable_get_face (GlyphPaintable *self)
+gtk_glyph_paintable_get_face (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), NULL);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), NULL);
 
   return self->face;
 }
 
 void
-glyph_paintable_set_glyph (GlyphPaintable *self,
-                           hb_codepoint_t  glyph)
+gtk_glyph_paintable_set_glyph (GtkGlyphPaintable *self,
+                               hb_codepoint_t  glyph)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   self->glyph = glyph;
 
@@ -453,18 +451,18 @@ glyph_paintable_set_glyph (GlyphPaintable *self,
 }
 
 hb_codepoint_t
-glyph_paintable_get_glyph (GlyphPaintable *self)
+gtk_glyph_paintable_get_glyph (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), 0);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), 0);
 
   return self->glyph;
 }
 
 void
-glyph_paintable_set_palette_index (GlyphPaintable *self,
-                                   unsigned int    palette_index)
+gtk_glyph_paintable_set_palette_index (GtkGlyphPaintable *self,
+                                       unsigned int    palette_index)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   self->palette_index = palette_index;
 
@@ -473,18 +471,18 @@ glyph_paintable_set_palette_index (GlyphPaintable *self,
 }
 
 unsigned int
-glyph_paintable_get_palette_index (GlyphPaintable *self)
+gtk_glyph_paintable_get_palette_index (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), 0);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), 0);
 
   return self->palette_index;
 }
 
 void
-glyph_paintable_set_variations (GlyphPaintable *self,
-                                const char     *variations)
+gtk_glyph_paintable_set_variations (GtkGlyphPaintable *self,
+                                    const char     *variations)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   g_free (self->variations);
   self->variations = g_strdup (variations);
@@ -497,18 +495,18 @@ glyph_paintable_set_variations (GlyphPaintable *self,
 }
 
 const char *
-glyph_paintable_get_variations (GlyphPaintable *self)
+gtk_glyph_paintable_get_variations (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), NULL);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), NULL);
 
   return self->variations;
 }
 
 void
-glyph_paintable_set_custom_colors (GlyphPaintable *self,
-                                   const char     *custom_colors)
+gtk_glyph_paintable_set_custom_colors (GtkGlyphPaintable *self,
+                                       const char     *custom_colors)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   g_free (self->custom_colors);
   self->custom_colors = g_strdup (custom_colors);
@@ -518,18 +516,18 @@ glyph_paintable_set_custom_colors (GlyphPaintable *self,
 }
 
 const char *
-glyph_paintable_get_custom_colors (GlyphPaintable *self)
+gtk_glyph_paintable_get_custom_colors (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), NULL);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), NULL);
 
   return self->custom_colors;
 }
 
 void
-glyph_paintable_set_color (GlyphPaintable *self,
-                           const GdkRGBA  *color)
+gtk_glyph_paintable_set_color (GtkGlyphPaintable *self,
+                               const GdkRGBA  *color)
 {
-  g_return_if_fail (GLYPH_IS_PAINTABLE (self));
+  g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   if (gdk_rgba_equal (&self->color, color))
     return;
@@ -541,9 +539,9 @@ glyph_paintable_set_color (GlyphPaintable *self,
 }
 
 const GdkRGBA *
-glyph_paintable_get_color (GlyphPaintable *self)
+gtk_glyph_paintable_get_color (GtkGlyphPaintable *self)
 {
-  g_return_val_if_fail (GLYPH_IS_PAINTABLE (self), NULL);
+  g_return_val_if_fail (GTK_IS_GLYPH_PAINTABLE (self), NULL);
 
   return &self->color;
 }

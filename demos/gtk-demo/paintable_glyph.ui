@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GlyphPaintable" id="paintable">
+  <object class="GtkGlyphPaintable" id="paintable">
     <property name="glyph" bind-source="glyph_picker" bind-property="glyph" bind-flags="bidirectional | sync-create"/>
     <property name="variations" bind-source="font_variations" bind-property="variations"/>
     <property name="palette-index" bind-source="font_colors" bind-property="palette-index"/>
