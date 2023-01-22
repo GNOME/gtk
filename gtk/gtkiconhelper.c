@@ -484,11 +484,12 @@ ensure_surface_for_gicon (GtkIconHelper    *self,
   if (destination == NULL)
     {
       GError *error = NULL;
-      destination = gtk_icon_theme_load_icon (icon_theme,
-                                              "image-missing",
-                                              width,
-                                              flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                              &error);
+      destination = gtk_icon_theme_load_icon_for_scale (icon_theme,
+                                                        "image-missing",
+                                                        MIN (width, height),
+                                                        scale,
+                                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                                        &error);
       /* We include this image as resource, so we always have it available or
        * the icontheme code is broken */
       g_assert_no_error (error);
