@@ -33,6 +33,7 @@
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gtksymbolicpaintable.h"
 
 struct _GtkIconHelper
 {
@@ -123,7 +124,7 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = g_object_ref (gtk_image_definition_get_paintable (self->def));
-      symbolic = FALSE;
+      symbolic = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
       break;
 
     case GTK_IMAGE_ICON_NAME:
