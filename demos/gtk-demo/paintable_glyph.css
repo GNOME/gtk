@@ -25,7 +25,3 @@ button.fontpicker > colorswatch,
 button.fontpicker > colorswatch > overlay {
   border-radius: 0;
 }
-
-image.demo-image {
-  -gtk-icon-size: 64px;
-}
