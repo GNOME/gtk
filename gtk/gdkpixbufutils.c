@@ -619,12 +619,6 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
   else if (face_from_blob (bytes, &face))
     {
       paintable = gtk_glyph_paintable_new (face);
-      if (scale_factor != 1)
-        {
-          GdkPaintable *tmp = paintable;
-          paintable = gtk_scaler_new (tmp, scale_factor);
-          g_object_unref (tmp);
-        }
     }
   else
     {

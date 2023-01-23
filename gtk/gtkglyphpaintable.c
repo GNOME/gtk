@@ -44,93 +44,67 @@ gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
                                        gsize                  n_colors)
 {
   GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paintable);
-  cairo_t *cr;
-  unsigned int upem;
-  cairo_font_face_t *cairo_face;
-  cairo_matrix_t font_matrix, ctm;
-  cairo_font_options_t *font_options;
-  cairo_scaled_font_t *scaled_font;
-  cairo_glyph_t glyph;
-  hb_glyph_extents_t extents;
-  double draw_scale;
-  GdkRGBA foreground;
+  GskRenderNode *node;
+  GdkRGBA foreground_color;
+  unsigned int num_colors = 0;
+  GdkRGBA *_colors = NULL;
 
   if (self->face == NULL)
     return;
 
-  hb_font_get_glyph_extents (self->font, self->glyph, &extents);
+  if (n_colors > 0)
+    foreground_color = colors[0];
+  else
+    foreground_color = self->color;
 
-  upem = hb_face_get_upem (self->face);
-
-  cairo_face = hb_cairo_font_face_create_for_font (self->font);
-  hb_cairo_font_face_set_scale_factor (cairo_face, 1 << self->subpixel_bits);
-
-  cairo_matrix_init_identity (&ctm);
-  cairo_matrix_init_scale (&font_matrix, (double)upem, (double)upem);
-
-  font_options = cairo_font_options_create ();
-  cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_NONE);
-  cairo_font_options_set_hint_metrics (font_options, CAIRO_HINT_METRICS_OFF);
-#ifdef CAIRO_COLOR_PALETTE_DEFAULT
-  cairo_font_options_set_color_palette (font_options, self->palette_index);
-#endif
-#ifdef HAVE_CAIRO_FONT_OPTIONS_SET_CUSTOM_PALETTE_COLOR
   if (self->custom_colors)
     {
       char **entries = g_strsplit (self->custom_colors, ",", -1);
+
+      num_colors = g_strv_length (entries);
+      if (n_colors > 1)
+        num_colors = MAX (n_colors - 1, num_colors);
+
+      _colors = g_new0 (GdkRGBA, num_colors);
 
       for (int i = 0; entries[i]; i++)
         {
           unsigned int r, g, b, a;
 
           if (sscanf (entries[i], "%2x%2x%2x%2x", &r, &g, &b, &a) == 4)
-            cairo_font_options_set_custom_palette_color (font_options, i,
-                                                          r / 255., g / 255., b / 255. , a / 255.);
+            {
+              _colors[i].red = r / 255.;
+              _colors[i].green = g / 255.;
+              _colors[i].blue = b / 255.;
+              _colors[i].alpha = a / 255.;
+            }
         }
 
        g_strfreev (entries);
     }
 
+  if (n_colors > 1 && !colors)
+    colors = g_new0 (GdkRGBA, n_colors - 1);
+
   for (int i = 0; i + 1 < MIN (4, n_colors); i++)
-    cairo_font_options_set_custom_palette_color (font_options, i,
-                                                 colors[i + 1].red,
-                                                 colors[i + 1].green,
-                                                 colors[i + 1].blue,
-                                                 colors[i + 1].alpha);
-#endif
+    {
+      _colors[i].red = colors[i + 1].red;
+      _colors[i].green = colors[i + 1].green;
+      _colors[i].blue = colors[i + 1].blue;
+      _colors[i].alpha = colors[i + 1].alpha;
+    }
 
-  if (n_colors > 0)
-    foreground = colors[0];
-  else
-    foreground = self->color;
+  node = gsk_glyph_node_new (&GRAPHENE_RECT_INIT (0, 0, width, height),
+                             self->font,
+                             self->glyph,
+                             self->palette_index,
+                             &foreground_color,
+                             num_colors,
+                             _colors);
 
-  scaled_font = cairo_scaled_font_create (cairo_face, &font_matrix, &ctm, font_options);
+  gtk_snapshot_append_node (snapshot, node);
 
-  cr = gtk_snapshot_append_cairo (GTK_SNAPSHOT (snapshot),
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
-
-  cairo_set_scaled_font (cr, scaled_font);
-
-  draw_scale = width / (double) (extents.width / (1 << self->subpixel_bits));
-
-  cairo_scale (cr, draw_scale, draw_scale);
-
-  cairo_set_source_rgba (cr, 0, 0, 0, 0);
-  cairo_paint (cr);
-
-  gdk_cairo_set_source_rgba (cr, &foreground);
-
-  glyph.index = self->glyph;
-  glyph.x = - extents.x_bearing / (1 << self->subpixel_bits);
-  glyph.y = extents.y_bearing / (1 << self->subpixel_bits);
-
-  cairo_show_glyphs (cr, &glyph, 1);
-
-  cairo_scaled_font_destroy (scaled_font);
-  cairo_font_options_destroy (font_options);
-  cairo_font_face_destroy (cairo_face);
-
-  cairo_destroy (cr);
+  gsk_render_node_unref (node);
 }
 
 static void
