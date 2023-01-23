@@ -32,6 +32,7 @@
 #include "gdk/gdkprivate.h"
 
 #include <hb-ot.h>
+#include <hb-cairo.h>
 
 /* maximal number of rectangles we keep in a diff region before we throw
  * the towel and just use the bounding box of the parent node.
@@ -4660,6 +4661,208 @@ gsk_text_node_get_offset (const GskRenderNode *node)
   return &self->offset;
 }
 
+/*** GSK_GLYPH_NODE ***/
+
+struct _GskGlyphNode
+{
+  GskRenderNode render_node;
+
+  hb_font_t *font;
+  hb_codepoint_t glyph;
+  unsigned int palette_index;
+  GdkRGBA foreground_color;
+  unsigned int n_colors;
+  GdkRGBA *colors;
+};
+
+static void
+gsk_glyph_node_finalize (GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_GLYPH_NODE));
+
+  hb_font_destroy (self->font);
+  g_free (self->colors);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_glyph_node_draw (GskRenderNode *node,
+                     cairo_t       *cr)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+  unsigned int upem;
+  cairo_font_face_t *cairo_face;
+  cairo_matrix_t font_matrix, ctm;
+  cairo_font_options_t *font_options;
+  cairo_scaled_font_t *scaled_font;
+  hb_glyph_extents_t extents;
+  double scale;
+  cairo_glyph_t glyph;
+
+  if (!hb_font_get_glyph_extents (self->font, self->glyph, &extents))
+    return;
+
+  if (extents.width <= 0 || extents.height == 0)
+    return;
+
+  cairo_save (cr);
+
+  upem = hb_face_get_upem (hb_font_get_face (self->font));
+
+  cairo_face = hb_cairo_font_face_create_for_font (self->font);
+  hb_cairo_font_face_set_scale_factor (cairo_face, 1 << 6);
+
+  cairo_matrix_init_identity (&ctm);
+  cairo_matrix_init_scale (&font_matrix, (double)upem, (double)upem);
+
+  font_options = cairo_font_options_create ();
+  cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_NONE);
+  cairo_font_options_set_hint_metrics (font_options, CAIRO_HINT_METRICS_OFF);
+#ifdef CAIRO_COLOR_PALETTE_DEFAULT
+  cairo_font_options_set_color_palette (font_options, self->palette_index);
+#endif
+#ifdef HAVE_CAIRO_FONT_OPTIONS_SET_CUSTOM_PALETTE_COLOR
+  for (int i = 0; i < self->n_colors; i++)
+    cairo_font_options_set_custom_palette_color (font_options, i,
+                                                 self->colors[i].red,
+                                                 self->colors[i].green,
+                                                 self->colors[i].blue,
+                                                 self->colors[i].alpha);
+#endif
+
+  scaled_font = cairo_scaled_font_create (cairo_face, &font_matrix, &ctm, font_options);
+
+  cairo_font_options_destroy (font_options);
+  cairo_font_face_destroy (cairo_face);
+
+  cairo_set_scaled_font (cr, scaled_font);
+
+  cairo_scaled_font_destroy (scaled_font);
+
+  scale = node->bounds.size.width * (1 << 6) / (double) extents.width;
+
+  cairo_scale (cr, scale, scale);
+
+  gdk_cairo_set_source_rgba (cr, &self->foreground_color);
+
+  glyph.index = self->glyph;
+  glyph.x = - extents.x_bearing / (1 << 6);
+  glyph.y = extents.y_bearing / (1 << 6);
+
+  cairo_show_glyphs (cr, &glyph, 1);
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_glyph_node_diff (GskRenderNode  *node1,
+                     GskRenderNode  *node2,
+                     cairo_region_t *region)
+{
+  GskGlyphNode *self1 = (GskGlyphNode *) node1;
+  GskGlyphNode *self2 = (GskGlyphNode *) node2;
+
+  if (self1->font == self2->font &&
+      self1->glyph == self2->glyph &&
+      self1->palette_index == self2->palette_index &&
+      gdk_rgba_equal (&self1->foreground_color, &self2->foreground_color) &&
+      self1->n_colors == self2->n_colors)
+    {
+      for (unsigned int i = 0; i < self1->n_colors; i++)
+        {
+          if (!gdk_rgba_equal (&self1->colors[i], &self2->colors[i]))
+            {
+              gsk_render_node_diff_impossible (node1, node2, region);
+              return;
+            }
+        }
+      return;
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
+GskRenderNode *
+gsk_glyph_node_new (const graphene_rect_t *bounds,
+                    hb_font_t             *font,
+                    hb_codepoint_t         glyph,
+                    unsigned int           palette_index,
+                    const GdkRGBA         *foreground_color,
+                    unsigned int           n_colors,
+                    const GdkRGBA         *colors)
+{
+  GskGlyphNode *self;
+  GskRenderNode *node;
+
+  self = gsk_render_node_alloc (GSK_GLYPH_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = FALSE;
+
+  self->font = hb_font_reference (font);
+  self->glyph = glyph;
+  self->palette_index = palette_index;
+  self->foreground_color = *foreground_color;
+  self->n_colors = n_colors;
+
+  self->colors = g_new (GdkRGBA, n_colors);
+  for (unsigned int i = 0; i < n_colors; i++)
+    self->colors[i] = colors[i];
+
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+
+  return node;
+}
+
+hb_font_t *
+gsk_glyph_node_get_font (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return self->font;
+}
+
+hb_codepoint_t
+gsk_glyph_node_get_glyph (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return self->glyph;
+}
+
+unsigned int
+gsk_glyph_node_get_palette_index (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return self->palette_index;
+}
+
+const GdkRGBA *
+gsk_glyph_node_get_foreground_color (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return &self->foreground_color;
+}
+
+unsigned int
+gsk_glyph_node_get_n_colors (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return self->n_colors;
+}
+
+const GdkRGBA *
+gsk_glyph_node_get_colors (const GskRenderNode *node)
+{
+  GskGlyphNode *self = (GskGlyphNode *) node;
+
+  return self->colors;
+}
+
 /*** GSK_BLUR_NODE ***/
 
 /**
@@ -5345,6 +5548,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_shadow_node, GSK_SHADOW_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_blend_node, GSK_BLEND_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_glyph_node, GSK_GLYPH_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
@@ -5702,6 +5906,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskTextNode"), &node_info);
     gsk_render_node_types[GSK_TEXT_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_GLYPH_NODE,
+      sizeof (GskGlyphNode),
+      NULL,
+      gsk_glyph_node_finalize,
+      gsk_glyph_node_draw,
+      NULL,
+      gsk_glyph_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskGlyphNode"), &node_info);
+    gsk_render_node_types[GSK_GLYPH_NODE] = node_type;
   }
 
   {

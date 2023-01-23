@@ -50,7 +50,7 @@
  * @GSK_BLUR_NODE: A node that applies a blur
  * @GSK_DEBUG_NODE: Debug information that does not affect the rendering
  * @GSK_GL_SHADER_NODE: A node that uses OpenGL fragment shaders to render
- 
+ *
  * The type of a node determines what the node is rendering.
  */
 typedef enum {
@@ -79,7 +79,8 @@ typedef enum {
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
   GSK_DEBUG_NODE,
-  GSK_GL_SHADER_NODE
+  GSK_GL_SHADER_NODE,
+  GSK_GLYPH_NODE,
 } GskRenderNodeType;
 
 /**

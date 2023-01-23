@@ -3766,6 +3766,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
       gsk_gl_render_job_visit_transform_node (job, node);
     break;
 
+    case GSK_GLYPH_NODE:
     case GSK_CAIRO_NODE:
       gsk_gl_render_job_visit_as_fallback (job, node);
     break;

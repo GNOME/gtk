@@ -164,6 +164,7 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_TEXT_NODE                      (gsk_text_node_get_type())
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_GL_SHADER_NODE                 (gsk_gl_shader_node_get_type())
+#define GSK_TYPE_GLYPH_NODE                     (gsk_glyph_node_get_type())
 
 typedef struct _GskDebugNode                    GskDebugNode;
 typedef struct _GskColorNode                    GskColorNode;
@@ -190,6 +191,7 @@ typedef struct _GskCrossFadeNode                GskCrossFadeNode;
 typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskGLShaderNode                 GskGLShaderNode;
+typedef struct _GskGlyphNode                    GskGlyphNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_debug_node_get_type                 (void) G_GNUC_CONST;
@@ -505,6 +507,29 @@ GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_text_node_get_offset                (const GskRenderNode      *node) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_4_10
+GType                   gsk_glyph_node_get_type                 (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_4_10
+GskRenderNode *         gsk_glyph_node_new                      (const graphene_rect_t    *bounds,
+                                                                 hb_font_t                *font,
+                                                                 hb_codepoint_t            glyph,
+                                                                 unsigned int              palette_index,
+                                                                 const GdkRGBA            *foreground_color,
+                                                                 unsigned int              n_colors,
+                                                                 const GdkRGBA            *colors);
+GDK_AVAILABLE_IN_4_10
+hb_font_t *             gsk_glyph_node_get_font                 (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+hb_codepoint_t          gsk_glyph_node_get_glyph                (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+unsigned int            gsk_glyph_node_get_palette_index        (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+const GdkRGBA *         gsk_glyph_node_get_foreground_color     (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+unsigned int            gsk_glyph_node_get_n_colors             (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+const GdkRGBA *         gsk_glyph_node_get_colors               (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_blur_node_get_type                  (void) G_GNUC_CONST;

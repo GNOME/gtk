@@ -13,7 +13,7 @@ typedef struct _GskRenderNodeClass GskRenderNodeClass;
  * We don't add an "n-types" value to avoid having to handle
  * it in every single switch.
  */
-#define GSK_RENDER_NODE_TYPE_N_TYPES    (GSK_GL_SHADER_NODE + 1)
+#define GSK_RENDER_NODE_TYPE_N_TYPES    (GSK_GLYPH_NODE + 1)
 
 extern GType gsk_render_node_types[];
 

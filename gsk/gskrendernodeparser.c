@@ -3043,6 +3043,8 @@ render_node_print (Printer       *p,
       }
       break;
 
+    case GSK_GLYPH_NODE:
+
     default:
       g_error ("Unhandled node: %s", g_type_name_from_instance ((GTypeInstance *) node));
       break;
