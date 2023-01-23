@@ -446,7 +446,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
                                 gdk_drag_get_selected_action (GDK_DRAG (drag)));
   gdk_drag_set_cursor (GDK_DRAG (drag), cursor);
 
-  if (!_gdk_macos_drag_begin (drag))
+  if (!_gdk_macos_drag_begin (drag, content, self->window))
     {
       g_object_unref (drag);
       return NULL;

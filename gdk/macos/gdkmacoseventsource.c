@@ -37,11 +37,15 @@
 /*
  * This file implementations integration between the GLib main loop and
  * the native system of the Core Foundation run loop and Cocoa event
- * handling. There are basically two different cases that we need to
- * handle: either the GLib main loop is in control (the application
- * has called gtk_main(), or is otherwise iterating the main loop), or
- * CFRunLoop is in control (we are in a modal operation such as window
- * resizing or drag-and-drop.)
+ * handling. There are basically three different cases that we need to
+ * handle:
+ *
+ * - the GLib main loop is in control. The application has called
+ *   gtk_main(), or is otherwise iterating the main loop.
+ * - CFRunLoop is in control. We are in a modal operation such as window
+ *   resizing.
+ * - CFRunLoop is running a nested loop. This happens when a drag-and-drop
+ *   operation has been initiated.
  *
  * When the GLib main loop is in control we integrate in native event
  * handling in two ways: first we add a GSource that handles checking
@@ -57,14 +61,23 @@
  * stages of the GLib main loop (prepare, check, dispatch), and make the
  * appropriate calls into GLib.
  *
- * Both cases share a single problem: the OS X API’s don’t allow us to
+ * When initiating a drag operation, a nested CFRunLoop is executed.
+ * The nested run loop is started when fetching a native event in our GLib
+ * main loop. The application does not receive any events until the nested loop
+ * is finished. We work around this by forwarding the
+ * events that trigger the callbacks of the NSDraggingSource protocol.
+ * The "run loop observer" is executing the GLib main loop stages as long as we're
+ * in the nested run loop, as if CFRunLoop were in control.
+ * See also GdkMacosWindow.
+ *
+ * All cases share a single problem: the macOS API’s don’t allow us to
  * wait simultaneously for file descriptors and for events. So when we
  * need to do a blocking wait that includes file descriptor activity, we
  * push the actual work of calling select() to a helper thread (the
  * "select thread") and wait for native events in the main thread.
  *
  * The main known limitation of this code is that if a callback is triggered
- * via the OS X run loop while we are "polling" (in either case described
+ * via the macOS run loop while we are "polling" (in either case described
  * above), iteration of the GLib main loop is not possible from within
  * that callback. If the programmer tries to do so explicitly, then they
  * will get a warning from GLib "main loop already active in another thread".
@@ -640,6 +653,23 @@ _gdk_macos_event_source_get_pending (void)
   return event;
 }
 
+static void
+_gdk_macos_event_source_queue_event (NSEvent *event)
+{
+  /* Just used to wake us up; if an event and a FD arrived at the same
+    * time; could have come from a previous iteration in some cases,
+    * but the spurious wake up is harmless if a little inefficient.
+    */
+  if (!event ||
+      ([event type] == NSEventTypeApplicationDefined &&
+       [event subtype] == GDK_MACOS_EVENT_SUBTYPE_EVENTLOOP))
+    return;
+
+  if (!current_events)
+    current_events = g_queue_new ();
+  g_queue_push_head (current_events, [event retain]);
+}
+
 static gboolean
 gdk_macos_event_source_prepare (GSource *source,
                                 int     *timeout)
@@ -782,23 +812,7 @@ poll_func (GPollFD *ufds,
   if (last_ufds == ufds && n_ready < 0)
     n_ready = select_thread_collect_poll (ufds, nfds);
 
-  if (event &&
-      [event type] == NSEventTypeApplicationDefined &&
-      [event subtype] == GDK_MACOS_EVENT_SUBTYPE_EVENTLOOP)
-    {
-      /* Just used to wake us up; if an event and a FD arrived at the same
-       * time; could have come from a previous iteration in some cases,
-       * but the spurious wake up is harmless if a little inefficient.
-       */
-      event = NULL;
-    }
-
-  if (event)
-    {
-      if (!current_events)
-        current_events = g_queue_new ();
-      g_queue_push_head (current_events, [event retain]);
-    }
+  _gdk_macos_event_source_queue_event (event);
 
   return n_ready;
 }
@@ -1018,7 +1032,10 @@ run_loop_observer_callback (CFRunLoopObserverRef observer,
       break;
     }
 
-  if (getting_events > 0) /* Activity we triggered */
+  /* DnD starts a nested runloop, or so it seems.
+     If we have such a loop, we still want to run
+     our idle handlers. */
+  if (getting_events > 0 && current_loop_level < 2)
     return;
 
   switch (activity)
@@ -1042,7 +1059,6 @@ run_loop_observer_callback (CFRunLoopObserverRef observer,
       run_loop_exit ();
       break;
     case kCFRunLoopAllActivities:
-      /* TODO: Do most of the above? */
     default:
       break;
     }

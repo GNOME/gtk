@@ -723,6 +723,85 @@ fill_scroll_event (GdkMacosDisplay *self,
   return g_steal_pointer (&ret);
 }
 
+
+static GdkEvent *
+fill_event (GdkMacosDisplay *self,
+            GdkMacosWindow  *window,
+            NSEvent         *nsevent,
+            int              x,
+            int              y)
+{
+  GdkMacosSurface *surface = [window gdkSurface];
+  NSEventType event_type = [nsevent type];
+  GdkEvent *ret = NULL;
+
+  switch ((int)event_type)
+    {
+    case NSEventTypeLeftMouseDown:
+    case NSEventTypeRightMouseDown:
+    case NSEventTypeOtherMouseDown:
+    case NSEventTypeLeftMouseUp:
+    case NSEventTypeRightMouseUp:
+    case NSEventTypeOtherMouseUp:
+      ret = fill_button_event (self, surface, nsevent, x, y);
+      break;
+
+    case NSEventTypeLeftMouseDragged:
+    case NSEventTypeRightMouseDragged:
+    case NSEventTypeOtherMouseDragged:
+    case NSEventTypeMouseMoved:
+      ret = fill_motion_event (self, surface, nsevent, x, y);
+      break;
+
+    case NSEventTypeMagnify:
+    case NSEventTypeRotate:
+      ret = fill_pinch_event (self, surface, nsevent, x, y);
+      break;
+
+    case NSEventTypeMouseExited:
+    case NSEventTypeMouseEntered:
+      {
+        GdkSeat *seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
+        GdkDevice *pointer = gdk_seat_get_pointer (seat);
+        GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), pointer);
+
+        if ([(GdkMacosWindow *)window isInManualResizeOrMove])
+          {
+            ret = GDK_MACOS_EVENT_DROP;
+          }
+        else if (grab == NULL)
+          {
+            if (event_type == NSEventTypeMouseExited)
+              [[NSCursor arrowCursor] set];
+
+            ret = synthesize_crossing_event (self, surface, nsevent, x, y);
+          }
+      }
+
+      break;
+
+    case NSEventTypeKeyDown:
+    case NSEventTypeKeyUp:
+    case NSEventTypeFlagsChanged: {
+      GdkEventType type = _gdk_macos_keymap_get_event_type (nsevent);
+
+      if (type)
+        ret = fill_key_event (self, surface, nsevent, type);
+
+      break;
+    }
+
+    case NSEventTypeScrollWheel:
+      ret = fill_scroll_event (self, surface, nsevent, x, y);
+      break;
+
+    default:
+      break;
+    }
+
+  return ret;
+}
+
 static gboolean
 is_mouse_button_press_event (NSEventType type)
 {
@@ -1025,15 +1104,11 @@ find_surface_for_ns_event (GdkMacosDisplay *self,
   GdkMacosBaseView *view;
   GdkSurface *surface;
   NSPoint point;
-  int x_tmp;
-  int y_tmp;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
   g_assert (nsevent != NULL);
   g_assert (x != NULL);
   g_assert (y != NULL);
-
-  _gdk_macos_display_from_display_coords (self, point.x, point.y, &x_tmp, &y_tmp);
 
   switch ((int)[nsevent type])
     {
@@ -1083,7 +1158,6 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   GdkMacosWindow *window;
   NSEventType event_type;
   NSWindow *event_window;
-  GdkEvent *ret = NULL;
   int x;
   int y;
 
@@ -1191,79 +1265,15 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
           _gdk_macos_display_clear_sorting (self);
         }
     }
-
-  switch ((int)event_type)
-    {
-    case NSEventTypeLeftMouseDown:
-    case NSEventTypeRightMouseDown:
-    case NSEventTypeOtherMouseDown:
-    case NSEventTypeLeftMouseUp:
-    case NSEventTypeRightMouseUp:
-    case NSEventTypeOtherMouseUp:
-      ret = fill_button_event (self, surface, nsevent, x, y);
-      break;
-
-    case NSEventTypeLeftMouseDragged:
-    case NSEventTypeRightMouseDragged:
-    case NSEventTypeOtherMouseDragged:
-    case NSEventTypeMouseMoved:
-      ret = fill_motion_event (self, surface, nsevent, x, y);
-      break;
-
-    case NSEventTypeMagnify:
-    case NSEventTypeRotate:
-      ret = fill_pinch_event (self, surface, nsevent, x, y);
-      break;
-
-    case NSEventTypeMouseExited:
-    case NSEventTypeMouseEntered:
-      {
-        GdkSeat *seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
-        GdkDevice *pointer = gdk_seat_get_pointer (seat);
-        GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), pointer);
-
-        if ([(GdkMacosWindow *)window isInManualResizeOrMove])
-          {
-            ret = GDK_MACOS_EVENT_DROP;
-          }
-        else if (grab == NULL)
-          {
-            if (event_type == NSEventTypeMouseExited)
-              [[NSCursor arrowCursor] set];
-
-            ret = synthesize_crossing_event (self, surface, nsevent, x, y);
-          }
-      }
-
-      break;
-
-    case NSEventTypeKeyDown:
-    case NSEventTypeKeyUp:
-    case NSEventTypeFlagsChanged: {
-      GdkEventType type = _gdk_macos_keymap_get_event_type (nsevent);
-
-      if (type)
-        ret = fill_key_event (self, surface, nsevent, type);
-
-      break;
-    }
-
-    case NSEventTypeScrollWheel:
-      ret = fill_scroll_event (self, surface, nsevent, x, y);
-      break;
-
-    default:
-      break;
-    }
-
-  return ret;
+  return fill_event (self, window, nsevent, x, y);
 }
 
 void
-_gdk_macos_display_send_button_event (GdkMacosDisplay *self,
-                                      NSEvent         *nsevent)
+_gdk_macos_display_send_event (GdkMacosDisplay *self,
+                               NSEvent         *nsevent)
 {
   GdkMacosSurface *surface;
+  GdkMacosWindow *window;
   GdkEvent *event;
   int x;
   int y;
@@ -1272,7 +1282,8 @@ _gdk_macos_display_send_button_event (GdkMacosDisplay *self,
   g_return_if_fail (nsevent != NULL);
 
   if ((surface = find_surface_for_ns_event (self, nsevent, &x, &y)) &&
-      (event = fill_button_event (self, surface, nsevent, x, y)))
+      (window = (GdkMacosWindow *)_gdk_macos_surface_get_native (surface)) &&
+      (event = fill_event (self, window, nsevent, x, y)))
     _gdk_windowing_got_event (GDK_DISPLAY (self),
                               _gdk_event_queue_append (GDK_DISPLAY (self), event),
                               event,

@@ -1024,6 +1024,16 @@ _gdk_macos_display_get_nsevent (GdkEvent *event)
   return NULL;
 }
 
+NSEvent *
+_gdk_macos_display_get_last_nsevent ()
+{
+  const GdkToNSEventMap *map = g_queue_peek_tail (&event_map);
+  if (map)
+    return map->nsevent;
+
+  return NULL;
+}
+
 GdkDrag *
 _gdk_macos_display_find_drag (GdkMacosDisplay *self,
                               NSInteger        sequence_number)

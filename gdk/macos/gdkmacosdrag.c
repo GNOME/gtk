@@ -25,6 +25,7 @@
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdragsurface-private.h"
+#include "gdkmacospasteboard-private.h"
 
 #include "gdk/gdkdeviceprivate.h"
 #include "gdk/gdkeventsprivate.h"
@@ -187,47 +188,6 @@ gdk_macos_drag_set_cursor (GdkDrag   *drag,
     [nscursor set];
 }
 
-static gboolean
-drag_grab (GdkMacosDrag *self)
-{
-  GdkSeat *seat;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  seat = gdk_device_get_seat (gdk_drag_get_device (GDK_DRAG (self)));
-
-  if (gdk_seat_grab (seat,
-                     GDK_SURFACE (self->drag_surface),
-                     GDK_SEAT_CAPABILITY_ALL_POINTING,
-                     FALSE,
-                     self->cursor,
-                     NULL,
-                     NULL,
-                     NULL) != GDK_GRAB_SUCCESS)
-    return FALSE;
-
-  g_set_object (&self->drag_seat, seat);
-
-  return TRUE;
-}
-
-static void
-drag_ungrab (GdkMacosDrag *self)
-{
-  GdkDisplay *display;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  if (self->drag_seat)
-    {
-      gdk_seat_ungrab (self->drag_seat);
-      g_clear_object (&self->drag_seat);
-    }
-
-  display = gdk_drag_get_display (GDK_DRAG (self));
-  _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), GDK_CURRENT_TIME);
-}
-
 static void
 gdk_macos_drag_cancel (GdkDrag             *drag,
                        GdkDragCancelReason  reason)
@@ -240,7 +200,6 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
     return;
 
   self->cancelled = TRUE;
-  drag_ungrab (self);
   gdk_drag_drop_done (drag, FALSE);
 }
 
@@ -253,7 +212,6 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
   g_assert (GDK_IS_MACOS_DRAG (self));
 
   g_object_ref (self);
-  drag_ungrab (self);
   g_signal_emit_by_name (drag, "dnd-finished");
   gdk_drag_drop_done (drag, TRUE);
   g_object_unref (self);
@@ -317,236 +275,12 @@ gdk_drag_get_current_actions (GdkModifierType  state,
 }
 
 static void
-gdk_drag_update (GdkDrag         *drag,
-                 double           x_root,
-                 double           y_root,
-                 GdkModifierType  mods,
-                 guint32          evtime)
-{
-  GdkMacosDrag *self = (GdkMacosDrag *)drag;
-  GdkDragAction suggested_action;
-  GdkDragAction possible_actions;
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-
-  self->last_x = x_root;
-  self->last_y = y_root;
-
-  gdk_drag_get_current_actions (mods,
-                                GDK_BUTTON_PRIMARY,
-                                gdk_drag_get_actions (drag),
-                                &suggested_action,
-                                &possible_actions);
-
-  if (GDK_IS_MACOS_SURFACE (self->drag_surface))
-    _gdk_macos_surface_move (GDK_MACOS_SURFACE (self->drag_surface),
-                             x_root - self->hot_x,
-                             y_root - self->hot_y);
-
-  if (!self->did_update)
-    {
-      self->start_x = self->last_x;
-      self->start_y = self->last_y;
-      self->did_update = TRUE;
-    }
-
-  gdk_drag_set_actions (drag, possible_actions);
-}
-
-static gboolean
-gdk_dnd_handle_motion_event (GdkDrag  *drag,
-                             GdkEvent *event)
-{
-  double x, y;
-  int x_root, y_root;
-
-  g_assert (GDK_IS_MACOS_DRAG (drag));
-  g_assert (event != NULL);
-
-  /* Ignore motion while doing zoomback */
-  if (GDK_MACOS_DRAG (drag)->cancelled)
-    return FALSE;
-
-  gdk_event_get_position (event, &x, &y);
-  x_root = event->surface->x + x;
-  y_root = event->surface->y + y;
-  gdk_drag_update (drag, x_root, y_root,
-                   gdk_event_get_modifier_state (event),
-                   gdk_event_get_time (event));
-
-  return TRUE;
-}
-
-static gboolean
-gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
-                                  GdkEvent *event)
-{
-  GdkMacosDrag *self = GDK_MACOS_DRAG (drag);
-  gboolean is_implicit = gdk_grab_broken_event_get_implicit (event);
-  GdkSurface *grab_surface = gdk_grab_broken_event_get_grab_surface (event);
-
-  /* Don't cancel if we break the implicit grab from the initial button_press. */
-  if (is_implicit || grab_surface == (GdkSurface *)self->drag_surface)
-    return FALSE;
-
-  if (gdk_event_get_device (event) != gdk_drag_get_device (drag))
-    return FALSE;
-
-  gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
-
-  return TRUE;
-}
-
-static gboolean
-gdk_dnd_handle_button_event (GdkDrag  *drag,
-                             GdkEvent *event)
-{
-  GdkMacosDrag *self = GDK_MACOS_DRAG (drag);
-
-  g_assert (GDK_IS_MACOS_DRAG (self));
-  g_assert (event != NULL);
-
-#if 0
-  /* FIXME: Check the button matches */
-  if (event->button != self->button)
-    return FALSE;
-#endif
-
-  if (gdk_drag_get_selected_action (drag) != 0)
-    g_signal_emit_by_name (drag, "drop-performed");
-  else
-    gdk_drag_cancel (drag, GDK_DRAG_CANCEL_NO_TARGET);
-
-  return TRUE;
-}
-
-static gboolean
-gdk_dnd_handle_key_event (GdkDrag  *drag,
-                          GdkEvent *event)
-{
-  GdkMacosDrag *self = GDK_MACOS_DRAG (drag);
-  GdkModifierType state;
-  GdkDevice *pointer;
-  GdkSeat *seat;
-  int dx, dy;
-
-  dx = dy = 0;
-  state = gdk_event_get_modifier_state (event);
-  seat = gdk_event_get_seat (event);
-  pointer = gdk_seat_get_pointer (seat);
-
-  if (event->event_type == GDK_KEY_PRESS)
-    {
-      guint keyval = gdk_key_event_get_keyval (event);
-
-      switch (keyval)
-        {
-        case GDK_KEY_Escape:
-          gdk_drag_cancel (drag, GDK_DRAG_CANCEL_USER_CANCELLED);
-          return TRUE;
-
-        case GDK_KEY_space:
-        case GDK_KEY_Return:
-        case GDK_KEY_ISO_Enter:
-        case GDK_KEY_KP_Enter:
-        case GDK_KEY_KP_Space:
-          if (gdk_drag_get_selected_action (drag) != 0)
-            g_signal_emit_by_name (drag, "drop-performed");
-          else
-            gdk_drag_cancel (drag, GDK_DRAG_CANCEL_NO_TARGET);
-
-          return TRUE;
-
-        case GDK_KEY_Up:
-        case GDK_KEY_KP_Up:
-          dy = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
-          break;
-
-        case GDK_KEY_Down:
-        case GDK_KEY_KP_Down:
-          dy = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-
-        case GDK_KEY_Left:
-        case GDK_KEY_KP_Left:
-          dx = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
-          break;
-
-        case GDK_KEY_Right:
-        case GDK_KEY_KP_Right:
-          dx = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-
-        default:
-          break;
-        }
-    }
-
-  /* The state is not yet updated in the event, so we need
-   * to query it here. We could use XGetModifierMapping, but
-   * that would be overkill.
-   */
-  gdk_macos_device_query_state (pointer, NULL, NULL, NULL, NULL, &state);
-
-  if (dx != 0 || dy != 0)
-    {
-      GdkDisplay *display = gdk_event_get_display ((GdkEvent *)event);
-
-      self->last_x += dx;
-      self->last_y += dy;
-
-      _gdk_macos_display_warp_pointer (GDK_MACOS_DISPLAY (display),
-                                       self->last_x,
-                                       self->last_y);
-    }
-
-  gdk_drag_update (drag,
-                   self->last_x, self->last_y,
-                   state,
-                   gdk_event_get_time (event));
-
-  return TRUE;
-}
-
-static gboolean
-gdk_macos_drag_handle_event (GdkDrag  *drag,
-                             GdkEvent *event)
-{
-  g_assert (GDK_IS_MACOS_DRAG (drag));
-  g_assert (event != NULL);
-
-  switch ((guint) event->event_type)
-    {
-    case GDK_MOTION_NOTIFY:
-      return gdk_dnd_handle_motion_event (drag, event);
-
-    case GDK_BUTTON_RELEASE:
-      return gdk_dnd_handle_button_event (drag, event);
-
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      return gdk_dnd_handle_key_event (drag, event);
-
-    case GDK_GRAB_BROKEN:
-      return gdk_dnd_handle_grab_broken_event (drag, event);
-
-    default:
-      return FALSE;
-    }
-}
-
-static void
 gdk_macos_drag_finalize (GObject *object)
 {
   GdkMacosDrag *self = (GdkMacosDrag *)object;
   GdkMacosDragSurface *drag_surface = g_steal_pointer (&self->drag_surface);
 
   g_clear_object (&self->cursor);
-  if (self->drag_seat)
-    {
-      gdk_seat_ungrab (self->drag_seat);
-      g_clear_object (&self->drag_seat);
-    }
 
   G_OBJECT_CLASS (gdk_macos_drag_parent_class)->finalize (object);
 
@@ -608,7 +342,6 @@ gdk_macos_drag_class_init (GdkMacosDragClass *klass)
   drag_class->set_cursor = gdk_macos_drag_set_cursor;
   drag_class->cancel = gdk_macos_drag_cancel;
   drag_class->drop_performed = gdk_macos_drag_drop_performed;
-  drag_class->handle_event = gdk_macos_drag_handle_event;
 
   properties [PROP_DRAG_SURFACE] =
     g_param_spec_object ("drag-surface", NULL, NULL,
@@ -624,11 +357,113 @@ gdk_macos_drag_init (GdkMacosDrag *self)
 }
 
 gboolean
-_gdk_macos_drag_begin (GdkMacosDrag *self)
+_gdk_macos_drag_begin (GdkMacosDrag       *self,
+                       GdkContentProvider *content,
+                       GdkMacosWindow     *window)
 {
+  NSArray<NSDraggingItem *> *items;
+  NSDraggingSession *session;
+  NSPasteboardItem *item;
+  NSEvent *nsevent;
+
   g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), FALSE);
+  g_return_val_if_fail (GDK_IS_MACOS_WINDOW (window), FALSE);
 
-  _gdk_macos_surface_show (GDK_MACOS_SURFACE (self->drag_surface));
+  GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  return drag_grab (self);
+  item = [[GdkMacosPasteboardItem alloc] initForDrag:GDK_DRAG (self) withContentProvider:content];
+  items = [NSArray arrayWithObject:item];
+  nsevent = _gdk_macos_display_get_last_nsevent ();
+
+  session = [[window contentView] beginDraggingSessionWithItems:items
+                                                          event:nsevent
+                                                         source:window];
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  _gdk_macos_display_set_drag (GDK_MACOS_DISPLAY (gdk_drag_get_display (GDK_DRAG (self))),
+                               [session draggingSequenceNumber],
+                               GDK_DRAG (self));
+
+  return TRUE;
+}
+
+NSDragOperation
+_gdk_macos_drag_operation (GdkMacosDrag *self)
+{
+  NSDragOperation operation = NSDragOperationNone;
+  GdkDragAction actions;
+
+  g_return_val_if_fail (GDK_IS_MACOS_DRAG (self), NSDragOperationNone);
+
+  actions = gdk_drag_get_actions (GDK_DRAG (self));
+
+  if (actions & GDK_ACTION_LINK)
+    operation |= NSDragOperationLink;
+
+  if (actions & GDK_ACTION_MOVE)
+    operation |= NSDragOperationMove;
+
+  if (actions & GDK_ACTION_COPY)
+    operation |= NSDragOperationCopy;
+
+  return operation;
+}
+
+GdkDragAction
+_gdk_macos_drag_ns_operation_to_action (NSDragOperation operation)
+{
+  if (operation & NSDragOperationCopy)
+    return GDK_ACTION_COPY;
+  if (operation & NSDragOperationMove)
+    return GDK_ACTION_MOVE;
+  if (operation & NSDragOperationLink)
+    return GDK_ACTION_LINK;
+  return 0;
+}
+
+void
+_gdk_macos_drag_surface_move (GdkMacosDrag *self,
+                              int           x_root,
+                              int           y_root)
+{
+  g_return_if_fail (GDK_IS_MACOS_DRAG (self));
+
+  self->last_x = x_root;
+  self->last_y = y_root;
+
+  if (GDK_IS_MACOS_SURFACE (self->drag_surface))
+    _gdk_macos_surface_move (GDK_MACOS_SURFACE (self->drag_surface),
+                             x_root - self->hot_x,
+                             y_root - self->hot_y);
+}
+
+void
+_gdk_macos_drag_set_start_position (GdkMacosDrag *self,
+                                    int           start_x,
+                                    int           start_y)
+{
+  g_return_if_fail (GDK_IS_MACOS_DRAG (self));
+
+  self->start_x = start_x;
+  self->start_y = start_y;
+}
+
+void
+_gdk_macos_drag_set_actions (GdkMacosDrag    *self,
+                             GdkModifierType  mods)
+{
+  GdkDragAction suggested_action;
+  GdkDragAction possible_actions;
+
+  g_assert (GDK_IS_MACOS_DRAG (self));
+
+  gdk_drag_get_current_actions (mods,
+                                GDK_BUTTON_PRIMARY,
+                                gdk_drag_get_actions (GDK_DRAG (self)),
+                                &suggested_action,
+                                &possible_actions);
+
+  gdk_drag_set_selected_action (GDK_DRAG (self), suggested_action);
+  gdk_drag_set_actions (GDK_DRAG (self), possible_actions);
 }

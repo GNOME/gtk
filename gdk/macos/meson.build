@@ -19,6 +19,7 @@ gdk_macos_sources = files([
   'gdkmacoseventsource.c',
   'gdkmacoskeymap.c',
   'gdkmacosmonitor.c',
+  'gdkmacospasteboard.c',
   'gdkmacospopupsurface.c',
   'gdkmacosseat.c',
   'gdkmacossurface.c',
