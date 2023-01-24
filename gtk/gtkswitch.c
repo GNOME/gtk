@@ -742,9 +742,8 @@ gtk_switch_get_active (GtkSwitch *self)
  *
  * Sets the underlying state of the `GtkSwitch`.
  *
- * Normally, this is the same as [property@Gtk.Switch:active], unless
- * the switch is set up for delayed state changes. This function is
- * typically called from a [signal@Gtk.Switch::state-set] signal handler.
+ * This function is typically called from a [signal@Gtk.Switch::state-set]
+ * signal handler in order to set up delayed state changes.
  *
  * See [signal@Gtk.Switch::state-set] for details.
  */
@@ -760,12 +759,6 @@ gtk_switch_set_state (GtkSwitch *self,
     return;
 
   self->state = state;
-
-  /* This will be a no-op if we're switching the state in response
-   * to a UI change. We're setting active anyway, to catch 'spontaneous'
-   * state changes.
-   */
-  gtk_switch_set_active (self, state);
 
   if (state)
     gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_CHECKED, FALSE);
