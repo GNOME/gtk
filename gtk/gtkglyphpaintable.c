@@ -460,6 +460,9 @@ update_font (GtkGlyphPaintable *self)
 
   g_clear_pointer (&self->font, hb_font_destroy);
 
+  if (!self->face)
+    return;
+
   self->font = hb_font_create (self->face);
 
   upem = hb_face_get_upem (self->face);
@@ -483,6 +486,9 @@ static void
 guess_default_glyph (GtkGlyphPaintable *self)
 {
   hb_codepoint_t glyph;
+
+  if (!self->font)
+    return;
 
   if (hb_font_get_glyph_from_name (self->font, "icon0", -1, &glyph) ||
       hb_font_get_glyph_from_name (self->font, "A", -1, &glyph))
