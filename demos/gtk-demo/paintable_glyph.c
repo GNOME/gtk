@@ -13,7 +13,7 @@
 #include "fontcolors.h"
 #include "glyphpicker.h"
 #include "colorpicker.h"
-
+#include "glyphmodel.h"
 
 static GtkWidget *window;
 static GtkWidget *glyph_picker;
@@ -21,6 +21,7 @@ static GtkWidget *color_picker;
 static GtkWidget *font_name;
 static GtkWidget *font_variations;
 static GtkWidget *font_colors;
+static GlyphModel *glyph_model;
 
 static void
 update_font_name (GtkWidget *label,
@@ -50,6 +51,7 @@ set_font_from_path (GdkPaintable *paintable,
   hb_blob_destroy (blob);
 
   gtk_glyph_paintable_set_face (GTK_GLYPH_PAINTABLE (paintable), face);
+  glyph_model_set_face (glyph_model, face);
 
   update_font_name (font_name, face);
 
@@ -192,6 +194,39 @@ background_changed (GtkWidget *picker,
   gtk_widget_queue_draw (box);
 }
 
+static void
+setup_grid_item (GtkSignalListItemFactory *factory,
+                 GObject                  *listitem)
+{
+  GtkWidget *picture;
+
+  picture = gtk_image_new ();
+  gtk_list_item_set_child (GTK_LIST_ITEM (listitem), picture);
+}
+
+static void
+bind_grid_item (GtkSignalListItemFactory *factory,
+                GObject                  *listitem)
+{
+  GtkWidget *picture;
+  GdkPaintable *paintable;
+
+  picture = gtk_list_item_get_child (GTK_LIST_ITEM (listitem));
+  paintable = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
+  gtk_image_set_from_paintable (GTK_IMAGE (picture), paintable);
+}
+
+static void
+grid_toggled (GtkToggleButton *toggle,
+              GParamSpec *pspec,
+              GtkStack *stack)
+{
+  if (gtk_toggle_button_get_active (toggle))
+    gtk_stack_set_visible_child_name (stack, "grid");
+  else
+    gtk_stack_set_visible_child_name (stack, "glyph");
+}
+
 GtkWidget *
 do_paintable_glyph (GtkWidget *do_widget)
 {
@@ -213,10 +248,14 @@ do_paintable_glyph (GtkWidget *do_widget)
       g_type_ensure (FONT_COLORS_TYPE);
       g_type_ensure (GLYPH_PICKER_TYPE);
       g_type_ensure (COLOR_PICKER_TYPE);
+      g_type_ensure (GLYPH_MODEL_TYPE);
 
       scope = gtk_builder_cscope_new ();
       gtk_builder_cscope_add_callback (scope, show_file_open);
       gtk_builder_cscope_add_callback (scope, background_changed);
+      gtk_builder_cscope_add_callback (scope, setup_grid_item);
+      gtk_builder_cscope_add_callback (scope, bind_grid_item);
+      gtk_builder_cscope_add_callback (scope, grid_toggled);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
@@ -232,6 +271,7 @@ do_paintable_glyph (GtkWidget *do_widget)
       font_variations = GTK_WIDGET (gtk_builder_get_object (builder, "font_variations"));
       font_colors = GTK_WIDGET (gtk_builder_get_object (builder, "font_colors"));
       paintable = GDK_PAINTABLE (gtk_builder_get_object (builder, "paintable"));
+      glyph_model = GLYPH_MODEL (gtk_builder_get_object (builder, "glyph_model"));
 
       create_reset_action ();
 
