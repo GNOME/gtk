@@ -85,7 +85,6 @@ gdk_event_source_check (GSource *source)
 static void
 handle_focus_change (GdkEvent *event)
 {
-  GdkSurface *surface = gdk_event_get_surface(event);
   GdkEvent *focus_event;
   gboolean focus_in = (gdk_event_get_event_type (event) == GDK_ENTER_NOTIFY);
 
