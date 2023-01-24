@@ -86,6 +86,9 @@ get_custom_colors (FontColors *self)
   GString *s;
   GList *l;
 
+  if (!self->has_custom_colors)
+    return NULL;
+
   s = g_string_new ("");
 
   for (l = self->custom_colors; l; l = l->next)
@@ -105,6 +108,8 @@ get_custom_colors (FontColors *self)
                                 (unsigned int)(rgba.blue * 255),
                                 (unsigned int)(rgba.alpha * 255));
     }
+
+  g_print ("%s\n", s->str);
 
   return g_string_free (s, FALSE);
 }

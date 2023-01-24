@@ -17,6 +17,7 @@
 
 static GtkWidget *window;
 static GtkWidget *glyph_picker;
+static GtkWidget *color_picker;
 static GtkWidget *font_name;
 static GtkWidget *font_variations;
 static GtkWidget *font_colors;
@@ -110,6 +111,7 @@ reset (GSimpleAction *action,
 {
   g_action_activate (font_variations_get_reset_action (FONT_VARIATIONS (font_variations)), NULL);
   g_action_activate (font_colors_get_reset_action (FONT_COLORS (font_colors)), NULL);
+  g_action_activate (color_picker_get_reset_action (COLOR_PICKER (color_picker)), NULL);
 }
 
 static void
@@ -120,7 +122,8 @@ update_reset (GSimpleAction *action,
   gboolean enabled;
 
   enabled = g_action_get_enabled (font_variations_get_reset_action (FONT_VARIATIONS (font_variations))) ||
-            g_action_get_enabled (font_colors_get_reset_action (FONT_COLORS (font_colors)));
+            g_action_get_enabled (font_colors_get_reset_action (FONT_COLORS (font_colors))) ||
+            g_action_get_enabled (color_picker_get_reset_action (COLOR_PICKER (color_picker)));
 
   g_simple_action_set_enabled (G_SIMPLE_ACTION (reset_action), enabled);
 }
@@ -136,6 +139,8 @@ create_reset_action (void)
   g_signal_connect (font_variations_get_reset_action (FONT_VARIATIONS (font_variations)),
                     "notify::enabled", G_CALLBACK (update_reset), reset_action);
   g_signal_connect (font_colors_get_reset_action (FONT_COLORS (font_colors)),
+                    "notify::enabled", G_CALLBACK (update_reset), reset_action);
+  g_signal_connect (color_picker_get_reset_action (COLOR_PICKER (color_picker)),
                     "notify::enabled", G_CALLBACK (update_reset), reset_action);
 
   update_reset (NULL, NULL, reset_action);
@@ -157,7 +162,7 @@ clear_provider (gpointer data)
 }
 
 static void
-background_changed (GtkWidget *color_picker,
+background_changed (GtkWidget *picker,
                     GParamSpec *pspec,
                     GtkWidget *box)
 {
@@ -175,7 +180,7 @@ background_changed (GtkWidget *color_picker,
                                                   800);
     }
 
-  g_object_get (color_picker, "background", &bg, NULL);
+  g_object_get (picker, "background", &bg, NULL);
 
   css = g_strdup_printf (".picture-parent-box { background-color: rgba(%f,%f,%f,%f); }",
                          255 * bg->red, 255 * bg->green, 255 * bg->blue, 255 * bg->alpha);
@@ -222,15 +227,11 @@ do_paintable_glyph (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
 
       glyph_picker = GTK_WIDGET (gtk_builder_get_object (builder, "glyph_picker"));
-      g_assert (glyph_picker);
+      color_picker = GTK_WIDGET (gtk_builder_get_object (builder, "color_picker"));
       font_name = GTK_WIDGET (gtk_builder_get_object (builder, "font_name"));
-      g_assert (font_name);
       font_variations = GTK_WIDGET (gtk_builder_get_object (builder, "font_variations"));
-      g_assert (font_variations);
       font_colors = GTK_WIDGET (gtk_builder_get_object (builder, "font_colors"));
-      g_assert (font_colors);
       paintable = GDK_PAINTABLE (gtk_builder_get_object (builder, "paintable"));
-      g_assert (paintable);
 
       create_reset_action ();
 

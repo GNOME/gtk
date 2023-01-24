@@ -55,6 +55,7 @@ fg_changed (GObject     *obj,
             ColorPicker *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOREGROUND]);
+  g_simple_action_set_enabled (self->reset_action, TRUE);
 }
 
 static void
@@ -63,6 +64,7 @@ bg_changed (GObject     *obj,
             ColorPicker *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BACKGROUND]);
+  g_simple_action_set_enabled (self->reset_action, TRUE);
 }
 
 static void
@@ -196,4 +198,10 @@ color_picker_class_init (ColorPickerClass *class)
 
   gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (class), GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "colorpicker");
+}
+
+GAction *
+color_picker_get_reset_action (ColorPicker *self)
+{
+  return G_ACTION (self->reset_action);
 }

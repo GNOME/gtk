@@ -12,3 +12,4 @@ typedef struct _ColorPickerClass    ColorPickerClass;
 
 
 GType        color_picker_get_type          (void);
+GAction *    color_picker_get_reset_action  (ColorPicker *self);
