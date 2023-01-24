@@ -17,6 +17,8 @@ struct _GtkGlyphPaintable
   char *variations;
   char *custom_colors;
   GdkRGBA color;
+  unsigned int uses_foreground : 1;
+  unsigned int uses_palette    : 1;
 };
 
 struct _GtkGlyphPaintableClass
@@ -344,6 +346,127 @@ count_variations (const char *string)
   return n;
 }
 
+
+static void
+paint_color (hb_paint_funcs_t *funcs,
+             void *paint_data,
+             hb_bool_t use_foreground,
+             hb_color_t color,
+             void *user_data)
+{
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paint_data);
+
+  if (use_foreground)
+    self->uses_foreground = TRUE;
+}
+
+static void
+handle_color_line (GtkGlyphPaintable *self,
+                   hb_color_line_t   *color_line)
+{
+  unsigned int len;
+  hb_color_stop_t *stops;
+
+  len = hb_color_line_get_color_stops (color_line, 0, NULL, NULL);
+  stops = g_newa (hb_color_stop_t, len);
+  hb_color_line_get_color_stops (color_line, 0, &len, stops);
+  for (unsigned int i = 0; i < len; i++)
+    {
+      if (stops[i].is_foreground)
+        {
+          self->uses_foreground = TRUE;
+          break;
+        }
+    }
+}
+
+static void
+linear_gradient (hb_paint_funcs_t *funcs,
+                 void *paint_data,
+                 hb_color_line_t *color_line,
+                 float x0, float y0,
+                 float x1, float y1,
+                 float x2, float y2,
+                 void *user_data)
+{
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paint_data);
+
+  handle_color_line (self, color_line);
+}
+
+static void
+radial_gradient (hb_paint_funcs_t *funcs,
+                 void *paint_data,
+                 hb_color_line_t *color_line,
+                 float x0, float y0, float r0,
+                 float x1, float y1, float r1,
+                 void *user_data)
+{
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paint_data);
+
+  handle_color_line (self, color_line);
+}
+
+static void
+sweep_gradient (hb_paint_funcs_t *funcs,
+                void *paint_data,
+                hb_color_line_t *color_line,
+                float x0, float y0,
+                float start_angle, float end_angle,
+                void *user_data)
+{
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paint_data);
+
+  handle_color_line (self, color_line);
+}
+
+static hb_bool_t
+custom_palette_color (hb_paint_funcs_t *funcs,
+                      void *paint_data,
+                      unsigned int color_index,
+                      hb_color_t *color,
+                      void *user_data)
+{
+  GtkGlyphPaintable *self = GTK_GLYPH_PAINTABLE (paint_data);
+
+  self->uses_palette = TRUE;
+
+  return FALSE;
+}
+
+static hb_paint_funcs_t *
+get_classify_funcs (void)
+{
+  static hb_paint_funcs_t *funcs;
+
+  if (funcs)
+    return funcs;
+
+  funcs = hb_paint_funcs_create ();
+
+  hb_paint_funcs_set_color_func (funcs, paint_color, NULL, NULL);
+  hb_paint_funcs_set_linear_gradient_func (funcs, linear_gradient, NULL, NULL);
+  hb_paint_funcs_set_radial_gradient_func (funcs, radial_gradient, NULL, NULL);
+  hb_paint_funcs_set_sweep_gradient_func (funcs, sweep_gradient, NULL, NULL);
+  hb_paint_funcs_set_custom_palette_color_func (funcs, custom_palette_color, NULL, NULL);
+
+  hb_paint_funcs_make_immutable (funcs);
+
+  return funcs;
+}
+
+static void
+classify_glyph (GtkGlyphPaintable *self)
+{
+  self->uses_foreground = FALSE;
+  self->uses_palette = FALSE;
+
+  if (self->font)
+    hb_font_paint_glyph (self->font, self->glyph,
+                         get_classify_funcs (), self,
+                         0, HB_COLOR (0, 0, 0, 255));
+}
+
 static void
 update_font (GtkGlyphPaintable *self)
 {
@@ -386,7 +509,7 @@ guess_default_glyph (GtkGlyphPaintable *self)
 
 void
 gtk_glyph_paintable_set_face (GtkGlyphPaintable *self,
-                          hb_face_t      *face)
+                              hb_face_t      *face)
 {
   g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
@@ -397,6 +520,7 @@ gtk_glyph_paintable_set_face (GtkGlyphPaintable *self,
 
   update_font (self);
   guess_default_glyph (self);
+  classify_glyph (self);
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
@@ -419,6 +543,8 @@ gtk_glyph_paintable_set_glyph (GtkGlyphPaintable *self,
 
   self->glyph = glyph;
 
+  classify_glyph (self);
+
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
@@ -440,7 +566,8 @@ gtk_glyph_paintable_set_palette_index (GtkGlyphPaintable *self,
 
   self->palette_index = palette_index;
 
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  if (self->uses_palette)
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PALETTE_INDEX]);
 }
 
@@ -485,7 +612,8 @@ gtk_glyph_paintable_set_custom_colors (GtkGlyphPaintable *self,
   g_free (self->custom_colors);
   self->custom_colors = g_strdup (custom_colors);
 
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  if (self->uses_palette)
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CUSTOM_COLORS]);
 }
 
@@ -508,7 +636,8 @@ gtk_glyph_paintable_set_color (GtkGlyphPaintable *self,
 
   self->color = *color;
 
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  if (self->uses_foreground)
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR]);
 }
 
