@@ -769,7 +769,7 @@ fill_event (GdkMacosDisplay *self,
           {
             ret = GDK_MACOS_EVENT_DROP;
           }
-        else if (grab == NULL)
+        else if (grab == NULL || grab->owner_events)
           {
             if (event_type == NSEventTypeMouseExited)
               [[NSCursor arrowCursor] set];
