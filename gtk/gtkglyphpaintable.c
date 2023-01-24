@@ -5,6 +5,8 @@
 #include <hb-cairo.h>
 #include <hb-ot.h>
 
+#define SUBPIXEL_BITS 6
+
 struct _GtkGlyphPaintable
 {
   GObject parent_instance;
@@ -12,7 +14,6 @@ struct _GtkGlyphPaintable
   hb_font_t *font;
   hb_codepoint_t glyph;
   unsigned int palette_index;
-  unsigned int subpixel_bits;
   char *variations;
   char *custom_colors;
   GdkRGBA color;
@@ -127,7 +128,7 @@ gtk_glyph_paintable_get_intrinsic_width (GdkPaintable *paintable)
     return 0;
 
   if (hb_font_get_glyph_extents (self->font, self->glyph, &extents))
-    return extents.width / (1 << self->subpixel_bits);
+    return extents.width / (1 << SUBPIXEL_BITS);
 
   return 0;
 }
@@ -142,7 +143,7 @@ gtk_glyph_paintable_get_intrinsic_height (GdkPaintable *paintable)
     return 0;
 
   if (hb_font_get_glyph_extents (self->font, self->glyph, &extents))
-    return (-extents.height) / (1 << self->subpixel_bits);
+    return (-extents.height) / (1 << SUBPIXEL_BITS);
 
   return 0;
 }
@@ -170,7 +171,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkGlyphPaintable, gtk_glyph_paintable, G_TYPE_OBJECT,
 static void
 gtk_glyph_paintable_init (GtkGlyphPaintable *self)
 {
-  self->subpixel_bits = 6;
   self->color = (GdkRGBA) { 0, 0, 0, 1 };
 }
 
@@ -355,7 +355,7 @@ update_font (GtkGlyphPaintable *self)
   self->font = hb_font_create (self->face);
 
   upem = hb_face_get_upem (self->face);
-  scale = (int) scalbnf ((double)upem, self->subpixel_bits);
+  scale = (int) scalbnf ((double)upem, SUBPIXEL_BITS);
 
   hb_font_set_scale (self->font, scale, scale);
 
