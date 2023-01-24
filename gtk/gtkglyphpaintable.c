@@ -15,6 +15,8 @@ struct _GtkGlyphPaintable
   hb_codepoint_t glyph;
   unsigned int palette_index;
   char *variations;
+  GdkRGBA *custom_palette;
+  unsigned int num_palette_entries;
   char *custom_colors;
   GdkRGBA color;
   unsigned int uses_foreground : 1;
@@ -50,7 +52,7 @@ gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
   GskRenderNode *node;
   GdkRGBA foreground_color;
   unsigned int num_colors = 0;
-  GdkRGBA *_colors = NULL;
+  GdkRGBA *custom_palette = NULL;
 
   if (self->face == NULL)
     return;
@@ -60,41 +62,23 @@ gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
   else
     foreground_color = self->color;
 
-  if (self->custom_colors)
+  if (self->custom_palette && colors)
     {
-      char **entries = g_strsplit (self->custom_colors, ",", -1);
+      num_colors = self->num_palette_entries;
+      custom_palette = g_newa (GdkRGBA, num_colors);
 
-      num_colors = g_strv_length (entries);
-      if (n_colors > 1)
-        num_colors = MAX (n_colors - 1, num_colors);
-
-      _colors = g_new0 (GdkRGBA, num_colors);
-
-      for (int i = 0; entries[i]; i++)
-        {
-          unsigned int r, g, b, a;
-
-          if (sscanf (entries[i], "%2x%2x%2x%2x", &r, &g, &b, &a) == 4)
-            {
-              _colors[i].red = r / 255.;
-              _colors[i].green = g / 255.;
-              _colors[i].blue = b / 255.;
-              _colors[i].alpha = a / 255.;
-            }
-        }
-
-       g_strfreev (entries);
+      memcpy (custom_palette, self->custom_palette, sizeof (GdkRGBA) * num_colors);
+      memcpy (custom_palette, &colors[1], sizeof (GdkRGBA) * MIN (n_colors - 1, num_colors));
     }
-
-  if (n_colors > 1 && !colors)
-    colors = g_new0 (GdkRGBA, n_colors - 1);
-
-  for (int i = 0; i + 1 < MIN (4, n_colors); i++)
+  else if (self->custom_palette)
     {
-      _colors[i].red = colors[i + 1].red;
-      _colors[i].green = colors[i + 1].green;
-      _colors[i].blue = colors[i + 1].blue;
-      _colors[i].alpha = colors[i + 1].alpha;
+      num_colors = self->num_palette_entries;
+      custom_palette = self->custom_palette;
+    }
+  else
+    {
+      num_colors = n_colors;
+      custom_palette = (GdkRGBA *)colors;
     }
 
   node = gsk_glyph_node_new (&GRAPHENE_RECT_INIT (0, 0, width, height),
@@ -103,7 +87,7 @@ gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
                              self->palette_index,
                              &foreground_color,
                              num_colors,
-                             _colors);
+                             custom_palette);
 
   gtk_snapshot_append_node (snapshot, node);
 
@@ -185,6 +169,7 @@ gtk_glyph_paintable_dispose (GObject *object)
   g_clear_pointer (&self->font, hb_font_destroy);
   g_free (self->variations);
   g_free (self->custom_colors);
+  g_free (self->custom_palette);
 
   G_OBJECT_CLASS (gtk_glyph_paintable_parent_class)->dispose (object);
 }
@@ -558,6 +543,55 @@ gtk_glyph_paintable_get_glyph (GtkGlyphPaintable *self)
   return self->glyph;
 }
 
+static void
+update_custom_palette (GtkGlyphPaintable *self)
+{
+  unsigned int len;
+  hb_color_t *colors;
+  char **entries;
+
+  if (self->custom_colors == NULL)
+    {
+      g_clear_pointer (&self->custom_palette, g_free);
+      self->num_palette_entries = 0;
+      return;
+    }
+
+  len = hb_ot_color_palette_get_colors (self->face, self->palette_index, 0, NULL, NULL);
+
+  if (self->num_palette_entries != len)
+    {
+      self->custom_palette = g_realloc (self->custom_palette, sizeof (GdkRGBA) * len);
+      self->num_palette_entries = len;
+    }
+
+  colors = g_newa (hb_color_t, len);
+  hb_ot_color_palette_get_colors (self->face, self->palette_index, 0, &len, colors);
+  for (unsigned int i = 0; i < len; i++)
+    {
+      self->custom_palette[i].red = hb_color_get_red (colors[i]) / 255.;
+      self->custom_palette[i].green = hb_color_get_green (colors[i]) / 255.;
+      self->custom_palette[i].blue = hb_color_get_blue (colors[i]) / 255.;
+      self->custom_palette[i].alpha = hb_color_get_alpha (colors[i]) / 255.;
+    }
+
+  entries = g_strsplit (self->custom_colors, ",", -1);
+  for (int i = 0; entries[i] && i < len; i++)
+    {
+      unsigned int r, g, b, a;
+
+      if (sscanf (entries[i], "%2x%2x%2x%2x", &r, &g, &b, &a) == 4)
+        {
+          self->custom_palette[i].red = r / 255.;
+          self->custom_palette[i].green = g / 255.;
+          self->custom_palette[i].blue = b / 255.;
+          self->custom_palette[i].alpha = a / 255.;
+        }
+    }
+
+  g_strfreev (entries);
+}
+
 void
 gtk_glyph_paintable_set_palette_index (GtkGlyphPaintable *self,
                                        unsigned int    palette_index)
@@ -565,6 +599,8 @@ gtk_glyph_paintable_set_palette_index (GtkGlyphPaintable *self,
   g_return_if_fail (GTK_IS_GLYPH_PAINTABLE (self));
 
   self->palette_index = palette_index;
+
+  update_custom_palette (self);
 
   if (self->uses_palette)
     gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
@@ -611,6 +647,8 @@ gtk_glyph_paintable_set_custom_colors (GtkGlyphPaintable *self,
 
   g_free (self->custom_colors);
   self->custom_colors = g_strdup (custom_colors);
+
+  update_custom_palette (self);
 
   if (self->uses_palette)
     gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
