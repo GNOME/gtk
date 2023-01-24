@@ -138,6 +138,7 @@ extra_demo_sources = files([
   'glyphpicker.c',
   'colorpicker.c',
   'glyphmodel.c',
+  'fontpicker.c',
 ])
 
 if os_unix

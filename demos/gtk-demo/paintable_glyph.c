@@ -11,100 +11,15 @@
 
 #include "fontvariations.h"
 #include "fontcolors.h"
+#include "fontpicker.h"
 #include "glyphpicker.h"
 #include "colorpicker.h"
 #include "glyphmodel.h"
 
 static GtkWidget *window;
-static GtkWidget *glyph_picker;
 static GtkWidget *color_picker;
-static GtkWidget *font_name;
 static GtkWidget *font_variations;
 static GtkWidget *font_colors;
-static GlyphModel *glyph_model;
-
-static void
-update_font_name (GtkWidget *label,
-                  hb_face_t *face)
-{
-  unsigned int len;
-  char *name;
-
-  len = hb_ot_name_get_utf8 (face, HB_OT_NAME_ID_FONT_FAMILY, HB_LANGUAGE_INVALID, NULL, NULL);
-  len++;
-  name = alloca (len);
-
-  hb_ot_name_get_utf8 (face, HB_OT_NAME_ID_FONT_FAMILY, HB_LANGUAGE_INVALID, &len, name);
-
-  gtk_label_set_label (GTK_LABEL (label), name);
-}
-
-static void
-set_font_from_path (GdkPaintable *paintable,
-                    const char   *path)
-{
-  hb_blob_t *blob;
-  hb_face_t *face;
-
-  blob = hb_blob_create_from_file (path);
-  face = hb_face_create (blob, 0);
-  hb_blob_destroy (blob);
-
-  gtk_glyph_paintable_set_face (GTK_GLYPH_PAINTABLE (paintable), face);
-  glyph_model_set_face (glyph_model, face);
-
-  update_font_name (font_name, face);
-
-  hb_face_destroy (face);
-}
-
-static void
-open_response_cb (GObject *source,
-                  GAsyncResult *result,
-                  void *data)
-{
-  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
-  GdkPaintable *paintable = data;
-  GFile *file;
-
-  file = gtk_file_dialog_open_finish (dialog, result, NULL);
-  if (file)
-    {
-      set_font_from_path (paintable, g_file_peek_path (file));
-      g_object_unref (file);
-    }
-}
-
-static void
-show_file_open (GtkWidget    *button,
-                GdkPaintable *paintable)
-{
-  GtkFileFilter *filter;
-  GtkFileDialog *dialog;
-  GListStore *filters;
-  GFile *folder;
-
-  dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, "Open Font");
-
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter, "Font Files");
-  gtk_file_filter_add_suffix (filter, "ttf");
-  gtk_file_filter_add_suffix (filter, "otf");
-  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
-  g_list_store_append (filters, filter);
-  g_object_unref (filter);
-  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
-  g_object_unref (filters);
-  folder = g_file_new_for_path ("/usr/share/fonts");
-  gtk_file_dialog_set_initial_folder (dialog, folder);
-  g_object_unref (folder);
-
-  gtk_file_dialog_open (dialog,
-                        GTK_WINDOW (gtk_widget_get_root (button)),
-                        NULL,
-                        open_response_cb, paintable);
-}
 
 static void
 reset (GSimpleAction *action,
@@ -234,8 +149,8 @@ do_paintable_glyph (GtkWidget *do_widget)
     {
       GtkBuilderScope *scope;
       GtkBuilder *builder;
-      GdkPaintable *paintable;
       GtkCssProvider *provider;
+      GtkWidget *font_picker;
 
       provider = gtk_css_provider_new ();
       gtk_css_provider_load_from_resource (provider, "/paintable_glyph/paintable_glyph.css");
@@ -246,12 +161,12 @@ do_paintable_glyph (GtkWidget *do_widget)
 
       g_type_ensure (FONT_VARIATIONS_TYPE);
       g_type_ensure (FONT_COLORS_TYPE);
+      g_type_ensure (FONT_PICKER_TYPE);
       g_type_ensure (GLYPH_PICKER_TYPE);
       g_type_ensure (COLOR_PICKER_TYPE);
       g_type_ensure (GLYPH_MODEL_TYPE);
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback (scope, show_file_open);
       gtk_builder_cscope_add_callback (scope, background_changed);
       gtk_builder_cscope_add_callback (scope, setup_grid_item);
       gtk_builder_cscope_add_callback (scope, bind_grid_item);
@@ -265,17 +180,14 @@ do_paintable_glyph (GtkWidget *do_widget)
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
 
-      glyph_picker = GTK_WIDGET (gtk_builder_get_object (builder, "glyph_picker"));
+      font_picker = GTK_WIDGET (gtk_builder_get_object (builder, "font_picker"));
       color_picker = GTK_WIDGET (gtk_builder_get_object (builder, "color_picker"));
-      font_name = GTK_WIDGET (gtk_builder_get_object (builder, "font_name"));
       font_variations = GTK_WIDGET (gtk_builder_get_object (builder, "font_variations"));
       font_colors = GTK_WIDGET (gtk_builder_get_object (builder, "font_colors"));
-      paintable = GDK_PAINTABLE (gtk_builder_get_object (builder, "paintable"));
-      glyph_model = GLYPH_MODEL (gtk_builder_get_object (builder, "glyph_model"));
 
       create_reset_action ();
 
-      set_font_from_path (paintable, "/usr/share/fonts/abattis-cantarell-vf-fonts/Cantarell-VF.otf");
+      font_picker_set_from_file (FONT_PICKER (font_picker), "/usr/share/fonts/abattis-cantarell-vf-fonts/Cantarell-VF.otf");
 
       g_object_unref (builder);
       g_object_unref (scope);

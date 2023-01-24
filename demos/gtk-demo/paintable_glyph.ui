@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkGlyphPaintable" id="paintable">
+    <property name="face" bind-source="font_picker" bind-property="face"/>
     <property name="glyph" bind-source="glyph_picker" bind-property="glyph" bind-flags="bidirectional | sync-create"/>
     <property name="variations" bind-source="font_variations" bind-property="variations"/>
     <property name="palette-index" bind-source="font_colors" bind-property="palette-index"/>
@@ -37,14 +38,16 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton">
-                    <property name="icon-name">open-menu-symbolic</property>
+                    <property name="icon-name">view-list-symbolic</property>
                     <signal name="notify::active" handler="grid_toggled" object="stack" swapped="0"/>
                   </object>
                 </child>
               </object>
             </property>
             <property name="center-widget">
-              <object class="GtkLabel" id="font_name"/>
+              <object class="GtkLabel">
+                <property name="label" bind-source="font_picker" bind-property="family-name"/>
+              </object>
             </property>
             <property name="end-widget">
               <object class="GtkLabel">
@@ -75,11 +78,7 @@
                         </style>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkButton">
-                            <property name="label">_Font</property>
-                            <property name="use-underline">1</property>
-                            <signal name="clicked" handler="show_file_open" object="paintable" swapped="false"/>
-                          </object>
+                          <object class="FontPicker" id="font_picker"/>
                         </child>
                         <child>
                           <object class="GtkBox">
@@ -93,7 +92,7 @@
                             </child>
                             <child>
                               <object class="GlyphPicker" id="glyph_picker">
-                                <property name="face" bind-source="paintable" bind-property="face"/>
+                                <property name="face" bind-source="font_picker" bind-property="face"/>
                               </object>
                             </child>
                           </object>
@@ -107,13 +106,13 @@
 
                         <child>
                           <object class="FontVariations" id="font_variations">
-                            <property name="face" bind-source="paintable" bind-property="face"/>
+                            <property name="face" bind-source="font_picker" bind-property="face"/>
                           </object>
                         </child>
 
                         <child>
                           <object class="FontColors" id="font_colors">
-                            <property name="face" bind-source="paintable" bind-property="face"/>
+                            <property name="face" bind-source="font_picker" bind-property="face"/>
                           </object>
                         </child>
                       </object>
@@ -156,7 +155,8 @@
                             <property name="model">
                               <object class="GtkNoSelection">
                                 <property name="model">
-                                  <object class="GlyphModel" id="glyph_model">
+                                  <object class="GlyphModel">
+                                    <property name="face" bind-source="font_picker" bind-property="face"/>
                                   </object>
                                 </property>
                               </object>

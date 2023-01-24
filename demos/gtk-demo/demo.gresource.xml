@@ -237,6 +237,8 @@
     <file>colorpicker.h</file>
     <file>colorpicker.c</file>
     <file>colorpicker.ui</file>
+    <file>fontpicker.h</file>
+    <file>fontpicker.c</file>
   </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
