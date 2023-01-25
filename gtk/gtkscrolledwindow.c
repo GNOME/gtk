@@ -1222,6 +1222,10 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
 
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
+  if (!may_hscroll (scrolled_window) &&
+      !may_vscroll (scrolled_window))
+    return GDK_EVENT_PROPAGATE;
+
   if (priv->smooth_scroll)
     {
       scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
@@ -1411,6 +1415,10 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
 {
   GtkScrolledWindowPrivate *priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
+
+  if (!may_hscroll (scrolled_window) &&
+      !may_vscroll (scrolled_window))
+    return GDK_EVENT_PROPAGATE;
 
   if (!priv->smooth_scroll)
     scrolled_window_scroll (scrolled_window, delta_x, delta_y, scroll);
