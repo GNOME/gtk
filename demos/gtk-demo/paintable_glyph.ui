@@ -30,18 +30,8 @@
               <class name="toolbar"/>
             </style>
             <property name="start-widget">
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkToggleButton" id="toggle">
-                    <property name="icon-name">open-menu-symbolic</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton">
-                    <property name="icon-name">view-list-symbolic</property>
-                    <signal name="notify::active" handler="grid_toggled" object="stack" swapped="0"/>
-                  </object>
-                </child>
+              <object class="GtkToggleButton" id="toggle">
+                <property name="icon-name">open-menu-symbolic</property>
               </object>
             </property>
             <property name="center-widget">
@@ -50,8 +40,9 @@
               </object>
             </property>
             <property name="end-widget">
-              <object class="GtkLabel">
-                <property name="label" bind-source="glyph_picker" bind-property="glyph-name"/>
+              <object class="GtkToggleButton">
+                <property name="icon-name">view-list-symbolic</property>
+                <signal name="notify::active" handler="grid_toggled" object="stack" swapped="0"/>
               </object>
             </property>
           </object>
@@ -61,9 +52,6 @@
         </child>
         <child>
           <object class="GtkBox" id="box">
-            <style>
-              <class name="picture-parent-box"/>
-            </style>
             <child>
               <object class="GtkRevealer">
                 <property name="reveal-child" bind-source="toggle" bind-property="active"/>
@@ -81,26 +69,14 @@
                           <object class="FontPicker" id="font_picker"/>
                         </child>
                         <child>
-                          <object class="GtkBox">
-                            <style>
-                              <class name="row"/>
-                            </style>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label">Glyph</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GlyphPicker" id="glyph_picker">
-                                <property name="face" bind-source="font_picker" bind-property="face"/>
-                              </object>
-                            </child>
+                          <object class="GlyphPicker" id="glyph_picker">
+                            <property name="face" bind-source="font_picker" bind-property="face"/>
                           </object>
                         </child>
 
                         <child>
                           <object class="ColorPicker" id="color_picker">
-                            <signal name="notify::background" handler="background_changed" object="box" swapped="false"/>
+                            <signal name="notify" handler="color_changed" object="stack" swapped="false"/>
                           </object>
                         </child>
 
@@ -123,6 +99,9 @@
             </child>
             <child>
               <object class="GtkStack" id="stack">
+                <style>
+                  <class name="picture-parent-box"/>
+                </style>
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">glyph</property>

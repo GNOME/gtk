@@ -22,7 +22,9 @@ struct _GlyphPicker
 {
   GtkWidget parent;
 
+  GtkLabel *label;
   GtkSpinButton *spin;
+  GtkLabel *name;
 
   hb_face_t *face;
   hb_font_t *font;
@@ -54,6 +56,12 @@ get_glyph_name (GlyphPicker *self)
 static void
 value_changed (GlyphPicker *self)
 {
+  char *name;
+
+  name = get_glyph_name (self);
+  gtk_label_set_label (self->name, name);
+  g_free (name);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH_NAME]);
 }
@@ -61,8 +69,12 @@ value_changed (GlyphPicker *self)
 static void
 glyph_picker_init (GlyphPicker *self)
 {
+  self->label = GTK_LABEL (gtk_label_new ("Glyph"));
+  gtk_widget_set_parent (GTK_WIDGET (self->label), GTK_WIDGET (self));
   self->spin = GTK_SPIN_BUTTON (gtk_spin_button_new_with_range (0, 0, 1));
   gtk_widget_set_parent (GTK_WIDGET (self->spin), GTK_WIDGET (self));
+  self->name = GTK_LABEL (gtk_label_new (""));
+  gtk_widget_set_parent (GTK_WIDGET (self->name), GTK_WIDGET (self));
 
   g_signal_connect_swapped (self->spin, "value-changed", G_CALLBACK (value_changed), self);
 }
@@ -73,6 +85,7 @@ glyph_picker_dispose (GObject *object)
   GlyphPicker *self = GLYPH_PICKER (object);
 
   g_clear_pointer ((GtkWidget **)&self->spin, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **)&self->label, gtk_widget_unparent);
 
   G_OBJECT_CLASS (glyph_picker_parent_class)->dispose (object);
 }
@@ -97,7 +110,7 @@ update_bounds (GlyphPicker *self)
     glyph_count = hb_face_get_glyph_count (self->face);
 
   adjustment = gtk_spin_button_get_adjustment (self->spin);
-  gtk_adjustment_set_upper (adjustment, glyph_count);
+  gtk_adjustment_set_upper (adjustment, glyph_count - 1);
 }
 
 static void
@@ -199,7 +212,7 @@ glyph_picker_class_init (GlyphPickerClass *class)
 
   g_object_class_install_properties (G_OBJECT_CLASS (class), NUM_PROPERTIES, properties);
 
-  gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (class), GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (class), GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "glyphpicker");
 }
 

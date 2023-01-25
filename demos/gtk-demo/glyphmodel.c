@@ -49,7 +49,6 @@ update_n_items (GlyphModel *self)
   n_removed = self->n_items;
   self->n_items = n_items;
   g_list_model_items_changed (G_LIST_MODEL (self), 0, n_removed, n_items);
-  g_print ("now %u items\n", n_items);
 }
 
 void

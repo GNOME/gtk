@@ -490,12 +490,13 @@ guess_default_glyph (GtkGlyphPaintable *self)
   if (!self->font)
     return;
 
+  self->glyph = 1;
+
   if (hb_font_get_glyph_from_name (self->font, "icon0", -1, &glyph) ||
       hb_font_get_glyph_from_name (self->font, "A", -1, &glyph))
-    {
-      self->glyph = glyph;
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
-    }
+    self->glyph = glyph;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GLYPH]);
 }
 
 void

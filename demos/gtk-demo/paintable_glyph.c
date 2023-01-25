@@ -20,6 +20,7 @@ static GtkWidget *window;
 static GtkWidget *color_picker;
 static GtkWidget *font_variations;
 static GtkWidget *font_colors;
+static GtkWidget *toggle;
 
 static void
 reset (GSimpleAction *action,
@@ -79,67 +80,76 @@ clear_provider (gpointer data)
 }
 
 static void
-background_changed (GtkWidget *picker,
-                    GParamSpec *pspec,
-                    GtkWidget *box)
+color_changed (GtkWidget *picker,
+               GParamSpec *pspec,
+               gpointer data)
 {
-  const GdkRGBA *bg;
+  const GdkRGBA *fg, *bg;
   char *css;
   GtkCssProvider *provider;
 
-  provider = GTK_CSS_PROVIDER (g_object_get_data (G_OBJECT (box), "bg-provider"));
+  provider = GTK_CSS_PROVIDER (g_object_get_data (G_OBJECT (picker), "bg-provider"));
   if (!provider)
     {
       provider = gtk_css_provider_new ();
-      g_object_set_data_full (G_OBJECT (box), "bg-provider", provider, clear_provider);
+      g_object_set_data_full (G_OBJECT (picker), "bg-provider", provider, clear_provider);
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                                   GTK_STYLE_PROVIDER (provider),
                                                   800);
     }
 
-  g_object_get (picker, "background", &bg, NULL);
+  g_object_get (picker, "foreground", &fg, "background", &bg, NULL);
 
-  css = g_strdup_printf (".picture-parent-box { background-color: rgba(%f,%f,%f,%f); }",
+  css = g_strdup_printf (".picture-parent-box { "
+                         "  color: rgba(%f,%f,%f,%f); "
+                         "  background-color: rgba(%f,%f,%f,%f); "
+                         "} ",
+                         255 * fg->red, 255 * fg->green, 255 * fg->blue, 255 * fg->alpha,
                          255 * bg->red, 255 * bg->green, 255 * bg->blue, 255 * bg->alpha);
 
   gtk_css_provider_load_from_data (provider, css, -1);
 
   g_free (css);
 
-  gtk_widget_queue_draw (box);
+  if (data)
+    gtk_widget_queue_draw (GTK_WIDGET (data));
 }
 
 static void
 setup_grid_item (GtkSignalListItemFactory *factory,
                  GObject                  *listitem)
 {
-  GtkWidget *picture;
-
-  picture = gtk_image_new ();
-  gtk_list_item_set_child (GTK_LIST_ITEM (listitem), picture);
+  gtk_list_item_set_child (GTK_LIST_ITEM (listitem), gtk_image_new ());
 }
 
 static void
 bind_grid_item (GtkSignalListItemFactory *factory,
                 GObject                  *listitem)
 {
-  GtkWidget *picture;
+  GtkWidget *image;
   GdkPaintable *paintable;
 
-  picture = gtk_list_item_get_child (GTK_LIST_ITEM (listitem));
+  image = gtk_list_item_get_child (GTK_LIST_ITEM (listitem));
   paintable = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
-  gtk_image_set_from_paintable (GTK_IMAGE (picture), paintable);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
 }
 
 static void
-grid_toggled (GtkToggleButton *toggle,
+grid_toggled (GtkToggleButton *grid_toggle,
               GParamSpec *pspec,
               GtkStack *stack)
 {
-  if (gtk_toggle_button_get_active (toggle))
-    gtk_stack_set_visible_child_name (stack, "grid");
+  if (gtk_toggle_button_get_active (grid_toggle))
+    {
+      gtk_stack_set_visible_child_name (stack, "grid");
+      gtk_widget_set_visible (toggle, FALSE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), FALSE);
+    }
   else
-    gtk_stack_set_visible_child_name (stack, "glyph");
+    {
+      gtk_stack_set_visible_child_name (stack, "glyph");
+      gtk_widget_set_visible (toggle, TRUE);
+    }
 }
 
 GtkWidget *
@@ -167,7 +177,7 @@ do_paintable_glyph (GtkWidget *do_widget)
       g_type_ensure (GLYPH_MODEL_TYPE);
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback (scope, background_changed);
+      gtk_builder_cscope_add_callback (scope, color_changed);
       gtk_builder_cscope_add_callback (scope, setup_grid_item);
       gtk_builder_cscope_add_callback (scope, bind_grid_item);
       gtk_builder_cscope_add_callback (scope, grid_toggled);
@@ -184,10 +194,13 @@ do_paintable_glyph (GtkWidget *do_widget)
       color_picker = GTK_WIDGET (gtk_builder_get_object (builder, "color_picker"));
       font_variations = GTK_WIDGET (gtk_builder_get_object (builder, "font_variations"));
       font_colors = GTK_WIDGET (gtk_builder_get_object (builder, "font_colors"));
+      toggle = GTK_WIDGET (gtk_builder_get_object (builder, "toggle"));
 
       create_reset_action ();
 
       font_picker_set_from_file (FONT_PICKER (font_picker), "/usr/share/fonts/abattis-cantarell-vf-fonts/Cantarell-VF.otf");
+
+      color_changed (color_picker, NULL, NULL);
 
       g_object_unref (builder);
       g_object_unref (scope);
