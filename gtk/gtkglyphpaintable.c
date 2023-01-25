@@ -75,10 +75,10 @@ gtk_glyph_paintable_snapshot_symbolic (GtkSymbolicPaintable  *paintable,
       num_colors = self->num_palette_entries;
       custom_palette = self->custom_palette;
     }
-  else
+  else if (n_colors > 1)
     {
-      num_colors = n_colors;
-      custom_palette = (GdkRGBA *)colors;
+      num_colors = n_colors - 1;
+      custom_palette = (GdkRGBA *)&colors[1];
     }
 
   node = gsk_glyph_node_new (&GRAPHENE_RECT_INIT (0, 0, width, height),
