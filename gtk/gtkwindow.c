@@ -266,6 +266,8 @@ struct _GtkWindowPrivate
 
   guint    use_subsurface            : 1;
 
+  guint    in_present                : 1;
+
   GdkWindowTypeHint type_hint;
 
   GtkGesture *multipress_gesture;
@@ -2563,15 +2565,12 @@ gtk_window_set_startup_id (GtkWindow   *window,
        */
       if (startup_id_is_fake (priv->startup_id))
 	gtk_window_present_with_time (window, timestamp);
-      else 
+      else
         {
-          gdk_window_set_startup_id (gdk_window,
-                                     priv->startup_id);
-          
-          /* If window is mapped, terminate the startup-notification too */
+          /* If window is mapped, terminate the startup-notification */
           if (_gtk_widget_get_mapped (widget) &&
               !disable_startup_notification)
-            gdk_notify_startup_complete_with_id (priv->startup_id);
+            gdk_window_set_startup_id (gdk_window, priv->startup_id);
         }
     }
 
@@ -6280,6 +6279,32 @@ popover_map (GtkWidget        *widget,
 }
 
 static void
+gtk_window_notify_startup (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (!disable_startup_notification &&
+      !GTK_IS_OFFSCREEN_WINDOW (window) &&
+      priv->type != GTK_WINDOW_POPUP)
+    {
+      /* Do we have a custom startup-notification id? */
+      if (priv->startup_id != NULL)
+        {
+          /* Make sure we have a "real" id */
+          if (!startup_id_is_fake (priv->startup_id))
+            gdk_notify_startup_complete_with_id (priv->startup_id);
+
+          g_free (priv->startup_id);
+          priv->startup_id = NULL;
+        }
+      else
+        {
+          gdk_notify_startup_complete ();
+        }
+    }
+}
+
+static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWidget *child;
@@ -6354,25 +6379,8 @@ gtk_window_map (GtkWidget *widget)
 
   gdk_window_show (gdk_window);
 
-  if (!disable_startup_notification &&
-      !GTK_IS_OFFSCREEN_WINDOW (window) &&
-      priv->type != GTK_WINDOW_POPUP)
-    {
-      /* Do we have a custom startup-notification id? */
-      if (priv->startup_id != NULL)
-        {
-          /* Make sure we have a "real" id */
-          if (!startup_id_is_fake (priv->startup_id))
-            gdk_notify_startup_complete_with_id (priv->startup_id);
-
-          g_free (priv->startup_id);
-          priv->startup_id = NULL;
-        }
-      else
-        {
-          gdk_notify_startup_complete ();
-        }
-    }
+  if (!priv->in_present)
+    gtk_window_notify_startup (window);
 
   /* if mnemonics visible is not already set
    * (as in the case of popup menus), then hide mnemonics initially
@@ -7614,8 +7622,6 @@ gtk_window_realize (GtkWidget *widget)
             gdk_x11_window_set_user_time (gdk_window, timestamp);
         }
 #endif
-      if (!startup_id_is_fake (priv->startup_id))
-        gdk_window_set_startup_id (gdk_window, priv->startup_id);
     }
 
 #ifdef GDK_WINDOWING_X11
@@ -10597,8 +10603,12 @@ gtk_window_present_with_time (GtkWindow *window,
   else
     {
       priv->initial_timestamp = timestamp;
+      priv->in_present = TRUE;
       gtk_widget_show (widget);
+      priv->in_present = FALSE;
     }
+
+  gtk_window_notify_startup (window);
 }
 
 /**
