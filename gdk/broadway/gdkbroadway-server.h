@@ -78,5 +78,8 @@ gboolean           _gdk_broadway_server_surface_move_resize       (GdkBroadwaySe
 								  int                 y,
 								  int                 width,
 								  int                 height);
+void               _gdk_broadway_server_surface_set_modal_hint   (GdkBroadwayServer *server,
+                                                                  int                id,
+                                                                  gboolean           modal_hint);
 
 #endif /* __GDK_BROADWAY_SERVER__ */

@@ -130,6 +130,9 @@ gboolean            broadway_server_surface_move_resize       (BroadwayServer  *
                                                                int              height);
 void                broadway_server_focus_surface             (BroadwayServer  *server,
                                                                int              new_focused_surface);
+void                broadway_server_surface_set_modal_hint    (BroadwayServer *server,
+                                                               int             id,
+                                                               gboolean        modal_hint);
 
 
 #endif /* __BROADWAY_SERVER__ */
