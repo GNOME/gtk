@@ -71,16 +71,48 @@
 
 G_DEFINE_INTERFACE (GtkBuilderScope, gtk_builder_scope, G_TYPE_OBJECT)
 
+static const char *
+find_fallback_name (const char *type_name)
+{
+  static struct {
+    const char *name;
+    const char *gname;
+  } std_names[] = {
+    { "int", "gint" },
+    { "unsigned int", "guint" },
+    { "long", "glong" },
+    { "int64_t", "gint64" },
+    { "uint64_t", "guint64" },
+    { "float", "gfloat" },
+    { "double", "gdouble" },
+    { "char*", "gchararray" },
+    { "void*", "gpointer" },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (std_names); i++)
+    {
+      if (strcmp (type_name, std_names[i].name) == 0)
+        return std_names[i].gname;
+    }
+
+  return NULL;
+}
+
 static GType
 gtk_builder_scope_default_get_type_from_name (GtkBuilderScope *self,
                                               GtkBuilder      *builder,
                                               const char      *type_name)
 {
   GType type;
+  const char *fallback_name;
 
   type = g_type_from_name (type_name);
   if (type != G_TYPE_INVALID)
     return type;
+
+  fallback_name = find_fallback_name (type_name);
+  if (fallback_name)
+    return g_type_from_name (fallback_name);
 
   gtk_test_register_all_types ();
   return g_type_from_name (type_name);
@@ -265,10 +297,15 @@ gtk_builder_cscope_get_type_from_name (GtkBuilderScope *scope,
 {
   GtkBuilderCScope *self = GTK_BUILDER_CSCOPE (scope);
   GType type;
+  const char *fallback_name;
 
   type = g_type_from_name (type_name);
   if (type != G_TYPE_INVALID)
     return type;
+
+  fallback_name = find_fallback_name (type_name);
+  if (fallback_name)
+    return g_type_from_name (fallback_name);
 
   type = gtk_builder_cscope_resolve_type_lazily (self, type_name);
   if (type != G_TYPE_INVALID)

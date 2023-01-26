@@ -2689,6 +2689,27 @@ test_expressions (void)
     }
 }
 
+/* Check that standard type names work */
+static void
+test_typenames (void)
+{
+  GtkBuilder *builder;
+
+  builder = gtk_builder_new ();
+
+  g_assert_true (gtk_builder_get_type_from_name (builder, "int") == G_TYPE_INT);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "unsigned int") == G_TYPE_UINT);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "long") == G_TYPE_LONG);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "int64_t") == G_TYPE_INT64);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "uint64_t") == G_TYPE_UINT64);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "float") == G_TYPE_FLOAT);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "double") == G_TYPE_DOUBLE);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "char*") == G_TYPE_STRING);
+  g_assert_true (gtk_builder_get_type_from_name (builder, "void*") == G_TYPE_POINTER);
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2736,6 +2757,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Shortcuts", test_shortcuts);
   g_test_add_func ("/Builder/Transforms", test_transforms);
   g_test_add_func ("/Builder/Expressions", test_expressions);
+  g_test_add_func ("/Builder/typenames", test_typenames);
 
   return g_test_run();
 }
