@@ -4,13 +4,13 @@
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2010.
 # wanderlust <wanderlust@ukr.net>, 2009.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2013, 2014, 2015, 2016.
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-12-17 12:46+0000\n"
-"PO-Revision-Date: 2022-12-23 15:48+0200\n"
+"POT-Creation-Date: 2023-01-25 20:24+0000\n"
+"PO-Revision-Date: 2023-01-27 21:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -54,27 +54,27 @@ msgstr "Не вдалося надати дані як %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
-#: gdk/gdkdisplay.c:1240
+#: gdk/gdkdisplay.c:1242
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування GL через GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1538
+#: gdk/gdkdisplay.c:1540
 msgid "No EGL configuration available"
 msgstr "Немає доступних налаштувань EGL"
 
-#: gdk/gdkdisplay.c:1546
+#: gdk/gdkdisplay.c:1548
 msgid "Failed to get EGL configurations"
 msgstr "Не вдалося отримати налаштування EGL"
 
-#: gdk/gdkdisplay.c:1576
+#: gdk/gdkdisplay.c:1578
 msgid "No EGL configuration with required features found"
 msgstr "Не знайдено налаштувань EGL із потрібними можливостями"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1585
 msgid "No perfect EGL configuration found"
 msgstr "Не знайдено ідеальних налаштувань EGL"
 
-#: gdk/gdkdisplay.c:1625
+#: gdk/gdkdisplay.c:1627
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -83,23 +83,23 @@ msgstr[1] "У реалізації EGL не вистачає %2$d розшире
 msgstr[2] "У реалізації EGL не вистачає %2$d розширень %1$s"
 msgstr[3] "У реалізації EGL не вистачає розширення %1$s"
 
-#: gdk/gdkdisplay.c:1658
+#: gdk/gdkdisplay.c:1660
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL є недоступною у цій пісочниці"
 
-#: gdk/gdkdisplay.c:1659
+#: gdk/gdkdisplay.c:1661
 msgid "libEGL not available"
 msgstr "libEGL є недоступною"
 
-#: gdk/gdkdisplay.c:1669
+#: gdk/gdkdisplay.c:1671
 msgid "Failed to create EGL display"
 msgstr "Не вдалося створити запис дисплея EGL"
 
-#: gdk/gdkdisplay.c:1679
+#: gdk/gdkdisplay.c:1681
 msgid "Could not initialize EGL display"
 msgstr "Не вдалося ініціалізувати дисплей EGL"
 
-#: gdk/gdkdisplay.c:1690
+#: gdk/gdkdisplay.c:1692
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr ""
@@ -223,12 +223,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Вниз"
 
-#: gdk/keynamesprivate.h:6856 gtk/gtkshortcutlabel.c:213
+#: gdk/keynamesprivate.h:6856 gtk/gtkshortcutlabel.c:217
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: gdk/keynamesprivate.h:6857 gtk/gtkshortcutlabel.c:216
+#: gdk/keynamesprivate.h:6857 gtk/gtkshortcutlabel.c:220
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
@@ -567,17 +567,12 @@ msgstr "Не вдалося завантажити дані TIFF"
 msgid "Reading data failed at row %d"
 msgstr "Помилка читання даних у рядку %d"
 
-#: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:336
-#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/wayland/gdkclipboard-wayland.c:240 gdk/wayland/gdkdrop-wayland.c:208
+#: gdk/wayland/gdkprimary-wayland.c:336 gdk/win32/gdkdrop-win32.c:1018
+#: gdk/win32/gdkdrop-win32.c:1063 gdk/x11/gdkclipboard-x11.c:805
+#: gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
-
-#: gdk/macos/gdkmacosclipboard.c:643
-#, c-format
-msgid "Failed to decode contents with mime-type of '%s'"
-msgstr "Не вдалося декодувати дані з типом MIME «%s»"
 
 #: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
@@ -774,17 +769,17 @@ msgstr "Помилка GlobalLock(): "
 msgid "GlobalAlloc() failed: "
 msgstr "Помилка GlobalAlloc(): "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:296
+#: gdk/x11/gdkapplaunchcontext-x11.c:299
 #, c-format
 msgid "Starting “%s”"
 msgstr "Запускання «%s»"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:309
+#: gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Opening “%s”"
 msgstr "Відкриваємо «%s»"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:314
+#: gdk/x11/gdkapplaunchcontext-x11.c:317
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -973,7 +968,6 @@ msgid "Could not unescape string"
 msgstr "Не вдалося вилучити екранування символів у рядку"
 
 #: gtk/deprecated/gtkappchooserbutton.c:323
-#| msgid "Other…"
 msgid "Other app…"
 msgstr "Інша програма…"
 
@@ -1009,28 +1003,23 @@ msgid "Failed to start GNOME Software"
 msgstr "Не вдалося запустити «Програмні засоби GNOME»"
 
 #: gtk/deprecated/gtkappchooserwidget.c:525
-#| msgid "Default"
 msgid "Default App"
 msgstr "Типова програма"
 
 #: gtk/deprecated/gtkappchooserwidget.c:575
 #, c-format
-#| msgid "No applications found for “%s”."
 msgid "No apps found for “%s”."
 msgstr "Не знайдено програм для «%s»."
 
 #: gtk/deprecated/gtkappchooserwidget.c:658
-#| msgid "Recommended Applications"
 msgid "Recommended Apps"
 msgstr "Рекомендовані програми"
 
 #: gtk/deprecated/gtkappchooserwidget.c:673
-#| msgid "Related Applications"
 msgid "Related Apps"
 msgstr "Пов'язані програми"
 
 #: gtk/deprecated/gtkappchooserwidget.c:687
-#| msgid "Other Applications"
 msgid "Other Apps"
 msgstr "Інші програми"
 
@@ -1089,7 +1078,7 @@ msgid "Sans 12"
 msgstr "Sans 12"
 
 #: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
-#: gtk/gtkfontdialog.c:595
+#: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Виберіть шрифт"
 
@@ -1103,7 +1092,7 @@ msgctxt "font"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/deprecated/gtkshow.c:176
+#: gtk/deprecated/gtkshow.c:178
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
@@ -1181,35 +1170,35 @@ msgstr "Ліцензія Apache, версія 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Громадська ліцензія Mozilla 2.0"
 
-#: gtk/gtkaboutdialog.c:970
+#: gtk/gtkaboutdialog.c:967
 msgid "Website"
 msgstr "Сайт"
 
-#: gtk/gtkaboutdialog.c:1006 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1003 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "Про %s"
 
-#: gtk/gtkaboutdialog.c:2096
+#: gtk/gtkaboutdialog.c:2093
 msgid "Created by"
 msgstr "Створення"
 
-#: gtk/gtkaboutdialog.c:2099
+#: gtk/gtkaboutdialog.c:2096
 msgid "Documented by"
 msgstr "Документація"
 
-#: gtk/gtkaboutdialog.c:2109
+#: gtk/gtkaboutdialog.c:2106
 msgid "Translated by"
 msgstr "Переклад"
 
-#: gtk/gtkaboutdialog.c:2114
+#: gtk/gtkaboutdialog.c:2111
 msgid "Design by"
 msgstr "Дизайн"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2279
+#: gtk/gtkaboutdialog.c:2276
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1279,7 +1268,7 @@ msgstr "Hyper"
 #. * this.
 #.
 #: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:110
-#: gtk/gtkshortcutlabel.c:147
+#: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1298,7 +1287,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "Пробіл"
 
-#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:172
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:176
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1693,7 +1682,7 @@ msgctxt "accessibility"
 msgid "window"
 msgstr "вікно"
 
-#: gtk/gtkalertdialog.c:660 gtk/gtkcustompaperunixdialog.c:328
+#: gtk/gtkalertdialog.c:668 gtk/gtkcustompaperunixdialog.c:328
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Закрити"
@@ -1788,7 +1777,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1495
+#: gtk/gtkcalendar.c:1496
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2167,24 +2156,24 @@ msgid "A file with that name already exists"
 msgstr "Файл з такою назвою вже існує"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:4997
-#: gtk/gtkfiledialog.c:718 gtk/gtkmessagedialog.c:170
+#: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfiledialog.c:841 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:638
 #: gtk/gtkprintunixdialog.c:657 gtk/gtkprintunixdialog.c:814
-#: gtk/gtkwindow.c:6156 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6155 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_Скасувати"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfiledialog.c:690 gtk/gtkplacessidebar.c:3145
+#: gtk/gtkfiledialog.c:813 gtk/gtkplacessidebar.c:3145
 #: gtk/gtkplacessidebar.c:3230 gtk/gtkplacesview.c:1645
 msgid "_Open"
 msgstr "_Відкрити"
 
-#: gtk/gtkfilechoosernative.c:594 gtk/gtkfiledialog.c:695
+#: gtk/gtkfilechoosernative.c:594 gtk/gtkfiledialog.c:818
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -2260,7 +2249,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:1793
-#: gtk/gtklabel.c:5661 gtk/gtktext.c:6087 gtk/gtktextview.c:8997
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8997
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2273,12 +2262,14 @@ msgid "Could not select file"
 msgstr "Не вдалось вибрати файл"
 
 #: gtk/gtkfilechooserwidget.c:1702 gtk/ui/gtkfilechooserwidget.ui:66
-msgid "Switch to grid view"
-msgstr "Перемкнутися на перегляд таблиці"
+msgid "Grid View"
+msgstr "Перегляд ґраткою"
 
 #: gtk/gtkfilechooserwidget.c:1708
-msgid "Switch to list view"
-msgstr "Перемкнутися на перегляд списку"
+#| msgctxt "accessibility"
+#| msgid "list item"
+msgid "List View"
+msgstr "Перегляд списком"
 
 #: gtk/gtkfilechooserwidget.c:1773
 msgid "_Visit File"
@@ -2358,7 +2349,7 @@ msgstr "Пошук"
 msgid "Enter location or URL"
 msgstr "Увести адресу або URL"
 
-#: gtk/gtkfilechooserwidget.c:3459 gtk/gtkfilechooserwidget.c:5782
+#: gtk/gtkfilechooserwidget.c:3459 gtk/gtkfilechooserwidget.c:5796
 #: gtk/ui/gtkfilechooserwidget.ui:383
 msgid "Modified"
 msgstr "Змінено"
@@ -2441,60 +2432,55 @@ msgstr "Презентація"
 msgid "Spreadsheet"
 msgstr "Електронна таблиця"
 
-#: gtk/gtkfilechooserwidget.c:4989 gtk/gtkprintunixdialog.c:648
+#: gtk/gtkfilechooserwidget.c:5003 gtk/gtkprintunixdialog.c:648
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл з назвою «%s» вже існує. Замінити його?"
 
-#: gtk/gtkfilechooserwidget.c:4991 gtk/gtkprintunixdialog.c:652
+#: gtk/gtkfilechooserwidget.c:5005 gtk/gtkprintunixdialog.c:652
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Файл у «%s» вже існує. Перезапис призведе до втрати вмісту."
 
-#: gtk/gtkfilechooserwidget.c:4997 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:5011 gtk/gtkprintunixdialog.c:660
 msgid "_Replace"
 msgstr "_Замінити"
 
-#: gtk/gtkfilechooserwidget.c:5152
+#: gtk/gtkfilechooserwidget.c:5166
 msgid "You do not have access to the specified folder."
 msgstr "Ви не маєте доступу до вказаної теки."
 
-#: gtk/gtkfilechooserwidget.c:5729
+#: gtk/gtkfilechooserwidget.c:5743
 msgid "Could not send the search request"
 msgstr "Не вдалось надіслати запит на пошук"
 
-#: gtk/gtkfilechooserwidget.c:6005
+#: gtk/gtkfilechooserwidget.c:6019
 msgid "Accessed"
 msgstr "Дозволено"
 
-#: gtk/gtkfiledialog.c:691
-#| msgid "Print to File"
+#: gtk/gtkfiledialog.c:814
 msgid "Pick Files"
 msgstr "Вибір файлів"
 
-#: gtk/gtkfiledialog.c:691
-#| msgid "Pick a Font"
+#: gtk/gtkfiledialog.c:814
 msgid "Pick a File"
 msgstr "Вибір файла"
 
-#: gtk/gtkfiledialog.c:696
-#| msgid "Select a File"
+#: gtk/gtkfiledialog.c:819
 msgid "Save a File"
 msgstr "Зберегти файл"
 
-#: gtk/gtkfiledialog.c:700 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkfiledialog.c:823 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Вибрати"
 
-#: gtk/gtkfiledialog.c:701
-#| msgid "Select a File"
+#: gtk/gtkfiledialog.c:824
 msgid "Select Folders"
 msgstr "Вибір тек"
 
-#: gtk/gtkfiledialog.c:701
-#| msgid "Select a File"
+#: gtk/gtkfiledialog.c:824
 msgid "Select a Folder"
 msgstr "Вибір теки"
 
@@ -2573,27 +2559,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6075 gtk/gtktextview.c:8985
+#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8985
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5659 gtk/gtktext.c:6079 gtk/gtktextview.c:8989
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8989
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5660 gtk/gtktext.c:6083 gtk/gtktextview.c:8993
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8993
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5666 gtk/gtktext.c:6096 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9018
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5671
+#: gtk/gtklabel.c:5668
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5675
+#: gtk/gtklabel.c:5672
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2601,7 +2587,7 @@ msgstr "Копіювати _адресу посилання"
 msgid "_Copy URL"
 msgstr "_Копіювати адресу"
 
-#: gtk/gtklinkbutton.c:547
+#: gtk/gtklinkbutton.c:544
 msgid "Invalid URI"
 msgstr "Неправильний URI"
 
@@ -2636,15 +2622,6 @@ msgid ""
 msgstr ""
 "Системна політика забороняє зміни.\n"
 "Зв'яжіться з системним адміністратором"
-
-#. Translate to default:RTL if you want your widgets
-#. * to be RTL, otherwise translate to default:LTR.
-#. * Do *not* translate it to "predefinito:LTR", if it
-#. * it isn't default:LTR or default:RTL it will not work
-#.
-#: gtk/gtkmain.c:789
-msgid "default:LTR"
-msgstr "default:LTR"
 
 #. hour:minutes:seconds
 #. Translators: This is a time format, like "9:05:02" for 9
@@ -2695,7 +2672,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/gtkprintbackend.c:639 gtk/gtkwindow.c:6157
+#: gtk/gtkprintbackend.c:639 gtk/gtkwindow.c:6156
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -3221,11 +3198,11 @@ msgstr "Автентифікація"
 msgid "_Remember password"
 msgstr "_Запам'ятати пароль"
 
-#: gtk/gtkprinteroptionwidget.c:739
+#: gtk/gtkprinteroptionwidget.c:715
 msgid "Select a filename"
 msgstr "Вибрати назву файла"
 
-#: gtk/gtkprinteroptionwidget.c:947
+#: gtk/gtkprinteroptionwidget.c:932
 msgid "Not available"
 msgstr "Недоступно"
 
@@ -3605,12 +3582,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6145
+#: gtk/gtkwindow.c:6144
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6147
+#: gtk/gtkwindow.c:6146
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3621,7 +3598,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6152
+#: gtk/gtkwindow.c:6151
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -3793,47 +3770,47 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:330 gtk/inspector/general.c:411
+#: gtk/inspector/general.c:332 gtk/inspector/general.c:413
 msgctxt "GL version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:339
+#: gtk/inspector/general.c:341
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:340
+#: gtk/inspector/general.c:342
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:412
+#: gtk/inspector/general.c:414
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:463
+#: gtk/inspector/general.c:465
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:464 gtk/inspector/general.c:465
+#: gtk/inspector/general.c:466 gtk/inspector/general.c:467
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:521
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:522 gtk/inspector/general.c:523
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:793
+#: gtk/inspector/general.c:795
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст способу введення жорстко встановлено у GTK_IM_MODULE"
 
@@ -4240,12 +4217,10 @@ msgstr "Увімкнути статистику з GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/strv-editor.c:83
 #, c-format
-#| msgid "_Remove"
 msgid "Remove %s"
 msgstr "Вилучити %s"
 
 #: gtk/inspector/strv-editor.c:115
-#| msgid "Address"
 msgid "Add"
 msgstr "Додати"
 
@@ -6012,17 +5987,14 @@ msgid "System"
 msgstr "Система"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
-#| msgid "Select _All"
 msgid "Select App"
 msgstr "Вибір програми"
 
 #: gtk/ui/gtkappchooserdialog.ui:60
-#| msgid "_View All Applications"
 msgid "_View All Apps"
 msgstr "П_ереглянути усі програми"
 
 #: gtk/ui/gtkappchooserdialog.ui:66
-#| msgid "_Find New Applications"
 msgid "_Find New Apps"
 msgstr "_Знайти нові програми"
 
@@ -7145,7 +7117,6 @@ msgid "FILE"
 msgstr "ФАЙЛ"
 
 #: tools/gtk-builder-tool-enumerate.c:64
-#| msgid "List all named objects."
 msgid "Print all named objects."
 msgstr "Вивести список усіх іменованих об'єктів."
 
@@ -7245,13 +7216,13 @@ msgstr "Показати версію програми"
 
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
-#: tools/gtk-launch.c:72
+#: tools/gtk-launch.c:74
 msgid "APPLICATION [URI…] — launch an APPLICATION"
 msgstr "ПРОГРАМА [URI…] — запустити програму."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: tools/gtk-launch.c:76
+#: tools/gtk-launch.c:78
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
@@ -7259,24 +7230,24 @@ msgstr ""
 "Запустити програму (вказану через її стільничну назву файла),\n"
 "за бажанням пропускати один або кілька URI як аргументи."
 
-#: tools/gtk-launch.c:86
+#: tools/gtk-launch.c:88
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Помилка розбирання параметрів командного рядка: %s\n"
 
-#: tools/gtk-launch.c:88 tools/gtk-launch.c:109
+#: tools/gtk-launch.c:90 tools/gtk-launch.c:111
 #, c-format
 msgid "Try “%s --help” for more information."
 msgstr "Скористайтеся «%s --help» для отримання докладної інформації."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: tools/gtk-launch.c:107
+#: tools/gtk-launch.c:109
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: бракує назви програми"
 
-#: tools/gtk-launch.c:136
+#: tools/gtk-launch.c:137
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
@@ -7285,14 +7256,14 @@ msgstr ""
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: tools/gtk-launch.c:144
+#: tools/gtk-launch.c:145
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: нема такої програми %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: tools/gtk-launch.c:162
+#: tools/gtk-launch.c:163
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: помилка запускання програми: %s\n"
@@ -7404,6 +7375,19 @@ msgstr ""
 "Немає індексного файла теми в «%s».\n"
 "Якщо ви дійсно бажаєте створити тут кеш значків, використовуйте --ignore-"
 "theme-index.\n"
+
+#, c-format
+#~ msgid "Failed to decode contents with mime-type of '%s'"
+#~ msgstr "Не вдалося декодувати дані з типом MIME «%s»"
+
+#~ msgid "Switch to grid view"
+#~ msgstr "Перемкнутися на перегляд таблиці"
+
+#~ msgid "Switch to list view"
+#~ msgstr "Перемкнутися на перегляд списку"
+
+#~ msgid "default:LTR"
+#~ msgstr "default:LTR"
 
 #~ msgid "Other application…"
 #~ msgstr "Інша програма…"
