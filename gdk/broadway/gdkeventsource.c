@@ -97,7 +97,9 @@ handle_focus_change (GdkEvent *event)
   focus_event = gdk_focus_event_new (gdk_event_get_surface (event),
 				     gdk_event_get_device (event),
 				     focus_in);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_display_put_event (gdk_event_get_display (event), focus_event);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gdk_event_unref (focus_event);
 }
 
