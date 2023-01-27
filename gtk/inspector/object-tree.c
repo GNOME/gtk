@@ -1002,7 +1002,6 @@ bind_type_cb (GtkSignalListItemFactory *factory,
   expander = gtk_list_item_get_child (list_item);
   gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), list_row);
   item = gtk_tree_list_row_get_item (list_row);
-  expander = gtk_list_item_get_child (list_item);
   inscription = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
 
   gtk_inscription_set_text (GTK_INSCRIPTION (inscription), G_OBJECT_TYPE_NAME (item));
