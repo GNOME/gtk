@@ -569,7 +569,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   GtkNative *native;
   GdkSurface *surface;
   double px, py;
-  int dx, dy;
+  double dx, dy;
   GdkContentProvider *content = NULL;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
