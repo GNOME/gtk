@@ -11,6 +11,7 @@ GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           
 guint                   gdk_gl_texture_get_id           (GdkGLTexture           *self);
 gpointer                gdk_gl_texture_get_sync         (GdkGLTexture           *self);
 
+GDK_AVAILABLE_IN_4_10
 GdkTexture *            gdk_gl_texture_new_with_sync    (GdkGLContext    *context,
                                                          guint            id,
                                                          gpointer         sync,
