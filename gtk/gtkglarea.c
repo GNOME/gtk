@@ -32,6 +32,7 @@
 #include "gtksnapshot.h"
 #include "gtkrenderlayoutprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gdk/gdkgltextureprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -759,6 +760,8 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       texture = priv->texture;
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
+
+      gdk_gl_texture_builder_set_sync (texture->builder, glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
 
       texture->holder = gdk_gl_texture_builder_build (texture->builder,
                                                       release_texture,
