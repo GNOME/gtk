@@ -323,8 +323,12 @@ gtk_application_add_platform_data (GApplication    *application,
 
       startup_id = gdk_display_get_startup_notification_id (display);
       if (startup_id && g_utf8_validate (startup_id, -1, NULL))
-        g_variant_builder_add (builder, "{sv}", "desktop-startup-id",
-                               g_variant_new_string (startup_id));
+        {
+          g_variant_builder_add (builder, "{sv}", "activation-token",
+                                 g_variant_new_string (startup_id));
+          g_variant_builder_add (builder, "{sv}", "desktop-startup-id",
+                                 g_variant_new_string (startup_id));
+        }
     }
 }
 
