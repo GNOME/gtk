@@ -14,6 +14,7 @@
         <child>
           <object class="GtkLabel" id="label">
             <property name="wrap">1</property>
+            <property name="max-width-chars">50</property>
           </object>
         </child>
       </object>
