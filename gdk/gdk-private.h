@@ -66,9 +66,6 @@ typedef struct {
   gboolean (* gdk_profiler_is_running) (void);
   void     (* gdk_profiler_start)      (int fd);
   void     (* gdk_profiler_stop)       (void);
-
-  gboolean (* gdk_window_titlebar_gesture) (GdkWindow          *window,
-                                            GdkTitlebarGesture  gesture);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL
