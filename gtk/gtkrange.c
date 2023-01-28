@@ -2712,10 +2712,8 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   gtk_range_update_mouse_location (range);
   if (!priv->mouse_location)
-    {
-      g_warning(G_STRLOC "value of mouse_location is 'NULL'");
-      return;
-    }
+    return;
+
   gtk_css_gadget_get_margin_box (priv->slider_gadget, &slider_alloc);
 
   g_object_get (gtk_widget_get_settings (widget),
