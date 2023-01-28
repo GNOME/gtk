@@ -29,6 +29,7 @@ gdk/loaders/gdktiff.c
 gdk/macos/gdkmacosclipboard.c
 gdk/macos/gdkmacosdrag.c
 gdk/macos/gdkmacosglcontext.c
+gdk/macos/gdkmacospasteboard.c
 gdk/wayland/gdkclipboard-wayland.c
 gdk/wayland/gdkdrag-wayland.c
 gdk/wayland/gdkdrop-wayland.c
