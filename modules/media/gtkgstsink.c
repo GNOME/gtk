@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkgstsinkprivate.h"
+#include "gdkgltextureprivate.h"
 
 #include "gtkgstpaintableprivate.h"
 
@@ -290,17 +291,16 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       GstGLSyncMeta *sync_meta;
 
       sync_meta = gst_buffer_get_gl_sync_meta (buffer);
-      if (sync_meta) {
+      if (sync_meta)
         gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
-        gst_gl_sync_meta_wait (sync_meta, self->gst_gdk_context);
-      }
 
-      texture = gdk_gl_texture_new (self->gdk_context,
-                                    *(guint *) frame->data[0],
-                                    frame->info.width,
-                                    frame->info.height,
-                                    (GDestroyNotify) video_frame_free,
-                                    frame);
+      texture = gdk_gl_texture_new_with_sync (self->gdk_context,
+                                              *(guint *) frame->data[0],
+                                              sync_meta ? sync_meta->data : NULL,
+                                              frame->info.width,
+                                              frame->info.height,
+                                              (GDestroyNotify) video_frame_free,
+                                              frame);
 
       *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
     }
