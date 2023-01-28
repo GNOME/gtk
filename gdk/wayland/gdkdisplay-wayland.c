@@ -84,7 +84,7 @@
 
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
-#define GTK_SHELL1_VERSION       5
+#define GTK_SHELL1_VERSION       4
 #ifdef HAVE_XDG_ACTIVATION
 #define XDG_ACTIVATION_VERSION   1
 #endif
