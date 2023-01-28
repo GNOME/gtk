@@ -265,6 +265,27 @@ gsk_gl_program_set_uniform_texture (GskGLProgram *self,
 }
 
 static inline void
+gsk_gl_program_set_uniform_texture_with_sync (GskGLProgram *self,
+                                              guint         key,
+                                              guint         stamp,
+                                              GLenum        texture_target,
+                                              GLenum        texture_slot,
+                                              guint         texture_id,
+                                              gpointer      sync)
+{
+  gsk_gl_attachment_state_bind_texture (self->driver->command_queue->attachments,
+                                        texture_target,
+                                        texture_slot,
+                                        texture_id);
+  gsk_gl_uniform_state_set_texture (self->uniforms,
+                                    self->program_info,
+                                    key,
+                                    stamp,
+                                    texture_slot);
+  gsk_gl_syncs_add_sync (&self->driver->command_queue->syncs, texture_id, sync);
+}
+
+static inline void
 gsk_gl_program_set_uniform_matrix (GskGLProgram            *self,
                                    guint                    key,
                                    guint                    stamp,

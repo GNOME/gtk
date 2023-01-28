@@ -403,6 +403,7 @@ gsk_gl_command_queue_dispose (GObject *object)
   gsk_gl_command_batches_clear (&self->batches);
   gsk_gl_command_binds_clear (&self->batch_binds);
   gsk_gl_command_uniforms_clear (&self->batch_uniforms);
+  gsk_gl_syncs_clear (&self->syncs);
 
   gsk_gl_buffer_destroy (&self->vertices);
 
@@ -425,6 +426,7 @@ gsk_gl_command_queue_init (GskGLCommandQueue *self)
   gsk_gl_command_batches_init (&self->batches, 128);
   gsk_gl_command_binds_init (&self->batch_binds, 1024);
   gsk_gl_command_uniforms_init (&self->batch_uniforms, 2048);
+  gsk_gl_syncs_init (&self->syncs, 10);
 
   gsk_gl_buffer_init (&self->vertices, GL_ARRAY_BUFFER, sizeof (GskGLDrawVertex));
 }
@@ -1098,15 +1100,23 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
           if G_UNLIKELY (batch->draw.bind_count > 0)
             {
               const GskGLCommandBind *bind = &self->batch_binds.items[batch->draw.bind_offset];
-
               for (guint i = 0; i < batch->draw.bind_count; i++)
                 {
                   if (textures[bind->texture] != bind->id)
                     {
+                      GskGLSync *s;
+
                       if (active != bind->texture)
                         {
                           active = bind->texture;
                           glActiveTexture (GL_TEXTURE0 + bind->texture);
+                        }
+
+                      s = gsk_gl_syncs_get_sync (&self->syncs, bind->id);
+                      if (s && s->sync)
+                        {
+                          glWaitSync ((GLsync) s->sync, 0, GL_TIMEOUT_IGNORED);
+                          s->sync = NULL;
                         }
 
                       glBindTexture (GL_TEXTURE_2D, bind->id);
@@ -1236,6 +1246,7 @@ gsk_gl_command_queue_end_frame (GskGLCommandQueue *self)
   self->batches.len = 0;
   self->batch_binds.len = 0;
   self->batch_uniforms.len = 0;
+  self->syncs.len = 0;
   self->n_uploads = 0;
   self->tail_batch_index = -1;
   self->in_frame = FALSE;

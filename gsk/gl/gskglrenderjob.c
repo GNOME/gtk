@@ -190,6 +190,7 @@ typedef struct _GskGLRenderOffscreen
 
   /* Return location for texture ID */
   guint texture_id;
+  gpointer sync;
 
   /* Whether to force creating a new texture, even if the
    * input already is a texture
@@ -3497,12 +3498,17 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   int                   mag_filter,
                                   GskGLRenderOffscreen *offscreen)
 {
+  GdkGLTexture *gl_texture = NULL;
+
+  if (GDK_IS_GL_TEXTURE (texture))
+    gl_texture = (GdkGLTexture *) texture;
+
   if (min_filter == GL_LINEAR &&
       mag_filter == GL_LINEAR &&
       gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
-      !GDK_IS_GL_TEXTURE (texture))
+      !gl_texture)
     {
       const GskGLIconData *icon_data;
 
@@ -3514,6 +3520,8 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
     {
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, min_filter, mag_filter);
       init_full_texture_region (offscreen);
+      if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture))
+        offscreen->sync = gdk_gl_texture_get_sync (gl_texture);
     }
 }
 
@@ -3535,12 +3543,13 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       g_assert (offscreen.was_offscreen == FALSE);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
-      gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
+      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                    UNIFORM_SHARED_SOURCE, 0,
+                                                    GL_TEXTURE_2D,
+                                                    GL_TEXTURE0,
+                                                    offscreen.texture_id,
+                                                    offscreen.sync);
+      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
     }
   else
