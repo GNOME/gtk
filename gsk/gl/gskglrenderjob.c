@@ -191,6 +191,7 @@ typedef struct _GskGLRenderOffscreen
 
   /* Return location for texture ID */
   guint texture_id;
+  gpointer sync;
 
   /* Whether to force creating a new texture, even if the
    * input already is a texture
@@ -3570,6 +3571,9 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, ensure_mipmap);
       init_full_texture_region (offscreen);
       offscreen->has_mipmap = ensure_mipmap;
+
+      if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture))
+        offscreen->sync = gdk_gl_texture_get_sync (gl_texture);
     }
 }
 
@@ -3597,13 +3601,15 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       g_assert (offscreen.was_offscreen == FALSE);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
-                                                      UNIFORM_SHARED_SOURCE, 0,
-                                                      GL_TEXTURE_2D,
-                                                      GL_TEXTURE0,
-                                                      offscreen.texture_id,
-                                                      offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
-                                                      GL_LINEAR);
+
+      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                    UNIFORM_SHARED_SOURCE, 0,
+                                                    GL_TEXTURE_2D,
+                                                    GL_TEXTURE0,
+                                                    offscreen.texture_id,
+                                                    offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                    GL_LINEAR,
+                                                    offscreen.sync);
       gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
     }
@@ -3733,7 +3739,14 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
     {
+      gpointer sync;
+
       texture_id = gsk_gl_driver_load_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR);
+
+      if (GDK_IS_GL_TEXTURE (texture) && texture_id == gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)))
+        sync = gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture));
+      else
+        sync = NULL;
 
       u0 = (clip_rect.origin.x - bounds->origin.x) / bounds->size.width;
       v0 = (clip_rect.origin.y - bounds->origin.y) / bounds->size.height;
@@ -3741,13 +3754,14 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       v1 = (clip_rect.origin.y + clip_rect.size.height - bounds->origin.y) / bounds->size.height;
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
-                                                      UNIFORM_SHARED_SOURCE, 0,
-                                                      GL_TEXTURE_2D,
-                                                      GL_TEXTURE0,
-                                                      texture_id,
-                                                      min_filter,
-                                                      mag_filter);
+      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                    UNIFORM_SHARED_SOURCE, 0,
+                                                    GL_TEXTURE_2D,
+                                                    GL_TEXTURE0,
+                                                    texture_id,
+                                                    min_filter,
+                                                    mag_filter,
+                                                    sync);
       gsk_gl_render_job_draw_coords (job,
                                      0, 0, clip_rect.size.width, clip_rect.size.height,
                                      u0, v0, u1, v1,
