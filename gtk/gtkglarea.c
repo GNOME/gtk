@@ -32,6 +32,7 @@
 #include "gtksnapshot.h"
 #include "gtkrenderlayoutprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gdk/gdkgltextureprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -144,6 +145,7 @@
 
 typedef struct {
   guint id;
+  GLsync sync;
   int width;
   int height;
   GdkTexture *holder;
@@ -393,6 +395,8 @@ delete_one_texture (gpointer data)
       glDeleteTextures (1, &texture->id);
       texture->id = 0;
     }
+
+  g_clear_pointer (&texture->sync, glDeleteSync);
 
   g_free (texture);
 }
@@ -673,6 +677,7 @@ release_texture (gpointer data)
 {
   Texture *texture = data;
   texture->holder = NULL;
+  g_clear_pointer (&texture->sync, glDeleteSync);
 }
 
 static void
@@ -735,11 +740,13 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      texture->holder = gdk_gl_texture_new (priv->context,
-                                            texture->id,
-                                            texture->width,
-                                            texture->height,
-                                            release_texture, texture);
+      texture->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      texture->holder = gdk_gl_texture_new_with_sync (priv->context,
+                                                      texture->id,
+                                                      texture->sync,
+                                                      texture->width,
+                                                      texture->height,
+                                                      release_texture, texture);
 
       /* Our texture is rendered by OpenGL, so it is upside down,
        * compared to what GSK expects, so flip it back.
