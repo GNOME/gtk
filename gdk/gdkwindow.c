@@ -11998,3 +11998,20 @@ gdk_window_show_window_menu (GdkWindow *window,
   else
     return FALSE;
 }
+
+gboolean
+gdk_window_titlebar_gesture (GdkWindow          *window,
+                             GdkTitlebarGesture  gesture)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), FALSE);
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->titlebar_gesture)
+    return impl_class->titlebar_gesture (window, gesture);
+  else
+    return FALSE;
+}
