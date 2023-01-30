@@ -254,12 +254,23 @@ gtk_password_entry_realize (GtkWidget *widget)
 }
 
 static void
+gtk_password_entry_unrealize (GtkWidget *widget)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+
+  if (entry->keyboard)
+    {
+      g_signal_handlers_disconnect_by_func (entry->keyboard, caps_lock_state_changed, entry);
+      entry->keyboard = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_password_entry_parent_class)->unrealize (widget);
+}
+
+static void
 gtk_password_entry_dispose (GObject *object)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
-
-  if (entry->keyboard)
-    g_signal_handlers_disconnect_by_func (entry->keyboard, caps_lock_state_changed, entry);
 
   if (entry->entry)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
@@ -451,6 +462,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   object_class->set_property = gtk_password_entry_set_property;
 
   widget_class->realize = gtk_password_entry_realize;
+  widget_class->unrealize = gtk_password_entry_unrealize;
   widget_class->measure = gtk_password_entry_measure;
   widget_class->size_allocate = gtk_password_entry_size_allocate;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
