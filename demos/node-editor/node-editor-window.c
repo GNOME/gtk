@@ -398,7 +398,7 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
     }
   else
     {
-      int bx, by, trailing;
+      GtkTextUnit bx, by, trailing;
 
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self->text_view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
@@ -1587,7 +1587,7 @@ click_gesture_pressed (GtkGestureClick  *gesture,
                        NodeEditorWindow *self)
 {
   GtkTextIter iter;
-  int bx, by, trailing;
+  GtkTextUnit bx, by, trailing;
   GdkModifierType state;
 
   state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture));

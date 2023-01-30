@@ -84,7 +84,7 @@ query_tooltip_cb (GtkWidget             *widget,
     }
   else
     {
-      int bx, by, trailing;
+      GtkTextUnit bx, by, trailing;
 
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (ce->priv->view), GTK_TEXT_WINDOW_TEXT,
                                              x, y, &bx, &by);
@@ -314,7 +314,7 @@ text_changed (GtkTextBuffer         *buffer,
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
-  ce->priv->timeout = g_timeout_add (100, update_timeout, ce); 
+  ce->priv->timeout = g_timeout_add (100, update_timeout, ce);
 
   g_list_free_full (ce->priv->errors, css_error_free);
   ce->priv->errors = NULL;

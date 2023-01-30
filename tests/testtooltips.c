@@ -95,7 +95,7 @@ query_tooltip_text_view_cb (GtkWidget  *widget,
     }
   else
     {
-      int bx, by, trailing;
+      GtkTextUnit bx, by, trailing;
 
       gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT,
 					     x, y, &bx, &by);

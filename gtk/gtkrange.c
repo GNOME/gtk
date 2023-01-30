@@ -107,6 +107,8 @@ struct _GtkRangePrivate
   int   slide_initial_slider_position;
   int   slide_initial_coordinate_delta;
 
+  guint changed_tick_id;
+
   guint flippable              : 1;
   guint inverted               : 1;
   guint slider_size_fixed      : 1;
@@ -693,6 +695,12 @@ gtk_range_set_adjustment (GtkRange      *range,
 	  g_signal_handlers_disconnect_by_func (priv->adjustment,
 						gtk_range_adjustment_value_changed,
 						range);
+          if (priv->changed_tick_id)
+            {
+              gtk_widget_remove_tick_callback (GTK_WIDGET (range),
+                                               priv->changed_tick_id);
+              priv->changed_tick_id = 0;
+            }
 	  g_object_unref (priv->adjustment);
 	}
 
@@ -1317,6 +1325,13 @@ gtk_range_dispose (GObject *object)
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   gtk_range_remove_step_timer (range);
+
+  if (priv->changed_tick_id)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (range),
+                                       priv->changed_tick_id);
+      priv->changed_tick_id = 0;
+    }
 
   if (priv->adjustment)
     {
@@ -2358,16 +2373,22 @@ gtk_range_drag_gesture_end (GtkGestureDrag *gesture,
   stop_scrolling (range);
 }
 
-static void
-gtk_range_adjustment_changed (GtkAdjustment *adjustment,
-                              gpointer       data)
+static gboolean
+gtk_range_adjustment_changed_cb (GtkWidget     *widget,
+                                 GdkFrameClock *frame_clock,
+                                 gpointer       unused)
 {
-  GtkRange *range = GTK_RANGE (data);
+  GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   double upper = gtk_adjustment_get_upper (priv->adjustment);
   double lower = gtk_adjustment_get_lower (priv->adjustment);
 
-  gtk_widget_set_visible (priv->slider_widget, upper != lower || !GTK_IS_SCALE (range));
+  priv->changed_tick_id = 0;
+
+  if (upper == lower && GTK_IS_SCALE (range))
+    gtk_widget_hide (priv->slider_widget);
+  else
+    gtk_widget_show (priv->slider_widget);
 
   gtk_widget_queue_allocate (priv->trough_widget);
 
@@ -2383,6 +2404,32 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
    * can input into the adjustment, not a filter that the GtkRange
    * will enforce on the adjustment.
    */
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_range_adjustment_changed (GtkAdjustment *adjustment,
+                              gpointer       data)
+{
+  GtkRange *range = GTK_RANGE (data);
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  /* There is a good chance that we will get this notification
+   * from size_allocate() of another widget. That means we are
+   * already in the LAYOUT phase of the frame clock.
+   *
+   * It's not allowed to call gtk_widget_show()/hide() from that
+   * point because it will result in a loss of allocations which
+   * are needed to complete the current frame.
+   *
+   * Instead, defer until the next frame to perform adjustments.
+   */
+  if (priv->changed_tick_id == 0)
+    priv->changed_tick_id =
+      gtk_widget_add_tick_callback (GTK_WIDGET (range),
+                                    gtk_range_adjustment_changed_cb,
+                                    NULL, NULL);
 }
 
 static void

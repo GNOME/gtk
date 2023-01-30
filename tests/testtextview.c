@@ -81,7 +81,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter, "For example, you can have ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "italic translucent blue text", -1,
-                                            "italic", 
+                                            "italic",
 					    "semi_blue_foreground",
 					    "x-large",
 					    NULL);
@@ -91,7 +91,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter, ", ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "bold text with translucent red background", -1,
-                                            "bold", 
+                                            "bold",
 					    "semi_red_background",
 					    "x-large",
 					    NULL);
@@ -108,7 +108,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter, "For instance, you can have ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "bold translucent blue text", -1,
-                                            "bold", 
+                                            "bold",
 					    "semi_blue_foreground",
 					    "x-large",
 					    NULL);
@@ -118,7 +118,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter, ", ", -1);
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
                                             "italic text with translucent red background", -1,
-                                            "italic", 
+                                            "italic",
 					    "semi_red_background",
 					    "x-large",
 					    NULL);
@@ -147,7 +147,7 @@ static void
 snapshot_background (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
-  GdkRectangle visible_rect;
+  GtkTextRectangle visible_rect;
 
   gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (widget), &visible_rect);
 

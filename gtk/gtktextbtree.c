@@ -293,8 +293,8 @@ static NodeData         *    gtk_text_btree_node_ensure_data         (GtkTextBTr
                                                                       gpointer          view_id);
 static void                  gtk_text_btree_node_get_size            (GtkTextBTreeNode *node,
                                                                       gpointer          view_id,
-                                                                      int              *width,
-                                                                      int              *height);
+                                                                      GtkTextUnit      *width,
+                                                                      GtkTextUnit      *height);
 static GtkTextBTreeNode *    gtk_text_btree_node_common_parent       (GtkTextBTreeNode *node1,
                                                                       GtkTextBTreeNode *node2);
 static void get_tree_bounds       (GtkTextBTree     *tree,
@@ -1340,11 +1340,14 @@ _gtk_text_btree_unregister_child_anchor (GtkTextChildAnchor *anchor)
  */
 
 static GtkTextLine*
-find_line_by_y (GtkTextBTree *tree, BTreeView *view,
-                GtkTextBTreeNode *node, int y, int *line_top,
-                GtkTextLine *last_line)
+find_line_by_y (GtkTextBTree     *tree,
+                BTreeView        *view,
+                GtkTextBTreeNode *node,
+                GtkTextUnit       y,
+                GtkTextUnit      *line_top,
+                GtkTextLine      *last_line)
 {
-  int current_y = 0;
+  GtkTextUnit current_y = 0;
 
   if (GTK_DEBUG_CHECK (TEXT))
     _gtk_text_btree_check (tree);
@@ -1382,8 +1385,8 @@ find_line_by_y (GtkTextBTree *tree, BTreeView *view,
 
       while (child != NULL)
         {
-          int width;
-          int height;
+          GtkTextUnit width;
+          GtkTextUnit height;
 
           gtk_text_btree_node_get_size (child, view->view_id,
                                         &width, &height);
@@ -1406,13 +1409,13 @@ find_line_by_y (GtkTextBTree *tree, BTreeView *view,
 GtkTextLine *
 _gtk_text_btree_find_line_by_y (GtkTextBTree *tree,
                                 gpointer      view_id,
-                                int           ypixel,
-                                int          *line_top_out)
+                                GtkTextUnit   ypixel,
+                                GtkTextUnit  *line_top_out)
 {
   GtkTextLine *line;
   BTreeView *view;
   GtkTextLine *last_line;
-  int line_top = 0;
+  GtkTextUnit line_top = 0;
 
   view = gtk_text_btree_get_view (tree, view_id);
   g_return_val_if_fail (view != NULL, NULL);
@@ -1460,7 +1463,7 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
                               GtkTextLine *target_line,
                               gpointer view_id)
 {
-  int y = 0;
+  GtkTextUnit y = 0;
   BTreeView *view;
   GtkTextBTreeNode *node;
   GtkTextBTreeNode *nodes[64];
@@ -1500,8 +1503,8 @@ _gtk_text_btree_find_line_top (GtkTextBTree *tree,
 
           while (child != NULL)
             {
-              int width;
-              int height;
+              GtkTextUnit width;
+              GtkTextUnit height;
 
               if (child == target_node)
                 break;
@@ -1635,9 +1638,9 @@ _gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
 
 void
 _gtk_text_btree_get_view_size (GtkTextBTree *tree,
-                              gpointer view_id,
-                              int *width,
-                              int *height)
+                               gpointer      view_id,
+                               GtkTextUnit  *width,
+                               GtkTextUnit  *height)
 {
   g_return_if_fail (tree != NULL);
   g_return_if_fail (view_id != NULL);
@@ -5236,11 +5239,11 @@ gtk_text_btree_node_validate (BTreeView         *view,
  **/
 gboolean
 _gtk_text_btree_validate (GtkTextBTree *tree,
-                         gpointer      view_id,
-                         int           max_pixels,
-                         int          *y,
-                         int          *old_height,
-                         int          *new_height)
+                          gpointer      view_id,
+                          int           max_pixels,
+                          GtkTextUnit  *y,
+                          GtkTextUnit  *old_height,
+                          GtkTextUnit  *new_height)
 {
   BTreeView *view;
 
@@ -5567,8 +5570,10 @@ gtk_text_btree_node_remove_data (GtkTextBTreeNode *node, gpointer view_id)
 }
 
 static void
-gtk_text_btree_node_get_size (GtkTextBTreeNode *node, gpointer view_id,
-                              int *width, int *height)
+gtk_text_btree_node_get_size (GtkTextBTreeNode *node,
+                              gpointer          view_id,
+                              GtkTextUnit      *width,
+                              GtkTextUnit      *height)
 {
   NodeData *nd;
 
@@ -5667,8 +5672,8 @@ tag_changed_cb (GtkTextTagTable *table,
 
       while (view != NULL)
         {
-          int width = 0;
-          int height = 0;
+          GtkTextUnit width = 0;
+          GtkTextUnit height = 0;
 
           _gtk_text_btree_get_view_size (tree, view->view_id, &width, &height);
           gtk_text_layout_changed (view->layout, 0, height, height);

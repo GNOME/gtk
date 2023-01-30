@@ -1815,7 +1815,7 @@ text_view_released (GtkGestureClick *gesture,
   GtkWidget *text_view;
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  int tx, ty;
+  GtkTextUnit tx, ty;
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) != GDK_BUTTON_PRIMARY)
     return;
@@ -1881,7 +1881,7 @@ text_view_motion (GtkEventControllerMotion *motion,
                   double                    y,
                   GtkAboutDialog           *about)
 {
-  int tx, ty;
+  GtkTextUnit tx, ty;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));

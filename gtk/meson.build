@@ -617,6 +617,7 @@ gtk_public_headers = files([
   'gtktextmark.h',
   'gtktexttag.h',
   'gtktexttagtable.h',
+  'gtktexttypes.h',
   'gtktextview.h',
   'gtktogglebutton.h',
   'gtktooltip.h',
