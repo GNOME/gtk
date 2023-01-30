@@ -1566,6 +1566,9 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
 
   files = g_value_get_boxed (value);
 
+  if (files == NULL)
+    return TRUE;
+
   data = g_new0 (FileListDragData, 1);
   data->impl = g_object_ref (impl);
   data->files = g_slist_copy_deep (files, (GCopyFunc) g_object_ref, NULL);
