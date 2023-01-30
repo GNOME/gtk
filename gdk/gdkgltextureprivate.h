@@ -9,6 +9,15 @@ G_BEGIN_DECLS
 
 GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           *self);
 guint                   gdk_gl_texture_get_id           (GdkGLTexture           *self);
+gpointer                gdk_gl_texture_get_sync         (GdkGLTexture           *self);
+
+GdkTexture *            gdk_gl_texture_new_with_sync    (GdkGLContext    *context,
+                                                         guint            id,
+                                                         gpointer         sync,
+                                                         int              width,
+                                                         int              height,
+                                                         GDestroyNotify   destroy,
+                                                         gpointer         data);
 
 G_END_DECLS
 

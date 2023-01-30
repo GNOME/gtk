@@ -39,6 +39,7 @@ struct _GdkGLTexture {
 
   GdkGLContext *context;
   guint id;
+  GLsync sync;
 
   GdkTexture *saved;
 
@@ -64,6 +65,7 @@ drop_gl_resources (GdkGLTexture *self)
 
   g_clear_object (&self->context);
   self->id = 0;
+  self->sync = NULL;
 }
 
 static void
@@ -441,6 +443,46 @@ gdk_gl_texture_new (GdkGLContext   *context,
                     GDestroyNotify  destroy,
                     gpointer        data)
 {
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
+  g_return_val_if_fail (id != 0, NULL);
+  g_return_val_if_fail (width > 0, NULL);
+  g_return_val_if_fail (height > 0, NULL);
+
+  return gdk_gl_texture_new_with_sync (context, id, NULL, width, height, destroy, data);
+}
+
+/*< private >
+ * gdk_gl_texture_new_with_sync:
+ * @context: a `GdkGLContext`
+ * @id: the ID of a texture that was created with @context
+ * @sync: (nullable): an optional GLsync object
+ * @width: the nominal width of the texture
+ * @height: the nominal height of the texture
+ * @destroy: a destroy notify that will be called when the GL resources
+ *   are released
+ * @data: data that gets passed to @destroy
+ *
+ * Creates a new texture for an existing GL texture.
+ *
+ * If @sync is given, consumers of the texture are required to wait on
+ * it before attempting to use the GL texture.
+ *
+ * The GL texture and the sync object must stay alive unmodified until
+ * @destroy is called, which will happen when the GdkTexture object is
+ * finalized, or due to an explicit call of [method@Gdk.GLTexture.release].
+ *
+ * Return value: (transfer full) (type GdkGLTexture): A newly-created
+ *   `GdkTexture`
+ */
+GdkTexture *
+gdk_gl_texture_new_with_sync (GdkGLContext   *context,
+                              guint           id,
+                              gpointer        sync,
+                              int             width,
+                              int             height,
+                              GDestroyNotify  destroy,
+                              gpointer        data)
+{
   GdkGLTexture *self;
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
@@ -455,6 +497,7 @@ gdk_gl_texture_new (GdkGLContext   *context,
 
   self->context = g_object_ref (context);
   self->id = id;
+  self->sync = sync;
   self->destroy = destroy;
   self->data = data;
 
@@ -463,3 +506,8 @@ gdk_gl_texture_new (GdkGLContext   *context,
   return GDK_TEXTURE (self);
 }
 
+gpointer
+gdk_gl_texture_get_sync (GdkGLTexture *self)
+{
+  return self->sync;
+}
