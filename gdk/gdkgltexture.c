@@ -100,6 +100,10 @@ gdk_gl_texture_invoke_callback (gpointer data)
   context = gdk_display_get_gl_context (gdk_gl_context_get_display (invoke->self->context));
 
   gdk_gl_context_make_current (context);
+
+  if (invoke->self->sync && context != invoke->self->context)
+    glWaitSync (invoke->self->sync, 0, GL_TIMEOUT_IGNORED);
+
   glBindTexture (GL_TEXTURE_2D, invoke->self->id);
 
   invoke->func (invoke->self, context, invoke->data);
