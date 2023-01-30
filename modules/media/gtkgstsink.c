@@ -292,7 +292,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       sync_meta = gst_buffer_get_gl_sync_meta (buffer);
       if (sync_meta) {
         gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
-        gst_gl_sync_meta_wait (sync_meta, self->gst_context);
+        gst_gl_sync_meta_wait (sync_meta, self->gst_app_context);
       }
 
       texture = gdk_gl_texture_new (self->gdk_context,
