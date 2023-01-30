@@ -51,7 +51,7 @@ struct _GtkGstSink
   GtkGstPaintable *    paintable;
   GdkGLContext *       gdk_context;
   GstGLDisplay *       gst_display;
-  GstGLContext *       gst_app_context;
+  GstGLContext *       gst_gdk_context;
   GstGLContext *       gst_context;
 };
 
