@@ -174,7 +174,7 @@ gtk_gst_sink_query (GstBaseSink *bsink,
 
   if (GST_QUERY_TYPE (query) == GST_QUERY_CONTEXT &&
       self->gst_display != NULL &&
-      gst_gl_handle_context_query (GST_ELEMENT (self), query, self->gst_display, self->gst_context, self->gst_app_context))
+      gst_gl_handle_context_query (GST_ELEMENT (self), query, self->gst_display, self->gst_context, self->gst_gdk_context))
     return TRUE;
 
   return GST_BASE_SINK_CLASS (gtk_gst_sink_parent_class)->query (bsink, query);
@@ -292,7 +292,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       sync_meta = gst_buffer_get_gl_sync_meta (buffer);
       if (sync_meta) {
         gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
-        gst_gl_sync_meta_wait (sync_meta, self->gst_context);
+        gst_gl_sync_meta_wait (sync_meta, self->gst_gdk_context);
       }
 
       texture = gdk_gl_texture_new (self->gdk_context,
@@ -464,7 +464,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
       if (gl_handle)
         {
-          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+          self->gst_gdk_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else
         {
@@ -490,7 +490,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
           wayland_display = gdk_wayland_display_get_wl_display (display);
           self->gst_display = GST_GL_DISPLAY (gst_gl_display_wayland_new_with_display (wayland_display));
-          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+          self->gst_gdk_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else
         {
@@ -513,7 +513,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       if (gl_handle)
         {
           self->gst_display = gst_gl_display_new ();
-          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+          self->gst_gdk_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else
         {
@@ -569,7 +569,7 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 #endif
 
           gst_gl_display_filter_gl_api (self->gst_display, gl_api);
-          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+          self->gst_gdk_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else
         {
@@ -584,15 +584,15 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       return FALSE;
     }
 
-  g_assert (self->gst_app_context != NULL);
+  g_assert (self->gst_gdk_context != NULL);
 
-  gst_gl_context_activate (self->gst_app_context, TRUE);
+  gst_gl_context_activate (self->gst_gdk_context, TRUE);
 
-  if (!gst_gl_context_fill_info (self->gst_app_context, &error))
+  if (!gst_gl_context_fill_info (self->gst_gdk_context, &error))
     {
       GST_ERROR_OBJECT (self, "failed to retrieve GDK context info: %s", error->message);
       g_clear_error (&error);
-      g_clear_object (&self->gst_app_context);
+      g_clear_object (&self->gst_gdk_context);
       g_clear_object (&self->gst_display);
       HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
       return FALSE;
@@ -600,16 +600,16 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
   else
     {
       DEACTIVATE_WGL_CONTEXT (self->gdk_context);
-      gst_gl_context_activate (self->gst_app_context, FALSE);
+      gst_gl_context_activate (self->gst_gdk_context, FALSE);
     }
 
-  succeeded = gst_gl_display_create_context (self->gst_display, self->gst_app_context, &self->gst_context, &error);
+  succeeded = gst_gl_display_create_context (self->gst_display, self->gst_gdk_context, &self->gst_context, &error);
 
   if (!succeeded)
     {
       GST_ERROR_OBJECT (self, "Couldn't create GL context: %s", error->message);
       g_error_free (error);
-      g_clear_object (&self->gst_app_context);
+      g_clear_object (&self->gst_gdk_context);
       g_clear_object (&self->gst_display);
     }
 
@@ -676,7 +676,7 @@ gtk_gst_sink_dispose (GObject *object)
   GtkGstSink *self = GTK_GST_SINK (object);
 
   g_clear_object (&self->paintable);
-  g_clear_object (&self->gst_app_context);
+  g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);
   g_clear_object (&self->gdk_context);
 
