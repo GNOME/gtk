@@ -36,6 +36,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkStatusbar:
  *

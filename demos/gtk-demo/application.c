@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef GtkApplication DemoApplication;
 typedef GtkApplicationClass DemoApplicationClass;
 

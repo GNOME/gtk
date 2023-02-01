@@ -37,6 +37,8 @@ remove_timeout (gpointer data)
   g_source_remove (id);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static gboolean
 pop_status (gpointer data)
 {
@@ -56,6 +58,8 @@ status_message (GtkStatusbar *status,
 
   g_object_set_data_full (G_OBJECT (status), "timeout", GUINT_TO_POINTER (id), remove_timeout);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 help_activate (GSimpleAction *action,

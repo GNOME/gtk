@@ -17,6 +17,7 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_MODULE_EXPORT void
 statusbar_remove_all (GtkStatusbar *s)

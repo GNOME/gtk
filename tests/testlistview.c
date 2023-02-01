@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define FILE_INFO_TYPE_SELECTION (file_info_selection_get_type ())
 
 G_DECLARE_FINAL_TYPE (FileInfoSelection, file_info_selection, FILE_INFO, SELECTION, GObject)
