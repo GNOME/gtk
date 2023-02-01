@@ -294,6 +294,12 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       if (sync_meta)
         gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
 
+      /* Note: using the gdk_context here is a (harmless) lie,
+       * since the texture really originates in the gst_context.
+       * But that is not a GdkGLContext. It is harmless, because
+       * we are never using the texture in the gdk_context, so we
+       * never make the (erroneous) decision to ignore the sync.
+       */
       texture = gdk_gl_texture_new_with_sync (self->gdk_context,
                                               *(guint *) frame->data[0],
                                               sync_meta ? sync_meta->data : NULL,
