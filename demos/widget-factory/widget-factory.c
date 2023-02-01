@@ -2252,11 +2252,13 @@ activate (GApplication *app)
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
     gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
   action = G_ACTION (g_property_action_new ("statusbar", widget, "visible"));
   g_action_map_add_action (G_ACTION_MAP (window), action);
   g_object_unref (G_OBJECT (action));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
   action = G_ACTION (g_property_action_new ("toolbar", widget, "visible"));

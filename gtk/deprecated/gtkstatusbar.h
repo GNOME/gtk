@@ -42,23 +42,23 @@ typedef struct _GtkStatusbar GtkStatusbar;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_statusbar_get_type     	(void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget* gtk_statusbar_new          	(void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 guint	   gtk_statusbar_get_context_id	(GtkStatusbar *statusbar,
 					 const char   *context_description);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 guint      gtk_statusbar_push          	(GtkStatusbar *statusbar,
 					 guint	       context_id,
 					 const char   *text);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_statusbar_pop          	(GtkStatusbar *statusbar,
 					 guint	       context_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
 					 guint	       context_id,
 					 guint         message_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_statusbar_remove_all    	(GtkStatusbar *statusbar,
 					 guint	       context_id);
 

@@ -109,3 +109,8 @@ Other libraries, such as libadwaita, may provide replacements as well.
 ## gtk_show_uri is being replaced
 
 Instead of gtk_show_uri(), you should use GtkUriLauncher or GtkFileLauncher.
+
+## GtkStatusbar is going away
+
+This is an oldfashioned widget that does not do all that much anymore, since
+it no longer has a resize handle for the window.
