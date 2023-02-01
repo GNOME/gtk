@@ -2074,8 +2074,10 @@ gdk_x11_display_make_default (GdkDisplay *display)
   display_x11->startup_notification_id = NULL;
 
   startup_id = gdk_get_startup_notification_id ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (startup_id)
     gdk_x11_display_set_startup_notification_id (display, startup_id);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -2303,6 +2305,8 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
  * Gets the startup notification ID for a display.
  * 
  * Returns: the startup notification ID for @display
+ *
+ * Deprecated: 4.10
  */
 const char *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
@@ -2329,7 +2333,9 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
  * gdk_display_notify_startup_complete()).
- **/
+ *
+ * Deprecated: 4.10: Using [method@Gdk.Toplevel.set_startup_id] is sufficient
+ */
 void
 gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
                                              const char *startup_id)
@@ -3042,7 +3048,9 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
+G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->create_surface = _gdk_x11_display_create_surface;
   display_class->get_keymap = gdk_x11_display_get_keymap;
