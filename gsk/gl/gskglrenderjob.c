@@ -3520,7 +3520,8 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
     {
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, min_filter, mag_filter);
       init_full_texture_region (offscreen);
-      if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture))
+      if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture) &&
+          gdk_gl_texture_get_context (gl_texture) != gsk_gl_command_queue_get_context (job->command_queue))
         offscreen->sync = gdk_gl_texture_get_sync (gl_texture);
     }
 }
