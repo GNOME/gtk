@@ -80,9 +80,9 @@ Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
 GDK_AVAILABLE_IN_ALL
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char * gdk_x11_display_get_startup_notification_id         (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
                                                                    const char *startup_id);
 GDK_AVAILABLE_IN_ALL

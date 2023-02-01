@@ -321,7 +321,9 @@ gtk_application_add_platform_data (GApplication    *application,
     {
       const char *startup_id;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       startup_id = gdk_display_get_startup_notification_id (display);
+G_GNUC_END_IGNORE_DEPRECATIONS
       if (startup_id && g_utf8_validate (startup_id, -1, NULL))
         {
           g_variant_builder_add (builder, "{sv}", "activation-token",
