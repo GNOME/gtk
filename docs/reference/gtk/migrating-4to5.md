@@ -114,3 +114,8 @@ Instead of gtk_show_uri(), you should use GtkUriLauncher or GtkFileLauncher.
 
 This is an oldfashioned widget that does not do all that much anymore, since
 it no longer has a resize handle for the window.
+
+## GtkLockButton is going away
+
+This is an very specialized widget that should better live with the application
+where it is used.
