@@ -177,7 +177,7 @@
 #include <gtk/gtklistitemfactory.h>
 #include <gtk/deprecated/gtkliststore.h>
 #include <gtk/gtklistview.h>
-#include <gtk/gtklockbutton.h>
+#include <gtk/deprecated/gtklockbutton.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmaplistmodel.h>
 #include <gtk/gtkmediacontrols.h>

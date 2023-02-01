@@ -2432,6 +2432,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   widget = (GtkWidget *)gtk_builder_get_object (builder, "record_button");
   g_object_set_data (G_OBJECT (window), "record_button", widget);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   widget = (GtkWidget *)gtk_builder_get_object (builder, "lockbox");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "lockbutton");
   g_object_set_data (G_OBJECT (window), "lockbutton", widget2);
@@ -2449,6 +2450,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                           G_BINDING_SYNC_CREATE);
   gtk_lock_button_set_permission (GTK_LOCK_BUTTON (widget2), permission);
   g_object_unref (permission);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "iconview1");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "increase_button");

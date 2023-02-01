@@ -28,6 +28,8 @@
 #include "gtkstack.h"
 #include "gtkprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkLockButton:
  *
