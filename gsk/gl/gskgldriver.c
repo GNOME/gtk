@@ -1377,7 +1377,6 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
   texture->texture_id = 0;
   gsk_gl_texture_free (texture);
 
-  gdk_gl_context_make_current (state->context);
   state->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   return gdk_gl_texture_new_with_sync (self->command_queue->context,
