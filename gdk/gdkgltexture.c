@@ -73,8 +73,8 @@ gdk_gl_texture_dispose (GObject *object)
 }
 
 typedef void (* GLFunc) (GdkGLTexture *self,
-                         gpointer      data,
-                         GdkGLContext *context);
+                         GdkGLContext *context,
+                         gpointer      data);
 
 typedef struct _InvokeData
 {
@@ -95,7 +95,7 @@ gdk_gl_texture_invoke_callback (gpointer data)
   gdk_gl_context_make_current (context);
   glBindTexture (GL_TEXTURE_2D, invoke->self->id);
 
-  invoke->func (invoke->self, invoke->data, context);
+  invoke->func (invoke->self, context, invoke->data);
 
   g_atomic_int_set (&invoke->spinlock, 1);
 
@@ -150,8 +150,8 @@ gdk_gl_texture_find_format (gboolean         use_es,
 
 static inline void
 gdk_gl_texture_do_download (GdkGLTexture *self,
-                            gpointer      download_,
-                            GdkGLContext *context)
+                            GdkGLContext *context,
+                            gpointer      download_)
 {
   GdkTexture *texture = GDK_TEXTURE (self);
   gsize expected_stride;
