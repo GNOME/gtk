@@ -35,6 +35,7 @@
 #include "gtkplacessidebarprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkdebug.h"
 
 G_BEGIN_DECLS
 
@@ -127,10 +128,10 @@ void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 
 gboolean        gtk_simulate_touchscreen (void);
 
-void  gtk_set_display_debug_flags (GdkDisplay *display,
-                                   guint       flags);
-guint gtk_get_display_debug_flags (GdkDisplay *display);
-gboolean gtk_get_any_display_debug_flag_set (void);
+void            gtk_set_display_debug_flags        (GdkDisplay    *display,
+                                                    GtkDebugFlags  flags);
+GtkDebugFlags   gtk_get_display_debug_flags        (GdkDisplay    *display);
+gboolean        gtk_get_any_display_debug_flag_set (void);
 
 GBytes *get_emoji_data (void);
 
