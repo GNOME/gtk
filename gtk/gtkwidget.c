@@ -8494,19 +8494,18 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
   GtkWidget *parent;
   GtkWidget *bounds_relative_to;
   double translated_x, translated_y;
-  graphene_rect_t *bounds;
-   
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT_ZERO;
+
   widget = GTK_WIDGET (self);
   if (!gtk_widget_get_realized (widget))
-    return false;
+    return FALSE;
 
   parent = gtk_widget_get_parent (widget);
-
-  if (parent)
+  if (parent != NULL)
     {
       gtk_widget_translate_coordinates (widget, parent, 0., 0., &translated_x, &translated_y);
-      *x = (int)translated_x;
-      *y = (int)translated_y;
+      *x = floorf (translated_x);
+      *y = floorf (translated_y);
       bounds_relative_to = parent;
     }
   else
@@ -8515,14 +8514,18 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
       bounds_relative_to = widget;
     }
 
-  bounds = graphene_rect_alloc ();
-  if (!gtk_widget_compute_bounds (widget, bounds_relative_to, bounds))
-    *width, *height = 0;
-    *width = (int)graphene_rect_get_width (bounds);
-  *height = (int)graphene_rect_get_height (bounds);
-  graphene_rect_free (bounds);
+  if (!gtk_widget_compute_bounds (widget, bounds_relative_to, &bounds))
+    {
+      *width = 0;
+      *height = 0;
+    }
+  else
+    {
+      *width = ceilf (graphene_rect_get_width (&bounds));
+      *height = ceilf (graphene_rect_get_height (&bounds));
+    }
 
-  return true;
+  return TRUE;
 }
 
 static void
