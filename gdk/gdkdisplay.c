@@ -2408,6 +2408,13 @@ gdk_error_trap_pop (void)
   return gdk_error_trap_pop_internal (TRUE);
 }
 
+gboolean
+gdk_display_is_gl_context_current (GdkDisplay   *display,
+                                   GdkGLContext *context)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->is_gl_context_current (display, context);
+}
+
 /*< private >
  * gdk_display_make_gl_context_current:
  * @display: a #GdkDisplay

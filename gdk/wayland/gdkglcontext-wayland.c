@@ -525,6 +525,15 @@ gdk_x11_gl_context_dispose (GObject *gobject)
 }
 
 gboolean
+gdk_wayland_display_is_gl_context_current (GdkDisplay   *display,
+                                           GdkGLContext *context)
+{
+  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
+
+  return context_wayland->egl_context == eglGetCurrentContext ();
+}
+
+gboolean
 gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
                                              GdkGLContext *context)
 {

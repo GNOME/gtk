@@ -1299,6 +1299,15 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 }
 
 gboolean
+gdk_x11_display_is_gl_context_current (GdkDisplay   *display,
+                                       GdkGLContext *context)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
+
+  return context_x11->glx_context == glXGetCurrentContext ();
+}
+
+gboolean
 gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
                                          GdkGLContext *context)
 {

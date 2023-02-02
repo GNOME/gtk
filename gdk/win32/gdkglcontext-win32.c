@@ -834,6 +834,15 @@ gdk_win32_gl_context_realize_wgl (GdkGLContext  *context,
 }
 
 static gboolean
+gdk_win32_display_is_wgl_context_current (GdkDisplay   *display,
+                                          GdkGLContext *context)
+{
+  GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
+
+  return context_wgl->wgl_context == wglGetCurrentContext ();
+}
+
+static gboolean
 gdk_win32_display_make_wgl_context_current (GdkDisplay   *display,
                                             GdkGLContext *context)
 {
@@ -1305,6 +1314,15 @@ gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window)
 }
 
 static gboolean
+gdk_win32_display_is_egl_context_current (GdkDisplay   *display,
+                                          GdkGLContext *context)
+{
+  GdkWin32GLContextEGL *context_egl = GDK_WIN32_GL_CONTEXT_EGL (context);
+
+  return context_egl->egl_context == eglGetCurrentContext ();
+}
+
+static gboolean
 gdk_win32_display_make_egl_context_current (GdkDisplay   *display,
                                             GdkGLContext *context)
 {
@@ -1525,6 +1543,22 @@ gdk_win32_window_create_gl_context (GdkWindow *window,
   context_win32->is_attached = attached;
 
   return GDK_GL_CONTEXT (context_win32);
+}
+
+gboolean
+gdk_win32_display_is_gl_context_current (GdkDisplay   *display,
+                                         GdkGLContext *context)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+
+  if (display_win32->gl_type == GDK_WIN32_GL_WGL)
+    return gdk_win32_display_is_wgl_context_current (display, context);
+
+  if (display_win32->gl_type == GDK_WIN32_GL_EGL)
+    return gdk_win32_display_is_egl_context_current (display, context);
+
+  g_assert_not_reached ();
+  return TRUE;
 }
 
 gboolean

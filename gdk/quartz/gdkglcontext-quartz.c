@@ -180,6 +180,15 @@ gdk_quartz_gl_context_dispose (GObject *gobject)
 }
 
 gboolean
+gdk_quartz_display_is_gl_context_current (GdkDisplay   *display,
+                                          GdkGLContext *context)
+{
+  GdkQuartzGLContext *context_quartz = GDK_QUARTZ_GL_CONTEXT (context);
+
+  return context_quartz->gl_context == [NSOpenGLContext currentContext];
+}
+
+gboolean
 gdk_quartz_display_make_gl_context_current (GdkDisplay   *display,
                                             GdkGLContext *context)
 {

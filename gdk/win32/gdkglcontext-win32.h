@@ -58,6 +58,10 @@ gdk_win32_window_invalidate_for_new_frame   (GdkWindow      *window,
                                              cairo_region_t *update_area);
 
 gboolean
+gdk_win32_display_is_gl_context_current     (GdkDisplay     *display,
+                                             GdkGLContext   *context);
+
+gboolean
 gdk_win32_display_make_gl_context_current   (GdkDisplay     *display,
                                              GdkGLContext   *context);
 

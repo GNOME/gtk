@@ -719,6 +719,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
   display_class->get_monitor_at_window = gdk_quartz_display_get_monitor_at_window;
+  display_class->is_gl_context_current = gdk_quartz_display_is_gl_context_current;
   display_class->make_gl_context_current = gdk_quartz_display_make_gl_context_current;
 
   /**

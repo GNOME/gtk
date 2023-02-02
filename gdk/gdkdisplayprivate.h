@@ -237,6 +237,8 @@ struct _GdkDisplayClass
   gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
                                                         const gchar    *text);
 
+  gboolean               (*is_gl_context_current)      (GdkDisplay        *display,
+                                                        GdkGLContext      *context);
   gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
                                                         GdkGLContext      *context);
 
@@ -329,6 +331,8 @@ void                _gdk_display_create_window_impl   (GdkDisplay       *display
                                                        gint              attributes_mask);
 GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display);
 
+gboolean            gdk_display_is_gl_context_current (GdkDisplay        *display,
+                                                       GdkGLContext      *context);
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);
 
