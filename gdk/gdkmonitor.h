@@ -86,6 +86,8 @@ GDK_AVAILABLE_IN_ALL
 GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
 gboolean          gdk_monitor_is_valid            (GdkMonitor   *monitor);
+GDK_AVAILABLE_IN_4_10
+const char *      gdk_monitor_get_description     (GdkMonitor   *monitor);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMonitor, g_object_unref)
 
