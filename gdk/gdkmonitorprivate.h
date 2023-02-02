@@ -37,6 +37,7 @@ struct _GdkMonitor {
   char *manufacturer;
   char *model;
   char *connector;
+  char *description;
   GdkRectangle geometry;
   int width_mm;
   int height_mm;
@@ -70,6 +71,8 @@ void            gdk_monitor_set_refresh_rate    (GdkMonitor *monitor,
 void            gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
                                                  GdkSubpixelLayout  subpixel);
 void            gdk_monitor_invalidate          (GdkMonitor *monitor);
+void            gdk_monitor_set_description     (GdkMonitor *monitor,
+                                                 const char *description);
 
 G_END_DECLS
 

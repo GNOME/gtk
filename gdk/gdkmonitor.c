@@ -39,6 +39,7 @@
 
 enum {
   PROP_0,
+  PROP_DESCRIPTION,
   PROP_DISPLAY,
   PROP_MANUFACTURER,
   PROP_MODEL,
@@ -81,6 +82,10 @@ gdk_monitor_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, monitor->description);
+      break;
+
     case PROP_DISPLAY:
       g_value_set_object (value, monitor->display);
       break;
@@ -154,6 +159,7 @@ gdk_monitor_finalize (GObject *object)
 {
   GdkMonitor *monitor = GDK_MONITOR (object);
 
+  g_free (monitor->description);
   g_free (monitor->connector);
   g_free (monitor->manufacturer);
   g_free (monitor->model);
@@ -169,6 +175,18 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   object_class->finalize = gdk_monitor_finalize;
   object_class->get_property = gdk_monitor_get_property;
   object_class->set_property = gdk_monitor_set_property;
+
+  /**
+   * GdkMonitor:description: (attributes org.gtk.Property.get=gdk_monitor_get_description)
+   *
+   * A short description of the monitor, meant for display to the user.
+   *
+   * Since: 4.10
+   */
+  props[PROP_DESCRIPTION] =
+    g_param_spec_string ("description", NULL, NULL,
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkMonitor:display: (attributes org.gtk.Property.get=gdk_monitor_get_display)
@@ -376,6 +394,10 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
  * @monitor: a `GdkMonitor`
  *
  * Gets the name of the monitor's connector, if available.
+ *
+ * These are strings such as "eDP-1", or "HDMI-2". They depend
+ * on software and hardware configuration, and should not be
+ * relied on as stable identifiers of a specific monitor.
  *
  * Returns: (transfer none) (nullable): the name of the connector
  */
@@ -619,3 +641,33 @@ gdk_monitor_is_valid (GdkMonitor *monitor)
 
   return monitor->valid;
 }
+
+/**
+ * gdk_monitor_get_description: (attributes org.gtk.Method.get_property=description)
+ * @monitor: a `GdkMonitor`
+ *
+ * Gets a string describing the monitor, if available.
+ *
+ * This can be used to identify a monitor in the UI.
+ *
+ * Returns: (transfer none) (nullable): the monitor description
+ *
+ * Since: 4.10
+ */
+const char *
+gdk_monitor_get_description (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), NULL);
+
+  return monitor->description;
+}
+
+void
+gdk_monitor_set_description (GdkMonitor *monitor,
+                             const char *description)
+{
+  g_free (monitor->description);
+  monitor->description = g_strdup (description);
+  g_object_notify_by_pspec (G_OBJECT (monitor), props[PROP_DESCRIPTION]);
+}
+
