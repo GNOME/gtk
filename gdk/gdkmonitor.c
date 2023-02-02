@@ -377,6 +377,10 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
  *
  * Gets the name of the monitor's connector, if available.
  *
+ * These are strings such as "eDP-1", or "HDMI-2". They depend
+ * on software and hardware configuration, and should not be
+ * relied on as stable identifiers of a specific monitor.
+ *
  * Returns: (transfer none) (nullable): the name of the connector
  */
 const char *
