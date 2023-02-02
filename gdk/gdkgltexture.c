@@ -53,10 +53,8 @@ struct _GdkGLTextureClass {
 G_DEFINE_TYPE (GdkGLTexture, gdk_gl_texture, GDK_TYPE_TEXTURE)
 
 static void
-gdk_gl_texture_dispose (GObject *object)
+drop_gl_resources (GdkGLTexture *self)
 {
-  GdkGLTexture *self = GDK_GL_TEXTURE (object);
-
   if (self->destroy)
     {
       self->destroy (self->data);
@@ -66,6 +64,14 @@ gdk_gl_texture_dispose (GObject *object)
 
   g_clear_object (&self->context);
   self->id = 0;
+}
+
+static void
+gdk_gl_texture_dispose (GObject *object)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (object);
+
+  drop_gl_resources (self);
 
   g_clear_object (&self->saved);
 
@@ -301,15 +307,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
   self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture,
                                                               gdk_texture_get_format (texture)));
 
-  if (self->destroy)
-    {
-      self->destroy (self->data);
-      self->destroy = NULL;
-      self->data = NULL;
-    }
-
-  g_clear_object (&self->context);
-  self->id = 0;
+  drop_gl_resources (self);
 }
 
 static void
