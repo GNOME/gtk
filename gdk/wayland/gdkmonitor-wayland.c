@@ -46,6 +46,7 @@ gdk_wayland_monitor_finalize (GObject *object)
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)object;
 
   g_free (monitor->name);
+  g_free (monitor->description);
 
   g_clear_pointer (&monitor->xdg_output, zxdg_output_v1_destroy);
 

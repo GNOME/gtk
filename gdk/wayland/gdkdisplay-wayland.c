@@ -2326,6 +2326,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
                               monitor->x, monitor->y,
                               monitor->width, monitor->height });
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
+  gdk_monitor_set_description (GDK_MONITOR (monitor), monitor->description);
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
 
@@ -2382,7 +2383,7 @@ xdg_output_handle_name (void                  *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
-  GDK_DEBUG (MISC, "handle name xdg-output %d", monitor->id);
+  GDK_DEBUG (MISC, "handle name xdg-output %d: %s", monitor->id, name);
 
   monitor->name = g_strdup (name);
 }
@@ -2392,8 +2393,11 @@ xdg_output_handle_description (void                  *data,
                                struct zxdg_output_v1 *xdg_output,
                                const char            *description)
 {
-  GDK_DEBUG (MISC, "handle description xdg-output %d",
-                   ((GdkWaylandMonitor *)data)->id);
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_DEBUG (MISC, "handle description xdg-output %d: %s", monitor->id, description);
+
+  monitor->description = g_strdup (description);
 }
 
 static const struct zxdg_output_v1_listener xdg_output_listener = {
