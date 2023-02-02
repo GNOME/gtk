@@ -3046,7 +3046,7 @@ theme_lookup_icon (IconTheme   *theme,
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
   int min_difference;
-  IconCacheFlag min_suffix;
+  IconCacheFlag min_suffix = ICON_CACHE_FLAG_PNG_SUFFIX;
   int i;
 
   min_difference = G_MAXINT;
