@@ -832,6 +832,8 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
  * if no ID has been defined.
  *
  * Returns: (nullable): the startup notification ID for @display
+ *
+ * Deprecated: 4.10.
  */
 const char *
 gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
@@ -853,6 +855,8 @@ gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
  * The startup ID is also what is used to signal that the startup is
  * complete (for example, when opening a window or when calling
  * [method@Gdk.Display.notify_startup_complete]).
+ *
+ * Deprecated: 4.10. Use [method@Gdk.Toplevel.set_startup_id]
  */
 void
 gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
@@ -981,7 +985,9 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->queue_events = _gdk_wayland_display_queue_events;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
+G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
   display_class->create_surface = _gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;

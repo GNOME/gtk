@@ -53,9 +53,9 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const char *name,
                                                                  int          size);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char *           gdk_wayland_display_get_startup_notification_id (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10_FOR(gdk_toplevel_set_startup_id)
 void                    gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
                                                                          const char *startup_id);
 
