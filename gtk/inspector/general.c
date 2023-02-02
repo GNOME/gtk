@@ -650,6 +650,7 @@ add_monitor (GtkInspectorGeneral *gen,
   g_free (value);
   g_free (name);
 
+  add_label_row (gen, list, "Description", gdk_monitor_get_description (monitor), 10);
   add_label_row (gen, list, "Connector", gdk_monitor_get_connector (monitor), 10);
 
   gdk_monitor_get_geometry (monitor, &rect);
