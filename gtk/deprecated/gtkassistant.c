@@ -88,6 +88,8 @@
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _GtkAssistantPageClass   GtkAssistantPageClass;
 
 struct _GtkAssistantPage

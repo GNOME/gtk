@@ -6,6 +6,8 @@
 
 #include "demo_conf.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *main_window;
 static GFile *filename = NULL;
 static GtkPageSetup *page_setup = NULL;

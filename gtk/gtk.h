@@ -46,7 +46,7 @@
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkapplicationwindow.h>
 #include <gtk/gtkaspectframe.h>
-#include <gtk/gtkassistant.h>
+#include <gtk/deprecated/gtkassistant.h>
 #include <gtk/gtkatcontext.h>
 #include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbitset.h>

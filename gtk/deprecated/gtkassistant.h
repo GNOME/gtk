@@ -103,81 +103,81 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_assistant_page_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_assistant_get_type              (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget            *gtk_assistant_new                   (void);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_next_page             (GtkAssistant         *assistant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_previous_page         (GtkAssistant         *assistant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int                   gtk_assistant_get_current_page      (GtkAssistant         *assistant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_set_current_page      (GtkAssistant         *assistant,
                                                            int                   page_num);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int                   gtk_assistant_get_n_pages           (GtkAssistant         *assistant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget            *gtk_assistant_get_nth_page          (GtkAssistant         *assistant,
                                                            int                   page_num);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int                   gtk_assistant_prepend_page          (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int                   gtk_assistant_append_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 int                   gtk_assistant_insert_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            int                   position);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_remove_page           (GtkAssistant         *assistant,
                                                            int                   page_num);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
                                                            GtkAssistantPageFunc  page_func,
                                                            gpointer              data,
                                                            GDestroyNotify        destroy);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_set_page_type         (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            GtkAssistantPageType  type);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkAssistantPageType  gtk_assistant_get_page_type         (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_set_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            const char           *title);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_set_page_complete     (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            gboolean              complete);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean              gtk_assistant_get_page_complete     (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_add_action_widget     (GtkAssistant         *assistant,
                                                            GtkWidget            *child);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_remove_action_widget  (GtkAssistant         *assistant,
                                                            GtkWidget            *child);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_update_buttons_state  (GtkAssistant *assistant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkAssistantPage *    gtk_assistant_get_page       (GtkAssistant     *assistant,
                                                     GtkWidget        *child);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *           gtk_assistant_page_get_child (GtkAssistantPage *page);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GListModel *          gtk_assistant_get_pages (GtkAssistant *assistant);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAssistant, g_object_unref)
