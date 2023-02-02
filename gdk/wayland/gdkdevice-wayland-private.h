@@ -217,6 +217,9 @@ struct _GdkWaylandSeat
   GdkCursor *grab_cursor;
 };
 
+#define GDK_TYPE_WAYLAND_DEVICE_PAD (gdk_wayland_device_pad_get_type ())
+GType gdk_wayland_device_pad_get_type (void);
+
 void gdk_wayland_device_query_state (GdkDevice        *device,
                                      GdkSurface       *surface,
                                      double           *win_x,
@@ -227,5 +230,8 @@ void gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
                                           GdkDevicePadFeature  feature,
                                           guint                feature_idx,
                                           const char          *label);
+
+GdkWaylandTabletPadData * gdk_wayland_seat_find_pad (GdkWaylandSeat *seat,
+                                                     GdkDevice      *device);
 
 #endif
