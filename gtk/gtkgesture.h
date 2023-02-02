@@ -51,7 +51,7 @@ GDK_AVAILABLE_IN_ALL
 GtkEventSequenceState
             gtk_gesture_get_sequence_state   (GtkGesture            *gesture,
                                               GdkEventSequence      *sequence);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean    gtk_gesture_set_sequence_state   (GtkGesture            *gesture,
                                               GdkEventSequence      *sequence,
                                               GtkEventSequenceState  state);

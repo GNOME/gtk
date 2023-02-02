@@ -2218,7 +2218,9 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
                gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_CLAIMED)
         continue;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       retval = gtk_gesture_set_sequence_state (gesture, seq, gesture_state);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (retval || gesture == emitter)
         {
