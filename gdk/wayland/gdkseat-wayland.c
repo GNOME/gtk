@@ -292,19 +292,13 @@ struct _GdkWaylandSeat
 
 G_DEFINE_TYPE (GdkWaylandSeat, gdk_wayland_seat, GDK_TYPE_SEAT)
 
-struct _GdkWaylandDevice
+typedef struct
 {
-  GdkDevice parent_instance;
   GdkWaylandTouchData *emulating_touch; /* Only used on wd->logical_touch */
   GdkWaylandPointerData *pointer;
-};
+} GdkWaylandDevicePrivate;
 
-struct _GdkWaylandDeviceClass
-{
-  GdkDeviceClass parent_class;
-};
-
-G_DEFINE_TYPE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
 
 struct _GdkWaylandDevicePad
 {
@@ -387,12 +381,51 @@ gdk_wayland_seat_find_pad (GdkWaylandSeat *seat,
   return NULL;
 }
 
+static GdkWaylandPointerData *
+gdk_wayland_device_get_pointer (GdkWaylandDevice *wayland_device)
+{
+  GdkWaylandDevicePrivate *priv =
+    gdk_wayland_device_get_instance_private (wayland_device);
+
+  return priv->pointer;
+}
+
+static void
+gdk_wayland_device_set_pointer (GdkWaylandDevice      *wayland_device,
+                                GdkWaylandPointerData *pointer)
+{
+  GdkWaylandDevicePrivate *priv =
+    gdk_wayland_device_get_instance_private (wayland_device);
+
+  priv->pointer = pointer;
+}
+
+static GdkWaylandTouchData *
+gdk_wayland_device_get_emulating_touch (GdkWaylandDevice *wayland_device)
+{
+  GdkWaylandDevicePrivate *priv =
+    gdk_wayland_device_get_instance_private (wayland_device);
+
+  return priv->emulating_touch;
+}
+
+static void
+gdk_wayland_device_set_emulating_touch (GdkWaylandDevice    *wayland_device,
+                                        GdkWaylandTouchData *touch)
+{
+  GdkWaylandDevicePrivate *priv =
+    gdk_wayland_device_get_instance_private (wayland_device);
+
+  priv->emulating_touch = touch;
+}
 
 static gboolean
 gdk_wayland_device_update_surface_cursor (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
   struct wl_buffer *buffer;
   int x, y, w, h, scale;
   guint next_image_index, next_image_delay;
@@ -497,7 +530,9 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
                                        GdkCursor  *cursor)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
 
   if (device == seat->logical_touch)
     return;
@@ -540,7 +575,9 @@ static GdkModifierType
 device_get_modifiers (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
   GdkModifierType mask;
 
   mask = seat->key_modifiers;
@@ -558,13 +595,14 @@ gdk_wayland_device_query_state (GdkDevice        *device,
                                 double           *win_y,
                                 GdkModifierType  *mask)
 {
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer;
   double x, y;
 
   if (mask)
     *mask = device_get_modifiers (device);
 
-  pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  pointer = gdk_wayland_device_get_pointer (wayland_device);
 
   if (pointer->focus == surface)
     {
@@ -669,13 +707,14 @@ GdkSurface *
 gdk_wayland_device_get_focus (GdkDevice *device)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer;
 
   if (device == wayland_seat->logical_keyboard)
     return wayland_seat->keyboard_focus;
   else
     {
-      pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+      pointer = gdk_wayland_device_get_pointer (wayland_device);
 
       if (pointer)
         return pointer->focus;
@@ -730,7 +769,9 @@ gdk_wayland_device_grab (GdkDevice    *device,
                          guint32       time_)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
 
   if (GDK_IS_DRAG_SURFACE (surface) &&
       gdk_surface_get_mapped (surface))
@@ -781,7 +822,9 @@ static void
 gdk_wayland_device_ungrab (GdkDevice *device,
                            guint32    time_)
 {
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
   GdkSurface *prev_focus;
 
   prev_focus = device_maybe_emit_ungrab_crossing (device, time_);
@@ -810,9 +853,10 @@ gdk_wayland_device_surface_at_position (GdkDevice       *device,
                                         double          *win_y,
                                         GdkModifierType *mask)
 {
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer;
 
-  pointer = GDK_WAYLAND_DEVICE(device)->pointer;
+  pointer = gdk_wayland_device_get_pointer (wayland_device);
 
   if (!pointer)
     return NULL;
@@ -2476,9 +2520,10 @@ static void
 mimic_pointer_emulating_touch_info (GdkDevice           *device,
                                     GdkWaylandTouchData *touch)
 {
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer;
 
-  pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  pointer = gdk_wayland_device_get_pointer (wayland_device);
   g_set_object (&pointer->focus, touch->surface);
   pointer->press_serial = pointer->enter_serial = touch->touch_down_serial;
   pointer->surface_x = touch->x;
@@ -2492,7 +2537,7 @@ touch_handle_logical_pointer_crossing (GdkWaylandSeat      *seat,
 {
   GdkWaylandPointerData *pointer;
 
-  pointer = GDK_WAYLAND_DEVICE (seat->logical_touch)->pointer;
+  pointer = gdk_wayland_device_get_pointer (GDK_WAYLAND_DEVICE (seat->logical_touch));
 
   if (pointer->focus == touch->surface)
     return;
@@ -2547,7 +2592,8 @@ touch_handle_down (void              *data,
   if (touch->initial_touch)
     {
       touch_handle_logical_pointer_crossing (seat, touch, time);
-      GDK_WAYLAND_DEVICE(seat->logical_touch)->emulating_touch = touch;
+      gdk_wayland_device_set_emulating_touch (GDK_WAYLAND_DEVICE (seat->logical_touch),
+                                              touch);
       mimic_pointer_emulating_touch_info (seat->logical_touch, touch);
     }
 
@@ -2596,7 +2642,8 @@ touch_handle_up (void            *data,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   if (touch->initial_touch)
-    GDK_WAYLAND_DEVICE(seat->logical_touch)->emulating_touch = NULL;
+    gdk_wayland_device_set_emulating_touch (GDK_WAYLAND_DEVICE (seat->logical_touch),
+                                            NULL);
 
   gdk_wayland_seat_remove_touch (seat, id);
 }
@@ -2658,11 +2705,8 @@ touch_handle_cancel (void            *data,
   GHashTableIter iter;
   GdkEvent *event;
 
-  if (GDK_WAYLAND_DEVICE (seat->logical_touch)->emulating_touch)
-    {
-      touch = GDK_WAYLAND_DEVICE (seat->logical_touch)->emulating_touch;
-      GDK_WAYLAND_DEVICE (seat->logical_touch)->emulating_touch = NULL;
-    }
+  gdk_wayland_device_set_emulating_touch (GDK_WAYLAND_DEVICE (seat->logical_touch),
+                                          NULL);
 
   g_hash_table_iter_init (&iter, seat->touches);
 
@@ -3095,7 +3139,9 @@ tablet_handle_done (void                 *data,
                                  "display", display,
                                  "seat", seat,
                                  NULL);
-  GDK_WAYLAND_DEVICE (logical_device)->pointer = &tablet->pointer_info;
+
+  gdk_wayland_device_set_pointer (GDK_WAYLAND_DEVICE (logical_device),
+                                  &tablet->pointer_info);
 
   stylus_device = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                 "name", tablet->name,
@@ -3328,7 +3374,9 @@ seat_handle_capabilities (void                    *data,
                                          "display", seat->display,
                                          "seat", seat,
                                          NULL);
-      GDK_WAYLAND_DEVICE (seat->logical_touch)->pointer = &seat->touch_info;
+
+      gdk_wayland_device_set_pointer (GDK_WAYLAND_DEVICE (seat->logical_touch),
+                                      &seat->touch_info);
       _gdk_device_set_associated_device (seat->logical_touch, seat->logical_keyboard);
       gdk_seat_device_added (GDK_SEAT (seat), seat->logical_touch);
 
@@ -4601,7 +4649,8 @@ init_devices (GdkWaylandSeat *seat)
                                        "seat", seat,
                                        NULL);
 
-  GDK_WAYLAND_DEVICE (seat->logical_pointer)->pointer = &seat->pointer_info;
+  gdk_wayland_device_set_pointer (GDK_WAYLAND_DEVICE (seat->logical_pointer),
+                                  &seat->pointer_info);
 
   /* keyboard */
   seat->logical_keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -4625,7 +4674,9 @@ static void
 pointer_surface_update_scale (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
+  GdkWaylandPointerData *pointer =
+    gdk_wayland_device_get_pointer (wayland_device);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   guint32 scale;
   GSList *l;
@@ -5255,9 +5306,11 @@ gdk_wayland_device_unset_touch_grab (GdkDevice        *gdk_device,
   touch = gdk_wayland_seat_get_touch (seat,
                                       GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
 
-  if (GDK_WAYLAND_DEVICE (seat->logical_touch)->emulating_touch == touch)
+  if (touch ==
+      gdk_wayland_device_get_emulating_touch (GDK_WAYLAND_DEVICE (seat->logical_touch)))
     {
-      GDK_WAYLAND_DEVICE (seat->logical_touch)->emulating_touch = NULL;
+      gdk_wayland_device_set_emulating_touch (GDK_WAYLAND_DEVICE (seat->logical_touch),
+                                              NULL);
       emulate_touch_crossing (touch->surface, NULL,
                               seat->logical_touch, seat->touch,
                               touch, GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL,

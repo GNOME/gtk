@@ -3,6 +3,18 @@
 
 #include "gdkwaylanddevice.h"
 
+#include <gdk/gdkdeviceprivate.h>
+
+struct _GdkWaylandDevice
+{
+  GdkDevice parent_instance;
+};
+
+struct _GdkWaylandDeviceClass
+{
+  GdkDeviceClass parent_class;
+};
+
 void gdk_wayland_device_query_state (GdkDevice        *device,
                                      GdkSurface       *surface,
                                      double           *win_x,
