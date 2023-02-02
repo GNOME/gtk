@@ -64,6 +64,7 @@ gtk/deprecated/gtkappchooserbutton.c
 gtk/deprecated/gtkappchooser.c
 gtk/deprecated/gtkappchooserdialog.c
 gtk/deprecated/gtkappchooserwidget.c
+gtk/deprecated/gtkassistant.c
 gtk/deprecated/gtkcellareabox.c
 gtk/deprecated/gtkcellarea.c
 gtk/deprecated/gtkcellareacontext.c
@@ -89,7 +90,9 @@ gtk/deprecated/gtkfontbutton.c
 gtk/deprecated/gtkfontchooser.c
 gtk/deprecated/gtkiconview.c
 gtk/deprecated/gtkliststore.c
+gtk/deprecated/gtklockbutton.c
 gtk/deprecated/gtkshow.c
+gtk/deprecated/gtkstatusbar.c
 gtk/deprecated/gtkstylecontext.c
 gtk/deprecated/gtktreednd.c
 gtk/deprecated/gtktreemodel.c
@@ -114,7 +117,6 @@ gtk/gtkapplication-dbus.c
 gtk/gtkapplication-quartz.c
 gtk/gtkapplicationwindow.c
 gtk/gtkaspectframe.c
-gtk/gtkassistant.c
 gtk/gtkbookmarklist.c
 gtk/gtkbookmarksmanager.c
 gtk/gtkboolfilter.c
@@ -223,7 +225,6 @@ gtk/gtklistbox.c
 gtk/gtklistitem.c
 gtk/gtklistitemwidget.c
 gtk/gtklistview.c
-gtk/gtklockbutton.c
 gtk/gtkmagnifier.c
 gtk/gtkmaplistmodel.c
 gtk/gtkmediacontrols.c
@@ -313,7 +314,6 @@ gtk/gtkspinner.c
 gtk/gtkstack.c
 gtk/gtkstacksidebar.c
 gtk/gtkstackswitcher.c
-gtk/gtkstatusbar.c
 gtk/gtkstringfilter.c
 gtk/gtkstringsorter.c
 gtk/gtkstyleproperty.c
