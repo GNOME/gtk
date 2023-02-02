@@ -502,6 +502,18 @@ gdk_gl_context_real_is_shared (GdkGLContext *self,
 }
 
 static gboolean
+gdk_gl_context_real_is_current (GdkGLContext *self)
+{
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  return priv->egl_context == eglGetCurrentContext ();
+#else
+  return TRUE;
+#endif
+}
+
+static gboolean
 gdk_gl_context_real_clear_current (GdkGLContext *context)
 {
 #ifdef HAVE_EGL
@@ -670,6 +682,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   klass->is_shared = gdk_gl_context_real_is_shared;
   klass->make_current = gdk_gl_context_real_make_current;
   klass->clear_current = gdk_gl_context_real_clear_current;
+  klass->is_current = gdk_gl_context_real_is_current;
   klass->get_default_framebuffer = gdk_gl_context_real_get_default_framebuffer;
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
@@ -1551,6 +1564,12 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->extensions_checked = TRUE;
 }
 
+static gboolean
+gdk_gl_context_check_is_current (GdkGLContext *context)
+{
+  return GDK_GL_CONTEXT_GET_CLASS (context)->is_current (context);
+}
+
 /**
  * gdk_gl_context_make_current:
  * @context: a `GdkGLContext`
@@ -1569,7 +1588,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
   masked_context = mask_context (context, surfaceless);
 
   current = g_private_get (&thread_current_context);
-  if (current == masked_context)
+  if (current == masked_context && gdk_gl_context_check_is_current (context))
     return;
 
   /* we need to realize the GdkGLContext if it wasn't explicitly realized */
@@ -1740,10 +1759,18 @@ GdkGLContext *
 gdk_gl_context_get_current (void)
 {
   MaskedContext *current;
+  GdkGLContext *context;
 
   current = g_private_get (&thread_current_context);
+  context = unmask_context (current);
 
-  return unmask_context (current);
+  if (context && !gdk_gl_context_check_is_current (context))
+    {
+      g_private_replace (&thread_current_context, NULL);
+      context = NULL;
+    }
+
+  return context;
 }
 
 gboolean

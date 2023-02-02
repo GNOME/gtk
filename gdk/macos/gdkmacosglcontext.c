@@ -549,6 +549,14 @@ gdk_macos_gl_context_clear_current (GdkGLContext *context)
 }
 
 static gboolean
+gdk_macos_gl_context_is_current (GdkGLContext *context)
+{
+  GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
+
+  return self->cgl_context == CGLGetCurrentContext ();
+}
+
+static gboolean
 gdk_macos_gl_context_make_current (GdkGLContext *context,
                                    gboolean      surfaceless)
 {
@@ -639,6 +647,7 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
 
   gl_class->get_damage = gdk_macos_gl_context_get_damage;
   gl_class->clear_current = gdk_macos_gl_context_clear_current;
+  gl_class->is_current = gdk_macos_gl_context_is_current;
   gl_class->make_current = gdk_macos_gl_context_make_current;
   gl_class->realize = gdk_macos_gl_context_real_realize;
   gl_class->get_default_framebuffer = gdk_macos_gl_context_get_default_framebuffer;
