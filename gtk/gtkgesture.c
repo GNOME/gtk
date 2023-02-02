@@ -69,7 +69,7 @@
  *
  * Within a widget, gestures can be grouped through [method@Gtk.Gesture.group].
  * Grouped gestures synchronize the state of sequences, so calling
- * [method@Gtk.Gesture.set_sequence_state] on one will effectively propagate
+ * [method@Gtk.Gesture.set_state] on one will effectively propagate
  * the state throughout the group.
  *
  * By default, all sequences start out in the %GTK_EVENT_SEQUENCE_NONE state,
@@ -99,7 +99,7 @@
  * again.
  *
  * Sequence states can't be changed freely.
- * See [method@Gtk.Gesture.set_sequence_state] to know about the possible
+ * See [method@Gtk.Gesture.set_state] to know about the possible
  * lifetimes of a `GdkEventSequence`.
  *
  * ## Touchpad gestures
@@ -519,7 +519,9 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
       else
         state = gtk_gesture_get_group_state (gesture, sequence);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_gesture_set_sequence_state (gesture, sequence, state);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   return TRUE;
@@ -1017,6 +1019,8 @@ gtk_gesture_get_sequence_state (GtkGesture       *gesture,
  *
  * Returns: %TRUE if @sequence is handled by @gesture,
  *   and the state is changed successfully
+ *
+ * Deprecated: 4.10. Use [method@Gtk.Gesture.set_state]
  */
 gboolean
 gtk_gesture_set_sequence_state (GtkGesture            *gesture,
@@ -1069,8 +1073,46 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
  * Sets the state of all sequences that @gesture is currently
  * interacting with.
  *
- * See [method@Gtk.Gesture.set_sequence_state] for more details
- * on sequence states.
+ * Sequences start in state %GTK_EVENT_SEQUENCE_NONE, and whenever
+ * they change state, they can never go back to that state. Likewise,
+ * sequences in state %GTK_EVENT_SEQUENCE_DENIED cannot turn back to
+ * a not denied state. With these rules, the lifetime of an event
+ * sequence is constrained to the next four:
+ *
+ * * None
+ * * None → Denied
+ * * None → Claimed
+ * * None → Claimed → Denied
+ *
+ * Note: Due to event handling ordering, it may be unsafe to set the
+ * state on another gesture within a [signal@Gtk.Gesture::begin] signal
+ * handler, as the callback might be executed before the other gesture
+ * knows about the sequence. A safe way to perform this could be:
+ *
+ * ```c
+ * static void
+ * first_gesture_begin_cb (GtkGesture       *first_gesture,
+ *                         GdkEventSequence *sequence,
+ *                         gpointer          user_data)
+ * {
+ *   gtk_gesture_set_state (first_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+ *   gtk_gesture_set_state (second_gesture, GTK_EVENT_SEQUENCE_DENIED);
+ * }
+ *
+ * static void
+ * second_gesture_begin_cb (GtkGesture       *second_gesture,
+ *                          GdkEventSequence *sequence,
+ *                          gpointer          user_data)
+ * {
+ *   if (gtk_gesture_get_sequence_state (first_gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
+ *     gtk_gesture_set_state (second_gesture, GTK_EVENT_SEQUENCE_DENIED);
+ * }
+ * ```
+ *
+ * If both gestures are in the same group, just set the state on
+ * the gesture emitting the event, the sequence will be already
+ * be initialized to the group's global state when the second
+ * gesture processes the event.
  *
  * Returns: %TRUE if the state of at least one sequence
  *   was changed successfully
@@ -1090,8 +1132,10 @@ gtk_gesture_set_state (GtkGesture            *gesture,
   priv = gtk_gesture_get_instance_private (gesture);
   sequences = g_hash_table_get_keys (priv->points);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   for (l = sequences; l; l = l->next)
     handled |= gtk_gesture_set_sequence_state (gesture, l->data, state);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_list_free (sequences);
 

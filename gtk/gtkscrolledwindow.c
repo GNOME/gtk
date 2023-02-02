@@ -273,7 +273,6 @@ typedef struct
   double drag_start_y;
 
   guint                  kinetic_scrolling         : 1;
-  guint                  in_drag                   : 1;
 
   guint                  deceleration_id;
 
@@ -906,7 +905,6 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
   GdkEventSequence *sequence;
   GtkWidget *event_widget;
 
-  priv->in_drag = FALSE;
   priv->drag_start_x = priv->unclamped_hadj_value;
   priv->drag_start_y = priv->unclamped_vadj_value;
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
@@ -915,7 +913,7 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
 
   if (event_widget == priv->vscrollbar || event_widget == priv->hscrollbar ||
       (!may_hscroll (scrolled_window) && !may_vscroll (scrolled_window)))
-    gtk_gesture_set_sequence_state (gesture, sequence, GTK_EVENT_SEQUENCE_DENIED);
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -978,17 +976,6 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
-                             GdkEventSequence  *sequence,
-                             GtkGesture        *gesture)
-{
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  if (!priv->in_drag || !gtk_gesture_handles_sequence (gesture, sequence))
-    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
-}
-
-static void
 gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
                                 double             x_velocity,
                                 double             y_velocity)
@@ -1033,18 +1020,13 @@ scrolled_window_long_press_cb (GtkScrolledWindow *scrolled_window,
                                double             y,
                                GtkGesture        *gesture)
 {
-  GdkEventSequence *sequence;
-
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  gtk_gesture_set_sequence_state (gesture, sequence,
-                                  GTK_EVENT_SEQUENCE_DENIED);
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
 scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
                                          GtkGesture        *gesture)
 {
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GdkEventSequence *sequence;
   GdkEvent *event;
   GdkEventType event_type;
@@ -1055,11 +1037,7 @@ scrolled_window_long_press_cancelled_cb (GtkScrolledWindow *scrolled_window,
 
   if (event_type == GDK_TOUCH_BEGIN ||
       event_type == GDK_BUTTON_PRESS)
-    gtk_gesture_set_sequence_state (gesture, sequence,
-                                    GTK_EVENT_SEQUENCE_DENIED);
-  else if (event_type != GDK_TOUCH_END &&
-           event_type != GDK_BUTTON_RELEASE)
-    priv->in_drag = TRUE;
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -2044,9 +2022,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
                             scrolled_window);
   g_signal_connect_swapped (priv->drag_gesture, "drag-update",
                             G_CALLBACK (scrolled_window_drag_update_cb),
-                            scrolled_window);
-  g_signal_connect_swapped (priv->drag_gesture, "end",
-                            G_CALLBACK (scrolled_window_drag_end_cb),
                             scrolled_window);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (priv->drag_gesture));
 

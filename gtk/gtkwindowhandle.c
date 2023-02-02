@@ -256,10 +256,17 @@ do_popup_fallback (GtkWindowHandle *self,
 
 static void
 do_popup (GtkWindowHandle *self,
-          GdkEvent        *event)
+          GtkGestureClick *gesture)
 {
   GdkSurface *surface =
     gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+  GdkEventSequence *sequence;
+  GdkEvent *event;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  if (!event)
+    return;
 
   if (!gdk_toplevel_show_window_menu (GDK_TOPLEVEL (surface), event))
     do_popup_fallback (self, event);
@@ -267,7 +274,7 @@ do_popup (GtkWindowHandle *self,
 
 static gboolean
 perform_titlebar_action_fallback (GtkWindowHandle    *self,
-                                  GdkEvent           *event,
+                                  GtkGestureClick    *click_gesture,
                                   GdkTitlebarGesture  gesture)
 {
   GtkSettings *settings;
@@ -306,7 +313,7 @@ perform_titlebar_action_fallback (GtkWindowHandle    *self,
                                 "window.minimize",
                                 NULL);
   else if (g_str_equal (action, "menu"))
-    do_popup (self, event);
+    do_popup (self, click_gesture);
   else
     {
       g_warning ("Unsupported titlebar action %s", action);
@@ -320,7 +327,7 @@ perform_titlebar_action_fallback (GtkWindowHandle    *self,
 
 static gboolean
 perform_titlebar_action (GtkWindowHandle *self,
-                         GdkEvent        *event,
+			 GtkGestureClick *click_gesture,
                          guint            button,
                          int              n_press)
 {
@@ -349,7 +356,7 @@ perform_titlebar_action (GtkWindowHandle *self,
   if (gdk_toplevel_titlebar_gesture (GDK_TOPLEVEL (surface), gesture))
     return TRUE;
 
-  return perform_titlebar_action_fallback (self, event, gesture);
+  return perform_titlebar_action_fallback (self, click_gesture, gesture);
 }
 
 static void
@@ -360,17 +367,10 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
                           GtkWindowHandle *self)
 {
   GtkWidget *widget;
-  GdkEventSequence *sequence;
-  GdkEvent *event;
   guint button;
 
   widget = GTK_WIDGET (self);
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-
-  if (!event)
-    return;
 
   if (n_press > 1)
     gtk_gesture_set_state (self->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
@@ -387,25 +387,25 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
     case GDK_BUTTON_PRIMARY:
       if (n_press == 2)
         {
-          perform_titlebar_action (self, event, button, n_press);
-          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                          sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+          perform_titlebar_action (self, gesture, button, n_press);
+          gtk_gesture_set_state (GTK_GESTURE (gesture),
+				 GTK_EVENT_SEQUENCE_CLAIMED);
         }
       break;
 
     case GDK_BUTTON_SECONDARY:
-      if (perform_titlebar_action (self, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      if (perform_titlebar_action (self, gesture, button, n_press))
+        gtk_gesture_set_state (GTK_GESTURE (gesture),
+			       GTK_EVENT_SEQUENCE_CLAIMED);
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->drag_gesture));
       break;
 
     case GDK_BUTTON_MIDDLE:
-      if (perform_titlebar_action (self, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      if (perform_titlebar_action (self, gesture, button, n_press))
+        gtk_gesture_set_state (GTK_GESTURE (gesture),
+			       GTK_EVENT_SEQUENCE_CLAIMED);
       break;
 
     default:

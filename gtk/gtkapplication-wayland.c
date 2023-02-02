@@ -108,7 +108,9 @@ gtk_application_impl_wayland_before_emit (GtkApplicationImpl *impl,
   if (!startup_notification_id)
     g_variant_lookup (platform_data, "desktop-startup-id", "&s", &startup_notification_id);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_wayland_display_set_startup_notification_id (gdk_display_get_default (), startup_notification_id);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static guint
