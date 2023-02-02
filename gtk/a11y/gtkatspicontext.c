@@ -82,7 +82,7 @@
  *   hold the TAB_PANEL role and be the target of the CONTROLS
  *   relation with their corresponding tabs (in the stack
  *   switcher or notebook).
- * 
+ *
  * These are the exceptions implemented by GTK itself, but note that application
  * developers can customize the accessibility tree by implementing the
  * [iface@Gtk.Accessible] interface in any way they choose.
@@ -343,7 +343,7 @@ get_index_in (GtkAccessible *parent,
     return -1;
 
   res = 0;
-for (candidate = gtk_accessible_get_first_accessible_child (parent);
+  for (candidate = gtk_accessible_get_first_accessible_child (parent);
        candidate != NULL;
        candidate = gtk_accessible_get_next_accessible_sibling (candidate))
     {
@@ -363,7 +363,11 @@ static int
 get_index_in_parent (GtkAccessible *accessible)
 {
   GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
-  return get_index_in(parent, accessible);
+
+  if (parent != NULL)
+    return get_index_in (parent, accessible);
+
+  return -1;
 }
 
 static int
@@ -1108,19 +1112,16 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkATContext *child_context = gtk_accessible_get_at_context (child);
 
-  int idx = 0;
-
   if (child_context == NULL)
     return;
 
-  if (gtk_accessible_get_accessible_parent (child) != accessible)
-    {
-      idx = 0;
-    }
-  else
-    {
-      idx = get_index_in(accessible, child);
-    }
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (child);
+  int idx = 0;
+
+  if (parent == NULL)
+    idx = -1;
+  else if (parent == accessible)
+    idx = get_index_in (accessible, child);
 
   if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
     emit_children_changed (self,

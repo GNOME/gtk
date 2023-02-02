@@ -22,6 +22,7 @@
 
 #include "gtkatcontext.h"
 
+#include "gtkaccessibleprivate.h"
 #include "gtkaccessibleattributesetprivate.h"
 
 G_BEGIN_DECLS
@@ -79,16 +80,6 @@ typedef enum {
   GTK_ACCESSIBLE_STATE_CHANGE_PRESSED  = 1 << GTK_ACCESSIBLE_STATE_PRESSED,
   GTK_ACCESSIBLE_STATE_CHANGE_SELECTED = 1 << GTK_ACCESSIBLE_STATE_SELECTED
 } GtkAccessibleStateChange;
-
-typedef enum {
-  GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-  GTK_ACCESSIBLE_CHILD_STATE_REMOVED
-} GtkAccessibleChildState;
-
-typedef enum {
-  GTK_ACCESSIBLE_CHILD_CHANGE_ADDED   = 1 << GTK_ACCESSIBLE_CHILD_STATE_ADDED,
-  GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED = 1 << GTK_ACCESSIBLE_CHILD_STATE_REMOVED
-} GtkAccessibleChildChange;
 
 struct _GtkATContext
 {

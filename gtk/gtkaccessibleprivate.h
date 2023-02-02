@@ -21,9 +21,36 @@
 #pragma once
 
 #include "gtkaccessible.h"
-#include "gtkatcontextprivate.h"
 
 G_BEGIN_DECLS
+
+/* < private >
+ * GtkAccessiblePlatformChange:
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE: whether the accessible has changed
+ *   its focusable state
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED: whether the accessible has changed its
+ *   focused state
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE: whether the accessible has changed its
+ *   active state
+ *
+ * Represents the various platform changes which can occur and are communicated
+ * using [method@Gtk.Accessible.platform_changed].
+ */
+typedef enum {
+  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
+  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED   = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
+  GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE    = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE,
+} GtkAccessiblePlatformChange;
+
+typedef enum {
+  GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+  GTK_ACCESSIBLE_CHILD_STATE_REMOVED
+} GtkAccessibleChildState;
+
+typedef enum {
+  GTK_ACCESSIBLE_CHILD_CHANGE_ADDED   = 1 << GTK_ACCESSIBLE_CHILD_STATE_ADDED,
+  GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED = 1 << GTK_ACCESSIBLE_CHILD_STATE_REMOVED
+} GtkAccessibleChildChange;
 
 const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
                                                  const char        *domain);

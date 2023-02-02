@@ -41,7 +41,8 @@
  * Every accessible implementation is part of a tree of accessible objects.
  * Normally, this tree corresponds to the widget tree, but can be customized
  * by reimplementing the [vfunc@Gtk.Accessible.get_accessible_parent],
- * [vfunc@Gtk.Accessible.get_first_accessible_child] and [vfunc@Gtk.Accessible.get_next_accessible_sibling] virtual functions.
+ * [vfunc@Gtk.Accessible.get_first_accessible_child] and
+ * [vfunc@Gtk.Accessible.get_next_accessible_sibling] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
  */
@@ -97,13 +98,17 @@ gtk_accessible_get_at_context (GtkAccessible *self)
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_at_context (self);
 }
 
-/*
+/**
  * gtk_accessible_get_accessible_parent:
  * @self: a `GtkAccessible`
  *
- * Retrieves the parent `GtkAccessible` for the given `GtkAccessible`.
+ * Retrieves the accessible accessible for an accessible object
  *
- * Returns: (transfer none): the parent `GtkAccessible`, which can not be %NULL
+ * This function returns `NULL` for top level widgets
+ *
+ * Returns: (transfer none) (nullable): the accessible parent
+ *
+ * Since: 4.10
  */
 GtkAccessible *
 gtk_accessible_get_accessible_parent (GtkAccessible *self)
@@ -113,14 +118,13 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
 }
 
-
 /**
  * gtk_accessible_get_first_accessible_child:
- * @self: a `GtkAccessible`
+ * @self: an accessible object
  *
- * Retrieves the first child `GtkAccessible` for this `GtkAccessible`.
+ * Retrieves the first accessible child of an accessible object.
  *
- * Returns: (transfer none) (nullable): the first `GtkAccessible` child of @self, if @self has accessible children, %NULL otherwise
+ * Returns: (transfer none) (nullable): the first accessible child
  *
  * since: 4.10
  */
@@ -134,11 +138,11 @@ gtk_accessible_get_first_accessible_child (GtkAccessible *self)
 
 /**
  * gtk_accessible_get_next_accessible_sibling:
- * @self: a `GtkAccessible`
+ * @self: an accessible object
  *
- * Retrieves the next `GtkAccessible` sibling of this `GtkAccessible`.
+ * Retrieves the next accessible sibling of an accessible object
  *
- * Returns: (transfer none) (nullable): the next `GtkAccessible` sibling of @self, if @self has a next sibling, %NULL otherwise
+ * Returns: (transfer none) (nullable): the next accessible sibling
  *
  * since: 4.10
  */
@@ -151,12 +155,12 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
 }
 
 /**
- * gtk_accessible_get_accessible_role: (attributes org.gtk.Method.get_property=accessible-role)
- * @self: a `GtkAccessible`
+ * gtk_accessible_get_accessible_role:
+ * @self: an accessible object
  *
- * Retrieves the `GtkAccessibleRole` for the given `GtkAccessible`.
+ * Retrieves the accessible role of an accessible object.
  *
- * Returns: a `GtkAccessibleRole`
+ * Returns: the accessible role
  */
 GtkAccessibleRole
 gtk_accessible_get_accessible_role (GtkAccessible *self)
@@ -187,6 +191,7 @@ gtk_accessible_get_accessible_role (GtkAccessible *self)
  * state change must be communicated to assistive technologies.
  *
  * Example:
+ *
  * ```c
  * value = GTK_ACCESSIBLE_TRISTATE_MIXED;
  * gtk_accessible_update_state (GTK_ACCESSIBLE (check_button),
@@ -743,7 +748,7 @@ gtk_accessible_role_is_range_subclass (GtkAccessibleRole role)
   return FALSE;
 }
 
-/*<private>
+/*< private >
  * gtk_accessible_platform_changed:
  * @self: a `GtkAccessible`
  * @change: the platform state change to report
@@ -795,15 +800,19 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
  * child widget, as is the case for `GtkText` wrappers.
  *
  * Returns: the value of @state for the accessible
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_accessible_get_platform_state (GtkAccessible              *self,
                                    GtkAccessiblePlatformState  state)
 {
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), FALSE);
+
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
-/**< private >
+/*< private >
  * gtk_accessible_bounds_changed:
  * @self: a `GtkAccessible`
  *
@@ -830,7 +839,7 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
   gtk_at_context_bounds_changed (context);
 }
 
-/*
+/**
  * gtk_accessible_get_bounds:
  * @self: a `GtkAccessible`
  * @x: (out): the x coordinate of the top left corner of the accessible
@@ -855,10 +864,14 @@ gtk_accessible_get_bounds (GtkAccessible *self,
                            int           *width,
                            int           *height)
 {
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), FALSE);
+  g_return_val_if_fail (x != NULL && y != NULL, FALSE);
+  g_return_val_if_fail (width != NULL && height != NULL, FALSE);
+
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_bounds (self, x, y, width, height);
 }
 
-/*<private>
+/*< private >
  * gtk_accessible_should_present:
  * @self: a `GtkAccessible`
  *

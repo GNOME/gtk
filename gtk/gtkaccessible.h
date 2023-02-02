@@ -40,7 +40,7 @@ G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
  * @GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE: whether the accessible can be focused
  * @GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED: whether the accessible has focus
  * @GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE: whether the accessible is active
- * 
+ *
  * The various platform states which can be queried
  * using [method@Gtk.Accessible.get_platform_state].
  *
@@ -52,161 +52,179 @@ typedef enum {
   GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE
 } GtkAccessiblePlatformState;
 
-/** < private >
- * GtkAccessiblePlatformChange:
- * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE: whether the accessible has changed
- *   its focusable state
- * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED: whether the accessible has changed its
- *   focused state
- * @GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE: whether the accessible has changed its
- *   active state
+/**
+ * GtkAccessibleInterface:
+ * @get_at_context: retrieve the platform-specific accessibility context
+ *   for the accessible implementation
+ * @get_platform_state: retrieve the accessible state
  *
- * Represents the various platform changes which can occur and are communicated
- * using [method@Gtk.Accessible.platform_changed].
+ * The common interface for accessible objects.
+ *
+ * Since: 4.10
  */
-typedef enum {
-  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
-  GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED   = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
-  GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE    = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE,
-} GtkAccessiblePlatformChange;
-
 struct _GtkAccessibleInterface
 {
   GTypeInterface g_iface;
 
   /**
    * GtkAccessibleInterface::get_at_context:
-   * @self: a `GtkAccessible`
-   * 
-   * Retrieves the `GtkATContext` for this accessible implementation.
+   * @self: an accessible object
+   *
+   * Retrieves the platform-specific accessibility context for the
+   * accessible implementation.
+   *
+   * Returns: (transfer none) (nullable): the accessibility context
+   *
+   * Since: 4.10
    */
-  GtkATContext *        (* get_at_context)      (GtkAccessible *self);
+  GtkATContext * (* get_at_context) (GtkAccessible *self);
 
   /**
    * GtkAccessibleInterface::get_platform_state:
-   * 
-   * @self: A `GtkAccessible`
-   * @state: The state to retrieve
-   * 
-   * Returns whether @self has the given platform state.
-   * @returns: %true if @state is active for @self.
-   * @returns:
+   * @self: an accessible object
+   * @state: the state to query
+   *
+   * Checks if the given @state applies to the accessible object.
+   *
+   * Returns: true if the @state is set, and false otherwise
+   *
+   * Since: 4.10
    */
-  gboolean              (* get_platform_state)  (GtkAccessible              *self,
-                                                 GtkAccessiblePlatformState  state);
+  gboolean (* get_platform_state) (GtkAccessible              *self,
+                                   GtkAccessiblePlatformState  state);
 
   /**
    * GtkAccessibleInterface::get_accessible_parent:
-   * @self: a `GtkAccessible`
-   * 
-   * Returns the parent `GtkAccessible` of @self.
-   * A return value of %NULL implies that the accessible represents a top-level
-   * accessible object, which currently also implies that the accessible
-   * represents something which is in the list of top-level widgets.
+   * @self: an accessible object
+   *
+   * Retrieves the accessible parent of an accessible object.
+   *
+   * This virtual function should return `NULL` for top level objects.
+   *
+   * Returns: (nullable) (transfer none): the accessible parent
+   *
+   * Since: 4.10
    */
-  GtkAccessible *       (* get_accessible_parent)  (GtkAccessible *self);
-  
+  GtkAccessible * (* get_accessible_parent) (GtkAccessible *self);
+
   /**
    * GtkaccessibleInterface::get_first_accessible_child:
-   * @self: a `GtkAccessible`
-   * 
-   * Returns the first accessible child of @self, or %NULL if @self has none
+   * @self: an accessible object
+   *
+   * Retrieves the first accessible child of an accessible object.
+   *
+   * Returns: (transfer none) (nullable): an accessible object
+   *
+   * Since: 4.10
    */
-  GtkAccessible *       (* get_first_accessible_child)  (GtkAccessible *self);
-
+  GtkAccessible * (* get_first_accessible_child) (GtkAccessible *self);
 
   /**
    * GtkaccessibleInterface::get_next_accessible_sibling:
-   * @self: a `GtkAccessible`
-   * 
-   * Returns the next accessible sibling of @self, or %NULL if @self has none
+   * @self: an accessible object
+   *
+   * Retrieves the next accessible sibling of an accessible object.
+   *
+   * Returns: (transfer none) (nullable): an accessible object
+   *
+   * Since: 4.10
    */
-  GtkAccessible *       (* get_next_accessible_sibling)  (GtkAccessible *self);
+  GtkAccessible * (* get_next_accessible_sibling) (GtkAccessible *self);
 
   /**
    * GtkAccessibleInterface::get_bounds:
-   * @self: a `GtkAccessible`
-   * @x: an addres of the x coordinate
-   * @y: an address of the y coordinate
-   * @width: address of the width
-   * @height: address of the height
-   * 
-   * Returns the dimensions and position of @self, if this information
-   * can be determined.
-   * @returns: %true if the values are valid, %false otherwise
+   * @self: an accessible object
+   * @x: (out): the horizontal coordinate of a rectangle
+   * @y: (out): the vertical coordinate of a rectangle
+   * @width: (out): the width of a rectangle
+   * @height: (out): the height of a rectangle
+   *
+   * Retrieves the dimensions and position of an accessible object in its
+   * parent's coordinate space, if those values can be determined.
+   *
+   * For top level accessible objects, the X and Y coordinates are always
+   * going to be set to zero.
+   *
+   * Returns: true if the values are value, and false otherwise
    */
-  gboolean              (* get_bounds) (GtkAccessible *self, int *x, int *y,
-                                        int *width, int *height);
+  gboolean (* get_bounds) (GtkAccessible *self,
+                           int           *x,
+                           int           *y,
+                           int           *width,
+                           int           *height);
 };
 
 GDK_AVAILABLE_IN_ALL
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
-gboolean        gtk_accessible_get_platform_state (GtkAccessible              *self,
-                                                   GtkAccessiblePlatformState  state);
+gboolean gtk_accessible_get_platform_state (GtkAccessible              *self,
+                                            GtkAccessiblePlatformState  state);
 
 GDK_AVAILABLE_IN_4_10
-GtkAccessible * gtk_accessible_get_accessible_parent(GtkAccessible *self);
+GtkAccessible * gtk_accessible_get_accessible_parent (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
-GtkAccessible * gtk_accessible_get_first_accessible_child(GtkAccessible *self);
+GtkAccessible * gtk_accessible_get_first_accessible_child (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
-GtkAccessible * gtk_accessible_get_next_accessible_sibling(GtkAccessible *self);
+GtkAccessible * gtk_accessible_get_next_accessible_sibling (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
-gboolean gtk_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height);
+gboolean gtk_accessible_get_bounds (GtkAccessible *self,
+                                    int           *x,
+                                    int           *y,
+                                    int           *width,
+                                    int           *height);
 
 GDK_AVAILABLE_IN_ALL
-GtkAccessibleRole       gtk_accessible_get_accessible_role      (GtkAccessible         *self);
+GtkAccessibleRole gtk_accessible_get_accessible_role (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_state             (GtkAccessible         *self,
-                                                                 GtkAccessibleState     first_state,
-                                                                 ...);
+void gtk_accessible_update_state (GtkAccessible      *self,
+                                  GtkAccessibleState  first_state,
+                                  ...);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_property          (GtkAccessible         *self,
-                                                                 GtkAccessibleProperty  first_property,
-                                                                 ...);
+void gtk_accessible_update_property (GtkAccessible         *self,
+                                     GtkAccessibleProperty  first_property,
+                                     ...);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_relation          (GtkAccessible         *self,
-                                                                 GtkAccessibleRelation  first_relation,
-                                                                 ...);
+void gtk_accessible_update_relation (GtkAccessible         *self,
+                                     GtkAccessibleRelation  first_relation,
+                                     ...);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_state_value       (GtkAccessible         *self,
-                                                                 int                    n_states,
-                                                                 GtkAccessibleState     states[],
-                                                                 const GValue           values[]);
+void gtk_accessible_update_state_value (GtkAccessible      *self,
+                                        int                 n_states,
+                                        GtkAccessibleState  states[],
+                                        const GValue        values[]);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_property_value    (GtkAccessible         *self,
-                                                                 int                    n_properties,
-                                                                 GtkAccessibleProperty  properties[],
-                                                                 const GValue           values[]);
+void gtk_accessible_update_property_value (GtkAccessible         *self,
+                                           int                    n_properties,
+                                           GtkAccessibleProperty  properties[],
+                                           const GValue           values[]);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_update_relation_value    (GtkAccessible         *self,
-                                                                 int                    n_relations,
-                                                                 GtkAccessibleRelation  relations[],
-                                                                 const GValue           values[]);
+void gtk_accessible_update_relation_value (GtkAccessible         *self,
+                                           int                    n_relations,
+                                           GtkAccessibleRelation  relations[],
+                                           const GValue           values[]);
+GDK_AVAILABLE_IN_ALL
+void gtk_accessible_reset_state (GtkAccessible      *self,
+                                 GtkAccessibleState  state);
+GDK_AVAILABLE_IN_ALL
+void gtk_accessible_reset_property (GtkAccessible         *self,
+                                    GtkAccessibleProperty  property);
+GDK_AVAILABLE_IN_ALL
+void gtk_accessible_reset_relation (GtkAccessible         *self,
+                                    GtkAccessibleRelation  relation);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_reset_state              (GtkAccessible         *self,
-                                                                 GtkAccessibleState     state);
+void gtk_accessible_state_init_value (GtkAccessibleState  state,
+                                      GValue             *value);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_reset_property           (GtkAccessible         *self,
-                                                                 GtkAccessibleProperty  property);
+void gtk_accessible_property_init_value (GtkAccessibleProperty  property,
+                                         GValue                *value);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_reset_relation           (GtkAccessible         *self,
-                                                                 GtkAccessibleRelation  relation);
-
-GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_state_init_value         (GtkAccessibleState     state,
-                                                                 GValue                *value);
-GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_property_init_value      (GtkAccessibleProperty  property,
-                                                                 GValue                *value);
-GDK_AVAILABLE_IN_ALL
-void                    gtk_accessible_relation_init_value      (GtkAccessibleRelation  relation,
-                                                                 GValue                *value);
+void gtk_accessible_relation_init_value (GtkAccessibleRelation  relation,
+                                         GValue                *value);
 
 G_END_DECLS
