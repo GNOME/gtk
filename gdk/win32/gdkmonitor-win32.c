@@ -740,7 +740,6 @@ GPtrArray *
 _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
 {
   EnumMonitorData data;
-  int i;
 
   data.display = win32_display;
   data.monitors = get_monitor_devices (win32_display);
