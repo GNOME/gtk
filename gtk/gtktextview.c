@@ -5609,15 +5609,15 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
   if (n_press == 1 &&
       gdk_event_triggers_context_menu (event))
     {
-      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
-                                      GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
       gtk_text_view_do_popup (text_view, event);
     }
   else if (button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (text_view))
     {
-      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
-                                      GTK_EVENT_SEQUENCE_CLAIMED);
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
       get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
                              &iter, NULL, NULL);
       gtk_text_buffer_paste_clipboard (get_buffer (text_view),
@@ -5655,8 +5655,8 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
               {
                 if (is_touchscreen)
                   {
-                    gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
-                                                    GTK_EVENT_SEQUENCE_CLAIMED);
+                    gtk_gesture_set_state (GTK_GESTURE (gesture),
+                                           GTK_EVENT_SEQUENCE_CLAIMED);
                     if (!priv->selection_bubble ||
                         !gtk_widget_get_visible (priv->selection_bubble))
                       {
