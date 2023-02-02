@@ -211,6 +211,14 @@ gdk_x11_gl_context_glx_clear_current (GdkGLContext *context)
 }
 
 static gboolean
+gdk_x11_gl_context_glx_is_current (GdkGLContext *context)
+{
+  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
+
+  return self->glx_context == glXGetCurrentContext ();
+}
+
+static gboolean
 gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
                                      gboolean      surfaceless)
 
@@ -685,6 +693,7 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
   context_class->realize = gdk_x11_gl_context_glx_realize;
   context_class->make_current = gdk_x11_gl_context_glx_make_current;
   context_class->clear_current = gdk_x11_gl_context_glx_clear_current;
+  context_class->is_current = gdk_x11_gl_context_glx_is_current;
   context_class->get_damage = gdk_x11_gl_context_glx_get_damage;
 
   draw_context_class->end_frame = gdk_x11_gl_context_glx_end_frame;

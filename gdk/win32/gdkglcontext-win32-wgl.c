@@ -632,6 +632,14 @@ gdk_win32_gl_context_wgl_clear_current (GdkGLContext *context)
 }
 
 static gboolean
+gdk_win32_gl_context_wgl_is_current (GdkGLContext *context)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
+
+  return self->wgl_context == wglGetCurrentContext ();
+}
+
+static gboolean
 gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
                                        gboolean      surfaceless)
 {
@@ -682,6 +690,7 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
   context_class->realize = gdk_win32_gl_context_wgl_realize;
   context_class->make_current = gdk_win32_gl_context_wgl_make_current;
   context_class->clear_current = gdk_win32_gl_context_wgl_clear_current;
+  context_class->is_current = gdk_win32_gl_context_wgl_is_current;
 
   draw_context_class->begin_frame = gdk_win32_gl_context_wgl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
