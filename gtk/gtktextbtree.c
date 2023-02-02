@@ -2415,7 +2415,6 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
   GtkTextLineSegment *seg;
   GtkTextLineSegment *end_seg;
   GString *retval;
-  char *str;
   GtkTextIter iter;
   GtkTextIter start;
   GtkTextIter end;
@@ -2447,9 +2446,7 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
 
   copy_segment (retval, include_hidden, include_nonchars, &iter, &end);
 
-  str = retval->str;
-  g_string_free (retval, FALSE);
-  return str;
+  return g_string_free (retval, FALSE);
 }
 
 int

@@ -956,7 +956,7 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                               guint                 default_framebuffer)
 {
   G_GNUC_UNUSED guint count = 0;
-  graphene_rect_t scissor_test = { 0, };
+  graphene_rect_t scissor_test = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   gboolean has_scissor = scissor != NULL;
   gboolean scissor_state = -1;
   guint program = 0;
