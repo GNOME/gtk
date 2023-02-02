@@ -388,15 +388,15 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
       if (n_press == 2)
         {
           perform_titlebar_action (self, event, button, n_press);
-          gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                          sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+          gtk_gesture_set_state (GTK_GESTURE (gesture),
+				 GTK_EVENT_SEQUENCE_CLAIMED);
         }
       break;
 
     case GDK_BUTTON_SECONDARY:
       if (perform_titlebar_action (self, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+        gtk_gesture_set_state (GTK_GESTURE (gesture),
+			       GTK_EVENT_SEQUENCE_CLAIMED);
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->drag_gesture));
@@ -404,8 +404,8 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
 
     case GDK_BUTTON_MIDDLE:
       if (perform_titlebar_action (self, event, button, n_press))
-        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+        gtk_gesture_set_state (GTK_GESTURE (gesture),
+			       GTK_EVENT_SEQUENCE_CLAIMED);
       break;
 
     default:
