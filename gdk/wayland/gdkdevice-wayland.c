@@ -1720,7 +1720,18 @@ pointer_handle_button (void              *data,
 
   gdk_wayland_seat_set_frame_event (seat, event);
 
-  modifier = (GDK_BUTTON1_MASK << (button - BUTTON_BASE - 1)) & ALL_BUTTONS_MASK;
+  switch (button)
+    {
+    case BTN_RIGHT:
+      modifier = GDK_BUTTON3_MASK;
+      break;
+    case BTN_MIDDLE:
+      modifier = GDK_BUTTON2_MASK;
+      break;
+    default:
+      modifier = (GDK_BUTTON1_MASK << (button - BUTTON_BASE - 1)) & ALL_BUTTONS_MASK;
+      break;
+    }
 
   if (state)
     seat->pointer_info.button_modifiers |= modifier;
