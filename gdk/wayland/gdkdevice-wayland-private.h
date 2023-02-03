@@ -220,6 +220,19 @@ struct _GdkWaylandSeat
 #define GDK_TYPE_WAYLAND_DEVICE_PAD (gdk_wayland_device_pad_get_type ())
 GType gdk_wayland_device_pad_get_type (void);
 
+void gdk_wayland_seat_stop_cursor_animation (GdkWaylandSeat        *seat,
+                                             GdkWaylandPointerData *pointer);
+
+GdkWaylandPointerData * gdk_wayland_device_get_pointer (GdkWaylandDevice *wayland_device);
+
+void gdk_wayland_device_set_pointer (GdkWaylandDevice      *wayland_device,
+                                     GdkWaylandPointerData *pointer);
+
+GdkWaylandTouchData * gdk_wayland_device_get_emulating_touch (GdkWaylandDevice *wayland_device);
+
+void gdk_wayland_device_set_emulating_touch (GdkWaylandDevice    *wayland_device,
+                                             GdkWaylandTouchData *touch);
+
 void gdk_wayland_device_query_state (GdkDevice        *device,
                                      GdkSurface       *surface,
                                      double           *win_x,
@@ -233,5 +246,22 @@ void gdk_wayland_device_pad_set_feedback (GdkDevice           *device,
 
 GdkWaylandTabletPadData * gdk_wayland_seat_find_pad (GdkWaylandSeat *seat,
                                                      GdkDevice      *device);
+
+GdkWaylandTabletData * gdk_wayland_seat_find_tablet (GdkWaylandSeat *seat,
+                                                     GdkDevice      *device);
+
+GdkWaylandTouchData * gdk_wayland_seat_get_touch (GdkWaylandSeat *seat,
+                                                  uint32_t        id);
+
+void gdk_wayland_device_maybe_emit_grab_crossing (GdkDevice  *device,
+                                                  GdkSurface *window,
+                                                  guint32     time);
+
+GdkSurface * gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
+                                                            guint32    time_);
+
+gboolean gdk_wayland_device_update_surface_cursor (GdkDevice *device);
+
+GdkModifierType gdk_wayland_device_get_modifiers (GdkDevice *device);
 
 #endif
