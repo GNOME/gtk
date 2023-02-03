@@ -1,6 +1,64 @@
 Overview of Changes in 4.9.3, xx-xx-xxxx
 ========================================
 
+* Add GtkUriLauncher, as replacement for gtk_show_uri
+
+* Add GdkMonitor::description
+
+* Fix problems with tooltip sizing
+
+* Deprecations:
+ - GtkStatusbar
+ - GtkAssistant
+ - GtkLockButton
+ - gtk_gesture_set_sequence_state
+
+* GtkColumnView:
+ - Only create widgets for visible columns
+
+* GtkFileDialog:
+ - Drop shortcut folders API
+
+* GtkCalendar:
+ - Make marked days work again
+
+* GtkSwitch:
+ - Make state and active independently settable
+
+* CSS:
+ - Fix randomly stopping CSS animations
+
+* GL:
+ - Fix synchronization with GStreamer
+ - Fix problems with 3rd party GL in the same thread
+
+* Wayland:
+ - Fix startup notification with xdg_activation
+
+* Broadway:
+ - Implement modal windows
+
+* macOS:
+ - Make DND work
+
+* Build:
+ - Require graphene 1.10
+ - Require gobject-introspection 1.72
+
+* Translation updates
+ Catalan
+ Galician
+ German
+ Hebrew
+ Indonesian
+ Portuguese
+ Russian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.9.2, 26-12-2022
 ========================================
 
