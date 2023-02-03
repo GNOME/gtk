@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ACCESSIBLE (gtk_accessible_get_type())
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
 
 /**
@@ -52,7 +52,7 @@ typedef enum {
   GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE
 } GtkAccessiblePlatformState;
 
-/**
+/** < private >
  * GtkAccessiblePlatformChange:
  * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE: whether the accessible has changed
  *   its focusable state
@@ -63,8 +63,6 @@ typedef enum {
  *
  * Represents the various platform changes which can occur and are communicated
  * using [method@Gtk.Accessible.platform_changed].
- *
- * Since: 4.10
  */
 typedef enum {
   GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
@@ -136,25 +134,18 @@ struct _GtkAccessibleInterface
 GDK_AVAILABLE_IN_ALL
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 
-GDK_AVAILABLE_IN_ALL
-void            gtk_accessible_platform_changed (GtkAccessible                *self,
-                                                 GtkAccessiblePlatformChange   change);
-
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 gboolean        gtk_accessible_get_platform_state (GtkAccessible              *self,
                                                    GtkAccessiblePlatformState  state);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 GtkAccessible * gtk_accessible_get_parent(GtkAccessible *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint idx);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 gboolean gtk_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height);
-
-GDK_AVAILABLE_IN_ALL
-void            gtk_accessible_bounds_changed   (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_ALL
 GtkAccessibleRole       gtk_accessible_get_accessible_role      (GtkAccessible         *self);

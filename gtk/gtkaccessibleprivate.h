@@ -36,4 +36,9 @@ void            gtk_accessible_update_children  (GtkAccessible           *self,
                                                  GtkAccessible           *child,
                                                  GtkAccessibleChildState  state);
 
+void            gtk_accessible_bounds_changed   (GtkAccessible *self);
+
+void            gtk_accessible_platform_changed (GtkAccessible                *self,
+                                                 GtkAccessiblePlatformChange   change);
+
 G_END_DECLS

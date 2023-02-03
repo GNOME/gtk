@@ -786,7 +786,7 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
-/**
+/**< private >
  * gtk_accessible_bounds_changed:
  * @self: a `GtkAccessible`
  *
