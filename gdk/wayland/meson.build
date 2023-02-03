@@ -13,7 +13,7 @@ gdk_wayland_sources = files([
   'gdkdrop-wayland.c',
   'gdkeventsource.c',
   'gdkglcontext-wayland.c',
-  'gdkkeys-wayland.c',
+  'gdkkeymap-wayland.c',
   'gdkmonitor-wayland.c',
   'gdkprimary-wayland.c',
   'gdkseat-wayland.c',
