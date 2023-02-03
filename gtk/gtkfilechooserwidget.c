@@ -7222,16 +7222,21 @@ popup_menu (GtkWidget *widget,
 }
 
 static void
-file_chooser_widget_clicked (GtkEventController *controller,
-                            int                 n_press,
-                            double              x,
-                            double              y,
-                            gpointer            user_data)
+file_chooser_widget_clicked (GtkEventController  *controller,
+                            int                   n_press,
+                            double                x,
+                            double                y,
+                            GtkFileChooserWidget *impl)
 {
-  GtkWidget *widget = user_data;
+  GtkWidget *widget = GTK_WIDGET (impl);
+  GtkWidget *child;
 
-  gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
-  popup_menu (widget, x, y);
+  child = gtk_widget_pick (widget, x, y, 0);
+  if (gtk_widget_is_ancestor (child, impl->browse_files_stack))
+    {
+      gtk_gesture_set_state (GTK_GESTURE (controller), GTK_EVENT_SEQUENCE_CLAIMED);
+      popup_menu (widget, x, y);
+    }
 }
 
 static void
