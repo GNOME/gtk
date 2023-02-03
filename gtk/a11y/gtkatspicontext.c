@@ -82,6 +82,10 @@
  *   hold the TAB_PANEL role and be the target of the CONTROLS
  *   relation with their corresponding tabs (in the stack
  *   switcher or notebook).
+ *
+ * These are the exceptions implemented by GTK itself, but note that application
+ * developers can customize the accessibility tree by implementing the
+ * [iface@Gtk.Accessible] interface in any way they choose.
  */
 
 struct _GtkAtSpiContext
@@ -329,28 +333,39 @@ collect_relations (GtkAtSpiContext *self,
 /* }}} */
 /* {{{ Accessible implementation */
 static int
-get_index_in_parent (GtkWidget *widget)
+get_index_in (GtkAccessible *parent,
+              GtkAccessible *child)
 {
-  GtkWidget *parent = gtk_widget_get_parent (widget);
-  GtkWidget *child;
-  int idx;
+  GtkAccessible *candidate;
+  guint res;
 
   if (parent == NULL)
     return -1;
 
-  idx = 0;
-  for (child = gtk_widget_get_first_child (parent);
-       child;
-       child = gtk_widget_get_next_sibling (child))
+  res = 0;
+  for (candidate = gtk_accessible_get_first_accessible_child (parent);
+       candidate != NULL;
+       candidate = gtk_accessible_get_next_accessible_sibling (candidate))
     {
-      if (child == widget)
-        return idx;
+      if (candidate == child)
+        return res;
 
-      if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
+      if (!gtk_accessible_should_present (candidate))
         continue;
 
-      idx++;
+      res++;
     }
+
+  return -1;
+}
+
+static int
+get_index_in_parent (GtkAccessible *accessible)
+{
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+
+  if (parent != NULL)
+    return get_index_in (parent, accessible);
 
   return -1;
 }
@@ -387,61 +402,21 @@ get_parent_context_ref (GtkAccessible *accessible)
 {
   GVariant *res = NULL;
 
-  if (GTK_IS_WIDGET (accessible))
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+
+  if (parent == NULL)
     {
-      GtkWidget *widget = GTK_WIDGET (accessible);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
+      GtkATContext *context = gtk_accessible_get_at_context (accessible);
+      GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
 
-      if (parent == NULL)
-        {
-          GtkATContext *context = gtk_accessible_get_at_context (accessible);
-          GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
-
-          res = gtk_at_spi_root_to_ref (self->root);
-        }
-      else if (GTK_IS_STACK (parent))
-        {
-          GtkStackPage *page =
-            gtk_stack_get_page (GTK_STACK (parent), widget);
-          GtkATContext *parent_context =
-            gtk_accessible_get_at_context (GTK_ACCESSIBLE (page));
-
-          if (parent_context != NULL)
-            {
-              gtk_at_context_realize (parent_context);
-
-              res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
-            }
-        }
-      else
-        {
-          GtkATContext *parent_context =
-            gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent));
-
-          if (parent_context != NULL)
-            {
-              /* XXX: This realize() is needed otherwise opening a GtkPopover will
-               * emit a warning when getting the context's reference
-               */
-              gtk_at_context_realize (parent_context);
-
-              res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
-            }
-        }
+      res = gtk_at_spi_root_to_ref (self->root);
     }
-  else if (GTK_IS_STACK_PAGE (accessible))
+  else
     {
-      GtkWidget *parent =
-        gtk_widget_get_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
-      GtkATContext *parent_context =
-        gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent));
+      GtkATContext *parent_context = gtk_accessible_get_at_context (parent);
+      gtk_at_context_realize (parent_context);
 
-      if (parent_context != NULL)
-        {
-          gtk_at_context_realize (parent_context);
-
-          res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
-        }
+      res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
     }
 
   if (res == NULL)
@@ -522,49 +497,30 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       GtkATContext *context = NULL;
       GtkAccessible *accessible;
-      int idx, real_idx = 0;
+      int idx, presentable_idx;
 
       g_variant_get (parameters, "(i)", &idx);
 
       accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
 
-      if (GTK_IS_STACK_PAGE (accessible))
-        {
-          if (idx == 0)
-            {
-              GtkWidget *child;
+      GtkAccessible *child;
 
-              child = gtk_stack_page_get_child (GTK_STACK_PAGE (accessible));
-              if (gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
-            }
+      presentable_idx = 0;
+      for (child = gtk_accessible_get_first_accessible_child (accessible);
+           child != NULL;
+           child = gtk_accessible_get_next_accessible_sibling (child))
+        {
+          if (!gtk_accessible_should_present (child))
+              continue;
+
+          if (presentable_idx == idx)
+            break;
+          presentable_idx++;
+
         }
-      else if (GTK_IS_WIDGET (accessible))
+      if (child)
         {
-          GtkWidget *widget = GTK_WIDGET (accessible);
-          GtkWidget *child;
-
-          real_idx = 0;
-          for (child = gtk_widget_get_first_child (widget);
-               child;
-               child = gtk_widget_get_next_sibling (child))
-            {
-              if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                continue;
-
-              if (real_idx == idx)
-                break;
-
-              real_idx += 1;
-            }
-
-          if (child)
-            {
-              if (GTK_IS_STACK (accessible))
-                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_stack_get_page (GTK_STACK (accessible), child)));
-              else
-                context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
-            }
+          context = gtk_accessible_get_at_context (child);
         }
 
       if (context == NULL)
@@ -588,45 +544,24 @@ handle_accessible_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(so)"));
 
       GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-      if (GTK_IS_WIDGET (accessible))
-        {
-          GtkWidget *widget = GTK_WIDGET (accessible);
-          GtkWidget *child;
 
-          for (child = gtk_widget_get_first_child (widget);
-               child;
-               child = gtk_widget_get_next_sibling (child))
-            {
-              if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-                continue;
+      GtkAccessible *child;
+      for (child = gtk_accessible_get_first_accessible_child (accessible);
+           child != NULL;
+           child = gtk_accessible_get_next_accessible_sibling (child))
+      {
+          if (!gtk_accessible_should_present (child))
+            continue;
 
-              GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+          GtkATContext *context = gtk_accessible_get_at_context (child);
 
-              /* Realize the child ATContext in order to get its ref */
-              gtk_at_context_realize (context);
+          /* Realize the child ATContext in order to get its ref */
+          gtk_at_context_realize (context);
 
-              GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+          GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
 
-              if (ref != NULL)
-                g_variant_builder_add (&builder, "@(so)", ref);
-            }
-        }
-      else if (GTK_IS_STACK_PAGE (accessible))
-        {
-          GtkWidget *child = gtk_stack_page_get_child (GTK_STACK_PAGE (accessible));
-
-          if (gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-            {
-              GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
-
-              /* Realize the child ATContext in order to get its ref */
-              gtk_at_context_realize (context);
-
-              GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
-
-              if (ref != NULL)
-                g_variant_builder_add (&builder, "@(so)", ref);
-            }
+          if (ref != NULL)
+            g_variant_builder_add (&builder, "@(so)", ref);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
@@ -915,7 +850,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN)
     {
-      GtkWidget *parent;
+      GtkAccessible *parent;
       GtkATContext *context;
       GtkAccessibleChildChange change;
 
@@ -932,14 +867,9 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         }
       else
         {
-          if (GTK_IS_WIDGET (accessible))
-            parent = gtk_widget_get_parent (GTK_WIDGET (accessible));
-          else if (GTK_IS_STACK_PAGE (accessible))
-            parent = gtk_widget_get_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
-          else
-            g_assert_not_reached ();
+          parent = gtk_accessible_get_accessible_parent (accessible);
 
-          context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (parent));
+          context = gtk_accessible_get_at_context (parent);
           gtk_at_context_child_changed (context, change, accessible);
         }
     }
@@ -1168,29 +1098,9 @@ gtk_at_spi_context_bounds_change (GtkATContext *ctx)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
-  GtkWidget *widget;
-  GtkWidget *parent;
-  double x, y;
-  int width, height;
-
-  if (!GTK_IS_WIDGET (accessible))
-    return;
-
-  widget = GTK_WIDGET (accessible);
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  parent = gtk_widget_get_parent (widget);
-
-  if (parent)
-    gtk_widget_translate_coordinates (widget, parent, 0., 0., &x, &y);
-  else
-    x = y = 0.;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  emit_bounds_changed (self, (int)x, (int)y, width, height);
+  int x, y, width, height;
+  if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
+    emit_bounds_changed (self, x, y, width, height);
 }
 
 static void
@@ -1201,99 +1111,17 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkATContext *child_context = gtk_accessible_get_at_context (child);
-  GtkWidget *parent_widget;
-  GtkWidget *child_widget;
-  int idx = 0;
-
-  if (!GTK_IS_WIDGET (accessible))
-    return;
 
   if (child_context == NULL)
     return;
 
-  /* handle the stack page special case */
-  if (GTK_IS_WIDGET (child) &&
-      GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (child))))
-    {
-      GtkWidget *stack;
-      GtkStackPage *page;
-      GListModel *pages;
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (child);
+  int idx = 0;
 
-      stack = gtk_widget_get_parent (GTK_WIDGET (child));
-      page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (child));
-      pages = G_LIST_MODEL (gtk_stack_get_pages (GTK_STACK (stack)));
-      idx = 0;
-      for (guint i = 0; i < g_list_model_get_n_items (pages); i++)
-        {
-          GtkStackPage *item = g_list_model_get_item (pages, i);
-
-          g_object_unref (item);
-
-          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (item)))
-            continue;
-
-          if (item == page)
-            break;
-
-          idx++;
-        }
-      g_object_unref (pages);
-
-      if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
-        {
-          emit_children_changed (GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (stack))),
-                                 GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (page))),
-                                 idx,
-                                 GTK_ACCESSIBLE_CHILD_STATE_ADDED);
-
-          emit_children_changed (GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (page))),
-                                 GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (child)),
-                                 0,
-                                 GTK_ACCESSIBLE_CHILD_STATE_ADDED);
-        }
-
-      if (change & GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED)
-        {
-          emit_children_changed (GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (page))),
-                                 GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (child)),
-                                 0,
-                                 GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
-          emit_children_changed (GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (stack))),
-                                 GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (page))),
-                                 idx,
-                                 GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
-
-        }
-
-      return;
-    }
-
-  parent_widget = GTK_WIDGET (accessible);
-
-  if (GTK_IS_STACK_PAGE (child))
-    child_widget = gtk_stack_page_get_child (GTK_STACK_PAGE (child));
-  else
-    child_widget = GTK_WIDGET (child);
-
-  if (gtk_widget_get_parent (child_widget) != parent_widget)
-    {
-      idx = 0;
-    }
-  else
-    {
-      for (GtkWidget *iter = gtk_widget_get_first_child (parent_widget);
-           iter != NULL;
-           iter = gtk_widget_get_next_sibling (iter))
-        {
-          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (iter)))
-            continue;
-
-          if (iter == child_widget)
-            break;
-
-          idx += 1;
-        }
-    }
+  if (parent == NULL)
+    idx = -1;
+  else if (parent == accessible)
+    idx = get_index_in (accessible, child);
 
   if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
     emit_children_changed (self,
@@ -1858,12 +1686,8 @@ gtk_at_spi_context_get_index_in_parent (GtkAtSpiContext *self)
 
   if (GTK_IS_ROOT (accessible))
     idx = get_index_in_toplevels (GTK_WIDGET (accessible));
-  else if (GTK_IS_STACK_PAGE (accessible))
-    idx = get_index_in_parent (gtk_stack_page_get_child (GTK_STACK_PAGE (accessible)));
-  else if (GTK_IS_STACK (gtk_widget_get_parent (GTK_WIDGET (accessible))))
-    idx = 1;
   else
-    idx = get_index_in_parent (GTK_WIDGET (accessible));
+    idx = get_index_in_parent  (accessible);
 
   return idx;
 }
@@ -1874,26 +1698,18 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_CONTEXT (self), -1);
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-  int n_children = -1;
+  int n_children = 0;
 
-  if (GTK_IS_WIDGET (accessible))
+  GtkAccessible *child = NULL;
+
+  for (child = gtk_accessible_get_first_accessible_child (accessible);
+       child != NULL;
+       child = gtk_accessible_get_next_accessible_sibling (child))
     {
-      GtkWidget *child;
+      if (!gtk_accessible_should_present (child))
+        continue;
 
-      n_children = 0;
-      for (child = gtk_widget_get_first_child (GTK_WIDGET (accessible));
-           child;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          if (!gtk_accessible_should_present (GTK_ACCESSIBLE (child)))
-            continue;
-
-          n_children++;
-        }
-    }
-  else if (GTK_IS_STACK_PAGE (accessible))
-    {
-      n_children = 1;
+      n_children++;
     }
 
   return n_children;
