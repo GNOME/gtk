@@ -26,6 +26,7 @@
 #include "gdkcontentformats.h"
 #include "gdkcontentserializer.h"
 #include "gdkcontentdeserializer.h"
+#include "gdkdebugprivate.h"
 
 #include <gio/gio.h>
 
@@ -213,6 +214,8 @@ file_transfer_portal_register_files (const char          **files,
   afd->len = g_strv_length ((char **)files);
   afd->start = 0;
 
+  GDK_DEBUG (DND, "file transfer portal: registering %d files", afd->len);
+
   g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&options, "{sv}", "writable", g_variant_new_boolean (writable));
   g_variant_builder_add (&options, "{sv}", "autostop", g_variant_new_boolean (TRUE));
@@ -348,9 +351,8 @@ portal_ready (GObject *object,
 static void
 portal_file_serializer (GdkContentSerializer *serializer)
 {
-  GFile *file;
-  const GValue *value;
   GPtrArray *files;
+  const GValue *value;
 
   files = g_ptr_array_new_with_free_func (g_free);
 
@@ -358,9 +360,24 @@ portal_file_serializer (GdkContentSerializer *serializer)
 
   if (G_VALUE_HOLDS (value, G_TYPE_FILE))
     {
+      GFile *file;
+
       file = g_value_get_object (gdk_content_serializer_get_value (serializer));
-      if (file)
-        g_ptr_array_add (files, g_file_get_path (file));
+
+      if (file && g_file_peek_path (file))
+        {
+          GDK_DEBUG (DND, "file transfer portal: Adding %s", g_file_peek_path (file));
+          g_ptr_array_add (files, g_file_get_path (file));
+        }
+#ifdef G_ENABLE_DEBUG
+      else if (GDK_DEBUG_CHECK (DND))
+        {
+          char *uri = g_file_get_uri (file);
+          gdk_debug_message ("file transfer portal: %s has no path, dropping\n", uri);
+          g_free (uri);
+        }
+#endif
+
       g_ptr_array_add (files, NULL);
     }
   else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
@@ -368,7 +385,21 @@ portal_file_serializer (GdkContentSerializer *serializer)
       GSList *l;
 
       for (l = g_value_get_boxed (value); l; l = l->next)
-        g_ptr_array_add (files, g_file_get_path (l->data));
+        {
+          GFile *file = l->data;
+
+          if (file && g_file_peek_path (file))
+            {
+              GDK_DEBUG (DND, "file transfer portal: Adding %s", g_file_peek_path (file));
+              g_ptr_array_add (files, g_file_get_path (file));
+            }
+          else
+            {
+              char *uri = g_file_get_uri (file);
+              gdk_debug_message ("file transfer portal: %s has no path, dropping", uri);
+              g_free (uri);
+            }
+        }
 
       g_ptr_array_add (files, NULL);
     }
@@ -394,6 +425,15 @@ portal_finish (GObject *object,
       gdk_content_deserializer_return_error (deserializer, error);
       return;
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DEBUG_CHECK (DND))
+    {
+      char *s = g_strjoinv (", ", files);
+      gdk_debug_message ("file transfer portal: Receiving files: %s", s);
+      g_free (s);
+    }
+#endif
 
   value = gdk_content_deserializer_get_value (deserializer);
   if (G_VALUE_HOLDS (value, G_TYPE_FILE))

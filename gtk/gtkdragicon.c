@@ -555,6 +555,9 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       GtkWidget *image;
 
       info = g_file_query_info (G_FILE (g_value_get_object (value)), "standard::icon", 0, NULL, NULL);
+      if (!info)
+        return NULL;
+
       image = gtk_image_new_from_gicon (g_file_info_get_icon (info));
       gtk_widget_add_css_class (image, "large-icons");
       g_object_unref (info);
