@@ -236,7 +236,14 @@ update_path (GtkInspectorA11y *sl)
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
   if (GTK_IS_AT_SPI_CONTEXT (context))
-    path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+    {
+      if (gtk_at_context_is_realized (context))
+        path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
+      else
+        path = "not realized";
+    }
+  else
+    path = "not on bus";
 #endif
 
   gtk_label_set_label (GTK_LABEL (sl->path), path);
@@ -422,7 +429,7 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   stack = gtk_widget_get_parent (GTK_WIDGET (sl));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
 
-  if (GTK_IS_ACCESSIBLE (object))
+  if (GTK_IS_ACCESSIBLE (sl->object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
       if (context)
