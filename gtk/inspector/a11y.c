@@ -34,9 +34,6 @@
 #include "gtknoselection.h"
 #include "gtkfilterlistmodel.h"
 #include "gtkboolfilter.h"
-#ifdef G_OS_UNIX
-#include "a11y/gtkatspicontextprivate.h"
-#endif
 
 typedef enum {
   STATE,
@@ -233,17 +230,19 @@ update_path (GtkInspectorA11y *sl)
   const char *path = "—";
 #ifdef G_OS_UNIX
   GtkATContext *context;
+  const char *context_path;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-  if (GTK_IS_AT_SPI_CONTEXT (context))
+  context_path = gtk_at_context_get_dbus_object_path (context);
+  if (context_path == NULL)
     {
-      if (gtk_at_context_is_realized (context))
-        path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
-      else
+      if (!gtk_at_context_is_realized (context))
         path = "not realized";
+      else
+        path = "not available on accessibility bus";
     }
   else
-    path = "not on bus";
+    path = context_path;
 #endif
 
   gtk_label_set_label (GTK_LABEL (sl->path), path);
