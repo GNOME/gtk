@@ -1,4 +1,4 @@
-Overview of Changes in 4.9.3, xx-xx-xxxx
+Overview of Changes in 4.9.3, 04-02-2023
 ========================================
 
 * Add GtkUriLauncher, as replacement for gtk_show_uri
@@ -24,6 +24,15 @@ Overview of Changes in 4.9.3, xx-xx-xxxx
 
 * GtkSwitch:
  - Make state and active independently settable
+
+* GtkFileChooser:
+ - Fix a crash with DND
+ - Fix excessively wide sidebar
+ - Make context menus work again
+
+* Accessibility:
+ - Make GtkAccessible public, so it can be implemented outside GTK
+ - Support accessible implementation for editables
 
 * CSS:
  - Fix randomly stopping CSS animations
