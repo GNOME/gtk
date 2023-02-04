@@ -13,7 +13,7 @@ fi
 meson subprojects update gi-docgen
 
 # make the release tarball
-meson setup -Dgtk_doc=true --force-fallback-for gi-docgen ${release_build_dir} || exit
+meson setup -Dintrospection=enabled -Dgtk_doc=true --force-fallback-for gi-docgen ${release_build_dir} || exit
 meson compile -C${release_build_dir} || exit
 meson dist -C${release_build_dir} --include-subprojects || exit
 
