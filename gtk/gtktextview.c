@@ -7787,8 +7787,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   else
     {
       values->appearance.underline = PANGO_UNDERLINE_NONE;
-      gdk_rgba_free (values->appearance.underline_rgba);
-      values->appearance.underline_rgba = NULL;
+      g_clear_pointer (&values->appearance.underline_rgba, gdk_rgba_free);
     }
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
@@ -7802,8 +7801,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   else
     {
       values->appearance.overline = PANGO_OVERLINE_NONE;
-      gdk_rgba_free (values->appearance.overline_rgba);
-      values->appearance.overline_rgba = NULL;
+      g_clear_pointer (&values->appearance.overline_rgba, gdk_rgba_free);
     }
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
@@ -7817,8 +7815,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   else
     {
       values->appearance.strikethrough = FALSE;
-      gdk_rgba_free (values->appearance.strikethrough_rgba);
-      values->appearance.strikethrough_rgba = NULL;
+      g_clear_pointer (&values->appearance.strikethrough_rgba, gdk_rgba_free);
     }
 
   /* letter-spacing */
