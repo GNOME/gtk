@@ -1394,6 +1394,14 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
   g_clear_object (&self->root);
 }
 
+static const char *
+gtk_at_spi_context_get_dbus_object_path (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  return self->context_path;
+}
+
 static void
 gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
 {
@@ -1409,6 +1417,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->platform_change = gtk_at_spi_context_platform_change;
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
   context_class->child_change = gtk_at_spi_context_child_change;
+  context_class->get_dbus_object_path = gtk_at_spi_context_get_dbus_object_path;
 }
 
 static void
