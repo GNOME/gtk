@@ -45,4 +45,7 @@ GtkATContext *          gtk_at_context_create                   (GtkAccessibleRo
                                                                  GtkAccessible     *accessible,
                                                                  GdkDisplay        *display);
 
+GDK_AVAILABLE_IN_4_10
+const char *            gtk_at_context_get_dbus_object_path     (GtkATContext      *self);
+
 G_END_DECLS

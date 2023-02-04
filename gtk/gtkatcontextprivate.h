@@ -124,6 +124,8 @@ struct _GtkATContextClass
 
   void (* realize)       (GtkATContext *self);
   void (* unrealize)     (GtkATContext *self);
+
+  const char * (* get_dbus_object_path) (GtkATContext *self);
 };
 
 GtkATContext *          gtk_at_context_clone                    (GtkATContext          *self,

@@ -1152,3 +1152,37 @@ gtk_at_context_child_changed (GtkATContext             *self,
 
   GTK_AT_CONTEXT_GET_CLASS (self)->child_change (self, change, child);
 }
+
+/**
+ * gtk_at_context_get_dbus_object_path:
+ * @self: an accessibility context
+ *
+ * Returns the D-Bus object path of the accessibility context.
+ *
+ * If the accessibility context uses a D-Bus transport, the return value is
+ * the path at which you will be able to find the object.
+ *
+ * This function returns `NULL` if the accessibility context is unrealized,
+ * or it does not use D-Bus, or if the accessibility support has been
+ * disabled.
+ *
+ * Returns: (nullable) (transfer none): the D-Bus object path of the
+ *   accessibility context
+ *
+ * Since: 4.10
+ */
+const char *
+gtk_at_context_get_dbus_object_path (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  if (!self->realized)
+    return FALSE;
+
+  GtkATContextClass *klass = GTK_AT_CONTEXT_GET_CLASS (self);
+
+  if (klass->get_dbus_object_path != NULL)
+    return klass->get_dbus_object_path (self);
+  else
+    return NULL;
+}
