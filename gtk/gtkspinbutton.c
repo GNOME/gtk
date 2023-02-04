@@ -614,25 +614,14 @@ static gboolean
 gtk_spin_button_accessible_get_platform_state (GtkAccessible              *self,
                                                GtkAccessiblePlatformState  state)
 {
-  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (self);
-
-  switch (state)
-    {
-    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
-      return gtk_widget_get_focusable (spin_button->entry);
-    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
-      return gtk_widget_has_focus (spin_button->entry);
-    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
-      return FALSE;
-    default:
-      g_assert_not_reached ();
-    }
+  return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (self), state);
 }
 
 static void
 gtk_spin_button_accessible_init (GtkAccessibleInterface *iface)
 {
   GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
+
   iface->get_at_context = parent_iface->get_at_context;
   iface->get_platform_state = gtk_spin_button_accessible_get_platform_state;
 }

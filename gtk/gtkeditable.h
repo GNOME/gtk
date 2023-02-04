@@ -30,8 +30,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/gtkaccessible.h>
 #include <gtk/gtkwidget.h>
-
 
 G_BEGIN_DECLS
 
@@ -194,6 +194,9 @@ gboolean     gtk_editable_delegate_get_property (GObject      *object,
                                                  guint         prop_id,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
+GDK_AVAILABLE_IN_4_10
+gboolean gtk_editable_delegate_get_accessible_platform_state (GtkEditable                *editable,
+                                                              GtkAccessiblePlatformState  state);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEditable, g_object_unref)
 

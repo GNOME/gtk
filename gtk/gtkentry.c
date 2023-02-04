@@ -339,20 +339,7 @@ static gboolean
 gtk_entry_accessible_get_platform_state (GtkAccessible              *self,
                                          GtkAccessiblePlatformState  state)
 {
-  GtkEntry *entry = GTK_ENTRY (self);
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  switch (state)
-    {
-    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
-      return gtk_widget_get_focusable (GTK_WIDGET (priv->text));
-    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
-      return gtk_widget_has_focus (GTK_WIDGET (priv->text));
-    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
-      return FALSE;
-    default:
-      g_assert_not_reached ();
-    }
+  return gtk_editable_delegate_get_accessible_platform_state (GTK_EDITABLE (self), state);
 }
 
 static void
