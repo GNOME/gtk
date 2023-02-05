@@ -26,7 +26,7 @@
 #include <string.h>
 #include <glib/gstdio.h>
 
-#include "gopenuriportal.h"
+#include "gtkopenuriportal.h"
 #include "xdp-dbus.h"
 #include "gtkwindowprivate.h"
 #include "gtkprivate.h"
@@ -43,7 +43,7 @@
 #endif
 
 
-static GXdpOpenURI *openuri;
+static GtkXdpOpenURI *openuri;
 
 static gboolean
 init_openuri_portal (void)
@@ -57,10 +57,10 @@ init_openuri_portal (void)
 
       if (connection != NULL)
         {
-          openuri = gxdp_open_uri_proxy_new_sync (connection, 0,
-                                                  PORTAL_BUS_NAME,
-                                                  PORTAL_OBJECT_PATH,
-                                                  NULL, &error);
+          openuri = gtk_xdp_open_uri_proxy_new_sync (connection, 0,
+                                                     PORTAL_BUS_NAME,
+                                                     PORTAL_OBJECT_PATH,
+                                                     NULL, &error);
           if (openuri == NULL)
             {
               g_warning ("Cannot create OpenURI portal proxy: %s", error->message);
@@ -83,7 +83,7 @@ init_openuri_portal (void)
 }
 
 gboolean
-g_openuri_portal_is_available (void)
+gtk_openuri_portal_is_available (void)
 {
   return init_openuri_portal ();
 }
@@ -169,7 +169,7 @@ open_call_done (GObject      *source,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
-  GXdpOpenURI *portal = GXDP_OPEN_URI (source);
+  GtkXdpOpenURI *portal = GTK_XDP_OPEN_URI (source);
   GTask *task = user_data;
   OpenUriData *data = g_task_get_task_data (task);
   GError *error = NULL;
@@ -179,13 +179,13 @@ open_call_done (GObject      *source,
   switch (data->call)
     {
     case OPEN_FILE:
-      res = gxdp_open_uri_call_open_file_finish (portal, &path, NULL, result, &error);
+      res = gtk_xdp_open_uri_call_open_file_finish (portal, &path, NULL, result, &error);
       break;
     case OPEN_FOLDER:
-      res = gxdp_open_uri_call_open_directory_finish (portal, &path, NULL, result, &error);
+      res = gtk_xdp_open_uri_call_open_directory_finish (portal, &path, NULL, result, &error);
       break;
     case OPEN_URI:
-      res = gxdp_open_uri_call_open_uri_finish (portal, &path, result, &error);
+      res = gtk_xdp_open_uri_call_open_uri_finish (portal, &path, result, &error);
       break;
     default:
       g_assert_not_reached ();
@@ -341,7 +341,7 @@ open_uri (OpenUriData         *data,
       if (open_folder)
         {
           data->call = OPEN_FOLDER;
-          gxdp_open_uri_call_open_directory (openuri,
+          gtk_xdp_open_uri_call_open_directory (openuri,
                                              parent_window ? parent_window : "",
                                              g_variant_new ("h", fd_id),
                                              opts,
@@ -353,7 +353,7 @@ open_uri (OpenUriData         *data,
       else
         {
           data->call = OPEN_FILE;
-          gxdp_open_uri_call_open_file (openuri,
+          gtk_xdp_open_uri_call_open_file (openuri,
                                         parent_window ? parent_window : "",
                                         g_variant_new ("h", fd_id),
                                         opts,
@@ -373,7 +373,7 @@ open_uri (OpenUriData         *data,
         uri = g_file_get_uri (file);
 
       data->call = OPEN_URI;
-      gxdp_open_uri_call_open_uri (openuri,
+      gtk_xdp_open_uri_call_open_uri (openuri,
                                    parent_window ? parent_window : "",
                                    uri ? uri : data->uri,
                                    opts,
@@ -441,12 +441,12 @@ window_handle_exported (GtkWindow  *window,
 }
 
 void
-g_openuri_portal_open_async (GFile               *file,
-                             gboolean             open_folder,
-                             GtkWindow           *parent,
-                             GCancellable        *cancellable,
-                             GAsyncReadyCallback  callback,
-                             gpointer             user_data)
+gtk_openuri_portal_open_async (GFile               *file,
+                               gboolean             open_folder,
+                               GtkWindow           *parent,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   OpenUriData *data;
 
@@ -465,27 +465,27 @@ g_openuri_portal_open_async (GFile               *file,
   data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
   data->task = g_task_new (parent, cancellable, callback, user_data);
   g_task_set_check_cancellable (data->task, FALSE);
-  g_task_set_source_tag (data->task, g_openuri_portal_open_async);
+  g_task_set_source_tag (data->task, gtk_openuri_portal_open_async);
 
   if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
     window_handle_exported (parent, NULL, data);
 }
 
 gboolean
-g_openuri_portal_open_finish (GAsyncResult  *result,
-                              GError       **error)
+gtk_openuri_portal_open_finish (GAsyncResult  *result,
+                                GError       **error)
 {
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == g_openuri_portal_open_async, FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_openuri_portal_open_async, FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 void
-g_openuri_portal_open_uri_async (const char          *uri,
-                                 GtkWindow           *parent,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
+gtk_openuri_portal_open_uri_async (const char          *uri,
+                                   GtkWindow           *parent,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
 {
   OpenUriData *data;
 
@@ -503,17 +503,17 @@ g_openuri_portal_open_uri_async (const char          *uri,
   data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
   data->task = g_task_new (parent, cancellable, callback, user_data);
   g_task_set_check_cancellable (data->task, FALSE);
-  g_task_set_source_tag (data->task, g_openuri_portal_open_uri_async);
+  g_task_set_source_tag (data->task, gtk_openuri_portal_open_uri_async);
 
   if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
     window_handle_exported (parent, NULL, data);
 }
 
 gboolean
-g_openuri_portal_open_uri_finish (GAsyncResult  *result,
-                                  GError       **error)
+gtk_openuri_portal_open_uri_finish (GAsyncResult  *result,
+                                    GError       **error)
 {
-  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == g_openuri_portal_open_uri_async, FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_openuri_portal_open_uri_async, FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }

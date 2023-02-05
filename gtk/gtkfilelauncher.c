@@ -22,7 +22,7 @@
 #include "gtkfilelauncher.h"
 
 #include "gtkdialogerror.h"
-#include "gopenuriportal.h"
+#include "gtkopenuriportal.h"
 #include "deprecated/gtkshow.h"
 #include <glib/gi18n-lib.h>
 
@@ -219,7 +219,7 @@ open_done (GObject      *source,
   GTask *task = G_TASK (data);
   GError *error = NULL;
 
-  if (!g_openuri_portal_open_finish (result, &error))
+  if (!gtk_openuri_portal_open_finish (result, &error))
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
@@ -367,9 +367,9 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
     }
 
 #ifndef G_OS_WIN32
-  if (g_openuri_portal_is_available ())
+  if (gtk_openuri_portal_is_available ())
     {
-      g_openuri_portal_open_async (self->file, FALSE, parent, cancellable, open_done, task);
+      gtk_openuri_portal_open_async (self->file, FALSE, parent, cancellable, open_done, task);
     }
   else
 #endif
@@ -461,9 +461,9 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
     }
 
 #ifndef G_OS_WIN32
-  if (g_openuri_portal_is_available ())
+  if (gtk_openuri_portal_is_available ())
     {
-      g_openuri_portal_open_async (self->file, TRUE, parent, cancellable, open_done, task);
+      gtk_openuri_portal_open_async (self->file, TRUE, parent, cancellable, open_done, task);
     }
   else
 #endif

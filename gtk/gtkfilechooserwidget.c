@@ -96,7 +96,7 @@
 #include "gtkexpression.h"
 
 #ifndef G_OS_WIN32
-#include "gopenuriportal.h"
+#include "gtkopenuriportal.h"
 #endif
 
 #include <cairo-gobject.h>
