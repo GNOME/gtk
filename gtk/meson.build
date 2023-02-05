@@ -758,7 +758,7 @@ if not (x11_enabled or win32_enabled)
 endif
 
 if not os_win32
-  gtk_sources += ['gopenuriportal.c', ]
+  gtk_sources += ['gtkopenuriportal.c', ]
 endif
 
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
@@ -991,7 +991,7 @@ else
   xdp_dbus_generated = gnome.gdbus_codegen('xdp-dbus',
     sources : 'org.freedesktop.portal.OpenURI.xml',
     interface_prefix : 'org.freedesktop.portal.',
-    namespace : 'GXdp',
+    namespace : 'GtkXdp',
   )
 endif
 

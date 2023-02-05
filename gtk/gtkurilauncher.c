@@ -22,7 +22,7 @@
 #include "gtkurilauncher.h"
 
 #include "gtkdialogerror.h"
-#include "gopenuriportal.h"
+#include "gtkopenuriportal.h"
 #include "deprecated/gtkshow.h"
 #include <glib/gi18n-lib.h>
 
@@ -221,7 +221,7 @@ open_done (GObject      *source,
   GTask *task = G_TASK (data);
   GError *error = NULL;
 
-  if (!g_openuri_portal_open_uri_finish (result, &error))
+  if (!gtk_openuri_portal_open_uri_finish (result, &error))
     g_task_return_error (task, error);
   else
     g_task_return_boolean (task, TRUE);
@@ -300,8 +300,8 @@ gtk_uri_launcher_launch (GtkUriLauncher     *self,
     }
 
 #ifndef G_OS_WIN32
-  if (g_openuri_portal_is_available ())
-    g_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
+  if (gtk_openuri_portal_is_available ())
+    gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
   else
 #endif
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
