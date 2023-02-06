@@ -694,7 +694,7 @@ gtk_file_dialog_set_initial_file (GtkFileDialog *self,
       GFile *folder;
       GFileInfo *info;
    
-      if (g_file_equal (self->initial_file, file))
+      if (self->initial_file && g_file_equal (self->initial_file, file))
         return;
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_FILE]);
@@ -707,7 +707,7 @@ gtk_file_dialog_set_initial_file (GtkFileDialog *self,
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_FOLDER]);
 
       info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, 0, NULL, NULL);
-      if (g_file_info_get_edit_name (info) != NULL)
+      if (info && g_file_info_get_edit_name (info) != NULL)
         {
           if (g_set_str (&self->initial_name, g_file_info_get_edit_name (info)))
             g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_NAME]);
@@ -724,7 +724,7 @@ gtk_file_dialog_set_initial_file (GtkFileDialog *self,
           g_free (name);
           g_free (relative);
         }
-      g_object_unref (info);
+      g_clear_object (&info);
       g_object_unref (folder);
     }
   else
