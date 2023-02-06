@@ -21,7 +21,7 @@ many things that we value:
 Please, do not use the issue tracker for support questions. If you have
 questions on how to use GTK effectively, you can use:
 
- - the `#gtk` IRC channel on irc.gnome.org
+ - the `gtk` [room on matrix](https://matrix.to/#/#gtk:gnome.org)
  - the [gtk tag on the GNOME Discourse instance](https://discourse.gnome.org/tag/gtk)
 
 You can also look at the GTK tag on [Stack
@@ -44,6 +44,7 @@ If you're reporting a bug make sure to list:
 
  0. which version of GTK are you using?
  0. which operating system are you using?
+ 0. what display and graphics driver are you using?
  0. the necessary steps to reproduce the issue
  0. the expected outcome
  0. a description of the behavior; screenshots are also welcome
