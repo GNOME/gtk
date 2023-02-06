@@ -69,4 +69,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_print_job_set_status (GtkPrintJob   *job,
 			       GtkPrintStatus status);
 
+GtkPrinter *         gtk_printer_find (const char *name);
+
 G_END_DECLS

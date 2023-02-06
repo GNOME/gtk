@@ -1338,6 +1338,30 @@ gtk_enumerate_printers (GtkPrinterFunc func,
     }
 }
 
+
+static GtkPrinter *found_printer;
+
+static gboolean
+match_printer_name (GtkPrinter *printer,
+                    gpointer    data)
+{
+  if (strcmp (gtk_printer_get_name (printer), (const char *)data) == 0)
+    {
+      found_printer = g_object_ref (printer);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+GtkPrinter *
+gtk_printer_find (const char *name)
+{
+  found_printer = NULL;
+  gtk_enumerate_printers (match_printer_name, (gpointer) name, NULL, TRUE);
+  return g_steal_pointer (&found_printer);
+}
+
 GType
 gtk_print_capabilities_get_type (void)
 {
