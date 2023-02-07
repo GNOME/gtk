@@ -19,7 +19,6 @@ tests = [
   { 'name': 'glcontext' },
   { 'name': 'keysyms' },
   { 'name': 'memorytexture' },
-  { 'name': 'pixbuf' },
   { 'name': 'rectangle' },
   { 'name': 'rgba' },
   { 'name': 'seat' },
