@@ -2064,19 +2064,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
             GDK_IS_TOPLEVEL (surface))
           {
-            if (gdk_x11_device_xi2_get_device_type ((GdkX11DeviceXI2 *) device) != GDK_X11_DEVICE_TYPE_LOGICAL)
-              _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
-            else
-              {
-                GList *physical_devices, *l;
+            GList *l;
 
-                physical_devices = gdk_device_list_physical_devices (source_device);
-
-                for (l = physical_devices; l; l = l->next)
-                  _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (l->data));
-
-                g_list_free (physical_devices);
-              }
+            for (l = device_manager->devices; l; l = l->next)
+              _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (l->data));
           }
 
         event = gdk_crossing_event_new (ev->evtype == XI_Enter
