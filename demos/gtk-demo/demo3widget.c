@@ -4,6 +4,8 @@
 enum
 {
   PROP_TEXTURE = 1,
+  PROP_MIN_FILTER,
+  PROP_MAG_FILTER,
   PROP_SCALE
 };
 
@@ -13,6 +15,8 @@ struct _Demo3Widget
 
   GdkTexture *texture;
   float scale;
+  GskScalingFilter min_filter;
+  GskScalingFilter mag_filter;
 
   GtkWidget *menu;
 };
@@ -28,6 +32,8 @@ static void
 demo3_widget_init (Demo3Widget *self)
 {
   self->scale = 1.f;
+  self->min_filter = GSK_SCALING_FILTER_NEAREST;
+  self->mag_filter = GSK_SCALING_FILTER_NEAREST;
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
@@ -50,6 +56,7 @@ demo3_widget_snapshot (GtkWidget   *widget,
   Demo3Widget *self = DEMO3_WIDGET (widget);
   int x, y, width, height;
   double w, h;
+  GskRenderNode *node;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
@@ -63,7 +70,12 @@ demo3_widget_snapshot (GtkWidget   *widget,
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-  gtk_snapshot_append_texture (snapshot, self->texture, &GRAPHENE_RECT_INIT (0, 0, w, h));
+  node = gsk_texture_node_new_with_filters (self->texture,
+                                            &GRAPHENE_RECT_INIT (0, 0, w, h),
+                                            self->min_filter,
+                                            self->mag_filter);
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
   gtk_snapshot_restore (snapshot);
   gtk_snapshot_pop (snapshot);
 }
@@ -124,6 +136,16 @@ demo3_widget_set_property (GObject      *object,
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
+    case PROP_MIN_FILTER:
+      self->min_filter = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (object));
+      break;
+
+    case PROP_MAG_FILTER:
+      self->mag_filter = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (object));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -146,6 +168,14 @@ demo3_widget_get_property (GObject     *object,
 
     case PROP_SCALE:
       g_value_set_float (value, self->scale);
+      break;
+
+    case PROP_MIN_FILTER:
+      g_value_set_enum (value, self->min_filter);
+      break;
+
+    case PROP_MAG_FILTER:
+      g_value_set_enum (value, self->mag_filter);
       break;
 
     default:
@@ -214,6 +244,16 @@ demo3_widget_class_init (Demo3WidgetClass *class)
       g_param_spec_float ("scale", NULL, NULL,
                           0.0, 10.0, 1.0,
                           G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_MIN_FILTER,
+      g_param_spec_enum ("min-filter", NULL, NULL,
+                         GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
+                         G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_MAG_FILTER,
+      g_param_spec_enum ("mag-filter", NULL, NULL,
+                         GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
+                         G_PARAM_READWRITE));
 
   /* These are the actions that we are using in the menu */
   gtk_widget_class_install_action (widget_class, "zoom.in", NULL, zoom_cb);
