@@ -214,8 +214,18 @@ GType                   gsk_texture_node_get_type               (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_texture_node_new                    (GdkTexture               *texture,
                                                                  const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_4_10
+GskRenderNode *         gsk_texture_node_new_with_filters       (GdkTexture               *texture,
+                                                                 const graphene_rect_t    *bounds,
+                                                                 GskScalingFilter          min_filter,
+                                                                 GskScalingFilter          mag_filter);
+
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gsk_texture_node_get_texture            (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_10
+GskScalingFilter        gsk_texture_node_get_min_filter         (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+GskScalingFilter        gsk_texture_node_get_mag_filter         (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_linear_gradient_node_get_type           (void) G_GNUC_CONST;

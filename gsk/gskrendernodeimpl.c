@@ -1471,6 +1471,9 @@ struct _GskTextureNode
   GskRenderNode render_node;
 
   GdkTexture *texture;
+
+  GskScalingFilter min_filter;
+  GskScalingFilter mag_filter;
 };
 
 static void
@@ -1492,6 +1495,11 @@ gsk_texture_node_draw (GskRenderNode *node,
   cairo_surface_t *surface;
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
+  cairo_filter_t filters[] = {
+    CAIRO_FILTER_BILINEAR,
+    CAIRO_FILTER_NEAREST,
+    CAIRO_FILTER_GOOD,
+  };
 
   surface = gdk_texture_download_surface (self->texture);
   pattern = cairo_pattern_create_for_surface (surface);
@@ -1504,6 +1512,10 @@ gsk_texture_node_draw (GskRenderNode *node,
                           -node->bounds.origin.x,
                           -node->bounds.origin.y);
   cairo_pattern_set_matrix (pattern, &matrix);
+  if (gdk_texture_get_width (self->texture) > node->bounds.size.width)
+    cairo_pattern_set_filter (pattern, filters[self->min_filter]);
+  else
+    cairo_pattern_set_filter (pattern, filters[self->mag_filter]);
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -1522,7 +1534,9 @@ gsk_texture_node_diff (GskRenderNode  *node1,
   GskTextureNode *self2 = (GskTextureNode *) node2;
 
   if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
-      self1->texture == self2->texture)
+      self1->texture == self2->texture &&
+      self1->min_filter ==self2->min_filter &&
+      self1->mag_filter ==self2->mag_filter)
     return;
 
   gsk_render_node_diff_impossible (node1, node2, region);
@@ -1542,6 +1556,38 @@ gsk_texture_node_get_texture (const GskRenderNode *node)
   const GskTextureNode *self = (const GskTextureNode *) node;
 
   return self->texture;
+}
+
+/**
+ * gsk_texture_node_get_min_filter:
+ * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_NODE
+ *
+ * Retrieves the filter to apply when scaling the texture down.
+ *
+ * Since: 4.10
+ */
+GskScalingFilter
+gsk_texture_node_get_min_filter (const GskRenderNode *node)
+{
+  const GskTextureNode *self = (const GskTextureNode *) node;
+
+  return self->min_filter;
+}
+
+/**
+ * gsk_texture_node_get_mag_filter:
+ * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_NODE
+ *
+ * Retrieves the filter to apply when scaling the texture up.
+ *
+ * Since: 4.10
+ */
+GskScalingFilter
+gsk_texture_node_get_mag_filter (const GskRenderNode *node)
+{
+  const GskTextureNode *self = (const GskTextureNode *) node;
+
+  return self->mag_filter;
 }
 
 /**
@@ -1569,6 +1615,49 @@ gsk_texture_node_new (GdkTexture            *texture,
   node->offscreen_for_opacity = FALSE;
 
   self->texture = g_object_ref (texture);
+  self->min_filter = GSK_SCALING_FILTER_LINEAR;
+  self->mag_filter = GSK_SCALING_FILTER_LINEAR;
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+
+  node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
+
+  return node;
+}
+
+/**
+ * gsk_texture_node_new_with_filters:
+ * @texture: the `GdkTexture`
+ * @bounds: the rectangle to render the texture into
+ * @min_filter: filter to apply when scaling down
+ * @mag_filter: filter to apply when scaling up
+ *
+ * Creates a `GskRenderNode` that will render the given
+ * @texture into the area given by @bounds, using the
+ * given filters when required.
+ *
+ * Returns: (transfer full) (type GskTextureNode): A new `GskRenderNode`
+ *
+ * Since: 4.10
+ */
+GskRenderNode *
+gsk_texture_node_new_with_filters (GdkTexture            *texture,
+                                   const graphene_rect_t *bounds,
+                                   GskScalingFilter       min_filter,
+                                   GskScalingFilter       mag_filter)
+{
+  GskTextureNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_TEXTURE_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = FALSE;
+
+  self->texture = g_object_ref (texture);
+  self->min_filter = min_filter;
+  self->mag_filter = mag_filter;
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
   node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
