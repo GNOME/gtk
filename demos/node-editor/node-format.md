@@ -297,6 +297,21 @@ The default texture is a 10x10 checkerboard with the top left and bottom right
 representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAKUlEQVQYlWP8z3DmPwMaYGQwYUQXY0IXwAUGUCGGoxkYGBiweXAoeAYAz44F3e3U1xUAAAAASUVORK5CYII=")
 `.
 
+### texture-scale
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`         | 50                     | always      |
+| texture  | `<url>`          | *see below*            | always      |
+| filter   | `filter`         | *see below*            | non-default |
+
+Creates a node like `gsk_texture_scale_node_new()` with the given properties.
+
+The default texture is a 10x10 checkerboard, just like for texture.
+
+The possible filter values are `linear`, `nearest` and `trilinear`, with
+`linear` being the default.
+
 ### transform
 
 | property | syntax           | default                | printed     |
