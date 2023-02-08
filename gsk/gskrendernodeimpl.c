@@ -1582,6 +1582,191 @@ gsk_texture_node_new (GdkTexture            *texture,
 }
 
 /* }}} */
+/* {{{ GSK_TEXTURE_SCALE_NODE */
+
+/**
+ * GskTextureScaleNode:
+ *
+ * A render node for a `GdkTexture`.
+ */
+struct _GskTextureScaleNode
+{
+  GskRenderNode render_node;
+
+  GdkTexture *texture;
+  GskScalingFilter filter;
+};
+
+static void
+gsk_texture_scale_node_finalize (GskRenderNode *node)
+{
+  GskTextureScaleNode *self = (GskTextureScaleNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_TEXTURE_SCALE_NODE));
+
+  g_clear_object (&self->texture);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_texture_scale_node_draw (GskRenderNode *node,
+                             cairo_t       *cr)
+{
+  GskTextureScaleNode *self = (GskTextureScaleNode *) node;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+  cairo_filter_t filters[] = {
+    CAIRO_FILTER_BILINEAR,
+    CAIRO_FILTER_NEAREST,
+    CAIRO_FILTER_GOOD,
+  };
+  cairo_t *cr2;
+  cairo_surface_t *surface2;
+
+  surface2 = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                         (int) ceilf (node->bounds.size.width),
+                                         (int) ceilf (node->bounds.size.height));
+  cr2 = cairo_create (surface2);
+
+  cairo_set_source_rgba (cr2, 0, 0, 0, 0);
+  cairo_paint (cr2);
+
+  surface = gdk_texture_download_surface (self->texture);
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  cairo_matrix_init_scale (&matrix,
+                           gdk_texture_get_width (self->texture) / node->bounds.size.width,
+                           gdk_texture_get_height (self->texture) / node->bounds.size.height);
+  cairo_pattern_set_matrix (pattern, &matrix);
+  cairo_pattern_set_filter (pattern, filters[self->filter]);
+
+  cairo_set_source (cr2, pattern);
+  cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface);
+
+  cairo_rectangle (cr2, 0, 0, node->bounds.size.width, node->bounds.size.height);
+  cairo_fill (cr2);
+
+  cairo_destroy (cr2);
+
+  cairo_save (cr);
+
+  pattern = cairo_pattern_create_for_surface (surface2);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  cairo_matrix_init_identity (&matrix);
+  cairo_matrix_translate (&matrix,
+                          -node->bounds.origin.x,
+                          -node->bounds.origin.y);
+  cairo_pattern_set_matrix (pattern, &matrix);
+  cairo_set_source (cr, pattern);
+  cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface2);
+
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_fill (cr);
+
+  cairo_restore (cr);
+}
+
+static void
+gsk_texture_scale_node_diff (GskRenderNode  *node1,
+                             GskRenderNode  *node2,
+                             cairo_region_t *region)
+{
+  GskTextureScaleNode *self1 = (GskTextureScaleNode *) node1;
+  GskTextureScaleNode *self2 = (GskTextureScaleNode *) node2;
+
+  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->texture == self2->texture &&
+      self1->filter == self2->filter)
+    return;
+
+  gsk_render_node_diff_impossible (node1, node2, region);
+}
+
+/**
+ * gsk_texture_scale_node_get_texture:
+ * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ *
+ * Retrieves the `GdkTexture` used when creating this `GskRenderNode`.
+ *
+ * Returns: (transfer none): the `GdkTexture`
+ *
+ * Since: 4.10
+ */
+GdkTexture *
+gsk_texture_scale_node_get_texture (const GskRenderNode *node)
+{
+  const GskTextureScaleNode *self = (const GskTextureScaleNode *) node;
+
+  return self->texture;
+}
+
+/**
+ * gsk_texture_scale_node_get_filter:
+ * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ *
+ * Retrieves the `GskScalingFilter` used when creating this `GskRenderNode`.
+ *
+ * Returns: (transfer none): the `GskScalingFilter`
+ *
+ * Since: 4.10
+ */
+GskScalingFilter
+gsk_texture_scale_node_get_filter (const GskRenderNode *node)
+{
+  const GskTextureScaleNode *self = (const GskTextureScaleNode *) node;
+
+  return self->filter;
+}
+
+/**
+ * gsk_texture_scale_node_new:
+ * @texture: the texture to scale
+ * @bounds: the size of the texture to scale to
+ * @filter: how to scale the texture
+ *
+ * Creates a node that scales the texture to the size given by the
+ * bounds and the filter and then places it at the bounds' position.
+ *
+ * This node is intended for tight control over scaling applied
+ * to a texture, such as in image editors and requires the
+ * application to be aware of the whole render tree as further
+ * transforms may be applied that conflict with the desired effect
+ * of this node.
+ *
+ * Returns: (transfer full) (type GskTextureScaleNode): A new `GskRenderNode`
+ *
+ * Since: 4.10
+ */
+GskRenderNode *
+gsk_texture_scale_node_new (GdkTexture            *texture,
+                            const graphene_rect_t *bounds,
+                            GskScalingFilter       filter)
+{
+  GskTextureScaleNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_TEXTURE_SCALE_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = FALSE;
+
+  self->texture = g_object_ref (texture);
+  graphene_rect_init_from_rect (&node->bounds, bounds);
+  self->filter = filter;
+
+  node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
+
+  return node;
+}
+
+/* }}} */
 /* {{{ GSK_INSET_SHADOW_NODE */
 
 /**
@@ -5357,6 +5542,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_repeating_radial_gradient_node, GSK_REPEATING_R
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_conic_gradient_node, GSK_CONIC_GRADIENT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_border_node, GSK_BORDER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_node, GSK_TEXTURE_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_texture_scale_node, GSK_TEXTURE_SCALE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_inset_shadow_node, GSK_INSET_SHADOW_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_outset_shadow_node, GSK_OUTSET_SHADOW_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_transform_node, GSK_TRANSFORM_NODE)
@@ -5534,6 +5720,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskTextureNode"), &node_info);
     gsk_render_node_types[GSK_TEXTURE_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_TEXTURE_SCALE_NODE,
+      sizeof (GskTextureScaleNode),
+      NULL,
+      gsk_texture_scale_node_finalize,
+      gsk_texture_scale_node_draw,
+      NULL,
+      gsk_texture_scale_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskTextureScaleNode"), &node_info);
+    gsk_render_node_types[GSK_TEXTURE_SCALE_NODE] = node_type;
   }
 
   {

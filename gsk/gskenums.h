@@ -35,6 +35,7 @@
  * @GSK_CONIC_GRADIENT_NODE: A node drawing a conic gradient
  * @GSK_BORDER_NODE: A node stroking a border around an area
  * @GSK_TEXTURE_NODE: A node drawing a `GdkTexture`
+ * @GSK_TEXTURE_SCALE_NODE: A node drawing a `GdkTexture` scaled and filtered
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
  * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
@@ -65,6 +66,7 @@ typedef enum {
   GSK_CONIC_GRADIENT_NODE,
   GSK_BORDER_NODE,
   GSK_TEXTURE_NODE,
+  GSK_TEXTURE_SCALE_NODE,
   GSK_INSET_SHADOW_NODE,
   GSK_OUTSET_SHADOW_NODE,
   GSK_TRANSFORM_NODE,

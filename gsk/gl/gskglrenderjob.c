@@ -3762,6 +3762,10 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
       gsk_gl_render_job_visit_texture_node (job, node);
     break;
 
+    case GSK_TEXTURE_SCALE_NODE:
+      gsk_gl_render_job_visit_as_fallback (job, node);
+    break;
+
     case GSK_TRANSFORM_NODE:
       gsk_gl_render_job_visit_transform_node (job, node);
     break;
