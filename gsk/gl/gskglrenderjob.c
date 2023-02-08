@@ -3443,9 +3443,13 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
 static void
 gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   GdkTexture           *texture,
+                                  int                   min_filter,
+                                  int                   mag_filter,
                                   GskGLRenderOffscreen *offscreen)
 {
-  if (gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
+  if (min_filter == GL_LINEAR &&
+      mag_filter == GL_LINEAR &&
+      gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
       !GDK_IS_GL_TEXTURE (texture))
@@ -3458,7 +3462,7 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
     }
   else
     {
-      offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, GL_LINEAR, GL_LINEAR);
+      offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, min_filter, mag_filter);
       init_full_texture_region (offscreen);
     }
 }
@@ -3468,6 +3472,8 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
                                       const GskRenderNode *node)
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
+  int min_filter = GL_LINEAR;
+  int mag_filter = GL_LINEAR;
   int max_texture_size = job->command_queue->max_texture_size;
 
   if G_LIKELY (texture->width <= max_texture_size &&
@@ -3475,7 +3481,7 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_upload_texture (job, texture, &offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, min_filter, mag_filter, &offscreen);
 
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
@@ -3812,7 +3818,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       offscreen->force_offscreen == FALSE)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (node);
-      gsk_gl_render_job_upload_texture (job, texture, offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, GL_LINEAR, GL_LINEAR, offscreen);
       g_assert (offscreen->was_offscreen == FALSE);
       return TRUE;
     }
