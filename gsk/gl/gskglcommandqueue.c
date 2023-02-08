@@ -1463,6 +1463,9 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
 
   gsk_gl_command_queue_do_upload_texture (self, texture);
 
+  if (min_filter == GL_LINEAR_MIPMAP_LINEAR)
+    glGenerateMipmap (GL_TEXTURE_2D);
+
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)
     glBindTexture (self->attachments->textures[0].target,
