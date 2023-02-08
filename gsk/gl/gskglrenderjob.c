@@ -3472,8 +3472,10 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
                                       const GskRenderNode *node)
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
-  int min_filter = GL_LINEAR;
-  int mag_filter = GL_LINEAR;
+  int min_filters[] = { GL_LINEAR, GL_NEAREST, GL_LINEAR_MIPMAP_LINEAR };
+  int mag_filters[] = { GL_LINEAR, GL_NEAREST, GL_LINEAR };
+  int min_filter = min_filters[gsk_texture_node_get_min_filter (node)];
+  int mag_filter = mag_filters[gsk_texture_node_get_mag_filter (node)];
   int max_texture_size = job->command_queue->max_texture_size;
 
   if G_LIKELY (texture->width <= max_texture_size &&
