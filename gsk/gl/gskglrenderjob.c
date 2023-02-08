@@ -3468,12 +3468,10 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
 }
 
 static inline void
-gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
-                                      const GskRenderNode *node)
+gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
+                                 GdkTexture            *texture,
+                                 const graphene_rect_t *bounds)
 {
-  GdkTexture *texture = gsk_texture_node_get_texture (node);
-  int min_filter = GL_LINEAR;
-  int mag_filter = GL_LINEAR;
   int max_texture_size = job->command_queue->max_texture_size;
 
   if G_LIKELY (texture->width <= max_texture_size &&
@@ -3481,7 +3479,7 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_upload_texture (job, texture, min_filter, mag_filter, &offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, GL_LINEAR, GL_LINEAR, &offscreen);
 
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
@@ -3492,15 +3490,15 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           offscreen.texture_id);
-      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
     }
   else
     {
-      float min_x = job->offset_x + node->bounds.origin.x;
-      float min_y = job->offset_y + node->bounds.origin.y;
-      float max_x = min_x + node->bounds.size.width;
-      float max_y = min_y + node->bounds.size.height;
+      float min_x = job->offset_x + bounds->origin.x;
+      float min_y = job->offset_y + bounds->origin.y;
+      float max_x = min_x + bounds->size.width;
+      float max_y = min_y + bounds->size.height;
       float scale_x = (max_x - min_x) / texture->width;
       float scale_y = (max_y - min_y) / texture->height;
       GskGLTextureSlice *slices = NULL;
@@ -3538,6 +3536,151 @@ gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
         }
 
       gsk_gl_render_job_end_draw (job);
+    }
+}
+
+static inline void
+gsk_gl_render_job_visit_texture_node (GskGLRenderJob      *job,
+                                      const GskRenderNode *node)
+{
+  GdkTexture *texture = gsk_texture_node_get_texture (node);
+  const graphene_rect_t *bounds = &node->bounds;
+
+  gsk_gl_render_job_visit_texture (job, texture, bounds);
+}
+
+static inline void
+gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
+                                            const GskRenderNode *node)
+{
+  GdkTexture *texture = gsk_texture_scale_node_get_texture (node);
+  const graphene_rect_t *bounds = &node->bounds;
+  GskScalingFilter scaling_filter = gsk_texture_scale_node_get_filter (node);
+  int min_filters[] = { GL_LINEAR, GL_NEAREST, GL_LINEAR_MIPMAP_LINEAR };
+  int mag_filters[] = { GL_LINEAR, GL_NEAREST, GL_LINEAR };
+  int min_filter = min_filters[scaling_filter];
+  int mag_filter = mag_filters[scaling_filter];
+  int max_texture_size = job->command_queue->max_texture_size;
+
+  if (scaling_filter == GSK_SCALING_FILTER_LINEAR)
+    {
+      gsk_gl_render_job_visit_texture (job, texture, bounds);
+      return;
+    }
+
+  if G_LIKELY (texture->width <= max_texture_size &&
+               texture->height <= max_texture_size)
+    {
+      GskGLRenderTarget *render_target;
+      GskGLRenderOffscreen offscreen = {0};
+      graphene_rect_t viewport;
+      graphene_rect_t prev_viewport;
+      graphene_matrix_t prev_projection;
+      float prev_alpha;
+      guint prev_fbo;
+      guint texture_id;
+
+      viewport = GRAPHENE_RECT_INIT (0, 0,
+                                     bounds->size.width,
+                                     bounds->size.height);
+
+      if (!gsk_gl_driver_create_render_target (job->driver,
+                                               (int) ceilf (viewport.size.width),
+                                               (int) ceilf (viewport.size.height),
+                                               get_target_format (job, node),
+                                               GL_LINEAR, GL_LINEAR,
+                                               &render_target))
+        {
+          /* viewport is too big, slice the texture and try again */
+          goto slice;
+        }
+
+      gsk_gl_render_job_upload_texture (job, texture, min_filter, mag_filter, &offscreen);
+
+      g_assert (offscreen.texture_id);
+      g_assert (offscreen.was_offscreen == FALSE);
+
+      gsk_gl_render_job_set_viewport (job, &viewport, &prev_viewport);
+      gsk_gl_render_job_set_projection_from_rect (job, &viewport, &prev_projection);
+      gsk_gl_render_job_set_modelview (job, NULL);
+      prev_alpha = gsk_gl_render_job_set_alpha (job, 1.0f);
+      gsk_gl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (viewport));
+
+      prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
+      gsk_gl_command_queue_clear (job->command_queue, 0, &viewport);
+
+      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen.texture_id);
+      gsk_gl_render_job_draw_offscreen (job, &viewport, &offscreen);
+      gsk_gl_render_job_end_draw (job);
+
+      gsk_gl_render_job_pop_clip (job);
+      gsk_gl_render_job_pop_modelview (job);
+      gsk_gl_render_job_set_viewport (job, &prev_viewport, NULL);
+      gsk_gl_render_job_set_projection (job, &prev_projection);
+      gsk_gl_render_job_set_alpha (job, prev_alpha);
+      gsk_gl_command_queue_bind_framebuffer (job->command_queue, prev_fbo);
+
+      texture_id = gsk_gl_driver_release_render_target (job->driver, render_target, FALSE);
+
+      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          texture_id);
+      gsk_gl_render_job_draw_offscreen_rect (job, bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
+  else
+    {
+slice:
+      float min_x = bounds->origin.x;
+      float min_y = bounds->origin.y;
+      float max_x = min_x + bounds->size.width;
+      float max_y = min_y + bounds->size.height;
+      float scale_x = (max_x - min_x) / texture->width;
+      float scale_y = (max_y - min_y) / texture->height;
+      GskGLTextureSlice *slices = NULL;
+      guint n_slices = 0;
+      GdkGLContext *context = gsk_gl_driver_get_context (job->driver);
+      guint rows, cols;
+
+      /* Slice enough that neither the original texture nor the scaled texture
+       * exceed the texture size limit
+       */
+      cols = (int)(MAX (bounds->size.width, texture->width) / (max_texture_size / 4)) + 1;
+      rows = (int)(MAX (bounds->size.height, texture->height) / (max_texture_size / 4)) + 1;
+
+      gsk_gl_driver_slice_texture (job->driver, texture, GL_NEAREST, GL_NEAREST, cols, rows, &slices, &n_slices);
+
+      g_assert (slices != NULL);
+      g_assert (n_slices > 0);
+
+      for (guint i = 0; i < n_slices; i ++)
+        {
+          const GskGLTextureSlice *slice = &slices[i];
+          float x1, x2, y1, y2;
+          GdkTexture *sub_texture;
+          GskRenderNode *sub_node;
+
+          x1 = min_x + (scale_x * slice->rect.x);
+          x2 = x1 + (slice->rect.width * scale_x);
+          y1 = min_y + (scale_y * slice->rect.y);
+          y2 = y1 + (slice->rect.height * scale_y);
+
+          sub_texture = gdk_gl_texture_new (context, slice->texture_id, slice->rect.width, slice->rect.height, NULL, NULL);
+
+          sub_node = gsk_texture_scale_node_new (sub_texture, &GRAPHENE_RECT_INIT (x1, y1, x2 - x1, y2 - y1), scaling_filter);
+
+          gsk_gl_render_job_visit_node (job, sub_node);
+          gsk_render_node_unref (sub_node);
+          g_object_unref (sub_texture);
+        }
     }
 }
 
@@ -3769,7 +3912,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_TEXTURE_SCALE_NODE:
-      gsk_gl_render_job_visit_as_fallback (job, node);
+      gsk_gl_render_job_visit_texture_scale_node (job, node);
     break;
 
     case GSK_TRANSFORM_NODE:
