@@ -58,7 +58,7 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
-/*** GSK_COLOR_NODE ***/
+/* {{{ GSK_COLOR_NODE */
 
 /**
  * GskColorNode:
@@ -147,7 +147,8 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   return node;
 }
 
-/*** GSK_LINEAR_GRADIENT_NODE ***/
+/* }}} */
+/* {{{ GSK_LINEAR_GRADIENT_NODE */
 
 /**
  * GskRepeatingLinearGradientNode:
@@ -420,7 +421,8 @@ gsk_linear_gradient_node_get_color_stops (const GskRenderNode *node,
   return self->stops;
 }
 
-/*** GSK_RADIAL_GRADIENT_NODE ***/
+/* }}} */
+/* {{{ GSK_RADIAL_GRADIENT_NODE */
 
 /**
  * GskRepeatingRadialGradientNode:
@@ -790,7 +792,8 @@ gsk_radial_gradient_node_get_end (const GskRenderNode *node)
   return self->end;
 }
 
-/*** GSK_CONIC_GRADIENT_NODE ***/
+/* }}} */
+/* {{{ GSK_CONIC_GRADIENT_NODE */
 
 /**
  * GskConicGradientNode:
@@ -1147,7 +1150,8 @@ gsk_conic_gradient_node_get_angle (const GskRenderNode *node)
   return self->angle;
 }
 
-/*** GSK_BORDER_NODE ***/
+/* }}} */
+/* {{{ GSK_BORDER_NODE */
 
 /**
  * GskBorderNode:
@@ -1459,7 +1463,8 @@ gsk_border_node_get_uniform_color (const GskRenderNode *self)
   return node->uniform_color;
 }
 
-/*** GSK_TEXTURE_NODE ***/
+/* }}} */
+/* {{{ GSK_TEXTURE_NODE */
 
 /**
  * GskTextureNode:
@@ -1576,7 +1581,8 @@ gsk_texture_node_new (GdkTexture            *texture,
   return node;
 }
 
-/*** GSK_INSET_SHADOW_NODE ***/
+/* }}} */
+/* {{{ GSK_INSET_SHADOW_NODE */
 
 /**
  * GskInsetShadowNode:
@@ -2132,7 +2138,8 @@ gsk_inset_shadow_node_get_blur_radius (const GskRenderNode *node)
   return self->blur_radius;
 }
 
-/*** GSK_OUTSET_SHADOW_NODE ***/
+/* }}} */
+/* {{{ GSK_OUTSET_SHADOW_NODE */
 
 /**
  * GskOutsetShadowNode:
@@ -2438,7 +2445,8 @@ gsk_outset_shadow_node_get_blur_radius (const GskRenderNode *node)
   return self->blur_radius;
 }
 
-/*** GSK_CAIRO_NODE ***/
+/* }}} */
+/* {{{ GSK_CAIRO_NODE */
 
 /**
  * GskCairoNode:
@@ -2576,7 +2584,8 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node)
   return res;
 }
 
-/**** GSK_CONTAINER_NODE ***/
+/* }}} */
+/* {{{ GSK_CONTAINER_NODE */
 
 /**
  * GskContainerNode:
@@ -2835,7 +2844,8 @@ gsk_container_node_is_disjoint (const GskRenderNode *node)
   return self->disjoint;
 }
 
-/*** GSK_TRANSFORM_NODE ***/
+/* }}} */
+/* {{{ GSK_TRANSFORM_NODE */
 
 /**
  * GskTransformNode:
@@ -3058,7 +3068,8 @@ gsk_transform_node_get_translate (const GskRenderNode *node,
   *dy = self->dy;
 }
 
-/*** GSK_OPACITY_NODE ***/
+/* }}} */
+/* {{{ GSK_OPACITY_NODE */
 
 /**
  * GskOpacityNode:
@@ -3185,7 +3196,8 @@ gsk_opacity_node_get_opacity (const GskRenderNode *node)
   return self->opacity;
 }
 
-/*** GSK_COLOR_MATRIX_NODE ***/
+/* }}} */
+/* {{{ GSK_COLOR_MATRIX_NODE */
 
 /**
  * GskColorMatrixNode:
@@ -3406,7 +3418,8 @@ gsk_color_matrix_node_get_color_offset (const GskRenderNode *node)
   return &self->color_offset;
 }
 
-/*** GSK_REPEAT_NODE ***/
+/* }}} */
+/* {{{ GSK_REPEAT_NODE */
 
 /**
  * GskRepeatNode:
@@ -3542,7 +3555,8 @@ gsk_repeat_node_get_child_bounds (const GskRenderNode *node)
   return &self->child_bounds;
 }
 
-/*** GSK_CLIP_NODE ***/
+/* }}} */
+/* {{{ GSK_CLIP_NODE */
 
 /**
  * GskClipNode:
@@ -3676,7 +3690,8 @@ gsk_clip_node_get_clip (const GskRenderNode *node)
   return &self->clip;
 }
 
-/*** GSK_ROUNDED_CLIP_NODE ***/
+/* }}} */
+/* {{{ GSK_ROUNDED_CLIP_NODE */
 
 /**
  * GskRoundedClipNode:
@@ -3810,7 +3825,8 @@ gsk_rounded_clip_node_get_clip (const GskRenderNode *node)
   return &self->clip;
 }
 
-/*** GSK_SHADOW_NODE ***/
+/* }}} */
+/* {{{ GSK_SHADOW_NODE */
 
 /**
  * GskShadowNode:
@@ -4050,7 +4066,8 @@ gsk_shadow_node_get_n_shadows (const GskRenderNode *node)
   return self->n_shadows;
 }
 
-/*** GSK_BLEND_NODE ***/
+/* }}} */
+/* {{{ GSK_BLEND_NODE */
 
 /**
  * GskBlendNode:
@@ -4244,7 +4261,8 @@ gsk_blend_node_get_blend_mode (const GskRenderNode *node)
   return self->blend_mode;
 }
 
-/*** GSK_CROSS_FADE_NODE ***/
+/* }}} */
+/* {{{ GSK_CROSS_FADE_NODE */
 
 /**
  * GskCrossFadeNode:
@@ -4395,7 +4413,8 @@ gsk_cross_fade_node_get_progress (const GskRenderNode *node)
   return self->progress;
 }
 
-/*** GSK_TEXT_NODE ***/
+/* }}} */
+/* {{{ GSK_TEXT_NODE */
 
 /**
  * GskTextNode:
@@ -4660,7 +4679,8 @@ gsk_text_node_get_offset (const GskRenderNode *node)
   return &self->offset;
 }
 
-/*** GSK_BLUR_NODE ***/
+/* }}} */
+/* {{{ GSK_BLUR_NODE */
 
 /**
  * GskBlurNode:
@@ -4979,7 +4999,8 @@ gsk_blur_node_get_radius (const GskRenderNode *node)
   return self->radius;
 }
 
-/*** GSK_DEBUG_NODE ***/
+/* }}} */
+/* {{{ GSK_DEBUG_NODE */
 
 /**
  * GskDebugNode:
@@ -5104,7 +5125,8 @@ gsk_debug_node_get_message (const GskRenderNode *node)
   return self->message;
 }
 
-/*** GSK_GL_SHADER_NODE ***/
+/* }}} */
+/* {{{ GSK_GL_SHADER_NODE */
 
 /**
  * GskGLShaderNode:
@@ -5308,6 +5330,8 @@ gsk_gl_shader_node_get_args (const GskRenderNode *node)
 
   return self->args;
 }
+
+/* }}} */
 
 GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
 
@@ -5884,3 +5908,5 @@ gsk_render_node_init_types (void)
       g_once_init_leave (&register_types__volatile, initialized);
     }
 }
+
+/* vim:set foldmethod=marker expandtab: */
