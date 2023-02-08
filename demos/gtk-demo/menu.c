@@ -22,9 +22,11 @@ do_menu (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *box;
+      GtkWidget *box2;
       GtkWidget *sw;
       GtkWidget *widget;
       GtkWidget *scale;
+      GtkWidget *dropdown;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Menu");
@@ -43,10 +45,19 @@ do_menu (GtkWidget *do_widget)
       widget = demo3_widget_new ("/transparent/portland-rose.jpg");
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), widget);
 
+      box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_box_append (GTK_BOX (box), box2);
+
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.01, 10.0, 0.1);
       gtk_range_set_value (GTK_RANGE (scale), 1.0);
-      gtk_box_append (GTK_BOX (box), scale);
+      gtk_widget_set_hexpand (scale, TRUE);
+      gtk_box_append (GTK_BOX (box2), scale);
 
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", NULL })), NULL);
+      gtk_box_append (GTK_BOX (box2), dropdown);
+
+      g_object_bind_property (dropdown, "selected", widget, "filter", G_BINDING_DEFAULT);
+ 
       g_object_bind_property (gtk_range_get_adjustment (GTK_RANGE (scale)), "value",
                               widget, "scale",
                               G_BINDING_BIDIRECTIONAL);
