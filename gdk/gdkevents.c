@@ -1511,7 +1511,6 @@ gdk_button_event_get_button (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkKeyEvent */
 
 /**
@@ -1972,7 +1971,6 @@ gdk_key_event_get_match (GdkEvent        *event,
 }
 
 /* }}} */
-
 /* {{{ GdkTouchEvent */
 
 /**
@@ -2109,7 +2107,6 @@ gdk_touch_event_get_emulating_pointer (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkCrossingEvent */
 
 /**
@@ -2253,7 +2250,6 @@ gdk_crossing_event_get_detail (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkDeleteEvent */
 
 /**
@@ -2284,7 +2280,6 @@ gdk_delete_event_new (GdkSurface *surface)
 }
 
 /* }}} */
-
 /* {{{ GdkFocusEvent */
 
 /**
@@ -2341,7 +2336,6 @@ gdk_focus_event_get_in (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkScrollEvent */
 
 /**
@@ -2600,7 +2594,6 @@ gdk_scroll_event_get_unit (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkTouchpadEvent */
 
 /**
@@ -2859,7 +2852,6 @@ gdk_touchpad_event_get_pinch_scale (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkPadEvent */
 
 /**
@@ -3033,7 +3025,6 @@ gdk_pad_event_get_group_mode (GdkEvent *event,
 }
 
 /* }}} */
-
 /* {{{ GdkMotionEvent */
 
 /**
@@ -3195,7 +3186,6 @@ gdk_event_get_history (GdkEvent *event,
 }
 
 /* }}} */
-
 /* {{{ GdkProximityEvent */
 
 /**
@@ -3258,7 +3248,6 @@ gdk_proximity_event_new (GdkEventType   type,
 }
 
 /* }}} */
-
 /* {{{ GdkDNDEvent */
 
 /**
@@ -3364,7 +3353,6 @@ gdk_dnd_event_get_drop (GdkEvent *event)
 }
 
 /* }}} */
-
 /* {{{ GdkGrabBrokenEvent */
 
 /**
@@ -3442,3 +3430,5 @@ gdk_grab_broken_event_get_implicit (GdkEvent *event)
 }
 
 /* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
