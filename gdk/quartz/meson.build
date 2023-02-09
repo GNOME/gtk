@@ -54,6 +54,8 @@ iosurface_dep = dependency('appleframeworks', modules: 'IOSurface', required: tr
 
 gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep, quartzcore_dep, iosurface_dep ]
 
+gdk_backend_extra_libs += gdk_quartz_deps
+
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],

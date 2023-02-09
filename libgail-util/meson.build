@@ -30,3 +30,12 @@ libgailutil = library('gailutil-3',
                       ] + common_cflags,
                       link_args: gailutil_link_args,
                       install: true)
+
+pkg.generate(libgailutil,
+    name: 'Gail',
+    filebase: 'gail-3.0',
+    description: 'GNOME Accessibility Implementation Library',
+    libraries: ['-L${libdir}', '-lgailutil-@0@'.format(gtk_major_version)],
+    requires: [atk_dep, libgtk],
+    subdirs: ['gail-@0@'.format(gtk_api_version)],
+)
