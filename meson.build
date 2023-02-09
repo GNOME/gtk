@@ -39,6 +39,7 @@ cloudproviders_req = '>= 0.2.5'
 xkbcommon_req      = '>= 0.2.0'
 
 gnome = import('gnome')
+pkg = import('pkgconfig')
 
 add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
 add_project_arguments('-DGLIB_MIN_REQUIRED_VERSION=' + glib_min_required, language: 'c')
@@ -423,7 +424,8 @@ endif
 
 if win32_enabled
   # for GTK_IM_CONTEXT_IME
-  pangowin32_dep  = dependency('pangowin32', fallback : ['pango', 'libpangowin32_dep'])
+  pangowin32_dep  = dependency('pangowin32', version: pango_req,
+  fallback : ['pango', 'libpangowin32_dep'])
 endif
 
 pangocairo_dep = dependency('pangocairo', version: cairo_req,
@@ -484,8 +486,6 @@ endif
 
 backend_immodules = []
 
-pc_gdk_extra_libs = []
-
 cairo_found_type = cairo_dep.type_name()
 if cairo_found_type == 'internal'
   cairo_features = subproject('cairo').get_variable('built_features')
@@ -516,24 +516,9 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
   endif
 endforeach
 
-cairo_pkg_found = false
-cairogobj_pkg_found = false
-
-if cairo_found_type == 'internal' or cairo_found_type == 'pkgconfig'
-  cairo_pkg_found = true
-endif
-if cairogobj_found_type == 'internal' or cairogobj_found_type == 'pkgconfig'
-  cairogobj_pkg_found = true
-endif
-
-cairo_libs = []
-
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found() ? 1 : false)
 cdata.set('HAVE_PANGOFT', pangoft_dep.found() ? 1 : false)
 
-atk_pkgs = ['atk']
-
-wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req)
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
@@ -552,7 +537,6 @@ if wayland_enabled
   ]
 endif
 
-x11_pkgs = []
 if x11_enabled
   xrandr_dep     = dependency('xrandr', version: '>= 1.2.99')
   xrandr15_dep   = dependency('xrandr', version: '>= 1.5', required: false)
@@ -568,23 +552,6 @@ if x11_enabled
   atkbridge_dep  = dependency('atk-bridge-2.0', version: at_spi2_atk_req)
 
   backend_immodules += ['xim']
-
-  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
-
-  if xcursor_dep.found()
-    x11_pkgs += ['xcursor']
-  endif
-  if xfixes_dep.found()
-    x11_pkgs += ['xfixes']
-  endif
-  if xcomposite_dep.found()
-    x11_pkgs += ['xcomposite']
-  endif
-  if xdamage_dep.found()
-    x11_pkgs += ['xdamage']
-  endif
-
-  atk_pkgs += ['atk-bridge-2.0']
 
   cdata.set('HAVE_XDAMAGE', xdamage_dep.found() ? 1 : false)
   cdata.set('HAVE_XCURSOR', xcursor_dep.found() ? 1 : false)
@@ -635,7 +602,6 @@ if x11_enabled
     if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
       cdata.set('HAVE_XFREE_XINERAMA', 1)
       cdata.set('HAVE_XINERAMA', 1)
-      x11_pkgs += ['xinerama']
     endif
   else
     xinerama_dep = []
@@ -646,28 +612,22 @@ if x11_enabled
 endif
 
 if broadway_enabled
-  pc_gdk_extra_libs += ['-lz']
   backend_immodules += ['broadway']
 endif
 
 if quartz_enabled
-  pc_gdk_extra_libs += ['-Wl,-framework,Cocoa', '-Wl,-framework,Carbon', '-Wl,-framework,CoreGraphics']
   backend_immodules += ['quartz']
   cdata.set('QUARTZ_RELOCATION', 1)
 endif
 
 extra_demo_ldflags = []
 if win32_enabled
-  pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32']
   if cc.get_id() == 'msvc'
     # Since the demo programs are now built as pure GUI programs, we
     # need to pass in /entry:mainCRTStartup so that they will properly
     # link on Visual Studio builds
     extra_demo_ldflags = ['/entry:mainCRTStartup']
-  else
-    pc_gdk_extra_libs += ['-Wl,-luuid']
   endif
-  pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32', '-lhid', '-lwinspool', '-lcomctl32', '-lcomdlg32']
   backend_immodules += ['ime']
 
   # Check whether libepoxy is built with EGL support on Windows
@@ -820,11 +780,14 @@ if os_unix
 endif
 
 cloudproviders_enabled = get_option('cloudproviders')
-cloudproviders_packages = []
+cloudproviders_dep = dependency(
+  'cloudproviders',
+  version: cloudproviders_req,
+  required: cloudproviders_enabled,
+)
+
 if cloudproviders_enabled
-  cloudproviders_dep = dependency('cloudproviders', version: cloudproviders_req, required: true)
   if cloudproviders_dep.found()
-    cloudproviders_packages += ['cloudproviders', cloudproviders_req]
     cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found() ? 1 : false)
   else
     error('Cloudproviders support not found, but was explicitly requested.')
@@ -853,6 +816,41 @@ endif
 gir = find_program('g-ir-scanner', required : get_option('introspection'))
 build_gir = gir.found() and get_option('introspection')
 
+gtk_pcs = ['gtk+-@0@'.format(gtk_api_version)]
+gdk_pcs = ['gdk-@0@'.format(gtk_api_version)]
+
+pkg_targets = []
+disabled_backends = []
+foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11']
+  if get_variable('@0@_enabled'.format(backend))
+    gtk_pcs += ['gtk+-@0@-@1@'.format(backend, gtk_api_version)]
+    gdk_pcs += ['gdk-@0@-@1@'.format(backend, gtk_api_version)]
+    pkg_targets += [backend]
+  else
+    disabled_backends += [backend]
+  endif
+endforeach
+
+gdk_pc_variables = [
+  'targets=@0@'.format(' '.join(pkg_targets))
+]
+
+gtk_pc_variables = [
+  'gtk_binary_version=@0@'.format(gtk_binary_version),
+  'gtk_host=@0@-@1@'.format(host_machine.cpu_family(), host_machine.system()), # FIXME
+]
+			
+# Sadly, Cairo only gained Meson build support quite a bit after 3.24.x was released
+cairo_lib_deps = []
+cairo_pkg_deps = []
+foreach dep: [cairogobj_dep, cairo_dep]
+  if dep.type_name() == 'library'
+    cairo_lib_deps += dep
+  else
+    cairo_pkg_deps += dep
+  endif
+endforeach
+   
 subdir('gdk')
 subdir('gtk')
 subdir('modules')
@@ -873,122 +871,6 @@ configure_file(
   output: 'config.h',
   configuration: cdata,
 )
-
-# pkg-config files - bit of a mess all of this
-pkgconf = configuration_data()
-
-pkgconf.set('prefix', get_option('prefix'))
-pkgconf.set('exec_prefix', '${prefix}')
-pkgconf.set('libdir', '${prefix}' / get_option('libdir'))
-pkgconf.set('includedir', '${prefix}' / get_option('includedir'))
-pkgconf.set('GTK_API_VERSION', gtk_api_version)
-pkgconf.set('VERSION', meson.project_version())
-pkgconf.set('GTK_BINARY_VERSION', gtk_binary_version)
-pkgconf.set('host', '@0@-@1@'.format(host_machine.cpu_family(), host_machine.system())) # FIXME
-
-# Requires
-pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
-gdk_packages = ' '.join([ pango_pkgname, pango_req,
-                       'pangocairo', pango_req,
-                       'gdk-pixbuf-2.0', gdk_pixbuf_req ])
-
-cairo_packages = ''
-
-if cairo_pkg_found
-  cairo_packages += ' '.join([ ' cairo', cairo_req ])
-elif cc.get_id() == 'msvc' and cairo_dep.found()
-  cairo_libs += '-lcairo'
-endif
-if cairogobj_pkg_found
-  cairo_packages += ' '.join([ ' cairo-gobject', cairo_req ])
-elif cc.get_id() == 'msvc' and cairogobj_dep.found()
-  cairo_libs += '-lcairo-gobject'
-endif
-
-gdk_packages += cairo_packages
-pkgconf.set('GDK_PACKAGES', gdk_packages)
-
-if have_gio_unix
-  gio_packages = ['gio-unix-2.0', glib_req]
-else
-  gio_packages = ['gio-2.0', glib_req]
-endif
-
-pkgconf.set('GDK_PRIVATE_PACKAGES',
-            ' '.join(gio_packages + x11_pkgs + wayland_pkgs + cairo_backends +
-                     ['epoxy', epoxy_req] + cloudproviders_packages +
-                     ['fribidi', fribidi_req]))
-
-gtk_packages = ' '.join([
-    atk_dep.name(), atk_req,
-    cairo_packages,
-    pixbuf_dep.name(), gdk_pixbuf_req,
-    'gio-2.0', glib_req,
-])
-pkgconf.set('GTK_PACKAGES', gtk_packages)
-
-# Requires.private
-pc_gdk_extra_libs += cairo_libs
-
-gtk_private_packages = atk_pkgs + wayland_pkgs + ['epoxy', epoxy_req, 'fribidi', fribidi_req]
-if wayland_enabled or x11_enabled
-  gtk_private_packages += ['pangoft2']
-endif
-gtk_private_packages += gio_packages
-
-pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(gtk_private_packages))
-
-pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
-pkgconf.set('GSK_EXTRA_LIBS', '')
-pkgconf.set('GTK_EXTRA_LIBS', '')
-
-pkgconf.set('GDK_EXTRA_CFLAGS', '')
-pkgconf.set('GSK_EXTRA_CFLAGS', '')
-pkgconf.set('GTK_EXTRA_CFLAGS', '')
-
-pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
-
-gtk_pcs = ['gtk+-3.0.pc']
-gdk_pcs = ['gdk-3.0.pc']
-
-pkg_targets = ''
-disabled_backends = []
-foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11']
-  if get_variable('@0@_enabled'.format(backend))
-    gtk_pcs += ['gtk+-@0@-3.0.pc'.format(backend)]
-    gdk_pcs += ['gdk-@0@-3.0.pc'.format(backend)]
-    pkg_targets += ' ' + backend
-  else
-    disabled_backends += [backend]
-  endif
-endforeach
-pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
-
-configure_file(input: 'gail-3.0.pc.in',
-               output: 'gail-3.0.pc',
-               configuration: pkgconf,
-               install_dir: pkg_install_dir)
-
-foreach pkg: gdk_pcs
-  configure_file(input: 'gdk-3.0.pc.in',
-                 output: pkg,
-                 configuration: pkgconf,
-                 install_dir: pkg_install_dir)
-endforeach
-
-foreach pkg: gtk_pcs
-  configure_file(input: 'gtk+-3.0.pc.in',
-                 output: pkg,
-                 configuration: pkgconf,
-                 install_dir: pkg_install_dir)
-endforeach
-
-if os_unix
-  configure_file(input: 'gtk+-unix-print-3.0.pc.in',
-                 output: 'gtk+-unix-print-3.0.pc',
-                 configuration: pkgconf,
-                 install_dir: pkg_install_dir)
-endif
 
 subdir('po')
 subdir('po-properties')
@@ -1019,7 +901,7 @@ summary = [
   '------',
   'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
   '',
-  '  Display backends: @0@ [disabled: @1@]'.format(pkg_targets.strip(), ' '.join(disabled_backends)),
+  '  Display backends: @0@ [disabled: @1@]'.format(' '.join(pkg_targets), ' '.join(disabled_backends)),
   '    Print backends: @0@ [disabled: @1@]'.format(' '.join(print_backends), ' '.join(disabled_print_backends)),
   '     Cloud support: @0@'.format(get_option('cloudproviders')),
   '    Colord support: @0@'.format(get_option('colord')),

@@ -26,14 +26,19 @@ gdk_wayland_public_headers = files(
 install_headers(gdk_wayland_public_headers, subdir: 'gtk-3.0/gdk/wayland')
 install_headers('gdkwayland.h', subdir: 'gtk-3.0/gdk')
 
-gdk_wayland_deps = [
-  shmlib,
+gdk_wayland_lib_deps = [shmlib]
+gdk_wayland_pkg_deps = [
   xkbdep,
   wlclientdep,
   wlprotocolsdep,
   wlcursordep,
   wlegldep,
 ]
+
+gdk_wayland_deps = gdk_wayland_lib_deps + gdk_wayland_pkg_deps
+
+gdk_backend_extra_pkgs += gdk_wayland_pkg_deps
+gdk_backend_extra_libs += gdk_wayland_lib_deps
 
 # wayland protocols
 wlprotocolsdep = dependency('wayland-protocols')

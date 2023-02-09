@@ -68,6 +68,7 @@ gdk_x11_deps = [
   xrandr_dep,
   xinerama_dep,
 ]
+gdk_backend_extra_pkgs = gdk_x11_deps
 
 libgdk_x11 = static_library('gdk-x11', gdkmarshal_h,
                             gdk_x11_sources, gdkconfig, gdkenum_h,

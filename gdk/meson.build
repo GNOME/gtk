@@ -197,29 +197,18 @@ wlinc = include_directories('.')
 
 gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
 
-gdk_deps = [
-  libm,
-  pixbuf_dep,
-  cairo_dep,
-  pango_dep,
-  fribidi_dep,
-  cairogobj_dep,
-  glib_dep,
-  epoxy_dep,
-  fontconfig_dep,
-  platform_gio_dep,
-  pangocairo_dep
-]
+pango_pkg_dep = win32_enabled ? pangowin32_dep : pango_dep
+
+gdk_pkg_deps = [pango_pkg_dep, pangocairo_dep, pixbuf_dep] + cairo_pkg_deps
+gdk_pkg_private_deps = [platform_gio_dep, fontconfig_dep, epoxy_dep, fribidi_dep]
+gdk_lib_deps = [libm, cairo_lib_deps]
+if profiler_enabled
+  if profiler_dep.found()
+    gdk_pkg_private_deps += profiler_dep
+  endif
+endif
 
 if win32_enabled
-  gdk_deps += [cc.find_library('advapi32'),
-               cc.find_library('comctl32'),
-               cc.find_library('dwmapi'),
-               cc.find_library('imm32'),
-               cc.find_library('opengl32'),
-               cc.find_library('setupapi'),
-               cc.find_library('winmm')]
-
   gdk_rc = configure_file(
     input: 'win32/rc/gdk.rc.in',
     output: 'gdk.rc',
@@ -229,11 +218,7 @@ if win32_enabled
   gdk_sources += gdk_res
 endif
 
-if profiler_enabled
-  if profiler_dep.found()
-    gdk_deps += [profiler_dep]
-  endif
-endif
+gdk_deps = gdk_lib_deps + gdk_pkg_deps + gdk_pkg_private_deps
 
 gdk_sources = [
   # Generated
@@ -258,6 +243,9 @@ if wayland_enabled or broadway_enabled
 endif
 
 gdk_backends = []
+gdk_backend_extra_libs = []
+gdk_backend_extra_pkgs = []
+
 gdk_backends_gen_headers = []  # non-public generated headers
 foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11']
   if get_variable('@0@_enabled'.format(backend))
@@ -303,6 +291,26 @@ libgdk = library('gdk-3',
                  install: true)
 
 gdk_dep_sources = [gdkconfig, gdkenum_h]
+
+if cloudproviders_dep.found()
+  gdk_backend_extra_pkgs += cloudproviders_dep
+endif
+
+# pkg-config
+foreach gdk_pc: gdk_pcs
+  pkg.generate(libgdk,
+    name: 'GDK',
+    description: 'Gtk+ Drawing Kit',
+    filebase: gdk_pc,
+    libraries: ['-L${libdir}', '-lgdk-@0@'.format(gtk_major_version)] + \
+               gdk_lib_deps + gdk_backend_extra_libs,
+    requires: gdk_pkg_deps,
+    requires_private: gdk_pkg_private_deps + gdk_backend_extra_pkgs,
+    subdirs: ['gtk-@0@'.format(gtk_api_version)],
+    unescaped_variables: gdk_pc_variables,
+  )
+endforeach
+
 # Introspection
 if build_gir
   gir_args = ['--quiet']

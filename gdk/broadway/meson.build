@@ -28,7 +28,18 @@ gdk_broadway_public_headers = files(
 install_headers(gdk_broadway_public_headers, subdir: 'gtk-3.0/gdk/broadway/')
 install_headers('gdkbroadway.h', subdir: 'gtk-3.0/gdk/')
 
-gdk_broadway_deps = [shmlib]
+zlib_dep = dependency('zlib')
+gdk_broadway_pkg_deps = []
+gdk_broadway_lib_deps = [shmlib]
+if zlib_dep.type_name() == 'pkgconfig'
+  gdk_broadway_pkg_deps += zlib_dep
+else
+  gdk_broadway_lib_deps += zlib_dep
+endif
+gdk_backend_extra_pkgs += gdk_broadway_pkg_deps
+gdk_backend_extra_libs += gdk_broadway_lib_deps
+
+gdk_broadway_deps = gdk_broadway_lib_deps + gdk_broadway_pkg_deps
 
 gen_c_array = find_program('gen-c-array.py')
 

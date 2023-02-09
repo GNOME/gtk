@@ -831,41 +831,62 @@ gtk_sources += [
   gtktypebuiltins,
 ]
 
-gtk_deps = [
+harfbuzz_pkg = []
+harfbuzz_lib = []
+
+if harfbuzz_dep.found()
+  if harfbuzz_dep.type_name() == 'pkgconfig' or harfbuzz_dep.type_name() == 'internal'
+    harfbuzz_pkg = harfbuzz_dep
+  else
+    harfbuzz_lib = harfbuzz_dep
+  endif
+endif
+
+gtk_pkg_deps = [
+  atk_dep,
   gmodule_dep,
   glib_dep,
   gobject_dep,
-  platform_gio_dep,
   pangocairo_dep,
   pango_dep,
-  pangoft_dep,
-  harfbuzz_dep,
-  fribidi_dep,
-  cairogobj_dep,
-  cairo_dep,
+  harfbuzz_pkg,
+] + cairo_pkg_deps + [
   fontconfig_dep,
   pixbuf_dep,
-  atk_dep,
-  epoxy_dep,
-  libm,
 ]
+
+gtk_private_pkg_deps = [atk_dep, epoxy_dep, fribidi_dep]
+gtk_extra_private_pkg_deps = []
+
+gtk_lib_deps = [harfbuzz_lib] + cairo_lib_deps + [libm]
 
 if x11_enabled
   x11_data_prefix = dependency('x11').get_variable(pkgconfig: 'prefix')
 
   gtk_cargs += [ '-DX11_DATA_PREFIX="@0@"'.format(x11_data_prefix), ]
   gtk_sources += gtk_use_x11_sources
-  gtk_deps += [ xi_dep, x11_dep, ]
+  gtk_extra_private_pkg_deps += [ xi_dep, x11_dep, ]
 endif
 
 if wayland_enabled
   gtk_sources += gtk_use_wayland_sources
+  gtk_extra_private_pkg_deps += [
+    wlclientdep,
+    xkbdep,
+    wlcursordep,
+    wlegldep,
+]
 endif
 
 if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
-  gtk_deps += [ giowin32_dep, pangowin32_dep ]
+  gtk_pkg_deps += [ giowin32_dep, pangowin32_dep ]
+  gtk_lib_deps += [
+    cc.find_library('comctl32'),
+    cc.find_library('comdlg32'),
+    cc.find_library('winspool'),
+  ]
 
   gtk_rc_body = configure_file(
     input: 'gtk-win32.rc.body.in',
@@ -902,8 +923,9 @@ if win32_enabled
   gtk_res = import('windows').compile_resources(gtk_rc)
   gtk_sources += gtk_res
 else
-  gtk_deps += [ atkbridge_dep, ]
+  gtk_private_pkg_deps += [ atkbridge_dep, ]
 endif
+gtk_private_pkg_deps += platform_gio_dep
 
 if quartz_enabled
   gtk_sources += gtk_use_quartz_sources
@@ -913,7 +935,7 @@ endif
 # So we don't add these twice
 if x11_enabled or wayland_enabled
   gtk_sources += gtk_use_wayland_or_x11_sources
-  gtk_deps += pangoft_dep
+  gtk_extra_private_pkg_deps += pangoft_dep
 endif
 
 if not (x11_enabled or win32_enabled or quartz_enabled)
@@ -921,16 +943,22 @@ if not (x11_enabled or win32_enabled or quartz_enabled)
 endif
 
 if cloudproviders_enabled
-  gtk_deps += cloudproviders_dep
+  gtk_pkg_deps += cloudproviders_dep
 endif
 
 if os_unix and tracker3_enabled
-  gtk_deps += tracker3_dep
+  gtk_pkg_deps += tracker3_dep
 endif
 
 # Unconditional. If libintl isn't found,
 # the object just does nothing being in the deplist
-gtk_deps += libintl_dep
+gtk_lib_deps += libintl_dep
+
+gtk_deps = \
+  gtk_pkg_deps + \
+  gtk_private_pkg_deps + \
+  gtk_lib_deps + \
+  gtk_extra_private_pkg_deps
 
 gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
@@ -987,6 +1015,34 @@ libgtk = library('gtk-3',
                  link_args: common_ldflags,
                  darwin_versions : gtk_osxversions,
                  install: true)
+
+# pkg-config
+foreach gtk_pc: gtk_pcs
+  pkg.generate(libgtk,
+    name: 'GTK+',
+    description: 'GTK+ Graphical UI Library',
+    filebase: gtk_pc,
+    libraries: ['-L${libdir}', '-lgtk-@0@'.format(gtk_major_version)] + \
+               gtk_lib_deps,
+    requires: [libgdk] + gtk_pkg_deps,
+    requires_private: gtk_private_pkg_deps,
+    subdirs: ['gtk-@0@'.format(gtk_api_version)],
+    unescaped_variables: gdk_pc_variables,
+    variables: gtk_pc_variables,
+  )
+endforeach
+
+if os_unix
+  pkg.generate(libgtk,
+    name: 'GTK+',
+    description: 'GTK+ Unix print support',
+    filebase: 'gtk+-unix-print-@0@'.format(gtk_api_version),
+    requires: ['gtk+-@0@'.format(gtk_api_version)] + gtk_pkg_deps,
+    subdirs: ['gtk-@0@/unix-print/gtk'.format(gtk_api_version)],
+    unescaped_variables: gdk_pc_variables,
+    variables: gtk_pc_variables,
+  )
+endif
 
 # Introspection
 if build_gir
