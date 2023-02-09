@@ -10,8 +10,27 @@ printbackends_args = [
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
 ] + common_cflags
 
+cpdb_dep = dependency('cpdb-frontend', version : '>=1.0', required: get_option('print-cpdb'))
 cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
-if cups_dep.found()
+
+# Use cpdb backend if present and enabled.
+# If not, use cups if present.
+# If not, use lpr.
+
+if get_option('print-cpdb').enabled() and cpdb_dep.found()
+  print_backends += 'cpdb'
+  shared_module('printbackend-cpdb',
+    sources: [
+      'gtkprintbackendcpdb.c',
+      'gtkprintercpdb.c',
+      'gtkprintbackendutils.c',
+    ],
+    c_args: printbackends_args,
+    dependencies: [libgtk_dep, cpdb_dep],
+    install_dir: printbackends_install_dir,
+    install: true,
+  )
+elif cups_dep.found()
   print_backends += 'cups'
   shared_module('printbackend-cups',
     sources: [
@@ -19,6 +38,7 @@ if cups_dep.found()
       'gtkprintercups.c',
       'gtkcupsutils.c',
       'gtkcupssecretsutils.c',
+      'gtkprintbackendutils.c',
     ],
     c_args: printbackends_args,
     dependencies: [libgtk_dep, cups_dep, colord_dep],
