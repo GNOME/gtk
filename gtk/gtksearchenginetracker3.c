@@ -394,8 +394,8 @@ gtk_search_engine_tracker3_new (void)
                            NULL, &error, NULL);
   if (!engine)
     {
-      g_critical ("Could not init tracker3 search engine: %s",
-                  error->message);
+      g_warning ("Could not init tracker3 search engine: %s",
+                 error->message);
       g_error_free (error);
     }
 
