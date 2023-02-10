@@ -41,6 +41,11 @@ option('media-gstreamer',
 
 # Print backends
 
+option('print-cpdb',
+       type: 'feature',
+       value: 'disabled',
+       description : 'Build the cpdb print backend')
+
 option('print-cups',
        type: 'feature',
        value: 'auto',
