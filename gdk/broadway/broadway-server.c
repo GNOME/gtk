@@ -113,6 +113,7 @@ struct BroadwayWindow {
   gboolean is_temp;
   gboolean visible;
   gint32 transient_for;
+  gboolean modal_hint;
 
   BroadwayBuffer *buffer;
   gboolean buffer_synced;
@@ -276,6 +277,14 @@ update_event_state (BroadwayServer *server,
       {
 	window->x = message->configure_notify.x;
 	window->y = message->configure_notify.y;
+
+	if (server->focused_window_id != message->configure_notify.id &&
+	    server->pointer_grab_window_id == -1 && window->modal_hint)
+	{
+	  broadway_server_window_raise (server, message->configure_notify.id);
+	  broadway_server_focus_window (server, message->configure_notify.id);
+	  broadway_server_flush (server);
+	}
       }
     break;
   case BROADWAY_EVENT_DELETE_NOTIFY:
@@ -1435,6 +1444,7 @@ broadway_server_destroy_window (BroadwayServer *server,
 				gint id)
 {
   BroadwayWindow *window;
+  gint transient_for = -1;
 
   if (server->mouse_in_toplevel_id == id)
     {
@@ -1453,6 +1463,9 @@ broadway_server_destroy_window (BroadwayServer *server,
 				GINT_TO_POINTER (id));
   if (window != NULL)
     {
+      if (server->focused_window_id == id)
+	transient_for = window->transient_for;
+
       server->toplevels = g_list_remove (server->toplevels, window);
       g_hash_table_remove (server->id_ht,
 			   GINT_TO_POINTER (id));
@@ -1462,6 +1475,17 @@ broadway_server_destroy_window (BroadwayServer *server,
 	cairo_surface_destroy (window->cached_surface);
 
       g_free (window);
+    }
+
+  if (transient_for != -1)
+    {
+      window = g_hash_table_lookup (server->id_ht,
+				    GINT_TO_POINTER (transient_for));
+      if (window != NULL)
+        {
+	  broadway_server_focus_window (server, transient_for);
+	  broadway_server_flush (server);
+	}
     }
 }
 
@@ -1586,6 +1610,20 @@ broadway_server_window_set_transient_for (BroadwayServer *server,
       broadway_output_set_transient_for (server->output, window->id, window->transient_for);
       broadway_server_flush (server);
     }
+}
+
+void
+broadway_server_window_set_modal_hint (BroadwayServer *server,
+				       gint id, gboolean modal_hint)
+{
+  BroadwayWindow *window;
+
+  window = g_hash_table_lookup (server->id_ht,
+				GINT_TO_POINTER (id));
+  if (window == NULL)
+    return;
+
+  window->modal_hint = modal_hint;
 }
 
 gboolean

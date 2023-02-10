@@ -73,6 +73,7 @@ struct _GdkWindowImplBroadway
 
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_hints_mask;
+  gboolean modal_hint;
 };
 
 struct _GdkWindowImplBroadwayClass

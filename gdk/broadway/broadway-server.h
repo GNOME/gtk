@@ -95,5 +95,8 @@ cairo_surface_t * broadway_server_open_surface (BroadwayServer *server,
 						char *name,
 						int width,
 						int height);
+void                broadway_server_window_set_modal_hint (BroadwayServer   *server,
+							   gint              id,
+							   gboolean          modal_hint);
 
 #endif /* __BROADWAY_SERVER__ */
