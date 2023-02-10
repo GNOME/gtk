@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-02-04 15:56+0000\n"
-"PO-Revision-Date: 2023-02-06 01:31+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2023-02-07 12:42+0000\n"
+"PO-Revision-Date: 2023-02-10 08:52+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -7271,7 +7271,7 @@ msgstr "Oluşturulan önbellek geçersiz oldu.\n"
 #: tools/updateiconcache.c:1567
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "%s, %s olarak yeniden adlandırılamadı: %s, o zaman %s siliniyor.\n"
+msgstr "%s, %s olarak yeniden adlandırılamadı: %s, o zaman %s kaldırılıyor.\n"
 
 #: tools/updateiconcache.c:1581
 #, c-format
