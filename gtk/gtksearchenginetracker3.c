@@ -100,8 +100,11 @@ finalize (GObject *object)
   g_clear_object (&engine->search_query);
   g_clear_object (&engine->search_location_query);
   g_clear_object (&engine->file_check_query);
-  tracker_sparql_connection_close (engine->sparql_conn);
-  g_clear_object (&engine->sparql_conn);
+  if (engine->sparql_conn != NULL)
+    {
+      tracker_sparql_connection_close (engine->sparql_conn);
+      g_clear_object (&engine->sparql_conn);
+    }
 
   G_OBJECT_CLASS (gtk_search_engine_tracker3_parent_class)->finalize (object);
 }
@@ -391,8 +394,8 @@ gtk_search_engine_tracker3_new (void)
                            NULL, &error, NULL);
   if (!engine)
     {
-      g_critical ("Could not init tracker3 search engine: %s",
-                  error->message);
+      g_warning ("Could not init tracker3 search engine: %s",
+                 error->message);
       g_error_free (error);
     }
 
