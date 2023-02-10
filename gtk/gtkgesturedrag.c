@@ -223,8 +223,8 @@ gtk_gesture_drag_new (void)
 /**
  * gtk_gesture_drag_get_start_point:
  * @gesture: a `GtkGesture`
- * @x: (out) (nullable): X coordinate for the drag start point
- * @y: (out) (nullable): Y coordinate for the drag start point
+ * @x: (out) (optional): X coordinate for the drag start point
+ * @y: (out) (optional): Y coordinate for the drag start point
  *
  * Gets the point where the drag started.
  *
@@ -263,8 +263,8 @@ gtk_gesture_drag_get_start_point (GtkGestureDrag *gesture,
 /**
  * gtk_gesture_drag_get_offset:
  * @gesture: a `GtkGesture`
- * @x: (out) (nullable): X offset for the current point
- * @y: (out) (nullable): Y offset for the current point
+ * @x: (out) (optional): X offset for the current point
+ * @y: (out) (optional): Y offset for the current point
  *
  * Gets the offset from the start point.
  *
