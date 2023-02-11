@@ -75,6 +75,7 @@ compare_render_tests = [
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
+  'scaled-texture',
 ]
 
 # these are too sensitive to differences in the renderers
