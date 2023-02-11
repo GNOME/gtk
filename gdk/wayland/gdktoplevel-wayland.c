@@ -2119,7 +2119,15 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
           xdg_activation_token_v1_commit (token);
 
           while (startup_id == NULL)
-            wl_display_dispatch_queue (display_wayland->wl_display, event_queue);
+            {
+              if (wl_display_dispatch_queue (display_wayland->wl_display,
+                                             event_queue) == -1)
+                {
+                  g_message ("Error %d (%s) dispatching to Wayland display.",
+                             errno, g_strerror (errno));
+                  _exit (1);
+                }
+            }
 
           xdg_activation_token_v1_destroy (token);
           wl_event_queue_destroy (event_queue);

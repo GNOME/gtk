@@ -1388,7 +1388,15 @@ gdk_wayland_surface_present_popup (GdkWaylandPopup *wayland_popup,
     }
 
   while (wayland_popup->display_server.xdg_popup && !is_relayout_finished (surface))
-    wl_display_dispatch_queue (display_wayland->wl_display, wayland_surface->event_queue);
+    {
+      if (wl_display_dispatch_queue (display_wayland->wl_display,
+                                     wayland_surface->event_queue) == -1)
+        {
+          g_message ("Error %d (%s) dispatching to Wayland display.",
+                     errno, g_strerror (errno));
+          _exit (1);
+        }
+    }
 
   if (wayland_popup->display_server.xdg_popup)
     {
