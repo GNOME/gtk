@@ -142,7 +142,7 @@ gdk_window_get_quartz_impl (GdkWindow* window)
 
   g_return_val_if_fail (GDK_IS_WINDOW_IMPL_QUARTZ (window->impl), NULL);
 
-  return window->impl;
+  return GDK_WINDOW_IMPL_QUARTZ (window->impl);
 }
 
 NSView *

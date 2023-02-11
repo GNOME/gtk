@@ -342,15 +342,6 @@
 }
 
 static void
-nsrect_from_cairo_rect (NSRect *nsrect, cairo_rectangle_int_t *rect)
-{
-  nsrect->origin.x = (CGFloat)rect->x;
-  nsrect->origin.y = (CGFloat)rect->y;
-  nsrect->size.width = (CGFloat)rect->width;
-  nsrect->size.height = (CGFloat)rect->height;
-}
-
-static void
 cairo_rect_from_nsrect (cairo_rectangle_int_t *rect, NSRect *nsrect)
 {
   rect->x = (int)nsrect->origin.x;
