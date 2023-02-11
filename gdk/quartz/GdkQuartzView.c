@@ -548,6 +548,8 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
 
 -(void)createBackingStoreWithWidth: (CGFloat) width andHeight: (CGFloat) height
 {
+  IOSurfaceRef surface;
+
   g_return_if_fail (width && height);
 
   CVPixelBufferRelease (pixels);
@@ -555,6 +557,9 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
                        kCVPixelFormatType_32BGRA,
                        cfpb_props, &pixels);
 
+  surface = CVPixelBufferGetIOSurface (pixels);
+  IOSurfaceSetValue(surface, CFSTR("IOSurfaceColorSpace"),
+                    kCGColorSpaceSRGB);
 }
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 10700
