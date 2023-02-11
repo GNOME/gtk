@@ -2694,3 +2694,17 @@ gdk_wayland_display_query_registry (GdkDisplay  *display,
 
   return FALSE;
 }
+
+void
+gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
+                                    struct wl_event_queue *event_queue)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (wl_display_dispatch_queue (display_wayland->wl_display, event_queue) == -1)
+    {
+      g_message ("Error %d (%s) dispatching to Wayland display.",
+                 errno, g_strerror (errno));
+      _exit (1);
+    }
+}
