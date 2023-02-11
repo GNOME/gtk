@@ -1918,6 +1918,10 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
  * Creates a new render node drawing the @texture
  * into the given @bounds and appends it to the
  * current render node of @snapshot.
+ *
+ * If the texture needs to be scaled to fill @bounds,
+ * linear filtering is used. See [method@Gtk.Snapshot.append_scaled_texture]
+ * if you need other filtering, such as nearest-neighbour.
  */
 void
 gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
@@ -1935,6 +1939,44 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
   node = gsk_texture_node_new (texture, &real_bounds);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
+}
+
+/**
+ * gtk_snapshot_append_scaled_texture:
+ * @snapshot: a `GtkSnapshot`
+ * @texture: the texture to render
+ * @filter: the filter to use
+ * @bounds: the bounds for the new node
+ *
+ * Creates a new render node drawing the @texture
+ * into the given @bounds and appends it to the
+ * current render node of @snapshot.
+ *
+ * In contrast to [method@Gtk.Snapshot.append_texture],
+ * this function provides control about how the filter
+ * that is used when scaling.
+ *
+ * Since: 4.10
+ */
+void
+gtk_snapshot_append_scaled_texture (GtkSnapshot           *snapshot,
+                                    GdkTexture            *texture,
+                                    GskScalingFilter       filter,
+                                    const graphene_rect_t *bounds)
+{
+  GskRenderNode *node;
+  graphene_rect_t real_bounds;
+  float scale_x, scale_y, dx, dy;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
+  g_return_if_fail (bounds != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
+  node = gsk_texture_scale_node_new (texture, &real_bounds, filter);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }

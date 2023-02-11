@@ -152,6 +152,11 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_texture             (GtkSnapshot            *snapshot,
                                                          GdkTexture             *texture,
                                                          const graphene_rect_t  *bounds);
+GDK_AVAILABLE_IN_4_10
+void            gtk_snapshot_append_scaled_texture      (GtkSnapshot            *snapshot,
+                                                         GdkTexture             *texture,
+                                                         GskScalingFilter        filter,
+                                                         const graphene_rect_t  *bounds);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_color               (GtkSnapshot            *snapshot,
                                                          const GdkRGBA          *color,
