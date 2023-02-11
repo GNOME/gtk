@@ -270,6 +270,7 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_BLUR_NODE:
+    case GSK_MASK_NODE:
 
     default:
 
@@ -846,6 +847,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       }
       break; /* Fallback */
 
+    case GSK_MASK_NODE:
     case GSK_TEXTURE_SCALE_NODE:
     case GSK_TEXT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:

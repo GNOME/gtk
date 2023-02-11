@@ -5185,6 +5185,135 @@ gsk_blur_node_get_radius (const GskRenderNode *node)
 }
 
 /* }}} */
+/* {{{ GSK_MASK_NODE */
+
+/**
+ * GskMaskNode:
+ *
+ * A render node masking one child node with another.
+ *
+ * Since: 4.10
+ */
+typedef struct _GskMaskNode GskMaskNode;
+
+struct _GskMaskNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *mask;
+  GskRenderNode *source;
+};
+
+static void
+gsk_mask_node_finalize (GskRenderNode *node)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+
+  gsk_render_node_unref (self->source);
+  gsk_render_node_unref (self->mask);
+}
+
+static void
+gsk_mask_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskMaskNode *self = (GskMaskNode *) node;
+  cairo_pattern_t *mask_pattern;
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->source, cr);
+  cairo_pop_group_to_source (cr);
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (self->mask, cr);
+  mask_pattern = cairo_pop_group (cr);
+
+  cairo_mask (cr, mask_pattern);
+}
+
+static void
+gsk_mask_node_diff (GskRenderNode  *node1,
+                    GskRenderNode  *node2,
+                    cairo_region_t *region)
+{
+  GskMaskNode *self1 = (GskMaskNode *) node1;
+  GskMaskNode *self2 = (GskMaskNode *) node2;
+
+  gsk_render_node_diff (self1->source, self2->source, region);
+  gsk_render_node_diff (self1->mask, self2->mask, region);
+}
+
+/**
+ * gsk_mask_node_new:
+ * @source: The bottom node to be drawn
+ * @mask: The node to be blended onto the @bottom node
+ *
+ * Creates a `GskRenderNode` that will use @blend_mode to blend the @top
+ * node onto the @bottom node.
+ *
+ * Returns: (transfer full) (type GskMaskNode): A new `GskRenderNode`
+ *
+ * Since: 4.10
+ */
+GskRenderNode *
+gsk_mask_node_new (GskRenderNode *source,
+                   GskRenderNode *mask)
+{
+  GskMaskNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (source), NULL);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (mask), NULL);
+
+  self = gsk_render_node_alloc (GSK_MASK_NODE);
+  self->source = gsk_render_node_ref (source);
+  self->mask = gsk_render_node_ref (mask);
+
+  graphene_rect_union (&source->bounds, &mask->bounds, &self->render_node.bounds);
+
+  return &self->render_node;
+}
+
+/**
+ * gsk_mask_node_get_source:
+ * @node: (type GskBlendNode): a mask `GskRenderNode`
+ *
+ * Retrieves the source `GskRenderNode` child of the @node.
+ *
+ * Returns: (transfer none): the source child node
+ *
+ * Since: 4.10
+ */
+GskRenderNode *
+gsk_mask_node_get_source (const GskRenderNode *node)
+{
+  const GskMaskNode *self = (const GskMaskNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_MASK_NODE), NULL);
+
+  return self->source;
+}
+
+/**
+ * gsk_mask_node_get_mask:
+ * @node: (type GskBlendNode): a mask `GskRenderNode`
+ *
+ * Retrieves the mask `GskRenderNode` child of the @node.
+ *
+ * Returns: (transfer none): the mask child node
+ *
+ * Since: 4.10
+ */
+GskRenderNode *
+gsk_mask_node_get_mask (const GskRenderNode *node)
+{
+  const GskMaskNode *self = (const GskMaskNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_MASK_NODE), NULL);
+
+  return self->mask;
+}
+
+/* }}} */
 /* {{{ GSK_DEBUG_NODE */
 
 /**
@@ -5556,6 +5685,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_blend_node, GSK_BLEND_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_mask_node, GSK_MASK_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
 
@@ -5944,6 +6074,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskBlurNode"), &node_info);
     gsk_render_node_types[GSK_BLUR_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_MASK_NODE,
+      sizeof (GskMaskNode),
+      NULL,
+      gsk_mask_node_finalize,
+      gsk_mask_node_draw,
+      NULL,
+      gsk_mask_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskMaskNode"), &node_info);
+    gsk_render_node_types[GSK_MASK_NODE] = node_type;
   }
 
   {

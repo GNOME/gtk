@@ -46,6 +46,7 @@
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
  * @GSK_BLEND_NODE: A node that blends two children together
+ * @GSK_MASK_NODE: A node that masks one child with another
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
@@ -77,6 +78,7 @@ typedef enum {
   GSK_ROUNDED_CLIP_NODE,
   GSK_SHADOW_NODE,
   GSK_BLEND_NODE,
+  GSK_MASK_NODE,
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,

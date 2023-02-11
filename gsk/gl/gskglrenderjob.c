@@ -3869,6 +3869,10 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
         gsk_gl_render_job_visit_as_fallback (job, node);
     break;
 
+    case GSK_MASK_NODE:
+      gsk_gl_render_job_visit_as_fallback (job, node);
+    break;
+
     case GSK_OPACITY_NODE:
       gsk_gl_render_job_visit_opacity_node (job, node);
     break;
