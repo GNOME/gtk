@@ -3,7 +3,8 @@
 
 enum
 {
-  PROP_PAINTABLE = 1,
+  PROP_TEXTURE = 1,
+  PROP_FILTER,
   PROP_SCALE
 };
 
@@ -11,8 +12,9 @@ struct _Demo3Widget
 {
   GtkWidget parent_instance;
 
-  GdkPaintable *paintable;
+  GdkTexture *texture;
   float scale;
+  GskScalingFilter filter;
 
   GtkWidget *menu;
 };
@@ -28,6 +30,7 @@ static void
 demo3_widget_init (Demo3Widget *self)
 {
   self->scale = 1.f;
+  self->filter = GSK_SCALING_FILTER_LINEAR;
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
@@ -36,7 +39,7 @@ demo3_widget_dispose (GObject *object)
 {
   Demo3Widget *self = DEMO3_WIDGET (object);
 
-  g_clear_object (&self->paintable);
+  g_clear_object (&self->texture);
 
   gtk_widget_dispose_template (GTK_WIDGET (self), DEMO3_TYPE_WIDGET);
 
@@ -50,12 +53,13 @@ demo3_widget_snapshot (GtkWidget   *widget,
   Demo3Widget *self = DEMO3_WIDGET (widget);
   int x, y, width, height;
   double w, h;
+  GskRenderNode *node;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  w = self->scale * gdk_paintable_get_intrinsic_width (self->paintable);
-  h = self->scale * gdk_paintable_get_intrinsic_height (self->paintable);
+  w = self->scale * gdk_texture_get_width (self->texture);
+  h = self->scale * gdk_texture_get_height (self->texture);
 
   x = MAX (0, (width - ceil (w)) / 2);
   y = MAX (0, (height - ceil (h)) / 2);
@@ -63,7 +67,11 @@ demo3_widget_snapshot (GtkWidget   *widget,
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-  gdk_paintable_snapshot (self->paintable, snapshot, w, h);
+  node = gsk_texture_scale_node_new (self->texture,
+                                     &GRAPHENE_RECT_INIT (0, 0, w, h),
+                                     self->filter);
+  gtk_snapshot_append_node (snapshot, node);
+  gsk_render_node_unref (node);
   gtk_snapshot_restore (snapshot);
   gtk_snapshot_pop (snapshot);
 }
@@ -81,9 +89,9 @@ demo3_widget_measure (GtkWidget      *widget,
   int size;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    size = gdk_paintable_get_intrinsic_width (self->paintable);
+    size = gdk_texture_get_width (self->texture);
   else
-    size = gdk_paintable_get_intrinsic_height (self->paintable);
+    size = gdk_texture_get_height (self->texture);
 
   *minimum = *natural = self->scale * size;
 }
@@ -113,14 +121,19 @@ demo3_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PAINTABLE:
-      g_clear_object (&self->paintable);
-      self->paintable = g_value_dup_object (value);
+    case PROP_TEXTURE:
+      g_clear_object (&self->texture);
+      self->texture = g_value_dup_object (value);
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
     case PROP_SCALE:
       self->scale = g_value_get_float (value);
+      gtk_widget_queue_resize (GTK_WIDGET (object));
+      break;
+
+    case PROP_FILTER:
+      self->filter = g_value_get_enum (value);
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
@@ -140,12 +153,16 @@ demo3_widget_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_PAINTABLE:
-      g_value_set_object (value, self->paintable);
+    case PROP_TEXTURE:
+      g_value_set_object (value, self->texture);
       break;
 
     case PROP_SCALE:
       g_value_set_float (value, self->scale);
+      break;
+
+    case PROP_FILTER:
+      g_value_set_enum (value, self->filter);
       break;
 
     default:
@@ -205,15 +222,20 @@ demo3_widget_class_init (Demo3WidgetClass *class)
   widget_class->measure = demo3_widget_measure;
   widget_class->size_allocate = demo3_widget_size_allocate;
 
-  g_object_class_install_property (object_class, PROP_PAINTABLE,
-      g_param_spec_object ("paintable", "Paintable", "Paintable",
-                           GDK_TYPE_PAINTABLE,
+  g_object_class_install_property (object_class, PROP_TEXTURE,
+      g_param_spec_object ("texture", NULL, NULL,
+                           GDK_TYPE_TEXTURE,
                            G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_SCALE,
-      g_param_spec_float ("scale", "Scale", "Scale",
+      g_param_spec_float ("scale", NULL, NULL,
                           0.0, 10.0, 1.0,
                           G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_FILTER,
+      g_param_spec_enum ("filter", NULL, NULL,
+                         GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
+                         G_PARAM_READWRITE));
 
   /* These are the actions that we are using in the menu */
   gtk_widget_class_install_action (widget_class, "zoom.in", NULL, zoom_cb);
@@ -229,16 +251,13 @@ GtkWidget *
 demo3_widget_new (const char *resource)
 {
   Demo3Widget *self;
-  GdkPixbuf *pixbuf;
-  GdkPaintable *paintable;
+  GdkTexture *texture;
 
-  pixbuf = gdk_pixbuf_new_from_resource (resource, NULL);
-  paintable = GDK_PAINTABLE (gdk_texture_new_for_pixbuf (pixbuf));
+  texture = gdk_texture_new_from_resource (resource);
 
-  self = g_object_new (DEMO3_TYPE_WIDGET, "paintable", paintable, NULL);
+  self = g_object_new (DEMO3_TYPE_WIDGET, "texture", texture, NULL);
 
-  g_object_unref (pixbuf);
-  g_object_unref (paintable);
+  g_object_unref (texture);
 
   return GTK_WIDGET (self);
 }

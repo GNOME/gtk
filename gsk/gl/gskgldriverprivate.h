@@ -177,6 +177,10 @@ GskGLTexture      * gsk_gl_driver_mark_texture_permanent (GskGLDriver         *s
                                                           guint                texture_id);
 void                gsk_gl_driver_add_texture_slices     (GskGLDriver         *self,
                                                           GdkTexture          *texture,
+                                                          int                  min_filter,
+                                                          int                  mag_filter,
+                                                          guint                min_cols,
+                                                          guint                min_rows,
                                                           GskGLTextureSlice  **out_slices,
                                                           guint               *out_n_slices);
 GskGLProgram      * gsk_gl_driver_lookup_shader          (GskGLDriver         *self,
@@ -228,6 +232,10 @@ gsk_gl_driver_lookup_texture (GskGLDriver         *self,
 static inline void
 gsk_gl_driver_slice_texture (GskGLDriver        *self,
                              GdkTexture         *texture,
+                             int                 min_filter,
+                             int                 mag_filter,
+                             guint               min_cols,
+                             guint               min_rows,
                              GskGLTextureSlice **out_slices,
                              guint              *out_n_slices)
 {
@@ -235,12 +243,15 @@ gsk_gl_driver_slice_texture (GskGLDriver        *self,
 
   if ((t = gdk_texture_get_render_data (texture, self)))
     {
-      *out_slices = t->slices;
-      *out_n_slices = t->n_slices;
-      return;
+      if (min_cols == 0 && min_rows == 0)
+        {
+          *out_slices = t->slices;
+          *out_n_slices = t->n_slices;
+          return;
+        }
     }
 
-  gsk_gl_driver_add_texture_slices (self, texture, out_slices, out_n_slices);
+  gsk_gl_driver_add_texture_slices (self, texture, min_filter, mag_filter, min_cols, min_rows, out_slices, out_n_slices);
 }
 
 G_END_DECLS

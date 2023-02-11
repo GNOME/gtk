@@ -1,0 +1,7 @@
+container {
+  texture-scale {
+    texture: url("some-10x10-image-with-content.png");
+    bounds: 0 0 100 100;
+    filter: nearest;
+  }
+}

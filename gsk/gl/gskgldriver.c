@@ -753,7 +753,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
     {
       if ((t = gdk_texture_get_render_data (texture, self)))
         {
-          if (t->min_filter == min_filter && t->mag_filter == mag_filter)
+          if (t->min_filter == min_filter && t->mag_filter == mag_filter && t->texture_id)
             return t->texture_id;
         }
 
@@ -1195,6 +1195,10 @@ gsk_gl_driver_create_command_queue (GskGLDriver *self,
 void
 gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                                   GdkTexture         *texture,
+                                  int                 min_filter,
+                                  int                 mag_filter,
+                                  guint               min_cols,
+                                  guint               min_rows,
                                   GskGLTextureSlice **out_slices,
                                   guint              *out_n_slices)
 {
@@ -1216,31 +1220,37 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
   /* XXX: Too much? */
   max_texture_size = self->command_queue->max_texture_size / 4;
-
   tex_width = texture->width;
   tex_height = texture->height;
-  cols = (texture->width / max_texture_size) + 1;
-  rows = (texture->height / max_texture_size) + 1;
+
+  cols = MAX ((texture->width / max_texture_size) + 1, min_cols);
+  rows = MAX ((texture->height / max_texture_size) + 1, min_rows);
+
+  n_slices = cols * rows;
 
   if ((t = gdk_texture_get_render_data (texture, self)))
     {
-      *out_slices = t->slices;
-      *out_n_slices = t->n_slices;
-      return;
+      if (t->n_slices == n_slices)
+        {
+          *out_slices = t->slices;
+          *out_n_slices = t->n_slices;
+          return;
+        }
+
+      gdk_texture_clear_render_data (texture);
     }
 
-  n_slices = cols * rows;
   slices = g_new0 (GskGLTextureSlice, n_slices);
   memtex = gdk_memory_texture_from_texture (texture,
                                             gdk_texture_get_format (texture));
 
-  for (guint col = 0; col < cols; col ++)
+  for (guint col = 0; col < cols; col++)
     {
-      int slice_width = MIN (max_texture_size, texture->width - x);
+      int slice_width = col + 1 < cols ? tex_width / cols : tex_width - x;
 
-      for (guint row = 0; row < rows; row ++)
+      for (guint row = 0; row < rows; row++)
         {
-          int slice_height = MIN (max_texture_size, texture->height - y);
+          int slice_height = row + 1 < rows ? tex_height / rows : tex_height - y;
           int slice_index = (col * rows) + row;
           GdkTexture *subtex;
           guint texture_id;
@@ -1250,7 +1260,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                                                       slice_width, slice_height);
           texture_id = gsk_gl_command_queue_upload_texture (self->command_queue,
                                                             subtex,
-                                                            GL_NEAREST, GL_NEAREST);
+                                                            min_filter, mag_filter);
           g_object_unref (subtex);
 
           slices[slice_index].rect.x = x;
