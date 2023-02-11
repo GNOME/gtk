@@ -87,7 +87,7 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       xdg_activation_token_v1_commit (token);
 
       while (app_launch_data.token == NULL)
-        wl_display_dispatch_queue (display->wl_display, event_queue);
+        gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display), event_queue);
 
       xdg_activation_token_v1_destroy (token);
       id = app_launch_data.token;
