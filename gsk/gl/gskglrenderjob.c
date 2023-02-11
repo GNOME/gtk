@@ -3278,6 +3278,56 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
 }
 
 static inline void
+gsk_gl_render_job_visit_mask_node (GskGLRenderJob       *job,
+                                    const GskRenderNode *node)
+{
+  const GskRenderNode *source = gsk_mask_node_get_source (node);
+  const GskRenderNode *mask = gsk_mask_node_get_mask (node);
+  GskGLRenderOffscreen source_offscreen = {0};
+  GskGLRenderOffscreen mask_offscreen = {0};
+
+  source_offscreen.bounds = &node->bounds;
+  source_offscreen.force_offscreen = TRUE;
+  source_offscreen.reset_clip = TRUE;
+
+  mask_offscreen.bounds = &node->bounds;
+  mask_offscreen.force_offscreen = TRUE;
+  mask_offscreen.reset_clip = TRUE;
+
+  /* TODO: We create 2 textures here as big as the mask node, but both
+   * nodes might be a lot smaller than that.
+   */
+  if (!gsk_gl_render_job_visit_node_with_offscreen (job, source, &source_offscreen))
+    {
+      gsk_gl_render_job_visit_node (job, source);
+      return;
+    }
+
+  g_assert (source_offscreen.was_offscreen);
+
+  if (!gsk_gl_render_job_visit_node_with_offscreen (job, mask, &mask_offscreen))
+    {
+      return;
+    }
+
+  g_assert (mask_offscreen.was_offscreen);
+
+  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, mask));
+  gsk_gl_program_set_uniform_texture (job->current_program,
+                                      UNIFORM_SHARED_SOURCE, 0,
+                                      GL_TEXTURE_2D,
+                                      GL_TEXTURE0,
+                                      source_offscreen.texture_id);
+  gsk_gl_program_set_uniform_texture (job->current_program,
+                                      UNIFORM_MASK_SOURCE, 0,
+                                      GL_TEXTURE_2D,
+                                      GL_TEXTURE1,
+                                      mask_offscreen.texture_id);
+  gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
+  gsk_gl_render_job_end_draw (job);
+}
+
+static inline void
 gsk_gl_render_job_visit_color_matrix_node (GskGLRenderJob      *job,
                                            const GskRenderNode *node)
 {
@@ -3870,7 +3920,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_MASK_NODE:
-      gsk_gl_render_job_visit_as_fallback (job, node);
+      gsk_gl_render_job_visit_mask_node (job, node);
     break;
 
     case GSK_OPACITY_NODE:
