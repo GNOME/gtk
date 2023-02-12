@@ -15,7 +15,6 @@ cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cup
 
 # Use cpdb backend if present and enabled.
 # If not, use cups if present.
-# If not, use lpr.
 
 if get_option('print-cpdb').enabled() and cpdb_dep.found()
   print_backends += 'cpdb'
@@ -42,17 +41,6 @@ elif cups_dep.found()
     ],
     c_args: printbackends_args,
     dependencies: [libgtk_dep, cups_dep, colord_dep],
-    name_suffix: module_suffix,
-    install_dir: printbackends_install_dir,
-    install: true,
-  )
-else
-  # Automatic fall-back to the lpr backend
-  print_backends += 'lpr'
-  shared_module('printbackend-lpr',
-    sources: 'gtkprintbackendlpr.c',
-    c_args: printbackends_args,
-    dependencies: libgtk_dep,
     name_suffix: module_suffix,
     install_dir: printbackends_install_dir,
     install: true,
