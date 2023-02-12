@@ -95,7 +95,8 @@ enum
   PROP_VALUE,
   PROP_SIZE,
   PROP_ADJUSTMENT,
-  PROP_ICONS
+  PROP_ICONS,
+  PROP_ACTIVE
 };
 
 typedef struct
@@ -257,6 +258,17 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                        GTK_PARAM_READWRITE));
 
   /**
+   * GtkScaleButton:active: (attributes org.gtk.Property.get=gtk_scale_button_get_active)
+   *
+   * If the scale button should be pressed in.
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVE,
+                                   g_param_spec_boolean ("active", NULL, NULL,
+                                                         FALSE,
+                                                         GTK_PARAM_READABLE));
+
+  /**
    * GtkScaleButton::value-changed:
    * @button: the object which received the signal
    * @value: the new value
@@ -394,6 +406,8 @@ gtk_scale_button_toggled (GtkScaleButton *button)
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   gboolean active;
 
+  g_object_notify (G_OBJECT (button), "active");
+
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
 
   if (active)
@@ -514,6 +528,9 @@ gtk_scale_button_get_property (GObject     *object,
       break;
     case PROP_ICONS:
       g_value_set_boxed (value, priv->icon_list);
+      break;
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, gtk_scale_button_get_active (button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -766,6 +783,29 @@ gtk_scale_button_get_popup (GtkScaleButton *button)
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
 
   return priv->dock;
+}
+
+/**
+ * gtk_scale_button_get_active: (attributes org.gtk.Method.get_property=active)
+ * @button: a `GtkScaleButton`
+ *
+ * Queries a `GtkScaleButton` and returns its current state.
+ *
+ * Returns %TRUE if the scale button is pressed in and %FALSE
+ * if it is raised.
+ *
+ * Returns: whether the button is pressed
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_scale_button_get_active (GtkScaleButton *button)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), FALSE);
+
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
 }
 
 static void
