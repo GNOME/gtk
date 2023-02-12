@@ -104,6 +104,7 @@ gtk/deprecated/gtktreesortable.c
 gtk/deprecated/gtktreestore.c
 gtk/deprecated/gtktreeview.c
 gtk/deprecated/gtktreeviewcolumn.c
+gtk/deprecated/gtkvolumebutton.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccessible.c
@@ -339,7 +340,6 @@ gtk/gtktreelistmodel.c
 gtk/gtktreelistrowsorter.c
 gtk/gtkvideo.c
 gtk/gtkviewport.c
-gtk/gtkvolumebutton.c
 gtk/gtkwidget.c
 gtk/gtkwidgetpaintable.c
 gtk/gtkwindow.c
