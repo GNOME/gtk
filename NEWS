@@ -1,6 +1,31 @@
 Overview of Changes in 4.9.4, xx-xx-xxxx
 ========================================
 
+* Printing:
+ - Add a CPDB print backend
+
+* GtkFileDialog:
+ - Robustness fixes
+
+* GtkScaleButton:
+ - Add an 'active' property
+
+* Fix conflicting type names between gtk and gio
+
+* Gsk:
+ - Settable filtering for scaled textures
+ - Add mask nodes
+
+* Wayland:
+ - Handle dispatch failing in more places
+
+* Translation updates:
+ Belarusian
+ Chinese (Taiwan)
+ Georgian
+ Turkish
+
+
 Overview of Changes in 4.9.3, 04-02-2023
 ========================================
 
