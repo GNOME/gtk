@@ -70,6 +70,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * [property@Gtk.LockButton:tooltip-lock],
  * [property@Gtk.LockButton:tooltip-unlock] and
  * [property@Gtk.LockButton:tooltip-not-authorized] properties.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 
 struct _GtkLockButton
@@ -271,6 +273,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:permission: (attributes org.gtk.Property.get=gtk_lock_button_get_permission org.gtk.Property.set=gtk_lock_button_set_permission)
    *
    * The `GPermission object controlling this button.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_PERMISSION,
     g_param_spec_object ("permission", NULL, NULL,
@@ -282,6 +286,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:text-lock:
    *
    * The text to display when prompting the user to lock.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_TEXT_LOCK,
     g_param_spec_string ("text-lock", NULL, NULL,
@@ -294,6 +300,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:text-unlock:
    *
    * The text to display when prompting the user to unlock.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_TEXT_UNLOCK,
     g_param_spec_string ("text-unlock", NULL, NULL,
@@ -306,6 +314,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:tooltip-lock:
    *
    * The tooltip to display when prompting the user to lock.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_LOCK,
     g_param_spec_string ("tooltip-lock", NULL, NULL,
@@ -318,6 +328,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:tooltip-unlock:
    *
    * The tooltip to display when prompting the user to unlock.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_UNLOCK,
     g_param_spec_string ("tooltip-unlock", NULL, NULL,
@@ -330,6 +342,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * GtkLockButton:tooltip-not-authorized:
    *
    * The tooltip to display when the user cannot obtain authorization.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_NOT_AUTHORIZED,
     g_param_spec_string ("tooltip-not-authorized", NULL, NULL,
@@ -511,6 +525,8 @@ gtk_lock_button_clicked (GtkButton *widget)
  * Creates a new lock button which reflects the @permission.
  *
  * Returns: a new `GtkLockButton`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_lock_button_new (GPermission *permission)
@@ -527,6 +543,8 @@ gtk_lock_button_new (GPermission *permission)
  * Obtains the `GPermission` object that controls @button.
  *
  * Returns: (transfer none) (nullable): the `GPermission` of @button
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GPermission *
 gtk_lock_button_get_permission (GtkLockButton *button)
@@ -542,6 +560,8 @@ gtk_lock_button_get_permission (GtkLockButton *button)
  * @permission: (nullable): a `GPermission` object
  *
  * Sets the `GPermission` object that controls @button.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_lock_button_set_permission (GtkLockButton *button,
