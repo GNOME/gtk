@@ -158,6 +158,9 @@ struct _GdkWaylandDisplayClass
 
 gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
 
+void gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
+                                         struct wl_event_queue *event_queue);
+
 G_END_DECLS
 
 #endif  /* __GDK_WAYLAND_DISPLAY__ */

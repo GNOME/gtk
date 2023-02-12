@@ -2120,13 +2120,8 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
 
           while (startup_id == NULL)
             {
-              if (wl_display_dispatch_queue (display_wayland->wl_display,
-                                             event_queue) == -1)
-                {
-                  g_message ("Error %d (%s) dispatching to Wayland display.",
-                             errno, g_strerror (errno));
-                  _exit (1);
-                }
+              gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display_wayland),
+                                                  event_queue);
             }
 
           xdg_activation_token_v1_destroy (token);
