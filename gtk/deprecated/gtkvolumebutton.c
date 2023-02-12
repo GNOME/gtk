@@ -35,6 +35,8 @@
 #include "gtkprivate.h"
 
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkVolumeButton:
  *

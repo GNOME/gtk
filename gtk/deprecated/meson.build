@@ -49,6 +49,7 @@ gtk_deprecated_sources = [
   'deprecated/gtktreepopover.c',
   'deprecated/gtktreeview.c',
   'deprecated/gtktreeviewcolumn.c',
+  'deprecated/gtkvolumebutton.c',
 ]
 
 gtk_deprecated_headers = [
@@ -106,4 +107,5 @@ gtk_deprecated_headers = [
   'deprecated/gtktreestore.h',
   'deprecated/gtktreeview.h',
   'deprecated/gtktreeviewcolumn.h',
+  'deprecated/gtkvolumebutton.h',
 ]

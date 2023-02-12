@@ -290,7 +290,7 @@
 #include <gtk/gtkversion.h>
 #include <gtk/gtkvideo.h>
 #include <gtk/gtkviewport.h>
-#include <gtk/gtkvolumebutton.h>
+#include <gtk/deprecated/gtkvolumebutton.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwidgetpaintable.h>
 #include <gtk/gtkwindow.h>
