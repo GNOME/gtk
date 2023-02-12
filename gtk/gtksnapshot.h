@@ -95,6 +95,9 @@ void            gtk_snapshot_push_shadow                (GtkSnapshot            
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_blend                 (GtkSnapshot            *snapshot,
                                                          GskBlendMode            blend_mode);
+GDK_AVAILABLE_IN_4_10
+void            gtk_snapshot_push_mask                  (GtkSnapshot            *snapshot);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
