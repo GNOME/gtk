@@ -77,6 +77,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * ## CSS node
  *
  * `GtkStatusbar` has a single CSS node with name `statusbar`.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
@@ -167,6 +169,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    * @text: the message that was pushed
    *
    * Emitted whenever a new message gets pushed onto a statusbar's stack.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     g_signal_new (I_("text-pushed"),
@@ -186,6 +190,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    * @text: the message that was just popped
    *
    * Emitted whenever a new message is popped off a statusbar's stack.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   statusbar_signals[SIGNAL_TEXT_POPPED] =
     g_signal_new (I_("text-popped"),
@@ -225,6 +231,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
  * Creates a new `GtkStatusbar` ready for messages.
  *
  * Returns: the new `GtkStatusbar`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget*
 gtk_statusbar_new (void)
@@ -257,6 +265,8 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
  * Note that the description is not shown in the UI.
  *
  * Returns: an integer id
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 guint
 gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
@@ -317,6 +327,8 @@ gtk_statusbar_msg_free (GtkStatusbarMsg *msg)
  *
  * Returns: a message id that can be used with
  *   [method@Gtk.Statusbar.remove].
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 guint
 gtk_statusbar_push (GtkStatusbar *statusbar,
@@ -351,6 +363,8 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
  * Note that this may not change the displayed message,
  * if the message at the top of the stack has a different
  * context id.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_statusbar_pop (GtkStatusbar *statusbar,
@@ -395,6 +409,8 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
  *
  * Forces the removal of a message from a statusbar’s stack.
  * The exact @context_id and @message_id must be specified.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_statusbar_remove (GtkStatusbar *statusbar,
@@ -443,6 +459,8 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
  *
  * Forces the removal of all messages from a statusbar's
  * stack with the exact @context_id.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_statusbar_remove_all (GtkStatusbar *statusbar,
@@ -499,6 +517,8 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
  * Retrieves the contents of the label in `GtkStatusbar`.
  *
  * Returns: (transfer none): the contents of the statusbar
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 const char *
 gtk_statusbar_get_message (GtkStatusbar *statusbar)

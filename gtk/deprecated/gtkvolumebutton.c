@@ -44,6 +44,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * volume control.
  *
  * ![An example GtkVolumeButton](volumebutton.png)
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 
 typedef struct _GtkVolumeButtonClass  GtkVolumeButtonClass;
@@ -168,6 +170,8 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
    *
    * Note that if the symbolic icons are not available in your installed
    * theme, then the normal (potentially colorful) icons will be used.
+   *
+   * Deprecated: 4.10: This widget will be removed in GTK 5
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SYMBOLIC,
@@ -200,6 +204,8 @@ gtk_volume_button_init (GtkVolumeButton *button)
  * [class@Gtk.ScaleButton].
  *
  * Returns: a new `GtkVolumeButton`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_volume_button_new (void)

@@ -34,6 +34,8 @@
  * same context which was used to request sizes for a given `GtkTreeModel`
  * row also be used for the same row when calling other `GtkCellArea` APIs
  * such as gtk_cell_area_render() and gtk_cell_area_event().
+ *
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 
 #include "config.h"
@@ -107,6 +109,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * GtkCellAreaContext:area:
    *
    * The `GtkCellArea` this context was created by
+   *
+   * Deprecated: 4.10: This object will be removed in GTK 5
    */
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
@@ -120,6 +124,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The minimum width for the `GtkCellArea` in this context
    * for all `GtkTreeModel` rows that this context was requested
    * for using gtk_cell_area_get_preferred_width().
+   *
+   * Deprecated: 4.10: This object will be removed in GTK 5
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_WIDTH,
@@ -133,6 +139,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The natural width for the `GtkCellArea` in this context
    * for all `GtkTreeModel` rows that this context was requested
    * for using gtk_cell_area_get_preferred_width().
+   *
+   * Deprecated: 4.10: This object will be removed in GTK 5
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_WIDTH,
@@ -146,6 +154,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The minimum height for the `GtkCellArea` in this context
    * for all `GtkTreeModel` rows that this context was requested
    * for using gtk_cell_area_get_preferred_height().
+   *
+   * Deprecated: 4.10: This object will be removed in GTK 5
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_HEIGHT,
@@ -159,6 +169,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    * The natural height for the `GtkCellArea` in this context
    * for all `GtkTreeModel` rows that this context was requested
    * for using gtk_cell_area_get_preferred_height().
+   *
+   * Deprecated: 4.10: This object will be removed in GTK 5
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_HEIGHT,
@@ -309,7 +321,7 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
  *
  * Returns: (transfer none): the `GtkCellArea` this context was created by.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 GtkCellArea *
 gtk_cell_area_context_get_area (GtkCellAreaContext *context)
@@ -348,7 +360,7 @@ gtk_cell_area_context_get_area (GtkCellAreaContext *context)
  * of all the displayed row heights using
  * gtk_cell_area_get_preferred_height_for_width().
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_reset (GtkCellAreaContext *context)
@@ -377,7 +389,7 @@ gtk_cell_area_context_reset (GtkCellAreaContext *context)
  * rows. This is generally the case for `GtkTreeView` when
  * `GtkTreeView:fixed-height-mode` is enabled.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_allocate (GtkCellAreaContext *context,
@@ -401,7 +413,7 @@ gtk_cell_area_context_allocate (GtkCellAreaContext *context,
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a `GtkCellArea`, the returned values are 0.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
@@ -431,7 +443,7 @@ gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a `GtkCellArea`, the returned values are 0.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
@@ -462,7 +474,7 @@ gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a `GtkCellArea`, the returned values are -1.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *context,
@@ -492,7 +504,7 @@ gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *contex
  * After gtk_cell_area_context_reset() is called and/or before ever
  * requesting the size of a `GtkCellArea`, the returned values are -1.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *context,
@@ -521,7 +533,7 @@ gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *contex
  * context was recently reset with gtk_cell_area_context_reset(),
  * the returned value will be -1.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_get_allocation (GtkCellAreaContext *context,
@@ -553,7 +565,7 @@ gtk_cell_area_context_get_allocation (GtkCellAreaContext *context,
  * progressively push the requested width over a series of
  * gtk_cell_area_get_preferred_width() requests.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
@@ -597,7 +609,7 @@ gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
  * progressively push the requested height over a series of
  * gtk_cell_area_get_preferred_height() requests.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: This object will be removed in GTK 5
  */
 void
 gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,
