@@ -215,6 +215,12 @@
     <file>demo3widget.h</file>
     <file>demo3widget.ui</file>
   </gresource>
+  <gresource prefix="/mask">
+    <file>demo4widget.c</file>
+    <file>demo4widget.h</file>
+    <file>hsla.h</file>
+    <file>hsla.c</file>
+  </gresource>
   <gresource prefix="/paintable_svg">
     <file>svgpaintable.h</file>
     <file>svgpaintable.c</file>
@@ -311,6 +317,7 @@
     <file>list_store.c</file>
     <file>main.c</file>
     <file>markup.c</file>
+    <file>mask.c</file>
     <file>menu.c</file>
     <file>overlay.c</file>
     <file>overlay_decorative.c</file>
