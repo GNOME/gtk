@@ -60,6 +60,12 @@ void gtk_search_entry_set_search_delay (GtkSearchEntry *entry,
 GDK_AVAILABLE_IN_4_8
 guint gtk_search_entry_get_search_delay (GtkSearchEntry *entry);
 
+GDK_AVAILABLE_IN_4_10
+void            gtk_search_entry_set_placeholder_text (GtkSearchEntry *entry,
+                                                       const char     *text);
+GDK_AVAILABLE_IN_4_10
+const char *    gtk_search_entry_get_placeholder_text (GtkSearchEntry *entry);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSearchEntry, g_object_unref)
 
 G_END_DECLS

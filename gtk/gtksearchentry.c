@@ -832,6 +832,42 @@ gtk_search_entry_get_key_controller (GtkSearchEntry *entry)
   return gtk_text_get_key_controller (GTK_TEXT (entry->entry));
 }
 
+/**
+ * gtk_search_entry_get_placeholder_text:
+ * @entry: a `GtkSearchEntry`
+ *
+ * Gets the placeholder text associated with @entry.
+ *
+ * Returns: (nullable): The placeholder text.
+ *
+ * Since: 4.10
+ */
+const char *
+gtk_search_entry_get_placeholder_text (GtkSearchEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), NULL);
+
+  return gtk_text_get_placeholder_text (GTK_TEXT (entry->entry));
+}
+
+/**
+ * gtk_search_entry_set_placeholder_text:
+ * @entry: a `GtkSearchEntry`
+ * @text: (nullable): the text to set as a placeholder
+ *
+ * Sets the placeholder text associated with @entry.
+ *
+ * Since: 4.10
+ */
+void
+gtk_search_entry_set_placeholder_text (GtkSearchEntry *entry,
+                                       const char     *text)
+{
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
+
+  gtk_text_set_placeholder_text (GTK_TEXT (entry->entry), text);
+}
+
 GtkText *
 gtk_search_entry_get_text_widget (GtkSearchEntry *entry)
 {
