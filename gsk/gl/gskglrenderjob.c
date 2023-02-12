@@ -3550,7 +3550,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                                     GL_TEXTURE0,
                                                     offscreen.texture_id,
                                                     offscreen.sync);
-      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
     }
   else
