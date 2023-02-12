@@ -96,6 +96,8 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_get_minus_button (GtkScaleButton  *button);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_get_popup        (GtkScaleButton  *button);
+GDK_AVAILABLE_IN_4_10
+gboolean         gtk_scale_button_get_active       (GtkScaleButton  *button);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScaleButton, g_object_unref)
 
