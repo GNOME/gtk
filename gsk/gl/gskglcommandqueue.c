@@ -570,7 +570,10 @@ gsk_gl_command_queue_end_draw (GskGLCommandQueue *self)
   g_assert (self->batches.len > 0);
 
   if (will_ignore_batch (self))
-    return;
+    {
+      self->in_draw = FALSE;
+      return;
+    }
 
   batch = gsk_gl_command_batches_tail (&self->batches);
 
