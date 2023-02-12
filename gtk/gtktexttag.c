@@ -485,7 +485,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:indent:
    *
-   * Amount to indent the paragraph, in pixels.
+   * Amount to indent the paragraph, in pixels. 
+   *
+   * A negative value of indent will produce a hanging indentation.
+   * That is, the first line will have the full width, and subsequent
+   * lines will be indented by the absolute value of indent.
+   *
    */
   g_object_class_install_property (object_class,
                                    PROP_INDENT,
