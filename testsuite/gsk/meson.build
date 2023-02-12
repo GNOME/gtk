@@ -54,6 +54,7 @@ compare_render_tests = [
   'inset-shadow-multiple',
   'invalid-transform',
   'issue-3615',
+  'mask',
   'nested-rounded-clips',
   'opacity_clip',
   'opacity-overdraw',
