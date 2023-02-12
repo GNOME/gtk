@@ -72,6 +72,8 @@ struct _GtkEditableLabel
   GtkWidget *stack;
   GtkWidget *label;
   GtkWidget *entry;
+
+  guint stop_editing_soon_id;
 };
 
 struct _GtkEditableLabelClass
@@ -196,10 +198,12 @@ static gboolean
 stop_editing_soon (gpointer data)
 {
   GtkEventController *controller = data;
-  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  GtkEditableLabel *self = GTK_EDITABLE_LABEL (gtk_event_controller_get_widget (controller));
 
   if (!gtk_event_controller_focus_contains_focus (GTK_EVENT_CONTROLLER_FOCUS (controller)))
-    gtk_editable_label_stop_editing (GTK_EDITABLE_LABEL (widget), TRUE);
+    gtk_editable_label_stop_editing (self, TRUE);
+
+  self->stop_editing_soon_id = 0;
 
   return FALSE;
 }
@@ -208,7 +212,8 @@ static void
 gtk_editable_label_focus_out (GtkEventController *controller,
                               GtkEditableLabel   *self)
 {
-  g_timeout_add (100, stop_editing_soon, controller);
+  if (self->stop_editing_soon_id == 0)
+    self->stop_editing_soon_id = g_timeout_add (100, stop_editing_soon, controller);
 }
 
 static void
@@ -360,6 +365,8 @@ gtk_editable_label_dispose (GObject *object)
 
   self->entry = NULL;
   self->label = NULL;
+
+  g_clear_handle_id (&self->stop_editing_soon_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_editable_label_parent_class)->dispose (object);
 }
