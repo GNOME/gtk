@@ -112,7 +112,8 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
             {
               if (!entry->accessed)
                 {
-                  gsk_gl_driver_release_texture (self->driver, entry->texture);
+                  if (entry->texture)
+                    gsk_gl_driver_release_texture (self->driver, entry->texture);
                   g_hash_table_iter_remove (&iter);
                   dropped++;
                 }
