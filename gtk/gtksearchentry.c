@@ -840,7 +840,7 @@ gtk_search_entry_get_key_controller (GtkSearchEntry *entry)
  *
  * Returns: (nullable): The placeholder text.
  *
- * Since: 4.8
+ * Since: 4.10
  */
 const char *
 gtk_search_entry_get_placeholder_text (GtkSearchEntry *entry)
@@ -857,7 +857,7 @@ gtk_search_entry_get_placeholder_text (GtkSearchEntry *entry)
  *
  * Sets the placeholder text associated with @entry.
  *
- * Since: 4.8
+ * Since: 4.10
  */
 void
 gtk_search_entry_set_placeholder_text (GtkSearchEntry *entry,
