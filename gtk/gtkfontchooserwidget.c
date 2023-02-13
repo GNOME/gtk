@@ -919,6 +919,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, selection);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, custom_filter);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, user_filter);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, multi_filter);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, preview);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, preview2);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_label);
