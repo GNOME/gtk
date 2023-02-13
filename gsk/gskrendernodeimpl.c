@@ -58,6 +58,16 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
+static void
+_graphene_rect_init_from_clip_extents (graphene_rect_t *rect,
+                                       cairo_t         *cr)
+{
+  double x1c, y1c, x2c, y2c;
+
+  cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
+  graphene_rect_init (rect, x1c, y1c, x2c - x1c, y2c - y1c);
+}
+
 /* {{{ GSK_COLOR_NODE */
 
 /**
@@ -2069,15 +2079,15 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   GskInsetShadowNode *self = (GskInsetShadowNode *) node;
   GskRoundedRect box, clip_box;
   int clip_radius;
-  double x1c, y1c, x2c, y2c;
+  graphene_rect_t clip_rect;
   double blur_radius;
 
   /* We don't need to draw invisible shadows */
   if (gdk_rgba_is_clear (&self->color))
     return;
 
-  cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
-  if (!gsk_rounded_rect_intersects_rect (&self->outline, &GRAPHENE_RECT_INIT (x1c, y1c, x2c - x1c, y2c - y1c)))
+  _graphene_rect_init_from_clip_extents (&clip_rect, cr);
+  if (!gsk_rounded_rect_intersects_rect (&self->outline, &clip_rect))
     return;
 
   blur_radius = self->blur_radius / 2;
@@ -2365,7 +2375,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   GskOutsetShadowNode *self = (GskOutsetShadowNode *) node;
   GskRoundedRect box, clip_box;
   int clip_radius;
-  double x1c, y1c, x2c, y2c;
+  graphene_rect_t clip_rect;
   float top, right, bottom, left;
   double blur_radius;
 
@@ -2373,8 +2383,8 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   if (gdk_rgba_is_clear (&self->color))
     return;
 
-  cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
-  if (gsk_rounded_rect_contains_rect (&self->outline, &GRAPHENE_RECT_INIT (x1c, y1c, x2c - x1c, y2c - y1c)))
+  _graphene_rect_init_from_clip_extents (&clip_rect, cr);
+  if (!gsk_rounded_rect_intersects_rect (&self->outline, &clip_rect))
     return;
 
   blur_radius = self->blur_radius / 2;
