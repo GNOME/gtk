@@ -1631,9 +1631,6 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
                                          (int) ceilf (node->bounds.size.height));
   cr2 = cairo_create (surface2);
 
-  cairo_set_source_rgba (cr2, 0, 0, 0, 0);
-  cairo_paint (cr2);
-
   surface = gdk_texture_download_surface (self->texture);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
