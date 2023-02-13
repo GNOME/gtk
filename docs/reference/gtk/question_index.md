@@ -11,8 +11,7 @@ the question you have, this list is a good place to start.
 
     The GTK [website](https://www.gtk.org) offers some
     [tutorials](https://www.gtk.org/documentation.php) and other documentation
-    (most of it about GTK 2.x and 3.x, but still somewhat applicable). This
-    reference manual also contains a introductory
+    This reference manual also contains a introductory
     [Getting Started](#gtk-getting-started) part.
 
     More documentation ranging from whitepapers to online books can be found at
@@ -25,9 +24,9 @@ the question you have, this list is a good place to start.
 
 3.  How do I port from one GTK version to another?
 
-    See the [migration guide](#migrating). You may also find useful information in
-    the documentation for specific widgets and functions. If you have a question not
-    covered in the manual, feel free to ask, and please
+    Every major version of GTK comes with a [migration guide](#migrating). You may also
+    find useful information in the documentation for specific widgets and functions. If
+    you have a question not covered in the manual, feel free to ask, and please
     [file a bug report](https://gitlab.gnome.org/GNOME/gtk/issues/new) against the
     documentation.
 
@@ -37,6 +36,10 @@ the question you have, this list is a good place to start.
     specifically `g_object_ref()` and `g_object_unref()`. `GInitiallyUnowned` is a
     subclass of `GObject` so the same points apply, except that it has a "floating"
     state (explained in its documentation).
+
+    In a widget tree, each container owns a reference to its children. The root
+    object (typically a `GtkWindow`) is owned by GTK. GTK will drop its reference
+    when you call [method@Gtk.Window.destroy].
 
     For strings returned from functions, they will be declared "const" if they should
     not be freed. Non-const strings should be freed with `g_free()`. Arrays follow the
@@ -250,11 +253,15 @@ the question you have, this list is a good place to start.
 11. How do I load an image or animation from a file?
 
     To load an image file straight into a display widget, use
-    [ctor@Gtk.Image.new_from_file]. To load an image for another purpose, use
-    [ctor@Gdk.Texture.new_from_file]. To load a video from a file, use
-    [ctor@Gtk.MediaFile.new_for_file].
+    [ctor@Gtk.Picture.new_for_file] or [ctor@GTk.Picture.new_for_filename].
+    To load an image for another purpose, use [ctor@Gdk.Texture.new_from_file].
+    To load a video from a file, use [ctor@Gtk.MediaFile.new_for_file].
 
 12. How do I draw text?
+
+    If you just want to put text into your user interface somewhere, it is
+    usually easiest to just use one of ready-made widgets for this purpose,
+    such as [class@Gtk.Label].
 
     To draw a piece of text onto a cairo surface, use a Pango layout and
     [func@PangoCairo.show_layout].
@@ -349,10 +356,7 @@ the question you have, this list is a good place to start.
 19. ...for presenting a set of mutually-exclusive choices, where Windows
     would use a combo box?
 
-    With GTK, a [class@Gtk.ComboBox] is the recommended widget to use for this use case.
-    If you need an editable text entry, use the [property@Gtk.ComboBox:has-entry] property.
-
-    A newer alternative is [class@Gtk.DropDown].
+    With GTK, a [class@Gtk.DropDown] is the recommended widget to use for this use case.
 
 ## Questions about GtkWidget
 
@@ -537,8 +541,10 @@ the question you have, this list is a good place to start.
 
 31. How do I use cairo to draw in GTK applications?
 
-    Use [method@Gtk.Snapshot.append_cairo] in your [vfunc@Gtk.Widget.snapshot] vfunc
-    to obtain a cairo context and draw with that.
+    [class@Gtk.DrawingArea] is a ready-made widget for drawing with cairo.
+
+    If you implement a custom widget, use [method@Gtk.Snapshot.append_cairo]
+    in your [vfunc@Gtk.Widget.snapshot] vfunc to obtain a cairo context and draw with that.
 
 32. Can I improve the performance of my application by using another backend
     of cairo (such as GL)?
