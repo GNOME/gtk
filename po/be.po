@@ -1215,7 +1215,7 @@ msgid ""
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Праграма распаўсюджваецца без аніякіх гарантый.\n"
-"Падрабязнасці глядзіце тут: <a href=«%s»>%s</a>."
+"Падрабязнасці глядзіце тут: <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
