@@ -30,6 +30,16 @@ the question you have, this list is a good place to start.
     [file a bug report](https://gitlab.gnome.org/GNOME/gtk/issues/new) against the
     documentation.
 
+*  Should I maintain parallel versions of my UI in GTK x and GTK y?
+
+    At the end of the day, that is up to you.
+
+    Our experience is that it is a lot of work, and usually not a good idea.
+
+    If you are not ready to make the jump to the next major version of GTK,
+    it is perfectly fine to stick with the stable release. We maintain them
+    for that reason.
+
 *  How does memory management work in GTK? Should I free data returned from functions?
 
     See the documentation for `GObject` and `GInitiallyUnowned`. For `GObject` note
