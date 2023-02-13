@@ -239,14 +239,14 @@ control whether Vulkan should be used.
 ### `media-gstreamer` and `media-ffmpeg`
 
 By default, GTK will try to build the gstreamer backend for
-media playback support. These option can be used to explicitly
+media playback support. These options can be used to explicitly
 control which media backends should be built.
 
-### `print-cups`
+### `print-cups` and `print-cpdb`
 
-By default, GTK will try to build various print backends
-if their dependencies are found. This option can be used
-to explicitly control whether the cups print backend should be built.
+By default, GTK will try to build the cups and file print backends
+if their dependencies are found. These options can be used to
+explicitly control which print backends should be built.
 
 ### `cloudproviders`
 
