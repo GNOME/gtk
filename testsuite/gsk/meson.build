@@ -201,6 +201,8 @@ node_parser_tests = [
   'empty-text.ref.node',
   'empty-texture.node',
   'empty-texture.ref.node',
+  'empty-texture-scale.node',
+  'empty-texture-scale.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
   'glshader.node',
