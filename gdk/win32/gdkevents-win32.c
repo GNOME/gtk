@@ -2669,6 +2669,10 @@ gdk_event_translate (MSG  *msg,
 	button = 5;
 
     buttonup0:
+    {
+      gboolean release_implicit_grab = FALSE;
+      GdkWindow *prev_window = NULL;
+
       GDK_NOTE (EVENTS,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
@@ -2684,37 +2688,12 @@ gdk_event_translate (MSG  *msg,
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
 	    {
-	      GdkWindow *native_window = pointer_grab->native_window;
-
-	      ReleaseCapture ();
-
-	      new_window = NULL;
-	      hwnd = WindowFromPoint (msg->pt);
-	      if (hwnd != NULL)
-		{
-		  POINT client_pt = msg->pt;
-
-		  ScreenToClient (hwnd, &client_pt);
-		  GetClientRect (hwnd, &rect);
-		  if (PtInRect (&rect, client_pt))
-		    new_window = gdk_win32_handle_table_lookup (hwnd);
-		}
-
-	      synthesize_crossing_events (display,
-                                          device_manager_win32->system_pointer,
-					  native_window, new_window,
-					  GDK_CROSSING_UNGRAB,
-					  &msg->pt,
-					  0, /* TODO: Set right mask */
-					  _gdk_win32_get_next_tick (msg->time),
-					  FALSE);
-	      g_set_object (&mouse_window, new_window);
-	      mouse_window_ignored_leave = NULL;
+              release_implicit_grab = TRUE;
+              prev_window = pointer_grab->native_window;
 	    }
 	}
 
-      generate_button_event (GDK_BUTTON_RELEASE, button,
-			     window, msg);
+      generate_button_event (GDK_BUTTON_RELEASE, button, window, msg);
 
       impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
@@ -2723,9 +2702,37 @@ gdk_event_translate (MSG  *msg,
           impl->drag_move_resize_context.button == button)
         gdk_win32_window_end_move_resize_drag (window);
 
+      if (release_implicit_grab)
+        {
+          ReleaseCapture ();
+
+          new_window = NULL;
+          hwnd = WindowFromPoint (msg->pt);
+          if (hwnd != NULL)
+            {
+              POINT client_pt = msg->pt;
+
+              ScreenToClient (hwnd, &client_pt);
+              GetClientRect (hwnd, &rect);
+              if (PtInRect (&rect, client_pt))
+                new_window = gdk_win32_handle_table_lookup (hwnd);
+            }
+
+          synthesize_crossing_events (display,
+                                      device_manager_win32->system_pointer,
+                                      prev_window, new_window,
+                                      GDK_CROSSING_UNGRAB,
+                                      &msg->pt,
+                                      0, /* TODO: Set right mask */
+                                      _gdk_win32_get_next_tick (msg->time),
+                                      FALSE);
+          g_set_object (&mouse_window, new_window);
+          mouse_window_ignored_leave = NULL;
+        }
+
       return_val = TRUE;
       break;
-
+    }
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
 		g_print (" %p (%d,%d)",
@@ -2739,60 +2746,35 @@ gdk_event_translate (MSG  *msg,
 
       pen_touch_input = FALSE;
 
-      new_window = window;
+      g_set_object (&window, find_window_for_mouse_event (window, msg));
 
-      if (pointer_grab != NULL)
-	{
-	  POINT pt;
-	  pt = msg->pt;
-
-	  new_window = NULL;
-	  hwnd = WindowFromPoint (pt);
-	  if (hwnd != NULL)
-	    {
-	      POINT client_pt = pt;
-
-	      ScreenToClient (hwnd, &client_pt);
-	      GetClientRect (hwnd, &rect);
-	      if (PtInRect (&rect, client_pt))
-		new_window = gdk_win32_handle_table_lookup (hwnd);
-	    }
-
-	  if (!pointer_grab->owner_events &&
-	      new_window != NULL &&
-	      new_window != pointer_grab->native_window)
-	    new_window = NULL;
-	}
-
-      if (mouse_window != new_window)
+      if (mouse_window != window)
 	{
 	  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
 				     mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL,
-				     new_window ? GDK_WINDOW_HWND (new_window) : NULL));
+                                     window ? GDK_WINDOW_HWND (window) : NULL));
 	  synthesize_crossing_events (display,
                                       device_manager_win32->system_pointer,
-				      mouse_window, new_window,
+                                      mouse_window, window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
 				      0, /* TODO: Set right mask */
 				      _gdk_win32_get_next_tick (msg->time),
 				      FALSE);
-	  g_set_object (&mouse_window, new_window);
+          g_set_object (&mouse_window, window);
 	  mouse_window_ignored_leave = NULL;
-	  if (new_window != NULL)
-	    track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
+          if (window != NULL)
+            track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (window));
 	}
-      else if (new_window != NULL &&
-	       new_window == mouse_window_ignored_leave)
+      else if (window != NULL && window == mouse_window_ignored_leave)
 	{
 	  /* If we ignored a leave event for this window and we're now getting
 	     input again we need to re-arm the mouse tracking, as that was
 	     cancelled by the mouseleave. */
 	  mouse_window_ignored_leave = NULL;
-	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
+         track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (window));
 	}
 
-      g_set_object (&window, find_window_for_mouse_event (window, msg));
       impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
       /* If we haven't moved, don't create any GDK event. Windows
