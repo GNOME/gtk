@@ -142,6 +142,9 @@ endforeach
 
 node_parser_tests = [
   'blend.node',
+  'blend-unknown-mode.errors',
+  'blend-unknown-mode.node',
+  'blend-unknown-mode.ref.node',
   'border.node',
   'color.node',
   'conic-gradient.node',
@@ -231,6 +234,9 @@ node_parser_tests = [
   'texture-fail.node',
   'texture-fail.ref.node',
   'texture-fail.ref.errors',
+  'texture-scale-unknown-filter.errors',
+  'texture-scale-unknown-filter.node',
+  'texture-scale-unknown-filter.ref.node',
   'transform-fail.node',
   'transform-fail.ref.node',
   'transform-fail.errors',
