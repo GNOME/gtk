@@ -356,6 +356,10 @@ canvas_item_start_editing (CanvasItem *item)
 
 }
 
+typedef struct {
+  double x, y;
+} Hotspot;
+
 static GdkContentProvider *
 prepare (GtkDragSource *source,
          double         x,
@@ -363,6 +367,7 @@ prepare (GtkDragSource *source,
 {
   GtkWidget *canvas;
   GtkWidget *item;
+  Hotspot *hotspot;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = gtk_widget_pick (canvas, x, y, GTK_PICK_DEFAULT);
@@ -372,6 +377,10 @@ prepare (GtkDragSource *source,
     return NULL;
 
   g_object_set_data (G_OBJECT (canvas), "dragged-item", item);
+
+  hotspot = g_new (Hotspot, 1);
+  gtk_widget_translate_coordinates (canvas, item, x, y, &hotspot->x, &hotspot->y);
+  g_object_set_data_full (G_OBJECT (canvas), "hotspot", hotspot, g_free);
 
   return gdk_content_provider_new_typed (GTK_TYPE_WIDGET, item);
 }
@@ -383,12 +392,14 @@ drag_begin (GtkDragSource *source,
   GtkWidget *canvas;
   CanvasItem *item;
   GdkPaintable *paintable;
+  Hotspot *hotspot;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = CANVAS_ITEM (g_object_get_data (G_OBJECT (canvas), "dragged-item"));
+  hotspot = (Hotspot *) g_object_get_data (G_OBJECT (canvas), "hotspot");
 
   paintable = canvas_item_get_drag_icon (item);
-  gtk_drag_source_set_icon (source, paintable, item->r, item->r);
+  gtk_drag_source_set_icon (source, paintable, hotspot->x, hotspot->y);
   g_object_unref (paintable);
 
   gtk_widget_set_opacity (GTK_WIDGET (item), 0.3);
