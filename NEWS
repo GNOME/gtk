@@ -1,8 +1,9 @@
-Overview of Changes in 4.9.4, xx-xx-xxxx
+Overview of Changes in 4.9.4, 12-02-2023
 ========================================
 
 * Printing:
- - Add a CPDB print backend
+ - Add a CPDB backend
+ - Drop the lpr backend
 
 * GtkFileDialog:
  - Robustness fixes
@@ -10,20 +11,28 @@ Overview of Changes in 4.9.4, xx-xx-xxxx
 * GtkScaleButton:
  - Add an 'active' property
 
+* GtkSearchEntry:
+ - Add placeholder text
+
 * Fix conflicting type names between gtk and gio
 
 * Gsk:
  - Settable filtering for scaled textures
  - Add mask nodes
+ - Some robustness and crash fixes
 
 * Wayland:
  - Handle dispatch failing in more places
+
+* Deprecations:
+ - GtkVolumeButton
 
 * Translation updates:
  Belarusian
  Chinese (Taiwan)
  Georgian
  Turkish
+ Ukrainian
 
 
 Overview of Changes in 4.9.3, 04-02-2023
