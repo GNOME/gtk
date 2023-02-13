@@ -1635,10 +1635,19 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   };
   cairo_t *cr2;
   cairo_surface_t *surface2;
+  graphene_rect_t clip_rect;
+
+  /* Make sure we draw the minimum region by using the clip */
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_clip (cr);
+  _graphene_rect_init_from_clip_extents (&clip_rect, cr);
+  if (clip_rect.size.width <= 0 || clip_rect.size.height <= 0)
+    return;
 
   surface2 = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                         (int) ceilf (node->bounds.size.width),
-                                         (int) ceilf (node->bounds.size.height));
+                                         (int) ceilf (clip_rect.size.width),
+                                         (int) ceilf (clip_rect.size.height));
+  cairo_surface_set_device_offset (surface2, -clip_rect.origin.x, -clip_rect.origin.y);
   cr2 = cairo_create (surface2);
 
   surface = gdk_texture_download_surface (self->texture);
