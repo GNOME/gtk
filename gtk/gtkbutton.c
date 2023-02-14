@@ -969,10 +969,6 @@ gtk_button_set_icon_name (GtkButton  *button,
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->child), icon_name);
     }
 
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, priv->child, NULL,
-                                  -1);
-
   gtk_button_set_child_type (button, ICON_CHILD);
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ICON_NAME]);
 }
