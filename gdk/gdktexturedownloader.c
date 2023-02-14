@@ -254,8 +254,7 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
     {
       GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (self->texture);
 
-      *out_stride = gdk_memory_texture_get_stride (memtex);
-      return g_bytes_ref (gdk_memory_texture_get_bytes (memtex));
+      return g_bytes_ref (gdk_memory_texture_get_bytes (memtex, out_stride));
     }
 
   stride = self->texture->width * gdk_memory_format_bytes_per_pixel (self->format);

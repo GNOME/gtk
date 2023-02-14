@@ -233,21 +233,11 @@ gdk_memory_texture_from_texture (GdkTexture      *texture,
   return GDK_MEMORY_TEXTURE (result);
 }
 
-const guchar *
-gdk_memory_texture_get_data (GdkMemoryTexture *self)
-{
-  return g_bytes_get_data (self->bytes, NULL);
-}
-
 GBytes *
-gdk_memory_texture_get_bytes (GdkMemoryTexture *self)
+gdk_memory_texture_get_bytes (GdkMemoryTexture *self,
+                              gsize            *out_stride)
 {
+  *out_stride = self->stride;
   return self->bytes;
-}
-
-gsize
-gdk_memory_texture_get_stride (GdkMemoryTexture *self)
-{
-  return self->stride;
 }
 
