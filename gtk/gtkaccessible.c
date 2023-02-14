@@ -45,6 +45,11 @@
  * [vfunc@Gtk.Accessible.get_next_accessible_sibling] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
+ * Also note that when an accessible object does not correspond to a widget,
+ * and it has children, whose implementation you don't control,
+ * it is necessary to ensure the correct shape of the a11y tree
+ * by calling gtk_accessible_set_accessible_parent() and
+ * gtk_accessible_set_next_accessible_sibling() as appropriate.
  */
 
 #include "config.h"
@@ -115,7 +120,43 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
+  GtkATContext *context;
+  GtkAccessible *parent = NULL;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL)
+    parent = gtk_at_context_get_accessible_parent (context);
+ 
+  if (parent != NULL)
+    return parent;
+  else
+    return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
+}
+
+/**
+ * gtk_accessible_set_accessible_parent:
+ * @self: a `GtkAccessible`
+ * @parent: the parent `GtkAccessible`
+ * @next_sibling: the next accessible sibling of this `GtkAccessible`
+ *
+ * Sets the parent and next sibling accessible of an accessible object
+ *
+ * Since: 4.10
+ */
+void
+gtk_accessible_set_accessible_parent (GtkAccessible *self,
+                                      GtkAccessible *parent,
+                                      GtkAccessible *next_sibling)
+{
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL)
+  {
+    gtk_at_context_set_accessible_parent (context, parent);
+    gtk_at_context_set_next_accessible_sibling (context, next_sibling);
+  }
 }
 
 /**
@@ -151,7 +192,13 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
+    return gtk_at_context_get_next_accessible_sibling (context);
+  else
+    return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
 }
 
 /**

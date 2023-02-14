@@ -87,6 +87,8 @@ struct _GtkATContext
 
   GtkAccessibleRole accessible_role;
   GtkAccessible *accessible;
+  GtkAccessible *accessible_parent;
+  GtkAccessible *next_accessible_sibling;
   GdkDisplay *display;
 
   GtkAccessibleAttributeSet *states;
@@ -178,5 +180,16 @@ void                    gtk_at_context_child_changed            (GtkATContext   
 const char *    gtk_accessible_property_get_attribute_name      (GtkAccessibleProperty property);
 const char *    gtk_accessible_relation_get_attribute_name      (GtkAccessibleRelation relation);
 const char *    gtk_accessible_state_get_attribute_name         (GtkAccessibleState    state);
+
+GtkAccessible *
+gtk_at_context_get_accessible_parent (GtkATContext *self);
+void
+gtk_at_context_set_accessible_parent (GtkATContext *self,
+                                      GtkAccessible *parent);
+GtkAccessible *
+gtk_at_context_get_next_accessible_sibling (GtkATContext *self);
+void
+gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
+                                            GtkAccessible *sibling);
 
 G_END_DECLS

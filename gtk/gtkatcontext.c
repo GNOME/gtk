@@ -448,6 +448,80 @@ gtk_at_context_get_accessible_role (GtkATContext *self)
 }
 
 /*< private >
+ * gtk_at_context_get_accessible_parent:
+ * @self: a `GtkAtContext`
+ *
+ * Retrieves the parent accessible object of the given `GtkAtContext`.
+ *
+ * Returns: (nullable) (transfer none): the parent accessible object, or `NULL` if not set.
+ */
+GtkAccessible *
+gtk_at_context_get_accessible_parent (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+  
+  return self->accessible_parent;
+}
+
+/*< private >
+ * gtk_at_context_set_accessible_parent:
+ * @self: a `GtkAtContext`
+ * @parent: the parent `GtkAccessible` to set
+ *
+ * Sets the parent accessible object of the given `GtkAtContext`.
+ */
+void
+gtk_at_context_set_accessible_parent (GtkATContext *self,
+                                      GtkAccessible *parent)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  
+  if (self->accessible_parent != parent)
+    {
+      if (self->accessible_parent != NULL)
+        g_object_unref (self->accessible_parent);
+      self->accessible_parent = g_object_ref (parent);
+    }
+}
+
+/*< private >
+ * gtk_at_context_get_next_accessible_sibling:
+ * @self: a `GtkAtContext`
+ *
+ * Retrieves the next accessible sibling of the given `GtkAtContext`.
+ *
+ * Returns: (nullable) (transfer none): the next accessible sibling.
+ */
+GtkAccessible *
+gtk_at_context_get_next_accessible_sibling (GtkATContext *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+  
+  return self->next_accessible_sibling;
+}
+
+/*< private >
+ * gtk_at_context_set_next_accessible_sibling:
+ * @self: a `GtkAtContext`
+ * @sibling: (nullable): the next accessible sibling
+ *
+ * Sets the next accessible sibling object of the given `GtkAtContext`.
+ */
+void
+gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
+                                            GtkAccessible *sibling)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  
+  if (self->next_accessible_sibling != sibling)
+    {
+      if (self->next_accessible_sibling != NULL)
+        g_object_unref (self->next_accessible_sibling);
+      self->next_accessible_sibling = g_object_ref (sibling);
+    }
+}
+
+/*< private >
  * gtk_at_context_set_display:
  * @self: a `GtkATContext`
  * @display: a `GdkDisplay`
