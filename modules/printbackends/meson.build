@@ -10,9 +10,6 @@ printbackends_args = [
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
 ] + common_cflags
 
-cpdb_dep = dependency('cpdb-frontend', version : '>=1.0', required: get_option('print-cpdb'))
-cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
-
 # Use cpdb backend if present and enabled.
 # If not, use cups if present.
 
