@@ -178,6 +178,16 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
 Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
+### mask
+
+| property | syntax           | default                | printed     |
+| -------- | ---------------- | ---------------------- | ----------- |
+| source   | `<node>`         | color { }              | always      |
+| mode     | `<blend-mode>`   | alpha                  | non-default |
+| mask     | `<node>`         | color { }              | always      |
+
+Creates a node like `gsk_mask_node_new()` with the given properties.
+
 ### opacity
 
 | property | syntax           | default                | printed     |
