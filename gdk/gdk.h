@@ -69,6 +69,7 @@
 #include <gdk/gdksnapshot.h>
 #include <gdk/gdksurface.h>
 #include <gdk/gdktexture.h>
+#include <gdk/gdktexturedownloader.h>
 #include <gdk/gdktoplevel.h>
 #include <gdk/gdktoplevellayout.h>
 #include <gdk/gdktoplevelsize.h>
