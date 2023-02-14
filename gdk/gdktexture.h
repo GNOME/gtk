@@ -24,6 +24,7 @@
 #endif
 
 #include <gdk/gdkversionmacros.h>
+#include <gdk/gdkenums.h>
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -82,6 +83,8 @@ GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_width                  (GdkTexture      *texture) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_height                 (GdkTexture      *texture) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_10
+GdkMemoryFormat         gdk_texture_get_format                 (GdkTexture      *self) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_download                   (GdkTexture      *texture,

@@ -43,7 +43,6 @@ void                    gdk_texture_do_download         (GdkTexture             
                                                          GdkMemoryFormat         format,
                                                          guchar                 *data,
                                                          gsize                   stride);
-GdkMemoryFormat         gdk_texture_get_format          (GdkTexture             *self);
 gboolean                gdk_texture_set_render_data     (GdkTexture             *self,
                                                          gpointer                key,
                                                          gpointer                data,

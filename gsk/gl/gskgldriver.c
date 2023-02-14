@@ -35,7 +35,6 @@
 #include "gskgliconlibraryprivate.h"
 #include "gskglprogramprivate.h"
 #include "gskglshadowlibraryprivate.h"
-#include "gskgltextureprivate.h"
 #include "fp16private.h"
 
 #include <gdk/gdkglcontextprivate.h>

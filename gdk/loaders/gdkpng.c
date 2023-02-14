@@ -24,7 +24,6 @@
 #include "gdkmemorytexture.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
-#include "gdktextureprivate.h"
 #include "gsk/gl/fp16private.h"
 #include <png.h>
 #include <stdio.h>

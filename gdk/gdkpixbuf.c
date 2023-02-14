@@ -27,7 +27,6 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdksurface.h"
-#include "gdktextureprivate.h"
 #include "gdktexturedownloaderprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
