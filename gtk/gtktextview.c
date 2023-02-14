@@ -998,6 +998,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * GtkTextView:indent: (attributes org.gtk.Property.get=gtk_text_view_get_indent org.gtk.Property.set=gtk_text_view_set_indent)
    *
    * Amount to indent the paragraph, in pixels.
+   *
+   * A negative value of indent will produce a hanging indentation.
+   * That is, the first line will have the full width, and subsequent
+   * lines will be indented by the absolute value of indent.
+   * 
    */
   g_object_class_install_property (gobject_class,
                                    PROP_INDENT,
