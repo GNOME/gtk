@@ -722,6 +722,9 @@ gdk_texture_download_surface (GdkTexture *texture)
  *                       cairo_image_surface_get_stride (surface));
  * cairo_surface_mark_dirty (surface);
  * ```
+ *
+ * For more flexible download capabilites, see
+ * [struct@Gdk.TextureDownloader].
  */
 void
 gdk_texture_download (GdkTexture *texture,
