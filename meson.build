@@ -740,6 +740,10 @@ subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
+if os_unix
+  cpdb_dep = dependency('cpdb-frontend', version : '>=2.0', required: get_option('print-cpdb'))
+  cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
+endif
 subdir('modules')
 if get_option('demos')
   subdir('demos')
