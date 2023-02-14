@@ -535,11 +535,14 @@ GDK_AVAILABLE_IN_4_10
 GType                  gsk_mask_node_get_type                   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_new                        (GskRenderNode            *source,
-                                                                 GskRenderNode            *mask);
+                                                                 GskRenderNode            *mask,
+                                                                 GskMaskMode               mask_mode);
 GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_source                 (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_4_10
 GskRenderNode *        gsk_mask_node_get_mask                   (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_4_10
+GskMaskMode            gsk_mask_node_get_mask_mode              (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_gl_shader_node_get_type             (void) G_GNUC_CONST;

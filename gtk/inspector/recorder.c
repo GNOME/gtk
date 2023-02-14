@@ -1140,6 +1140,12 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_MASK_NODE:
+      {
+        GskMaskMode mode = gsk_mask_node_get_mask_mode (node);
+        tmp = g_enum_to_string (GSK_TYPE_MASK_MODE, mode);
+        add_text_row (store, "Mask mode", tmp);
+        g_free (tmp);
+      }
       break;
 
     case GSK_BLUR_NODE:

@@ -62,7 +62,8 @@ GSK_GL_DEFINE_PROGRAM (linear_gradient,
 
 GSK_GL_DEFINE_PROGRAM (mask,
                        GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("mask.glsl")),
-                       GSK_GL_ADD_UNIFORM (1, MASK_SOURCE, u_mask))
+                       GSK_GL_ADD_UNIFORM (1, MASK_SOURCE, u_mask)
+                       GSK_GL_ADD_UNIFORM (2, MASK_MODE, u_mode))
 
 GSK_GL_DEFINE_PROGRAM (outset_shadow,
                        GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("outset_shadow.glsl")),

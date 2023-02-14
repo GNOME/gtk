@@ -255,5 +255,25 @@ typedef enum
   GSK_GL_UNIFORM_TYPE_VEC4,
 } GskGLUniformType;
 
+/**
+ * GskMaskMode:
+ * @GSK_MASK_MODE_ALPHA: Use the alpha channel of the mask
+ * @GSK_MASK_MODE_INVERTED_ALPHA: Use the inverted alpha channel of the mask
+ * @GSK_MASK_MODE_LUMINANCE: Use the luminance of the mask,
+ *     multiplied by mask alpha
+ * @GSK_MASK_MODE_INVERTED_LUMINANCE: Use the inverted luminance of the mask,
+ *     multiplied by mask alpha
+ *
+ * The mask modes available for mask nodes.
+ *
+ * Since: 4.10
+ */
+typedef enum
+{
+  GSK_MASK_MODE_ALPHA,
+  GSK_MASK_MODE_INVERTED_ALPHA,
+  GSK_MASK_MODE_LUMINANCE,
+  GSK_MASK_MODE_INVERTED_LUMINANCE
+} GskMaskMode;
 
 #endif /* __GSK_TYPES_H__ */

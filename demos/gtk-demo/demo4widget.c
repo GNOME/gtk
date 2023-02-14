@@ -92,7 +92,7 @@ demo4_widget_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  gtk_snapshot_push_mask (snapshot);
+  gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_INVERTED_ALPHA);
   gtk_snapshot_append_layout (snapshot, self->layout, &(GdkRGBA) { 0, 0, 0, 1 });
   gtk_snapshot_pop (snapshot);
 

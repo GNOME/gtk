@@ -122,6 +122,7 @@ struct _GtkSnapshotState {
       char *message;
     } debug;
     struct {
+      GskMaskMode mask_mode;
       GskRenderNode *mask_node;
     } mask;
   } data;
@@ -1258,7 +1259,7 @@ gtk_snapshot_collect_mask_source (GtkSnapshot      *snapshot,
   if (source_child == NULL || mask_child == NULL)
     return NULL;
 
-  mask_node = gsk_mask_node_new (source_child, mask_child);
+  mask_node = gsk_mask_node_new (source_child, mask_child, state->data.mask.mask_mode);
 
   gsk_render_node_unref (source_child);
   gsk_render_node_unref (mask_child);
@@ -1290,9 +1291,11 @@ gtk_snapshot_collect_mask_mask (GtkSnapshot      *snapshot,
 /**
  * gtk_snapshot_push_mask:
  * @snapshot: a #GtkSnapshot
+ * @mask_mode: mask mode to use
  *
  * Until the first call to [method@Gtk.Snapshot.pop], the
  * mask image for the mask operation will be recorded.
+ *
  * After that call, the source image will be recorded until
  * the second call to [method@Gtk.Snapshot.pop].
  *
@@ -1301,7 +1304,8 @@ gtk_snapshot_collect_mask_mask (GtkSnapshot      *snapshot,
  * Since: 4.10
  */
 void
-gtk_snapshot_push_mask (GtkSnapshot *snapshot)
+gtk_snapshot_push_mask (GtkSnapshot *snapshot,
+                        GskMaskMode  mask_mode)
 {
   GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *source_state;
@@ -1310,6 +1314,8 @@ gtk_snapshot_push_mask (GtkSnapshot *snapshot)
                                           current_state->transform,
                                           gtk_snapshot_collect_mask_source,
                                           gtk_snapshot_clear_mask_source);
+
+  source_state->data.mask.mask_mode = mask_mode;
 
   gtk_snapshot_push_state (snapshot,
                            source_state->transform,
