@@ -3687,8 +3687,8 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       gsk_gl_render_job_end_draw (job);
     }
   else
-    {
 slice:
+    {
       float min_x = bounds->origin.x;
       float min_y = bounds->origin.y;
       float max_x = min_x + bounds->size.width;
