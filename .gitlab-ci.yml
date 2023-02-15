@@ -34,6 +34,13 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 default:
+  retry:
+    max: 2
+    when:
+      - 'runner_system_failure'
+      - 'stuck_or_timeout_failure'
+      - 'scheduler_failure'
+      - 'api_failure'
   interruptible: true
 
 style-check-diff:
