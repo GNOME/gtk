@@ -49,7 +49,7 @@
  * and it has children, whose implementation you don't control,
  * it is necessary to ensure the correct shape of the a11y tree
  * by calling gtk_accessible_set_accessible_parent() and
- * gtk_accessible_set_next_accessible_sibling() as appropriate.
+ * updating the sibling by gtk_accessible_update_next_accessible_sibling().
  */
 
 #include "config.h"
@@ -157,6 +157,38 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
     gtk_at_context_set_accessible_parent (context, parent);
     gtk_at_context_set_next_accessible_sibling (context, next_sibling);
   }
+}
+
+/**
+ * gtk_accessible_update_next_accessible_sibling:
+ * @self: a `GtkAccessible`
+ * @new_sibling: (nullable): the new next accessible sibling to set
+ *
+ * Updates the next accessible sibling of @self.
+ * That might be useful when a new child of a custom `GtkAccessible`
+ * is created, and it needs to be linked to a previous child.
+ *
+ * Since: 4.10
+ */
+void
+gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
+                                               GtkAccessible *new_sibling)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (!context)
+    return;
+  
+  if (gtk_at_context_get_accessible_parent (context) == NULL)
+  {
+    g_critical ("Failed to update next accessible sibling: no parent accessible set for this accessible");
+    return;
+  }
+
+  gtk_at_context_set_next_accessible_sibling (context, new_sibling);
 }
 
 /**

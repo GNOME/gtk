@@ -174,6 +174,10 @@ GtkAccessible * gtk_accessible_get_first_accessible_child (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10
 GtkAccessible * gtk_accessible_get_next_accessible_sibling (GtkAccessible *self);
+GDK_AVAILABLE_IN_4_10
+void gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
+                                                    GtkAccessible *new_sibling);
+
 
 GDK_AVAILABLE_IN_4_10
 gboolean gtk_accessible_get_bounds (GtkAccessible *self,
