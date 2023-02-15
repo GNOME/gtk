@@ -39,7 +39,7 @@ style-check-diff:
   extends: .only-default
   image: $FEDORA_IMAGE
   stage: check
-  allow_failure: true
+  when: manual
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
