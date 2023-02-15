@@ -18,7 +18,8 @@ do_mask (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *box;
-      GtkWidget *widget;
+      GtkWidget *demo;
+      GtkWidget *scale;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Mask Nodes");
@@ -30,11 +31,17 @@ do_mask (GtkWidget *do_widget)
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), box);
 
-      widget = demo4_widget_new ();
-      gtk_widget_set_hexpand (widget, TRUE);
-      gtk_widget_set_vexpand (widget, TRUE);
+      demo = demo4_widget_new ();
+      gtk_widget_set_hexpand (demo, TRUE);
+      gtk_widget_set_vexpand (demo, TRUE);
 
-      gtk_box_append (GTK_BOX (box), widget);
+      gtk_box_append (GTK_BOX (box), demo);
+
+      scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 1, 0.1);
+      gtk_range_set_value (GTK_RANGE (scale), 0.5);
+      g_object_bind_property (gtk_range_get_adjustment (GTK_RANGE (scale)), "value", demo, "progress", 0);
+
+      gtk_box_append (GTK_BOX (box), scale);
     }
 
   if (!gtk_widget_get_visible (window))

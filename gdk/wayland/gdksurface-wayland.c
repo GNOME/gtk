@@ -229,7 +229,7 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
 
   if (impl->display_server.egl_window)
     wl_egl_window_resize (impl->display_server.egl_window, width * scale, height * scale, 0, 0);
-  if (impl->display_server.wl_surface)
+  if (impl->display_server.wl_surface && scale_changed)
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
   gdk_surface_invalidate_rect (surface, NULL);
@@ -588,6 +588,7 @@ gdk_wayland_surface_sync_offset (GdkSurface *surface)
       WL_SURFACE_OFFSET_SINCE_VERSION)
     return;
 
+#if 0
   if (impl->pending_buffer_offset_x == 0 &&
       impl->pending_buffer_offset_y == 0)
     return;
@@ -597,6 +598,7 @@ gdk_wayland_surface_sync_offset (GdkSurface *surface)
                      impl->pending_buffer_offset_y);
   impl->pending_buffer_offset_x = 0;
   impl->pending_buffer_offset_y = 0;
+#endif
 }
 
 void

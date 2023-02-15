@@ -25,6 +25,7 @@
 
 #include "gdkdisplay-wayland.h"
 #include "gdksurface-wayland.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandglcontext.h"
@@ -60,9 +61,14 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  int dx = impl->pending_buffer_offset_x;
+  int dy = impl->pending_buffer_offset_y;
 
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
+
+  wl_surface_offset (impl->display_server.wl_surface, dx, dy);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
 

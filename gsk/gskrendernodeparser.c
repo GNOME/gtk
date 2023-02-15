@@ -649,6 +649,18 @@ static const struct
   { GSK_BLEND_MODE_LUMINOSITY, "luminosity" }
 };
 
+static const char *
+get_blend_mode_name (GskBlendMode mode)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (blend_modes); i++)
+    {
+      if (blend_modes[i].mode == mode)
+        return blend_modes[i].name;
+    }
+
+  return NULL;
+}
+
 static gboolean
 parse_blend_mode (GtkCssParser *parser,
                   gpointer      out_mode)
@@ -660,6 +672,46 @@ parse_blend_mode (GtkCssParser *parser,
       if (gtk_css_parser_try_ident (parser, blend_modes[i].name))
         {
           *(GskBlendMode *) out_mode = blend_modes[i].mode;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static const struct
+{
+  GskMaskMode mode;
+  const char *name;
+} mask_modes[] = {
+  { GSK_MASK_MODE_ALPHA, "alpha" },
+  { GSK_MASK_MODE_INVERTED_ALPHA, "inverted-alpha" },
+  { GSK_MASK_MODE_LUMINANCE, "luminance" },
+};
+
+static const char *
+get_mask_mode_name (GskMaskMode mode)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (mask_modes); i++)
+    {
+      if (mask_modes[i].mode == mode)
+        return mask_modes[i].name;
+    }
+
+  return NULL;
+}
+
+static gboolean
+parse_mask_mode (GtkCssParser *parser,
+                 gpointer      out_mode)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (mask_modes); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, mask_modes[i].name))
+        {
+          *(GskMaskMode *) out_mode = mask_modes[i].mode;
           return TRUE;
         }
     }
@@ -1381,7 +1433,9 @@ parse_mask_node (GtkCssParser *parser)
 {
   GskRenderNode *source = NULL;
   GskRenderNode *mask = NULL;
+  GskMaskMode mode = GSK_MASK_MODE_ALPHA;
   const Declaration declarations[] = {
+    { "mode", parse_mask_mode, NULL, &mode },
     { "source", parse_node, clear_node, &source },
     { "mask", parse_node, clear_node, &mask },
   };
@@ -1393,7 +1447,7 @@ parse_mask_node (GtkCssParser *parser)
   if (mask == NULL)
     mask = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
 
-  result = gsk_mask_node_new (source, mask);
+  result = gsk_mask_node_new (source, mask, mode);
 
   gsk_render_node_unref (source);
   gsk_render_node_unref (mask);
@@ -3103,21 +3157,13 @@ render_node_print (Printer       *p,
     case GSK_BLEND_NODE:
       {
         GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
-        guint i;
 
         start_node (p, "blend");
 
         if (mode != GSK_BLEND_MODE_DEFAULT)
           {
             _indent (p);
-            for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
-              {
-                if (blend_modes[i].mode == mode)
-                  {
-                    g_string_append_printf (p->str, "mode: %s;\n", blend_modes[i].name);
-                    break;
-                  }
-              }
+            g_string_append_printf (p->str, "mode: %s;\n", get_blend_mode_name (mode));
           }
         append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
@@ -3128,8 +3174,15 @@ render_node_print (Printer       *p,
 
     case GSK_MASK_NODE:
       {
+        GskMaskMode mode = gsk_mask_node_get_mask_mode (node);
+
         start_node (p, "mask");
 
+        if (mode != GSK_MASK_MODE_ALPHA)
+          {
+            _indent (p);
+            g_string_append_printf (p->str, "mode: %s;\n", get_mask_mode_name (mode));
+          }
         append_node_param (p, "source", gsk_mask_node_get_source (node));
         append_node_param (p, "mask", gsk_mask_node_get_mask (node));
 

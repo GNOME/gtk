@@ -3278,8 +3278,8 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
 }
 
 static inline void
-gsk_gl_render_job_visit_mask_node (GskGLRenderJob       *job,
-                                    const GskRenderNode *node)
+gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
+                                   const GskRenderNode *node)
 {
   const GskRenderNode *source = gsk_mask_node_get_source (node);
   const GskRenderNode *mask = gsk_mask_node_get_mask (node);
@@ -3293,6 +3293,7 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob       *job,
   mask_offscreen.bounds = &node->bounds;
   mask_offscreen.force_offscreen = TRUE;
   mask_offscreen.reset_clip = TRUE;
+  mask_offscreen.do_not_cache = TRUE;
 
   /* TODO: We create 2 textures here as big as the mask node, but both
    * nodes might be a lot smaller than that.
@@ -3323,6 +3324,9 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob       *job,
                                       GL_TEXTURE_2D,
                                       GL_TEXTURE1,
                                       mask_offscreen.texture_id);
+  gsk_gl_program_set_uniform1i (job->current_program,
+                                UNIFORM_MASK_MODE, 0,
+                                gsk_mask_node_get_mask_mode (node));
   gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
   gsk_gl_render_job_end_draw (job);
 }
