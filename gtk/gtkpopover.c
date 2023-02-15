@@ -2484,8 +2484,8 @@ gtk_popover_set_offset (GtkPopover *popover,
 /**
  * gtk_popover_get_offset:
  * @popover: a `GtkPopover`
- * @x_offset: (out) (nullable): a location for the x_offset
- * @y_offset: (out) (nullable): a location for the y_offset
+ * @x_offset: (out) (optional): a location for the x_offset
+ * @y_offset: (out) (optional): a location for the y_offset
  *
  * Gets the offset previous set with [method@Gtk.Popover.set_offset()].
  */
