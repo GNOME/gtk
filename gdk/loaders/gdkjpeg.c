@@ -23,7 +23,7 @@
 
 #include <glib/gi18n-lib.h>
 #include "gdktexture.h"
-#include "gdkmemorytextureprivate.h"
+#include "gdktexturedownloaderprivate.h"
 
 #include "gdkprofilerprivate.h"
 
@@ -251,7 +251,8 @@ gdk_save_jpeg (GdkTexture *texture)
   guchar *data = NULL;
   gulong size = 0;
   guchar *input = NULL;
-  GdkMemoryTexture *memtex = NULL;
+  GdkTextureDownloader downloader;
+  GBytes *texbytes;
   const guchar *texdata;
   gsize texstride;
   guchar *row;
@@ -270,7 +271,7 @@ gdk_save_jpeg (GdkTexture *texture)
       free (data);
       g_free (input);
       jpeg_destroy_compress (&info);
-      g_clear_object (&memtex);
+      g_clear_pointer (&texbytes, g_bytes_unref);
       return NULL;
     }
 
@@ -289,10 +290,11 @@ gdk_save_jpeg (GdkTexture *texture)
 
   jpeg_mem_dest (&info, &data, &size);
 
-  memtex = gdk_memory_texture_from_texture (texture,
-                                            GDK_MEMORY_R8G8B8);
-  texdata = gdk_memory_texture_get_data (memtex);
-  texstride = gdk_memory_texture_get_stride (memtex);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_R8G8B8);
+  texbytes = gdk_texture_downloader_download_bytes (&downloader, &texstride);
+  gdk_texture_downloader_finish (&downloader);
+  texdata = g_bytes_get_data (texbytes, NULL);
 
   jpeg_start_compress (&info, TRUE);
 
@@ -304,7 +306,7 @@ gdk_save_jpeg (GdkTexture *texture)
 
   jpeg_finish_compress (&info);
 
-  g_object_unref (memtex);
+  g_bytes_unref (texbytes);
   g_free (input);
   jpeg_destroy_compress (&info);
 

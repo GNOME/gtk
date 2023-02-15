@@ -24,7 +24,6 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
-#include "gdktextureprivate.h"
 
 #include <epoxy/gl.h>
 

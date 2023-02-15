@@ -77,6 +77,7 @@ typedef struct _GdkContentFormats     GdkContentFormats;
 typedef struct _GdkContentProvider    GdkContentProvider;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkTexture            GdkTexture;
+typedef struct _GdkTextureDownloader  GdkTextureDownloader;
 typedef struct _GdkDevice             GdkDevice;
 typedef struct _GdkDrag               GdkDrag;
 typedef struct _GdkDrop               GdkDrop;

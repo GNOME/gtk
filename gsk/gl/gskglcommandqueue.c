@@ -27,8 +27,8 @@
 
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
-#include <gdk/gdkmemorytextureprivate.h>
 #include <gdk/gdkprofilerprivate.h>
+#include <gdk/gdktexturedownloaderprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 
@@ -1359,7 +1359,8 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
   GdkGLContext *context;
   const guchar *data;
   gsize stride;
-  GdkMemoryTexture *memtex;
+  GBytes *bytes;
+  GdkTextureDownloader downloader;
   GdkMemoryFormat data_format;
   int width, height;
   GLenum gl_internalformat;
@@ -1394,9 +1395,11 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
         }
     }
 
-  memtex = gdk_memory_texture_from_texture (texture, data_format);
-  data = gdk_memory_texture_get_data (memtex);
-  stride = gdk_memory_texture_get_stride (memtex);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, data_format);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
+  data = g_bytes_get_data (bytes, NULL);
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
@@ -1426,7 +1429,7 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
     }
   glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
 
-  g_object_unref (memtex);
+  g_bytes_unref (bytes);
 }
 
 int

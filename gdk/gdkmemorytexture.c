@@ -222,7 +222,7 @@ gdk_memory_texture_from_texture (GdkTexture      *texture,
   data = g_malloc_n (stride, texture->height);
 
   gdk_texture_do_download (texture, format, data, stride);
-  bytes = g_bytes_new_take (data, stride);
+  bytes = g_bytes_new_take (data, stride * texture->height);
   result = gdk_memory_texture_new (texture->width,
                                    texture->height,
                                    format,
@@ -233,15 +233,11 @@ gdk_memory_texture_from_texture (GdkTexture      *texture,
   return GDK_MEMORY_TEXTURE (result);
 }
 
-const guchar *
-gdk_memory_texture_get_data (GdkMemoryTexture *self)
+GBytes *
+gdk_memory_texture_get_bytes (GdkMemoryTexture *self,
+                              gsize            *out_stride)
 {
-  return g_bytes_get_data (self->bytes, NULL);
-}
-
-gsize
-gdk_memory_texture_get_stride (GdkMemoryTexture *self)
-{
-  return self->stride;
+  *out_stride = self->stride;
+  return self->bytes;
 }
 

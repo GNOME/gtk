@@ -27,7 +27,7 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdksurface.h"
-#include "gdktextureprivate.h"
+#include "gdktexturedownloaderprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -218,9 +218,9 @@ gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
 
 static void
 pixbuf_texture_unref_cb (guchar   *pixels,
-                         gpointer  texture)
+                         gpointer  bytes)
 {
-  g_object_unref (texture);
+  g_bytes_unref (bytes);
 }
 
 /**
@@ -238,22 +238,27 @@ pixbuf_texture_unref_cb (guchar   *pixels,
 GdkPixbuf *
 gdk_pixbuf_get_from_texture (GdkTexture *texture)
 {
-  GdkMemoryTexture *memtex;
+  GdkTextureDownloader downloader;
+  GBytes *bytes;
+  gsize stride;
   gboolean alpha;
 
   alpha = gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE;
 
-  memtex = gdk_memory_texture_from_texture (texture,
-                                            alpha ? GDK_MEMORY_GDK_PIXBUF_ALPHA
-                                                  : GDK_MEMORY_GDK_PIXBUF_OPAQUE);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, 
+                                     alpha ? GDK_MEMORY_GDK_PIXBUF_ALPHA
+                                           : GDK_MEMORY_GDK_PIXBUF_OPAQUE);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
 
-  return gdk_pixbuf_new_from_data (gdk_memory_texture_get_data (memtex),
+  return gdk_pixbuf_new_from_data (g_bytes_get_data (bytes, NULL),
                                    GDK_COLORSPACE_RGB,
                                    alpha,
                                    8,
-                                   gdk_texture_get_width (GDK_TEXTURE (memtex)),
-                                   gdk_texture_get_height (GDK_TEXTURE (memtex)),
-                                   gdk_memory_texture_get_stride (memtex),
+                                   gdk_texture_get_width (texture),
+                                   gdk_texture_get_height (texture),
+                                   stride,
                                    pixbuf_texture_unref_cb,
-                                   memtex);
+                                   bytes);
 }

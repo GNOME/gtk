@@ -21,10 +21,9 @@
 
 #include <glib/gi18n-lib.h>
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytextureprivate.h"
+#include "gdkmemorytexture.h"
 #include "gdkprofilerprivate.h"
-#include "gdktexture.h"
-#include "gdktextureprivate.h"
+#include "gdktexturedownloaderprivate.h"
 #include "gsk/gl/fp16private.h"
 #include <png.h>
 #include <stdio.h>
@@ -297,11 +296,12 @@ gdk_save_png (GdkTexture *texture)
   png_info *info;
   png_io io = { NULL, 0, 0 };
   int width, height;
+  int y;
+  GdkMemoryFormat format;
+  GdkTextureDownloader downloader;
+  GBytes *bytes;
   gsize stride;
   const guchar *data;
-  int y;
-  GdkMemoryTexture *memtex;
-  GdkMemoryFormat format;
   int png_format;
   int depth;
 
@@ -370,11 +370,15 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
-  memtex = gdk_memory_texture_from_texture (texture, format);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, format);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
+  data = g_bytes_get_data (bytes, NULL);
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
-      g_object_unref (memtex);
+      g_bytes_unref (bytes);
       g_free (io.data);
       png_destroy_read_struct (&png, &info, NULL);
       return NULL;
@@ -394,8 +398,6 @@ gdk_save_png (GdkTexture *texture)
   png_set_swap (png);
 #endif
 
-  data = gdk_memory_texture_get_data (memtex);
-  stride = gdk_memory_texture_get_stride (memtex);
   for (y = 0; y < height; y++)
     png_write_row (png, data + y * stride);
 
@@ -403,7 +405,7 @@ gdk_save_png (GdkTexture *texture)
 
   png_destroy_write_struct (&png, &info);
 
-  g_object_unref (memtex);
+  g_bytes_unref (bytes);
 
   return g_bytes_new_take (io.data, io.size);
 }

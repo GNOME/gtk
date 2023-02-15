@@ -21,10 +21,9 @@
 
 #include <glib/gi18n-lib.h>
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytextureprivate.h"
+#include "gdkmemorytexture.h"
 #include "gdkprofilerprivate.h"
-#include "gdktexture.h"
-#include "gdktextureprivate.h"
+#include "gdktexturedownloaderprivate.h"
 
 #include <tiffio.h>
 
@@ -260,11 +259,12 @@ GBytes *
 gdk_save_tiff (GdkTexture *texture)
 {
   TIFF *tif;
-  int width, height, stride;
+  int width, height;
+  gsize stride;
   const guchar *line;
   const guchar *data;
-  GBytes *result = NULL;
-  GdkMemoryTexture *memtex;
+  GBytes *bytes, *result = NULL;
+  GdkTextureDownloader downloader;
   GdkMemoryFormat format;
   const FormatData *fdata = NULL;
 
@@ -292,9 +292,11 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 
-  memtex = gdk_memory_texture_from_texture (texture, fdata->format);
-  data = gdk_memory_texture_get_data (memtex);
-  stride = gdk_memory_texture_get_stride (memtex);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, fdata->format);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
+  data = g_bytes_get_data (bytes, NULL);
 
   line = (const guchar *)data;
   for (int y = 0; y < height; y++)
@@ -302,7 +304,7 @@ gdk_save_tiff (GdkTexture *texture)
       if (TIFFWriteScanline (tif, (void *)line, y, 0) == -1)
         {
           TIFFClose (tif);
-          g_object_unref (memtex);
+          g_bytes_unref (bytes);
           return NULL;
         }
 
@@ -314,7 +316,7 @@ gdk_save_tiff (GdkTexture *texture)
 
   g_assert (result);
 
-  g_object_unref (memtex);
+  g_bytes_unref (bytes);
 
   return result;
 }

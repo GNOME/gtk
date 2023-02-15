@@ -37,8 +37,8 @@ GdkTexture *            gdk_memory_texture_new_subtexture   (GdkMemoryTexture  *
                                                              int                width,
                                                              int                height);
 
-const guchar *          gdk_memory_texture_get_data         (GdkMemoryTexture  *self);
-gsize                   gdk_memory_texture_get_stride       (GdkMemoryTexture  *self);
+GBytes *                gdk_memory_texture_get_bytes        (GdkMemoryTexture  *self,
+                                                             gsize             *out_stride);
 
 
 G_END_DECLS
