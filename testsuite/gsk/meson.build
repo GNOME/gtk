@@ -56,6 +56,7 @@ compare_render_tests = [
   'invalid-transform',
   'issue-3615',
   'mask',
+  'mask-modes',
   'nested-rounded-clips',
   'opacity_clip',
   'opacity-overdraw',
