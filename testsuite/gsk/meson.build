@@ -207,6 +207,8 @@ node_parser_tests = [
   'gradient-fail.node',
   'gradient-fail.ref.node',
   'gradient-fail.errors',
+  'mask-modes.node',
+  'mask-modes.ref.node',
   'radial-gradient.node',
   'radial-gradient.ref.node',
   'repeating-linear-gradient.node',
