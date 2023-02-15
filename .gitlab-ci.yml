@@ -27,16 +27,16 @@ variables:
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Ddemos=false -Dbuild-examples=false -Dbuild-tests=false -Dbuild-testsuite=true"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v40"
-  FLATPAK_IMAGE: "quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master"
 
-.only-default:
-  only:
-    - branches
-  except:
-    - tags
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+
+default:
+  interruptible: true
 
 style-check-diff:
-  extends: .only-default
   image: $FEDORA_IMAGE
   stage: check
   when: manual
@@ -44,7 +44,6 @@ style-check-diff:
     - .gitlab-ci/run-style-check-diff.sh
 
 .build-fedora-default:
-  extends: .only-default
   image: $FEDORA_IMAGE
   artifacts:
     when: always
@@ -160,7 +159,6 @@ fedora-mingw64:
     - ninja -C _build
 
 .mingw-defaults:
-  extends: .only-default
   stage: build
   tags:
     - win32-ps
@@ -192,9 +190,8 @@ msys2-mingw64:
 macos:
   # Sadly, this fails regularly, and its failure is never enlightening
   allow_failure: true
-  extends: .only-default
-  only:
-    - branches@GNOME/gtk
+  rules:
+    - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
   tags:
     - macos
@@ -227,10 +224,9 @@ macos:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 vs2017-x64:
-  extends: .only-default
   # TODO: Uncomment this when ready to merge.
-  #only:
-  #  - branches@GNOME/gtk
+  # rules:
+  #   - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
   tags:
     - win32-ps
@@ -243,7 +239,7 @@ vs2017-x64:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 .flatpak-defaults:
-  image: $FLATPAK_IMAGE
+  image: "quay.io/gnome_infrastructure/gnome-runtime-images:gnome-master"
   stage: flatpak
   allow_failure: true
   tags:
@@ -253,64 +249,34 @@ vs2017-x64:
       - "${APPID}-dev.flatpak"
       - 'repo.tar'
     expire_in: 1 day
+  rules:
+    # Only build Flatpak bundles automatically on main
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH != "main"
+      when: "manual"
   script:
     - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
 
-# Manual jobs, for branches and MRs
-.flatpak-manual:
-  extends: .flatpak-defaults
-  when: manual
-
-# Only build Flatpak bundles automatically on main
-.flatpak-main:
-  extends: .flatpak-defaults
-  only:
-    - main
-
-flatpak-manual:demo:
-  extends: .flatpak-manual
+flatpak:demo:
+  extends: '.flatpak-defaults'
   needs: []
   variables:
     APPID: org.gtk.Demo4
 
-flatpak-main:demo:
-  extends: .flatpak-main
-  needs: []
-  variables:
-    APPID: org.gtk.Demo4
-
-flatpak-manual:widget-factory:
-  extends: .flatpak-manual
+flatpak:widget-factory:
+  extends: '.flatpak-defaults'
   needs: []
   variables:
     APPID: org.gtk.WidgetFactory4
 
-flatpak-main:widget-factory:
-  extends: .flatpak-main
-  needs: []
-  variables:
-    APPID: org.gtk.WidgetFactory4
-
-flatpak-manual:icon-browser:
-  extends: .flatpak-manual
+flatpak:icon-browser:
+  extends: '.flatpak-defaults'
   needs: []
   variables:
     APPID: org.gtk.IconBrowser4
 
-flatpak-main:icon-browser:
-  extends: .flatpak-main
-  needs: []
-  variables:
-    APPID: org.gtk.IconBrowser4
-
-flatpak-manual:node-editor:
-  extends: .flatpak-manual
-  needs: []
-  variables:
-    APPID: org.gtk.gtk4.NodeEditor
-
-flatpak-main:node-editor:
-  extends: .flatpak-main
+flatpak:node-editor:
+  extends: '.flatpak-defaults'
   needs: []
   variables:
     APPID: org.gtk.gtk4.NodeEditor
@@ -320,23 +286,19 @@ flatpak-main:node-editor:
 # https://gitlab.gnome.org/GNOME/Initiatives/-/wikis/DevOps-with-Flatpak
 nightly demo:
     extends: '.publish_nightly'
-    dependencies: ['flatpak-main:demo']
-    needs: ['flatpak-main:demo']
+    needs: ['flatpak:demo']
 
 nightly factory:
     extends: '.publish_nightly'
-    dependencies: ['flatpak-main:widget-factory']
-    needs: ['flatpak-main:widget-factory']
+    needs: ['flatpak:widget-factory']
 
 nightly icon-browser:
     extends: '.publish_nightly'
-    dependencies: ['flatpak-main:icon-browser']
-    needs: ['flatpak-main:icon-browser']
+    needs: ['flatpak:icon-browser']
 
 nightly node-editor:
     extends: '.publish_nightly'
-    dependencies: ['flatpak-main:node-editor']
-    needs: ['flatpak-main:node-editor']
+    needs: ['flatpak:node-editor']
 
 static-scan:
   image: $FEDORA_IMAGE
@@ -419,9 +381,9 @@ reference:
 publish-docs:
   image: fedora:latest
   stage: publish
+  interruptible: false
   needs: ['reference']
   script:
     - "curl -X POST -F token=${PAGES_TRIGGER_TOKEN} -F ref=docs-gtk-org https://gitlab.gnome.org/api/v4/projects/665/trigger/pipeline"
-  only:
-    refs:
-      - main
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
