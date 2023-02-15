@@ -42,6 +42,7 @@ compare_render_tests = [
   'empty-inset-shadow',
 # this test fails for some of the backends
 # 'empty-linear-gradient',
+  'empty-mask',
   'empty-opacity',
   'empty-outset-shadow',
   'empty-repeat',
@@ -181,6 +182,8 @@ node_parser_tests = [
   'empty-inset-shadow.ref.node',
   'empty-linear-gradient.node',
   'empty-linear-gradient.ref.node',
+  'empty-mask.node',
+  'empty-mask.ref.node',
   'empty-opacity.node',
   'empty-opacity.ref.node',
   'empty-outset-shadow.node',
