@@ -263,9 +263,25 @@ flatpak:demo:
   variables:
     APPID: org.gtk.Demo4
 
+flatpak:demo:aarch64:
+  extends: '.flatpak-defaults'
+  needs: []
+  tags:
+    - flatpak-aarch64
+  variables:
+    APPID: org.gtk.Demo4
+
 flatpak:widget-factory:
   extends: '.flatpak-defaults'
   needs: []
+  variables:
+    APPID: org.gtk.WidgetFactory4
+
+flatpak:widget-factory:aarch64:
+  extends: '.flatpak-defaults'
+  needs: []
+  tags:
+    - flatpak-aarch64
   variables:
     APPID: org.gtk.WidgetFactory4
 
@@ -275,9 +291,25 @@ flatpak:icon-browser:
   variables:
     APPID: org.gtk.IconBrowser4
 
+flatpak:icon-browser:aarch64:
+  extends: '.flatpak-defaults'
+  needs: []
+  tags:
+    - flatpak-aarch64
+  variables:
+    APPID: org.gtk.IconBrowser4
+
 flatpak:node-editor:
   extends: '.flatpak-defaults'
   needs: []
+  variables:
+    APPID: org.gtk.gtk4.NodeEditor
+
+flatpak:node-editor:aarch64:
+  extends: '.flatpak-defaults'
+  needs: []
+  tags:
+    - flatpak-aarch64
   variables:
     APPID: org.gtk.gtk4.NodeEditor
 
@@ -288,17 +320,33 @@ nightly demo:
     extends: '.publish_nightly'
     needs: ['flatpak:demo']
 
+nightly demo aarch64:
+    extends: '.publish_nightly'
+    needs: ['flatpak:demo:aarch64']
+
 nightly factory:
     extends: '.publish_nightly'
     needs: ['flatpak:widget-factory']
+
+nightly factory aarch64:
+    extends: '.publish_nightly'
+    needs: ['flatpak:widget-factory:aarch64']
 
 nightly icon-browser:
     extends: '.publish_nightly'
     needs: ['flatpak:icon-browser']
 
+nightly icon-browser aarch64:
+    extends: '.publish_nightly'
+    needs: ['flatpak:icon-browser:aarch64']
+
 nightly node-editor:
     extends: '.publish_nightly'
     needs: ['flatpak:node-editor']
+
+nightly node-editor aarch64:
+    extends: '.publish_nightly'
+    needs: ['flatpak:node-editor:aarch64']
 
 static-scan:
   image: $FEDORA_IMAGE
