@@ -3418,7 +3418,7 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
   cairo_surface_t *surface, *image_surface;
   guchar *data;
   gsize x, y, width, height, stride;
-  float alpha, orig_alpha;
+  float alpha;
   graphene_vec4_t pixel;
   guint32* pixel_data;
 
@@ -3435,7 +3435,7 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
       pixel_data = (guint32 *) data;
       for (x = 0; x < width; x++)
         {
-          alpha = orig_alpha = ((pixel_data[x] >> 24) & 0xFF) / 255.0;
+          alpha = ((pixel_data[x] >> 24) & 0xFF) / 255.0;
 
           if (alpha == 0)
             {
@@ -3451,12 +3451,16 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
               graphene_matrix_transform_vec4 (color_matrix, &pixel, &pixel);
             }
 
+          if (multiply_alpha)
+            graphene_vec4_init (&pixel,
+                                graphene_vec4_get_x (&pixel),
+                                graphene_vec4_get_y (&pixel),
+                                graphene_vec4_get_z (&pixel),
+                                alpha * graphene_vec4_get_w (&pixel));
+
           graphene_vec4_add (&pixel, color_offset, &pixel);
 
           alpha = graphene_vec4_get_w (&pixel);
-
-          if (multiply_alpha)
-            alpha *= orig_alpha;
 
           if (alpha > 0.0)
             {
