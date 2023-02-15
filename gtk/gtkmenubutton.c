@@ -150,6 +150,7 @@ enum
   PROP_HAS_FRAME,
   PROP_PRIMARY,
   PROP_CHILD,
+  PROP_ACTIVE,
   LAST_PROP
 };
 
@@ -208,6 +209,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_CHILD:
         gtk_menu_button_set_child (self, g_value_get_object (value));
         break;
+      case PROP_ACTIVE:
+        gtk_menu_button_set_active (self, g_value_get_boolean (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -252,6 +256,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_CHILD:
         g_value_set_object (value, gtk_menu_button_get_child (self));
+        break;
+      case PROP_ACTIVE:
+        g_value_set_boolean (value, gtk_menu_button_get_active (self));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -314,6 +321,8 @@ gtk_menu_button_toggled (GtkMenuButton *self)
                                       GTK_ACCESSIBLE_STATE_EXPANDED);
         }
     }
+
+  g_object_notify_by_pspec (G_OBJECT (self), menu_button_props[PROP_ACTIVE]);
 }
 
 static void
@@ -512,6 +521,18 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkMenuButton:active: (attributes org.gtk.Property.get=gtk_menu_button_get_active org.gtk.Property.set=gtk_menu_button_set_active)
+   *
+   * Whether the menu button is active.
+   *
+   * Since: 4.10
+   */
+  menu_button_props[PROP_ACTIVE] =
+    g_param_spec_boolean ("active", NULL, NULL,
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
@@ -1498,4 +1519,46 @@ gtk_menu_button_get_child (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
   return menu_button->child;
+}
+
+/**
+ * gtk_menu_button_set_active: (attributes org.gtk.Method.set_property=active)
+ * @menu_button: a `GtkMenuButton`
+ * @active: whether the menu button is active
+ *
+ * Sets whether menu button acts is active.
+ *
+ * Since: 4.10
+ */
+void
+gtk_menu_button_set_active (GtkMenuButton *menu_button,
+                            gboolean       active)
+{
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  if (active == gtk_menu_button_get_active (menu_button))
+    return;
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (menu_button->button),
+                                active);
+
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ACTIVE]);
+}
+
+/**
+ * gtk_menu_button_get_active: (attributes org.gtk.Method.get_property=active)
+ * @menu_button: a `GtkMenuButton`
+ *
+ * Returns whether the menu button is active.
+ *
+ * Returns: TRUE if the button is active
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_menu_button_get_active (GtkMenuButton *menu_button)
+{
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
+
+  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu_button->button));
 }
