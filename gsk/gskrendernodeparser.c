@@ -691,6 +691,7 @@ static const struct
   { GSK_MASK_MODE_ALPHA, "alpha" },
   { GSK_MASK_MODE_INVERTED_ALPHA, "inverted-alpha" },
   { GSK_MASK_MODE_LUMINANCE, "luminance" },
+  { GSK_MASK_MODE_INVERTED_LUMINANCE, "inverted-luminance" },
 };
 
 static const char *
@@ -719,6 +720,8 @@ parse_mask_mode (GtkCssParser *parser,
           return TRUE;
         }
     }
+
+  gtk_css_parser_error_syntax (parser, "Not a valid mask mode.");
 
   return FALSE;
 }
