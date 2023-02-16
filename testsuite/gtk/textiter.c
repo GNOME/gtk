@@ -786,6 +786,52 @@ test_backward_line (void)
   g_object_unref (buffer);
 }
 
+static void
+test_invisible_text (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter, end;
+  GtkTextTag *tag;
+  GtkTextTagTable *tags;
+  char *text;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  tag = gtk_text_tag_new ("invisible");
+
+  tags = gtk_text_buffer_get_tag_table (buffer);
+  g_object_set (tag, "invisible", TRUE, NULL);
+  gtk_text_tag_table_add (tags, tag);
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, "one ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "two three", -1, "invisible", NULL);
+  gtk_text_buffer_insert (buffer, &iter, " four", -1);
+
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+
+  gtk_text_iter_forward_visible_word_end (&iter);
+
+  text = gtk_text_buffer_get_text (buffer, &iter, &end, TRUE);
+  g_assert_cmpstr (text, ==, " two three four");
+  g_free (text);
+
+  gtk_text_iter_forward_word_end (&iter);
+  text = gtk_text_buffer_get_text (buffer, &iter, &end, TRUE);
+  g_assert_cmpstr (text, ==, " three four");
+  g_free (text);
+
+  gtk_text_iter_forward_visible_word_end (&iter);
+  text = gtk_text_buffer_get_text (buffer, &iter, &end, TRUE);
+  g_assert_cmpstr (text, ==, " four");
+  g_free (text);
+
+  gtk_text_iter_forward_visible_word_end (&iter);
+  g_assert_true (gtk_text_iter_equal (&iter, &end));
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -803,6 +849,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Visible Cursor Positions", test_visible_cursor_positions);
   g_test_add_func ("/TextIter/Sentence Boundaries", test_sentence_boundaries);
   g_test_add_func ("/TextIter/Backward line", test_backward_line);
+  g_test_add_func ("/TextIter/Invisible text", test_invisible_text);
 
   return g_test_run();
 }
