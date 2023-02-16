@@ -12598,7 +12598,8 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
  * actions to be added for all instances of this class.
  *
  * Actions installed by this function are stateless. The only state
- * they have is whether they are enabled or not.
+ * they have is whether they are enabled or not (which can be changed with
+ * [method@Gtk.Widget.action_set_enabled]).
  */
 void
 gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
