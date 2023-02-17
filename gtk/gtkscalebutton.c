@@ -261,6 +261,8 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * GtkScaleButton:active: (attributes org.gtk.Property.get=gtk_scale_button_get_active)
    *
    * If the scale button should be pressed in.
+   *
+   * Since: 4.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
