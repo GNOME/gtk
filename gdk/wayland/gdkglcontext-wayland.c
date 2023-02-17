@@ -68,7 +68,9 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
-  wl_surface_offset (impl->display_server.wl_surface, dx, dy);
+  if (wl_surface_get_version (impl->display_server.wl_surface) >=
+      WL_SURFACE_OFFSET_SINCE_VERSION)
+    wl_surface_offset (impl->display_server.wl_surface, dx, dy);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
 
