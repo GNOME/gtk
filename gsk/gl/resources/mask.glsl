@@ -21,13 +21,13 @@ void main() {
   if (u_mode == 0)
     mask_value = mask.a;
   else if (u_mode == 1)
-    mask_value = 1 - mask.a;
+    mask_value = 1.0 - mask.a;
   else if (u_mode == 2)
     mask_value = (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
   else if (u_mode == 3)
-    mask_value = 1 - (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+    mask_value = 1.0 - (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
   else
-    mask_value = 0;
+    mask_value = 0.0;
 
   gskSetOutputColor(vec4 (source * mask_value));
 }
