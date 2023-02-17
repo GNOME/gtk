@@ -23,6 +23,7 @@ push=0
 list=0
 print_help=0
 no_login=0
+no_cache=0
 
 while (($# > 0)); do
         case "${1%%=*}" in
@@ -34,6 +35,7 @@ while (($# > 0)); do
                 --base|-b) read_arg base "$@" || shift;;
                 --version|-v) read_arg base_version "$@" || shift;;
                 --no-login) no_login=1;;
+                --no-cache) no_cache=1;;
                 *) echo -e "\e[1;31mERROR\e[0m: Unknown option '$1'"; exit 1;;
         esac
         shift
@@ -103,11 +105,21 @@ TAG="${REGISTRY}/gnome/gtk/${base}:${base_version}"
 
 if [ $build == 1 ]; then
         echo -e "\e[1;32mBUILDING\e[0m: ${base} as ${TAG}"
-        ${CMD} build \
-                ${format} \
-                --build-arg HOST_USER_ID="$UID" \
-                --tag "${TAG}" \
-                --file "${base}.Dockerfile" .
+        if [ $no_cache == 0 ]; then
+                ${CMD} build \
+                        ${format} \
+                        --build-arg HOST_USER_ID="$UID" \
+                        --tag "${TAG}" \
+                        --file "${base}.Dockerfile" .
+        else
+                ${CMD} build \
+                        ${format} \
+                        --no-cache \
+                        --build-arg HOST_USER_ID="$UID" \
+                        --tag "${TAG}" \
+                        --file "${base}.Dockerfile" .
+        fi
+
         exit $?
 fi
 
