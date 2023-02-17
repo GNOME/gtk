@@ -19,7 +19,6 @@
 
 
 #include <glib.h>
-#include <sys/random.h>
 
 #include "gtkprintbackendutils.h"
 
@@ -114,12 +113,10 @@ random_string (int n)
                           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                           "0123456789";
 
-  char *str = g_new0 (char, n+1);
-  getrandom (str, n, 0);
-  for (int i=0; i<n; i++)
+  char *str = g_new0 (char, n + 1);
+  for (int i = 0; i < n; i++)
     {
-      int rand = str[i] + 128;
-      int idx = rand % ((int) sizeof charset);
+      int idx = g_random_int_range (0, strlen (charset));
       str[i] = charset[idx];
     }
   str[n] = '\0';
