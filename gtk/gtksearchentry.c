@@ -623,7 +623,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
                               "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                               "icon-name", "edit-clear-symbolic",
                               NULL);
-  gtk_widget_set_tooltip_text (entry->icon, _("Clear entry"));
+  gtk_widget_set_tooltip_text (entry->icon, _("Clear Entry"));
   gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
   gtk_widget_set_child_visible (entry->icon, FALSE);
 
