@@ -35,7 +35,7 @@
 
 #include <sys/types.h>
 
-#if defined(HAVE_MLOCK)
+#if defined(HAVE_SYS_MMAN_H)
 #include <sys/mman.h>
 #endif
 
@@ -229,7 +229,7 @@ pool_alloc (void)
 		return NULL;
 	}
 
-#ifdef HAVE_MMAP
+#if defined(HAVE_MMAP) && defined(HAVE_GETPAGESIZE)
 	/* A pool with an available item */
         Pool *pool = NULL;
 
@@ -916,7 +916,7 @@ sec_acquire_pages (size_t *sz,
 	g_assert (*sz);
 	g_assert (during_tag);
 
-#if defined(HAVE_MLOCK) && defined(HAVE_MMAP)
+#if defined(HAVE_MLOCK) && defined(HAVE_MMAP) && defined(HAVE_GETPAGESIZE)
 	/* Make sure sz is a multiple of the page size */
 	unsigned long pgsize = getpagesize ();
 
@@ -1000,7 +1000,7 @@ sec_release_pages (void *pages, size_t sz)
 {
 	g_assert (pages);
 
-#if defined(HAVE_MLOCK)
+#if defined(HAVE_MLOCK) && defined(HAVE_GETPAGESIZE)
 	g_assert (sz % getpagesize () == 0);
 
 	if (munlock (pages, sz) < 0 && gtk_secure_warnings)
