@@ -48,14 +48,16 @@
 #define VERTICES_PER_TOOTH 34
 #define GEAR_VERTEX_STRIDE 6
 
-#ifndef HAVE_SINCOS
-static void
-sincos (double x, double *_sin, double *_cos)
+static inline void
+_sincos (double x, double *_sin, double *_cos)
 {
+#ifdef HAVE_SINCOS
+  sincos (x, _sin, _cos);
+#else
   *_sin = sin (x);
   *_cos = cos (x);
-}
 #endif
+}
 
 /**
  * Struct describing the vertices in triangle strip
@@ -305,12 +307,12 @@ create_gear (GLfloat inner_radius,
     /* Create the 7 points (only x,y coords) used to draw a tooth */
     struct point p[7];
 
-    /* Calculate needed sin/cos for varius angles */
-    sincos(i * 2.0 * G_PI / teeth + da * 0, &s[0], &c[0]);
-    sincos(i * 2.0 * M_PI / teeth + da * 1, &s[1], &c[1]);
-    sincos(i * 2.0 * M_PI / teeth + da * 2, &s[2], &c[2]);
-    sincos(i * 2.0 * M_PI / teeth + da * 3, &s[3], &c[3]);
-    sincos(i * 2.0 * M_PI / teeth + da * 4, &s[4], &c[4]);
+    /* Calculate needed sin/cos for various angles */
+    _sincos(i * 2.0 * G_PI / teeth + da * 0, &s[0], &c[0]);
+    _sincos(i * 2.0 * M_PI / teeth + da * 1, &s[1], &c[1]);
+    _sincos(i * 2.0 * M_PI / teeth + da * 2, &s[2], &c[2]);
+    _sincos(i * 2.0 * M_PI / teeth + da * 3, &s[3], &c[3]);
+    _sincos(i * 2.0 * M_PI / teeth + da * 4, &s[4], &c[4]);
 
     GEAR_POINT(p[0], r2, 1);
     GEAR_POINT(p[1], r2, 2);
@@ -519,7 +521,7 @@ void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloa
    identity(tmp);
 
    deltaZ = zFar - zNear;
-   sincos(radians, &sine, &cosine);
+   _sincos(radians, &sine, &cosine);
 
    if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
       return;
