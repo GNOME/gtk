@@ -70,6 +70,7 @@ struct _GtkInscription
   guint nat_chars;
   guint min_lines;
   guint nat_lines;
+  gboolean single_line_mode;
   float xalign;
   float yalign;
   PangoAttrList *attrs;
@@ -87,6 +88,7 @@ enum
   PROP_MIN_LINES,
   PROP_NAT_CHARS,
   PROP_NAT_LINES,
+  PROP_SINGLE_LINE_MODE,
   PROP_TEXT,
   PROP_TEXT_OVERFLOW,
   PROP_WRAP_MODE,
@@ -150,6 +152,10 @@ gtk_inscription_get_property (GObject    *object,
       g_value_set_uint (value, self->nat_lines);
       break;
 
+    case PROP_SINGLE_LINE_MODE:
+      g_value_set_boolean (value, self->single_line_mode);
+      break;
+
     case PROP_TEXT:
       g_value_set_string (value, self->text);
       break;
@@ -208,6 +214,10 @@ gtk_inscription_set_property (GObject      *object,
 
     case PROP_NAT_LINES:
       gtk_inscription_set_nat_lines (self, g_value_get_uint (value));
+      break;
+
+    case PROP_SINGLE_LINE_MODE:
+      gtk_inscription_set_single_line_mode (self, g_value_get_boolean (value));
       break;
 
     case PROP_TEXT:
@@ -659,6 +669,21 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkInscription:single-line-mode: (attributes org.gtk.Property.get=gtk_inscription_get_single_line_mode org.gtk.Property.set=gtk_inscription_set_single_line_mode)
+   *
+   * Whether the inscription is in single line mode.
+   *
+   * In single line mode, the text is forced to be displayed in a single line,
+   * showing a glyph for each newline character in it.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_SINGLE_LINE_MODE] =
+      g_param_spec_boolean ("single-line-mode", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkInscription:text: (attributes org.gtk.Property.get=gtk_inscription_get_text org.gtk.Property.set=gtk_inscription_set_text)
    *
    * The displayed text.
@@ -1016,6 +1041,55 @@ gtk_inscription_get_nat_lines (GtkInscription *self)
   g_return_val_if_fail (GTK_IS_INSCRIPTION (self), DEFAULT_NAT_LINES);
 
   return self->nat_lines;
+}
+
+/**
+ * gtk_inscription_set_single_line_mode: (attributes org.gtk.Method.set_property=single-line-mode)
+ * @self: a `GtkInscription`
+ * @single_line_mode: %TRUE if the inscription should be in single line mode
+ *
+ * Sets the `single-line-mode` of the inscription.
+ *
+ * See the [property@Gtk.Inscription:single-line-mode] property.
+ *
+ * Since: 4.10
+ */
+void
+gtk_inscription_set_single_line_mode (GtkInscription *self,
+                                      gboolean        single_line_mode)
+{
+  g_return_if_fail (GTK_IS_INSCRIPTION (self));
+
+  if (self->single_line_mode == single_line_mode)
+    return;
+
+  self->single_line_mode = single_line_mode;
+
+  pango_layout_set_single_paragraph_mode (self->layout, self->single_line_mode);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_LINE_MODE]);
+}
+
+/**
+ * gtk_inscription_get_single_line_mode: (attributes org.gtk.Method.get_property=single-line-mode)
+ * @self: a `GtkInscription`
+ *
+ * Gets the `single-line-mode` of the inscription.
+ *
+ * See the [property@Gtk.Inscription:single-line-mode] property.
+ *
+ * Returns: the single-line-mode property
+ *
+ * Since: 4.10
+ */
+gboolean
+gtk_inscription_get_single_line_mode (GtkInscription *self)
+{
+  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), FALSE);
+
+  return self->single_line_mode;
 }
 
 /**
