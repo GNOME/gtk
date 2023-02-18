@@ -233,16 +233,13 @@ endforeach
 libm = cc.find_library('m', required: false)
 
 check_functions = [
-  'dcgettext',
   'getpagesize',
   'getresuid',
-  'lstat',
   'mmap',
   'nearbyint',
   'posix_fallocate',
   '_lock_file',
   'flockfile',
-  'mkstemp',
   'mallinfo',
   'round',
   'rint',
@@ -255,7 +252,15 @@ check_functions = [
 ]
 
 foreach func : check_functions
-  if cc.has_function(func, dependencies: libm)
+  if cc.has_function(func,
+                     args: '-D_GNU_SOURCE',
+                     prefix:
+                       '#include <stdlib.h>\n' +
+                       '#include <unistd.h>\n' +
+                       '#include <sys/mman.h>\n' +
+                       '#include <fcntl.h>\n' +
+                       '#include <math.h>',
+                     dependencies: libm)
     cdata.set('HAVE_' + func.underscorify().to_upper(), 1)
   endif
 endforeach
