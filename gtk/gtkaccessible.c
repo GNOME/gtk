@@ -48,8 +48,8 @@
  * Also note that when an accessible object does not correspond to a widget,
  * and it has children, whose implementation you don't control,
  * it is necessary to ensure the correct shape of the a11y tree
- * by calling gtk_accessible_set_accessible_parent() and
- * updating the sibling by gtk_accessible_update_next_accessible_sibling().
+ * by calling [method@Gtk.Accessible.set_accessible_parent] and
+ * updating the sibling by [method@Gtk.Accessible.update_next_accessible_sibling].
  */
 
 #include "config.h"
@@ -135,11 +135,19 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
 
 /**
  * gtk_accessible_set_accessible_parent:
- * @self: a `GtkAccessible`
- * @parent: the parent `GtkAccessible`
- * @next_sibling: the next accessible sibling of this `GtkAccessible`
+ * @self: an accessible object
+ * @parent: (nullable): the parent accessible object
+ * @next_sibling: (nullable): the sibling accessible object
  *
- * Sets the parent and next sibling accessible of an accessible object
+ * Sets the parent and sibling of an accessible object.
+ *
+ * This function is meant to be used by accessible implementations that are
+ * not part of the widget hierarchy, and but act as a logical bridge between
+ * widgets. For instance, if a widget creates an object that holds metadata
+ * for each child, and you want that object to implement the `GtkAccessible`
+ * interface, you will use this function to ensure that the parent of each
+ * child widget is the metadata object, and the parent of each metadata
+ * object is the container widget.
  *
  * Since: 4.10
  */
@@ -149,14 +157,16 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
                                       GtkAccessible *next_sibling)
 {
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  g_return_if_fail (parent == NULL || GTK_IS_ACCESSIBLE (parent));
+  g_return_if_fail (next_sibling == NULL || GTK_IS_ACCESSIBLE (parent));
   GtkATContext *context;
 
   context = gtk_accessible_get_at_context (self);
   if (context != NULL)
-  {
-    gtk_at_context_set_accessible_parent (context, parent);
-    gtk_at_context_set_next_accessible_sibling (context, next_sibling);
-  }
+    {
+      gtk_at_context_set_accessible_parent (context, parent);
+      gtk_at_context_set_next_accessible_sibling (context, next_sibling);
+    }
 }
 
 /**

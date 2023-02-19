@@ -476,12 +476,7 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
   
-  if (self->accessible_parent != parent)
-    {
-      if (self->accessible_parent != NULL)
-        g_object_unref (self->accessible_parent);
-      self->accessible_parent = g_object_ref (parent);
-    }
+  g_set_object (&self->accessible_parent, parent);
 }
 
 /*< private >
@@ -513,12 +508,7 @@ gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
   
-  if (self->next_accessible_sibling != sibling)
-    {
-      if (self->next_accessible_sibling != NULL)
-        g_object_unref (self->next_accessible_sibling);
-      self->next_accessible_sibling = g_object_ref (sibling);
-    }
+  g_set_object (&self->next_accessible_sibling, sibling);
 }
 
 /*< private >
