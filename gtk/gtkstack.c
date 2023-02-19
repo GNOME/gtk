@@ -410,7 +410,6 @@ gtk_stack_page_set_property (GObject      *object,
     {
     case CHILD_PROP_CHILD:
       g_set_object (&info->widget, g_value_get_object (value));
-      gtk_accessible_set_accessible_parent (
       gtk_accessible_set_accessible_parent (GTK_ACCESSIBLE (info->widget),
                                             GTK_ACCESSIBLE (info),
                                             NULL);
