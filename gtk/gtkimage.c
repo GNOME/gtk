@@ -290,12 +290,35 @@ gtk_image_init (GtkImage *image)
   image->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
 }
 
+static void gtk_image_paintable_invalidate_contents (GdkPaintable *paintable,
+                                                     GtkImage     *image);
+
+static void gtk_image_paintable_invalidate_size     (GdkPaintable *paintable,
+                                                     GtkImage     *image);
+
 static void
 gtk_image_finalize (GObject *object)
 {
   GtkImage *image = GTK_IMAGE (object);
 
-  gtk_image_clear (image);
+  g_free (image->filename);
+  g_free (image->resource_path);
+
+  if (_gtk_icon_helper_get_storage_type (image->icon_helper) == GTK_IMAGE_PAINTABLE)
+    {
+      GdkPaintable *paintable = _gtk_icon_helper_peek_paintable (image->icon_helper);
+      const guint flags = gdk_paintable_get_flags (paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_handlers_disconnect_by_func (paintable,
+                                              gtk_image_paintable_invalidate_contents,
+                                              image);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_handlers_disconnect_by_func (paintable,
+                                              gtk_image_paintable_invalidate_size,
+                                              image);
+    }
 
   g_clear_object (&image->icon_helper);
 
