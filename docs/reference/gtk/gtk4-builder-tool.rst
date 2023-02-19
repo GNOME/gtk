@@ -33,6 +33,11 @@ Validation
 The ``validate`` command validates the given UI definition file and reports
 errors to ``stderr``.
 
+Note that there are limitations to the validation that can be done for templates,
+since they are closely tied to the class_init function they are used in.
+If your UI file uses types from third-party libraries, it may help to add those
+libraries to the `LD_PRELOAD` environment variable.
+
 ``--deprecations``
 
   Warn about uses of deprecated types in the UI definition file.
