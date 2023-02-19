@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-02-12 15:29+0000\n"
-"PO-Revision-Date: 2023-02-12 19:55+0200\n"
+"POT-Creation-Date: 2023-02-18 21:10+0000\n"
+"PO-Revision-Date: 2023-02-19 22:23+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -534,35 +534,35 @@ msgstr "Помилка інтерпретації файлу зображенн�
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Непідтримуваний простір кольорів JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:455
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Недостатньо пам'яті для зображення розміром %ux%u"
 
-#: gdk/loaders/gdkpng.c:119
+#: gdk/loaders/gdkpng.c:118
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "Помилка читання png (%s)"
 
-#: gdk/loaders/gdkpng.c:217
+#: gdk/loaders/gdkpng.c:216
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Непідтримувана глибина, %u, у зображенні png"
 
-#: gdk/loaders/gdkpng.c:247
+#: gdk/loaders/gdkpng.c:246
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Непідтримуваний тип кольору, %u, у зображенні png"
 
-#: gdk/loaders/gdktiff.c:340
+#: gdk/loaders/gdktiff.c:342
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Не вдалося завантажити дані RGB з файлу формату TIFF"
 
-#: gdk/loaders/gdktiff.c:383
+#: gdk/loaders/gdktiff.c:385
 msgid "Could not load TIFF data"
 msgstr "Не вдалося завантажити дані TIFF"
 
-#: gdk/loaders/gdktiff.c:465
+#: gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Помилка читання даних у рядку %d"
@@ -604,8 +604,8 @@ msgstr ""
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Не вдалося отримати буфер обміну у власність. Помилка EmptyClipboard(): 0x"
-"%lx."
+"Не вдалося отримати буфер обміну у власність. Помилка EmptyClipboard(): "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:800
 #, c-format
@@ -692,15 +692,15 @@ msgstr ""
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
-"Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalLock(x"
-"%p): 0x%lx."
+"Не вдалося отримати дані перетягування зі скиданням. Помилка "
+"GlobalLock(x%p): 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
-"Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalSize(0x"
-"%p): 0x%lx."
+"Не вдалося отримати дані перетягування зі скиданням. Помилка "
+"GlobalSize(0x%p): 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:969
 #, c-format
@@ -1097,15 +1097,15 @@ msgctxt "font"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/deprecated/gtklockbutton.c:288 gtk/ui/gtklockbutton.ui:20
+#: gtk/deprecated/gtklockbutton.c:294 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "Заблокувати"
 
-#: gtk/deprecated/gtklockbutton.c:300 gtk/ui/gtklockbutton.ui:26
+#: gtk/deprecated/gtklockbutton.c:308 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "Розблокувати"
 
-#: gtk/deprecated/gtklockbutton.c:312
+#: gtk/deprecated/gtklockbutton.c:322
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -1113,7 +1113,7 @@ msgstr ""
 "Вікно розблоковано.\n"
 "Натисніть, щоб запобігти подальших змін"
 
-#: gtk/deprecated/gtklockbutton.c:324
+#: gtk/deprecated/gtklockbutton.c:336
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -1121,7 +1121,7 @@ msgstr ""
 "Вікно заблоковано.\n"
 "Натисніть, щоб унести зміни"
 
-#: gtk/deprecated/gtklockbutton.c:336
+#: gtk/deprecated/gtklockbutton.c:350
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -1133,11 +1133,11 @@ msgstr ""
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
-#: gtk/deprecated/gtkvolumebutton.c:230
+#: gtk/deprecated/gtkvolumebutton.c:236
 msgid "Muted"
 msgstr "Приглушити"
 
-#: gtk/deprecated/gtkvolumebutton.c:234
+#: gtk/deprecated/gtkvolumebutton.c:240
 msgid "Full Volume"
 msgstr "Повна гучність"
 
@@ -1146,7 +1146,7 @@ msgstr "Повна гучність"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/deprecated/gtkvolumebutton.c:247
+#: gtk/deprecated/gtkvolumebutton.c:253
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -2305,7 +2305,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:1796
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8994
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8999
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2542,70 +2542,70 @@ msgstr "Вибір теки"
 msgid "Change Font Features"
 msgstr "Змінити властивості шрифту"
 
-#: gtk/gtkfontchooserwidget.c:1546
+#: gtk/gtkfontchooserwidget.c:1547
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Ширина"
 
-#: gtk/gtkfontchooserwidget.c:1547
+#: gtk/gtkfontchooserwidget.c:1548
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Вага"
 
-#: gtk/gtkfontchooserwidget.c:1548
+#: gtk/gtkfontchooserwidget.c:1549
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Курсив"
 
-#: gtk/gtkfontchooserwidget.c:1549
+#: gtk/gtkfontchooserwidget.c:1550
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Нахил"
 
-#: gtk/gtkfontchooserwidget.c:1550
+#: gtk/gtkfontchooserwidget.c:1551
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Оптичний розмір"
 
-#: gtk/gtkfontchooserwidget.c:2102
+#: gtk/gtkfontchooserwidget.c:2103
 msgctxt "Font feature value"
 msgid "Default"
 msgstr "Типове"
 
-#: gtk/gtkfontchooserwidget.c:2119
+#: gtk/gtkfontchooserwidget.c:2120
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: gtk/gtkfontchooserwidget.c:2447
+#: gtk/gtkfontchooserwidget.c:2448
 msgid "Default"
 msgstr "Типово"
 
-#: gtk/gtkfontchooserwidget.c:2509
+#: gtk/gtkfontchooserwidget.c:2510
 msgid "Ligatures"
 msgstr "Лігатури"
 
-#: gtk/gtkfontchooserwidget.c:2510
+#: gtk/gtkfontchooserwidget.c:2511
 msgid "Letter Case"
 msgstr "Розмір літер"
 
-#: gtk/gtkfontchooserwidget.c:2511
+#: gtk/gtkfontchooserwidget.c:2512
 msgid "Number Case"
 msgstr "Розмір цифр"
 
-#: gtk/gtkfontchooserwidget.c:2512
+#: gtk/gtkfontchooserwidget.c:2513
 msgid "Number Spacing"
 msgstr "Інтервали між цифрами"
 
-#: gtk/gtkfontchooserwidget.c:2513
+#: gtk/gtkfontchooserwidget.c:2514
 msgid "Fractions"
 msgstr "Дроби"
 
-#: gtk/gtkfontchooserwidget.c:2514
+#: gtk/gtkfontchooserwidget.c:2515
 msgid "Style Variations"
 msgstr "Варіанти стилів"
 
-#: gtk/gtkfontchooserwidget.c:2516
+#: gtk/gtkfontchooserwidget.c:2517
 msgid "Character Variations"
 msgstr "Варіанти символів"
 
@@ -2613,19 +2613,19 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8982
+#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8987
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8986
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8991
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8990
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8995
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9015
+#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9020
 msgid "Select _All"
 msgstr "Виді_лити все"
 
@@ -3481,7 +3481,8 @@ msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
 #: gtk/gtksearchentry.c:626
-msgid "Clear entry"
+#| msgid "Clear entry"
+msgid "Clear Entry"
 msgstr "Спорожнити запис"
 
 #. Translators: This string is used to mark left/right variants of modifier
@@ -3570,15 +3571,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Бічна панель"
 
-#: gtk/gtktext.c:6101 gtk/gtktextview.c:9020
+#: gtk/gtktext.c:6101 gtk/gtktextview.c:9025
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
-#: gtk/gtktextview.c:9002
+#: gtk/gtktextview.c:9007
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:9006
+#: gtk/gtktextview.c:9011
 msgid "_Redo"
 msgstr "Пов_торити"
 
@@ -4097,7 +4098,7 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:1859
+#: gtk/inspector/recorder.c:1865
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
@@ -6525,19 +6526,14 @@ msgid "After"
 msgstr "Після"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:592
-#| msgctxt "printer option"
-#| msgid "Print at"
 msgid "Print at"
 msgstr "Надрукувати"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:602
-#| msgctxt "printer option"
-#| msgid "Print at time"
 msgid "Print at time"
 msgstr "Надрукувати о"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:665
-#| msgid "CSS Border"
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Без рамки"
