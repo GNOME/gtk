@@ -31,7 +31,6 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkgizmoprivate.h"
-#include "gtkicontheme.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"

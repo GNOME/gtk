@@ -35,7 +35,6 @@
 #include "gtkdragicon.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkicontheme.h"
 #include "gtkpicture.h"
 #include "gtksettingsprivate.h"
 #include "gtkgesturesingle.h"

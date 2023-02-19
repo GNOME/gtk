@@ -26,7 +26,6 @@
 #include "deprecated/gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
 #include "gtkfontchooserutils.h"
-#include "gtkbox.h"
 #include <glib/gi18n-lib.h>
 #include "gtkbuildable.h"
 #include "gtkprivate.h"

@@ -69,7 +69,6 @@
 #include "gtkbinlayout.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"

@@ -26,7 +26,6 @@
 #include "gtkgesturelongpress.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include "gtkicontheme.h"
 #include "gtkimage.h"
 #include <glib/gi18n-lib.h>
 #include "gtkmain.h"

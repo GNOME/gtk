@@ -23,10 +23,6 @@
 #include "gtkapplication.h"
 #include "gdkprofilerprivate.h"
 
-#ifdef G_OS_UNIX
-#include <gio/gunixfdlist.h>
-#endif
-
 #include <stdlib.h>
 
 #ifdef HAVE_UNISTD_H
@@ -36,10 +32,8 @@
 #include "gtkapplicationprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
-#include "gtkrecentmanager.h"
 #include "gtkicontheme.h"
 #include "gtkbuilder.h"
-#include "gtkshortcutswindow.h"
 #include "gtkprivate.h"
 
 /* NB: please do not add backend-specific GDK headers here.  This should

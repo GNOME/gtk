@@ -29,7 +29,6 @@
 #include "gtkactionhelperprivate.h"
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkcssnumbervalueprivate.h"
 #include "gtkgestureclick.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
@@ -37,7 +36,6 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkmodelbuttonprivate.h"
 
 /**
  * GtkCheckButton:

@@ -25,7 +25,6 @@
 #include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkdragsource.h"
-#include "gtkicontheme.h"
 #include "gtkimage.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"

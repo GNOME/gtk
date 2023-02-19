@@ -27,7 +27,6 @@
 #include "gtkimageprivate.h"
 
 #include "gtkiconhelperprivate.h"
-#include "gtkicontheme.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
