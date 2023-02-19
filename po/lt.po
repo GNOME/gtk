@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-02-13 17:32+0000\n"
-"PO-Revision-Date: 2023-02-13 23:06+0200\n"
+"POT-Creation-Date: 2023-02-18 21:10+0000\n"
+"PO-Revision-Date: 2023-02-19 21:05+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -536,35 +536,35 @@ msgstr "Klaida interpretuojant JPEG paveikslėlio failą (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepalaikoma JPEG spalvų sritis (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:455
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Nepakanka atminties paveikslėlio dydžiui %ux%u"
 
-#: gdk/loaders/gdkpng.c:119
+#: gdk/loaders/gdkpng.c:118
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "Klaida skaitant png (%s)"
 
-#: gdk/loaders/gdkpng.c:217
+#: gdk/loaders/gdkpng.c:216
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Nepalaikomas gylis %u pn paveikslėlyje"
 
-#: gdk/loaders/gdkpng.c:247
+#: gdk/loaders/gdkpng.c:246
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepalaikomas spalvos tipas %u png paveikslėlyje"
 
-#: gdk/loaders/gdktiff.c:340
+#: gdk/loaders/gdktiff.c:342
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nepavyko įkelti RGB duomenų iš TIFF failo"
 
-#: gdk/loaders/gdktiff.c:383
+#: gdk/loaders/gdktiff.c:385
 msgid "Could not load TIFF data"
 msgstr "Nepavyko įkelti TIFF duomenų"
 
-#: gdk/loaders/gdktiff.c:465
+#: gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Duomenų skaitymas nepavyko ties eilute %d"
@@ -2271,7 +2271,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jei ištrinsite elementą, jis bus negrįžtamai prarastas."
 
 #: gtk/gtkfilechooserwidget.c:1168 gtk/gtkfilechooserwidget.c:1796
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8994
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8999
 msgid "_Delete"
 msgstr "Iš_trinti"
 
@@ -2579,19 +2579,19 @@ msgstr "Simbolių variantai"
 msgid "OpenGL context creation failed"
 msgstr "Nepavyko sukurti OpenGL konteksto"
 
-#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8982
+#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8987
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8986
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8991
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8990
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8995
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9015
+#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9020
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
@@ -3442,7 +3442,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
 #: gtk/gtksearchentry.c:626
-msgid "Clear entry"
+msgid "Clear Entry"
 msgstr "Išvalyti lauką"
 
 #. Translators: This string is used to mark left/right variants of modifier
@@ -3531,15 +3531,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Šoninė juosta"
 
-#: gtk/gtktext.c:6101 gtk/gtktextview.c:9020
+#: gtk/gtktext.c:6101 gtk/gtktextview.c:9025
 msgid "Insert _Emoji"
 msgstr "Įterpti _emoji"
 
-#: gtk/gtktextview.c:9002
+#: gtk/gtktextview.c:9007
 msgid "_Undo"
 msgstr "Atša_ukti"
 
-#: gtk/gtktextview.c:9006
+#: gtk/gtktextview.c:9011
 msgid "_Redo"
 msgstr "Paka_rtoti"
 
@@ -4059,7 +4059,7 @@ msgstr "Šaltinis:"
 msgid "Defined At"
 msgstr "Apibrėžtas"
 
-#: gtk/inspector/recorder.c:1859
+#: gtk/inspector/recorder.c:1865
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Nepavyko įrašyti RenderNode"
