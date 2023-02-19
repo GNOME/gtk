@@ -1691,7 +1691,7 @@ gsk_texture_scale_node_diff (GskRenderNode  *node1,
 
 /**
  * gsk_texture_scale_node_get_texture:
- * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ * @node: (type GskTextureScaleNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
  *
  * Retrieves the `GdkTexture` used when creating this `GskRenderNode`.
  *
@@ -1709,7 +1709,7 @@ gsk_texture_scale_node_get_texture (const GskRenderNode *node)
 
 /**
  * gsk_texture_scale_node_get_filter:
- * @node: (type GskTextureNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ * @node: (type GskTextureScaleNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
  *
  * Retrieves the `GskScalingFilter` used when creating this `GskRenderNode`.
  *
