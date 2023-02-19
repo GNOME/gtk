@@ -45,6 +45,11 @@
  * [vfunc@Gtk.Accessible.get_next_accessible_sibling] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
+ * Also note that when an accessible object does not correspond to a widget,
+ * and it has children, whose implementation you don't control,
+ * it is necessary to ensure the correct shape of the a11y tree
+ * by calling [method@Gtk.Accessible.set_accessible_parent] and
+ * updating the sibling by [method@Gtk.Accessible.update_next_accessible_sibling].
  */
 
 #include "config.h"
@@ -117,7 +122,85 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
+  GtkATContext *context;
+  GtkAccessible *parent = NULL;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL)
+    parent = gtk_at_context_get_accessible_parent (context);
+ 
+  if (parent != NULL)
+    return parent;
+  else
+    return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
+}
+
+/**
+ * gtk_accessible_set_accessible_parent:
+ * @self: an accessible object
+ * @parent: (nullable): the parent accessible object
+ * @next_sibling: (nullable): the sibling accessible object
+ *
+ * Sets the parent and sibling of an accessible object.
+ *
+ * This function is meant to be used by accessible implementations that are
+ * not part of the widget hierarchy, and but act as a logical bridge between
+ * widgets. For instance, if a widget creates an object that holds metadata
+ * for each child, and you want that object to implement the `GtkAccessible`
+ * interface, you will use this function to ensure that the parent of each
+ * child widget is the metadata object, and the parent of each metadata
+ * object is the container widget.
+ *
+ * Since: 4.10
+ */
+void
+gtk_accessible_set_accessible_parent (GtkAccessible *self,
+                                      GtkAccessible *parent,
+                                      GtkAccessible *next_sibling)
+{
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+  g_return_if_fail (parent == NULL || GTK_IS_ACCESSIBLE (parent));
+  g_return_if_fail (next_sibling == NULL || GTK_IS_ACCESSIBLE (parent));
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL)
+    {
+      gtk_at_context_set_accessible_parent (context, parent);
+      gtk_at_context_set_next_accessible_sibling (context, next_sibling);
+    }
+}
+
+/**
+ * gtk_accessible_update_next_accessible_sibling:
+ * @self: a `GtkAccessible`
+ * @new_sibling: (nullable): the new next accessible sibling to set
+ *
+ * Updates the next accessible sibling of @self.
+ * That might be useful when a new child of a custom `GtkAccessible`
+ * is created, and it needs to be linked to a previous child.
+ *
+ * Since: 4.10
+ */
+void
+gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
+                                               GtkAccessible *new_sibling)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (!context)
+    return;
+  
+  if (gtk_at_context_get_accessible_parent (context) == NULL)
+  {
+    g_critical ("Failed to update next accessible sibling: no parent accessible set for this accessible");
+    return;
+  }
+
+  gtk_at_context_set_next_accessible_sibling (context, new_sibling);
 }
 
 /**
@@ -153,7 +236,13 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
+  GtkATContext *context;
+
+  context = gtk_accessible_get_at_context (self);
+  if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
+    return gtk_at_context_get_next_accessible_sibling (context);
+  else
+    return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
 }
 
 /**
