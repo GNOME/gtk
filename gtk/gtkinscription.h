@@ -100,12 +100,6 @@ GDK_AVAILABLE_IN_4_8
 void                    gtk_inscription_set_nat_lines           (GtkInscription         *self,
                                                                  guint                   nat_lines);
 
-GDK_AVAILABLE_IN_4_10
-gboolean                gtk_inscription_get_single_line_mode    (GtkInscription         *self);
-GDK_AVAILABLE_IN_4_10
-void                    gtk_inscription_set_single_line_mode    (GtkInscription         *self,
-                                                                 gboolean                single_line_mode);
-
 GDK_AVAILABLE_IN_4_8
 float                   gtk_inscription_get_xalign              (GtkInscription         *self);
 GDK_AVAILABLE_IN_4_8
