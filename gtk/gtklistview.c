@@ -606,9 +606,9 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     }
 
   /* step 1: determine width of the list */
-  gtk_widget_measure (widget, opposite_orientation,
-                      -1,
-                      &min, &nat, NULL, NULL);
+  gtk_list_view_measure_across (widget, opposite_orientation,
+                                -1,
+                                &min, &nat);
   self->list_width = orientation == GTK_ORIENTATION_VERTICAL ? width : height;
   if (opposite_scroll_policy == GTK_SCROLL_MINIMUM)
     self->list_width = MAX (min, self->list_width);
