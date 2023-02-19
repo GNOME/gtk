@@ -89,6 +89,8 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
  * Retrieves the `GtkATContext` for the given `GtkAccessible`.
  *
  * Returns: (transfer none): the `GtkATContext`
+ *
+ * Since: 4.10
  */
 GtkATContext *
 gtk_accessible_get_at_context (GtkAccessible *self)

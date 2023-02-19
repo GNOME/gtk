@@ -1588,6 +1588,8 @@ gsk_texture_node_new (GdkTexture            *texture,
  * GskTextureScaleNode:
  *
  * A render node for a `GdkTexture`.
+ *
+ * Since: 4.10
  */
 struct _GskTextureScaleNode
 {
