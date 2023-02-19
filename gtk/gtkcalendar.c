@@ -114,7 +114,6 @@
 #include "gtkeventcontrollerfocus.h"
 #include "gtkdragsource.h"
 #include "gtknative.h"
-#include "gtkicontheme.h"
 #include "gtkdragicon.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"

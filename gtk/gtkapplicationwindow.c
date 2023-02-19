@@ -24,15 +24,10 @@
 #include "gtkapplicationprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkheaderbar.h"
 #include "gtkpopovermenubar.h"
 #include "gtksettings.h"
 #include "gtkshortcutswindowprivate.h"
 #include "gtktooltipprivate.h"
-
-#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
-#include <gio/gdesktopappinfo.h>
-#endif
 
 /**
  * GtkApplicationWindow:

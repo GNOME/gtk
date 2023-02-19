@@ -27,8 +27,6 @@
 #include "gtkeditable.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
-#include "gtkbox.h"
-#include "gtkimage.h"
 #include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkpasswordentrybuffer.h"

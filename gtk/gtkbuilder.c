@@ -216,13 +216,10 @@
 #include "gtkdebug.h"
 #include "gtkexpression.h"
 #include "gtkmain.h"
-#include "gtkicontheme.h"
 #include "gtkprivate.h"
 #include "gtkshortcutactionprivate.h"
 #include "gtkshortcuttrigger.h"
-#include "gtktestutils.h"
 #include "gtktypebuiltins.h"
-#include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkdebug.h"
 

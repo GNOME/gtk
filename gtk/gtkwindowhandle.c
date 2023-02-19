@@ -20,7 +20,6 @@
 
 #include "gtkwindowhandle.h"
 
-#include "gtkactionmuxerprivate.h"
 #include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"

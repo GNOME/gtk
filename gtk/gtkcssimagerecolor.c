@@ -23,7 +23,6 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkiconthemeprivate.h"
 #include "gdkpixbufutilsprivate.h"
 
 #include "gtkstyleproviderprivate.h"

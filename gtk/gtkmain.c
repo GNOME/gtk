@@ -52,7 +52,6 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkbox.h"
 #include "gtkdebug.h"
 #include "gtkdropprivate.h"
 #include "gtkmain.h"
@@ -60,7 +59,6 @@
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
-#include "gtksettingsprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"

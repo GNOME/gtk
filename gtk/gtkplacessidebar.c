@@ -33,7 +33,6 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbookmarksmanagerprivate.h"
 #include "gtkfilechooserutils.h"
-#include "gtkicontheme.h"
 #include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
