@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkWindow">
+  <object class="GtkAspectFrame">
     <property name="child">
-      <object class="GtkBox">
-        <child>
-          <placeholder/>
-        </child>
+      <object class="GtkLabel">
+        <property name="label">start</property>
       </object>
     </property>
   </object>
