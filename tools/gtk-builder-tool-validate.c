@@ -149,10 +149,15 @@ validate_template (const char *filename,
   GError *error = NULL;
   gboolean ret;
 
+  builder = gtk_builder_new ();
+  scope = fake_scope_new ();
+  gtk_builder_set_scope (builder, GTK_BUILDER_SCOPE (scope));
+  g_object_unref (scope);
+
   /* Only make a fake type if it doesn't exist yet.
    * This lets us e.g. validate the GtkFileChooserWidget template.
    */
-  template_type = g_type_from_name (type_name);
+  template_type = gtk_builder_get_type_from_name (builder, type_name);
   if (template_type == G_TYPE_INVALID)
     template_type = make_fake_type (type_name, parent_name);
 
@@ -163,15 +168,11 @@ validate_template (const char *filename,
       return FALSE;
     }
 
-  builder = gtk_builder_new ();
-  scope = fake_scope_new ();
-  gtk_builder_set_scope (builder, GTK_BUILDER_SCOPE (scope));
   ret = gtk_builder_extend_with_template (builder, object, template_type, " ", 1, &error);
   if (ret)
     ret = gtk_builder_add_from_file (builder, filename, &error);
   if (ret && deprecations)
     ret = fake_scope_check_deprecations (scope, &error);
-  g_object_unref (scope);
   g_object_unref (builder);
 
   if (!ret)
