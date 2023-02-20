@@ -638,7 +638,7 @@ gtk_button_new_with_label (const char *label)
 
 /**
  * gtk_button_new_from_icon_name:
- * @icon_name: (nullable): an icon name
+ * @icon_name: an icon name
  *
  * Creates a new button containing an icon from the current icon theme.
  *
