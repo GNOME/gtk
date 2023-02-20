@@ -1279,6 +1279,114 @@ rewrite_paned (Element *element,
 }
 
 static void
+replace_child_by_property (Element *element,
+                           Element *child,
+                           const char *property,
+                           MyParserData *data)
+{
+  Element *obj, *elt;
+
+  obj = child->children->data;
+  g_assert (obj && g_str_equal (obj->element_name, "object"));
+  child->children = g_list_remove (child->children, obj);
+
+  elt = g_new0 (Element, 1);
+  elt->parent = element;
+  elt->element_name = g_strdup ("property");
+  elt->attribute_names = g_new0 (char *, 2);
+  elt->attribute_names[0] = g_strdup ("name");
+  elt->attribute_values = g_new0 (char *, 2);
+  elt->attribute_values[0] = g_strdup (property);
+  elt->children = g_list_prepend (NULL, obj);
+
+  for (GList *l = element->children; l; l = l->next)
+    {
+      if (l->data == child)
+        {
+          l->data = elt;
+          elt = NULL;
+          free_element (child);
+          break;
+        }
+     }
+
+  g_assert (elt == NULL);
+}
+
+static void
+rewrite_start_end_children (Element      *element,
+                            MyParserData *data)
+{
+  Element *start_child = NULL;
+  Element *end_child = NULL;
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (!g_str_equal (child->element_name, "child"))
+        continue;
+
+      if (has_attribute (child, "type", "start"))
+        start_child = child;
+      else if (has_attribute (child, "type", "end"))
+        end_child = child;
+      else if (start_child == NULL)
+        start_child = child;
+      else if (end_child == NULL)
+        end_child = child;
+      else
+        g_warning ("%s only accepts two children", get_class_name (element));
+    }
+
+  if (start_child)
+    replace_child_by_property (element, start_child, "start-child", data);
+
+  if (end_child)
+    replace_child_by_property (element, end_child, "end-child", data);
+}
+
+static void
+rewrite_start_center_end_children (Element      *element,
+                                   MyParserData *data)
+{
+  Element *start_child = NULL;
+  Element *center_child = NULL;
+  Element *end_child = NULL;
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (has_attribute (child, "type", "start"))
+        start_child = child;
+      else if (has_attribute (child, "type", "center"))
+        center_child = child;
+      else if (has_attribute (child, "type", "end"))
+        end_child = child;
+      else if (start_child == NULL)
+        start_child = child;
+      else if (center_child == NULL)
+        center_child = child;
+      else if (end_child == NULL)
+        end_child = child;
+      else
+        g_warning ("%s only accepts three children", get_class_name (element));
+    }
+
+  if (start_child)
+    replace_child_by_property (element, start_child, "start-widget", data);
+
+  if (center_child)
+    replace_child_by_property (element, center_child, "center-widget", data);
+
+  if (end_child)
+    replace_child_by_property (element, end_child, "end-widget", data);
+}
+
+static void
 rewrite_dialog (Element *element,
                MyParserData *data)
 {
@@ -2004,8 +2112,8 @@ simplify_tree (MyParserData *data)
 }
 
 static gboolean
-rewrite_element (Element      *element,
-                 MyParserData *data)
+rewrite_element_3to4 (Element      *element,
+                      MyParserData *data)
 {
   GList *l;
 
@@ -2014,7 +2122,7 @@ rewrite_element (Element      *element,
     {
       GList *next = l->next;
       Element *child = l->data;
-      if (rewrite_element (child, data))
+      if (rewrite_element_3to4 (child, data))
         {
           element->children = g_list_remove (element->children, child);
           free_element (child);
@@ -2070,6 +2178,52 @@ rewrite_element (Element      *element,
     rewrite_fixed (element, data);
 
   if (element_is_object_or_template (element) &&
+      g_str_equal (get_class_name (element), "GtkRadioButton"))
+    rewrite_radio_button (element, data);
+
+  if (element_is_object_or_template (element) &&
+      g_str_equal (get_class_name (element), "GtkScale"))
+    rewrite_scale (element, data);
+
+  if (g_str_equal (element->element_name, "property"))
+    maybe_rename_property (element, data);
+
+  if (g_str_equal (element->element_name, "property") &&
+      property_has_been_removed (element, data))
+    return TRUE;
+
+  if (g_str_equal (element->element_name, "requires"))
+    rewrite_requires (element, data);
+
+  return FALSE;
+}
+
+static void
+rewrite_tree_3to4 (MyParserData *data)
+{
+  rewrite_element_3to4 (data->root, data);
+}
+
+static gboolean
+rewrite_element (Element      *element,
+                 MyParserData *data)
+{
+  GList *l;
+
+  l = element->children;
+  while (l)
+    {
+      GList *next = l->next;
+      Element *child = l->data;
+      if (rewrite_element (child, data))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+        }
+      l = next;
+    }
+
+  if (element_is_object_or_template (element) &&
       (g_str_equal (get_class_name (element), "GtkAspectFrame") ||
        g_str_equal (get_class_name (element), "GtkComboBox") ||
        g_str_equal (get_class_name (element), "GtkComboBoxText") ||
@@ -2087,22 +2241,12 @@ rewrite_element (Element      *element,
     rewrite_bin_child (element, data);
 
   if (element_is_object_or_template (element) &&
-      g_str_equal (get_class_name (element), "GtkRadioButton"))
-    rewrite_radio_button (element, data);
+      g_str_equal (get_class_name (element), "GtkPaned"))
+    rewrite_start_end_children (element, data);
 
   if (element_is_object_or_template (element) &&
-      g_str_equal (get_class_name (element), "GtkScale"))
-    rewrite_scale (element, data);
-
-  if (g_str_equal (element->element_name, "property"))
-    maybe_rename_property (element, data);
-
-  if (g_str_equal (element->element_name, "property") &&
-      property_has_been_removed (element, data))
-    return TRUE;
-
-  if (g_str_equal (element->element_name, "requires"))
-    rewrite_requires (element, data);
+      g_str_equal (get_class_name (element), "GtkCenterBox"))
+    rewrite_start_center_end_children (element, data);
 
   return FALSE;
 }
@@ -2319,8 +2463,10 @@ simplify_file (const char *filename,
   if (data.convert3to4)
     {
       enhance_tree (&data);
-      rewrite_tree (&data);
+      rewrite_tree_3to4 (&data);
     }
+
+  rewrite_tree (&data);
   simplify_tree (&data);
 
   dump_tree (&data);

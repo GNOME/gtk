@@ -2,10 +2,8 @@
 <interface>
   <object class="GtkWindow">
     <property name="child">
-      <object class="GtkBox">
-        <child>
-          <placeholder/>
-        </child>
+      <object class="GtkLabel">
+        <property name="label">start</property>
       </object>
     </property>
   </object>
