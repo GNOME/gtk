@@ -14,7 +14,7 @@
                 <property name="shrink-start-child">0</property>
                 <property name="resize-start-child">0</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="start-child">
                   <object class="GtkPlacesSidebar" id="places_sidebar">
                     <property name="show-other-locations">1</property>
                     <property name="show-trash">0</property>
@@ -25,8 +25,8 @@
                     <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
                     <signal name="show-other-locations-with-flags" handler="places_sidebar_show_other_locations_with_flags_cb" swapped="no"/>
                   </object>
-                </child>
-                <child>
+                </property>
+                <property name="end-child">
                   <object class="GtkBox">
                     <property name="orientation">1</property>
                     <child>
@@ -526,7 +526,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
           </object>
