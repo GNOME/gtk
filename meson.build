@@ -156,6 +156,7 @@ check_headers = [
   'crt/externs.h',
   'dev/evdev/input.h',
   'dlfcn.h',
+  'execinfo.h',
   'ftw.h',
   'inttypes.h',
   'linux/input.h',

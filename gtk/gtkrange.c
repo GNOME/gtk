@@ -20,12 +20,14 @@
  * Modified by the GTK+ Team and others 1997-2004.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
 
 #include "gtkrangeprivate.h"
+
+#include "gdkprofilerprivate.h"
 
 #include "gtkaccessible.h"
 #include "gtkaccessiblerange.h"
@@ -688,7 +690,7 @@ gtk_range_set_adjustment (GtkRange      *range,
 
       priv->adjustment = adjustment;
       g_object_ref_sink (adjustment);
-      
+
       g_signal_connect (adjustment, "changed",
 			G_CALLBACK (gtk_range_adjustment_changed),
 			range);
@@ -1069,7 +1071,7 @@ gtk_range_set_range (GtkRange *range,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GtkAdjustment *adjustment;
   double value;
-  
+
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (min <= max);
 
@@ -1548,7 +1550,7 @@ clamp_dimensions (int        range_width,
           *width += extra;
         }
     }
-  
+
   /* See if we can fit rect, if not kill the border */
   shortage = *width - range_width;
   if (shortage > 0)
@@ -1585,7 +1587,7 @@ clamp_dimensions (int        range_width,
           border->bottom += extra / 2 + extra % 2;
         }
     }
-  
+
   /* See if we can fit rect, if not kill the border */
   shortage = *height - range_height;
   if (shortage > 0)
@@ -2348,6 +2350,8 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
   double upper = gtk_adjustment_get_upper (priv->adjustment);
   double lower = gtk_adjustment_get_lower (priv->adjustment);
 
+  gdk_profiler_add_stacktrace ();
+
   gtk_widget_set_visible (priv->slider_widget, upper != lower || !GTK_IS_SCALE (range));
 
   gtk_widget_queue_allocate (priv->trough_widget);
@@ -2391,7 +2395,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 static void
-apply_marks (GtkRange *range, 
+apply_marks (GtkRange *range,
              double    oldval,
              double   *newval)
 {
@@ -2502,7 +2506,7 @@ gtk_range_scroll (GtkRange     *range,
       else
         step_back (range);
       break;
-                    
+
     case GTK_SCROLL_STEP_UP:
       if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         step_forward (range);
@@ -2516,18 +2520,18 @@ gtk_range_scroll (GtkRange     *range,
       else
         step_forward (range);
       break;
-                    
+
     case GTK_SCROLL_STEP_DOWN:
       if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         step_back (range);
       else
         step_forward (range);
       break;
-                  
+
     case GTK_SCROLL_STEP_BACKWARD:
       step_back (range);
       break;
-                  
+
     case GTK_SCROLL_STEP_FORWARD:
       step_forward (range);
       break;
@@ -2538,7 +2542,7 @@ gtk_range_scroll (GtkRange     *range,
       else
         page_back (range);
       break;
-                    
+
     case GTK_SCROLL_PAGE_UP:
       if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         page_forward (range);
@@ -2552,18 +2556,18 @@ gtk_range_scroll (GtkRange     *range,
       else
         page_forward (range);
       break;
-                    
+
     case GTK_SCROLL_PAGE_DOWN:
       if (should_invert_move (range, GTK_ORIENTATION_VERTICAL))
         page_back (range);
       else
         page_forward (range);
       break;
-                  
+
     case GTK_SCROLL_PAGE_BACKWARD:
       page_back (range);
       break;
-                  
+
     case GTK_SCROLL_PAGE_FORWARD:
       page_forward (range);
       break;
@@ -2853,7 +2857,7 @@ _gtk_range_set_stop_values (GtkRange *range,
 
   priv->n_marks = n_values;
 
-  for (i = 0; i < n_values; i++) 
+  for (i = 0; i < n_values; i++)
     priv->marks[i] = values[i];
 
   gtk_range_calc_marks (range);

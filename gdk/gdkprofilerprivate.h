@@ -63,6 +63,8 @@ void   gdk_profiler_end_markf (gint64       begin_time,
                                const gchar *message_format,
                                ...) G_GNUC_PRINTF (3, 4);
 
+void    gdk_profiler_add_stacktrace (void);
+
 guint   gdk_profiler_define_counter     (const char *name,
                                          const char *description);
 guint   gdk_profiler_define_int_counter (const char *name,
@@ -85,6 +87,8 @@ void    gdk_profiler_set_int_counter    (guint  id,
 #else
 /* no varargs macro support; the call will have to be optimised out by the compiler */
 #endif
+
+#define gdk_profiler_add_stacktrace() G_STMT_START {} G_STMT_END
 
 #define gdk_profiler_define_counter(n, d) 0
 #define gdk_profiler_define_int_counter(n, d) 0

@@ -32,6 +32,9 @@
 #include "gdkversionmacros.h"
 #include "gdkframeclockprivate.h"
 
+#ifdef HAVE_SYSPROF
+# include "backtrace-helper.h"
+#endif
 
 gboolean
 gdk_profiler_is_running (void)
@@ -158,5 +161,21 @@ void
 
   value.v64 = val;
   sysprof_collector_set_counters (&id, &value, 1);
+#endif
+}
+
+void
+(gdk_profiler_add_stacktrace) (void)
+{
+#ifdef HAVE_SYSPROF
+  static gsize did_init;
+
+  if (!did_init)
+    {
+      did_init = TRUE;
+      backtrace_init ();
+    }
+
+  sysprof_collector_sample (backtrace_func, NULL);
 #endif
 }
