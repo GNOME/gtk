@@ -584,6 +584,8 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
                   _gdk_frame_clock_emit_layout (clock);
+                  if (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT)
+                    g_print ("looping in layout %d\n", iter);
                 }
 	      if (iter == 5)
 		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
@@ -808,4 +810,13 @@ _gdk_frame_clock_idle_new (void)
   clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
 
   return GDK_FRAME_CLOCK (clock);
+}
+
+GdkFrameClockPhase
+gdk_frame_clock_get_current_phase (GdkFrameClock *clock)
+{
+  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+
+  return priv->phase;
 }
