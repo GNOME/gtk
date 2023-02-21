@@ -75,6 +75,7 @@
 
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkframeclockprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
 
@@ -10571,6 +10572,14 @@ static void
 gtk_widget_set_alloc_needed (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
+  if (frame_clock != NULL &&
+      gdk_frame_clock_get_current_phase (frame_clock) == GDK_FRAME_CLOCK_PHASE_PAINT)
+    {
+      g_warning ("%s %p set alloc-needed during PAINT\n",
+                 G_OBJECT_TYPE_NAME (widget), widget);
+    }
 
   priv->alloc_needed = TRUE;
 
