@@ -4689,10 +4689,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     }
   g_object_unref (layout);
 
-  /* The GTK resize loop processes all the pending exposes right
-   * after doing the resize stuff, so the idle sizer won't have a
-   * chance to run. So we do the work here.
-   */
   gtk_text_view_flush_first_validate (text_view);
 
   chooser = g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser");
@@ -4876,6 +4872,8 @@ gtk_text_view_invalidate (GtkTextView *text_view)
       DV (g_print (G_STRLOC": adding incremental validate idle %d\n",
                    priv->incremental_validate_idle));
     }
+
+  gtk_widget_queue_allocate (GTK_WIDGET (text_view));
 }
 
 static void
