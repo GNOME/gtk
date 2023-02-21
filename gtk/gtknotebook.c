@@ -4033,9 +4033,6 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_notebook_tab_drop_enter), page);
   g_signal_connect (controller, "leave", G_CALLBACK (gtk_notebook_tab_drop_leave), page);
   gtk_widget_add_controller (page->tab_widget, controller);
-  gtk_accessible_update_property (GTK_ACCESSIBLE (page->tab_widget),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Tab"),
-                                  -1);
 
   page->expand = FALSE;
   page->fill = TRUE;
@@ -4335,6 +4332,11 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
         text = page->tab_text;
       else
         text = string;
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (page->tab_widget),
+                                GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                -1);
+
       if (notebook->show_tabs)
         {
           if (page->default_tab)
