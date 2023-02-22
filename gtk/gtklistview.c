@@ -589,7 +589,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   ListRow *row;
   GArray *heights;
   int min, nat, row_height;
-  int x, y;
+  int x, y, y0;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy, opposite_scroll_policy;
 
@@ -635,6 +635,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->height != row_height)
         {
           row->height = row_height;
+          gtk_list_tile_set_area_size (self->item_manager, &row->parent, self->list_width, row_height);
           gtk_rb_tree_node_mark_dirty (row);
         }
       g_array_append_val (heights, row_height);
@@ -654,6 +655,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->height != row_height)
         {
           row->height = row_height;
+          gtk_list_tile_set_area_size (self->item_manager, &row->parent, self->list_width, row_height * row->parent.n_items);
           gtk_rb_tree_node_mark_dirty (row);
         }
     }
@@ -667,6 +669,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
                                     &x, &y);
   x = -x;
   y = -y;
+  y0 = y;
 
   /* step 4: actually allocate the widgets */
 
@@ -674,19 +677,12 @@ gtk_list_view_size_allocate (GtkWidget *widget,
        row != NULL;
        row = gtk_rb_tree_node_get_next (row))
     {
-      if (row->parent.widget)
-        {
-          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
-                                             row->parent.widget,
-                                             x,
-                                             y,
-                                             self->list_width,
-                                             row->height);
-        }
+      gtk_list_tile_set_area_position (self->item_manager, &row->parent, 0, y - y0);
 
       y += row->height * row->parent.n_items;
     }
 
+  gtk_list_base_allocate_children (GTK_LIST_BASE (self));
   gtk_list_base_allocate_rubberband (GTK_LIST_BASE (self));
 }
 

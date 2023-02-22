@@ -1432,6 +1432,32 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
   gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
+void
+gtk_list_base_allocate_children (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListTile *tile;
+  int dx, dy;
+  
+  gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &dx, NULL, NULL);
+  gtk_list_base_get_adjustment_values (self, priv->orientation, &dy, NULL, NULL);
+
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        {
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
+                                             tile->widget,
+                                             tile->area.x - dx,
+                                             tile->area.y - dy,
+                                             tile->area.width,
+                                             tile->area.height);
+        }
+    }
+}
+
 static void
 gtk_list_base_widget_to_list (GtkListBase *self,
                               double       x_widget,

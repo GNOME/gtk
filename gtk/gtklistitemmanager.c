@@ -74,6 +74,22 @@ static void             gtk_list_item_manager_release_list_item (GtkListItemMana
                                                                  GtkWidget              *widget);
 G_DEFINE_TYPE (GtkListItemManager, gtk_list_item_manager, G_TYPE_OBJECT)
 
+static void
+potentially_empty_rectangle_union (cairo_rectangle_int_t       *self,
+                                   const cairo_rectangle_int_t *area)
+{
+  if (area->width <= 0 || area->height <= 0)
+    return;
+
+  if (self->width <= 0 || self->height <= 0)
+    {
+      *self = *area;
+      return;
+    }
+
+  gdk_rectangle_union (self, area, self);
+}
+
 void
 gtk_list_item_manager_augment_node (GtkRbTree *tree,
                                     gpointer   node_augment,
@@ -85,12 +101,14 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
   GtkListTileAugment *aug = node_augment;
 
   aug->n_items = tile->n_items;
+  aug->area = tile->area;
 
   if (left)
     {
       GtkListTileAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
 
       aug->n_items += left_aug->n_items;
+      potentially_empty_rectangle_union (&aug->area, &left_aug->area);
     }
 
   if (right)
@@ -98,6 +116,7 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
       GtkListTileAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
 
       aug->n_items += right_aug->n_items;
+      potentially_empty_rectangle_union (&aug->area, &right_aug->area);
     }
 }
 
@@ -247,6 +266,66 @@ gtk_list_tile_get_augment (GtkListItemManager *self,
                            GtkListTile        *tile)
 {
   return gtk_rb_tree_get_augment (self->items, tile);
+}
+
+/*
+ * gtk_list_tile_set_area:
+ * @self: the list item manager
+ * @tile: tile to set area for
+ * @area: (nullable): area to set or NULL to clear
+ *     the area
+ *
+ * Updates the area of the tile.
+ *
+ * The area is given in the internal coordinate system,
+ * so the x/y flip due to orientation and the left/right
+ * flip for RTL languages will happen later.
+ *
+ * This function should only be called from inside size_allocate().
+ **/
+void
+gtk_list_tile_set_area (GtkListItemManager          *self,
+                        GtkListTile                 *tile,
+                        const cairo_rectangle_int_t *area)
+{
+  cairo_rectangle_int_t empty_area = { 0, 0, 0, 0 };
+
+  if (!area)
+    area = &empty_area;
+
+  if (gdk_rectangle_equal (&tile->area, area))
+    return;
+
+  tile->area = *area;
+  gtk_rb_tree_node_mark_dirty (tile);
+}
+
+void
+gtk_list_tile_set_area_position (GtkListItemManager *self,
+                                 GtkListTile        *tile,
+                                 int                 x,
+                                 int                 y)
+{
+  if (tile->area.x == x && tile->area.y == y)
+    return;
+
+  tile->area.x = x;
+  tile->area.y = y;
+  gtk_rb_tree_node_mark_dirty (tile);
+}
+
+void
+gtk_list_tile_set_area_size (GtkListItemManager *self,
+                             GtkListTile        *tile,
+                             int                 width,
+                             int                 height)
+{
+  if (tile->area.width == width && tile->area.height == height)
+    return;
+
+  tile->area.width = width;
+  tile->area.height = height;
+  gtk_rb_tree_node_mark_dirty (tile);
 }
 
 static void
