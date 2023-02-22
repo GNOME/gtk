@@ -221,6 +221,61 @@ gtk_list_item_manager_get_nth (GtkListItemManager *self,
   return tile;
 }
 
+static GtkListTile *
+gtk_list_tile_get_tile_at (GtkListItemManager *self,
+                           GtkListTile        *tile,
+                           int                 x,
+                           int                 y)
+{
+  GtkListTileAugment *aug;
+  GtkListTile *subtile;
+
+  aug = gtk_list_tile_get_augment (self, tile);
+  if (!gdk_rectangle_contains_point (&aug->area, x, y))
+    return NULL;
+
+  subtile = gtk_rb_tree_node_get_left (tile);
+  if (subtile)
+    {
+      subtile = gtk_list_tile_get_tile_at (self, subtile, x, y);
+      if (subtile)
+        return subtile;
+    }
+
+  if (gdk_rectangle_contains_point (&tile->area, x, y))
+    return tile;
+
+  subtile = gtk_rb_tree_node_get_right (tile);
+  if (subtile)
+    {
+      subtile = gtk_list_tile_get_tile_at (self, subtile, x, y);
+      if (subtile)
+        return subtile;
+    }
+
+  return NULL;
+}
+
+/*
+ * gtk_list_item_manager_get_tile_at:
+ * @self: a GtkListItemManager
+ * @x: x coordinate of tile
+ * @y: y coordinate of tile
+ *
+ * Finds the tile occupying the coordinates at (x, y). If no
+ * tile occupies the coordinates (for example, if the tile is out of bounds),
+ * NULL is returned.
+ *
+ * Returns: (nullable): The tile at (x, y) or NULL
+ **/
+GtkListTile *
+gtk_list_item_manager_get_tile_at (GtkListItemManager *self,
+                                   int                 x,
+                                   int                 y)
+{
+  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y);
+}
+
 guint
 gtk_list_tile_get_position (GtkListItemManager *self,
                             GtkListTile        *tile)
