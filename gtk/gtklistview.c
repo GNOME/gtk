@@ -146,13 +146,13 @@ typedef struct _ListRowAugment ListRowAugment;
 
 struct _ListRow
 {
-  GtkListItemManagerItem parent;
+  GtkListTile parent;
   guint height; /* per row */
 };
 
 struct _ListRowAugment
 {
-  GtkListItemManagerItemAugment parent;
+  GtkListTileAugment parent;
   guint height; /* total */
 };
 
@@ -243,7 +243,7 @@ gtk_list_view_get_row_at_y (GtkListView *self,
       tmp = gtk_rb_tree_node_get_left (row);
       if (tmp)
         {
-          ListRowAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, tmp);
+          ListRowAugment *aug = gtk_list_item_manager_get_tile_augment (self->item_manager, tmp);
           if (y < aug->height)
             {
               row = tmp;
@@ -275,7 +275,7 @@ list_row_get_y (GtkListView *self,
   left = gtk_rb_tree_node_get_left (row);
   if (left)
     {
-      ListRowAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, left);
+      ListRowAugment *aug = gtk_list_item_manager_get_tile_augment (self->item_manager, left);
       y = aug->height;
     }
   else
@@ -291,7 +291,7 @@ list_row_get_y (GtkListView *self,
         {
           if (left)
             {
-              ListRowAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, left);
+              ListRowAugment *aug = gtk_list_item_manager_get_tile_augment (self->item_manager, left);
               y += aug->height;
             }
           y += parent->height * parent->parent.n_items;
@@ -313,7 +313,7 @@ gtk_list_view_get_list_height (GtkListView *self)
   if (row == NULL)
     return 0;
 
-  aug = gtk_list_item_manager_get_item_augment (self->item_manager, row);
+  aug = gtk_list_item_manager_get_tile_augment (self->item_manager, row);
   return aug->height;
 }
 
@@ -385,12 +385,12 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
 
   row = gtk_list_view_get_row_at_y (self, rect->y, NULL);
   if (row)
-    first = gtk_list_item_manager_get_item_position (self->item_manager, row);
+    first = gtk_list_item_manager_get_tile_position (self->item_manager, row);
   else
     first = rect->y < 0 ? 0 : n_items - 1;
   row = gtk_list_view_get_row_at_y (self, rect->y + rect->height, NULL);
   if (row)
-    last = gtk_list_item_manager_get_item_position (self->item_manager, row);
+    last = gtk_list_item_manager_get_tile_position (self->item_manager, row);
   else
     last = rect->y + rect->height < 0 ? 0 : n_items - 1;
 
@@ -433,7 +433,7 @@ gtk_list_view_get_position_from_allocation (GtkListBase           *base,
   if (row == NULL)
     return FALSE;
 
-  *pos = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  *pos = gtk_list_item_manager_get_tile_position (self->item_manager, row);
   g_assert (remaining < row->height * row->parent.n_items);
   *pos += remaining / row->height;
 

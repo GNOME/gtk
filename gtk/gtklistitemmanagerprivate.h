@@ -39,17 +39,17 @@ G_BEGIN_DECLS
 
 typedef struct _GtkListItemManager GtkListItemManager;
 typedef struct _GtkListItemManagerClass GtkListItemManagerClass;
-typedef struct _GtkListItemManagerItem GtkListItemManagerItem; /* sorry */
-typedef struct _GtkListItemManagerItemAugment GtkListItemManagerItemAugment;
+typedef struct _GtkListTile GtkListTile;
+typedef struct _GtkListTileAugment GtkListTileAugment;
 typedef struct _GtkListItemTracker GtkListItemTracker;
 
-struct _GtkListItemManagerItem
+struct _GtkListTile
 {
   GtkWidget *widget;
   guint n_items;
 };
 
-struct _GtkListItemManagerItemAugment
+struct _GtkListTileAugment
 {
   guint n_items;
 };
@@ -76,10 +76,10 @@ gpointer                gtk_list_item_manager_get_first         (GtkListItemMana
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
-guint                   gtk_list_item_manager_get_item_position (GtkListItemManager     *self,
-                                                                 gpointer                item);
-gpointer                gtk_list_item_manager_get_item_augment  (GtkListItemManager     *self,
-                                                                 gpointer                item);
+guint                   gtk_list_item_manager_get_tile_position (GtkListItemManager     *self,
+                                                                 gpointer                tile);
+gpointer                gtk_list_item_manager_get_tile_augment  (GtkListItemManager     *self,
+                                                                 gpointer                tile);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);

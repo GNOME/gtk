@@ -105,13 +105,13 @@ struct _GtkGridViewClass
 
 struct _Cell
 {
-  GtkListItemManagerItem parent;
+  GtkListTile parent;
   guint size; /* total, only counting cells in first column */
 };
 
 struct _CellAugment
 {
-  GtkListItemManagerItemAugment parent;
+  GtkListTileAugment parent;
   guint size; /* total, only counting first column */
 };
 
@@ -233,7 +233,7 @@ gtk_grid_view_get_cell_at_y (GtkGridView *self,
       tmp = gtk_rb_tree_node_get_left (cell);
       if (tmp)
         {
-          CellAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, tmp);
+          CellAugment *aug = gtk_list_item_manager_get_tile_augment (self->item_manager, tmp);
           if (y < aug->size)
             {
               cell = tmp;
@@ -330,7 +330,7 @@ gtk_grid_view_get_allocation_along (GtkListBase *base,
       tmp = gtk_rb_tree_node_get_left (cell);
       if (tmp)
         {
-          CellAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, tmp);
+          CellAugment *aug = gtk_list_item_manager_get_tile_augment (self->item_manager, tmp);
           if (pos < aug->parent.n_items)
             {
               cell = tmp;
@@ -421,7 +421,7 @@ gtk_grid_view_compute_total_height (GtkGridView *self)
   cell = gtk_list_item_manager_get_root (self->item_manager);
   if (cell == NULL)
     return 0;
-  aug = gtk_list_item_manager_get_item_augment (self->item_manager, cell);
+  aug = gtk_list_item_manager_get_tile_augment (self->item_manager, cell);
   return aug->size;
 }
 

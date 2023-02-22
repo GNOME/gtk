@@ -492,7 +492,7 @@ gtk_list_base_focus (GtkWidget        *widget,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   guint old, pos, n_items;
   GtkWidget *focus_child;
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
 
   focus_child = gtk_widget_get_focus_child (widget);
   /* focus is moving around fine inside the focus child, don't disturb it */
@@ -558,15 +558,15 @@ gtk_list_base_focus (GtkWidget        *widget,
   if (old == pos)
     return TRUE;
 
-  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-  if (item == NULL)
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (tile == NULL)
     return FALSE;
 
   /* This shouldn't really happen, but if it does, oh well */
-  if (item->widget == NULL)
+  if (tile->widget == NULL)
     return gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, TRUE, FALSE, FALSE);
 
-  return gtk_widget_child_focus (item->widget, direction);
+  return gtk_widget_child_focus (tile->widget, direction);
 }
 
 static gboolean
@@ -1648,17 +1648,17 @@ static void
 gtk_list_base_stop_rubberband (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
 
   if (!priv->rubberband)
     return;
 
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (item->widget)
-        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+      if (tile->widget)
+        gtk_widget_unset_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE);
     }
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
@@ -1673,7 +1673,7 @@ static void
 gtk_list_base_update_rubberband_selection (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
   GdkRectangle rect;
   guint pos;
   GtkBitset *rubberband_selection;
@@ -1684,19 +1684,19 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
   rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
 
   pos = 0;
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (item->widget)
+      if (tile->widget)
         {
           if (gtk_bitset_contains (rubberband_selection, pos))
-            gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+            gtk_widget_set_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
           else
-            gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+            gtk_widget_unset_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE);
         }
 
-      pos += item->n_items;
+      pos += tile->n_items;
     }
 
   gtk_bitset_unref (rubberband_selection);
@@ -2124,14 +2124,14 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
                                   gboolean     extend)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
   gboolean success;
 
-  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-  if (item == NULL)
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (tile == NULL)
     return FALSE;
 
-  if (!item->widget)
+  if (!tile->widget)
     {
       GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
 
@@ -2141,16 +2141,16 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
        * so we create a temporary one. */
       gtk_list_item_tracker_set_position (priv->item_manager, tracker, pos, 0, 0);
 
-      item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-      g_assert (item->widget);
+      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+      g_assert (tile->widget);
 
-      success = gtk_widget_grab_focus (item->widget);
+      success = gtk_widget_grab_focus (tile->widget);
 
       gtk_list_item_tracker_free (priv->item_manager, tracker);
     }
   else
     {
-      success = gtk_widget_grab_focus (item->widget);
+      success = gtk_widget_grab_focus (tile->widget);
     }
 
   if (!success)
