@@ -203,8 +203,8 @@ gtk_list_item_manager_get_nth (GtkListItemManager *self,
 }
 
 guint
-gtk_list_item_manager_get_tile_position (GtkListItemManager *self,
-                                         gpointer            tile)
+gtk_list_tile_get_position (GtkListItemManager *self,
+                            GtkListTile        *tile)
 {
   GtkListTile *parent, *left;
   int pos;
@@ -243,8 +243,8 @@ gtk_list_item_manager_get_tile_position (GtkListItemManager *self,
 }
 
 gpointer
-gtk_list_item_manager_get_tile_augment (GtkListItemManager *self,
-                                        gpointer            tile)
+gtk_list_tile_get_augment (GtkListItemManager *self,
+                           GtkListTile        *tile)
 {
   return gtk_rb_tree_get_augment (self->items, tile);
 }

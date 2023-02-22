@@ -76,10 +76,11 @@ gpointer                gtk_list_item_manager_get_first         (GtkListItemMana
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
-guint                   gtk_list_item_manager_get_tile_position (GtkListItemManager     *self,
-                                                                 gpointer                tile);
-gpointer                gtk_list_item_manager_get_tile_augment  (GtkListItemManager     *self,
-                                                                 gpointer                tile);
+
+guint                   gtk_list_tile_get_position              (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
+gpointer                gtk_list_tile_get_augment               (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);
