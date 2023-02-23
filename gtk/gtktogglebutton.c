@@ -67,6 +67,10 @@
  * `GtkToggleButton` has a single CSS node with name button. To differentiate
  * it from a plain `GtkButton`, it gets the `.toggle` style class.
  *
+ * ## Accessibility
+ *
+ * `GtkToggleButton` uses the %GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON role.
+ *
  * ## Creating two `GtkToggleButton` widgets.
  *
  * ```c
@@ -311,6 +315,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON);
 }
 
 static void
