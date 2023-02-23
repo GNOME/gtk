@@ -459,7 +459,7 @@ remove_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE (file));
 
   id = node_get_for_file (model, file);
-  if (id == 0)
+  if (id == GTK_INVALID_LIST_POSITION)
     return;
 
   node = get_node (model, id);
