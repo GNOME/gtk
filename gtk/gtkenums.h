@@ -1306,6 +1306,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_WIDGET: An interactive component of a graphical user
  *    interface. This is the role that GTK uses by default for widgets.
  * @GTK_ACCESSIBLE_ROLE_WINDOW: An application window.
+ * @GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON: A type of push button
+ *    which stays pressed until depressed by a second activation.
+ *    Since: 4.10
  *
  * The accessible role for a [iface@Accessible] implementation.
  *
@@ -1390,7 +1393,8 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_TREE_GRID,
   GTK_ACCESSIBLE_ROLE_TREE_ITEM,
   GTK_ACCESSIBLE_ROLE_WIDGET,
-  GTK_ACCESSIBLE_ROLE_WINDOW
+  GTK_ACCESSIBLE_ROLE_WINDOW,
+  GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON
 } GtkAccessibleRole;
 
 /**
