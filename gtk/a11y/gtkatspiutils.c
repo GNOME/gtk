@@ -273,6 +273,8 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_WINDOW:
       return ATSPI_ROLE_FRAME;
 
+    case GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON:
+      return ATSPI_ROLE_TOGGLE_BUTTON;
     default:
       break;
     }
