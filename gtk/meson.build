@@ -660,6 +660,10 @@ if os_unix and tracker3_enabled
 endif
 
 if os_unix
+  gtk_unix_sources += 'filetransferportal.c'
+endif
+
+if os_unix
   gtk_sources += gtk_unix_sources
 endif
 

@@ -116,6 +116,10 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
+#ifndef G_OS_WIN32
+#include "filetransferportalprivate.h"
+#endif
+
 #undef DEBUG_SELECTION
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
@@ -338,6 +342,7 @@ static GdkAtom text_plain_atom;
 static GdkAtom text_plain_utf8_atom;
 static GdkAtom text_plain_locale_atom;
 static GdkAtom text_uri_list_atom;
+static GdkAtom portal_files_atom;
 
 static void 
 init_atoms (void)
@@ -358,6 +363,7 @@ init_atoms (void)
       g_free (tmp);
 
       text_uri_list_atom = gdk_atom_intern_static_string ("text/uri-list");
+      portal_files_atom = gdk_atom_intern_static_string ("application/vnd.portal.files");
     }
 }
 
@@ -502,6 +508,10 @@ gtk_target_list_add_image_targets (GtkTargetList *list,
  * Appends the URI targets supported by #GtkSelectionData to
  * the target list. All targets are added with the same @info.
  * 
+ * Since 3.24.37, this includes the application/vnd.portal.files
+ * target when possible, to allow sending files between sandboxed
+ * apps via the FileTransfer portal.
+ *
  * Since: 2.6
  **/
 void 
@@ -512,7 +522,12 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
   
   init_atoms ();
 
-  gtk_target_list_add (list, text_uri_list_atom, 0, info);  
+  gtk_target_list_add (list, text_uri_list_atom, 0, info);
+
+#ifndef G_OS_WIN32
+  if (file_transfer_portal_supported ())
+    gtk_target_list_add (list, portal_files_atom, 0, info);
+#endif
 }
 
 /**
@@ -1835,6 +1850,9 @@ gtk_selection_data_get_pixbuf (const GtkSelectionData *selection_data)
  * Sets the contents of the selection from a list of URIs.
  * The string is converted to the form determined by
  * @selection_data->target.
+ *
+ * Since 3.24.37, this may involve using the FileTransfer
+ * portal to send files between sandboxed apps.
  * 
  * Returns: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
@@ -1880,6 +1898,57 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
 	  return TRUE;
 	}
     }
+#ifndef G_OS_WIN32
+  else if (selection_data->target == portal_files_atom &&
+           file_transfer_portal_supported ())
+    {
+      GPtrArray *a;
+      char **files;
+      char *key;
+      GError *error = NULL;
+
+      a = g_ptr_array_new ();
+
+      for (int i = 0; uris[i]; i++)
+        {
+          GFile *file;
+          char *path;
+
+          file = g_file_new_for_uri (uris[i]);
+          path = g_file_get_path (file);
+          g_object_unref (file);
+
+          if (path == NULL)
+            {
+              g_ptr_array_unref (a);
+              return FALSE;
+            }
+
+          g_ptr_array_add (a, path);
+        }
+
+      g_ptr_array_add (a, NULL);
+      files = (char **) g_ptr_array_free (a, FALSE);
+
+      key = file_transfer_portal_register_files_sync ((const char **)files, TRUE, &error);
+      if (key == NULL)
+        {
+          g_strfreev (files);
+          g_warning ("%s", error->message);
+          g_error_free (error);
+          return FALSE;
+        }
+
+      gtk_selection_data_set (selection_data,
+                              portal_files_atom,
+                              8, (guchar *)key, strlen (key));
+
+      g_strfreev (files);
+      g_free (key);
+
+      return TRUE;
+    }
+#endif
 
   return FALSE;
 }
@@ -1889,6 +1958,9 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
  * @selection_data: a #GtkSelectionData
  * 
  * Gets the contents of the selection data as array of URIs.
+ *
+ * Since 3.24.37, this may involve using the FileTransfer
+ * portal to send files between sandboxed apps.
  *
  * Returns:  (array zero-terminated=1) (element-type utf8) (transfer full): if
  *   the selection data contains a list of
@@ -1922,6 +1994,40 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
       
       g_strfreev (list);
     }
+#ifndef G_OS_WIN32
+  else if (selection_data->length >= 0 &&
+           selection_data->type == portal_files_atom &&
+           file_transfer_portal_supported ())
+    {
+      char *key;
+      GError *error = NULL;
+      char **files;
+
+      key = g_strndup ((char *) selection_data->data, selection_data->length);
+      files = file_transfer_portal_retrieve_files_sync (key, &error);
+      if (error)
+        {
+          g_warning ("%s", error->message);
+          g_error_free (error);
+        }
+      g_free (key);
+
+      if (files)
+        {
+          GPtrArray *uris = g_ptr_array_new ();
+
+          for (int i = 0; files[i]; i++)
+            {
+              GFile *file = g_file_new_for_path (files[i]);
+              g_ptr_array_add (uris, g_file_get_uri (file));
+              g_object_unref (file);
+            }
+
+          g_ptr_array_add (uris, NULL);
+          result = (char **) g_ptr_array_free (uris, FALSE);
+        }
+    }
+#endif
 
   return result;
 }
@@ -2246,7 +2352,8 @@ gtk_targets_include_uri (GdkAtom *targets,
 
   for (i = 0; i < n_targets; i++)
     {
-      if (targets[i] == text_uri_list_atom)
+      if (targets[i] == text_uri_list_atom ||
+          targets[i] == portal_files_atom)
 	{
 	  result = TRUE;
 	  break;
