@@ -8486,19 +8486,34 @@ gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
 static GtkAccessible *
 gtk_widget_accessible_get_accessible_parent (GtkAccessible *self)
 {
-  return GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self)));
+  GtkWidget *parent = _gtk_widget_get_parent (GTK_WIDGET (self));
+
+  if (parent == NULL)
+    return NULL;
+
+  return GTK_ACCESSIBLE (g_object_ref (parent));
 }
 
 static GtkAccessible *
 gtk_widget_accessible_get_next_accessible_sibling (GtkAccessible *self)
 {
-  return GTK_ACCESSIBLE (gtk_widget_get_next_sibling (GTK_WIDGET (self)));
+  GtkWidget *sibling = _gtk_widget_get_next_sibling (GTK_WIDGET (self));
+
+  if (sibling == NULL)
+    return NULL;
+
+  return GTK_ACCESSIBLE (g_object_ref (sibling));
 }
 
 static GtkAccessible *
 gtk_widget_accessible_get_first_accessible_child (GtkAccessible *self)
 {
-  return GTK_ACCESSIBLE (gtk_widget_get_first_child (GTK_WIDGET (self)));
+  GtkWidget *child = _gtk_widget_get_first_child (GTK_WIDGET (self));
+
+  if (child == NULL)
+    return NULL;
+
+  return GTK_ACCESSIBLE (g_object_ref (child));
 }
 
 static gboolean

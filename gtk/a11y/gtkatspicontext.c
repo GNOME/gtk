@@ -331,7 +331,6 @@ collect_relations (GtkAtSpiContext *self,
   };
   GtkAccessibleValue *value;
   GList *list, *l;
-  GtkATContext *target_ctx;
   int i;
 
   for (i = 0; i < G_N_ELEMENTS (map); i++)
@@ -346,13 +345,16 @@ collect_relations (GtkAtSpiContext *self,
 
       for (l = list; l; l = l->next)
         {
-          target_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (l->data));
+          GtkATContext *target_ctx =
+            gtk_accessible_get_at_context (GTK_ACCESSIBLE (l->data));
 
           /* Realize the ATContext of the target, so we can ask for its ref */
           gtk_at_context_realize (target_ctx);
 
           g_variant_builder_add (&b, "@(so)",
                                  gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (target_ctx)));
+
+          g_object_unref (target_ctx);
         }
 
       g_variant_builder_add (builder, "(ua(so))", map[i].s, &b);
@@ -364,24 +366,30 @@ static int
 get_index_in (GtkAccessible *parent,
               GtkAccessible *child)
 {
-  GtkAccessible *candidate;
-  guint res;
-
   if (parent == NULL)
     return -1;
 
-  res = 0;
+  guint res = 0;
+  GtkAccessible *candidate;
   for (candidate = gtk_accessible_get_first_accessible_child (parent);
        candidate != NULL;
        candidate = gtk_accessible_get_next_accessible_sibling (candidate))
     {
       if (candidate == child)
-        return res;
+        {
+          g_object_unref (candidate);
+          return res;
+        }
 
       if (!gtk_accessible_should_present (candidate))
-        continue;
+        {
+          g_object_unref (candidate);
+          continue;
+        }
 
       res++;
+
+      g_object_unref (candidate);
     }
 
   return -1;
@@ -393,7 +401,13 @@ get_index_in_parent (GtkAccessible *accessible)
   GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
 
   if (parent != NULL)
-    return get_index_in (parent, accessible);
+    {
+      int res = get_index_in (parent, accessible);
+
+      g_object_unref (parent);
+
+      return res;
+    }
 
   return -1;
 }
@@ -429,7 +443,6 @@ static GVariant *
 get_parent_context_ref (GtkAccessible *accessible)
 {
   GVariant *res = NULL;
-
   GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
 
   if (parent == NULL)
@@ -438,13 +451,19 @@ get_parent_context_ref (GtkAccessible *accessible)
       GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
 
       res = gtk_at_spi_root_to_ref (self->root);
+
+      g_object_unref (context);
     }
   else
     {
       GtkATContext *parent_context = gtk_accessible_get_at_context (parent);
+
       gtk_at_context_realize (parent_context);
 
       res = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (parent_context));
+
+      g_object_unref (parent_context);
+      g_object_unref (parent);
     }
 
   if (res == NULL)
@@ -525,30 +544,37 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       GtkATContext *context = NULL;
       GtkAccessible *accessible;
+      GtkAccessible *child = NULL;
       int idx, presentable_idx;
 
       g_variant_get (parameters, "(i)", &idx);
 
       accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
 
-      GtkAccessible *child;
-
       presentable_idx = 0;
+
       for (child = gtk_accessible_get_first_accessible_child (accessible);
            child != NULL;
            child = gtk_accessible_get_next_accessible_sibling (child))
         {
           if (!gtk_accessible_should_present (child))
+            {
+              g_object_unref (child);
               continue;
+            }
 
           if (presentable_idx == idx)
             break;
-          presentable_idx++;
 
+          presentable_idx += 1;
+
+          g_object_unref (child);
         }
-      if (child)
+
+      if (child != NULL)
         {
           context = gtk_accessible_get_at_context (child);
+          g_object_unref (child);
         }
 
       if (context == NULL)
@@ -564,22 +590,26 @@ handle_accessible_method (GDBusConnection       *connection,
       gtk_at_context_realize (context);
 
       GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
-
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", ref));
+
+      g_object_unref (context);
     }
   else if (g_strcmp0 (method_name, "GetChildren") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(so)"));
 
       GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+      GtkAccessible *child = NULL;
 
-      GtkAccessible *child;
       for (child = gtk_accessible_get_first_accessible_child (accessible);
            child != NULL;
            child = gtk_accessible_get_next_accessible_sibling (child))
-      {
+        {
           if (!gtk_accessible_should_present (child))
-            continue;
+            {
+              g_object_unref (child);
+              continue;
+            }
 
           GtkATContext *context = gtk_accessible_get_at_context (child);
 
@@ -590,6 +620,9 @@ handle_accessible_method (GDBusConnection       *connection,
 
           if (ref != NULL)
             g_variant_builder_add (&builder, "@(so)", ref);
+
+          g_object_unref (context);
+          g_object_unref (child);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
@@ -878,8 +911,6 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN)
     {
-      GtkAccessible *parent;
-      GtkATContext *context;
       GtkAccessibleChildChange change;
 
       value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_HIDDEN);
@@ -895,10 +926,15 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         }
       else
         {
-          parent = gtk_accessible_get_accessible_parent (accessible);
+          GtkAccessible *parent =
+            gtk_accessible_get_accessible_parent (accessible);
+          GtkATContext *context =
+            gtk_accessible_get_at_context (parent);
 
-          context = gtk_accessible_get_at_context (parent);
           gtk_at_context_child_changed (context, change, accessible);
+
+          g_object_unref (context);
+          g_object_unref (parent);
         }
     }
 
@@ -1147,9 +1183,18 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   int idx = 0;
 
   if (parent == NULL)
-    idx = -1;
+    {
+      idx = -1;
+    }
   else if (parent == accessible)
-    idx = get_index_in (accessible, child);
+    {
+      idx = get_index_in (accessible, child);
+      g_object_unref (parent);
+    }
+  else
+    {
+      g_object_unref (parent);
+    }
 
   if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
     emit_children_changed (self,
@@ -1161,6 +1206,8 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
                            GTK_AT_SPI_CONTEXT (child_context),
                            idx,
                            GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
+
+  g_object_unref (child_context);
 }
 /* }}} */
 /* {{{ D-Bus Registration */
@@ -1729,15 +1776,19 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
   int n_children = 0;
 
   GtkAccessible *child = NULL;
-
   for (child = gtk_accessible_get_first_accessible_child (accessible);
        child != NULL;
        child = gtk_accessible_get_next_accessible_sibling (child))
     {
       if (!gtk_accessible_should_present (child))
-        continue;
+        {
+          g_object_unref (child);
+          continue;
+        }
 
-      n_children++;
+      n_children += 1;
+
+      g_object_unref (child);
     }
 
   return n_children;

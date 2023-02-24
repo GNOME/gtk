@@ -94,7 +94,9 @@ listbox_handle_method (GDBusConnection       *connection,
       else
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (counter.child));
-          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_dbus_method_invocation_return_value (invocation,
+            g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_object_unref (ctx);
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)
@@ -271,7 +273,8 @@ listview_handle_method (GDBusConnection       *connection,
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
           g_dbus_method_invocation_return_value (invocation,
-              g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+            g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_object_unref (ctx);
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)
@@ -495,7 +498,9 @@ flowbox_handle_method (GDBusConnection       *connection,
       else
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (counter.child));
-          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_dbus_method_invocation_return_value (invocation,
+            g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_object_unref (ctx);
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)
@@ -761,7 +766,8 @@ stackswitcher_handle_method (GDBusConnection       *connection,
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
           g_dbus_method_invocation_return_value (invocation,
-               g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+            g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_object_unref (ctx);
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)
@@ -891,7 +897,8 @@ notebook_handle_method (GDBusConnection       *connection,
         {
           GtkATContext *ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
           g_dbus_method_invocation_return_value (invocation,
-               g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+            g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (ctx))));
+          g_object_unref (ctx);
         }
     }
   else if (g_strcmp0 (method_name, "SelectChild") == 0)

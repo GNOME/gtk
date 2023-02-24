@@ -158,9 +158,12 @@ component_handle_method (GDBusConnection       *connection,
         }
       else
         {
-          GtkAtSpiContext *ctx = GTK_AT_SPI_CONTEXT (gtk_accessible_get_at_context (GTK_ACCESSIBLE (child)));
+          GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+          GtkAtSpiContext *ctx = GTK_AT_SPI_CONTEXT (context);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (ctx)));
+
+          g_object_unref (context);
         }
     }
   else if (g_strcmp0 (method_name, "GetExtents") == 0)
