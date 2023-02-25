@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /**
@@ -63,7 +63,6 @@
 
 #include "gtkactionhelperprivate.h"
 #include "gtkbuildable.h"
-#include "gtkcheckbutton.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkbinlayout.h"
@@ -829,8 +828,6 @@ gtk_button_set_label (GtkButton   *button,
           gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
           gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
         }
-      if (GTK_IS_CHECK_BUTTON (button))
-        gtk_label_set_xalign (GTK_LABEL (child), 0.0);
 
       gtk_button_set_child (button,  child);
     }
