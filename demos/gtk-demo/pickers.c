@@ -13,20 +13,13 @@
 static GtkWidget *app_picker;
 
 static void
-file_opened (GObject *source,
-             GAsyncResult *result,
-             void *data)
+set_file (GFile    *file,
+          gpointer  data)
 {
-  GFile *file;
-  GError *error = NULL;
   char *name;
-
-  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
 
   if (!file)
     {
-      g_print ("%s\n", error->message);
-      g_error_free (error);
       gtk_widget_set_sensitive (app_picker, FALSE);
       g_object_set_data (G_OBJECT (app_picker), "file", NULL);
       return;
@@ -38,6 +31,25 @@ file_opened (GObject *source,
 
   gtk_widget_set_sensitive (app_picker, TRUE);
   g_object_set_data_full (G_OBJECT (app_picker), "file", g_object_ref (file), g_object_unref);
+}
+
+static void
+file_opened (GObject *source,
+             GAsyncResult *result,
+             void *data)
+{
+  GFile *file;
+  GError *error = NULL;
+
+  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
+
+  if (!file)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+    }
+
+  set_file (file, data);
 }
 
 static gboolean
@@ -130,11 +142,28 @@ launch_uri (GtkButton *picker)
   g_object_unref (launcher);
 }
 
+static gboolean
+on_drop (GtkDropTarget *target,
+         const GValue  *value,
+         double         x,
+         double         y,
+         gpointer       data)
+{
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      set_file (g_value_get_object (value), data);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *table, *label, *picker, *button;
+  GtkDropTarget *drop_target;
 
   if (!window)
   {
@@ -179,7 +208,13 @@ do_pickers (GtkWidget *do_widget)
 
     picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
     button = gtk_button_new_from_icon_name ("document-open-symbolic");
+
     label = gtk_label_new ("None");
+
+    drop_target = gtk_drop_target_new (G_TYPE_FILE, GDK_ACTION_COPY);
+    g_signal_connect (drop_target, "drop", G_CALLBACK (on_drop), label);
+    gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (drop_target));
+
     gtk_label_set_xalign (GTK_LABEL (label), 0.);
     gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
     gtk_widget_set_hexpand (label, TRUE);
