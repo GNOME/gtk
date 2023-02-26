@@ -66,6 +66,8 @@ You can compile the program above with GCC using:
 gcc $( pkg-config --cflags gtk4 ) -o example-0 example-0.c $( pkg-config --libs gtk4 )
 ```
 
+If the above compilation does not work due to an error regarding "G_APPLICATION_DEFAULT_FLAGS" this could be due to a recent change in GLib/GIO. If your distribution is using a slightly older version you will want to replace this with G_APPLICATION_FLAGS_NONE for this example and others in this documentation.
+
 For more information on how to compile a GTK application, please
 refer to the [Compiling GTK Applications](compiling.html)
 section in this reference.
