@@ -355,15 +355,6 @@ void              gtk_widget_remove_surface_transform_changed_callback (GtkWidge
 
 gboolean          gtk_widget_can_activate       (GtkWidget *widget);
 
-/* focus vfuncs for non-focusable containers with focusable children */
-gboolean gtk_widget_grab_focus_child (GtkWidget        *widget);
-gboolean gtk_widget_focus_child      (GtkWidget        *widget,
-                                      GtkDirectionType  direction);
-/* focus vfuncs for focusable widgets with children that don't receive focus */
-gboolean gtk_widget_grab_focus_self  (GtkWidget        *widget);
-gboolean gtk_widget_focus_self       (GtkWidget        *widget,
-                                      GtkDirectionType  direction);
-
 void    gtk_widget_update_orientation   (GtkWidget      *widget,
                                          GtkOrientation  orientation);
 

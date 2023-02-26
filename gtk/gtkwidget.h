@@ -979,6 +979,17 @@ void                    gtk_widget_class_set_accessible_role    (GtkWidgetClass 
 GDK_AVAILABLE_IN_ALL
 GtkAccessibleRole       gtk_widget_class_get_accessible_role    (GtkWidgetClass    *widget_class);
 
+GDK_AVAILABLE_IN_4_12
+gboolean                gtk_widget_grab_focus_child             (GtkWidget        *widget);
+GDK_AVAILABLE_IN_4_12
+gboolean                gtk_widget_focus_child                  (GtkWidget        *widget,
+                                                                 GtkDirectionType  direction);
+GDK_AVAILABLE_IN_4_12
+gboolean                gtk_widget_grab_focus_self              (GtkWidget        *widget);
+GDK_AVAILABLE_IN_4_12
+gboolean                gtk_widget_focus_self                   (GtkWidget        *widget,
+                                                                 GtkDirectionType  direction);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
