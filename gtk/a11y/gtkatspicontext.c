@@ -303,6 +303,13 @@ collect_states (GtkAtSpiContext    *self,
         set_atspi_state (&states, ATSPI_STATE_HAS_POPUP);
     }
 
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE);
+      if (gtk_autocomplete_accessible_value_get (value) != GTK_ACCESSIBLE_AUTOCOMPLETE_NONE)
+        set_atspi_state (&states, ATSPI_STATE_SUPPORTS_AUTOCOMPLETION);
+    }
+
   g_variant_builder_add (builder, "u", (guint32) (states & 0xffffffff));
   g_variant_builder_add (builder, "u", (guint32) (states >> 32));
 }
