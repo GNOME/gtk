@@ -4035,6 +4035,8 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->height = adjusted.height;
   priv->baseline = baseline;
 
+  priv->alloc_needed_on_child = FALSE;
+
   if (priv->layout_manager != NULL)
     {
       gtk_layout_manager_allocate (priv->layout_manager, widget,
@@ -4062,7 +4064,6 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
-  priv->alloc_needed_on_child = FALSE;
 
   gtk_widget_update_paintables (widget);
 
