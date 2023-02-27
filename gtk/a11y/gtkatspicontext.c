@@ -282,6 +282,13 @@ collect_states (GtkAtSpiContext    *self,
         }
     }
 
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED))
+    {
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED);
+      if (gtk_boolean_accessible_value_get (value))
+        set_atspi_state (&states, ATSPI_STATE_REQUIRED);
+    }
+
   g_variant_builder_add (builder, "u", (guint32) (states & 0xffffffff));
   g_variant_builder_add (builder, "u", (guint32) (states >> 32));
 }
