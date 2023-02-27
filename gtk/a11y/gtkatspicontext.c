@@ -246,7 +246,7 @@ collect_states (GtkAtSpiContext    *self,
         case GTK_ACCESSIBLE_INVALID_TRUE:
         case GTK_ACCESSIBLE_INVALID_GRAMMAR:
         case GTK_ACCESSIBLE_INVALID_SPELLING:
-          set_atspi_state (&states, ATSPI_STATE_INVALID);
+          set_atspi_state (&states, ATSPI_STATE_INVALID_ENTRY);
           break;
         case GTK_ACCESSIBLE_INVALID_FALSE:
         default:
