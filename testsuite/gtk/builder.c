@@ -2796,6 +2796,110 @@ test_child_dispose_order (void)
   g_assert_cmpuint (data.destroy_count, ==, 2);
 }
 
+#define MY_GTK_BUILDABLE_TEMPLATE "\
+<interface>\n\
+ <template class=\"MyGtkBuildable\" parent=\"GtkWidget\">\n\
+  <custom/>\n\
+  <custom>\n\
+    <custom/>\n\
+  </custom>\n\
+ </template>\n\
+</interface>\n"
+
+#define MY_TYPE_GTK_BUILDABLE (my_gtk_buildable_get_type ())
+G_DECLARE_FINAL_TYPE          (MyGtkBuildable, my_gtk_buildable, MY, GTK_BUILDABLE, GtkWidget)
+
+struct _MyGtkBuildable
+{
+  GtkWidget parent_instance;
+};
+
+static void my_gtk_buildable_buildable_init (GtkBuildableIface *iface);
+static GtkBuildableIface *parent_buildable_iface;
+
+G_DEFINE_TYPE_WITH_CODE (MyGtkBuildable, my_gtk_buildable, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                my_gtk_buildable_buildable_init));
+
+static void
+my_gtk_buildable_init (MyGtkBuildable *buildable)
+{
+  gtk_widget_init_template (GTK_WIDGET (buildable));
+}
+
+static void
+my_gtk_buildable_class_init (MyGtkBuildableClass *klass)
+{
+  GBytes *template = g_bytes_new_static (MY_GTK_BUILDABLE_TEMPLATE, strlen (MY_GTK_BUILDABLE_TEMPLATE));
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template (widget_class, template);
+}
+
+static const GtkBuildableParser custom_parser = {
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+
+static gboolean
+my_gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                   GtkBuilder         *builder,
+                                   GObject            *child,
+                                   const char         *tagname,
+                                   GtkBuildableParser *parser,
+                                   gpointer           *parser_data)
+{
+  if (strcmp (tagname, "custom") == 0) {
+    *parser = custom_parser;
+    *parser_data = NULL;
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+static void
+my_gtk_buildable_custom_finished (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  GObject      *child,
+                                  const char   *tagname,
+                                  gpointer      user_data)
+{
+  if (strcmp (tagname, "custom") == 0)
+    return;
+
+  parent_buildable_iface->custom_finished (buildable, builder, child,
+                                           tagname, user_data);
+}
+
+static void
+my_gtk_buildable_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->custom_tag_start = my_gtk_buildable_custom_tag_start;
+  iface->custom_finished = my_gtk_buildable_custom_finished;
+}
+
+static void
+test_buildable (void)
+{
+  MyGtkBuildable *my_gtk_buildable;
+
+  /* make sure the type we are trying to register does not exist */
+  g_assert_false (g_type_from_name ("MyGtkBuildable"));
+
+  /* create the template object */
+  my_gtk_buildable = g_object_new (MY_TYPE_GTK_BUILDABLE, NULL);
+
+  /* Check everything is fine */
+  g_assert_true (g_type_from_name ("MyGtkBuildable"));
+  g_assert_true (MY_IS_GTK_BUILDABLE (my_gtk_buildable));
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2844,6 +2948,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Transforms", test_transforms);
   g_test_add_func ("/Builder/Expressions", test_expressions);
   g_test_add_func ("/Builder/Child Dispose Order", test_child_dispose_order);
+  g_test_add_func ("/Builder/Buildable", test_buildable);
 
   return g_test_run();
 }
