@@ -1726,6 +1726,7 @@ stack_remove (GtkStack  *stack,
   if (priv->last_visible_child == child_info)
     priv->last_visible_child = NULL;
 
+  gtk_accessible_set_accessible_parent (GTK_ACCESSIBLE (child), NULL, NULL);
   gtk_widget_unparent (child);
 
   g_clear_object (&child_info->widget);
