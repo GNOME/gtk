@@ -3388,11 +3388,15 @@ gtk_text_insert_text (GtkText    *self,
    * The incoming text may a password or other secret. We make sure
    * not to copy it into temporary buffers.
    */
+  if (priv->change_count == 0)
+    gtk_text_history_begin_irreversible_action (priv->history);
   begin_change (self);
 
   n_inserted = gtk_entry_buffer_insert_text (get_buffer (self), *position, text, n_chars);
 
   end_change (self);
+  if (priv->change_count == 0)
+    gtk_text_history_end_irreversible_action (priv->history);
 
   if (n_inserted != n_chars)
     gtk_widget_error_bell (GTK_WIDGET (self));
@@ -3414,11 +3418,16 @@ gtk_text_delete_text (GtkText *self,
   if (start_pos == end_pos)
     return;
 
+  if (priv->change_count == 0)
+    gtk_text_history_begin_irreversible_action (priv->history);
   begin_change (self);
 
   gtk_entry_buffer_delete_text (get_buffer (self), start_pos, end_pos - start_pos);
 
   end_change (self);
+  if (priv->change_count == 0)
+    gtk_text_history_end_irreversible_action (priv->history);
+
   update_placeholder_visibility (self);
   if (priv->propagate_text_width)
     gtk_widget_queue_resize (GTK_WIDGET (self));
