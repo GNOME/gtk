@@ -243,6 +243,7 @@ struct _GtkTextPrivate
   guint         populate_all            : 1;
   guint         propagate_text_width    : 1;
   guint         text_handles_enabled    : 1;
+  guint         enable_undo             : 1;
 };
 
 struct _GtkTextPasswordHint
@@ -392,6 +393,9 @@ static void        gtk_text_set_max_width_chars  (GtkText    *self,
                                                   int         n_chars);
 static void        gtk_text_set_alignment        (GtkText    *self,
                                                   float       xalign);
+
+static void        gtk_text_set_enable_undo      (GtkText    *self,
+                                                  gboolean    enable_undo);
 
 /* Default signal handlers
  */
@@ -552,6 +556,7 @@ static void         begin_change                       (GtkText *self);
 static void         end_change                         (GtkText *self);
 static void         emit_changed                       (GtkText *self);
 
+static void         gtk_text_update_history           (GtkText *self);
 static void         gtk_text_update_clipboard_actions (GtkText *self);
 static void         gtk_text_update_emoji_action      (GtkText *self);
 static void         gtk_text_update_handles           (GtkText *self);
@@ -1593,11 +1598,7 @@ gtk_text_set_property (GObject      *object,
       break;
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_ENABLE_UNDO:
-      if (g_value_get_boolean (value) != gtk_text_history_get_enabled (priv->history))
-        {
-          gtk_text_history_set_enabled (priv->history, g_value_get_boolean (value));
-          g_object_notify_by_pspec (object, pspec);
-        }
+      gtk_text_set_enable_undo (self, g_value_get_boolean (value));
       break;
 
     /* GtkText properties */
@@ -1723,7 +1724,7 @@ gtk_text_get_property (GObject    *object,
       break;
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_ENABLE_UNDO:
-      g_value_set_boolean (value, gtk_text_history_get_enabled (priv->history));
+      g_value_set_boolean (value, priv->enable_undo);
       break;
 
     /* GtkText properties */
@@ -1849,6 +1850,7 @@ gtk_text_init (GtkText *self)
   priv->cursor_alpha = 1.0;
   priv->invisible_char = 0;
   priv->history = gtk_text_history_new (&history_funcs, self);
+  priv->enable_undo = TRUE;
 
   gtk_text_history_set_max_undo_levels (priv->history, DEFAULT_MAX_UNDO);
 
@@ -5503,6 +5505,7 @@ gtk_text_set_editable (GtkText  *self,
       gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                                is_editable ? priv->im_context : NULL);
 
+      gtk_text_update_history (self);
       gtk_text_update_clipboard_actions (self);
       gtk_text_update_emoji_action (self);
 
@@ -5583,7 +5586,7 @@ gtk_text_set_visibility (GtkText  *self,
       gtk_text_recompute (self);
 
       /* disable undo when invisible text is used */
-      gtk_text_history_set_enabled (priv->history, visible);
+      gtk_text_update_history (self);
 
       gtk_text_update_clipboard_actions (self);
     }
@@ -7264,4 +7267,29 @@ gtk_text_history_select_cb (gpointer funcs_data,
   gtk_editable_select_region (GTK_EDITABLE (text),
                               selection_insert,
                               selection_bound);
+}
+
+static void
+gtk_text_set_enable_undo (GtkText  *self,
+                          gboolean  enable_undo)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (priv->enable_undo == enable_undo)
+    return;
+
+  priv->enable_undo = enable_undo;
+  gtk_text_update_history (self);
+  g_object_notify (G_OBJECT (self), "enable-undo");
+}
+
+static void
+gtk_text_update_history (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  gtk_text_history_set_enabled (priv->history,
+                                priv->enable_undo &&
+                                priv->visible &&
+                                priv->editable);
 }
