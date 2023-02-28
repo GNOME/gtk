@@ -78,7 +78,10 @@ update_image (GtkFileThumbnail *self)
   int scale;
 
   if (!g_file_info_has_attribute (self->info, G_FILE_ATTRIBUTE_STANDARD_ICON))
-    return FALSE;
+    {
+      gtk_image_clear (GTK_IMAGE (self->image));
+      return FALSE;
+    }
 
   scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
@@ -128,7 +131,10 @@ static void
 get_thumbnail (GtkFileThumbnail *self)
 {
   if (!self->info)
-    return;
+    {
+      gtk_image_clear (GTK_IMAGE (self->image));
+      return;
+    }
 
   if (!update_image (self))
     {
