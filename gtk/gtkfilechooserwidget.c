@@ -2571,7 +2571,11 @@ set_select_multiple (GtkFileChooserWidget *impl,
   if (select_multiple)
     impl->selection_model = GTK_SELECTION_MODEL (gtk_multi_selection_new (model));
   else
-    impl->selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+    {
+      impl->selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+      gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (impl->selection_model), TRUE);
+      gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (impl->selection_model), FALSE);
+    }
 
   g_signal_connect (impl->selection_model, "selection-changed",
                     G_CALLBACK (list_selection_changed), impl);
@@ -7289,6 +7293,9 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
                     G_CALLBACK (list_items_changed), impl);
 
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (impl->selection_model), G_LIST_MODEL (impl->sort_model));
+  gtk_single_selection_set_can_unselect (GTK_SINGLE_SELECTION (impl->selection_model), TRUE);
+  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (impl->selection_model), FALSE);
+
   gtk_sort_list_model_set_model (impl->sort_model, G_LIST_MODEL (impl->filter_model));
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view), impl->selection_model);
