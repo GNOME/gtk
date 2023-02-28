@@ -1608,6 +1608,7 @@ create_subparser (GObject       *object,
   subparser->object = object;
   subparser->child = child;
   subparser->tagname = g_strdup (element_name);
+  subparser->level = 1;
   subparser->start = element_name;
   subparser->parser = g_memdup2 (parser, sizeof (GtkBuildableParser));
   subparser->data = user_data;
@@ -1638,6 +1639,8 @@ subparser_start (GtkBuildableParseContext  *context,
 
   if (subparser->start)
     {
+      subparser->level++;
+
       if (subparser->parser->start_element)
         subparser->parser->start_element (context,
                                           element_name, names, values,
@@ -1653,6 +1656,8 @@ subparser_end (GtkBuildableParseContext  *context,
                ParserData                *data,
                GError                   **error)
 {
+  data->subparser->level--;
+
   if (data->subparser->parser->end_element)
     data->subparser->parser->end_element (context, element_name,
                                           data->subparser->data, error);
@@ -1660,8 +1665,10 @@ subparser_end (GtkBuildableParseContext  *context,
   if (*error)
     return;
 
-  if (strcmp (data->subparser->start, element_name) != 0)
+  if (data->subparser->level > 0)
     return;
+
+  g_assert (strcmp (data->subparser->start, element_name) == 0);
 
   gtk_buildable_custom_tag_end (GTK_BUILDABLE (data->subparser->object),
                                 data->builder,

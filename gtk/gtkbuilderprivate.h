@@ -165,6 +165,7 @@ struct _GtkBuildableParseContext {
 typedef struct {
   GtkBuildableParser *parser;
   char *tagname;
+  int level;
   const char *start;
   gpointer data;
   GObject *object;
