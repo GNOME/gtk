@@ -1,5 +1,57 @@
-Overview of Changes in 4.9.5, xx-xx-xxxx
-========================================
+Overview of Changes in 4.10.0, xx-xx-xxxx
+=========================================
+
+* GtkTextView
+ - Document hanging indentation
+
+* GtkListView
+ - Fix a size allocation problem
+
+* GtkFileChooser
+ - Fix paned behavior
+ - Fix a crash
+
+* GtkText
+ - Fix various problems with undo
+
+* Accessibility
+ - Allow setting accessible parents and siblings
+ - Add a role for toggle buttons
+ - Miscellaneous property fixes and improvements
+
+* gtk
+ - Improve the handling resize-during-size-allocate
+
+* gdk
+ - Introduce GdkTextureDownloader and use it
+ - Make gdk_texture_get_format public
+
+* gsk
+ - Make mask nodes more versatile
+
+* X11
+ - Fix key handling during DND
+
+* Tools
+ - gtk-builder-tool: Try harder to handle templates
+ - gtk-builder-tool: Prefer properties over <child>
+
+* Translation updates
+ Basque
+ Belarusian
+ Bulgarian
+ Indonesian
+ Galician
+ Georgian
+ German
+ Hebrew
+ Lithuanian
+ Portuguese
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.9.4, 12-02-2023
 ========================================
