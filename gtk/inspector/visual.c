@@ -630,6 +630,8 @@ fill_icons (const char *path,
   const char *dir_entry;
   GDir *dir;
 
+  g_print ("fill icons from %s\n", path);
+
   dir = g_dir_open (path, 0, NULL);
   if (!dir)
     return;
@@ -658,6 +660,7 @@ init_icons (GtkInspectorVisual *vis)
   GList *list, *l;
   int i;
   GtkStringList *names;
+  const char * const *dirs;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -668,6 +671,14 @@ init_icons (GtkInspectorVisual *vis)
   path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
   fill_icons (path, t);
   g_free (path);
+
+  dirs = g_get_system_data_dirs ();
+  for (i = 0; dirs[i]; i++)
+    {
+      path = g_build_filename (dirs[i], "icons", NULL);
+      fill_icons (path, t);
+      g_free (path);
+    }
 
   list = NULL;
   g_hash_table_iter_init (&iter, t);
@@ -723,6 +734,7 @@ init_cursors (GtkInspectorVisual *vis)
   GList *list, *l;
   GtkStringList *names;
   int i;
+  const char * const *dirs;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -733,6 +745,14 @@ init_cursors (GtkInspectorVisual *vis)
   path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
   fill_cursors (path, t);
   g_free (path);
+
+  dirs = g_get_system_data_dirs ();
+  for (i = 0; dirs[i]; i++)
+    {
+      path = g_build_filename (dirs[i], "icons", NULL);
+      fill_cursors (path, t);
+      g_free (path);
+    }
 
   list = NULL;
   g_hash_table_iter_init (&iter, t);
