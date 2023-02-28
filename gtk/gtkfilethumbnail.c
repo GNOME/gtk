@@ -104,10 +104,19 @@ thumbnail_queried_cb (GObject      *object,
   GtkFileThumbnail *self = user_data; /* might be unreffed if operation was cancelled */
   GFile *file = G_FILE (object);
   GFileInfo *queried;
+  GError *error = NULL;
 
-  queried = g_file_query_info_finish (file, result, NULL);
-  if (queried == NULL)
-    return;
+  queried = g_file_query_info_finish (file, result, &error);
+
+  if (error)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
+      g_clear_error (&error);
+      return;
+    }
+
+  g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
 
   copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
   copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
@@ -147,7 +156,6 @@ get_thumbnail (GtkFileThumbnail *self)
       self->cancellable = g_cancellable_new ();
 
       file = _gtk_file_info_get_file (self->info);
-      g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
       g_file_query_info_async (file,
                                G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
                                G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
