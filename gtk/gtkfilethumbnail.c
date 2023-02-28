@@ -91,7 +91,6 @@ update_image (GtkFileThumbnail *self)
   g_object_unref (icon);
 
   return TRUE;
-
 }
 
 static void
