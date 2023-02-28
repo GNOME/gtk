@@ -78,7 +78,10 @@ update_image (GtkFileThumbnail *self)
   int scale;
 
   if (!g_file_info_has_attribute (self->info, G_FILE_ATTRIBUTE_STANDARD_ICON))
-    return FALSE;
+    {
+      gtk_image_clear (GTK_IMAGE (self->image));
+      return FALSE;
+    }
 
   scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
@@ -91,7 +94,6 @@ update_image (GtkFileThumbnail *self)
   g_object_unref (icon);
 
   return TRUE;
-
 }
 
 static void
@@ -102,10 +104,19 @@ thumbnail_queried_cb (GObject      *object,
   GtkFileThumbnail *self = user_data; /* might be unreffed if operation was cancelled */
   GFile *file = G_FILE (object);
   GFileInfo *queried;
+  GError *error = NULL;
 
-  queried = g_file_query_info_finish (file, result, NULL);
-  if (queried == NULL)
-    return;
+  queried = g_file_query_info_finish (file, result, &error);
+
+  if (error)
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
+      g_clear_error (&error);
+      return;
+    }
+
+  g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
 
   copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
   copy_attribute (self->info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
@@ -129,7 +140,10 @@ static void
 get_thumbnail (GtkFileThumbnail *self)
 {
   if (!self->info)
-    return;
+    {
+      gtk_image_clear (GTK_IMAGE (self->image));
+      return;
+    }
 
   if (!update_image (self))
     {
@@ -142,7 +156,6 @@ get_thumbnail (GtkFileThumbnail *self)
       self->cancellable = g_cancellable_new ();
 
       file = _gtk_file_info_get_file (self->info);
-      g_file_info_set_attribute_boolean (self->info, "filechooser::queried", TRUE);
       g_file_query_info_async (file,
                                G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
                                G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
