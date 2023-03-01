@@ -31,6 +31,10 @@
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
+#include "gtklistitem.h"
+#include "gtklistitemwidgetprivate.h"
+#include "gtkcolumnviewcellprivate.h"
+#include "deprecated/gtkfilechooser.h"
 
 struct _GtkFileChooserCell
 {
@@ -198,6 +202,48 @@ gtk_file_chooser_cell_dispose (GObject *object)
 }
 
 static void
+update_selectable (GtkFileChooserCell *self)
+{
+  GtkWidget *ancestor;
+  GtkListItem *item = NULL;
+  GtkListItem *item2 = NULL;
+  gboolean selectable = TRUE;
+
+  if (!self->item)
+    return;
+
+  ancestor = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_FILE_CHOOSER);
+  if (!ancestor)
+    return;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (ancestor)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    selectable = g_file_info_get_file_type (self->item) == G_FILE_TYPE_DIRECTORY;
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  ancestor = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_LIST_ITEM_WIDGET);
+  if (ancestor)
+    item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (ancestor));
+
+  if (GTK_IS_COLUMN_VIEW_CELL (ancestor))
+    {
+      ancestor = gtk_widget_get_ancestor (gtk_widget_get_parent (GTK_WIDGET (ancestor)), GTK_TYPE_LIST_ITEM_WIDGET);
+      if (ancestor)
+        item2 = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (ancestor));
+    }
+
+  if (item)
+    gtk_list_item_set_selectable (item, selectable);
+  if (item2)
+    gtk_list_item_set_selectable (item2, selectable);
+
+  if (selectable)
+    gtk_widget_remove_css_class (GTK_WIDGET (self), "dim-label");
+  else
+    gtk_widget_add_css_class (GTK_WIDGET (self), "dim-label");
+}
+
+static void
 gtk_file_chooser_cell_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
@@ -217,6 +263,7 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
     case PROP_ITEM:
       self->item = g_value_get_object (value);
+      update_selectable (self);
       break;
 
     case PROP_SHOW_TIME:
@@ -261,6 +308,15 @@ gtk_file_chooser_cell_get_property (GObject    *object,
     }
 }
 
+static void
+gtk_file_chooser_cell_root (GtkWidget *widget)
+{
+  GtkFileChooserCell *self = GTK_FILE_CHOOSER_CELL (widget);
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_cell_parent_class)->root (widget);
+
+  update_selectable (self);
+}
 
 static void
 gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
@@ -271,6 +327,8 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->dispose = gtk_file_chooser_cell_dispose;
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
+
+  widget_class->root = gtk_file_chooser_cell_root;
 
   g_object_class_install_property (object_class, PROP_POSITION,
                                    g_param_spec_uint ("position", NULL, NULL,
