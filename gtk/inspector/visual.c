@@ -630,8 +630,6 @@ fill_icons (const char *path,
   const char *dir_entry;
   GDir *dir;
 
-  g_print ("fill icons from %s\n", path);
-
   dir = g_dir_open (path, 0, NULL);
   if (!dir)
     return;
