@@ -3595,8 +3595,19 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  *
  * Sets the default size of a window.
  *
- * If the window’s “natural” size (its size request) is larger than
+ * The default size of a window is the size that will be used if no other constraints apply.
+ * 
+ * The default size will be updated whenever the window is resized
+ * to reflect the new size, unless the window is forced to a size,
+ * like when it is maximized or fullscreened.
+ *
+ * If the window’s minimum size request is larger than
  * the default, the default will be ignored.
+ *
+ * Setting the default size to a value <= 0 will cause it to be
+ * ignored and the natural size request will be used instead. It
+ * is possible to do this while the window is showing to "reset"
+ * it to its initial size.
  *
  * Unlike [method@Gtk.Widget.set_size_request], which sets a size
  * request for a widget and thus would keep users from shrinking
@@ -3605,13 +3616,6 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * shrink the window again as they normally would. Setting a default
  * size of -1 means to use the “natural” default size (the size request
  * of the window).
- *
- * The default size of a window only affects the first time a window is
- * shown; if a window is hidden and re-shown, it will remember the size
- * it had prior to hiding, rather than using the default size.
- *
- * Windows can’t actually be 0x0 in size, they must be at least 1x1, but
- * passing 0 for @width and @height is OK, resulting in a 1x1 default size.
  *
  * If you use this function to reestablish a previously saved window size,
  * note that the appropriate size to save is the one returned by
@@ -3643,6 +3647,9 @@ gtk_window_set_default_size (GtkWindow   *window,
  * A value of 0 for the width or height indicates that a default
  * size has not been explicitly set for that dimension, so the
  * “natural” size of the window will be used.
+ *
+ * This function is the recommended way for [saving window state
+ * across restarts of applications](https://developer.gnome.org/documentation/tutorials/save-state.html).
  */
 void
 gtk_window_get_default_size (GtkWindow *window,
