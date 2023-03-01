@@ -169,7 +169,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_OPTION_PANE;
 
     case GTK_ACCESSIBLE_ROLE_PRESENTATION:
-      return ATSPI_ROLE_SECTION;
+      return ATSPI_ROLE_FILLER;
 
     case GTK_ACCESSIBLE_ROLE_PROGRESS_BAR:
       return ATSPI_ROLE_PROGRESS_BAR;
@@ -205,7 +205,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_ENTRY;
 
     case GTK_ACCESSIBLE_ROLE_SECTION:
-      return ATSPI_ROLE_FILLER;
+      return ATSPI_ROLE_SECTION;
 
     case GTK_ACCESSIBLE_ROLE_SECTION_HEAD:
       return ATSPI_ROLE_FILLER;
