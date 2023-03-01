@@ -197,6 +197,15 @@ gtk_file_chooser_cell_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_file_chooser_cell_parent_class)->dispose (object);
 }
 
+static gboolean
+get_selectable (GtkFileChooserCell *self)
+{
+  if (self->item)
+    return g_file_info_get_attribute_boolean (self->item, "filechooser::selectable");
+
+  return TRUE;
+}
+
 static void
 gtk_file_chooser_cell_set_property (GObject      *object,
                                     guint         prop_id,
@@ -217,6 +226,11 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
     case PROP_ITEM:
       self->item = g_value_get_object (value);
+
+      if (get_selectable (self))
+        gtk_widget_remove_css_class (GTK_WIDGET (self), "dim-label");
+      else
+        gtk_widget_add_css_class (GTK_WIDGET (self), "dim-label");
       break;
 
     case PROP_SHOW_TIME:
