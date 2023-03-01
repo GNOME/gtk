@@ -158,6 +158,24 @@ gtk_list_item_manager_new_for_size (GtkWidget            *widget,
   return self;
 }
 
+void
+gtk_list_item_manager_get_tile_bounds (GtkListItemManager *self,
+                                       GdkRectangle       *out_bounds)
+{
+  GtkListTile *tile;
+  GtkListTileAugment *aug;
+
+  tile = gtk_rb_tree_get_root (self->items);
+  if (tile == NULL)
+    {
+      *out_bounds = &(GdkRectangle) { 0, 0, 0, 0 };
+      return;
+    }
+
+  aug = gtk_rb_tree_get_augment (self->items, tile);
+  *out_bounds = aug->area;
+}
+
 gpointer
 gtk_list_item_manager_get_first (GtkListItemManager *self)
 {
@@ -551,6 +569,81 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
   gtk_rb_tree_remove (self->items, second);
 
   return TRUE;
+}
+
+/*
+ * gtk_list_tile_split:
+ * @self: the listitemmanager
+ * @tile: a tile to split into two
+ * @n_items: nuber of items to keep in tile
+ *
+ * Splits the given tile into two tiles. The original
+ * tile will remain with @n_items items, the remaining
+ * items will be given to the new tile, which will be
+ * nserted after the tile.
+ *
+ * It is valid for either tile to have 0 items after
+ * the split.
+ *
+ * Returns: The new tile
+ **/
+GtkListTile *
+gtk_list_tile_split (GtkListItemManager *self,
+                     GtkListTile        *tile,
+                     guint               n_items)
+{
+  GtkListTile *result;
+
+  g_assert (n_items <= tile->n_items);
+
+  result = gtk_rb_tree_insert_after (self->items, tile);
+  result->n_items = tile->n_items - n_items;
+  tile->n_items = n_items;
+  gtk_rb_tree_node_mark_dirty (tile);
+
+  return result;
+}
+
+/*
+ * gtk_list_tile_gc:
+ * @self: the listitemmanager
+ * @tile: a tile
+ *
+ * Tries to get rid of tiles when they aren't needed anymore,
+ * either because their referenced listitems were deleted or
+ * because they can be merged with the next item(s).
+ *
+ * Note that this only looks forward, but never backward.
+ *
+ * Returns: The next tile
+ **/
+GtkListTile *
+gtk_list_tile_gc (GtkListItemManager *self,
+                  GtkListTile        *tile)
+{
+  GtkListTile *next;
+
+  while (tile)
+    {
+      next = gtk_rb_tree_node_get_next (tile);
+
+      if (tile->n_items == 0)
+        {
+          gtk_rb_tree_remove (self->items, tile);
+          tile = next;
+          continue;
+        }
+
+      if (next == NULL)
+        break;
+
+      if (gtk_list_item_manager_merge_list_items (self, tile, next))
+        continue;
+
+      break;
+    }
+
+  return tile;
 }
 
 static void

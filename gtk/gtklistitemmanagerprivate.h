@@ -75,6 +75,8 @@ void                    gtk_list_item_manager_augment_node      (GtkRbTree      
                                                                  gpointer                node,
                                                                  gpointer                left,
                                                                  gpointer                right);
+void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
+                                                                 GdkRectangle           *out_bounds);
 gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_first         (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
@@ -99,6 +101,12 @@ void                    gtk_list_tile_set_area_size             (GtkListItemMana
                                                                  GtkListTile            *tile,
                                                                  int                     width,
                                                                  int                     height);
+
+GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile,
+                                                                 guint                   n_items);
+GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);
