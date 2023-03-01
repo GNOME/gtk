@@ -21,6 +21,7 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
+#include <gtk/deprecated/gtkfilechooser.h>
 
 G_BEGIN_DECLS
 
@@ -56,6 +57,9 @@ void                _gtk_file_system_model_set_filter_folders (GtkFileSystemMode
 
 void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
                                                              GtkFileFilter      *filter);
+
+void                _gtk_file_system_model_set_can_select_files (GtkFileSystemModel   *model,
+                                                                 gboolean              can_select);
 
 G_END_DECLS
 
