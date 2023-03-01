@@ -362,7 +362,7 @@ do_drawingarea (GtkWidget *do_widget)
                         G_CALLBACK (scribble_resize), NULL);
 
       drag = gtk_gesture_drag_new ();
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), GDK_BUTTON_PRIMARY);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (drag), 0);
       gtk_widget_add_controller (da, GTK_EVENT_CONTROLLER (drag));
 
       g_signal_connect (drag, "drag-begin", G_CALLBACK (drag_begin), da);

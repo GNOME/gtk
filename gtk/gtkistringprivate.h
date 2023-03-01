@@ -133,7 +133,7 @@ istring_prepend (IString *str,
       if (!istring_is_inline (str))
         old = str->u.str;
 
-      str->u.str = g_strconcat (istring_str (str), istring_str (other), NULL);
+      str->u.str = g_strconcat (istring_str (other), istring_str (str), NULL);
       str->n_bytes += other->n_bytes;
       str->n_chars += other->n_chars;
 

@@ -1438,7 +1438,8 @@ gtk_calendar_select_day (GtkCalendar *calendar,
         else
           gtk_widget_remove_css_class (label, "other-month");
 
-        if (calendar->marked_date[day-1])
+        if (calendar->marked_date[day-1] &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
@@ -1524,6 +1525,14 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
 
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
 
+  for (int y = 0; y < 6; y ++)
+    for (int x = 0; x < 7; x ++)
+      {
+        GtkWidget *label = calendar->day_number_labels[y][x];
+
+        gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
+      }
+
   for (day = 0; day < 31; day++)
     {
       calendar->marked_date[day] = FALSE;
@@ -1533,12 +1542,33 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
   calendar_queue_refresh (calendar);
 }
 
+static void
+update_mark_state (GtkCalendar *calendar,
+                   guint        day,
+                   gboolean     mark)
+{
+  for (int y = 0; y < 6; y ++)
+    for (int x = 0; x < 7; x ++)
+      {
+        GtkWidget *label = calendar->day_number_labels[y][x];
+
+        if (day != calendar->day[y][x])
+          continue;
+
+        if (mark && calendar->marked_date[day-1] &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
+      }
+}
+
 /**
  * gtk_calendar_mark_day:
  * @calendar: a `GtkCalendar`
  * @day: the day number to mark between 1 and 31.
  *
- * Places a visual marker on a particular day.
+ * Places a visual marker on a particular day of the current month.
  */
 void
 gtk_calendar_mark_day (GtkCalendar *calendar,
@@ -1550,6 +1580,7 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
     {
       calendar->marked_date[day - 1] = TRUE;
       calendar->num_marked_dates++;
+      update_mark_state (calendar, day, TRUE);
       calendar_invalidate_day_num (calendar, day);
     }
 }
@@ -1592,6 +1623,7 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
     {
       calendar->marked_date[day - 1] = FALSE;
       calendar->num_marked_dates--;
+      update_mark_state (calendar, day, FALSE);
       calendar_invalidate_day_num (calendar, day);
     }
 }

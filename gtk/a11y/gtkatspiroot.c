@@ -690,7 +690,8 @@ gtk_at_spi_root_constructed (GObject *gobject)
       /* No need to validate the path */
       self->base_path = g_strconcat (app_path, "/a11y", NULL);
     }
-  else
+
+  if (self->base_path == NULL)
     {
       const char *program_name = g_get_prgname ();
 

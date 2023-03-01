@@ -251,6 +251,18 @@ click_released_cb (GtkGestureClick *gesture,
 }
 
 static void
+click_pressed_cb (GtkGestureClick *gesture,
+                  int              n_press,
+                  double           x,
+                  double           y,
+                  GtkColumnView   *self)
+{
+  /* Claim the state here to prevent propagation, the event controllers in
+   * GtkColumView have already been handled in the CAPTURE phase */
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 gtk_column_view_title_init (GtkColumnViewTitle *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -272,6 +284,7 @@ gtk_column_view_title_init (GtkColumnViewTitle *self)
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "released", G_CALLBACK (click_released_cb), self);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (click_pressed_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
 
