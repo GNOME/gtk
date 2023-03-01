@@ -1877,12 +1877,9 @@ gtk_list_base_init_real (GtkListBase      *self,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkEventController *controller;
 
-  priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
-                                                           g_class->list_item_name,
-                                                           g_class->list_item_role,
-                                                           g_class->list_item_size,
-                                                           g_class->list_item_augment_size,
-                                                           g_class->list_item_augment_func);
+  priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
+                                                  g_class->list_item_name,
+                                                  g_class->list_item_role);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;

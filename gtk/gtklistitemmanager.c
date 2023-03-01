@@ -90,7 +90,7 @@ potentially_empty_rectangle_union (cairo_rectangle_int_t       *self,
   gdk_rectangle_union (self, area, self);
 }
 
-void
+static void
 gtk_list_item_manager_augment_node (GtkRbTree *tree,
                                     gpointer   node_augment,
                                     gpointer   node,
@@ -129,18 +129,13 @@ gtk_list_item_manager_clear_node (gpointer _tile)
 }
 
 GtkListItemManager *
-gtk_list_item_manager_new_for_size (GtkWidget            *widget,
-                                    const char           *item_css_name,
-                                    GtkAccessibleRole     item_role,
-                                    gsize                 element_size,
-                                    gsize                 augment_size,
-                                    GtkRbTreeAugmentFunc  augment_func)
+gtk_list_item_manager_new (GtkWidget         *widget,
+                           const char        *item_css_name,
+                           GtkAccessibleRole  item_role)
 {
   GtkListItemManager *self;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (element_size >= sizeof (GtkListTile), NULL);
-  g_return_val_if_fail (augment_size >= sizeof (GtkListTileAugment), NULL);
 
   self = g_object_new (GTK_TYPE_LIST_ITEM_MANAGER, NULL);
 
@@ -149,9 +144,9 @@ gtk_list_item_manager_new_for_size (GtkWidget            *widget,
   self->item_css_name = g_intern_string (item_css_name);
   self->item_role = item_role;
 
-  self->items = gtk_rb_tree_new_for_size (element_size,
-                                          augment_size,
-                                          augment_func,
+  self->items = gtk_rb_tree_new_for_size (sizeof (GtkListTile),
+                                          sizeof (GtkListTileAugment),
+                                          gtk_list_item_manager_augment_node,
                                           gtk_list_item_manager_clear_node,
                                           NULL);
 

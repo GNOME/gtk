@@ -813,9 +813,6 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
   list_base_class->list_item_name = "child";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
-  list_base_class->list_item_size = sizeof (GtkListTile);
-  list_base_class->list_item_augment_size = sizeof (GtkListTileAugment);
-  list_base_class->list_item_augment_func = gtk_list_item_manager_augment_node;
   list_base_class->get_allocation_along = gtk_grid_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_grid_view_get_allocation_across;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;

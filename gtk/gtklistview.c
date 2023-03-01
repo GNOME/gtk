@@ -663,9 +663,6 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   list_base_class->list_item_name = "row";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
-  list_base_class->list_item_size = sizeof (GtkListTile);
-  list_base_class->list_item_augment_size = sizeof (GtkListTileAugment);
-  list_base_class->list_item_augment_func = gtk_list_item_manager_augment_node;
   list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;

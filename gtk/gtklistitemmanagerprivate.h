@@ -61,20 +61,10 @@ struct _GtkListTileAugment
 
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
-GtkListItemManager *    gtk_list_item_manager_new_for_size      (GtkWidget              *widget,
+GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget,
                                                                  const char             *item_css_name,
-                                                                 GtkAccessibleRole       item_role,
-                                                                 gsize                   element_size,
-                                                                 gsize                   augment_size,
-                                                                 GtkRbTreeAugmentFunc    augment_func);
-#define gtk_list_item_manager_new(widget, item_css_name, type, augment_type, augment_func) \
-  gtk_list_item_manager_new_for_size (widget, item_css_name, sizeof (type), sizeof (augment_type), (augment_func))
+                                                                 GtkAccessibleRole       item_role);
 
-void                    gtk_list_item_manager_augment_node      (GtkRbTree              *tree,
-                                                                 gpointer                node_augment,
-                                                                 gpointer                node,
-                                                                 gpointer                left,
-                                                                 gpointer                right);
 void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
                                                                  GdkRectangle           *out_bounds);
 gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);

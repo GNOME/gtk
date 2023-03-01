@@ -36,9 +36,6 @@ struct _GtkListBaseClass
 
   const char *         list_item_name;
   GtkAccessibleRole    list_item_role;
-  gsize                list_item_size;
-  gsize                list_item_augment_size;
-  GtkRbTreeAugmentFunc list_item_augment_func;
 
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
