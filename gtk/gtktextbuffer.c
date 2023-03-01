@@ -5336,7 +5336,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
           GdkRGBA *rgba;
           char *value;
 
-          g_object_get (tag, "foreground", &rgba, NULL);
+          g_object_get (tag, "foreground-rgba", &rgba, NULL);
           value = g_strdup_printf ("%u,%u,%u",
                                    (guint) rgba->red * 65535,
                                    (guint) rgba->green * 65535,
