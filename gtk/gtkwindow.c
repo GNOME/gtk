@@ -3595,8 +3595,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  *
  * Sets the default size of a window.
  *
- * The default size of a window is the size that will be used for
- * its size if no other constraints apply.
+ * The default size of a window is the size that will be used if no other constraints apply.
  * 
  * The default size will be updated whenever the window is resized
  * to reflect the new size, unless the window is forced to a size,
@@ -3649,7 +3648,7 @@ gtk_window_set_default_size (GtkWindow   *window,
  * size has not been explicitly set for that dimension, so the
  * “natural” size of the window will be used.
  *
- * This function is the recommended way for [saving winodw state
+ * This function is the recommended way for [saving window state
  * across restarts of applications](https://developer.gnome.org/documentation/tutorials/save-state.html).
  */
 void
