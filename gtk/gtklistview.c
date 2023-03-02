@@ -505,12 +505,12 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   else
     self->list_width = MAX (nat, self->list_width);
 
-  /* step 2: determine height of known list items */
+  /* step 2: determine height of known list items and gc the list */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
 
-  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+  for (tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
        tile != NULL;
-       tile = gtk_rb_tree_node_get_next (tile))
+       tile = gtk_list_tile_gc (self->item_manager, gtk_rb_tree_node_get_next (tile)))
     {
       if (tile->widget == NULL)
         continue;
