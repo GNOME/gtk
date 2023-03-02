@@ -3,6 +3,22 @@ Overview of Changes in GTK+ 3.24.37, xx-xx-xxxx
 
 * Support the file transfer portal for copy-paste and DND
 
+* Treat XKB_MODE_NAME_LODO as super key
+
+* Refactor startup notification handling to be in sync with GTK 4
+
+* GL: Synchronie when calling MakeCurrent
+
+* CSS: Fix a problem with stopping animations
+
+* Wayland: Drop the legacy text input module
+
+* Windows: Set the default file extension in the native file chooser
+
+* Translation updates:
+ Abkhazian
+ Turkish
+
 
 Overview of Changes in GTK+ 3.24.36, 12-22-2022
 ===============================================
