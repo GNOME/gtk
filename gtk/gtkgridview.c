@@ -91,7 +91,6 @@ struct _GtkGridView
   guint max_columns;
   /* set in size_allocate */
   guint n_columns;
-  int unknown_row_height;
   double column_width;
 };
 
@@ -624,7 +623,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   GtkGridView *self = GTK_GRID_VIEW (widget);
   GtkListTile *tile, *start;
   GArray *heights;
-  int min_row_height, row_height, col_min, col_nat;
+  int min_row_height, unknown_row_height, row_height, col_min, col_nat;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy;
   GdkRectangle bounds;
@@ -711,7 +710,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     }
 
   /* step 3: determine height of rows with only unknown items */
-  self->unknown_row_height = gtk_grid_view_get_unknown_row_size (self, heights);
+  unknown_row_height = gtk_grid_view_get_unknown_row_size (self, heights);
   g_array_free (heights, TRUE);
 
   /* step 4: determine height for remaining rows and set each row's position */
@@ -732,7 +731,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           gtk_list_tile_set_area_size (self->item_manager,
                                        tile,
                                        ceil (self->column_width * self->n_columns),
-                                       self->unknown_row_height * (tile->n_items / self->n_columns));
+                                       unknown_row_height * (tile->n_items / self->n_columns));
           y += tile->area.height;
         }
       else
@@ -744,7 +743,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               gtk_list_tile_set_area_size (self->item_manager,
                                            tile,
                                            ceil (self->column_width * (i + tile->n_items)) - ceil (self->column_width * i),
-                                           self->unknown_row_height);
+                                           unknown_row_height);
             }
           i += tile->n_items;
         }
