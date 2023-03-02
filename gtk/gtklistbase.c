@@ -1355,7 +1355,7 @@ update_autoscroll (GtkListBase *self,
     remove_autoscroll (self);
 }
 
-/**
+/*
  * gtk_list_base_size_allocate_child:
  * @self: The listbase
  * @child: The child
@@ -1368,7 +1368,7 @@ update_autoscroll (GtkListBase *self,
  * but with the coordinates already offset by the scroll
  * offset.
  **/
-void
+static void
 gtk_list_base_size_allocate_child (GtkListBase *self,
                                    GtkWidget   *child,
                                    int          x,
@@ -1432,7 +1432,7 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
   gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
-void
+static void
 gtk_list_base_allocate_children (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
@@ -1537,7 +1537,7 @@ gtk_list_base_get_rubberband_coords (GtkListBase  *self,
   return TRUE;
 }
 
-void
+static void
 gtk_list_base_allocate_rubberband (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
@@ -1912,7 +1912,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
-static int
+static void
 gtk_list_base_set_adjustment_values (GtkListBase    *self,
                                      GtkOrientation  orientation,
                                      int             value,
@@ -1940,22 +1940,23 @@ gtk_list_base_set_adjustment_values (GtkListBase    *self,
   g_signal_handlers_unblock_by_func (priv->adjustment[orientation],
                                      gtk_list_base_adjustment_value_changed_cb,
                                      self);
-
-  return value;
 }
 
-void
-gtk_list_base_update_adjustments (GtkListBase *self,
-                                  int          total_across,
-                                  int          total_along,
-                                  int          page_across,
-                                  int          page_along,
-                                  int         *across,
-                                  int         *along)
+static void
+gtk_list_base_update_adjustments (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GdkRectangle bounds;
   int value_along, value_across, size;
+  int page_along, page_across;
   guint pos;
+
+  gtk_list_item_manager_get_tile_bounds (priv->item_manager, &bounds);
+  g_assert (bounds.x == 0);
+  g_assert (bounds.y == 0);
+
+  page_across = gtk_widget_get_size (GTK_WIDGET (self), OPPOSITE_ORIENTATION (priv->orientation));
+  page_along = gtk_widget_get_size (GTK_WIDGET (self), priv->orientation);
 
   pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->anchor);
   if (pos == GTK_INVALID_LIST_POSITION)
@@ -1987,16 +1988,25 @@ gtk_list_base_update_adjustments (GtkListBase *self,
         }
     }
 
-  *across = gtk_list_base_set_adjustment_values (self,
-                                                 OPPOSITE_ORIENTATION (priv->orientation),
-                                                 value_across,
-                                                 total_across,
-                                                 page_across);
-  *along = gtk_list_base_set_adjustment_values (self,
-                                                priv->orientation,
-                                                value_along,
-                                                total_along,
-                                                page_along);
+  gtk_list_base_set_adjustment_values (self,
+                                       OPPOSITE_ORIENTATION (priv->orientation),
+                                       value_across,
+                                       bounds.width,
+                                       page_across);
+  gtk_list_base_set_adjustment_values (self,
+                                       priv->orientation,
+                                       value_along,
+                                       bounds.height,
+                                       page_along);
+}
+
+void
+gtk_list_base_allocate (GtkListBase *self)
+{
+  gtk_list_base_update_adjustments (self);
+
+  gtk_list_base_allocate_children (self);
+  gtk_list_base_allocate_rubberband (self);
 }
 
 GtkScrollablePolicy

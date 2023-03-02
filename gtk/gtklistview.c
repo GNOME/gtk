@@ -506,8 +506,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   GtkListView *self = GTK_LIST_VIEW (widget);
   GtkListTile *tile;
   GArray *heights;
-  int min, nat, row_height;
-  int x, y;
+  int min, nat, row_height, y;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy, opposite_scroll_policy;
 
@@ -519,7 +518,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   /* step 0: exit early if list is empty */
   if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
     {
-      gtk_list_base_update_adjustments (GTK_LIST_BASE (self), 0, 0, 0, 0, &x, &y);
+      gtk_list_base_allocate (GTK_LIST_BASE (self));
       return;
     }
 
@@ -570,16 +569,8 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       y += tile->area.height;
     }
 
-  /* step 4: update the adjustments */
-  gtk_list_base_update_adjustments (GTK_LIST_BASE (self),
-                                    self->list_width,
-                                    gtk_list_view_get_list_height (self),
-                                    gtk_widget_get_size (widget, opposite_orientation),
-                                    gtk_widget_get_size (widget, orientation),
-                                    &x, &y);
-
-  gtk_list_base_allocate_children (GTK_LIST_BASE (self));
-  gtk_list_base_allocate_rubberband (GTK_LIST_BASE (self));
+  /* step 4: allocate the rest */
+  gtk_list_base_allocate (GTK_LIST_BASE (self));
 }
 
 static void
