@@ -1870,6 +1870,14 @@ gtk_list_base_drag_leave (GtkDropControllerMotion *motion,
   remove_autoscroll (GTK_LIST_BASE (widget));
 }
 
+static GtkListTile *
+gtk_list_base_split_func (gpointer     data,
+                          GtkListTile *tile,
+                          guint        n_items)
+{
+  return GTK_LIST_BASE_GET_CLASS (data)->split (data, tile, n_items);
+}
+
 static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
@@ -1879,7 +1887,9 @@ gtk_list_base_init_real (GtkListBase      *self,
 
   priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
                                                   g_class->list_item_name,
-                                                  g_class->list_item_role);
+                                                  g_class->list_item_role,
+                                                  gtk_list_base_split_func,
+                                                  self);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;

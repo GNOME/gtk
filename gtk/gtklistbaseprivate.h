@@ -37,6 +37,10 @@ struct _GtkListBaseClass
   const char *         list_item_name;
   GtkAccessibleRole    list_item_role;
 
+  GtkListTile *        (* split)                                (GtkListBase            *self,
+                                                                 GtkListTile            *tile,
+                                                                 guint                   n_items);
+
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
   gboolean             (* get_allocation_along)                 (GtkListBase            *self,

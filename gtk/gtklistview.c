@@ -200,6 +200,34 @@ gtk_list_view_get_list_height (GtkListView *self)
   return aug->area.height;
 }
 
+static GtkListTile *
+gtk_list_view_split (GtkListBase *base,
+                     GtkListTile *tile,
+                     guint        n_items)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkListTile *new_tile;
+  guint row_height;
+
+  row_height = tile->area.height / tile->n_items;
+
+  new_tile = gtk_list_tile_split (self->item_manager, tile, n_items);
+  gtk_list_tile_set_area_size (self->item_manager,
+                               tile,
+                               tile->area.width,
+                               row_height * tile->n_items);
+  gtk_list_tile_set_area (self->item_manager,
+                          new_tile,
+                          &(GdkRectangle) {
+                            tile->area.x,
+                            tile->area.y + tile->area.height,
+                            tile->area.width,
+                            row_height * new_tile->n_items
+                          });
+
+  return new_tile;
+}
+
 static gboolean
 gtk_list_view_get_allocation_along (GtkListBase *base,
                                     guint        pos,
@@ -663,6 +691,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   list_base_class->list_item_name = "row";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
+  list_base_class->split = gtk_list_view_split;
   list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;

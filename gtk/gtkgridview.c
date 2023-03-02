@@ -152,6 +152,82 @@ dump (GtkGridView *self)
   g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
 }
 
+static GtkListTile *
+gtk_grid_view_split (GtkListBase *base,
+                     GtkListTile *tile,
+                     guint        n_items)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
+  GtkListTile *split;
+  guint col, row_height;
+
+  row_height = tile->area.height / MAX (tile->n_items / self->n_columns, 1);
+
+  /* split off the multirow at the top */
+  if (n_items >= self->n_columns)
+    {
+      guint top_rows = n_items / self->n_columns;
+      guint top_items = top_rows * self->n_columns;
+
+      split = tile;
+      tile = gtk_list_tile_split (self->item_manager, tile, top_items);
+      gtk_list_tile_set_area (self->item_manager,
+                              tile,
+                              &(GdkRectangle) {
+                                split->area.x,
+                                split->area.y + row_height * top_rows,
+                                split->area.width,
+                                split->area.height - row_height * top_rows,
+                              });
+      gtk_list_tile_set_area_size (self->item_manager,
+                                   split,
+                                   split->area.width,
+                                   row_height * top_rows);
+      n_items -= top_items;
+      if (n_items == 0)
+        return tile;
+    }
+
+  /* split off the multirow at the bottom */
+  if (tile->n_items > self->n_columns)
+    {
+      split = gtk_list_tile_split (self->item_manager, tile, self->n_columns);
+      gtk_list_tile_set_area (self->item_manager,
+                              split,
+                              &(GdkRectangle) {
+                                tile->area.x,
+                                tile->area.y + row_height,
+                                tile->area.width,
+                                tile->area.height - row_height,
+                              });
+      gtk_list_tile_set_area_size (self->item_manager,
+                                   tile,
+                                   tile->area.width,
+                                   row_height);
+    }
+
+  g_assert (n_items < tile->n_items);
+  g_assert (tile->n_items <= self->n_columns);
+
+  /* now it's a single row, do a split at the column boundary */
+  col = tile->area.x / self->column_width;
+  split = gtk_list_tile_split (self->item_manager, tile, n_items);
+  gtk_list_tile_set_area (self->item_manager,
+                          split,
+                          &(GdkRectangle) {
+                            ceil ((col + n_items) * self->column_width),
+                            tile->area.y,
+                            ceil ((col + n_items + split->n_items) * self->column_width),
+                            tile->area.height,
+                          });
+  gtk_list_tile_set_area_size (self->item_manager,
+                               tile,
+                               ceil ((col + n_items) * self->column_width) - tile->area.x,
+                               tile->area.height);
+  
+  return split;
+}
+
 static gboolean
 gtk_grid_view_get_allocation_along (GtkListBase *base,
                                     guint        pos,
@@ -813,6 +889,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
   list_base_class->list_item_name = "child";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
+  list_base_class->split = gtk_grid_view_split;
   list_base_class->get_allocation_along = gtk_grid_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_grid_view_get_allocation_across;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
