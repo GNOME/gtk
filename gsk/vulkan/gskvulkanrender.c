@@ -113,7 +113,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   GskVulkanRender *self;
   VkDevice device;
 
-  self = g_slice_new0 (GskVulkanRender);
+  self = g_new0 (GskVulkanRender, 1);
 
   self->vulkan = context;
   self->renderer = renderer;
@@ -281,7 +281,7 @@ gsk_vulkan_render_remove_framebuffer_from_image (gpointer  data,
                         fb->framebuffer,
                         NULL);
 
-  g_slice_free (HashFramebufferEntry, fb);
+  g_free (fb);
 }
 
 VkFramebuffer
@@ -294,7 +294,7 @@ gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
   if (fb)
     return fb->framebuffer;
 
-  fb = g_slice_new0 (HashFramebufferEntry);
+  fb = g_new0 (HashFramebufferEntry, 1);
   GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
                                      &(VkFramebufferCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
@@ -705,7 +705,7 @@ gsk_vulkan_render_free (GskVulkanRender *self)
       vkDestroyFramebuffer (gdk_vulkan_context_get_device (self->vulkan),
                             fb->framebuffer,
                             NULL);
-      g_slice_free (HashFramebufferEntry, fb);
+      g_free (fb);
       g_object_weak_unref (G_OBJECT (key), gsk_vulkan_render_remove_framebuffer_from_image, self);
       g_hash_table_iter_remove (&iter);
     }
@@ -749,7 +749,7 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   gsk_vulkan_command_pool_free (self->command_pool);
 
-  g_slice_free (GskVulkanRender, self);
+  g_free (self);
 }
 
 gboolean

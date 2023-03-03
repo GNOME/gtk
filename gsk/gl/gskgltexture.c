@@ -51,7 +51,7 @@ gsk_gl_texture_free (GskGLTexture *texture)
       g_clear_pointer (&texture->slices, g_free);
       g_clear_pointer (&texture->nine_slice, g_free);
 
-      g_slice_free (GskGLTexture, texture);
+      g_free (texture);
     }
 }
 
@@ -66,7 +66,7 @@ gsk_gl_texture_new (guint  texture_id,
 {
   GskGLTexture *texture;
 
-  texture = g_slice_new0 (GskGLTexture);
+  texture = g_new0 (GskGLTexture, 1);
   texture->texture_id = texture_id;
   texture->link.data = texture;
   texture->min_filter = min_filter;

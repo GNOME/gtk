@@ -49,7 +49,7 @@ gsk_vulkan_uploader_new (GdkVulkanContext     *context,
 {
   GskVulkanUploader *self;
 
-  self = g_slice_new0 (GskVulkanUploader);
+  self = g_new0 (GskVulkanUploader, 1);
 
   self->vulkan = g_object_ref (context);
   self->command_pool = command_pool;
@@ -75,7 +75,7 @@ gsk_vulkan_uploader_free (GskVulkanUploader *self)
 
   g_object_unref (self->vulkan);
 
-  g_slice_free (GskVulkanUploader, self);
+  g_free (self);
 }
 
 static void

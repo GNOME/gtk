@@ -52,7 +52,7 @@ gsk_gl_icon_data_free (gpointer data)
   GskGLIconData *icon_data = data;
 
   g_clear_object (&icon_data->source_texture);
-  g_slice_free (GskGLIconData, icon_data);
+  g_free (icon_data);
 }
 
 static void

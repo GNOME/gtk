@@ -23,7 +23,7 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
   VkMemoryRequirements requirements;
   GskVulkanBuffer *self;
 
-  self = g_slice_new0 (GskVulkanBuffer);
+  self = g_new0 (GskVulkanBuffer, 1);
 
   self->vulkan = g_object_ref (context);
   self->size = size;
@@ -88,7 +88,7 @@ gsk_vulkan_buffer_free (GskVulkanBuffer *self)
 
   g_object_unref (self->vulkan);
 
-  g_slice_free (GskVulkanBuffer, self);
+  g_free (self);
 }
 
 VkBuffer

@@ -619,7 +619,7 @@ gsk_gl_driver_after_frame (GskGLDriver *self)
 
       gsk_gl_driver_autorelease_framebuffer (self, render_target->framebuffer_id);
       gsk_gl_driver_autorelease_texture (self, render_target->texture_id);
-      g_slice_free (GskGLRenderTarget, render_target);
+      g_free (render_target);
 
       self->render_targets->len--;
     }
@@ -935,7 +935,7 @@ gsk_gl_driver_create_render_target (GskGLDriver        *self,
     {
       GskGLRenderTarget *render_target;
 
-      render_target = g_slice_new0 (GskGLRenderTarget);
+      render_target = g_new0 (GskGLRenderTarget, 1);
       render_target->min_filter = min_filter;
       render_target->mag_filter = mag_filter;
       render_target->format = format;
@@ -1007,7 +1007,7 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
                            g_steal_pointer (&texture));
 
       gsk_gl_driver_autorelease_framebuffer (self, render_target->framebuffer_id);
-      g_slice_free (GskGLRenderTarget, render_target);
+      g_free (render_target);
 
     }
 
@@ -1341,7 +1341,7 @@ create_texture_from_texture_destroy (gpointer data)
   gdk_gl_context_make_current (state->context);
   glDeleteTextures (1, &state->texture_id);
   g_clear_object (&state->context);
-  g_slice_free (GskGLTextureState, state);
+  g_free (state);
 }
 
 GdkTexture *
@@ -1362,7 +1362,7 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
   if (!(texture = g_hash_table_lookup (self->textures, GUINT_TO_POINTER (texture_id))))
     g_return_val_if_reached (NULL);
 
-  state = g_slice_new0 (GskGLTextureState);
+  state = g_new0 (GskGLTextureState, 1);
   state->texture_id = texture_id;
   state->context = g_object_ref (self->command_queue->context);
 

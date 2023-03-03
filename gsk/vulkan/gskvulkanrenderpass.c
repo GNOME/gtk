@@ -140,7 +140,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   GskVulkanRenderPass *self;
   VkImageLayout final_layout;
 
-  self = g_slice_new0 (GskVulkanRenderPass);
+  self = g_new0 (GskVulkanRenderPass, 1);
   self->vulkan = g_object_ref (context);
   self->render_ops = g_array_new (FALSE, FALSE, sizeof (GskVulkanOp));
 
@@ -231,7 +231,7 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_array_unref (self->wait_semaphores);
 
 
-  g_slice_free (GskVulkanRenderPass, self);
+  g_free (self);
 }
 
 #define FALLBACK(...) G_STMT_START { \
