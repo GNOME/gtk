@@ -219,6 +219,7 @@ struct _GtkStackPage
   guint needs_attention : 1;
   guint visible         : 1;
   guint use_underline   : 1;
+  guint in_destruction  : 1;
 };
 
 typedef struct _GtkStackPageClass GtkStackPageClass;
@@ -234,6 +235,14 @@ static GtkATContext *
 gtk_stack_page_accessible_get_at_context (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
+
+  if (page->in_destruction)
+    {
+      GTK_DEBUG (A11Y, "ATContext for “%s” [%p] accessed during destruction",
+                       G_OBJECT_TYPE_NAME (accessible),
+                       accessible);
+      return NULL;
+    }
 
   if (page->at_context == NULL)
     {
@@ -352,6 +361,8 @@ static void
 gtk_stack_page_dispose (GObject *object)
 {
   GtkStackPage *page = GTK_STACK_PAGE (object);
+
+  page->in_destruction = TRUE;
 
   g_clear_object (&page->at_context);
 
