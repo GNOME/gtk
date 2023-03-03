@@ -79,8 +79,7 @@ main (int argc, char **argv)
   const GType *all_types;
   guint n_types = 0, i;
   gchar *schema_dir;
-  GTestDBus *bus;
-  gint result;
+  int result;
 
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
@@ -94,12 +93,6 @@ main (int argc, char **argv)
   schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
   if (g_getenv ("GTK_TEST_MESON") == NULL)
     g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
-
-  /* Create one test bus for all tests, as we have a lot of very small
-   * and quick tests.
-   */
-  bus = g_test_dbus_new (G_TEST_DBUS_NONE);
-  g_test_dbus_up (bus);
 
   all_types = gtk_test_list_all_types (&n_types);
 
@@ -133,8 +126,6 @@ main (int argc, char **argv)
 
   result = g_test_run();
 
-  g_test_dbus_down (bus);
-  g_object_unref (bus);
   g_free (schema_dir);
 
   return result;

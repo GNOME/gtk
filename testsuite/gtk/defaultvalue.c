@@ -458,9 +458,6 @@ main (int argc, char **argv)
   const GType *otypes;
   guint i;
   gchar *schema_dir;
-  GTestDBus *bus;
-  GMainLoop *loop;
-  gint result;
 
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
@@ -474,12 +471,6 @@ main (int argc, char **argv)
   schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
   if (g_getenv ("GTK_TEST_MESON") == NULL)
     g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
-
-  /* Create one test bus for all tests, as we have a lot of very small
-   * and quick tests.
-   */
-  bus = g_test_dbus_new (G_TEST_DBUS_NONE);
-  g_test_dbus_up (bus);
 
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
@@ -497,19 +488,5 @@ main (int argc, char **argv)
       g_free (testname);
     }
 
-  result = g_test_run();
-
-  /* Work around the annoying issue that g_test_dbus_down is giving
-   * us an "Error while sending AddMatch" that comes out of an idle
-   */
-  loop = g_main_loop_new (NULL, FALSE);
-  g_timeout_add (1000, (GSourceFunc)g_main_loop_quit, loop);
-  g_main_loop_run (loop);
-  g_main_loop_unref (loop);
-
-  g_test_dbus_down (bus);
-  g_object_unref (bus);
-  g_free (schema_dir);
-
-  return result;
+  return g_test_run();
 }
