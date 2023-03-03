@@ -283,7 +283,7 @@ static void
 push_nsevent (GdkEvent *gdk_event,
               NSEvent  *nsevent)
 {
-  GdkToNSEventMap *map = g_slice_new0 (GdkToNSEventMap);
+  GdkToNSEventMap *map = g_new0 (GdkToNSEventMap, 1);
 
   map->link.data = map;
   map->gdk_event = gdk_event_ref (gdk_event);
@@ -297,7 +297,7 @@ push_nsevent (GdkEvent *gdk_event,
 
       gdk_event_unref (map->gdk_event);
       [map->nsevent release];
-      g_slice_free (GdkToNSEventMap, map);
+      g_free (map);
     }
 }
 

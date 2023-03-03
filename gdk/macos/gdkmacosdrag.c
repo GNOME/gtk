@@ -66,7 +66,7 @@ gdk_macos_zoomback_destroy (GdkMacosZoomback *zb)
 {
   gdk_surface_hide (GDK_SURFACE (zb->drag->drag_surface));
   g_clear_object (&zb->drag);
-  g_slice_free (GdkMacosZoomback, zb);
+  g_free (zb);
 }
 
 static gboolean
@@ -157,7 +157,7 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
   /* Apple HIG suggests doing a "zoomback" animation of the surface back
    * towards the original position.
    */
-  zb = g_slice_new0 (GdkMacosZoomback);
+  zb = g_new0 (GdkMacosZoomback, 1);
   zb->drag = g_object_ref (self);
   zb->frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self->drag_surface));
   zb->start_time = gdk_frame_clock_get_frame_time (zb->frame_clock);
