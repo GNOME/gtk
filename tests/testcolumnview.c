@@ -222,7 +222,7 @@ row_data_free (gpointer _data)
 
   row_data_unbind (data);
 
-  g_slice_free (RowData, data);
+  g_free (data);
 }
 
 static void
@@ -232,7 +232,7 @@ setup_widget (GtkListItem *list_item,
   GtkWidget *box, *child;
   RowData *data;
 
-  data = g_slice_new0 (RowData);
+  data = g_new0 (RowData, 1);
   g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);
   g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
 

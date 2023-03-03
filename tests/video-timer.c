@@ -107,7 +107,7 @@ create_frames_thread (gpointer data)
 
   while (TRUE)
     {
-      FrameData *frame_data = g_slice_new0 (FrameData);
+      FrameData *frame_data = g_new0 (FrameData, 1);
       frame_data->angle = 2 * M_PI * (frame_count % fps) / (double)fps;
       frame_data->stream_time = (G_GINT64_CONSTANT (1000000) * frame_count) / fps;
 
@@ -266,7 +266,7 @@ collect_old_frames (void)
       if (remove)
         {
           past_frames = g_list_delete_link (past_frames, l);
-          g_slice_free (FrameData, frame_data);
+          g_free (frame_data);
         }
     }
 }
@@ -329,7 +329,7 @@ on_update (GdkFrameClock *frame_clock,
               stream_time_to_clock_time (next_frame->stream_time)
               < predicted_presentation_time + refresh_interval / 2)
             {
-              g_slice_free (FrameData, unqueue_frame ());
+              g_free (unqueue_frame ());
               n_frames++;
               dropped_frames++;
               pending_frame = next_frame;
