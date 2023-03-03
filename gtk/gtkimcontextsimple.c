@@ -351,6 +351,8 @@ init_compose_table_thread_cb (GTask            *task,
 
   gtk_im_context_simple_init_compose_table ();
 
+  g_task_return_boolean (task, TRUE);
+
   gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
 }
 
