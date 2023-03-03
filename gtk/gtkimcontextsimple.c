@@ -253,6 +253,8 @@ init_compose_table_thread_cb (GTask            *task,
     return;
 
   gtk_im_context_simple_init_compose_table ();
+
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
