@@ -85,6 +85,9 @@ gtk_at_context_dispose (GObject *gobject)
 
   gtk_at_context_unrealize (self);
 
+  g_clear_object (&self->accessible_parent);
+  g_clear_object (&self->next_accessible_sibling);
+
   G_OBJECT_CLASS (gtk_at_context_parent_class)->dispose (gobject);
 }
 
@@ -459,14 +462,14 @@ GtkAccessible *
 gtk_at_context_get_accessible_parent (GtkATContext *self)
 {
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
-  
+
   return self->accessible_parent;
 }
 
 /*< private >
  * gtk_at_context_set_accessible_parent:
  * @self: a `GtkAtContext`
- * @parent: the parent `GtkAccessible` to set
+ * @parent: (nullable): the parent `GtkAccessible` to set
  *
  * Sets the parent accessible object of the given `GtkAtContext`.
  */
@@ -475,7 +478,7 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
                                       GtkAccessible *parent)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
-  
+
   g_set_object (&self->accessible_parent, parent);
 }
 
@@ -491,7 +494,7 @@ GtkAccessible *
 gtk_at_context_get_next_accessible_sibling (GtkATContext *self)
 {
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
-  
+
   return self->next_accessible_sibling;
 }
 
@@ -507,7 +510,7 @@ gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
                                             GtkAccessible *sibling)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
-  
+
   g_set_object (&self->next_accessible_sibling, sibling);
 }
 
