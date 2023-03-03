@@ -278,14 +278,11 @@ static GtkAccessible *
 gtk_stack_page_accessible_get_first_accessible_child (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
-  GtkWidget *child;
 
   if (page->widget == NULL)
     return NULL;
 
-  child = _gtk_widget_get_first_child (page->widget);
-
-  return GTK_ACCESSIBLE (g_object_ref (child));
+  return GTK_ACCESSIBLE (g_object_ref (page->widget));
 }
 
 static GtkAccessible *
