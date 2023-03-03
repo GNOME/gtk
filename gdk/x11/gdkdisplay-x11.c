@@ -1975,7 +1975,7 @@ gdk_x11_display_finalize (GObject *object)
       if (trap->end_sequence == 0)
         g_warning ("Display finalized with an unpopped error trap");
 
-      g_slice_free (GdkErrorTrap, trap);
+      g_free (trap);
     }
 
   g_free (display_x11->program_class);
@@ -2499,7 +2499,7 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
           tmp_list = tmp_list->next;
           display_x11->error_traps =
             g_slist_delete_link (display_x11->error_traps, free_me);
-          g_slice_free (GdkErrorTrap, trap);
+          g_free (trap);
         }
       else
         {
@@ -2531,7 +2531,7 @@ gdk_x11_display_error_trap_push (GdkDisplay *display)
   /* set up the Xlib callback to tell us about errors */
   _gdk_x11_error_handler_push ();
 
-  trap = g_slice_new0 (GdkErrorTrap);
+  trap = g_new0 (GdkErrorTrap, 1);
 
   trap->start_sequence = XNextRequest (display_x11->xdisplay);
   trap->error_code = Success;
