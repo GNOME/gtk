@@ -767,7 +767,7 @@ static void
 free_value (gpointer value)
 {
   g_value_unset (value);
-  g_slice_free (GValue, value);
+  g_free (value);
 }
 
 static void
@@ -790,7 +790,7 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, source_tag);
-  value = g_slice_new0 (GValue);
+  value = g_new0 (GValue, 1);
   g_value_init (value, type);
   g_task_set_task_data (task, value, free_value);
 

@@ -50,7 +50,7 @@ gdk_io_pipe_new (void)
 {
   GdkIOPipe *pipe;
 
-  pipe = g_slice_new0 (GdkIOPipe);
+  pipe = g_new0 (GdkIOPipe, 1);
   pipe->ref_count = 1;
 
   g_mutex_init (&pipe->mutex);
@@ -76,7 +76,7 @@ gdk_io_pipe_unref (GdkIOPipe *pipe)
   g_cond_clear (&pipe->cond);
   g_mutex_clear (&pipe->mutex);
 
-  g_slice_free (GdkIOPipe, pipe);
+  g_free (pipe);
 }
 
 static void

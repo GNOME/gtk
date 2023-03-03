@@ -416,7 +416,7 @@ gdk_content_register_serializer (GType                    type,
   g_return_if_fail (mime_type != NULL);
   g_return_if_fail (serialize != NULL);
 
-  serializer = g_slice_new0 (Serializer);
+  serializer = g_new0 (Serializer, 1);
 
   serializer->mime_type = g_intern_string (mime_type);
   serializer->type = type;
