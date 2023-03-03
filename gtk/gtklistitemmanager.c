@@ -170,7 +170,7 @@ gtk_list_item_manager_get_tile_bounds (GtkListItemManager *self,
   tile = gtk_rb_tree_get_root (self->items);
   if (tile == NULL)
     {
-      *out_bounds = &(GdkRectangle) { 0, 0, 0, 0 };
+      *out_bounds = (GdkRectangle) { 0, 0, 0, 0 };
       return;
     }
 

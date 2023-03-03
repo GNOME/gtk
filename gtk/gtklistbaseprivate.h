@@ -43,14 +43,9 @@ struct _GtkListBaseClass
 
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
-  gboolean             (* get_allocation_along)                 (GtkListBase            *self,
+  gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,
-                                                                 int                    *offset,
-                                                                 int                    *size);
-  gboolean             (* get_allocation_across)                (GtkListBase            *self,
-                                                                 guint                   pos,
-                                                                 int                    *offset,
-                                                                 int                    *size);
+                                                                 GdkRectangle           *area);
   gboolean             (* get_position_from_allocation)         (GtkListBase            *self,
                                                                  int                     across,
                                                                  int                     along,

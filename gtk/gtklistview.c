@@ -229,50 +229,25 @@ gtk_list_view_split (GtkListBase *base,
 }
 
 static gboolean
-gtk_list_view_get_allocation_along (GtkListBase *base,
-                                    guint        pos,
-                                    int         *offset,
-                                    int         *size)
+gtk_list_view_get_allocation (GtkListBase  *base,
+                              guint         pos,
+                              GdkRectangle *area)
 {
   GtkListView *self = GTK_LIST_VIEW (base);
   GtkListTile *tile;
-  guint skip;
-  int row_height;
+  guint offset;
 
-  tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &skip);
+  tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &offset);
   if (tile == NULL)
-    {
-      if (offset)
-        *offset = 0;
-      if (size)
-        *size = 0;
-      return FALSE;
-    }
+    return FALSE;
 
-  row_height = tile->area.height / tile->n_items;
-
+  *area = tile->area;
+  if (tile->n_items)
+    area->height /= tile->n_items;
   if (offset)
-    *offset = tile->area.y + skip * row_height;
-  if (size)
-    *size = row_height;
+    area->y += offset * area->height;
 
-  return TRUE;
-}
-
-static gboolean
-gtk_list_view_get_allocation_across (GtkListBase *base,
-                                     guint        pos,
-                                     int         *offset,
-                                     int         *size)
-{
-  GtkListView *self = GTK_LIST_VIEW (base);
-
-  if (offset)
-    *offset = 0;
-  if (size)
-    *size = self->list_width;
-
-  return TRUE;
+  return area->width > 0 && area->height > 0;
 }
 
 static GtkBitset *
@@ -683,8 +658,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   list_base_class->list_item_name = "row";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
   list_base_class->split = gtk_list_view_split;
-  list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
-  list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
+  list_base_class->get_allocation = gtk_list_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
   list_base_class->move_focus_along = gtk_list_view_move_focus_along;

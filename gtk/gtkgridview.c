@@ -228,50 +228,33 @@ gtk_grid_view_split (GtkListBase *base,
 }
 
 static gboolean
-gtk_grid_view_get_allocation_along (GtkListBase *base,
-                                    guint        pos,
-                                    int         *offset,
-                                    int         *size)
+gtk_grid_view_get_allocation (GtkListBase  *base,
+                              guint         pos,
+                              GdkRectangle *area)
 {
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkListTile *tile;
-  guint remaining;
+  guint offset;
 
-  tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &remaining);
-  if (tile->n_items <= self->n_columns)
-    {
-      *offset = tile->area.y;
-      *size = tile->area.height;
-    }
-  else
-    {
-      guint rows_in_tile = tile->n_items / self->n_columns;
-      guint row_height = tile->area.height / rows_in_tile;
-      guint row_index = remaining / self->n_columns;
+  tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &offset);
+  if (tile == NULL || tile->area.width <= 0 || tile->area.height <= 0)
+    return FALSE;
 
-      *offset = tile->area.y  + row_index * row_height;
-      *size = row_height;
+  *area = tile->area;
+
+  if (tile->n_items > self->n_columns)
+    {
+      area->height /= (tile->n_items / self->n_columns);
+      area->y += (offset / self->n_columns) * area->height;
+      offset %= self->n_columns;
     }
 
-  return TRUE;
-}
-
-static gboolean
-gtk_grid_view_get_allocation_across (GtkListBase *base,
-                                     guint        pos,
-                                     int         *offset,
-                                     int         *size)
-{
-  GtkGridView *self = GTK_GRID_VIEW (base);
-  guint start;
-
-  pos %= self->n_columns;
-  start = ceil (self->column_width * pos);
-
-  if (offset)
-    *offset = start;
-  if (size)
-    *size = ceil (self->column_width * (pos + 1)) - start;
+  if (tile->n_items > 1)
+    {
+      guint col = area->x / self->column_width;
+      area->x = ceil ((col + offset) * self->column_width);
+      area->width = ceil ((col + offset + 1) * self->column_width) - area->x;
+    }
 
   return TRUE;
 }
@@ -876,8 +859,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   list_base_class->list_item_name = "child";
   list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
   list_base_class->split = gtk_grid_view_split;
-  list_base_class->get_allocation_along = gtk_grid_view_get_allocation_along;
-  list_base_class->get_allocation_across = gtk_grid_view_get_allocation_across;
+  list_base_class->get_allocation = gtk_grid_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_grid_view_get_position_from_allocation;
   list_base_class->move_focus_along = gtk_grid_view_move_focus_along;

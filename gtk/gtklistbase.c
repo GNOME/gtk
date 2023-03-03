@@ -327,49 +327,22 @@ gtk_list_base_move_focus (GtkListBase    *self,
 }
 
 /*
- * gtk_list_base_get_allocation_along:
+ * gtk_list_base_get_allocation:
  * @self: a `GtkListBase`
- * @pos: item to get the size of
- * @offset: (out caller-allocates) (optional): set to the offset
- *   of the top/left of the item
- * @size: (out caller-allocates) (optional): set to the size of
- *   the item in the direction
+ * @pos: item to get the area of
+ * @area: (out caller-allocates): set to the area
+ *   occupied by the item
  *
- * Computes the allocation of the item in the direction along the sizing
- * axis.
+ * Computes the allocation of the item in the given position
  *
  * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
  **/
 static gboolean
-gtk_list_base_get_allocation_along (GtkListBase *self,
-                                    guint        pos,
-                                    int         *offset,
-                                    int         *size)
+gtk_list_base_get_allocation (GtkListBase  *self,
+                              guint         pos,
+                              GdkRectangle *area)
 {
-  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_along (self, pos, offset, size);
-}
-
-/*
- * gtk_list_base_get_allocation_across:
- * @self: a `GtkListBase`
- * @pos: item to get the size of
- * @offset: (out caller-allocates) (optional): set to the offset
- *   of the top/left of the item
- * @size: (out caller-allocates) (optional): set to the size of
- *   the item in the direction
- *
- * Computes the allocation of the item in the direction across to the sizing
- * axis.
- *
- * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
- **/
-static gboolean
-gtk_list_base_get_allocation_across (GtkListBase *self,
-                                     guint        pos,
-                                     int         *offset,
-                                     int         *size)
-{
-  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_across (self, pos, offset, size);
+  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation (self, pos, area);
 }
 
 /*
@@ -807,29 +780,22 @@ gtk_list_base_scroll_to_item (GtkListBase *self,
                               guint        pos)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
+  GdkRectangle area;
 
-  /* figure out primary orientation and if position is valid */
-  if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
+  if (!gtk_list_base_get_allocation (GTK_LIST_BASE (self), pos, &area))
     return;
 
-  end += start;
   gtk_list_base_compute_scroll_align (self,
                                       gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                      start, end,
+                                      area.y, area.y + area.height,
                                       priv->anchor_align_along, priv->anchor_side_along,
                                       &align_along, &side_along);
 
-  /* now do the same thing with the other orientation */
-  if (!gtk_list_base_get_allocation_across (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
-
-  end += start;
   gtk_list_base_compute_scroll_align (self,
                                       gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
-                                      start, end,
+                                      area.x, area.x + area.width,
                                       priv->anchor_align_across, priv->anchor_side_across,
                                       &align_across, &side_across);
 
@@ -959,8 +925,7 @@ gtk_list_base_move_cursor_page_up (GtkWidget *widget,
 
   pos = gtk_list_base_get_focus_position (self);
   page_size = gtk_adjustment_get_page_size (priv->adjustment[priv->orientation]);
-  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
-      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+  if (!gtk_list_base_get_allocation (self, pos, &area))
     return TRUE;
   if (!gtk_list_base_get_position_from_allocation (self,
                                                    area.x + area.width / 2,
@@ -1005,8 +970,7 @@ gtk_list_base_move_cursor_page_down (GtkWidget *widget,
   if (end == 0)
     return TRUE;
 
-  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
-      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+  if (!gtk_list_base_get_allocation (self, pos, &area))
     return TRUE;
 
   if (!gtk_list_base_get_position_from_allocation (self,
@@ -1510,13 +1474,13 @@ gtk_list_base_get_rubberband_coords (GtkListBase  *self,
     }
   else
     {
+      GdkRectangle area;
       guint pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->rubberband->start_tracker);
 
-      if (gtk_list_base_get_allocation_along (self, pos, &y1, &y2) &&
-          gtk_list_base_get_allocation_across (self, pos, &x1, &x2))
+      if (gtk_list_base_get_allocation (self, pos, &area))
         {
-          x1 += x2 * priv->rubberband->start_align_across;
-          y1 += y2 * priv->rubberband->start_align_along;
+          x1 = area.x + area.width * priv->rubberband->start_align_across;
+          y1 = area.y + area.height * priv->rubberband->start_align_along;
         }
       else
         {
@@ -1947,7 +1911,7 @@ gtk_list_base_update_adjustments (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GdkRectangle bounds;
-  int value_along, value_across, size;
+  int value_along, value_across;
   int page_along, page_across;
   guint pos;
 
@@ -1966,24 +1930,22 @@ gtk_list_base_update_adjustments (GtkListBase *self)
     }
   else
     {
-      if (gtk_list_base_get_allocation_across (self, pos, &value_across, &size))
+      GdkRectangle area;
+
+      if (gtk_list_base_get_allocation (self, pos, &area))
         {
+          value_across = area.x;
+          value_along = area.y;
           if (priv->anchor_side_across == GTK_PACK_END)
-            value_across += size;
-          value_across -= priv->anchor_align_across * page_across;
-        }
-      else
-        {
-          value_along = 0;
-        }
-      if (gtk_list_base_get_allocation_along (self, pos, &value_along, &size))
-        {
+            value_across += area.width;
           if (priv->anchor_side_along == GTK_PACK_END)
-            value_along += size;
+            value_along += area.height;
+          value_across -= priv->anchor_align_across * page_across;
           value_along -= priv->anchor_align_along * page_along;
         }
       else
         {
+          value_across = 0;
           value_along = 0;
         }
     }
