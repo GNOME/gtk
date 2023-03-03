@@ -145,7 +145,7 @@ static GtkTextHistoryFuncs funcs = {
 static Text *
 text_new (void)
 {
-  Text *text = g_slice_new0 (Text);
+  Text *text = g_new0 (Text, 1);
 
   text->history = gtk_text_history_new (&funcs, text);
   text->buf = g_string_new (NULL);
@@ -160,7 +160,7 @@ text_free (Text *text)
 {
   g_object_unref (text->history);
   g_string_free (text->buf, TRUE);
-  g_slice_free (Text, text);
+  g_free (text);
 }
 
 static void

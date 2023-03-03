@@ -126,7 +126,7 @@ gtk_tree_model_ref_count_finalize (GObject *object)
 static NodeInfo *
 node_info_new (void)
 {
-  NodeInfo *info = g_slice_new (NodeInfo);
+  NodeInfo *info = g_new (NodeInfo, 1);
   info->ref_count = 0;
 
   return info;
@@ -135,7 +135,7 @@ node_info_new (void)
 static void
 node_info_free (NodeInfo *info)
 {
-  g_slice_free (NodeInfo, info);
+  g_free (info);
 }
 
 static void

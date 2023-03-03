@@ -45,7 +45,7 @@ recent_manager_add (void)
 
   manager = gtk_recent_manager_get_default ();
 
-  recent_data = g_slice_new0 (GtkRecentData);
+  recent_data = g_new0 (GtkRecentData, 1);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
@@ -90,7 +90,7 @@ recent_manager_add (void)
   res = gtk_recent_manager_add_full (manager, uri, recent_data);
   g_assert_true (res);
 
-  g_slice_free (GtkRecentData, recent_data);
+  g_free (recent_data);
 }
 
 typedef struct {
@@ -118,7 +118,7 @@ static gboolean
 add_bulk (gpointer data_)
 {
   AddManyClosure *closure = data_;
-  GtkRecentData *data = g_slice_new0 (GtkRecentData);
+  GtkRecentData *data = g_new0 (GtkRecentData, 1);
   int i;
 
   for (i = 0; i < 100; i++)
@@ -139,7 +139,7 @@ add_bulk (gpointer data_)
       closure->counter += 1;
     }
 
-  g_slice_free (GtkRecentData, data);
+  g_free (data);
 
   return G_SOURCE_REMOVE;
 }
@@ -283,12 +283,12 @@ recent_manager_purge (void)
   n = gtk_recent_manager_purge_items (manager, &error);
   g_assert_null (error);
 
-  recent_data = g_slice_new0 (GtkRecentData);
+  recent_data = g_new0 (GtkRecentData, 1);
   recent_data->mime_type = (char *)"text/plain";
   recent_data->app_name = (char *)"testrecentchooser";
   recent_data->app_exec = (char *)"testrecentchooser %u";
   gtk_recent_manager_add_full (manager, uri, recent_data);
-  g_slice_free (GtkRecentData, recent_data);
+  g_free (recent_data);
 
   error = NULL;
   n = gtk_recent_manager_purge_items (manager, &error);
