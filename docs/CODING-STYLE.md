@@ -678,11 +678,10 @@ Interfaces must have the following macros:
 
 ### Memory allocation
 
-When dynamically allocating data on the heap either use `g_new()` or,
-if allocating multiple small data structures, `g_slice_new()`.
+When dynamically allocating data on the heap use `g_new()`.
 
 Public structure types should always be returned after being zero-ed,
-either explicitly for each member, or by using `g_new0()` or `g_slice_new0()`.
+either explicitly for each member, or by using `g_new0()`.
 
 ### Macros
 
