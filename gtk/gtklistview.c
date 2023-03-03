@@ -491,7 +491,8 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   opposite_scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), opposite_orientation);
 
   /* step 0: exit early if list is empty */
-  if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
+  tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+  if (tile == NULL)
     {
       gtk_list_base_allocate (GTK_LIST_BASE (self));
       return;
@@ -510,7 +511,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   /* step 2: determine height of known list items and gc the list */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
 
-  for (tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+  for (;
        tile != NULL;
        tile = gtk_list_tile_gc (self->item_manager, gtk_rb_tree_node_get_next (tile)))
     {
