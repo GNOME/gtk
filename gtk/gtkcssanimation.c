@@ -140,7 +140,7 @@ gtk_css_animation_free (GtkStyleAnimation *animation)
   _gtk_css_keyframes_unref (self->keyframes);
   _gtk_css_value_unref (self->ease);
 
-  g_slice_free (GtkCssAnimation, self);
+  g_free (self);
 }
 
 static const GtkStyleAnimationClass GTK_CSS_ANIMATION_CLASS = {
@@ -172,7 +172,7 @@ _gtk_css_animation_new (const char      *name,
   g_return_val_if_fail (ease != NULL, NULL);
   g_return_val_if_fail (iteration_count >= 0, NULL);
 
-  animation = g_slice_alloc (sizeof (GtkCssAnimation));
+  animation = g_new (GtkCssAnimation, 1);
   animation->parent.class = &GTK_CSS_ANIMATION_CLASS;
   animation->parent.ref_count = 1;
 
@@ -203,7 +203,7 @@ _gtk_css_animation_advance_with_play_state (GtkCssAnimation *source,
                                             gint64           timestamp,
                                             GtkCssPlayState  play_state)
 {
-  GtkCssAnimation *animation = g_slice_alloc (sizeof (GtkCssAnimation));
+  GtkCssAnimation *animation = g_new (GtkCssAnimation, 1);
   animation->parent.class = &GTK_CSS_ANIMATION_CLASS;
   animation->parent.ref_count = 1;
 

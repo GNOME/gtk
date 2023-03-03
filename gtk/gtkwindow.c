@@ -3202,7 +3202,7 @@ static void
 free_icon_info (GtkWindowIconInfo *info)
 {
   g_free (info->icon_name);
-  g_slice_free (GtkWindowIconInfo, info);
+  g_free (info);
 }
 
 
@@ -3215,7 +3215,7 @@ ensure_icon_info (GtkWindow *window)
 
   if (info == NULL)
     {
-      info = g_slice_new0 (GtkWindowIconInfo);
+      info = g_new0 (GtkWindowIconInfo, 1);
       g_object_set_qdata_full (G_OBJECT (window),
                               quark_gtk_window_icon_info,
                               info,

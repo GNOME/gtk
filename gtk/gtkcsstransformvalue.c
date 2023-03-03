@@ -266,11 +266,9 @@ gtk_css_value_transform_free (GtkCssValue *value)
   guint i;
 
   for (i = 0; i < value->n_transforms; i++)
-    {
-      gtk_css_transform_clear (&value->transforms[i]);
-    }
+    gtk_css_transform_clear (&value->transforms[i]);
 
-  g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssTransform) * (value->n_transforms - 1), value);
+  g_free (value);
 }
 
 /* returns TRUE if dest == src */

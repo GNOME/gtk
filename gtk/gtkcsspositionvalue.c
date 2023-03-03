@@ -32,8 +32,7 @@ gtk_css_value_position_free (GtkCssValue *value)
 {
   _gtk_css_value_unref (value->x);
   _gtk_css_value_unref (value->y);
-
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

@@ -39,7 +39,7 @@ _gtk_bookmark_free (gpointer data)
 
   g_object_unref (bookmark->file);
   g_free (bookmark->label);
-  g_slice_free (GtkBookmark, bookmark);
+  g_free (bookmark);
 }
 
 static void
@@ -105,7 +105,7 @@ parse_bookmarks (const char *contents)
       if (!g_utf8_validate (lines[i], -1, NULL))
 	continue;
 
-      bookmark = g_slice_new0 (GtkBookmark);
+      bookmark = g_new0 (GtkBookmark, 1);
 
       if ((space = strchr (lines[i], ' ')) != NULL)
 	{
@@ -419,7 +419,7 @@ _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
       return FALSE;
     }
 
-  bookmark = g_slice_new0 (GtkBookmark);
+  bookmark = g_new0 (GtkBookmark, 1);
   bookmark->file = g_object_ref (file);
 
   manager->bookmarks = g_slist_insert (manager->bookmarks, bookmark, position);

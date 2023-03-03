@@ -36,7 +36,7 @@ gtk_drop_free (gpointer data)
 {
   GtkDrop *self = data;
 
-  g_slice_free (GtkDrop, self);
+  g_free (self);
 }
 
 static GtkDrop *
@@ -51,7 +51,7 @@ gtk_drop_lookup (GdkDrop *drop)
   result = g_object_get_qdata (G_OBJECT (drop), drop_quark);
   if (result == NULL)
     {
-      result = g_slice_new0 (GtkDrop);
+      result = g_new0 (GtkDrop, 1);
       g_object_set_qdata_full (G_OBJECT (drop), drop_quark, result, gtk_drop_free);
     }
 

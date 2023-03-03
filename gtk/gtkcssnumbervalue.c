@@ -79,13 +79,9 @@ gtk_css_value_number_free (GtkCssValue *number)
 
       for (guint i = 0; i < n_terms; i++)
         _gtk_css_value_unref (number->calc.terms[i]);
+    }
 
-      g_slice_free1 (gtk_css_value_calc_get_size (n_terms), number);
-    }
-  else
-    {
-      g_slice_free (GtkCssValue, number);
-    }
+  g_free (number);
 }
 
 static double

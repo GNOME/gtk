@@ -361,7 +361,7 @@ gtk_string_list_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       ItemParserData *data;
 
-      data = g_slice_new0 (ItemParserData);
+      data = g_new0 (ItemParserData, 1);
       data->builder = g_object_ref (builder);
       data->list = g_object_ref (GTK_STRING_LIST (buildable));
       data->domain = gtk_builder_get_translation_domain (builder);
@@ -391,7 +391,7 @@ gtk_string_list_buildable_custom_finished (GtkBuildable *buildable,
       g_object_unref (data->list);
       g_object_unref (data->builder);
       g_string_free (data->string, TRUE);
-      g_slice_free (ItemParserData, data);
+      g_free (data);
     }
 }
 

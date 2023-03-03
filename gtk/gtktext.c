@@ -3576,7 +3576,7 @@ gtk_text_password_hint_free (GtkTextPasswordHint *password_hint)
   if (password_hint->source_id)
     g_source_remove (password_hint->source_id);
 
-  g_slice_free (GtkTextPasswordHint, password_hint);
+  g_free (password_hint);
 }
 
 
@@ -3645,7 +3645,7 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
                                                                     quark_password_hint);
           if (!password_hint)
             {
-              password_hint = g_slice_new0 (GtkTextPasswordHint);
+              password_hint = g_new0 (GtkTextPasswordHint, 1);
               g_object_set_qdata_full (G_OBJECT (self), quark_password_hint, password_hint,
                                        (GDestroyNotify)gtk_text_password_hint_free);
             }

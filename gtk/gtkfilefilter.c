@@ -225,7 +225,7 @@ filter_rule_free (FilterRule *rule)
     default:
       break;
     }
-  g_slice_free (FilterRule, rule);
+  g_free (rule);
 }
 
 static void
@@ -442,7 +442,7 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
 
   if (strcmp (tagname, "mime-types") == 0)
     {
-      data = g_slice_new0 (SubParserData);
+      data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_MIME_TYPES;
       data->filter = GTK_FILE_FILTER (buildable);
@@ -453,7 +453,7 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
     }
   else if (strcmp (tagname, "patterns") == 0)
     {
-      data = g_slice_new0 (SubParserData);
+      data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_PATTERNS;
       data->filter = GTK_FILE_FILTER (buildable);
@@ -464,7 +464,7 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
     }
   else if (strcmp (tagname, "suffixes") == 0)
     {
-      data = g_slice_new0 (SubParserData);
+      data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_SUFFIXES;
       data->filter = GTK_FILE_FILTER (buildable);
@@ -491,7 +491,7 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
       SubParserData *data = (SubParserData*)user_data;
 
       g_string_free (data->string, TRUE);
-      g_slice_free (SubParserData, data);
+      g_free (data);
     }
 }
 
@@ -621,7 +621,7 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (mime_type != NULL);
 
-  rule = g_slice_new (FilterRule);
+  rule = g_new (FilterRule, 1);
   rule->type = FILTER_RULE_MIME_TYPE;
   rule->u.content_types = g_new0 (char *, 2);
   rule->u.content_types[0] = g_content_type_from_mime_type (mime_type);
@@ -650,7 +650,7 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (pattern != NULL);
 
-  rule = g_slice_new (FilterRule);
+  rule = g_new (FilterRule, 1);
   rule->type = FILTER_RULE_PATTERN;
   rule->u.pattern = g_strdup (pattern);
 
@@ -682,7 +682,7 @@ gtk_file_filter_add_suffix (GtkFileFilter *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (suffix != NULL);
 
-  rule = g_slice_new (FilterRule);
+  rule = g_new (FilterRule, 1);
   rule->type = FILTER_RULE_SUFFIX;
   rule->u.pattern = g_strconcat ("*.", suffix, NULL);
 
@@ -709,7 +709,7 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
-  rule = g_slice_new (FilterRule);
+  rule = g_new (FilterRule, 1);
   rule->type = FILTER_RULE_PIXBUF_FORMATS;
 
   array = g_ptr_array_new ();

@@ -125,7 +125,7 @@ free_hit (gpointer data)
 
   g_clear_object (&hit->file);
   g_clear_object (&hit->info);
-  g_slice_free (GtkSearchHit, hit);
+  g_free (hit);
 }
 
 static GFileInfo *
@@ -194,7 +194,7 @@ handle_cursor_idle_cb (gpointer user_data)
         break;
 
       url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
-      hit = g_slice_new0 (GtkSearchHit);
+      hit = g_new0 (GtkSearchHit, 1);
       hit->file = g_file_new_for_uri (url);
       hit->info = create_file_info (hit->file, cursor);
       hits = g_list_prepend (hits, hit);

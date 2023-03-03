@@ -363,7 +363,7 @@ gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       GtkPangoAttributeParserData *parser_data;
 
-      parser_data = g_slice_new0 (GtkPangoAttributeParserData);
+      parser_data = g_new0 (GtkPangoAttributeParserData, 1);
       parser_data->builder = g_object_ref (builder);
       parser_data->object = (GObject *) g_object_ref (buildable);
       *parser = pango_parser;
@@ -395,7 +395,7 @@ gtk_entry_buildable_custom_finished (GtkBuildable *buildable,
 
       g_object_unref (data->object);
       g_object_unref (data->builder);
-      g_slice_free (GtkPangoAttributeParserData, data);
+      g_free (data);
     }
 }
 
@@ -1441,7 +1441,7 @@ gtk_entry_finalize (GObject *object)
 
       gtk_widget_unparent (icon_info->widget);
 
-      g_slice_free (EntryIconInfo, icon_info);
+      g_free (icon_info);
     }
 
   g_clear_pointer (&priv->progress_widget, gtk_widget_unparent);
@@ -1603,7 +1603,7 @@ construct_icon_info (GtkWidget            *widget,
 
   g_return_val_if_fail (priv->icons[icon_pos] == NULL, NULL);
 
-  icon_info = g_slice_new0 (EntryIconInfo);
+  icon_info = g_new0 (EntryIconInfo, 1);
   priv->icons[icon_pos] = icon_info;
 
   icon_info->widget = gtk_image_new ();

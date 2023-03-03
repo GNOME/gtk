@@ -55,7 +55,7 @@ typedef struct
 static void
 gtk_application_wayland_inhibitor_free (GtkApplicationWaylandInhibitor *inhibitor)
 {
-  g_slice_free (GtkApplicationWaylandInhibitor, inhibitor);
+  g_free (inhibitor);
 }
 
 typedef struct
@@ -127,7 +127,7 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
   if (!flags)
     return 0;
 
-  inhibitor = g_slice_new0 (GtkApplicationWaylandInhibitor);
+  inhibitor = g_new0 (GtkApplicationWaylandInhibitor, 1);
   inhibitor->cookie = ++wayland->next_cookie;
   inhibitor->flags = flags;
   wayland->inhibitors = g_slist_prepend (wayland->inhibitors, inhibitor);

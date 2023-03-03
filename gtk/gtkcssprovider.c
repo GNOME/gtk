@@ -318,7 +318,7 @@ gtk_css_scanner_destroy (GtkCssScanner *scanner)
   g_object_unref (scanner->provider);
   gtk_css_parser_unref (scanner->parser);
 
-  g_slice_free (GtkCssScanner, scanner);
+  g_free (scanner);
 }
 
 static void
@@ -356,7 +356,7 @@ gtk_css_scanner_new (GtkCssProvider *provider,
 {
   GtkCssScanner *scanner;
 
-  scanner = g_slice_new0 (GtkCssScanner);
+  scanner = g_new0 (GtkCssScanner, 1);
 
   g_object_ref (provider);
   scanner->provider = provider;

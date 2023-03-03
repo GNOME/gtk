@@ -37,7 +37,7 @@ gtk_css_node_style_cache_new (GtkCssStyle *style)
 {
   GtkCssNodeStyleCache *result;
 
-  result = g_slice_new0 (GtkCssNodeStyleCache);
+  result = g_new0 (GtkCssNodeStyleCache, 1);
 
   result->ref_count = 1;
   result->style = g_object_ref (style);
@@ -65,7 +65,7 @@ gtk_css_node_style_cache_unref (GtkCssNodeStyleCache *cache)
   if (cache->children)
     g_hash_table_unref (cache->children);
 
-  g_slice_free (GtkCssNodeStyleCache, cache);
+  g_free (cache);
 }
 
 GtkCssStyle *

@@ -204,7 +204,7 @@ static GtkLevelBarOffset *
 gtk_level_bar_offset_new (const char *name,
                           double       value)
 {
-  GtkLevelBarOffset *offset = g_slice_new0 (GtkLevelBarOffset);
+  GtkLevelBarOffset *offset = g_new0 (GtkLevelBarOffset, 1);
 
   offset->name = g_strdup (name);
   offset->value = value;
@@ -216,7 +216,7 @@ static void
 gtk_level_bar_offset_free (GtkLevelBarOffset *offset)
 {
   g_free (offset->name);
-  g_slice_free (GtkLevelBarOffset, offset);
+  g_free (offset);
 }
 
 static int
@@ -766,7 +766,7 @@ gtk_level_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
   if (strcmp (tagname, "offsets") != 0)
     return FALSE;
 
-  data = g_slice_new0 (OffsetsParserData);
+  data = g_new0 (OffsetsParserData, 1);
   data->self = GTK_LEVEL_BAR (buildable);
   data->builder = builder;
   data->offsets = NULL;
@@ -805,7 +805,7 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
     }
 
   g_list_free_full (data->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
-  g_slice_free (OffsetsParserData, data);
+  g_free (data);
 }
 
 static void

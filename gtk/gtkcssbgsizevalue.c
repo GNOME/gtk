@@ -37,7 +37,7 @@ gtk_css_value_bg_size_free (GtkCssValue *value)
   if (value->y)
     _gtk_css_value_unref (value->y);
 
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

@@ -81,7 +81,7 @@ gtk_numeric_sort_keys_free (GtkSortKeys *keys)
   GtkNumericSortKeys *self = (GtkNumericSortKeys *) keys;
 
   gtk_expression_unref (self->expression);
-  g_slice_free (GtkNumericSortKeys, self);
+  g_free (self);
 }
 
 #define COMPARE_FUNC(type, name, _a, _b) \

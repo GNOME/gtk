@@ -55,7 +55,7 @@ gtk_builder_menu_push_frame (GtkBuilderMenuState *state,
 {
   struct frame *new;
 
-  new = g_slice_new (struct frame);
+  new = g_new (struct frame, 1);
   *new = state->frame;
 
   state->frame.menu = menu;
@@ -77,7 +77,7 @@ gtk_builder_menu_pop_frame (GtkBuilderMenuState *state)
 
   state->frame = *prev;
 
-  g_slice_free (struct frame, prev);
+  g_free (prev);
 }
 
 static void
@@ -335,7 +335,7 @@ gtk_builder_menu_error (GtkBuildableParseContext *context,
 
       state->frame = *prev;
 
-      g_slice_free (struct frame, prev);
+      g_free (prev);
     }
 
   if (state->string)
@@ -347,7 +347,7 @@ gtk_builder_menu_error (GtkBuildableParseContext *context,
   g_free (state->attribute);
   g_free (state->context);
 
-  g_slice_free (GtkBuilderMenuState, state);
+  g_free (state);
 }
 
 static GtkBuildableParser gtk_builder_menu_subparser =
@@ -368,7 +368,7 @@ _gtk_builder_menu_start (ParserData   *parser_data,
   GtkBuilderMenuState *state;
   char *id;
 
-  state = g_slice_new0 (GtkBuilderMenuState);
+  state = g_new0 (GtkBuilderMenuState, 1);
   state->parser_data = parser_data;
   gtk_buildable_parse_context_push (&parser_data->ctx, &gtk_builder_menu_subparser, state);
 
@@ -394,5 +394,5 @@ _gtk_builder_menu_end (ParserData *parser_data)
   g_assert (state->frame.prev == NULL);
   g_assert (state->frame.item == NULL);
   g_assert (state->frame.menu == NULL);
-  g_slice_free (GtkBuilderMenuState, state);
+  g_free (state);
 }

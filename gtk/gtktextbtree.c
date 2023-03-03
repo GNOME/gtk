@@ -395,7 +395,7 @@ _gtk_text_btree_new (GtkTextTagTable *table,
 
   /* Create the tree itself */
 
-  tree = g_slice_new0 (GtkTextBTree);
+  tree = g_new0 (GtkTextBTree, 1);
   tree->root_node = root_node;
   tree->table = table;
   tree->views = NULL;
@@ -513,7 +513,7 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
       g_object_unref (tree->selection_bound_mark);
       tree->selection_bound_mark = NULL;
 
-      g_slice_free (GtkTextBTree, tree);
+      g_free (tree);
     }
 }
 
@@ -1539,7 +1539,7 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
 
   g_return_if_fail (tree != NULL);
 
-  view = g_slice_new (BTreeView);
+  view = g_new (BTreeView, 1);
 
   view->view_id = layout;
   view->layout = layout;
@@ -1561,7 +1561,7 @@ _gtk_text_btree_add_view (GtkTextBTree *tree,
    */
   last_line = get_last_line (tree);
 
-  line_data = g_slice_new (GtkTextLineData);
+  line_data = g_new (GtkTextLineData, 1);
   line_data->view_id = layout;
   line_data->next = NULL;
   line_data->width = 0;
@@ -1607,14 +1607,14 @@ _gtk_text_btree_remove_view (GtkTextBTree *tree,
    */
   last_line = get_last_line (tree);
   line_data = _gtk_text_line_remove_data (last_line, view_id);
-  g_slice_free (GtkTextLineData, line_data);
+  g_free (line_data);
 
   gtk_text_btree_node_remove_view (view, tree->root_node, view_id);
 
   view->layout = (gpointer) 0xdeadbeef;
   view->view_id = (gpointer) 0xdeadbeef;
 
-  g_slice_free (BTreeView, view);
+  g_free (view);
 }
 
 void
@@ -1665,7 +1665,7 @@ static IterStack*
 iter_stack_new (void)
 {
   IterStack *stack;
-  stack = g_slice_new (IterStack);
+  stack = g_new (IterStack, 1);
   stack->iters = NULL;
   stack->count = 0;
   stack->allocated = 0;
@@ -1704,7 +1704,7 @@ static void
 iter_stack_free (IterStack *stack)
 {
   g_free (stack->iters);
-  g_slice_free (IterStack, stack);
+  g_free (stack);
 }
 
 static void
@@ -3610,7 +3610,7 @@ _gtk_text_line_data_new (GtkTextLayout *layout,
 {
   GtkTextLineData *line_data;
 
-  line_data = g_slice_new (GtkTextLineData);
+  line_data = g_new (GtkTextLineData, 1);
 
   line_data->view_id = layout;
   line_data->next = NULL;
@@ -4700,7 +4700,12 @@ _gtk_text_line_previous_could_contain_tag (GtkTextLine  *line,
 static void
 summary_list_destroy (Summary *summary)
 {
-  g_slice_free_chain (Summary, summary, next);
+  while (summary)
+    {
+      Summary *next = summary->next;
+      g_free (summary);
+      summary = next;
+    }
 }
 
 static GtkTextLine*
@@ -4734,7 +4739,7 @@ gtk_text_line_new (void)
 {
   GtkTextLine *line;
 
-  line = g_slice_new0 (GtkTextLine);
+  line = g_new0 (GtkTextLine, 1);
   line->dir_strong = PANGO_DIRECTION_NEUTRAL;
   line->dir_propagated_forward = PANGO_DIRECTION_NEUTRAL;
   line->dir_propagated_back = PANGO_DIRECTION_NEUTRAL;
@@ -4765,7 +4770,7 @@ gtk_text_line_destroy (GtkTextBTree *tree, GtkTextLine *line)
       ld = next;
     }
 
-  g_slice_free (GtkTextLine, line);
+  g_free (line);
 }
 
 static void
@@ -4826,7 +4831,7 @@ node_data_new (gpointer  view_id,
 {
   NodeData *nd;
 
-  nd = g_slice_new (NodeData);
+  nd = g_new (NodeData, 1);
 
   nd->view_id = view_id;
   nd->next = next;
@@ -4840,13 +4845,18 @@ node_data_new (gpointer  view_id,
 static inline void
 node_data_destroy (NodeData *nd)
 {
-  g_slice_free (NodeData, nd);
+  g_free (nd);
 }
 
 static inline void
 node_data_list_destroy (NodeData *nd)
 {
-  g_slice_free_chain (NodeData, nd, next);
+  while (nd)
+    {
+      NodeData *next = nd->next;
+      g_free (nd);
+      nd = next;
+    }
 }
 
 static inline NodeData*
@@ -4869,7 +4879,7 @@ summary_destroy (Summary *summary)
   summary->info = (void*)0x1;
   summary->toggle_count = 567;
   summary->next = (void*)0x1;
-  g_slice_free (Summary, summary);
+  g_free (summary);
 }
 
 static GtkTextBTreeNode*
@@ -4877,7 +4887,7 @@ gtk_text_btree_node_new (void)
 {
   GtkTextBTreeNode *node;
 
-  node = g_slice_new (GtkTextBTreeNode);
+  node = g_new (GtkTextBTreeNode, 1);
 
   node->node_data = NULL;
 
@@ -4907,7 +4917,7 @@ gtk_text_btree_node_adjust_toggle_count (GtkTextBTreeNode  *node,
     {
       /* didn't find a summary for our tag. */
       g_return_if_fail (adjust > 0);
-      summary = g_slice_new (Summary);
+      summary = g_new (Summary, 1);
       summary->info = info;
       summary->toggle_count = adjust;
       summary->next = node->summary;
@@ -5529,7 +5539,7 @@ gtk_text_btree_node_free_empty (GtkTextBTree *tree,
 
   summary_list_destroy (node->summary);
   node_data_list_destroy (node->node_data);
-  g_slice_free (GtkTextBTreeNode, node);
+  g_free (node);
 }
 
 static NodeData*
@@ -6014,7 +6024,7 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
     {
       /* didn't find it, create. */
 
-      info = g_slice_new (GtkTextTagInfo);
+      info = g_new (GtkTextTagInfo, 1);
 
       info->tag = tag;
       g_object_ref (tag);
@@ -6055,7 +6065,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
 
           g_object_unref (info->tag);
 
-          g_slice_free (GtkTextTagInfo, info);
+          g_free (info);
           return;
         }
 
@@ -6355,7 +6365,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
                */
 
               GtkTextBTreeNode *rootnode = info->tag_root;
-              summary = g_slice_new (Summary);
+              summary = g_new (Summary, 1);
               summary->info = info;
               summary->toggle_count = info->toggle_count - delta;
               summary->next = rootnode->summary;
@@ -6364,7 +6374,7 @@ _gtk_change_node_toggle_count (GtkTextBTreeNode *node,
               rootLevel = rootnode->level;
               info->tag_root = rootnode;
             }
-          summary = g_slice_new (Summary);
+          summary = g_new (Summary, 1);
           summary->info = info;
           summary->toggle_count = delta;
           summary->next = node->summary;

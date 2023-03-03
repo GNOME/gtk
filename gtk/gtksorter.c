@@ -236,7 +236,7 @@ gtk_default_sort_keys_free (GtkSortKeys *keys)
 
   g_object_unref (self->sorter);
 
-  g_slice_free (GtkDefaultSortKeys, self);
+  g_free (self);
 }
 
 static gboolean

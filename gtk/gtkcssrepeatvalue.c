@@ -30,7 +30,7 @@ struct _GtkCssValue {
 static void
 gtk_css_value_repeat_free (GtkCssValue *value)
 {
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

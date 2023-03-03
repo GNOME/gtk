@@ -77,7 +77,7 @@ gtk_text_line_display_cache_new (void)
 {
   GtkTextLineDisplayCache *ret;
 
-  ret = g_slice_new0 (GtkTextLineDisplayCache);
+  ret = g_new0 (GtkTextLineDisplayCache, 1);
   ret->sorted_by_line = g_sequence_new ((GDestroyNotify)gtk_text_line_display_unref);
   ret->line_to_display = g_hash_table_new (NULL, NULL);
   ret->mru_size = DEFAULT_MRU_SIZE;
@@ -101,7 +101,7 @@ gtk_text_line_display_cache_free (GtkTextLineDisplayCache *cache)
   g_clear_pointer (&cache->evict_source, g_source_destroy);
   g_clear_pointer (&cache->sorted_by_line, g_sequence_free);
   g_clear_pointer (&cache->line_to_display, g_hash_table_unref);
-  g_slice_free (GtkTextLineDisplayCache, cache);
+  g_free (cache);
 }
 
 static gboolean

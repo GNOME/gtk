@@ -117,7 +117,7 @@ gtk_rb_node_new (GtkRbTree *tree)
 {
   GtkRbNode *result;
 
-  result = g_slice_alloc0 (gtk_rb_node_get_size (tree));
+  result = g_malloc0 (gtk_rb_node_get_size (tree));
 
   result->red = TRUE;
   result->dirty = TRUE;
@@ -134,7 +134,7 @@ gtk_rb_node_free (GtkRbTree *tree,
   if (tree->clear_augment_func)
     tree->clear_augment_func (NODE_TO_AUG_POINTER (tree, node));
 
-  g_slice_free1 (gtk_rb_node_get_size (tree), node);
+  g_free (node);
 }
 
 static void
@@ -511,7 +511,7 @@ gtk_rb_tree_new_for_size (gsize                element_size,
 {
   GtkRbTree *tree;
 
-  tree = g_slice_new0 (GtkRbTree);
+  tree = g_new0 (GtkRbTree, 1);
   tree->ref_count = 1;
 
   tree->element_size = element_size;
@@ -540,8 +540,8 @@ gtk_rb_tree_unref (GtkRbTree *tree)
 
   if (tree->root)
     gtk_rb_node_free_deep (tree, tree->root);
-    
-  g_slice_free (GtkRbTree, tree);
+
+  g_free (tree);
 }
 
 gpointer

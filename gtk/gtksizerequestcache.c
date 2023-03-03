@@ -37,9 +37,9 @@ free_sizes_x (SizeRequestX **sizes)
   int i;
 
   for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
-    g_slice_free (SizeRequestX, sizes[i]);
+    g_free (sizes[i]);
 
-  g_slice_free1 (sizeof (SizeRequestY *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
+  g_free (sizes);
 }
 
 static void
@@ -48,9 +48,9 @@ free_sizes_y (SizeRequestY **sizes)
   int i;
 
   for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
-    g_slice_free (SizeRequestY, sizes[i]);
+    g_free (sizes[i]);
 
-  g_slice_free1 (sizeof (SizeRequestY *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
+  g_free (sizes);
 }
 
 void
@@ -144,10 +144,10 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 	}
 
       if (cache->requests_x == NULL)
-	cache->requests_x = g_slice_alloc0 (sizeof (SizeRequestX *) * GTK_SIZE_REQUEST_CACHED_SIZES);
+	cache->requests_x = g_new0 (SizeRequestX *, GTK_SIZE_REQUEST_CACHED_SIZES);
 
       if (cache->requests_x[cache->flags[orientation].last_cached_request] == NULL)
-	cache->requests_x[cache->flags[orientation].last_cached_request] = g_slice_new (SizeRequestX);
+	cache->requests_x[cache->flags[orientation].last_cached_request] = g_new (SizeRequestX, 1);
 
       cached_size = cache->requests_x[cache->flags[orientation].last_cached_request];
       cached_size->lower_for_size = for_size;
@@ -188,10 +188,10 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 	}
 
       if (cache->requests_y == NULL)
-	cache->requests_y = g_slice_alloc0 (sizeof (SizeRequestY *) * GTK_SIZE_REQUEST_CACHED_SIZES);
+	cache->requests_y = g_new0 (SizeRequestY *, GTK_SIZE_REQUEST_CACHED_SIZES);
 
       if (cache->requests_y[cache->flags[orientation].last_cached_request] == NULL)
-	cache->requests_y[cache->flags[orientation].last_cached_request] = g_slice_new (SizeRequestY);
+	cache->requests_y[cache->flags[orientation].last_cached_request] = g_new (SizeRequestY, 1);
 
       cached_size = cache->requests_y[cache->flags[orientation].last_cached_request];
       cached_size->lower_for_size = for_size;

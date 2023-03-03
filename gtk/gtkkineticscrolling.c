@@ -91,7 +91,7 @@ gtk_kinetic_scrolling_new (double lower,
 {
   GtkKineticScrolling *data;
 
-  data = g_slice_new0 (GtkKineticScrolling);
+  data = g_new0 (GtkKineticScrolling, 1);
   data->lower = lower;
   data->upper = upper;
   data->decel_friction = decel_friction;
@@ -155,7 +155,7 @@ gtk_kinetic_scrolling_update_size (GtkKineticScrolling *data,
 void
 gtk_kinetic_scrolling_free (GtkKineticScrolling *kinetic)
 {
-  g_slice_free (GtkKineticScrolling, kinetic);
+  g_free (kinetic);
 }
 
 static void

@@ -1857,7 +1857,7 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
 {
   g_free (unthemed_icon->svg_filename);
   g_free (unthemed_icon->no_svg_filename);
-  g_slice_free (UnthemedIcon, unthemed_icon);
+  g_free (unthemed_icon);
 }
 
 static inline void
@@ -1932,7 +1932,7 @@ add_unthemed_icon (GtkIconTheme *self,
     }
   else
     {
-      unthemed_icon = g_slice_new0 (UnthemedIcon);
+      unthemed_icon = g_new0 (UnthemedIcon, 1);
 
       unthemed_icon->is_resource = is_resource;
 

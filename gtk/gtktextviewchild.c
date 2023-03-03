@@ -60,7 +60,7 @@ overlay_new (GtkWidget *widget,
 {
   Overlay *overlay;
 
-  overlay = g_slice_new0 (Overlay);
+  overlay = g_new0 (Overlay, 1);
   overlay->link.data = overlay;
   overlay->widget = g_object_ref (widget);
   overlay->x = x;
@@ -76,7 +76,7 @@ overlay_free (Overlay *overlay)
   g_assert (overlay->link.next == NULL);
 
   g_object_unref (overlay->widget);
-  g_slice_free (Overlay, overlay);
+  g_free (overlay);
 }
 
 static void

@@ -48,7 +48,7 @@ gtk_css_value_font_variations_free (GtkCssValue *value)
 {
   g_hash_table_unref (value->axes);
 
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

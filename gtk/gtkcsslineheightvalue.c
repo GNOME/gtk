@@ -35,7 +35,7 @@ static void
 gtk_css_value_line_height_free (GtkCssValue *value)
 {
   _gtk_css_value_unref (value->height);
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

@@ -30,7 +30,7 @@ static void
 gtk_css_value_image_free (GtkCssValue *value)
 {
   g_object_unref (value->image);
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

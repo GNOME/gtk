@@ -1834,7 +1834,7 @@ mark_data_free (MarkData *data)
 {
   g_string_free (data->markup, TRUE);
   g_free (data->context);
-  g_slice_free (MarkData, data);
+  g_free (data);
 }
 
 static void
@@ -1908,7 +1908,7 @@ marks_start_element (GtkBuildableParseContext *context,
           position = g_value_get_enum (&gvalue);
         }
 
-      mark = g_slice_new (MarkData);
+      mark = g_new (MarkData, 1);
       mark->value = value;
       if (position == GTK_POS_LEFT || position == GTK_POS_TOP)
         mark->position = GTK_POS_TOP;
@@ -1968,7 +1968,7 @@ gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
 
   if (strcmp (tagname, "marks") == 0)
     {
-      data = g_slice_new0 (MarksSubparserData);
+      data = g_new0 (MarksSubparserData, 1);
       data->scale = GTK_SCALE (buildable);
       data->builder = builder;
       data->marks = NULL;
@@ -2017,12 +2017,12 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
         }
 
       g_slist_free (marks_data->marks);
-      g_slice_free (MarksSubparserData, marks_data);
+      g_free (marks_data);
     }
   else
     {
       parent_buildable_iface->custom_finished (buildable, builder, child,
-					       tagname, user_data);
+                                               tagname, user_data);
     }
 
 }

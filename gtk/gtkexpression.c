@@ -2050,7 +2050,7 @@ free_binds (gpointer data)
       g_assert (bind->target == NULL);
       if (bind->watch)
         gtk_expression_watch_unwatch (bind->watch);
-      g_slice_free (GtkExpressionBind, bind);
+      g_free (bind);
     }
   g_slist_free (data);
 }
@@ -2070,7 +2070,7 @@ gtk_expression_bind_free (gpointer data)
       else
         g_object_weak_unref (bind->target, invalidate_binds, NULL);
 
-      g_slice_free (GtkExpressionBind, bind);
+      g_free (bind);
     }
   else
     {
@@ -2154,7 +2154,7 @@ gtk_expression_bind (GtkExpression *self,
       return NULL;
     }
 
-  bind = g_slice_new0 (GtkExpressionBind);
+  bind = g_new0 (GtkExpressionBind, 1);
   binds = g_object_steal_data (target, "gtk-expression-binds");
   if (binds == NULL)
     g_object_weak_ref (target, invalidate_binds, NULL);

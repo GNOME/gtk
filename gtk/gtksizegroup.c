@@ -531,7 +531,7 @@ gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
 
   if (strcmp (tagname, "widgets") == 0)
     {
-      data = g_slice_new0 (GSListSubParserData);
+      data = g_new0 (GSListSubParserData, 1);
       data->items = NULL;
       data->object = G_OBJECT (buildable);
       data->builder = builder;
@@ -571,5 +571,5 @@ gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
       gtk_size_group_add_widget (GTK_SIZE_GROUP (data->object), GTK_WIDGET (object));
     }
   g_slist_free_full (data->items, item_data_free);
-  g_slice_free (GSListSubParserData, data);
+  g_free (data);
 }

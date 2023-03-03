@@ -854,7 +854,7 @@ gtk_text_layout_free_line_data (GtkTextLayout   *layout,
 {
   gtk_text_layout_invalidate_cache (layout, line, FALSE);
 
-  g_slice_free (GtkTextLineData, line_data);
+  g_free (line_data);
 }
 
 /**
@@ -1348,7 +1348,7 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
   if (appearance_attr->appearance.strikethrough_rgba)
     gdk_rgba_free (appearance_attr->appearance.strikethrough_rgba);
 
-  g_slice_free (GtkTextAttrAppearance, appearance_attr);
+  g_free (appearance_attr);
 }
 
 static gboolean
@@ -1431,7 +1431,7 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
     klass.type = gtk_text_attr_appearance_type =
       pango_attr_type_register (I_("GtkTextAttrAppearance"));
 
-  result = g_slice_new (GtkTextAttrAppearance);
+  result = g_new (GtkTextAttrAppearance, 1);
   result->attr.klass = &klass;
 
   result->appearance = *appearance;

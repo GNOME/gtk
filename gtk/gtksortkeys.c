@@ -32,7 +32,7 @@ gtk_sort_keys_alloc (const GtkSortKeysClass *klass,
 
   g_return_val_if_fail (key_align > 0, NULL);
 
-  self = g_slice_alloc0 (size);
+  self = g_malloc0 (size);
 
   self->klass = klass;
   self->ref_count = 1;
@@ -98,7 +98,7 @@ gtk_sort_keys_needs_clear_key (GtkSortKeys *self)
 static void
 gtk_equal_sort_keys_free (GtkSortKeys *keys)
 {
-  g_slice_free (GtkSortKeys, keys);
+  g_free (keys);
 }
 
 static int

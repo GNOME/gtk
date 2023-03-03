@@ -75,7 +75,7 @@ _gtk_css_keyframes_unref (GtkCssKeyframes *keyframes)
     }
   g_free (keyframes->values);
 
-  g_slice_free (GtkCssKeyframes, keyframes);
+  g_free (keyframes);
 }
 
 static guint
@@ -178,7 +178,7 @@ gtk_css_keyframes_alloc (void)
 {
   GtkCssKeyframes *keyframes;
 
-  keyframes = g_slice_new0 (GtkCssKeyframes);
+  keyframes = g_new0 (GtkCssKeyframes, 1);
   keyframes->ref_count = 1;
 
   return keyframes;

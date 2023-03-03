@@ -37,7 +37,7 @@
 GtkBorder *
 gtk_border_new (void)
 {
-  return g_slice_new0 (GtkBorder);
+  return g_new0 (GtkBorder, 1);
 }
 
 /**
@@ -51,9 +51,13 @@ gtk_border_new (void)
 GtkBorder *
 gtk_border_copy (const GtkBorder *border_)
 {
+  GtkBorder *copy;
+
   g_return_val_if_fail (border_ != NULL, NULL);
 
-  return g_slice_dup (GtkBorder, border_);
+  copy = g_new0 (GtkBorder, 1);
+  memcpy (copy, border_, sizeof (GtkBorder));
+  return copy;
 }
 
 /**
@@ -65,7 +69,7 @@ gtk_border_copy (const GtkBorder *border_)
 void
 gtk_border_free (GtkBorder *border_)
 {
-  g_slice_free (GtkBorder, border_);
+  g_free (border_);
 }
 
 G_DEFINE_BOXED_TYPE (GtkBorder, gtk_border,
