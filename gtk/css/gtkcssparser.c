@@ -61,7 +61,7 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
 {
   GtkCssParser *self;
 
-  self = g_slice_new0 (GtkCssParser);
+  self = g_new0 (GtkCssParser, 1);
 
   self->ref_count = 1;
   self->tokenizer = gtk_css_tokenizer_ref (tokenizer);
@@ -130,7 +130,7 @@ gtk_css_parser_finalize (GtkCssParser *self)
     g_critical ("Finalizing CSS parser with %u remaining blocks", self->blocks->len);
   g_array_free (self->blocks, TRUE);
 
-  g_slice_free (GtkCssParser, self);
+  g_free (self);
 }
 
 GtkCssParser *

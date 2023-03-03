@@ -571,7 +571,7 @@ gtk_css_tokenizer_new (GBytes *bytes)
 {
   GtkCssTokenizer *tokenizer;
 
-  tokenizer = g_slice_new0 (GtkCssTokenizer);
+  tokenizer = g_new0 (GtkCssTokenizer, 1);
   tokenizer->ref_count = 1;
   tokenizer->bytes = g_bytes_ref (bytes);
   tokenizer->name_buffer = g_string_new (NULL);
@@ -601,7 +601,7 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
 
   g_string_free (tokenizer->name_buffer, TRUE);
   g_bytes_unref (tokenizer->bytes);
-  g_slice_free (GtkCssTokenizer, tokenizer);
+  g_free (tokenizer);
 }
 
 const GtkCssLocation *
