@@ -246,9 +246,11 @@ gtk_stack_page_accessible_get_at_context (GtkAccessible *accessible)
         display = gdk_display_get_default ();
 
       page->at_context = gtk_at_context_create (role, accessible, display);
+      if (page->at_context == NULL)
+        return NULL;
     }
 
-  return page->at_context;
+  return g_object_ref (page->at_context);
 }
 
 static gboolean
@@ -262,30 +264,39 @@ static GtkAccessible *
 gtk_stack_page_accessible_get_accessible_parent (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
+  GtkWidget *parent;
 
   if (page->widget == NULL)
     return NULL;
-  else
-    return GTK_ACCESSIBLE (gtk_widget_get_parent (page->widget));
+
+  parent = _gtk_widget_get_parent (page->widget);
+
+  return GTK_ACCESSIBLE (g_object_ref (parent));
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_first_accessible_child(GtkAccessible *accessible)
+gtk_stack_page_accessible_get_first_accessible_child (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
+  GtkWidget *child;
 
-  if (page->widget != NULL)
-    return GTK_ACCESSIBLE (page->widget);
-  else
+  if (page->widget == NULL)
     return NULL;
+
+  child = _gtk_widget_get_first_child (page->widget);
+
+  return GTK_ACCESSIBLE (g_object_ref (child));
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_next_accessible_sibling(GtkAccessible *accessible)
+gtk_stack_page_accessible_get_next_accessible_sibling (GtkAccessible *accessible)
 {
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
 
-  return GTK_ACCESSIBLE (page->next_page);
+  if (page->next_page == NULL)
+    return NULL;
+
+  return GTK_ACCESSIBLE (g_object_ref (page->next_page));
 }
 
 static gboolean
@@ -791,7 +802,8 @@ gtk_stack_accessible_get_first_accessible_child (GtkAccessible *accessible)
   GtkStack *stack = GTK_STACK (accessible);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *page = g_ptr_array_index (priv->children, 0);
-  return GTK_ACCESSIBLE (page);
+
+  return GTK_ACCESSIBLE (g_object_ref (page));
 }
 
 static void

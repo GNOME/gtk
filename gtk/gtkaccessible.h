@@ -73,7 +73,7 @@ struct _GtkAccessibleInterface
    * Retrieves the platform-specific accessibility context for the
    * accessible implementation.
    *
-   * Returns: (transfer none) (nullable): the accessibility context
+   * Returns: (transfer full) (nullable): the accessibility context
    *
    * Since: 4.10
    */
@@ -101,7 +101,7 @@ struct _GtkAccessibleInterface
    *
    * This virtual function should return `NULL` for top level objects.
    *
-   * Returns: (nullable) (transfer none): the accessible parent
+   * Returns: (nullable) (transfer full): the accessible parent
    *
    * Since: 4.10
    */
@@ -113,7 +113,7 @@ struct _GtkAccessibleInterface
    *
    * Retrieves the first accessible child of an accessible object.
    *
-   * Returns: (transfer none) (nullable): an accessible object
+   * Returns: (transfer full) (nullable): an accessible object
    *
    * Since: 4.10
    */
@@ -125,7 +125,7 @@ struct _GtkAccessibleInterface
    *
    * Retrieves the next accessible sibling of an accessible object.
    *
-   * Returns: (transfer none) (nullable): an accessible object
+   * Returns: (transfer full) (nullable): an accessible object
    *
    * Since: 4.10
    */

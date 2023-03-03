@@ -314,6 +314,8 @@ handle_accessible_method (GDBusConnection       *connection,
       const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
+
+      g_object_unref (context);
     }
   else if (g_strcmp0 (method_name, "GetChildren") == 0)
     {
@@ -334,6 +336,8 @@ handle_accessible_method (GDBusConnection       *connection,
           const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));
 
           g_variant_builder_add (&builder, "(so)", name, path);
+
+          g_object_unref (context);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
@@ -453,6 +457,8 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
       GtkATContext *context = gtk_accessible_get_at_context (child);
 
       window_ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+
+      g_object_unref (context);
     }
 
   switch (change)

@@ -91,9 +91,9 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
  * gtk_accessible_get_at_context:
  * @self: a `GtkAccessible`
  *
- * Retrieves the `GtkATContext` for the given `GtkAccessible`.
+ * Retrieves the accessible implementation for the given `GtkAccessible`.
  *
- * Returns: (transfer none): the `GtkATContext`
+ * Returns: (transfer full): the accessible implementation object
  *
  * Since: 4.10
  */
@@ -109,11 +109,11 @@ gtk_accessible_get_at_context (GtkAccessible *self)
  * gtk_accessible_get_accessible_parent:
  * @self: a `GtkAccessible`
  *
- * Retrieves the accessible accessible for an accessible object
+ * Retrieves the accessible parent for an accessible object.
  *
- * This function returns `NULL` for top level widgets
+ * This function returns `NULL` for top level widgets.
  *
- * Returns: (transfer none) (nullable): the accessible parent
+ * Returns: (transfer full) (nullable): the accessible parent
  *
  * Since: 4.10
  */
@@ -128,9 +128,9 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
   context = gtk_accessible_get_at_context (self);
   if (context != NULL)
     parent = gtk_at_context_get_accessible_parent (context);
- 
+
   if (parent != NULL)
-    return parent;
+    return g_object_ref (parent);
   else
     return GTK_ACCESSIBLE_GET_IFACE (self)->get_accessible_parent (self);
 }
@@ -177,6 +177,7 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
  * @new_sibling: (nullable): the new next accessible sibling to set
  *
  * Updates the next accessible sibling of @self.
+ *
  * That might be useful when a new child of a custom `GtkAccessible`
  * is created, and it needs to be linked to a previous child.
  *
@@ -193,7 +194,7 @@ gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
   context = gtk_accessible_get_at_context (self);
   if (!context)
     return;
-  
+
   if (gtk_at_context_get_accessible_parent (context) == NULL)
   {
     g_critical ("Failed to update next accessible sibling: no parent accessible set for this accessible");
@@ -209,7 +210,7 @@ gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
  *
  * Retrieves the first accessible child of an accessible object.
  *
- * Returns: (transfer none) (nullable): the first accessible child
+ * Returns: (transfer full) (nullable): the first accessible child
  *
  * since: 4.10
  */
@@ -227,7 +228,7 @@ gtk_accessible_get_first_accessible_child (GtkAccessible *self)
  *
  * Retrieves the next accessible sibling of an accessible object
  *
- * Returns: (transfer none) (nullable): the next accessible sibling
+ * Returns: (transfer full) (nullable): the next accessible sibling
  *
  * since: 4.10
  */
@@ -240,7 +241,14 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
 
   context = gtk_accessible_get_at_context (self);
   if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
-    return gtk_at_context_get_next_accessible_sibling (context);
+    {
+      GtkAccessible *sibling = gtk_at_context_get_next_accessible_sibling (context);
+
+      if (sibling != NULL)
+        return g_object_ref (sibling);
+
+      return NULL;
+    }
   else
     return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
 }
