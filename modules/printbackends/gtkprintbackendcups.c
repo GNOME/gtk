@@ -2034,7 +2034,7 @@ printer_setup_info_free (PrinterSetupInfo *info)
   g_free (info->original_device_uri);
   g_free (info->state_msg);
   g_strfreev (info->covers);
-  g_slice_free (PrinterSetupInfo, info);
+  g_free (info);
 }
 
 static void
@@ -2732,7 +2732,7 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
                               gpointer             user_data)
 {
   RequestPrinterInfoData *data = (RequestPrinterInfoData *) user_data;
-  PrinterSetupInfo       *info = g_slice_new0 (PrinterSetupInfo);
+  PrinterSetupInfo       *info = g_new0 (PrinterSetupInfo, 1);
   GtkPrintBackend        *backend = GTK_PRINT_BACKEND (cups_backend);
   ipp_attribute_t        *attr;
   GtkPrinter             *printer = g_object_ref (GTK_PRINTER (data->printer));
@@ -3022,7 +3022,7 @@ create_temporary_queue (GtkPrintBackendCups *backend,
 static void
 create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
 {
-  PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
+  PrinterSetupInfo *info = g_new0 (PrinterSetupInfo, 1);
   GtkPrinter       *printer;
 
   printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (data->backend), data->printer_name);
@@ -3689,7 +3689,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       GtkPrinter *printer;
       gboolean status_changed = FALSE;
       GList *node;
-      PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
+      PrinterSetupInfo *info = g_new0 (PrinterSetupInfo, 1);
 
       /* Skip leading attributes until we hit a printer...
        */
