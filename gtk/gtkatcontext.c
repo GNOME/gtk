@@ -996,6 +996,8 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
           GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
           gtk_at_context_get_name_accumulate (rel_context, names, FALSE);
+
+          g_object_unref (rel_context);
         }
     }
 
@@ -1068,6 +1070,8 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
           GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
           gtk_at_context_get_description_accumulate (rel_context, labels, FALSE);
+
+          g_object_unref (rel_context);
         }
     }
 

@@ -33,7 +33,7 @@ test_object_accessible_get_at_context (GtkAccessible *accessible)
                                               accessible,
                                               gdk_display_get_default ());
 
-  return self->at_context;
+  return g_object_ref (self->at_context);
 }
 
 static void

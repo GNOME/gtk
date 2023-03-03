@@ -172,6 +172,7 @@ gtk_test_accessible_has_property (GtkAccessible         *accessible,
                                   GtkAccessibleProperty  property)
 {
   GtkATContext *context;
+  gboolean res;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
 
@@ -179,7 +180,11 @@ gtk_test_accessible_has_property (GtkAccessible         *accessible,
   if (context == NULL)
     return FALSE;
 
-  return gtk_at_context_has_accessible_property (context, property);
+  res = gtk_at_context_has_accessible_property (context, property);
+
+  g_object_unref (context);
+
+  return res;
 }
 
 /**
@@ -230,6 +235,7 @@ gtk_test_accessible_check_property (GtkAccessible         *accessible,
 
 out:
   gtk_accessible_value_unref (check_value);
+  g_object_unref (context);
 
   return res;
 }
@@ -248,6 +254,7 @@ gtk_test_accessible_has_state (GtkAccessible      *accessible,
                                GtkAccessibleState  state)
 {
   GtkATContext *context;
+  gboolean res;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
 
@@ -255,7 +262,11 @@ gtk_test_accessible_has_state (GtkAccessible      *accessible,
   if (context == NULL)
     return FALSE;
 
-  return gtk_at_context_has_accessible_state (context, state);
+  res = gtk_at_context_has_accessible_state (context, state);
+
+  g_object_unref (context);
+
+  return res;
 }
 
 /**
@@ -306,6 +317,7 @@ gtk_test_accessible_check_state (GtkAccessible      *accessible,
 
 out:
   gtk_accessible_value_unref (check_value);
+  g_object_unref (context);
 
   return res;
 }
@@ -324,6 +336,7 @@ gtk_test_accessible_has_relation (GtkAccessible         *accessible,
                                   GtkAccessibleRelation  relation)
 {
   GtkATContext *context;
+  gboolean res;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), FALSE);
 
@@ -331,7 +344,11 @@ gtk_test_accessible_has_relation (GtkAccessible         *accessible,
   if (context == NULL)
     return FALSE;
 
-  return gtk_at_context_has_accessible_relation (context, relation);
+  res = gtk_at_context_has_accessible_relation (context, relation);
+
+  g_object_unref (context);
+
+  return res;
 }
 
 /**
@@ -382,6 +399,7 @@ gtk_test_accessible_check_relation (GtkAccessible         *accessible,
 
 out:
   gtk_accessible_value_unref (check_value);
+  g_object_unref (context);
 
   return res;
 }
