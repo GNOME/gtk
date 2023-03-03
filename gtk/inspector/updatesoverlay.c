@@ -64,7 +64,7 @@ gtk_update_free (gpointer data)
   GtkUpdate *region = data;
 
   cairo_region_destroy (region->region);
-  g_slice_free (GtkUpdate, region);
+  g_free (region);
 }
 
 static void
@@ -79,7 +79,7 @@ gtk_widget_updates_free (gpointer data)
     gtk_widget_remove_tick_callback (updates->widget, updates->tick_callback);
   updates->tick_callback = 0;
 
-  g_slice_free (GtkWidgetUpdates, updates);
+  g_free (updates);
 }
 
 static void
@@ -130,7 +130,7 @@ gtk_update_overlay_lookup_for_widget (GtkUpdatesOverlay *self,
   if (updates || !create)
     return updates;
 
-  updates = g_slice_new0 (GtkWidgetUpdates);
+  updates = g_new0 (GtkWidgetUpdates, 1);
   updates->updates = g_queue_new ();
   updates->widget = widget;
   updates->unmap_callback = g_signal_connect (widget, "unmap", G_CALLBACK (gtk_widget_updates_unmap_widget), self);
@@ -147,7 +147,7 @@ gtk_widget_updates_add (GtkWidgetUpdates *updates,
   GtkUpdate *update;
   GList *l;
 
-  update = g_slice_new0 (GtkUpdate);
+  update = g_new0 (GtkUpdate, 1);
   update->timestamp = timestamp;
   update->region = region;
   for (l = g_queue_peek_head_link (updates->updates); l != NULL; l = l->next)
