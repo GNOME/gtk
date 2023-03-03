@@ -481,7 +481,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   GtkListView *self = GTK_LIST_VIEW (widget);
   GtkListTile *tile;
   GArray *heights;
-  int min, nat, row_height, y;
+  int min, nat, row_height, y, list_width;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy, opposite_scroll_policy;
 
@@ -501,11 +501,11 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   gtk_list_view_measure_across (widget, opposite_orientation,
                                 -1,
                                 &min, &nat);
-  self->list_width = orientation == GTK_ORIENTATION_VERTICAL ? width : height;
+  list_width = orientation == GTK_ORIENTATION_VERTICAL ? width : height;
   if (opposite_scroll_policy == GTK_SCROLL_MINIMUM)
-    self->list_width = MAX (min, self->list_width);
+    list_width = MAX (min, list_width);
   else
-    self->list_width = MAX (nat, self->list_width);
+    list_width = MAX (nat, list_width);
 
   /* step 2: determine height of known list items and gc the list */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
@@ -518,13 +518,13 @@ gtk_list_view_size_allocate (GtkWidget *widget,
         continue;
 
       gtk_widget_measure (tile->widget, orientation,
-                          self->list_width,
+                          list_width,
                           &min, &nat, NULL, NULL);
       if (scroll_policy == GTK_SCROLL_MINIMUM)
         row_height = min;
       else
         row_height = nat;
-      gtk_list_tile_set_area_size (self->item_manager, tile, self->list_width, row_height);
+      gtk_list_tile_set_area_size (self->item_manager, tile, list_width, row_height);
       g_array_append_val (heights, row_height);
     }
 
@@ -539,7 +539,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     {
       gtk_list_tile_set_area_position (self->item_manager, tile, 0, y);
       if (tile->widget == NULL)
-        gtk_list_tile_set_area_size (self->item_manager, tile, self->list_width, row_height * tile->n_items);
+        gtk_list_tile_set_area_size (self->item_manager, tile, list_width, row_height * tile->n_items);
 
       y += tile->area.height;
     }

@@ -31,8 +31,6 @@ struct _GtkListView
 
   GtkListItemManager *item_manager;
   gboolean show_separators;
-
-  int list_width;
 };
 
 struct _GtkListViewClass
