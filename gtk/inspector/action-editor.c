@@ -185,7 +185,7 @@ action_state_changed_cb (GActionGroup             *group,
 static void
 update_widgets (GtkInspectorActionEditor *r)
 {
-  GVariant *state;
+  GVariant *state = NULL;
 
   if (G_IS_ACTION_GROUP (r->owner))
     g_action_group_query_action (G_ACTION_GROUP (r->owner), r->name,
