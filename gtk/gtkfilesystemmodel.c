@@ -209,13 +209,18 @@ node_should_be_visible (GtkFileSystemModel *model,
                         gboolean            filtered_out)
 {
   FileModelNode *node = get_node (model, id);
+  gboolean has_is_hidden;
+  gboolean has_is_backup;
   gboolean result;
 
   if (node->info == NULL)
     return FALSE;
 
+  has_is_hidden = g_file_info_has_attribute (node->info, "standard::is-hidden");
+  has_is_backup = g_file_info_has_attribute (node->info, "standard::is-backup");
   if (!model->show_hidden &&
-      (g_file_info_get_is_hidden (node->info) || g_file_info_get_is_backup (node->info)))
+      ((has_is_hidden && g_file_info_get_is_hidden (node->info)) ||
+       (has_is_backup && g_file_info_get_is_backup (node->info))))
     return FALSE;
 
   if (_gtk_file_info_consider_as_directory (node->info))
@@ -941,7 +946,7 @@ _gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
  * @model: the model
  *
  * Gets the cancellable used by the @model. This is the cancellable used
- * internally by the @model that will be cancelled when @model is 
+ * internally by the @model that will be cancelled when @model is
  * disposed. So you can use it for operations that should be cancelled
  * when the model goes away.
  *
@@ -1005,7 +1010,7 @@ _gtk_file_system_model_update_files (GtkFileSystemModel *model,
  * _gtk_file_system_model_set_filter:
  * @mode: a `GtkFileSystemModel`
  * @filter: (nullable): %NULL or filter to use
- * 
+ *
  * Sets a filter to be used for deciding if a row should be visible or not.
  * Whether this filter applies to directories can be toggled with
  * _gtk_file_system_model_set_filter_folders().
@@ -1028,7 +1033,7 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
  * @file: the file to add
  * @attributes: attributes to query before adding the file
  *
- * This is a convenience function that calls g_file_query_info_async() on 
+ * This is a convenience function that calls g_file_query_info_async() on
  * the given file, and when successful, adds it to the model.
  * Upon failure, the @file is discarded.
  **/
