@@ -66,19 +66,21 @@ compare_render_tests = [
   'outset_shadow_offset_y',
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
-  'scaled-cairo',
-  'scale-textures-negative-ngl',
-  'scale-up-down',
-  'shadow-in-opacity',
-  'texture-url',
   'repeat',
   'repeat-no-repeat',
   'repeat-negative-coords',
   'repeat-texture',
+  'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
+  'scale-textures-negative-ngl',
+  'scale-up-down',
+  'scaled-cairo',
+  'scaled-texture',
+  'shadow-in-opacity',
+  'texture-scale-magnify-10000x',
+  'texture-scale-stripes',
+  'texture-url',
   'transform-in-transform',
   'transform-in-transform-in-transform',
-  'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
-  'scaled-texture',
 ]
 
 # these are too sensitive to differences in the renderers
