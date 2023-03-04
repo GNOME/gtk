@@ -45,7 +45,8 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
 
   if (self->bounds.size.width <= 0 ||
-      self->bounds.size.height <= 0)
+      self->bounds.size.height <= 0 ||
+      self->node == NULL)
     return;
 
   gtk_snapshot_save (snapshot);
@@ -141,12 +142,12 @@ gtk_render_node_paintable_new (GskRenderNode         *node,
 {
   GtkRenderNodePaintable *self;
 
-  g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
+  g_return_val_if_fail (node == NULL || GSK_IS_RENDER_NODE (node), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
   self = g_object_new (GTK_TYPE_RENDER_NODE_PAINTABLE, NULL);
 
-  self->node = gsk_render_node_ref (node);
+  self->node = node ? gsk_render_node_ref (node) : NULL;
   self->bounds = *bounds;
 
   return GDK_PAINTABLE (self);
