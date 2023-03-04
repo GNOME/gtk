@@ -77,6 +77,7 @@ compare_render_tests = [
   'scaled-texture',
   'shadow-in-opacity',
   'texture-scale-magnify-10000x',
+  'texture-scale-stripes',
   'texture-url',
   'transform-in-transform',
   'transform-in-transform-in-transform',
