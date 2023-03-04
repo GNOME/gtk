@@ -185,6 +185,12 @@ gtk_list_item_manager_get_first (GtkListItemManager *self)
 }
 
 gpointer
+gtk_list_item_manager_get_last (GtkListItemManager *self)
+{
+  return gtk_rb_tree_get_last (self->items);
+}
+
+gpointer
 gtk_list_item_manager_get_root (GtkListItemManager *self)
 {
   return gtk_rb_tree_get_root (self->items);

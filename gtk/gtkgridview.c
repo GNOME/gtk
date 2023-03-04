@@ -737,6 +737,21 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           i = 0;
         }
     }
+  /* Add a filler tile for empty space in the bottom right */
+  if (i < self->n_columns)
+    {
+      GtkListTile *filler;
+      tile = gtk_list_item_manager_get_last (self->item_manager);
+      filler = gtk_list_tile_split (self->item_manager, tile, tile->n_items);
+      gtk_list_tile_set_area_position (self->item_manager,
+                                       filler,
+                                       ceil (self->column_width * i),
+                                       y);
+      gtk_list_tile_set_area_size (self->item_manager,
+                                   filler,
+                                   ceil (self->column_width * self->n_columns) - filler->area.x,
+                                   tile->area.height);
+    }
 
   /* step 4: allocate the rest */
   gtk_list_base_allocate (GTK_LIST_BASE (self));

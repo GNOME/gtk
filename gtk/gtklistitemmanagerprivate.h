@@ -71,6 +71,7 @@ void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemMana
                                                                  GdkRectangle           *out_bounds);
 gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_first         (GtkListItemManager     *self);
+gpointer                gtk_list_item_manager_get_last          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
