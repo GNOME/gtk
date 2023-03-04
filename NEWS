@@ -1,4 +1,4 @@
-Overview of Changes in 4.10.0, xx-xx-xxxx
+Overview of Changes in 4.10.0, 04-03-2023
 =========================================
 
 * GtkTextView
@@ -15,6 +15,7 @@ Overview of Changes in 4.10.0, xx-xx-xxxx
  - Fix various problems with undo
 
 * Accessibility
+ - Make some getters transfer-full
  - Allow setting accessible parents and siblings
  - Add a role for toggle buttons
  - Miscellaneous property fixes and improvements
@@ -28,6 +29,7 @@ Overview of Changes in 4.10.0, xx-xx-xxxx
 
 * gsk
  - Make mask nodes more versatile
+ - Improve the GL implementation for texture scale nodes
 
 * X11
  - Fix key handling during DND
