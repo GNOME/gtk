@@ -218,7 +218,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
       desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
       if (desktop != NULL)
         path_bar->desktop_file = g_file_new_for_path (desktop);
-      else 
+      else
         path_bar->desktop_file = NULL;
     }
   else
@@ -306,7 +306,7 @@ update_visibility_up_to_next_root (GtkPathBar *path_bar,
 {
   gboolean fake_root_found = FALSE;
   GList *l;
-  
+
   for (l = start_from_button; l; l = l->next)
     {
       GtkWidget *button = BUTTON_DATA (l->data)->button;
@@ -776,6 +776,7 @@ gtk_path_bar_get_info_callback (GObject      *source,
   GFileInfo *info;
   ButtonData *button_data;
   const char *display_name;
+  gboolean has_is_hidden, has_is_backup;
   gboolean is_hidden;
 
   info = g_file_query_info_finish (file, result, NULL);
@@ -794,7 +795,10 @@ gtk_path_bar_get_info_callback (GObject      *source,
   file_info->cancellable = NULL;
 
   display_name = g_file_info_get_display_name (info);
-  is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
+  has_is_hidden = g_file_info_has_attribute (info, "standard::is-hidden");
+  has_is_backup = g_file_info_has_attribute (info, "standard::is-backup");
+  is_hidden = (has_is_hidden && g_file_info_get_is_hidden (info)) ||
+    (has_is_backup && g_file_info_get_is_backup (info));
 
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
@@ -879,7 +883,7 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
 /**
  * _gtk_path_bar_up:
  * @path_bar: a `GtkPathBar`
- * 
+ *
  * If the selected button in the pathbar is not the furthest button “up” (in the
  * root direction), act as if the user clicked on the next button up.
  **/
@@ -906,7 +910,7 @@ _gtk_path_bar_up (GtkPathBar *path_bar)
 /**
  * _gtk_path_bar_down:
  * @path_bar: a `GtkPathBar`
- * 
+ *
  * If the selected button in the pathbar is not the furthest button “down” (in the
  * leaf direction), act as if the user clicked on the next button down.
  **/
