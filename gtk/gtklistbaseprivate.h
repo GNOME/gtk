@@ -41,8 +41,6 @@ struct _GtkListBaseClass
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
 
-  void                 (* adjustment_value_changed)             (GtkListBase            *self,
-                                                                 GtkOrientation          orientation);
   gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,
                                                                  GdkRectangle           *area);
