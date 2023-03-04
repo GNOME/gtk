@@ -329,6 +329,8 @@ update_at_context (GtkModelButton *button)
 
   if (was_realized)
     gtk_at_context_realize (context);
+
+  g_object_unref (context);
 }
 
 static void
@@ -1199,7 +1201,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * A GIcon that will be used if iconic appearance for the button is
    * desired.
    */
-  properties[PROP_ICON] = 
+  properties[PROP_ICON] =
     g_param_spec_object ("icon", NULL, NULL,
                          G_TYPE_ICON,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);

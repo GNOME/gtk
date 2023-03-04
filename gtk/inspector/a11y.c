@@ -244,6 +244,8 @@ update_path (GtkInspectorA11y *sl)
     }
   else
     path = "not on bus";
+
+  g_clear_object (&context);
 #endif
 
   gtk_label_set_label (GTK_LABEL (sl->path), path);
@@ -270,7 +272,7 @@ update_attributes (GtkInspectorA11y *sl)
   gboolean has_value;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-  if (!context)
+  if (context == NULL)
     return;
 
   store = g_list_store_new (G_TYPE_OBJECT);
@@ -347,6 +349,8 @@ update_attributes (GtkInspectorA11y *sl)
   g_object_unref (selection);
 
   gtk_widget_set_visible (sl->attributes, g_list_model_get_n_items (G_LIST_MODEL (filter_model)) > 0);
+
+  g_object_unref (context);
 }
 
 static void
@@ -420,8 +424,11 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   if (sl->object && GTK_IS_ACCESSIBLE (sl->object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-      if (context)
-        g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
+      if (context != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
+          g_object_unref (context);
+        }
     }
 
   g_set_object (&sl->object, object);
@@ -432,8 +439,12 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
   if (GTK_IS_ACCESSIBLE (sl->object))
     {
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-      if (context)
-        g_signal_connect_swapped (context, "state-change", G_CALLBACK (refresh_all), sl);
+      if (context != NULL)
+        {
+          g_signal_connect_swapped (context, "state-change", G_CALLBACK (refresh_all), sl);
+          g_object_unref (context);
+        }
+
       gtk_stack_page_set_visible (page, TRUE);
       update_role (sl);
       update_path (sl);
@@ -461,7 +472,11 @@ dispose (GObject *o)
       GtkATContext *context;
 
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
-      g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
+      if (context != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (context, refresh_all, sl);
+          g_object_unref (context);
+        }
     }
 
   g_clear_object (&sl->object);

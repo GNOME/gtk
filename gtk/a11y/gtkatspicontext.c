@@ -376,21 +376,15 @@ get_index_in (GtkAccessible *parent,
        candidate != NULL;
        candidate = gtk_accessible_get_next_accessible_sibling (candidate))
     {
+      g_object_unref (candidate);
+
       if (candidate == child)
-        {
-          g_object_unref (candidate);
-          return res;
-        }
+        return res;
 
       if (!gtk_accessible_should_present (candidate))
-        {
-          g_object_unref (candidate);
-          continue;
-        }
+        continue;
 
       res++;
-
-      g_object_unref (candidate);
     }
 
   return -1;
@@ -558,25 +552,19 @@ handle_accessible_method (GDBusConnection       *connection,
            child != NULL;
            child = gtk_accessible_get_next_accessible_sibling (child))
         {
+          g_object_unref (child);
+
           if (!gtk_accessible_should_present (child))
-            {
-              g_object_unref (child);
-              continue;
-            }
+            continue;
 
           if (presentable_idx == idx)
             break;
 
           presentable_idx += 1;
-
-          g_object_unref (child);
         }
 
       if (child != NULL)
-        {
-          context = gtk_accessible_get_at_context (child);
-          g_object_unref (child);
-        }
+        context = gtk_accessible_get_at_context (child);
 
       if (context == NULL)
         {
@@ -606,11 +594,10 @@ handle_accessible_method (GDBusConnection       *connection,
            child != NULL;
            child = gtk_accessible_get_next_accessible_sibling (child))
         {
+          g_object_unref (child);
+
           if (!gtk_accessible_should_present (child))
-            {
-              g_object_unref (child);
-              continue;
-            }
+            continue;
 
           GtkATContext *context = gtk_accessible_get_at_context (child);
 
@@ -623,7 +610,6 @@ handle_accessible_method (GDBusConnection       *connection,
             g_variant_builder_add (&builder, "@(so)", ref);
 
           g_object_unref (context);
-          g_object_unref (child);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
@@ -1787,15 +1773,12 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
        child != NULL;
        child = gtk_accessible_get_next_accessible_sibling (child))
     {
+      g_object_unref (child);
+
       if (!gtk_accessible_should_present (child))
-        {
-          g_object_unref (child);
-          continue;
-        }
+        continue;
 
       n_children += 1;
-
-      g_object_unref (child);
     }
 
   return n_children;

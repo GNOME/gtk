@@ -127,7 +127,10 @@ gtk_accessible_get_accessible_parent (GtkAccessible *self)
 
   context = gtk_accessible_get_at_context (self);
   if (context != NULL)
-    parent = gtk_at_context_get_accessible_parent (context);
+    {
+      parent = gtk_at_context_get_accessible_parent (context);
+      g_object_unref (context);
+    }
 
   if (parent != NULL)
     return g_object_ref (parent);
@@ -161,6 +164,7 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
   g_return_if_fail (parent == NULL || GTK_IS_ACCESSIBLE (parent));
   g_return_if_fail (next_sibling == NULL || GTK_IS_ACCESSIBLE (parent));
+
   GtkATContext *context;
 
   context = gtk_accessible_get_at_context (self);
@@ -168,6 +172,7 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
     {
       gtk_at_context_set_accessible_parent (context, parent);
       gtk_at_context_set_next_accessible_sibling (context, next_sibling);
+      g_object_unref (context);
     }
 }
 
@@ -188,20 +193,26 @@ gtk_accessible_update_next_accessible_sibling (GtkAccessible *self,
                                                GtkAccessible *new_sibling)
 {
   GtkATContext *context;
+  GtkAccessible *parent;
 
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
 
   context = gtk_accessible_get_at_context (self);
-  if (!context)
+  if (context == NULL)
     return;
 
-  if (gtk_at_context_get_accessible_parent (context) == NULL)
-  {
-    g_critical ("Failed to update next accessible sibling: no parent accessible set for this accessible");
-    return;
-  }
+  parent = gtk_at_context_get_accessible_parent (context);
+  if (parent == NULL)
+    {
+      g_object_unref (context);
+      g_critical ("Failed to update next accessible sibling: no parent accessible set for this accessible");
+      return;
+    }
 
   gtk_at_context_set_next_accessible_sibling (context, new_sibling);
+
+  g_object_unref (parent);
+  g_object_unref (context);
 }
 
 /**
@@ -240,14 +251,20 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
   GtkATContext *context;
 
   context = gtk_accessible_get_at_context (self);
-  if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
+  if (context != NULL)
     {
-      GtkAccessible *sibling = gtk_at_context_get_next_accessible_sibling (context);
+      GtkAccessible *sibling = NULL;
 
-      if (sibling != NULL)
-        return g_object_ref (sibling);
+      if (gtk_at_context_get_accessible_parent (context) != NULL)
+        {
+          sibling = gtk_at_context_get_next_accessible_sibling (context);
+          if (sibling != NULL)
+            sibling = g_object_ref (sibling);
+        }
 
-      return NULL;
+      g_object_unref (context);
+
+      return sibling;
     }
   else
     return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
@@ -264,13 +281,21 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
 GtkAccessibleRole
 gtk_accessible_get_accessible_role (GtkAccessible *self)
 {
-  GtkAccessibleRole role;
+  GtkAccessibleRole role = GTK_ACCESSIBLE_ROLE_NONE;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), GTK_ACCESSIBLE_ROLE_NONE);
 
   GtkATContext *context = gtk_accessible_get_at_context (self);
-  if (context != NULL && gtk_at_context_is_realized (context))
-    return gtk_at_context_get_accessible_role (context);
+  if (context != NULL)
+    {
+      if (gtk_at_context_is_realized (context))
+        role = gtk_at_context_get_accessible_role (context);
+
+      g_object_unref (context);
+
+      if (role != GTK_ACCESSIBLE_ROLE_NONE)
+        return role;
+    }
 
   g_object_get (G_OBJECT (self), "accessible-role", &role, NULL);
 
@@ -344,6 +369,8 @@ gtk_accessible_update_state (GtkAccessible      *self,
 
 out:
   va_end (args);
+
+  g_object_unref (context);
 }
 
 /**
@@ -397,6 +424,7 @@ gtk_accessible_update_state_value (GtkAccessible      *self,
     }
 
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -420,6 +448,7 @@ gtk_accessible_reset_state (GtkAccessible      *self,
 
   gtk_at_context_set_accessible_state (context, state, NULL);
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -491,6 +520,8 @@ gtk_accessible_update_property (GtkAccessible         *self,
 
 out:
   va_end (args);
+
+  g_object_unref (context);
 }
 
 /**
@@ -544,6 +575,7 @@ gtk_accessible_update_property_value (GtkAccessible         *self,
     }
 
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -567,6 +599,7 @@ gtk_accessible_reset_property (GtkAccessible         *self,
 
   gtk_at_context_set_accessible_property (context, property, NULL);
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -638,6 +671,8 @@ gtk_accessible_update_relation (GtkAccessible         *self,
 
 out:
   va_end (args);
+
+  g_object_unref (context);
 }
 
 /**
@@ -666,6 +701,8 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
   g_return_if_fail (n_relations > 0);
 
   context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
 
   for (int i = 0; i < n_relations; i++)
     {
@@ -684,15 +721,14 @@ gtk_accessible_update_relation_value (GtkAccessible         *self,
           break;
         }
 
-      if (context)
-        gtk_at_context_set_accessible_relation (context, relation, real_value);
+      gtk_at_context_set_accessible_relation (context, relation, real_value);
 
       if (real_value != NULL)
         gtk_accessible_value_unref (real_value);
     }
 
-  if (context)
-    gtk_at_context_update (context);
+  gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -716,6 +752,7 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
 
   gtk_at_context_set_accessible_relation (context, relation, NULL);
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 static const char *role_names[] = {
@@ -876,13 +913,22 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (gtk_accessible_get_accessible_parent (self));
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (self);
+
+      if (parent != NULL)
+        {
+          context = gtk_accessible_get_at_context (parent);
+          g_object_unref (parent);
+        }
+    }
 
   if (context == NULL)
     return;
 
   gtk_at_context_platform_changed (context, change);
   gtk_at_context_update (context);
+  g_object_unref (context);
 }
 
 /**
@@ -936,6 +982,7 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
     return;
 
   gtk_at_context_bounds_changed (context);
+  g_object_unref (context);
 }
 
 /**
@@ -988,6 +1035,7 @@ gtk_accessible_should_present (GtkAccessible *self)
 {
   GtkAccessibleRole role;
   GtkATContext *context;
+  gboolean res = TRUE;
 
   if (GTK_IS_WIDGET (self) &&
       !gtk_widget_get_visible (GTK_WIDGET (self)))
@@ -1008,10 +1056,12 @@ gtk_accessible_should_present (GtkAccessible *self)
 
       value = gtk_at_context_get_accessible_state (context, GTK_ACCESSIBLE_STATE_HIDDEN);
       if (gtk_boolean_accessible_value_get (value))
-        return FALSE;
+        res = FALSE;
     }
 
-  return TRUE;
+  g_object_unref (context);
+
+  return res;
 }
 
 void
@@ -1025,15 +1075,24 @@ gtk_accessible_update_children (GtkAccessible           *self,
       gtk_widget_get_root (GTK_WIDGET (self)) == NULL)
     return;
 
-  context = gtk_accessible_get_at_context (self);
-
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (gtk_accessible_get_accessible_parent (self));
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (self);
+
+      context = gtk_accessible_get_at_context (parent);
+
+      g_object_unref (parent);
+    }
+  else
+    {
+      context = gtk_accessible_get_at_context (self);
+    }
 
   if (context == NULL)
     return;
 
   gtk_at_context_child_changed (context, 1 << state, child);
   gtk_at_context_update (context);
+  g_object_unref (context);
 }

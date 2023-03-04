@@ -85,8 +85,19 @@ gtk_at_context_dispose (GObject *gobject)
 
   gtk_at_context_unrealize (self);
 
-  g_clear_object (&self->accessible_parent);
-  g_clear_object (&self->next_accessible_sibling);
+  if (self->accessible_parent != NULL)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (self->accessible_parent),
+                                    (gpointer *) &self->accessible_parent);
+      self->accessible_parent = NULL;
+    }
+
+  if (self->next_accessible_sibling != NULL)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (self->next_accessible_sibling),
+                                    (gpointer *) &self->next_accessible_sibling);
+      self->next_accessible_sibling = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_at_context_parent_class)->dispose (gobject);
 }
@@ -479,7 +490,17 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
-  g_set_object (&self->accessible_parent, parent);
+  if (self->accessible_parent != parent)
+    {
+      if (self->accessible_parent != NULL)
+        g_object_remove_weak_pointer (G_OBJECT (self->accessible_parent),
+                                      (gpointer *) &self->accessible_parent);
+
+      self->accessible_parent = parent;
+      if (self->accessible_parent != NULL)
+        g_object_add_weak_pointer (G_OBJECT (self->accessible_parent),
+                                   (gpointer *) &self->accessible_parent);
+    }
 }
 
 /*< private >
@@ -511,7 +532,18 @@ gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
 
-  g_set_object (&self->next_accessible_sibling, sibling);
+  if (self->next_accessible_sibling != sibling)
+    {
+      if (self->next_accessible_sibling != NULL)
+        g_object_remove_weak_pointer (G_OBJECT (self->next_accessible_sibling),
+                                      (gpointer *) &self->next_accessible_sibling);
+
+      self->next_accessible_sibling = sibling;
+
+      if (self->next_accessible_sibling != NULL)
+        g_object_add_weak_pointer (G_OBJECT (self->next_accessible_sibling),
+                                   (gpointer *) &self->next_accessible_sibling);
+    }
 }
 
 /*< private >
@@ -996,6 +1028,8 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
           GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
           gtk_at_context_get_name_accumulate (rel_context, names, FALSE);
+
+          g_object_unref (rel_context);
         }
     }
 
@@ -1068,6 +1102,8 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
           GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
           gtk_at_context_get_description_accumulate (rel_context, labels, FALSE);
+
+          g_object_unref (rel_context);
         }
     }
 
