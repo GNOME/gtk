@@ -20,6 +20,7 @@ flatpak build ${builddir} meson \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
                 -Dbuild-tests=false \
+                -Dbuild-testsuite=false \
                 -Dbuild-examples=false \
                 -Dintrospection=disabled \
                 -Ddemos=true \
