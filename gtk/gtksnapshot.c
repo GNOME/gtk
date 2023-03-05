@@ -1623,17 +1623,22 @@ gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
     {
       graphene_size_init_from_size (&bounds.size, size);
     }
-  else
+  else if (node)
     {
       gsk_render_node_get_bounds (node, &bounds);
       bounds.size.width += bounds.origin.x;
       bounds.size.height += bounds.origin.y;
     }
+  else
+    {
+      bounds.size.width = 0;
+      bounds.size.height = 0;
+    }
   bounds.origin.x = 0;
   bounds.origin.y = 0;
 
   paintable = gtk_render_node_paintable_new (node, &bounds);
-  gsk_render_node_unref (node);
+  g_clear_pointer (&node, gsk_render_node_unref);
 
   return paintable;
 }

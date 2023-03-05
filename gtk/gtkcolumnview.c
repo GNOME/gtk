@@ -477,6 +477,8 @@ gtk_column_view_dispose (GObject *object)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (object);
 
+  gtk_column_view_sorter_clear (GTK_COLUMN_VIEW_SORTER (self->sorter));
+
   while (g_list_model_get_n_items (G_LIST_MODEL (self->columns)) > 0)
     {
       GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), 0);

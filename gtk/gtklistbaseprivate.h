@@ -36,20 +36,14 @@ struct _GtkListBaseClass
 
   const char *         list_item_name;
   GtkAccessibleRole    list_item_role;
-  gsize                list_item_size;
-  gsize                list_item_augment_size;
-  GtkRbTreeAugmentFunc list_item_augment_func;
 
-  void                 (* adjustment_value_changed)             (GtkListBase            *self,
-                                                                 GtkOrientation          orientation);
-  gboolean             (* get_allocation_along)                 (GtkListBase            *self,
+  GtkListTile *        (* split)                                (GtkListBase            *self,
+                                                                 GtkListTile            *tile,
+                                                                 guint                   n_items);
+
+  gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,
-                                                                 int                    *offset,
-                                                                 int                    *size);
-  gboolean             (* get_allocation_across)                (GtkListBase            *self,
-                                                                 guint                   pos,
-                                                                 int                    *offset,
-                                                                 int                    *size);
+                                                                 GdkRectangle           *area);
   gboolean             (* get_position_from_allocation)         (GtkListBase            *self,
                                                                  int                     across,
                                                                  int                     along,
@@ -75,13 +69,6 @@ guint                  gtk_list_base_get_n_items                (GtkListBase    
 GtkSelectionModel *    gtk_list_base_get_model                  (GtkListBase            *self);
 gboolean               gtk_list_base_set_model                  (GtkListBase            *self,
                                                                  GtkSelectionModel      *model);
-void                   gtk_list_base_update_adjustments         (GtkListBase            *self,
-                                                                 int                     total_across,
-                                                                 int                     total_along,
-                                                                 int                     page_across,
-                                                                 int                     page_along,
-                                                                 int                    *across,
-                                                                 int                    *along);
 
 guint                  gtk_list_base_get_anchor                 (GtkListBase            *self);
 void                   gtk_list_base_set_anchor                 (GtkListBase            *self,
@@ -106,13 +93,7 @@ gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase    
 void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
                                                                  gboolean                enable);
 gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
-void                   gtk_list_base_allocate_rubberband        (GtkListBase            *self);
 
-void                   gtk_list_base_size_allocate_child        (GtkListBase            *self,
-                                                                 GtkWidget              *child,
-                                                                 int                     x,
-                                                                 int                     y,
-                                                                 int                     width,
-                                                                 int                     height);
+void                   gtk_list_base_allocate                   (GtkListBase            *self);
 
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */

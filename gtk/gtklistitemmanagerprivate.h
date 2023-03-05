@@ -39,47 +39,67 @@ G_BEGIN_DECLS
 
 typedef struct _GtkListItemManager GtkListItemManager;
 typedef struct _GtkListItemManagerClass GtkListItemManagerClass;
-typedef struct _GtkListItemManagerItem GtkListItemManagerItem; /* sorry */
-typedef struct _GtkListItemManagerItemAugment GtkListItemManagerItemAugment;
+typedef struct _GtkListTile GtkListTile;
+typedef struct _GtkListTileAugment GtkListTileAugment;
 typedef struct _GtkListItemTracker GtkListItemTracker;
 
-struct _GtkListItemManagerItem
+struct _GtkListTile
 {
   GtkWidget *widget;
   guint n_items;
+  /* area occupied by tile. May be empty if tile has no allcoation */
+  cairo_rectangle_int_t area;
 };
 
-struct _GtkListItemManagerItemAugment
+struct _GtkListTileAugment
 {
   guint n_items;
+  /* union of all areas of tile and children */
+  cairo_rectangle_int_t area;
 };
 
 
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
-GtkListItemManager *    gtk_list_item_manager_new_for_size      (GtkWidget              *widget,
+GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget,
                                                                  const char             *item_css_name,
                                                                  GtkAccessibleRole       item_role,
-                                                                 gsize                   element_size,
-                                                                 gsize                   augment_size,
-                                                                 GtkRbTreeAugmentFunc    augment_func);
-#define gtk_list_item_manager_new(widget, item_css_name, type, augment_type, augment_func) \
-  gtk_list_item_manager_new_for_size (widget, item_css_name, sizeof (type), sizeof (augment_type), (augment_func))
+                                                                 GtkListTile *           (* split_func) (gpointer, GtkListTile *, guint),
+                                                                 gpointer                user_data);
 
-void                    gtk_list_item_manager_augment_node      (GtkRbTree              *tree,
-                                                                 gpointer                node_augment,
-                                                                 gpointer                node,
-                                                                 gpointer                left,
-                                                                 gpointer                right);
+void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
+                                                                 GdkRectangle           *out_bounds);
 gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_first         (GtkListItemManager     *self);
+gpointer                gtk_list_item_manager_get_last          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
-guint                   gtk_list_item_manager_get_item_position (GtkListItemManager     *self,
-                                                                 gpointer                item);
-gpointer                gtk_list_item_manager_get_item_augment  (GtkListItemManager     *self,
-                                                                 gpointer                item);
+GtkListTile *           gtk_list_item_manager_get_tile_at       (GtkListItemManager     *self,
+                                                                 int                     x,
+                                                                 int                     y);
+
+guint                   gtk_list_tile_get_position              (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
+gpointer                gtk_list_tile_get_augment               (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
+void                    gtk_list_tile_set_area                  (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile,
+                                                                 const cairo_rectangle_int_t *area);
+void                    gtk_list_tile_set_area_position         (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile,
+                                                                 int                     x,
+                                                                 int                     y);
+void                    gtk_list_tile_set_area_size             (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile,
+                                                                 int                     width,
+                                                                 int                     height);
+
+GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile,
+                                                                 guint                   n_items);
+GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
+                                                                 GtkListTile            *tile);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);

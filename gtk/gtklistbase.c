@@ -327,49 +327,22 @@ gtk_list_base_move_focus (GtkListBase    *self,
 }
 
 /*
- * gtk_list_base_get_allocation_along:
+ * gtk_list_base_get_allocation:
  * @self: a `GtkListBase`
- * @pos: item to get the size of
- * @offset: (out caller-allocates) (optional): set to the offset
- *   of the top/left of the item
- * @size: (out caller-allocates) (optional): set to the size of
- *   the item in the direction
+ * @pos: item to get the area of
+ * @area: (out caller-allocates): set to the area
+ *   occupied by the item
  *
- * Computes the allocation of the item in the direction along the sizing
- * axis.
+ * Computes the allocation of the item in the given position
  *
  * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
  **/
 static gboolean
-gtk_list_base_get_allocation_along (GtkListBase *self,
-                                    guint        pos,
-                                    int         *offset,
-                                    int         *size)
+gtk_list_base_get_allocation (GtkListBase  *self,
+                              guint         pos,
+                              GdkRectangle *area)
 {
-  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_along (self, pos, offset, size);
-}
-
-/*
- * gtk_list_base_get_allocation_across:
- * @self: a `GtkListBase`
- * @pos: item to get the size of
- * @offset: (out caller-allocates) (optional): set to the offset
- *   of the top/left of the item
- * @size: (out caller-allocates) (optional): set to the size of
- *   the item in the direction
- *
- * Computes the allocation of the item in the direction across to the sizing
- * axis.
- *
- * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
- **/
-static gboolean
-gtk_list_base_get_allocation_across (GtkListBase *self,
-                                     guint        pos,
-                                     int         *offset,
-                                     int         *size)
-{
-  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_across (self, pos, offset, size);
+  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation (self, pos, area);
 }
 
 /*
@@ -492,7 +465,7 @@ gtk_list_base_focus (GtkWidget        *widget,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   guint old, pos, n_items;
   GtkWidget *focus_child;
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
 
   focus_child = gtk_widget_get_focus_child (widget);
   /* focus is moving around fine inside the focus child, don't disturb it */
@@ -558,15 +531,15 @@ gtk_list_base_focus (GtkWidget        *widget,
   if (old == pos)
     return TRUE;
 
-  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-  if (item == NULL)
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (tile == NULL)
     return FALSE;
 
   /* This shouldn't really happen, but if it does, oh well */
-  if (item->widget == NULL)
+  if (tile->widget == NULL)
     return gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, TRUE, FALSE, FALSE);
 
-  return gtk_widget_child_focus (item->widget, direction);
+  return gtk_widget_child_focus (tile->widget, direction);
 }
 
 static gboolean
@@ -807,29 +780,22 @@ gtk_list_base_scroll_to_item (GtkListBase *self,
                               guint        pos)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
+  GdkRectangle area;
 
-  /* figure out primary orientation and if position is valid */
-  if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
+  if (!gtk_list_base_get_allocation (GTK_LIST_BASE (self), pos, &area))
     return;
 
-  end += start;
   gtk_list_base_compute_scroll_align (self,
                                       gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                      start, end,
+                                      area.y, area.y + area.height,
                                       priv->anchor_align_along, priv->anchor_side_along,
                                       &align_along, &side_along);
 
-  /* now do the same thing with the other orientation */
-  if (!gtk_list_base_get_allocation_across (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
-
-  end += start;
   gtk_list_base_compute_scroll_align (self,
                                       gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
-                                      start, end,
+                                      area.x, area.x + area.width,
                                       priv->anchor_align_across, priv->anchor_side_across,
                                       &align_across, &side_across);
 
@@ -959,8 +925,7 @@ gtk_list_base_move_cursor_page_up (GtkWidget *widget,
 
   pos = gtk_list_base_get_focus_position (self);
   page_size = gtk_adjustment_get_page_size (priv->adjustment[priv->orientation]);
-  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
-      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+  if (!gtk_list_base_get_allocation (self, pos, &area))
     return TRUE;
   if (!gtk_list_base_get_position_from_allocation (self,
                                                    area.x + area.width / 2,
@@ -1005,8 +970,7 @@ gtk_list_base_move_cursor_page_down (GtkWidget *widget,
   if (end == 0)
     return TRUE;
 
-  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
-      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+  if (!gtk_list_base_get_allocation (self, pos, &area))
     return TRUE;
 
   if (!gtk_list_base_get_position_from_allocation (self,
@@ -1355,7 +1319,7 @@ update_autoscroll (GtkListBase *self,
     remove_autoscroll (self);
 }
 
-/**
+/*
  * gtk_list_base_size_allocate_child:
  * @self: The listbase
  * @child: The child
@@ -1368,7 +1332,7 @@ update_autoscroll (GtkListBase *self,
  * but with the coordinates already offset by the scroll
  * offset.
  **/
-void
+static void
 gtk_list_base_size_allocate_child (GtkListBase *self,
                                    GtkWidget   *child,
                                    int          x,
@@ -1433,6 +1397,32 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
 }
 
 static void
+gtk_list_base_allocate_children (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListTile *tile;
+  int dx, dy;
+  
+  gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &dx, NULL, NULL);
+  gtk_list_base_get_adjustment_values (self, priv->orientation, &dy, NULL, NULL);
+
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        {
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
+                                             tile->widget,
+                                             tile->area.x - dx,
+                                             tile->area.y - dy,
+                                             tile->area.width,
+                                             tile->area.height);
+        }
+    }
+}
+
+static void
 gtk_list_base_widget_to_list (GtkListBase *self,
                               double       x_widget,
                               double       y_widget,
@@ -1484,13 +1474,13 @@ gtk_list_base_get_rubberband_coords (GtkListBase  *self,
     }
   else
     {
+      GdkRectangle area;
       guint pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->rubberband->start_tracker);
 
-      if (gtk_list_base_get_allocation_along (self, pos, &y1, &y2) &&
-          gtk_list_base_get_allocation_across (self, pos, &x1, &x2))
+      if (gtk_list_base_get_allocation (self, pos, &area))
         {
-          x1 += x2 * priv->rubberband->start_align_across;
-          y1 += y2 * priv->rubberband->start_align_along;
+          x1 = area.x + area.width * priv->rubberband->start_align_across;
+          y1 = area.y + area.height * priv->rubberband->start_align_along;
         }
       else
         {
@@ -1511,7 +1501,7 @@ gtk_list_base_get_rubberband_coords (GtkListBase  *self,
   return TRUE;
 }
 
-void
+static void
 gtk_list_base_allocate_rubberband (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
@@ -1648,17 +1638,17 @@ static void
 gtk_list_base_stop_rubberband (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
 
   if (!priv->rubberband)
     return;
 
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (item->widget)
-        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+      if (tile->widget)
+        gtk_widget_unset_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE);
     }
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
@@ -1673,7 +1663,7 @@ static void
 gtk_list_base_update_rubberband_selection (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
   GdkRectangle rect;
   guint pos;
   GtkBitset *rubberband_selection;
@@ -1684,19 +1674,19 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
   rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
 
   pos = 0;
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (item->widget)
+      if (tile->widget)
         {
           if (gtk_bitset_contains (rubberband_selection, pos))
-            gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
+            gtk_widget_set_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
           else
-            gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
+            gtk_widget_unset_state_flags (tile->widget, GTK_STATE_FLAG_ACTIVE);
         }
 
-      pos += item->n_items;
+      pos += tile->n_items;
     }
 
   gtk_bitset_unref (rubberband_selection);
@@ -1844,6 +1834,14 @@ gtk_list_base_drag_leave (GtkDropControllerMotion *motion,
   remove_autoscroll (GTK_LIST_BASE (widget));
 }
 
+static GtkListTile *
+gtk_list_base_split_func (gpointer     data,
+                          GtkListTile *tile,
+                          guint        n_items)
+{
+  return GTK_LIST_BASE_GET_CLASS (data)->split (data, tile, n_items);
+}
+
 static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
@@ -1851,12 +1849,11 @@ gtk_list_base_init_real (GtkListBase      *self,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkEventController *controller;
 
-  priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
-                                                           g_class->list_item_name,
-                                                           g_class->list_item_role,
-                                                           g_class->list_item_size,
-                                                           g_class->list_item_augment_size,
-                                                           g_class->list_item_augment_func);
+  priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
+                                                  g_class->list_item_name,
+                                                  g_class->list_item_role,
+                                                  gtk_list_base_split_func,
+                                                  self);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;
@@ -1879,7 +1876,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
-static int
+static void
 gtk_list_base_set_adjustment_values (GtkListBase    *self,
                                      GtkOrientation  orientation,
                                      int             value,
@@ -1907,22 +1904,23 @@ gtk_list_base_set_adjustment_values (GtkListBase    *self,
   g_signal_handlers_unblock_by_func (priv->adjustment[orientation],
                                      gtk_list_base_adjustment_value_changed_cb,
                                      self);
-
-  return value;
 }
 
-void
-gtk_list_base_update_adjustments (GtkListBase *self,
-                                  int          total_across,
-                                  int          total_along,
-                                  int          page_across,
-                                  int          page_along,
-                                  int         *across,
-                                  int         *along)
+static void
+gtk_list_base_update_adjustments (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  int value_along, value_across, size;
+  GdkRectangle bounds;
+  int value_along, value_across;
+  int page_along, page_across;
   guint pos;
+
+  gtk_list_item_manager_get_tile_bounds (priv->item_manager, &bounds);
+  g_assert (bounds.x == 0);
+  g_assert (bounds.y == 0);
+
+  page_across = gtk_widget_get_size (GTK_WIDGET (self), OPPOSITE_ORIENTATION (priv->orientation));
+  page_along = gtk_widget_get_size (GTK_WIDGET (self), priv->orientation);
 
   pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->anchor);
   if (pos == GTK_INVALID_LIST_POSITION)
@@ -1932,38 +1930,45 @@ gtk_list_base_update_adjustments (GtkListBase *self,
     }
   else
     {
-      if (gtk_list_base_get_allocation_across (self, pos, &value_across, &size))
+      GdkRectangle area;
+
+      if (gtk_list_base_get_allocation (self, pos, &area))
         {
+          value_across = area.x;
+          value_along = area.y;
           if (priv->anchor_side_across == GTK_PACK_END)
-            value_across += size;
-          value_across -= priv->anchor_align_across * page_across;
-        }
-      else
-        {
-          value_along = 0;
-        }
-      if (gtk_list_base_get_allocation_along (self, pos, &value_along, &size))
-        {
+            value_across += area.width;
           if (priv->anchor_side_along == GTK_PACK_END)
-            value_along += size;
+            value_along += area.height;
+          value_across -= priv->anchor_align_across * page_across;
           value_along -= priv->anchor_align_along * page_along;
         }
       else
         {
+          value_across = 0;
           value_along = 0;
         }
     }
 
-  *across = gtk_list_base_set_adjustment_values (self,
-                                                 OPPOSITE_ORIENTATION (priv->orientation),
-                                                 value_across,
-                                                 total_across,
-                                                 page_across);
-  *along = gtk_list_base_set_adjustment_values (self,
-                                                priv->orientation,
-                                                value_along,
-                                                total_along,
-                                                page_along);
+  gtk_list_base_set_adjustment_values (self,
+                                       OPPOSITE_ORIENTATION (priv->orientation),
+                                       value_across,
+                                       bounds.width,
+                                       page_across);
+  gtk_list_base_set_adjustment_values (self,
+                                       priv->orientation,
+                                       value_along,
+                                       bounds.height,
+                                       page_along);
+}
+
+void
+gtk_list_base_allocate (GtkListBase *self)
+{
+  gtk_list_base_update_adjustments (self);
+
+  gtk_list_base_allocate_children (self);
+  gtk_list_base_allocate_rubberband (self);
 }
 
 GtkScrollablePolicy
@@ -2124,14 +2129,14 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
                                   gboolean     extend)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
+  GtkListTile *tile;
   gboolean success;
 
-  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-  if (item == NULL)
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (tile == NULL)
     return FALSE;
 
-  if (!item->widget)
+  if (!tile->widget)
     {
       GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
 
@@ -2141,16 +2146,16 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
        * so we create a temporary one. */
       gtk_list_item_tracker_set_position (priv->item_manager, tracker, pos, 0, 0);
 
-      item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-      g_assert (item->widget);
+      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+      g_assert (tile->widget);
 
-      success = gtk_widget_grab_focus (item->widget);
+      success = gtk_widget_grab_focus (tile->widget);
 
       gtk_list_item_tracker_free (priv->item_manager, tracker);
     }
   else
     {
-      success = gtk_widget_grab_focus (item->widget);
+      success = gtk_widget_grab_focus (tile->widget);
     }
 
   if (!success)
