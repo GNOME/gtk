@@ -37,6 +37,23 @@
 
 G_DEFINE_INTERFACE (GdkDragSurface, gdk_drag_surface, GDK_TYPE_SURFACE)
 
+enum
+{
+  COMPUTE_SIZE,
+
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS] = { 0 };
+
+void
+gdk_drag_surface_notify_compute_size (GdkDragSurface *surface,
+                                      int            *width,
+                                      int            *height)
+{
+  g_signal_emit (surface, signals[COMPUTE_SIZE], 0, width, height);
+}
+
 static gboolean
 gdk_drag_surface_default_present (GdkDragSurface *drag_surface,
                                   int          width,
@@ -49,6 +66,16 @@ static void
 gdk_drag_surface_default_init (GdkDragSurfaceInterface *iface)
 {
   iface->present = gdk_drag_surface_default_present;
+
+  signals[COMPUTE_SIZE] =
+    g_signal_new (I_("compute-size"),
+                  GDK_TYPE_DRAG_SURFACE,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_POINTER, G_TYPE_POINTER);
 }
 
 /**

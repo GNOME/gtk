@@ -15,6 +15,10 @@ struct _GdkDragSurfaceInterface
                         int             height);
 };
 
+void gdk_drag_surface_notify_compute_size (GdkDragSurface *surface,
+                                           int            *width,
+                                           int            *height);
+
 G_END_DECLS
 
 #endif /* __GDK_DRAG_SURFACE_PRIVATE_H__ */
