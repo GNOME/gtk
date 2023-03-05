@@ -1131,11 +1131,19 @@ toplevel_filter_func (gpointer item,
                       gpointer data)
 {
   GdkDisplay *display = data;
+  gpointer iw;
 
   if (!GTK_IS_WINDOW (item))
     return FALSE;
 
-  return gtk_widget_get_display (item) == display;
+  if (gtk_widget_get_display (item) != display)
+    return FALSE;
+
+  iw = g_object_get_data (G_OBJECT (display), "-gtk-inspector");
+  if (iw == item)
+    return FALSE;
+
+  return TRUE;
 }
 
 static GListModel *
