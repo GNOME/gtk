@@ -507,9 +507,6 @@ gtk_css_node_real_node_removed (GtkCssNode *parent,
   node->previous_sibling = NULL;
   node->next_sibling = NULL;
   node->parent = NULL;
-
-  if (parent->children_observer)
-    gtk_list_list_model_item_removed (parent->children_observer, previous);
 }
 
 static void
@@ -715,6 +712,8 @@ gtk_css_node_reposition (GtkCssNode *node,
   if (old_parent != NULL)
     {
       GTK_CSS_NODE_GET_CLASS (old_parent)->node_removed (old_parent, node, node->previous_sibling);
+      if (old_parent->children_observer && old_parent != new_parent)
+        gtk_list_list_model_item_removed (old_parent->children_observer, previous);
       if (old_parent->first_child && node->visible)
         gtk_css_node_invalidate (old_parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
     }
@@ -784,7 +783,7 @@ gtk_css_node_reposition (GtkCssNode *node,
 
   if (new_parent && new_parent->children_observer)
     {
-      if (old_previous)
+      if (old_previous && old_parent == new_parent)
         gtk_list_list_model_item_moved (new_parent->children_observer, node, old_previous);
       else
         gtk_list_list_model_item_added (new_parent->children_observer, node);
