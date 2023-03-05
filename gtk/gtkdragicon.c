@@ -184,6 +184,18 @@ surface_render (GdkSurface     *surface,
 }
 
 static void
+surface_compute_size (GdkDragSurface *surface,
+                      int            *width,
+                      int            *height,
+                      GtkWidget      *widget)
+{
+  GtkRequisition size;
+  gtk_widget_get_preferred_size (widget, NULL, &size);
+  *width = size.width;
+  *height = size.height;
+}
+
+static void
 gtk_drag_icon_realize (GtkWidget *widget)
 {
   GtkDragIcon *icon = GTK_DRAG_ICON (widget);
@@ -193,6 +205,7 @@ gtk_drag_icon_realize (GtkWidget *widget)
   gdk_surface_set_widget (icon->surface, widget);
 
   g_signal_connect (icon->surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (icon->surface, "compute-size", G_CALLBACK (surface_compute_size), widget);
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->realize (widget);
 
@@ -216,6 +229,7 @@ gtk_drag_icon_unrealize (GtkWidget *widget)
   if (icon->surface)
     {
       g_signal_handlers_disconnect_by_func (icon->surface, surface_render, widget);
+      g_signal_handlers_disconnect_by_func (icon->surface, surface_compute_size, widget);
       gdk_surface_set_widget (icon->surface, NULL);
     }
 }
