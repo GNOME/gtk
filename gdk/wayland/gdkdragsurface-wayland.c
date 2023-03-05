@@ -78,6 +78,10 @@ gdk_wayland_drag_surface_compute_size (GdkSurface *surface)
 
   if (impl->next_layout.surface_geometry_dirty)
     {
+      gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface),
+                                            &impl->next_layout.configured_width,
+                                            &impl->next_layout.configured_height);
+
       gdk_wayland_surface_update_size (surface,
                                        impl->next_layout.configured_width,
                                        impl->next_layout.configured_height,
