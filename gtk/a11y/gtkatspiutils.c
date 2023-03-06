@@ -109,7 +109,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_LABEL;
 
     case GTK_ACCESSIBLE_ROLE_LANDMARK:
-      break;
+      return ATSPI_ROLE_LANDMARK;
 
     case GTK_ACCESSIBLE_ROLE_LEGEND:
       return ATSPI_ROLE_LABEL;
