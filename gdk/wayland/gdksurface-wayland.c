@@ -971,6 +971,15 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           impl->display_server.egl_window = NULL;
         }
 
+      impl->awaiting_frame = FALSE;
+      if (impl->awaiting_frame_frozen)
+        {
+          impl->awaiting_frame_frozen = FALSE;
+          gdk_surface_thaw_updates (surface);
+        }
+
+      GDK_WAYLAND_SURFACE_GET_CLASS (impl)->hide_surface (impl);
+
       if (impl->display_server.xdg_surface)
         {
           xdg_surface_destroy (impl->display_server.xdg_surface);
@@ -988,15 +997,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           else
             impl->initial_configure_received = FALSE;
         }
-
-      impl->awaiting_frame = FALSE;
-      if (impl->awaiting_frame_frozen)
-        {
-          impl->awaiting_frame_frozen = FALSE;
-          gdk_surface_thaw_updates (surface);
-        }
-
-      GDK_WAYLAND_SURFACE_GET_CLASS (impl)->hide_surface (impl);
 
       g_clear_pointer (&impl->display_server.wl_surface, wl_surface_destroy);
 
