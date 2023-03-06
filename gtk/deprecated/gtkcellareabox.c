@@ -995,10 +995,11 @@ gtk_cell_area_box_focus_changed (GtkCellArea        *area,
                                  GParamSpec         *pspec,
                                  GtkCellAreaBox     *box)
 {
-  GtkCellAreaBoxPrivate *priv = gtk_cell_area_box_get_instance_private (box);
+  GtkCellAreaBoxPrivate *priv       = gtk_cell_area_box_get_instance_private (box);
+  GtkCellRenderer       *focus_cell = gtk_cell_area_get_focus_cell (area);
 
-  if (gtk_cell_area_get_focus_cell (area))
-    priv->last_focus_cell = gtk_cell_area_get_focus_cell (area);
+  if  (focus_cell)
+    priv->last_focus_cell = focus_cell;
 }
 
 /*************************************************************
