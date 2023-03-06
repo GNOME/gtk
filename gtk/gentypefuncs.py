@@ -71,7 +71,7 @@ for f in funcs:
     file_output += ['#ifdef GDK_WINDOWING_WIN32']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
-  elif f.startswith('gdk_quartz'):
+  elif f.startswith('gdk_macos'):
     file_output += ['#ifdef GDK_WINDOWING_MACOS']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
