@@ -11180,7 +11180,8 @@ gtk_widget_dispose_template (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (g_type_name (widget_type) != NULL);
 
-  GtkWidgetTemplate *template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  GObjectClass *object_class = g_type_class_peek (widget_type);
+  GtkWidgetTemplate *template = GTK_WIDGET_CLASS (object_class)->priv->template;
   g_return_if_fail (template != NULL);
 
   /* Tear down the automatic child data */
