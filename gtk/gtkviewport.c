@@ -30,11 +30,13 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtkscrollinfoprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
 #include "gtktext.h"
 
+#include <math.h>
 
 /**
  * GtkViewport:
@@ -718,5 +720,56 @@ gtk_viewport_get_child (GtkViewport *viewport)
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
   return viewport->child;
+}
+
+/**
+ * gtk_viewport_scroll_to:
+ * @viewport: a `GtkViewport`
+ * @descendant: a descendant widget of the viewport
+ * @scroll: (nullable) (transfer full): details of how to perform
+ *   the scroll operation or NULL to scroll into view
+ *
+ * Scrolls a descendant of the viewport into view.
+ *
+ * The viewport and the descendant must be visible and mapped for
+ * this function to work, otherwise no scrolling will be performed.
+ *
+ * Since: 4.12
+ **/
+void
+gtk_viewport_scroll_to (GtkViewport   *viewport,
+                        GtkWidget     *descendant,
+                        GtkScrollInfo *scroll)
+{
+  graphene_rect_t bounds;
+  int x, y;
+  double adj_x, adj_y;
+
+  g_return_if_fail (GTK_IS_VIEWPORT (viewport));
+  g_return_if_fail (GTK_IS_WIDGET (descendant));
+
+  if (!gtk_widget_compute_bounds (descendant, GTK_WIDGET (viewport), &bounds))
+    return;
+
+  adj_x = gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  adj_y = gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  gtk_scroll_info_compute_scroll (scroll,
+                                  &(GdkRectangle) {
+                                    floor (bounds.origin.x + adj_x),
+                                    floor (bounds.origin.y + adj_y),
+                                    ceil (bounds.origin.x + bounds.size.width) - floor (bounds.origin.x),
+                                    ceil (bounds.origin.y + bounds.size.height) - floor (bounds.origin.y)
+                                  },
+                                  &(GdkRectangle) {
+                                    adj_x,
+                                    adj_y,
+                                    gtk_widget_get_width (GTK_WIDGET (viewport)),
+                                    gtk_widget_get_height (GTK_WIDGET (viewport))
+                                  },
+                                  &x, &y);
+
+  gtk_adjustment_animate_to_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL], x);
+  gtk_adjustment_animate_to_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL], y);
 }
 
