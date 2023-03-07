@@ -61,6 +61,11 @@ void           gtk_viewport_set_child           (GtkViewport *viewport,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *    gtk_viewport_get_child           (GtkViewport *viewport);
 
+GDK_AVAILABLE_IN_4_12
+void           gtk_viewport_scroll_to           (GtkViewport   *viewport,
+                                                 GtkWidget     *descendant,
+                                                 GtkScrollInfo *scroll);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkViewport, g_object_unref)
 
 G_END_DECLS
