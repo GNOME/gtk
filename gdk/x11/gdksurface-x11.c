@@ -40,6 +40,7 @@
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdktextureprivate.h"
+#include "gdkdragsurfacesizeprivate.h"
 
 #include "gdkseatprivate.h"
 #include "gdkprivate.h"
@@ -346,6 +347,36 @@ compute_toplevel_size (GdkSurface *surface,
 }
 
 static gboolean
+compute_drag_surface_size (GdkSurface *surface,
+                           int        *width,
+                           int        *height)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  GdkDragSurfaceSize size;
+
+  gdk_drag_surface_size_init (&size);
+  size.width = impl->next_layout.configured_width;
+  size.height = impl->next_layout.configured_height;
+
+  gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface), &size);
+
+  if ((impl->last_computed_width != size.width ||
+        impl->last_computed_height != size.height) &&
+      (impl->next_layout.configured_width != size.width ||
+        impl->next_layout.configured_height != size.height))
+    {
+      *width = size.width;
+      *height = size.height;
+      impl->last_computed_width = size.width;
+      impl->last_computed_height = size.height;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 compute_size_idle (gpointer user_data)
 {
   GdkSurface *surface = user_data;
@@ -384,6 +415,24 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
       int width, height;
 
       if (compute_toplevel_size (surface, UPDATE_GEOMETRY, &width, &height))
+        gdk_x11_surface_toplevel_resize (surface, width, height);
+
+      if (surface->resize_count == 0)
+        {
+          gdk_x11_surface_update_size (impl,
+                                       impl->next_layout.configured_width,
+                                       impl->next_layout.configured_height,
+                                       impl->surface_scale);
+        }
+
+      impl->next_layout.surface_geometry_dirty = FALSE;
+      impl->next_layout.configure_pending = FALSE;
+    }
+  else if (GDK_IS_DRAG_SURFACE (surface))
+    {
+      int width, height;
+
+      if (compute_drag_surface_size (surface, &width, &height))
         gdk_x11_surface_toplevel_resize (surface, width, height);
 
       if (surface->resize_count == 0)
