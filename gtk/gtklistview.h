@@ -89,6 +89,11 @@ GDK_AVAILABLE_IN_4_12
 GtkListTabBehavior
                 gtk_list_view_get_tab_behavior                  (GtkListView            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_view_scroll_to                         (GtkListView            *self,
+                                                                 guint                   pos,
+                                                                 GtkListScrollFlags      flags,
+                                                                 GtkScrollInfo          *scroll);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListView, g_object_unref)
 
