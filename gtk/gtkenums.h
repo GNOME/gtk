@@ -1420,6 +1420,8 @@ typedef enum {
  *   enumeration
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected. Value type: boolean or undefined
+ * @GTK_ACCESSIBLE_STATE_VISITED: Indicates that a widget with the
+ * GTK_ACCESSIBLE_ROLE_LINK has been visited. Value type: boolean. Since: 4.12
  *
  * The possible accessible states of a [iface@Accessible].
  */
@@ -1431,7 +1433,8 @@ typedef enum {
   GTK_ACCESSIBLE_STATE_HIDDEN,
   GTK_ACCESSIBLE_STATE_INVALID,
   GTK_ACCESSIBLE_STATE_PRESSED,
-  GTK_ACCESSIBLE_STATE_SELECTED
+  GTK_ACCESSIBLE_STATE_SELECTED,
+  GTK_ACCESSIBLE_STATE_VISITED
 } GtkAccessibleState;
 
 /**

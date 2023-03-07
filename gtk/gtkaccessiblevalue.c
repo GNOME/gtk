@@ -688,6 +688,11 @@ static const GtkAccessibleCollect collect_states[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_BOOLEAN | GTK_ACCESSIBLE_COLLECT_UNDEFINED,
     .name = "selected"
   },
+  [GTK_ACCESSIBLE_STATE_VISITED] = {
+    .value = GTK_ACCESSIBLE_STATE_VISITED,
+    .ctype = GTK_ACCESSIBLE_COLLECT_BOOLEAN|GTK_ACCESSIBLE_COLLECT_UNDEFINED,
+    .name = "visited"
+  }
 };
 
 /* § 6.6.1 Widget attributes */
@@ -927,7 +932,7 @@ gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
-  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_VISITED, NULL);
 
   switch (cstate->value)
     {
@@ -940,6 +945,7 @@ gtk_accessible_value_get_default_for_state (GtkAccessibleState state)
     case GTK_ACCESSIBLE_STATE_EXPANDED:
     case GTK_ACCESSIBLE_STATE_PRESSED:
     case GTK_ACCESSIBLE_STATE_SELECTED:
+    case GTK_ACCESSIBLE_STATE_VISITED:
       return gtk_undefined_accessible_value_new ();
 
     case GTK_ACCESSIBLE_STATE_INVALID:
@@ -1564,7 +1570,7 @@ gtk_accessible_value_collect_for_state (GtkAccessibleState   state,
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
-  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_VISITED, NULL);
 
   return gtk_accessible_value_collect_valist (cstate, error, args);
 }
@@ -1592,7 +1598,7 @@ gtk_accessible_value_collect_for_state_value (GtkAccessibleState   state,
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
-  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_VISITED, NULL);
 
   return gtk_accessible_value_collect_value (cstate, value, error);
 }
@@ -1605,7 +1611,7 @@ gtk_accessible_value_parse_for_state (GtkAccessibleState   state,
 {
   const GtkAccessibleCollect *cstate = &collect_states[state];
 
-  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_SELECTED, NULL);
+  g_return_val_if_fail (state <= GTK_ACCESSIBLE_STATE_VISITED, NULL);
 
   return gtk_accessible_value_parse (cstate, str, len, error);
 }

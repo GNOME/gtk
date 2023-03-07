@@ -282,6 +282,16 @@ collect_states (GtkAtSpiContext    *self,
         }
     }
 
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_VISITED))
+    {
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_VISITED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          if (gtk_boolean_accessible_value_get (value))
+            set_atspi_state (&states, ATSPI_STATE_VISITED);
+        }
+    }
+
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED))
     {
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED);
@@ -1046,6 +1056,15 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         }
       else
         emit_state_changed (self, "selectable", FALSE);
+    }
+
+  if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_VISITED)
+    {
+      value = gtk_accessible_attribute_set_get_value (states, GTK_ACCESSIBLE_STATE_VISITED);
+      if (value->value_class->type == GTK_ACCESSIBLE_VALUE_TYPE_BOOLEAN)
+        {
+          emit_state_changed (self, "visited",gtk_boolean_accessible_value_get (value));
+        }
     }
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_READ_ONLY)

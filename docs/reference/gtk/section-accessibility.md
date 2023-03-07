@@ -128,6 +128,7 @@ Each state name is part of the `GtkAccessibleState` enumeration.
 | %GTK_ACCESSIBLE_STATE_INVALID | “aria-invalid” | `GtkAccessibleInvalidState` | Set when a widget is showing an error |
 | %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.ToggleButton] |
 | %GTK_ACCESSIBLE_STATE_SELECTED | “aria-selected” | boolean or undefined | Set when a widget is selected |
+| %GTK_ACCESSIBLE_STATE_VISITED | N/A | boolean or undefined | Set when a link-like widget is visited |
 
 #### List of accessible properties
 
