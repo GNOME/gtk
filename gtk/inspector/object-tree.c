@@ -910,7 +910,11 @@ search (GtkInspectorObjectTree *wt,
         {
           if (match_object (child, text))
             {
-              gtk_single_selection_set_selected (priv->selection, row);
+              gtk_column_view_scroll_to (GTK_COLUMN_VIEW (wt->priv->list),
+                                         row,
+                                         NULL,
+                                         GTK_LIST_SCROLL_SELECT | GTK_LIST_SCROLL_FOCUS,
+                                         NULL);
               g_object_unref (child);
               g_object_unref (row_item);
               return TRUE;
@@ -1302,8 +1306,12 @@ gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
   if (row_item == NULL)
     return;
 
-  gtk_single_selection_set_selected (wt->priv->selection,
-                                     gtk_tree_list_row_get_position (row_item));
+  gtk_column_view_scroll_to (GTK_COLUMN_VIEW (wt->priv->list),
+                             gtk_tree_list_row_get_position (row_item),
+                             NULL,
+                             GTK_LIST_SCROLL_SELECT | GTK_LIST_SCROLL_FOCUS,
+                             NULL);
+
   g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object); // FIXME
   g_object_unref (row_item);
 }
