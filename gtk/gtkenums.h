@@ -290,6 +290,23 @@ typedef enum
 } GtkListTabBehavior;
 
 /**
+ * GtkListScrollFlags:
+ * @GTK_LIST_SCROLL_FOCUS: Focus the target item
+ * @GTK_LIST_SCROLL_SELECT: Select the target item and
+ *   unselect all other items.
+ * @GTK_LIST_SCROLL_NO_SCROLL: Do not actually scroll,
+ *   just perform actions from other flags.
+ *
+ * List of actions to perform when scrolling to items in
+ * a list widget.
+ */
+typedef enum {
+  GTK_LIST_SCROLL_FOCUS     = 1 << 0,
+  GTK_LIST_SCROLL_SELECT    = 1 << 1,
+  GTK_LIST_SCROLL_NO_SCROLL = 1 << 2,
+} GtkListScrollFlags;
+
+/**
  * GtkMessageType:
  * @GTK_MESSAGE_INFO: Informational message
  * @GTK_MESSAGE_WARNING: Non-fatal warning message

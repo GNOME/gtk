@@ -1350,3 +1350,30 @@ gtk_list_view_get_tab_behavior (GtkListView *self)
   return gtk_list_base_get_tab_behavior (GTK_LIST_BASE (self));
 }
 
+/**
+ * gtk_list_view_scroll_to:
+ * @self: The listview to scroll in
+ * @pos: position of the item
+ * @flags: actions to perform
+ * @scroll: (nullable) (transfer full): details of how to perform
+ *   the scroll operation or NULL to scroll into view 
+ *
+ * Scroll to the item at the given position and performs the actions
+ * specified in @flags.
+ *
+ * This function works if the listview is not shown or not focused,
+ * the changes will take effect once that happens.  
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_view_scroll_to (GtkListView        *self,
+                         guint               pos,
+                         GtkListScrollFlags  flags,
+                         GtkScrollInfo      *scroll)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  gtk_list_base_scroll_to (GTK_LIST_BASE (self), pos, flags, scroll);
+}
+
