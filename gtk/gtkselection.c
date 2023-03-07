@@ -343,6 +343,7 @@ static GdkAtom text_plain_utf8_atom;
 static GdkAtom text_plain_locale_atom;
 static GdkAtom text_uri_list_atom;
 static GdkAtom portal_files_atom;
+static GdkAtom portal_filetransfer_atom;
 
 static void 
 init_atoms (void)
@@ -364,6 +365,7 @@ init_atoms (void)
 
       text_uri_list_atom = gdk_atom_intern_static_string ("text/uri-list");
       portal_files_atom = gdk_atom_intern_static_string ("application/vnd.portal.files");
+      portal_filetransfer_atom = gdk_atom_intern_static_string ("application/vnd.portal.filetransfer");
     }
 }
 
@@ -526,7 +528,10 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
 
 #ifndef G_OS_WIN32
   if (file_transfer_portal_supported ())
-    gtk_target_list_add (list, portal_files_atom, 0, info);
+    {
+      gtk_target_list_add (list, portal_filetransfer_atom, 0, info);
+      gtk_target_list_add (list, portal_files_atom, 0, info);
+    }
 #endif
 }
 
@@ -1899,7 +1904,8 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
 	}
     }
 #ifndef G_OS_WIN32
-  else if (selection_data->target == portal_files_atom &&
+  else if ((selection_data->target == portal_filetransfer_atom ||
+            selection_data->target == portal_files_atom) &&
            file_transfer_portal_supported ())
     {
       GPtrArray *a;
@@ -1940,7 +1946,7 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
         }
 
       gtk_selection_data_set (selection_data,
-                              portal_files_atom,
+                              selection_data->target,
                               8, (guchar *)key, strlen (key));
 
       g_strfreev (files);
@@ -1996,7 +2002,8 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
     }
 #ifndef G_OS_WIN32
   else if (selection_data->length >= 0 &&
-           selection_data->type == portal_files_atom &&
+           (selection_data->type == portal_filetransfer_atom ||
+            selection_data->type == portal_files_atom) &&
            file_transfer_portal_supported ())
     {
       char *key;
@@ -2353,6 +2360,7 @@ gtk_targets_include_uri (GdkAtom *targets,
   for (i = 0; i < n_targets; i++)
     {
       if (targets[i] == text_uri_list_atom ||
+          targets[i] == portal_filetransfer_atom ||
           targets[i] == portal_files_atom)
 	{
 	  result = TRUE;
