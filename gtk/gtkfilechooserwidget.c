@@ -6989,15 +6989,20 @@ location_sort_func (gconstpointer a,
                     gpointer      user_data)
 {
   GtkFileChooserWidget *impl = user_data;
+  char *location_a, *location_b;
   char *key_a, *key_b;
   GtkOrdering result;
 
   /* FIXME: use sortkeys for these */
-  key_a = g_utf8_collate_key_for_filename (file_chooser_get_location (impl, (GFileInfo *)a), -1);
-  key_b = g_utf8_collate_key_for_filename (file_chooser_get_location (impl, (GFileInfo *)b), -1);
+  location_a = file_chooser_get_location (impl, (GFileInfo *)a);
+  location_b = file_chooser_get_location (impl, (GFileInfo *)b);
+  key_a = g_utf8_collate_key_for_filename (location_a, -1);
+  key_b = g_utf8_collate_key_for_filename (location_b, -1);
 
   result = g_strcmp0 (key_a, key_b);
 
+  g_free (location_a);
+  g_free (location_b);
   g_free (key_a);
   g_free (key_b);
 
