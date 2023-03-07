@@ -40,6 +40,7 @@ void                    gtk_column_view_distribute_width        (GtkColumnView  
                                                                  GtkRequestedSize       *sizes);
 
 void                    gtk_column_view_set_focus_column        (GtkColumnView          *self,
-                                                                 GtkColumnViewColumn    *focus_column);
+                                                                 GtkColumnViewColumn    *focus_column,
+                                                                 gboolean                scroll);
 GtkColumnViewColumn *   gtk_column_view_get_focus_column        (GtkColumnView          *self);
 

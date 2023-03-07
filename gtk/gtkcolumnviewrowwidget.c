@@ -288,7 +288,7 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
         {
           if (gtk_widget_grab_focus_self (widget))
             {
-              gtk_column_view_set_focus_column (view, NULL);
+              gtk_column_view_set_focus_column (view, NULL, FALSE);
               return TRUE;
             }
         }
@@ -323,7 +323,7 @@ gtk_column_view_row_widget_grab_focus (GtkWidget *widget)
 
   if (gtk_widget_grab_focus_self (widget))
     {
-      gtk_column_view_set_focus_column (view, NULL);
+      gtk_column_view_set_focus_column (view, NULL, FALSE);
       return TRUE;
     }
 
@@ -354,7 +354,8 @@ gtk_column_view_row_widget_set_focus_child (GtkWidget *widget,
   if (child)
     {
       gtk_column_view_set_focus_column (gtk_column_view_row_widget_get_column_view (self),
-                                        gtk_column_view_row_child_get_column (child));
+                                        gtk_column_view_row_child_get_column (child),
+                                        TRUE);
     }
 }
 

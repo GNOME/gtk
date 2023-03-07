@@ -35,6 +35,7 @@
 #include "gtkgesturedrag.h"
 #include "gtklistviewprivate.h"
 #include "gtkscrollable.h"
+#include "gtkscrollinfoprivate.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -1722,7 +1723,7 @@ gtk_column_view_remove_column (GtkColumnView       *self,
       else
         item = NULL;
 
-      gtk_column_view_set_focus_column (self, item);
+      gtk_column_view_set_focus_column (self, item, TRUE);
     }
 }
 
@@ -1782,23 +1783,27 @@ gtk_column_view_insert_column (GtkColumnView       *self,
 
 static void
 gtk_column_view_scroll_to_column (GtkColumnView       *self,
-                                  GtkColumnViewColumn *column)
+                                  GtkColumnViewColumn *column,
+                                  GtkScrollInfo       *scroll_info)
 {
-  int col_x, col_width, adj_x, adj_width;
+  int col_x, col_width, new_value;
 
   gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
-  adj_x = gtk_adjustment_get_value (self->hadjustment);
-  adj_width = gtk_adjustment_get_page_size (self->hadjustment);
 
-  if (col_x < adj_x)
-    gtk_adjustment_set_value (self->hadjustment, col_x);
-  else if (col_x + col_width > adj_x + adj_width)
-    gtk_adjustment_set_value (self->hadjustment, adj_x + adj_width - col_width);
+  new_value = gtk_scroll_info_compute_for_orientation (scroll_info,
+                                                       GTK_ORIENTATION_HORIZONTAL,
+                                                       col_x,
+                                                       col_width,
+                                                       gtk_adjustment_get_value (self->hadjustment),
+                                                       gtk_adjustment_get_page_size (self->hadjustment));
+
+  gtk_adjustment_set_value (self->hadjustment, new_value);
 }
 
 void
 gtk_column_view_set_focus_column (GtkColumnView       *self,
-                                  GtkColumnViewColumn *column)
+                                  GtkColumnViewColumn *column,
+                                  gboolean             scroll)
 {
   g_assert (column == NULL || gtk_column_view_column_get_column_view (column) == self);
 
@@ -1807,8 +1812,8 @@ gtk_column_view_set_focus_column (GtkColumnView       *self,
 
   self->focus_column = column;
 
-  if (column)
-    gtk_column_view_scroll_to_column (self, column);
+  if (column && scroll)
+    gtk_column_view_scroll_to_column (self, column, NULL);
 }
 
 GtkColumnViewColumn *
@@ -2172,5 +2177,46 @@ gtk_column_view_set_header_factory (GtkColumnView      *self,
   gtk_list_view_set_header_factory (self->listview, factory);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
+}
+
+/**
+ * gtk_column_view_scroll_to:
+ * @self: The columnview to scroll in
+ * @pos: position of the item
+ * @column: (nullable) (transfer none): The column to scroll to
+ *   or %NULL to not scroll columns.
+ * @flags: actions to perform
+ * @scroll: (nullable) (transfer full): details of how to perform
+ *   the scroll operation or %NULL to scroll into view
+ *
+ * Scroll to the row at the given position - or cell if a column is
+ * given - and performs the actions specified in @flags.
+ *
+ * This function works no matter if the listview is shown or focused.
+ * If it isn't, then the changes will take effect once that happens.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_scroll_to (GtkColumnView       *self,
+                           guint                pos,
+                           GtkColumnViewColumn *column,
+                           GtkListScrollFlags   flags,
+                           GtkScrollInfo       *scroll)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
+  if (column)
+    {
+      g_return_if_fail (gtk_column_view_column_get_column_view (column) == self);
+    }
+
+  if (column && (flags & GTK_LIST_SCROLL_FOCUS))
+    gtk_column_view_set_focus_column (self, column, FALSE);
+
+  gtk_list_view_scroll_to (self->listview, pos, flags, scroll);
+
+  if (column)
+    gtk_column_view_scroll_to_column (self, column, scroll);
 }
 
