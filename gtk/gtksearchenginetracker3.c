@@ -41,7 +41,7 @@
 #define SEARCH_QUERY_BASE(__PATTERN__)                                 \
   "SELECT ?url "                                                       \
   "       nfo:fileName(?urn) "					       \
-  "       nie:mimeType(?urn)"					       \
+  "       nie:mimeType(?ie)"                                           \
   "       nfo:fileSize(?urn)"					       \
   "       nfo:fileLastModified(?urn)"				       \
   "FROM tracker:FileSystem "                                           \
@@ -49,6 +49,7 @@
   "  ?urn a nfo:FileDataObject ;"                                      \
   "       nie:url ?url ; "                                             \
   "       fts:match ~match . "                                         \
+  "  OPTIONAL { ?urn nie:interpretedAs ?ie } ."                        \
   __PATTERN__                                                          \
   "} "                                                                 \
   "ORDER BY DESC(fts:rank(?urn)) DESC(?url)"
@@ -145,7 +146,18 @@ create_file_info (TrackerSparqlCursor *cursor)
 
   str = tracker_sparql_cursor_get_string (cursor, 2, NULL);
   if (str)
-    g_file_info_set_content_type (info, str);
+    {
+      g_file_info_set_content_type (info, str);
+      g_file_info_set_attribute_uint32 (info, "standard::type",
+                                        strcmp (str, "inode/directory") == 0 ?
+                                        G_FILE_TYPE_DIRECTORY :
+                                        G_FILE_TYPE_REGULAR);
+    }
+  else
+    {
+      g_file_info_set_content_type (info, "application/text");
+      g_file_info_set_attribute_uint32 (info, "standard::type", G_FILE_TYPE_UNKNOWN);
+    }
 
   g_file_info_set_size (info,
                         tracker_sparql_cursor_get_integer (cursor, 3));
