@@ -366,7 +366,6 @@ gtk_combo_box_size_allocate (GtkWidget *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  int menu_width;
 
   gtk_widget_size_allocate (priv->box,
                             &(GtkAllocation) {
@@ -374,17 +373,8 @@ gtk_combo_box_size_allocate (GtkWidget *widget,
                               width, height
                             }, baseline);
 
-  gtk_widget_set_size_request (priv->popup_widget, -1, -1);
-
-  if (priv->popup_fixed_width)
-    gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                        &menu_width, NULL, NULL, NULL);
-  else
-    gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                        NULL, &menu_width, NULL, NULL);
-
-  gtk_widget_set_size_request (priv->popup_widget,
-                               MAX (width, menu_width), -1);
+  gtk_widget_set_size_request (priv->popup_widget, width, -1);
+  gtk_widget_queue_resize (priv->popup_widget);
 
   gtk_popover_present (GTK_POPOVER (priv->popup_widget));
 }
