@@ -284,9 +284,13 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
       return;
     }
 
-  tracker->query_pending = TRUE;
   search_text = gtk_query_get_text (tracker->query);
   location = gtk_query_get_location (tracker->query);
+
+  if (strlen (search_text) <= 1)
+    return;
+
+  tracker->query_pending = TRUE;
 
   if (location)
     {
