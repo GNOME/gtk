@@ -2106,3 +2106,42 @@ gtk_column_view_get_tab_behavior (GtkColumnView *self)
   return gtk_list_view_get_tab_behavior (self->listview);
 }
 
+/**
+ * gtk_column_view_scroll_to:
+ * @self: The listview to scroll in
+ * @pos: position of the item
+ * @column: (nullable) (transfer none): The column to scroll in
+ *   or %NULL to not scroll columns.
+ * @flags: actions to perform
+ * @scroll: (nullable) (transfer full): details of how to perform
+ *   the scroll operation or NULL to scroll into view 
+ *
+ * Scroll to the row at the given position - or cell if a column is
+ * given - and performs the actions specified in @flags.
+ *
+ * This function works if the columnview is not shown or not focused,
+ * the changes will take effect once that happens.  
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_scroll_to (GtkColumnView       *self,
+                           guint                pos,
+                           GtkColumnViewColumn *column,
+                           GtkListScrollFlags   flags,
+                           GtkScrollInfo       *scroll)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
+  if (column)
+    {
+      g_return_if_fail (gtk_column_view_column_get_column_view (column) == self);
+    }
+
+  gtk_list_view_scroll_to (self->listview, pos, flags, scroll);
+
+  if (column)
+    {
+      g_warning ("FIXME: column scrolling is not implemented.");
+    }
+}

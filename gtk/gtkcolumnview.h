@@ -122,5 +122,12 @@ GDK_AVAILABLE_IN_4_12
 GtkListItemFactory *
                 gtk_column_view_get_row_factory                 (GtkColumnView          *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_column_view_scroll_to                       (GtkColumnView          *self,
+                                                                 guint                   pos,
+                                                                 GtkColumnViewColumn    *column,
+                                                                 GtkListScrollFlags      flags,
+                                                                 GtkScrollInfo          *scroll);
+
 G_END_DECLS
 
