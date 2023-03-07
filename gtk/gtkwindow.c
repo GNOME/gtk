@@ -4437,6 +4437,7 @@ gtk_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
+  g_signal_handlers_disconnect_by_func (surface, toplevel_compute_size, widget);
 
   frame_clock = gdk_surface_get_frame_clock (surface);
 
