@@ -52,7 +52,7 @@
   "ORDER BY DESC(fts:rank(?urn)) DESC(?url)"
 
 #define SEARCH_QUERY SEARCH_QUERY_BASE("")
-#define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("?urn (nfo:belongsToContainer/nie:isStoredAs)+/nie:url ~location")
+#define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("FILTER (STRSTARTS (?url, CONCAT (~location, '/')))")
 #define SEARCH_LOCATION_QUERY SEARCH_QUERY_BASE("?urn nfo:belongsToContainer/nie:isStoredAs/nie:url ~location")
 #define FILE_CHECK_QUERY "ASK { ?urn nie:url ~url }"
 
