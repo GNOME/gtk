@@ -346,6 +346,32 @@ compute_toplevel_size (GdkSurface *surface,
 }
 
 static gboolean
+compute_drag_surface_size (GdkSurface *surface,
+                           int        *width,
+                           int        *height)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  int new_width = 0, new_height = 0;
+
+  gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface), &new_width, &new_height);
+
+  if ((impl->last_computed_width != new_width ||
+        impl->last_computed_height != new_height) &&
+      (impl->next_layout.configured_width != new_width ||
+        impl->next_layout.configured_height != new_height))
+    {
+      *width = new_width;
+      *height = new_height;
+      impl->last_computed_width = new_width;
+      impl->last_computed_height = new_height;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 compute_size_idle (gpointer user_data)
 {
   GdkSurface *surface = user_data;
@@ -384,6 +410,24 @@ gdk_x11_surface_compute_size (GdkSurface *surface)
       int width, height;
 
       if (compute_toplevel_size (surface, UPDATE_GEOMETRY, &width, &height))
+        gdk_x11_surface_toplevel_resize (surface, width, height);
+
+      if (surface->resize_count == 0)
+        {
+          gdk_x11_surface_update_size (impl,
+                                       impl->next_layout.configured_width,
+                                       impl->next_layout.configured_height,
+                                       impl->surface_scale);
+        }
+
+      impl->next_layout.surface_geometry_dirty = FALSE;
+      impl->next_layout.configure_pending = FALSE;
+    }
+  else if (GDK_IS_DRAG_SURFACE (surface))
+    {
+      int width, height;
+
+      if (compute_drag_surface_size (surface, &width, &height))
         gdk_x11_surface_toplevel_resize (surface, width, height);
 
       if (surface->resize_count == 0)
