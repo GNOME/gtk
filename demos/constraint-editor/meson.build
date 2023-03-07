@@ -9,7 +9,7 @@ constraint_editor_sources = [
 
 constraint_editor_resources = gnome.compile_resources('constraint_editor_resources',
   'constraint-editor.gresource.xml',
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
 )
 
 executable('gtk4-constraint-editor',

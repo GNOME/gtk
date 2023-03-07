@@ -1,6 +1,6 @@
 app7_resources = gnome.compile_resources('exampleapp7_resources',
   'exampleapp.gresource.xml',
-  source_dir: '.')
+  source_dir: meson.current_source_dir())
 
 app7_schemas = gnome.compile_schemas()
 

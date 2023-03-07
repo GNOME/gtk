@@ -913,7 +913,7 @@ foreach lang : [
 
   gnome.compile_resources(lang,
     resxml,
-    source_dir: 'emoji',
+    source_dir: meson.current_source_dir() / 'emoji',
     gresource_bundle: true,
     install: true,
     install_dir: gtk_datadir / 'gtk-4.0/emoji',

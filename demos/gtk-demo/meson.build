@@ -225,7 +225,7 @@ if not meson.is_cross_build() and build_machine.cpu_family() != 'arm' and build_
 else
   gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
     'demo.gresource.xml',
-    source_dir: '.',
+    source_dir: meson.current_source_dir()
   )
 endif
 

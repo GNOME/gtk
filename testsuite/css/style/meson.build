@@ -10,7 +10,7 @@ styletest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 cssresources = gnome.compile_resources(
   'cssresources',
   'test-css-style.gresource.xml',
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
 )
 
 test_style = executable('test-css-style',
