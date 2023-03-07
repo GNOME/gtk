@@ -226,6 +226,9 @@
     <file>svgpaintable.c</file>
     <file>org.gtk.gtk4.NodeEditor.Devel.svg</file>
   </gresource>
+  <gresource prefix="/scrollinfo">
+    <file>scrollinfo.ui</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>

@@ -78,6 +78,7 @@ demos = files([
   'revealer.c',
   'rotated_text.c',
   'scale.c',
+  'scrollinfo.c',
   'search_entry.c',
   'search_entry2.c',
   'shadertoy.c',

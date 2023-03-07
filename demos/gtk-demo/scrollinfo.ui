@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">ScrollInfo</property>
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="min-content-width">200</property>
+            <property name="min-content-height">200</property>
+            <property name="child">
+              <object class="GtkViewport" id="viewport">
+                <property name="child">
+                  <object class="GtkFixed">
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="width-request">1000</property>
+                        <property name="height-request">1000</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="face_cool">
+                        <property name="icon-name">face-cool-symbolic</property>
+                        <property name="icon-size">large</property>
+                        <layout>
+                          <property name="transform">translate(284,284)</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="face_smirk">
+                        <property name="icon-name">face-smirk-symbolic</property>
+                        <property name="icon-size">large</property>
+                        <layout>
+                          <property name="transform">translate(584,284)</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="face_wink">
+                        <property name="icon-name">face-wink-symbolic</property>
+                        <property name="icon-size">large</property>
+                        <layout>
+                          <property name="transform">translate(284,584)</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="face_laugh">
+                        <property name="icon-name">face-laugh-symbolic</property>
+                        <property name="icon-size">large</property>
+                        <layout>
+                          <property name="transform">translate(584,584)</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">viewport X</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="width-request">200</property>
+                <property name="draw-value">1</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="viewport_x">
+                    <property name="upper">1</property>
+                    <property name="value">0</property>
+                    <property name="step-increment">0.02</property>
+                    <property name="page-increment">0.2</property>
+                    <signal name="value-changed" handler="viewport_x_width_changed" object="viewport_width" swapped="no"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">viewport Y</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="width-request">200</property>
+                <property name="draw-value">1</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="viewport_y">
+                    <property name="upper">1</property>
+                    <property name="value">0</property>
+                    <property name="step-increment">0.02</property>
+                    <property name="page-increment">0.2</property>
+                    <signal name="value-changed" handler="viewport_y_height_changed" object="viewport_height" swapped="no"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">viewport width</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="width-request">200</property>
+                <property name="draw-value">1</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="viewport_width">
+                    <property name="upper">1</property>
+                    <property name="value">1</property>
+                    <property name="step-increment">0.02</property>
+                    <property name="page-increment">0.2</property>
+                    <signal name="value-changed" handler="viewport_x_width_changed" object="viewport_x" swapped="yes"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">viewport height</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale">
+                <property name="width-request">200</property>
+                <property name="draw-value">1</property>
+                <property name="adjustment">
+                  <object class="GtkAdjustment" id="viewport_height">
+                    <property name="upper">1</property>
+                    <property name="value">1</property>
+                    <property name="step-increment">0.02</property>
+                    <property name="page-increment">0.2</property>
+                    <signal name="value-changed" handler="viewport_y_height_changed" object="viewport_y" swapped="yes"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="enable_horizontal">
+                <property name="label">scroll horizontal</property>
+                <property name="active">1</property>
+                <signal name="notify::active" handler="enabled_changed" object="enable_vertical" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="enable_vertical">
+                <property name="label">scroll vertical</property>
+                <property name="active">1</property>
+                <signal name="notify::active" handler="enabled_changed" object="enable_horizontal" swapped="yes"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">face-cool-symbolic</property>
+                    <signal name="clicked" handler="do_scroll" object="face_cool" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">face-smirk-symbolic</property>
+                    <signal name="clicked" handler="do_scroll" object="face_smirk" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">face-wink-symbolic</property>
+                    <signal name="clicked" handler="do_scroll" object="face_wink" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">face-laugh-symbolic</property>
+                    <signal name="clicked" handler="do_scroll" object="face_laugh" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
