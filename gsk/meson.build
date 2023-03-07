@@ -164,7 +164,7 @@ gskenum_h = gsk_enums[1]
 gskresources = gnome.compile_resources('gskresources',
   gsk_resources_xml,
   dependencies: gsk_private_vulkan_compiled_shaders_deps,
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
   c_name: '_gsk',
   extra_args: [ '--manual-register', ],
 )

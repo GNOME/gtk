@@ -7,7 +7,7 @@ node_editor_sources = [
 
 node_editor_resources = gnome.compile_resources('node_editor_resources',
   'node-editor.gresource.xml',
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
 )
 
 executable('gtk4-node-editor',

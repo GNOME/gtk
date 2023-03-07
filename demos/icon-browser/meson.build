@@ -8,7 +8,7 @@ iconbrowser_sources = [
 
 iconbrowser_resources = gnome.compile_resources('iconbrowser_resources',
   'iconbrowser.gresource.xml',
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
 )
 
 executable('gtk4-icon-browser',

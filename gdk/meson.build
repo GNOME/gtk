@@ -131,7 +131,7 @@ gdk_gresource_xml = configure_file(output: 'gdk.gresource.xml',
 
 gdkresources = gnome.compile_resources('gdkresources',
   gdk_gresource_xml,
-  source_dir: '.',
+  source_dir: meson.current_source_dir(),
   c_name: '_gdk',
   extra_args: '--manual-register',
 )
