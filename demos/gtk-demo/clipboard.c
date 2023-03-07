@@ -12,6 +12,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "demoimage.h"
+#include "gtkthrobber.h"
 
 static void
 copy_button_clicked (GtkStack *source_stack,
@@ -364,6 +365,26 @@ drag_prepare (GtkDragSource *drag_source,
   return gdk_content_provider_new_for_value (&value);
 }
 
+static void
+drag_begin (GtkDragSource *drag_source,
+            GdkDrag       *drag,
+            gpointer       user_data)
+{
+  GtkWidget *button;
+  GdkFrameClock *clock;
+  GdkPaintable *paintable;
+
+  button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag_source));
+  clock = gtk_widget_get_frame_clock (button);
+  paintable = gtk_throbber_new (clock,
+                                "/transparent/portland-rose.jpg",
+                                0.02, 0.1,
+                                drag);
+
+  gtk_drag_source_set_icon (drag_source, paintable, 10, 10);
+  g_object_unref (paintable);
+}
+
 GtkWidget *
 do_clipboard (GtkWidget *do_widget)
 {
@@ -384,6 +405,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, open_folder_cb);
       gtk_builder_cscope_add_callback (scope, on_drop);
       gtk_builder_cscope_add_callback (scope, drag_prepare);
+      gtk_builder_cscope_add_callback (scope, drag_begin);
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
       gtk_builder_add_from_resource (builder, "/clipboard/clipboard.ui", NULL);

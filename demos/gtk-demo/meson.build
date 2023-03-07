@@ -134,6 +134,7 @@ extra_demo_sources = files([
   'unicode-names.c',
   'suggestionentry.c',
   'language-names.c',
+  'gtkthrobber.c',
 ])
 
 if os_unix

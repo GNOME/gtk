@@ -91,6 +91,7 @@
                             <child>
                               <object class="GtkDragSource">
                                 <signal name="prepare" handler="drag_prepare"/>
+                                <signal name="drag-begin" handler="drag_begin"/>
                               </object>
                             </child>
                             <child>
