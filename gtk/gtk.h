@@ -223,6 +223,7 @@
 #include <gtk/gtkscalebutton.h>
 #include <gtk/gtkscrollable.h>
 #include <gtk/gtkscrollbar.h>
+#include <gtk/gtkscrollinfo.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtksearchbar.h>
 #include <gtk/gtksearchentry.h>

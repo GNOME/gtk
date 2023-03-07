@@ -46,6 +46,7 @@ typedef struct _GtkListItemFactory     GtkListItemFactory;
 typedef struct _GtkNative              GtkNative;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkRoot  	       GtkRoot;
+typedef struct _GtkScrollInfo  	       GtkScrollInfo;
 typedef struct _GtkSettings            GtkSettings;
 typedef struct _GtkShortcut            GtkShortcut;
 typedef struct _GtkShortcutAction      GtkShortcutAction;
