@@ -55,7 +55,6 @@
 
 #define SEARCH_QUERY SEARCH_QUERY_BASE("")
 #define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("FILTER (STRSTARTS (?url, CONCAT (~location, '/')))")
-#define SEARCH_LOCATION_QUERY SEARCH_QUERY_BASE("?urn nfo:belongsToContainer/nie:isStoredAs/nie:url ~location")
 
 struct _GtkSearchEngineTracker3
 {
@@ -63,7 +62,6 @@ struct _GtkSearchEngineTracker3
   TrackerSparqlConnection *sparql_conn;
   TrackerSparqlStatement *search_query;
   TrackerSparqlStatement *search_recursive_query;
-  TrackerSparqlStatement *search_location_query;
   GCancellable *cancellable;
   guint idle_id;
   GtkQuery *query;
@@ -108,7 +106,8 @@ finalize (GObject *object)
   g_clear_handle_id (&engine->idle_id, g_source_remove);
 
   g_clear_object (&engine->search_query);
-  g_clear_object (&engine->search_location_query);
+  g_clear_object (&engine->search_recursive_query);
+
   if (engine->sparql_conn != NULL)
     {
       tracker_sparql_connection_close (engine->sparql_conn);
@@ -258,7 +257,6 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
   const char *search_text;
   char *match;
   GFile *location;
-  gboolean recursive;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER3 (engine);
 
@@ -277,22 +275,13 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
   tracker->query_pending = TRUE;
   search_text = gtk_query_get_text (tracker->query);
   location = gtk_query_get_location (tracker->query);
-  recursive = TRUE;
 
   if (location)
     {
       char *location_uri = g_file_get_uri (location);
 
-      if (recursive)
-        {
-          g_debug ("Recursive search query in location: %s", location_uri);
-          statement = tracker->search_recursive_query;
-        }
-      else
-        {
-          g_debug ("Search query in location: %s", location_uri);
-          statement = tracker->search_location_query;
-        }
+      g_debug ("Recursive search query in location: %s", location_uri);
+      statement = tracker->search_recursive_query;
 
       tracker_sparql_statement_bind_string (statement,
                                             "location",
@@ -396,14 +385,6 @@ gtk_search_engine_tracker3_initable_init (GInitable     *initable,
                                                cancellable,
                                                error);
   if (!engine->search_recursive_query)
-    return FALSE;
-
-  engine->search_location_query =
-    tracker_sparql_connection_query_statement (engine->sparql_conn,
-                                               SEARCH_LOCATION_QUERY,
-                                               cancellable,
-                                               error);
-  if (!engine->search_location_query)
     return FALSE;
 
   return TRUE;
