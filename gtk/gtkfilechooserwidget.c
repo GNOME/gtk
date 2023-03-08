@@ -637,8 +637,8 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
   for (l = infos; l; l = l->next)
     {
       GtkRecentInfo *info = l->data;
-      const char *uri;
-      GFile *parent;
+      const char *uri, *mime_type;
+      GFile *dir;
       GFile *file;
 
       if (!gtk_recent_info_is_local (info))
@@ -646,18 +646,27 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
 
       uri = gtk_recent_info_get_uri (info);
       file = g_file_new_for_uri (uri);
-      parent = g_file_get_parent (file);
-      g_object_unref (file);
 
-      if (parent)
+      mime_type = gtk_recent_info_get_mime_type (info);
+      if (strcmp (mime_type, "inode/directory") != 0)
         {
-          if (!g_hash_table_lookup (folders, parent))
+          dir = g_file_get_parent (file);
+          g_object_unref (file);
+        }
+      else
+        {
+          dir = file;
+        }
+
+      if (dir)
+        {
+          if (!g_hash_table_lookup (folders, dir))
             {
-              g_hash_table_insert (folders, parent, (gpointer) 1);
-              result = g_list_prepend (result, g_object_ref (parent));
+              g_hash_table_insert (folders, dir, (gpointer) 1);
+              result = g_list_prepend (result, g_object_ref (dir));
             }
 
-          g_object_unref (parent);
+          g_object_unref (dir);
         }
     }
 
