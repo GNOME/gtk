@@ -328,7 +328,6 @@ struct _GtkFileChooserWidget
   guint show_type_column : 1;
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
-  guint starting_search : 1;
   guint browse_files_interaction_frozen : 1;
 };
 
@@ -2664,6 +2663,16 @@ location_bar_update (GtkFileChooserWidget *impl)
 }
 
 static void
+search_clear_engine (GtkFileChooserWidget *impl)
+{
+  if (impl->search_engine)
+    {
+      g_signal_handlers_disconnect_by_data (impl->search_engine, impl);
+      g_clear_object (&impl->search_engine);
+    }
+}
+
+static void
 operation_mode_stop (GtkFileChooserWidget *impl,
                      OperationMode         mode)
 {
@@ -2673,6 +2682,7 @@ operation_mode_stop (GtkFileChooserWidget *impl,
       search_stop_searching (impl, TRUE);
       search_clear_model (impl, TRUE);
       gtk_widget_set_visible (impl->remote_warning_bar, FALSE);
+      search_clear_engine (impl);
     }
 }
 
@@ -3076,6 +3086,7 @@ cancel_all_operations (GtkFileChooserWidget *impl)
   g_clear_object (&impl->file_exists_get_info_cancellable);
 
   search_stop_searching (impl, TRUE);
+  search_clear_engine (impl);
 }
 
 static void sorter_changed (GtkSorter            *main_sorter,
@@ -5774,8 +5785,6 @@ search_stop_searching (GtkFileChooserWidget *impl,
   if (impl->search_engine)
     {
       _gtk_search_engine_stop (impl->search_engine);
-      g_signal_handlers_disconnect_by_data (impl->search_engine, impl);
-      g_clear_object (&impl->search_engine);
 
       set_busy_cursor (impl, FALSE);
       gtk_widget_set_visible (impl->search_spinner, FALSE);
@@ -5900,11 +5909,12 @@ static void
 search_entry_stop_cb (GtkFileChooserWidget *impl)
 {
   if (impl->search_engine)
-    search_stop_searching (impl, FALSE);
+    {
+      search_stop_searching (impl, FALSE);
+      search_clear_engine (impl);
+    }
   else
     g_object_set (impl, "search-mode", FALSE, NULL);
-
-  impl->starting_search = FALSE;
 }
 
 /* Hides the path bar and creates the search entry */
