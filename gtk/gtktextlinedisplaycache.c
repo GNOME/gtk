@@ -511,7 +511,7 @@ gtk_text_line_display_cache_invalidate_range (GtkTextLineDisplayCache *cache,
   /* gtk_text_iter_order() preserving const */
   if (gtk_text_iter_compare (begin, end) > 0)
     {
-      const GtkTextIter *tmp = begin;
+      const GtkTextIter *tmp = end;
       end = begin;
       begin = tmp;
     }
