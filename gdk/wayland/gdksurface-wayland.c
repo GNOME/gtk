@@ -561,8 +561,14 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->display_server.wl_surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface),
-                     impl->pending_buffer_offset_x,
-                     impl->pending_buffer_offset_y);
+                     0, 0);
+
+  if ((impl->pending_buffer_offset_x || impl->pending_buffer_offset_y) &&
+      wl_surface_get_version (impl->display_server.wl_surface) >=
+      WL_SURFACE_OFFSET_SINCE_VERSION)
+    wl_surface_offset (impl->display_server.wl_surface,
+                       impl->pending_buffer_offset_x,
+                       impl->pending_buffer_offset_y);
   impl->pending_buffer_offset_x = 0;
   impl->pending_buffer_offset_y = 0;
 

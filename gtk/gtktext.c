@@ -6354,6 +6354,9 @@ gtk_text_drag_drop (GtkDropTarget *dest,
   drop_position = gtk_text_find_position (self, x + priv->scroll_offset);
 
   str = g_value_get_string (value);
+  if (str == NULL)
+    str = "";
+
   if (priv->truncate_multiline)
     length = truncate_multiline (str);
   else
