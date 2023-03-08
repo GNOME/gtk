@@ -52,7 +52,7 @@
   "  OPTIONAL { ?urn nie:interpretedAs ?ie } ."                        \
   __PATTERN__                                                          \
   "} "                                                                 \
-  "ORDER BY DESC(fts:rank(?urn)) DESC(?url)"
+  "ORDER BY ASC(?url)"
 
 #define SEARCH_QUERY SEARCH_QUERY_BASE("")
 #define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("FILTER (STRSTARTS (?url, CONCAT (~location, '/')))")
