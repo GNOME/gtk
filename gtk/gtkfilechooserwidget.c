@@ -2061,6 +2061,9 @@ file_chooser_get_location (GtkFileChooserWidget *impl,
   else
     location = g_file_get_path (dir_location);
 
+  if (!location)
+    location = g_strdup ("");
+
   g_clear_object (&dir_location);
   g_clear_object (&home_location);
 
