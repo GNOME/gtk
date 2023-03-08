@@ -4020,7 +4020,10 @@ gtk_widget_allocate (GtkWidget    *widget,
   size_changed = (priv->width != adjusted.width) || (priv->height != adjusted.height);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
-    goto skip_allocate;
+    {
+      gtk_widget_ensure_allocate (widget);
+      goto skip_allocate;
+    }
 
   priv->width = adjusted.width;
   priv->height = adjusted.height;
@@ -4068,9 +4071,6 @@ skip_allocate:
     gtk_widget_queue_draw (priv->parent);
 
 out:
-  if (priv->alloc_needed_on_child)
-    gtk_widget_ensure_allocate (widget);
-
   gtk_widget_pop_verify_invariants (widget);
 }
 
