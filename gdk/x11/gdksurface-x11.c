@@ -40,6 +40,7 @@
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdktextureprivate.h"
+#include "gdkdragsurfacesizeprivate.h"
 
 #include "gdkseatprivate.h"
 #include "gdkprivate.h"
@@ -351,9 +352,14 @@ compute_drag_surface_size (GdkSurface *surface,
                            int        *height)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-  int new_width = 0, new_height = 0;
+  GdkDragSurfaceSize size;
+  int new_width, new_height;
 
-  gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface), &new_width, &new_height);
+  gdk_drag_surface_size_init (&size);
+  gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface), &size);
+
+  new_width = size.width;
+  new_height = size.height;
 
   if ((impl->last_computed_width != new_width ||
         impl->last_computed_height != new_height) &&
