@@ -644,6 +644,9 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
 
       uri = gtk_recent_info_get_uri (info);
 
+      if (!g_str_has_prefix (uri, "file://"))
+        continue;
+
       file = g_file_new_for_uri (uri);
       parent = g_file_get_parent (file);
       g_object_unref (file);
@@ -5979,6 +5982,10 @@ recent_start_loading (GtkFileChooserWidget *impl)
         {
           GtkRecentInfo *info = l->data;
           GFile *file;
+
+          const char *uri = gtk_recent_info_get_uri (info);
+          if (!g_str_has_prefix (uri, "file://"))
+            continue;
 
           if (gtk_recent_info_get_private_hint (info) &&
               !gtk_recent_info_has_application (info, app_name))
