@@ -603,29 +603,11 @@ gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
 }
 
 static void
-scroll_to_view (GtkAdjustment *adj,
-                double         pos,
-                double         size)
-{
-  double value, page_size;
-
-  value = gtk_adjustment_get_value (adj);
-  page_size = gtk_adjustment_get_page_size (adj);
-
-  if (pos < 0)
-    gtk_adjustment_animate_to_value (adj, value + pos);
-  else if (pos + size >= page_size)
-    gtk_adjustment_animate_to_value (adj, value + pos + size - page_size);
-}
-
-static void
 focus_change_handler (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkRoot *root;
   GtkWidget *focus_widget;
-  graphene_rect_t rect;
-  graphene_point_t p;
 
   if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_FOCUS_WITHIN) == 0)
     return;
@@ -639,16 +621,7 @@ focus_change_handler (GtkWidget *widget)
   if (GTK_IS_TEXT (focus_widget))
     focus_widget = gtk_widget_get_parent (focus_widget);
 
-  if (!gtk_widget_compute_bounds (focus_widget, viewport->child, &rect))
-    return;
-
-  if (!gtk_widget_compute_point (viewport->child, widget,
-                                 &GRAPHENE_POINT_INIT (rect.origin.x, rect.origin.y),
-                                 &p))
-    return;
-
-  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL], p.x, rect.size.width);
-  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_VERTICAL], p.y, rect.size.height);
+  gtk_viewport_scroll_to (viewport, focus_widget, NULL);
 }
 
 static void
