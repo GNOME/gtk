@@ -4044,52 +4044,53 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
       gtk_widget_ensure_allocate_on_children (widget);
-      goto skip_allocate;
     }
-
-  priv->width = adjusted.width;
-  priv->height = adjusted.height;
-  priv->baseline = baseline;
-
-  priv->alloc_needed_on_child = FALSE;
-
-  if (priv->layout_manager != NULL)
+  else 
     {
-      gtk_layout_manager_allocate (priv->layout_manager, widget,
-                                   priv->width,
-                                   priv->height,
-                                   baseline);
-    }
-  else
-    {
-      GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                    priv->width,
-                                                    priv->height,
-                                                    baseline);
-    }
+      priv->width = adjusted.width;
+      priv->height = adjusted.height;
+      priv->baseline = baseline;
 
-  /* Size allocation is god... after consulting god, no further requests or allocations are needed */
+      priv->alloc_needed_on_child = FALSE;
+
+      if (priv->layout_manager != NULL)
+        {
+          gtk_layout_manager_allocate (priv->layout_manager, widget,
+                                       priv->width,
+                                       priv->height,
+                                       baseline);
+        }
+      else
+        {
+          GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                        priv->width,
+                                                        priv->height,
+                                                        baseline);
+        }
+
+      /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
-      gtk_widget_get_resize_needed (widget))
-    {
-      g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
-                 gtk_widget_get_name (widget), widget);
-    }
+      if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
+          gtk_widget_get_resize_needed (widget))
+        {
+          g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
+                     gtk_widget_get_name (widget), widget);
+        }
 #endif
 
-  gtk_widget_ensure_resize (widget);
-  priv->alloc_needed = FALSE;
+      gtk_widget_ensure_resize (widget);
+      priv->alloc_needed = FALSE;
 
-  gtk_widget_update_paintables (widget);
+      gtk_widget_update_paintables (widget);
 
-  if (size_changed)
-    gtk_accessible_bounds_changed (GTK_ACCESSIBLE (widget));
+      if (size_changed)
+        gtk_accessible_bounds_changed (GTK_ACCESSIBLE (widget));
 
-skip_allocate:
-  if (size_changed || baseline_changed)
-    gtk_widget_queue_draw (widget);
-  else if (transform_changed && priv->parent)
+      if (size_changed || baseline_changed)
+        gtk_widget_queue_draw (widget);
+    }
+  
+  if (transform_changed && priv->parent)
     gtk_widget_queue_draw (priv->parent);
 
 out:
