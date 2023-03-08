@@ -673,6 +673,10 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
     {
       link_button->visited = visited;
 
+      gtk_accessible_update_state (GTK_ACCESSIBLE (link_button),
+                                   GTK_ACCESSIBLE_STATE_VISITED, visited,
+                                   -1);
+
       if (visited)
         {
           gtk_widget_unset_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK);
