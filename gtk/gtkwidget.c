@@ -3871,6 +3871,28 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
     }
 }
 
+static void
+gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *child;
+
+  g_assert (!priv->resize_needed);
+  g_assert (!priv->alloc_needed);
+
+  if (!priv->alloc_needed_on_child)
+    return;
+  
+  priv->alloc_needed_on_child = FALSE;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      gtk_widget_ensure_allocate (child);
+    }
+}
+
 /**
  * gtk_widget_allocate:
  * @widget: A `GtkWidget`
@@ -4038,7 +4060,7 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
-      gtk_widget_ensure_allocate (widget);
+      gtk_widget_ensure_allocate_on_children (widget);
       goto skip_allocate;
     }
 
@@ -10685,18 +10707,9 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
                            priv->allocated_size_baseline,
                            gsk_transform_ref (priv->allocated_transform));
     }
-  else if (priv->alloc_needed_on_child)
+  else
     {
-      GtkWidget *child;
-
-      priv->alloc_needed_on_child = FALSE;
-
-      for (child = _gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = _gtk_widget_get_next_sibling (child))
-        {
-          gtk_widget_ensure_allocate (child);
-        }
+      gtk_widget_ensure_allocate_on_children (widget);
     }
 }
 
