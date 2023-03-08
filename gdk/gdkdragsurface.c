@@ -47,11 +47,10 @@ enum
 static guint signals[N_SIGNALS] = { 0 };
 
 void
-gdk_drag_surface_notify_compute_size (GdkDragSurface *surface,
-                                      int            *width,
-                                      int            *height)
+gdk_drag_surface_notify_compute_size (GdkDragSurface     *surface,
+                                      GdkDragSurfaceSize *size)
 {
-  g_signal_emit (surface, signals[COMPUTE_SIZE], 0, width, height);
+  g_signal_emit (surface, signals[COMPUTE_SIZE], 0, size);
 }
 
 static gboolean
@@ -74,8 +73,8 @@ gdk_drag_surface_default_init (GdkDragSurfaceInterface *iface)
                   0,
                   NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER, G_TYPE_POINTER);
+                  G_TYPE_NONE, 1,
+                  GDK_TYPE_DRAG_SURFACE_SIZE);
 }
 
 /**
