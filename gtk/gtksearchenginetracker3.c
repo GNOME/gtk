@@ -34,12 +34,14 @@
 
 #include "gtksearchenginetracker3private.h"
 
+#define N_RESULT_BATCH_ITEMS 50
+
 #define MINER_FS_BUS_NAME "org.freedesktop.Tracker3.Miner.Files"
 
 #define SEARCH_QUERY_BASE(__PATTERN__)                                 \
   "SELECT ?url "                                                       \
   "       nfo:fileName(?urn) "					       \
-  "       nie:mimeType(?urn)"					       \
+  "       nie:mimeType(?ie)"                                           \
   "       nfo:fileSize(?urn)"					       \
   "       nfo:fileLastModified(?urn)"				       \
   "FROM tracker:FileSystem "                                           \
@@ -47,13 +49,13 @@
   "  ?urn a nfo:FileDataObject ;"                                      \
   "       nie:url ?url ; "                                             \
   "       fts:match ~match . "                                         \
+  "  OPTIONAL { ?urn nie:interpretedAs ?ie } ."                        \
   __PATTERN__                                                          \
   "} "                                                                 \
-  "ORDER BY DESC(fts:rank(?urn)) DESC(?url)"
+  "ORDER BY ASC(?url)"
 
 #define SEARCH_QUERY SEARCH_QUERY_BASE("")
-#define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("?urn (nfo:belongsToContainer/nie:isStoredAs)+/nie:url ~location")
-#define SEARCH_LOCATION_QUERY SEARCH_QUERY_BASE("?urn nfo:belongsToContainer/nie:isStoredAs/nie:url ~location")
+#define SEARCH_RECURSIVE_QUERY SEARCH_QUERY_BASE("FILTER (STRSTARTS (?url, CONCAT (~location, '/')))")
 
 struct _GtkSearchEngineTracker3
 {
@@ -61,8 +63,8 @@ struct _GtkSearchEngineTracker3
   TrackerSparqlConnection *sparql_conn;
   TrackerSparqlStatement *search_query;
   TrackerSparqlStatement *search_recursive_query;
-  TrackerSparqlStatement *search_location_query;
   GCancellable *cancellable;
+  guint idle_id;
   GtkQuery *query;
   gboolean query_pending;
 };
@@ -71,6 +73,13 @@ struct _GtkSearchEngineTracker3Class
 {
   GtkSearchEngineClass parent_class;
 };
+
+typedef struct
+{
+  TrackerSparqlCursor *cursor;
+  GtkSearchEngineTracker3 *engine;
+  gboolean got_results;
+} CursorData;
 
 static void gtk_search_engine_tracker3_initable_iface_init (GInitableIface *iface);
 
@@ -95,8 +104,11 @@ finalize (GObject *object)
       g_object_unref (engine->cancellable);
     }
 
+  g_clear_handle_id (&engine->idle_id, g_source_remove);
+
   g_clear_object (&engine->search_query);
-  g_clear_object (&engine->search_location_query);
+  g_clear_object (&engine->search_recursive_query);
+
   if (engine->sparql_conn != NULL)
     {
       tracker_sparql_connection_close (engine->sparql_conn);
@@ -131,7 +143,18 @@ create_file_info (GFile               *file,
 
   str = tracker_sparql_cursor_get_string (cursor, 2, NULL);
   if (str)
-    g_file_info_set_content_type (info, str);
+    {
+      g_file_info_set_content_type (info, str);
+      g_file_info_set_attribute_uint32 (info, "standard::type",
+                                        strcmp (str, "inode/directory") == 0 ?
+                                        G_FILE_TYPE_DIRECTORY :
+                                        G_FILE_TYPE_REGULAR);
+    }
+  else
+    {
+      g_file_info_set_content_type (info, "application/text");
+      g_file_info_set_attribute_uint32 (info, "standard::type", G_FILE_TYPE_UNKNOWN);
+    }
 
   g_file_info_set_size (info,
                         tracker_sparql_cursor_get_integer (cursor, 3));
@@ -151,6 +174,59 @@ create_file_info (GFile               *file,
   return info;
 }
 
+static gboolean
+handle_cursor_idle_cb (gpointer user_data)
+{
+  CursorData *data = user_data;
+  GtkSearchEngineTracker3 *engine = data->engine;
+  TrackerSparqlCursor *cursor = data->cursor;
+  gboolean has_next;
+  GList *hits = NULL;
+  GtkSearchHit *hit;
+  int i = 0;
+
+  for (i = 0; i < N_RESULT_BATCH_ITEMS; i++)
+    {
+      const gchar *url;
+
+      has_next = tracker_sparql_cursor_next (cursor, NULL, NULL);
+      if (!has_next)
+        break;
+
+      url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
+      hit = g_slice_new0 (GtkSearchHit);
+      hit->file = g_file_new_for_uri (url);
+      hit->info = create_file_info (hit->file, cursor);
+      hits = g_list_prepend (hits, hit);
+      data->got_results = TRUE;
+    }
+
+  _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (engine), hits);
+
+  g_list_free_full (hits, free_hit);
+
+  if (has_next)
+    return G_SOURCE_CONTINUE;
+  else
+    {
+      engine->idle_id = 0;
+      return G_SOURCE_REMOVE;
+    }
+}
+
+static void
+cursor_data_free (gpointer user_data)
+{
+  CursorData *data = user_data;
+
+  tracker_sparql_cursor_close (data->cursor);
+  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (data->engine),
+                               data->got_results);
+  g_object_unref (data->cursor);
+  g_object_unref (data->engine);
+  g_free (data);
+}
+
 static void
 query_callback (TrackerSparqlStatement *statement,
                 GAsyncResult           *res,
@@ -158,9 +234,8 @@ query_callback (TrackerSparqlStatement *statement,
 {
   GtkSearchEngineTracker3 *engine;
   TrackerSparqlCursor *cursor;
-  GList *hits = NULL;
   GError *error = NULL;
-  GtkSearchHit *hit;
+  CursorData *data;
 
   engine = GTK_SEARCH_ENGINE_TRACKER3 (user_data);
 
@@ -176,25 +251,14 @@ query_callback (TrackerSparqlStatement *statement,
       return;
     }
 
-  while (tracker_sparql_cursor_next (cursor, NULL, NULL))
-    {
-      const char *url;
+  data = g_new0 (CursorData, 1);
+  data->cursor = cursor;
+  data->engine = engine;
 
-      url = tracker_sparql_cursor_get_string (cursor, 0, NULL);
-      hit = g_slice_new0 (GtkSearchHit);
-      hit->file = g_file_new_for_uri (url);
-      hit->info = create_file_info (hit->file, cursor);
-      hits = g_list_prepend (hits, hit);
-    }
-
-  tracker_sparql_cursor_close (cursor);
-
-  _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (engine), hits);
-  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (engine), hits != NULL);
-
-  g_list_free_full (hits, free_hit);
-  g_object_unref (engine);
-  g_object_unref (cursor);
+  engine->idle_id =
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                     handle_cursor_idle_cb,
+                     data, cursor_data_free);
 }
 
 static void
@@ -205,7 +269,6 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
   const char *search_text;
   char *match;
   GFile *location;
-  gboolean recursive;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER3 (engine);
 
@@ -221,25 +284,20 @@ gtk_search_engine_tracker3_start (GtkSearchEngine *engine)
       return;
     }
 
-  tracker->query_pending = TRUE;
   search_text = gtk_query_get_text (tracker->query);
   location = gtk_query_get_location (tracker->query);
-  recursive = TRUE;
+
+  if (strlen (search_text) <= 1)
+    return;
+
+  tracker->query_pending = TRUE;
 
   if (location)
     {
       char *location_uri = g_file_get_uri (location);
 
-      if (recursive)
-        {
-          g_debug ("Recursive search query in location: %s", location_uri);
-          statement = tracker->search_recursive_query;
-        }
-      else
-        {
-          g_debug ("Search query in location: %s", location_uri);
-          statement = tracker->search_location_query;
-        }
+      g_debug ("Recursive search query in location: %s", location_uri);
+      statement = tracker->search_recursive_query;
 
       tracker_sparql_statement_bind_string (statement,
                                             "location",
@@ -273,6 +331,8 @@ gtk_search_engine_tracker3_stop (GtkSearchEngine *engine)
       g_cancellable_cancel (tracker->cancellable);
       tracker->query_pending = FALSE;
     }
+
+  g_clear_handle_id (&tracker->idle_id, g_source_remove);
 }
 
 static void
@@ -341,14 +401,6 @@ gtk_search_engine_tracker3_initable_init (GInitable     *initable,
                                                cancellable,
                                                error);
   if (!engine->search_recursive_query)
-    return FALSE;
-
-  engine->search_location_query =
-    tracker_sparql_connection_query_statement (engine->sparql_conn,
-                                               SEARCH_LOCATION_QUERY,
-                                               cancellable,
-                                               error);
-  if (!engine->search_location_query)
     return FALSE;
 
   return TRUE;
