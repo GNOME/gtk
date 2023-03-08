@@ -3889,7 +3889,8 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      gtk_widget_ensure_allocate (child);
+      if (gtk_widget_should_layout (child))
+        gtk_widget_ensure_allocate (child);
     }
 }
 
