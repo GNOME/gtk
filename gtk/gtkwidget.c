@@ -10660,7 +10660,10 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
         break;
 
       if (GTK_IS_NATIVE (widget))
-        gtk_native_queue_relayout (GTK_NATIVE (widget));
+        {
+          gtk_native_queue_relayout (GTK_NATIVE (widget));
+          return;
+        }
 
       widget = priv->parent;
       if (widget == NULL)
