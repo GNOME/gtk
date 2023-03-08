@@ -728,8 +728,13 @@ endif
 
 # Introspection
 gir = find_program('g-ir-scanner', required : get_option('introspection'))
-build_gir = gir.found() and get_option('introspection').enabled()
 
+if not gir.found() and get_option('introspection').enabled()
+  error('Introspection enabled, but g-ir-scanner not found.')
+endif
+
+build_gir = gir.found() and (get_option('introspection').enabled() or
+                             (get_option('introspection').allowed() and get_option('gtk_doc')))
 
 project_build_root = meson.current_build_dir()
 
