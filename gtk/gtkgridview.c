@@ -302,15 +302,8 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkListTile *tile;
   guint pos;
-  GdkRectangle bounds;
 
-  gtk_list_item_manager_get_tile_bounds (self->item_manager, &bounds);
-  if (bounds.width <= 0 || bounds.height <= 0)
-    return FALSE;
-  x = CLAMP (x, bounds.x, bounds.x + bounds.width - 1);
-  y = CLAMP (y, bounds.y, bounds.y + bounds.height - 1);
-
-  tile = gtk_list_item_manager_get_tile_at (self->item_manager, x, y);
+  tile = gtk_list_item_manager_get_nearest_tile (self->item_manager, x, y);
   if (tile == NULL)
     return FALSE;
 
@@ -329,7 +322,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
   if (tile->n_items > 1)
     {
       /* offset in x direction */
-      pos += (x - tile->area.x) / self->column_width;
+      pos += MAX (tile->area.width - 1, x - tile->area.x) / self->column_width;
       if (area)
         {
           guint col = MIN (x / self->column_width, self->n_columns - 1);
@@ -342,7 +335,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
         {
           guint rows_in_tile = tile->n_items / self->n_columns;
           guint row_height = tile->area.height / rows_in_tile;
-          guint row_index = (y - tile->area.y) / row_height;
+          guint row_index = MAX (tile->area.height - 1, y - tile->area.y) / row_height;
           pos += self->n_columns * row_index;
 
           if (area)
