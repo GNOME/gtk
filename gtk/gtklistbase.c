@@ -23,6 +23,8 @@
 
 #include "gtkadjustment.h"
 #include "gtkbitset.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
@@ -1993,6 +1995,30 @@ gtk_list_base_get_orientation (GtkListBase *self)
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
   return priv->orientation;
+}
+
+void
+gtk_list_base_get_border_spacing (GtkListBase *self,
+                                  int         *xspacing,
+                                  int         *yspacing)
+{
+  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (self)));
+  GtkCssValue *border_spacing = style->size->border_spacing;
+
+  if (gtk_list_base_get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (xspacing)
+        *xspacing = _gtk_css_position_value_get_y (border_spacing, 0);
+      if (yspacing)
+        *yspacing = _gtk_css_position_value_get_x (border_spacing, 0);
+    }
+  else
+    {
+      if (xspacing)
+        *xspacing = _gtk_css_position_value_get_x (border_spacing, 0);
+      if (yspacing)
+        *yspacing = _gtk_css_position_value_get_y (border_spacing, 0);
+    }
 }
 
 GtkListItemManager *
