@@ -1239,7 +1239,7 @@ gdk_win32_gl_context_realize_egl (GdkGLContext  *context,
   if (compat_bit)
     flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
-  GDK_NOTE (OPENGL, g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s)",
+  GDK_NOTE (OPENGL, g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s)",
                                major, minor,
                                debug_bit ? "yes" : "no",
                                compat_bit ? "yes" : "no"));
