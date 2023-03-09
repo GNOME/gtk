@@ -378,22 +378,16 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
 {
   GtkGridView *self = GTK_GRID_VIEW (base);
   guint first_row, last_row, first_column, last_column;
-  GdkRectangle bounds;
   GtkBitset *result;
 
   result = gtk_bitset_new_empty ();
 
-  /* limit rect to the region that actually overlaps items */
-  gtk_list_item_manager_get_tile_bounds (self->item_manager, &bounds);
-  if (!gdk_rectangle_intersect (&bounds, rect, &bounds))
-    return result;
-
-  first_column = fmax (floor (bounds.x / self->column_width), 0);
-  last_column = fmin (floor ((bounds.x + bounds.width) / self->column_width), self->n_columns - 1);
+  first_column = fmax (floor (rect->x / self->column_width), 0);
+  last_column = fmin (floor ((rect->x + rect->width) / self->column_width), self->n_columns - 1);
   /* match y = 0 here because we care about the rows, not the cells */
-  if (!gtk_grid_view_get_position_from_allocation (base, 0, bounds.y, &first_row, NULL))
+  if (!gtk_grid_view_get_position_from_allocation (base, 0, rect->y, &first_row, NULL))
     g_return_val_if_reached (result);
-  if (!gtk_grid_view_get_position_from_allocation (base, 0, bounds.y + bounds.height - 1, &last_row, NULL))
+  if (!gtk_grid_view_get_position_from_allocation (base, 0, rect->y + rect->height - 1, &last_row, NULL))
     g_return_val_if_reached (result);
 
   gtk_bitset_add_rectangle (result,

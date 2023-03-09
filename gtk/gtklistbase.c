@@ -1454,7 +1454,14 @@ static GtkBitset *
 gtk_list_base_get_items_in_rect (GtkListBase        *self,
                                  const GdkRectangle *rect)
 {
-  return GTK_LIST_BASE_GET_CLASS (self)->get_items_in_rect (self, rect);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GdkRectangle bounds;
+
+  gtk_list_item_manager_get_tile_bounds (priv->item_manager, &bounds);
+  if (!gdk_rectangle_intersect (&bounds, rect, &bounds))
+    return gtk_bitset_new_empty ();
+
+  return GTK_LIST_BASE_GET_CLASS (self)->get_items_in_rect (self, &bounds);
 }
 
 static gboolean

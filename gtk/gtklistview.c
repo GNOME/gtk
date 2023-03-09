@@ -186,20 +186,6 @@ dump (GtkListView *self)
   g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
 }
 
-static int
-gtk_list_view_get_list_height (GtkListView *self)
-{
-  GtkListTile *tile;
-  GtkListTileAugment *aug;
-
-  tile = gtk_list_item_manager_get_root (self->item_manager);
-  if (tile == NULL)
-    return 0;
-
-  aug = gtk_list_tile_get_augment (self->item_manager, tile);
-  return aug->area.height;
-}
-
 static GtkListTile *
 gtk_list_view_split (GtkListBase *base,
                      GtkListTile *tile,
@@ -296,9 +282,6 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
   GtkListTile *tile;
 
   result = gtk_bitset_new_empty ();
-
-  if (rect->y >= gtk_list_view_get_list_height (self))
-    return result;
 
   n_items = gtk_list_base_get_n_items (base);
   if (n_items == 0)
