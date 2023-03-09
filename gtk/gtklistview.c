@@ -242,12 +242,48 @@ gtk_list_view_get_allocation (GtkListBase  *base,
     return FALSE;
 
   *area = tile->area;
-  if (tile->n_items)
-    area->height /= tile->n_items;
-  if (offset)
-    area->y += offset * area->height;
+  if (area->width || area->height)
+    {
+      if (tile->n_items)
+        area->height /= tile->n_items;
+      if (offset)
+        area->y += offset * area->height;
+    }
+  else
+    {
+      /* item is not allocated yet */
+      GtkListTile *other;
 
-  return area->width > 0 && area->height > 0;
+      for (other = gtk_rb_tree_node_get_previous (tile);
+           other;
+           other = gtk_rb_tree_node_get_previous (other))
+        {
+          if (other->area.width || other->area.height)
+            {
+              area->x = other->area.x;
+              area->width = other->area.width;
+              area->y = other->area.y + other->area.height;
+              break;
+            }
+        }
+      if (other == NULL)
+        {
+          for (other = gtk_rb_tree_node_get_next (tile);
+               other;
+               other = gtk_rb_tree_node_get_next (other))
+            {
+              if (other->area.width || other->area.height)
+                {
+                  area->x = other->area.x;
+                  area->width = other->area.width;
+                  area->y = other->area.y;
+                  break;
+                }
+            }
+        }
+    }
+
+  return TRUE;
 }
 
 static GtkBitset *

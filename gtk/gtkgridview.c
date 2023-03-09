@@ -237,8 +237,41 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
   guint offset;
 
   tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &offset);
-  if (tile == NULL || tile->area.width <= 0 || tile->area.height <= 0)
+  if (tile == NULL)
     return FALSE;
+
+  if (tile->area.width <= 0 || tile->area.height <= 0)
+    {
+      /* item is not allocated yet */
+      GtkListTile *other;
+
+      for (other = gtk_rb_tree_node_get_previous (tile);
+           other;
+           other = gtk_rb_tree_node_get_previous (other))
+        {
+          if (other->area.width || other->area.height)
+            {
+              area->x = other->area.x + other->area.width;
+              area->y = other->area.y + other->area.height;
+              break;
+            }
+        }
+      if (other == NULL)
+        {
+          for (other = gtk_rb_tree_node_get_next (tile);
+               other;
+               other = gtk_rb_tree_node_get_next (other))
+            {
+              if (other->area.width || other->area.height)
+                {
+                  area->x = other->area.x;
+                  area->y = other->area.y;
+                  break;
+                }
+            }
+        }
+      return TRUE;
+    }
 
   *area = tile->area;
 
