@@ -1,13 +1,14 @@
-/* Menu
- * #Keywords: action, zoom
- *
- * Demonstrates how to add a context menu to a custom widget
- * and connect it with widget actions.
+/* Image Scaling
+ * #Keywords: zoom, scale, filter, action, menu
  *
  * The custom widget we create here is similar to a GtkPicture,
- * but allows setting a zoom level for the displayed paintable.
+ * but allows setting a zoom level and filtering mode for the
+ * displayed paintable.
  *
- * Our context menu has items to change the zoom level.
+ * It also demonstrates how to add a context menu to a custom
+ * widget and connect it with widget actions.
+ *
+ * The context menu has items to change the zoom level.
  */
 
 #include <gtk/gtk.h>
@@ -86,7 +87,7 @@ do_menu (GtkWidget *do_widget)
       GtkWidget *button;
 
       window = gtk_window_new ();
-      gtk_window_set_title (GTK_WINDOW (window), "Menu");
+      gtk_window_set_title (GTK_WINDOW (window), "Image Scaling");
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
