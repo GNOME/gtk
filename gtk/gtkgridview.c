@@ -153,23 +153,26 @@ dump (GtkGridView *self)
 
 static int
 column_index (GtkGridView *self,
+              int          spacing,
               int          x)
 {
-  return x / self->column_width;
+  return (x + spacing / 2.0) / (self->column_width + spacing);
 }
 
 static int
 column_start (GtkGridView *self,
+              int          spacing,
               int          col)
 {
-  return ceil (self->column_width * col);
+  return ceil ((self->column_width + spacing) * col);
 }
 
 static int
 column_end (GtkGridView *self,
+            int          spacing,
             int          col)
 {
-  return ceil (self->column_width * (col + 1));
+  return ceil (self->column_width * (col + 1) + (spacing * col));
 }
 
 static GtkListTile *
@@ -180,8 +183,11 @@ gtk_grid_view_split (GtkListBase *base,
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkListTile *split;
   guint col, row_height;
+  int xspacing, yspacing;
 
-  row_height = tile->area.height / MAX (tile->n_items / self->n_columns, 1);
+  gtk_list_base_get_border_spacing (base, &xspacing, &yspacing);
+
+  row_height = (tile->area.height + yspacing) / MAX (tile->n_items / self->n_columns, 1) - yspacing;
 
   /* split off the multirow at the top */
   if (n_items >= self->n_columns)
@@ -195,14 +201,14 @@ gtk_grid_view_split (GtkListBase *base,
                               tile,
                               &(GdkRectangle) {
                                 split->area.x,
-                                split->area.y + row_height * top_rows,
+                                split->area.y + (row_height + yspacing) * top_rows,
                                 split->area.width,
-                                split->area.height - row_height * top_rows,
+                                split->area.height - (row_height + yspacing) * top_rows,
                               });
       gtk_list_tile_set_area_size (self->item_manager,
                                    split,
                                    split->area.width,
-                                   row_height * top_rows);
+                                   row_height * top_rows + yspacing * (top_rows - 1));
       n_items -= top_items;
       if (n_items == 0)
         return tile;
@@ -216,9 +222,9 @@ gtk_grid_view_split (GtkListBase *base,
                               split,
                               &(GdkRectangle) {
                                 tile->area.x,
-                                tile->area.y + row_height,
+                                tile->area.y + row_height + yspacing,
                                 tile->area.width,
-                                tile->area.height - row_height,
+                                tile->area.height - row_height - yspacing,
                               });
       gtk_list_tile_set_area_size (self->item_manager,
                                    tile,
@@ -230,20 +236,20 @@ gtk_grid_view_split (GtkListBase *base,
   g_assert (tile->n_items <= self->n_columns);
 
   /* now it's a single row, do a split at the column boundary */
-  col = column_index (self, tile->area.x);
+  col = column_index (self, xspacing, tile->area.x);
   split = gtk_list_tile_split (self->item_manager, tile, n_items);
   gtk_list_tile_set_area (self->item_manager,
                           split,
                           &(GdkRectangle) {
-                            column_start (self, col + n_items),
+                            column_start (self, xspacing, col + n_items),
                             tile->area.y,
-                            column_end (self, col + n_items + split->n_items - 1)
-                            - column_start (self, col + n_items),
+                            column_end (self, xspacing, col + n_items + split->n_items - 1)
+                            - column_start (self, xspacing, col + n_items),
                             tile->area.height,
                           });
   gtk_list_tile_set_area_size (self->item_manager,
                                tile,
-                               column_end (self, col + n_items - 1) - tile->area.x,
+                               column_end (self, xspacing, col + n_items - 1) - tile->area.x,
                                tile->area.height);
   
   return split;
@@ -257,10 +263,13 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkListTile *tile;
   guint offset;
+  int xspacing, yspacing;
 
   tile = gtk_list_item_manager_get_nth (self->item_manager, pos, &offset);
   if (tile == NULL)
     return FALSE;
+
+  gtk_list_base_get_border_spacing (base, &xspacing, &yspacing);
 
   if (tile->area.width <= 0 || tile->area.height <= 0)
     {
@@ -299,16 +308,16 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
 
   if (tile->n_items > self->n_columns)
     {
-      area->height /= (tile->n_items / self->n_columns);
-      area->y += (offset / self->n_columns) * area->height;
+      area->height = (area->height + yspacing) / (tile->n_items / self->n_columns) - yspacing;
+      area->y += (offset / self->n_columns) * (area->height + yspacing);
       offset %= self->n_columns;
     }
 
   if (tile->n_items > 1)
     {
-      guint col = column_index (self, area->x);
-      area->x = column_start (self, col + offset);
-      area->width = column_end (self, col + offset) - area->x;
+      guint col = column_index (self, xspacing, area->x);
+      area->x = column_start (self, xspacing, col + offset);
+      area->width = column_end (self, xspacing, col + offset) - area->x;
     }
 
   return TRUE;
@@ -343,26 +352,30 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
   pos = gtk_list_tile_get_position (self->item_manager, tile);
   if (tile->n_items > 1)
     {
+      int xspacing, yspacing;
+
+      gtk_list_base_get_border_spacing (base, &xspacing, &yspacing);
+
       /* offset in x direction */
-      pos += column_index (self, MAX (tile->area.width - 1, x - tile->area.x));
+      pos += column_index (self, xspacing, MAX (tile->area.width - 1, x - tile->area.x));
       if (area)
         {
-          guint col = MIN (column_index (self, x), self->n_columns - 1);
-          area->x = column_start (self, col);
-          area->width = column_end (self, col) - area->x;
+          guint col = MIN (column_index (self, xspacing, x), self->n_columns - 1);
+          area->x = column_start (self, xspacing, col);
+          area->width = column_end (self, xspacing, col) - area->x;
         }
 
       /* offset in y direction */
       if (tile->n_items > self->n_columns)
         {
           guint rows_in_tile = tile->n_items / self->n_columns;
-          guint row_height = tile->area.height / rows_in_tile;
-          guint row_index = MAX (tile->area.height - 1, y - tile->area.y) / row_height;
+          guint row_height = (tile->area.height + yspacing) / rows_in_tile - yspacing;
+          guint row_index = MIN (tile->area.height - 1, y - tile->area.y) / (row_height + yspacing);
           pos += self->n_columns * row_index;
 
           if (area)
             {
-              area->y = tile->area.y  + row_index * row_height;
+              area->y = tile->area.y  + row_index * (row_height + yspacing);
               area->height = row_height;
             }
         }
@@ -393,23 +406,37 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
 {
   GtkGridView *self = GTK_GRID_VIEW (base);
   guint first_row, last_row, first_column, last_column;
+  cairo_rectangle_int_t area;
+  int xspacing, yspacing;
   GtkBitset *result;
 
+  gtk_list_base_get_border_spacing (base, &xspacing, &yspacing);
   result = gtk_bitset_new_empty ();
 
-  first_column = MAX (column_index (self, rect->x), 0);
-  last_column = MIN (column_index (self, rect->x + rect->width), self->n_columns - 1);
+  first_column = MAX (column_index (self, xspacing, rect->x), 0);
+  if (column_end (self, xspacing, first_column) <= rect->x)
+    first_column++;
+  last_column = MIN (column_index (self, xspacing, rect->x + rect->width), self->n_columns - 1);
+  if (column_start (self, xspacing, last_column) > rect->x + rect->width)
+    last_column--;
   /* match y = 0 here because we care about the rows, not the cells */
-  if (!gtk_grid_view_get_position_from_allocation (base, 0, rect->y, &first_row, NULL))
+  if (!gtk_grid_view_get_position_from_allocation (base, column_start (self, xspacing, 0), rect->y, &first_row, &area))
     g_return_val_if_reached (result);
-  if (!gtk_grid_view_get_position_from_allocation (base, 0, rect->y + rect->height - 1, &last_row, NULL))
+  if (area.y + area.height < rect->y)
+    first_row += self->n_columns;
+  if (!gtk_grid_view_get_position_from_allocation (base, column_start (self, xspacing, 0), rect->y + rect->height, &last_row, NULL))
     g_return_val_if_reached (result);
+  if (area.y >= rect->y + rect->height)
+    last_row -= self->n_columns;
 
-  gtk_bitset_add_rectangle (result,
-                            first_row + first_column,
-                            last_column - first_column + 1,
-                            (last_row - first_row) / self->n_columns + 1,
-                            self->n_columns);
+  if (first_column <= last_column && first_row <= last_row)
+    {
+      gtk_bitset_add_rectangle (result,
+                                first_row + first_column,
+                                last_column - first_column + 1,
+                                (last_row - first_row) / self->n_columns + 1,
+                                self->n_columns);
+    }
 
   return result;
 }
@@ -511,16 +538,20 @@ gtk_grid_view_measure_across (GtkWidget *widget,
                               int       *natural)
 {
   GtkGridView *self = GTK_GRID_VIEW (widget);
+  int xspacing;
+
+  gtk_list_base_get_border_spacing (GTK_LIST_BASE (widget), &xspacing, NULL);
 
   gtk_grid_view_measure_column_size (self, minimum, natural);
 
-  *minimum *= self->min_columns;
-  *natural *= self->max_columns;
+  *minimum = (*minimum + xspacing) * self->min_columns - xspacing;
+  *natural = (*natural + xspacing) * self->max_columns - xspacing;
 }
 
 static guint
 gtk_grid_view_compute_n_columns (GtkGridView *self,
                                  guint        for_size,
+                                 int          border_spacing,
                                  int          min,
                                  int          nat)
 {
@@ -529,9 +560,9 @@ gtk_grid_view_compute_n_columns (GtkGridView *self,
   /* rounding down is exactly what we want here, so int division works */
   if (gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self),
                                        gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self))) == GTK_SCROLL_MINIMUM)
-    n_columns = for_size / MAX (1, min);
+    n_columns = (for_size + border_spacing) / MAX (1, min + border_spacing);
   else
-    n_columns = for_size / MAX (1, nat);
+    n_columns = (for_size + border_spacing) / MAX (1, nat + border_spacing);
 
   n_columns = CLAMP (n_columns, self->min_columns, self->max_columns);
 
@@ -550,11 +581,13 @@ gtk_grid_view_measure_list (GtkWidget *widget,
   GtkScrollablePolicy scroll_policy;
   GtkListTile *tile;
   int height, row_height, child_min, child_nat, column_size, col_min, col_nat;
+  int xspacing, yspacing;
   gboolean measured;
   GArray *heights;
   guint n_unknown, n_columns;
   guint i;
 
+  gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), gtk_list_base_get_orientation (GTK_LIST_BASE (self)));
   heights = g_array_new (FALSE, FALSE, sizeof (int));
   n_unknown = 0;
@@ -562,7 +595,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
 
   gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
   for_size = MAX (for_size, col_min * (int) self->min_columns);
-  n_columns = gtk_grid_view_compute_n_columns (self, for_size, col_min, col_nat);
+  n_columns = gtk_grid_view_compute_n_columns (self, for_size, xspacing, col_min, col_nat);
   column_size = for_size / n_columns;
 
   i = 0;
@@ -593,7 +626,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
             {
               g_array_append_val (heights, row_height);
               i -= n_columns;
-              height += row_height;
+              height += row_height + yspacing;
               measured = FALSE;
               row_height = 0;
             }
@@ -607,14 +640,17 @@ gtk_grid_view_measure_list (GtkWidget *widget,
       if (measured)
         {
           g_array_append_val (heights, row_height);
-          height += row_height;
+          height += row_height + yspacing;
         }
       else
         n_unknown++;
     }
 
   if (n_unknown)
-    height += n_unknown * gtk_grid_view_get_unknown_row_size (self, heights);
+    height += n_unknown * (gtk_grid_view_get_unknown_row_size (self, heights) + yspacing);
+  /* if we have a height, we have at least one row, and because we added spacing for every row... */
+  if (height)
+    height -= yspacing;
 
   g_array_free (heights, TRUE);
 
@@ -651,12 +687,13 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   int min_row_height, unknown_row_height, row_height, col_min, col_nat;
   GtkOrientation orientation;
   GtkScrollablePolicy scroll_policy;
-  int y;
+  int y, xspacing, yspacing;
   guint i;
 
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), orientation);
   min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
+  gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
 
   /* step 0: exit early if list is empty */
   tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
@@ -670,6 +707,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
   self->n_columns = gtk_grid_view_compute_n_columns (self, 
                                                      orientation == GTK_ORIENTATION_VERTICAL ? width : height,
+                                                     xspacing,
                                                      col_min, col_nat);
   self->column_width = (orientation == GTK_ORIENTATION_VERTICAL ? width : height) / self->n_columns;
   self->column_width = MAX (self->column_width, col_min);
@@ -725,7 +763,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
             {
               gtk_list_tile_set_area_size (self->item_manager,
                                            start,
-                                           column_end (self, i + start->n_items - 1) - column_start (self, i),
+                                           column_end (self, xspacing, i + start->n_items - 1)
+                                           - column_start (self, xspacing, i),
                                            row_height);
               i += start->n_items;
             }
@@ -746,7 +785,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     {
       gtk_list_tile_set_area_position (self->item_manager,
                                        tile,
-                                       column_start (self, i),
+                                       column_start (self, xspacing, i),
                                        y);
       if (tile->n_items >= self->n_columns && tile->widget == NULL)
         {
@@ -754,9 +793,10 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           g_assert (tile->n_items % self->n_columns == 0);
           gtk_list_tile_set_area_size (self->item_manager,
                                        tile,
-                                       column_end (self, self->n_columns - 1) - column_start (self, 0),
-                                       unknown_row_height * (tile->n_items / self->n_columns));
-          y += tile->area.height;
+                                       column_end (self, xspacing, self->n_columns - 1)
+                                       - column_start (self, xspacing, 0),
+                                       (unknown_row_height + yspacing) * (tile->n_items / self->n_columns) - yspacing);
+          y += tile->area.height + yspacing;
         }
       else
         {
@@ -766,7 +806,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                * be a multirow tile but it may have no widgets either */
               gtk_list_tile_set_area_size (self->item_manager,
                                            tile,
-                                           column_end (self, i + tile->n_items - 1) - column_start (self, i),
+                                           column_end (self, xspacing, i + tile->n_items - 1) - tile->area.x,
                                            unknown_row_height);
             }
           i += tile->n_items;
@@ -775,7 +815,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
       if (i >= self->n_columns)
         {
           g_assert (i == self->n_columns);
-          y += tile->area.height;
+          y += tile->area.height + yspacing;
           i = 0;
         }
     }
@@ -787,11 +827,11 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
       filler = gtk_list_tile_split (self->item_manager, tile, tile->n_items);
       gtk_list_tile_set_area_position (self->item_manager,
                                        filler,
-                                       column_start (self, i),
+                                       column_start (self, xspacing, i),
                                        y);
       gtk_list_tile_set_area_size (self->item_manager,
                                    filler,
-                                   column_end (self, self->n_columns - 1) - filler->area.x,
+                                   column_end (self, xspacing, self->n_columns - 1) - filler->area.x,
                                    tile->area.height);
     }
 
