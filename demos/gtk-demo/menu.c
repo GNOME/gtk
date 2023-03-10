@@ -13,6 +13,62 @@
 #include <gtk/gtk.h>
 #include "demo3widget.h"
 
+static void
+file_opened (GObject      *source,
+             GAsyncResult *result,
+             void         *data)
+{
+  GFile *file;
+  GError *error = NULL;
+  GdkTexture *texture;
+
+  file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
+
+  if (!file)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  texture = gdk_texture_new_from_file (file, &error);
+  g_object_unref (file);
+  if (!texture)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  g_object_set (G_OBJECT (data), "texture", texture, NULL);
+  g_object_unref (texture);
+}
+
+static void
+open_file (GtkWidget *picker,
+           GtkWidget *demo)
+{
+  GtkWindow *parent = GTK_WINDOW (gtk_widget_get_root (picker));
+  GtkFileDialog *dialog;
+  GtkFileFilter *filter;
+  GListStore *filters;
+
+  dialog = gtk_file_dialog_new ();
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "Images");
+  gtk_file_filter_add_pixbuf_formats (filter);
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+  g_object_unref (filters);
+
+  gtk_file_dialog_open (dialog, parent, NULL, file_opened, demo);
+
+  g_object_unref (dialog);
+}
 
 GtkWidget *
 do_menu (GtkWidget *do_widget)
@@ -27,6 +83,7 @@ do_menu (GtkWidget *do_widget)
       GtkWidget *widget;
       GtkWidget *scale;
       GtkWidget *dropdown;
+      GtkWidget *button;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Menu");
@@ -47,6 +104,10 @@ do_menu (GtkWidget *do_widget)
 
       box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_append (GTK_BOX (box), box2);
+
+      button = gtk_button_new_from_icon_name ("document-open-symbolic");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_file), widget);
+      gtk_box_append (GTK_BOX (box2), button);
 
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.01, 10.0, 0.1);
       gtk_range_set_value (GTK_RANGE (scale), 1.0);
