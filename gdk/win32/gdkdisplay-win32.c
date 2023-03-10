@@ -1205,6 +1205,9 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
                                 FALSE,
                                 error))
         {
+          if (display->have_egl_win32_libangle)
+            g_message ("libANGLE EGL contexts currently support OpenGL/ES API only");
+
           return g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL,
                                "display", display,
                                NULL);
@@ -1230,6 +1233,9 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
                             TRUE,
                             error))
     {
+      if (display->have_egl_win32_libangle)
+        g_message ("libANGLE EGL contexts currently support OpenGL/ES API only");
+
       return g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL,
                            "display", display,
                            NULL);

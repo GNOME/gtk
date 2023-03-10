@@ -124,6 +124,23 @@ gdk_win32_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, prefers_high_depth, update_area);
 }
 
+static GdkGLAPI
+gdk_win32_gl_context_egl_realize (GdkGLContext *context,
+                                  GError **error)
+{
+  GdkGLContextClass *klass = GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+
+  /*
+   * force OpenGL/ES  API if libANGLE is being used, since libANGLE does not
+   * implement enough Desktop OpenGL even with the EGL_KHR_create_context extension
+   */
+  if (display->have_egl_win32_libangle)
+    gdk_gl_context_set_use_es (context, 1);
+
+  return klass->realize (context, error);
+}
+
 static void
 gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 {
@@ -131,6 +148,7 @@ gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS(klass);
 
   context_class->backend_type = GDK_GL_EGL;
+  context_class->realize = gdk_win32_gl_context_egl_realize;
 
   draw_context_class->begin_frame = gdk_win32_gl_context_egl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_egl_end_frame;
