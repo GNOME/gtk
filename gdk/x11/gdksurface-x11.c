@@ -1358,6 +1358,7 @@ gdk_x11_surface_destroy (GdkSurface *surface,
 
   unhook_surface_changed (surface);
   disconnect_frame_clock (surface);
+  g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
 
   if (impl->cairo_surface)
     {
