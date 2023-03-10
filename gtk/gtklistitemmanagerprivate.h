@@ -78,6 +78,10 @@ gpointer                gtk_list_item_manager_get_nth           (GtkListItemMana
 GtkListTile *           gtk_list_item_manager_get_tile_at       (GtkListItemManager     *self,
                                                                  int                     x,
                                                                  int                     y);
+GtkListTile *           gtk_list_item_manager_get_nearest_tile  (GtkListItemManager     *self,
+                                                                 int                     x,
+                                                                 int                     y);
+
 
 guint                   gtk_list_tile_get_position              (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);

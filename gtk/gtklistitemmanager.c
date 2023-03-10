@@ -247,39 +247,94 @@ gtk_list_item_manager_get_nth (GtkListItemManager *self,
   return tile;
 }
 
+/* This computes Manhattan distance */
+static int
+rectangle_distance (const cairo_rectangle_int_t *rect,
+                    int                          x,
+                    int                          y)
+{
+  int x_dist, y_dist;
+
+  if (rect->x > x)
+    x_dist = rect->x - x;
+  else if (rect->x + rect->width < x)
+    x_dist = x - (rect->x + rect->width);
+  else
+    x_dist = 0;
+
+  if (rect->y > y)
+    y_dist = rect->y - y;
+  else if (rect->y + rect->height < y)
+    y_dist = y - (rect->y + rect->height);
+  else
+    y_dist = 0;
+
+  return x_dist + y_dist;
+}
+
 static GtkListTile *
 gtk_list_tile_get_tile_at (GtkListItemManager *self,
                            GtkListTile        *tile,
                            int                 x,
-                           int                 y)
+                           int                 y,
+                           int                *distance)
 {
   GtkListTileAugment *aug;
-  GtkListTile *subtile;
+  GtkListTile *left, *right, *result;
+  int dist, left_dist, right_dist;
 
-  aug = gtk_list_tile_get_augment (self, tile);
-  if (!gdk_rectangle_contains_point (&aug->area, x, y))
-    return NULL;
-
-  subtile = gtk_rb_tree_node_get_left (tile);
-  if (subtile)
+  left = gtk_rb_tree_node_get_left (tile);
+  if (left)
     {
-      subtile = gtk_list_tile_get_tile_at (self, subtile, x, y);
-      if (subtile)
-        return subtile;
+      aug = gtk_list_tile_get_augment (self, left);
+      left_dist = rectangle_distance (&aug->area, x, y);
     }
-
-  if (gdk_rectangle_contains_point (&tile->area, x, y))
-    return tile;
-
-  subtile = gtk_rb_tree_node_get_right (tile);
-  if (subtile)
+  else
+    left_dist = *distance;
+  right = gtk_rb_tree_node_get_right (tile);
+  if (right)
     {
-      subtile = gtk_list_tile_get_tile_at (self, subtile, x, y);
-      if (subtile)
-        return subtile;
+      aug = gtk_list_tile_get_augment (self, right);
+      right_dist = rectangle_distance (&aug->area, x, y);
     }
+  else
+    right_dist = *distance;
 
-  return NULL;
+  dist = rectangle_distance (&tile->area, x, y);
+  result = NULL;
+
+  while (TRUE)
+    {
+      if (dist < left_dist && dist < right_dist)
+        {
+          if (dist >= *distance)
+            return result;
+
+          *distance = dist;
+          return tile;
+        }
+
+      if (left_dist < right_dist)
+        {
+          if (left_dist >= *distance)
+            return result;
+
+          left = gtk_list_tile_get_tile_at (self, left, x, y, distance);
+          if (left)
+            result = left;
+          left_dist = G_MAXINT;
+        }
+      else
+        {
+          if (right_dist >= *distance)
+            return result;
+
+          right = gtk_list_tile_get_tile_at (self, right, x, y, distance);
+          if (right)
+            result = right;
+          right_dist = G_MAXINT;
+        }
+    }
 }
 
 /*
@@ -299,7 +354,35 @@ gtk_list_item_manager_get_tile_at (GtkListItemManager *self,
                                    int                 x,
                                    int                 y)
 {
-  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y);
+  int distance = 1;
+
+  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y, &distance);
+}
+
+/*
+ * gtk_list_item_manager_get_nearest_tile:
+ * @self: a GtkListItemManager
+ * @x: x coordinate of tile
+ * @y: y coordinate of tile
+ *
+ * Finds the tile closest to the coordinates at (x, y). If no
+ * tile occupies the coordinates (for example, if the tile is out of bounds),
+ * Manhattan distance is used to find the nearest tile.
+ *
+ * If multiple tiles have the same distance, the one closest to the start
+ * will be returned.
+ *
+ * Returns: (nullable): The tile nearest to (x, y) or NULL if there are no
+ *     tile
+ **/
+GtkListTile *
+gtk_list_item_manager_get_nearest_tile (GtkListItemManager *self,
+                                        int                 x,
+                                        int                 y)
+{
+  int distance = G_MAXINT;
+
+  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y, &distance);
 }
 
 guint
