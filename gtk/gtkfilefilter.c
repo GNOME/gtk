@@ -68,15 +68,17 @@
  */
 
 #include "config.h"
-#include <string.h>
-
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "gtkfilefilterprivate.h"
+
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkprivate.h"
 #include "gtkfilter.h"
+#include "gtkprivate.h"
+
+#include <glib/gi18n-lib.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <string.h>
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -987,6 +989,13 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
 {
   GVariantBuilder builder;
   GSList *l;
+  GVariant *result;
+  char *name;
+
+  if (filter->name)
+    name = g_strdup (filter->name);
+  else
+    name = NULL;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(us)"));
   for (l = filter->rules; l; l = l->next)
@@ -998,6 +1007,8 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
         {
         case FILTER_RULE_PATTERN:
           g_variant_builder_add (&builder, "(us)", 0, rule->u.pattern);
+          if (name == NULL)
+            name = g_strdup (rule->u.pattern);
           break;
 
         case FILTER_RULE_SUFFIX:
@@ -1008,13 +1019,24 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
             char *pattern = _gtk_make_ci_glob_pattern (rule->u.pattern);
             g_variant_builder_add (&builder, "(us)", 0, pattern);
             g_free (pattern);
+            if (name == NULL)
+              name = g_strdup (rule->u.pattern);
           }
           break;
 
         case FILTER_RULE_MIME_TYPE:
         case FILTER_RULE_PIXBUF_FORMATS:
           for (i = 0; rule->u.content_types[i]; i++)
-            g_variant_builder_add (&builder, "(us)", 1, rule->u.content_types[i]);
+            {
+              g_variant_builder_add (&builder, "(us)", 1, rule->u.content_types[i]);
+              if (name == NULL)
+                {
+                  if (rule->type == FILTER_RULE_PIXBUF_FORMATS)
+                    name = g_strdup (_("Image"));
+                  else
+                    name = g_content_type_get_description (rule->u.content_types[i]);
+                }
+            }
           break;
 
         default:
@@ -1022,7 +1044,14 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
         }
     }
 
-  return g_variant_new ("(s@a(us))", filter->name, g_variant_builder_end (&builder));
+  if (name == NULL)
+    name = g_strdup (_("Unspecified"));
+
+  result = g_variant_new ("(s@a(us))", name, g_variant_builder_end (&builder));
+
+  g_free (name);
+
+  return result;
 }
 
 /**

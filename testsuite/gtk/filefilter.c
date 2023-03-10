@@ -192,6 +192,104 @@ test_builder (void)
   g_object_unref (builder);
 }
 
+/* Create a filter but don't set a name, then
+ * turn it into a GVariant */
+static void
+test_variant_no_name (void)
+{
+  GtkFileFilter *filter;
+  GVariant *variant;
+
+  filter = gtk_file_filter_new ();
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  gtk_file_filter_add_mime_type (filter, "image/jpeg");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_suffix (filter, "txt");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_suffix (filter, "txt");
+  gtk_file_filter_add_suffix (filter, "html");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pixbuf_formats (filter);
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_filter_add_pixbuf_formats (filter);
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.*");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pattern (filter, "*.*");
+  gtk_file_filter_add_pattern (filter, ".*.*");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_filter_add_suffix (filter, "txt");
+  gtk_file_filter_add_pattern (filter, "*.*");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_filter_add_suffix (filter, "txt");
+  gtk_file_filter_add_pattern (filter, "*.*");
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_suffix (filter, "txt");
+  gtk_file_filter_add_pattern (filter, "*.*");
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  gtk_file_filter_add_pixbuf_formats (filter);
+  variant = gtk_file_filter_to_gvariant (filter);
+  g_variant_unref (variant);
+  g_object_unref (filter);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -204,6 +302,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filefilter/mimetype", test_mime_type);
   g_test_add_func ("/filefilter/buildable", test_buildable);
   g_test_add_func ("/filefilter/builder", test_builder);
+  g_test_add_func ("/filefilter/variant-no-name", test_variant_no_name);
 
   return g_test_run ();
 }
