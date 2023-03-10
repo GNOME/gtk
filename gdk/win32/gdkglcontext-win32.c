@@ -1043,6 +1043,12 @@ gdk_win32_display_init_egl (GdkWin32Display *display_win32)
   if (display_win32->gl_type == GDK_WIN32_GL_NONE)
     GDK_NOTE (OPENGL, g_message ("Falling back to GLES..."));
 
+  if (!epoxy_has_egl ())
+    {
+      GDK_NOTE (OPENGL, g_message ("EGL/GLES support not present in this system"));
+      return;
+    }
+
   egl_disp = gdk_win32_get_egl_display (display_win32);
 
   if (egl_disp == EGL_NO_DISPLAY ||
