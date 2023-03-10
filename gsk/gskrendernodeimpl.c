@@ -21,8 +21,10 @@
 #include "gskrendernodeprivate.h"
 
 #include "gskcairoblurprivate.h"
+#include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
 #include "gskdiffprivate.h"
+#include "gl/gskglrenderer.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
@@ -6315,6 +6317,36 @@ gsk_render_node_svg_serializer (GdkContentSerializer *serializer)
 #endif
 
 static void
+gsk_render_node_png_serializer (GdkContentSerializer *serializer)
+{
+  GskRenderNode *node;
+  GdkTexture *texture;
+  GskRenderer *renderer;
+  GBytes *bytes;
+
+  node = gsk_value_get_render_node (gdk_content_serializer_get_value (serializer));
+
+  renderer = gsk_gl_renderer_new ();
+  if (!gsk_renderer_realize (renderer, NULL, NULL))
+    {
+      g_object_unref (renderer);
+      renderer = gsk_cairo_renderer_new ();
+      if (!gsk_renderer_realize (renderer, NULL, NULL))
+        {
+          g_assert_not_reached ();
+        }
+    }
+  texture = gsk_renderer_render_texture (renderer, node, NULL);
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+
+  bytes = gdk_texture_save_to_png_bytes (texture);
+  g_object_unref (texture);
+
+  gsk_render_node_serialize_bytes (serializer, bytes);
+}
+
+static void
 gsk_render_node_content_serializer (GdkContentSerializer *serializer)
 {
   const GValue *value;
@@ -6402,6 +6434,11 @@ gsk_render_node_init_content_serializers (void)
                                    NULL,
                                    NULL);
 #endif
+  gdk_content_register_serializer (GSK_TYPE_RENDER_NODE,
+                                   "image/png",
+                                   gsk_render_node_png_serializer,
+                                   NULL,
+                                   NULL);
 
   gdk_content_register_deserializer ("application/x-gtk-render-node",
                                      GSK_TYPE_RENDER_NODE,
