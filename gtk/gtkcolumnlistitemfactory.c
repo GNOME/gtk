@@ -103,6 +103,8 @@ gtk_column_list_item_factory_update (GtkListItemFactory *factory,
 {
   GtkListItem *list_item = GTK_LIST_ITEM (item);
   GtkWidget *child;
+  gboolean selectable = TRUE;
+  gboolean activatable = TRUE;
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->update (factory, item, unbind, bind, func, data);
 
@@ -114,7 +116,18 @@ gtk_column_list_item_factory_update (GtkListItemFactory *factory,
                                    gtk_list_item_get_position (list_item),
                                    gtk_list_item_get_item (list_item),
                                    gtk_list_item_get_selected (list_item));
+
+       selectable &= gtk_list_item_get_selectable (gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child)));
+       activatable &= gtk_list_item_get_activatable (gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child)));
     }
+
+  /* This really does not belong here, but doing better
+   * requires considerable plumbing that we don't have now,
+   * and something like this is needed to fix the filechooser
+   * in select_folder mode.
+   */
+  gtk_list_item_set_selectable (list_item, selectable);
+  gtk_list_item_set_activatable (list_item, activatable);
 }
 
 static void

@@ -31,6 +31,7 @@
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
+#include "gtklistitem.h"
 
 struct _GtkFileChooserCell
 {
@@ -39,6 +40,7 @@ struct _GtkFileChooserCell
   GFileInfo *item;
   gboolean selected;
   guint position;
+  GtkListItem *list_item;
 
   gboolean show_time;
 };
@@ -56,6 +58,7 @@ enum
   PROP_SELECTED,
   PROP_ITEM,
   PROP_SHOW_TIME,
+  PROP_LIST_ITEM,
 };
 
 #define ICON_SIZE 16
@@ -197,6 +200,22 @@ gtk_file_chooser_cell_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_file_chooser_cell_parent_class)->dispose (object);
 }
 
+static gboolean
+get_selectable (GtkFileChooserCell *self)
+{
+  if (self->item)
+    return g_file_info_get_attribute_boolean (self->item, "filechooser::selectable");
+
+  return TRUE;
+}
+
+static void
+update_list_item (GtkFileChooserCell *self)
+{
+  if (self->list_item)
+    gtk_list_item_set_selectable (self->list_item, get_selectable (self));
+}
+
 static void
 gtk_file_chooser_cell_set_property (GObject      *object,
                                     guint         prop_id,
@@ -217,10 +236,23 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
     case PROP_ITEM:
       self->item = g_value_get_object (value);
+
+      if (get_selectable (self))
+        gtk_widget_remove_css_class (GTK_WIDGET (self), "dim-label");
+      else
+        gtk_widget_add_css_class (GTK_WIDGET (self), "dim-label");
+
+      update_list_item (self);
       break;
 
     case PROP_SHOW_TIME:
       self->show_time = g_value_get_boolean (value);
+      break;
+
+    case PROP_LIST_ITEM:
+      self->list_item = g_value_get_object (value);
+
+      update_list_item (self);
       break;
 
     default:
@@ -291,6 +323,11 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
                                    g_param_spec_boolean ("show-time", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_LIST_ITEM,
+                                   g_param_spec_object ("list-item", NULL, NULL,
+                                                        GTK_TYPE_LIST_ITEM,
+                                                        GTK_PARAM_WRITABLE));
 
   gtk_widget_class_set_css_name (widget_class, I_("filelistcell"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

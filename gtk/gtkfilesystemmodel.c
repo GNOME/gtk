@@ -81,6 +81,7 @@ struct _GtkFileSystemModel
   guint                 show_folders :1;/* whether to show folders */
   guint                 show_files :1;  /* whether to show files */
   guint                 filter_folders :1;/* whether filter applies to folders */
+  guint                 can_select_files : 1;
 };
 
 static void freeze_updates (GtkFileSystemModel *model);
@@ -151,7 +152,8 @@ static void
 node_set_visible_and_filtered_out (GtkFileSystemModel *model,
                                    guint               id,
                                    gboolean            visible,
-                                   gboolean            filtered_out)
+                                   gboolean            filtered_out,
+                                   gboolean            selectable)
 {
   FileModelNode *node = get_node (model, id);
 
@@ -163,6 +165,10 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model,
     {
       node->filtered_out = filtered_out;
     }
+
+  /* Selectability */
+
+  g_file_info_set_attribute_boolean (node->info, "filechooser::selectable", selectable);
 
   /* Visibility */
 
@@ -242,17 +248,34 @@ node_should_be_visible (GtkFileSystemModel *model,
   return result;
 }
 
+static gboolean
+node_should_be_selectable (GtkFileSystemModel *model,
+                          guint                id)
+{
+  FileModelNode *node = get_node (model, id);
+
+  if (node->info == NULL)
+    return TRUE;
+
+  if (_gtk_file_info_consider_as_directory (node->info))
+    return TRUE;
+  else
+    return model->can_select_files;
+}
+
 static void
 node_compute_visibility_and_filters (GtkFileSystemModel *model,
                                      guint               id)
 {
   gboolean filtered_out;
   gboolean visible;
+  gboolean selectable;
 
   filtered_out = node_should_be_filtered_out (model, id);
   visible = node_should_be_visible (model, id, filtered_out);
+  selectable = node_should_be_selectable (model, id);
 
-  node_set_visible_and_filtered_out (model, id, visible, filtered_out);
+  node_set_visible_and_filtered_out (model, id, visible, filtered_out, selectable);
 }
 
 static guint
@@ -545,6 +568,7 @@ gtk_file_system_model_init (GtkFileSystemModel *model)
   model->show_folders = TRUE;
   model->show_hidden = FALSE;
   model->filter_folders = FALSE;
+  model->can_select_files = TRUE;
 
   model->file_lookup = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
   model->cancellable = g_cancellable_new ();
@@ -1096,3 +1120,11 @@ _gtk_file_system_model_get_directory (GtkFileSystemModel *model)
   return model->dir;
 }
 
+void
+_gtk_file_system_model_set_can_select_files (GtkFileSystemModel *model,
+                                             gboolean            can_select)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+
+  model->can_select_files = can_select;
+}

@@ -3981,10 +3981,10 @@ set_list_model (GtkFileChooserWidget  *impl,
   set_busy_cursor (impl, TRUE);
 
   impl->browse_files_model =
-    _gtk_file_system_model_new_for_directory (impl->current_folder,
-                                              MODEL_ATTRIBUTES);
+    _gtk_file_system_model_new_for_directory (impl->current_folder, MODEL_ATTRIBUTES);
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
+  _gtk_file_system_model_set_can_select_files (impl->browse_files_model, impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
   load_setup_timer (impl); /* This changes the state to LOAD_PRELOAD */
 
@@ -5820,6 +5820,8 @@ search_setup_model (GtkFileChooserWidget *impl)
 
   impl->search_model = _gtk_file_system_model_new ();
 
+  _gtk_file_system_model_set_can_select_files (impl->search_model, impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
   set_current_model (impl, G_LIST_MODEL (impl->search_model));
   update_columns (impl, TRUE, _("Modified"));
 }
@@ -5986,6 +5988,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
   impl->recent_model = _gtk_file_system_model_new ();
 
   _gtk_file_system_model_set_filter (impl->recent_model, impl->current_filter);
+  _gtk_file_system_model_set_can_select_files (impl->recent_model, impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
   if (!impl->recent_manager)
     return;

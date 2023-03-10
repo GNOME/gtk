@@ -193,6 +193,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkBox">
             <binding name="tooltip-text">
@@ -256,6 +257,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkInscription">
             <property name="hexpand">1</property>
@@ -305,6 +307,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
@@ -352,6 +355,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
@@ -398,6 +402,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkBox">
             <property name="spacing">6</property>
@@ -712,6 +717,7 @@
         <binding name="selected">
           <lookup name="selected">GtkListItem</lookup>
         </binding>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
