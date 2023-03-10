@@ -107,15 +107,18 @@ do_menu (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (box), box2);
 
       button = gtk_button_new_from_icon_name ("document-open-symbolic");
+      gtk_widget_set_tooltip_text (button, "Open File");
       g_signal_connect (button, "clicked", G_CALLBACK (open_file), widget);
       gtk_box_append (GTK_BOX (box2), button);
 
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.01, 10.0, 0.1);
+      gtk_widget_set_tooltip_text (scale, "Zoom");
       gtk_range_set_value (GTK_RANGE (scale), 1.0);
       gtk_widget_set_hexpand (scale, TRUE);
       gtk_box_append (GTK_BOX (box2), scale);
 
       dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", NULL })), NULL);
+      gtk_widget_set_tooltip_text (dropdown, "Filter");
       gtk_box_append (GTK_BOX (box2), dropdown);
 
       g_object_bind_property (dropdown, "selected", widget, "filter", G_BINDING_DEFAULT);
