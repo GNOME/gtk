@@ -1096,10 +1096,18 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     }
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
-    {
-      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
-      GVariant *v = g_variant_new_take_string (label);
+  {
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));                                            
+      GVariant *v = g_variant_new_take_string (label);                                                                 
       emit_property_changed (self, "accessible-description", v);
+    }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_VALUE_NOW)
+    {
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW);
+      emit_property_changed (self,
+                             "accessible-value",
+                             g_variant_new_double (gtk_number_accessible_value_get (value)));
     }
 }
 
