@@ -31,6 +31,10 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
 
+#include <cairo.h>
+#ifdef CAIRO_HAS_SVG_SURFACE
+#include <cairo-svg.h>
+#endif
 #include <hb-ot.h>
 
 /* maximal number of rectangles we keep in a diff region before we throw
@@ -6227,9 +6231,9 @@ gsk_render_node_init_types_once (void)
 }
 
 static void
-gsk_render_node_content_serializer_finish (GObject      *source,
-                                           GAsyncResult *result,
-                                           gpointer      serializer)
+gsk_render_node_serialize_bytes_finish (GObject      *source,
+                                        GAsyncResult *result,
+                                        gpointer      serializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -6241,16 +6245,11 @@ gsk_render_node_content_serializer_finish (GObject      *source,
 }
 
 static void
-gsk_render_node_content_serializer (GdkContentSerializer *serializer)
+gsk_render_node_serialize_bytes (GdkContentSerializer *serializer,
+                                 GBytes               *bytes)
 {
   GInputStream *input;
-  const GValue *value;
-  GskRenderNode *node;
-  GBytes *bytes;
 
-  value = gdk_content_serializer_get_value (serializer);
-  node = gsk_value_get_render_node (value);
-  bytes = gsk_render_node_serialize (node);
   input = g_memory_input_stream_new_from_bytes (bytes);
 
   g_output_stream_splice_async (gdk_content_serializer_get_output_stream (serializer),
@@ -6258,16 +6257,81 @@ gsk_render_node_content_serializer (GdkContentSerializer *serializer)
                                 G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
                                 gdk_content_serializer_get_priority (serializer),
                                 gdk_content_serializer_get_cancellable (serializer),
-                                gsk_render_node_content_serializer_finish,
+                                gsk_render_node_serialize_bytes_finish,
                                 serializer);
   g_object_unref (input);
   g_bytes_unref (bytes);
 }
 
+#ifdef CAIRO_HAS_SVG_SURFACE
+static cairo_status_t
+gsk_render_node_cairo_serializer_write (gpointer             user_data,
+                                        const unsigned char *data,
+                                        unsigned int         length)
+{
+  g_byte_array_append (user_data, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+gsk_render_node_svg_serializer (GdkContentSerializer *serializer)
+{
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  graphene_rect_t bounds;
+  GByteArray *array;
+
+  node = gsk_value_get_render_node (gdk_content_serializer_get_value (serializer));
+  gsk_render_node_get_bounds (node, &bounds);
+  array = g_byte_array_new ();
+
+  surface = cairo_svg_surface_create_for_stream (gsk_render_node_cairo_serializer_write,
+                                                 array,
+                                                 bounds.size.width,
+                                                 bounds.size.height);
+  cairo_svg_surface_set_document_unit (surface, CAIRO_SVG_UNIT_PX);
+  cairo_surface_set_device_offset (surface, -bounds.origin.x, -bounds.origin.y);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  if (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS)
+    {
+      gsk_render_node_serialize_bytes (serializer, g_byte_array_free_to_bytes (array));
+    }
+  else
+    {
+      GError *error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_FAILED,
+                                           cairo_status_to_string (cairo_surface_status (surface)));
+      gdk_content_serializer_return_error (serializer, error);
+      g_byte_array_unref (array);
+    }
+  cairo_surface_destroy (surface);
+}
+#endif
+
+static void
+gsk_render_node_content_serializer (GdkContentSerializer *serializer)
+{
+  const GValue *value;
+  GskRenderNode *node;
+  GBytes *bytes;
+
+  value = gdk_content_serializer_get_value (serializer);
+  node = gsk_value_get_render_node (value);
+  bytes = gsk_render_node_serialize (node);
+
+  gsk_render_node_serialize_bytes (serializer, bytes);
+}
+
 static void
 gsk_render_node_content_deserializer_finish (GObject      *source,
-                              GAsyncResult *result,
-                              gpointer      deserializer)
+                                             GAsyncResult *result,
+                                             gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -6331,6 +6395,13 @@ gsk_render_node_init_content_serializers (void)
                                    gsk_render_node_content_serializer,
                                    NULL,
                                    NULL);
+#ifdef CAIRO_HAS_SVG_SURFACE
+  gdk_content_register_serializer (GSK_TYPE_RENDER_NODE,
+                                   "image/svg+xml",
+                                   gsk_render_node_svg_serializer,
+                                   NULL,
+                                   NULL);
+#endif
 
   gdk_content_register_deserializer ("application/x-gtk-render-node",
                                      GSK_TYPE_RENDER_NODE,
