@@ -3640,6 +3640,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   guint prev_fbo;
   guint texture_id;
   float u0, u1, v0, v1;
+  GskTextureKey key;
 
   gsk_gl_render_job_untransform_bounds (job, &job->current_clip->rect.bounds, &clip_rect);
   if (!graphene_rect_intersection (bounds, &clip_rect, &clip_rect))
@@ -3651,6 +3652,17 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       gsk_gl_render_job_visit_texture (job, texture, bounds);
       return;
     }
+
+  key.pointer = node;
+  key.pointer_is_child = TRUE;
+  key.parent_rect = clip_rect;
+  key.scale_x = 1.;
+  key.scale_y = 1.;
+  key.filter = min_filter;
+
+  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  if (texture_id != 0)
+    goto render_texture;
 
   viewport = GRAPHENE_RECT_INIT (0, 0,
                                  clip_rect.size.width,
@@ -3707,6 +3719,9 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
 
   texture_id = gsk_gl_driver_release_render_target (job->driver, render_target, FALSE);
 
+  gsk_gl_driver_cache_texture (job->driver, &key, texture_id);
+
+render_texture:
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
   gsk_gl_program_set_uniform_texture (job->current_program,
                                       UNIFORM_SHARED_SOURCE, 0,
