@@ -7117,6 +7117,10 @@ recent_sort_func (gconstpointer a,
 
   result = time_sort_func (a, b, user_data);
 
+  /* Recent files should show most recently changed items first
+   */
+  result = -result;
+
   if (result == GTK_ORDERING_EQUAL)
     result = name_sort_func (a, b, user_data);
 
