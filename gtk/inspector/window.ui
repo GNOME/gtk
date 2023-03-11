@@ -618,7 +618,9 @@
             <property name="name">recorder</property>
             <property name="title" translatable="yes">Recorder</property>
             <property name="child">
-              <object class="GtkInspectorRecorder" id="widget_recorder"/>
+              <object class="GtkInspectorRecorder" id="widget_recorder">
+                <signal name="notify::debug-nodes" handler="force_full_redraw" swapped='true'/>
+              </object>
             </property>
           </object>
         </child>
