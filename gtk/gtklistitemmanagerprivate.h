@@ -75,9 +75,6 @@ gpointer                gtk_list_item_manager_get_last          (GtkListItemMana
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
-GtkListTile *           gtk_list_item_manager_get_tile_at       (GtkListItemManager     *self,
-                                                                 int                     x,
-                                                                 int                     y);
 GtkListTile *           gtk_list_item_manager_get_nearest_tile  (GtkListItemManager     *self,
                                                                  int                     x,
                                                                  int                     y);
@@ -112,7 +109,6 @@ void                    gtk_list_item_manager_set_model         (GtkListItemMana
                                                                  GtkSelectionModel      *model);
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);
 
-guint                   gtk_list_item_manager_get_size          (GtkListItemManager     *self);
 void                    gtk_list_item_manager_set_single_click_activate
                                                                 (GtkListItemManager     *self,
                                                                  gboolean                single_click_activate);

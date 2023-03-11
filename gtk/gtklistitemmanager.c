@@ -24,8 +24,6 @@
 #include "gtklistitemwidgetprivate.h"
 #include "gtkwidgetprivate.h"
 
-#define GTK_LIST_VIEW_MAX_LIST_ITEMS 200
-
 struct _GtkListItemManager
 {
   GObject parent_instance;
@@ -335,28 +333,6 @@ gtk_list_tile_get_tile_at (GtkListItemManager *self,
           right_dist = G_MAXINT;
         }
     }
-}
-
-/*
- * gtk_list_item_manager_get_tile_at:
- * @self: a GtkListItemManager
- * @x: x coordinate of tile
- * @y: y coordinate of tile
- *
- * Finds the tile occupying the coordinates at (x, y). If no
- * tile occupies the coordinates (for example, if the tile is out of bounds),
- * NULL is returned.
- *
- * Returns: (nullable): The tile at (x, y) or NULL
- **/
-GtkListTile *
-gtk_list_item_manager_get_tile_at (GtkListItemManager *self,
-                                   int                 x,
-                                   int                 y)
-{
-  int distance = 1;
-
-  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y, &distance);
 }
 
 /*
