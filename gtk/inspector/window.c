@@ -585,6 +585,31 @@ gtk_inspector_window_enable_debugging (GtkWindow *window,
 }
 
 static void
+force_one_full_redraw (GtkWidget *w)
+{
+  gtk_widget_queue_draw (w);
+  for (w = gtk_widget_get_first_child (w); w; w = gtk_widget_get_next_sibling (w))
+    force_one_full_redraw (w);
+}
+
+static void
+force_full_redraw (GtkInspectorWindow *window)
+{
+  GListModel *toplevels;
+
+  toplevels = gtk_window_get_toplevels ();
+  for (unsigned int i = 0; i < g_list_model_get_n_items (toplevels); i++)
+    {
+      GtkWidget *w = GTK_WIDGET (g_list_model_get_item (toplevels, i));
+
+      if (gtk_widget_get_display (w) == window->inspected_display)
+        force_one_full_redraw (w);
+
+      g_object_unref (w);
+    }
+}
+
+static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -671,6 +696,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, go_up_cb);
   gtk_widget_class_bind_template_callback (widget_class, go_down_cb);
   gtk_widget_class_bind_template_callback (widget_class, go_next_cb);
+  gtk_widget_class_bind_template_callback (widget_class, force_full_redraw);
 }
 
 static GdkDisplay *
