@@ -15,7 +15,7 @@ default_theme_variants = [
 default_theme_deps = []
 
 foreach variant: default_theme_variants
-  default_theme_deps += custom_target('Default theme variant: ' + variant,
+  default_theme_deps += custom_target('Default theme variant ' + variant,
     input: 'Default-@0@.scss'.format(variant),
     output: 'Default-@0@.css'.format(variant),
     command: [
