@@ -40,6 +40,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
+#include <gdk/gdkrgbaprivate.h>
+
 /* Allow shadows to overdraw without immediately culling the widget at the viewport
  * boundary.
  * Choose this so that roughly 1 extra widget gets drawn on each side of the viewport,
@@ -1151,6 +1153,120 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   return TRUE;
 }
 
+static GskRenderNode *
+gtk_list_base_dump_tiles (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSnapshot *snapshot;
+  GtkListTile *tile;
+  cairo_rectangle_int_t viewport;
+  guint i, focus, anchor, selected;
+  PangoLayout *layout;
+  char *s;
+
+  focus = gtk_list_base_get_focus_position (self);
+  anchor = gtk_list_base_get_anchor (self);
+  selected = gtk_list_item_tracker_get_position (priv->item_manager, priv->selected);
+
+  snapshot = gtk_snapshot_new ();
+
+  i = 0;
+  for (tile = gtk_list_item_manager_get_first (priv->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        {
+          GdkRGBA color;
+          if (i == focus)
+            color = GDK_RGBA("00FF00");
+          else if (i == anchor)
+            color = GDK_RGBA("FFFF00");
+          else if (i == selected)
+            color = GDK_RGBA("0000FF");
+          else
+            color = GDK_RGBA("FFFFFF");
+
+          gtk_snapshot_append_color (snapshot,
+                                     &color,
+                                     &GRAPHENE_RECT_INIT(
+                                       tile->area.x, tile->area.y,
+                                       tile->area.width, tile->area.height
+                                     ));
+
+          /* This should really look at the ListItem */
+          s = g_strdup_printf ("%u", i);
+          layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), s);
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (tile->area.x + 2, tile->area.y + 2));
+          gtk_snapshot_append_layout (snapshot, layout, &GDK_RGBA("000000"));
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- tile->area.x - 2, - tile->area.y - 2));
+          g_object_unref (layout);
+          g_free (s);
+        }
+      else
+        {
+          GdkRGBA color;
+
+          if (tile->n_items == 0)
+            color = GDK_RGBA("A07070");
+          else
+            color = GDK_RGBA("808080");
+          gtk_snapshot_append_color (snapshot,
+                                     &color,
+                                     &GRAPHENE_RECT_INIT(
+                                       tile->area.x, tile->area.y,
+                                       tile->area.width, tile->area.height
+                                     ));
+        }
+
+      gtk_snapshot_append_border (snapshot,
+                                  &GSK_ROUNDED_RECT_INIT(
+                                    tile->area.x, tile->area.y,
+                                    tile->area.width, tile->area.height
+                                  ),
+                                  (float[4]) { 1, 1, 1, 1 },
+                                  (GdkRGBA[4]) { GDK_RGBA("000000"), GDK_RGBA("000000"), GDK_RGBA("000000"), GDK_RGBA("000000") });
+
+      i += tile->n_items;
+    }
+
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                       &viewport.y, NULL, &viewport.height);
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
+                                       &viewport.x, NULL, &viewport.width);
+  gtk_snapshot_append_color (snapshot,
+                             &GDK_RGBA("0000F040"),
+                             &GRAPHENE_RECT_INIT(
+                               viewport.x, viewport.y,
+                               viewport.width, viewport.height
+                             ));
+  
+
+  return gtk_snapshot_free_to_node (snapshot);
+}
+
+static gboolean
+gtk_list_base_copy_tiles_to_clipboard (GtkWidget *widget,
+                                       GVariant  *args,
+                                       gpointer   unused)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GskRenderNode *node;
+
+  node = gtk_list_base_dump_tiles (self);
+  if (node == NULL)
+    return TRUE;
+
+  gdk_clipboard_set (gtk_widget_get_clipboard (widget),
+                     GSK_TYPE_RENDER_NODE,
+                     node);
+  gsk_render_node_unref (node);
+
+  return TRUE;
+}
+
 static void
 gtk_list_base_add_move_binding (GtkWidgetClass *widget_class,
                                 guint           keyval,
@@ -1329,6 +1445,8 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
+
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_R, GDK_CONTROL_MASK | GDK_SHIFT_MASK, gtk_list_base_copy_tiles_to_clipboard, NULL);
 }
 
 static gboolean
