@@ -32,6 +32,11 @@
 #include "gsk/vulkan/gskvulkanrenderer.h"
 #endif
 
+#include <cairo.h>
+#ifdef CAIRO_HAS_SVG_SURFACE
+#include <cairo-svg.h>
+#endif
+
 typedef struct
 {
   gsize  start_chars;
@@ -643,23 +648,34 @@ save_cb (GtkWidget        *button,
   g_object_unref (dialog);
 }
 
-static GdkTexture *
-create_texture (NodeEditorWindow *self)
+static GskRenderNode *
+create_node (NodeEditorWindow *self)
 {
   GdkPaintable *paintable;
   GtkSnapshot *snapshot;
-  GskRenderer *renderer;
   GskRenderNode *node;
-  GdkTexture *texture;
 
   paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
   if (paintable == NULL ||
       gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
       gdk_paintable_get_intrinsic_height (paintable) <= 0)
     return NULL;
+
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable, snapshot, gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
   node = gtk_snapshot_free_to_node (snapshot);
+
+  return node;
+}
+
+static GdkTexture *
+create_texture (NodeEditorWindow *self)
+{
+  GskRenderer *renderer;
+  GskRenderNode *node;
+  GdkTexture *texture;
+
+  node = create_node (self);
   if (node == NULL)
     return NULL;
 
@@ -669,6 +685,58 @@ create_texture (NodeEditorWindow *self)
 
   return texture;
 }
+
+#ifdef CAIRO_HAS_SVG_SURFACE
+static cairo_status_t
+cairo_serializer_write (gpointer             user_data,
+                        const unsigned char *data,
+                        unsigned int         length)
+{
+  g_byte_array_append (user_data, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static GBytes *
+create_svg (GskRenderNode  *node,
+            GError        **error)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  graphene_rect_t bounds;
+  GByteArray *array;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  array = g_byte_array_new ();
+
+  surface = cairo_svg_surface_create_for_stream (cairo_serializer_write,
+                                                 array,
+                                                 bounds.size.width,
+                                                 bounds.size.height);
+  cairo_svg_surface_set_document_unit (surface, CAIRO_SVG_UNIT_PX);
+  cairo_surface_set_device_offset (surface, -bounds.origin.x, -bounds.origin.y);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  if (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS)
+    {
+      cairo_surface_destroy (surface);
+      return g_byte_array_free_to_bytes (array);
+    }
+  else
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "%s", cairo_status_to_string (cairo_surface_status (surface)));
+      cairo_surface_destroy (surface);
+      g_byte_array_unref (array);
+      return NULL;
+    }
+}
+#endif
 
 static GdkTexture *
 create_cairo_texture (NodeEditorWindow *self)
@@ -702,50 +770,140 @@ create_cairo_texture (NodeEditorWindow *self)
 }
 
 static void
-export_image_response_cb (GObject *source,
+export_image_saved_cb (GObject      *source,
+                       GAsyncResult *result,
+                       void         *user_data)
+{
+  GError *error = NULL;
+
+  if (!g_file_replace_contents_finish (G_FILE (source), result, NULL, &error))
+    {
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new ("Exporting to image failed");
+      gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, NULL);
+      g_object_unref (alert);
+      g_clear_error (&error);
+    }
+}
+
+static void
+export_image_response_cb (GObject      *source,
                           GAsyncResult *result,
-                          void *user_data)
+                          void         *user_data)
 {
   GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
-  GdkTexture *texture = user_data;
+  GskRenderNode *node = user_data;
   GFile *file;
+  char *uri;
+  GBytes *bytes;
 
   file = gtk_file_dialog_save_finish (dialog, result, NULL);
-  if (file)
+  if (file == NULL)
     {
-      if (!gdk_texture_save_to_png (texture, g_file_peek_path (file)))
+      gsk_render_node_unref (node);
+      return;
+    }
+
+  uri = g_file_get_uri (file);
+#ifdef CAIRO_HAS_SVG_SURFACE
+  if (g_str_has_suffix (uri, "svg"))
+    {
+      GError *error = NULL;
+
+      bytes = create_svg (node, &error);
+      if (bytes == NULL)
         {
           GtkAlertDialog *alert;
 
           alert = gtk_alert_dialog_new ("Exporting to image failed");
-          gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))));
+          gtk_alert_dialog_set_detail (alert, error->message);
+          gtk_alert_dialog_show (alert, NULL);
           g_object_unref (alert);
+          g_clear_error (&error);
         }
-
-      g_object_unref (file);
     }
+  else
+#endif
+    {
+      GdkTexture *texture;
+      GskRenderer *renderer;
 
-  g_object_unref (texture);
+      renderer = gsk_gl_renderer_new ();
+      if (!gsk_renderer_realize (renderer, NULL, NULL))
+        {
+          g_object_unref (renderer);
+          renderer = gsk_cairo_renderer_new ();
+          if (!gsk_renderer_realize (renderer, NULL, NULL))
+            {
+              g_assert_not_reached ();
+            }
+        }
+      texture = gsk_renderer_render_texture (renderer, node, NULL);
+      gsk_renderer_unrealize (renderer);
+      g_object_unref (renderer);
+
+      if (g_str_has_suffix (uri, "tiff"))
+        bytes = gdk_texture_save_to_tiff_bytes (texture);
+      else
+        bytes = gdk_texture_save_to_png_bytes (texture);
+      g_object_unref (texture);
+    }
+  g_free (uri);
+
+  if (bytes)
+    {
+      g_file_replace_contents_bytes_async (file,
+                                           bytes,
+                                           NULL,
+                                           FALSE,
+                                           0,
+                                           NULL,
+                                           export_image_saved_cb,
+                                           NULL);
+      g_bytes_unref (bytes);
+    }
+  gsk_render_node_unref (node);
+  g_object_unref (file);
 }
 
 static void
 export_image_cb (GtkWidget        *button,
                  NodeEditorWindow *self)
 {
-  GdkTexture *texture;
+  GskRenderNode *node;
   GtkFileDialog *dialog;
+  GtkFileFilter *filter;
+  GListStore *filters;
 
-  texture = create_texture (self);
-  if (texture == NULL)
+  node = create_node (self);
+  if (node == NULL)
     return;
+
+  filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/png");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/svg+xml");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_mime_type (filter, "image/tiff");
+  g_list_store_append (filters, filter);
+  g_object_unref (filter);
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "");
   gtk_file_dialog_set_initial_name (dialog, "example.png");
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                         NULL,
-                        export_image_response_cb, texture);
+                        export_image_response_cb, node);
+  g_object_unref (filters);
   g_object_unref (dialog);
 }
 
