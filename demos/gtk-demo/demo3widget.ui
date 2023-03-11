@@ -12,6 +12,11 @@
       <attribute name="label">1∶1</attribute>
       <attribute name="action">zoom.reset</attribute>
     </item>
+    <item>
+      <attribute name="label">Rotate</attribute>
+      <attribute name="action">rotate</attribute>
+      <attribute name="target" type="i">90</attribute>
+    </item>
   </menu>
   <template class="Demo3Widget">
     <child>
