@@ -83,15 +83,6 @@ void                   gtk_list_base_set_anchor                 (GtkListBase    
 void                   gtk_list_base_set_anchor_max_widgets     (GtkListBase            *self,
                                                                  guint                   n_center,
                                                                  guint                   n_above_below);
-void                   gtk_list_base_select_item                (GtkListBase            *self,
-                                                                 guint                   pos,
-                                                                 gboolean                modify,
-                                                                 gboolean                extend);
-gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase            *self,
-                                                                 guint                   pos,
-                                                                 gboolean                select,
-                                                                 gboolean                modify,
-                                                                 gboolean                extend);
 
 void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
                                                                  gboolean                enable);
