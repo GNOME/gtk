@@ -142,7 +142,7 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
   GtkListView *self = GTK_LIST_VIEW (base);
   GtkWidget *result;
 
-  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+  result = gtk_list_item_widget_new (self->factory,
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_ROW);
 

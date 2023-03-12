@@ -31,7 +31,6 @@ struct _GtkListItemManager
 
   GtkWidget *widget;
   GtkSelectionModel *model;
-  GtkListItemFactory *factory;
 
   GtkRbTree *items;
   GSList *trackers;
@@ -1063,8 +1062,6 @@ gtk_list_item_manager_dispose (GObject *object)
 
   gtk_list_item_manager_clear_model (self);
 
-  g_clear_object (&self->factory);
-
   g_clear_pointer (&self->items, gtk_rb_tree_unref);
 
   G_OBJECT_CLASS (gtk_list_item_manager_parent_class)->dispose (object);
@@ -1081,50 +1078,6 @@ gtk_list_item_manager_class_init (GtkListItemManagerClass *klass)
 static void
 gtk_list_item_manager_init (GtkListItemManager *self)
 {
-}
-
-void
-gtk_list_item_manager_set_factory (GtkListItemManager *self,
-                                   GtkListItemFactory *factory)
-{
-  guint n_items;
-  GSList *l;
-
-  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
-
-  if (self->factory == factory)
-    return;
-
-  n_items = self->model ? g_list_model_get_n_items (G_LIST_MODEL (self->model)) : 0;
-  gtk_list_item_manager_remove_items (self, NULL, 0, n_items);
-
-  g_set_object (&self->factory, factory);
-
-  gtk_list_item_manager_add_items (self, 0, n_items);
-
-  gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
-
-  for (l = self->trackers; l; l = l->next)
-    {
-      GtkListItemTracker *tracker = l->data;
-      GtkListTile *tile;
-
-      if (tracker->widget == NULL)
-        continue;
-
-      tile = gtk_list_item_manager_get_nth (self, tracker->position, NULL);
-      g_assert (tile);
-      tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
-    }
-}
-
-GtkListItemFactory *
-gtk_list_item_manager_get_factory (GtkListItemManager *self)
-{
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-
-  return self->factory;
 }
 
 void

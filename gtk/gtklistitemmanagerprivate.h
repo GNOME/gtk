@@ -101,9 +101,6 @@ GtkListTile *           gtk_list_tile_split                     (GtkListItemMana
 GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
 
-void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
-                                                                 GtkListItemFactory     *factory);
-GtkListItemFactory *    gtk_list_item_manager_get_factory       (GtkListItemManager     *self);
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
                                                                  GtkSelectionModel      *model);
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);

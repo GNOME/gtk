@@ -88,6 +88,7 @@ struct _GtkGridView
   GtkListBase parent_instance;
 
   GtkListItemManager *item_manager;
+  GtkListItemFactory *factory;
   guint min_columns;
   guint max_columns;
   gboolean single_click_activate;
@@ -263,7 +264,7 @@ gtk_grid_view_create_list_widget (GtkListBase *base)
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkWidget *result;
 
-  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+  result = gtk_list_item_widget_new (self->factory,
                                      "child",
                                      GTK_ACCESSIBLE_ROLE_GRID_CELL);
 
@@ -877,7 +878,7 @@ gtk_grid_view_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_FACTORY:
-      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      g_value_set_object (value, self->factory);
       break;
 
     case PROP_MAX_COLUMNS:
@@ -1202,7 +1203,7 @@ gtk_grid_view_get_factory (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
 
-  return gtk_list_item_manager_get_factory (self->item_manager);
+  return self->factory;
 }
 
 /**
@@ -1216,13 +1217,22 @@ void
 gtk_grid_view_set_factory (GtkGridView        *self,
                            GtkListItemFactory *factory)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
-  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+  if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (tile->widget), factory);
+    }
+
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }

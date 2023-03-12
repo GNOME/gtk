@@ -222,7 +222,7 @@ gtk_list_view_create_list_widget (GtkListBase *base)
   GtkListView *self = GTK_LIST_VIEW (base);
   GtkWidget *result;
 
-  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+  result = gtk_list_item_widget_new (self->factory,
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_LIST_ITEM);
 
@@ -628,7 +628,7 @@ gtk_list_view_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_FACTORY:
-      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      g_value_set_object (value, self->factory);
       break;
 
     case PROP_MODEL:
@@ -927,7 +927,7 @@ gtk_list_view_get_factory (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
 
-  return gtk_list_item_manager_get_factory (self->item_manager);
+  return self->factory;
 }
 
 /**
@@ -941,13 +941,21 @@ void
 gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
-  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+  if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (tile->widget), factory);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
