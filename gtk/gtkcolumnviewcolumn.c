@@ -529,18 +529,20 @@ gtk_column_view_column_create_cells (GtkColumnViewColumn *self)
        row = gtk_widget_get_next_sibling (row))
     {
       GtkListItemWidget *list_item;
+      GtkListItemBase *base;
       GtkWidget *cell;
 
       if (!gtk_widget_get_root (row))
         continue;
 
       list_item = GTK_LIST_ITEM_WIDGET (row);
+      base = GTK_LIST_ITEM_BASE (row);
       cell = gtk_column_view_cell_new (self);
       gtk_list_item_widget_add_child (list_item, cell);
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (cell),
-                                   gtk_list_item_widget_get_position (list_item),
-                                   gtk_list_item_widget_get_item (list_item),
-                                   gtk_list_item_widget_get_selected (list_item));
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
+                                 gtk_list_item_base_get_position (base),
+                                 gtk_list_item_base_get_item (base),
+                                 gtk_list_item_base_get_selected (base));
     }
 }
 

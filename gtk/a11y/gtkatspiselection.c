@@ -256,7 +256,7 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          if (gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child)))
+          if (gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (child)))
             {
               if (idx == 0)
                 break;
@@ -303,7 +303,7 @@ listview_handle_method (GDBusConnection       *connection,
           guint pos;
           gboolean ret;
 
-          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          pos = gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (child));
           ret = gtk_selection_model_select_item (model, pos, FALSE);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
@@ -335,7 +335,7 @@ listview_handle_method (GDBusConnection       *connection,
           guint pos;
           gboolean ret;
 
-          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          pos = gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (child));
           ret = gtk_selection_model_unselect_item (model, pos);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
@@ -353,7 +353,7 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
-          if (gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child)))
+          if (gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (child)))
             {
               if (idx == 0)
                 break;
@@ -371,7 +371,7 @@ listview_handle_method (GDBusConnection       *connection,
           guint pos;
           gboolean ret;
 
-          pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+          pos = gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (child));
           ret = gtk_selection_model_unselect_item (model, pos);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
@@ -402,7 +402,7 @@ listview_handle_method (GDBusConnection       *connection,
         {
           gboolean ret;
 
-          ret = gtk_list_item_widget_get_selected (GTK_LIST_ITEM_WIDGET (child));
+          ret = gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (child));
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
         }

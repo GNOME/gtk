@@ -896,10 +896,10 @@ gtk_list_base_set_focus_child (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_list_base_parent_class)->set_focus_child (widget, child);
 
-  if (!GTK_IS_LIST_ITEM_WIDGET (child))
+  if (!GTK_IS_LIST_ITEM_BASE (child))
     return;
 
-  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+  pos = gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (child));
 
   if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
     {

@@ -21,6 +21,7 @@
 
 #include "gtklistitemmanagerprivate.h"
 
+#include "gtklistitembaseprivate.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -49,7 +50,7 @@ struct _GtkListItemManagerClass
 struct _GtkListItemTracker
 {
   guint position;
-  GtkListItemWidget *widget;
+  GtkListItemBase *widget;
   guint n_before;
   guint n_after;
 };
@@ -874,7 +875,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       if (tracker->widget == NULL)
         continue;
 
-      if (g_hash_table_lookup (change, gtk_list_item_widget_get_item (tracker->widget)))
+      if (g_hash_table_lookup (change, gtk_list_item_base_get_item (tracker->widget)))
         break;
     }
 
@@ -952,7 +953,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
         }
       else if (tracker->position >= position)
         {
-          if (g_hash_table_lookup (change, gtk_list_item_widget_get_item (tracker->widget)))
+          if (g_hash_table_lookup (change, gtk_list_item_base_get_item (tracker->widget)))
             {
               /* The item is gone. Guess a good new position */
               tracker->position = position + (tracker->position - position) * added / removed;
@@ -970,7 +971,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
               /* item was put in its right place in the expensive loop above,
                * and we updated its position while at it. So grab it from there.
                */
-              tracker->position = gtk_list_item_widget_get_position (tracker->widget);
+              tracker->position = gtk_list_item_base_get_position (tracker->widget);
             }
         }
       else
@@ -997,7 +998,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       tile = gtk_list_item_manager_get_nth (self, tracker->position, NULL);
       g_assert (tile != NULL);
       g_assert (tile->widget);
-      tracker->widget = GTK_LIST_ITEM_WIDGET (tile->widget);
+      tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
     }
 
   g_hash_table_unref (change);
@@ -1118,7 +1119,7 @@ gtk_list_item_manager_set_factory (GtkListItemManager *self,
 
       tile = gtk_list_item_manager_get_nth (self, tracker->position, NULL);
       g_assert (tile);
-      tracker->widget = GTK_LIST_ITEM_WIDGET (tile->widget);
+      tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
     }
 }
 
@@ -1205,7 +1206,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (result), position, item, selected);
+  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (result), position, item, selected);
   g_object_unref (item);
   gtk_widget_insert_after (result, self->widget, prev_sibling);
 
@@ -1243,11 +1244,11 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   if (g_hash_table_steal_extended (change, item, NULL, (gpointer *) &result))
     {
-      GtkListItemWidget *list_item = GTK_LIST_ITEM_WIDGET (result);
-      gtk_list_item_widget_update (list_item,
-                                   position,
-                                   gtk_list_item_widget_get_item (list_item),
-                                   gtk_selection_model_is_selected (self->model, position));
+      GtkListItemBase *list_item = GTK_LIST_ITEM_BASE (result);
+      gtk_list_item_base_update (list_item,
+                                 position,
+                                 gtk_list_item_base_get_item (list_item),
+                                 gtk_selection_model_is_selected (self->model, position));
       gtk_widget_insert_after (result, self->widget, prev_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (result);
@@ -1285,10 +1286,10 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (list_item),
-                               position,
-                               item,
-                               selected);
+  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (list_item),
+                             position,
+                             item,
+                             selected);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -1307,17 +1308,17 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
                                         GtkWidget          *item,
                                         guint               position)
 {
-  GtkListItemWidget *list_item = GTK_LIST_ITEM_WIDGET (item);
+  GtkListItemBase *list_item = GTK_LIST_ITEM_BASE (item);
   gboolean selected;
 
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_WIDGET (item));
+  g_return_if_fail (GTK_IS_LIST_ITEM_BASE (item));
 
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_update (list_item,
-                               position,
-                               gtk_list_item_widget_get_item (list_item),
-                               selected);
+  gtk_list_item_base_update (list_item,
+                             position,
+                             gtk_list_item_base_get_item (list_item),
+                             selected);
 }
 
 /*
@@ -1337,11 +1338,11 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
                                          GtkWidget          *item)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_WIDGET (item));
+  g_return_if_fail (GTK_IS_LIST_ITEM_BASE (item));
 
   if (change != NULL)
     {
-      if (!g_hash_table_replace (change, gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (item)), item))
+      if (!g_hash_table_replace (change, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (item)), item))
         {
           g_warning ("Duplicate item detected in list. Picking one randomly.");
         }
@@ -1437,7 +1438,7 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
 
   tile = gtk_list_item_manager_get_nth (self, position, NULL);
   if (tile)
-    tracker->widget = GTK_LIST_ITEM_WIDGET (tile->widget);
+    tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
 
   gtk_widget_queue_resize (self->widget);
 }

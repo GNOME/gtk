@@ -114,10 +114,10 @@ gtk_column_list_item_factory_update (GtkListItemFactory *factory,
     {
       GtkListItem *cell_item;
 
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (child),
-                                   gtk_list_item_get_position (list_item),
-                                   gtk_list_item_get_item (list_item),
-                                   gtk_list_item_get_selected (list_item));
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (child),
+                                 gtk_list_item_get_position (list_item),
+                                 gtk_list_item_get_item (list_item),
+                                 gtk_list_item_get_selected (list_item));
 
        cell_item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child));
        if (cell_item)
@@ -169,12 +169,13 @@ gtk_column_list_item_factory_add_column (GtkColumnListItemFactory *factory,
                                          GtkColumnViewColumn      *column,
                                          gboolean                  check_bind)
 {
+  GtkListItemBase *base = GTK_LIST_ITEM_BASE (list_item);
   GtkWidget *cell;
 
   cell = gtk_column_view_cell_new (column);
   gtk_list_item_widget_add_child (GTK_LIST_ITEM_WIDGET (list_item), GTK_WIDGET (cell));
-  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (cell),
-                               gtk_list_item_widget_get_position (list_item),
-                               gtk_list_item_widget_get_item (list_item),
-                               gtk_list_item_widget_get_selected (list_item));
+  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
+                             gtk_list_item_base_get_position (base),
+                             gtk_list_item_base_get_item (base),
+                             gtk_list_item_base_get_selected (base));
 }

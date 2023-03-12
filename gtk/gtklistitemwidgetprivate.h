@@ -20,8 +20,9 @@
 #ifndef __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
 #define __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
 
+#include "gtklistitembaseprivate.h"
+
 #include "gtklistitemfactory.h"
-#include "gtkwidget.h"
 
 G_BEGIN_DECLS
 
@@ -37,12 +38,12 @@ typedef struct _GtkListItemWidgetClass GtkListItemWidgetClass;
 
 struct _GtkListItemWidget
 {
-  GtkWidget parent_instance;
+  GtkListItemBase parent_instance;
 };
 
 struct _GtkListItemWidgetClass
 {
-  GtkWidgetClass parent_class;
+  GtkListItemBaseClass parent_class;
 
   void          (* activate_signal)                             (GtkListItemWidget            *self);
 };
@@ -53,10 +54,6 @@ GtkWidget *             gtk_list_item_widget_new                (GtkListItemFact
                                                                  const char             *css_name,
                                                                  GtkAccessibleRole       role);
 
-void                    gtk_list_item_widget_update             (GtkListItemWidget      *self,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
 GtkListItem *           gtk_list_item_widget_get_list_item      (GtkListItemWidget      *self);
 
 void                    gtk_list_item_widget_set_factory        (GtkListItemWidget      *self,
@@ -73,10 +70,6 @@ void                    gtk_list_item_widget_reorder_child      (GtkListItemWidg
                                                                  guint                   position);
 void                    gtk_list_item_widget_remove_child       (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
-
-guint                   gtk_list_item_widget_get_position       (GtkListItemWidget      *self);
-gpointer                gtk_list_item_widget_get_item           (GtkListItemWidget      *self);
-gboolean                gtk_list_item_widget_get_selected       (GtkListItemWidget      *self);
 
 G_END_DECLS
 

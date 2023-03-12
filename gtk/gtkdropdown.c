@@ -219,12 +219,12 @@ selection_changed (GtkSingleSelection *selection,
       gtk_stack_set_visible_child_name (GTK_STACK (self->button_stack), "item");
     }
 
-  if (selected != gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (self->button_item)))
+  if (selected != gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->button_item)))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
-                                   selected,
-                                   gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection)),
-                                   FALSE);
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (self->button_item),
+                                 selected,
+                                 gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection)),
+                                 FALSE);
     }
 
   /* reset the filter so positions are 1-1 */
@@ -246,12 +246,12 @@ selection_item_changed (GtkSingleSelection *selection,
 
   item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
 
-  if (item != gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (self->button_item)))
+  if (item != gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->button_item)))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
-                                   gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)),
-                                   item,
-                                   FALSE);
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (self->button_item),
+                                 gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)),
+                                 item,
+                                 FALSE);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
