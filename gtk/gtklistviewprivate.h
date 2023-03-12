@@ -31,6 +31,7 @@ struct _GtkListView
 
   GtkListItemManager *item_manager;
   gboolean show_separators;
+  gboolean single_click_activate;
 };
 
 struct _GtkListViewClass

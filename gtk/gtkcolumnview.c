@@ -146,6 +146,8 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_ROW);
 
+  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+
   return GTK_LIST_ITEM_BASE (result);
 }
 

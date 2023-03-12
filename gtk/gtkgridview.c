@@ -90,6 +90,7 @@ struct _GtkGridView
   GtkListItemManager *item_manager;
   guint min_columns;
   guint max_columns;
+  gboolean single_click_activate;
   /* set in size_allocate */
   guint n_columns;
   double column_width;
@@ -265,6 +266,8 @@ gtk_grid_view_create_list_widget (GtkListBase *base)
   result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
                                      "child",
                                      GTK_ACCESSIBLE_ROLE_GRID_CELL);
+
+  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
 
   return GTK_LIST_ITEM_BASE (result);
 }
@@ -890,7 +893,7 @@ gtk_grid_view_get_property (GObject    *object,
       break;
 
     case PROP_SINGLE_CLICK_ACTIVATE:
-      g_value_set_boolean (value, gtk_list_item_manager_get_single_click_activate (self->item_manager));
+      g_value_set_boolean (value, self->single_click_activate);
       break;
 
     case PROP_ENABLE_RUBBERBAND:
@@ -1330,12 +1333,23 @@ void
 gtk_grid_view_set_single_click_activate (GtkGridView *self,
                                          gboolean     single_click_activate)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
 
-  if (single_click_activate == gtk_list_item_manager_get_single_click_activate (self->item_manager))
+  if (single_click_activate == self->single_click_activate)
     return;
 
-  gtk_list_item_manager_set_single_click_activate (self->item_manager, single_click_activate);
+  self->single_click_activate = single_click_activate;
+
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (tile->widget), single_click_activate);
+    }
+
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
 }
@@ -1354,7 +1368,7 @@ gtk_grid_view_get_single_click_activate (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), FALSE);
 
-  return gtk_list_item_manager_get_single_click_activate (self->item_manager);
+  return self->single_click_activate;
 }
 
 /**
