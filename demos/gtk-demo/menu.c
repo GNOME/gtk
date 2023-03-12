@@ -71,6 +71,19 @@ open_file (GtkWidget *picker,
   g_object_unref (dialog);
 }
 
+static void
+rotate (GtkWidget *button,
+        GtkWidget *demo)
+{
+  float angle;
+
+  g_object_get (demo, "angle", &angle, NULL);
+
+  angle = fmodf (angle + 90.f, 360.f);
+
+  g_object_set (demo, "angle", angle, NULL);
+}
+
 GtkWidget *
 do_menu (GtkWidget *do_widget)
 {
@@ -109,6 +122,11 @@ do_menu (GtkWidget *do_widget)
       button = gtk_button_new_from_icon_name ("document-open-symbolic");
       gtk_widget_set_tooltip_text (button, "Open File");
       g_signal_connect (button, "clicked", G_CALLBACK (open_file), widget);
+      gtk_box_append (GTK_BOX (box2), button);
+
+      button = gtk_button_new_from_icon_name ("object-rotate-right-symbolic");
+      gtk_widget_set_tooltip_text (button, "Rotate");
+      g_signal_connect (button, "clicked", G_CALLBACK (rotate), widget);
       gtk_box_append (GTK_BOX (box2), button);
 
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.01, 10.0, 0.1);

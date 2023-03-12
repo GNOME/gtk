@@ -5,7 +5,8 @@ enum
 {
   PROP_TEXTURE = 1,
   PROP_FILTER,
-  PROP_SCALE
+  PROP_SCALE,
+  PROP_ANGLE,
 };
 
 struct _Demo3Widget
@@ -14,6 +15,7 @@ struct _Demo3Widget
 
   GdkTexture *texture;
   float scale;
+  float angle;
   GskScalingFilter filter;
 
   GtkWidget *menu;
@@ -30,6 +32,7 @@ static void
 demo3_widget_init (Demo3Widget *self)
 {
   self->scale = 1.f;
+  self->angle = 0.f;
   self->filter = GSK_SCALING_FILTER_LINEAR;
   gtk_widget_init_template (GTK_WIDGET (self));
 }
@@ -52,21 +55,34 @@ demo3_widget_snapshot (GtkWidget   *widget,
 {
   Demo3Widget *self = DEMO3_WIDGET (widget);
   int x, y, width, height;
-  double w, h;
+  double w, h, w2, h2;
   GskRenderNode *node;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
-  w = self->scale * gdk_texture_get_width (self->texture);
-  h = self->scale * gdk_texture_get_height (self->texture);
+  w2 = w = self->scale * gdk_texture_get_width (self->texture);
+  h2 = h = self->scale * gdk_texture_get_height (self->texture);
 
-  x = MAX (0, (width - ceil (w)) / 2);
-  y = MAX (0, (height - ceil (h)) / 2);
+  if (G_APPROX_VALUE (self->angle, 90.f, FLT_EPSILON) ||
+      G_APPROX_VALUE (self->angle, 270.f, FLT_EPSILON))
+    {
+      double s;
+
+      s = w2;
+      w2 = h2;
+      h2 = s;
+    }
+
+  x = MAX (0, (width - ceil (w2)) / 2);
+  y = MAX (0, (height - ceil (h2)) / 2);
 
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (w2 / 2, h2 / 2));
+  gtk_snapshot_rotate (snapshot, self->angle);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- w / 2, - h / 2));
   node = gsk_texture_scale_node_new (self->texture,
                                      &GRAPHENE_RECT_INIT (0, 0, w, h),
                                      self->filter);
@@ -132,6 +148,11 @@ demo3_widget_set_property (GObject      *object,
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
+    case PROP_ANGLE:
+      self->angle = fmodf (g_value_get_float (value), 360.f);
+      gtk_widget_queue_resize (GTK_WIDGET (object));
+      break;
+
     case PROP_FILTER:
       self->filter = g_value_get_enum (value);
       gtk_widget_queue_resize (GTK_WIDGET (object));
@@ -159,6 +180,10 @@ demo3_widget_get_property (GObject     *object,
 
     case PROP_SCALE:
       g_value_set_float (value, self->scale);
+      break;
+
+    case PROP_ANGLE:
+      g_value_set_float (value, self->angle);
       break;
 
     case PROP_FILTER:
@@ -209,6 +234,19 @@ zoom_cb (GtkWidget  *widget,
 }
 
 static void
+rotate_cb (GtkWidget  *widget,
+           const char *action_name,
+           GVariant   *parameter)
+{
+  Demo3Widget *self = DEMO3_WIDGET (widget);
+  int angle;
+
+  g_variant_get (parameter, "i", &angle);
+
+  g_object_set (widget, "angle", fmodf (self->angle + angle, 360.f), NULL);
+}
+
+static void
 demo3_widget_class_init (Demo3WidgetClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -232,6 +270,11 @@ demo3_widget_class_init (Demo3WidgetClass *class)
                           0.0, 10.0, 1.0,
                           G_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class, PROP_ANGLE,
+      g_param_spec_float ("angle", NULL, NULL,
+                          0.0, 360.0, 0.0,
+                          G_PARAM_READWRITE));
+
   g_object_class_install_property (object_class, PROP_FILTER,
       g_param_spec_enum ("filter", NULL, NULL,
                          GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
@@ -241,6 +284,7 @@ demo3_widget_class_init (Demo3WidgetClass *class)
   gtk_widget_class_install_action (widget_class, "zoom.in", NULL, zoom_cb);
   gtk_widget_class_install_action (widget_class, "zoom.out", NULL, zoom_cb);
   gtk_widget_class_install_action (widget_class, "zoom.reset", NULL, zoom_cb);
+  gtk_widget_class_install_action (widget_class, "rotate", "i", rotate_cb);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/menu/demo3widget.ui");
   gtk_widget_class_bind_template_child (widget_class, Demo3Widget, menu);
