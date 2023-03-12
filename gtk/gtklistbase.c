@@ -1920,6 +1920,12 @@ gtk_list_base_split_func (GtkWidget   *widget,
   return GTK_LIST_BASE_GET_CLASS (widget)->split (GTK_LIST_BASE (widget), tile, n_items);
 }
 
+static GtkListItemBase *
+gtk_list_base_create_widget_func (GtkWidget *widget)
+{
+  return GTK_LIST_BASE_GET_CLASS (widget)->create_list_widget (GTK_LIST_BASE (widget));
+}
+
 static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
@@ -1928,9 +1934,8 @@ gtk_list_base_init_real (GtkListBase      *self,
   GtkEventController *controller;
 
   priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
-                                                  g_class->list_item_name,
-                                                  g_class->list_item_role,
-                                                  gtk_list_base_split_func);
+                                                  gtk_list_base_split_func,
+                                                  gtk_list_base_create_widget_func);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;

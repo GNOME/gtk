@@ -25,6 +25,7 @@
 #include "gtklistbaseprivate.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtklistitemwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksingleselection.h"
@@ -253,6 +254,19 @@ gtk_grid_view_split (GtkListBase *base,
                                tile->area.height);
   
   return split;
+}
+
+static GtkListItemBase *
+gtk_grid_view_create_list_widget (GtkListBase *base)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+                                     "child",
+                                     GTK_ACCESSIBLE_ROLE_GRID_CELL);
+
+  return GTK_LIST_ITEM_BASE (result);
 }
 
 static gboolean
@@ -954,9 +968,8 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  list_base_class->list_item_name = "child";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
   list_base_class->split = gtk_grid_view_split;
+  list_base_class->create_list_widget = gtk_grid_view_create_list_widget;
   list_base_class->get_allocation = gtk_grid_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_grid_view_get_position_from_allocation;

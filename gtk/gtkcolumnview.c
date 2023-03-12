@@ -136,14 +136,26 @@ gtk_column_list_view_init (GtkColumnListView *view)
 {
 }
 
+static GtkListItemBase *
+gtk_column_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+                                     "row",
+                                     GTK_ACCESSIBLE_ROLE_ROW);
+
+  return GTK_LIST_ITEM_BASE (result);
+}
+
 static void
 gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
 {
   GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  list_base_class->list_item_name = "row";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_ROW;
+  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
 
   gtk_widget_class_set_css_name (widget_class, I_("listview"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);

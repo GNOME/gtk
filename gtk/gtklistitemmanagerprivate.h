@@ -24,6 +24,7 @@
 #include "gtk/gtktypes.h"
 #include "gtk/gtkenums.h"
 
+#include "gtk/gtklistitembaseprivate.h"
 #include "gtk/gtklistitemfactory.h"
 #include "gtk/gtkrbtreeprivate.h"
 #include "gtk/gtkselectionmodel.h"
@@ -62,9 +63,8 @@ struct _GtkListTileAugment
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
 GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget,
-                                                                 const char             *item_css_name,
-                                                                 GtkAccessibleRole       item_role,
-                                                                 GtkListTile *           (* split_func) (GtkWidget *, GtkListTile *, guint));
+                                                                 GtkListTile *           (* split_func) (GtkWidget *, GtkListTile *, guint),
+                                                                 GtkListItemBase *       (* create_widget) (GtkWidget *));
 
 void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
                                                                  GdkRectangle           *out_bounds);

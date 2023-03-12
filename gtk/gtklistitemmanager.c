@@ -33,13 +33,12 @@ struct _GtkListItemManager
   GtkSelectionModel *model;
   GtkListItemFactory *factory;
   gboolean single_click_activate;
-  const char *item_css_name;
-  GtkAccessibleRole item_role;
 
   GtkRbTree *items;
   GSList *trackers;
 
   GtkListTile * (* split_func) (GtkWidget *, GtkListTile *, guint);
+  GtkListItemBase * (* create_widget) (GtkWidget *);
 };
 
 struct _GtkListItemManagerClass
@@ -131,9 +130,8 @@ gtk_list_item_manager_clear_node (gpointer _tile)
 
 GtkListItemManager *
 gtk_list_item_manager_new (GtkWidget         *widget,
-                           const char        *item_css_name,
-                           GtkAccessibleRole  item_role,
-                           GtkListTile *      (* split_func) (GtkWidget *, GtkListTile *, guint))
+                           GtkListTile *      (* split_func) (GtkWidget *, GtkListTile *, guint),
+                           GtkListItemBase *  (* create_widget) (GtkWidget *))
 {
   GtkListItemManager *self;
 
@@ -143,9 +141,8 @@ gtk_list_item_manager_new (GtkWidget         *widget,
 
   /* not taking a ref because the widget refs us */
   self->widget = widget;
-  self->item_css_name = g_intern_string (item_css_name);
-  self->item_role = item_role;
   self->split_func = split_func;
+  self->create_widget = create_widget;
 
   self->items = gtk_rb_tree_new_for_size (sizeof (GtkListTile),
                                           sizeof (GtkListTileAugment),
@@ -1191,24 +1188,22 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
                                          guint               position,
                                          GtkWidget          *prev_sibling)
 {
-  GtkWidget *result;
+  GtkListItemBase *result;
   gpointer item;
   gboolean selected;
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
-  result = gtk_list_item_widget_new (self->factory,
-                                     self->item_css_name,
-                                     self->item_role);
+  result = self->create_widget (self->widget);
 
   gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (result), position, item, selected);
+  gtk_list_item_base_update (result, position, item, selected);
   g_object_unref (item);
-  gtk_widget_insert_after (result, self->widget, prev_sibling);
+  gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
 
   return GTK_WIDGET (result);
 }

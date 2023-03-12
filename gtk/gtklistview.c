@@ -24,6 +24,7 @@
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtklistitemwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
@@ -213,6 +214,19 @@ gtk_list_view_split (GtkListBase *base,
                           });
 
   return new_tile;
+}
+
+static GtkListItemBase *
+gtk_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_list_item_widget_new (gtk_list_item_manager_get_factory (self->item_manager),
+                                     "row",
+                                     GTK_ACCESSIBLE_ROLE_LIST_ITEM);
+
+  return GTK_LIST_ITEM_BASE (result);
 }
 
 static gboolean
@@ -698,9 +712,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  list_base_class->list_item_name = "row";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
   list_base_class->split = gtk_list_view_split;
+  list_base_class->create_list_widget = gtk_list_view_create_list_widget;
   list_base_class->get_allocation = gtk_list_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;

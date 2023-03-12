@@ -34,12 +34,10 @@ struct _GtkListBaseClass
 {
   GtkWidgetClass parent_class;
 
-  const char *         list_item_name;
-  GtkAccessibleRole    list_item_role;
-
   GtkListTile *        (* split)                                (GtkListBase            *self,
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
+  GtkListItemBase *    (* create_list_widget)                   (GtkListBase            *self);
 
   gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,
