@@ -112,13 +112,19 @@ gtk_column_list_item_factory_update (GtkListItemFactory *factory,
        child;
        child = gtk_widget_get_next_sibling (child))
     {
+      GtkListItem *cell_item;
+
       gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (child),
                                    gtk_list_item_get_position (list_item),
                                    gtk_list_item_get_item (list_item),
                                    gtk_list_item_get_selected (list_item));
 
-       selectable &= gtk_list_item_get_selectable (gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child)));
-       activatable &= gtk_list_item_get_activatable (gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child)));
+       cell_item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child));
+       if (cell_item)
+         {
+           selectable &= gtk_list_item_get_selectable (cell_item);
+           activatable &= gtk_list_item_get_activatable (cell_item);
+        }
     }
 
   /* This really does not belong here, but doing better
