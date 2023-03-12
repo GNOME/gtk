@@ -38,8 +38,7 @@ struct _GtkListItemManager
   GtkRbTree *items;
   GSList *trackers;
 
-  GtkListTile * (* split_func) (gpointer, GtkListTile *, guint);
-  gpointer user_data;
+  GtkListTile * (* split_func) (GtkWidget *, GtkListTile *, guint);
 };
 
 struct _GtkListItemManagerClass
@@ -133,8 +132,7 @@ GtkListItemManager *
 gtk_list_item_manager_new (GtkWidget         *widget,
                            const char        *item_css_name,
                            GtkAccessibleRole  item_role,
-                           GtkListTile *      (* split_func) (gpointer, GtkListTile *, guint),
-                           gpointer           user_data)
+                           GtkListTile *      (* split_func) (GtkWidget *, GtkListTile *, guint))
 {
   GtkListItemManager *self;
 
@@ -147,7 +145,6 @@ gtk_list_item_manager_new (GtkWidget         *widget,
   self->item_css_name = g_intern_string (item_css_name);
   self->item_role = item_role;
   self->split_func = split_func;
-  self->user_data = user_data;
 
   self->items = gtk_rb_tree_new_for_size (sizeof (GtkListTile),
                                           sizeof (GtkListTileAugment),
@@ -571,7 +568,7 @@ gtk_list_item_manager_ensure_split (GtkListItemManager *self,
                                     GtkListTile        *tile,
                                     guint               n_items)
 {
-  return self->split_func (self->user_data, tile, n_items);
+  return self->split_func (self->widget, tile, n_items);
 }
 
 static void
