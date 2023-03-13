@@ -277,7 +277,7 @@ demo3_widget_class_init (Demo3WidgetClass *class)
 
   g_object_class_install_property (object_class, PROP_SCALE,
       g_param_spec_float ("scale", NULL, NULL,
-                          0.0, 10.0, 1.0,
+                          0.0, 1024.0, 1.0,
                           G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_ANGLE,

@@ -84,6 +84,16 @@ rotate (GtkWidget *button,
   g_object_set (demo, "angle", angle, NULL);
 }
 
+static void
+scale_changed (GtkRange  *range,
+               GtkWidget *widget)
+{
+  float scale;
+
+  scale = (float) pow (2., gtk_range_get_value (range));
+  g_object_set (widget, "scale", scale, NULL);
+}
+
 GtkWidget *
 do_menu (GtkWidget *do_widget)
 {
@@ -129,7 +139,7 @@ do_menu (GtkWidget *do_widget)
       g_signal_connect (button, "clicked", G_CALLBACK (rotate), widget);
       gtk_box_append (GTK_BOX (box2), button);
 
-      scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0.01, 10.0, 0.1);
+      scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, -10, 10.0, 0.1);
       gtk_widget_set_tooltip_text (scale, "Zoom");
       gtk_range_set_value (GTK_RANGE (scale), 1.0);
       gtk_widget_set_hexpand (scale, TRUE);
@@ -140,10 +150,8 @@ do_menu (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (box2), dropdown);
 
       g_object_bind_property (dropdown, "selected", widget, "filter", G_BINDING_DEFAULT);
- 
-      g_object_bind_property (gtk_range_get_adjustment (GTK_RANGE (scale)), "value",
-                              widget, "scale",
-                              G_BINDING_BIDIRECTIONAL);
+
+      g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed), widget);
     }
 
   if (!gtk_widget_get_visible (window))
