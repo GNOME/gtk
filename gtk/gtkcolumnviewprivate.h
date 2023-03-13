@@ -25,17 +25,17 @@
 #include "gtk/gtksizerequest.h"
 
 #include "gtk/gtkcolumnviewsorterprivate.h"
-#include "gtk/gtklistitemwidgetprivate.h"
+#include "gtk/gtkcolumnviewrowwidgetprivate.h"
 
-GtkListItemWidget *     gtk_column_view_get_header_widget       (GtkColumnView          *self);
+GtkColumnViewRowWidget *gtk_column_view_get_header_widget       (GtkColumnView          *self);
 GtkListView *           gtk_column_view_get_list_view           (GtkColumnView          *self);
 
 void                    gtk_column_view_measure_across          (GtkColumnView          *self,
                                                                  int                    *minimum,
                                                                  int                    *natural);
 
-void                    gtk_column_view_distribute_width        (GtkColumnView    *self,
-                                                                 int               width,
-                                                                 GtkRequestedSize *sizes);
+void                    gtk_column_view_distribute_width        (GtkColumnView          *self,
+                                                                 int                     width,
+                                                                 GtkRequestedSize       *sizes);
 
 #endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */

@@ -23,9 +23,9 @@
 #include "gtkcolumnviewsorterprivate.h"
 
 #include "gtkcolumnviewprivate.h"
+#include "gtkcolumnviewrowwidgetprivate.h"
 #include "gtkcolumnviewtitleprivate.h"
 #include "gtklistbaseprivate.h"
-#include "gtklistitemwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
@@ -528,17 +528,17 @@ gtk_column_view_column_create_cells (GtkColumnViewColumn *self)
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
-      GtkListItemWidget *list_item;
+      GtkColumnViewRowWidget *list_item;
       GtkListItemBase *base;
       GtkWidget *cell;
 
       if (!gtk_widget_get_root (row))
         continue;
 
-      list_item = GTK_LIST_ITEM_WIDGET (row);
+      list_item = GTK_COLUMN_VIEW_ROW_WIDGET (row);
       base = GTK_LIST_ITEM_BASE (row);
       cell = gtk_column_view_cell_new (self);
-      gtk_list_item_widget_add_child (list_item, cell);
+      gtk_column_view_row_widget_add_child (list_item, cell);
       gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
                                  gtk_list_item_base_get_position (base),
                                  gtk_list_item_base_get_item (base),
@@ -561,7 +561,7 @@ gtk_column_view_column_create_header (GtkColumnViewColumn *self)
 
   self->header = gtk_column_view_title_new (self);
   gtk_widget_set_visible (self->header, self->visible);
-  gtk_list_item_widget_add_child (gtk_column_view_get_header_widget (self->view),
+  gtk_column_view_row_widget_add_child (gtk_column_view_get_header_widget (self->view),
                                   self->header);
   gtk_column_view_column_queue_resize (self);
 }
@@ -572,7 +572,7 @@ gtk_column_view_column_remove_header (GtkColumnViewColumn *self)
   if (self->header == NULL)
     return;
 
-  gtk_list_item_widget_remove_child (gtk_column_view_get_header_widget (self->view),
+  gtk_column_view_row_widget_remove_child (gtk_column_view_get_header_widget (self->view),
                                      self->header);
   self->header = NULL;
   gtk_column_view_column_queue_resize (self);
@@ -634,16 +634,16 @@ gtk_column_view_column_set_position (GtkColumnViewColumn *self,
 {
   GtkColumnViewCell *cell;
 
-  gtk_list_item_widget_reorder_child (gtk_column_view_get_header_widget (self->view),
+  gtk_column_view_row_widget_reorder_child (gtk_column_view_get_header_widget (self->view),
                                       self->header,
                                       position);
 
   for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
     {
-      GtkListItemWidget *list_item;
+      GtkColumnViewRowWidget *list_item;
 
-      list_item = GTK_LIST_ITEM_WIDGET (gtk_widget_get_parent (GTK_WIDGET (cell)));
-      gtk_list_item_widget_reorder_child (list_item, GTK_WIDGET (cell), position);
+      list_item = GTK_COLUMN_VIEW_ROW_WIDGET (gtk_widget_get_parent (GTK_WIDGET (cell)));
+      gtk_column_view_row_widget_reorder_child (list_item, GTK_WIDGET (cell), position);
     }
 }
 

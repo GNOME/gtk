@@ -49,7 +49,7 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
                                     gpointer            data)
 {
   GtkColumnListItemFactory *self = GTK_COLUMN_LIST_ITEM_FACTORY (factory);
-  GtkListItemWidget *widget = data;
+  GtkColumnViewRowWidget *widget = data;
   GListModel *columns;
   guint i;
 
@@ -82,14 +82,14 @@ gtk_column_list_item_factory_teardown (GtkListItemFactory *factory,
                                        GFunc               func,
                                        gpointer            data)
 {
-  GtkListItemWidget *widget = data;
+  GtkColumnViewRowWidget *widget = data;
   GtkWidget *child;
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->teardown (factory, item, unbind, func, data);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (widget))))
     {
-      gtk_list_item_widget_remove_child (GTK_LIST_ITEM_WIDGET (widget), child);
+      gtk_column_view_row_widget_remove_child (GTK_COLUMN_VIEW_ROW_WIDGET (widget), child);
     }
 }
 
@@ -165,7 +165,7 @@ gtk_column_list_item_factory_new (GtkColumnView *view)
 
 void
 gtk_column_list_item_factory_add_column (GtkColumnListItemFactory *factory,
-                                         GtkListItemWidget        *list_item,
+                                         GtkColumnViewRowWidget   *list_item,
                                          GtkColumnViewColumn      *column,
                                          gboolean                  check_bind)
 {
@@ -173,7 +173,7 @@ gtk_column_list_item_factory_add_column (GtkColumnListItemFactory *factory,
   GtkWidget *cell;
 
   cell = gtk_column_view_cell_new (column);
-  gtk_list_item_widget_add_child (GTK_LIST_ITEM_WIDGET (list_item), GTK_WIDGET (cell));
+  gtk_column_view_row_widget_add_child (GTK_COLUMN_VIEW_ROW_WIDGET (list_item), GTK_WIDGET (cell));
   gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
                              gtk_list_item_base_get_position (base),
                              gtk_list_item_base_get_item (base),

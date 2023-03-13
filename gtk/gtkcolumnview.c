@@ -142,7 +142,7 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
   GtkListView *self = GTK_LIST_VIEW (base);
   GtkWidget *result;
 
-  result = gtk_list_item_widget_new (self->factory,
+  result = gtk_column_view_row_widget_new (self->factory,
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_ROW);
 
@@ -924,7 +924,7 @@ gtk_column_view_in_header (GtkColumnView       *self,
   GtkWidget *header;
   graphene_rect_t rect;
 
-header = gtk_column_view_column_get_header (column);
+  header = gtk_column_view_column_get_header (column);
 
   if (!gtk_widget_compute_bounds (header, self->header, &rect))
     return FALSE;
@@ -1288,7 +1288,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_list_item_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_ROW);
+  self->header = gtk_column_view_row_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_ROW);
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
@@ -1640,10 +1640,10 @@ gtk_column_view_measure_across (GtkColumnView *self,
   *natural = nat;
 }
 
-GtkListItemWidget *
+GtkColumnViewRowWidget *
 gtk_column_view_get_header_widget (GtkColumnView *self)
 {
-  return GTK_LIST_ITEM_WIDGET (self->header);
+  return GTK_COLUMN_VIEW_ROW_WIDGET (self->header);
 }
 
 GtkListView *

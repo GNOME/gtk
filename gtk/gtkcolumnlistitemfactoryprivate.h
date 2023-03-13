@@ -20,8 +20,8 @@
 #ifndef __GTK_COLUMN_LIST_ITEM_FACTORY_H__
 #define __GTK_COLUMN_LIST_ITEM_FACTORY_H__
 
-#include <gtk/gtklistitemwidgetprivate.h>
 #include <gtk/gtkcolumnview.h>
+#include <gtk/gtkcolumnviewrowwidgetprivate.h>
 
 G_BEGIN_DECLS
 
@@ -47,12 +47,12 @@ GtkColumnListItemFactory *
                         gtk_column_list_item_factory_new        (GtkColumnView          *view);
 
 void                    gtk_column_list_item_factory_add_column (GtkColumnListItemFactory       *factory,
-                                                                 GtkListItemWidget              *list_item,
+                                                                 GtkColumnViewRowWidget         *list_item,
                                                                  GtkColumnViewColumn            *column,
                                                                  gboolean                        check_bind);
 void                    gtk_column_list_item_factory_remove_column
                                                                 (GtkColumnListItemFactory       *factory,
-                                                                 GtkListItemWidget              *list_item,
+                                                                 GtkColumnViewRowWidget         *list_item,
                                                                  guint                           col_pos,
                                                                  GtkColumnViewColumn            *column);
 
