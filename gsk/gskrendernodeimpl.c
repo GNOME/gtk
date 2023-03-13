@@ -1573,6 +1573,10 @@ gsk_texture_node_get_texture (const GskRenderNode *node)
  * Creates a `GskRenderNode` that will render the given
  * @texture into the area given by @bounds.
  *
+ * Note that GSK applies linear filtering when textures are
+ * scaled and transformed. See [class@Gsk.TextureScaleNode]
+ * for a way to influence filtering.
+ *
  * Returns: (transfer full) (type GskTextureNode): A new `GskRenderNode`
  */
 GskRenderNode *
@@ -1754,7 +1758,11 @@ gsk_texture_scale_node_get_filter (const GskRenderNode *node)
  * @filter: how to scale the texture
  *
  * Creates a node that scales the texture to the size given by the
- * bounds and the filter and then places it at the bounds' position.
+ * bounds using the filter and then places it at the bounds' position.
+ *
+ * Note that further scaling and other transformations which are
+ * applied to the node will apply linear filtering to the resulting
+ * texture, as usual.
  *
  * This node is intended for tight control over scaling applied
  * to a texture, such as in image editors and requires the
