@@ -67,15 +67,13 @@ demo3_widget_snapshot (GtkWidget   *widget,
   if (G_APPROX_VALUE (self->angle, 90.f, FLT_EPSILON) ||
       G_APPROX_VALUE (self->angle, 270.f, FLT_EPSILON))
     {
-      double s;
-
-      s = w2;
+      double s = w2;
       w2 = h2;
       h2 = s;
     }
 
-  x = MAX (0, (width - ceil (w2)) / 2);
-  y = MAX (0, (height - ceil (h2)) / 2);
+  x = (width - ceil (w2)) / 2;
+  y = (height - ceil (h2)) / 2;
 
   gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
   gtk_snapshot_save (snapshot);
@@ -102,14 +100,26 @@ demo3_widget_measure (GtkWidget      *widget,
                       int            *natural_baseline)
 {
   Demo3Widget *self = DEMO3_WIDGET (widget);
+  int width, height;
   int size;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    size = gdk_texture_get_width (self->texture);
-  else
-    size = gdk_texture_get_height (self->texture);
+  width = gdk_texture_get_width (self->texture);
+  height = gdk_texture_get_height (self->texture);
 
-  *minimum = *natural = self->scale * size;
+  if (G_APPROX_VALUE (self->angle, 90.f, FLT_EPSILON) ||
+      G_APPROX_VALUE (self->angle, 270.f, FLT_EPSILON))
+    {
+      int s = width;
+      width = height;
+      height = s;
+    }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    size = width;
+  else
+    size = height;
+
+  *minimum = *natural = (int) ceil (self->scale * size);
 }
 
 static void
