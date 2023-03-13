@@ -28,6 +28,80 @@ struct _Demo3WidgetClass
 
 G_DEFINE_TYPE (Demo3Widget, demo3_widget, GTK_TYPE_WIDGET)
 
+static gboolean
+query_tooltip (GtkWidget  *widget,
+               int         x,
+               int         y,
+               gboolean    keyboard_mode,
+               GtkTooltip *tooltip,
+               gpointer    data)
+{
+  Demo3Widget *self = DEMO3_WIDGET (widget);
+  GtkWidget *grid;
+  GtkWidget *label;
+  char *s, *s2;
+  const char *filter[] = { "Linear", "Nearest", "Trilinear" };
+  int precision, l;
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  label = gtk_label_new ("Texture");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  s = g_strdup_printf ("%d\342\200\206\303\227\342\200\206%d",
+                       gdk_texture_get_width (self->texture),
+                       gdk_texture_get_height (self->texture));
+  label = gtk_label_new (s);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
+
+  label = gtk_label_new ("Rotation");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  s = g_strdup_printf ("%.1f", self->angle);
+  if (g_str_has_suffix (s, ".0"))
+    s[strlen (s) - 2] = '\0';
+  s2 = g_strconcat (s, "\302\260", NULL);
+  label = gtk_label_new (s2);
+  g_free (s2);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
+
+  label = gtk_label_new ("Scale");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+
+  precision = 1;
+  do {
+    s = g_strdup_printf ("%.*f", precision, self->scale);
+    l = strlen (s) - 1;
+    while (s[l] == '0')
+      l--;
+    if (s[l] == '.')
+      s[l] = '\0';
+    precision++;
+  } while (strcmp (s, "0") == 0);
+
+  label = gtk_label_new (s);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 2, 1, 1);
+
+  label = gtk_label_new ("Filter");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  label = gtk_label_new (filter[self->filter]);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 3, 1, 1);
+
+  gtk_tooltip_set_custom (tooltip, grid);
+
+  return TRUE;
+}
+
 static void
 demo3_widget_init (Demo3Widget *self)
 {
@@ -316,7 +390,12 @@ demo3_widget_new (const char *resource)
 
   texture = gdk_texture_new_from_resource (resource);
 
-  self = g_object_new (DEMO3_TYPE_WIDGET, "texture", texture, NULL);
+  self = g_object_new (DEMO3_TYPE_WIDGET,
+                       "texture", texture,
+                       "has-tooltip", TRUE,
+                       NULL);
+
+  g_signal_connect (self, "query-tooltip", G_CALLBACK (query_tooltip), NULL);
 
   g_object_unref (texture);
 
