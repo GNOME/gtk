@@ -4634,10 +4634,12 @@ show_and_select_files (GtkFileChooserWidget *impl,
       if (!_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
           GFileInfo *info = _gtk_file_system_model_get_info (fsmodel, &iter);
+          gboolean has_is_hidden = g_file_info_has_attribute (info, "standard::is-hidden");
+          gboolean has_is_backup = g_file_info_has_attribute (info, "standard::is-backup");
 
           if (!enabled_hidden &&
-              (g_file_info_get_is_hidden (info) ||
-               g_file_info_get_is_backup (info)))
+              ((has_is_hidden && g_file_info_get_is_hidden (info)) ||
+               (has_is_backup && g_file_info_get_is_backup (info))))
             {
               g_object_set (impl, "show-hidden", TRUE, NULL);
               enabled_hidden = TRUE;

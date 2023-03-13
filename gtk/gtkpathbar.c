@@ -1762,7 +1762,8 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
     }
 
   display_name = g_file_info_get_display_name (info);
-  is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
+  is_hidden = g_file_info_get_attribute_boolean (info, "standard::is-hidden") ||
+              g_file_info_get_attribute_boolean (info, "standard::is-backup");
 
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
