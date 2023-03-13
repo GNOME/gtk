@@ -23,9 +23,7 @@
 
 #include "gtkboxlayout.h"
 #include "gtkbuildable.h"
-#include "gtkcolumnlistitemfactoryprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
-#include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdropcontrollermotion.h"
@@ -142,9 +140,7 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
   GtkListView *self = GTK_LIST_VIEW (base);
   GtkWidget *result;
 
-  result = gtk_column_view_row_widget_new (self->factory,
-                                     "row",
-                                     GTK_ACCESSIBLE_ROLE_ROW);
+  result = gtk_column_view_row_widget_new (FALSE);
 
   gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
 
@@ -173,7 +169,6 @@ struct _GtkColumnView
   GtkWidget *header;
 
   GtkListView *listview;
-  GtkColumnListItemFactory *factory;
 
   GtkSorter *sorter;
 
@@ -503,7 +498,6 @@ gtk_column_view_dispose (GObject *object)
   g_clear_pointer (&self->header, gtk_widget_unparent);
 
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
-  g_clear_object (&self->factory);
 
   g_clear_object (&self->sorter);
   clear_adjustment (self);
@@ -1288,9 +1282,8 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_column_view_row_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_ROW);
+  self->header = gtk_column_view_row_widget_new (TRUE);
   gtk_widget_set_can_focus (self->header, FALSE);
-  gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
@@ -1320,9 +1313,7 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = GTK_SORTER (gtk_column_view_sorter_new ());
-  self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (g_object_new (GTK_TYPE_COLUMN_LIST_VIEW, NULL));
-  gtk_list_view_set_factory (self->listview, GTK_LIST_ITEM_FACTORY (self->factory));
   gtk_widget_set_hexpand (GTK_WIDGET (self->listview), TRUE);
   gtk_widget_set_vexpand (GTK_WIDGET (self->listview), TRUE);
   g_signal_connect (self->listview, "activate", G_CALLBACK (gtk_column_view_activate_cb), self);

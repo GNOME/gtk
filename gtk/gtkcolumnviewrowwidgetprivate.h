@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Benjamin Otte
+ * Copyright © 2023 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,9 +46,7 @@ struct _GtkColumnViewRowWidgetClass
 
 GType                   gtk_column_view_row_widget_get_type             (void) G_GNUC_CONST;
 
-GtkWidget *             gtk_column_view_row_widget_new                  (GtkListItemFactory     *factory,
-                                                                         const char             *css_name,
-                                                                         GtkAccessibleRole       role);
+GtkWidget *             gtk_column_view_row_widget_new                  (gboolean                is_header);
 
 void                    gtk_column_view_row_widget_add_child            (GtkColumnViewRowWidget *self,
                                                                          GtkWidget              *child);

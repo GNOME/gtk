@@ -27,10 +27,7 @@
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 #include "gtklistbaseprivate.h"
-#include "gtkmain.h"
-#include "gtkselectionmodel.h"
 #include "gtkwidget.h"
-#include "gtkwidgetprivate.h"
 
 G_DEFINE_TYPE (GtkListItemWidget, gtk_list_item_widget, GTK_TYPE_LIST_FACTORY_WIDGET)
 
