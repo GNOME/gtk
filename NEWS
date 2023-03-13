@@ -1,5 +1,51 @@
-Overview of Changes in 4.10.1, xx-xx-xxxx
+Overview of Changes in 4.10.1, 14-03-2023
 =========================================
+
+* GtkFileChooser
+ - Improve search performance
+ - Be safe against pathless files
+ - Fix memory leaks
+ - Only show local files in recent files
+ - Show most recent files first
+ - Make files non-selectable in selet_folder mode
+
+* GtkListView / GtkColumnView / GtkGridView
+ - Fix scrolling problems
+ - Support CSS border-spacing
+
+* GtkComboBox
+ - Fix a size allocation problem
+
+* gtk
+ - Size allocation fixes
+
+* Accessibility
+ - Miscellaneous property fixes and improvements
+
+* Wayland
+ - Fix an ordering problem in surface disposal
+
+* Windows
+ - Fix Visual Studio build with older GLib
+
+* Translation updates
+ Basque
+ Bulgarian
+ Catalan
+ Czech
+ Danish
+ Finnish
+ Friulian
+ Galician
+ Georgian
+ Hungarian
+ Lithuanian
+ Polish
+ Portuguese
+ Swedish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.10.0, 04-03-2023
 =========================================
