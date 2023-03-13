@@ -108,6 +108,7 @@ $_switch_margin: if($_sizevariant=='default', 10px, 7px);
 .view,
 %view {
   color: $text_color;
+  caret-color: $caret_color;
   background-color: $base_color;
 
   &:backdrop {
