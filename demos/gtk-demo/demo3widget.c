@@ -135,6 +135,8 @@ demo3_widget_size_allocate (GtkWidget *widget,
   gtk_popover_present (GTK_POPOVER (self->menu));
 }
 
+static void update_actions (Demo3Widget *self);
+
 static void
 demo3_widget_set_property (GObject      *object,
                            guint         prop_id,
@@ -153,6 +155,7 @@ demo3_widget_set_property (GObject      *object,
 
     case PROP_SCALE:
       self->scale = g_value_get_float (value);
+      update_actions (self);
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
@@ -220,6 +223,14 @@ pressed_cb (GtkGestureClick *gesture,
 }
 
 static void
+update_actions (Demo3Widget *self)
+{
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.in", self->scale < 1024.);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.out", self->scale > 1./1024.);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.reset", self->scale != 1.);
+}
+
+static void
 zoom_cb (GtkWidget  *widget,
          const char *action_name,
          GVariant   *parameter)
@@ -228,15 +239,13 @@ zoom_cb (GtkWidget  *widget,
   float scale;
 
   if (g_str_equal (action_name, "zoom.in"))
-    scale = MIN (10, self->scale * M_SQRT2);
+    scale = MIN (1024., self->scale * M_SQRT2);
   else if (g_str_equal (action_name, "zoom.out"))
-    scale = MAX (0.01, self->scale / M_SQRT2);
-  else
+    scale = MAX (1./1024., self->scale / M_SQRT2);
+  else if (g_str_equal (action_name, "zoom.reset"))
     scale = 1.0;
-
-  gtk_widget_action_set_enabled (widget, "zoom.in", scale < 10);
-  gtk_widget_action_set_enabled (widget, "zoom.out", scale > 0.01);
-  gtk_widget_action_set_enabled (widget, "zoom.reset", scale != 1);
+  else
+    g_assert_not_reached ();
 
   g_object_set (widget, "scale", scale, NULL);
 }
@@ -275,7 +284,7 @@ demo3_widget_class_init (Demo3WidgetClass *class)
 
   g_object_class_install_property (object_class, PROP_SCALE,
       g_param_spec_float ("scale", NULL, NULL,
-                          0.0, 1024.0, 1.0,
+                          1./1024., 1024., 1.0,
                           G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_ANGLE,
