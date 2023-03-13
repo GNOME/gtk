@@ -2054,16 +2054,13 @@ gtk_snapshot_append_scaled_texture (GtkSnapshot           *snapshot,
                                     const graphene_rect_t *bounds)
 {
   GskRenderNode *node;
-  graphene_rect_t real_bounds;
-  float scale_x, scale_y, dx, dy;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GDK_IS_TEXTURE (texture));
   g_return_if_fail (bounds != NULL);
 
-  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
-  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
-  node = gsk_texture_scale_node_new (texture, &real_bounds, filter);
+  gtk_snapshot_ensure_identity (snapshot);
+  node = gsk_texture_scale_node_new (texture, bounds, filter);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }

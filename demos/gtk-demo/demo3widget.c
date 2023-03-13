@@ -56,7 +56,6 @@ demo3_widget_snapshot (GtkWidget   *widget,
   Demo3Widget *self = DEMO3_WIDGET (widget);
   int x, y, width, height;
   double w, h, w2, h2;
-  GskRenderNode *node;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
@@ -81,11 +80,10 @@ demo3_widget_snapshot (GtkWidget   *widget,
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (w2 / 2, h2 / 2));
   gtk_snapshot_rotate (snapshot, self->angle);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- w / 2, - h / 2));
-  node = gsk_texture_scale_node_new (self->texture,
-                                     &GRAPHENE_RECT_INIT (0, 0, w, h),
-                                     self->filter);
-  gtk_snapshot_append_node (snapshot, node);
-  gsk_render_node_unref (node);
+  gtk_snapshot_append_scaled_texture (snapshot,
+                                      self->texture,
+                                      self->filter,
+                                      &GRAPHENE_RECT_INIT (0, 0, w, h));
   gtk_snapshot_restore (snapshot);
   gtk_snapshot_pop (snapshot);
 }
