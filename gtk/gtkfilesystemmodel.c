@@ -442,16 +442,23 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
 }
 
 static gboolean
-node_should_be_visible (GtkFileSystemModel *model, guint id, gboolean filtered_out)
+node_should_be_visible (GtkFileSystemModel *model,
+                        guint               id,
+                        gboolean            filtered_out)
 {
   FileModelNode *node = get_node (model, id);
+  gboolean has_is_hidden, has_is_backup;
   gboolean result;
 
   if (node->info == NULL)
     return FALSE;
 
+  has_is_hidden = g_file_info_has_attribute (node->info, "standard::is-hidden");
+  has_is_backup = g_file_info_has_attribute (node->info, "standard::is-backup");
+
   if (!model->show_hidden &&
-      (g_file_info_get_is_hidden (node->info) || g_file_info_get_is_backup (node->info)))
+      ((has_is_hidden && g_file_info_get_is_hidden (node->info)) ||
+       (has_is_backup && g_file_info_get_is_backup (node->info))))
     return FALSE;
 
   if (_gtk_file_info_consider_as_directory (node->info))
