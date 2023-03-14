@@ -28,6 +28,80 @@ struct _Demo3WidgetClass
 
 G_DEFINE_TYPE (Demo3Widget, demo3_widget, GTK_TYPE_WIDGET)
 
+static gboolean
+query_tooltip (GtkWidget  *widget,
+               int         x,
+               int         y,
+               gboolean    keyboard_mode,
+               GtkTooltip *tooltip,
+               gpointer    data)
+{
+  Demo3Widget *self = DEMO3_WIDGET (widget);
+  GtkWidget *grid;
+  GtkWidget *label;
+  char *s, *s2;
+  const char *filter[] = { "Linear", "Nearest", "Trilinear" };
+  int precision, l;
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  label = gtk_label_new ("Texture");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  s = g_strdup_printf ("%d\342\200\206\303\227\342\200\206%d",
+                       gdk_texture_get_width (self->texture),
+                       gdk_texture_get_height (self->texture));
+  label = gtk_label_new (s);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
+
+  label = gtk_label_new ("Rotation");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  s = g_strdup_printf ("%.1f", self->angle);
+  if (g_str_has_suffix (s, ".0"))
+    s[strlen (s) - 2] = '\0';
+  s2 = g_strconcat (s, "\302\260", NULL);
+  label = gtk_label_new (s2);
+  g_free (s2);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
+
+  label = gtk_label_new ("Scale");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+
+  precision = 1;
+  do {
+    s = g_strdup_printf ("%.*f", precision, self->scale);
+    l = strlen (s) - 1;
+    while (s[l] == '0')
+      l--;
+    if (s[l] == '.')
+      s[l] = '\0';
+    precision++;
+  } while (strcmp (s, "0") == 0);
+
+  label = gtk_label_new (s);
+  g_free (s);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 2, 1, 1);
+
+  label = gtk_label_new ("Filter");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  label = gtk_label_new (filter[self->filter]);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 3, 1, 1);
+
+  gtk_tooltip_set_custom (tooltip, grid);
+
+  return TRUE;
+}
+
 static void
 demo3_widget_init (Demo3Widget *self)
 {
@@ -135,6 +209,8 @@ demo3_widget_size_allocate (GtkWidget *widget,
   gtk_popover_present (GTK_POPOVER (self->menu));
 }
 
+static void update_actions (Demo3Widget *self);
+
 static void
 demo3_widget_set_property (GObject      *object,
                            guint         prop_id,
@@ -153,6 +229,7 @@ demo3_widget_set_property (GObject      *object,
 
     case PROP_SCALE:
       self->scale = g_value_get_float (value);
+      update_actions (self);
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
 
@@ -220,6 +297,14 @@ pressed_cb (GtkGestureClick *gesture,
 }
 
 static void
+update_actions (Demo3Widget *self)
+{
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.in", self->scale < 1024.);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.out", self->scale > 1./1024.);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.reset", self->scale != 1.);
+}
+
+static void
 zoom_cb (GtkWidget  *widget,
          const char *action_name,
          GVariant   *parameter)
@@ -228,15 +313,13 @@ zoom_cb (GtkWidget  *widget,
   float scale;
 
   if (g_str_equal (action_name, "zoom.in"))
-    scale = MIN (10, self->scale * M_SQRT2);
+    scale = MIN (1024., self->scale * M_SQRT2);
   else if (g_str_equal (action_name, "zoom.out"))
-    scale = MAX (0.01, self->scale / M_SQRT2);
-  else
+    scale = MAX (1./1024., self->scale / M_SQRT2);
+  else if (g_str_equal (action_name, "zoom.reset"))
     scale = 1.0;
-
-  gtk_widget_action_set_enabled (widget, "zoom.in", scale < 10);
-  gtk_widget_action_set_enabled (widget, "zoom.out", scale > 0.01);
-  gtk_widget_action_set_enabled (widget, "zoom.reset", scale != 1);
+  else
+    g_assert_not_reached ();
 
   g_object_set (widget, "scale", scale, NULL);
 }
@@ -275,7 +358,7 @@ demo3_widget_class_init (Demo3WidgetClass *class)
 
   g_object_class_install_property (object_class, PROP_SCALE,
       g_param_spec_float ("scale", NULL, NULL,
-                          0.0, 1024.0, 1.0,
+                          1./1024., 1024., 1.0,
                           G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_ANGLE,
@@ -307,7 +390,12 @@ demo3_widget_new (const char *resource)
 
   texture = gdk_texture_new_from_resource (resource);
 
-  self = g_object_new (DEMO3_TYPE_WIDGET, "texture", texture, NULL);
+  self = g_object_new (DEMO3_TYPE_WIDGET,
+                       "texture", texture,
+                       "has-tooltip", TRUE,
+                       NULL);
+
+  g_signal_connect (self, "query-tooltip", G_CALLBACK (query_tooltip), NULL);
 
   g_object_unref (texture);
 

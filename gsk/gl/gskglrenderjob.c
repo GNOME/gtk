@@ -260,6 +260,7 @@ node_supports_2d_transform (const GskRenderNode *node)
     case GSK_OPACITY_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXTURE_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
@@ -3643,6 +3644,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   GskTextureKey key;
 
   gsk_gl_render_job_untransform_bounds (job, &job->current_clip->rect.bounds, &clip_rect);
+
   if (!graphene_rect_intersection (bounds, &clip_rect, &clip_rect))
     return;
 
