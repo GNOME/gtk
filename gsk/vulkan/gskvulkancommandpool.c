@@ -16,7 +16,7 @@ gsk_vulkan_command_pool_new (GdkVulkanContext *context)
 {
   GskVulkanCommandPool *self;
 
-  self = g_slice_new0 (GskVulkanCommandPool);
+  self = g_new0 (GskVulkanCommandPool, 1);
 
   self->vulkan = g_object_ref (context);
 
@@ -56,7 +56,7 @@ gsk_vulkan_command_pool_free (GskVulkanCommandPool *self)
                         self->vk_command_pool,
                         NULL);
 
-  g_slice_free (GskVulkanCommandPool, self);
+  g_free (self);
 }
 
 void

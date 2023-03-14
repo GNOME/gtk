@@ -285,7 +285,7 @@ action_new (ActionKind kind)
 {
   Action *action;
 
-  action = g_slice_new0 (Action);
+  action = g_new0 (Action, 1);
   action->kind = kind;
   action->link.data = action;
 
@@ -305,7 +305,7 @@ action_free (Action *action)
   else if (action->kind == ACTION_KIND_GROUP)
     clear_action_queue (&action->u.group.actions);
 
-  g_slice_free (Action, action);
+  g_free (action);
 }
 
 static gboolean

@@ -35,11 +35,9 @@ gtk_css_value_array_free (GtkCssValue *value)
   guint i;
 
   for (i = 0; i < value->n_values; i++)
-    {
-      _gtk_css_value_unref (value->values[i]);
-    }
+    _gtk_css_value_unref (value->values[i]);
 
-  g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (value->n_values - 1), value);
+  g_free (value);
 }
 
 static GtkCssValue *

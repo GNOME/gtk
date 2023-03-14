@@ -45,7 +45,7 @@ reftest_module_new_take (GModule *module,
 
   g_return_val_if_fail (module != NULL, NULL);
 
-  result = g_slice_new0 (ReftestModule);
+  result = g_new0 (ReftestModule, 1);
 
   result->refcount = 1;
   result->filename = filename;
@@ -135,7 +135,7 @@ reftest_module_unref (ReftestModule *module)
     }
 
   g_free (module->filename);
-  g_slice_free (ReftestModule, module);
+  g_free (module);
 }
 
 GCallback

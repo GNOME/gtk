@@ -1321,7 +1321,7 @@ free_value (gpointer data)
 
   g_value_unset (&qvalue->value);
   g_free (qvalue->origin);
-  g_slice_free (GtkSettingsValue, qvalue);
+  g_free (qvalue);
 }
 
 static void
@@ -1352,7 +1352,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   qvalue = g_datalist_id_dup_data (&settings->queued_settings, name_quark, NULL, NULL);
   if (!qvalue)
     {
-      qvalue = g_slice_new0 (GtkSettingsValue);
+      qvalue = g_new0 (GtkSettingsValue, 1);
       g_datalist_id_set_data_full (&settings->queued_settings, name_quark, qvalue, free_value);
     }
   else

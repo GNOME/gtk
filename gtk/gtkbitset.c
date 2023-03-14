@@ -92,7 +92,7 @@ gtk_bitset_unref (GtkBitset *self)
     return;
 
   ra_clear (&self->roaring.high_low_container);
-  g_slice_free (GtkBitset, self);
+  g_free (self);
 }
 
 /**
@@ -271,7 +271,7 @@ gtk_bitset_new_empty (void)
 {
   GtkBitset *self;
 
-  self = g_slice_new0 (GtkBitset);
+  self = g_new0 (GtkBitset, 1);
 
   self->ref_count = 1;
 

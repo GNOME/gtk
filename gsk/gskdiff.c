@@ -53,7 +53,7 @@ gsk_diff_settings_new (GCompareDataFunc compare_func,
 {
   GskDiffSettings *settings;
 
-  settings = g_slice_new0 (GskDiffSettings);
+  settings = g_new0 (GskDiffSettings, 1);
 
   settings->compare_func = compare_func;
   settings->keep_func = keep_func;
@@ -73,7 +73,7 @@ gsk_diff_settings_set_allow_abort (GskDiffSettings *settings,
 void
 gsk_diff_settings_free (GskDiffSettings *settings)
 {
-  g_slice_free (GskDiffSettings, settings);
+  g_free (settings);
 }
 
 /*

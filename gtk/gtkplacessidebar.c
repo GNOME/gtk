@@ -825,7 +825,7 @@ on_bookmark_query_info_complete (GObject      *source,
 out:
   g_clear_object (&info);
   g_clear_error (&error);
-  g_slice_free (BookmarkQueryClosure, clos);
+  g_free (clos);
 }
 
 static gboolean
@@ -1365,7 +1365,7 @@ update_places (GtkPlacesSidebar *sidebar)
       if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root))
         continue;
 
-      clos = g_slice_new (BookmarkQueryClosure);
+      clos = g_new (BookmarkQueryClosure, 1);
       clos->sidebar = sidebar;
       clos->index = index;
       clos->is_native = is_native;

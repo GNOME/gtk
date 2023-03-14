@@ -142,7 +142,7 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 {
   GtkCssValue *value;
 
-  value = g_slice_alloc0 (size);
+  value = g_malloc0 (size);
 
   value->class = klass;
   value->ref_count = 1;

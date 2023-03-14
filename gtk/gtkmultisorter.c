@@ -84,7 +84,7 @@ gtk_multi_sort_keys_free (GtkSortKeys *keys)
   for (i = 0; i < self->n_keys; i++)
     gtk_sort_keys_unref (self->keys[i].keys);
 
-  g_slice_free1 (sizeof (GtkMultiSortKeys) + self->n_keys * sizeof (GtkMultiSortKey), self);
+  g_free (self);
 }
 
 static int

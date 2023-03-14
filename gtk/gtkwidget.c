@@ -1928,7 +1928,7 @@ template_child_class_free (AutomaticChildClass *child_class)
   if (child_class)
     {
       g_free (child_class->name);
-      g_slice_free (AutomaticChildClass, child_class);
+      g_free (child_class);
     }
 }
 
@@ -1944,7 +1944,7 @@ gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 
       g_object_unref (template_data->scope);
 
-      g_slice_free (GtkWidgetTemplate, template_data);
+      g_free (template_data);
     }
 
   g_object_unref (klass->priv->shortcuts);
@@ -2913,7 +2913,7 @@ unref_tick_callback_info (GtkWidget           *widget,
       priv->tick_callbacks = g_list_delete_link (priv->tick_callbacks, link);
       if (info->notify)
         info->notify (info->user_data);
-      g_slice_free (GtkTickCallbackInfo, info);
+      g_free (info);
     }
 
   if (priv->tick_callbacks == NULL && priv->clock_tick_id)
@@ -3045,7 +3045,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
         }
     }
 
-  info = g_slice_new0 (GtkTickCallbackInfo);
+  info = g_new0 (GtkTickCallbackInfo, 1);
 
   info->refcount = 1;
   info->id = ++tick_callback_id;
@@ -3111,7 +3111,7 @@ surface_transform_changed_callback_info_destroy (GtkSurfaceTransformChangedCallb
   if (info->notify)
     info->notify (info->user_data);
 
-  g_slice_free (GtkSurfaceTransformChangedCallbackInfo, info);
+  g_free (info);
 }
 
 static void
@@ -3158,7 +3158,7 @@ destroy_surface_transform_data (GtkWidget *widget)
 
   g_list_free_full (surface_transform_data->callbacks,
                     (GDestroyNotify) surface_transform_changed_callback_info_destroy);
-  g_slice_free (GtkWidgetSurfaceTransformData, surface_transform_data);
+  g_free (surface_transform_data);
   priv->surface_transform_data = NULL;
 }
 
@@ -3264,7 +3264,7 @@ ensure_surface_transform_data (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (!priv->surface_transform_data)
-    priv->surface_transform_data = g_slice_new0 (GtkWidgetSurfaceTransformData);
+    priv->surface_transform_data = g_new0 (GtkWidgetSurfaceTransformData, 1);
 
   return priv->surface_transform_data;
 }
@@ -3306,7 +3306,7 @@ gtk_widget_add_surface_transform_changed_callback (GtkWidget                    
   if (!surface_transform_data->callbacks)
     sync_widget_surface_transform (widget);
 
-  info = g_slice_new0 (GtkSurfaceTransformChangedCallbackInfo);
+  info = g_new0 (GtkSurfaceTransformChangedCallbackInfo, 1);
 
   info->id = ++surface_transform_changed_callback_id;
   info->callback = callback;
@@ -3361,7 +3361,7 @@ gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
     {
       if (surface_transform_data->tracked_parent)
         remove_parent_surface_transform_changed_listener (widget);
-      g_slice_free (GtkWidgetSurfaceTransformData, surface_transform_data);
+      g_free (surface_transform_data);
       priv->surface_transform_data = NULL;
     }
 }
@@ -7509,7 +7509,7 @@ gtk_widget_real_destroy (GtkWidget *object)
                                                                          child_class->name);
                   if (G_IS_OBJECT (child_object))
                     {
-                      FinalizeAssertion *assertion = g_slice_new0 (FinalizeAssertion);
+                      FinalizeAssertion *assertion = g_new0 (FinalizeAssertion, 1);
                       assertion->child_class = child_class;
                       assertion->widget_type = class_type;
                       assertion->object = child_object;
@@ -7582,7 +7582,7 @@ gtk_widget_real_destroy (GtkWidget *object)
             g_type_name (assertion->widget_type),
             assertion->object->ref_count);
 
-          g_slice_free (FinalizeAssertion, assertion);
+          g_free (assertion);
         }
       g_slist_free (assertions);
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
@@ -8008,7 +8008,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
 GtkRequisition *
 gtk_requisition_new (void)
 {
-  return g_slice_new0 (GtkRequisition);
+  return g_new0 (GtkRequisition, 1);
 }
 
 /**
@@ -8022,7 +8022,9 @@ gtk_requisition_new (void)
 GtkRequisition *
 gtk_requisition_copy (const GtkRequisition *requisition)
 {
-  return g_slice_dup (GtkRequisition, requisition);
+  GtkRequisition *copy = g_new (GtkRequisition, 1);
+  memcpy (copy, requisition, sizeof (GtkRequisition));
+  return copy;
 }
 
 /**
@@ -8034,7 +8036,7 @@ gtk_requisition_copy (const GtkRequisition *requisition)
 void
 gtk_requisition_free (GtkRequisition *requisition)
 {
-  g_slice_free (GtkRequisition, requisition);
+  g_free (requisition);
 }
 
 G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
@@ -9092,7 +9094,7 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       StyleParserData *data;
 
-      data = g_slice_new0 (StyleParserData);
+      data = g_new0 (StyleParserData, 1);
       data->builder = builder;
 
       *parser = style_parser;
@@ -9105,7 +9107,7 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       LayoutParserData *data;
 
-      data = g_slice_new0 (LayoutParserData);
+      data = g_new0 (LayoutParserData, 1);
       data->builder = builder;
       data->object = (GObject *) g_object_ref (buildable);
 
@@ -9119,7 +9121,7 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       AccessibilityParserData *data;
 
-      data = g_slice_new0 (AccessibilityParserData);
+      data = g_new0 (AccessibilityParserData, 1);
       data->builder = builder;
       data->object = (GObject *) g_object_ref (buildable);
 
@@ -9384,7 +9386,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
         gtk_widget_add_css_class (GTK_WIDGET (buildable), (const char *)l->data);
 
       g_slist_free_full (style_data->classes, g_free);
-      g_slice_free (StyleParserData, style_data);
+      g_free (style_data);
     }
   else if (strcmp (tagname, "layout") == 0)
     {
@@ -9399,7 +9401,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       /* Free the unapplied properties, if any */
       g_slist_free_full (layout_data->properties, layout_property_info_free);
       g_object_unref (layout_data->object);
-      g_slice_free (LayoutParserData, layout_data);
+      g_free (layout_data);
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {
@@ -9415,7 +9417,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       g_slist_free_full (accessibility_data->states,
                          accessibility_attribute_info_free);
       g_object_unref (accessibility_data->object);
-      g_slice_free (AccessibilityParserData, accessibility_data);
+      g_free (accessibility_data);
     }
 }
 
@@ -11007,7 +11009,7 @@ template_child_class_new (const char *name,
                           gboolean     internal_child,
                           gssize       offset)
 {
-  AutomaticChildClass *child_class = g_slice_new0 (AutomaticChildClass);
+  AutomaticChildClass *child_class = g_new0 (AutomaticChildClass, 1);
 
   child_class->name = g_strdup (name);
   child_class->internal_child = internal_child;
@@ -11267,7 +11269,7 @@ gtk_widget_class_set_template (GtkWidgetClass *widget_class,
   g_return_if_fail (widget_class->priv->template == NULL);
   g_return_if_fail (template_bytes != NULL);
 
-  widget_class->priv->template = g_slice_new0 (GtkWidgetTemplate);
+  widget_class->priv->template = g_new0 (GtkWidgetTemplate, 1);
   bytes_data = g_bytes_get_data (template_bytes, &bytes_size);
 
   if (_gtk_buildable_parser_is_precompiled (bytes_data, bytes_size))

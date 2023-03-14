@@ -768,7 +768,7 @@ vfl_view_free (VflView *view)
   view->prev_view = NULL;
   view->next_view = NULL;
 
-  g_slice_free (VflView, view);
+  g_free (view);
 }
 
 static void
@@ -878,7 +878,7 @@ gtk_constraint_vfl_parser_parse_line (GtkConstraintVflParser *parser,
         {
           if (parser->views == NULL && parser->leading_super == NULL)
             {
-              parser->leading_super = g_slice_new0 (VflView);
+              parser->leading_super = g_new0 (VflView, 1);
 
               parser->leading_super->name = g_strdup ("super");
               parser->leading_super->orientation = parser->orientation;
@@ -888,7 +888,7 @@ gtk_constraint_vfl_parser_parse_line (GtkConstraintVflParser *parser,
             }
           else if (parser->trailing_super == NULL)
             {
-              parser->trailing_super = g_slice_new0 (VflView);
+              parser->trailing_super = g_new0 (VflView, 1);
 
               parser->trailing_super->name = g_strdup ("super");
               parser->trailing_super->orientation = parser->orientation;
@@ -1040,7 +1040,7 @@ gtk_constraint_vfl_parser_parse_line (GtkConstraintVflParser *parser,
 
       if (*cur == '[')
         {
-          VflView *view = g_slice_new0 (VflView);
+          VflView *view = g_new0 (VflView, 1);
           char *tmp;
 
           view->orientation = parser->orientation;

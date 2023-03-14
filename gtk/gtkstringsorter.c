@@ -163,7 +163,7 @@ gtk_string_sort_keys_free (GtkSortKeys *keys)
   GtkStringSortKeys *self = (GtkStringSortKeys *) keys;
 
   gtk_expression_unref (self->expression);
-  g_slice_free (GtkStringSortKeys, self);
+  g_free (self);
 }
 
 static int

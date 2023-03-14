@@ -74,13 +74,13 @@ gsk_gl_glyph_key_free (gpointer data)
   GskGLGlyphKey *key = data;
 
   g_clear_object (&key->font);
-  g_slice_free (GskGLGlyphKey, key);
+  g_free (key);
 }
 
 static void
 gsk_gl_glyph_value_free (gpointer data)
 {
-  g_slice_free (GskGLGlyphValue, data);
+  g_free (data);
 }
 
 static void

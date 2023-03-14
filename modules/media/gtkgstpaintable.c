@@ -278,7 +278,7 @@ set_texture_invocation_free (SetTextureInvocation *invoke)
   g_object_unref (invoke->paintable);
   g_object_unref (invoke->texture);
 
-  g_slice_free (SetTextureInvocation, invoke);
+  g_free (invoke);
 }
 
 static gboolean
@@ -300,7 +300,7 @@ gtk_gst_paintable_queue_set_texture (GtkGstPaintable *self,
 {
   SetTextureInvocation *invoke;
 
-  invoke = g_slice_new0 (SetTextureInvocation);
+  invoke = g_new0 (SetTextureInvocation, 1);
   invoke->paintable = g_object_ref (self);
   invoke->texture = g_object_ref (texture);
   invoke->pixel_aspect_ratio = pixel_aspect_ratio;

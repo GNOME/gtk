@@ -326,7 +326,7 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 
   g_object_unref (data->image);
 
-  g_slice_free (GskVulkanTextureData, data);
+  g_free (data);
 }
 
 GskVulkanImage *
@@ -350,7 +350,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
                                           cairo_image_surface_get_stride (surface));
   cairo_surface_destroy (surface);
 
-  data = g_slice_new0 (GskVulkanTextureData);
+  data = g_new0 (GskVulkanTextureData, 1);
   data->image = image;
   data->texture = texture;
   data->renderer = self;
@@ -362,7 +362,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
     }
   else
     {
-      g_slice_free (GskVulkanTextureData, data);
+      g_free (data);
     }
 
   return image;

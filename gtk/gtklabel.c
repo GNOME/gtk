@@ -661,7 +661,7 @@ gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       GtkPangoAttributeParserData *parser_data;
 
-      parser_data = g_slice_new0 (GtkPangoAttributeParserData);
+      parser_data = g_new0 (GtkPangoAttributeParserData, 1);
       parser_data->builder = g_object_ref (builder);
       parser_data->object = (GObject *) g_object_ref (buildable);
       *parser = pango_parser;
@@ -693,7 +693,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
 
       g_object_unref (data->object);
       g_object_unref (data->builder);
-      g_slice_free (GtkPangoAttributeParserData, data);
+      g_free (data);
     }
 }
 

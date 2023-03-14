@@ -67,7 +67,12 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
 {
-  return g_slice_dup (GdkRGBA, rgba);
+  GdkRGBA *copy;
+
+  copy = g_new (GdkRGBA, 1);
+  memcpy (copy, rgba, sizeof (GdkRGBA));
+
+  return copy;
 }
 
 /**
@@ -79,7 +84,7 @@ gdk_rgba_copy (const GdkRGBA *rgba)
 void
 gdk_rgba_free (GdkRGBA *rgba)
 {
-  g_slice_free (GdkRGBA, rgba);
+  g_free (rgba);
 }
 
 /**

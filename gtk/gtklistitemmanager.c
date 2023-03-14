@@ -1413,7 +1413,7 @@ gtk_list_item_tracker_new (GtkListItemManager *self)
 
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
 
-  tracker = g_slice_new0 (GtkListItemTracker);
+  tracker = g_new0 (GtkListItemTracker, 1);
 
   tracker->position = GTK_INVALID_LIST_POSITION;
 
@@ -1430,7 +1430,7 @@ gtk_list_item_tracker_free (GtkListItemManager *self,
 
   self->trackers = g_slist_remove (self->trackers, tracker);
 
-  g_slice_free (GtkListItemTracker, tracker);
+  g_free (tracker);
 
   gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
 

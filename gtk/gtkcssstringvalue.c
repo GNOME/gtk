@@ -31,7 +31,7 @@ static void
 gtk_css_value_string_free (GtkCssValue *value)
 {
   g_free (value->string);
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

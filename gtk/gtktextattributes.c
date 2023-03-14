@@ -66,7 +66,7 @@ gtk_text_attributes_new (void)
 {
   GtkTextAttributes *values;
 
-  values = g_slice_new0 (GtkTextAttributes);
+  values = g_new0 (GtkTextAttributes, 1);
 
   /* 0 is a valid value for most of the struct */
   values->refcount = 1;
@@ -244,7 +244,7 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->font_features)
         g_free (values->font_features);
 
-      g_slice_free (GtkTextAttributes, values);
+      g_free (values);
     }
 }
 

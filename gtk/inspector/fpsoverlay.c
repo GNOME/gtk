@@ -56,7 +56,7 @@ gtk_fps_info_free (gpointer data)
 
   gsk_render_node_unref (info->last_node);
 
-  g_slice_free (GtkFpsInfo, info);
+  g_free (info);
 }
 
 static double
@@ -103,7 +103,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   info = g_hash_table_lookup (self->infos, widget);
   if (info == NULL)
     {
-      info = g_slice_new0 (GtkFpsInfo);
+      info = g_new0 (GtkFpsInfo, 1);
       g_hash_table_insert (self->infos, widget, info);
     }
   if (info->last_node != node)

@@ -2738,7 +2738,7 @@ free_pending_scroll (GtkTextPendingScroll *scroll)
     gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (scroll->mark),
                                  scroll->mark);
   g_object_unref (scroll->mark);
-  g_slice_free (GtkTextPendingScroll, scroll);
+  g_free (scroll);
 }
 
 static void
@@ -2764,7 +2764,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 
   DV(g_print(G_STRLOC"\n"));
 
-  scroll = g_slice_new (GtkTextPendingScroll);
+  scroll = g_new (GtkTextPendingScroll, 1);
 
   scroll->within_margin = within_margin;
   scroll->use_align = use_align;
@@ -7410,7 +7410,7 @@ selection_data_free (SelectionData *data)
 
   g_object_unref (data->buffer);
 
-  g_slice_free (SelectionData, data);
+  g_free (data);
 }
 
 static gboolean
@@ -7642,7 +7642,7 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
   SelectionData *data;
 
   priv = text_view->priv;
-  data = g_slice_new0 (SelectionData);
+  data = g_new0 (SelectionData, 1);
   data->granularity = granularity;
 
   buffer = get_buffer (text_view);
@@ -9403,7 +9403,7 @@ text_window_new (GtkWidget *widget)
   GtkTextWindow *win;
   GtkCssNode *widget_node;
 
-  win = g_slice_new (GtkTextWindow);
+  win = g_new (GtkTextWindow, 1);
 
   win->type = GTK_TEXT_WINDOW_TEXT;
   win->widget = widget;
@@ -9429,7 +9429,7 @@ text_window_free (GtkTextWindow *win)
 {
   gtk_css_node_set_parent (win->css_node, NULL);
 
-  g_slice_free (GtkTextWindow, win);
+  g_free (win);
 }
 
 static void
@@ -9588,7 +9588,7 @@ anchored_child_new (GtkWidget          *child,
 {
   AnchoredChild *vc;
 
-  vc = g_slice_new0 (AnchoredChild);
+  vc = g_new0 (AnchoredChild, 1);
   vc->link.data = vc;
   vc->widget = g_object_ref (child);
   vc->anchor = g_object_ref (anchor);
@@ -9615,7 +9615,7 @@ anchored_child_free (AnchoredChild *child)
   g_object_unref (child->anchor);
   g_object_unref (child->widget);
 
-  g_slice_free (AnchoredChild, child);
+  g_free (child);
 }
 
 static void

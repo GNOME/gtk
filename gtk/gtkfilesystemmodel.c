@@ -435,7 +435,7 @@ add_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (G_IS_FILE_INFO (info));
 
-  node = g_slice_alloc0 (sizeof (FileModelNode));
+  node = g_new0 (FileModelNode, 1);
   node->file = g_object_ref (file);
   if (info)
     {
@@ -445,7 +445,7 @@ add_file (GtkFileSystemModel *model,
   node->frozen_add = model->frozen ? TRUE : FALSE;
 
   g_array_append_vals (model->files, node, 1);
-  g_slice_free1 (sizeof (FileModelNode), node);
+  g_free (node);
 
   position = model->files->len - 1;
 

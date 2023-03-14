@@ -479,7 +479,7 @@ row_data_free (gpointer _data)
 
   row_data_unbind (data);
 
-  g_slice_free (RowData, data);
+  g_free (data);
 }
 
 static void
@@ -489,7 +489,7 @@ setup_widget (GtkSignalListItemFactory *factory,
   GtkWidget *box, *child;
   RowData *data;
 
-  data = g_slice_new0 (RowData);
+  data = g_new0 (RowData, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_list_item_set_child (list_item, box);

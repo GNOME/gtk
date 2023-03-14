@@ -70,7 +70,7 @@ gtk_css_dynamic_is_static (GtkStyleAnimation *style_animation)
 static void
 gtk_css_dynamic_free (GtkStyleAnimation *animation)
 {
-  g_slice_free (GtkCssDynamic, (GtkCssDynamic *)animation);
+  g_free (animation);
 }
 
 static const GtkStyleAnimationClass GTK_CSS_DYNAMIC_CLASS = {
@@ -85,7 +85,7 @@ static const GtkStyleAnimationClass GTK_CSS_DYNAMIC_CLASS = {
 GtkStyleAnimation *
 gtk_css_dynamic_new (gint64 timestamp)
 {
-  GtkCssDynamic *dynamic = g_slice_alloc (sizeof (GtkCssDynamic));
+  GtkCssDynamic *dynamic = g_new (GtkCssDynamic, 1);
 
   dynamic->parent.class = &GTK_CSS_DYNAMIC_CLASS;
   dynamic->parent.ref_count = 1;

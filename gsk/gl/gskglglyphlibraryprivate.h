@@ -88,7 +88,9 @@ gsk_gl_glyph_library_lookup_or_add (GskGLGlyphLibrary      *self,
     }
   else
     {
-      GskGLGlyphKey *k = g_slice_copy (sizeof *key, key);
+      GskGLGlyphKey *k;
+      k = g_new (GskGLGlyphKey, 1);
+      memcpy (k, key, sizeof (GskGLGlyphKey));
       g_object_ref (k->font);
       gsk_gl_glyph_library_add (self, k, out_value);
       self->front[front_index].key = *key;

@@ -90,7 +90,7 @@ gtk_css_value_color_free (GtkCssValue *color)
       break;
     }
 
-  g_slice_free (GtkCssValue, color);
+  g_free (color);
 }
 
 static GtkCssValue *

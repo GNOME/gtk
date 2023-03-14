@@ -1404,7 +1404,7 @@ save_range (GtkTextIter *range_start,
 {
   Range *r;
 
-  r = g_slice_new (Range);
+  r = g_new (Range, 1);
 
   r->buffer = gtk_text_iter_get_buffer (range_start);
   g_object_ref (r->buffer);
@@ -1464,7 +1464,7 @@ restore_range (Range *r)
     *r->range_end = *r->whole_end;
 
   g_object_unref (r->buffer);
-  g_slice_free (Range, r);
+  g_free (r);
 }
 
 static void
@@ -3662,7 +3662,7 @@ static void
 free_clipboard_request (ClipboardRequest *request_data)
 {
   g_object_unref (request_data->buffer);
-  g_slice_free (ClipboardRequest, request_data);
+  g_free (request_data);
 }
 
 #if 0
@@ -3854,7 +3854,7 @@ gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer,
     }
   else
     {
-      selection_clipboard = g_slice_new (SelectionClipboard);
+      selection_clipboard = g_new (SelectionClipboard, 1);
 
       selection_clipboard->clipboard = clipboard;
       selection_clipboard->ref_count = 1;
@@ -3897,7 +3897,7 @@ gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer,
       buffer->priv->selection_clipboards = g_slist_remove (buffer->priv->selection_clipboards,
                                                            selection_clipboard);
 
-      g_slice_free (SelectionClipboard, selection_clipboard);
+      g_free (selection_clipboard);
     }
 }
 
@@ -3910,7 +3910,7 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
   for (l = priv->selection_clipboards; l != NULL; l = l->next)
     {
       SelectionClipboard *selection_clipboard = l->data;
-      g_slice_free (SelectionClipboard, selection_clipboard);
+      g_free (selection_clipboard);
     }
 
   g_slist_free (priv->selection_clipboards);
@@ -3940,7 +3940,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
 				 GtkTextIter   *override_location,
                                  gboolean       default_editable)
 {
-  ClipboardRequest *data = g_slice_new (ClipboardRequest);
+  ClipboardRequest *data = g_new (ClipboardRequest, 1);
   GtkTextIter paste_point;
   GtkTextIter start, end;
 
@@ -4321,7 +4321,7 @@ free_log_attr_cache (GtkTextLogAttrCache *cache)
   for (i = 0; i < ATTR_CACHE_SIZE; i++)
     g_free (cache->entries[i].attrs);
 
-  g_slice_free (GtkTextLogAttrCache, cache);
+  g_free (cache);
 }
 
 static void
@@ -4398,7 +4398,7 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
 
   if (priv->log_attr_cache == NULL)
     {
-      priv->log_attr_cache = g_slice_new0 (GtkTextLogAttrCache);
+      priv->log_attr_cache = g_new0 (GtkTextLogAttrCache, 1);
       priv->log_attr_cache->chars_changed_stamp =
         _gtk_text_btree_get_chars_changed_stamp (get_btree (buffer));
     }

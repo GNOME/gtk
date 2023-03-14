@@ -4374,7 +4374,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   if (framebuffer == 0 && default_framebuffer != 0)
     framebuffer = default_framebuffer;
 
-  job = g_slice_new0 (GskGLRenderJob);
+  job = g_new0 (GskGLRenderJob, 1);
   job->driver = g_object_ref (driver);
   job->command_queue = job->driver->command_queue;
   job->clip = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderClip), 16);
@@ -4439,5 +4439,5 @@ gsk_gl_render_job_free (GskGLRenderJob *job)
   g_clear_pointer (&job->region, cairo_region_destroy);
   g_clear_pointer (&job->modelview, g_array_unref);
   g_clear_pointer (&job->clip, g_array_unref);
-  g_slice_free (GskGLRenderJob, job);
+  g_free (job);
 }

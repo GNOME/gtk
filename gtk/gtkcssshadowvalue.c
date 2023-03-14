@@ -108,7 +108,7 @@ gtk_css_value_shadow_free (GtkCssValue *value)
       shadow_value_unref (shadow);
     }
 
-  g_slice_free1 (sizeof (GtkCssValue) + sizeof (ShadowValue) * (value->n_shadows - 1), value);
+  g_free (value);
 }
 
 static GtkCssValue *

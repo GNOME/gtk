@@ -37,7 +37,7 @@ gtk_application_quartz_inhibitor_free (GtkApplicationQuartzInhibitor *inhibitor)
 {
   g_free (inhibitor->reason);
   g_clear_object (&inhibitor->window);
-  g_slice_free (GtkApplicationQuartzInhibitor, inhibitor);
+  g_free (inhibitor);
 }
 
 typedef GtkApplicationImplClass GtkApplicationImplQuartzClass;
@@ -286,7 +286,7 @@ gtk_application_impl_quartz_inhibit (GtkApplicationImpl         *impl,
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GtkApplicationQuartzInhibitor *inhibitor;
 
-  inhibitor = g_slice_new (GtkApplicationQuartzInhibitor);
+  inhibitor = g_new (GtkApplicationQuartzInhibitor, 1);
   inhibitor->cookie = ++quartz->next_cookie;
   inhibitor->flags = flags;
   inhibitor->reason = g_strdup (reason);

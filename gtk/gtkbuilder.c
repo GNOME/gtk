@@ -587,7 +587,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
 
               prop->applied = TRUE;
 
-              property = g_slice_new (DelayedProperty);
+              property = g_new (DelayedProperty, 1);
               property->pspec = prop->pspec;
               property->object = g_strdup (object_name);
               property->value = g_strdup (prop->text->str);
@@ -1096,7 +1096,7 @@ gtk_builder_apply_delayed_properties (GtkBuilder  *builder,
 
       g_free (property->value);
       g_free (property->object);
-      g_slice_free (DelayedProperty, property);
+      g_free (property);
     }
   g_slist_free (props);
 

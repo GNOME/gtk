@@ -112,7 +112,7 @@ gtk_tree_list_row_sort_keys_free (GtkSortKeys *keys)
   g_hash_table_unref (self->cached_keys);
   if (self->sort_keys)
     gtk_sort_keys_unref (self->sort_keys);
-  g_slice_free (GtkTreeListRowSortKeys, self);
+  g_free (self);
 }
 
 static inline gboolean

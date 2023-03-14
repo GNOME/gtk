@@ -296,11 +296,9 @@ gtk_css_value_filter_free (GtkCssValue *value)
   guint i;
 
   for (i = 0; i < value->n_filters; i++)
-    {
-      gtk_css_filter_clear (&value->filters[i]);
-    }
+    gtk_css_filter_clear (&value->filters[i]);
 
-  g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssFilter) * (value->n_filters - 1), value);
+  g_free (value);
 }
 
 /* returns TRUE if dest == src */

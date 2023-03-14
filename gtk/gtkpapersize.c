@@ -195,7 +195,7 @@ gtk_paper_size_new_from_info (const PaperInfo *info)
 {
   GtkPaperSize *size;
 
-  size = g_slice_new0 (GtkPaperSize);
+  size = g_new0 (GtkPaperSize, 1);
   size->info = info;
   size->width = info->width;
   size->height = info->height;
@@ -238,7 +238,7 @@ gtk_paper_size_new (const char *name)
         }
       else
         {
-          size = g_slice_new0 (GtkPaperSize);
+          size = g_new0 (GtkPaperSize, 1);
 
           size->width = width;
           size->height = height;
@@ -256,7 +256,7 @@ gtk_paper_size_new (const char *name)
       else
         {
           g_warning ("Unknown paper size %s", name);
-          size = g_slice_new0 (GtkPaperSize);
+          size = g_new0 (GtkPaperSize, 1);
           size->name = g_strdup (name);
           size->display_name = g_strdup (name);
           /* Default to A4 size */
@@ -484,7 +484,7 @@ gtk_paper_size_new_custom (const char *name,
   g_return_val_if_fail (name != NULL, NULL);
   g_return_val_if_fail (unit != GTK_UNIT_NONE, NULL);
 
-  size = g_slice_new0 (GtkPaperSize);
+  size = g_new0 (GtkPaperSize, 1);
 
   size->name = g_strdup (name);
   size->display_name = g_strdup (display_name);
@@ -509,7 +509,7 @@ gtk_paper_size_copy (GtkPaperSize *other)
 {
   GtkPaperSize *size;
 
-  size = g_slice_new0 (GtkPaperSize);
+  size = g_new0 (GtkPaperSize, 1);
 
   size->info = other->info;
   if (other->name)
@@ -539,8 +539,7 @@ gtk_paper_size_free (GtkPaperSize *size)
   g_free (size->name);
   g_free (size->display_name);
   g_free (size->ppd_name);
-
-  g_slice_free (GtkPaperSize, size);
+  g_free (size);
 }
 
 /**

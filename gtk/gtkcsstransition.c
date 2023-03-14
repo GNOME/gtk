@@ -100,8 +100,7 @@ gtk_css_transition_free (GtkStyleAnimation *animation)
 
   gtk_css_value_unref (self->start);
   gtk_css_value_unref (self->ease);
-
-  g_slice_free (GtkCssTransition, self);
+  g_free (self);
 }
 
 static const GtkStyleAnimationClass GTK_CSS_TRANSITION_CLASS = {
@@ -120,7 +119,7 @@ gtk_css_transition_advance (GtkStyleAnimation    *style_animation,
   GtkCssTransition *source = (GtkCssTransition *)style_animation;
   GtkCssTransition *transition;
 
-  transition = g_slice_alloc (sizeof (GtkCssTransition));
+  transition = g_new (GtkCssTransition, 1);
   transition->parent.class = &GTK_CSS_TRANSITION_CLASS;
   transition->parent.ref_count = 1;
 
@@ -147,7 +146,7 @@ _gtk_css_transition_new (guint        property,
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (ease != NULL, NULL);
 
-  transition = g_slice_alloc (sizeof (GtkCssTransition));
+  transition = g_new (GtkCssTransition, 1);
   transition->parent.class = &GTK_CSS_TRANSITION_CLASS;
   transition->parent.ref_count = 1;
 

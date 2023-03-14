@@ -322,7 +322,7 @@ static void
 free_pointer_info (GdkPointerSurfaceInfo *info)
 {
   g_clear_object (&info->surface_under_pointer);
-  g_slice_free (GdkPointerSurfaceInfo, info);
+  g_free (info);
 }
 
 static void
@@ -834,7 +834,7 @@ _gdk_display_get_pointer_info (GdkDisplay *display,
 
   if (G_UNLIKELY (!info))
     {
-      info = g_slice_new0 (GdkPointerSurfaceInfo);
+      info = g_new0 (GdkPointerSurfaceInfo, 1);
       g_hash_table_insert (display->pointers_info, device, info);
     }
 

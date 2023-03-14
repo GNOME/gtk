@@ -79,7 +79,7 @@ gdk_x11_pending_selection_notify_new (Window window,
 {
   GdkX11PendingSelectionNotify *pending;
 
-  pending = g_slice_new0 (GdkX11PendingSelectionNotify);
+  pending = g_new0 (GdkX11PendingSelectionNotify, 1);
   pending->n_pending = 1;
 
   pending->xevent.type = SelectionNotify;
@@ -97,7 +97,7 @@ gdk_x11_pending_selection_notify_new (Window window,
 static void
 gdk_x11_pending_selection_notify_free (GdkX11PendingSelectionNotify *notify)
 {
-  g_slice_free (GdkX11PendingSelectionNotify, notify);
+  g_free (notify);
 }
 
 static void
@@ -731,7 +731,7 @@ handle_timestamp_done (GObject      *stream,
       g_error_free (error);
     }
 
-  g_slice_free (gulong, user_data);
+  g_free (user_data);
 }
 
 static void
@@ -747,7 +747,7 @@ handle_timestamp (GOutputStream                *stream,
 {
   gulong *time_;
 
-  time_ = g_slice_new (gulong);
+  time_ = g_new (gulong, 1);
   *time_ = timestamp;
 
   g_output_stream_write_all_async (stream,

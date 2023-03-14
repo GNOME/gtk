@@ -423,7 +423,7 @@ write_request_free (WriteRequest *wr)
   g_clear_pointer (&wr->main_context, g_main_context_unref);
   g_clear_object (&wr->stream);
   [wr->item release];
-  g_slice_free (WriteRequest, wr);
+  g_free (wr);
 }
 
 static void
@@ -491,7 +491,7 @@ on_data_ready_cb (GObject      *object,
       return;
     }
 
-  wr = g_slice_new0 (WriteRequest);
+  wr = g_new0 (WriteRequest, 1);
   wr->item = [item retain];
   wr->stream = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new_resizable ());
   wr->type = type;

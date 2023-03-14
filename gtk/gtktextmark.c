@@ -176,7 +176,7 @@ gtk_text_mark_finalize (GObject *obj)
                    "impending");
 
       g_free (seg->body.mark.name);
-      g_slice_free1 (MSEG_SIZE, seg);
+      g_free (seg);
 
       mark->segment = NULL;
     }
@@ -383,7 +383,7 @@ gtk_mark_segment_new (GtkTextMark *mark_obj)
 {
   GtkTextLineSegment *mark;
 
-  mark = g_slice_alloc0 (MSEG_SIZE);
+  mark = g_malloc0 (MSEG_SIZE);
   mark->body.mark.name = NULL;
   mark->type = &gtk_text_right_mark_type;
 

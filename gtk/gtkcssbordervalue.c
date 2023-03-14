@@ -38,7 +38,7 @@ gtk_css_value_border_free (GtkCssValue *value)
         _gtk_css_value_unref (value->values[i]);
     }
 
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

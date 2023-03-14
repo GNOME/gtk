@@ -377,7 +377,7 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
             {
               GtkMenuTrackerSection *fake_section;
 
-              fake_section = g_slice_new0 (GtkMenuTrackerSection);
+              fake_section = g_new0 (GtkMenuTrackerSection, 1);
               fake_section->is_fake = TRUE;
               fake_section->model = g_object_ref (item);
               fake_section->handler = g_signal_connect (item, "notify::is-visible",
@@ -467,7 +467,7 @@ gtk_menu_tracker_section_free (GtkMenuTrackerSection *section)
   g_slist_free_full (section->items, (GDestroyNotify) gtk_menu_tracker_section_free);
   g_free (section->action_namespace);
   g_object_unref (section->model);
-  g_slice_free (GtkMenuTrackerSection, section);
+  g_free (section);
 }
 
 static GtkMenuTrackerSection *
@@ -480,7 +480,7 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
 {
   GtkMenuTrackerSection *section;
 
-  section = g_slice_new0 (GtkMenuTrackerSection);
+  section = g_new0 (GtkMenuTrackerSection, 1);
   section->model = g_object_ref (model);
   section->with_separators = with_separators;
   section->action_namespace = g_strdup (action_namespace);
@@ -560,7 +560,7 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
 {
   GtkMenuTracker *tracker;
 
-  tracker = g_slice_new (GtkMenuTracker);
+  tracker = g_new (GtkMenuTracker, 1);
   tracker->merge_sections = merge_sections;
   tracker->mac_os_mode = mac_os_mode;
   tracker->observable = g_object_ref (observable);
@@ -611,5 +611,5 @@ gtk_menu_tracker_free (GtkMenuTracker *tracker)
 {
   gtk_menu_tracker_section_free (tracker->toplevel);
   g_object_unref (tracker->observable);
-  g_slice_free (GtkMenuTracker, tracker);
+  g_free (tracker);
 }

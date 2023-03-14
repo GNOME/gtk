@@ -37,7 +37,7 @@ gsk_vulkan_shader_new_from_bytes (GdkVulkanContext     *context,
       return NULL;
     }
 
-  self = g_slice_new0 (GskVulkanShader);
+  self = g_new0 (GskVulkanShader, 1);
 
   self->vulkan = g_object_ref (context);
   self->type = type;
@@ -85,7 +85,7 @@ gsk_vulkan_shader_free (GskVulkanShader *self)
 
   g_object_unref (self->vulkan);
 
-  g_slice_free (GskVulkanShader, self);
+  g_free (self);
 }
 
 GskVulkanShaderType

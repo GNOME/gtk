@@ -410,7 +410,7 @@ gdk_content_register_deserializer (const char                *mime_type,
   g_return_if_fail (mime_type != NULL);
   g_return_if_fail (deserialize != NULL);
 
-  deserializer = g_slice_new0 (Deserializer);
+  deserializer = g_new0 (Deserializer, 1);
 
   deserializer->mime_type = g_intern_string (mime_type);
   deserializer->type = type;

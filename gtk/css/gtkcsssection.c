@@ -55,7 +55,7 @@ gtk_css_section_new (GFile                *file,
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (end != NULL, NULL);
 
-  result = g_slice_new0 (GtkCssSection);
+  result = g_new0 (GtkCssSection, 1);
 
   result->ref_count = 1;
   if (file)
@@ -105,7 +105,7 @@ gtk_css_section_unref (GtkCssSection *section)
   if (section->file)
     g_object_unref (section->file);
 
-  g_slice_free (GtkCssSection, section);
+  g_free (section);
 }
 
 /**

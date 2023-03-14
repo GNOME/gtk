@@ -787,7 +787,7 @@ free_pixmap (gpointer datap)
     }
 
   g_object_unref (data->display);
-  g_slice_free (FreePixmapData, data);
+  g_free (data);
 }
 
 static void
@@ -798,7 +798,7 @@ attach_free_pixmap_handler (cairo_surface_t *surface,
   static const cairo_user_data_key_t key;
   FreePixmapData *data;
   
-  data = g_slice_new (FreePixmapData);
+  data = g_new (FreePixmapData, 1);
   data->display = g_object_ref (display);
   data->pixmap = pixmap;
 

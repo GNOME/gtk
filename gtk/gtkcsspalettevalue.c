@@ -99,8 +99,7 @@ gtk_css_value_palette_free (GtkCssValue *value)
 
   g_free (value->color_names);
   g_free (value->color_values);
-
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

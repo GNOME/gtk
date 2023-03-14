@@ -22,7 +22,7 @@ gsk_vulkan_memory_new (GdkVulkanContext      *context,
   GskVulkanMemory *self;
   uint32_t i;
 
-  self = g_slice_new0 (GskVulkanMemory);
+  self = g_new0 (GskVulkanMemory, 1);
 
   self->vulkan = g_object_ref (context);
   self->size = size;
@@ -62,7 +62,7 @@ gsk_vulkan_memory_free (GskVulkanMemory *self)
 
   g_object_unref (self->vulkan);
 
-  g_slice_free (GskVulkanMemory, self);
+  g_free (self);
 }
 
 VkDeviceMemory

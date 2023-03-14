@@ -1836,7 +1836,7 @@ static void
 gdk_drag_anim_destroy (GdkDragAnim *anim)
 {
   g_object_unref (anim->drag);
-  g_slice_free (GdkDragAnim, anim);
+  g_free (anim);
 }
 
 static gboolean
@@ -1936,7 +1936,7 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   cairo_surface_destroy (surface);
 */
 
-  anim = g_slice_new0 (GdkDragAnim);
+  anim = g_new0 (GdkDragAnim, 1);
   g_set_object (&anim->drag, drag_win32);
   anim->frame_clock = gdk_surface_get_frame_clock (drag_win32->drag_surface);
   anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);

@@ -34,7 +34,6 @@ typedef enum
 
 /* All strings are owned by the string chunk */
 typedef struct {
-  /* Must be first for g_slice_free_chain() */
   GList link;
 
   const char *string;
@@ -82,7 +81,7 @@ record_data_node_new (RecordDataElement *parent,
                       RecordDataType     type,
                       gsize              size)
 {
-  RecordDataNode *node = g_slice_alloc0 (size);
+  RecordDataNode *node = g_malloc0 (size);
 
   node->type = type;
   node->link.data = node;
@@ -163,12 +162,11 @@ record_data_node_free (RecordDataNode *node)
           l = next;
         }
 
-      g_slice_free1 (sizeof (RecordDataElement) +
-                     sizeof (RecordDataString) * element->n_attributes, element);
+      g_free (element);
       break;
     case RECORD_TYPE_TEXT:
       text = (RecordDataText *)node;
-      g_slice_free (RecordDataText, text);
+      g_free (text);
       break;
     case RECORD_TYPE_END_ELEMENT:
     default:
@@ -234,7 +232,7 @@ record_data_string_lookup (RecordData *data,
       return s;
     }
 
-  s = g_slice_new (RecordDataString);
+  s = g_new (RecordDataString, 1);
   /* The string is zero terminated */
   s->string = g_string_chunk_insert_len (data->chunks, str, len);
   s->len = len;
@@ -474,6 +472,7 @@ _gtk_buildable_parser_precompile (const char  *text,
   GList *l;
   GString *marshaled;
   int offset;
+  RecordDataString *node;
 
   data.strings = g_hash_table_new (record_data_string_hash, record_data_string_equal);
   data.chunks = g_string_chunk_new (512);
@@ -528,9 +527,14 @@ _gtk_buildable_parser_precompile (const char  *text,
 
   marshal_root (marshaled, &data.root->base);
 
-  g_slice_free_chain (RecordDataString,
-                      (RecordDataString *)data.string_list.head,
-                      link.next);
+  node = (RecordDataString *) data.string_list.head;
+  while (node)
+    {
+      RecordDataString *next = (RecordDataString *) node->link.next;
+      g_free (node);
+      node = next;
+    }
+
   record_data_node_free (&data.root->base);
   g_string_chunk_free (data.chunks);
   g_hash_table_destroy (data.strings);

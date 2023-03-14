@@ -76,7 +76,7 @@ gdk_texture_downloader_new (GdkTexture *texture)
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
 
-  self = g_slice_new (GdkTextureDownloader);
+  self = g_new (GdkTextureDownloader, 1);
   gdk_texture_downloader_init (self, texture);
 
   return self;
@@ -121,7 +121,7 @@ gdk_texture_downloader_free (GdkTextureDownloader *self)
   g_return_if_fail (self != NULL);
 
   gdk_texture_downloader_finish (self);
-  g_slice_free (GdkTextureDownloader, self);
+  g_free (self);
 }
 
 /**

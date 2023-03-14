@@ -49,7 +49,7 @@ gtk_css_value_font_features_free (GtkCssValue *value)
 {
   g_hash_table_unref (value->features);
 
-  g_slice_free (GtkCssValue, value);
+  g_free (value);
 }
 
 static GtkCssValue *

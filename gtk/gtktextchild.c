@@ -142,7 +142,7 @@ paintable_segment_delete_func (GtkTextLineSegment *seg,
       g_object_unref (paintable);
     }
 
-  g_slice_free1 (PAINTABLE_SEG_SIZE, seg);
+  g_free (seg);
 
   return 0;
 }
@@ -184,7 +184,7 @@ _gtk_paintable_segment_new (GdkPaintable *paintable)
   GtkTextLineSegment *seg;
   guint flags;
 
-  seg = g_slice_alloc (PAINTABLE_SEG_SIZE);
+  seg = g_malloc (PAINTABLE_SEG_SIZE);
 
   seg->type = &gtk_text_paintable_type;
 
@@ -299,7 +299,7 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
   GtkTextLineSegment *seg;
   GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
 
-  seg = g_slice_alloc (WIDGET_SEG_SIZE);
+  seg = g_malloc (WIDGET_SEG_SIZE);
 
   seg->type = &gtk_text_child_type;
 
@@ -461,7 +461,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
 
       g_slist_free_full (seg->body.child.widgets, g_object_unref);
 
-      g_slice_free1 (WIDGET_SEG_SIZE, seg);
+      g_free (seg);
     }
 
   g_free (priv->replacement);

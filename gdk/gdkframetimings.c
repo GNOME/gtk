@@ -43,7 +43,7 @@ _gdk_frame_timings_new (gint64 frame_counter)
 {
   GdkFrameTimings *timings;
 
-  timings = g_slice_new0 (GdkFrameTimings);
+  timings = g_new0 (GdkFrameTimings, 1);
   timings->ref_count = 1;
   timings->frame_counter = frame_counter;
 
@@ -99,9 +99,7 @@ gdk_frame_timings_unref (GdkFrameTimings *timings)
 
   timings->ref_count--;
   if (timings->ref_count == 0)
-    {
-      g_slice_free (GdkFrameTimings, timings);
-    }
+    g_free (timings);
 }
 
 /**

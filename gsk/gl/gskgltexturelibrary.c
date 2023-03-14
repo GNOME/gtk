@@ -52,7 +52,7 @@ gsk_gl_texture_atlas_free (GskGLTextureAtlas *atlas)
     }
 
   g_clear_pointer (&atlas->nodes, g_free);
-  g_slice_free (GskGLTextureAtlas, atlas);
+  g_free (atlas);
 }
 
 static gboolean
@@ -388,7 +388,7 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
   g_assert (out_packed_x != NULL);
   g_assert (out_packed_y != NULL);
 
-  entry = g_slice_alloc0 (valuelen);
+  entry = g_malloc0 (valuelen);
   entry->n_pixels = width * height;
   entry->accessed = TRUE;
   entry->used = TRUE;
@@ -542,7 +542,7 @@ gsk_gl_texture_library_acquire_atlas (GskGLTextureLibrary *self)
   g_return_val_if_fail (self->atlas_width > 0, NULL);
   g_return_val_if_fail (self->atlas_height > 0, NULL);
 
-  atlas = g_slice_new0 (GskGLTextureAtlas);
+  atlas = g_new0 (GskGLTextureAtlas, 1);
   atlas->width = self->atlas_width;
   atlas->height = self->atlas_height;
   /* TODO: We might want to change the strategy about the amount of

@@ -759,7 +759,7 @@ destroy_credit_section (gpointer data)
   CreditSection *cs = data;
   g_free (cs->heading);
   g_strfreev (cs->people);
-  g_slice_free (CreditSection, data);
+  g_free (data);
 }
 
 static void
@@ -2324,7 +2324,7 @@ gtk_about_dialog_add_credit_section (GtkAboutDialog  *about,
   g_return_if_fail (section_name != NULL);
   g_return_if_fail (people != NULL);
 
-  new_entry = g_slice_new (CreditSection);
+  new_entry = g_new (CreditSection, 1);
   new_entry->heading = g_strdup ((char *)section_name);
   new_entry->people = g_strdupv ((char **)people);
 
