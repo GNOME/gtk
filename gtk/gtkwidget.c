@@ -7637,14 +7637,20 @@ gtk_widget_finalize (GObject *object)
   if (_gtk_widget_get_first_child (widget) != NULL)
     {
       GtkWidget *child;
-      g_warning ("Finalizing %s %p, but it still has children left:",
-                 gtk_widget_get_name (widget), widget);
+      GString *s;
+
+      s = g_string_new (NULL);
+      g_string_append_printf (s, "Finalizing %s %p, but it still has children left:",
+                              gtk_widget_get_name (widget), widget);
       for (child = _gtk_widget_get_first_child (widget);
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          g_warning ("   - %s %p", gtk_widget_get_name (child), child);
+          g_string_append_printf (s, "\n   - %s %p",
+                                  gtk_widget_get_name (child), child);
         }
+      g_warning ("%s", s->str);
+      g_string_free (s, TRUE);
     }
 
   if (g_object_is_floating (object))
