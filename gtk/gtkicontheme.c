@@ -3051,6 +3051,7 @@ theme_lookup_icon (IconTheme   *theme,
 
   min_difference = G_MAXINT;
   min_dir_size = NULL;
+  min_file = NULL;
 
   for (i = 0; i < theme->dir_sizes->len; i++)
     {

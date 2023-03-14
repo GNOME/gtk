@@ -758,11 +758,8 @@ _gtk_css_number_value_get (const GtkCssValue *value,
 gboolean
 gtk_css_dimension_value_is_zero (const GtkCssValue *value)
 {
-  if (!value)
-    return TRUE;
-
-  if (value->class != &GTK_CSS_VALUE_NUMBER)
-    return FALSE;
+  g_assert (value != 0);
+  g_assert (value->class == &GTK_CSS_VALUE_NUMBER);
 
   if (value->type != TYPE_DIMENSION)
     return FALSE;
