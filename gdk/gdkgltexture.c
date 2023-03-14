@@ -335,6 +335,7 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
   switch (internal_format)
   {
     case GL_RGB8:
+    case GL_RGB:
       texture->format = GDK_MEMORY_R8G8B8;
       break;
 
