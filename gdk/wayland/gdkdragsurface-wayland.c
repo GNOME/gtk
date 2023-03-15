@@ -33,6 +33,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdevice-wayland-private.h"
+#include "gdkdragsurfacesizeprivate.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
@@ -78,6 +79,17 @@ gdk_wayland_drag_surface_compute_size (GdkSurface *surface)
 
   if (impl->next_layout.surface_geometry_dirty)
     {
+      GdkDragSurfaceSize size;
+
+      gdk_drag_surface_size_init (&size);
+      size.width = impl->next_layout.configured_width;
+      size.height = impl->next_layout.configured_height;
+
+      gdk_drag_surface_notify_compute_size (GDK_DRAG_SURFACE (surface), &size);
+
+      impl->next_layout.configured_width = size.width;
+      impl->next_layout.configured_height = size.height;
+
       gdk_wayland_surface_update_size (surface,
                                        impl->next_layout.configured_width,
                                        impl->next_layout.configured_height,

@@ -45,6 +45,7 @@
 #include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdrag.h>
 #include <gdk/gdkdragsurface.h>
+#include <gdk/gdkdragsurfacesize.h>
 #include <gdk/gdkdrawcontext.h>
 #include <gdk/gdkdrop.h>
 #include <gdk/gdkenums.h>
