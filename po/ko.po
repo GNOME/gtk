@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-02-27 11:02+0000\n"
-"PO-Revision-Date: 2023-03-01 23:41+0900\n"
+"POT-Creation-Date: 2023-03-14 16:53+0000\n"
+"PO-Revision-Date: 2023-03-15 02:05+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -1096,7 +1096,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "글꼴 고르기"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3851
+#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3883
 #: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "글꼴"
@@ -1356,399 +1356,399 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "백슬래시"
 
-#: gtk/gtkaccessible.c:714
+#: gtk/gtkaccessible.c:759
 msgctxt "accessibility"
 msgid "alert"
 msgstr "알림"
 
-#: gtk/gtkaccessible.c:715
+#: gtk/gtkaccessible.c:760
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "알림 대화창"
 
-#: gtk/gtkaccessible.c:716
+#: gtk/gtkaccessible.c:761
 msgctxt "accessibility"
 msgid "banner"
 msgstr "배너"
 
-#: gtk/gtkaccessible.c:717
+#: gtk/gtkaccessible.c:762
 msgctxt "accessibility"
 msgid "button"
 msgstr "단추"
 
-#: gtk/gtkaccessible.c:718
+#: gtk/gtkaccessible.c:763
 msgctxt "accessibility"
 msgid "caption"
 msgstr "표제"
 
-#: gtk/gtkaccessible.c:719
+#: gtk/gtkaccessible.c:764
 msgctxt "accessibility"
 msgid "cell"
 msgstr "셀"
 
-#: gtk/gtkaccessible.c:720
+#: gtk/gtkaccessible.c:765
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "확인란"
 
-#: gtk/gtkaccessible.c:721
+#: gtk/gtkaccessible.c:766
 msgctxt "accessibility"
 msgid "column header"
 msgstr "열 헤더"
 
-#: gtk/gtkaccessible.c:722
+#: gtk/gtkaccessible.c:767
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "콤보 박스"
 
-#: gtk/gtkaccessible.c:723
+#: gtk/gtkaccessible.c:768
 msgctxt "accessibility"
 msgid "command"
 msgstr "명령"
 
-#: gtk/gtkaccessible.c:724
+#: gtk/gtkaccessible.c:769
 msgctxt "accessibility"
 msgid "composite"
 msgstr "컴포짓"
 
-#: gtk/gtkaccessible.c:725
+#: gtk/gtkaccessible.c:770
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "대화창"
 
-#: gtk/gtkaccessible.c:726
+#: gtk/gtkaccessible.c:771
 msgctxt "accessibility"
 msgid "document"
 msgstr "문서"
 
-#: gtk/gtkaccessible.c:727
+#: gtk/gtkaccessible.c:772
 msgctxt "accessibility"
 msgid "feed"
 msgstr "피드"
 
-#: gtk/gtkaccessible.c:728
+#: gtk/gtkaccessible.c:773
 msgctxt "accessibility"
 msgid "form"
 msgstr "폼"
 
-#: gtk/gtkaccessible.c:729
+#: gtk/gtkaccessible.c:774
 msgctxt "accessibility"
 msgid "generic"
 msgstr "일반"
 
-#: gtk/gtkaccessible.c:730
+#: gtk/gtkaccessible.c:775
 msgctxt "accessibility"
 msgid "grid"
 msgstr "격자"
 
-#: gtk/gtkaccessible.c:731
+#: gtk/gtkaccessible.c:776
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "격자 셀"
 
-#: gtk/gtkaccessible.c:732
+#: gtk/gtkaccessible.c:777
 msgctxt "accessibility"
 msgid "group"
 msgstr "모음"
 
-#: gtk/gtkaccessible.c:733
+#: gtk/gtkaccessible.c:778
 msgctxt "accessibility"
 msgid "heading"
 msgstr "제목"
 
-#: gtk/gtkaccessible.c:734
+#: gtk/gtkaccessible.c:779
 msgctxt "accessibility"
 msgid "image"
 msgstr "이미지"
 
-#: gtk/gtkaccessible.c:735
+#: gtk/gtkaccessible.c:780
 msgctxt "accessibility"
 msgid "input"
 msgstr "입력"
 
-#: gtk/gtkaccessible.c:736
+#: gtk/gtkaccessible.c:781
 msgctxt "accessibility"
 msgid "label"
 msgstr "레이블"
 
-#: gtk/gtkaccessible.c:737
+#: gtk/gtkaccessible.c:782
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "랜드마크"
 
-#: gtk/gtkaccessible.c:738
+#: gtk/gtkaccessible.c:783
 msgctxt "accessibility"
 msgid "legend"
 msgstr "범례"
 
-#: gtk/gtkaccessible.c:739
+#: gtk/gtkaccessible.c:784
 msgctxt "accessibility"
 msgid "link"
 msgstr "링크"
 
-#: gtk/gtkaccessible.c:740
+#: gtk/gtkaccessible.c:785
 msgctxt "accessibility"
 msgid "list"
 msgstr "리스트"
 
-#: gtk/gtkaccessible.c:741
+#: gtk/gtkaccessible.c:786
 msgctxt "accessibility"
 msgid "list box"
 msgstr "리스트 모음"
 
-#: gtk/gtkaccessible.c:742
+#: gtk/gtkaccessible.c:787
 msgctxt "accessibility"
 msgid "list item"
 msgstr "메뉴 항목"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:743
+#: gtk/gtkaccessible.c:788
 msgctxt "accessibility"
 msgid "log"
 msgstr "기록"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:744
+#: gtk/gtkaccessible.c:789
 msgctxt "accessibility"
 msgid "main"
 msgstr "메인"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:745
+#: gtk/gtkaccessible.c:790
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "장막"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:746
+#: gtk/gtkaccessible.c:791
 msgctxt "accessibility"
 msgid "math"
 msgstr "수학"
 
 # An element that represents a value within a known range.
-#: gtk/gtkaccessible.c:747
+#: gtk/gtkaccessible.c:792
 msgctxt "accessibility"
 msgid "meter"
 msgstr "범위값"
 
-#: gtk/gtkaccessible.c:748
+#: gtk/gtkaccessible.c:793
 msgctxt "accessibility"
 msgid "menu"
 msgstr "메뉴"
 
-#: gtk/gtkaccessible.c:749
+#: gtk/gtkaccessible.c:794
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "메뉴 모음"
 
-#: gtk/gtkaccessible.c:750
+#: gtk/gtkaccessible.c:795
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "메뉴 항목"
 
-#: gtk/gtkaccessible.c:751
+#: gtk/gtkaccessible.c:796
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "메뉴 항목 확인란"
 
-#: gtk/gtkaccessible.c:752
+#: gtk/gtkaccessible.c:797
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "메뉴 항목 라디오"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:753
+#: gtk/gtkaccessible.c:798
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "네비게이션"
 
-#: gtk/gtkaccessible.c:754
+#: gtk/gtkaccessible.c:799
 msgctxt "accessibility"
 msgid "none"
 msgstr "없음"
 
-#: gtk/gtkaccessible.c:755
+#: gtk/gtkaccessible.c:800
 msgctxt "accessibility"
 msgid "note"
 msgstr "노트"
 
-#: gtk/gtkaccessible.c:756
+#: gtk/gtkaccessible.c:801
 msgctxt "accessibility"
 msgid "option"
 msgstr "옵션"
 
-#: gtk/gtkaccessible.c:757
+#: gtk/gtkaccessible.c:802
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "프리젠테이션"
 
-#: gtk/gtkaccessible.c:758
+#: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "진행률 표시줄"
 
-#: gtk/gtkaccessible.c:759
+#: gtk/gtkaccessible.c:804
 msgctxt "accessibility"
 msgid "radio"
 msgstr "라디오"
 
-#: gtk/gtkaccessible.c:760
+#: gtk/gtkaccessible.c:805
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "라디오 모음"
 
-#: gtk/gtkaccessible.c:761
+#: gtk/gtkaccessible.c:806
 msgctxt "accessibility"
 msgid "range"
 msgstr "범위"
 
-#: gtk/gtkaccessible.c:762
+#: gtk/gtkaccessible.c:807
 msgctxt "accessibility"
 msgid "region"
 msgstr "구역"
 
-#: gtk/gtkaccessible.c:763
+#: gtk/gtkaccessible.c:808
 msgctxt "accessibility"
 msgid "row"
 msgstr "행"
 
-#: gtk/gtkaccessible.c:764
+#: gtk/gtkaccessible.c:809
 msgctxt "accessibility"
 msgid "row group"
 msgstr "행 모음"
 
-#: gtk/gtkaccessible.c:765
+#: gtk/gtkaccessible.c:810
 msgctxt "accessibility"
 msgid "row header"
 msgstr "행 헤더"
 
-#: gtk/gtkaccessible.c:766
+#: gtk/gtkaccessible.c:811
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "스크롤바"
 
-#: gtk/gtkaccessible.c:767
+#: gtk/gtkaccessible.c:812
 msgctxt "accessibility"
 msgid "search"
 msgstr "검색"
 
-#: gtk/gtkaccessible.c:768
+#: gtk/gtkaccessible.c:813
 msgctxt "accessibility"
 msgid "search box"
 msgstr "검색 창"
 
-#: gtk/gtkaccessible.c:769
+#: gtk/gtkaccessible.c:814
 msgctxt "accessibility"
 msgid "section"
 msgstr "섹션"
 
-#: gtk/gtkaccessible.c:770
+#: gtk/gtkaccessible.c:815
 msgctxt "accessibility"
 msgid "section head"
 msgstr "섹션 머리"
 
-#: gtk/gtkaccessible.c:771
+#: gtk/gtkaccessible.c:816
 msgctxt "accessibility"
 msgid "select"
 msgstr "선택"
 
-#: gtk/gtkaccessible.c:772
+#: gtk/gtkaccessible.c:817
 msgctxt "accessibility"
 msgid "separator"
 msgstr "구분선"
 
-#: gtk/gtkaccessible.c:773
+#: gtk/gtkaccessible.c:818
 msgctxt "accessibility"
 msgid "slider"
 msgstr "슬라이더"
 
-#: gtk/gtkaccessible.c:774
+#: gtk/gtkaccessible.c:819
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "스핀 단추"
 
-#: gtk/gtkaccessible.c:775
+#: gtk/gtkaccessible.c:820
 msgctxt "accessibility"
 msgid "status"
 msgstr "상태"
 
 # 현재 사용되지 않음
-#: gtk/gtkaccessible.c:776
+#: gtk/gtkaccessible.c:821
 msgctxt "accessibility"
 msgid "structure"
 msgstr "구조"
 
-#: gtk/gtkaccessible.c:777
+#: gtk/gtkaccessible.c:822
 msgctxt "accessibility"
 msgid "switch"
 msgstr "스위치"
 
-#: gtk/gtkaccessible.c:778
+#: gtk/gtkaccessible.c:823
 msgctxt "accessibility"
 msgid "tab"
 msgstr "탭"
 
-#: gtk/gtkaccessible.c:779
+#: gtk/gtkaccessible.c:824
 msgctxt "accessibility"
 msgid "table"
 msgstr "테이블"
 
-#: gtk/gtkaccessible.c:780
+#: gtk/gtkaccessible.c:825
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "탭 목록"
 
-#: gtk/gtkaccessible.c:781
+#: gtk/gtkaccessible.c:826
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "탭 패널"
 
-#: gtk/gtkaccessible.c:782
+#: gtk/gtkaccessible.c:827
 msgctxt "accessibility"
 msgid "text box"
 msgstr "텍스트 입력창"
 
-#: gtk/gtkaccessible.c:783
+#: gtk/gtkaccessible.c:828
 msgctxt "accessibility"
 msgid "time"
 msgstr "시간"
 
-#: gtk/gtkaccessible.c:784
+#: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
 msgid "timer"
 msgstr "타이머"
 
-#: gtk/gtkaccessible.c:785
+#: gtk/gtkaccessible.c:830
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "도구 모음"
 
-#: gtk/gtkaccessible.c:786
+#: gtk/gtkaccessible.c:831
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "풍선 도움말"
 
-#: gtk/gtkaccessible.c:787
+#: gtk/gtkaccessible.c:832
 msgctxt "accessibility"
 msgid "tree"
 msgstr "트리"
 
-#: gtk/gtkaccessible.c:788
+#: gtk/gtkaccessible.c:833
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "트리 격자"
 
-#: gtk/gtkaccessible.c:789
+#: gtk/gtkaccessible.c:834
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "트리 항목"
 
-#: gtk/gtkaccessible.c:790
+#: gtk/gtkaccessible.c:835
 msgctxt "accessibility"
 msgid "widget"
 msgstr "위젯"
 
-#: gtk/gtkaccessible.c:791
+#: gtk/gtkaccessible.c:836
 msgctxt "accessibility"
 msgid "window"
 msgstr "창"
@@ -2228,12 +2228,12 @@ msgid "A file with that name already exists"
 msgstr "그 이름의 파일이 이미 있습니다"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1163 gtk/gtkfilechooserwidget.c:5009
+#: gtk/gtkfilechooserwidget.c:1173 gtk/gtkfilechooserwidget.c:5041
 #: gtk/gtkfiledialog.c:841 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:638
 #: gtk/gtkprintunixdialog.c:657 gtk/gtkprintunixdialog.c:814
-#: gtk/gtkwindow.c:6150 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6158 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2249,7 +2249,7 @@ msgstr "열기(_O)"
 msgid "_Save"
 msgstr "저장(_S)"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:546
+#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:551
 msgid "Select which types of files are shown"
 msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 
@@ -2262,272 +2262,272 @@ msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 msgid "%1$s on %2$s"
 msgstr "%s %s"
 
-#: gtk/gtkfilechooserwidget.c:342
+#: gtk/gtkfilechooserwidget.c:341
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserwidget.c:705
+#: gtk/gtkfilechooserwidget.c:715
 msgid "The folder could not be created"
 msgstr "폴더를 만들 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:718
+#: gtk/gtkfilechooserwidget.c:728
 msgid "You need to choose a valid filename."
 msgstr "올바른 파일 이름을 선택해야 합니다."
 
-#: gtk/gtkfilechooserwidget.c:721
+#: gtk/gtkfilechooserwidget.c:731
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "폴더가 아니므로 %s 아래에 파일을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:731
+#: gtk/gtkfilechooserwidget.c:741
 msgid "Cannot create file as the filename is too long"
 msgstr "파일 이름이 너무 길어서 파일을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:732
+#: gtk/gtkfilechooserwidget.c:742
 msgid "Try using a shorter name."
 msgstr "짧은 이름을 사용해 보십시오."
 
-#: gtk/gtkfilechooserwidget.c:742
+#: gtk/gtkfilechooserwidget.c:752
 msgid "You may only select folders"
 msgstr "폴더만 선택할 수 있습니다"
 
-#: gtk/gtkfilechooserwidget.c:743
+#: gtk/gtkfilechooserwidget.c:753
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "선택한 항목이 폴더가 아닙니다. 다른 항목을 선택하십시오."
 
-#: gtk/gtkfilechooserwidget.c:751
+#: gtk/gtkfilechooserwidget.c:761
 msgid "Invalid file name"
 msgstr "잘못된 파일 이름"
 
-#: gtk/gtkfilechooserwidget.c:760
+#: gtk/gtkfilechooserwidget.c:770
 msgid "The folder contents could not be displayed"
 msgstr "폴더 내용을 표시할 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:768
+#: gtk/gtkfilechooserwidget.c:778
 msgid "The file could not be deleted"
 msgstr "파일을 삭제할 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:776
+#: gtk/gtkfilechooserwidget.c:786
 msgid "The file could not be moved to the Trash"
 msgstr "파일을 휴지통에 옮길 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:1161
+#: gtk/gtkfilechooserwidget.c:1171
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "정말로 “%s”을(를) 영구히 삭제하시겠습니까?"
 
-#: gtk/gtkfilechooserwidget.c:1162
+#: gtk/gtkfilechooserwidget.c:1172
 msgid "If you delete an item, it will be permanently lost."
 msgstr "삭제하면 영구히 잃어버리게 됩니다."
 
-#: gtk/gtkfilechooserwidget.c:1163 gtk/gtkfilechooserwidget.c:1791
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6087 gtk/gtktextview.c:8999
+#: gtk/gtkfilechooserwidget.c:1173 gtk/gtkfilechooserwidget.c:1801
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6099 gtk/gtktextview.c:8999
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: gtk/gtkfilechooserwidget.c:1276
+#: gtk/gtkfilechooserwidget.c:1286
 msgid "The file could not be renamed"
 msgstr "파일의 이름을 바꿀 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:1482
+#: gtk/gtkfilechooserwidget.c:1492
 msgid "Could not select file"
 msgstr "파일을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:1700 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1710 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "그리드 보기"
 
-#: gtk/gtkfilechooserwidget.c:1706
+#: gtk/gtkfilechooserwidget.c:1716
 msgid "List View"
 msgstr "목록 보기"
 
-#: gtk/gtkfilechooserwidget.c:1771
+#: gtk/gtkfilechooserwidget.c:1781
 msgid "_Visit File"
 msgstr "파일 보기(_V)"
 
-#: gtk/gtkfilechooserwidget.c:1775
+#: gtk/gtkfilechooserwidget.c:1785
 msgid "_Open With File Manager"
 msgstr "파일 관리자로 열기(_O)"
 
-#: gtk/gtkfilechooserwidget.c:1779
+#: gtk/gtkfilechooserwidget.c:1789
 msgid "_Copy Location"
 msgstr "위치 복사(_C)"
 
-#: gtk/gtkfilechooserwidget.c:1783
+#: gtk/gtkfilechooserwidget.c:1793
 msgid "_Add to Bookmarks"
 msgstr "책갈피에 추가(_A)"
 
-#: gtk/gtkfilechooserwidget.c:1787 gtk/gtkplacessidebar.c:2308
-#: gtk/gtkplacessidebar.c:3265 gtk/ui/gtkfilechooserwidget.ui:665
+#: gtk/gtkfilechooserwidget.c:1797 gtk/gtkplacessidebar.c:2308
+#: gtk/gtkplacessidebar.c:3265 gtk/ui/gtkfilechooserwidget.ui:670
 msgid "_Rename"
 msgstr "이름 바꾸기(_R)"
 
-#: gtk/gtkfilechooserwidget.c:1795
+#: gtk/gtkfilechooserwidget.c:1805
 msgid "_Move to Trash"
 msgstr "휴지통으로 옮기기(_M)"
 
-#: gtk/gtkfilechooserwidget.c:1804
+#: gtk/gtkfilechooserwidget.c:1814
 msgid "Show _Hidden Files"
 msgstr "숨긴 파일 표시(_H)"
 
-#: gtk/gtkfilechooserwidget.c:1808
+#: gtk/gtkfilechooserwidget.c:1818
 msgid "Show _Size Column"
 msgstr "크기 열 표시(_S)"
 
-#: gtk/gtkfilechooserwidget.c:1813
+#: gtk/gtkfilechooserwidget.c:1823
 msgid "Show T_ype Column"
 msgstr "종류 열 표시(_Y)"
 
-#: gtk/gtkfilechooserwidget.c:1818
+#: gtk/gtkfilechooserwidget.c:1828
 msgid "Show _Time"
 msgstr "시간 표시(_T)"
 
-#: gtk/gtkfilechooserwidget.c:1823
+#: gtk/gtkfilechooserwidget.c:1833
 msgid "Sort _Folders Before Files"
 msgstr "폴더를 파일보다 앞에 정렬(_F)"
 
-#: gtk/gtkfilechooserwidget.c:1957 gtk/gtkfilechooserwidget.c:1993
-#: gtk/gtkfilechooserwidget.c:3894
+#: gtk/gtkfilechooserwidget.c:1967 gtk/gtkfilechooserwidget.c:2003
+#: gtk/gtkfilechooserwidget.c:3926
 msgid "Unknown"
 msgstr "알 수 없음"
 
 # 홈 폴더
-#: gtk/gtkfilechooserwidget.c:2051 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2061 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "홈"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2218 gtk/inspector/css-node-tree.ui:76
-#: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:114
+#: gtk/gtkfilechooserwidget.c:2231 gtk/inspector/css-node-tree.ui:76
+#: gtk/ui/gtkfilechooserwidget.ui:239 gtk/ui/gtkprintunixdialog.ui:114
 msgid "Location"
 msgstr "위치"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2325
+#: gtk/gtkfilechooserwidget.c:2338
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: gtk/gtkfilechooserwidget.c:2865 gtk/gtkfilechooserwidget.c:2879
+#: gtk/gtkfilechooserwidget.c:2893 gtk/gtkfilechooserwidget.c:2907
 #, c-format
 msgid "Searching in %s"
 msgstr "%s에서 검색"
 
-#: gtk/gtkfilechooserwidget.c:2885
+#: gtk/gtkfilechooserwidget.c:2913
 msgid "Searching"
 msgstr "검색"
 
-#: gtk/gtkfilechooserwidget.c:2891
+#: gtk/gtkfilechooserwidget.c:2919
 msgid "Enter location or URL"
 msgstr "위치 또는 URL 입력"
 
-#: gtk/gtkfilechooserwidget.c:3457 gtk/gtkfilechooserwidget.c:5794
-#: gtk/ui/gtkfilechooserwidget.ui:383
+#: gtk/gtkfilechooserwidget.c:3486 gtk/gtkfilechooserwidget.c:5826
+#: gtk/ui/gtkfilechooserwidget.ui:387
 msgid "Modified"
 msgstr "수정"
 
-#: gtk/gtkfilechooserwidget.c:3638
+#: gtk/gtkfilechooserwidget.c:3670
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s의 내용을 읽을 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:3642
+#: gtk/gtkfilechooserwidget.c:3674
 msgid "Could not read the contents of the folder"
 msgstr "폴더의 내용을 읽을 수 없습니다"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3789 gtk/gtkfilechooserwidget.c:3832
+#: gtk/gtkfilechooserwidget.c:3821 gtk/gtkfilechooserwidget.c:3864
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3791 gtk/gtkfilechooserwidget.c:3834
+#: gtk/gtkfilechooserwidget.c:3823 gtk/gtkfilechooserwidget.c:3866
 msgid "%l:%M %p"
 msgstr "%p %l:%M"
 
-#: gtk/gtkfilechooserwidget.c:3795
+#: gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserwidget.c:3803
+#: gtk/gtkfilechooserwidget.c:3835
 msgid "%-e %b"
 msgstr "%b %-e일"
 
-#: gtk/gtkfilechooserwidget.c:3807
+#: gtk/gtkfilechooserwidget.c:3839
 msgid "%-e %b %Y"
 msgstr "%Y년 %b %-e일"
 
-#: gtk/gtkfilechooserwidget.c:3849 gtk/gtkfilechooserwidget.c:3857
+#: gtk/gtkfilechooserwidget.c:3881 gtk/gtkfilechooserwidget.c:3889
 msgid "Program"
 msgstr "프로그램"
 
-#: gtk/gtkfilechooserwidget.c:3850
+#: gtk/gtkfilechooserwidget.c:3882
 msgid "Audio"
 msgstr "오디오"
 
-#: gtk/gtkfilechooserwidget.c:3852
+#: gtk/gtkfilechooserwidget.c:3884 gtk/gtkfilefilter.c:1035
 msgid "Image"
 msgstr "이미지"
 
-#: gtk/gtkfilechooserwidget.c:3853
+#: gtk/gtkfilechooserwidget.c:3885
 msgid "Archive"
 msgstr "압축"
 
-#: gtk/gtkfilechooserwidget.c:3854
+#: gtk/gtkfilechooserwidget.c:3886
 msgid "Markup"
 msgstr "마크업"
 
-#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilechooserwidget.c:3856
+#: gtk/gtkfilechooserwidget.c:3887 gtk/gtkfilechooserwidget.c:3888
 msgid "Text"
 msgstr "텍스트"
 
-#: gtk/gtkfilechooserwidget.c:3858
+#: gtk/gtkfilechooserwidget.c:3890
 msgid "Video"
 msgstr "비디오"
 
-#: gtk/gtkfilechooserwidget.c:3859
+#: gtk/gtkfilechooserwidget.c:3891
 msgid "Contacts"
 msgstr "연락처"
 
-#: gtk/gtkfilechooserwidget.c:3860
+#: gtk/gtkfilechooserwidget.c:3892
 msgid "Calendar"
 msgstr "캘린더"
 
-#: gtk/gtkfilechooserwidget.c:3861
+#: gtk/gtkfilechooserwidget.c:3893
 msgid "Document"
 msgstr "문서"
 
-#: gtk/gtkfilechooserwidget.c:3862
+#: gtk/gtkfilechooserwidget.c:3894
 msgid "Presentation"
 msgstr "프리젠테이션"
 
-#: gtk/gtkfilechooserwidget.c:3863
+#: gtk/gtkfilechooserwidget.c:3895
 msgid "Spreadsheet"
 msgstr "스프레드시트"
 
-#: gtk/gtkfilechooserwidget.c:5001 gtk/gtkprintunixdialog.c:648
+#: gtk/gtkfilechooserwidget.c:5033 gtk/gtkprintunixdialog.c:648
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "이름이 “%s”인 파일이 이미 있습니다. 이 파일을 바꾸시겠습니까?"
 
-#: gtk/gtkfilechooserwidget.c:5003 gtk/gtkprintunixdialog.c:652
+#: gtk/gtkfilechooserwidget.c:5035 gtk/gtkprintunixdialog.c:652
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "“%s” 안에 파일이 이미 있습니다. 파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: gtk/gtkfilechooserwidget.c:5009 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:5041 gtk/gtkprintunixdialog.c:660
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: gtk/gtkfilechooserwidget.c:5164
+#: gtk/gtkfilechooserwidget.c:5196
 msgid "You do not have access to the specified folder."
 msgstr "지정한 폴더에 접근할 수 없습니다."
 
-#: gtk/gtkfilechooserwidget.c:5741
+#: gtk/gtkfilechooserwidget.c:5773
 msgid "Could not send the search request"
 msgstr "검색 요청을 보낼 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:6017
+#: gtk/gtkfilechooserwidget.c:6054
 msgid "Accessed"
 msgstr "접근 시간"
 
@@ -2555,6 +2555,10 @@ msgstr "폴더 선택"
 #: gtk/gtkfiledialog.c:824
 msgid "Select a Folder"
 msgstr "폴더 선택"
+
+#: gtk/gtkfilefilter.c:1048
+msgid "Unspecified"
+msgstr "지정하지 않음"
 
 #: gtk/gtkfontchooserdialog.c:186
 msgid "Change Font Features"
@@ -2631,19 +2635,19 @@ msgstr "문자 이형"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 컨텍스트 만들기 실패"
 
-#: gtk/gtklabel.c:5655 gtk/gtktext.c:6075 gtk/gtktextview.c:8987
+#: gtk/gtklabel.c:5655 gtk/gtktext.c:6087 gtk/gtktextview.c:8987
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6079 gtk/gtktextview.c:8991
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6091 gtk/gtktextview.c:8991
 msgid "_Copy"
 msgstr "복사(_C)"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6083 gtk/gtktextview.c:8995
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6095 gtk/gtktextview.c:8995
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: gtk/gtklabel.c:5663 gtk/gtktext.c:6096 gtk/gtktextview.c:9020
+#: gtk/gtklabel.c:5663 gtk/gtktext.c:6108 gtk/gtktextview.c:9020
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
@@ -2712,7 +2716,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/gtkprintbackend.c:639 gtk/gtkwindow.c:6151
+#: gtk/gtkprintbackend.c:639 gtk/gtkwindow.c:6159
 msgid "_OK"
 msgstr "확인(_O)"
 
@@ -3013,7 +3017,7 @@ msgstr "이 이름은 이미 있습니다"
 
 #: gtk/gtkplacessidebar.c:2302 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
-#: gtk/ui/gtkfilechooserwidget.ui:176 gtk/ui/gtkfilechooserwidget.ui:640
+#: gtk/ui/gtkfilechooserwidget.ui:176 gtk/ui/gtkfilechooserwidget.ui:645
 #: gtk/ui/gtkprintunixdialog.ui:83
 msgid "Name"
 msgstr "이름"
@@ -3570,12 +3574,12 @@ msgid "Search Shortcuts"
 msgstr "검색 바로 가기"
 
 #: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
-#: gtk/ui/gtkfilechooserwidget.ui:497
+#: gtk/ui/gtkfilechooserwidget.ui:502
 msgid "No Results Found"
 msgstr "결과가 없습니다"
 
 #: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
-#: gtk/ui/gtkfilechooserwidget.ui:510 gtk/ui/gtkplacesview.ui:218
+#: gtk/ui/gtkfilechooserwidget.ui:515 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "다르게 검색해 보기"
 
@@ -3585,7 +3589,7 @@ msgid "Sidebar"
 msgstr "가장자리창"
 
 # 키보드에 써 있는 단어이므로 번역하지 않는다
-#: gtk/gtktext.c:6101 gtk/gtktextview.c:9025
+#: gtk/gtktext.c:6113 gtk/gtktextview.c:9025
 msgid "Insert _Emoji"
 msgstr "에모지 입력(_E)"
 
@@ -3601,12 +3605,12 @@ msgstr "다시 실행(_R)"
 msgid "Expand"
 msgstr "확장"
 
-#: gtk/gtkwindow.c:6139
+#: gtk/gtkwindow.c:6147
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK 인스펙터를 사용하시겠습니까?"
 
-#: gtk/gtkwindow.c:6141
+#: gtk/gtkwindow.c:6149
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3617,7 +3621,7 @@ msgstr ""
 "의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK 인스펙터를 사용했을 때 프"
 "로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
 
-#: gtk/gtkwindow.c:6146
+#: gtk/gtkwindow.c:6154
 msgid "Don’t show this message again"
 msgstr "이 메시지 다시 보지 않기"
 
@@ -3927,7 +3931,7 @@ msgid "Address"
 msgstr "주소"
 
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:36 gtk/ui/gtkfilechooserwidget.ui:336
+#: gtk/inspector/statistics.ui:36 gtk/ui/gtkfilechooserwidget.ui:339
 msgid "Type"
 msgstr "종류"
 
@@ -4159,7 +4163,7 @@ msgstr "경로"
 msgid "Count"
 msgstr "개수"
 
-#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:290
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:292
 #: gtk/ui/gtkfontchooserwidget.ui:204 gtk/ui/gtkfontchooserwidget.ui:351
 msgid "Size"
 msgstr "크기"
@@ -4261,7 +4265,7 @@ msgstr "구현"
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "테마가 GTK_THEME으로 하드 코딩되어 있습니다"
 
-#: gtk/inspector/visual.c:853
+#: gtk/inspector/visual.c:871
 msgid "Backend does not support window scaling"
 msgstr "백엔드가 창 크기 조정을 지원하지 않습니다"
 
@@ -6169,15 +6173,15 @@ msgstr "최근"
 msgid "Create Folder"
 msgstr "폴더 만들기"
 
-#: gtk/ui/gtkfilechooserwidget.ui:449
+#: gtk/ui/gtkfilechooserwidget.ui:454
 msgid "Remote location — only searching the current folder"
 msgstr "원격 위치 — 현재 폴더만 검색"
 
-#: gtk/ui/gtkfilechooserwidget.ui:578
+#: gtk/ui/gtkfilechooserwidget.ui:583
 msgid "Folder Name"
 msgstr "폴더 이름"
 
-#: gtk/ui/gtkfilechooserwidget.ui:604
+#: gtk/ui/gtkfilechooserwidget.ui:609
 msgid "_Create"
 msgstr "만들기(_C)"
 
@@ -6465,42 +6469,42 @@ msgstr "고급"
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
-#: modules/media/gtkffmediafile.c:253
+#: modules/media/gtkffmediafile.c:262
 #, c-format
 msgid "Unspecified error decoding media"
 msgstr "미디어 디코딩에 알 수 없는 오류가 있습니다"
 
-#: modules/media/gtkffmediafile.c:286
+#: modules/media/gtkffmediafile.c:295
 #, c-format
 msgid "Cannot find decoder: %s"
 msgstr "디코더를 찾을 수 없습니다: %s"
 
-#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
+#: modules/media/gtkffmediafile.c:305 modules/media/gtkffmediafile.c:372
 msgid "Failed to allocate a codec context"
 msgstr "코덱 컨텍스트를 할당하는데 실패했습니다"
 
-#: modules/media/gtkffmediafile.c:341
+#: modules/media/gtkffmediafile.c:350
 #, c-format
 msgid "Cannot find encoder: %s"
 msgstr "인코더를 찾을 수 없습니다: %s"
 
-#: modules/media/gtkffmediafile.c:352
+#: modules/media/gtkffmediafile.c:361
 msgid "Cannot add new stream"
 msgstr "새 스트림을 추가할 수 없습니다"
 
-#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
+#: modules/media/gtkffmediafile.c:494 modules/media/gtkffmediafile.c:951
 msgid "Failed to allocate an audio frame"
 msgstr "오디오 프레임을 할당하는데 실패했습니다"
 
-#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
+#: modules/media/gtkffmediafile.c:659 modules/media/gtkffmediafile.c:907
 msgid "Not enough memory"
 msgstr "메모리가 부족합니다"
 
-#: modules/media/gtkffmediafile.c:821
+#: modules/media/gtkffmediafile.c:830
 msgid "Could not allocate resampler context"
 msgstr "리샘플러 컨텍스트를 할당하는데 실패했습니다"
 
-#: modules/media/gtkffmediafile.c:868
+#: modules/media/gtkffmediafile.c:877
 msgid "No audio output found"
 msgstr "오디오 출력이 없습니다"
 
