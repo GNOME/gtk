@@ -366,6 +366,7 @@ static const char *state_attrs[] = {
   [GTK_ACCESSIBLE_STATE_INVALID]        = "invalid",
   [GTK_ACCESSIBLE_STATE_PRESSED]        = "pressed",
   [GTK_ACCESSIBLE_STATE_SELECTED]       = "selected",
+  [GTK_ACCESSIBLE_STATE_VISITED] = "visited",
 };
 
 /*< private >
