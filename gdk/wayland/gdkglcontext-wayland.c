@@ -65,6 +65,9 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   int dx = impl->pending_buffer_offset_x;
   int dy = impl->pending_buffer_offset_y;
 
+  impl->pending_buffer_offset_x = 0;
+  impl->pending_buffer_offset_y = 0;
+
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
@@ -118,7 +121,7 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
 {
   GdkWaylandDisplay *self = GDK_WAYLAND_DISPLAY (display);
 
-  if (!gdk_display_init_egl (display, 
+  if (!gdk_display_init_egl (display,
                              EGL_PLATFORM_WAYLAND_EXT,
                              self->wl_display,
                              TRUE,
