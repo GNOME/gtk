@@ -1469,8 +1469,8 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
       g_warning ("Attempt to create texture of size %ux%u but max size is %d. "
                  "Clipping will occur.",
                  width, height, self->max_texture_size);
-      width = MAX (width, self->max_texture_size);
-      height = MAX (height, self->max_texture_size);
+      width = MIN (width, self->max_texture_size);
+      height = MIN (height, self->max_texture_size);
     }
   texture_id = gsk_gl_command_queue_create_texture (self, width, height, GL_RGBA8, min_filter, mag_filter);
   if (texture_id == -1)
