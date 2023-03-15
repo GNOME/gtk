@@ -107,8 +107,7 @@ gtk_list_item_widget_setup_object (GtkListFactoryWidget *fw,
 
   list_item->owner = self;
 
-  if (list_item->child)
-    gtk_list_item_widget_add_child (self, list_item->child);
+  gtk_list_item_widget_set_child (self, list_item->child);
 
   gtk_list_factory_widget_set_activatable (fw, list_item->activatable);
   gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
@@ -130,8 +129,7 @@ gtk_list_item_widget_teardown_object (GtkListFactoryWidget *fw,
 
   list_item->owner = NULL;
 
-  if (list_item->child)
-    gtk_list_item_widget_remove_child (self, list_item->child);
+  gtk_list_item_widget_set_child (self, NULL);
 
   gtk_list_factory_widget_set_activatable (fw, FALSE);
   gtk_list_factory_widget_set_selectable (fw, FALSE);
@@ -213,45 +211,17 @@ gtk_list_item_widget_new (GtkListItemFactory *factory,
 }
 
 void
-gtk_list_item_widget_add_child (GtkListItemWidget *self,
+gtk_list_item_widget_set_child (GtkListItemWidget *self,
                                 GtkWidget         *child)
 {
-  gtk_widget_set_parent (child, GTK_WIDGET (self));
-}
+  GtkWidget *cur_child = gtk_widget_get_first_child (GTK_WIDGET (self));
 
-void
-gtk_list_item_widget_reorder_child (GtkListItemWidget *self,
-                                    GtkWidget         *child,
-                                    guint              position)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-  GtkWidget *sibling = NULL;
+  if (cur_child == child)
+    return;
 
-  if (position > 0)
-    {
-      GtkWidget *c;
-      guint i;
+  g_clear_pointer (&cur_child, gtk_widget_unparent);
 
-      for (c = gtk_widget_get_first_child (widget), i = 0;
-           c;
-           c = gtk_widget_get_next_sibling (c), i++)
-        {
-          if (i + 1 == position)
-            {
-              sibling = c;
-              break;
-            }
-        }
-    }
-
-  if (child != sibling)
-    gtk_widget_insert_after (child, widget, sibling);
-}
-
-void
-gtk_list_item_widget_remove_child (GtkListItemWidget *self,
-                                   GtkWidget         *child)
-{
-  gtk_widget_unparent (child);
+  if (child)
+    gtk_widget_set_parent (child, GTK_WIDGET (self));
 }
 

@@ -309,19 +309,16 @@ gtk_list_item_set_child (GtkListItem *self,
   if (self->child == child)
     return;
 
-  if (self->child && self->owner)
-    gtk_list_item_widget_remove_child (self->owner, self->child);
-
   g_clear_object (&self->child);
 
   if (child)
     {
       g_object_ref_sink (child);
       self->child = child;
-
-      if (self->owner)
-        gtk_list_item_widget_add_child (self->owner, child);
     }
+
+  if (self->owner)
+    gtk_list_item_widget_set_child (self->owner, child);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }

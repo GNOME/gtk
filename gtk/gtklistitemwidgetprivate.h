@@ -50,12 +50,7 @@ GtkWidget *             gtk_list_item_widget_new                (GtkListItemFact
                                                                  const char             *css_name,
                                                                  GtkAccessibleRole       role);
 
-void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
-                                                                 GtkWidget              *child);
-void                    gtk_list_item_widget_reorder_child      (GtkListItemWidget      *self,
-                                                                 GtkWidget              *child,
-                                                                 guint                   position);
-void                    gtk_list_item_widget_remove_child       (GtkListItemWidget      *self,
+void                    gtk_list_item_widget_set_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
 
 G_END_DECLS

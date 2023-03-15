@@ -22,11 +22,12 @@
 #include "gtkcolumnviewcellprivate.h"
 
 #include "gtkcolumnviewcolumnprivate.h"
-#include "gtkprivate.h"
-#include "gtklistitemwidgetprivate.h"
-#include "gtkwidgetprivate.h"
+#include "gtkcolumnviewrowwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtklistitemwidgetprivate.h"
+#include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 struct _GtkColumnViewCell
@@ -248,7 +249,7 @@ gtk_column_view_cell_remove (GtkColumnViewCell *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
 
-  gtk_list_item_widget_remove_child (GTK_LIST_ITEM_WIDGET (gtk_widget_get_parent (widget)), widget);
+  gtk_column_view_row_widget_remove_child (GTK_COLUMN_VIEW_ROW_WIDGET (gtk_widget_get_parent (widget)), widget);
 }
 
 GtkColumnViewCell *
