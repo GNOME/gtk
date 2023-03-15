@@ -1546,20 +1546,28 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
                          epoxy_has_gl_extension ("OES_vertex_half_float");
 
-  GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
-                     "%s version: %d.%d (%s)\n"
-                     "* GLSL version: %s\n"
-                     "* Extensions checked:\n"
-                     " - GL_KHR_debug: %s\n"
-                     " - GL_EXT_unpack_subimage: %s\n"
-                     " - OES_vertex_half_float: %s",
-                     gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
-                     priv->gl_version / 10, priv->gl_version % 10,
-                     priv->is_legacy ? "legacy" : "core",
-                     glGetString (GL_SHADING_LANGUAGE_VERSION),
-                     priv->has_khr_debug ? "yes" : "no",
-                     priv->has_unpack_subimage ? "yes" : "no",
-                     priv->has_half_float ? "yes" : "no");
+#ifdef G_ENABLE_DEBUG
+  {
+    int max_texture_size;
+    glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
+    GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
+                       "%s version: %d.%d (%s)\n"
+                       "* GLSL version: %s\n"
+                       "* Max texture size: %d\n"
+                       "* Extensions checked:\n"
+                       " - GL_KHR_debug: %s\n"
+                       " - GL_EXT_unpack_subimage: %s\n"
+                       " - OES_vertex_half_float: %s",
+                       gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
+                       priv->gl_version / 10, priv->gl_version % 10,
+                       priv->is_legacy ? "legacy" : "core",
+                       glGetString (GL_SHADING_LANGUAGE_VERSION),
+                       max_texture_size,
+                       priv->has_khr_debug ? "yes" : "no",
+                       priv->has_unpack_subimage ? "yes" : "no",
+                       priv->has_half_float ? "yes" : "no");
+  }
+#endif
 
   priv->extensions_checked = TRUE;
 }
