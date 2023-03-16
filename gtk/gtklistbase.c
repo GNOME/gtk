@@ -23,6 +23,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkbitset.h"
+#include "gtkcssboxesprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkdragsourceprivate.h"
@@ -1324,6 +1325,8 @@ update_autoscroll (GtkListBase *self,
 /*
  * gtk_list_base_size_allocate_child:
  * @self: The listbase
+ * @boxes: The CSS boxes of @self to allow for proper
+ *     clipping
  * @child: The child
  * @x: top left coordinate in the across direction
  * @y: top right coordinate in the along direction
@@ -1336,6 +1339,7 @@ update_autoscroll (GtkListBase *self,
  **/
 static void
 gtk_list_base_size_allocate_child (GtkListBase *self,
+                                   GtkCssBoxes *boxes,
                                    GtkWidget   *child,
                                    int          x,
                                    int          y,
@@ -1343,10 +1347,9 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
                                    int          height)
 {
   GtkAllocation child_allocation;
-  int self_width, self_height;
+  int self_width;
 
   self_width = gtk_widget_get_width (GTK_WIDGET (self));
-  self_height = gtk_widget_get_height (GTK_WIDGET (self));
 
   if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) == GTK_ORIENTATION_VERTICAL)
     {
@@ -1379,14 +1382,14 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
       child_allocation.height = width;
     }
 
-  if (!gdk_rectangle_intersect (&child_allocation,
-                                &(GdkRectangle) {
-                                  - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
-                                  - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
-                                  self_width + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
-                                  self_height + GTK_LIST_BASE_CHILD_MAX_OVERDRAW
-                                },
-                                NULL))
+  if (!graphene_rect_intersection (gtk_css_boxes_get_padding_rect (boxes),
+                                   &GRAPHENE_RECT_INIT(
+                                     child_allocation.x + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                     child_allocation.y + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                     child_allocation.width + 2 * GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                     child_allocation.height + 2 * GTK_LIST_BASE_CHILD_MAX_OVERDRAW
+                                   ),
+                                   NULL))
     {
       /* child is fully outside the viewport, hide it and don't allocate it */
       gtk_widget_set_child_visible (child, FALSE);
@@ -1399,7 +1402,8 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
 }
 
 static void
-gtk_list_base_allocate_children (GtkListBase *self)
+gtk_list_base_allocate_children (GtkListBase *self,
+                                 GtkCssBoxes *boxes)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListTile *tile;
@@ -1415,6 +1419,7 @@ gtk_list_base_allocate_children (GtkListBase *self)
       if (tile->widget)
         {
           gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
+                                             boxes,
                                              tile->widget,
                                              tile->area.x - dx,
                                              tile->area.y - dy,
@@ -1511,7 +1516,8 @@ gtk_list_base_get_rubberband_coords (GtkListBase  *self,
 }
 
 static void
-gtk_list_base_allocate_rubberband (GtkListBase *self)
+gtk_list_base_allocate_rubberband (GtkListBase *self,
+                                   GtkCssBoxes *boxes)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkRequisition min_size;
@@ -1531,6 +1537,7 @@ gtk_list_base_allocate_rubberband (GtkListBase *self)
   rect.y -= offset_y;
 
   gtk_list_base_size_allocate_child (self,
+                                     boxes,
                                      priv->rubberband->widget,
                                      rect.x, rect.y, rect.width, rect.height);
 }
@@ -1974,10 +1981,14 @@ gtk_list_base_update_adjustments (GtkListBase *self)
 void
 gtk_list_base_allocate (GtkListBase *self)
 {
+  GtkCssBoxes boxes;
+
+  gtk_css_boxes_init (&boxes, GTK_WIDGET (self));
+
   gtk_list_base_update_adjustments (self);
 
-  gtk_list_base_allocate_children (self);
-  gtk_list_base_allocate_rubberband (self);
+  gtk_list_base_allocate_children (self, &boxes);
+  gtk_list_base_allocate_rubberband (self, &boxes);
 }
 
 GtkScrollablePolicy

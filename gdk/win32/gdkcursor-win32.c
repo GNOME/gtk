@@ -1005,7 +1005,8 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   } bmi;
   HDC hdc;
   uint8_t *pixels, *bits;
-  int rowstride, x, y, w, h;
+  int x, y, w, h;
+  gsize rowstride;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))
     return NULL;
@@ -1057,7 +1058,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 		no_alpha = FALSE;
 	      pixels += 4;
 	    }
-	  pixels += (w * 4 - rowstride);
+	  pixels += rowstride - w * 4;
 	}
 
       /* mask */
@@ -1072,7 +1073,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 		  pixels[3] = 255 - bits[(x + y * w) * 4];
 		  pixels += 4;
 		}
-	      pixels += (w * 4 - rowstride);
+	      pixels += rowstride - w * 4;
 	    }
 	}
     }
@@ -1146,7 +1147,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 		  xorp++;
 		}
 	    }
-	  pixels += (w * 4 - rowstride);
+	  pixels += rowstride - w * 4;
 	}
     }
 
