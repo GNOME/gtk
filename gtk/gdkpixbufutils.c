@@ -284,7 +284,8 @@ extract_plane (GdkPixbuf *src,
                int        to_plane)
 {
   guchar *src_data, *dst_data;
-  int width, height, src_stride, dst_stride;
+  int width, height;
+  gsize src_stride, dst_stride;
   guchar *src_row, *dst_row;
   int x, y;
 
