@@ -29,10 +29,10 @@
 #include "gtkbuildable.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerfocus.h"
+#include "gtkfilelauncher.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
 #include "gtkpangoprivate.h"
@@ -59,6 +59,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib/gi18n-lib.h>
 
 /**
  * GtkLabel:
@@ -2102,14 +2103,31 @@ gtk_label_activate_link (GtkLabel    *self,
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  GtkUriLauncher *launcher;
+  const char *uri_scheme;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  launcher = gtk_uri_launcher_new (uri);
-  gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
-  g_object_unref (launcher);
+  uri_scheme = g_uri_peek_scheme (uri);
+  if (g_strcmp0 (uri_scheme, "file") == 0)
+    {
+      GFile *file;
+      GtkFileLauncher *launcher;
+
+      file = g_file_new_for_uri (uri);
+      launcher = gtk_file_launcher_new (file);
+      gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      g_object_unref (launcher);
+      g_object_unref (file);
+    }
+  else
+    {
+      GtkUriLauncher *launcher;
+
+      launcher = gtk_uri_launcher_new (uri);
+      gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      g_object_unref (launcher);
+    }
 
   return TRUE;
 }
