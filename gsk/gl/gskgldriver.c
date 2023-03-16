@@ -733,7 +733,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
   format = GL_RGBA8;
 
-  if (GDK_IS_GL_TEXTURE (texture))
+  if (GDK_IS_GL_TEXTURE (texture) && min_filter == GL_LINEAR && mag_filter == GL_LINEAR)
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
       GdkGLContext *texture_context = gdk_gl_texture_get_context (gl_texture);
