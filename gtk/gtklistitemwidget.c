@@ -480,6 +480,7 @@ gtk_list_item_widget_click_gesture_released (GtkGestureClick   *gesture,
       extend = (state & GDK_SHIFT_MASK) != 0;
       modify = (state & GDK_CONTROL_MASK) != 0;
 
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       gtk_widget_activate_action (GTK_WIDGET (self),
                                   "list.select-item",
                                   "(ubb)",
