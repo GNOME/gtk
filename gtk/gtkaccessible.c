@@ -251,16 +251,13 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
   GtkATContext *context;
 
   context = gtk_accessible_get_at_context (self);
-  if (context != NULL)
+  if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
     {
       GtkAccessible *sibling = NULL;
 
-      if (gtk_at_context_get_accessible_parent (context) != NULL)
-        {
-          sibling = gtk_at_context_get_next_accessible_sibling (context);
-          if (sibling != NULL)
-            sibling = g_object_ref (sibling);
-        }
+      sibling = gtk_at_context_get_next_accessible_sibling (context);
+      if (sibling != NULL)
+        sibling = g_object_ref (sibling);
 
       g_object_unref (context);
 
