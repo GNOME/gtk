@@ -249,25 +249,21 @@ gtk_accessible_get_next_accessible_sibling (GtkAccessible *self)
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
   GtkATContext *context;
+  GtkAccessible *sibling = NULL;
 
   context = gtk_accessible_get_at_context (self);
-  if (context != NULL)
+  if (context != NULL && gtk_at_context_get_accessible_parent (context) != NULL)
     {
-      GtkAccessible *sibling = NULL;
-
-      if (gtk_at_context_get_accessible_parent (context) != NULL)
-        {
-          sibling = gtk_at_context_get_next_accessible_sibling (context);
-          if (sibling != NULL)
-            sibling = g_object_ref (sibling);
-        }
-
-      g_object_unref (context);
-
-      return sibling;
+      sibling = gtk_at_context_get_next_accessible_sibling (context);
+      if (sibling != NULL)
+        sibling = g_object_ref (sibling);
     }
   else
-    return GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
+    sibling = GTK_ACCESSIBLE_GET_IFACE (self)->get_next_accessible_sibling (self);
+
+  g_clear_object (&context);
+
+  return sibling;
 }
 
 /**
