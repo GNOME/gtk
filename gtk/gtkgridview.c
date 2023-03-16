@@ -820,7 +820,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
         }
     }
   /* Add a filler tile for empty space in the bottom right */
-  if (i < self->n_columns)
+  if (i > 0)
     {
       GtkListTile *filler;
       tile = gtk_list_item_manager_get_last (self->item_manager);
