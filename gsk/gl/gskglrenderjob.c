@@ -3575,7 +3575,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, GL_NEAREST, GL_NEAREST, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, GL_LINEAR, GL_LINEAR, 0, 0, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);

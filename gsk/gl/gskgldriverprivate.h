@@ -243,7 +243,7 @@ gsk_gl_driver_slice_texture (GskGLDriver        *self,
 
   if ((t = gdk_texture_get_render_data (texture, self)))
     {
-      if (min_cols == 0 && min_rows == 0)
+      if (min_cols == 0 && min_rows == 0 && t->slices)
         {
           *out_slices = t->slices;
           *out_n_slices = t->n_slices;
