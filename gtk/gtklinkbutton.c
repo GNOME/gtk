@@ -57,9 +57,9 @@
 #include "gtklinkbutton.h"
 
 #include "gtkdragsource.h"
+#include "gtkfilelauncher.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -71,6 +71,7 @@
 #include "gtkwidgetprivate.h"
 
 #include <string.h>
+#include <glib/gi18n-lib.h>
 
 typedef struct _GtkLinkButtonClass GtkLinkButtonClass;
 
@@ -230,7 +231,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   /**
    * GtkLinkButton|menu.popup:
    *
-   * Opens the context menu. 
+   * Opens the context menu.
    */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_link_button_popup_menu);
 
@@ -303,7 +304,7 @@ gtk_link_content_get_value (GdkContentProvider  *provider,
       content->link != NULL)
     {
       char *uri;
-  
+
       uri = g_strdup_printf ("%s\r\n", content->link->uri);
       g_value_set_string (value, uri);
       g_free (uri);
@@ -381,7 +382,7 @@ gtk_link_button_get_property (GObject    *object,
 			      GParamSpec *pspec)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  
+
   switch (prop_id)
     {
     case PROP_URI:
@@ -403,7 +404,7 @@ gtk_link_button_set_property (GObject      *object,
 			      GParamSpec   *pspec)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (object);
-  
+
   switch (prop_id)
     {
     case PROP_URI:
@@ -479,13 +480,31 @@ static gboolean
 gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
   GtkWidget *toplevel;
-  GtkUriLauncher *launcher;
+  const char *uri_scheme;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
-  launcher = gtk_uri_launcher_new (link_button->uri);
-  gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
-  g_object_unref (launcher);
+  uri_scheme = g_uri_peek_scheme (link_button->uri);
+  if (g_strcmp0 (uri_scheme, "file") == 0)
+    {
+      GFile *file = g_file_new_for_uri (link_button->uri);
+      GtkFileLauncher *launcher;
+
+      launcher = gtk_file_launcher_new (file);
+
+      gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+
+      g_object_unref (launcher);
+      g_object_unref (file);
+    }
+  else
+    {
+      GtkUriLauncher *launcher = gtk_uri_launcher_new (link_button->uri);
+
+      gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+
+      g_object_unref (launcher);
+    }
 
   gtk_link_button_set_visited (link_button, TRUE);
 
@@ -521,9 +540,9 @@ gtk_link_button_new (const char *uri)
 {
   char *utf8_uri = NULL;
   GtkWidget *retval;
-  
+
   g_return_val_if_fail (uri != NULL, NULL);
-  
+
   if (g_utf8_validate (uri, -1, NULL))
     {
       utf8_uri = g_strdup (uri);
@@ -531,7 +550,7 @@ gtk_link_button_new (const char *uri)
   else
     {
       GError *conv_err = NULL;
-    
+
       utf8_uri = g_locale_to_utf8 (uri, -1, NULL, NULL, &conv_err);
       if (conv_err)
         {
@@ -540,18 +559,18 @@ gtk_link_button_new (const char *uri)
                      uri,
                      conv_err->message);
           g_error_free (conv_err);
-        
+
           utf8_uri = g_strdup (_("Invalid URI"));
         }
     }
-  
+
   retval = g_object_new (GTK_TYPE_LINK_BUTTON,
   			 "label", utf8_uri,
   			 "uri", uri,
   			 NULL);
-  
+
   g_free (utf8_uri);
-  
+
   return retval;
 }
 
@@ -569,9 +588,9 @@ gtk_link_button_new_with_label (const char *uri,
 				const char *label)
 {
   GtkWidget *retval;
-  
+
   g_return_val_if_fail (uri != NULL, NULL);
-  
+
   if (!label)
     return gtk_link_button_new (uri);
 
@@ -583,7 +602,7 @@ gtk_link_button_new_with_label (const char *uri,
   return retval;
 }
 
-static gboolean 
+static gboolean
 gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                   int           x,
                                   int           y,
