@@ -3758,6 +3758,8 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
 
       gsk_gl_driver_slice_texture (job->driver, texture, min_filter, mag_filter, 0, 0, &slices, &n_slices);
 
+      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+
       for (guint i = 0; i < n_slices; i++)
         {
           const GskGLTextureSlice *slice = &slices[i];
@@ -3768,7 +3770,12 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
           slice_bounds.size.width = slice->rect.width * scale_x;
           slice_bounds.size.height = slice->rect.height * scale_y;
 
-          gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+          if (!graphene_rect_intersection (&slice_bounds, &viewport, NULL))
+            continue;
+
+          if (i > 0)
+            gsk_gl_render_job_split_draw (job);
+
           gsk_gl_program_set_uniform_texture (job->current_program,
                                               UNIFORM_SHARED_SOURCE, 0,
                                               GL_TEXTURE_2D,
@@ -3781,8 +3788,9 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                          slice_bounds.origin.y + slice_bounds.size.height,
                                          0, 0, 1, 1,
                                          (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
-          gsk_gl_render_job_end_draw (job);
         }
+
+      gsk_gl_render_job_end_draw (job);
     }
 
   gsk_gl_render_job_pop_clip (job);
