@@ -266,6 +266,9 @@ struct _GskGLCommandQueue
   /* Counter for uploads on the frame */
   guint n_uploads;
 
+  /* If the GL context is new enough for sampler support */
+  guint has_samplers : 1;
+
   /* If we're inside a begin/end_frame pair */
   guint in_frame : 1;
 

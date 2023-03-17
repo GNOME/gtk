@@ -411,7 +411,8 @@ gsk_gl_command_queue_dispose (GObject *object)
   g_clear_pointer (&self->attachments, gsk_gl_attachment_state_unref);
   g_clear_pointer (&self->uniforms, gsk_gl_uniform_state_unref);
 
-  glDeleteSamplers (G_N_ELEMENTS (self->samplers), self->samplers);
+  if (self->has_samplers)
+    glDeleteSamplers (G_N_ELEMENTS (self->samplers), self->samplers);
 
   gsk_gl_command_batches_clear (&self->batches);
   gsk_gl_command_binds_clear (&self->batch_binds);
@@ -480,14 +481,19 @@ gsk_gl_command_queue_new (GdkGLContext      *context,
         }
     }
 
+  self->has_samplers = gdk_gl_context_check_version (context, 3, 3, 3, 0);
+
   /* create the samplers */
-  glGenSamplers (G_N_ELEMENTS (self->samplers), self->samplers);
-  for (i = 0; i < G_N_ELEMENTS (self->samplers); i++)
+  if (self->has_samplers)
     {
-      glSamplerParameteri (self->samplers[i], GL_TEXTURE_MIN_FILTER, filter_from_index(i / GSK_GL_N_FILTERS));
-      glSamplerParameteri (self->samplers[i], GL_TEXTURE_MAG_FILTER, filter_from_index(i % GSK_GL_N_FILTERS));
-      glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      glGenSamplers (G_N_ELEMENTS (self->samplers), self->samplers);
+      for (i = 0; i < G_N_ELEMENTS (self->samplers); i++)
+        {
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MIN_FILTER, filter_from_index(i / GSK_GL_N_FILTERS));
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MAG_FILTER, filter_from_index(i % GSK_GL_N_FILTERS));
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        }
     }
 
   return g_steal_pointer (&self);
@@ -1153,11 +1159,22 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
 
                       glBindTexture (GL_TEXTURE_2D, bind->id);
                       textures[bind->texture] = bind->id;
+                      if (!self->has_samplers)
+                        {
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_from_index(bind->sampler / GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_from_index(bind->sampler % GSK_GL_N_FILTERS));
+                        }
                     }
 
                   if (samplers[bind->texture] != bind->sampler)
                     {
-                      glBindSampler (bind->texture, self->samplers[bind->sampler]);
+                      if (self->has_samplers)
+                        glBindSampler (bind->texture, self->samplers[bind->sampler]);
+                      else
+                        {
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_from_index(bind->sampler / GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_from_index(bind->sampler % GSK_GL_N_FILTERS));
+                        }
                       samplers[bind->texture] = bind->sampler;
                     }
 
