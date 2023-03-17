@@ -93,7 +93,8 @@ guint32             broadway_server_new_surface               (BroadwayServer  *
                                                                int              width,
                                                                int              height);
 void                broadway_server_destroy_surface           (BroadwayServer  *server,
-                                                               int              id);
+                                                               int              id,
+                                                               gboolean         disconnected);
 gboolean            broadway_server_surface_show              (BroadwayServer  *server,
                                                                int              id);
 gboolean            broadway_server_surface_hide              (BroadwayServer  *server,
