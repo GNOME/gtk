@@ -246,6 +246,29 @@ gsk_gl_program_set_uniform_color (GskGLProgram  *self,
 }
 
 static inline void
+gsk_gl_program_set_uniform_texture_with_filter (GskGLProgram *self,
+                                                guint         key,
+                                                guint         stamp,
+                                                GLenum        texture_target,
+                                                GLenum        texture_slot,
+                                                guint         texture_id,
+                                                GLint         min_filter,
+                                                GLint         mag_filter)
+{
+  gsk_gl_attachment_state_bind_texture (self->driver->command_queue->attachments,
+                                        texture_target,
+                                        texture_slot,
+                                        texture_id,
+                                        min_filter,
+                                        mag_filter);
+  gsk_gl_uniform_state_set_texture (self->uniforms,
+                                    self->program_info,
+                                    key,
+                                    stamp,
+                                    texture_slot);
+}
+
+static inline void
 gsk_gl_program_set_uniform_texture (GskGLProgram *self,
                                     guint         key,
                                     guint         stamp,
@@ -253,15 +276,14 @@ gsk_gl_program_set_uniform_texture (GskGLProgram *self,
                                     GLenum        texture_slot,
                                     guint         texture_id)
 {
-  gsk_gl_attachment_state_bind_texture (self->driver->command_queue->attachments,
-                                        texture_target,
-                                        texture_slot,
-                                        texture_id);
-  gsk_gl_uniform_state_set_texture (self->uniforms,
-                                    self->program_info,
-                                    key,
-                                    stamp,
-                                    texture_slot);
+  gsk_gl_program_set_uniform_texture_with_filter (self,
+                                                  key,
+                                                  stamp,
+                                                  texture_target,
+                                                  texture_slot,
+                                                  texture_id,
+                                                  GL_LINEAR,
+                                                  GL_LINEAR);
 }
 
 static inline void

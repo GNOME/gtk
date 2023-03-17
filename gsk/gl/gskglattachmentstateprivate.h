@@ -29,11 +29,37 @@ typedef struct _GskGLAttachmentState GskGLAttachmentState;
 typedef struct _GskGLBindFramebuffer GskGLBindFramebuffer;
 typedef struct _GskGLBindTexture     GskGLBindTexture;
 
+#define GSK_GL_N_FILTERS 3
+
+static inline guint
+filter_index (GLint filter)
+{
+  switch (filter)
+  {
+    case GL_LINEAR:
+      return 0;
+    case GL_NEAREST:
+      return 1;
+    case GL_LINEAR_MIPMAP_LINEAR:
+      return 2;
+    default:
+      g_assert_not_reached ();
+  }
+}
+
+static inline guint
+sampler_index (GLint min_filter,
+               GLint mag_filter)
+{
+  return filter_index (min_filter) * GSK_GL_N_FILTERS + filter_index (mag_filter);
+}
+
 struct _GskGLBindTexture
 {
   guint changed : 1;
   guint initial : 1;
-  GLenum target : 30;
+  GLenum target : 26;
+  guint sampler : 4;
   GLenum texture;
   guint id;
 };
@@ -62,7 +88,9 @@ void                  gsk_gl_attachment_state_unref            (GskGLAttachmentS
 void                  gsk_gl_attachment_state_bind_texture     (GskGLAttachmentState *self,
                                                                 GLenum                 target,
                                                                 GLenum                 texture,
-                                                                guint                  id);
+                                                                guint                  id,
+                                                                GLint                  min_filter,
+                                                                GLint                  mag_filter);
 void                  gsk_gl_attachment_state_bind_framebuffer (GskGLAttachmentState *self,
                                                                 guint                  id);
 

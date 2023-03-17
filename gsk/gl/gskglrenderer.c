@@ -379,7 +379,6 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   if (gsk_gl_driver_create_render_target (self->driver,
                                           width, height,
                                           format,
-                                          GL_NEAREST, GL_NEAREST,
                                           &render_target))
     {
       gsk_gl_driver_begin_frame (self->driver, self->command_queue);
