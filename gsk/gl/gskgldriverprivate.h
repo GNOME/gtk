@@ -241,14 +241,16 @@ gsk_gl_driver_slice_texture (GskGLDriver        *self,
 {
   GskGLTexture *t;
 
-  if ((t = gdk_texture_get_render_data (texture, self)))
+  t = gdk_texture_get_render_data (texture, self);
+
+  if (t && t->slices &&
+      t->min_filter == min_filter &&
+      t->mag_filter == mag_filter &&
+      min_cols == 0 && min_rows == 0)
     {
-      if (min_cols == 0 && min_rows == 0 && t->slices)
-        {
-          *out_slices = t->slices;
-          *out_n_slices = t->n_slices;
-          return;
-        }
+      *out_slices = t->slices;
+      *out_n_slices = t->n_slices;
+      return;
     }
 
   gsk_gl_driver_add_texture_slices (self, texture, min_filter, mag_filter, min_cols, min_rows, out_slices, out_n_slices);
