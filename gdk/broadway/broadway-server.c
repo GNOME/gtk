@@ -1574,7 +1574,8 @@ broadway_server_query_mouse (BroadwayServer *server,
 
 void
 broadway_server_destroy_surface (BroadwayServer *server,
-                                 int id)
+                                 int id,
+                                 gboolean disconnected)
 {
   BroadwaySurface *surface;
   gint32 transient_for = -1;
@@ -1589,8 +1590,7 @@ broadway_server_destroy_surface (BroadwayServer *server,
     server->pointer_grab_surface_id = -1;
 
   if (server->output)
-    broadway_output_destroy_surface (server->output,
-                                     id);
+    broadway_output_destroy_surface (server->output, id);
 
   surface = broadway_server_lookup_surface (server, id);
   if (surface != NULL)
@@ -1604,7 +1604,7 @@ broadway_server_destroy_surface (BroadwayServer *server,
       broadway_surface_free (server, surface);
     }
 
-  if (transient_for != -1)
+  if (transient_for != -1 && !disconnected)
     {
       surface = broadway_server_lookup_surface (server, transient_for);
       if (surface != NULL)
