@@ -760,7 +760,8 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
     }
 
   /* The download_texture() call may have switched the GL context. Make sure
-   * the right context is at work again. */
+   * the right context is at work again.
+   */
   gdk_gl_context_make_current (context);
 
   width = gdk_texture_get_width (texture);
@@ -1227,9 +1228,13 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
   n_slices = cols * rows;
 
-  if ((t = gdk_texture_get_render_data (texture, self)))
+  t = gdk_texture_get_render_data (texture, self);
+
+  if (t)
     {
-      if (t->n_slices == n_slices)
+      if (t->n_slices == n_slices &&
+          t->min_filter == min_filter &&
+          t->mag_filter == mag_filter)
         {
           *out_slices = t->slices;
           *out_n_slices = t->n_slices;
@@ -1281,7 +1286,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   t = gsk_gl_texture_new (0,
                           tex_width, tex_height,
                           GL_RGBA8,
-                          GL_NEAREST, GL_NEAREST,
+                          min_filter, mag_filter,
                           self->current_frame_id);
 
   /* Use gsk_gl_texture_free() as destroy notify here since we are
