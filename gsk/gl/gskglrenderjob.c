@@ -3643,8 +3643,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   guint prev_fbo;
   float u0, u1, v0, v1;
   GskTextureKey key;
-  GdkTexture *subtexture = NULL;
-  graphene_rect_t subbounds;
   guint texture_id;
 
   if (filter == GSK_SCALING_FILTER_LINEAR)
@@ -3683,36 +3681,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
     {
       gsk_gl_render_job_visit_texture (job, texture, bounds);
       return;
-    }
-
-  if G_UNLIKELY (texture->width > max_texture_size ||
-                 texture->height > max_texture_size)
-    {
-      float scale_x = bounds->size.width / texture->width;
-      float scale_y = bounds->size.height / texture->height;
-      int x, y, width, height;
-
-      x = (int) floorf ((clip_rect.origin.x - bounds->origin.x) / scale_x);
-      y = (int) floorf ((clip_rect.origin.y - bounds->origin.y) / scale_y);
-      width = (int) ceilf (clip_rect.size.width / scale_x);
-      height = (int) ceilf (clip_rect.size.height / scale_y);
-
-      if (width <= max_texture_size && height <= max_texture_size)
-        {
-          GdkMemoryTexture *memtex;
-
-          memtex = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
-          subtexture = gdk_memory_texture_new_subtexture (memtex, x, y, width, height);
-          g_object_unref (memtex);
-
-          subbounds.origin.x = bounds->origin.x + x * scale_x;
-          subbounds.origin.y = bounds->origin.y + y * scale_y;
-          subbounds.size.width = width * scale_x;
-          subbounds.size.height = height * scale_y;
-
-          texture = subtexture;
-          bounds = &subbounds;
-        }
     }
 
   gsk_gl_render_job_set_viewport (job, &viewport, &prev_viewport);
@@ -3819,8 +3787,6 @@ render_texture:
                                  clip_rect.size.height / ceilf (clip_rect.size.height), 0,
                                  (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
   gsk_gl_render_job_end_draw (job);
-
-  g_clear_object (&subtexture);
 }
 
 static inline void
