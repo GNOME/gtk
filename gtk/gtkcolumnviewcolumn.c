@@ -36,7 +36,7 @@
 /**
  * GtkColumnViewColumn:
  *
- * `GtkColumnViewColumn` represents the columns being added to `GtkColumnView`.
+ * `GtkColumnViewColumn` represents the columns being added to a `GtkColumnView`.
  *
  * The main ingredient for a `GtkColumnViewColumn` is the `GtkListItemFactory`
  * that tells the columnview how to create cells for this column from items in
