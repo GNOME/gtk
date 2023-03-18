@@ -23,7 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -648,10 +648,31 @@ warn_missing_property (Element      *element,
                        const char   *property_name,
                        PropKind      kind)
 {
-  const char *kind_str[] = { "", "Packing ", "Cell ", "Layout " };
+  char *name;
+  char *msg;
 
-  g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
-              data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
+  name = g_strconcat (class_name, "::", property_name, NULL);
+  switch (kind)
+    {
+    case PROP_KIND_OBJECT:
+      msg = g_strdup_printf (_("Property %s not found"), name);
+      break;
+    case PROP_KIND_PACKING:
+      msg = g_strdup_printf (_("Packing property %s not found"), name);
+      break;
+    case PROP_KIND_CELL_PACKING:
+      msg = g_strdup_printf (_("Cell property %s not found"), name);
+      break;
+    case PROP_KIND_LAYOUT:
+      msg = g_strdup_printf (_("Layout property %s not found"), name);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_printerr ("%s:%d: %s\n", data->input_filename, element->line_number, msg);
+  g_free (name);
+  g_free (msg);
 }
 
 static gboolean
@@ -1373,7 +1394,7 @@ rewrite_start_center_end_children (Element      *element,
       else if (end_child == NULL)
         end_child = child;
       else
-        g_warning ("%s only accepts three children", get_class_name (element));
+        g_warning (_("%s only accepts three children"), get_class_name (element));
     }
 
   if (start_child)
@@ -2454,7 +2475,7 @@ simplify_file (const char *filename,
 
   if (data.root == NULL)
     {
-      g_printerr (_("Can’t parse “%s”\n"), filename);
+      g_printerr (_("Can’t parse “%s”: %s\n"), filename, "");
       return FALSE;
     }
 
@@ -2486,7 +2507,7 @@ simplify_file (const char *filename,
 
       if (!g_file_set_contents (data.input_filename, content, length, &error))
         {
-          g_printerr (_("Failed to write %s: “%s”\n"), data.input_filename, error->message);
+          g_printerr (_("Failed to write “%s”: “%s”\n"), data.input_filename, error->message);
           return FALSE;
         }
     }

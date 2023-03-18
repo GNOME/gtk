@@ -23,7 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -42,7 +42,7 @@ make_fake_type (const char *type_name,
   parent_type = g_type_from_name (parent_name);
   if (parent_type == G_TYPE_INVALID)
     {
-      g_printerr ("Failed to lookup template parent type %s\n", parent_name);
+      g_printerr (_("Failed to lookup template parent type %s\n"), parent_name);
       exit (1);
     }
 
@@ -120,7 +120,7 @@ fake_scope_check_deprecations (FakeScope  *self,
       if (is_deprecated (name))
         {
           if (s->len == 0)
-            g_string_append (s, "Deprecated types:\n");
+            g_string_append (s, _("Deprecated types:\n"));
           g_string_append_printf (s, "%s", name);
           g_string_append (s, "\n");
         }
@@ -164,7 +164,7 @@ validate_template (const char *filename,
   object = g_object_new (template_type, NULL);
   if (!object)
     {
-      g_printerr ("Failed to create an instance of the template type %s\n", type_name);
+      g_printerr (_("Failed to create an instance of the template type %s\n"), type_name);
       return FALSE;
     }
 
@@ -273,6 +273,12 @@ do_validate (int *argc, const char ***argv)
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
+      exit (1);
+    }
+
+  if (!filenames)
+    {
+      g_printerr (_("No .ui file specified\n"));
       exit (1);
     }
 

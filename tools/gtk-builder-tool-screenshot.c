@@ -23,7 +23,7 @@
 #include <string.h>
 #include <errno.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
@@ -233,15 +233,15 @@ screenshot_file (const char *filename,
   if (object == NULL)
     {
       if (id)
-        g_printerr ("No object with ID '%s' found\n", id);
+        g_printerr (_("No object with ID '%s' found\n"), id);
       else
-        g_printerr ("No object found\n");
+        g_printerr (_("No object found\n"));
       exit (1);
     }
 
   if (!GTK_IS_WIDGET (object))
     {
-      g_printerr ("Objects of type %s can't be screenshot\n", G_OBJECT_TYPE_NAME (object));
+      g_printerr (_("Objects of type %s can't be screenshot\n"), G_OBJECT_TYPE_NAME (object));
       exit (1);
     }
 
@@ -295,7 +295,7 @@ screenshot_file (const char *filename,
 
   if (texture == NULL)
     {
-      g_printerr ("Failed to take a screenshot\n");
+      g_printerr (_("Failed to take a screenshot\n"));
       exit (1);
     }
 
@@ -306,8 +306,8 @@ screenshot_file (const char *filename,
 
   if (g_file_test (save_to, G_FILE_TEST_EXISTS) && !force)
     {
-      g_printerr ("File %s exists.\n"
-                  "Use --force to overwrite.\n", save_to);
+      g_printerr (_("File %s exists.\n"
+                    "Use --force to overwrite.\n"), save_to);
       exit (1);
     }
 
@@ -328,11 +328,11 @@ screenshot_file (const char *filename,
                            g_bytes_get_size (bytes),
                            &error))
     {
-      g_print ("Output written to %s.\n", save_to);
+      g_print (_("Output written to %s.\n"), save_to);
     }
   else
     {
-      g_printerr ("Failed to save %s: %s\n", save_to, error->message);
+      g_printerr (_("Failed to save %s: %s\n"), save_to, error->message);
       exit (1);
     }
 
@@ -366,7 +366,7 @@ do_screenshot (int          *argc,
 
   if (gdk_display_get_default () == NULL)
     {
-      g_printerr ("Could not initialize windowing system\n");
+      g_printerr (_("Could not initialize windowing system\n"));
       exit (1);
     }
 
@@ -387,13 +387,13 @@ do_screenshot (int          *argc,
 
   if (filenames == NULL)
     {
-      g_printerr ("No .ui file specified\n");
+      g_printerr (_("No .ui file specified\n"));
       exit (1);
     }
 
   if (g_strv_length (filenames) > 2)
     {
-      g_printerr ("Can only screenshot a single .ui file and a single output file\n");
+      g_printerr (_("Can only screenshot a single .ui file and a single output file\n"));
       exit (1);
     }
 
