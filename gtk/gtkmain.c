@@ -510,10 +510,8 @@ gettext_initialization (void)
   setlocale_initialization ();
 
   bindtextdomain (GETTEXT_PACKAGE, _gtk_get_localedir ());
-  bindtextdomain (GETTEXT_PACKAGE "-properties", _gtk_get_localedir ());
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
 #endif
 }
 
