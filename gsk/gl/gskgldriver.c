@@ -777,6 +777,8 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
   g_hash_table_insert (self->textures, GUINT_TO_POINTER (texture_id), t);
 
+  gdk_texture_clear_render_data (texture);
+
   if (gdk_texture_set_render_data (texture, self, t, gsk_gl_texture_destroyed))
     t->user = texture;
 
