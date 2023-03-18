@@ -57,7 +57,12 @@
  *
  * The options are given to `GtkDropDown` in the form of `GListModel`
  * and how the individual options are represented is determined by
- * a [class@Gtk.ListItemFactory]. The default factory displays simple strings.
+ * a [class@Gtk.ListItemFactory]. The default factory displays simple strings,
+ * and adds a checkmark to the selected item in the popup.
+ *
+ * To set your own factory, use [method@Gtk.DropDown.set_factory]. It is
+ * possible to use a separate factory for the items in the popup, with
+ * [method@Gtk.DropDown.set_list_factory].
  *
  * `GtkDropDown` knows how to obtain strings from the items in a
  * [class@Gtk.StringList]; for other models, you have to provide an expression
@@ -81,6 +86,9 @@
  *   </property>
  * </object>
  * ```
+ *
+ * To learn more about the list widget framework, see the
+ * [overview](section-list-widget.html).
  *
  * # CSS nodes
  *
