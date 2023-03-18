@@ -11,6 +11,7 @@ gdk/gdkdevice.c
 gdk/gdkdisplay.c
 gdk/gdkdisplaymanager.c
 gdk/gdkdrag.c
+gdk/gdkdragsurface.c
 gdk/gdkdrawcontext.c
 gdk/gdkdrop.c
 gdk/gdkevents.c

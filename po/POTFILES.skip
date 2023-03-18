@@ -272,6 +272,7 @@ testsuite/reftests/label-wrap-width-chars.ref.ui
 testsuite/reftests/label-wrap-width-chars.ui
 testsuite/reftests/link-coloring.ref.ui
 testsuite/reftests/link-coloring.ui
+testsuite/reftests/listview-margin.ui
 testsuite/reftests/messagedialog-secondarytext.ref.ui
 testsuite/reftests/messagedialog-secondarytext.ui
 testsuite/reftests/misc-alignment.ref.ui
