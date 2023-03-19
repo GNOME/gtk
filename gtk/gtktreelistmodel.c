@@ -1120,7 +1120,8 @@ gtk_tree_list_row_get_position (GtkTreeListRow *self)
  * of zero, rows corresponding to items of models of direct children
  * of the root model have a depth of 1 and so on.
  *
- * The depth of a row never changes until the row is destroyed.
+ * The depth of a row never changes until the row is removed from its model
+ * at which point it will forever return 0.
  *
  * Returns: The depth of this row
  */
@@ -1228,7 +1229,8 @@ gtk_tree_list_row_get_expanded (GtkTreeListRow *self)
  * This does not mean that the row is actually expanded,
  * this can be checked with [method@Gtk.TreeListRow.get_expanded].
  *
- * If a row is expandable never changes until the row is destroyed.
+ * If a row is expandable never changes until the row is removed
+ * from its model at which point it will forever return %FALSE.
  *
  * Returns: %TRUE if the row is expandable
  */
@@ -1315,7 +1317,8 @@ gtk_tree_list_row_get_children (GtkTreeListRow *self)
  * %NULL is returned.
  *
  * The value returned by this function never changes
- * until the row is destroyed.
+ * until the row is removed from its model at which point
+ * it will forever return %NULL.
  *
  * Returns: (nullable) (transfer full): The parent of @self
  */
