@@ -1017,6 +1017,19 @@ testcase_save_clicked_cb (GtkWidget        *button,
     }
 
   text = get_current_text (self->text_buffer);
+  {
+    GBytes *bytes;
+    GskRenderNode *node;
+    gsize size;
+
+    bytes = g_bytes_new_take (text, strlen (text) + 1);
+    node = gsk_render_node_deserialize (bytes, NULL, NULL);
+    g_bytes_unref (bytes);
+    bytes = gsk_render_node_serialize (node);
+    gsk_render_node_unref (node);
+    text = g_bytes_unref_to_data (bytes, &size);
+  }
+
   if (!g_file_set_contents (node_file, text, -1, &error))
     {
       gtk_label_set_label (GTK_LABEL (self->testcase_error_label), error->message);
