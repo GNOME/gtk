@@ -713,7 +713,7 @@ gtk_css_node_reposition (GtkCssNode *node,
     {
       GTK_CSS_NODE_GET_CLASS (old_parent)->node_removed (old_parent, node, node->previous_sibling);
       if (old_parent->children_observer && old_parent != new_parent)
-        gtk_list_list_model_item_removed (old_parent->children_observer, previous);
+        gtk_list_list_model_item_removed (old_parent->children_observer, old_previous);
       if (old_parent->first_child && node->visible)
         gtk_css_node_invalidate (old_parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
     }
