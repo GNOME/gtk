@@ -15,10 +15,15 @@ exclude_unstable = ['flaky', 'failing']
 setups = [
   { 'backend': 'x11', 'if': x11_enabled, },
   { 'backend': 'wayland', 'if': wayland_enabled, 'is_default': true, },
-  { 'name': 'waylandgles', 'backend': 'wayland', 'if': wayland_enabled,
+  { 'name': 'wayland_gles',
+    'backend': 'wayland', 'if': wayland_enabled,
     'env': ['GDK_DEBUG=gl-gles,default-settings'], },
   { 'backend': 'win32', 'if': os_win32 },
   { 'backend': 'broadway', 'if': broadway_enabled, },
+  { 'name': 'wayland_smalltexture',
+    'backend': 'wayland', 'if': wayland_enabled,
+    'env': ['GSK_MAX_TEXTURE_SIZE=1024'], },
+  { 'backend': 'win32', 'if': os_win32 },
 ]
 
 foreach setup : setups
