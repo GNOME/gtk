@@ -53,10 +53,12 @@ typedef struct _GskGLCommandBind
    * texture will be placed into. We always use GL_TEXTURE_2D so we don't
    * waste any bits here to indicate that.
    */
-  guint texture : 5;
+  guint texture : 4;
+
+  guint sampler : 4;
 
   /* The identifier for the texture created with glGenTextures(). */
-  guint id : 27;
+  guint id: 24;
 } GskGLCommandBind;
 
 G_STATIC_ASSERT (sizeof (GskGLCommandBind) == 4);
@@ -225,6 +227,13 @@ struct _GskGLCommandQueue
    */
   GskGLCommandUniforms batch_uniforms;
 
+  /* Array of samplers that we use for mag/min filter handling. It is indexed
+   * by the sampler_index() function.
+   * Note that when samplers are not supported (hello GLES), we fall back to
+   * setting the texture filter, but that needs to be done for every texture.
+   */
+  GLuint samplers[GSK_GL_N_FILTERS * GSK_GL_N_FILTERS];
+
   /* Discovered max texture size when loading the command queue so that we
    * can either scale down or slice textures to fit within this size. Assumed
    * to be both height and width.
@@ -257,6 +266,9 @@ struct _GskGLCommandQueue
   /* Counter for uploads on the frame */
   guint n_uploads;
 
+  /* If the GL context is new enough for sampler support */
+  guint has_samplers : 1;
+
   /* If we're inside a begin/end_frame pair */
   guint in_frame : 1;
 
@@ -281,22 +293,16 @@ void                gsk_gl_command_queue_execute              (GskGLCommandQueue
                                                                const cairo_region_t *scissor,
                                                                guint                 default_framebuffer);
 int                 gsk_gl_command_queue_upload_texture       (GskGLCommandQueue    *self,
-                                                               GdkTexture           *texture,
-                                                               int                   min_filter,
-                                                               int                   mag_filter);
+                                                               GdkTexture           *texture);
 int                 gsk_gl_command_queue_create_texture       (GskGLCommandQueue    *self,
                                                                int                   width,
                                                                int                   height,
-                                                               int                   format,
-                                                               int                   min_filter,
-                                                               int                   mag_filter);
+                                                               int                   format);
 guint               gsk_gl_command_queue_create_framebuffer   (GskGLCommandQueue    *self);
 gboolean            gsk_gl_command_queue_create_render_target (GskGLCommandQueue    *self,
                                                                int                   width,
                                                                int                   height,
                                                                int                   format,
-                                                               int                   min_filter,
-                                                               int                   mag_filter,
                                                                guint                *out_fbo_id,
                                                                guint                *out_texture_id);
 void                gsk_gl_command_queue_delete_program       (GskGLCommandQueue    *self,

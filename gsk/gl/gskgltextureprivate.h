@@ -65,20 +65,16 @@ struct _GskGLTexture
 
   int width;
   int height;
-  int min_filter;
-  int mag_filter;
-  int format;
 
   /* Set when used by an atlas so we don't drop the texture */
   guint              permanent : 1;
+  /* we called glGenerateMipmap() for this texture */
+  guint              has_mipmap : 1;
 };
 
 GskGLTexture                * gsk_gl_texture_new            (guint                 texture_id,
                                                              int                   width,
                                                              int                   height,
-                                                             int                   format,
-                                                             int                   min_filter,
-                                                             int                   mag_filter,
                                                              gint64                frame_id);
 const GskGLTextureNineSlice * gsk_gl_texture_get_nine_slice (GskGLTexture         *texture,
                                                              const GskRoundedRect *outline,

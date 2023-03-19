@@ -198,7 +198,6 @@ typedef struct _GskGLRenderOffscreen
   guint force_offscreen : 1;
   guint reset_clip : 1;
   guint do_not_cache : 1;
-  guint linear_filter : 1;
 
   /* Return location for whether we created a texture */
   guint was_offscreen : 1;
@@ -1221,7 +1220,6 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   key.pointer_is_child = FALSE;
   key.scale_x = scale_x;
   key.scale_y = scale_y;
-  key.filter = GL_NEAREST;
 
   cached_id = gsk_gl_driver_lookup_texture (job->driver, &key);
 
@@ -1291,8 +1289,7 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
 
   /* Create texture to upload */
   texture = gdk_texture_new_for_surface (surface);
-  texture_id = gsk_gl_driver_load_texture (job->driver, texture,
-                                           GL_NEAREST, GL_NEAREST);
+  texture_id = gsk_gl_driver_load_texture (job->driver, texture, FALSE);
 
   if (gdk_gl_context_has_debug (job->command_queue->context))
     gdk_gl_context_label_object_printf (job->command_queue->context, GL_TEXTURE, texture_id,
@@ -1341,7 +1338,6 @@ blur_offscreen (GskGLRenderJob       *job,
                                            MAX (texture_to_blur_width, 1),
                                            MAX (texture_to_blur_height, 1),
                                            job->target_format,
-                                           GL_NEAREST, GL_NEAREST,
                                            &pass1))
     return 0;
 
@@ -1352,7 +1348,6 @@ blur_offscreen (GskGLRenderJob       *job,
                                            texture_to_blur_width,
                                            texture_to_blur_height,
                                            job->target_format,
-                                           GL_NEAREST, GL_NEAREST,
                                            &pass2))
     return gsk_gl_driver_release_render_target (job->driver, pass1, FALSE);
 
@@ -2105,13 +2100,14 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
         {
           GskGLRenderOffscreen offscreen = {0};
           float sx = 1, sy  = 1;
+          gboolean linear_filter = FALSE;
 
           offscreen.bounds = &child->bounds;
           offscreen.force_offscreen = FALSE;
           offscreen.reset_clip = TRUE;
 
           if (!result_is_axis_aligned (transform, &child->bounds))
-            offscreen.linear_filter = TRUE;
+            linear_filter = TRUE;
 
           if (category == GSK_TRANSFORM_CATEGORY_2D)
             {
@@ -2141,16 +2137,19 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
           if (gsk_gl_render_job_visit_node_with_offscreen (job, child, &offscreen))
             {
               /* For non-trivial transforms, we draw everything on a texture and then
-               * draw the texture transformed. */
+               * draw the texture transformed.
+               */
               if (transform)
                 gsk_gl_render_job_push_modelview (job, transform);
 
               gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-              gsk_gl_program_set_uniform_texture (job->current_program,
-                                                  UNIFORM_SHARED_SOURCE, 0,
-                                                  GL_TEXTURE_2D,
-                                                  GL_TEXTURE0,
-                                                  offscreen.texture_id);
+              gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                              UNIFORM_SHARED_SOURCE, 0,
+                                                              GL_TEXTURE_2D,
+                                                              GL_TEXTURE0,
+                                                              offscreen.texture_id,
+                                                              linear_filter ? GL_LINEAR : GL_NEAREST,
+                                                              linear_filter ? GL_LINEAR : GL_NEAREST);
               gsk_gl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
               gsk_gl_render_job_end_draw (job);
 
@@ -2228,7 +2227,6 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
   key.pointer_is_child = FALSE;
   key.scale_x = scale_x;
   key.scale_y = scale_y;
-  key.filter = GL_NEAREST;
 
   blurred_texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
 
@@ -2272,7 +2270,6 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       if (!gsk_gl_driver_create_render_target (job->driver,
                                                texture_width, texture_height,
                                                get_target_format (job, node),
-                                               GL_NEAREST, GL_NEAREST,
                                                &render_target))
         g_assert_not_reached ();
 
@@ -2545,7 +2542,6 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       gsk_gl_driver_create_render_target (job->driver,
                                           texture_width, texture_height,
                                           get_target_format (job, node),
-                                          GL_NEAREST, GL_NEAREST,
                                           &render_target);
 
       if (gdk_gl_context_has_debug (context))
@@ -3206,7 +3202,6 @@ gsk_gl_render_job_visit_blur_node (GskGLRenderJob      *job,
   key.pointer_is_child = FALSE;
   key.scale_x = job->scale_x;
   key.scale_y = job->scale_y;
-  key.filter = GL_NEAREST;
 
   offscreen.texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
   cache_texture = offscreen.texture_id == 0;
@@ -3515,12 +3510,10 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
 static void
 gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   GdkTexture           *texture,
-                                  int                   min_filter,
-                                  int                   mag_filter,
+                                  gboolean              ensure_mipmap,
                                   GskGLRenderOffscreen *offscreen)
 {
-  if (min_filter == GL_LINEAR &&
-      mag_filter == GL_LINEAR &&
+  if (!ensure_mipmap &&
       gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
@@ -3534,7 +3527,7 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
     }
   else
     {
-      offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, min_filter, mag_filter);
+      offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, ensure_mipmap);
       init_full_texture_region (offscreen);
     }
 }
@@ -3551,7 +3544,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_upload_texture (job, texture, GL_LINEAR, GL_LINEAR, &offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, FALSE, &offscreen);
 
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
@@ -3576,7 +3569,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, GL_LINEAR, GL_LINEAR, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, FALSE, 0, 0, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
@@ -3635,7 +3628,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   int max_texture_size = job->command_queue->max_texture_size;
   graphene_rect_t clip_rect;
   GskGLRenderTarget *render_target;
-  GskGLRenderOffscreen offscreen = {0};
   graphene_rect_t viewport;
   graphene_rect_t prev_viewport;
   graphene_matrix_t prev_projection;
@@ -3661,7 +3653,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   key.parent_rect = clip_rect;
   key.scale_x = 1.;
   key.scale_y = 1.;
-  key.filter = min_filter;
 
   texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
 
@@ -3676,7 +3667,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                            (int) ceilf (clip_rect.size.width),
                                            (int) ceilf (clip_rect.size.height),
                                            get_target_format (job, node),
-                                           GL_LINEAR, GL_LINEAR,
                                            &render_target))
     {
       gsk_gl_render_job_visit_texture (job, texture, bounds);
@@ -3695,10 +3685,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
     {
-      gsk_gl_render_job_upload_texture (job, texture, min_filter, mag_filter, &offscreen);
-
-      g_assert (offscreen.texture_id);
-      g_assert (offscreen.was_offscreen == FALSE);
+      texture_id = gsk_gl_driver_load_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR);
 
       u0 = (clip_rect.origin.x - bounds->origin.x) / bounds->size.width;
       v0 = (clip_rect.origin.y - bounds->origin.y) / bounds->size.height;
@@ -3706,11 +3693,13 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       v1 = (clip_rect.origin.y + clip_rect.size.height - bounds->origin.y) / bounds->size.height;
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
+      gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                      UNIFORM_SHARED_SOURCE, 0,
+                                                      GL_TEXTURE_2D,
+                                                      GL_TEXTURE0,
+                                                      texture_id,
+                                                      min_filter,
+                                                      mag_filter);
       gsk_gl_render_job_draw_coords (job,
                                      0, 0, clip_rect.size.width, clip_rect.size.height,
                                      u0, v0, u1, v1,
@@ -3724,7 +3713,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, min_filter, mag_filter, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, 0, 0, &slices, &n_slices);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
 
@@ -3744,11 +3733,13 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
           if (i > 0)
             gsk_gl_render_job_split_draw (job);
 
-          gsk_gl_program_set_uniform_texture (job->current_program,
-                                              UNIFORM_SHARED_SOURCE, 0,
-                                              GL_TEXTURE_2D,
-                                              GL_TEXTURE0,
-                                              slice->texture_id);
+          gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                          UNIFORM_SHARED_SOURCE, 0,
+                                                          GL_TEXTURE_2D,
+                                                          GL_TEXTURE0,
+                                                          slice->texture_id,
+                                                          min_filter,
+                                                          mag_filter);
           gsk_gl_render_job_draw_coords (job,
                                          slice_bounds.origin.x,
                                          slice_bounds.origin.y,
@@ -4049,7 +4040,6 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
 {
   GskTextureKey key;
   guint cached_id;
-  int filter;
 
   g_assert (job != NULL);
   g_assert (node != NULL);
@@ -4070,19 +4060,15 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       offscreen->force_offscreen == FALSE)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (node);
-      gsk_gl_render_job_upload_texture (job, texture, GL_LINEAR, GL_LINEAR, offscreen);
-      g_assert (offscreen->was_offscreen == FALSE);
+      gsk_gl_render_job_upload_texture (job, texture, FALSE, offscreen);
       return TRUE;
     }
-
-  filter = offscreen->linear_filter ? GL_LINEAR : GL_NEAREST;
 
   key.pointer = node;
   key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
   key.parent_rect = *offscreen->bounds;
   key.scale_x = job->scale_x;
   key.scale_y = job->scale_y;
-  key.filter = filter;
 
   float offset_x = job->offset_x;
   float offset_y = job->offset_y;
@@ -4190,7 +4176,6 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   if (!gsk_gl_driver_create_render_target (job->driver,
                                            texture_width, texture_height,
                                            get_target_format (job, node),
-                                           filter, filter,
                                            &render_target))
     g_assert_not_reached ();
 
@@ -4278,7 +4263,6 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
                                                   MAX (1, job->viewport.size.width),
                                                   MAX (1, job->viewport.size.height),
                                                   job->target_format,
-                                                  GL_NEAREST, GL_NEAREST,
                                                   &framebuffer_id, &texture_id))
     return;
 

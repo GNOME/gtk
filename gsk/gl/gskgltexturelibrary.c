@@ -320,7 +320,7 @@ gsk_gl_texture_library_pack_one (GskGLTextureLibrary *self,
       height = MIN (height, self->driver->command_queue->max_texture_size);
     }
 
-  texture = gsk_gl_driver_create_texture (self->driver, width, height, GL_RGBA8, GL_LINEAR, GL_LINEAR);
+  texture = gsk_gl_driver_create_texture (self->driver, width, height, GL_RGBA8);
   texture->permanent = TRUE;
 
   return texture;
@@ -552,9 +552,7 @@ gsk_gl_texture_library_acquire_atlas (GskGLTextureLibrary *self)
   atlas->texture_id = gsk_gl_command_queue_create_texture (self->driver->command_queue,
                                                            atlas->width,
                                                            atlas->height,
-                                                           GL_RGBA8,
-                                                           GL_LINEAR,
-                                                           GL_LINEAR);
+                                                           GL_RGBA8);
 
   gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
                                       GL_TEXTURE, atlas->texture_id,
