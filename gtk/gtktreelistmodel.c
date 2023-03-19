@@ -88,6 +88,7 @@ struct _GtkTreeListRow
   GObject parent_instance;
 
   TreeNode *node; /* NULL when the row has been destroyed */
+  gpointer item;
 };
 
 struct _GtkTreeListRowClass
@@ -293,6 +294,7 @@ tree_node_get_row (TreeNode *node)
     {
       node->row = g_object_new (GTK_TYPE_TREE_LIST_ROW, NULL);
       node->row->node = node;
+      node->row->item = g_object_ref (node->item);
 
       return node->row;
     }
@@ -947,7 +949,6 @@ gtk_tree_list_row_destroy (GtkTreeListRow *self)
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_DEPTH]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDED]);
-  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_ITEM]);
 
   self->node = NULL;
   g_object_thaw_notify (G_OBJECT (self));
@@ -1016,6 +1017,8 @@ gtk_tree_list_row_dispose (GObject *object)
 
   if (self->node)
     self->node->row = NULL;
+
+  g_clear_object (&self->item);
 
   G_OBJECT_CLASS (gtk_tree_list_row_parent_class)->dispose (object);
 }
@@ -1263,21 +1266,16 @@ gtk_tree_list_row_is_expandable (GtkTreeListRow *self)
  *
  * Gets the item corresponding to this row,
  *
- * The value returned by this function never changes until the
- * row is destroyed.
- *
  * Returns: (nullable) (type GObject) (transfer full): The item
- *   of this row or %NULL when the row was destroyed
+ *   of this row. This function is only marked as nullable for backwards
+ *   compatibility reasons.
  */
 gpointer
 gtk_tree_list_row_get_item (GtkTreeListRow *self)
 {
   g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), NULL);
 
-  if (self->node == NULL)
-    return NULL;
-
-  return g_object_ref (self->node->item);
+  return g_object_ref (self->item);
 }
 
 /**
