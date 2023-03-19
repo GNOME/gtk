@@ -104,7 +104,7 @@ fedora-x86_64:
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
-    - .gitlab-ci/run-tests.sh _build waylandgles
+    - .gitlab-ci/run-tests.sh _build wayland_gles
     - .gitlab-ci/run-tests.sh _build wayland_smalltexture
     - .gitlab-ci/run-tests.sh _build broadway
 

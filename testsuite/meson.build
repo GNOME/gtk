@@ -15,7 +15,7 @@ exclude_unstable = ['flaky', 'failing']
 setups = [
   { 'backend': 'x11', 'if': x11_enabled, },
   { 'backend': 'wayland', 'if': wayland_enabled, 'is_default': true, },
-  { 'name': 'waylandgles',
+  { 'name': 'wayland_gles',
     'backend': 'wayland', 'if': wayland_enabled,
     'env': ['GDK_DEBUG=gl-gles,default-settings'], },
   { 'backend': 'win32', 'if': os_win32 },
