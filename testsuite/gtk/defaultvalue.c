@@ -151,6 +151,12 @@ test_type (gconstpointer data)
       if ((pspec->flags & G_PARAM_READABLE) == 0)
 	continue;
 
+      /* This is set by the treelistmodel, plain 
+       * g_object_new() will crash here */
+      if (g_type_is_a (type, GTK_TYPE_TREE_LIST_ROW) &&
+	  (strcmp (pspec->name, "item") == 0))
+	continue;
+
       /* This is set via class_init, and we have a11y tests to verify it */
       if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
           strcmp (pspec->name, "accessible-role") == 0)

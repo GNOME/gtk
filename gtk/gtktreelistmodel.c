@@ -45,6 +45,7 @@ typedef struct _TreeAugment TreeAugment;
 
 struct _TreeNode
 {
+  gpointer item;
   GListModel *model;
   GtkTreeListRow *row;
   GtkRbTree *children;
@@ -87,6 +88,7 @@ struct _GtkTreeListRow
   GObject parent_instance;
 
   TreeNode *node; /* NULL when the row has been destroyed */
+  gpointer item;
 };
 
 struct _GtkTreeListRowClass
@@ -157,50 +159,6 @@ tree_node_get_n_children (TreeNode *node)
   child_aug = gtk_rb_tree_get_augment (node->children, child_node);
 
   return child_aug->n_items;
-}
-
-static guint
-tree_node_get_local_position (GtkRbTree *tree,
-                              TreeNode  *node)
-{
-  TreeNode *left, *parent;
-  TreeAugment *left_aug;
-  guint n;
-  
-  left = gtk_rb_tree_node_get_left (node);
-  if (left)
-    {
-      left_aug = gtk_rb_tree_get_augment (tree, left);
-      n = left_aug->n_local;
-    }
-  else
-    {
-      n = 0;
-    }
-
-  for (parent = gtk_rb_tree_node_get_parent (node);
-       parent;
-       parent = gtk_rb_tree_node_get_parent (node))
-    {
-      left = gtk_rb_tree_node_get_left (parent);
-      if (left == node)
-        {
-          /* we are the left node, nothing changes */
-        }
-      else
-        {
-          /* we are the right node */
-          n++;
-          if (left)
-            {
-              left_aug = gtk_rb_tree_get_augment (tree, left);
-              n += left_aug->n_local;
-            }
-        }
-      node = parent;
-    }
-
-  return n;
 }
 
 static guint
@@ -316,28 +274,13 @@ static GListModel *
 tree_node_create_model (GtkTreeListModel *self,
                         TreeNode         *node)
 {
-  TreeNode *parent = node->parent;
   GListModel *model;
-  GObject *item;
 
-  item = g_list_model_get_item (parent->model,
-                                tree_node_get_local_position (parent->children, node));
-  model = self->create_func (item, self->user_data);
-  g_object_unref (item);
+  model = self->create_func (node->item, self->user_data);
   if (model == NULL)
     node->empty = TRUE;
 
   return model;
-}
-
-static gpointer
-tree_node_get_item (TreeNode *node)
-{
-  TreeNode *parent;
-
-  parent = node->parent;
-  return g_list_model_get_item (parent->model,
-                                tree_node_get_local_position (parent->children, node));
 }
 
 static GtkTreeListRow *
@@ -351,6 +294,7 @@ tree_node_get_row (TreeNode *node)
     {
       node->row = g_object_new (GTK_TYPE_TREE_LIST_ROW, NULL);
       node->row->node = node;
+      node->row->item = g_object_ref (node->item);
 
       return node->row;
     }
@@ -417,6 +361,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
     {
       child = gtk_rb_tree_insert_before (node->children, child);
       child->parent = node;
+      child->item = g_list_model_get_item (model, position + i);
     }
   if (self->autoexpand)
     {
@@ -442,6 +387,8 @@ static void gtk_tree_list_row_destroy (GtkTreeListRow *row);
 static void
 gtk_tree_list_model_clear_node_children (TreeNode *node)
 {
+  g_clear_object (&node->item);
+
   if (node->model)
     {
       g_signal_handlers_disconnect_by_func (node->model,
@@ -516,6 +463,7 @@ gtk_tree_list_model_init_node (GtkTreeListModel *list,
     {
       node = gtk_rb_tree_insert_after (self->children, node);
       node->parent = self;
+      node->item = g_list_model_get_item (model, i);
       if (list->autoexpand)
         gtk_tree_list_model_expand_node (list, node);
     }
@@ -596,7 +544,7 @@ gtk_tree_list_model_get_item (GListModel *list,
 
   if (self->passthrough)
     {
-      return tree_node_get_item (node);
+      return g_object_ref (node->item);
     }
   else
     {
@@ -1001,7 +949,6 @@ gtk_tree_list_row_destroy (GtkTreeListRow *self)
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_DEPTH]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDED]);
-  g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_ITEM]);
 
   self->node = NULL;
   g_object_thaw_notify (G_OBJECT (self));
@@ -1070,6 +1017,8 @@ gtk_tree_list_row_dispose (GObject *object)
 
   if (self->node)
     self->node->row = NULL;
+
+  g_clear_object (&self->item);
 
   G_OBJECT_CLASS (gtk_tree_list_row_parent_class)->dispose (object);
 }
@@ -1171,7 +1120,8 @@ gtk_tree_list_row_get_position (GtkTreeListRow *self)
  * of zero, rows corresponding to items of models of direct children
  * of the root model have a depth of 1 and so on.
  *
- * The depth of a row never changes until the row is destroyed.
+ * The depth of a row never changes until the row is removed from its model
+ * at which point it will forever return 0.
  *
  * Returns: The depth of this row
  */
@@ -1279,7 +1229,8 @@ gtk_tree_list_row_get_expanded (GtkTreeListRow *self)
  * This does not mean that the row is actually expanded,
  * this can be checked with [method@Gtk.TreeListRow.get_expanded].
  *
- * If a row is expandable never changes until the row is destroyed.
+ * If a row is expandable never changes until the row is removed
+ * from its model at which point it will forever return %FALSE.
  *
  * Returns: %TRUE if the row is expandable
  */
@@ -1317,21 +1268,16 @@ gtk_tree_list_row_is_expandable (GtkTreeListRow *self)
  *
  * Gets the item corresponding to this row,
  *
- * The value returned by this function never changes until the
- * row is destroyed.
- *
  * Returns: (nullable) (type GObject) (transfer full): The item
- *   of this row or %NULL when the row was destroyed
+ *   of this row. This function is only marked as nullable for backwards
+ *   compatibility reasons.
  */
 gpointer
 gtk_tree_list_row_get_item (GtkTreeListRow *self)
 {
   g_return_val_if_fail (GTK_IS_TREE_LIST_ROW (self), NULL);
 
-  if (self->node == NULL)
-    return NULL;
-
-  return tree_node_get_item (self->node);
+  return g_object_ref (self->item);
 }
 
 /**
@@ -1371,7 +1317,8 @@ gtk_tree_list_row_get_children (GtkTreeListRow *self)
  * %NULL is returned.
  *
  * The value returned by this function never changes
- * until the row is destroyed.
+ * until the row is removed from its model at which point
+ * it will forever return %NULL.
  *
  * Returns: (nullable) (transfer full): The parent of @self
  */
