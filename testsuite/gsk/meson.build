@@ -10,6 +10,9 @@ node_parser = executable('node-parser', 'node-parser.c',
 )
 
 compare_render_tests = [
+  'big-checkerboard',
+  'big-checkerboard-scaled-down',
+  'big-checkerboard-scaled-down-nearest',
   'blend-difference',
   'blend-invisible-child',
   'blend-normal',
