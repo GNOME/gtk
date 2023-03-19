@@ -362,6 +362,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
       child = gtk_rb_tree_insert_before (node->children, child);
       child->parent = node;
       child->item = g_list_model_get_item (model, position + i);
+      g_assert (child->item);
     }
   if (self->autoexpand)
     {
@@ -387,8 +388,6 @@ static void gtk_tree_list_row_destroy (GtkTreeListRow *row);
 static void
 gtk_tree_list_model_clear_node_children (TreeNode *node)
 {
-  g_clear_object (&node->item);
-
   if (node->model)
     {
       g_signal_handlers_disconnect_by_func (node->model,
@@ -409,6 +408,8 @@ gtk_tree_list_model_clear_node (gpointer data)
     gtk_tree_list_row_destroy (node->row);
 
   gtk_tree_list_model_clear_node_children (node);
+
+  g_clear_object (&node->item);
 }
 
 static void
@@ -464,6 +465,7 @@ gtk_tree_list_model_init_node (GtkTreeListModel *list,
       node = gtk_rb_tree_insert_after (self->children, node);
       node->parent = self;
       node->item = g_list_model_get_item (model, i);
+      g_assert (node ->item);
       if (list->autoexpand)
         gtk_tree_list_model_expand_node (list, node);
     }
@@ -945,12 +947,13 @@ gtk_tree_list_row_destroy (GtkTreeListRow *self)
 {
   g_object_freeze_notify (G_OBJECT (self));
 
+  self->node = NULL;
+
   /* FIXME: We could check some properties to avoid excess notifies */
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_DEPTH]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDABLE]);
   g_object_notify_by_pspec (G_OBJECT (self), row_properties[ROW_PROP_EXPANDED]);
 
-  self->node = NULL;
   g_object_thaw_notify (G_OBJECT (self));
 }
 
