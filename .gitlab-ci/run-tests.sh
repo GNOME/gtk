@@ -36,39 +36,12 @@ case "${backend}" in
                 --suite=failing || true
     ;;
 
-  wayland)
+  wayland*)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
     weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 &
     compositor=$!
     export WAYLAND_DISPLAY=wayland-5
-
-    meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
-                --print-errorlogs \
-                --setup=${backend} \
-                --suite=gtk \
-                --no-suite=failing \
-                --no-suite=flaky \
-                --no-suite=gsk-compare-broadway
-    exit_code=$?
-
-    meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
-                --print-errorlogs \
-                --setup=${backend}_unstable \
-                --suite=flaky \
-                --suite=failing || true
-
-    kill ${compositor}
-    ;;
-
-  waylandgles)
-    export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
-
-    weston --backend=headless-backend.so --socket=wayland-6 --idle-time=0 &
-    compositor=$!
-    export WAYLAND_DISPLAY=wayland-6
 
     meson test -C ${builddir} \
                 --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
