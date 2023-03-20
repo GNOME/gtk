@@ -915,7 +915,7 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
   if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (self->button_item), factory);
+  gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), factory);
   if (self->list_factory == NULL)
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
 

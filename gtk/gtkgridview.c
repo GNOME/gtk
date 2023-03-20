@@ -268,7 +268,7 @@ gtk_grid_view_create_list_widget (GtkListBase *base)
                                      "child",
                                      GTK_ACCESSIBLE_ROLE_GRID_CELL);
 
-  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
 
   return GTK_LIST_ITEM_BASE (result);
 }
@@ -1230,7 +1230,7 @@ gtk_grid_view_set_factory (GtkGridView        *self,
        tile = gtk_rb_tree_node_get_next (tile))
     {
       if (tile->widget)
-        gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (tile->widget), factory);
+        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
     }
 
 
@@ -1357,7 +1357,7 @@ gtk_grid_view_set_single_click_activate (GtkGridView *self,
        tile = gtk_rb_tree_node_get_next (tile))
     {
       if (tile->widget)
-        gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (tile->widget), single_click_activate);
+        gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (tile->widget), single_click_activate);
     }
 
 

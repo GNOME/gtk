@@ -226,7 +226,7 @@ gtk_list_view_create_list_widget (GtkListBase *base)
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_LIST_ITEM);
 
-  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
 
   return GTK_LIST_ITEM_BASE (result);
 }
@@ -954,7 +954,7 @@ gtk_list_view_set_factory (GtkListView        *self,
        tile = gtk_rb_tree_node_get_next (tile))
     {
       if (tile->widget)
-        gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (tile->widget), factory);
+        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
@@ -1030,7 +1030,7 @@ gtk_list_view_set_single_click_activate (GtkListView *self,
        tile = gtk_rb_tree_node_get_next (tile))
     {
       if (tile->widget)
-        gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (tile->widget), single_click_activate);
+        gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (tile->widget), single_click_activate);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);

@@ -119,7 +119,7 @@ gtk_column_list_item_factory_update (GtkListItemFactory *factory,
                                  gtk_list_item_get_item (list_item),
                                  gtk_list_item_get_selected (list_item));
 
-       cell_item = gtk_list_item_widget_get_list_item (GTK_LIST_ITEM_WIDGET (child));
+       cell_item = gtk_list_factory_widget_get_object (GTK_LIST_FACTORY_WIDGET (child));
        if (cell_item)
          {
            selectable &= gtk_list_item_get_selectable (cell_item);

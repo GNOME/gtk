@@ -20,9 +20,7 @@
 #ifndef __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
 #define __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
 
-#include "gtklistitembaseprivate.h"
-
-#include "gtklistitemfactory.h"
+#include "gtklistfactorywidgetprivate.h"
 
 G_BEGIN_DECLS
 
@@ -38,14 +36,12 @@ typedef struct _GtkListItemWidgetClass GtkListItemWidgetClass;
 
 struct _GtkListItemWidget
 {
-  GtkListItemBase parent_instance;
+  GtkListFactoryWidget parent_instance;
 };
 
 struct _GtkListItemWidgetClass
 {
-  GtkListItemBaseClass parent_class;
-
-  void          (* activate_signal)                             (GtkListItemWidget            *self);
+  GtkListFactoryWidgetClass parent_class;
 };
 
 GType                   gtk_list_item_widget_get_type           (void) G_GNUC_CONST;
@@ -54,15 +50,6 @@ GtkWidget *             gtk_list_item_widget_new                (GtkListItemFact
                                                                  const char             *css_name,
                                                                  GtkAccessibleRole       role);
 
-GtkListItem *           gtk_list_item_widget_get_list_item      (GtkListItemWidget      *self);
-
-void                    gtk_list_item_widget_set_factory        (GtkListItemWidget      *self,
-                                                                 GtkListItemFactory     *factory);
-void                    gtk_list_item_widget_set_single_click_activate
-                                                                (GtkListItemWidget     *self,
-                                                                 gboolean               single_click_activate);
-void                    gtk_list_item_widget_set_activatable    (GtkListItemWidget     *self,
-                                                                 gboolean               activatable);
 void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
 void                    gtk_list_item_widget_reorder_child      (GtkListItemWidget      *self,
