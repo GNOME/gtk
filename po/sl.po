@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 4.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-03-14 16:53+0000\n"
-"PO-Revision-Date: 2023-03-14 18:18+0100\n"
+"POT-Creation-Date: 2023-03-19 17:33+0000\n"
+"PO-Revision-Date: 2023-03-20 23:15+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2313,12 +2313,10 @@ msgid "Could not select file"
 msgstr "Datoteke ni mogoče izbrati"
 
 #: gtk/gtkfilechooserwidget.c:1710 gtk/ui/gtkfilechooserwidget.ui:66
-#, fuzzy
 msgid "Grid View"
 msgstr "Mrežni pogled"
 
 #: gtk/gtkfilechooserwidget.c:1716
-#, fuzzy
 msgid "List View"
 msgstr "Seznamski pogled"
 
@@ -2511,17 +2509,14 @@ msgid "Accessed"
 msgstr "Dostopano"
 
 #: gtk/gtkfiledialog.c:814
-#, fuzzy
 msgid "Pick Files"
 msgstr "Izberi datoteke"
 
 #: gtk/gtkfiledialog.c:814
-#, fuzzy
 msgid "Pick a File"
 msgstr "Izberite datoteko"
 
 #: gtk/gtkfiledialog.c:819
-#, fuzzy
 msgid "Save a File"
 msgstr "Shranite datoteko"
 
@@ -2531,17 +2526,14 @@ msgid "_Select"
 msgstr "_Izberi"
 
 #: gtk/gtkfiledialog.c:824
-#, fuzzy
 msgid "Select Folders"
 msgstr "Izberi mape"
 
 #: gtk/gtkfiledialog.c:824
-#, fuzzy
 msgid "Select a Folder"
 msgstr "Izberite mapo"
 
 #: gtk/gtkfilefilter.c:1048
-#, fuzzy
 msgid "Unspecified"
 msgstr "Nedoločeno"
 
@@ -5994,7 +5986,6 @@ msgid "System"
 msgstr "Sistem"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
-#, fuzzy
 msgid "Select App"
 msgstr "Izberi program"
 
@@ -6529,21 +6520,14 @@ msgid "After"
 msgstr "Po"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:592
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Print at"
 msgid "Print at"
 msgstr "Natisni ob"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:602
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Print at time"
 msgid "Print at time"
 msgstr "Natisni ob času"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:665
-#, fuzzy
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Brez obrobe"
@@ -7138,7 +7122,6 @@ msgid "FILE"
 msgstr "DATOTEKA"
 
 #: tools/gtk-builder-tool-enumerate.c:64
-#, fuzzy
 msgid "Print all named objects."
 msgstr "Natisni seznam vseh imenovanih predmetov."
 
