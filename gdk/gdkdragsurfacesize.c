@@ -25,6 +25,8 @@
  *
  * The `GdkDragSurfaceSize` struct contains information that is useful
  * to compute the size of a drag surface.
+ *
+ * Since: 4.12
  */
 
 G_DEFINE_POINTER_TYPE (GdkDragSurfaceSize, gdk_drag_surface_size)
@@ -42,6 +44,8 @@ gdk_drag_surface_size_init (GdkDragSurfaceSize *size)
  * @height: the height
  *
  * Sets the size the drag surface prefers to be resized to.
+ *
+ * Since: 4.12
  */
 void
 gdk_drag_surface_size_set_size (GdkDragSurfaceSize *size,
