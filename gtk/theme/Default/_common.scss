@@ -43,6 +43,10 @@ image:disabled {
   -gtk-icon-filter: opacity(0.5);
 }
 
+picture:disabled {
+  opacity: 0.5;
+}
+
 .view,
 %view {
   color: $text_color;
