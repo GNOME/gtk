@@ -222,6 +222,20 @@ gdk_vulkan_strerror (VkResult result)
 #if VK_HEADER_VERSION < 140
     case VK_RESULT_RANGE_SIZE:
 #endif
+#if VK_HEADER_VERSION >= 218
+    case VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR:
+      return "The requested VkImageUsageFlags are not supported. (VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR)";
+    case VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR:
+      return "The requested video picture layout is not supported. (VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR)";
+    case VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR:
+      return "A video profile operation specified via VkVideoProfileInfoKHR::videoCodecOperation is not supported. (VK_ERROR_VIDEO_PROFILE_OPERATION_NOT_SUPPORTED_KHR)";
+    case VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR:
+      return "Format parameters in a requested VkVideoProfileInfoKHR chain are not supported. (VK_ERROR_VIDEO_PROFILE_FORMAT_NOT_SUPPORTED_KHR)";
+    case VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR:
+      return "Codec-specific parameters in a requested (VK_ERROR_VIDEO_PROFILE_CODEC_NOT_SUPPORTED_KHR)";
+    case VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR:
+      return "The specified video Std header version is not supported. (VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR)";
+#endif
     case VK_RESULT_MAX_ENUM:
     default:
       return "Unknown Vulkan error.";
