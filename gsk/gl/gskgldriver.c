@@ -732,7 +732,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   t = gdk_texture_get_render_data (texture, self);
   if (t && t->texture_id)
     {
-      if (ensure_mipmap & !t->has_mipmap)
+      if (ensure_mipmap && !t->has_mipmap)
         {
           glBindTexture (GL_TEXTURE_2D, t->texture_id);
           glGenerateMipmap (GL_TEXTURE_2D);

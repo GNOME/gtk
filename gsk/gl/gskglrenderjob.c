@@ -3538,9 +3538,12 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                  const graphene_rect_t *bounds)
 {
   int max_texture_size = job->command_queue->max_texture_size;
+  float scale_x = bounds->size.width / texture->width;
+  float scale_y = bounds->size.height / texture->height;
   gboolean use_mipmaps;
 
-  use_mipmaps = job->scale_x < 0.5 || job->scale_y < 0.5;
+  use_mipmaps = (scale_x * job->scale_x) < 0.5 ||
+                (scale_y * job->scale_y) < 0.5;
 
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
@@ -3567,10 +3570,6 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
     {
       float min_x = job->offset_x + bounds->origin.x;
       float min_y = job->offset_y + bounds->origin.y;
-      float max_x = min_x + bounds->size.width;
-      float max_y = min_y + bounds->size.height;
-      float scale_x = (max_x - min_x) / texture->width;
-      float scale_y = (max_y - min_y) / texture->height;
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
@@ -3581,7 +3580,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
 
-      for (guint i = 0; i < n_slices; i ++)
+      for (unsigned int i = 0; i < n_slices; i++)
         {
           const GskGLTextureSlice *slice = &slices[i];
           float x1, x2, y1, y2;
