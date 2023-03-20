@@ -3602,7 +3602,8 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
 
           gsk_gl_render_job_draw_coords (job,
                                          x1, y1, x2, y2,
-                                         0, 0, 1, 1,
+                                         slice->area.x, slice->area.y,
+                                         slice->area.x2, slice->area.y2,
                                          (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
         }
 
@@ -3751,7 +3752,8 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                          slice_bounds.origin.y,
                                          slice_bounds.origin.x + slice_bounds.size.width,
                                          slice_bounds.origin.y + slice_bounds.size.height,
-                                         0, 0, 1, 1,
+                                         slice->area.x, slice->area.y,
+                                         slice->area.x2, slice->area.y2,
                                          (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
         }
 

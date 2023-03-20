@@ -28,6 +28,12 @@ G_BEGIN_DECLS
 struct _GskGLTextureSlice
 {
   cairo_rectangle_int_t rect;
+  struct {
+    float x;
+    float y;
+    float x2;
+    float y2;
+  } area;
   guint texture_id;
 };
 

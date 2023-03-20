@@ -43,6 +43,8 @@
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
+#include <gdk/gdkmemoryformatprivate.h>
+
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
 static guint
@@ -1177,6 +1179,63 @@ gsk_gl_driver_create_command_queue (GskGLDriver *self,
   return gsk_gl_command_queue_new (context, self->shared_command_queue->uniforms);
 }
 
+#if 0
+static void
+dump_slice (GskGLTextureSlice *slice,
+            unsigned int       i)
+{
+  GLenum gl_internal_format, gl_format, gl_type;
+  int level;
+  guchar *data;
+  int width, height;
+  char *filename;
+  cairo_surface_t *surface;
+
+  gdk_memory_format_gl_format (GDK_MEMORY_DEFAULT, TRUE,
+                               &gl_internal_format, &gl_format, &gl_type);
+
+  glBindTexture (GL_TEXTURE_2D, slice->texture_id);
+
+  level = 0;
+  width = slice->rect.width + 2 * 15;
+  height = slice->rect.height + 2 * 15;
+
+  data = g_malloc (width * 4 * height);
+
+  while (width > 0 && height > 0)
+    {
+      glGetTexImage (GL_TEXTURE_2D,
+                     level,
+                     gl_format,
+                     gl_type,
+                     data);
+
+      surface = cairo_image_surface_create_for_data (data,
+                                                     CAIRO_FORMAT_ARGB32,
+                                                     width, height, 4 * width);
+
+      filename = g_strdup_printf ("slice%ulevel%d.png", i, level);
+      cairo_surface_write_to_png (surface, filename);
+      g_free (filename);
+      cairo_surface_destroy (surface);
+
+      level ++;
+      width = width / 2;
+      height = height / 2;
+    }
+
+  g_free (data);
+}
+
+static void
+dump_slices (GskGLTextureSlice *slices,
+             unsigned int       n_slices)
+{
+  for (unsigned int i = 0; i < n_slices; i++)
+    dump_slice (&slices[i], i);
+}
+#endif
+
 void
 gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                                   GdkTexture         *texture,
@@ -1196,14 +1255,14 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   int tex_height;
   int x = 0, y = 0;
   GdkMemoryTexture *memtex;
+  int extra_pixels;
 
   g_assert (GSK_IS_GL_DRIVER (self));
   g_assert (GDK_IS_TEXTURE (texture));
   g_assert (out_slices != NULL);
   g_assert (out_n_slices != NULL);
 
-  /* XXX: Too much? */
-  max_texture_size = self->command_queue->max_texture_size / 4;
+  max_texture_size = self->command_queue->max_texture_size / 2;
   tex_width = texture->width;
   tex_height = texture->height;
 
@@ -1231,10 +1290,63 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   memtex = gdk_memory_texture_from_texture (texture,
                                             gdk_texture_get_format (texture));
 
+  if (ensure_mipmap)
+    {
+      guchar *data, *data2;
+      int w, h;
+      GBytes *bytes;
+
+      /* We need some extra pixels around our tiles, in order for
+       * GL to properly determine the right level of detail to use.
+       * This number should probably depend on the scale, but for
+       * now we just hardcode it.
+       */
+      extra_pixels = 15;
+
+      /* FIXME a shame we have to copy the data here.
+       * It would be nicer if we could scatter-gather
+       * textures from smaller pieces.
+       */
+
+      data = g_malloc (4 * tex_width * tex_height);
+      gdk_texture_download (GDK_TEXTURE (memtex), data, 4 * tex_width);
+
+      w = tex_width + 2 * extra_pixels;
+      h = tex_height + 2 * extra_pixels;
+
+      data2 = g_malloc (4 * w * h);
+
+      for (int i = 0; i < w; i++)
+        {
+          int ii = CLAMP (i, extra_pixels, (tex_width - 1) + extra_pixels) - extra_pixels;
+
+          for (int j = 0; j < h; j++)
+            {
+              int jj = CLAMP (j, extra_pixels, (tex_height - 1) + extra_pixels) - extra_pixels;
+
+              data2[(j * w + i) * 4] = data[(jj * tex_width + ii) * 4];
+              data2[(j * w + i) * 4 + 1] = data[(jj * tex_width + ii) * 4 + 1];
+              data2[(j * w + i) * 4 + 2] = data[(jj * tex_width + ii) * 4 + 2];
+              data2[(j * w + i) * 4 + 3] = data[(jj * tex_width + ii) * 4 + 3];
+            }
+        }
+
+      g_free (data);
+      bytes = g_bytes_new_take (data2, 4 * w * h);
+
+      g_object_unref (memtex);
+      memtex = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (w, h, GDK_MEMORY_DEFAULT, bytes, 4 * w));
+      g_bytes_unref (bytes);
+    }
+  else
+    extra_pixels = 0;
+
+  x = 0;
   for (guint col = 0; col < cols; col++)
     {
       int slice_width = col + 1 < cols ? tex_width / cols : tex_width - x;
 
+      y = 0;
       for (guint row = 0; row < rows; row++)
         {
           int slice_height = row + 1 < rows ? tex_height / rows : tex_height - y;
@@ -1244,7 +1356,9 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
           subtex = gdk_memory_texture_new_subtexture (memtex,
                                                       x, y,
-                                                      slice_width, slice_height);
+                                                      slice_width + 2 * extra_pixels,
+                                                      slice_height + 2 * extra_pixels);
+
           texture_id = gsk_gl_command_queue_upload_texture (self->command_queue, subtex);
           g_object_unref (subtex);
           if (ensure_mipmap)
@@ -1258,11 +1372,14 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
           slices[slice_index].rect.width = slice_width;
           slices[slice_index].rect.height = slice_height;
           slices[slice_index].texture_id = texture_id;
+          slices[slice_index].area.x = extra_pixels / (float) (slice_width + 2 * extra_pixels);
+          slices[slice_index].area.y = extra_pixels / (float) (slice_height + 2 * extra_pixels);
+          slices[slice_index].area.x2 = (extra_pixels + slice_width) / (float) (slice_width + 2 * extra_pixels);
+          slices[slice_index].area.y2 = (extra_pixels + slice_height) / (float) (slice_height + 2 * extra_pixels);
 
           y += slice_height;
         }
 
-      y = 0;
       x += slice_width;
     }
 
@@ -1282,6 +1399,10 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
   t->slices = *out_slices = slices;
   t->n_slices = *out_n_slices = n_slices;
+
+#if 0
+  dump_slices (slices, n_slices);
+#endif
 }
 
 GskGLTexture *
