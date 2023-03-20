@@ -3538,23 +3538,28 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                  const graphene_rect_t *bounds)
 {
   int max_texture_size = job->command_queue->max_texture_size;
+  gboolean use_mipmaps;
+
+  use_mipmaps = job->scale_x < 0.5 || job->scale_y < 0.5;
 
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_upload_texture (job, texture, FALSE, &offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, use_mipmaps, &offscreen);
 
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
+      gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                      UNIFORM_SHARED_SOURCE, 0,
+                                                      GL_TEXTURE_2D,
+                                                      GL_TEXTURE0,
+                                                      offscreen.texture_id,
+                                                      use_mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                      GL_LINEAR);
       gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
     }
@@ -3569,7 +3574,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, FALSE, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, 0, 0, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
@@ -3588,11 +3593,13 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
 
           if (i > 0)
             gsk_gl_render_job_split_draw (job);
-          gsk_gl_program_set_uniform_texture (job->current_program,
-                                              UNIFORM_SHARED_SOURCE, 0,
-                                              GL_TEXTURE_2D,
-                                              GL_TEXTURE0,
-                                              slice->texture_id);
+          gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                          UNIFORM_SHARED_SOURCE, 0,
+                                                          GL_TEXTURE_2D,
+                                                          GL_TEXTURE0,
+                                                          slice->texture_id,
+                                                          use_mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                          GL_LINEAR);
 
           gsk_gl_render_job_draw_coords (job,
                                          x1, y1, x2, y2,
