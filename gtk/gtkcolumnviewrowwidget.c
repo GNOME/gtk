@@ -354,18 +354,47 @@ gtk_column_view_row_widget_allocate (GtkWidget *widget,
 }
 
 static void
+add_arrow_bindings (GtkWidgetClass   *widget_class,
+		    guint             keysym,
+		    GtkDirectionType  direction)
+{
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
+
+  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                       "move-focus",
+                                       "(i)",
+                                       direction);
+}
+
+static void
 gtk_column_view_row_widget_class_init (GtkColumnViewRowWidgetClass *klass)
 {
   GtkListItemBaseClass *base_class = GTK_LIST_ITEM_BASE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   base_class->update = gtk_column_view_row_widget_update;
+
   widget_class->focus = gtk_column_view_row_widget_focus;
   widget_class->grab_focus = gtk_column_view_row_widget_grab_focus;
   widget_class->measure = gtk_column_view_row_widget_measure;
   widget_class->size_allocate = gtk_column_view_row_widget_allocate;
   widget_class->root = gtk_column_view_row_widget_root;
   widget_class->unroot = gtk_column_view_row_widget_unroot;
+
+  add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);
 
   /* This gets overwritten by gtk_column_view_row_widget_new() but better safe than sorry */
   gtk_widget_class_set_css_name (widget_class, g_intern_static_string ("row"));
