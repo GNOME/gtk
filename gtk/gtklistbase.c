@@ -1091,15 +1091,16 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   GtkListBase *self = GTK_LIST_BASE (widget);
   int amount;
   guint orientation;
-  guint pos;
+  guint old_pos, new_pos;
   gboolean select, modify, extend;
 
   g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
 
-  pos = gtk_list_base_get_focus_position (self);
-  pos = gtk_list_base_move_focus (self, pos, orientation, amount);
+  old_pos = gtk_list_base_get_focus_position (self);
+  new_pos = gtk_list_base_move_focus (self, old_pos, orientation, amount);
 
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, select, modify, extend);
+  if (old_pos != new_pos)
+    gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
 
   return TRUE;
 }
