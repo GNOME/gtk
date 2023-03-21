@@ -1212,6 +1212,11 @@ gtk_editable_delegate_get_property (GObject    *object,
  * }
  * ```
  *
+ * Note that the widget which is the delegate *must* be a direct child of
+ * this widget, otherwise your implementation of [vfunc@Gtk.Accessible.get_platform_state]
+ * might not even be called, as the platform change will originate from
+ * the parent of the delegate, and, as a result, will not work properly.
+ *
  * Since: 4.10
  */
 gboolean
