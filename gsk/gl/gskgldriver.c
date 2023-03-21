@@ -1179,63 +1179,6 @@ gsk_gl_driver_create_command_queue (GskGLDriver *self,
   return gsk_gl_command_queue_new (context, self->shared_command_queue->uniforms);
 }
 
-#if 0
-static void
-dump_slice (GskGLTextureSlice *slice,
-            unsigned int       i)
-{
-  GLenum gl_internal_format, gl_format, gl_type;
-  int level;
-  guchar *data;
-  int width, height;
-  char *filename;
-  cairo_surface_t *surface;
-
-  gdk_memory_format_gl_format (GDK_MEMORY_DEFAULT, TRUE,
-                               &gl_internal_format, &gl_format, &gl_type);
-
-  glBindTexture (GL_TEXTURE_2D, slice->texture_id);
-
-  level = 0;
-  width = slice->rect.width + 2 * 15;
-  height = slice->rect.height + 2 * 15;
-
-  data = g_malloc (width * 4 * height);
-
-  while (width > 0 && height > 0)
-    {
-      glGetTexImage (GL_TEXTURE_2D,
-                     level,
-                     gl_format,
-                     gl_type,
-                     data);
-
-      surface = cairo_image_surface_create_for_data (data,
-                                                     CAIRO_FORMAT_ARGB32,
-                                                     width, height, 4 * width);
-
-      filename = g_strdup_printf ("slice%ulevel%d.png", i, level);
-      cairo_surface_write_to_png (surface, filename);
-      g_free (filename);
-      cairo_surface_destroy (surface);
-
-      level ++;
-      width = width / 2;
-      height = height / 2;
-    }
-
-  g_free (data);
-}
-
-static void
-dump_slices (GskGLTextureSlice *slices,
-             unsigned int       n_slices)
-{
-  for (unsigned int i = 0; i < n_slices; i++)
-    dump_slice (&slices[i], i);
-}
-#endif
-
 void
 gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                                   GdkTexture         *texture,
@@ -1397,10 +1340,6 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
   t->slices = *out_slices = slices;
   t->n_slices = *out_n_slices = n_slices;
-
-#if 0
-  dump_slices (slices, n_slices);
-#endif
 }
 
 GskGLTexture *
