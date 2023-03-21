@@ -1968,10 +1968,10 @@ queue_open_clipboard (GdkWin32ClipboardQueueAction  action,
 	return;
     }
 
-  info = g_slice_new (GdkWin32ClipboardQueueInfo);
+  info = g_slice_new0 (GdkWin32ClipboardQueueInfo);
 
   info->display = display;
-  g_set_object (&info->requestor, requestor);
+  info->requestor = g_object_ref (requestor);
   info->selection = GDK_SELECTION_CLIPBOARD;
   info->target = target;
   info->idle_time = 0;
