@@ -76,6 +76,88 @@ prepend (GListStore *store,
   g_object_unref (object);
 }
 
+static void
+assert_items_changed_correctly (GListModel *model,
+                                guint       position,
+                                guint       removed,
+                                guint       added,
+                                GListModel *compare)
+{
+  guint i, n_items;
+
+  //sanity check that we got all notifies
+  g_assert_cmpuint (g_list_model_get_n_items (compare), ==, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
+
+  //g_print ("%s => %u -%u +%u => %s\n", model_to_string (compare), position, removed, added, model_to_string (model));
+
+  g_assert_cmpint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare) - removed + added);
+  n_items = g_list_model_get_n_items (model);
+
+  /* Check that all unchanged items are indeed unchanged */
+  for (i = 0; i < position; i++)
+    {
+      gpointer o1 = g_list_model_get_item (model, i);
+      gpointer o2 = g_list_model_get_item (compare, i);
+      g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
+      g_object_unref (o1);
+      g_object_unref (o2);
+    }
+  for (i = position + added; i < n_items; i++)
+    {
+      gpointer o1 = g_list_model_get_item (model, i);
+      gpointer o2 = g_list_model_get_item (compare, i - added + removed);
+      g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
+      g_object_unref (o1);
+      g_object_unref (o2);
+    }
+
+  /*doesn't hold with passthrough, because we reuse the same children */
+#if 0
+  /* Check that the first and last added item are different from
+   * first and last removed item.
+   * Otherwise we could have kept them as-is
+   */
+  if (removed > 0 && added > 0)
+    {
+      gpointer o1 = g_list_model_get_item (model, position);
+      gpointer o2 = g_list_model_get_item (compare, position);
+      g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
+      g_object_unref (o1);
+      g_object_unref (o2);
+
+      o1 = g_list_model_get_item (model, position + added - 1);
+      o2 = g_list_model_get_item (compare, position + removed - 1);
+      g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
+      g_object_unref (o1);
+      g_object_unref (o2);
+    }
+#endif
+
+  /* Finally, perform the same change as the signal indicates */
+  g_list_store_splice (G_LIST_STORE (compare), position, removed, NULL, 0);
+  for (i = position; i < position + added; i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), i);
+      g_list_store_insert (G_LIST_STORE (compare), i, item);
+      g_object_unref (item);
+    }
+}
+
+static void
+assert_n_items_notified_properly (GListModel *model,
+                                  GParamSpec *pspec,
+                                  GListModel *compare)
+{
+  g_assert_cmpuint (g_list_model_get_n_items (model), !=, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
+
+  /* These should hve been updated in items-changed, which should have been emitted first */
+  g_assert_cmpuint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare));
+
+  g_object_set_data (G_OBJECT (compare),
+                     "last-notified-n-items",
+                     GUINT_TO_POINTER (g_list_model_get_n_items (model)));
+}
+
 #define assert_model(model, expected) G_STMT_START{ \
   char *s = model_to_string (G_LIST_MODEL (model)); \
   if (!g_str_equal (s, expected)) \
@@ -91,6 +173,38 @@ prepend (GListStore *store,
          #model " == " #expected, changes->str, "==", expected); \
   g_string_set_size (changes, 0); \
 }G_STMT_END
+
+static void
+check_model_changes (GListModel *model)
+{
+  GListStore *check;
+  gsize i;
+
+  check = g_list_store_new (g_list_model_get_item_type (model));
+
+  for (i = 0; i < g_list_model_get_n_items (model); i++)
+    {
+      gpointer item = g_list_model_get_item (model, i);
+      g_list_store_append (check, item);
+      g_object_unref (item);
+    }
+  g_signal_connect_data (model,
+                         "items-changed",
+                         G_CALLBACK (assert_items_changed_correctly), 
+                         check,
+                         (GClosureNotify) g_object_unref,
+                         0);
+
+  g_object_set_data (G_OBJECT (check),
+                     "last-notified-n-items",
+                     GUINT_TO_POINTER (g_list_model_get_n_items (G_LIST_MODEL (check))));
+  g_signal_connect_data (model,
+                         "notify::n-items",
+                         G_CALLBACK (assert_n_items_notified_properly), 
+                         g_object_ref (check),
+                         (GClosureNotify) g_object_unref,
+                         0);
+}
 
 static GListStore *
 new_empty_store (void)
@@ -337,8 +451,8 @@ create_model (void)
 }
 
 static GListModel *
-model_children (gpointer item,
-                gpointer unused)
+demo_node_children (gpointer item,
+                    gpointer unused)
 {
   GListStore *children;
 
@@ -363,7 +477,7 @@ test_collapse_change (void)
   treemodel = gtk_tree_list_model_new (G_LIST_MODEL (model),
                                        FALSE,
                                        FALSE,
-                                       model_children,
+                                       demo_node_children,
                                        NULL,
                                        NULL);
 
@@ -380,6 +494,76 @@ test_collapse_change (void)
   g_object_unref (a);
 }
 
+static void
+test_same_child_model (void)
+{
+#define N_MODELS 4
+  static const guint N_ITEMS_PER_MODEL = 3;
+  static const guint N_RUNS = 100;
+
+  GListStore *models[N_MODELS];
+  GtkTreeListModel *treelist;
+  DemoNode *d;
+  guint i, j;
+
+  i = N_MODELS;
+  while (i --> 0)
+    {
+      models[i] = g_list_store_new (demo_node_get_type ());
+      for (j = 0; j < N_ITEMS_PER_MODEL; j++)
+        {
+          d = demo_node_new ("A" + j, i + 1 < N_MODELS ? models[i + 1] : NULL);
+          g_list_store_append (models[i], d);
+        }
+    }
+
+  treelist = gtk_tree_list_model_new (g_object_ref (G_LIST_MODEL (models[0])),
+                                      g_test_rand_bit (), TRUE,
+                                      demo_node_children,
+                                      NULL, NULL);
+  check_model_changes (G_LIST_MODEL (treelist));
+
+  for (i = 0; i < N_RUNS; i++)
+    {
+      guint model_id = g_test_rand_int_range (0, N_MODELS);
+      GListStore *model = models[model_id];
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+
+      switch (g_test_rand_int_range (0, 3))
+        {
+          case 0:
+            if (n_items < 10)
+              {
+                d = demo_node_new ("A" + (i % 26), model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
+                g_list_store_insert (model,
+                                     g_test_rand_int_range (0, n_items + 1),
+                                     d);
+                g_object_unref (d);
+              }
+            break;
+          case 1:
+            if (n_items > 0)
+              g_list_store_remove (model, g_test_rand_int_range (0, n_items));
+            break;
+          case 2:
+            d = demo_node_new ("A" + (i % 26), model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
+            g_list_store_splice (model,
+                                 n_items ? g_test_rand_int_range (0, n_items) : 0,
+                                 n_items ? 1 : 0,
+                                 (gpointer[1]) { d }, 1);
+            g_object_unref (d);
+            break;
+          default:
+            g_assert_not_reached ();
+            break;
+        }
+  }
+
+  g_object_unref (treelist);
+  for (i = 0; i < G_N_ELEMENTS (models); i++)
+    g_object_unref (models[i]);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -392,6 +576,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/treelistmodel/expand", test_expand);
   g_test_add_func ("/treelistmodel/remove_some", test_remove_some);
   g_test_add_func ("/treelistmodel/collapse-change", test_collapse_change);
+  g_test_add_func ("/treelistmodel/same-child-model", test_same_child_model);
 
   return g_test_run ();
 }

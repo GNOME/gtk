@@ -481,16 +481,15 @@ gtk_check_button_focus (GtkWidget         *widget,
             }
         }
 
+      g_ptr_array_free (child_array, TRUE);
 
-      if (new_focus)
+      if (new_focus && new_focus != widget)
         {
           gtk_widget_grab_focus (new_focus);
           gtk_widget_activate (new_focus);
+          return TRUE;
         }
-
-      g_ptr_array_free (child_array, TRUE);
-
-      return TRUE;
+      return FALSE;
     }
   else
     {
