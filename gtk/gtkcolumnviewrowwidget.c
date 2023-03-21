@@ -91,6 +91,50 @@ gtk_column_view_row_widget_update (GtkListItemBase *base,
   gtk_list_factory_widget_set_activatable (fw, activatable);
 }
 
+static GtkWidget *
+gtk_column_view_next_focus_widget (GtkWidget        *widget,
+                                   GtkWidget        *child,
+                                   GtkDirectionType  direction)
+{
+  gboolean forward;
+
+  switch (direction)
+    {
+      case GTK_DIR_TAB_FORWARD:
+        forward = TRUE;
+        break;
+      case GTK_DIR_TAB_BACKWARD:
+        forward = FALSE;
+        break;
+      case GTK_DIR_LEFT:
+        forward = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+        break;
+      case GTK_DIR_RIGHT:
+        forward = gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL;
+        break;
+      case GTK_DIR_UP:
+      case GTK_DIR_DOWN:
+        return NULL;
+      default:
+        g_return_val_if_reached (NULL);
+    }
+
+  if (forward)
+    {
+      if (child)
+        return gtk_widget_get_next_sibling (child);
+      else
+        return gtk_widget_get_first_child (widget);
+    }
+  else
+    {
+      if (child)
+        return gtk_widget_get_prev_sibling (child);
+      else
+        return gtk_widget_get_last_child (widget);
+    }
+}
+
 static gboolean
 gtk_column_view_row_widget_focus (GtkWidget        *widget,
                                   GtkDirectionType  direction)
@@ -112,10 +156,9 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
   if (focus_child && gtk_widget_child_focus (focus_child, direction))
     return TRUE;
 
-  for (child = focus_child ? gtk_widget_get_next_sibling (focus_child)
-                           : gtk_widget_get_first_child (widget);
+  for (child = gtk_column_view_next_focus_widget (widget, focus_child, direction);
        child;
-       child = gtk_widget_get_next_sibling (child))
+       child = gtk_column_view_next_focus_widget (widget, child, direction))
     {
       if (gtk_widget_child_focus (child, direction))
         return TRUE;
