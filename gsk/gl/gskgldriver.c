@@ -1240,12 +1240,10 @@ void
 gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                                   GdkTexture         *texture,
                                   gboolean            ensure_mipmap,
-                                  guint               min_cols,
-                                  guint               min_rows,
                                   GskGLTextureSlice **out_slices,
                                   guint              *out_n_slices)
 {
-  int max_texture_size;
+  int max_slice_size;
   GskGLTextureSlice *slices;
   GskGLTexture *t;
   guint n_slices;
@@ -1262,12 +1260,12 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   g_assert (out_slices != NULL);
   g_assert (out_n_slices != NULL);
 
-  max_texture_size = self->command_queue->max_texture_size / 2;
+  max_slice_size = self->command_queue->max_texture_size / 2;
   tex_width = texture->width;
   tex_height = texture->height;
 
-  cols = MAX ((texture->width / max_texture_size) + 1, min_cols);
-  rows = MAX ((texture->height / max_texture_size) + 1, min_rows);
+  cols = (texture->width / max_slice_size) + 1;
+  rows = (texture->height / max_slice_size) + 1;
 
   n_slices = cols * rows;
 

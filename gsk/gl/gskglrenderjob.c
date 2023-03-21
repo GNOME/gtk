@@ -3573,7 +3573,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
@@ -3720,7 +3720,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, &slices, &n_slices);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
 
