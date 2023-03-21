@@ -70,6 +70,7 @@ static void gdk_wayland_surface_configure (GdkSurface *surface);
 static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
 static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
 static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
+static void gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface);
 
 /* {{{ Utilities */
 
@@ -229,8 +230,8 @@ gdk_wayland_surface_update_size (GdkSurface *surface,
 
   if (impl->display_server.egl_window)
     wl_egl_window_resize (impl->display_server.egl_window, width * scale, height * scale, 0, 0);
-  if (impl->display_server.wl_surface && scale_changed)
-    wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
+  if (scale_changed)
+    impl->buffer_scale_dirty = TRUE;
 
   gdk_surface_invalidate_rect (surface, NULL);
 
@@ -528,7 +529,12 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       GdkMonitor *monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
       if (monitor)
         {
-          GDK_WAYLAND_SURFACE (surface)->scale = gdk_monitor_get_scale_factor (monitor);
+          GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+          impl->scale = gdk_monitor_get_scale_factor (monitor);
+          if (impl->scale != 1)
+            impl->buffer_scale_dirty = TRUE;
+
           g_object_unref (monitor);
         }
     }
@@ -549,7 +555,6 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
                                   const cairo_region_t *damage)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display;
   cairo_rectangle_int_t rect;
   int i, n;
 
@@ -572,11 +577,6 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
   impl->pending_buffer_offset_x = 0;
   impl->pending_buffer_offset_y = 0;
 
-  /* Only set the buffer scale if supported by the compositor */
-  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
-    wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
-
   n = cairo_region_num_rectangles (damage);
   for (i = 0; i < n; i++)
     {
@@ -591,6 +591,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_shadow (surface);
   gdk_wayland_surface_sync_opaque_region (surface);
   gdk_wayland_surface_sync_input_region (surface);
+  gdk_wayland_surface_sync_buffer_scale (surface);
 }
 
 static gboolean
@@ -775,6 +776,26 @@ gdk_wayland_surface_sync_input_region (GdkSurface *surface)
     wl_region_destroy (wl_region);
 
   impl->input_region_dirty = FALSE;
+}
+
+static void
+gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display;
+
+  if (!impl->display_server.wl_surface)
+    return;
+
+  if (!impl->buffer_scale_dirty)
+    return;
+
+  /* Only set the buffer scale if supported by the compositor */
+  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
+    wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
+
+  impl->buffer_scale_dirty = FALSE;
 }
 
 static void
@@ -1013,6 +1034,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   impl->has_uncommitted_ack_configure = FALSE;
   impl->input_region_dirty = TRUE;
   impl->opaque_region_dirty = TRUE;
+  if (impl->scale != 1)
+    impl->buffer_scale_dirty = TRUE;
 
   impl->last_sent_window_geometry = (GdkRectangle) { 0 };
   impl->mapped = FALSE;
@@ -1286,8 +1309,6 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
         wl_egl_window_create (impl->display_server.wl_surface,
                               surface->width * impl->scale,
                               surface->height * impl->scale);
-      wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
-
       gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
 }
