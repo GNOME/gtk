@@ -474,24 +474,35 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   VkPresentRegionsKHR *regionsptr = VK_NULL_HANDLE;
   VkPresentRegionsKHR regions;
-  cairo_rectangle_int_t extents;
+  VkRectLayerKHR *rectangles;
+  int n_regions;
   int scale;
 
-  cairo_region_get_extents (painted, &extents);
   scale = gdk_surface_get_scale_factor (surface);
+  n_regions = cairo_region_num_rectangles (painted);
+  rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
+
+  for (int i = 0; i < n_regions; i++)
+    {
+      cairo_rectangle_int_t r;
+
+      cairo_region_get_rectangle (painted, i, &r);
+
+      rectangles[i] = (VkRectLayerKHR) {
+          .layer = 0,
+          .offset.x = r.x * scale,
+          .offset.y = r.y * scale,
+          .extent.width = r.width * scale,
+          .extent.height = r.height * scale,
+      };
+    }
 
   regions = (VkPresentRegionsKHR) {
       .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
       .swapchainCount = 1,
       .pRegions = &(VkPresentRegionKHR) {
-          .rectangleCount = 1,
-          .pRectangles = &(VkRectLayerKHR) {
-              .layer = 0,
-              .offset.x = extents.x * scale,
-              .offset.y = extents.y * scale,
-              .extent.width = extents.width * scale,
-              .extent.height = extents.height * scale,
-          }
+        .rectangleCount = n_regions,
+        .pRectangles = rectangles,
       },
   };
 
