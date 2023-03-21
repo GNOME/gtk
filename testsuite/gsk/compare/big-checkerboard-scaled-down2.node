@@ -1,8 +1,11 @@
-transform {
-  transform: scale(0.042);
-  child: texture {
-    bounds: 0 0 1500 1500;
-    texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABdwAAAXcCAIAAAC3V9szAAAgAElEQVR4nOzbwQ0EMQgEweXyz3nu\
+/* Clip away problematic corners */
+clip {
+  clip: 3 3 57 57;
+  child: transform {
+    transform: scale(0.042);
+    child: texture {
+      bounds: 0 0 1500 1500;
+      texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABdwAAAXcCAIAAAC3V9szAAAgAElEQVR4nOzbwQ0EMQgEweXyz3nu\
 MTkYS67+UDEgmO/7vu9L8n3fzDAzMzMzMzMz8wH/PkmSJEmSJJ0vSdczzMzMzMzMzMx8zC5lJEmS\
 JEmSFpqOLmlu+KdiZmZmZmZmZn7BLmUkSZIkSZI2StL1DDMzMzMzMzMzH7NLGUmSJEmSpIWmo0ua\
 G/6pmJmZmZmZmZlfsEsZSZIkSZKkjZJ0PcPMzMzMzMzMzMfsUkaSJEmSJGmh6eiS5oZ/KmZmZmZm\
@@ -327,5 +330,6 @@ SdJAp0+PND/8p2JmZmZmZmZm3mBLGUmSJEmSpImS9DzDzMzMzMzMzMzPbCkjSZIkSZI00OnTI80P\
 /6mYmZmZmZmZmTfYUkaSJEmSJGmiJD3PMDMzMzMzMzPzM1vKSJIkSZIkDXQBAv0dBQosl+kAAAAA\
 SUVORK5CYII=\
 ");
+    }
   }
 }
