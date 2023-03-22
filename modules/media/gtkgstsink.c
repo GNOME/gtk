@@ -677,6 +677,12 @@ gtk_gst_sink_dispose (GObject *object)
 {
   GtkGstSink *self = GTK_GST_SINK (object);
 
+#if GST_GL_HAVE_WINDOW_WIN32 && (GST_GL_HAVE_PLATFORM_WGL || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_WIN32)
+  /* Windows: Tell libepoxy that we are going back to the GdkGLContext now */
+  if (self->gdk_context != NULL)
+    handle_wgl_makecurrent (self->gdk_context);
+#endif
+
   g_clear_object (&self->paintable);
   g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);
