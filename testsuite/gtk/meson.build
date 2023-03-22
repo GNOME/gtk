@@ -128,6 +128,7 @@ internal_tests = [
   { 'name': 'textbuffer' },
   { 'name': 'texthistory' },
   { 'name': 'fnmatch' },
+  { 'name': 'a11y' },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
