@@ -381,6 +381,11 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
 
+      ink_rect.x -= 1;
+      ink_rect.y -= 1;
+      ink_rect.width += 2;
+      ink_rect.height += 2;
+
       value->draw_x = ink_rect.x;
       value->draw_y = ink_rect.y;
       value->draw_width = ink_rect.width;
