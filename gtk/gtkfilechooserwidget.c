@@ -34,6 +34,7 @@
 #include "gtkfilechooserprivate.h"
 #include "deprecated/gtkfilechooserdialog.h"
 #include "deprecated/gtkfilechooser.h"
+#include "gtkfilechoosercellprivate.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilesystemmodelprivate.h"
@@ -7304,6 +7305,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_type_ensure (GTK_TYPE_PATH_BAR);
   g_type_ensure (GTK_TYPE_PLACES_VIEW);
   g_type_ensure (GTK_TYPE_PLACES_SIDEBAR);
+  g_type_ensure (GTK_TYPE_FILE_CHOOSER_CELL);
   g_type_ensure (GTK_TYPE_FILE_CHOOSER_ERROR_STACK);
 
   impl->select_multiple = FALSE;
