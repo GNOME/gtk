@@ -1217,6 +1217,10 @@ gtk_editable_delegate_get_property (GObject    *object,
  * might not even be called, as the platform change will originate from
  * the parent of the delegate, and, as a result, will not work properly.
  *
+ * So, if you can't ensure the direct child condition, you should give the
+ * delegate the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role, or you can
+ * change your tree to allow this function to work.
+ *
  * Since: 4.10
  */
 gboolean
