@@ -38,4 +38,8 @@ void                    gtk_column_view_distribute_width        (GtkColumnView  
                                                                  int                     width,
                                                                  GtkRequestedSize       *sizes);
 
+void                    gtk_column_view_set_focus_column        (GtkColumnView          *self,
+                                                                 GtkColumnViewColumn    *focus_column);
+GtkColumnViewColumn *   gtk_column_view_get_focus_column        (GtkColumnView          *self);
+
 #endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */

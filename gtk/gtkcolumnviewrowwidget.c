@@ -53,6 +53,17 @@ gtk_column_view_row_widget_is_header (GtkColumnViewRowWidget *self)
   return gtk_widget_get_css_name (GTK_WIDGET (self)) == g_intern_static_string ("header");
 }
 
+static GtkColumnViewColumn *
+gtk_column_view_row_child_get_column (GtkWidget *child)
+{
+  if (GTK_IS_COLUMN_VIEW_CELL (child))
+    return gtk_column_view_cell_get_column (GTK_COLUMN_VIEW_CELL (child));
+  else
+    return gtk_column_view_title_get_column (GTK_COLUMN_VIEW_TITLE (child));
+
+  g_return_val_if_reached (NULL);
+}
+
 static void
 gtk_column_view_row_widget_update (GtkListItemBase *base,
                                    guint            position,
@@ -190,6 +201,21 @@ gtk_column_view_row_widget_grab_focus (GtkWidget *widget)
     return FALSE;
 
   return GTK_WIDGET_CLASS (gtk_column_view_row_widget_parent_class)->grab_focus (widget);
+}
+
+static void
+gtk_column_view_row_widget_set_focus_child (GtkWidget *widget,
+                                            GtkWidget *child)
+{
+  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (widget);
+
+  GTK_WIDGET_CLASS (gtk_column_view_row_widget_parent_class)->set_focus_child (widget, child);
+
+  if (child)
+    {
+      gtk_column_view_set_focus_column (gtk_column_view_row_widget_get_column_view (self),
+                                        gtk_column_view_row_child_get_column (child));
+    }
 }
 
 static void
@@ -341,10 +367,7 @@ gtk_column_view_row_widget_allocate (GtkWidget *widget,
       if (!gtk_widget_should_layout (child))
         continue;
 
-      if (GTK_IS_COLUMN_VIEW_CELL (child))
-        column = gtk_column_view_cell_get_column (GTK_COLUMN_VIEW_CELL (child));
-      else
-        column = gtk_column_view_title_get_column (GTK_COLUMN_VIEW_TITLE (child));
+      column = gtk_column_view_row_child_get_column (child);
       gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
 
       gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -388,6 +411,7 @@ gtk_column_view_row_widget_class_init (GtkColumnViewRowWidgetClass *klass)
 
   widget_class->focus = gtk_column_view_row_widget_focus;
   widget_class->grab_focus = gtk_column_view_row_widget_grab_focus;
+  widget_class->set_focus_child = gtk_column_view_row_widget_set_focus_child;
   widget_class->measure = gtk_column_view_row_widget_measure;
   widget_class->size_allocate = gtk_column_view_row_widget_allocate;
   widget_class->root = gtk_column_view_row_widget_root;
