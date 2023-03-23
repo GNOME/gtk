@@ -64,6 +64,23 @@ gtk_column_view_row_child_get_column (GtkWidget *child)
   g_return_val_if_reached (NULL);
 }
 
+static GtkWidget *
+gtk_column_view_row_widget_find_child (GtkColumnViewRowWidget *self,
+                                       GtkColumnViewColumn    *column)
+{
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (self));
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (gtk_column_view_row_child_get_column (child) == column)
+        return child;
+    }
+
+  return NULL;
+}
+
 static void
 gtk_column_view_row_widget_update (GtkListItemBase *base,
                                    guint            position,
@@ -150,7 +167,9 @@ static gboolean
 gtk_column_view_row_widget_focus (GtkWidget        *widget,
                                   GtkDirectionType  direction)
 {
+  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (widget);
   GtkWidget *child, *focus_child;
+  GtkColumnView *view;
 
   /* The idea of this function is the following:
    * 1. If any child can take focus, do not ever attempt
@@ -167,12 +186,42 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
   if (focus_child && gtk_widget_child_focus (focus_child, direction))
     return TRUE;
 
+  view = gtk_column_view_row_widget_get_column_view (self);
+  if (focus_child == NULL)
+    {
+      GtkColumnViewColumn *focus_column = gtk_column_view_get_focus_column (view);
+      if (focus_column)
+        {
+          focus_child = gtk_column_view_row_widget_find_child (self, focus_column);
+          if (focus_child && gtk_widget_child_focus (focus_child, direction))
+            return TRUE;
+        }
+    }
+
   for (child = gtk_column_view_next_focus_widget (widget, focus_child, direction);
        child;
        child = gtk_column_view_next_focus_widget (widget, child, direction))
     {
       if (gtk_widget_child_focus (child, direction))
         return TRUE;
+    }
+
+  switch (direction)
+    {
+      case GTK_DIR_TAB_FORWARD:
+      case GTK_DIR_TAB_BACKWARD:
+        gtk_column_view_set_focus_column (view, NULL);
+        break;
+
+      case GTK_DIR_LEFT:
+      case GTK_DIR_RIGHT:
+        return TRUE;
+
+      default:
+        g_assert_not_reached ();
+      case GTK_DIR_UP:
+      case GTK_DIR_DOWN:
+        break;
     }
 
   if (focus_child)
@@ -187,12 +236,31 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
 static gboolean
 gtk_column_view_row_widget_grab_focus (GtkWidget *widget)
 {
-  GtkWidget *child;
+  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (widget);
+  GtkWidget *child, *focus_child;
+  GtkColumnViewColumn *focus_column;
+  GtkColumnView *view;
 
-  for (child = gtk_widget_get_first_child (widget);
-       child;
+  view = gtk_column_view_row_widget_get_column_view (self);
+  focus_column = gtk_column_view_get_focus_column (view);
+  if (focus_column)
+    {
+      focus_child = gtk_column_view_row_widget_find_child (self, focus_column);
+      if (focus_child && gtk_widget_grab_focus (focus_child))
+        return TRUE;
+    }
+  else
+    focus_child = NULL;
+
+  for (child = focus_child ? gtk_widget_get_next_sibling (focus_child) : gtk_widget_get_first_child (widget);
+       child != focus_child;
        child = gtk_widget_get_next_sibling (child))
     {
+      /* When we started iterating at focus_child, we want to iterate over the rest
+       * of the children, too */
+      if (child == NULL)
+        continue;
+
       if (gtk_widget_grab_focus (child))
         return TRUE;
     }
