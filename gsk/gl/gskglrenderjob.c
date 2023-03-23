@@ -3538,9 +3538,12 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                  const graphene_rect_t *bounds)
 {
   int max_texture_size = job->command_queue->max_texture_size;
+  float scale_x = bounds->size.width / texture->width;
+  float scale_y = bounds->size.height / texture->height;
   gboolean use_mipmaps;
 
-  use_mipmaps = job->scale_x < 0.5 || job->scale_y < 0.5;
+  use_mipmaps = (scale_x * job->scale_x) < 0.5 ||
+                (scale_y * job->scale_y) < 0.5;
 
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
@@ -3567,21 +3570,17 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
     {
       float min_x = job->offset_x + bounds->origin.x;
       float min_y = job->offset_y + bounds->origin.y;
-      float max_x = min_x + bounds->size.width;
-      float max_y = min_y + bounds->size.height;
-      float scale_x = (max_x - min_x) / texture->width;
-      float scale_y = (max_y - min_y) / texture->height;
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
 
-      for (guint i = 0; i < n_slices; i ++)
+      for (unsigned int i = 0; i < n_slices; i++)
         {
           const GskGLTextureSlice *slice = &slices[i];
           float x1, x2, y1, y2;
@@ -3603,7 +3602,8 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
 
           gsk_gl_render_job_draw_coords (job,
                                          x1, y1, x2, y2,
-                                         0, 0, 1, 1,
+                                         slice->area.x, slice->area.y,
+                                         slice->area.x2, slice->area.y2,
                                          (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
         }
 
@@ -3720,7 +3720,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, 0, 0, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, &slices, &n_slices);
 
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
 
@@ -3752,7 +3752,8 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                          slice_bounds.origin.y,
                                          slice_bounds.origin.x + slice_bounds.size.width,
                                          slice_bounds.origin.y + slice_bounds.size.height,
-                                         0, 0, 1, 1,
+                                         slice->area.x, slice->area.y,
+                                         slice->area.x2, slice->area.y2,
                                          (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
         }
 

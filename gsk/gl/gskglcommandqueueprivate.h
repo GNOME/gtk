@@ -298,6 +298,18 @@ int                 gsk_gl_command_queue_create_texture       (GskGLCommandQueue
                                                                int                   width,
                                                                int                   height,
                                                                int                   format);
+
+
+typedef struct {
+  GdkTexture *texture;
+  int x;
+  int y;
+} GskGLTextureChunk;
+
+int                 gsk_gl_command_queue_upload_texture_chunks(GskGLCommandQueue    *self,
+                                                               unsigned int          n_chunks,
+                                                               GskGLTextureChunk    *chunks);
+
 guint               gsk_gl_command_queue_create_framebuffer   (GskGLCommandQueue    *self);
 gboolean            gsk_gl_command_queue_create_render_target (GskGLCommandQueue    *self,
                                                                int                   width,
