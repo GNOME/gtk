@@ -8501,11 +8501,7 @@ create_at_context (GtkWidget *self)
     role = class_priv->accessible_role;
 
   priv->accessible_role = role;
-  priv->at_context = gtk_at_context_create (role, GTK_ACCESSIBLE (self), gdk_display_get_default ());
-  if (priv->at_context != NULL)
-    return g_object_ref (priv->at_context);
-
-  return NULL;
+  return gtk_at_context_create (role, GTK_ACCESSIBLE (self), gdk_display_get_default ());
 }
 
 static GtkATContext *
