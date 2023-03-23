@@ -201,6 +201,7 @@ typedef struct _GskGLRenderOffscreen
 
   /* Return location for whether we created a texture */
   guint was_offscreen : 1;
+  guint has_mipmap : 1;
 } GskGLRenderOffscreen;
 
 static void     gsk_gl_render_job_visit_node                (GskGLRenderJob       *job,
@@ -3513,22 +3514,36 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   gboolean              ensure_mipmap,
                                   GskGLRenderOffscreen *offscreen)
 {
+  GdkGLTexture *gl_texture = NULL;
+
+  if (GDK_IS_GL_TEXTURE (texture))
+    gl_texture = GDK_GL_TEXTURE (texture);
+
   if (!ensure_mipmap &&
       gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
-      !GDK_IS_GL_TEXTURE (texture))
+      !gl_texture)
     {
       const GskGLIconData *icon_data;
 
       gsk_gl_icon_library_lookup_or_add (job->driver->icons_library, texture, &icon_data);
       offscreen->texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
       memcpy (&offscreen->area, &icon_data->entry.area, sizeof offscreen->area);
+      offscreen->has_mipmap = FALSE;
     }
   else
     {
+      /* Only generate a mipmap if it does not make use reupload
+       * a GL texture which we could otherwise use directly.
+       */
+      if (gl_texture &&
+          gdk_gl_context_is_shared (gdk_gl_texture_get_context (gl_texture), job->command_queue->context))
+        ensure_mipmap = gdk_gl_texture_has_mipmap (gl_texture);
+
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, ensure_mipmap);
       init_full_texture_region (offscreen);
+      offscreen->has_mipmap = ensure_mipmap;
     }
 }
 
@@ -3540,17 +3555,17 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
   int max_texture_size = job->command_queue->max_texture_size;
   float scale_x = bounds->size.width / texture->width;
   float scale_y = bounds->size.height / texture->height;
-  gboolean use_mipmaps;
+  gboolean use_mipmap;
 
-  use_mipmaps = (scale_x * job->scale_x) < 0.5 ||
-                (scale_y * job->scale_y) < 0.5;
+  use_mipmap = (scale_x * job->scale_x) < 0.5 ||
+               (scale_y * job->scale_y) < 0.5;
 
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_upload_texture (job, texture, use_mipmaps, &offscreen);
+      gsk_gl_render_job_upload_texture (job, texture, use_mipmap, &offscreen);
 
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
@@ -3561,7 +3576,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                                       GL_TEXTURE_2D,
                                                       GL_TEXTURE0,
                                                       offscreen.texture_id,
-                                                      use_mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                      offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
                                                       GL_LINEAR);
       gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
       gsk_gl_render_job_end_draw (job);
@@ -3573,7 +3588,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmaps, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, use_mipmap, &slices, &n_slices);
 
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
@@ -3597,7 +3612,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                                           GL_TEXTURE_2D,
                                                           GL_TEXTURE0,
                                                           slice->texture_id,
-                                                          use_mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                          use_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
                                                           GL_LINEAR);
 
           gsk_gl_render_job_draw_coords (job,
