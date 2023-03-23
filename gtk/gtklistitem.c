@@ -94,12 +94,12 @@ gtk_list_item_get_property (GObject    *object,
 
     case PROP_ITEM:
       if (self->owner)
-        g_value_set_object (value, gtk_list_item_widget_get_item (self->owner));
+        g_value_set_object (value, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->owner)));
       break;
 
     case PROP_POSITION:
       if (self->owner)
-        g_value_set_uint (value, gtk_list_item_widget_get_position (self->owner));
+        g_value_set_uint (value, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->owner)));
       else
         g_value_set_uint (value, GTK_INVALID_LIST_POSITION);
       break;
@@ -110,7 +110,7 @@ gtk_list_item_get_property (GObject    *object,
 
     case PROP_SELECTED:
       if (self->owner)
-        g_value_set_boolean (value, gtk_list_item_widget_get_selected (self->owner));
+        g_value_set_boolean (value, gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->owner)));
       else
         g_value_set_boolean (value, FALSE);
       break;
@@ -268,7 +268,7 @@ gtk_list_item_get_item (GtkListItem *self)
   if (self->owner == NULL)
     return NULL;
 
-  return gtk_list_item_widget_get_item (self->owner);
+  return gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->owner));
 }
 
 /**
@@ -309,19 +309,16 @@ gtk_list_item_set_child (GtkListItem *self,
   if (self->child == child)
     return;
 
-  if (self->child && self->owner)
-    gtk_list_item_widget_remove_child (self->owner, self->child);
-
   g_clear_object (&self->child);
 
   if (child)
     {
       g_object_ref_sink (child);
       self->child = child;
-
-      if (self->owner)
-        gtk_list_item_widget_add_child (self->owner, child);
     }
+
+  if (self->owner)
+    gtk_list_item_widget_set_child (self->owner, child);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
@@ -344,7 +341,7 @@ gtk_list_item_get_position (GtkListItem *self)
   if (self->owner == NULL)
     return GTK_INVALID_LIST_POSITION;
 
-  return gtk_list_item_widget_get_position (self->owner);
+  return gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->owner));
 }
 
 /**
@@ -366,7 +363,7 @@ gtk_list_item_get_selected (GtkListItem *self)
   if (self->owner == NULL)
     return FALSE;
 
-  return gtk_list_item_widget_get_selected (self->owner);
+  return gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->owner));
 }
 
 /**
@@ -417,6 +414,9 @@ gtk_list_item_set_selectable (GtkListItem *self,
 
   self->selectable = selectable;
 
+  if (self->owner)
+    gtk_list_factory_widget_set_selectable (GTK_LIST_FACTORY_WIDGET (self->owner), selectable);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
 }
 
@@ -464,7 +464,7 @@ gtk_list_item_set_activatable (GtkListItem *self,
   self->activatable = activatable;
 
   if (self->owner)
-    gtk_list_item_widget_set_activatable (self->owner, activatable);
+    gtk_list_factory_widget_set_activatable (GTK_LIST_FACTORY_WIDGET (self->owner), activatable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
 }

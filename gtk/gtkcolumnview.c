@@ -21,11 +21,10 @@
 
 #include "gtkcolumnviewprivate.h"
 
+#include "gtkadjustment.h"
 #include "gtkboxlayout.h"
 #include "gtkbuildable.h"
-#include "gtkcolumnlistitemfactoryprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
-#include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdropcontrollermotion.h"
@@ -33,9 +32,8 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
-#include "gtkwidgetprivate.h"
 #include "gtksizerequest.h"
-#include "gtkadjustment.h"
+#include "gtkwidgetprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkdragsourceprivate.h"
@@ -136,14 +134,26 @@ gtk_column_list_view_init (GtkColumnListView *view)
 {
 }
 
+static GtkListItemBase *
+gtk_column_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_column_view_row_widget_new (FALSE);
+
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
+
+  return GTK_LIST_ITEM_BASE (result);
+}
+
 static void
 gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
 {
   GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  list_base_class->list_item_name = "row";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_ROW;
+  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
 
   gtk_widget_class_set_css_name (widget_class, I_("listview"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
@@ -156,10 +166,11 @@ struct _GtkColumnView
 
   GListStore *columns;
 
+  GtkColumnViewColumn *focus_column;
+
   GtkWidget *header;
 
   GtkListView *listview;
-  GtkColumnListItemFactory *factory;
 
   GtkSorter *sorter;
 
@@ -486,10 +497,11 @@ gtk_column_view_dispose (GObject *object)
       g_object_unref (column);
     }
 
+  g_assert (self->focus_column == NULL);
+
   g_clear_pointer (&self->header, gtk_widget_unparent);
 
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
-  g_clear_object (&self->factory);
 
   g_clear_object (&self->sorter);
   clear_adjustment (self);
@@ -910,7 +922,7 @@ gtk_column_view_in_header (GtkColumnView       *self,
   GtkWidget *header;
   graphene_rect_t rect;
 
-header = gtk_column_view_column_get_header (column);
+  header = gtk_column_view_column_get_header (column);
 
   if (!gtk_widget_compute_bounds (header, self->header, &rect))
     return FALSE;
@@ -1274,9 +1286,8 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_list_item_widget_new (NULL, "header", GTK_ACCESSIBLE_ROLE_ROW);
+  self->header = gtk_column_view_row_widget_new (TRUE);
   gtk_widget_set_can_focus (self->header, FALSE);
-  gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
@@ -1306,9 +1317,7 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = GTK_SORTER (gtk_column_view_sorter_new ());
-  self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (g_object_new (GTK_TYPE_COLUMN_LIST_VIEW, NULL));
-  gtk_list_view_set_factory (self->listview, GTK_LIST_ITEM_FACTORY (self->factory));
   gtk_widget_set_hexpand (GTK_WIDGET (self->listview), TRUE);
   gtk_widget_set_vexpand (GTK_WIDGET (self->listview), TRUE);
   g_signal_connect (self->listview, "activate", G_CALLBACK (gtk_column_view_activate_cb), self);
@@ -1542,6 +1551,20 @@ gtk_column_view_remove_column (GtkColumnView       *self,
   gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (self->sorter), column);
   gtk_column_view_column_set_column_view (column, NULL);
   g_list_store_remove (self->columns, i);
+
+  if (self->focus_column == column)
+    {
+      GtkColumnViewColumn *item;
+
+      if (i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)))
+        item = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      else if (i > 0)
+        item = g_list_model_get_item (G_LIST_MODEL (self->columns), i - 1);
+      else
+        item = NULL;
+
+      gtk_column_view_set_focus_column (self, item);
+    }
 }
 
 /**
@@ -1598,6 +1621,43 @@ gtk_column_view_insert_column (GtkColumnView       *self,
   g_object_unref (column);
 }
 
+static void
+gtk_column_view_scroll_to_column (GtkColumnView       *self,
+                                  GtkColumnViewColumn *column)
+{
+  int col_x, col_width, adj_x, adj_width;
+
+  gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
+  adj_x = gtk_adjustment_get_value (self->hadjustment);
+  adj_width = gtk_adjustment_get_page_size (self->hadjustment);
+
+  if (col_x < adj_x)
+    gtk_adjustment_set_value (self->hadjustment, col_x);
+  else if (col_x + col_width > adj_x + adj_width)
+    gtk_adjustment_set_value (self->hadjustment, adj_x + adj_width - col_width);
+}
+
+void
+gtk_column_view_set_focus_column (GtkColumnView       *self,
+                                  GtkColumnViewColumn *column)
+{
+  g_assert (column == NULL || gtk_column_view_column_get_column_view (column) == self);
+
+  if (self->focus_column == column)
+    return;
+
+  self->focus_column = column;
+
+  if (column)
+    gtk_column_view_scroll_to_column (self, column);
+}
+
+GtkColumnViewColumn *
+gtk_column_view_get_focus_column (GtkColumnView *self)
+{
+  return self->focus_column;
+}
+
 void
 gtk_column_view_measure_across (GtkColumnView *self,
                                 int           *minimum,
@@ -1626,10 +1686,10 @@ gtk_column_view_measure_across (GtkColumnView *self,
   *natural = nat;
 }
 
-GtkListItemWidget *
+GtkColumnViewRowWidget *
 gtk_column_view_get_header_widget (GtkColumnView *self)
 {
-  return GTK_LIST_ITEM_WIDGET (self->header);
+  return GTK_COLUMN_VIEW_ROW_WIDGET (self->header);
 }
 
 GtkListView *

@@ -24,6 +24,7 @@
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtklistitemwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
@@ -213,6 +214,21 @@ gtk_list_view_split (GtkListBase *base,
                           });
 
   return new_tile;
+}
+
+static GtkListItemBase *
+gtk_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_list_item_widget_new (self->factory,
+                                     "row",
+                                     GTK_ACCESSIBLE_ROLE_LIST_ITEM);
+
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
+
+  return GTK_LIST_ITEM_BASE (result);
 }
 
 static gboolean
@@ -612,7 +628,7 @@ gtk_list_view_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_FACTORY:
-      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      g_value_set_object (value, self->factory);
       break;
 
     case PROP_MODEL:
@@ -624,7 +640,7 @@ gtk_list_view_get_property (GObject    *object,
       break;
 
     case PROP_SINGLE_CLICK_ACTIVATE:
-      g_value_set_boolean (value, gtk_list_item_manager_get_single_click_activate (self->item_manager));
+      g_value_set_boolean (value, self->single_click_activate);
       break;
 
     case PROP_ENABLE_RUBBERBAND:
@@ -698,9 +714,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  list_base_class->list_item_name = "row";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
   list_base_class->split = gtk_list_view_split;
+  list_base_class->create_list_widget = gtk_list_view_create_list_widget;
   list_base_class->get_allocation = gtk_list_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
@@ -912,7 +927,7 @@ gtk_list_view_get_factory (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
 
-  return gtk_list_item_manager_get_factory (self->item_manager);
+  return self->factory;
 }
 
 /**
@@ -926,13 +941,21 @@ void
 gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
-  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+  if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
@@ -993,12 +1016,22 @@ void
 gtk_list_view_set_single_click_activate (GtkListView *self,
                                          gboolean     single_click_activate)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
 
-  if (single_click_activate == gtk_list_item_manager_get_single_click_activate (self->item_manager))
+  if (single_click_activate == self->single_click_activate)
     return;
 
-  gtk_list_item_manager_set_single_click_activate (self->item_manager, single_click_activate);
+  self->single_click_activate = single_click_activate;
+
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (tile->widget), single_click_activate);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
 }
@@ -1017,7 +1050,7 @@ gtk_list_view_get_single_click_activate (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), FALSE);
 
-  return gtk_list_item_manager_get_single_click_activate (self->item_manager);
+  return self->single_click_activate;
 }
 
 /**

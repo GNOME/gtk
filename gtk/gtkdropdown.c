@@ -219,12 +219,12 @@ selection_changed (GtkSingleSelection *selection,
       gtk_stack_set_visible_child_name (GTK_STACK (self->button_stack), "item");
     }
 
-  if (selected != gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (self->button_item)))
+  if (selected != gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->button_item)))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
-                                   selected,
-                                   gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection)),
-                                   FALSE);
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (self->button_item),
+                                 selected,
+                                 gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection)),
+                                 FALSE);
     }
 
   /* reset the filter so positions are 1-1 */
@@ -246,12 +246,12 @@ selection_item_changed (GtkSingleSelection *selection,
 
   item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (self->selection));
 
-  if (item != gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (self->button_item)))
+  if (item != gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->button_item)))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (self->button_item),
-                                   gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)),
-                                   item,
-                                   FALSE);
+      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (self->button_item),
+                                 gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)),
+                                 item,
+                                 FALSE);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
@@ -915,7 +915,7 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
   if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_widget_set_factory (GTK_LIST_ITEM_WIDGET (self->button_item), factory);
+  gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), factory);
   if (self->list_factory == NULL)
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
 

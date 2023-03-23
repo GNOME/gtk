@@ -363,7 +363,7 @@ gtk_list_base_get_allocation (GtkListBase  *self,
  * selections, both when clicking rows with the mouse or when using
  * the keyboard.
  **/
-void
+static void
 gtk_list_base_select_item (GtkListBase *self,
                            guint        pos,
                            gboolean     modify,
@@ -439,6 +439,68 @@ gtk_list_base_select_item (GtkListBase *self,
                                       priv->selected,
                                       pos,
                                       0, 0);
+}
+
+/*
+ * gtk_list_base_grab_focus_on_item:
+ * @self: a `GtkListBase`
+ * @pos: position of the item to focus
+ * @select: %TRUE to select the item
+ * @modify: if selecting, %TRUE to modify the selected
+ *   state, %FALSE to always select
+ * @extend: if selecting, %TRUE to extend the selection,
+ *   %FALSE to only operate on this item
+ *
+ * Tries to grab focus on the given item. If there is no item
+ * at this position or grabbing focus failed, %FALSE will be
+ * returned.
+ *
+ * Returns: %TRUE if focusing the item succeeded
+ **/
+static gboolean
+gtk_list_base_grab_focus_on_item (GtkListBase *self,
+                                  guint        pos,
+                                  gboolean     select,
+                                  gboolean     modify,
+                                  gboolean     extend)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListTile *tile;
+  gboolean success;
+
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (tile == NULL)
+    return FALSE;
+
+  if (!tile->widget)
+    {
+      GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
+
+      /* We need a tracker here to create the widget.
+       * That needs to have happened or we can't grab it.
+       * And we can't use a different tracker, because they manage important rows,
+       * so we create a temporary one. */
+      gtk_list_item_tracker_set_position (priv->item_manager, tracker, pos, 0, 0);
+
+      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+      g_assert (tile->widget);
+
+      success = gtk_widget_grab_focus (tile->widget);
+
+      gtk_list_item_tracker_free (priv->item_manager, tracker);
+    }
+  else
+    {
+      success = gtk_widget_grab_focus (tile->widget);
+    }
+
+  if (!success)
+    return FALSE;
+
+  if (select)
+    gtk_list_base_select_item (self, pos, modify, extend);
+
+  return TRUE;
 }
 
 guint
@@ -834,10 +896,10 @@ gtk_list_base_set_focus_child (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_list_base_parent_class)->set_focus_child (widget, child);
 
-  if (!GTK_IS_LIST_ITEM_WIDGET (child))
+  if (!GTK_IS_LIST_ITEM_BASE (child))
     return;
 
-  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (child));
+  pos = gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (child));
 
   if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
     {
@@ -1029,15 +1091,16 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   GtkListBase *self = GTK_LIST_BASE (widget);
   int amount;
   guint orientation;
-  guint pos;
+  guint old_pos, new_pos;
   gboolean select, modify, extend;
 
   g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
 
-  pos = gtk_list_base_get_focus_position (self);
-  pos = gtk_list_base_move_focus (self, pos, orientation, amount);
+  old_pos = gtk_list_base_get_focus_position (self);
+  new_pos = gtk_list_base_move_focus (self, old_pos, orientation, amount);
 
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos, select, modify, extend);
+  if (old_pos != new_pos)
+    gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
 
   return TRUE;
 }
@@ -1851,11 +1914,17 @@ gtk_list_base_drag_leave (GtkDropControllerMotion *motion,
 }
 
 static GtkListTile *
-gtk_list_base_split_func (gpointer     data,
+gtk_list_base_split_func (GtkWidget   *widget,
                           GtkListTile *tile,
                           guint        n_items)
 {
-  return GTK_LIST_BASE_GET_CLASS (data)->split (data, tile, n_items);
+  return GTK_LIST_BASE_GET_CLASS (widget)->split (GTK_LIST_BASE (widget), tile, n_items);
+}
+
+static GtkListItemBase *
+gtk_list_base_create_widget_func (GtkWidget *widget)
+{
+  return GTK_LIST_BASE_GET_CLASS (widget)->create_list_widget (GTK_LIST_BASE (widget));
 }
 
 static void
@@ -1866,10 +1935,8 @@ gtk_list_base_init_real (GtkListBase      *self,
   GtkEventController *controller;
 
   priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
-                                                  g_class->list_item_name,
-                                                  g_class->list_item_role,
                                                   gtk_list_base_split_func,
-                                                  self);
+                                                  gtk_list_base_create_widget_func);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;
@@ -2147,68 +2214,6 @@ gtk_list_base_set_anchor_max_widgets (GtkListBase *self,
                             priv->anchor_side_across,
                             priv->anchor_align_along,
                             priv->anchor_side_along);
-}
-
-/*
- * gtk_list_base_grab_focus_on_item:
- * @self: a `GtkListBase`
- * @pos: position of the item to focus
- * @select: %TRUE to select the item
- * @modify: if selecting, %TRUE to modify the selected
- *   state, %FALSE to always select
- * @extend: if selecting, %TRUE to extend the selection,
- *   %FALSE to only operate on this item
- *
- * Tries to grab focus on the given item. If there is no item
- * at this position or grabbing focus failed, %FALSE will be
- * returned.
- *
- * Returns: %TRUE if focusing the item succeeded
- **/
-gboolean
-gtk_list_base_grab_focus_on_item (GtkListBase *self,
-                                  guint        pos,
-                                  gboolean     select,
-                                  gboolean     modify,
-                                  gboolean     extend)
-{
-  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListTile *tile;
-  gboolean success;
-
-  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-  if (tile == NULL)
-    return FALSE;
-
-  if (!tile->widget)
-    {
-      GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
-
-      /* We need a tracker here to create the widget.
-       * That needs to have happened or we can't grab it.
-       * And we can't use a different tracker, because they manage important rows,
-       * so we create a temporary one. */
-      gtk_list_item_tracker_set_position (priv->item_manager, tracker, pos, 0, 0);
-
-      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-      g_assert (tile->widget);
-
-      success = gtk_widget_grab_focus (tile->widget);
-
-      gtk_list_item_tracker_free (priv->item_manager, tracker);
-    }
-  else
-    {
-      success = gtk_widget_grab_focus (tile->widget);
-    }
-
-  if (!success)
-    return FALSE;
-
-  if (select)
-    gtk_list_base_select_item (self, pos, modify, extend);
-
-  return TRUE;
 }
 
 GtkSelectionModel *

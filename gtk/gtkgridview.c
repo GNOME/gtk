@@ -25,6 +25,7 @@
 #include "gtklistbaseprivate.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtklistitemwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksingleselection.h"
@@ -87,8 +88,10 @@ struct _GtkGridView
   GtkListBase parent_instance;
 
   GtkListItemManager *item_manager;
+  GtkListItemFactory *factory;
   guint min_columns;
   guint max_columns;
+  gboolean single_click_activate;
   /* set in size_allocate */
   guint n_columns;
   double column_width;
@@ -253,6 +256,21 @@ gtk_grid_view_split (GtkListBase *base,
                                tile->area.height);
   
   return split;
+}
+
+static GtkListItemBase *
+gtk_grid_view_create_list_widget (GtkListBase *base)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
+  GtkWidget *result;
+
+  result = gtk_list_item_widget_new (self->factory,
+                                     "child",
+                                     GTK_ACCESSIBLE_ROLE_GRID_CELL);
+
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
+
+  return GTK_LIST_ITEM_BASE (result);
 }
 
 static gboolean
@@ -860,7 +878,7 @@ gtk_grid_view_get_property (GObject    *object,
   switch (property_id)
     {
     case PROP_FACTORY:
-      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      g_value_set_object (value, self->factory);
       break;
 
     case PROP_MAX_COLUMNS:
@@ -876,7 +894,7 @@ gtk_grid_view_get_property (GObject    *object,
       break;
 
     case PROP_SINGLE_CLICK_ACTIVATE:
-      g_value_set_boolean (value, gtk_list_item_manager_get_single_click_activate (self->item_manager));
+      g_value_set_boolean (value, self->single_click_activate);
       break;
 
     case PROP_ENABLE_RUBBERBAND:
@@ -954,9 +972,8 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  list_base_class->list_item_name = "child";
-  list_base_class->list_item_role = GTK_ACCESSIBLE_ROLE_GRID_CELL;
   list_base_class->split = gtk_grid_view_split;
+  list_base_class->create_list_widget = gtk_grid_view_create_list_widget;
   list_base_class->get_allocation = gtk_grid_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_grid_view_get_position_from_allocation;
@@ -1186,7 +1203,7 @@ gtk_grid_view_get_factory (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
 
-  return gtk_list_item_manager_get_factory (self->item_manager);
+  return self->factory;
 }
 
 /**
@@ -1200,13 +1217,22 @@ void
 gtk_grid_view_set_factory (GtkGridView        *self,
                            GtkListItemFactory *factory)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
-  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+  if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+    }
+
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
@@ -1317,12 +1343,23 @@ void
 gtk_grid_view_set_single_click_activate (GtkGridView *self,
                                          gboolean     single_click_activate)
 {
+  GtkListTile *tile;
+
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
 
-  if (single_click_activate == gtk_list_item_manager_get_single_click_activate (self->item_manager))
+  if (single_click_activate == self->single_click_activate)
     return;
 
-  gtk_list_item_manager_set_single_click_activate (self->item_manager, single_click_activate);
+  self->single_click_activate = single_click_activate;
+
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (tile->widget), single_click_activate);
+    }
+
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
 }
@@ -1341,7 +1378,7 @@ gtk_grid_view_get_single_click_activate (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), FALSE);
 
-  return gtk_list_item_manager_get_single_click_activate (self->item_manager);
+  return self->single_click_activate;
 }
 
 /**
