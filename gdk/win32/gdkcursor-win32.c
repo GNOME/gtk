@@ -417,13 +417,12 @@ hcursor_from_x_cursor (int          i,
 #undef SET_BIT
 #undef RESET_BIT
 
-      rv = CreateCursor (_gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
+      rv = CreateCursor (NULL, cursors[i].hotx, cursors[i].hoty,
 			 w, h, and_plane, xor_plane);
     }
   else
     {
-      rv = CreateCursor (_gdk_app_hmodule, 0, 0,
-			 w, h, and_plane, xor_plane);
+      rv = CreateCursor (NULL, 0, 0, w, h, and_plane, xor_plane);
     }
 
   if (rv == NULL)
@@ -466,7 +465,7 @@ win32_cursor_create_win32hcursor (GdkWin32Display *display,
         break;
       case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_THIS:
         result = gdk_win32_hcursor_new (display,
-                                        LoadImageA (_gdk_app_hmodule,
+                                        LoadImageA (GetModuleHandle (NULL),
                                                     (const char *) cursor->resource_name,
                                                     IMAGE_CURSOR,
                                                     cursor->width,
@@ -476,7 +475,7 @@ win32_cursor_create_win32hcursor (GdkWin32Display *display,
         break;
       case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_GTK:
         result = gdk_win32_hcursor_new (display,
-                                        LoadImageA (_gdk_dll_hinstance,
+                                        LoadImageA (this_module (),
                                                     (const char *) cursor->resource_name,
                                                     IMAGE_CURSOR,
                                                     cursor->width,
@@ -858,9 +857,7 @@ create_blank_win32hcursor (GdkWin32Display *display)
   xor_plane = g_malloc ((w/8) * h);
   memset (xor_plane, 0, (w/8) * h);
 
-  rv = CreateCursor (_gdk_app_hmodule, 0, 0,
-                     w, h, and_plane, xor_plane);
-
+  rv = CreateCursor (NULL, 0, 0, w, h, and_plane, xor_plane);
   if (rv == NULL)
     WIN32_API_FAILED ("CreateCursor");
 
@@ -871,6 +868,7 @@ static GdkWin32HCursor *
 gdk_win32hcursor_create_for_name (GdkWin32Display  *display,
                                   const char *name)
 {
+  const HINSTANCE hinstance = GetModuleHandle (NULL);
   GdkWin32HCursor *win32hcursor = NULL;
 
   /* Blank cursor case */
@@ -885,7 +883,7 @@ gdk_win32hcursor_create_for_name (GdkWin32Display  *display,
   /* Allow to load named cursor resources linked into the executable.
    * Cursors obtained with LoadCursor() cannot be destroyed.
    */
-  return gdk_win32_hcursor_new (display, LoadCursor (_gdk_app_hmodule, name), FALSE);
+  return gdk_win32_hcursor_new (display, LoadCursor (hinstance, name), FALSE);
 }
 
 static HICON

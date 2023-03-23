@@ -481,7 +481,7 @@ register_display_change_notification (GdkDisplay *display)
 
   wclass.lpszClassName = "GdkDisplayChange";
   wclass.lpfnWndProc = display_change_window_procedure;
-  wclass.hInstance = _gdk_app_hmodule;
+  wclass.hInstance = this_module ();
   wclass.style = CS_OWNDC;
 
   klass = RegisterClass (&wclass);
@@ -490,10 +490,10 @@ register_display_change_notification (GdkDisplay *display)
       display_win32->hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                                           NULL, WS_POPUP,
                                           0, 0, 0, 0, NULL, NULL,
-                                          _gdk_app_hmodule, NULL);
+                                          this_module (), NULL);
       if (!display_win32->hwnd)
         {
-          UnregisterClass (MAKEINTRESOURCE (klass), _gdk_app_hmodule);
+          UnregisterClass (MAKEINTRESOURCE (klass), this_module ());
         }
     }
 }

@@ -31,8 +31,6 @@ GdkDisplay	 *_gdk_display = NULL;
 GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
 HDC		  _gdk_display_hdc;
-HINSTANCE	  _gdk_dll_hinstance;
-HINSTANCE	  _gdk_app_hmodule;
 
 int		  _gdk_input_ignore_core;
 

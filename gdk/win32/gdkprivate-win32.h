@@ -285,8 +285,6 @@ extern GdkDisplay       *_gdk_display;
 extern GdkDeviceManagerWin32 *_gdk_device_manager;
 
 extern HDC               _gdk_display_hdc;
-extern HINSTANCE         _gdk_dll_hinstance;
-extern HINSTANCE         _gdk_app_hmodule;
 
 extern int               _gdk_input_ignore_core;
 
@@ -453,4 +451,12 @@ HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
 gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
+
+extern IMAGE_DOS_HEADER __ImageBase;
+
+static inline HMODULE
+this_module (void)
+{
+  return (HMODULE) &__ImageBase;
+}
 

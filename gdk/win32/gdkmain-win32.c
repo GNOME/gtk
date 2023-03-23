@@ -66,7 +66,6 @@ _gdk_win32_surfaceing_init (void)
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
 
-  _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
   _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);

@@ -413,8 +413,7 @@ set_up_low_level_keyboard_hook (void)
 
   hook_handle = SetWindowsHookEx (WH_KEYBOARD_LL,
                                   (HOOKPROC) low_level_keyboard_proc,
-                                  _gdk_dll_hinstance,
-                                  0);
+                                  this_module (), 0);
 
   if (hook_handle != NULL)
     keyboard_hook = hook_handle;

@@ -261,7 +261,7 @@ create_dummy_gl_window (void)
 
   wclass.lpszClassName = "GdkGLDummyWindow";
   wclass.lpfnWndProc = DefWindowProc;
-  wclass.hInstance = _gdk_app_hmodule;
+  wclass.hInstance = this_module ();
   wclass.style = CS_OWNDC;
 
   klass = RegisterClass (&wclass);
@@ -270,10 +270,10 @@ create_dummy_gl_window (void)
       hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                            NULL, WS_POPUP,
                            0, 0, 0, 0, NULL, NULL,
-                           _gdk_app_hmodule, NULL);
+                           this_module (), NULL);
       if (!hwnd)
         {
-          UnregisterClass (MAKEINTRESOURCE (klass), _gdk_app_hmodule);
+          UnregisterClass (MAKEINTRESOURCE (klass), this_module ());
         }
     }
 

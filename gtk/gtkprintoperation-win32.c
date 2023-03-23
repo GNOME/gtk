@@ -1494,7 +1494,7 @@ create_application_page (GtkPrintOperation *op)
   memset (&page, 0, sizeof (page));
   page.dwSize = sizeof (page);
   page.dwFlags = PSP_DLGINDIRECT | PSP_USETITLE | PSP_PREMATURE;
-  page.hInstance = GetModuleHandle (NULL);
+  page.hInstance = NULL;
   page.pResource = template;
   
   tab_label = op->priv->custom_tab_label;
