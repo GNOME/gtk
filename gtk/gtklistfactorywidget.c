@@ -65,7 +65,7 @@ gtk_list_factory_widget_activate_signal (GtkListFactoryWidget *self)
 {
   GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
 
-  if (priv->activatable)
+  if (!priv->activatable)
     return;
 
   gtk_widget_activate_action (GTK_WIDGET (self),
