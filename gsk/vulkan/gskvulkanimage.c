@@ -722,6 +722,8 @@ gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
         }
 
       bufferImageCopy[i].bufferOffset = offset;
+      bufferImageCopy[i].bufferRowLength = regions[i].width;
+      bufferImageCopy[i].bufferImageHeight = regions[i].height;
       bufferImageCopy[i].imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
       bufferImageCopy[i].imageSubresource.mipLevel = 0;
       bufferImageCopy[i].imageSubresource.baseArrayLayer = 0;
