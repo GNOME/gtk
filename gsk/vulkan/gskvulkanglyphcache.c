@@ -270,11 +270,8 @@ render_glyph (Atlas          *atlas,
 
   gi.glyph = key->glyph;
   gi.geometry.width = value->draw_width * 1024;
-  if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    gi.geometry.x_offset = key->xshift * 256;
-  else
-    gi.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
-  gi.geometry.y_offset = key->yshift * 256 - value->draw_y * 1024;
+  gi.geometry.x_offset = (0.25 * key->xshift - value->draw_x) * 1024;
+  gi.geometry.y_offset = (0.25 * key->yshift - value->draw_y) * 1024;
 
   glyphs.num_glyphs = 1;
   glyphs.glyphs = &gi;
