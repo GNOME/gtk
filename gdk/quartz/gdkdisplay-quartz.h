@@ -39,7 +39,7 @@ struct _GdkQuartzDisplay
   GPtrArray *monitors;
   /* This structure is not allocated. It points to an embedded
    * GList in the GdkWindow. */
-  GList   *windows_awaiting_frame;
+  GSList   *windows_awaiting_frame;
   GSource *frame_source;
 };
 
