@@ -10635,7 +10635,11 @@ gtk_widget_set_has_focus (GtkWidget *widget,
 gboolean
 gtk_widget_in_destruction (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidgetPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  priv = gtk_widget_get_instance_private (widget);
 
   return priv->in_destruction;
 }
