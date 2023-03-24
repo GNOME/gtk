@@ -317,9 +317,9 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
   GLint internal_format;
 
   /* Abort if somebody else is GL-ing here... */
-  if (self->context != gdk_gl_context_get_current () ||
+  if (!gdk_gl_context_is_shared (self->context, gdk_gl_context_get_current ()) ||
       /* ... or glGetTexLevelParameter() isn't supported */
-      !gdk_gl_context_check_version (self->context, 0, 0, 3, 1))
+      !gdk_gl_context_check_version (gdk_gl_context_get_current (), 0, 0, 3, 1))
     {
       texture->format = GDK_MEMORY_DEFAULT;
       return;
