@@ -982,7 +982,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::activate:
    * @self: The widget on which the signal is emitted
    *
-   * Emitted when the user hits the Enter key.
+   * Emitted when the user hits the <kbd>Enter</kbd> key.
    *
    * The default bindings for this signal are all forms
    * of the <kbd>Enter</kbd> key.
@@ -1021,8 +1021,8 @@ gtk_text_class_init (GtkTextClass *class)
    *
    * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
    *   move by individual characters/lines
-   * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
-   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
+   * - <kbd>Ctrl</kbd>+<kbd>←</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd> and <kbd>End</kbd> move to the ends of the buffer
    */
   signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
@@ -1073,7 +1073,7 @@ gtk_text_class_init (GtkTextClass *class)
    * of characters.
    *
    * The default bindings for this signal are <kbd>Delete</kbd>
-   * for deleting a character and <kbd>Ctrl</kbd>-<kbd>Delete</kbd>
+   * for deleting a character and <kbd>Ctrl</kbd>+<kbd>Delete</kbd>
    * for deleting a word.
    */
   signals[DELETE_FROM_CURSOR] =
@@ -1096,7 +1096,7 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>-<kbd>Backspace</kbd>.
+   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>+<kbd>Backspace</kbd>.
    */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
@@ -1116,8 +1116,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>x</kbd> and
-   * <kbd>Shift</kbd>-<kbd>Delete</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>x</kbd> and
+   * <kbd>Shift</kbd>+<kbd>Delete</kbd>.
    */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
@@ -1137,8 +1137,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>c</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>c</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>Insert</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -1158,7 +1158,7 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>v</kbd> and <kbd>Shift</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>v</kbd> and <kbd>Shift</kbd>+<kbd>Insert</kbd>.
    */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
@@ -1218,8 +1218,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>.</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>;</kbd>
+   * <kbd>Ctrl</kbd>+<kbd>.</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>;</kbd>
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
