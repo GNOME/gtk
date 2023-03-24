@@ -288,6 +288,9 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * This is an action signal. Applications should never connect
    * to this signal, but use the [signal@Gtk.Button::clicked] signal.
+   *
+   * The default bindings for this signal are all forms of the
+   * <kbd>␣</kbd> and <kbd>Enter</kbd> keys.
    */
   button_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -669,7 +672,8 @@ gtk_button_new_from_icon_name (const char *icon_name)
  * If characters in @label are preceded by an underscore, they are underlined.
  * If you need a literal underscore character in a label, use “__” (two
  * underscores). The first underlined character represents a keyboard
- * accelerator called a mnemonic. Pressing Alt and that key activates the button.
+ * accelerator called a mnemonic. Pressing <kbd>Alt</kbd> and that key
+ * activates the button.
  *
  * Returns: a new `GtkButton`
  */
