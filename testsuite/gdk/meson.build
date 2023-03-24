@@ -17,6 +17,7 @@ tests = [
   { 'name': 'displaymanager' },
   { 'name': 'encoding' },
   { 'name': 'glcontext' },
+  { 'name': 'gltexture' },
   { 'name': 'keysyms' },
   { 'name': 'memorytexture' },
   { 'name': 'rectangle' },
