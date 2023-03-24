@@ -68,6 +68,7 @@ struct _GtkListBasePrivate
   GtkOrientation orientation;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
+  GtkListTabBehavior tab_behavior;
 
   GtkListItemTracker *anchor;
   double anchor_align_along;
@@ -554,21 +555,42 @@ gtk_list_base_focus (GtkWidget        *widget,
        * while keeping the selection intact.
        */
       old = GTK_INVALID_LIST_POSITION;
+      if (priv->tab_behavior == GTK_LIST_TAB_ALL)
+        {
+          if (direction == GTK_DIR_TAB_FORWARD)
+            pos = 0;
+          else if (direction == GTK_DIR_TAB_BACKWARD)
+            pos = n_items - 1;
+        }
     }
   else
     {
       switch (direction)
         {
         case GTK_DIR_TAB_FORWARD:
-          pos++;
-          if (pos >= n_items)
-            return FALSE;
+          if (priv->tab_behavior == GTK_LIST_TAB_ALL)
+            {
+              pos++;
+              if (pos >= n_items)
+                return FALSE;
+            }
+          else
+            {
+              return FALSE;
+            }
           break;
 
         case GTK_DIR_TAB_BACKWARD:
-          if (pos == 0)
-            return FALSE;
-          pos--;
+          if (priv->tab_behavior == GTK_LIST_TAB_ALL)
+            {
+              if (pos == 0)
+                return FALSE;
+              pos--;
+            }
+          else
+            {
+              return FALSE;
+            }
           break;
 
         case GTK_DIR_UP:
@@ -1948,6 +1970,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
+  priv->tab_behavior = GTK_LIST_TAB_ALL;
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
@@ -2248,3 +2271,21 @@ gtk_list_base_set_model (GtkListBase       *self,
 
   return TRUE;
 }
+
+void
+gtk_list_base_set_tab_behavior (GtkListBase        *self,
+                                GtkListTabBehavior  behavior)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  priv->tab_behavior = behavior;
+}
+
+GtkListTabBehavior
+gtk_list_base_get_tab_behavior (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return priv->tab_behavior;
+}
+

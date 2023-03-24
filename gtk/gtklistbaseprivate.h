@@ -85,6 +85,10 @@ void                   gtk_list_base_set_anchor_max_widgets     (GtkListBase    
 void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
                                                                  gboolean                enable);
 gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
+void                   gtk_list_base_set_tab_behavior           (GtkListBase            *self,
+                                                                 GtkListTabBehavior      behavior);
+GtkListTabBehavior     gtk_list_base_get_tab_behavior           (GtkListBase            *self);
+
 
 void                   gtk_list_base_allocate                   (GtkListBase            *self);
 
