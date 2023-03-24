@@ -23,6 +23,7 @@ gdk_win32_sources = gdk_win32_public_sources + files([
   'gdkdevice-wintab.c',
   'gdkdrop-win32.c',
   'gdkglobals-win32.c',
+  'gdkglcontext-win32-wgl-private.c',
   'gdkhdataoutputstream-win32.c',
   'gdkinput-dmanipulation.c',
   'gdkinput-winpointer.c',
@@ -59,6 +60,7 @@ endif
 gdk_win32_deps = [
   pangowin32_dep, # FIXME
   cc.find_library('hid'),
+  cc.find_library('opengl32'),
 ]
 
 libgdk_win32 = static_library('gdk-win32',
