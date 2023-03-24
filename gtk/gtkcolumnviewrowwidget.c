@@ -254,7 +254,7 @@ gtk_column_view_row_widget_grab_focus (GtkWidget *widget)
 
   for (child = focus_child ? gtk_widget_get_next_sibling (focus_child) : gtk_widget_get_first_child (widget);
        child != focus_child;
-       child = gtk_widget_get_next_sibling (child))
+       child = child ? gtk_widget_get_next_sibling (child) : gtk_widget_get_first_child (widget))
     {
       /* When we started iterating at focus_child, we want to iterate over the rest
        * of the children, too */
