@@ -113,11 +113,13 @@ struct _GskVulkanRenderPass
   GArray *render_ops;
 
   GskVulkanImage *target;
-  int scale_factor;
   graphene_rect_t viewport;
   cairo_region_t *clip;
   graphene_matrix_t mv;
   graphene_matrix_t p;
+
+  float scale_x;
+  float scale_y;
 
   VkRenderPass render_pass;
   VkSemaphore signal_semaphore;
@@ -131,7 +133,8 @@ struct _GskVulkanRenderPass
 GskVulkanRenderPass *
 gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
                             GskVulkanImage    *target,
-                            int                scale_factor,
+                            float              scale_x,
+                            float              scale_y,
                             graphene_matrix_t *mv,
                             graphene_rect_t   *viewport,
                             cairo_region_t    *clip,
@@ -145,9 +148,10 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->render_ops = g_array_new (FALSE, FALSE, sizeof (GskVulkanOp));
 
   self->target = g_object_ref (target);
-  self->scale_factor = scale_factor;
   self->clip = cairo_region_copy (clip);
   self->viewport = *viewport;
+  self->scale_x = scale_x;
+  self->scale_y = scale_y;
 
   self->mv = *mv;
   graphene_matrix_init_ortho (&self->p,
@@ -767,7 +771,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
 
   op.text.start_glyph = 0;
   op.text.texture_index = G_MAXUINT;
-  op.text.scale = self->scale_factor;
+  op.text.scale = MAX (fabs (self->scale_x), fabs (self->scale_y));
 
   x_position = 0;
   for (i = 0, count = 0; i < num_glyphs; i++)
@@ -1019,7 +1023,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
         pass = gsk_vulkan_render_pass_new (self->vulkan,
                                            result,
-                                           self->scale_factor,
+                                           self->scale_x,
+                                           self->scale_y,
                                            &self->mv,
                                            &view,
                                            clip,
@@ -1114,9 +1119,9 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (node->bounds.size.width * self->scale_factor),
-                                        ceil (node->bounds.size.height * self->scale_factor));
-  cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
+                                        ceil (node->bounds.size.width * self->scale_x),
+                                        ceil (node->bounds.size.height * self->scale_y));
+  cairo_surface_set_device_scale (surface, self->scale_x, self->scale_y);
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
@@ -2181,8 +2186,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                        0,
                        1,
                        &(VkRect2D) {
-                          { rect.x * self->scale_factor, rect.y * self->scale_factor },
-                          { rect.width * self->scale_factor, rect.height * self->scale_factor }
+                          { rect.x * self->scale_x, rect.y * self->scale_y },
+                          { rect.width * self->scale_x, rect.height * self->scale_y }
                        });
 
       vkCmdBeginRenderPass (command_buffer,
@@ -2191,8 +2196,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                 .renderPass = self->render_pass,
                                 .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
                                 .renderArea = { 
-                                    { rect.x * self->scale_factor, rect.y * self->scale_factor },
-                                    { rect.width * self->scale_factor, rect.height * self->scale_factor }
+                                    { rect.x * self->scale_x, rect.y * self->scale_y },
+                                    { rect.width * self->scale_x, rect.height * self->scale_y }
                                 },
                                 .clearValueCount = 1,
                                 .pClearValues = (VkClearValue [1]) {
