@@ -40,7 +40,6 @@
 
 #if GST_GL_HAVE_WINDOW_WIN32 && (GST_GL_HAVE_PLATFORM_WGL || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_WIN32)
 #include <gdk/win32/gdkwin32.h>
-#include <epoxy/wgl.h>
 #endif
 
 #if GST_GL_HAVE_PLATFORM_EGL && (GST_GL_HAVE_WINDOW_WIN32 || GST_GL_HAVE_WINDOW_X11)
@@ -359,69 +358,6 @@ gtk_gst_sink_show_frame (GstVideoSink *vsink,
   return GST_FLOW_OK;
 }
 
-#if GST_GL_HAVE_WINDOW_WIN32 && (GST_GL_HAVE_PLATFORM_WGL || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_WIN32)
-#define HANDLE_EXTERNAL_WGL_MAKE_CURRENT(ctx) handle_wgl_makecurrent(ctx)
-#define DEACTIVATE_WGL_CONTEXT(ctx) deactivate_gdk_wgl_context(ctx)
-#define REACTIVATE_WGL_CONTEXT(ctx) reactivate_gdk_wgl_context(ctx)
-
-static void
-handle_wgl_makecurrent (GdkGLContext *ctx)
-{
-  if (!gdk_gl_context_get_use_es (ctx))
-    epoxy_handle_external_wglMakeCurrent();
-}
-
-static void
-deactivate_gdk_wgl_context (GdkGLContext *ctx)
-{
-  if (!gdk_gl_context_get_use_es (ctx))
-    {
-      HDC hdc = GetDC (GDK_SURFACE_HWND (gdk_gl_context_get_surface (ctx)));
-      wglMakeCurrent (hdc, NULL);
-    }
-}
-
-static void
-reactivate_gdk_wgl_context (GdkGLContext *ctx)
-{
-  if (!gdk_gl_context_get_use_es (ctx))
-    gdk_gl_context_make_current (ctx);
-}
-
-/*
- * Unfortunately, libepoxy does not offer a way to allow us to safely call
- * gst_gl_context_get_current_gl_api() on a WGL context that underlies a
- * GdkGLContext after we notify libepoxy an external wglMakeCurrent() has
- * been called (which is required for the first gdk_gl_context_make_current()
- * call in gtk_gst_sink_initialize_gl(), for instance), so we can't do
- * gst_gl_context_get_current_gl_api() directly on WGL contexts that underlies
- * GdkGLContext's.  So, we just ask GDK about our WGL context, since it already
- * knows what kind of WGL context we have there...
- */
-static gboolean
-check_win32_gst_gl_api (GdkGLContext  *ctx,
-                        GstGLPlatform *platform,
-                        GstGLAPI      *gl_api)
-{
-  gboolean is_gles = gdk_gl_context_get_use_es (ctx);
-
-  g_return_val_if_fail (*gl_api == GST_GL_API_NONE, FALSE);
-
-  *platform = is_gles ? GST_GL_PLATFORM_EGL : GST_GL_PLATFORM_WGL;
-
-  if (is_gles)
-    *gl_api = gst_gl_context_get_current_gl_api (*platform, NULL, NULL);
-  else
-    *gl_api = gdk_gl_context_is_legacy (ctx) ? GST_GL_API_OPENGL : GST_GL_API_OPENGL3;
-
-  return is_gles;
-}
-#else
-#define HANDLE_EXTERNAL_WGL_MAKE_CURRENT(ctx)
-#define DEACTIVATE_WGL_CONTEXT(ctx)
-#define REACTIVATE_WGL_CONTEXT(ctx)
-#endif
-
 static gboolean
 gtk_gst_sink_initialize_gl (GtkGstSink *self)
 {
@@ -434,7 +370,6 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
   display = gdk_gl_context_get_display (self->gdk_context);
 
-  HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
   gdk_gl_context_make_current (self->gdk_context);
 
 #ifdef HAVE_GST_X11_SUPPORT
@@ -528,8 +463,11 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 #if GST_GL_HAVE_WINDOW_WIN32 && (GST_GL_HAVE_PLATFORM_WGL || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_WIN32)
   if (GDK_IS_WIN32_DISPLAY (display))
     {
-      gboolean is_gles = check_win32_gst_gl_api (self->gdk_context, &platform, &gl_api);
-      const gchar *gl_type = is_gles ? "EGL" : "WGL";
+      gboolean is_gles = gdk_gl_context_get_use_es (self->gdk_context);
+      const char *gl_type = is_gles ? "EGL" : "WGL";
+
+      platform = is_gles ? GST_GL_PLATFORM_EGL : GST_GL_PLATFORM_WGL;
+      gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
 
       GST_DEBUG_OBJECT (self, "got %s on Win32!", gl_type);
 
@@ -596,12 +534,12 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       g_clear_error (&error);
       g_clear_object (&self->gst_gdk_context);
       g_clear_object (&self->gst_display);
-      HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
+
       return FALSE;
     }
   else
     {
-      DEACTIVATE_WGL_CONTEXT (self->gdk_context);
+      gdk_gl_context_clear_current ();
       gst_gl_context_activate (self->gst_gdk_context, FALSE);
     }
 
@@ -615,8 +553,6 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       g_clear_object (&self->gst_display);
     }
 
-  HANDLE_EXTERNAL_WGL_MAKE_CURRENT (self->gdk_context);
-  REACTIVATE_WGL_CONTEXT (self->gdk_context);
   return succeeded;
 }
 
