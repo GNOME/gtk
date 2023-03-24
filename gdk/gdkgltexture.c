@@ -320,14 +320,17 @@ static void
 gdk_gl_texture_determine_format (GdkGLTexture *self)
 {
   GdkTexture *texture = GDK_TEXTURE (self);
+  GdkGLContext *context;
   GLint active_texture;
   GLint internal_format;
   GLint width, height;
 
   /* Abort if somebody else is GL-ing here... */
-  if (!gdk_gl_context_is_shared (self->context, gdk_gl_context_get_current ()) ||
+  context = gdk_gl_context_get_current ();
+  if (context == NULL ||
+      !gdk_gl_context_is_shared (self->context, context) ||
       /* ... or glGetTexLevelParameter() isn't supported */
-      !gdk_gl_context_check_version (gdk_gl_context_get_current (), 0, 0, 3, 1))
+      !gdk_gl_context_check_version (context, 0, 0, 3, 1))
     {
       texture->format = GDK_MEMORY_DEFAULT;
       self->has_mipmap = FALSE;
