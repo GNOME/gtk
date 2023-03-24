@@ -131,15 +131,26 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   GdkRectangle rect;
   GtkRequisition req;
   GtkWidget *parent;
+  GtkNative *native;
+  graphene_point_t point = GRAPHENE_POINT_INIT (handle->pointing_to.x, handle->pointing_to.y);
+  graphene_point_t transformed;
+  double nx, ny;
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
   gtk_text_handle_get_padding (handle, &handle->border);
 
   parent = gtk_widget_get_parent (widget);
-  gtk_widget_get_surface_allocation (parent, &rect);
 
-  rect.x += handle->pointing_to.x;
-  rect.y += handle->pointing_to.y + handle->pointing_to.height - handle->border.top;
+  native = gtk_widget_get_native (parent);
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  if (!gtk_widget_compute_point (parent, GTK_WIDGET (native),
+                                 &point, &transformed))
+    transformed = point;
+
+  rect.x = (int)(transformed.x + nx);
+  rect.y = (int)(transformed.y + ny) + handle->pointing_to.height - handle->border.top;
+
   rect.width = req.width - handle->border.left - handle->border.right;
   rect.height = 1;
 
