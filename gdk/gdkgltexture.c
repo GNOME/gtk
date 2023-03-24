@@ -38,6 +38,7 @@ struct _GdkGLTexture {
 
   GdkGLContext *context;
   guint id;
+  gboolean has_mipmap;
 
   GdkTexture *saved;
 
@@ -284,6 +285,12 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
   return self->id;
 }
 
+gboolean
+gdk_gl_texture_has_mipmap (GdkGLTexture *self)
+{
+  return self->has_mipmap;
+}
+
 /**
  * gdk_gl_texture_release:
  * @self: a `GdkTexture` wrapping a GL texture
@@ -315,13 +322,15 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
   GdkTexture *texture = GDK_TEXTURE (self);
   GLint active_texture;
   GLint internal_format;
+  GLint width, height;
 
   /* Abort if somebody else is GL-ing here... */
-  if (self->context != gdk_gl_context_get_current () ||
+  if (!gdk_gl_context_is_shared (self->context, gdk_gl_context_get_current ()) ||
       /* ... or glGetTexLevelParameter() isn't supported */
-      !gdk_gl_context_check_version (self->context, 0, 0, 3, 1))
+      !gdk_gl_context_check_version (gdk_gl_context_get_current (), 0, 0, 3, 1))
     {
       texture->format = GDK_MEMORY_DEFAULT;
+      self->has_mipmap = FALSE;
       return;
     }
 
@@ -411,6 +420,20 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
       break;
   }
 
+  /* Determine if the texture has a mipmap.
+   * We do this here, since it requires binding the texture,
+   * and we're already doing that here.
+   * GL has no way to directly query 'mipmap completeness' of textures,
+   * so we just check that level 1 has the expected size, and assume
+   * that means somebody called glGenerateMipmap().
+   */
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_WIDTH, &width);
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_HEIGHT, &height);
+
+  self->has_mipmap = width == texture->width / 2 &&
+                     height == texture->height / 2;
+
+  /* restore previous state */
   glBindTexture (GL_TEXTURE_2D, active_texture);
 }
 

@@ -744,12 +744,13 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
       return t->texture_id;
     }
 
-  if (GDK_IS_GL_TEXTURE (texture) && !ensure_mipmap)
+  if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
       GdkGLContext *texture_context = gdk_gl_texture_get_context (gl_texture);
 
-      if (gdk_gl_context_is_shared (context, texture_context))
+      if (gdk_gl_context_is_shared (context, texture_context) &&
+          (!ensure_mipmap || gdk_gl_texture_has_mipmap (gl_texture)))
         {
           /* A GL texture from the same GL context is a simple task... */
           return gdk_gl_texture_get_id (gl_texture);
