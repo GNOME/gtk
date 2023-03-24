@@ -187,6 +187,13 @@ gtk_column_view_row_widget_focus (GtkWidget        *widget,
     return TRUE;
 
   view = gtk_column_view_row_widget_get_column_view (self);
+  if (gtk_column_view_get_tab_behavior (view) == GTK_LIST_TAB_CELL &&
+      (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD))
+    {
+      if (focus_child || gtk_widget_is_focus (widget))
+        return FALSE;
+    }
+
   if (focus_child == NULL)
     {
       GtkColumnViewColumn *focus_column = gtk_column_view_get_focus_column (view);

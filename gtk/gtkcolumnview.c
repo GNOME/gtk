@@ -27,18 +27,17 @@
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkgestureclick.h"
+#include "gtkgesturedrag.h"
 #include "gtklistviewprivate.h"
-#include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkgesturedrag.h"
-#include "gtkeventcontrollermotion.h"
-#include "gtkdragsourceprivate.h"
-#include "gtkeventcontrollerkey.h"
-#include "gtkgestureclick.h"
 
 /**
  * GtkColumnView:
@@ -202,17 +201,18 @@ enum
 {
   PROP_0,
   PROP_COLUMNS,
+  PROP_ENABLE_RUBBERBAND,
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
+  PROP_REORDERABLE,
   PROP_SHOW_ROW_SEPARATORS,
   PROP_SHOW_COLUMN_SEPARATORS,
+  PROP_SINGLE_CLICK_ACTIVATE,
   PROP_SORTER,
+  PROP_TAB_BEHAVIOR,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
-  PROP_SINGLE_CLICK_ACTIVATE,
-  PROP_REORDERABLE,
-  PROP_ENABLE_RUBBERBAND,
 
   N_PROPS
 };
@@ -533,6 +533,10 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, self->columns);
       break;
 
+    case PROP_ENABLE_RUBBERBAND:
+      g_value_set_boolean (value, gtk_column_view_get_enable_rubberband (self));
+      break;
+
     case PROP_HADJUSTMENT:
       g_value_set_object (value, self->hadjustment);
       break;
@@ -573,8 +577,8 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
       break;
 
-    case PROP_ENABLE_RUBBERBAND:
-      g_value_set_boolean (value, gtk_column_view_get_enable_rubberband (self));
+    case PROP_TAB_BEHAVIOR:
+      g_value_set_enum (value, gtk_list_view_get_tab_behavior (self->listview));
       break;
 
     default:
@@ -594,6 +598,10 @@ gtk_column_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ENABLE_RUBBERBAND:
+      gtk_column_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
     case PROP_HADJUSTMENT:
       adjustment = g_value_get_object (value);
       if (adjustment == NULL)
@@ -656,8 +664,8 @@ gtk_column_view_set_property (GObject      *object,
       gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ENABLE_RUBBERBAND:
-      gtk_column_view_set_enable_rubberband (self, g_value_get_boolean (value));
+    case PROP_TAB_BEHAVIOR:
+      gtk_column_view_set_tab_behavior (self, g_value_get_enum (value));
       break;
 
     default:
@@ -707,6 +715,16 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_object ("columns", NULL, NULL,
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnView:enable-rubberband: (attributes org.gtk.Property.get=gtk_column_view_get_enable_rubberband org.gtk.Property.set=gtk_column_view_set_enable_rubberband)
+   *
+   * Allow rubberband selection.
+   */
+  properties[PROP_ENABLE_RUBBERBAND] =
+    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColumnView:model: (attributes org.gtk.Property.get=gtk_column_view_get_model org.gtk.Property.set=gtk_column_view_set_model)
@@ -769,14 +787,17 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:enable-rubberband: (attributes org.gtk.Property.get=gtk_column_view_get_enable_rubberband org.gtk.Property.set=gtk_column_view_set_enable_rubberband)
+   * GtkColumnView:tab-behavior: (attributes org.gtk.Property.get=gtk_column_view_get_tab_behavior org.gtk.Property.set=gtk_column_view_set_tab_behavior)
    *
-   * Allow rubberband selection.
+   * Behavior of the <kbd>Tab</kbd> key
+   *
+   * Since: 4.12
    */
-  properties[PROP_ENABLE_RUBBERBAND] =
-    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_TAB_BEHAVIOR] =
+    g_param_spec_enum ("tab-behavior", NULL, NULL,
+                       GTK_TYPE_LIST_TAB_BEHAVIOR,
+                       GTK_LIST_TAB_ALL,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1885,3 +1906,45 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
 
   return gtk_list_view_get_enable_rubberband (self->listview);
 }
+
+/**
+ * gtk_column_view_set_tab_behavior: (attributes org.gtk.Method.set_property=tab-behavior)
+ * @self: a `GtkColumnView`
+ * @tab_behavior: The desired tab behavior
+ *
+ * Sets the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_set_tab_behavior (GtkColumnView      *self,
+                                  GtkListTabBehavior  tab_behavior)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (tab_behavior == gtk_list_view_get_tab_behavior (self->listview))
+    return;
+
+  gtk_list_view_set_tab_behavior (self->listview, tab_behavior);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TAB_BEHAVIOR]);
+}
+
+/**
+ * gtk_column_view_get_tab_behavior: (attributes org.gtk.Method.get_property=tab-behavior)
+ * @self: a `GtkColumnView`
+ *
+ * Gets the behavior set for the <kbd>Tab</kbd> key.
+ *
+ * Returns: The behavior of the <kbd>Tab</kbd> key
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_column_view_get_tab_behavior (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return gtk_list_view_get_tab_behavior (self->listview);
+}
+
