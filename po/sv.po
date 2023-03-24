@@ -1,18 +1,18 @@
 # Swedish messages for GTK.
-# Copyright © 1999-2022 Free Software Foundation, Inc.
+# Copyright © 1999-2023 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
 # Josef Andersson <josef.andersson@fripost.org>, 2014.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Luna Jernberg <droidbittin@gmail.com>, 2021, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-10 13:45+0000\n"
-"PO-Revision-Date: 2022-11-19 21:09+0100\n"
+"POT-Creation-Date: 2023-03-24 08:45+0000\n"
+"PO-Revision-Date: 2023-03-24 10:09+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -476,19 +476,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "Kan inte skapa ett GL-bildpunktsformat"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Kan inte skapa en GL-kontext"
 
 #: gdk/wayland/gdkglcontext-wayland.c:422
 #: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
-#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
+#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
-#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1497
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementation tillgänglig"
@@ -658,15 +658,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "S_täng"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
 msgstr "Minimera"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9364
 msgid "Maximize"
 msgstr "Maximera"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9321
 msgid "Restore"
 msgstr "Återställ"
 
@@ -1076,12 +1076,20 @@ msgid "Toggles the switch"
 msgstr "Slår på/av brytaren"
 
 #: gtk/deprecated/gtkcolorsel.c:425
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller ljusheten på den färgen genom att använda den inre triangeln."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller "
+"ljusheten på den färgen genom att använda den inre triangeln."
 
 #: gtk/deprecated/gtkcolorsel.c:451
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för att välja den färgen."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för "
+"att välja den färgen."
 
 #: gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -1144,8 +1152,12 @@ msgid "Color _name:"
 msgstr "Färg_namn:"
 
 #: gtk/deprecated/gtkcolorsel.c:516
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as “orange” in this entry."
-msgstr "Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange ett engelskt namn på färgen som exempelvis ”orange” i detta fält."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as “orange” in this entry."
+msgstr ""
+"Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange "
+"ett engelskt namn på färgen som exempelvis ”orange” i detta fält."
 
 #: gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -1156,15 +1168,27 @@ msgid "Color Wheel"
 msgstr "Färghjul"
 
 #: gtk/deprecated/gtkcolorsel.c:1072
-msgid "The previously-selected color, for comparison to the color you’re selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Den färg som valdes tidigare, för att du ska kunna jämföra med den färg du väljer nu. Du kan dra färgen till en palettpost, eller välja denna färg som den aktuella genom att dra den till det andra färgprovet."
+msgid ""
+"The previously-selected color, for comparison to the color you’re selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Den färg som valdes tidigare, för att du ska kunna jämföra med den färg du "
+"väljer nu. Du kan dra färgen till en palettpost, eller välja denna färg som "
+"den aktuella genom att dra den till det andra färgprovet."
 
 #: gtk/deprecated/gtkcolorsel.c:1078
-msgid "The color you’ve chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Färgen som du valt. Du kan dra den här färgen till en palettpost för att spara den för framtida bruk."
+msgid ""
+"The color you’ve chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Färgen som du valt. Du kan dra den här färgen till en palettpost för att "
+"spara den för framtida bruk."
 
 #: gtk/deprecated/gtkcolorsel.c:1084
-msgid "The previously-selected color, for comparison to the color you’re selecting now."
+msgid ""
+"The previously-selected color, for comparison to the color you’re selecting "
+"now."
 msgstr "Den tidigare valda färgen, för jämförelse med färgen som du väljer nu."
 
 #: gtk/deprecated/gtkcolorsel.c:1088
@@ -1176,17 +1200,22 @@ msgid "_Save color here"
 msgstr "_Spara färgen här"
 
 #: gtk/deprecated/gtkcolorsel.c:1664
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select “Save color here.”"
-msgstr "Klicka på denna palettpost för att göra den till aktuell färg. För att ändra denna post kan du dra ett färgprov hit eller högerklicka och välja ”Spara färg här”."
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select “Save color here.”"
+msgstr ""
+"Klicka på denna palettpost för att göra den till aktuell färg. För att ändra "
+"denna post kan du dra ett färgprov hit eller högerklicka och välja ”Spara "
+"färg här”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
-#: gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:6573
+#: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1235,7 +1264,7 @@ msgid "_Apply"
 msgstr "_Verkställ"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12830
 msgid "_OK"
 msgstr "_OK"
 
@@ -1519,9 +1548,11 @@ msgstr "Grafik av"
 #.
 #: gtk/gtkaboutdialog.c:2500
 #, c-format
-msgid "This program comes with absolutely no warranty.\n"
+msgid ""
+"This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
-msgstr "Detta program levereras utan någon form av garanti.\n"
+msgstr ""
+"Detta program levereras utan någon form av garanti.\n"
 "Besök <a href=\"%s\">%s</a> för detaljer."
 
 #. This is the text that should appear next to menu accelerators
@@ -1726,7 +1757,8 @@ msgstr "Kan inte tolka fil: %s\n"
 
 #: gtk/gtk-builder-tool.c:1058
 #, c-format
-msgid "Usage:\n"
+msgid ""
+"Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
 "\n"
 "Commands:\n"
@@ -1743,7 +1775,8 @@ msgid "Usage:\n"
 "  --css=FILE         Use style from CSS file\n"
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
-msgstr "Användning:\n"
+msgstr ""
+"Användning:\n"
 "  gtk-builder-tool [KOMMANDO] FIL\n"
 "\n"
 "Kommandon:\n"
@@ -2216,24 +2249,24 @@ msgstr "_Höger:"
 msgid "Paper Margins"
 msgstr "Pappersmarginaler"
 
-#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6687 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6688 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6688 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6689 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6689 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6690 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1503
+#: gtk/gtkfilechooserwidget.c:2338 gtk/gtklabel.c:6692 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6700 gtk/gtktextview.c:9551
+#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6701 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "Markera _allt"
 
@@ -2318,12 +2351,15 @@ msgid "The folder could not be created"
 msgstr "Mappen kunde inte skapas"
 
 #: gtk/gtkfilechooserwidget.c:822
-msgid "The folder could not be created, as a file with the same name already exists."
-msgstr "Mappen kunde inte skapas eftersom det redan finns en fil med samma namn."
+msgid ""
+"The folder could not be created, as a file with the same name already exists."
+msgstr ""
+"Mappen kunde inte skapas eftersom det redan finns en fil med samma namn."
 
 #: gtk/gtkfilechooserwidget.c:824
 msgid "Try using a different name for the folder, or rename the file first."
-msgstr "Prova att använda ett annat namn på mappen, eller byt namn på filen först."
+msgstr ""
+"Prova att använda ett annat namn på mappen, eller byt namn på filen först."
 
 #: gtk/gtkfilechooserwidget.c:837
 msgid "You need to choose a valid filename."
@@ -2348,7 +2384,8 @@ msgstr "Du kan bara markera mappar"
 
 #: gtk/gtkfilechooserwidget.c:862
 msgid "The item that you selected is not a folder try using a different item."
-msgstr "Objektet som du valde är inte en mapp. Försök att använda ett annat objekt."
+msgstr ""
+"Objektet som du valde är inte en mapp. Försök att använda ett annat objekt."
 
 #: gtk/gtkfilechooserwidget.c:870
 msgid "Invalid file name"
@@ -2422,224 +2459,227 @@ msgstr "Mappnamn som börjar med ”.” är dolda"
 msgid "File names starting with a “.” are hidden"
 msgstr "Filnamn som börjar med ”.” är dolda"
 
-#: gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Är du säker på att du vill ta bort ”%s” permanent?"
 
-#: gtk/gtkfilechooserwidget.c:1498
+#: gtk/gtkfilechooserwidget.c:1501
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
-#: gtk/gtkfilechooserwidget.c:1635
+#: gtk/gtkfilechooserwidget.c:1638
 msgid "The file could not be renamed"
 msgstr "Filens namn kunde inte bytas"
 
-#: gtk/gtkfilechooserwidget.c:1980
+#: gtk/gtkfilechooserwidget.c:1983
 msgid "Could not select file"
 msgstr "Kunde inte välja fil"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Visit File"
 msgstr "_Besök fil"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2334
 msgid "_Open With File Manager"
 msgstr "Ö_ppna med filhanterare"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Copy Location"
 msgstr "Kopiera _plats"
 
-#: gtk/gtkfilechooserwidget.c:2333
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Add to Bookmarks"
 msgstr "_Lägg till i bokmärkena"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
+#: gtk/gtkfilechooserwidget.c:2337 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "_Byt namn"
 
-#: gtk/gtkfilechooserwidget.c:2336
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Move to Trash"
 msgstr "_Flytta till papperskorgen"
 
-#: gtk/gtkfilechooserwidget.c:2340
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Hidden Files"
 msgstr "Visa _dolda filer"
 
-#: gtk/gtkfilechooserwidget.c:2341
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Show _Size Column"
 msgstr "Visa kolumnen _Storlek"
 
-#: gtk/gtkfilechooserwidget.c:2342
+#: gtk/gtkfilechooserwidget.c:2345
 msgid "Show T_ype Column"
 msgstr "Visa kolumnen T_yp"
 
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2346
 msgid "Show _Time"
 msgstr "Visa _tid"
 
-#: gtk/gtkfilechooserwidget.c:2344
+#: gtk/gtkfilechooserwidget.c:2347
 msgid "Sort _Folders before Files"
 msgstr "Sortera _mappar före filer"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Plats"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2719
+#: gtk/gtkfilechooserwidget.c:2722
 msgid "_Name:"
 msgstr "_Namn:"
 
-#: gtk/gtkfilechooserwidget.c:3344 gtk/gtkfilechooserwidget.c:3358
+#: gtk/gtkfilechooserwidget.c:3347 gtk/gtkfilechooserwidget.c:3361
 #, c-format
 msgid "Searching in %s"
 msgstr "Söker i %s"
 
-#: gtk/gtkfilechooserwidget.c:3364
+#: gtk/gtkfilechooserwidget.c:3367
 msgid "Searching"
 msgstr "Söker"
 
-#: gtk/gtkfilechooserwidget.c:3371
+#: gtk/gtkfilechooserwidget.c:3374
 msgid "Enter location"
 msgstr "Ange plats"
 
-#: gtk/gtkfilechooserwidget.c:3373
+#: gtk/gtkfilechooserwidget.c:3376
 msgid "Enter location or URL"
 msgstr "Ange plats eller URL"
 
-#: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
+#: gtk/gtkfilechooserwidget.c:4454 gtk/gtkfilechooserwidget.c:7498
 #: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "Ändrad"
 
-#: gtk/gtkfilechooserwidget.c:4729
+#: gtk/gtkfilechooserwidget.c:4734
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Kunde inte läsa innehållet i %s"
 
-#: gtk/gtkfilechooserwidget.c:4733
+#: gtk/gtkfilechooserwidget.c:4738
 msgid "Could not read the contents of the folder"
 msgstr "Kunde inte läsa innehållet i mappen"
 
-#: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
+#: gtk/gtkfilechooserwidget.c:4898 gtk/gtkfilechooserwidget.c:4946
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
+#: gtk/gtkfilechooserwidget.c:4900 gtk/gtkfilechooserwidget.c:4948
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4899
+#: gtk/gtkfilechooserwidget.c:4904
 msgid "Yesterday"
 msgstr "Igår"
 
-#: gtk/gtkfilechooserwidget.c:4907
+#: gtk/gtkfilechooserwidget.c:4912
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4911
+#: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
 msgstr "Program"
 
-#: gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfilechooserwidget.c:5016
 msgid "Audio"
 msgstr "Ljud"
 
-#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5017 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Typsnitt"
 
-#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5018 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Bild"
 
-#: gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Archive"
 msgstr "Arkiv"
 
-#: gtk/gtkfilechooserwidget.c:5015
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Markup"
 msgstr "Markup"
 
-#: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfilechooserwidget.c:5021 gtk/gtkfilechooserwidget.c:5022
 msgid "Text"
 msgstr "Text"
 
-#: gtk/gtkfilechooserwidget.c:5019
+#: gtk/gtkfilechooserwidget.c:5024
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:5020
+#: gtk/gtkfilechooserwidget.c:5025
 msgid "Contacts"
 msgstr "Kontakter"
 
-#: gtk/gtkfilechooserwidget.c:5021
+#: gtk/gtkfilechooserwidget.c:5026
 msgid "Calendar"
 msgstr "Kalender"
 
-#: gtk/gtkfilechooserwidget.c:5022
+#: gtk/gtkfilechooserwidget.c:5027
 msgid "Document"
 msgstr "Dokument"
 
-#: gtk/gtkfilechooserwidget.c:5023
+#: gtk/gtkfilechooserwidget.c:5028
 msgid "Presentation"
 msgstr "Presentation"
 
-#: gtk/gtkfilechooserwidget.c:5024
+#: gtk/gtkfilechooserwidget.c:5029
 msgid "Spreadsheet"
 msgstr "Kalkylblad"
 
-#: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
+#: gtk/gtkfilechooserwidget.c:5060 gtk/gtkfilechooserwidget.c:5249
 #: gtk/inspector/prop-editor.c:1689
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
+#: gtk/gtkfilechooserwidget.c:5288 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Hem"
 
-#: gtk/gtkfilechooserwidget.c:5780
+#: gtk/gtkfilechooserwidget.c:5785
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
-#: gtk/gtkfilechooserwidget.c:6566 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6571 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "En fil med namnet ”%s” finns redan. Vill du ersätta den?"
 
-#: gtk/gtkfilechooserwidget.c:6569 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:669
 #, c-format
-msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "Filen finns redan i ”%s”. Att ersätta den kommer att skriva över dess innehåll."
+msgid ""
+"The file already exists in “%s”.  Replacing it will overwrite its contents."
+msgstr ""
+"Filen finns redan i ”%s”. Att ersätta den kommer att skriva över dess "
+"innehåll."
 
-#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6579 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Ersätt"
 
-#: gtk/gtkfilechooserwidget.c:6793
+#: gtk/gtkfilechooserwidget.c:6798
 msgid "You do not have access to the specified folder."
 msgstr "Du har inte åtkomst till den angivna mappen."
 
-#: gtk/gtkfilechooserwidget.c:7416
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "Could not send the search request"
 msgstr "Kunde inte skicka sökbegäran"
 
-#: gtk/gtkfilechooserwidget.c:7704
+#: gtk/gtkfilechooserwidget.c:7709
 msgid "Accessed"
 msgstr "Åtkommen"
 
-#: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
+#: gtk/gtkfilechooserwidget.c:8829 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "Skapa mapp"
 
@@ -2722,7 +2762,7 @@ msgstr "Skapande av OpenGL-kontext misslyckades"
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9391
 msgid "Close"
 msgstr "Stäng"
 
@@ -2773,12 +2813,12 @@ msgid "Error"
 msgstr "Fel"
 
 #. Open Link
-#: gtk/gtklabel.c:6668
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6677
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "Kopiera _länkadress"
 
@@ -2793,9 +2833,11 @@ msgstr "PROGRAM [URI…] — starta ett PROGRAM"
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
 #: gtk/gtk-launch.c:80
-msgid "Launch an application (specified by its desktop file name),\n"
+msgid ""
+"Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
-msgstr "Starta ett program (angivet genom dess skrivbordsfilnamn),\n"
+msgstr ""
+"Starta ett program (angivet genom dess skrivbordsfilnamn),\n"
 "alternativt med en eller flera URI:er som argument."
 
 #: gtk/gtk-launch.c:92
@@ -2851,21 +2893,27 @@ msgid "Unlock"
 msgstr "Lås upp"
 
 #: gtk/gtklockbutton.c:293
-msgid "Dialog is unlocked.\n"
+msgid ""
+"Dialog is unlocked.\n"
 "Click to prevent further changes"
-msgstr "Dialogrutan är upplåst.\n"
+msgstr ""
+"Dialogrutan är upplåst.\n"
 "Klicka för att förhindra ändringar"
 
 #: gtk/gtklockbutton.c:302
-msgid "Dialog is locked.\n"
+msgid ""
+"Dialog is locked.\n"
 "Click to make changes"
-msgstr "Dialogrutan är låst.\n"
+msgstr ""
+"Dialogrutan är låst.\n"
 "Klicka för att göra ändringar"
 
 #: gtk/gtklockbutton.c:311
-msgid "System policy prevents changes.\n"
+msgid ""
+"System policy prevents changes.\n"
 "Contact your system administrator"
-msgstr "Systemets policy förhindrar ändringar.\n"
+msgstr ""
+"Systemets policy förhindrar ändringar.\n"
 "Kontakta din systemadministratör"
 
 #. Description of --gtk-module=MODULES in --help output
@@ -3043,12 +3091,14 @@ msgstr "För portabla dokument"
 
 #: gtk/gtkpagesetupunixdialog.c:832
 #, c-format
-msgid "Margins:\n"
+msgid ""
+"Margins:\n"
 " Left: %s %s\n"
 " Right: %s %s\n"
 " Top: %s %s\n"
 " Bottom: %s %s"
-msgstr "Marginaler:\n"
+msgstr ""
+"Marginaler:\n"
 " Vänster: %s %s\n"
 " Höger: %s %s\n"
 " Övre: %s %s\n"
@@ -3730,7 +3780,8 @@ msgstr "Kan inte flytta objektet med URI ”%s” till ”%s”"
 #: gtk/gtkrecentmanager.c:2507
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Inget registrerat program med namnet ”%s” hittades för objekt med URI ”%s”"
+msgstr ""
+"Inget registrerat program med namnet ”%s” hittades för objekt med URI ”%s”"
 
 #: gtk/gtksearchentry.c:371
 msgid "Search"
@@ -3878,8 +3929,10 @@ msgstr "”%s” är inte ett giltigt attributnamn"
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "”%s” kunde inte konverteras till ett värde av typen ”%s” för attributet ”%s”"
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"”%s” kunde inte konverteras till ett värde av typen ”%s” för attributet ”%s”"
 
 #: gtk/gtktextbufferserialize.c:1206
 #, c-format
@@ -3915,8 +3968,11 @@ msgid "Serialized data is malformed"
 msgstr "Serialiserad data är felformulerad"
 
 #: gtk/gtktextbufferserialize.c:1873
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Serialiserad data är felformulerad. Första sektionen är inte GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Serialiserad data är felformulerad. Första sektionen är inte "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
@@ -3981,29 +4037,35 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9329
+#: gtk/gtkwindow.c:9339
 msgid "Move"
 msgstr "Flytta"
 
-#: gtk/gtkwindow.c:9337
+#: gtk/gtkwindow.c:9347
 msgid "Resize"
 msgstr "Ändra storlek"
 
-#: gtk/gtkwindow.c:9368
+#: gtk/gtkwindow.c:9378
 msgid "Always on Top"
 msgstr "Alltid överst"
 
-#: gtk/gtkwindow.c:12803
+#: gtk/gtkwindow.c:12817
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vill du använda GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12805
+#: gtk/gtkwindow.c:12819
 #, c-format
-msgid "GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of any GTK+ application. Using it may cause the application to break or crash."
-msgstr "GTK+ Inspector är en interaktiv felsökare som låter dig utforska och ändra det inre i vilket GTK+-program som helst. Användning av det kan medföra att programmet avslutar eller kraschar."
+msgid ""
+"GTK+ Inspector is an interactive debugger that lets you explore and modify "
+"the internals of any GTK+ application. Using it may cause the application to "
+"break or crash."
+msgstr ""
+"GTK+ Inspector är en interaktiv felsökare som låter dig utforska och ändra "
+"det inre i vilket GTK+-program som helst. Användning av det kan medföra att "
+"programmet avslutar eller kraschar."
 
-#: gtk/gtkwindow.c:12810
+#: gtk/gtkwindow.c:12824
 msgid "Don't show this message again"
 msgstr "Visa inte detta meddelande igen"
 
@@ -4016,7 +4078,7 @@ msgstr "Aktivera"
 msgid "State"
 msgstr "Tillstånd"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Prefix"
@@ -4034,8 +4096,12 @@ msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "Du kan skriva vilken CSS-regel som helst som känns igen av GTK+ här."
 
 #: gtk/inspector/css-editor.c:113
-msgid "You can temporarily disable this custom CSS by clicking on the “Pause” button above."
-msgstr "Du kan tillfälligt inaktivera denna anpassade CSS genom att klicka på ”Paus”-knappen ovanför."
+msgid ""
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
+"button above."
+msgstr ""
+"Du kan tillfälligt inaktivera denna anpassade CSS genom att klicka på ”Paus”-"
+"knappen ovanför."
 
 #: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4075,15 +4141,19 @@ msgstr "Värde"
 msgid "Show data"
 msgstr "Visa data"
 
-#: gtk/inspector/general.c:330
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:331
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ingen"
+
+#: gtk/inspector/general.c:550
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "IM-kontext är hårdkodad med GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:34
 msgid "GTK+ Version"
@@ -4093,31 +4163,39 @@ msgstr "GTK+-version"
 msgid "GDK Backend"
 msgstr "GDK-bakände"
 
-#: gtk/inspector/general.ui:115
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr "Pango-typsnittskarta"
+
+#: gtk/inspector/general.ui:136
+msgid "Input Method"
+msgstr "Inmatningsmetod"
+
+#: gtk/inspector/general.ui:183
 msgid "Application ID"
 msgstr "Program-ID"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:217
 msgid "Resource Path"
 msgstr "Sökväg för resurs"
 
-#: gtk/inspector/general.ui:454
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "Display"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "RGBA-visuell"
 
-#: gtk/inspector/general.ui:523
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "Sammansatt"
 
-#: gtk/inspector/general.ui:570
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "GL-version"
 
-#: gtk/inspector/general.ui:605
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "GL-leverantör"
 
@@ -4471,9 +4549,11 @@ msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Inställningen är hårdkodad med GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:817
-msgid "Not settable at runtime.\n"
+msgid ""
+"Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
-msgstr "Går ej att ställa in under körning.\n"
+msgstr ""
+"Går ej att ställa in under körning.\n"
 "Använd GDK_GL=always eller GDK_GL=disable i stället"
 
 #: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832
@@ -7251,7 +7331,8 @@ msgid "Server Addresses"
 msgstr "Serveradresser"
 
 #: gtk/ui/gtkplacesview.ui:43
-msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr "Serveradresser utgörs av ett protokollprefix och en adress. Exempel:"
 
 #: gtk/ui/gtkplacesview.ui:78
@@ -7310,9 +7391,11 @@ msgstr "Sid_or:"
 
 #: gtk/ui/gtkprintunixdialog.ui:252 gtk/ui/gtkprintunixdialog.ui:270
 #: gtk/ui/gtkprintunixdialog.ui:277
-msgid "Specify one or more page ranges,\n"
+msgid ""
+"Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
-msgstr "Ange en eller flera sidintervall,\n"
+msgstr ""
+"Ange en eller flera sidintervall,\n"
 " exempelvis 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
@@ -7421,9 +7504,11 @@ msgstr "Kloc_kan:"
 #: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
 #: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
 #: gtk/ui/gtkprintunixdialog.ui:1037
-msgid "Specify the time of print,\n"
+msgid ""
+"Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr "Ange tiden för utskrift,\n"
+msgstr ""
+"Ange tiden för utskrift,\n"
 " t.ex. 15∶30, 02∶35, 14∶15∶20, 11∶46∶30"
 
 #: gtk/ui/gtkprintunixdialog.ui:1036
@@ -7609,9 +7694,11 @@ msgstr "Ingen temaindexfil.\n"
 
 #: gtk/updateiconcache.c:1758
 #, c-format
-msgid "No theme index file in '%s'.\n"
+msgid ""
+"No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "Ingen temaindexfil i ”%s”.\n"
+msgstr ""
+"Ingen temaindexfil i ”%s”.\n"
 "Om du verkligen vill skapa en ikoncache här, använd --ignore-theme-index.\n"
 
 #. ID
@@ -7696,12 +7783,6 @@ msgstr "Vietnamesisk (VIQR)"
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
-
-#. ID
-#: modules/input/imwaylandgtk.c:82
-msgctxt "input method menu"
-msgid "Waylandgtk"
-msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
@@ -8312,3 +8393,6 @@ msgstr "testutdata.%s"
 msgid "Print to Test Printer"
 msgstr "Skriv ut till testskrivare"
 
+#~ msgctxt "input method menu"
+#~ msgid "Waylandgtk"
+#~ msgstr "Waylandgtk"
