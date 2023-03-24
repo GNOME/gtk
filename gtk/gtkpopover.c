@@ -443,16 +443,38 @@ create_popup_layout (GtkPopover *popover)
   GtkWidget *parent;
   GtkCssStyle *style;
   GtkBorder shadow_width;
+  GtkNative *native;
+  double nx, ny;
+  graphene_rect_t bounds;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
-  gtk_widget_get_surface_allocation (parent, &rect);
+  native = gtk_widget_get_native (parent);
+
   if (priv->has_pointing_to)
     {
-      rect.x += priv->pointing_to.x;
-      rect.y += priv->pointing_to.y;
-      rect.width = priv->pointing_to.width;
-      rect.height = priv->pointing_to.height;
+      graphene_matrix_t transform;
+      graphene_rect_t pointing_to = GRAPHENE_RECT_INIT (priv->pointing_to.x,
+                                                        priv->pointing_to.y,
+                                                        priv->pointing_to.width,
+                                                        priv->pointing_to.height);
+
+      if (!gtk_widget_compute_transform (parent, GTK_WIDGET (native), &transform))
+        graphene_matrix_init_identity (&transform);
+
+      graphene_matrix_transform_bounds (&transform, &pointing_to, &bounds);
     }
+  else
+    {
+      if (!gtk_widget_compute_bounds (parent, GTK_WIDGET (native), &bounds))
+        g_warning ("Failed to compute bounds");
+    }
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  rect.x = (int) floor (bounds.origin.x + nx);
+  rect.y = (int) floor (bounds.origin.y + ny);
+  rect.width = (int) ceilf (bounds.size.width);
+  rect.width = (int) ceilf (bounds.size.height);
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
