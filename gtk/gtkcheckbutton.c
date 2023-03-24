@@ -672,6 +672,9 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * Applications should never connect to this signal, but use the
    * [signal@Gtk.CheckButton::toggled] signal.
    *
+   * The default bindings for this signal are all forms of the
+   * <kbd>␣</kbd> and <kbd>Enter</kbd> keys.
+   *
    * Since: 4.2
    */
   signals[ACTIVATE] =

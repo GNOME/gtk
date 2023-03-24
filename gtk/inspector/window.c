@@ -719,7 +719,7 @@ get_inspector_display (void)
       if (display)
         g_debug ("Using default display for GtkInspector");
       else
-        g_message ("Failed to separate connection to default display");
+        g_message ("Failed to open separate connection to default display");
     }
 
 

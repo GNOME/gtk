@@ -2237,9 +2237,11 @@ gtk_label_class_init (GtkLabelClass *class)
    * the variant with the Shift modifier extends the selection,
    * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
+   *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual characters/lines
+   * - <kbd>Ctrl</kbd>+<kbd>←</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd> and <kbd>End</kbd> move to the ends of the buffer
    */
   signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
@@ -2261,7 +2263,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
-   * The default binding for this signal is Ctrl-c.
+   * The default binding for this signal is <kbd>Ctrl</kbd>+<kbd>c</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -2283,7 +2285,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * Applications may also emit the signal with g_signal_emit_by_name()
      * if they need to control activation of URIs programmatically.
      *
-     * The default bindings for this signal are all forms of the Enter key.
+     * The default bindings for this signal are all forms of the <kbd>Enter</kbd> key.
      */
     signals[ACTIVATE_CURRENT_LINK] =
       g_signal_new_class_handler (I_("activate-current-link"),
@@ -2361,7 +2363,8 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:use-underline: (attributes org.gtk.Property.get=gtk_label_get_use_underline org.gtk.Property.set=gtk_label_set_use_underline)
    *
-   * %TRUE if the text of the label indicates a mnemonic with _.
+   * %TRUE if the text of the label indicates a mnemonic with an _
+   * before the mnemonic character.
    */
   label_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline", NULL, NULL,
