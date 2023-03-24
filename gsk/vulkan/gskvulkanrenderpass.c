@@ -503,27 +503,99 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   GskVulkanOp op = {
     .render.node = node
   };
-  graphene_matrix_t transform, mv;
+  graphene_matrix_t old_mv;
   GskRenderNode *child;
+  GskTransform *next_transform;
+  GskTransform *transform;
+  float new_scale_x = self->scale_x;
+  float new_scale_y = self->scale_x;
+  float old_scale_x;
+  float old_scale_y;
 
 #if 0
  if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
     FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
+  transform = gsk_transform_node_get_transform (node);
+
+  switch (gsk_transform_get_category (transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float dx, dy;
+        gsk_transform_to_affine (transform, &new_scale_x, &new_scale_y, &dx, &dy);
+      }
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D:
+      {
+        float xx, xy, yx, yy, dx, dy;
+
+        gsk_transform_to_2d (transform,
+                             &xx, &xy, &yx, &yy, &dx, &dy);
+
+        new_scale_x = sqrtf (xx * xx + xy * xy);
+        new_scale_y = sqrtf (yx * yx + yy * yy);
+      }
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+      {
+        graphene_quaternion_t rotation;
+        graphene_matrix_t matrix;
+        graphene_vec4_t perspective;
+        graphene_vec3_t translation;
+        graphene_vec3_t scale;
+        graphene_vec3_t shear;
+
+        gsk_transform_to_matrix (transform, &matrix);
+        graphene_matrix_decompose (&matrix,
+                                   &translation,
+                                   &scale,
+                                   &rotation,
+                                   &shear,
+                                   &perspective);
+
+        new_scale_x = graphene_vec3_get_x (&scale);
+        new_scale_y = graphene_vec3_get_y (&scale);
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  old_mv = self->mv;
+  old_scale_x = self->scale_x;
+  old_scale_y = self->scale_y;
+
+  self->scale_x = new_scale_x;
+  self->scale_y = new_scale_y;
+
+  next_transform = gsk_transform_matrix (gsk_transform_ref (transform), &self->mv);
+  gsk_transform_to_matrix (next_transform, &self->mv);
+
   child = gsk_transform_node_get_child (node);
-  gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &transform);
-  graphene_matrix_init_from_matrix (&mv, &self->mv);
-  graphene_matrix_multiply (&transform, &mv, &self->mv);
-  if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, gsk_transform_node_get_transform (node), &child->bounds))
+  if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
     FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   g_array_append_val (self->render_ops, op);
 
   gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, child);
+
   gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-  graphene_matrix_init_from_matrix (&self->mv, &mv);
   g_array_append_val (self->render_ops, op);
+
+  self->scale_x = old_scale_x;
+  self->scale_y = old_scale_y;
+  self->mv = old_mv;
 
   return TRUE;
 }
