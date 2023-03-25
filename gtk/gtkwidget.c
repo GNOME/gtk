@@ -10279,6 +10279,9 @@ gtk_widget_pick (GtkWidget    *widget,
  * when @widget and @target do not share a common ancestor. In that
  * case @out_transform gets set to the identity matrix.
  *
+ * To learn more about widget coordinate systems, see the coordinate
+ * system [overview](coordinates.html).
+ *
  * Returns: %TRUE if the transform could be computed, %FALSE otherwise
  */
 gboolean
@@ -10353,7 +10356,9 @@ gtk_widget_compute_transform (GtkWidget         *widget,
  *
  * Computes the bounds for @widget in the coordinate space of @target.
  *
- * FIXME: Explain what "bounds" are.
+ * The bounds of widget are (the bounding box of) the region that it is
+ * expected to draw in. See the [coordinate system](coordinates.html)
+ * overview to learn more.
  *
  * If the operation is successful, %TRUE is returned. If @widget has no
  * bounds or the bounds cannot be expressed in @target's coordinate space
@@ -10396,6 +10401,9 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
  *
  * Returns the width that has currently been allocated to @widget.
  *
+ * To learn more about widget sizes, see the coordinate
+ * system [overview](coordinates.html).
+ *
  * Returns: the width of the @widget
  */
 int
@@ -10415,6 +10423,9 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
  * @widget: the widget to query
  *
  * Returns the height that has currently been allocated to @widget.
+ *
+ * To learn more about widget sizes, see the coordinate
+ * system [overview](coordinates.html).
  *
  * Returns: the height of the @widget
  */
@@ -12430,6 +12441,9 @@ gtk_widget_get_can_target (GtkWidget *widget)
  *
  * For pointer events, see [method@Gtk.Widget.contains].
  *
+ * To learn more about widget sizes, see the coordinate
+ * system [overview](coordinates.html).
+ *
  * Returns: The width of @widget
  */
 int
@@ -12453,6 +12467,9 @@ gtk_widget_get_width (GtkWidget *widget)
  * should be using in [vfunc@Gtk.Widget.snapshot].
  *
  * For pointer events, see [method@Gtk.Widget.contains].
+ *
+ * To learn more about widget sizes, see the coordinate
+ * system [overview](coordinates.html).
  *
  * Returns: The height of @widget
  */
@@ -12480,6 +12497,9 @@ gtk_widget_get_height (GtkWidget *widget)
  * for %GTK_ORIENTATION_VERTICAL, but can be used when
  * writing orientation-independent code, such as when
  * implementing [iface@Gtk.Orientable] widgets.
+ *
+ * To learn more about widget sizes, see the coordinate
+ * system [overview](coordinates.html).
  *
  * Returns: The size of @widget in @orientation.
  */
