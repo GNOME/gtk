@@ -801,7 +801,7 @@ suggestion_entry_key_pressed (GtkEventControllerKey *controller,
             selected = matches - 1;
         }
 
-      gtk_single_selection_set_selected (self->selection, selected);
+      gtk_list_view_scroll_to (GTK_LIST_VIEW (self->list), selected, GTK_LIST_SCROLL_SELECT, NULL);
       return TRUE;
     }
 
