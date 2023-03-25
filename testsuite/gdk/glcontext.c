@@ -14,7 +14,7 @@ test_allowed_backends (gconstpointer data)
   GdkGLAPI allowed = GPOINTER_TO_SIZE (data);
   GdkGLAPI not_allowed = (~allowed) & ALL_APIS;
   GdkGLAPI api, random_apis;
-  GdkDisplay *display = gdk_display_get_default ();
+  GdkDisplay *display;
   GdkGLContext *context;
   GError *error = NULL;
 
@@ -28,7 +28,7 @@ test_allowed_backends (gconstpointer data)
     }
 
   context = gdk_display_create_gl_context (display, &error);
-  g_assert (context);
+  g_assert_nonnull (context);
   g_assert_no_error (error);
   g_assert_cmpint (gdk_gl_context_get_api (context), ==, 0);
   g_assert_cmpint (gdk_gl_context_get_allowed_apis (context), ==, ALL_APIS);
