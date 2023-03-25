@@ -67,9 +67,9 @@ or decreasing Y coordinates.
 Event controllers and gestures report positions in the coordinate system of the widget
 they are attached to.
 
-But if you are dealing with raw events in the form of [class@Gdk.Event] that have
-positions associated with them (e.g. the pointer position), such positions are expressed
-in **_surface coordinates_**, which have their origin at the top left corner of the
+If you are dealing with raw events in the form of [class@Gdk.Event] that have positions
+associated with them (e.g. the pointer position), such positions are expressed in
+**_surface coordinates_**, which have their origin at the top left corner of the
 [class@Gdk.Surface].
 
 To translate from surface to widget coordinates, you have to apply the offset from the
