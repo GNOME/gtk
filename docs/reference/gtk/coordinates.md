@@ -3,14 +3,14 @@ Slug: gtk-coordinates
 
 ## Coordinate systems in GTK
 
-Every widget in a window has its own coordinate system that it uses to place its
-child widgets and to interpret events. Most of the time, this fact can be safely
-ignored. The section will explain the details for the few cases when it is important.
-
 All coordinate systems in GTK have the origin at the top left, with the X axis
 pointing right, and the Y axis pointing down. This matches the convention used
 in X11, Wayland and cairo, but differs from OpenGL and PostScript, where the origin
 is in the lower left, and the Y axis is pointin up.
+
+Every widget in a window has its own coordinate system that it uses to place its
+child widgets and to interpret events. Most of the time, this fact can be safely
+ignored. The section will explain the details for the few cases when it is important.
 
 ## The box model
 
