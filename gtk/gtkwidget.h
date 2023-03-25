@@ -607,7 +607,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_is_ancestor     (GtkWidget      *widget,
                                          GtkWidget      *ancestor);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_compute_point)
 gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
                                                GtkWidget  *dest_widget,
                                                double      src_x,

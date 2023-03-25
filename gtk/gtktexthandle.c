@@ -425,7 +425,7 @@ handle_drag_begin (GtkGestureDrag *gesture,
                    GtkTextHandle  *handle)
 {
   GtkBorder input_extents;
-  double widget_x, widget_y;
+  graphene_point_t p;
 
   x -= handle->pointing_to.x;
   y -= handle->pointing_to.y;
@@ -434,12 +434,14 @@ handle_drag_begin (GtkGestureDrag *gesture,
    * are relative to the parent widget.
    */
   handle_get_input_extents (handle, &input_extents);
-  gtk_widget_translate_coordinates (handle->controller_widget,
-                                    gtk_widget_get_parent (GTK_WIDGET (handle)),
-                                    x, y, &widget_x, &widget_y);
+  if (!gtk_widget_compute_point (handle->controller_widget,
+                                 gtk_widget_get_parent (GTK_WIDGET (handle)),
+                                 &GRAPHENE_POINT_INIT (x, y),
+                                 &p))
+    graphene_point_init (&p, x, y);
 
-  if (widget_x < input_extents.left || widget_x >= input_extents.right ||
-      widget_y < input_extents.top || widget_y >= input_extents.bottom)
+  if (p.x < input_extents.left || p.x >= input_extents.right ||
+      p.y < input_extents.top || p.y >= input_extents.bottom)
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
       return;

@@ -2829,15 +2829,16 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
   for (i = 0; i < MAX_ICONS; i++)
     {
       EntryIconInfo *icon_info = priv->icons[i];
-      double icon_x, icon_y;
+      graphene_point_t p;
 
       if (icon_info == NULL)
         continue;
 
-      gtk_widget_translate_coordinates (GTK_WIDGET (entry), icon_info->widget,
-                                        x, y, &icon_x, &icon_y);
+      if (!gtk_widget_compute_point (GTK_WIDGET (entry), icon_info->widget,
+                                     &GRAPHENE_POINT_INIT (x, y), &p))
+        continue;
 
-      if (gtk_widget_contains (icon_info->widget, icon_x, icon_y))
+      if (gtk_widget_contains (icon_info->widget, p.x, p.y))
         return i;
     }
 

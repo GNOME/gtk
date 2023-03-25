@@ -71,18 +71,19 @@ popup_menu (GtkFileChooserCell *self,
   GtkWidget *widget = GTK_WIDGET (self);
   GtkSelectionModel *model;
   GtkWidget *impl;
-  double xx, yy;
+  graphene_point_t p;
 
   impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
 
   model = gtk_file_chooser_widget_get_selection_model (GTK_FILE_CHOOSER_WIDGET (impl));
   gtk_selection_model_select_item (model, self->position, TRUE);
 
-  gtk_widget_translate_coordinates (widget, GTK_WIDGET (impl),
-                                    x, y, &xx, &yy);
+  if (!gtk_widget_compute_point (widget, GTK_WIDGET (impl),
+                                 &GRAPHENE_POINT_INIT (x, y), &p))
+    return;
 
   gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                              "(udd)", self->position, xx, yy);
+                              "(udd)", self->position, p.x, p.y);
 }
 
 static void

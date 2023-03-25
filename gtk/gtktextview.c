@@ -9088,18 +9088,20 @@ gtk_text_view_do_popup (GtkTextView *text_view,
           GdkSurface *surface;
           double px, py;
           double nx, ny;
+          graphene_point_t p;
 
           native = gtk_widget_get_native (GTK_WIDGET (text_view));
           surface = gtk_native_get_surface (native);
           gdk_surface_get_device_position (surface, device, &px, &py, NULL);
           gtk_native_get_surface_transform (native, &nx, &ny);
 
-          gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (text_view))),
-                                           GTK_WIDGET (text_view),
-                                           px - nx, py - ny,
-                                           &px, &py);
-          rect.x = px;
-          rect.y = py;
+          if (!gtk_widget_compute_point (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (text_view))),
+                                         GTK_WIDGET (text_view),
+                                         &GRAPHENE_POINT_INIT (px - nx, py - ny),
+                                         &p))
+            graphene_point_init (&p, px - nx, px - nx);
+          rect.x = p.x;
+          rect.y = p.y;
         }
 
       gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);

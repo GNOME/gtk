@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static const char *css =
 "test>button {"
 "  all: unset; "

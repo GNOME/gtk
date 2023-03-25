@@ -199,18 +199,21 @@ do_popup_fallback (GtkWindowHandle *self,
       GdkSurface *surface;
       double px, py;
       double nx, ny;
+      graphene_point_t p;
 
       native = gtk_widget_get_native (GTK_WIDGET (self));
       surface = gtk_native_get_surface (native);
       gdk_surface_get_device_position (surface, device, &px, &py, NULL);
       gtk_native_get_surface_transform (native, &nx, &ny);
 
-      gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (self))),
-                                       GTK_WIDGET (self),
-                                       px - nx, py - ny,
-                                       &px, &py);
-      rect.x = px;
-      rect.y = py;
+      if (!gtk_widget_compute_point (GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (self))),
+                                     GTK_WIDGET (self),
+                                     &GRAPHENE_POINT_INIT (px - nx, py - ny),
+                                     &p))
+        graphene_point_init (&p, 0, 0);
+
+      rect.x = p.x;
+      rect.y = p.y;
     }
 
   gtk_popover_set_pointing_to (GTK_POPOVER (self->fallback_menu), &rect);
@@ -422,7 +425,7 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
     {
       double start_x, start_y;
       double native_x, native_y;
-      double window_x, window_y;
+      graphene_point_t p;
       GtkNative *native;
       GdkSurface *surface;
 
@@ -432,21 +435,22 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
 
       native = gtk_widget_get_native (GTK_WIDGET (self));
 
-      gtk_widget_translate_coordinates (GTK_WIDGET (self),
-                                        GTK_WIDGET (native),
-                                        start_x, start_y,
-                                        &window_x, &window_y);
+      if (!gtk_widget_compute_point (GTK_WIDGET (self),
+                                     GTK_WIDGET (native),
+                                     &GRAPHENE_POINT_INIT (start_x, start_y),
+                                     &p))
+        graphene_point_init (&p, start_x, start_y);
 
       gtk_native_get_surface_transform (native, &native_x, &native_y);
-      window_x += native_x;
-      window_y += native_y;
+      p.x += native_x;
+      p.y += native_y;
 
       surface = gtk_native_get_surface (native);
       if (GDK_IS_TOPLEVEL (surface))
         gdk_toplevel_begin_move (GDK_TOPLEVEL (surface),
                                  gtk_gesture_get_device (GTK_GESTURE (gesture)),
                                  gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-                                 window_x, window_y,
+                                 p.x, p.y,
                                  gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture)));
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));

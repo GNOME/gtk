@@ -1358,7 +1358,7 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_surface_t *cairo_surface;
       cairo_region_t *region;
       cairo_t *cr;
-      double x, y;
+      graphene_point_t p;
       double native_x, native_y;
 
       gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
@@ -1380,10 +1380,11 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_fill (cr);
 
       box = gtk_css_boxes_get_border_box (&content_css_boxes);
-      gtk_widget_translate_coordinates (priv->contents_widget, GTK_WIDGET (popover),
-                                        0, 0,
-                                        &x, &y);
-      cairo_translate (cr, x, y);
+      if (!gtk_widget_compute_point (priv->contents_widget, GTK_WIDGET (popover),
+                                     &GRAPHENE_POINT_INIT (0, 0), &p))
+        graphene_point_init (&p, 0, 0);
+
+      cairo_translate (cr, p.x, p.y);
       gsk_rounded_rect_path (box, cr);
       cairo_fill (cr);
       cairo_destroy (cr);

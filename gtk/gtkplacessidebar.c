@@ -1674,6 +1674,8 @@ drag_motion_callback (GtkDropTarget    *target,
 
       if (row != NULL)
         {
+          graphene_point_t p;
+
           g_object_get (row, "order-index", &row_index, NULL);
           g_object_get (sidebar->row_placeholder, "order-index", &row_placeholder_index, NULL);
           /* We order the bookmarks sections based on the bookmark index that we
@@ -1687,9 +1689,11 @@ drag_motion_callback (GtkDropTarget    *target,
            * of the row, we need to increase the order-index.
            */
           row_placeholder_index = row_index;
-          gtk_widget_translate_coordinates (GTK_WIDGET (sidebar), GTK_WIDGET (row),
-		                            x, y,
-		                            &x, &y);
+          if (!gtk_widget_compute_point (GTK_WIDGET (sidebar), GTK_WIDGET (row),
+                                         &GRAPHENE_POINT_INIT (x, y), &p))
+            graphene_point_init (&p, x, y);
+          x = p.x;
+          y = p.y;
 
           if (y > sidebar->drag_row_height / 2 && row_index > 0)
             row_placeholder_index++;
@@ -2373,13 +2377,16 @@ _popover_set_pointing_to_widget (GtkPopover *popover,
                                  GtkWidget  *target)
 {
   GtkWidget *parent;
+  graphene_point_t p;
   double x, y, w, h;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
 
-  if (!gtk_widget_translate_coordinates (target, parent, 0, 0, &x, &y))
+  if (!gtk_widget_compute_point (target, parent, &GRAPHENE_POINT_INIT (0, 0), &p))
     return;
 
+  x = p.x;
+  y = p.y;
   w = gtk_widget_get_allocated_width (GTK_WIDGET (target));
   h = gtk_widget_get_allocated_height (GTK_WIDGET (target));
 
@@ -3473,7 +3480,7 @@ on_row_dragged (GtkGestureDrag *gesture,
   if (gtk_drag_check_threshold_double (GTK_WIDGET (row), 0, 0, x, y))
     {
       double start_x, start_y;
-      double drag_x, drag_y;
+      graphene_point_t p;
       GdkContentProvider *content;
       GdkSurface *surface;
       GdkDevice *device;
@@ -3482,10 +3489,11 @@ on_row_dragged (GtkGestureDrag *gesture,
       GdkDrag *drag;
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-      gtk_widget_translate_coordinates (GTK_WIDGET (row),
-                                        GTK_WIDGET (sidebar),
-                                        start_x, start_y,
-                                        &drag_x, &drag_y);
+      if (!gtk_widget_compute_point (GTK_WIDGET (row),
+                                     GTK_WIDGET (sidebar),
+                                     &GRAPHENE_POINT_INIT (start_x, start_y),
+                                     &p))
+        graphene_point_init (&p, start_x, start_y);
 
       sidebar->dragging_over = TRUE;
 
@@ -3494,7 +3502,7 @@ on_row_dragged (GtkGestureDrag *gesture,
       surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (sidebar)));
       device = gtk_gesture_get_device (GTK_GESTURE (gesture));
 
-      drag = gdk_drag_begin (surface, device, content, GDK_ACTION_MOVE, drag_x, drag_y);
+      drag = gdk_drag_begin (surface, device, content, GDK_ACTION_MOVE, p.x, p.y);
 
       g_object_unref (content);
 

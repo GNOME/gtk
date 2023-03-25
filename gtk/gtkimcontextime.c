@@ -871,21 +871,21 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
             GtkNative *native = gtk_native_get_for_surface (context_ime->client_surface);
             if G_LIKELY (native)
               {
-                double x = 0.0;
-                double y = 0.0;
+                graphene_point_t p;
                 double decor_x = 0.0;
                 double decor_y = 0.0;
 
-                gtk_widget_translate_coordinates (context_ime->client_widget,
-                                                  GTK_WIDGET (native),
-                                                  0.0, 0.0, &x, &y);
+                if (!gtk_widget_compute_point (context_ime->client_widget,
+                                               GTK_WIDGET (native),
+                                               &GRAPHENE_POINT_INIT (0, 0), &p))
+                  graphene_point_init (&p, 0, 0);
 
                 gtk_native_get_surface_transform (native, &decor_x, &decor_y);
-                x += decor_x;
-                y += decor_y;
+                p.x += decor_x;
+                p.y += decor_y;
 
-                wx = (int) x;
-                wy = (int) y;
+                wx = (int) p.x;
+                wy = (int) p.y;
               }
 
             scale = gtk_widget_get_scale_factor (context_ime->client_widget);

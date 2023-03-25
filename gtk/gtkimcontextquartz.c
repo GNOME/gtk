@@ -307,7 +307,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   GtkWidget* surface_widget;
   int sx, sy;
-  double wx, wy;
+  graphene_point_t p;
 
   GTK_DEBUG (MODULES, "quartz_set_cursor_location");
 
@@ -323,11 +323,12 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
     return;
 
   gdk_surface_get_origin (qc->client_surface, &sx, &sy);
-  gtk_widget_translate_coordinates(qc->client_widget, surface_widget,
-                                   area->x, area->y, &wx, &wy);
+  if (!gtk_widget_compute_point (qc->client_widget, surface_widget,
+                                 &GRAPHENE_POINT_INIT (area->x, area->y), &p))
+    graphene_point_init (&p, area->x, area->y);
 
-  qc->cursor_rect->x = sx + (int) wx;
-  qc->cursor_rect->y = sy + (int) wy;
+  qc->cursor_rect->x = sx + (int) p.x;
+  qc->cursor_rect->y = sy + (int) p.y;
   qc->cursor_rect->width = area->width;
   qc->cursor_rect->height = area->height;
 

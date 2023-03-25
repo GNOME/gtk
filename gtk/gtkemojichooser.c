@@ -276,7 +276,7 @@ scroll_to_child (GtkWidget *child)
   GtkEmojiChooser *chooser;
   GtkAdjustment *adj;
   GtkAllocation alloc;
-  double pos;
+  graphene_point_t p;
   double value;
   double page_size;
 
@@ -289,12 +289,14 @@ scroll_to_child (GtkWidget *child)
   value = gtk_adjustment_get_value (adj);
   page_size = gtk_adjustment_get_page_size (adj);
 
-  gtk_widget_translate_coordinates (child, gtk_widget_get_parent (chooser->recent.box), 0, 0, NULL, &pos);
+  if (!gtk_widget_compute_point (child, gtk_widget_get_parent (chooser->recent.box),
+                                 &GRAPHENE_POINT_INIT (0, 0), &p))
+    return;
 
-  if (pos < value)
-    gtk_adjustment_animate_to_value (adj, pos);
-  else if (pos + alloc.height >= value + page_size)
-    gtk_adjustment_animate_to_value (adj, value + ((pos + alloc.height) - (value + page_size)));
+  if (p.y < value)
+    gtk_adjustment_animate_to_value (adj, p.y);
+  else if (p.y + alloc.height >= value + page_size)
+    gtk_adjustment_animate_to_value (adj, value + ((p.y + alloc.height) - (value + page_size)));
 }
 
 static void
