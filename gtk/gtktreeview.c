@@ -71,7 +71,7 @@
  * Widget that displays any object that implements the #GtkTreeModel interface.
  *
  * Please refer to the
- * [tree widget conceptual overview][TreeWidget]
+ * [tree widget conceptual overview](TreeWidget.html)
  * for an overview of all the objects and data types related
  * to the tree widget and how they work together.
  *
@@ -1330,7 +1330,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * Space, Shift+Space, Return or Enter is pressed.
    *
    * For selection handling refer to the
-   * [tree widget conceptual overview][TreeWidget]
+   * [tree widget conceptual overview](TreeWidget.html)
    * as well as #GtkTreeSelection.
    */
   tree_view_signals[ROW_ACTIVATED] =

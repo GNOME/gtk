@@ -51,7 +51,7 @@
  * It allows to set properties of the column header, and functions as a holding pen for
  * the cell renderers which determine how the data in the column is displayed.
  *
- * Please refer to the [tree widget conceptual overview][TreeWidget]
+ * Please refer to the [tree widget conceptual overview](TreeWidget.html)
  * for an overview of all the objects and data types related to the tree widget and how
  * they work together.
  */
