@@ -68,6 +68,7 @@ content_files = [
   "input-handling.md",
   "drag-and-drop.md",
   "drawing-model.md",
+  "coordinates.md",
   "css-overview.md",
   "css-properties.md",
   "section-accessibility.md",
