@@ -464,11 +464,13 @@ gtk_native_update_opaque_region (GtkNative  *native,
 
       if (contents != GTK_WIDGET (native))
         {
-          double contents_x, contents_y;
+          graphene_point_t p;
 
-          gtk_widget_translate_coordinates (contents, GTK_WIDGET (native), 0, 0, &contents_x, &contents_y);
-          rect.x += contents_x;
-          rect.y += contents_y;
+          if (!gtk_widget_compute_point (contents, GTK_WIDGET (native),
+                                         &GRAPHENE_POINT_INIT (0, 0), &p))
+            graphene_point_init (&p, 0, 0);
+          rect.x += p.x;
+          rect.y += p.y;
         }
 
       opaque_region = cairo_region_create_rectangle (&rect);

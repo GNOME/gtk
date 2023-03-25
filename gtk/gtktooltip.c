@@ -367,6 +367,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   GdkDevice *device;
   GdkSurface *surface;
   double x, y;
+  graphene_point_t p;
   GtkWidget *toplevel;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -394,9 +395,10 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
-  gtk_widget_translate_coordinates (toplevel, widget, x, y, &x, &y);
+  if (!gtk_widget_compute_point (toplevel, widget, &GRAPHENE_POINT_INIT (x, y), &p))
+    graphene_point_init (&p, x, y);
 
-  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, x, y);
+  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, p.x, p.y);
 }
 
 static void
@@ -434,7 +436,15 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
   picked_widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_INSENSITIVE);
 
   if (picked_widget != NULL)
-    gtk_widget_translate_coordinates (event_widget, picked_widget, x, y, &x, &y);
+    {
+      graphene_point_t p;
+
+      if (!gtk_widget_compute_point (event_widget, picked_widget,
+                                     &GRAPHENE_POINT_INIT (x, y), &p))
+        graphene_point_init (&p, x, y);
+      x = p.x;
+      y = p.y;
+    }
 
   *widget_x = x;
   *widget_y = y;
@@ -552,16 +562,14 @@ gtk_tooltip_run_requery (GtkWidget  **widget,
 
           if (parent)
             {
-              double xx = *x;
-              double yy = *y;
+              graphene_point_t r = GRAPHENE_POINT_INIT (*x, *y);
+              graphene_point_t p;
 
-              if (gtk_widget_get_native (parent) != gtk_widget_get_native (*widget))
+              if (!gtk_widget_compute_point (*widget, parent, &r, &p))
                 break;
 
-              gtk_widget_translate_coordinates (*widget, parent, xx, yy, &xx, &yy);
-
-              *x = xx;
-              *y = yy;
+              *x = p.x;
+              *y = p.y;
             }
 
           *widget = parent;
@@ -933,8 +941,13 @@ _gtk_tooltip_handle_event (GtkWidget *target,
   surface = gdk_event_get_surface (event);
   if (gdk_event_get_position (event, &x, &y))
     {
+      graphene_point_t p;
       gtk_native_get_surface_transform (native, &nx, &ny);
-      gtk_widget_translate_coordinates (GTK_WIDGET (native), target, x - nx, y - ny, &x, &y);
+      if (!gtk_widget_compute_point (GTK_WIDGET (native), target,
+                                     &GRAPHENE_POINT_INIT (x - nx, y - ny), &p))
+        graphene_point_init (&p, x - nx, y - ny);
+      x = p.x;
+      y = p.y;
     }
   gtk_tooltip_handle_event_internal (event_type, surface, target, x, y);
 }

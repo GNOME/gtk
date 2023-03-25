@@ -564,7 +564,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   GtkWidget *widget;
   GdkDevice *device, *pointer;
   GdkSeat *seat;
-  double x, y;
+  graphene_point_t p;
   GtkNative *native;
   GdkSurface *surface;
   double px, py;
@@ -583,11 +583,15 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   native = gtk_widget_get_native (widget);
   surface = gtk_native_get_surface (native);
 
-  gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), source->start_x, source->start_y, &x, &y);
+  if (!gtk_widget_compute_point (widget, GTK_WIDGET (native),
+                                 &GRAPHENE_POINT_INIT (source->start_x, source->start_y),
+                                 &p))
+    return;
+
   gdk_surface_get_device_position (surface, pointer, &px, &py, NULL);
 
-  dx = round (px - x);
-  dy = round (py - y);
+  dx = round (px - p.x);
+  dy = round (py - p.y);
 
   g_signal_emit (source, signals[PREPARE], 0, source->start_x, source->start_y, &content);
   if (!content)

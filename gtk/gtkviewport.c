@@ -623,7 +623,7 @@ focus_change_handler (GtkWidget *widget)
   GtkRoot *root;
   GtkWidget *focus_widget;
   graphene_rect_t rect;
-  double x, y;
+  graphene_point_t p;
 
   if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_FOCUS_WITHIN) == 0)
     return;
@@ -640,13 +640,13 @@ focus_change_handler (GtkWidget *widget)
   if (!gtk_widget_compute_bounds (focus_widget, viewport->child, &rect))
     return;
 
-  gtk_widget_translate_coordinates (viewport->child, widget,
-                                    rect.origin.x,
-                                    rect.origin.y,
-                                     &x, &y);
+  if (!gtk_widget_compute_point (viewport->child, widget,
+                                 &GRAPHENE_POINT_INIT (rect.origin.x, rect.origin.y),
+                                 &p))
+    return;
 
-  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL], x, rect.size.width);
-  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_VERTICAL], y, rect.size.height);
+  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL], p.x, rect.size.width);
+  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_VERTICAL], p.y, rect.size.height);
 }
 
 static void

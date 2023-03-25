@@ -3473,34 +3473,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-void
-gtk_widget_get_surface_allocation (GtkWidget     *widget,
-                                  GtkAllocation *allocation)
-{
-  GtkNative *native;
-  graphene_rect_t bounds;
-  double nx, ny;
-
-  native = gtk_widget_get_native (widget);
-
-  g_assert (GTK_IS_WINDOW (native) || GTK_IS_POPOVER (native));
-  gtk_native_get_surface_transform (native, &nx, &ny);
-
-  if (gtk_widget_compute_bounds (widget, GTK_WIDGET (native), &bounds))
-    {
-      *allocation = (GtkAllocation) {
-        floorf (bounds.origin.x) + nx,
-        floorf (bounds.origin.y) + ny,
-        ceilf (bounds.size.width),
-        ceilf (bounds.size.height)
-      };
-    }
-  else
-    {
-      *allocation = (GtkAllocation) { 0, 0, 0, 0 };
-    }
-}
-
 /**
  * gtk_widget_queue_draw:
  * @widget: a `GtkWidget`
@@ -4197,6 +4169,8 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
  * Returns: %FALSE if @src_widget and @dest_widget have no common
  *   ancestor. In this case, 0 is stored in *@dest_x and *@dest_y.
  *   Otherwise %TRUE.
+ *
+ * Deprecated: 4.12: Use gtk_widget_compute_point() instead
  */
 gboolean
 gtk_widget_translate_coordinates (GtkWidget  *src_widget,
@@ -8593,7 +8567,6 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
   GtkWidget *widget;
   GtkWidget *parent;
   GtkWidget *bounds_relative_to;
-  double translated_x, translated_y;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT_ZERO;
 
   widget = GTK_WIDGET (self);
@@ -8603,9 +8576,11 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
   parent = gtk_widget_get_parent (widget);
   if (parent != NULL)
     {
-      gtk_widget_translate_coordinates (widget, parent, 0., 0., &translated_x, &translated_y);
-      *x = floorf (translated_x);
-      *y = floorf (translated_y);
+      graphene_point_t p;
+      if (!gtk_widget_compute_point (widget, parent, &GRAPHENE_POINT_INIT (0, 0), &p))
+        graphene_point_init (&p, 0, 0);
+      *x = floorf (p.x);
+      *y = floorf (p.y);
       bounds_relative_to = parent;
     }
   else

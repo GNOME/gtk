@@ -1857,19 +1857,21 @@ update_initial_slider_position (GtkRange *range,
                                 double    y)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+  graphene_point_t p;
 
-  gtk_widget_translate_coordinates (GTK_WIDGET (range), priv->trough_widget,
-                                    x, y, &x, &y);
+  if (!gtk_widget_compute_point (GTK_WIDGET (range), priv->trough_widget,
+                                 &GRAPHENE_POINT_INIT (x, y), &p))
+    graphene_point_init (&p, x, y);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       priv->slide_initial_slider_position = MAX (0, priv->slider_x);
-      priv->slide_initial_coordinate_delta = x - priv->slide_initial_slider_position;
+      priv->slide_initial_coordinate_delta = p.x - priv->slide_initial_slider_position;
     }
   else
     {
       priv->slide_initial_slider_position = MAX (0, priv->slider_y);
-      priv->slide_initial_coordinate_delta = y - priv->slide_initial_slider_position;
+      priv->slide_initial_coordinate_delta = p.y - priv->slide_initial_slider_position;
     }
 }
 
@@ -1949,22 +1951,23 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
             (!primary_warps && shift_pressed && button == GDK_BUTTON_PRIMARY) ||
             (!primary_warps && button == GDK_BUTTON_MIDDLE)))
     {
-      double slider_range_x, slider_range_y;
+      graphene_point_t p;
       graphene_rect_t slider_bounds;
 
-      gtk_widget_translate_coordinates (priv->trough_widget, widget,
-                                        priv->slider_x, priv->slider_y,
-                                        &slider_range_x, &slider_range_y);
+      if (!gtk_widget_compute_point (priv->trough_widget, widget,
+                                     &GRAPHENE_POINT_INIT (priv->slider_x, priv->slider_y),
+                                     &p))
+        graphene_point_init (&p, priv->slider_x, priv->slider_y);
 
       /* If we aren't fixed, center on the slider. I.e. if this is not a scale... */
       if (!priv->slider_size_fixed &&
           gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds))
         {
-          slider_range_x += (slider_bounds.size.width  / 2);
-          slider_range_y += (slider_bounds.size.height / 2);
+          p.x += (slider_bounds.size.width  / 2);
+          p.y += (slider_bounds.size.height / 2);
         }
 
-      update_initial_slider_position (range, slider_range_x, slider_range_y);
+      update_initial_slider_position (range, p.x, p.y);
 
       range_grab_add (range, priv->slider_widget);
 
@@ -2030,10 +2033,11 @@ update_slider_position (GtkRange *range,
   double mark_delta;
   double zoom;
   int i;
-  double x, y;
+  graphene_point_t p;
 
-  gtk_widget_translate_coordinates (GTK_WIDGET (range), priv->trough_widget,
-                                    mouse_x, mouse_y, &x, &y);
+  if (!gtk_widget_compute_point(GTK_WIDGET (range), priv->trough_widget,
+                                &GRAPHENE_POINT_INIT (mouse_x, mouse_y), &p))
+    graphene_point_init (&p, mouse_x, mouse_y);
 
   if (priv->zoom &&
       gtk_widget_compute_bounds (priv->trough_widget, priv->trough_widget, &trough_bounds))
@@ -2066,15 +2070,15 @@ update_slider_position (GtkRange *range,
         zoom_divisor = zoom - 1.0;
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        priv->slide_initial_slider_position = (zoom * (y - priv->slide_initial_coordinate_delta) - slider_bounds.origin.y) / zoom_divisor;
+        priv->slide_initial_slider_position = (zoom * (p.y - priv->slide_initial_coordinate_delta) - slider_bounds.origin.y) / zoom_divisor;
       else
-        priv->slide_initial_slider_position = (zoom * (x - priv->slide_initial_coordinate_delta) - slider_bounds.origin.x) / zoom_divisor;
+        priv->slide_initial_slider_position = (zoom * (p.x - priv->slide_initial_coordinate_delta) - slider_bounds.origin.x) / zoom_divisor;
     }
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    delta = y - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
+    delta = p.y - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
   else
-    delta = x - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
+    delta = p.x - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
 
   c = priv->slide_initial_slider_position + zoom * delta;
 
@@ -2694,19 +2698,20 @@ gtk_range_calc_marks (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GdkRectangle slider;
-  double x, y;
+  graphene_point_t p;
   int i;
 
   for (i = 0; i < priv->n_marks; i++)
     {
       gtk_range_compute_slider_position (range, priv->marks[i], &slider);
-      gtk_widget_translate_coordinates (priv->trough_widget, GTK_WIDGET (range),
-                                        slider.x, slider.y, &x, &y);
+      if (!gtk_widget_compute_point (priv->trough_widget, GTK_WIDGET (range),
+                                     &GRAPHENE_POINT_INIT (slider.x, slider.y), &p))
+        graphene_point_init (&p, slider.x, slider.y);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        priv->mark_pos[i] = x + slider.width / 2;
+        priv->mark_pos[i] = p.x + slider.width / 2;
       else
-        priv->mark_pos[i] = y + slider.height / 2;
+        priv->mark_pos[i] = p.y + slider.height / 2;
     }
 }
 

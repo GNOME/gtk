@@ -864,16 +864,19 @@ update_autoscroll (GtkColumnView *self,
 {
   double width;
   double delta;
-  double vx, vy;
+  graphene_point_t v;
 
   /* x is in header coordinates */
-  gtk_widget_translate_coordinates (self->header, GTK_WIDGET (self), x, 0, &vx, &vy);
+  if (!gtk_widget_compute_point (self->header, GTK_WIDGET (self),
+                                 &GRAPHENE_POINT_INIT (x, 0),
+                                 &v))
+    graphene_point_init (&v, 0, 0);
   width = gtk_widget_get_width (GTK_WIDGET (self));
 
-  if (vx < SCROLL_EDGE_SIZE)
-    delta = - (SCROLL_EDGE_SIZE - vx)/3.0;
-  else if (width - vx < SCROLL_EDGE_SIZE)
-    delta = (SCROLL_EDGE_SIZE - (width - vx))/3.0;
+  if (v.x < SCROLL_EDGE_SIZE)
+    delta = - (SCROLL_EDGE_SIZE - v.x)/3.0;
+  else if (width - v.x < SCROLL_EDGE_SIZE)
+    delta = (SCROLL_EDGE_SIZE - (width - v.x))/3.0;
   else
     delta = 0;
 
@@ -1264,10 +1267,12 @@ gtk_column_view_drag_motion (GtkDropControllerMotion *motion,
 {
   GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
-  double hx, hy;
+  graphene_point_t h;
 
-  gtk_widget_translate_coordinates (widget, self->header, x, 0, &hx, &hy);
-  update_autoscroll (GTK_COLUMN_VIEW (widget), hx);
+  if (!gtk_widget_compute_point (widget, self->header,
+                                 &GRAPHENE_POINT_INIT (x, 0), &h))
+    graphene_point_init (&h, 0, 0);
+  update_autoscroll (GTK_COLUMN_VIEW (widget), h.x);
 }
 
 static void

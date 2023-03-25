@@ -324,7 +324,7 @@ canvas_item_start_editing (CanvasItem *item)
   GtkWidget *canvas = gtk_widget_get_parent (GTK_WIDGET (item));
   GtkWidget *entry;
   GtkWidget *scale;
-  double x, y;
+  graphene_point_t p;
 
   if (item->editor)
     return;
@@ -350,8 +350,9 @@ canvas_item_start_editing (CanvasItem *item)
 
   gtk_box_append (GTK_BOX (item->editor), scale);
 
-  gtk_widget_translate_coordinates (GTK_WIDGET (item), canvas, 0, 0, &x, &y);
-  gtk_fixed_put (GTK_FIXED (canvas), item->editor, x, y + 2 * item->r);
+  if (!gtk_widget_compute_point (GTK_WIDGET (item), canvas, &GRAPHENE_POINT_INIT (0, 0), &p))
+    graphene_point_init (&p, 0, 0);
+  gtk_fixed_put (GTK_FIXED (canvas), item->editor, p.x, p.y + 2 * item->r);
   gtk_widget_grab_focus (entry);
 
 }
@@ -368,6 +369,7 @@ prepare (GtkDragSource *source,
   GtkWidget *canvas;
   GtkWidget *item;
   Hotspot *hotspot;
+  graphene_point_t p;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = gtk_widget_pick (canvas, x, y, GTK_PICK_DEFAULT);
@@ -379,7 +381,10 @@ prepare (GtkDragSource *source,
   g_object_set_data (G_OBJECT (canvas), "dragged-item", item);
 
   hotspot = g_new (Hotspot, 1);
-  gtk_widget_translate_coordinates (canvas, item, x, y, &hotspot->x, &hotspot->y);
+  if (!gtk_widget_compute_point (canvas, item, &GRAPHENE_POINT_INIT (x, y), &p))
+    graphene_point_init (&p, x, y);
+  hotspot->x = p.x;
+  hotspot->y = p.y;
   g_object_set_data_full (G_OBJECT (canvas), "hotspot", hotspot, g_free);
 
   return gdk_content_provider_new_typed (GTK_TYPE_WIDGET, item);

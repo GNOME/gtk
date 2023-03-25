@@ -259,13 +259,21 @@ gtk_fixed_get_child_position (GtkFixed  *fixed,
                               double    *x,
                               double    *y)
 {
+  graphene_point_t p;
+
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (x != NULL);
   g_return_if_fail (y != NULL);
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-  gtk_widget_translate_coordinates (widget, GTK_WIDGET (fixed), 0, 0, x, y);
+
+  if (!gtk_widget_compute_point (widget, GTK_WIDGET (fixed),
+                                 &GRAPHENE_POINT_INIT (0, 0), &p))
+    graphene_point_init (&p, 0, 0);
+
+  *x = p.x;
+  *y = p.y;
 }
 
 /**

@@ -44,35 +44,32 @@ translate_coordinates_to_widget (GtkWidget      *widget,
                                  int            *xo,
                                  int            *yo)
 {
-  double x = xi;
-  double y = yi;
+  graphene_point_t p;
+  GtkWidget *source;
 
   switch (coordtype)
     {
     case ATSPI_COORD_TYPE_SCREEN:
       g_warning ("Screen coordinates not supported, reported positions will be wrong");
-      G_GNUC_FALLTHROUGH;
+      return;
 
     case ATSPI_COORD_TYPE_WINDOW:
-      gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_root (widget)),
-                                        widget,
-                                        x, y,
-                                        &x, &y);
+      source = GTK_WIDGET (gtk_widget_get_root (widget));
       break;
 
     case ATSPI_COORD_TYPE_PARENT:
-      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
-                                        widget,
-                                        x, y,
-                                        &x, &y);
+      source = gtk_widget_get_parent (widget);
       break;
 
     default:
       g_assert_not_reached ();
     }
 
-  *xo = (int)x;
-  *yo = (int)y;
+  if (!gtk_widget_compute_point (source, widget, &GRAPHENE_POINT_INIT (xi, yi), &p))
+    graphene_point_init (&p, xi, yi);
+
+  *xo = (int)p.x;
+  *yo = (int)p.y;
 }
 
 static void
@@ -83,35 +80,32 @@ translate_coordinates_from_widget (GtkWidget      *widget,
                                    int            *xo,
                                    int            *yo)
 {
-  double x = xi;
-  double y = yi;
+  graphene_point_t p;
+  GtkWidget *target;
 
   switch (coordtype)
     {
     case ATSPI_COORD_TYPE_SCREEN:
       g_warning ("Screen coordinates not supported, reported positions will be wrong");
-      G_GNUC_FALLTHROUGH;
+      return;
 
     case ATSPI_COORD_TYPE_WINDOW:
-      gtk_widget_translate_coordinates (widget,
-                                        GTK_WIDGET (gtk_widget_get_root (widget)),
-                                        x, y,
-                                        &x, &y);
+      target = GTK_WIDGET (gtk_widget_get_root (widget));
       break;
 
     case ATSPI_COORD_TYPE_PARENT:
-      gtk_widget_translate_coordinates (widget,
-                                        gtk_widget_get_parent (widget),
-                                        x, y,
-                                        &x, &y);
+      target = gtk_widget_get_parent (widget);
       break;
 
     default:
       g_assert_not_reached ();
     }
 
-  *xo = (int)x;
-  *yo = (int)y;
+  if (!gtk_widget_compute_point (widget, target, &GRAPHENE_POINT_INIT (xi, yi), &p))
+    graphene_point_init (&p, xi, yi);
+
+  *xo = (int)p.x;
+  *yo = (int)p.y;
 }
 
 static void

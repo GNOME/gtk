@@ -1397,12 +1397,12 @@ text_view_handle_method (GDBusConnection       *connection,
                                              rect.x, rect.y,
                                              &x, &y);
 
-      double dx, dy;
-      gtk_widget_translate_coordinates (widget,
-                                        GTK_WIDGET (gtk_widget_get_native (widget)),
-                                        (double) x, (double) y, &dx, &dy);
-      x = floor (dx);
-      y = floor (dy);
+      graphene_point_t p;
+      if (!gtk_widget_compute_point (widget, GTK_WIDGET (gtk_widget_get_native (widget)),
+                                     &GRAPHENE_POINT_INIT (x, y), &p))
+        graphene_point_init (&p, x, y);
+      x = floor (p.x);
+      y = floor (p.y);
 
       g_dbus_method_invocation_return_value (invocation,
                                              g_variant_new ("(iiii)",
