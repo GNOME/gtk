@@ -68,6 +68,7 @@ content_files = [
   "input-handling.md",
   "drag-and-drop.md",
   "drawing-model.md",
+  "coordinates.md",
   "css-overview.md",
   "css-properties.md",
   "section-accessibility.md",
@@ -241,5 +242,7 @@ content_images = [
   "images/rich-list.png",
   "images/data-table.png",
   "images/navigation-sidebar.png",
+  "images/box-model-light.png",
+  "images/box-model-dark.png",
 ]
 urlmap_file = "urlmap.js"

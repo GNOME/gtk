@@ -17,6 +17,7 @@ expand_content_md_files = [
   'actions.md',
   'input-handling.md',
   'drawing-model.md',
+  'coordinates.md',
   'css-overview.md',
   'css-properties.md',
   'section-accessibility.md',
