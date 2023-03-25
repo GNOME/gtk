@@ -3473,34 +3473,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-void
-gtk_widget_get_surface_allocation (GtkWidget     *widget,
-                                  GtkAllocation *allocation)
-{
-  GtkNative *native;
-  graphene_rect_t bounds;
-  double nx, ny;
-
-  native = gtk_widget_get_native (widget);
-
-  g_assert (GTK_IS_WINDOW (native) || GTK_IS_POPOVER (native));
-  gtk_native_get_surface_transform (native, &nx, &ny);
-
-  if (gtk_widget_compute_bounds (widget, GTK_WIDGET (native), &bounds))
-    {
-      *allocation = (GtkAllocation) {
-        floorf (bounds.origin.x) + nx,
-        floorf (bounds.origin.y) + ny,
-        ceilf (bounds.size.width),
-        ceilf (bounds.size.height)
-      };
-    }
-  else
-    {
-      *allocation = (GtkAllocation) { 0, 0, 0, 0 };
-    }
-}
-
 /**
  * gtk_widget_queue_draw:
  * @widget: a `GtkWidget`

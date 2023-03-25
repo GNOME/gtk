@@ -316,9 +316,6 @@ gboolean          gtk_widget_focus_move                    (GtkWidget        *wi
                                                             GtkDirectionType  direction);
 void              gtk_widget_set_has_focus                 (GtkWidget        *widget,
                                                             gboolean          has_focus);
-void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
-							     GtkAllocation *allocation);
-
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
