@@ -6,7 +6,7 @@ Slug: gtk-coordinates
 All coordinate systems in GTK have the origin at the top left, with the X axis
 pointing right, and the Y axis pointing down. This matches the convention used
 in X11, Wayland and cairo, but differs from OpenGL and PostScript, where the origin
-is in the lower left, and the Y axis is pointin up.
+is in the lower left, and the Y axis is pointing up.
 
 Every widget in a window has its own coordinate system that it uses to place its
 child widgets and to interpret events. Most of the time, this fact can be safely
@@ -62,8 +62,8 @@ the CSS box model and widget properties such as align and margin. This happens i
 parent's coordinate system.
 
 Note that the **_text direction_** of a widget does not influence its coordinate
-systems, but simply determines whether text flows in the direction of increasing
-or decreasing Y coordinates.
+system, but simply determines whether text flows in the direction of increasing
+or decreasing X coordinates.
 
 ## Events
 
