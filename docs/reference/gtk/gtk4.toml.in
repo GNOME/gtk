@@ -242,5 +242,7 @@ content_images = [
   "images/rich-list.png",
   "images/data-table.png",
   "images/navigation-sidebar.png",
+  "images/box-model-light.png",
+  "images/box-model-dark.png",
 ]
 urlmap_file = "urlmap.js"

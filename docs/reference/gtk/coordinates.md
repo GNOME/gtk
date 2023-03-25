@@ -16,7 +16,10 @@ ignored. The section will explain the details for the few cases when it is impor
 
 When it comes to rendering, GTK follows the CSS box model as far as practical.
 
-![](https://www.w3.org/TR/css-box-3/images/box.png)
+<picture>
+  <source srcset="box-model-dark.png" media="(prefers-color-scheme: dark)">
+  <img alt="Box Model" src="box-model-light.png">
+</picture>
 
 The CSS stylesheet that is in use determines the sizes (and appearance) of the
 margin, border and padding areas for each widget. The size of the content area
