@@ -7,6 +7,11 @@ Every widget in a window has its own coordinate system that it uses to place its
 child widgets and to interpret events. Most of the time, this fact can be safely
 ignored. The section will explain the details for the few cases when it is important.
 
+All coordinate systems in GTK have the origin at the top left, with the X axis
+pointing right, and the Y axis pointing down. This matches the convention used
+in X11, Wayland and cairo, but differs from OpenGL and PostScript, where the origin
+is in the lower left, and the Y axis is pointin up.
+
 ## The box model
 
 When it comes to rendering, GTK follows the CSS box model as far as practical.
@@ -20,7 +25,7 @@ and [vfunc@Gtk.Widget.size_allocate] vfuncs.
 
 You can learn more about the CSS box model by reading the
 [CSS specification](https://www.w3.org/TR/css-box-3/#box-model) or the
-Mozilla [docs](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model).
+Mozilla [documentation](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model).
 
 To learn more about where GTK CSS differs from CSS on the web, see the
 [CSS overview](css-overview.html).
@@ -31,15 +36,17 @@ The content area in the CSS box model is the region that the widget considers it
 
 The origin of the widgets coordinate system is the top left corner of the content area,
 and its size is the widgets size. The size can be queried with [method@Gtk.Widget.get_width]
-and [method@Gtk.Widget.get_height]. GTK allows general transformations to position
-widgets (although most of the time, the transformation will be a simple translation).
+and [method@Gtk.Widget.get_height]. GTK allows general 3D transformations to position
+widgets (although most of the time, the transformation will be a simple 2D translation).
 The transform to go from one widgets coordinate system to another one can be obtained
 with [method@Gtk.Widget.compute_transform].
 
 When widget APIs expect positions or areas, they need to be expressed in this coordinate
 system, typically called **_widget coordinates_**. GTK provides a number of APIs to translate
 between different widgets' coordinate systems, such as [method@Gtk.Widget.compute_point]
-or [method@Gtk.Widget.compute_bounds].
+or [method@Gtk.Widget.compute_bounds]. These methods can fail (either because the widgets
+don't share a common ancestor, or because of a singular transformation), and callers need
+to handle this eventuality.
 
 Another area that is occasionally relevant are the widgets **_bounds_**, which is the area
 that a widgets rendering is typically confined to (technically, widgets can draw outside
@@ -51,14 +58,20 @@ allocate them at least as much size as measured. These functions take care of re
 the CSS box model and widget properties such as align and margin. This happens in the
 parent's coordinate system.
 
+Note that the **_text direction_** of a widget does not influence its coordinate
+systems, but simply determines whether text flows in the direction of increasing
+or decreasing Y coordinates.
+
 ## Events
 
-Some types of events have positions associated with them (e.g. the pointer position).
-Such positions are expressed in **_surface coordinates_**, which have their origin at
-the top left corner of the surface.
-
 Event controllers and gestures report positions in the coordinate system of the widget
-they are attached to. But if you are dealing with raw events in the form of [class@Gdk.Event]
-struts, you need to translate from surface to widget coordinates, by applying the offset
-from the top left corner of the surface to the top left corner of the topmost
-widget. This offset can be obtained with [method@Gtk.Native.get_surface_transform].
+they are attached to.
+
+But if you are dealing with raw events in the form of [class@Gdk.Event] that have
+positions associated with them (e.g. the pointer position), such positions are expressed
+in **_surface coordinates_**, which have their origin at the top left corner of the
+[class@Gdk.Surface].
+
+To translate from surface to widget coordinates, you have to apply the offset from the
+top left corner of the surface to the top left corner of the topmost widget, which can
+be obtained with [method@Gtk.Native.get_surface_transform].
