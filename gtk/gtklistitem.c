@@ -51,6 +51,7 @@ enum
   PROP_0,
   PROP_ACTIVATABLE,
   PROP_CHILD,
+  PROP_FOCUSABLE,
   PROP_ITEM,
   PROP_POSITION,
   PROP_SELECTABLE,
@@ -90,6 +91,10 @@ gtk_list_item_get_property (GObject    *object,
 
     case PROP_CHILD:
       g_value_set_object (value, self->child);
+      break;
+
+    case PROP_FOCUSABLE:
+      g_value_set_boolean (value, self->focusable);
       break;
 
     case PROP_ITEM:
@@ -139,6 +144,10 @@ gtk_list_item_set_property (GObject      *object,
       gtk_list_item_set_child (self, g_value_get_object (value));
       break;
 
+    case PROP_FOCUSABLE:
+      gtk_list_item_set_focusable (self, g_value_get_boolean (value));
+      break;
+
     case PROP_SELECTABLE:
       gtk_list_item_set_selectable (self, g_value_get_boolean (value));
       break;
@@ -177,6 +186,18 @@ gtk_list_item_class_init (GtkListItemClass *klass)
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListItem:focusable: (attributes org.gtk.Property.get=gtk_list_item_get_focusable org.gtk.Property.set=gtk_list_item_set_focusable)
+   *
+   * If the item can be focused with the keyboard.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_FOCUSABLE] =
+    g_param_spec_boolean ("focusable", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkListItem:item: (attributes org.gtk.Property.get=gtk_list_item_get_item)
@@ -226,6 +247,7 @@ gtk_list_item_init (GtkListItem *self)
 {
   self->selectable = TRUE;
   self->activatable = TRUE;
+  self->focusable = TRUE;
 }
 
 GtkListItem *
@@ -467,4 +489,57 @@ gtk_list_item_set_activatable (GtkListItem *self,
     gtk_list_factory_widget_set_activatable (GTK_LIST_FACTORY_WIDGET (self->owner), activatable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
+}
+
+/**
+ * gtk_list_item_get_focusable: (attributes org.gtk.Method.get_property=focusable)
+ * @self: a `GtkListItem`
+ *
+ * Checks if a list item has been set to be focusable via
+ * gtk_list_item_set_focusable().
+ *
+ * Returns: %TRUE if the item is focusable
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_list_item_get_focusable (GtkListItem *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (self), FALSE);
+
+  return self->focusable;
+}
+
+/**
+ * gtk_list_item_set_focusable: (attributes org.gtk.Method.set_property=focusable)
+ * @self: a `GtkListItem`
+ * @focusable: if the item should be focusable
+ *
+ * Sets @self to be focusable.
+ *
+ * If an item is focusable, it can be focused using the keyboard.
+ * This works similar to [method@Gtk.Widget.set_focusable].
+ *
+ * Note that if items are not focusable, the keyboard cannot be used to activate
+ * them and selecting only works if one of the listitem's children is focusable.
+ *
+ * By default, list items are focusable.
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_item_set_focusable (GtkListItem *self,
+                             gboolean     focusable)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  if (self->focusable == focusable)
+    return;
+
+  self->focusable = focusable;
+
+  if (self->owner)
+    gtk_widget_set_focusable (GTK_WIDGET (self->owner), focusable);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUSABLE]);
 }

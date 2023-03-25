@@ -35,6 +35,7 @@ struct _GtkListItem
 
   guint activatable : 1;
   guint selectable : 1;
+  guint focusable : 1;
 };
 
 GtkListItem *   gtk_list_item_new                               (void);

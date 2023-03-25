@@ -47,6 +47,11 @@ gboolean        gtk_list_item_get_activatable                   (GtkListItem    
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_activatable                   (GtkListItem            *self,
                                                                  gboolean                activatable);
+GDK_AVAILABLE_IN_4_12
+gboolean        gtk_list_item_get_focusable                     (GtkListItem            *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_item_set_focusable                     (GtkListItem            *self,
+                                                                 gboolean                focusable);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_child                         (GtkListItem            *self,

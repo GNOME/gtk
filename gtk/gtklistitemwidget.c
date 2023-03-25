@@ -28,6 +28,7 @@
 #include "gtklistitemprivate.h"
 #include "gtklistbaseprivate.h"
 #include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 
 G_DEFINE_TYPE (GtkListItemWidget, gtk_list_item_widget, GTK_TYPE_LIST_FACTORY_WIDGET)
 
@@ -35,59 +36,65 @@ static gboolean
 gtk_list_item_widget_focus (GtkWidget        *widget,
                             GtkDirectionType  direction)
 {
-  GtkWidget *child, *focus_child;
+  GtkWidget *child = gtk_widget_get_first_child (widget);
 
-  /* The idea of this function is the following:
-   * 1. If any child can take focus, do not ever attempt
-   *    to take focus.
-   * 2. Otherwise, if this item is selectable or activatable,
-   *    allow focusing this widget.
-   *
-   * This makes sure every item in a list is focusable for
-   * activation and selection handling, but no useless widgets
-   * get focused and moving focus is as fast as possible.
-   */
-
-  focus_child = gtk_widget_get_focus_child (widget);
-  if (focus_child && gtk_widget_child_focus (focus_child, direction))
-    return TRUE;
-
-  for (child = focus_child ? gtk_widget_get_next_sibling (focus_child)
-                           : gtk_widget_get_first_child (widget);
-       child;
-       child = gtk_widget_get_next_sibling (child))
+  if (gtk_widget_get_focus_child (widget))
     {
-      if (gtk_widget_child_focus (child, direction))
-        return TRUE;
+      /* focus is in the child */
+      if (direction == GTK_DIR_TAB_BACKWARD)
+        return gtk_widget_grab_focus_self (widget);
+      else
+        return FALSE;
     }
+  else if (gtk_widget_is_focus (widget))
+    {
+      /* The widget has focus */
+      if (direction == GTK_DIR_TAB_FORWARD)
+        {
+          if (child)
+            return gtk_widget_child_focus (child, direction);
+        }
 
-  if (focus_child)
-    return FALSE;
+      return FALSE;
+    }
+  else
+    {
+      /* focus coming in from the outside */
+      if (direction == GTK_DIR_TAB_BACKWARD)
+        {
+          if (child &&
+              gtk_widget_child_focus (child, direction))
+            return TRUE;
 
-  if (gtk_widget_is_focus (widget))
-    return FALSE;
+          return gtk_widget_grab_focus_self (widget);
+        }
+      else
+        {
+          if (gtk_widget_grab_focus_self (widget))
+            return TRUE;
 
-  return gtk_widget_grab_focus (widget);
+          if (child &&
+              gtk_widget_child_focus (child, direction))
+            return TRUE;
+
+          return FALSE;
+        }
+    }
 }
 
 static gboolean
 gtk_list_item_widget_grab_focus (GtkWidget *widget)
 {
-  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
   GtkWidget *child;
 
-  for (child = gtk_widget_get_first_child (widget);
-       child;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      if (gtk_widget_grab_focus (child))
-        return TRUE;
-    }
+  if (GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->grab_focus (widget))
+    return TRUE;
 
-  if (!gtk_list_factory_widget_get_selectable (GTK_LIST_FACTORY_WIDGET (self)))
-    return FALSE;
+  child = gtk_widget_get_first_child (widget);
+  if (child && gtk_widget_grab_focus (child))
+    return TRUE;
 
-  return GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->grab_focus (widget);
+  return FALSE;
 }
 
 static gpointer
@@ -111,6 +118,7 @@ gtk_list_item_widget_setup_object (GtkListFactoryWidget *fw,
 
   gtk_list_factory_widget_set_activatable (fw, list_item->activatable);
   gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
+  gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
 
   gtk_list_item_do_notify (list_item,
                            gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
@@ -133,6 +141,7 @@ gtk_list_item_widget_teardown_object (GtkListFactoryWidget *fw,
 
   gtk_list_factory_widget_set_activatable (fw, FALSE);
   gtk_list_factory_widget_set_selectable (fw, FALSE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   gtk_list_item_do_notify (list_item,
                            gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
