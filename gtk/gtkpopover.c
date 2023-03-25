@@ -431,21 +431,15 @@ update_popover_layout (GtkPopover     *popover,
   gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
-static GdkPopupLayout *
-create_popup_layout (GtkPopover *popover)
+static void
+compute_surface_pointing_to (GtkPopover   *popover,
+                             GdkRectangle *rect)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkRectangle rect;
-  GdkGravity parent_anchor;
-  GdkGravity surface_anchor;
-  GdkAnchorHints anchor_hints;
-  GdkPopupLayout *layout;
   GtkWidget *parent;
-  GtkCssStyle *style;
-  GtkBorder shadow_width;
   GtkNative *native;
-  double nx, ny;
   graphene_rect_t bounds;
+  double nx, ny;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
   native = gtk_widget_get_native (parent);
@@ -471,10 +465,25 @@ create_popup_layout (GtkPopover *popover)
 
   gtk_native_get_surface_transform (native, &nx, &ny);
 
-  rect.x = (int) floor (bounds.origin.x + nx);
-  rect.y = (int) floor (bounds.origin.y + ny);
-  rect.width = (int) ceilf (bounds.size.width);
-  rect.width = (int) ceilf (bounds.size.height);
+  rect->x = (int) floor (bounds.origin.x + nx);
+  rect->y = (int) floor (bounds.origin.y + ny);
+  rect->width = (int) ceilf (bounds.size.width);
+  rect->width = (int) ceilf (bounds.size.height);
+}
+
+static GdkPopupLayout *
+create_popup_layout (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GdkRectangle rect;
+  GdkGravity parent_anchor;
+  GdkGravity surface_anchor;
+  GdkAnchorHints anchor_hints;
+  GdkPopupLayout *layout;
+  GtkCssStyle *style;
+  GtkBorder shadow_width;
+
+  compute_surface_pointing_to (popover, &rect);
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
@@ -1207,21 +1216,12 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   int border_radius;
   int popover_width, popover_height;
   GtkCssStyle *style;
-  GtkWidget *parent;
   GtkBorder shadow_width;
 
   popover_width = gtk_widget_get_allocated_width (widget);
   popover_height = gtk_widget_get_allocated_height (widget);
-  parent = gtk_widget_get_parent (widget);
 
-  gtk_widget_get_surface_allocation (parent, &rect);
-  if (priv->has_pointing_to)
-    {
-      rect.x += priv->pointing_to.x;
-      rect.y += priv->pointing_to.y;
-      rect.width = priv->pointing_to.width;
-      rect.height = priv->pointing_to.height;
-    }
+  compute_surface_pointing_to (popover, &rect);
 
   rect.x -= priv->final_rect.x;
   rect.y -= priv->final_rect.y;
