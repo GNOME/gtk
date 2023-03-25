@@ -96,7 +96,6 @@ _gdk_quartz_display_add_frame_callback (GdkDisplay             *display,
   display_quartz = GDK_QUARTZ_DISPLAY (display);
 
   impl->frame_link.data = window;
-  impl->frame_link.prev = NULL;
   impl->frame_link.next = display_quartz->windows_awaiting_frame;
 
   display_quartz->windows_awaiting_frame = &impl->frame_link;
@@ -110,14 +109,14 @@ _gdk_quartz_display_remove_frame_callback (GdkDisplay             *display,
                                            GdkWindow              *window)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
-  GList *link;
+  GSList *link;
 
-  link = g_list_find (display_quartz->windows_awaiting_frame, window);
+  link = g_slist_find (display_quartz->windows_awaiting_frame, window);
 
   if (link != NULL)
     {
       display_quartz->windows_awaiting_frame =
-        g_list_remove_link (display_quartz->windows_awaiting_frame, link);
+        g_slist_remove_link (display_quartz->windows_awaiting_frame, link);
     }
 
   if (display_quartz->windows_awaiting_frame == NULL)
@@ -129,7 +128,7 @@ gdk_quartz_display_frame_cb (gpointer data)
 {
   GdkDisplayLinkSource *source;
   GdkQuartzDisplay *display_quartz = data;
-  GList *iter;
+  GSList *iter, **last_next = NULL;
   gint64 presentation_time;
   gint64 now;
 
@@ -153,6 +152,12 @@ gdk_quartz_display_frame_cb (gpointer data)
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
       GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
       GdkFrameTimings *timings;
+
+      /* Clear the frame_link */
+      iter->data = NULL;
+      if (last_next && *last_next)
+        *last_next = NULL;
+      last_next = &iter->next;
 
       if (frame_clock == NULL)
         continue;

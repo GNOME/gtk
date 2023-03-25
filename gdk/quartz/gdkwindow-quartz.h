@@ -66,7 +66,7 @@ struct _GdkWindowImplQuartz
   gint shadow_max;
 
   gboolean use_cg_context;
-  GList frame_link;
+  GSList frame_link;
   gint pending_frame_counter;
 };
  
