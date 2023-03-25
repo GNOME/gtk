@@ -45,8 +45,14 @@ struct _GtkScrollInfo
 
 static GtkScrollInfo default_scroll_info = {
   1,
+#if 0
+  /* MSVC can't deal with this */
   GRAPHENE_RECT_INIT (0, 0, 1, 1),
   GRAPHENE_POINT_INIT (0.5, 0.5),
+#else
+  { { 0, 0 }, { 1, 1 }},
+  { 0.5, 0.5 },
+#endif
   FALSE,
   { TRUE, TRUE }
 };
