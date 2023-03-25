@@ -298,6 +298,7 @@
     <file>iconscroll.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
+    <file>image_scaling.c</file>
     <file>images.c</file>
     <file>infobar.c</file>
     <file>layoutmanager.c</file>
@@ -318,7 +319,6 @@
     <file>main.c</file>
     <file>markup.c</file>
     <file>mask.c</file>
-    <file>menu.c</file>
     <file>overlay.c</file>
     <file>overlay_decorative.c</file>
     <file>paint.c</file>

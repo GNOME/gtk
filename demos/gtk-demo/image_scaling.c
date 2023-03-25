@@ -117,7 +117,7 @@ transform_from (GBinding     *binding,
 }
 
 GtkWidget *
-do_menu (GtkWidget *do_widget)
+do_image_scaling (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
 
