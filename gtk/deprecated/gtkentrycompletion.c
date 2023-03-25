@@ -1120,7 +1120,7 @@ gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
-  GtkAllocation allocation;
+  graphene_rect_t bounds;
   int matches, items, height;
   GdkSurface *surface;
   GtkRequisition entry_req;
@@ -1135,19 +1135,20 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (!completion->filter_model)
     return;
 
-  gtk_widget_get_surface_allocation (completion->entry, &allocation);
-  gtk_widget_get_preferred_size (completion->entry,
-                                 &entry_req, NULL);
+  if (!gtk_widget_compute_bounds (completion->entry,
+                                  GTK_WIDGET (gtk_widget_get_native (completion->entry)),
+                                  &bounds))
+    graphene_rect_init (&bounds, 0, 0, 0, 0);
+
+  gtk_widget_get_preferred_size (completion->entry, &entry_req, NULL);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->filter_model), NULL);
 
   /* Call get preferred size on the on the tree view to force it to validate its
    * cells before calling into the cell size functions.
    */
-  gtk_widget_get_preferred_size (completion->tree_view,
-                                 &tree_req, NULL);
-  gtk_tree_view_column_cell_get_size (completion->column,
-                                      NULL, NULL, NULL, &height);
+  gtk_widget_get_preferred_size (completion->tree_view, &tree_req, NULL);
+  gtk_tree_view_column_cell_get_size (completion->column, NULL, NULL, NULL, &height);
 
   gtk_widget_realize (completion->tree_view);
 
@@ -1159,7 +1160,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->scrolled_window);
 
   if (completion->popup_set_width)
-    width = allocation.width;
+    width = ceilf (bounds.size.width);
   else
     width = -1;
 
