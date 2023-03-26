@@ -747,9 +747,7 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkRectangle geometry;
   uint32_t constraint_adjustment = ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_NONE;
-  const GdkRectangle *anchor_rect;
-  int real_anchor_rect_x, real_anchor_rect_y;
-  int anchor_rect_width, anchor_rect_height;
+  GdkRectangle anchor_rect;
   int rect_anchor_dx;
   int rect_anchor_dy;
   GdkGravity rect_anchor;
@@ -775,12 +773,24 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
 
   gdk_wayland_surface_get_window_geometry (surface->parent, &parent_geometry);
 
-  anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
-  real_anchor_rect_x = anchor_rect->x - parent_geometry.x;
-  real_anchor_rect_y = anchor_rect->y - parent_geometry.y;
+  anchor_rect = *gdk_popup_layout_get_anchor_rect (layout);
 
-  anchor_rect_width = MAX (anchor_rect->width, 1);
-  anchor_rect_height = MAX (anchor_rect->height, 1);
+  /* Wayland protocol requires that the anchor rect is specified
+   * wrt. to the parent geometry, and that it is non-empty and
+   * contained in the parent geometry.
+   */
+  if (!gdk_rectangle_intersect (&parent_geometry, &anchor_rect, &anchor_rect))
+    {
+      anchor_rect.x = 0;
+      anchor_rect.y = 0;
+      anchor_rect.width = 1;
+      anchor_rect.height = 1;
+    }
+  else
+    {
+      anchor_rect.x -= parent_geometry.x;
+      anchor_rect.y -= parent_geometry.y;
+    }
 
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
 
@@ -801,10 +811,10 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
 
         xdg_positioner_set_size (positioner, geometry.width, geometry.height);
         xdg_positioner_set_anchor_rect (positioner,
-                                        real_anchor_rect_x,
-                                        real_anchor_rect_y,
-                                        anchor_rect_width,
-                                        anchor_rect_height);
+                                        anchor_rect.x,
+                                        anchor_rect.y,
+                                        anchor_rect.width,
+                                        anchor_rect.height);
         xdg_positioner_set_offset (positioner, rect_anchor_dx, rect_anchor_dy);
 
         anchor = rect_anchor_to_anchor (rect_anchor);
@@ -855,10 +865,10 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
 
         zxdg_positioner_v6_set_size (positioner, geometry.width, geometry.height);
         zxdg_positioner_v6_set_anchor_rect (positioner,
-                                            real_anchor_rect_x,
-                                            real_anchor_rect_y,
-                                            anchor_rect_width,
-                                            anchor_rect_height);
+                                            anchor_rect.x,
+                                            anchor_rect.y,
+                                            anchor_rect.width,
+                                            anchor_rect.height);
         zxdg_positioner_v6_set_offset (positioner,
                                        rect_anchor_dx,
                                        rect_anchor_dy);
