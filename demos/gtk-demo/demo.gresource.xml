@@ -43,7 +43,7 @@
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
-  <gresource prefix="/dropdown">
+  <gresource prefix="/listview_selections">
     <file>suggestionentry.h</file>
     <file>suggestionentry.c</file>
     <file>suggestionentry.css</file>
@@ -274,7 +274,6 @@
     <file>cursors.c</file>
     <file>dialog.c</file>
     <file>drawingarea.c</file>
-    <file>dropdown.c</file>
     <file>dnd.c</file>
     <file>editable_cells.c</file>
     <file>entry_completion.c</file>
@@ -298,6 +297,7 @@
     <file>iconscroll.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
+    <file>image_scaling.c</file>
     <file>images.c</file>
     <file>infobar.c</file>
     <file>layoutmanager.c</file>
@@ -310,6 +310,7 @@
     <file>listview_clocks.c</file>
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
+    <file>listview_selections.c</file>
     <file>listview_settings.c</file>
     <file>listview_ucd.c</file>
     <file>listview_weather.c</file>
@@ -318,7 +319,6 @@
     <file>main.c</file>
     <file>markup.c</file>
     <file>mask.c</file>
-    <file>menu.c</file>
     <file>overlay.c</file>
     <file>overlay_decorative.c</file>
     <file>paint.c</file>

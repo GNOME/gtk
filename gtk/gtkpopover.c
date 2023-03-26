@@ -468,7 +468,7 @@ compute_surface_pointing_to (GtkPopover   *popover,
   rect->x = (int) floor (bounds.origin.x + nx);
   rect->y = (int) floor (bounds.origin.y + ny);
   rect->width = (int) ceilf (bounds.size.width);
-  rect->width = (int) ceilf (bounds.size.height);
+  rect->height = (int) ceilf (bounds.size.height);
 }
 
 static GdkPopupLayout *

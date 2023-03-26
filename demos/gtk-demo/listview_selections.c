@@ -369,7 +369,7 @@ match_func (MatchObject *obj,
 }
 
 GtkWidget *
-do_dropdown (GtkWidget *do_widget)
+do_listview_selections (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button, *box, *spin, *check, *hbox, *label, *entry;
