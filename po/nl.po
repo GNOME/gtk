@@ -23,22 +23,22 @@
 # Wouter Bolsterlee <wbolster@gnome.org>, 2011–2012.
 # Rachid BM <rachidbm@ubuntu.com>, 2011–2012, 2013.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013, 2016, 2017.
-# Nathan Follens <nfollens@gnome.org>, 2018-2022.
+# Nathan Follens <nfollens@gnome.org>, 2018-2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-31 12:28+0000\n"
-"PO-Revision-Date: 2022-11-02 00:07+0100\n"
+"POT-Creation-Date: 2023-03-26 08:32+0000\n"
+"PO-Revision-Date: 2023-03-26 15:23+0200\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
-"Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
+"Language-Team: Dutch <https://matrix.to/#/#nl:gnome.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2016-03-25 10:32+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -502,24 +502,24 @@ msgid "Unable to create a GL pixel format"
 msgstr "Er kan geen GL-pixelformaat worden aangemaakt"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Er kan geen GL-context worden aangemaakt"
 
-#: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
-#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
+#: gdk/wayland/gdkglcontext-wayland.c:422
+#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Geen configuraties beschikbaar voor het gegeven beeldpuntformaat"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1497
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Er is geen GL-implementatie beschikbaar"
 
-#: gdk/wayland/gdkglcontext-wayland.c:476
+#: gdk/wayland/gdkglcontext-wayland.c:480
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL is niet beschikbaar bij EGL-implementatie"
 
@@ -687,15 +687,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Sl_uiten"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
 msgstr "Minimaliseren"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9364
 msgid "Maximize"
 msgstr "Maximaliseren"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9321
 msgid "Restore"
 msgstr "Herstellen"
 
@@ -1269,12 +1269,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
-#: gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:6573
+#: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1329,7 +1329,7 @@ msgstr "Toe_passen"
 
 # Ok/OK
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12830
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2328,24 +2328,24 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papiermarges"
 
-#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6687 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6688 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "K_nippen"
 
-#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6688 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6689 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "_Kopiëren"
 
-#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6689 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6690 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "_Plakken"
 
-#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1503
+#: gtk/gtkfilechooserwidget.c:2338 gtk/gtklabel.c:6692 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6700 gtk/gtktextview.c:9551
+#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6701 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
@@ -2548,97 +2548,97 @@ msgstr "Mapnamen die beginnen met een ‘.’ zijn verborgen"
 msgid "File names starting with a “.” are hidden"
 msgstr "Bestandsnamen die beginnen met een ‘.’ zijn verborgen"
 
-#: gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Weet u zeker dat u ‘%s’ permanent wilt verwijderen?"
 
-#: gtk/gtkfilechooserwidget.c:1498
+#: gtk/gtkfilechooserwidget.c:1501
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Als u een item verwijdert, zal het voorgoed verloren gaan."
 
-#: gtk/gtkfilechooserwidget.c:1635
+#: gtk/gtkfilechooserwidget.c:1638
 msgid "The file could not be renamed"
 msgstr "Het bestand kon niet hernoemd worden"
 
-#: gtk/gtkfilechooserwidget.c:1980
+#: gtk/gtkfilechooserwidget.c:1983
 msgid "Could not select file"
 msgstr "Kon bestand niet selecteren"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Visit File"
 msgstr "Dit bestand _bezoeken"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2334
 msgid "_Open With File Manager"
 msgstr "_Openen met bestandsbeheer"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Copy Location"
 msgstr "_Locatie kopiëren"
 
-#: gtk/gtkfilechooserwidget.c:2333
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Add to Bookmarks"
 msgstr "_Toevoegen aan bladwijzers"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
+#: gtk/gtkfilechooserwidget.c:2337 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "_Hernoemen"
 
-#: gtk/gtkfilechooserwidget.c:2336
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Move to Trash"
 msgstr "Naar prullenbak _verplaatsen"
 
 # _b zou conflicteren met: _Bladeren naar andere mappen
-#: gtk/gtkfilechooserwidget.c:2340
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Hidden Files"
 msgstr "Verbo_rgen bestanden tonen"
 
 # de kolom met de groottes van de bestanden tonen
-#: gtk/gtkfilechooserwidget.c:2341
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Show _Size Column"
 msgstr "_Grootte-kolom tonen"
 
 # de kolom met de groottes van de bestanden tonen
-#: gtk/gtkfilechooserwidget.c:2342
+#: gtk/gtkfilechooserwidget.c:2345
 msgid "Show T_ype Column"
 msgstr "T_ype-kolom tonen"
 
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2346
 msgid "Show _Time"
 msgstr "_Tijd tonen"
 
-#: gtk/gtkfilechooserwidget.c:2344
+#: gtk/gtkfilechooserwidget.c:2347
 msgid "Sort _Folders before Files"
 msgstr "_Mappen vóór bestanden sorteren"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Locatie"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2719
+#: gtk/gtkfilechooserwidget.c:2722
 msgid "_Name:"
 msgstr "_Naam:"
 
-#: gtk/gtkfilechooserwidget.c:3344 gtk/gtkfilechooserwidget.c:3358
+#: gtk/gtkfilechooserwidget.c:3347 gtk/gtkfilechooserwidget.c:3361
 #, c-format
 msgid "Searching in %s"
 msgstr "Zoeken in %s"
 
-#: gtk/gtkfilechooserwidget.c:3364
+#: gtk/gtkfilechooserwidget.c:3367
 msgid "Searching"
 msgstr "Zoeken"
 
-#: gtk/gtkfilechooserwidget.c:3371
+#: gtk/gtkfilechooserwidget.c:3374
 msgid "Enter location"
 msgstr "Locatie invoeren"
 
-#: gtk/gtkfilechooserwidget.c:3373
+#: gtk/gtkfilechooserwidget.c:3376
 msgid "Enter location or URL"
 msgstr "Locatie of URL invoeren"
 
@@ -2647,95 +2647,95 @@ msgstr "Locatie of URL invoeren"
 # veranderd in Wijzigingsdatum.
 # 'Gewijzigd' zou ook kunnen (is korter) maar dan moet Nautilus ook aangepast
 # worden.
-#: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
+#: gtk/gtkfilechooserwidget.c:4454 gtk/gtkfilechooserwidget.c:7498
 #: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "Wijzigingsdatum"
 
-#: gtk/gtkfilechooserwidget.c:4729
+#: gtk/gtkfilechooserwidget.c:4734
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Kon de inhoud van %s niet lezen"
 
-#: gtk/gtkfilechooserwidget.c:4733
+#: gtk/gtkfilechooserwidget.c:4738
 msgid "Could not read the contents of the folder"
 msgstr "Kon de inhoud van de map niet lezen"
 
-#: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
+#: gtk/gtkfilechooserwidget.c:4898 gtk/gtkfilechooserwidget.c:4946
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
+#: gtk/gtkfilechooserwidget.c:4900 gtk/gtkfilechooserwidget.c:4948
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4899
+#: gtk/gtkfilechooserwidget.c:4904
 msgid "Yesterday"
 msgstr "Gisteren"
 
-#: gtk/gtkfilechooserwidget.c:4907
+#: gtk/gtkfilechooserwidget.c:4912
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4911
+#: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
 msgstr "Programma"
 
-#: gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfilechooserwidget.c:5016
 msgid "Audio"
 msgstr "Geluid"
 
-#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5017 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Lettertype"
 
-#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5018 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Image"
 
-#: gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Archive"
 msgstr "Archief"
 
-#: gtk/gtkfilechooserwidget.c:5015
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Markup"
 msgstr "Opmaak"
 
-#: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfilechooserwidget.c:5021 gtk/gtkfilechooserwidget.c:5022
 msgid "Text"
 msgstr "Tekst"
 
-#: gtk/gtkfilechooserwidget.c:5019
+#: gtk/gtkfilechooserwidget.c:5024
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:5020
+#: gtk/gtkfilechooserwidget.c:5025
 msgid "Contacts"
 msgstr "Contacten"
 
-#: gtk/gtkfilechooserwidget.c:5021
+#: gtk/gtkfilechooserwidget.c:5026
 msgid "Calendar"
 msgstr "Agenda"
 
-#: gtk/gtkfilechooserwidget.c:5022
+#: gtk/gtkfilechooserwidget.c:5027
 msgid "Document"
 msgstr "Document"
 
 # ligging/orientatie/positie/positionering
-#: gtk/gtkfilechooserwidget.c:5023
+#: gtk/gtkfilechooserwidget.c:5028
 msgid "Presentation"
 msgstr "Presentatie"
 
-#: gtk/gtkfilechooserwidget.c:5024
+#: gtk/gtkfilechooserwidget.c:5029
 msgid "Spreadsheet"
 msgstr "Rekenblad"
 
-#: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
+#: gtk/gtkfilechooserwidget.c:5060 gtk/gtkfilechooserwidget.c:5249
 #: gtk/inspector/prop-editor.c:1689
 msgid "Unknown"
 msgstr "Onbekend"
@@ -2743,20 +2743,20 @@ msgstr "Onbekend"
 # Dit is de titel van de persoonlijke map in de bestandkiezer
 # eigen map
 # persoonlijke map
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
+#: gtk/gtkfilechooserwidget.c:5288 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Persoonlijke map"
 
-#: gtk/gtkfilechooserwidget.c:5780
+#: gtk/gtkfilechooserwidget.c:5785
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan niet naar de map gaan omdat deze niet lokaal is"
 
-#: gtk/gtkfilechooserwidget.c:6566 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6571 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Een bestand met de naam ‘%s’ bestaat al. Wilt u het vervangen?"
 
-#: gtk/gtkfilechooserwidget.c:6569 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2764,23 +2764,23 @@ msgstr ""
 "Het bestand bestaat al in ‘%s’.  Bij vervangen zal de inhoud worden "
 "overschreven."
 
-#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6579 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: gtk/gtkfilechooserwidget.c:6793
+#: gtk/gtkfilechooserwidget.c:6798
 msgid "You do not have access to the specified folder."
 msgstr "U heeft geen toegang tot de specifieke map."
 
-#: gtk/gtkfilechooserwidget.c:7416
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "Could not send the search request"
 msgstr "Kon de zoekopdracht niet verzenden"
 
-#: gtk/gtkfilechooserwidget.c:7704
+#: gtk/gtkfilechooserwidget.c:7709
 msgid "Accessed"
 msgstr "Geopend"
 
-#: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
+#: gtk/gtkfilechooserwidget.c:8829 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "Map aanmaken"
 
@@ -2864,7 +2864,7 @@ msgstr "OpenGL-context aanmaken is mislukt"
 msgid "Application menu"
 msgstr "Toepassingenmenu"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9391
 msgid "Close"
 msgstr "Sluiten"
 
@@ -2916,12 +2916,12 @@ msgid "Error"
 msgstr "Fout"
 
 #. Open Link
-#: gtk/gtklabel.c:6668
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "Link _openen"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6677
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "Linkadres _kopiëren"
 
@@ -4168,24 +4168,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9329
+#: gtk/gtkwindow.c:9339
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: gtk/gtkwindow.c:9337
+#: gtk/gtkwindow.c:9347
 msgid "Resize"
 msgstr "Grootte wijzigen"
 
-#: gtk/gtkwindow.c:9368
+#: gtk/gtkwindow.c:9378
 msgid "Always on Top"
 msgstr "Altijd bovenop"
 
-#: gtk/gtkwindow.c:12803
+#: gtk/gtkwindow.c:12817
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Wilt u GTK+ Inspector gebruiken?"
 
-#: gtk/gtkwindow.c:12805
+#: gtk/gtkwindow.c:12819
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4196,7 +4196,7 @@ msgstr ""
 "inwendige van een GTK+ toepassing kunt verkennen en wijzigen. Het gebruik "
 "ervan kan ertoe leiden dat de toepassing afgebroken wordt of vastloopt."
 
-#: gtk/gtkwindow.c:12810
+#: gtk/gtkwindow.c:12824
 msgid "Don't show this message again"
 msgstr "Deze boodschap niet meer tonen"
 
@@ -4209,7 +4209,7 @@ msgstr "Activeren"
 msgid "State"
 msgstr "Status"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Voorvoegsel"
@@ -4273,15 +4273,19 @@ msgstr "Waarde"
 msgid "Show data"
 msgstr "Gegevens tonen"
 
-#: gtk/inspector/general.c:330
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "Geen"
 
-#: gtk/inspector/general.c:331
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Geen"
+
+#: gtk/inspector/general.c:550
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "IM-context is vastgesteld door GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:34
 msgid "GTK+ Version"
@@ -4291,31 +4295,39 @@ msgstr "GTK+-versie"
 msgid "GDK Backend"
 msgstr "GDK Backend"
 
-#: gtk/inspector/general.ui:115
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr "Pango-fontmap"
+
+#: gtk/inspector/general.ui:136
+msgid "Input Method"
+msgstr "Invoermethode"
+
+#: gtk/inspector/general.ui:183
 msgid "Application ID"
 msgstr "Toepassings-ID"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:217
 msgid "Resource Path"
 msgstr "Bronpad"
 
-#: gtk/inspector/general.ui:454
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "Scherm"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "RGBA visueel"
 
-#: gtk/inspector/general.ui:523
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "Samengesteld"
 
-#: gtk/inspector/general.ui:570
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "Versie GL"
 
-#: gtk/inspector/general.ui:605
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "Leverancier GL"
 
@@ -7957,12 +7969,6 @@ msgid "Wayland"
 msgstr "Wayland"
 
 #. ID
-#: modules/input/imwaylandgtk.c:82
-msgctxt "input method menu"
-msgid "Waylandgtk"
-msgstr "Waylandgtk"
-
-#. ID
 #: modules/input/imxim.c:26
 msgctxt "input method menu"
 msgid "X Input Method"
@@ -8591,6 +8597,10 @@ msgstr "testafdruk.%s"
 msgid "Print to Test Printer"
 msgstr "Afdrukken om printer te testen"
 
+#~ msgctxt "input method menu"
+#~ msgid "Waylandgtk"
+#~ msgstr "Waylandgtk"
+
 #~ msgid "Don't batch GDI requests"
 #~ msgstr "Geen GDI-verzoeken in de wacht zetten"
 
@@ -8756,13 +8766,13 @@ msgstr "Afdrukken om printer te testen"
 
 #~ msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 #~ msgstr ""
-#~ "Kan geen gegevens van klembord verkrijgen. GlobalLock(0x%p) mislukt: 0x"
-#~ "%lx."
+#~ "Kan geen gegevens van klembord verkrijgen. GlobalLock(0x%p) mislukt: "
+#~ "0x%lx."
 
 #~ msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 #~ msgstr ""
-#~ "Kan geen gegevens van klembord verkrijgen. GlobalSize(0x%p) mislukt: 0x"
-#~ "%lx."
+#~ "Kan geen gegevens van klembord verkrijgen. GlobalSize(0x%p) mislukt: "
+#~ "0x%lx."
 
 #~ msgid ""
 #~ "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
@@ -8796,8 +8806,8 @@ msgstr "Afdrukken om printer te testen"
 
 #~ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 #~ msgstr ""
-#~ "Kan geen gegevens van klembord verkrijgen. GetClipboardData() mislukt: 0x"
-#~ "%lx."
+#~ "Kan geen gegevens van klembord verkrijgen. GetClipboardData() mislukt: "
+#~ "0x%lx."
 
 #~ msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 #~ msgstr "Kan DnD-gegevens niet verkrijgen. GlobalLock(0x%p) mislukt: 0x%lx."
@@ -9364,10 +9374,6 @@ msgstr "Afdrukken om printer te testen"
 #~ msgid "Could not find application"
 #~ msgstr "Kon de link niet tonen"
 
-#, fuzzy
-#~ msgid "Input _Methods"
-#~ msgstr "X-Invoermethode"
-
 #~ msgid "_Insert Unicode Control Character"
 #~ msgstr "_Unicode controleteken invoegen"
 
@@ -9516,8 +9522,8 @@ msgstr "Afdrukken om printer te testen"
 #~ "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
 #~ "href=\"%s\">%s</a>"
 #~ msgstr ""
-#~ "Deze toepassing komt ZONDER ENIGE GARANTIE. Bezoek voor details <a href="
-#~ "\"%s\">%s</a>"
+#~ "Deze toepassing komt ZONDER ENIGE GARANTIE. Bezoek voor details <a "
+#~ "href=\"%s\">%s</a>"
 
 #, fuzzy
 #~ msgid "_Find applications online"
