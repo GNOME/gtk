@@ -104,16 +104,19 @@ gdk_pixbuf_get_from_window (GdkWindow *src,
    * by external applications.
    *
    * So be on the safe side and:
+   * - flush the Cairo state
    * - mark the surface as dirty, in case the GdkWindow was
    *   created from a foreign X11 surface
-   * - flush the Cairo state
+   *
+   * THE ORDER IS IMPORTANT. DO NOT CHANGE IT.
    *
    * For reference, see:
    * - https://bugzilla.gnome.org/show_bug.cgi?id=754952
    * - https://gitlab.gnome.org/GNOME/gtk/-/issues/4456
+   * - https://gitlab.gnome.org/GNOME/gtk/-/issues/5691
    */
-  cairo_surface_mark_dirty (surface);
   cairo_surface_flush (surface);
+  cairo_surface_mark_dirty (surface);
 
   if (cairo_surface_get_content (surface) & CAIRO_CONTENT_ALPHA)
     copy = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
