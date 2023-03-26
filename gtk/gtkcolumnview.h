@@ -109,6 +109,12 @@ void            gtk_column_view_set_enable_rubberband           (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_enable_rubberband           (GtkColumnView          *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_column_view_set_tab_behavior                (GtkColumnView          *self,
+                                                                 GtkListTabBehavior      tab_behavior);
+GDK_AVAILABLE_IN_4_12
+gboolean        gtk_column_view_get_tab_behavior                (GtkColumnView          *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_H__ */

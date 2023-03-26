@@ -25,11 +25,9 @@
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtklistitemwidgetprivate.h"
-#include "gtkmain.h"
-#include "gtkprivate.h"
-#include "gtkrbtreeprivate.h"
-#include "gtkwidgetprivate.h"
 #include "gtkmultiselection.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 /* Maximum number of list items created by the listview.
  * For debugging, you can set this to G_MAXUINT to ensure
@@ -145,11 +143,12 @@
 enum
 {
   PROP_0,
+  PROP_ENABLE_RUBBERBAND,
   PROP_FACTORY,
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
-  PROP_ENABLE_RUBBERBAND,
+  PROP_TAB_BEHAVIOR,
 
   N_PROPS
 };
@@ -627,6 +626,10 @@ gtk_list_view_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_ENABLE_RUBBERBAND:
+      g_value_set_boolean (value, gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)));
+      break;
+
     case PROP_FACTORY:
       g_value_set_object (value, self->factory);
       break;
@@ -643,8 +646,8 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_boolean (value, self->single_click_activate);
       break;
 
-    case PROP_ENABLE_RUBBERBAND:
-      g_value_set_boolean (value, gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)));
+    case PROP_TAB_BEHAVIOR:
+      g_value_set_enum (value, gtk_list_base_get_tab_behavior (GTK_LIST_BASE (self)));
       break;
 
     default:
@@ -663,6 +666,10 @@ gtk_list_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ENABLE_RUBBERBAND:
+      gtk_list_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
     case PROP_FACTORY:
       gtk_list_view_set_factory (self, g_value_get_object (value));
       break;
@@ -679,8 +686,8 @@ gtk_list_view_set_property (GObject      *object,
       gtk_list_view_set_single_click_activate (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ENABLE_RUBBERBAND:
-      gtk_list_view_set_enable_rubberband (self, g_value_get_boolean (value));
+    case PROP_TAB_BEHAVIOR:
+      gtk_list_view_set_tab_behavior (self, g_value_get_enum (value));
       break;
 
     default:
@@ -730,6 +737,16 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   gobject_class->set_property = gtk_list_view_set_property;
 
   /**
+   * GtkListView:enable-rubberband: (attributes org.gtk.Property.get=gtk_list_view_get_enable_rubberband org.gtk.Property.set=gtk_list_view_set_enable_rubberband)
+   *
+   * Allow rubberband selection.
+   */
+  properties[PROP_ENABLE_RUBBERBAND] =
+    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkListView:factory: (attributes org.gtk.Property.get=gtk_list_view_get_factory org.gtk.Property.set=gtk_list_view_set_factory)
    *
    * Factory for populating list items.
@@ -770,14 +787,17 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:enable-rubberband: (attributes org.gtk.Property.get=gtk_list_view_get_enable_rubberband org.gtk.Property.set=gtk_list_view_set_enable_rubberband)
+   * GtkListView:tab-behavior: (attributes org.gtk.Property.get=gtk_list_view_get_tab_behavior org.gtk.Property.set=gtk_list_view_set_tab_behavior)
    *
-   * Allow rubberband selection.
+   * Behavior of the <kbd>Tab</kbd> key
+   *
+   * Since: 4.12
    */
-  properties[PROP_ENABLE_RUBBERBAND] =
-    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_TAB_BEHAVIOR] =
+    g_param_spec_enum ("tab-behavior", NULL, NULL,
+                       GTK_TYPE_LIST_TAB_BEHAVIOR,
+                       GTK_LIST_TAB_ALL,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1089,3 +1109,45 @@ gtk_list_view_get_enable_rubberband (GtkListView *self)
 
   return gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self));
 }
+
+/**
+ * gtk_list_view_set_tab_behavior: (attributes org.gtk.Method.set_property=tab-behavior)
+ * @self: a `GtkListView`
+ * @tab_behavior: The desired tab behavior
+ *
+ * Sets the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_view_set_tab_behavior (GtkListView        *self,
+                                GtkListTabBehavior  tab_behavior)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  if (tab_behavior == gtk_list_base_get_tab_behavior (GTK_LIST_BASE (self)))
+    return;
+
+  gtk_list_base_set_tab_behavior (GTK_LIST_BASE (self), tab_behavior);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TAB_BEHAVIOR]);
+}
+
+/**
+ * gtk_list_view_get_tab_behavior: (attributes org.gtk.Method.get_property=tab-behavior)
+ * @self: a `GtkListView`
+ *
+ * Gets the behavior set for the <kbd>Tab</kbd> key.
+ *
+ * Returns: The behavior of the <kbd>Tab</kbd> key
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_list_view_get_tab_behavior (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), FALSE);
+
+  return gtk_list_base_get_tab_behavior (GTK_LIST_BASE (self));
+}
+

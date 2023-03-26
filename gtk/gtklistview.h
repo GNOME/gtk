@@ -76,6 +76,13 @@ void            gtk_list_view_set_enable_rubberband             (GtkListView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_list_view_get_enable_rubberband             (GtkListView            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_view_set_tab_behavior                  (GtkListView            *self,
+                                                                 GtkListTabBehavior      tab_behavior);
+GDK_AVAILABLE_IN_4_12
+gboolean        gtk_list_view_get_tab_behavior                  (GtkListView            *self);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListView, g_object_unref)
 
 G_END_DECLS
