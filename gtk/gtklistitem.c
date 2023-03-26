@@ -337,6 +337,12 @@ gtk_list_item_set_child (GtkListItem *self,
     {
       g_object_ref_sink (child);
       self->child = child;
+
+      /* Workaround that hopefully achieves good enough backwards
+       * compatibility with people using expanders.
+       */
+      if (!self->focusable_set)
+        gtk_list_item_set_focusable (self, !gtk_widget_get_focusable (child));
     }
 
   if (self->owner)
@@ -532,6 +538,8 @@ gtk_list_item_set_focusable (GtkListItem *self,
                              gboolean     focusable)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  self->focusable_set = TRUE;
 
   if (self->focusable == focusable)
     return;
