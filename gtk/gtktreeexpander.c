@@ -45,6 +45,11 @@
  * "listitem.toggle-expand" actions are provided to allow adding custom
  * UI for managing expanded state.
  *
+ * It is important to mention that you want to set the
+ * [property@Gtk.ListItem:focusable] property to FALSE when using this
+ * widget, as you want the keyboard focus to be in the treexpander, and not
+ * inside the list to make use of the keybindings.
+ *
  * The `GtkTreeListModel` must be set to not be passthrough. Then it
  * will provide [class@Gtk.TreeListRow] items which can be set via
  * [method@Gtk.TreeExpander.set_list_row] on the expander.
