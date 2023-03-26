@@ -55,7 +55,7 @@ demos = files([
   'listview_colors.c',
   'listview_filebrowser.c',
   'listview_minesweeper.c',
-  'dropdown.c',
+  'listview_selections.c',
   'listview_settings.c',
   'listview_ucd.c',
   'listview_weather.c',

@@ -849,7 +849,7 @@ suggestion_entry_init (SuggestionEntry *self)
       GtkCssProvider *provider;
 
       provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_resource (provider, "/dropdown/suggestionentry.css");
+      gtk_css_provider_load_from_resource (provider, "/listview_selections/suggestionentry.css");
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                                   GTK_STYLE_PROVIDER (provider),
                                                   800);
