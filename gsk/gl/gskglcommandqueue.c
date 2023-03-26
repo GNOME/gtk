@@ -248,9 +248,19 @@ will_ignore_batch (GskGLCommandQueue *self)
 }
 
 static inline GLint
-filter_from_index (guint index)
+min_filter_from_index (guint index)
 {
   GLint filters[3] = { GL_LINEAR, GL_NEAREST, GL_LINEAR_MIPMAP_LINEAR };
+
+  g_assert (index < GSK_GL_N_FILTERS);
+
+  return filters[index];
+}
+
+static inline GLint
+mag_filter_from_index (guint index)
+{
+  GLint filters[3] = { GL_LINEAR, GL_NEAREST, GL_LINEAR };
 
   g_assert (index < GSK_GL_N_FILTERS);
 
@@ -489,8 +499,8 @@ gsk_gl_command_queue_new (GdkGLContext      *context,
       glGenSamplers (G_N_ELEMENTS (self->samplers), self->samplers);
       for (i = 0; i < G_N_ELEMENTS (self->samplers); i++)
         {
-          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MIN_FILTER, filter_from_index(i / GSK_GL_N_FILTERS));
-          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MAG_FILTER, filter_from_index(i % GSK_GL_N_FILTERS));
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MIN_FILTER, min_filter_from_index (i / GSK_GL_N_FILTERS));
+          glSamplerParameteri (self->samplers[i], GL_TEXTURE_MAG_FILTER, mag_filter_from_index (i % GSK_GL_N_FILTERS));
           glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
           glSamplerParameteri (self->samplers[i], GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         }
@@ -1161,8 +1171,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                       textures[bind->texture] = bind->id;
                       if (!self->has_samplers)
                         {
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_from_index(bind->sampler / GSK_GL_N_FILTERS));
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_from_index(bind->sampler % GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
                         }
                     }
 
@@ -1172,8 +1182,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                         glBindSampler (bind->texture, self->samplers[bind->sampler]);
                       else
                         {
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_from_index(bind->sampler / GSK_GL_N_FILTERS));
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_from_index(bind->sampler % GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
+                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
                         }
                       samplers[bind->texture] = bind->sampler;
                     }
