@@ -991,7 +991,7 @@ gdk_wayland_toplevel_set_startup_id (GdkWaylandToplevel *toplevel,
       startup_id = free_me;
     }
 
-  if (startup_id)
+  if (display->xdg_activation && startup_id)
     xdg_activation_v1_activate (display->xdg_activation,
                                 startup_id,
                                 surface->display_server.wl_surface);
