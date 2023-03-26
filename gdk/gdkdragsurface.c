@@ -69,19 +69,21 @@ gdk_drag_surface_default_init (GdkDragSurfaceInterface *iface)
   /**
    * GdkDragSurface::compute-size:
    * @surface: a `GdkDragSurface`
-   * @size: (type Gdk.DragSurfaceSize) (out caller-allocates): a
-   * `GdkDragSurfaceSize`
+   * @size: (type Gdk.DragSurfaceSize): the size of the drag surface
    *
    * Emitted when the size for the surface needs to be computed, when it is
    * present.
    *
-   * It will normally be emitted during the native surface layout cycle when the
-   * surface size needs to be recomputed.
+   * This signal will normally be emitted during the native surface layout
+   * cycle when the surface size needs to be recomputed.
    *
-   * It is the responsibility of the drag surface user to handle this signal and
-   * compute the desired size of the surface, storing the computed size in the
-   * [struct@Gdk.DragSurfaceSize] object. Failing to do so will result in an
-   * arbitrary size being used as a result.
+   * It is the responsibility of the drag surface user to handle this signal
+   * and compute the desired size of the surface, storing the computed size
+   * in the [struct@Gdk.DragSurfaceSize] object that is passed to the signal
+   * handler, using [method@Gdk.DragSurfaceSize.set_size].
+   *
+   * Failing to set a size so will result in an arbitrary size being used as
+   * a result.
    *
    * Since: 4.12
    */
@@ -108,8 +110,8 @@ gdk_drag_surface_default_init (GdkDragSurfaceInterface *iface)
  */
 gboolean
 gdk_drag_surface_present (GdkDragSurface *drag_surface,
-                          int          width,
-                          int          height)
+                          int             width,
+                          int             height)
 {
   g_return_val_if_fail (GDK_IS_DRAG_SURFACE (drag_surface), FALSE);
   g_return_val_if_fail (width > 0, FALSE);
