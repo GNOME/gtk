@@ -20,6 +20,7 @@
           <object class="GtkScrolledWindow">
             <child>
               <object class="GtkListView" id="listview">
+                <property name="tab-behavior">item</property>
                 <style>
                   <class name="navigation-sidebar"/>
                 </style>
@@ -76,6 +77,7 @@
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkColumnView" id="columnview">
+                    <property name="tab-behavior">cell</property>
                     <style>
                       <class name="data-table"/>
                     </style>

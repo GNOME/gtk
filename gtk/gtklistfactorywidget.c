@@ -205,30 +205,6 @@ gtk_list_factory_widget_update (GtkListItemBase *base,
 }
 
 static void
-gtk_list_factory_widget_root (GtkWidget *widget)
-{
-  GtkListFactoryWidget *self = GTK_LIST_FACTORY_WIDGET (widget);
-  GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
-
-  GTK_WIDGET_CLASS (gtk_list_factory_widget_parent_class)->root (widget);
-
-  if (priv->factory)
-    gtk_list_factory_widget_setup_factory (self);
-}
-
-static void
-gtk_list_factory_widget_unroot (GtkWidget *widget)
-{
-  GtkListFactoryWidget *self = GTK_LIST_FACTORY_WIDGET (widget);
-  GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
-
-  GTK_WIDGET_CLASS (gtk_list_factory_widget_parent_class)->unroot (widget);
-
-  if (priv->object)
-    gtk_list_factory_widget_teardown_factory (self);
-}
-
-static void
 gtk_list_factory_widget_set_property (GObject      *object,
                                       guint         property_id,
                                       const GValue *value,
@@ -261,14 +237,24 @@ gtk_list_factory_widget_set_property (GObject      *object,
 }
 
 static void
+gtk_list_factory_widget_clear_factory (GtkListFactoryWidget *self)
+{
+  GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
+
+  if (priv->factory == NULL)
+    return;
+
+  if (priv->object)
+    gtk_list_factory_widget_teardown_factory (self);
+
+  g_clear_object (&priv->factory);
+}
+static void
 gtk_list_factory_widget_dispose (GObject *object)
 {
   GtkListFactoryWidget *self = GTK_LIST_FACTORY_WIDGET (object);
-  GtkListFactoryWidgetPrivate *priv = gtk_list_factory_widget_get_instance_private (self);
 
-  g_assert (priv->object == NULL);
-
-  g_clear_object (&priv->factory);
+  gtk_list_factory_widget_clear_factory (self);
 
   G_OBJECT_CLASS (gtk_list_factory_widget_parent_class)->dispose (object);
 }
@@ -318,9 +304,6 @@ gtk_list_factory_widget_class_init (GtkListFactoryWidgetClass *klass)
   klass->teardown_object = gtk_list_factory_widget_default_teardown_object;
 
   base_class->update = gtk_list_factory_widget_update;
-
-  widget_class->root = gtk_list_factory_widget_root;
-  widget_class->unroot = gtk_list_factory_widget_unroot;
 
   gobject_class->set_property = gtk_list_factory_widget_set_property;
   gobject_class->dispose = gtk_list_factory_widget_dispose;
@@ -553,19 +536,13 @@ gtk_list_factory_widget_set_factory (GtkListFactoryWidget *self,
   if (priv->factory == factory)
     return;
 
-  if (priv->factory)
-    {
-      if (priv->object)
-        gtk_list_factory_widget_teardown_factory (self);
-      g_clear_object (&priv->factory);
-    }
+  gtk_list_factory_widget_clear_factory (self);
 
   if (factory)
     {
       priv->factory = g_object_ref (factory);
 
-      if (gtk_widget_get_root (GTK_WIDGET (self)))
-        gtk_list_factory_widget_setup_factory (self);
+      gtk_list_factory_widget_setup_factory (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);

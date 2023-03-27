@@ -215,13 +215,58 @@ gtk_list_view_split (GtkListBase *base,
   return new_tile;
 }
 
+/* We define the listview as **inert** when the factory isn't used. */
+static gboolean
+gtk_list_view_is_inert (GtkListView *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  return !gtk_widget_get_visible (widget) ||
+         gtk_widget_get_root (widget) == NULL || 
+         self->factory == NULL;
+}
+
+static void
+gtk_list_view_update_factories_with (GtkListView        *self,
+                                     GtkListItemFactory *factory)
+{
+  GtkListTile *tile;
+
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->widget)
+        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+    }
+}
+
+static void
+gtk_list_view_update_factories (GtkListView *self)
+{
+  gtk_list_view_update_factories_with (self,
+                                       gtk_list_view_is_inert (self) ? NULL : self->factory);
+}
+
+static void
+gtk_list_view_clear_factories (GtkListView *self)
+{
+  gtk_list_view_update_factories_with (self, NULL);
+}
+
 static GtkListItemBase *
 gtk_list_view_create_list_widget (GtkListBase *base)
 {
   GtkListView *self = GTK_LIST_VIEW (base);
+  GtkListItemFactory *factory;
   GtkWidget *result;
 
-  result = gtk_list_item_widget_new (self->factory,
+  if (gtk_list_view_is_inert (self))
+    factory = NULL;
+  else
+    factory = self->factory;
+
+  result = gtk_list_item_widget_new (factory,
                                      "row",
                                      GTK_ACCESSIBLE_ROLE_LIST_ITEM);
 
@@ -607,6 +652,50 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_list_view_root (GtkWidget *widget)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_list_view_parent_class)->root (widget);
+
+  if (!gtk_list_view_is_inert (self))
+    gtk_list_view_update_factories (self);
+}
+
+static void
+gtk_list_view_unroot (GtkWidget *widget)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+
+  if (!gtk_list_view_is_inert (self))
+    gtk_list_view_clear_factories (self);
+
+  GTK_WIDGET_CLASS (gtk_list_view_parent_class)->unroot (widget);
+}
+
+static void
+gtk_list_view_show (GtkWidget *widget)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_list_view_parent_class)->show (widget);
+
+  if (!gtk_list_view_is_inert (self))
+    gtk_list_view_update_factories (self);
+}
+
+static void
+gtk_list_view_hide (GtkWidget *widget)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+
+  if (!gtk_list_view_is_inert (self))
+    gtk_list_view_clear_factories (self);
+
+  GTK_WIDGET_CLASS (gtk_list_view_parent_class)->hide (widget);
+}
+
+static void
 gtk_list_view_dispose (GObject *object)
 {
   GtkListView *self = GTK_LIST_VIEW (object);
@@ -731,6 +820,10 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   widget_class->measure = gtk_list_view_measure;
   widget_class->size_allocate = gtk_list_view_size_allocate;
+  widget_class->root = gtk_list_view_root;
+  widget_class->unroot = gtk_list_view_unroot;
+  widget_class->show = gtk_list_view_show;
+  widget_class->hide = gtk_list_view_hide;
 
   gobject_class->dispose = gtk_list_view_dispose;
   gobject_class->get_property = gtk_list_view_get_property;
@@ -961,21 +1054,18 @@ void
 gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
-  GtkListTile *tile;
+  gboolean was_inert;
 
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
+  was_inert = gtk_list_view_is_inert (self);
+
   if (!g_set_object (&self->factory, factory))
     return;
 
-  for (tile = gtk_list_item_manager_get_first (self->item_manager);
-       tile != NULL;
-       tile = gtk_rb_tree_node_get_next (tile))
-    {
-      if (tile->widget)
-        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
-    }
+  if (!was_inert || !gtk_list_view_is_inert (self))
+    gtk_list_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
