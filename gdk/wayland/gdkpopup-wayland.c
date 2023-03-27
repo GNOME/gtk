@@ -398,7 +398,11 @@ gdk_wayland_popup_handle_configure (GdkWaylandSurface *wayland_surface)
     g_warn_if_reached ();
 
   if (wayland_popup->pending.has_repositioned_token)
-    wayland_popup->received_reposition_token = wayland_popup->pending.repositioned_token;
+    {
+      wayland_popup->received_reposition_token =
+        wayland_popup->pending.repositioned_token;
+      wayland_popup->pending.has_repositioned_token = FALSE;
+    }
 
   switch (wayland_popup->state)
     {
@@ -967,6 +971,9 @@ gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
     default:
       g_assert_not_reached ();
     }
+
+  wayland_popup->received_reposition_token = 0;
+  wayland_popup->reposition_token = 0;
 
   gdk_popup_layout_get_shadow_width (layout,
                                      &impl->shadow_left,
