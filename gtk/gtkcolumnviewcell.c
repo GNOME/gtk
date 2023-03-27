@@ -58,8 +58,18 @@ gtk_column_view_cell_create_object (GtkListFactoryWidget *fw)
 
   gtk_list_item_set_selectable (list_item, FALSE);
   gtk_list_item_set_activatable (list_item, FALSE);
+  gtk_list_item_set_focusable (list_item, FALSE);
 
   return list_item;
+}
+
+static void
+gtk_column_view_cell_teardown_object (GtkListFactoryWidget *fw,
+                                      gpointer              object)
+{
+  GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_parent_class)->teardown_object (fw, object);
+
+  gtk_widget_set_focusable (GTK_WIDGET (fw), FALSE);
 }
 
 static int
@@ -193,6 +203,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   factory_class->create_object = gtk_column_view_cell_create_object;
+  factory_class->teardown_object = gtk_column_view_cell_teardown_object;
 
   widget_class->measure = gtk_column_view_cell_measure;
   widget_class->size_allocate = gtk_column_view_cell_size_allocate;
