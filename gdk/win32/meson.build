@@ -11,6 +11,7 @@ gdk_win32_sources = files(
   'gdkevents-win32.c',
   'gdkgeometry-win32.c',
   'gdkglcontext-win32.c',
+  'gdkglcontext-win32-wgl-private.c',
   'gdkglobals-win32.c',
   'gdkkeys-win32.c',
   'gdkkeys-win32-impl.c',
@@ -51,7 +52,8 @@ install_headers('gdkwin32.h', subdir: 'gtk-3.0/gdk')
 
 gdk_win32_deps = [ # FIXME
     pangowin32_dep,
-    meson.get_compiler('c').find_library('hid')
+    cc.find_library('hid'),
+    cc.find_library('opengl32')
 ]
 
 libgdk_win32 = static_library('gdk-win32',
