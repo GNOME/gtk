@@ -586,13 +586,6 @@ _gdk_wayland_display_open (const char *display_name)
 
   GDK_DEBUG (MISC, "opening display %s", display_name ? display_name : "");
 
-  /* If this variable is unset then wayland initialisation will surely
-   * fail, logging a fatal error in the process.  Save ourselves from
-   * that.
-   */
-  if (g_getenv ("XDG_RUNTIME_DIR") == NULL)
-    return NULL;
-
   wl_log_set_handler_client (log_handler);
 
   wl_display = wl_display_connect (display_name);
