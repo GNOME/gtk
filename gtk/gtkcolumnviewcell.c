@@ -25,6 +25,7 @@
 #include "gtkcolumnviewrowwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtklistitemprivate.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
@@ -47,6 +48,19 @@ struct _GtkColumnViewCellClass
 };
 
 G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM_WIDGET)
+
+static gpointer
+gtk_column_view_cell_create_object (GtkListFactoryWidget *fw)
+{
+  GtkListItem *list_item;
+
+  list_item = gtk_list_item_new ();
+
+  gtk_list_item_set_selectable (list_item, FALSE);
+  gtk_list_item_set_activatable (list_item, FALSE);
+
+  return list_item;
+}
 
 static int
 get_number (GtkCssValue *value)
@@ -174,8 +188,11 @@ gtk_column_view_cell_get_request_mode (GtkWidget *widget)
 static void
 gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
 {
+  GtkListFactoryWidgetClass *factory_class = GTK_LIST_FACTORY_WIDGET_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  factory_class->create_object = gtk_column_view_cell_create_object;
 
   widget_class->measure = gtk_column_view_cell_measure;
   widget_class->size_allocate = gtk_column_view_cell_size_allocate;
