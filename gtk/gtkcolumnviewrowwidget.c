@@ -23,7 +23,7 @@
 
 #include "gtkbinlayout.h"
 #include "gtkcolumnviewprivate.h"
-#include "gtkcolumnviewcellprivate.h"
+#include "gtkcolumnviewcellwidgetprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewrowprivate.h"
 #include "gtkcolumnviewtitleprivate.h"
@@ -57,8 +57,8 @@ gtk_column_view_row_widget_is_header (GtkColumnViewRowWidget *self)
 static GtkColumnViewColumn *
 gtk_column_view_row_child_get_column (GtkWidget *child)
 {
-  if (GTK_IS_COLUMN_VIEW_CELL (child))
-    return gtk_column_view_cell_get_column (GTK_COLUMN_VIEW_CELL (child));
+  if (GTK_IS_COLUMN_VIEW_CELL_WIDGET (child))
+    return gtk_column_view_cell_widget_get_column (GTK_COLUMN_VIEW_CELL_WIDGET (child));
   else
     return gtk_column_view_title_get_column (GTK_COLUMN_VIEW_TITLE (child));
 
@@ -373,7 +373,7 @@ gtk_column_view_row_widget_root (GtkWidget *widget)
             {
               GtkWidget *cell;
 
-              cell = gtk_column_view_cell_new (column);
+              cell = gtk_column_view_cell_widget_new (column);
               gtk_column_view_row_widget_add_child (self, cell);
               gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
                                          gtk_list_item_base_get_position (base),

@@ -38,7 +38,7 @@ gtk_private_sources = files([
   'gtkcolorpickershell.c',
   'gtkcolorscale.c',
   'gtkcolorswatch.c',
-  'gtkcolumnviewcell.c',
+  'gtkcolumnviewcellwidget.c',
   'gtkcolumnviewrowwidget.c',
   'gtkcolumnviewtitle.c',
   'gtkconstraintexpression.c',
