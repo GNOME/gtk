@@ -261,15 +261,16 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   /**
    * GdkToplevel::compute-size:
    * @toplevel: a `GdkToplevel`
-   * @size: (type Gdk.ToplevelSize) (out caller-allocates): a `GdkToplevelSize`
+   * @size: (type Gdk.ToplevelSize): a `GdkToplevelSize`
    *
    * Emitted when the size for the surface needs to be computed, when
    * it is present.
    *
-   * It will normally be emitted during or after [method@Gdk.Toplevel.present],
-   * depending on the configuration received by the windowing system.
-   * It may also be emitted at any other point in time, in response
-   * to the windowing system spontaneously changing the configuration.
+   * This signal will normally be emitted during or after a call to
+   * [method@Gdk.Toplevel.present], depending on the configuration
+   * received by the windowing system. It may also be emitted at any
+   * other point in time, in response to the windowing system
+   * spontaneously changing the configuration of the toplevel surface.
    *
    * It is the responsibility of the toplevel user to handle this signal
    * and compute the desired size of the toplevel, given the information
