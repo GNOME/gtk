@@ -68,8 +68,8 @@
  * that paintables are never made smaller than their ideal size - but
  * be careful if you do not know the size of the paintable in use (like
  * when displaying user-loaded images). This can easily cause the picture to
- * grow larger than the screen. And [property@GtkWidget:halign] and
- * [property@GtkWidget:valign] can be used to make sure the paintable doesn't
+ * grow larger than the screen. And [property@Gtk.Widget:halign] and
+ * [property@Gtk.Widget:valign] can be used to make sure the paintable doesn't
  * fill all available space but is instead displayed at its original size.
  *
  * ## CSS nodes

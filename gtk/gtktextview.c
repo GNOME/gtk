@@ -1002,7 +1002,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * A negative value of indent will produce a hanging indentation.
    * That is, the first line will have the full width, and subsequent
    * lines will be indented by the absolute value of indent.
-   * 
+   *
    */
   g_object_class_install_property (gobject_class,
                                    PROP_INDENT,
@@ -3759,7 +3759,7 @@ gtk_text_view_toggle_cursor_visible (GtkTextView *text_view)
  * cursor, so you may want to turn the cursor off.
  *
  * Note that this property may be overridden by the
- * [property@GtkSettings:gtk-keynav-use-caret] setting.
+ * [property@Gtk.Settings:gtk-keynav-use-caret] setting.
  */
 void
 gtk_text_view_set_cursor_visible (GtkTextView *text_view,
