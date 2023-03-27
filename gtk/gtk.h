@@ -87,6 +87,7 @@
 #include <gtk/gtkcolorutils.h>
 #include <gtk/gtkcolumnview.h>
 #include <gtk/gtkcolumnviewcolumn.h>
+#include <gtk/gtkcolumnviewrow.h>
 #include <gtk/gtkcolumnviewsorter.h>
 #include <gtk/deprecated/gtkcombobox.h>
 #include <gtk/deprecated/gtkcomboboxtext.h>
