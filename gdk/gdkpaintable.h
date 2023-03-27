@@ -37,10 +37,10 @@ G_DECLARE_INTERFACE (GdkPaintable, gdk_paintable, GDK, PAINTABLE, GObject)
 /**
  * GdkPaintableFlags:
  * @GDK_PAINTABLE_STATIC_SIZE: The size is immutable.
- *   The [signal@GdkPaintable::invalidate-size] signal will never be
+ *   The [signal@Gdk.Paintable::invalidate-size] signal will never be
  *   emitted.
  * @GDK_PAINTABLE_STATIC_CONTENTS: The content is immutable.
- *   The [signal@GdkPaintable::invalidate-contents] signal will never be
+ *   The [signal@Gdk.Paintable::invalidate-contents] signal will never be
  *   emitted.
  *
  * Flags about a paintable object.
@@ -97,7 +97,7 @@ struct _GdkPaintableInterface
                                                          double                  height);
   /* get the current contents in an immutable form (optional) */
   GdkPaintable *        (* get_current_image)           (GdkPaintable           *paintable);
-   
+
   /* get flags for potential optimizations (optional) */
   GdkPaintableFlags     (* get_flags)                   (GdkPaintable           *paintable);
   /* preferred width of paintable or 0 if it has no width (optional) */
