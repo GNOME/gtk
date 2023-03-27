@@ -50,7 +50,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * to do, it is suggested that you scale your paintable ignoring any potential
  * aspect ratio.
  *
- * The contents that a `GdkPaintable` produces may depend on the [class@GdkSnapshot]
+ * The contents that a `GdkPaintable` produces may depend on the [class@Gdk.Snapshot]
  * passed to it. For example, paintables may decide to use more detailed images
  * on higher resolution screens or when OpenGL is available. A `GdkPaintable`
  * will however always produce the same output for the same snapshot.
@@ -58,7 +58,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * A `GdkPaintable` may change its contents, meaning that it will now produce
  * a different output with the same snapshot. Once that happens, it will call
  * [method@Gdk.Paintable.invalidate_contents] which will emit the
- * [signal@GdkPaintable::invalidate-contents] signal. If a paintable is known
+ * [signal@Gdk.Paintable::invalidate-contents] signal. If a paintable is known
  * to never change its contents, it will set the %GDK_PAINTABLE_STATIC_CONTENTS
  * flag. If a consumer cannot deal with changing contents, it may call
  * [method@Gdk.Paintable.get_current_image] which will return a static
@@ -69,7 +69,7 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * can use this information to layout thepaintable appropriately. Just like the
  * contents, the size of a paintable can change. A paintable will indicate this
  * by calling [method@Gdk.Paintable.invalidate_size] which will emit the
- * [signal@GdkPaintable::invalidate-size] signal. And just like for contents,
+ * [signal@Gdk.Paintable::invalidate-size] signal. And just like for contents,
  * if a paintable is known to never change its size, it will set the
  * %GDK_PAINTABLE_STATIC_SIZE flag.
  *
@@ -529,7 +529,7 @@ gdk_paintable_compute_concrete_size (GdkPaintable *paintable,
            * the missing dimension is calculated from the present
            * dimension and the intrinsic aspect ratio.
            * Otherwise, the missing dimension is taken from the default
-           * object size. 
+           * object size.
            */
           if (image_width)
             *concrete_width = image_width;
@@ -559,7 +559,7 @@ gdk_paintable_compute_concrete_size (GdkPaintable *paintable,
    * dimensions, the missing dimension is taken from the object's intrinsic
    * dimensions.
    * Otherwise, the missing dimension of the concrete object size is taken
-   * from the default object size. 
+   * from the default object size.
    */
   if (specified_width)
     {

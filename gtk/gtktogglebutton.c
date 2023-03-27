@@ -391,7 +391,7 @@ gtk_toggle_button_new_with_mnemonic (const char *label)
  * and %FALSE to raise it.
  *
  * If the status of the button changes, this action causes the
- * [signal@GtkToggleButton::toggled] signal to be emitted.
+ * [signal@Gtk.ToggleButton::toggled] signal to be emitted.
  */
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,

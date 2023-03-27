@@ -3859,7 +3859,7 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
 
   if (!priv->alloc_needed_on_child)
     return;
-  
+
   priv->alloc_needed_on_child = FALSE;
 
   for (child = _gtk_widget_get_first_child (widget);
@@ -4040,7 +4040,7 @@ gtk_widget_allocate (GtkWidget    *widget,
     {
       gtk_widget_ensure_allocate_on_children (widget);
     }
-  else 
+  else
     {
       priv->width = adjusted.width;
       priv->height = adjusted.height;
@@ -4084,7 +4084,7 @@ gtk_widget_allocate (GtkWidget    *widget,
       if (size_changed || baseline_changed)
         gtk_widget_queue_draw (widget);
     }
-  
+
   if (transform_changed && priv->parent)
     gtk_widget_queue_draw (priv->parent);
 
@@ -4254,7 +4254,7 @@ gtk_widget_compute_point (GtkWidget              *widget,
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
  * initialization. It does not provide for user_data, if you need that,
- * you will have to use [method@GtkWidgetClass.add_shortcut] with a custom
+ * you will have to use [method@Gtk.WidgetClass.add_shortcut] with a custom
  * shortcut.
  */
 void
@@ -11377,7 +11377,7 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
  * this class’s template data.
  *
  * Note that this must be called from a composite widget classes class
- * initializer after calling [method@GtkWidgetClass.set_template].
+ * initializer after calling [method@Gtk.WidgetClass.set_template].
  */
 void
 gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
