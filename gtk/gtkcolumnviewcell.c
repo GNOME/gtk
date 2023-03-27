@@ -138,43 +138,24 @@ gtk_column_view_cell_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_column_view_cell_root (GtkWidget *widget)
-{
-  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (widget);
-
-  GTK_WIDGET_CLASS (gtk_column_view_cell_parent_class)->root (widget);
-
-  self->next_cell = gtk_column_view_column_get_first_cell (self->column);
-  if (self->next_cell)
-    self->next_cell->prev_cell = self;
-
-  gtk_column_view_column_add_cell (self->column, self);
-}
-
-static void
-gtk_column_view_cell_unroot (GtkWidget *widget)
-{
-  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (widget);
-
-  gtk_column_view_column_remove_cell (self->column, self);
-
-  if (self->prev_cell)
-    self->prev_cell->next_cell = self->next_cell;
-  if (self->next_cell)
-    self->next_cell->prev_cell = self->prev_cell;
-
-  self->prev_cell = NULL;
-  self->next_cell = NULL;
-
-  GTK_WIDGET_CLASS (gtk_column_view_cell_parent_class)->unroot (widget);
-}
-
-static void
 gtk_column_view_cell_dispose (GObject *object)
 {
   GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (object);
 
-  g_clear_object (&self->column);
+  if (self->column)
+    {
+      gtk_column_view_column_remove_cell (self->column, self);
+
+      if (self->prev_cell)
+        self->prev_cell->next_cell = self->next_cell;
+      if (self->next_cell)
+        self->next_cell->prev_cell = self->prev_cell;
+
+      self->prev_cell = NULL;
+      self->next_cell = NULL;
+
+      g_clear_object (&self->column);
+    }
 
   G_OBJECT_CLASS (gtk_column_view_cell_parent_class)->dispose (object);
 }
@@ -196,8 +177,6 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  widget_class->root = gtk_column_view_cell_root;
-  widget_class->unroot = gtk_column_view_cell_unroot;
   widget_class->measure = gtk_column_view_cell_measure;
   widget_class->size_allocate = gtk_column_view_cell_size_allocate;
   widget_class->get_request_mode = gtk_column_view_cell_get_request_mode;
@@ -232,16 +211,21 @@ gtk_column_view_cell_init (GtkColumnViewCell *self)
 GtkWidget *
 gtk_column_view_cell_new (GtkColumnViewColumn *column)
 {
-  GtkColumnViewCell *cell;
+  GtkColumnViewCell *self;
 
-  cell = g_object_new (GTK_TYPE_COLUMN_VIEW_CELL,
+  self = g_object_new (GTK_TYPE_COLUMN_VIEW_CELL,
                        "factory", gtk_column_view_column_get_factory (column),
-                       "visible", gtk_column_view_column_get_visible (column),
                        NULL);
 
-  cell->column = g_object_ref (column);
+  self->column = g_object_ref (column);
 
-  return GTK_WIDGET (cell);
+  self->next_cell = gtk_column_view_column_get_first_cell (self->column);
+  if (self->next_cell)
+    self->next_cell->prev_cell = self;
+
+  gtk_column_view_column_add_cell (self->column, self);
+
+  return GTK_WIDGET (self);
 }
 
 void
