@@ -634,24 +634,22 @@ gtk_init_check (void)
  * gtk_init:
  *
  * Call this function before using any other GTK functions in your GUI
- * applications.  It will initialize everything needed to operate the
+ * applications. It will initialize everything needed to operate the
  * toolkit.
  *
- * If you are using `GtkApplication`, you don't have to call gtk_init()
- * or gtk_init_check(); the `GApplication::startup` handler
- * does it for you.
+ * If you are using `GtkApplication`, you don't have to call this
+ * function; the `GApplication::startup` handler does it for you.
  *
  * This function will terminate your program if it was unable to
  * initialize the windowing system for some reason. If you want
- * your program to fall back to a textual interface you want to
- * call gtk_init_check() instead.
+ * your program to fall back to a textual interface, call
+ * [func@Gtk.init_check] instead.
  *
- * GTK calls `signal (SIGPIPE, SIG_IGN)`
- * during initialization, to ignore SIGPIPE signals, since these are
- * almost never wanted in graphical applications. If you do need to
- * handle SIGPIPE for some reason, reset the handler after gtk_init(),
- * but notice that other libraries (e.g. libdbus or gvfs) might do
- * similar things.
+ * GTK calls `signal (SIGPIPE, SIG_IGN)` during initialization, to ignore
+ * SIGPIPE signals, since these are almost never wanted in graphical
+ * applications. If you do need to handle SIGPIPE for some reason, reset
+ * the handler after gtk_init(), but notice that other libraries (e.g.
+ * libdbus or gvfs) might do similar things.
  */
 void
 gtk_init (void)
@@ -728,8 +726,9 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
 /**
  * gtk_is_initialized:
  *
- * Use this function to check if GTK has been initialized with gtk_init()
- * or gtk_init_check().
+ * Use this function to check if GTK has been initialized.
+ *
+ * See [func@Gtk.init].
  *
  * Returns: the initialization status
  */
@@ -766,12 +765,11 @@ gtk_is_initialized (void)
  * update_locale (const char *new_locale)
  * {
  *   setlocale (LC_ALL, new_locale);
- *   GtkTextDirection direction = gtk_get_locale_direction ();
- *   gtk_widget_set_default_direction (direction);
+ *   gtk_widget_set_default_direction (gtk_get_locale_direction ());
  * }
  * ]|
  *
- * Returns: the `GtkTextDirection` of the current locale
+ * Returns: the direction of the current locale
  */
 GtkTextDirection
 gtk_get_locale_direction (void)
@@ -822,12 +820,10 @@ gtk_get_locale_direction (void)
  * locale. It determines, for example, whether GTK uses
  * the right-to-left or left-to-right text direction.
  *
- * This function is equivalent to
- * [func@Pango.Language.get_default].
+ * This function is equivalent to [func@Pango.Language.get_default].
  * See that function for details.
  *
- * Returns: (transfer none): the default language as a
- *   `PangoLanguage`
+ * Returns: (transfer none): the default language
  */
 PangoLanguage *
 gtk_get_default_language (void)
