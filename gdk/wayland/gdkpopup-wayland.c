@@ -748,6 +748,8 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
   GdkRectangle geometry;
   uint32_t constraint_adjustment = ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_NONE;
   const GdkRectangle *anchor_rect;
+  int anchor_rect_x, anchor_rect_y;
+  int anchor_rect_x2, anchor_rect_y2;
   int real_anchor_rect_x, real_anchor_rect_y;
   int anchor_rect_width, anchor_rect_height;
   int rect_anchor_dx;
@@ -776,11 +778,36 @@ create_dynamic_positioner (GdkWaylandPopup *wayland_popup,
   gdk_wayland_surface_get_window_geometry (surface->parent, &parent_geometry);
 
   anchor_rect = gdk_popup_layout_get_anchor_rect (layout);
-  real_anchor_rect_x = anchor_rect->x - parent_geometry.x;
-  real_anchor_rect_y = anchor_rect->y - parent_geometry.y;
 
-  anchor_rect_width = MAX (anchor_rect->width, 1);
-  anchor_rect_height = MAX (anchor_rect->height, 1);
+  /* Wayland protocol requires that the anchor rect is specified
+   * wrt. to the parent geometry, and that it is non-empty and
+   * contained in the parent geometry.
+   */
+  anchor_rect_x = anchor_rect->x - parent_geometry.x;
+  anchor_rect_y = anchor_rect->y - parent_geometry.y;
+  anchor_rect_x2 = anchor_rect_x + anchor_rect->width;
+  anchor_rect_y2 = anchor_rect_y + anchor_rect->height;
+
+  anchor_rect_x = CLAMP (anchor_rect_x, 0, parent_geometry.width - 1);
+  anchor_rect_y = CLAMP (anchor_rect_y, 0, parent_geometry.height - 1);
+  anchor_rect_x2 = CLAMP (anchor_rect_x, 0, parent_geometry.width - 1);
+  anchor_rect_y2 = CLAMP (anchor_rect_y, 0, parent_geometry.height - 1);
+
+  if (anchor_rect_x2 <= anchor_rect_x || anchor_rect_y2 <= anchor_rect_y)
+    {
+      /* Somebody gave a bad anchor rect. Just make something up */
+      real_anchor_rect_x = 0;
+      real_anchor_rect_y = 0;
+      anchor_rect_width = 1;
+      anchor_rect_height = 1;
+    }
+  else
+    {
+      real_anchor_rect_x = anchor_rect_x;
+      real_anchor_rect_y = anchor_rect_y;
+      anchor_rect_width = anchor_rect_x2 - anchor_rect_x;
+      anchor_rect_height = anchor_rect_y2 - anchor_rect_y;
+    }
 
   gdk_popup_layout_get_offset (layout, &rect_anchor_dx, &rect_anchor_dy);
 
