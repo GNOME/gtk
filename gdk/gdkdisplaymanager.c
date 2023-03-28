@@ -410,12 +410,19 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
     {
       const char *backend = backends[i];
       gboolean any = g_str_equal (backend, "*");
+      gboolean found = FALSE;
 
       if (!allow_any && !any && !strstr (allowed_backends, backend))
-        continue;
+        {
+          GDK_DEBUG (MISC, "Skipping %s backend", backend);
+          continue;
+        }
 
       for (j = 0; gdk_backends[j].name != NULL; j++)
         {
+          if (g_str_equal (backend, gdk_backends[j].name))
+            found = TRUE;
+
           if ((any && allow_any) ||
               (any && strstr (allowed_backends, gdk_backends[j].name)) ||
               g_str_equal (backend, gdk_backends[j].name))
@@ -423,9 +430,15 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
               GDK_DEBUG (MISC, "Trying %s backend", gdk_backends[j].name);
               display = gdk_backends[j].open_display (name);
               if (display)
-                break;
+                {
+                  GDK_DEBUG (MISC, "Using %s display %s", gdk_backends[j].name, gdk_display_get_name (display));
+                  break;
+                }
             }
         }
+
+      if (!found && !display)
+        g_warning ("No such backend: %s", backend);
     }
 
   g_strfreev (backends);
