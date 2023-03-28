@@ -2480,6 +2480,60 @@ base64_encode_with_linebreaks (const guchar *data,
   return out;
 }
 
+static void
+append_texture_param (Printer    *p,
+                      const char *param_name,
+                      GdkTexture *texture)
+{
+  GBytes *bytes;
+  char *b64;
+
+  _indent (p);
+
+  g_string_append_printf (p->str, "%s: ", param_name);
+
+  switch (gdk_texture_get_format (texture))
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
+      bytes = gdk_texture_save_to_png_bytes (texture);
+      g_string_append (p->str, "url(\"data:image/png;base64,");
+      break;
+
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      bytes = gdk_texture_save_to_tiff_bytes (texture);
+      g_string_append (p->str, "url(\"data:image/tiff;base64,");
+      break;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+    }
+
+  b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
+                                       g_bytes_get_size (bytes));
+  append_escaping_newlines (p->str, b64);
+  g_free (b64);
+  g_string_append (p->str, "\");\n");
+
+  g_bytes_unref (bytes);
+}
+
 void
 gsk_text_node_serialize_glyphs (GskRenderNode *node,
                                 GString       *p)
@@ -2861,63 +2915,18 @@ render_node_print (Printer       *p,
 
     case GSK_TEXTURE_NODE:
       {
-        GdkTexture *texture = gsk_texture_node_get_texture (node);
-        GBytes *bytes;
-
         start_node (p, "texture");
+
         append_rect_param (p, "bounds", &node->bounds);
+        append_texture_param (p, "texture", gsk_texture_node_get_texture (node));
 
-        _indent (p);
-
-        switch (gdk_texture_get_format (texture))
-          {
-          case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-          case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-          case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-          case GDK_MEMORY_B8G8R8A8:
-          case GDK_MEMORY_A8R8G8B8:
-          case GDK_MEMORY_R8G8B8A8:
-          case GDK_MEMORY_A8B8G8R8:
-          case GDK_MEMORY_R8G8B8:
-          case GDK_MEMORY_B8G8R8:
-          case GDK_MEMORY_R16G16B16:
-          case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-          case GDK_MEMORY_R16G16B16A16:
-            bytes = gdk_texture_save_to_png_bytes (texture);
-            g_string_append (p->str, "texture: url(\"data:image/png;base64,");
-            break;
-
-          case GDK_MEMORY_R16G16B16_FLOAT:
-          case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-          case GDK_MEMORY_R16G16B16A16_FLOAT:
-          case GDK_MEMORY_R32G32B32_FLOAT:
-          case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-          case GDK_MEMORY_R32G32B32A32_FLOAT:
-            bytes = gdk_texture_save_to_tiff_bytes (texture);
-            g_string_append (p->str, "texture: url(\"data:image/tiff;base64,");
-            break;
-
-          case GDK_MEMORY_N_FORMATS:
-          default:
-            g_assert_not_reached ();
-          }
-
-        b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
-                                             g_bytes_get_size (bytes));
-        append_escaping_newlines (p->str, b64);
-        g_free (b64);
-        g_string_append (p->str, "\");\n");
         end_node (p);
-
-        g_bytes_unref (bytes);
       }
       break;
 
     case GSK_TEXTURE_SCALE_NODE:
       {
-        GdkTexture *texture = gsk_texture_scale_node_get_texture (node);
         GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
-        GBytes *bytes;
 
         start_node (p, "texture-scale");
         append_rect_param (p, "bounds", &node->bounds);
@@ -2934,49 +2943,9 @@ render_node_print (Printer       *p,
                   }
               }
           }
-        _indent (p);
 
-        switch (gdk_texture_get_format (texture))
-          {
-          case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-          case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-          case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-          case GDK_MEMORY_B8G8R8A8:
-          case GDK_MEMORY_A8R8G8B8:
-          case GDK_MEMORY_R8G8B8A8:
-          case GDK_MEMORY_A8B8G8R8:
-          case GDK_MEMORY_R8G8B8:
-          case GDK_MEMORY_B8G8R8:
-          case GDK_MEMORY_R16G16B16:
-          case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-          case GDK_MEMORY_R16G16B16A16:
-            bytes = gdk_texture_save_to_png_bytes (texture);
-            g_string_append (p->str, "texture: url(\"data:image/png;base64,");
-            break;
-
-          case GDK_MEMORY_R16G16B16_FLOAT:
-          case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-          case GDK_MEMORY_R16G16B16A16_FLOAT:
-          case GDK_MEMORY_R32G32B32_FLOAT:
-          case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-          case GDK_MEMORY_R32G32B32A32_FLOAT:
-            bytes = gdk_texture_save_to_tiff_bytes (texture);
-            g_string_append (p->str, "texture: url(\"data:image/tiff;base64,");
-            break;
-
-          case GDK_MEMORY_N_FORMATS:
-          default:
-            g_assert_not_reached ();
-          }
-
-        b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
-                                             g_bytes_get_size (bytes));
-        append_escaping_newlines (p->str, b64);
-        g_free (b64);
-        g_string_append (p->str, "\");\n");
+        append_texture_param (p, "texture", gsk_texture_scale_node_get_texture (node));
         end_node (p);
-
-        g_bytes_unref (bytes);
       }
       break;
 
