@@ -2292,13 +2292,152 @@ typedef struct
 {
   int indentation_level;
   GString *str;
+  GHashTable *named_nodes;
+  gsize named_node_counter;
+  GHashTable *named_textures;
+  gsize named_texture_counter;
 } Printer;
 
 static void
-printer_init (Printer *self)
+printer_init_check_texture (Printer    *printer,
+                            GdkTexture *texture)
+{
+  gpointer name;
+
+  if (!g_hash_table_lookup_extended (printer->named_textures, texture, NULL, &name))
+    g_hash_table_insert (printer->named_textures, texture, NULL);
+  else if (name == NULL)
+    g_hash_table_insert (printer->named_textures, texture, g_strdup (""));
+}
+
+static void
+printer_init_duplicates_for_node (Printer       *printer,
+                                  GskRenderNode *node)
+{
+  gpointer name;
+
+  if (!g_hash_table_lookup_extended (printer->named_nodes, node, NULL, &name))
+    g_hash_table_insert (printer->named_nodes, node, NULL);
+  else if (name == NULL)
+    g_hash_table_insert (printer->named_nodes, node, g_strdup (""));
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_CAIRO_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+      /* no children */
+      break;
+
+    case GSK_TEXTURE_NODE:
+      printer_init_check_texture (printer, gsk_texture_node_get_texture (node));
+      break;
+
+    case GSK_TEXTURE_SCALE_NODE:
+      printer_init_check_texture (printer, gsk_texture_scale_node_get_texture (node));
+      break;
+
+    case GSK_TRANSFORM_NODE:
+      printer_init_duplicates_for_node (printer, gsk_transform_node_get_child (node));
+      break;
+
+    case GSK_OPACITY_NODE:
+      printer_init_duplicates_for_node (printer, gsk_opacity_node_get_child (node));
+      break;
+
+    case GSK_COLOR_MATRIX_NODE:
+      printer_init_duplicates_for_node (printer, gsk_color_matrix_node_get_child (node));
+      break;
+
+    case GSK_BLUR_NODE:
+      printer_init_duplicates_for_node (printer, gsk_blur_node_get_child (node));
+      break;
+
+    case GSK_REPEAT_NODE:
+      printer_init_duplicates_for_node (printer, gsk_repeat_node_get_child (node));
+      break;
+
+    case GSK_CLIP_NODE:
+      printer_init_duplicates_for_node (printer, gsk_clip_node_get_child (node));
+      break;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      printer_init_duplicates_for_node (printer, gsk_rounded_clip_node_get_child (node));
+      break;
+
+    case GSK_SHADOW_NODE:
+      printer_init_duplicates_for_node (printer, gsk_shadow_node_get_child (node));
+      break;
+
+    case GSK_DEBUG_NODE:
+      printer_init_duplicates_for_node (printer, gsk_debug_node_get_child (node));
+      break;
+
+    case GSK_BLEND_NODE:
+      printer_init_duplicates_for_node (printer, gsk_blend_node_get_bottom_child (node));
+      printer_init_duplicates_for_node (printer, gsk_blend_node_get_top_child (node));
+      break;
+
+    case GSK_MASK_NODE:
+      printer_init_duplicates_for_node (printer, gsk_mask_node_get_source (node));
+      printer_init_duplicates_for_node (printer, gsk_mask_node_get_mask (node));
+      break;
+
+    case GSK_CROSS_FADE_NODE:
+      printer_init_duplicates_for_node (printer, gsk_cross_fade_node_get_start_child (node));
+      printer_init_duplicates_for_node (printer, gsk_cross_fade_node_get_end_child (node));
+      break;
+
+    case GSK_GL_SHADER_NODE:
+      {
+        guint i;
+
+        for (i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
+          {
+            printer_init_duplicates_for_node (printer, gsk_gl_shader_node_get_child (node, i));
+          }
+      }
+      break;
+
+    case GSK_CONTAINER_NODE:
+      {
+        guint i;
+
+        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+          {
+            printer_init_duplicates_for_node (printer, gsk_container_node_get_child (node, i));
+          }
+      }
+      break;
+
+    default:
+    case GSK_NOT_A_RENDER_NODE:
+      g_assert_not_reached ();
+      break;
+
+    }
+}
+
+static void
+printer_init (Printer       *self,
+              GskRenderNode *node)
 {
   self->indentation_level = 0;
   self->str = g_string_new (NULL);
+  self->named_nodes = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  self->named_node_counter = 0;
+  self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  self->named_texture_counter = 0;
+
+  printer_init_duplicates_for_node (self, node);
 }
 
 #define IDENT_LEVEL 2 /* Spaces per level */
@@ -2312,9 +2451,16 @@ _indent (Printer *self)
 
 static void
 start_node (Printer    *self,
+            const char *node_type,
             const char *node_name)
 {
-  g_string_append_printf (self->str, "%s {\n", node_name);
+  g_string_append_printf (self->str, "%s ", node_type);
+  if (node_name)
+    {
+      gtk_css_print_string (self->str, node_name, FALSE);
+      g_string_append_c (self->str, ' ');
+    }
+  g_string_append_printf (self->str, "{\n");
   self->indentation_level ++;
 }
 
@@ -2668,10 +2814,32 @@ append_texture_param (Printer    *p,
 {
   GBytes *bytes;
   char *b64;
+  const char *texture_name;
 
   _indent (p);
 
   g_string_append_printf (p->str, "%s: ", param_name);
+
+  texture_name = g_hash_table_lookup (p->named_textures, texture);
+  if (texture_name == NULL)
+    {
+      /* nothing to do here, texture is unique */
+    }
+  else if (texture_name[0])
+    {
+      /* texture has been named already */
+      gtk_css_print_string (p->str, texture_name, TRUE);
+      g_string_append (p->str, ";\n");
+      return;
+    }
+  else
+    {
+      /* texture needs a name */
+      char *new_name = g_strdup_printf ("texture%zu", ++p->named_texture_counter);
+      gtk_css_print_string (p->str, new_name, TRUE);
+      g_string_append_c (p->str, ' ');
+      g_hash_table_insert (p->named_textures, texture, new_name);
+    }
 
   switch (gdk_texture_get_format (texture))
     {
@@ -2801,6 +2969,27 @@ render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
   char *b64;
+  const char *node_name;
+
+  node_name = g_hash_table_lookup (p->named_nodes, node);
+  if (node_name == NULL)
+    {
+      /* nothing to do here, node is unique */
+    }
+  else if (node_name[0])
+    {
+      /* node has been named already */
+      gtk_css_print_string (p->str, node_name, TRUE);
+      g_string_append (p->str, ";\n");
+      return;
+    }
+  else
+    {
+      /* node needs a name */
+      char *new_name = g_strdup_printf ("node%zu", ++p->named_node_counter);
+      g_hash_table_insert (p->named_nodes, node, new_name);
+      node_name = new_name;
+    }
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -2808,7 +2997,7 @@ render_node_print (Printer       *p,
       {
         guint i;
 
-        start_node (p, "container");
+        start_node (p, "container", node_name);
         for (i = 0; i < gsk_container_node_get_n_children (node); i ++)
           {
             GskRenderNode *child = gsk_container_node_get_child (node, i);
@@ -2823,7 +3012,7 @@ render_node_print (Printer       *p,
 
     case GSK_COLOR_NODE:
       {
-        start_node (p, "color");
+        start_node (p, "color", node_name);
         append_rect_param (p, "bounds", &node->bounds);
         append_rgba_param (p, "color", gsk_color_node_get_color (node));
         end_node (p);
@@ -2832,7 +3021,7 @@ render_node_print (Printer       *p,
 
     case GSK_CROSS_FADE_NODE:
       {
-        start_node (p, "cross-fade");
+        start_node (p, "cross-fade", node_name);
 
         append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node), 0.5f);
         append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
@@ -2846,9 +3035,9 @@ render_node_print (Printer       *p,
     case GSK_LINEAR_GRADIENT_NODE:
       {
         if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
-          start_node (p, "repeating-linear-gradient");
+          start_node (p, "repeating-linear-gradient", node_name);
         else
-          start_node (p, "linear-gradient");
+          start_node (p, "linear-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
@@ -2864,9 +3053,9 @@ render_node_print (Printer       *p,
     case GSK_RADIAL_GRADIENT_NODE:
       {
         if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
-          start_node (p, "repeating-radial-gradient");
+          start_node (p, "repeating-radial-gradient", node_name);
         else
-          start_node (p, "radial-gradient");
+          start_node (p, "radial-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "center", gsk_radial_gradient_node_get_center (node));
@@ -2884,7 +3073,7 @@ render_node_print (Printer       *p,
 
     case GSK_CONIC_GRADIENT_NODE:
       {
-        start_node (p, "conic-gradient");
+        start_node (p, "conic-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
@@ -2899,7 +3088,7 @@ render_node_print (Printer       *p,
 
     case GSK_OPACITY_NODE:
       {
-        start_node (p, "opacity");
+        start_node (p, "opacity", node_name);
 
         append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node), 0.5f);
         append_node_param (p, "child", gsk_opacity_node_get_child (node));
@@ -2912,7 +3101,7 @@ render_node_print (Printer       *p,
       {
         const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
 
-        start_node (p, "outset-shadow");
+        start_node (p, "outset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
         if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
@@ -2928,7 +3117,7 @@ render_node_print (Printer       *p,
 
     case GSK_CLIP_NODE:
       {
-        start_node (p, "clip");
+        start_node (p, "clip", node_name);
 
         append_rect_param (p, "clip", gsk_clip_node_get_clip (node));
         append_node_param (p, "child", gsk_clip_node_get_child (node));
@@ -2939,7 +3128,7 @@ render_node_print (Printer       *p,
 
     case GSK_ROUNDED_CLIP_NODE:
       {
-        start_node (p, "rounded-clip");
+        start_node (p, "rounded-clip", node_name);
 
         append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_get_clip (node));
         append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
@@ -2952,7 +3141,7 @@ render_node_print (Printer       *p,
     case GSK_TRANSFORM_NODE:
       {
         GskTransform *transform = gsk_transform_node_get_transform (node);
-        start_node (p, "transform");
+        start_node (p, "transform", node_name);
 
         if (gsk_transform_get_category (transform) != GSK_TRANSFORM_CATEGORY_IDENTITY)
           append_transform_param (p, "transform", transform);
@@ -2964,7 +3153,7 @@ render_node_print (Printer       *p,
 
     case GSK_COLOR_MATRIX_NODE:
       {
-        start_node (p, "color-matrix");
+        start_node (p, "color-matrix", node_name);
 
         if (!graphene_matrix_is_identity (gsk_color_matrix_node_get_color_matrix (node)))
           append_matrix_param (p, "matrix", gsk_color_matrix_node_get_color_matrix (node));
@@ -2981,7 +3170,7 @@ render_node_print (Printer       *p,
         const GdkRGBA *colors = gsk_border_node_get_colors (node);
         const float *widths = gsk_border_node_get_widths (node);
         guint i, n;
-        start_node (p, "border");
+        start_node (p, "border", node_name);
 
         if (!gdk_rgba_equal (&colors[3], &colors[1]))
           n = 4;
@@ -3042,7 +3231,7 @@ render_node_print (Printer       *p,
         const guint n_shadows = gsk_shadow_node_get_n_shadows (node);
         int i;
 
-        start_node (p, "shadow");
+        start_node (p, "shadow", node_name);
 
         _indent (p);
         g_string_append (p->str, "shadows: ");
@@ -3080,7 +3269,7 @@ render_node_print (Printer       *p,
     case GSK_INSET_SHADOW_NODE:
       {
         const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
-        start_node (p, "inset-shadow");
+        start_node (p, "inset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node), 0.0f);
         if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
@@ -3096,7 +3285,7 @@ render_node_print (Printer       *p,
 
     case GSK_TEXTURE_NODE:
       {
-        start_node (p, "texture");
+        start_node (p, "texture", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_texture_param (p, "texture", gsk_texture_node_get_texture (node));
@@ -3109,7 +3298,7 @@ render_node_print (Printer       *p,
       {
         GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
 
-        start_node (p, "texture-scale");
+        start_node (p, "texture-scale", node_name);
         append_rect_param (p, "bounds", &node->bounds);
 
         if (filter != GSK_SCALING_FILTER_LINEAR)
@@ -3138,7 +3327,7 @@ render_node_print (Printer       *p,
         PangoFontDescription *desc;
         char *font_name;
 
-        start_node (p, "text");
+        start_node (p, "text", node_name);
 
         if (!gdk_rgba_equal (color, &GDK_RGBA("000000")))
           append_rgba_param (p, "color", color);
@@ -3169,7 +3358,7 @@ render_node_print (Printer       *p,
       {
         const char *message = gsk_debug_node_get_message (node);
 
-        start_node (p, "debug");
+        start_node (p, "debug", node_name);
 
         /* TODO: We potentially need to escape certain characters in the message */
         if (message)
@@ -3185,7 +3374,7 @@ render_node_print (Printer       *p,
 
     case GSK_BLUR_NODE:
       {
-        start_node (p, "blur");
+        start_node (p, "blur", node_name);
 
         append_float_param (p, "blur", gsk_blur_node_get_radius (node), 1.0f);
         append_node_param (p, "child", gsk_blur_node_get_child (node));
@@ -3199,7 +3388,7 @@ render_node_print (Printer       *p,
         GskGLShader *shader = gsk_gl_shader_node_get_shader (node);
         GBytes *args = gsk_gl_shader_node_get_args (node);
 
-        start_node (p, "glshader");
+        start_node (p, "glshader", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
 
@@ -3317,7 +3506,7 @@ render_node_print (Printer       *p,
         GskRenderNode *child = gsk_repeat_node_get_child (node);
         const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
 
-        start_node (p, "repeat");
+        start_node (p, "repeat", node_name);
 
         if (!graphene_rect_equal (&node->bounds, &child->bounds))
           append_rect_param (p, "bounds", &node->bounds);
@@ -3333,7 +3522,7 @@ render_node_print (Printer       *p,
       {
         GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
 
-        start_node (p, "blend");
+        start_node (p, "blend", node_name);
 
         if (mode != GSK_BLEND_MODE_DEFAULT)
           {
@@ -3351,7 +3540,7 @@ render_node_print (Printer       *p,
       {
         GskMaskMode mode = gsk_mask_node_get_mask_mode (node);
 
-        start_node (p, "mask");
+        start_node (p, "mask", node_name);
 
         if (mode != GSK_MASK_MODE_ALPHA)
           {
@@ -3374,7 +3563,7 @@ render_node_print (Printer       *p,
         cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
         GByteArray *array;
 
-        start_node (p, "cairo");
+        start_node (p, "cairo", node_name);
         append_rect_param (p, "bounds", &node->bounds);
 
         if (surface != NULL)
@@ -3453,7 +3642,7 @@ gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
 
-  printer_init (&p);
+  printer_init (&p, node);
 
   if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
     {
