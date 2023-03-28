@@ -2136,19 +2136,60 @@ parse_node (GtkCssParser *parser,
     { "mask", parse_mask_node },
   };
   GskRenderNode **node_p = out_node;
+  const GtkCssToken *token;
   guint i;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    {
+      GskRenderNode *node;
+      char *node_name;
+
+      node_name = gtk_css_parser_consume_string (parser);
+
+      if (context->named_nodes)
+        node = g_hash_table_lookup (context->named_nodes, node_name);
+      else
+        node = NULL;
+
+      if (node)
+        {
+          *node_p = gsk_render_node_ref (node);
+          g_free (node_name);
+          return TRUE;
+        }
+      else
+        {
+          gtk_css_parser_error_value (parser, "No node named \"%s\"", node_name);
+          g_free (node_name);
+          return FALSE;
+        }
+    }
 
   for (i = 0; i < G_N_ELEMENTS (node_parsers); i++)
     {
       if (gtk_css_parser_try_ident (parser, node_parsers[i].name))
         {
           GskRenderNode *node;
+          GtkCssLocation node_name_start_location, node_name_end_location;
+          char *node_name;
+
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+            {
+              node_name_start_location = *gtk_css_parser_get_start_location (parser);
+              node_name_end_location = *gtk_css_parser_get_end_location (parser);
+              node_name = gtk_css_parser_consume_string (parser);
+            }
+          else
+            node_name = NULL;
 
           if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
               gtk_css_parser_error_syntax (parser, "Expected '{' after node name");
               return FALSE;
             }
+
           gtk_css_parser_end_block_prelude (parser);
           node = node_parsers[i].func (parser, context);
           if (node)
@@ -2156,8 +2197,30 @@ parse_node (GtkCssParser *parser,
               if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
                 gtk_css_parser_error_syntax (parser, "Expected '}' at end of node definition");
               g_clear_pointer (node_p, gsk_render_node_unref);
+
+              if (node_name)
+                {
+                  if (context->named_nodes == NULL)
+                    context->named_nodes = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                                  g_free, (GDestroyNotify) gsk_render_node_unref);
+                  if (g_hash_table_lookup (context->named_nodes, node_name))
+                    {
+                      gtk_css_parser_error (parser,
+                                            GTK_CSS_PARSER_ERROR_FAILED,
+                                            &node_name_start_location,
+                                            &node_name_end_location,
+                                            "A node named \"%s\" already exists.", node_name);
+                    }
+                  else
+                    {
+                      g_hash_table_insert (context->named_nodes, g_strdup (node_name), gsk_render_node_ref (node));
+                    }
+                }
+
               *node_p = node;
             }
+
+          g_free (node_name);
 
           return node != NULL;
         }
