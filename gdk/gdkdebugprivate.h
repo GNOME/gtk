@@ -60,7 +60,11 @@ GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
 
+#ifdef GLIB_USING_SYSTEM_PRINTF
+#define gdk_debug_message(format, ...) fprintf (stderr, format "\n", ##__VA_ARGS__)
+#else
 #define gdk_debug_message(format, ...) g_fprintf (stderr, format "\n", ##__VA_ARGS__)
+#endif
 
 #ifdef G_ENABLE_DEBUG
 
