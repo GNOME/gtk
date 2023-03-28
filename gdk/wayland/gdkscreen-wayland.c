@@ -1337,6 +1337,7 @@ fontconfig_dbus_proxy_open_cb (GObject      *object,
       g_free (screen_wayland->dbus_settings.modules);
 
       screen_wayland->dbus_settings.modules = g_variant_dup_string (value, NULL);
+      notify_setting (GDK_SCREEN (screen_wayland), "gtk-modules");
     }
 
   if (value != NULL)
