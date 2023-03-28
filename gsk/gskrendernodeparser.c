@@ -115,8 +115,41 @@ parse_texture (GtkCssParser *parser,
 {
   GdkTexture *texture;
   GError *error = NULL;
+  const GtkCssToken *token;
   GtkCssLocation start_location;
-  char *url, *scheme;
+  char *url, *scheme, *texture_name;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    {
+      texture_name = gtk_css_parser_consume_string (parser);
+
+      if (context->named_textures)
+        texture = g_hash_table_lookup (context->named_textures, texture_name);
+      else
+        texture = NULL;
+
+      if (texture)
+        {
+          *(GdkTexture **) out_data = g_object_ref (texture);
+          g_free (texture_name);
+          return TRUE;
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        {
+          gtk_css_parser_error_value (parser, "No texture named \"%s\"", texture_name);
+          g_free (texture_name);
+          return FALSE;
+        }
+
+      if (context->named_textures && g_hash_table_lookup (context->named_textures, texture_name))
+        {
+          gtk_css_parser_error_value (parser, "A texture named \"%s\" already exists.", texture_name);
+          g_clear_pointer (&texture_name, g_free);
+        }
+    }
+  else
+    texture_name = NULL;
 
   start_location = *gtk_css_parser_get_start_location (parser);
   url = gtk_css_parser_consume_url (parser);
@@ -174,6 +207,14 @@ parse_texture (GtkCssParser *parser,
           g_clear_error (&error);
         }
       return FALSE;
+    }
+
+  if (texture_name)
+    {
+      if (context->named_textures == NULL)
+        context->named_textures = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                         g_free, g_object_unref);
+      g_hash_table_insert (context->named_textures, texture_name, g_object_ref (texture));
     }
 
   *(GdkTexture **) out_data = texture;
