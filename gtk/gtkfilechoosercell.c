@@ -38,8 +38,6 @@ struct _GtkFileChooserCell
   GtkWidget parent_instance;
 
   GFileInfo *item;
-  gboolean selected;
-  guint position;
   GtkListItem *list_item;
 
   gboolean show_time;
@@ -55,7 +53,6 @@ G_DEFINE_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK_TYPE_WIDGET)
 enum
 {
   PROP_POSITION = 1,
-  PROP_SELECTED,
   PROP_ITEM,
   PROP_SHOW_TIME,
   PROP_LIST_ITEM,
@@ -69,21 +66,20 @@ popup_menu (GtkFileChooserCell *self,
             double              y)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkSelectionModel *model;
   GtkWidget *impl;
   graphene_point_t p;
 
-  impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
+  gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
 
-  model = gtk_file_chooser_widget_get_selection_model (GTK_FILE_CHOOSER_WIDGET (impl));
-  gtk_selection_model_select_item (model, self->position, TRUE);
+  impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
 
   if (!gtk_widget_compute_point (widget, GTK_WIDGET (impl),
                                  &GRAPHENE_POINT_INIT (x, y), &p))
     return;
 
-  gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                              "(udd)", self->position, p.x, p.y);
+  if (self->list_item)
+    gtk_widget_activate_action (widget, "item.popup-file-list-menu",
+                                "(udd)", gtk_list_item_get_position (self->list_item), p.x, p.y);
 }
 
 static void
@@ -129,10 +125,9 @@ drag_prepare_cb (GtkDragSource *source,
   impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
-  if (!self->selected)
+  if (self->list_item && !gtk_list_item_get_selected (self->list_item))
     {
-      gtk_selection_model_select_item (gtk_file_chooser_widget_get_selection_model (impl),
-                                       self->position, TRUE);
+      gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
     }
 
   selection = gtk_file_chooser_widget_get_selected_files (impl);
@@ -227,14 +222,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_POSITION:
-      self->position = g_value_get_uint (value);
-      break;
-
-    case PROP_SELECTED:
-      self->selected = g_value_get_boolean (value);
-      break;
-
     case PROP_ITEM:
       self->item = g_value_get_object (value);
 
@@ -272,14 +259,6 @@ gtk_file_chooser_cell_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_POSITION:
-      g_value_set_uint (value, self->position);
-      break;
-
-    case PROP_SELECTED:
-      g_value_set_boolean (value, self->selected);
-      break;
-
     case PROP_ITEM:
       g_value_set_object (value, self->item);
       break;
@@ -304,16 +283,6 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->dispose = gtk_file_chooser_cell_dispose;
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
-
-  g_object_class_install_property (object_class, PROP_POSITION,
-                                   g_param_spec_uint ("position", NULL, NULL,
-                                                      0, G_MAXUINT, 0,
-                                                      GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class, PROP_SELECTED,
-                                   g_param_spec_boolean ("selected", NULL, NULL,
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_ITEM,
                                    g_param_spec_object ("item", NULL, NULL,

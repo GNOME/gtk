@@ -184,14 +184,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -248,14 +242,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -298,14 +286,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -346,14 +328,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -393,14 +369,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell" id="file_chooser_cell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -708,14 +678,8 @@
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
-        <binding name="position">
-          <lookup name="position">GtkListItem</lookup>
-        </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
