@@ -223,6 +223,7 @@ enum
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
   PROP_REORDERABLE,
+  PROP_ROW_FACTORY,
   PROP_SHOW_ROW_SEPARATORS,
   PROP_SHOW_COLUMN_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
@@ -635,6 +636,14 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_view_get_model (self->listview));
       break;
 
+    case PROP_REORDERABLE:
+      g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
+      break;
+
+    case PROP_ROW_FACTORY:
+      g_value_set_object (value, gtk_column_view_get_row_factory (self));
+      break;
+
     case PROP_SHOW_ROW_SEPARATORS:
       g_value_set_boolean (value, gtk_list_view_get_show_separators (self->listview));
       break;
@@ -657,10 +666,6 @@ gtk_column_view_get_property (GObject    *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       g_value_set_boolean (value, gtk_column_view_get_single_click_activate (self));
-      break;
-
-    case PROP_REORDERABLE:
-      g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
       break;
 
     case PROP_TAB_BEHAVIOR:
@@ -718,6 +723,14 @@ gtk_column_view_set_property (GObject      *object,
       gtk_column_view_set_model (self, g_value_get_object (value));
       break;
 
+    case PROP_REORDERABLE:
+      gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_ROW_FACTORY:
+      gtk_column_view_set_row_factory (self, g_value_get_object (value));
+      break;
+
     case PROP_SHOW_ROW_SEPARATORS:
       gtk_column_view_set_show_row_separators (self, g_value_get_boolean (value));
       break;
@@ -744,10 +757,6 @@ gtk_column_view_set_property (GObject      *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       gtk_column_view_set_single_click_activate (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_REORDERABLE:
-      gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
       break;
 
     case PROP_TAB_BEHAVIOR:
@@ -827,6 +836,28 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkColumnView:reorderable: (attributes org.gtk.Property.get=gtk_column_view_get_reorderable org.gtk.Property.set=gtk_column_view_set_reorderable)
+   *
+   * Whether columns are reorderable.
+   */
+  properties[PROP_REORDERABLE] =
+    g_param_spec_boolean ("reorderable", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnView:row-factory: (attributes org.gtk.Property.get=gtk_column_view_get_row_factory org.gtk.Property.set=gtk_column_view_set_row_factory)
+   *
+   * The factory used for configuring rows.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_ROW_FACTORY] =
+    g_param_spec_object ("row-factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkColumnView:show-row-separators: (attributes org.gtk.Property.get=gtk_column_view_get_show_row_separators org.gtk.Property.set=gtk_column_view_set_show_row_separators)
    *
    * Show separators between rows.
@@ -865,16 +896,6 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkColumnView:reorderable: (attributes org.gtk.Property.get=gtk_column_view_get_reorderable org.gtk.Property.set=gtk_column_view_set_reorderable)
-   *
-   * Whether columns are reorderable.
-   */
-  properties[PROP_REORDERABLE] =
-    g_param_spec_boolean ("reorderable", NULL, NULL,
-                          TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkColumnView:tab-behavior: (attributes org.gtk.Property.get=gtk_column_view_get_tab_behavior org.gtk.Property.set=gtk_column_view_set_tab_behavior)
@@ -1995,6 +2016,53 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_enable_rubberband (self->listview);
+}
+
+/**
+ * gtk_column_view_set_row_factory: (attributes org.gtk.Method.set_property=row-factory)
+ * @self: a `GtkColumnView`
+ * @factory: (nullable): The row factory
+ *
+ * Sets the factory used for configuring rows. The factory must be for configuring
+ * [class@Gtk.ColumnViewRow] objects.
+ *
+ * If this factory is not set - which is the default - then the defaults will be used.
+ *
+ * This factory is not used to set the widgets displayed in the individual cells. For
+ * that see [method@GtkColumnViewColumn.set_factory] and [class@GtkColumnViewCell].
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_set_row_factory (GtkColumnView      *self,
+                                 GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (factory == gtk_list_view_get_factory (self->listview))
+    return;
+
+  gtk_list_view_set_factory (self->listview, factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ROW_FACTORY]);
+}
+
+/**
+ * gtk_column_view_get_row_factory: (attributes org.gtk.Method.get_property=row-factory)
+ * @self: a `GtkColumnView`
+ *
+ * Gets the factory set via [method@Gtk.ColumnView.set_row_factory].
+ *
+ * Returns: (nullable) (transfer none): The factory
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_column_view_get_row_factory (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return gtk_list_view_get_factory (self->listview);
 }
 
 /**
