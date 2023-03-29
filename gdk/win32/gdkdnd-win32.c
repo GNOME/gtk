@@ -2152,7 +2152,9 @@ _gdk_win32_dnd_do_dragdrop (void)
     			 g_strdup_printf ("%#.8lx", hr))))));
 
   /* Delete dnd selection after successful move */
-  if (hr == DRAGDROP_S_DROP && dwEffect == DROPEFFECT_MOVE)
+  if (hr == DRAGDROP_S_DROP &&
+      dwEffect == DROPEFFECT_MOVE &&
+      (drag_ctx->actions & GDK_ACTION_MOVE))
     {
       GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
       GdkEvent tmp_event;
