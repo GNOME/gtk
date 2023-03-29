@@ -190,9 +190,6 @@
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
         </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
-        </binding>
         <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkBox">
@@ -254,9 +251,6 @@
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
         </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
-        </binding>
         <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkInscription">
@@ -304,9 +298,6 @@
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
         </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
-        </binding>
         <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkLabel">
@@ -352,9 +343,6 @@
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
         </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
-        </binding>
         <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkLabel">
@@ -398,9 +386,6 @@
         </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
@@ -713,9 +698,6 @@
         </binding>
         <binding name="item">
           <lookup name="item">GtkListItem</lookup>
-        </binding>
-        <binding name="selected">
-          <lookup name="selected">GtkListItem</lookup>
         </binding>
         <property name="list-item">GtkListItem</property>
         <child>
