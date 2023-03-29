@@ -499,7 +499,15 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
     return FALSE;
 
   if (select)
-    gtk_list_base_select_item (self, pos, modify, extend);
+    {
+      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+
+      /* We do this convoluted calling into the widget because that way
+       * GtkListItem::selectable gets respected, which is what one would expect.
+       */
+      g_assert (tile->widget);
+      gtk_widget_activate_action (tile->widget, "listitem.select", "(bb)", modify, extend);
+    }
 
   return TRUE;
 }
