@@ -357,7 +357,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
     }
 
   tree_added = added;
-  for (i = 0; i < added; i++)
+  for (i = added; i-- > 0;)
     {
       child = gtk_rb_tree_insert_before (node->children, child);
       child->parent = node;

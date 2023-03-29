@@ -261,6 +261,51 @@ test_remove_some (void)
   g_object_unref (tree);
 }
 
+static void
+splice (GListStore *store,
+        guint       pos,
+        guint       removed,
+        guint      *numbers,
+        guint       added)
+{
+  GObject **objects = g_newa (GObject *, added);
+  guint i;
+
+  for (i = 0; i < added; i++)
+    {
+      /* 0 cannot be differentiated from NULL, so don't use it */
+      g_assert_cmpint (numbers[i], !=, 0);
+      objects[i] = g_object_new (G_TYPE_OBJECT, NULL);
+      g_object_set_qdata (objects[i], number_quark, GUINT_TO_POINTER (numbers[i]));
+    }
+
+  g_list_store_splice (store, pos, removed, (gpointer *) objects, added);
+
+  for (i = 0; i < added; i++)
+    g_object_unref (objects[i]);
+}
+
+static void
+test_splice (void)
+{
+  GtkTreeListModel *tree = new_model (100, TRUE);
+  gpointer item;
+
+  assert_model (tree, "100 100 100 99 98 97 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
+  assert_changes (tree, "");
+
+  item = g_list_model_get_item (G_LIST_MODEL (tree), 1);
+  g_assert_true (G_IS_LIST_MODEL (item));
+  splice (item, 0, 5, (guint[5]) { 300, 301, 302, 303, 304 }, 5);
+  /* expected */
+  assert_model (tree, "100 100 300 301 302 303 304 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
+  /* real outcome */
+  // assert_model (tree, "100 100 304 303 302 301 300 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
+  assert_changes (tree, "2-5+5");
+
+  g_object_unref (tree);
+}
+
 /* Test for https://gitlab.gnome.org/GNOME/gtk/-/issues/4595 */
 typedef struct _DemoNode DemoNode;
 
@@ -391,6 +436,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/treelistmodel/expand", test_expand);
   g_test_add_func ("/treelistmodel/remove_some", test_remove_some);
+  g_test_add_func ("/treelistmodel/remove_splice", test_splice);
   g_test_add_func ("/treelistmodel/collapse-change", test_collapse_change);
 
   return g_test_run ();
