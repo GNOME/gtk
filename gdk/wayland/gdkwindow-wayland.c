@@ -4179,7 +4179,7 @@ gdk_wayland_window_set_startup_id (GdkWindow   *window,
     }
 
 #ifdef HAVE_XDG_ACTIVATION
-  if (startup_id)
+  if (display_wayland->xdg_activation && startup_id)
     {
       xdg_activation_v1_activate (display_wayland->xdg_activation,
                                   startup_id,
