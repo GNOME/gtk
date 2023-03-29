@@ -351,56 +351,17 @@ gtk_column_view_row_widget_set_focus_child (GtkWidget *widget,
 }
 
 static void
-gtk_column_view_row_widget_root (GtkWidget *widget)
+gtk_column_view_row_widget_dispose (GObject *object)
 {
-  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (widget);
-
-  GTK_WIDGET_CLASS (gtk_column_view_row_widget_parent_class)->root (widget);
-
-  if (!gtk_column_view_row_widget_is_header (self))
-    {
-      GtkListItemBase *base = GTK_LIST_ITEM_BASE (self);
-      GListModel *columns;
-      guint i;
-
-      columns = gtk_column_view_get_columns (gtk_column_view_row_widget_get_column_view (self));
-
-      for (i = 0; i < g_list_model_get_n_items (columns); i++)
-        {
-          GtkColumnViewColumn *column = g_list_model_get_item (columns, i);
-
-          if (gtk_column_view_column_get_visible (column))
-            {
-              GtkWidget *cell;
-
-              cell = gtk_column_view_cell_widget_new (column);
-              gtk_column_view_row_widget_add_child (self, cell);
-              gtk_list_item_base_update (GTK_LIST_ITEM_BASE (cell),
-                                         gtk_list_item_base_get_position (base),
-                                         gtk_list_item_base_get_item (base),
-                                         gtk_list_item_base_get_selected (base));
-            }
-
-          g_object_unref (column);
-        }
-    }
-}
-
-static void
-gtk_column_view_row_widget_unroot (GtkWidget *widget)
-{
-  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (widget);
+  GtkColumnViewRowWidget *self = GTK_COLUMN_VIEW_ROW_WIDGET (object);
   GtkWidget *child;
 
-  if (!gtk_column_view_row_widget_is_header (self))
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
     {
-      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
-        {
-          gtk_column_view_row_widget_remove_child (self, child);
-        }
+      gtk_column_view_row_widget_remove_child (self, child);
     }
 
-  GTK_WIDGET_CLASS (gtk_column_view_row_widget_parent_class)->unroot (widget);
+  G_OBJECT_CLASS (gtk_column_view_row_widget_parent_class)->dispose (object);
 }
 
 static void
@@ -539,6 +500,7 @@ gtk_column_view_row_widget_class_init (GtkColumnViewRowWidgetClass *klass)
   GtkListFactoryWidgetClass *factory_class = GTK_LIST_FACTORY_WIDGET_CLASS (klass);
   GtkListItemBaseClass *base_class = GTK_LIST_ITEM_BASE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   factory_class->create_object = gtk_column_view_row_widget_create_object;
   factory_class->setup_object = gtk_column_view_row_widget_setup_object;
@@ -552,8 +514,8 @@ gtk_column_view_row_widget_class_init (GtkColumnViewRowWidgetClass *klass)
   widget_class->set_focus_child = gtk_column_view_row_widget_set_focus_child;
   widget_class->measure = gtk_column_view_row_widget_measure;
   widget_class->size_allocate = gtk_column_view_row_widget_allocate;
-  widget_class->root = gtk_column_view_row_widget_root;
-  widget_class->unroot = gtk_column_view_row_widget_unroot;
+
+  object_class->dispose = gtk_column_view_row_widget_dispose;
 
   add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
   add_arrow_bindings (widget_class, GDK_KEY_Right, GTK_DIR_RIGHT);

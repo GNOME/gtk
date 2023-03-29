@@ -113,52 +113,6 @@
  * some parameters for item creation.
  */
 
-#define GTK_TYPE_COLUMN_LIST_VIEW (gtk_column_list_view_get_type ())
-G_DECLARE_FINAL_TYPE (GtkColumnListView, gtk_column_list_view, GTK, COLUMN_LIST_VIEW, GtkListView)
-
-struct _GtkColumnListView
-{
-  GtkListView parent_instance;
-};
-
-struct _GtkColumnListViewClass
-{
-  GtkListViewClass parent_class;
-};
-
-G_DEFINE_TYPE (GtkColumnListView, gtk_column_list_view, GTK_TYPE_LIST_VIEW)
-
-static void
-gtk_column_list_view_init (GtkColumnListView *view)
-{
-}
-
-static GtkListItemBase *
-gtk_column_list_view_create_list_widget (GtkListBase *base)
-{
-  GtkListView *self = GTK_LIST_VIEW (base);
-  GtkWidget *result;
-
-  result = gtk_column_view_row_widget_new (FALSE);
-
-  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
-
-  return GTK_LIST_ITEM_BASE (result);
-}
-
-static void
-gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
-{
-  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
-
-  gtk_widget_class_set_css_name (widget_class, I_("listview"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
-}
-
-
 struct _GtkColumnView
 {
   GtkWidget parent_instance;
@@ -196,6 +150,69 @@ struct _GtkColumnViewClass
 {
   GtkWidgetClass parent_class;
 };
+
+
+#define GTK_TYPE_COLUMN_LIST_VIEW (gtk_column_list_view_get_type ())
+G_DECLARE_FINAL_TYPE (GtkColumnListView, gtk_column_list_view, GTK, COLUMN_LIST_VIEW, GtkListView)
+
+struct _GtkColumnListView
+{
+  GtkListView parent_instance;
+};
+
+struct _GtkColumnListViewClass
+{
+  GtkListViewClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkColumnListView, gtk_column_list_view, GTK_TYPE_LIST_VIEW)
+
+static void
+gtk_column_list_view_init (GtkColumnListView *view)
+{
+}
+
+static GtkListItemBase *
+gtk_column_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (gtk_widget_get_parent (GTK_WIDGET (base)));
+  GtkWidget *result;
+  guint i;
+
+  result = gtk_column_view_row_widget_new (FALSE);
+
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), GTK_LIST_VIEW (base)->single_click_activate);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (gtk_column_view_column_get_visible (column))
+        {
+          GtkWidget *cell;
+
+          cell = gtk_column_view_cell_widget_new (column);
+          gtk_column_view_row_widget_add_child (GTK_COLUMN_VIEW_ROW_WIDGET (result), cell);
+        }
+
+      g_object_unref (column);
+    }
+
+  return GTK_LIST_ITEM_BASE (result);
+}
+
+static void
+gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
+{
+  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
+
+  gtk_widget_class_set_css_name (widget_class, I_("listview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
+}
+
 
 enum
 {
