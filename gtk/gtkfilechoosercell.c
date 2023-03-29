@@ -69,14 +69,12 @@ popup_menu (GtkFileChooserCell *self,
             double              y)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  GtkSelectionModel *model;
   GtkWidget *impl;
   graphene_point_t p;
 
-  impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
+  gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
 
-  model = gtk_file_chooser_widget_get_selection_model (GTK_FILE_CHOOSER_WIDGET (impl));
-  gtk_selection_model_select_item (model, self->position, TRUE);
+  impl = gtk_widget_get_ancestor (widget, GTK_TYPE_FILE_CHOOSER_WIDGET);
 
   if (!gtk_widget_compute_point (widget, GTK_WIDGET (impl),
                                  &GRAPHENE_POINT_INIT (x, y), &p))
@@ -129,10 +127,9 @@ drag_prepare_cb (GtkDragSource *source,
   impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
-  if (!self->selected)
+  if (self->list_item && !gtk_list_item_get_selected (self->list_item))
     {
-      gtk_selection_model_select_item (gtk_file_chooser_widget_get_selection_model (impl),
-                                       self->position, TRUE);
+      gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
     }
 
   selection = gtk_file_chooser_widget_get_selected_files (impl);
