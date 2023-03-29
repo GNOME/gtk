@@ -28,6 +28,7 @@
 #include "gtkdropdown.h"
 #include "gtkcolumnview.h"
 #include "gtkcolumnviewcolumn.h"
+#include "gtkcolumnviewrow.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdroptarget.h"
 #include "gtkentry.h"
@@ -2021,6 +2022,20 @@ column_view_get_file_type (GtkListItem *item,
     return NULL;
 
   return get_type_information (impl, info);
+}
+
+static void
+column_view_row_bind (GtkListItemFactory *factory,
+                      GtkColumnViewRow   *row,
+                      gpointer            unused)
+{
+  GFileInfo *info;
+  gboolean selectable;
+
+  info = gtk_column_view_row_get_item (row);
+  selectable = g_file_info_get_attribute_boolean (info, "filechooser::selectable");
+
+  gtk_column_view_row_set_selectable (row, selectable);
 }
 
 static char *
@@ -6798,8 +6813,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_location_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_size_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_time_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_type_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo_hbox);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_type_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, extra_align);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, extra_and_filters);
@@ -6840,6 +6855,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_tooltip_text);
+  gtk_widget_class_bind_template_callback (widget_class, column_view_row_bind);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
 

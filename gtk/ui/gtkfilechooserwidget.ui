@@ -169,6 +169,11 @@
                                             <style>
                                               <class name="complex"/>
                                             </style>
+                                            <property name="row-factory">
+                                              <object class="GtkSignalListItemFactory">
+                                                <signal name="bind" handler="column_view_row_bind" swapped="no"/>
+                                              </object>
+                                            </property>
                                             <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
                                             <child>
