@@ -37,6 +37,8 @@ void                    gtk_column_view_column_remove_cell              (GtkColu
 GtkColumnViewCellWidget *     gtk_column_view_column_get_first_cell           (GtkColumnViewColumn    *self);
 GtkWidget *             gtk_column_view_column_get_header               (GtkColumnViewColumn    *self);
 
+void                    gtk_column_view_column_update_factory           (GtkColumnViewColumn    *self,
+                                                                         gboolean                inert);
 void                    gtk_column_view_column_queue_resize             (GtkColumnViewColumn    *self);
 void                    gtk_column_view_column_measure                  (GtkColumnViewColumn    *self,
                                                                          int                    *minimum,

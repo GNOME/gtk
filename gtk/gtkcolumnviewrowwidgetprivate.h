@@ -45,7 +45,8 @@ struct _GtkColumnViewRowWidgetClass
 
 GType                   gtk_column_view_row_widget_get_type             (void) G_GNUC_CONST;
 
-GtkWidget *             gtk_column_view_row_widget_new                  (gboolean                is_header);
+GtkWidget *             gtk_column_view_row_widget_new                  (GtkListItemFactory     *factory,
+                                                                         gboolean                is_header);
 
 void                    gtk_column_view_row_widget_add_child            (GtkColumnViewRowWidget *self,
                                                                          GtkWidget              *child);

@@ -532,9 +532,11 @@ gtk_column_view_row_widget_init (GtkColumnViewRowWidget *self)
 }
 
 GtkWidget *
-gtk_column_view_row_widget_new (gboolean is_header)
+gtk_column_view_row_widget_new (GtkListItemFactory *factory,
+                                gboolean            is_header)
 {
   return g_object_new (GTK_TYPE_COLUMN_VIEW_ROW_WIDGET,
+                       "factory", factory,
                        "css-name", is_header ? "header" : "row",
                        "selectable", TRUE,
                        "activatable", TRUE,

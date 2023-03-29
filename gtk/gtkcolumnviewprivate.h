@@ -26,6 +26,8 @@
 #include "gtk/gtkcolumnviewsorterprivate.h"
 #include "gtk/gtkcolumnviewrowwidgetprivate.h"
 
+gboolean                gtk_column_view_is_inert                (GtkColumnView          *self);
+
 GtkColumnViewRowWidget *gtk_column_view_get_header_widget       (GtkColumnView          *self);
 GtkListView *           gtk_column_view_get_list_view           (GtkColumnView          *self);
 

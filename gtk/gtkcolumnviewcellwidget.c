@@ -237,12 +237,13 @@ gtk_column_view_cell_widget_init (GtkColumnViewCellWidget *self)
 }
 
 GtkWidget *
-gtk_column_view_cell_widget_new (GtkColumnViewColumn *column)
+gtk_column_view_cell_widget_new (GtkColumnViewColumn *column,
+                                 gboolean             inert)
 {
   GtkColumnViewCellWidget *self;
 
   self = g_object_new (GTK_TYPE_COLUMN_VIEW_CELL_WIDGET,
-                       "factory", gtk_column_view_column_get_factory (column),
+                       "factory", inert ? NULL : gtk_column_view_column_get_factory (column),
                        NULL);
 
   self->column = g_object_ref (column);

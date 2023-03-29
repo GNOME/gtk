@@ -179,7 +179,7 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
   GtkWidget *result;
   guint i;
 
-  result = gtk_column_view_row_widget_new (FALSE);
+  result = gtk_column_view_row_widget_new (gtk_list_view_get_factory (self->listview), FALSE);
 
   gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), GTK_LIST_VIEW (base)->single_click_activate);
 
@@ -191,7 +191,7 @@ gtk_column_list_view_create_list_widget (GtkListBase *base)
         {
           GtkWidget *cell;
 
-          cell = gtk_column_view_cell_widget_new (column);
+          cell = gtk_column_view_cell_widget_new (column, gtk_column_view_is_inert (self));
           gtk_column_view_row_widget_add_child (GTK_COLUMN_VIEW_ROW_WIDGET (result), cell);
         }
 
@@ -296,6 +296,31 @@ G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
+
+gboolean
+gtk_column_view_is_inert (GtkColumnView *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  return !gtk_widget_get_visible (widget) ||
+         gtk_widget_get_root (widget) == NULL;
+}
+
+static void
+gtk_column_view_update_cell_factories (GtkColumnView *self,
+                                       gboolean       inert)
+{
+  guint i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      gtk_column_view_column_update_factory (column, inert);
+    }
+}
 
 static void
 gtk_column_view_measure (GtkWidget      *widget,
@@ -473,6 +498,50 @@ gtk_column_view_allocate (GtkWidget *widget,
                        gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, header_height)));
 
   gtk_adjustment_configure (self->hadjustment,  x, 0, full_width, width * 0.1, width * 0.9, width);
+}
+
+static void
+gtk_column_view_root (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->root (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, FALSE);
+}
+
+static void
+gtk_column_view_unroot (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->unroot (widget);
+}
+
+static void
+gtk_column_view_show (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->show (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, FALSE);
+}
+
+static void
+gtk_column_view_hide (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->hide (widget);
 }
 
 static void
@@ -702,6 +771,10 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->measure = gtk_column_view_measure;
   widget_class->size_allocate = gtk_column_view_allocate;
+  widget_class->root = gtk_column_view_root;
+  widget_class->unroot = gtk_column_view_unroot;
+  widget_class->show = gtk_column_view_show;
+  widget_class->hide = gtk_column_view_hide;
 
   gobject_class->dispose = gtk_column_view_dispose;
   gobject_class->finalize = gtk_column_view_finalize;
@@ -1329,7 +1402,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_column_view_row_widget_new (TRUE);
+  self->header = gtk_column_view_row_widget_new (NULL, TRUE);
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
 
