@@ -128,6 +128,10 @@ parse_texture (GtkCssParser *parser,
         }
       else
         {
+          g_set_error (&error,
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                       "Failed to resolve URL");
           texture = NULL;
         }
     }
@@ -229,8 +233,19 @@ parse_script (GtkCssParser *parser,
       GFile *file;
 
       file = gtk_css_parser_resolve_url (parser, url);
-      bytes = g_file_load_bytes (file, NULL, NULL, &error);
-      g_object_unref (file);
+      if (file)
+        {
+          bytes = g_file_load_bytes (file, NULL, NULL, &error);
+          g_object_unref (file);
+        }
+      else
+        {
+          g_set_error (&error,
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                       "Failed to resolve URL");
+          bytes = NULL;
+        }
     }
 
   g_free (scheme);
