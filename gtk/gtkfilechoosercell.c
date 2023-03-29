@@ -38,7 +38,6 @@ struct _GtkFileChooserCell
   GtkWidget parent_instance;
 
   GFileInfo *item;
-  guint position;
   GtkListItem *list_item;
 
   gboolean show_time;
@@ -78,8 +77,9 @@ popup_menu (GtkFileChooserCell *self,
                                  &GRAPHENE_POINT_INIT (x, y), &p))
     return;
 
-  gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                              "(udd)", self->position, p.x, p.y);
+  if (self->list_item)
+    gtk_widget_activate_action (widget, "item.popup-file-list-menu",
+                                "(udd)", gtk_list_item_get_position (self->list_item), p.x, p.y);
 }
 
 static void
@@ -222,10 +222,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_POSITION:
-      self->position = g_value_get_uint (value);
-      break;
-
     case PROP_ITEM:
       self->item = g_value_get_object (value);
 
@@ -263,10 +259,6 @@ gtk_file_chooser_cell_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_POSITION:
-      g_value_set_uint (value, self->position);
-      break;
-
     case PROP_ITEM:
       g_value_set_object (value, self->item);
       break;
@@ -291,11 +283,6 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->dispose = gtk_file_chooser_cell_dispose;
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
-
-  g_object_class_install_property (object_class, PROP_POSITION,
-                                   g_param_spec_uint ("position", NULL, NULL,
-                                                      0, G_MAXUINT, 0,
-                                                      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_ITEM,
                                    g_param_spec_object ("item", NULL, NULL,
