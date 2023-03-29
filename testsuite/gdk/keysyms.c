@@ -113,6 +113,10 @@ test_key_unicode (void)
     { GDK_KEY_A, 'A' },
     { GDK_KEY_EuroSign, 0x20ac },
     { UNICODE_KEYVAL (0x1f60b), 0x1f60b },
+  },
+  oneway_tests[] = {
+    { GDK_KEY_KP_0, '0' },
+    { GDK_KEY_KP_Divide, '/' },
   };
   guint i;
 
@@ -120,6 +124,11 @@ test_key_unicode (void)
     {
       g_assert_cmpuint (gdk_keyval_to_unicode (tests[i].key), ==, tests[i].ch);
       g_assert_cmpuint (gdk_unicode_to_keyval (tests[i].ch), ==, tests[i].key);
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (oneway_tests); i++)
+    {
+      g_assert_cmpuint (gdk_keyval_to_unicode (tests[i].key), ==, tests[i].ch);
     }
 }
 
