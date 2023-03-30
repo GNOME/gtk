@@ -50,6 +50,7 @@ struct _GdkWaylandSurface
 
   gint64 pending_frame_counter;
   guint32 scale;
+  gboolean buffer_scale_dirty;
 
   int shadow_left;
   int shadow_right;
