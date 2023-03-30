@@ -570,7 +570,10 @@ gtk_overlay_set_child (GtkOverlay *overlay,
                        GtkWidget  *child)
 {
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || overlay->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (overlay->child == child)
+    return;
 
   g_clear_pointer (&overlay->child, gtk_widget_unparent);
 

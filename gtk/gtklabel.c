@@ -2489,7 +2489,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_MNEMONIC_WIDGET] =
       g_param_spec_object ("mnemonic-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:ellipsize: (attributes org.gtk.Property.get=gtk_label_get_ellipsize org.gtk.Property.set=gtk_label_set_ellipsize)
@@ -2980,9 +2980,10 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
                                GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_LABEL (self));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
-  if (widget)
-    g_return_if_fail (GTK_IS_WIDGET (widget));
+  if (self->mnemonic_widget == widget)
+    return;
 
   if (self->mnemonic_widget)
     {

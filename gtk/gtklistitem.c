@@ -304,7 +304,7 @@ gtk_list_item_set_child (GtkListItem *self,
                          GtkWidget   *child)
 {
   g_return_if_fail (GTK_IS_LIST_ITEM (self));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || gtk_widget_get_parent (child) == NULL);
 
   if (self->child == child)
     return;

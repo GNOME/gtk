@@ -1034,7 +1034,10 @@ gtk_button_set_child (GtkButton *button,
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
 
   g_return_if_fail (GTK_IS_BUTTON (button));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child)
+    return;
 
   g_clear_pointer (&priv->child, gtk_widget_unparent);
 

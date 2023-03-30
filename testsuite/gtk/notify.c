@@ -357,6 +357,12 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_set (instance, pspec->name, value, NULL);
       assert_notifies (instance, pspec->name, data.count, 1);
 
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      g_object_set (instance, pspec->name, NULL, NULL);
+      assert_notifies (instance, pspec->name, data.count, 2);
+
       g_signal_handler_disconnect (instance, id);
     }
   else
@@ -659,25 +665,29 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "expanded"))
         continue;
 
-       /* can't select items without an underlying, populated model */
-       if (g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) &&
-           (g_str_equal (pspec->name, "selected") ||
-            g_str_equal (pspec->name, "selected-item")))
-         continue;
+      /* can't select items without an underlying, populated model */
+      if (g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) &&
+          (g_str_equal (pspec->name, "selected") ||
+           g_str_equal (pspec->name, "selected-item")))
+        continue;
 
-       /* can't select items without an underlying, populated model */
-       if (g_type_is_a (type, GTK_TYPE_DROP_DOWN) &&
-           g_str_equal (pspec->name, "selected"))
-         continue;
+      /* can't select items without an underlying, populated model */
+      if (g_type_is_a (type, GTK_TYPE_DROP_DOWN) &&
+          g_str_equal (pspec->name, "selected"))
+        continue;
 
        /* can't set position without a notebook */
-       if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
-           g_str_equal (pspec->name, "position"))
-         continue;
+      if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
+          g_str_equal (pspec->name, "position"))
+        continue;
 
        /* This one is special */
-       if (g_str_equal (pspec->name, "focus-widget"))
-         continue;
+      if (g_str_equal (pspec->name, "focus-widget"))
+        continue;
+
+      if (pspec->owner_type == GTK_TYPE_TREE_VIEW_COLUMN &&
+          g_str_equal (pspec->name, "widget"))
+        continue;
 
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
