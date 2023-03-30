@@ -2009,7 +2009,7 @@ gtk_popover_set_child (GtkPopover *popover,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
 
   if (priv->child == child)
     return;

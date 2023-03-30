@@ -6628,7 +6628,10 @@ gtk_window_set_child (GtkWindow *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child)
+    return;
 
   g_clear_pointer (&priv->child, gtk_widget_unparent);
 

@@ -864,7 +864,10 @@ gtk_revealer_set_child (GtkRevealer *revealer,
                         GtkWidget   *child)
 {
   g_return_if_fail (GTK_IS_REVEALER (revealer));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || revealer->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (revealer->child == child)
+    return;
 
   g_clear_pointer (&revealer->child, gtk_widget_unparent);
 

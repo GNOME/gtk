@@ -597,6 +597,12 @@ gtk_flow_box_child_set_child (GtkFlowBoxChild *self,
 {
   GtkFlowBoxChildPrivate *priv = CHILD_PRIV (self);
 
+  g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (self));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child)
+    return;
+
   g_clear_pointer (&priv->child, gtk_widget_unparent);
 
   priv->child = child;

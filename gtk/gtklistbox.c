@@ -2956,6 +2956,12 @@ gtk_list_box_row_set_child (GtkListBoxRow *row,
 {
   GtkListBoxRowPrivate *priv = ROW_PRIV (row);
 
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child)
+    return;
+
   g_clear_pointer (&priv->child, gtk_widget_unparent);
 
   priv->child = child;

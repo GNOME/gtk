@@ -331,7 +331,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
@@ -686,7 +686,7 @@ gtk_viewport_set_child (GtkViewport *viewport,
                         GtkWidget   *child)
 {
   g_return_if_fail (GTK_IS_VIEWPORT (viewport));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || viewport->child == child || gtk_widget_get_parent (child) == NULL);
 
   if (viewport->child == child)
     return;

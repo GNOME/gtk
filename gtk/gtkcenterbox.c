@@ -332,6 +332,12 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 {
   GtkLayoutManager *layout_manager;
 
+  g_return_if_fail (GTK_IS_CENTER_BOX (self));
+  g_return_if_fail (child == NULL || self->start_widget == child || gtk_widget_get_parent (child) == NULL);
+
+  if (self->start_widget == child)
+    return;
+
   if (self->start_widget)
     gtk_widget_unparent (self->start_widget);
 
@@ -360,6 +366,12 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 {
   GtkLayoutManager *layout_manager;
 
+  g_return_if_fail (GTK_IS_CENTER_BOX (self));
+  g_return_if_fail (child == NULL || self->center_widget == child || gtk_widget_get_parent (child) == NULL);
+
+  if (self->center_widget == child)
+    return;
+
   if (self->center_widget)
     gtk_widget_unparent (self->center_widget);
 
@@ -387,6 +399,12 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
                                GtkWidget    *child)
 {
   GtkLayoutManager *layout_manager;
+
+  g_return_if_fail (GTK_IS_CENTER_BOX (self));
+  g_return_if_fail (child == NULL || self->end_widget == child || gtk_widget_get_parent (child) == NULL);
+
+  if (self->end_widget == child)
+    return;
 
   if (self->end_widget)
     gtk_widget_unparent (self->end_widget);

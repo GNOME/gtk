@@ -188,7 +188,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_LABEL_WIDGET] =
       g_param_spec_object ("label-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFrame:child: (attributes org.gtk.Property.get=gtk_frame_get_child org.gtk.Property.set=gtk_frame_set_child)
@@ -198,7 +198,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
@@ -408,8 +408,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   g_return_if_fail (GTK_IS_FRAME (frame));
-  g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
-  g_return_if_fail (label_widget == NULL || gtk_widget_get_parent (label_widget) == NULL);
+  g_return_if_fail (label_widget == NULL || priv->label_widget == label_widget || gtk_widget_get_parent (label_widget) == NULL);
 
   if (priv->label_widget == label_widget)
     return;
@@ -669,7 +668,7 @@ gtk_frame_set_child (GtkFrame  *frame,
   GtkFramePrivate *priv = gtk_frame_get_instance_private (frame);
 
   g_return_if_fail (GTK_IS_FRAME (frame));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
 
   if (priv->child == child)
     return;

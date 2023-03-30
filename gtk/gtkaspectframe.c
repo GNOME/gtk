@@ -640,7 +640,7 @@ gtk_aspect_frame_set_child (GtkAspectFrame  *self,
                             GtkWidget       *child)
 {
   g_return_if_fail (GTK_IS_ASPECT_FRAME (self));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || self->child == child || gtk_widget_get_parent (child) == NULL);
 
   if (self->child == child)
     return;

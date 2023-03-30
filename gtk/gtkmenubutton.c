@@ -1472,7 +1472,10 @@ gtk_menu_button_set_child (GtkMenuButton *menu_button,
   GtkWidget *box, *arrow;
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || menu_button->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (menu_button->child == child)
+    return;
 
   g_object_freeze_notify (G_OBJECT (menu_button));
 
@@ -1487,7 +1490,8 @@ gtk_menu_button_set_child (GtkMenuButton *menu_button,
   arrow = gtk_builtin_icon_new ("arrow");
   menu_button->arrow_widget = arrow;
 
-  gtk_box_append (GTK_BOX (box), child);
+  if (child)
+    gtk_box_append (GTK_BOX (box), child);
   gtk_box_append (GTK_BOX (box), arrow);
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
 

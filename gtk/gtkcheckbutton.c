@@ -1129,8 +1129,13 @@ void
 gtk_check_button_set_child (GtkCheckButton *button,
                             GtkWidget      *child)
 {
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (button);
+
   g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || priv->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child)
+    return;
 
   g_object_freeze_notify (G_OBJECT (button));
 

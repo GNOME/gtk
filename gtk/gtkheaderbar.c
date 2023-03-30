@@ -300,8 +300,7 @@ gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
                                  GtkWidget    *title_widget)
 {
   g_return_if_fail (GTK_IS_HEADER_BAR (bar));
-  if (title_widget)
-    g_return_if_fail (GTK_IS_WIDGET (title_widget));
+  g_return_if_fail (title_widget == NULL || bar->title_widget == title_widget || gtk_widget_get_parent (title_widget) == NULL);
 
   /* No need to do anything if the title widget stays the same */
   if (bar->title_widget == title_widget)
@@ -564,7 +563,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   header_bar_props[PROP_TITLE_WIDGET] =
       g_param_spec_object ("title-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkHeaderBar:show-title-buttons: (attributes org.gtk.Property.get=gtk_header_bar_get_show_title_buttons org.gtk.Property.set=gtk_header_bar_set_show_title_buttons)

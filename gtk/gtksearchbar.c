@@ -675,6 +675,12 @@ void
 gtk_search_bar_set_child (GtkSearchBar *bar,
                           GtkWidget    *child)
 {
+  g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
+  g_return_if_fail (child == NULL || bar->child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (bar->child == child)
+    return;
+
   if (bar->child)
     {
       if (GTK_IS_EDITABLE (bar->child))

@@ -3033,7 +3033,7 @@ gtk_combo_box_set_child (GtkComboBox *combo_box,
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || gtk_widget_get_parent (child) == NULL);
 
   if (priv->child)
     gtk_combo_box_remove (combo_box, priv->child);

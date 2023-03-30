@@ -782,7 +782,7 @@ gtk_tree_expander_set_child (GtkTreeExpander *self,
                              GtkWidget       *child)
 {
   g_return_if_fail (GTK_IS_TREE_EXPANDER (self));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || self->child == child || gtk_widget_get_parent (child) == NULL);
 
   if (self->child == child)
     return;

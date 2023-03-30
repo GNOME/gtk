@@ -4190,6 +4190,14 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
   GtkWidget *scrollable_child;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+  g_return_if_fail (child == NULL ||
+                    priv->child == child ||
+                    (priv->auto_added_viewport && gtk_viewport_get_child (GTK_VIEWPORT (priv->child)) == child) ||
+                    gtk_widget_get_parent (child) == NULL);
+
+  if (priv->child == child ||
+      (priv->auto_added_viewport && gtk_viewport_get_child (GTK_VIEWPORT (priv->child)) == child))
+    return;
 
   if (priv->child)
     {

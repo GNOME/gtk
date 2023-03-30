@@ -1574,11 +1574,14 @@ gtk_paned_new (GtkOrientation orientation)
  * If @child is `NULL`, the existing child will be removed.
  */
 void
-gtk_paned_set_start_child (GtkPaned *paned,
+gtk_paned_set_start_child (GtkPaned  *paned,
                            GtkWidget *child)
 {
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || paned->start_child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (paned->start_child == child)
+    return;
 
   g_clear_pointer (&paned->start_child, gtk_widget_unparent);
 
@@ -1691,11 +1694,14 @@ gtk_paned_get_shrink_start_child (GtkPaned *paned)
  * If @child is `NULL`, the existing child will be removed.
  */
 void
-gtk_paned_set_end_child (GtkPaned *paned,
+gtk_paned_set_end_child (GtkPaned  *paned,
                          GtkWidget *child)
 {
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+  g_return_if_fail (child == NULL || paned->end_child == child || gtk_widget_get_parent (child) == NULL);
+
+  if (paned->end_child == child)
+    return;
 
   g_clear_pointer (&paned->end_child, gtk_widget_unparent);
 
