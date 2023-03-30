@@ -25,8 +25,8 @@
 #include "gtkcolumnviewrowwidgetprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtklistfactorywidgetprivate.h"
 #include "gtklistitemprivate.h"
-#include "gtklistitemwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -47,7 +47,72 @@ struct _GtkColumnViewCellWidgetClass
   GtkListItemWidgetClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkColumnViewCellWidget, gtk_column_view_cell_widget, GTK_TYPE_LIST_ITEM_WIDGET)
+G_DEFINE_TYPE (GtkColumnViewCellWidget, gtk_column_view_cell_widget, GTK_TYPE_LIST_FACTORY_WIDGET)
+
+static gboolean
+gtk_column_view_cell_widget_focus (GtkWidget        *widget,
+                                   GtkDirectionType  direction)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (gtk_widget_get_focus_child (widget))
+    {
+      /* focus is in the child */
+      if (direction == GTK_DIR_TAB_BACKWARD)
+        return gtk_widget_grab_focus_self (widget);
+      else
+        return FALSE;
+    }
+  else if (gtk_widget_is_focus (widget))
+    {
+      /* The widget has focus */
+      if (direction == GTK_DIR_TAB_FORWARD)
+        {
+          if (child)
+            return gtk_widget_child_focus (child, direction);
+        }
+
+      return FALSE;
+    }
+  else
+    {
+      /* focus coming in from the outside */
+      if (direction == GTK_DIR_TAB_BACKWARD)
+        {
+          if (child &&
+              gtk_widget_child_focus (child, direction))
+            return TRUE;
+
+          return gtk_widget_grab_focus_self (widget);
+        }
+      else
+        {
+          if (gtk_widget_grab_focus_self (widget))
+            return TRUE;
+
+          if (child &&
+              gtk_widget_child_focus (child, direction))
+            return TRUE;
+
+          return FALSE;
+        }
+    }
+}
+
+static gboolean
+gtk_column_view_cell_widget_grab_focus (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  if (GTK_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->grab_focus (widget))
+    return TRUE;
+
+  child = gtk_widget_get_first_child (widget);
+  if (child && gtk_widget_grab_focus (child))
+    return TRUE;
+
+  return FALSE;
+}
 
 static gpointer
 gtk_column_view_cell_widget_create_object (GtkListFactoryWidget *fw)
@@ -64,12 +129,80 @@ gtk_column_view_cell_widget_create_object (GtkListFactoryWidget *fw)
 }
 
 static void
+gtk_column_view_cell_widget_setup_object (GtkListFactoryWidget *fw,
+                                          gpointer              object)
+{
+  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
+  GtkListItem *list_item = object;
+
+  GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->setup_object (fw, object);
+
+  list_item->cell = self;
+
+  gtk_list_factory_widget_set_activatable (fw, list_item->activatable);
+  gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
+  gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), list_item->child);
+
+  gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
+
+  gtk_list_item_do_notify (list_item,
+                           gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
+                           gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
+                           gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
+}
+
+static void
 gtk_column_view_cell_widget_teardown_object (GtkListFactoryWidget *fw,
                                              gpointer              object)
 {
+  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
+  GtkListItem *list_item = object;
+
   GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->teardown_object (fw, object);
 
-  gtk_widget_set_focusable (GTK_WIDGET (fw), FALSE);
+  list_item->cell = NULL;
+
+  gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), NULL);
+
+  gtk_list_factory_widget_set_activatable (fw, FALSE);
+  gtk_list_factory_widget_set_selectable (fw, FALSE);
+  gtk_widget_set_focusable (GTK_WIDGET (self), FALSE);
+
+  gtk_list_item_do_notify (list_item,
+                           gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
+                           gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
+                           gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
+
+  /* FIXME: This is technically not correct, the child is user code, isn't it? */
+  gtk_list_item_set_child (list_item, NULL);
+}
+
+static void
+gtk_column_view_cell_widget_update_object (GtkListFactoryWidget *fw,
+                                           gpointer              object,
+                                           guint                 position,
+                                           gpointer              item,
+                                           gboolean              selected)
+{
+  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
+  GtkListItemBase *base = GTK_LIST_ITEM_BASE (self);
+  GtkListItem *list_item = object;
+  /* Track notify manually instead of freeze/thaw_notify for performance reasons. */
+  gboolean notify_item = FALSE, notify_position = FALSE, notify_selected = FALSE;
+
+  /* FIXME: It's kinda evil to notify external objects from here... */
+  notify_item = gtk_list_item_base_get_item (base) != item;
+  notify_position = gtk_list_item_base_get_position (base) != position;
+  notify_selected = gtk_list_item_base_get_selected (base) != selected;
+
+  GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->update_object (fw,
+                                                                                           object,
+                                                                                           position,
+                                                                                           item,
+                                                                                           selected);
+
+  if (list_item)
+    gtk_list_item_do_notify (list_item, notify_item, notify_position, notify_selected);
 }
 
 static int
@@ -193,8 +326,12 @@ gtk_column_view_cell_widget_class_init (GtkColumnViewCellWidgetClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   factory_class->create_object = gtk_column_view_cell_widget_create_object;
+  factory_class->setup_object = gtk_column_view_cell_widget_setup_object;
+  factory_class->update_object = gtk_column_view_cell_widget_update_object;
   factory_class->teardown_object = gtk_column_view_cell_widget_teardown_object;
 
+  widget_class->focus = gtk_column_view_cell_widget_focus;
+  widget_class->grab_focus = gtk_column_view_cell_widget_grab_focus;
   widget_class->measure = gtk_column_view_cell_widget_measure;
   widget_class->size_allocate = gtk_column_view_cell_widget_size_allocate;
   widget_class->get_request_mode = gtk_column_view_cell_widget_get_request_mode;
@@ -271,4 +408,19 @@ GtkColumnViewColumn *
 gtk_column_view_cell_widget_get_column (GtkColumnViewCellWidget *self)
 {
   return self->column;
+}
+
+void
+gtk_column_view_cell_widget_set_child (GtkColumnViewCellWidget *self,
+                                       GtkWidget               *child)
+{
+  GtkWidget *cur_child = gtk_widget_get_first_child (GTK_WIDGET (self));
+
+  if (cur_child == child)
+    return;
+
+  g_clear_pointer (&cur_child, gtk_widget_unparent);
+
+  if (child)
+    gtk_widget_set_parent (child, GTK_WIDGET (self));
 }

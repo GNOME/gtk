@@ -38,6 +38,9 @@ GType                           gtk_column_view_cell_widget_get_type           (
 GtkWidget *                     gtk_column_view_cell_widget_new                (GtkColumnViewColumn             *column,
                                                                                 gboolean                         inert);
 
+void                            gtk_column_view_cell_widget_set_child          (GtkColumnViewCellWidget         *self,
+                                                                                GtkWidget                       *child);
+
 void                            gtk_column_view_cell_widget_remove             (GtkColumnViewCellWidget         *self);
 
 GtkColumnViewCellWidget *       gtk_column_view_cell_widget_get_next           (GtkColumnViewCellWidget         *self);

@@ -22,6 +22,7 @@
 #include "gtklistitem.h"
 
 #include "gtklistitemwidgetprivate.h"
+#include "gtkcolumnviewcellwidgetprivate.h"
 #include "gtkversion.h"
 
 G_BEGIN_DECLS
@@ -31,6 +32,7 @@ struct _GtkListItem
   GObject parent_instance;
 
   GtkListItemWidget *owner; /* has a reference */
+  GtkColumnViewCellWidget *cell; /* has a reference */
 
   GtkWidget *child;
 
