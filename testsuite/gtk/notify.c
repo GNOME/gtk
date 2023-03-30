@@ -376,11 +376,6 @@ test_type (gconstpointer data)
   if (g_str_equal (g_type_name (type), "GdkPixbufSimpleAnim"))
     return;
 
-  /* Deprecated, not getting fixed */
-  if (g_str_equal (g_type_name (type), "GtkColorSelection") ||
-      g_str_equal (g_type_name (type), "GtkNumerableIcon"))
-    return;
-
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
@@ -396,28 +391,13 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GdkX11GLContext"))
     return;
 
-  /* This throws a critical when the connection is dropped */
-  if (g_type_is_a (type, GTK_TYPE_APP_CHOOSER_DIALOG))
-    return;
-
   /* These leak their GDBusConnections */
   if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_NATIVE))
     return;
 
-  if (g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
-    return;
-
   if (g_type_is_a (type, GTK_TYPE_STACK_PAGE))
-    return;
-
-  /* These rely on a d-bus session bus */
-  if (g_type_is_a (type, GTK_TYPE_MOUNT_OPERATION))
-    return;
-
-  /* Needs a special surface */
-  if (g_type_is_a (type, GTK_TYPE_DRAG_ICON))
     return;
 
   /* these assert in constructed */
