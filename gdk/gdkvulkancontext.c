@@ -1101,11 +1101,19 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                  VK_VERSION_MINOR (layers[i].specVersion),
                                  VK_VERSION_PATCH (layers[i].specVersion),
                                  layers[i].description);
-      if ((gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_VALIDATE) &&
-          g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
+      if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_VALIDATE)
         {
-          g_ptr_array_add (used_layers, (gpointer) "VK_LAYER_LUNARG_standard_validation");
-          validate = TRUE;
+          const char *validation_layer_names[] = {
+            "VK_LAYER_LUNARG_standard_validation",
+            "VK_LAYER_KHRONOS_validation",
+            NULL,
+          };
+
+          if (g_strv_contains (validation_layer_names, layers[i].layerName))
+            {
+              g_ptr_array_add (used_layers, layers[i].layerName);
+              validate = TRUE;
+            }
         }
     }
 
