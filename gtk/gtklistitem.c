@@ -21,6 +21,7 @@
 
 #include "gtklistitemprivate.h"
 
+#include "gtkcolumnviewcell.h"
 
 /**
  * GtkListItem:
@@ -40,11 +41,6 @@
  * 2. The bound stage where the listitem references an item from the list.
  *    The [property@Gtk.ListItem:item] property is not %NULL.
  */
-
-struct _GtkListItemClass
-{
-  GObjectClass parent_class;
-};
 
 enum
 {
@@ -70,7 +66,6 @@ gtk_list_item_dispose (GObject *object)
   GtkListItem *self = GTK_LIST_ITEM (object);
 
   g_assert (self->owner == NULL); /* would hold a reference */
-  g_assert (self->cell == NULL); /* would hold a reference */
   g_clear_object (&self->child);
 
   G_OBJECT_CLASS (gtk_list_item_parent_class)->dispose (object);
@@ -101,15 +96,11 @@ gtk_list_item_get_property (GObject    *object,
     case PROP_ITEM:
       if (self->owner)
         g_value_set_object (value, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->owner)));
-      else if (self->cell)
-        g_value_set_object (value, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->cell)));
       break;
 
     case PROP_POSITION:
       if (self->owner)
         g_value_set_uint (value, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->owner)));
-      else if (self->cell)
-        g_value_set_uint (value, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->cell)));
       else
         g_value_set_uint (value, GTK_INVALID_LIST_POSITION);
       break;
@@ -121,8 +112,6 @@ gtk_list_item_get_property (GObject    *object,
     case PROP_SELECTED:
       if (self->owner)
         g_value_set_boolean (value, gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->owner)));
-      if (self->cell)
-        g_value_set_boolean (value, gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->cell)));
       else
         g_value_set_boolean (value, FALSE);
       break;
@@ -296,8 +285,8 @@ gtk_list_item_get_item (GtkListItem *self)
 
   if (self->owner)
     return gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->owner));
-  else if (self->cell)
-    return gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->cell));
+  else if (GTK_IS_COLUMN_VIEW_CELL (self))
+    return gtk_column_view_cell_get_item (GTK_COLUMN_VIEW_CELL (self));
   else
     return NULL;
 }
@@ -315,6 +304,9 @@ GtkWidget *
 gtk_list_item_get_child (GtkListItem *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), NULL);
+
+  if (GTK_IS_COLUMN_VIEW_CELL (self))
+    return gtk_column_view_cell_get_child (GTK_COLUMN_VIEW_CELL (self));
 
   return self->child;
 }
@@ -337,6 +329,12 @@ gtk_list_item_set_child (GtkListItem *self,
   g_return_if_fail (GTK_IS_LIST_ITEM (self));
   g_return_if_fail (child == NULL || gtk_widget_get_parent (child) == NULL);
 
+  if (GTK_IS_COLUMN_VIEW_CELL (self))
+    {
+      gtk_column_view_cell_set_child (GTK_COLUMN_VIEW_CELL (self), child);
+      return;
+    }
+
   if (self->child == child)
     return;
 
@@ -356,8 +354,6 @@ gtk_list_item_set_child (GtkListItem *self,
 
   if (self->owner)
     gtk_list_item_widget_set_child (self->owner, child);
-  else if (self->cell)
-    gtk_column_view_cell_widget_set_child (self->cell, child);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
 }
@@ -377,10 +373,12 @@ gtk_list_item_get_position (GtkListItem *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), GTK_INVALID_LIST_POSITION);
 
-  if (self->owner == NULL)
+  if (self->owner)
+    return gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->owner));
+  else if (GTK_IS_COLUMN_VIEW_CELL (self))
+    return gtk_column_view_cell_get_position (GTK_COLUMN_VIEW_CELL (self));
+  else
     return GTK_INVALID_LIST_POSITION;
-
-  return gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->owner));
 }
 
 /**
@@ -401,8 +399,8 @@ gtk_list_item_get_selected (GtkListItem *self)
 
   if (self->owner)
     return gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->owner));
-  if (self->cell)
-    return gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->cell));
+  else if (GTK_IS_COLUMN_VIEW_CELL (self))
+    return gtk_column_view_cell_get_selected (GTK_COLUMN_VIEW_CELL (self));
   else
     return FALSE;
 }
@@ -561,8 +559,6 @@ gtk_list_item_set_focusable (GtkListItem *self,
 
   if (self->owner)
     gtk_widget_set_focusable (GTK_WIDGET (self->owner), focusable);
-  if (self->cell)
-    gtk_widget_set_focusable (GTK_WIDGET (self->cell), focusable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUSABLE]);
 }

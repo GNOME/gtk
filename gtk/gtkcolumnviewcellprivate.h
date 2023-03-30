@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Benjamin Otte
+ * Copyright © 2023 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,41 +19,30 @@
 
 #pragma once
 
-#include "gtklistitem.h"
+#include "gtkcolumnviewcell.h"
 
-#include "gtklistitemwidgetprivate.h"
 #include "gtkcolumnviewcellwidgetprivate.h"
-#include "gtkversion.h"
+#include "gtklistitemprivate.h"
 
 G_BEGIN_DECLS
 
-struct _GtkListItem
+struct _GtkColumnViewCell
 {
-  GObject parent_instance;
+  GtkListItem parent_instance;
 
-  GtkListItemWidget *owner; /* has a reference */
+  GtkColumnViewCellWidget *cell; /* has a reference */
 
   GtkWidget *child;
 
-  guint activatable : 1;
-  guint selectable : 1;
   guint focusable : 1;
-#if !GTK_CHECK_VERSION (5, 0, 0)
-  guint focusable_set : 1;
-#endif
 };
 
-struct _GtkListItemClass
-{
-  GObjectClass parent_class;
-};
+GtkColumnViewCell *     gtk_column_view_cell_new                        (void);
 
-GtkListItem *   gtk_list_item_new                               (void);
-
-void            gtk_list_item_do_notify                         (GtkListItem *list_item,
-                                                                 gboolean notify_item,
-                                                                 gboolean notify_position,
-                                                                 gboolean notify_selected);
+void                    gtk_column_view_cell_do_notify                  (GtkColumnViewCell *column_view_cell,
+                                                                         gboolean notify_item,
+                                                                         gboolean notify_position,
+                                                                         gboolean notify_selected);
 
 
 G_END_DECLS

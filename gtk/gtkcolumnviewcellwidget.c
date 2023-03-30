@@ -21,12 +21,12 @@
 
 #include "gtkcolumnviewcellwidgetprivate.h"
 
+#include "gtkcolumnviewcellprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewrowwidgetprivate.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistfactorywidgetprivate.h"
-#include "gtklistitemprivate.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -117,15 +117,7 @@ gtk_column_view_cell_widget_grab_focus (GtkWidget *widget)
 static gpointer
 gtk_column_view_cell_widget_create_object (GtkListFactoryWidget *fw)
 {
-  GtkListItem *list_item;
-
-  list_item = gtk_list_item_new ();
-
-  gtk_list_item_set_selectable (list_item, FALSE);
-  gtk_list_item_set_activatable (list_item, FALSE);
-  gtk_list_item_set_focusable (list_item, FALSE);
-
-  return list_item;
+  return gtk_column_view_cell_new ();
 }
 
 static void
@@ -133,20 +125,20 @@ gtk_column_view_cell_widget_setup_object (GtkListFactoryWidget *fw,
                                           gpointer              object)
 {
   GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
-  GtkListItem *list_item = object;
+  GtkColumnViewCell *cell = object;
 
   GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->setup_object (fw, object);
 
-  list_item->cell = self;
+  cell->cell = self;
 
-  gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), list_item->child);
+  gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), cell->child);
 
-  gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
+  gtk_widget_set_focusable (GTK_WIDGET (self), cell->focusable);
 
-  gtk_list_item_do_notify (list_item,
-                           gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
-                           gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
-                           gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
+  gtk_column_view_cell_do_notify (cell,
+                                  gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
+                                  gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
+                                  gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
 }
 
 static void
@@ -154,23 +146,20 @@ gtk_column_view_cell_widget_teardown_object (GtkListFactoryWidget *fw,
                                              gpointer              object)
 {
   GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
-  GtkListItem *list_item = object;
+  GtkColumnViewCell *cell = object;
 
   GTK_LIST_FACTORY_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->teardown_object (fw, object);
 
-  list_item->cell = NULL;
+  cell->cell = NULL;
 
   gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), NULL);
 
   gtk_widget_set_focusable (GTK_WIDGET (self), FALSE);
 
-  gtk_list_item_do_notify (list_item,
-                           gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
-                           gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
-                           gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
-
-  /* FIXME: This is technically not correct, the child is user code, isn't it? */
-  gtk_list_item_set_child (list_item, NULL);
+  gtk_column_view_cell_do_notify (cell,
+                                  gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
+                                  gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
+                                  gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self)));
 }
 
 static void
@@ -182,7 +171,7 @@ gtk_column_view_cell_widget_update_object (GtkListFactoryWidget *fw,
 {
   GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (fw);
   GtkListItemBase *base = GTK_LIST_ITEM_BASE (self);
-  GtkListItem *list_item = object;
+  GtkColumnViewCell *cell = object;
   /* Track notify manually instead of freeze/thaw_notify for performance reasons. */
   gboolean notify_item = FALSE, notify_position = FALSE, notify_selected = FALSE;
 
@@ -197,8 +186,8 @@ gtk_column_view_cell_widget_update_object (GtkListFactoryWidget *fw,
                                                                                            item,
                                                                                            selected);
 
-  if (list_item)
-    gtk_list_item_do_notify (list_item, notify_item, notify_position, notify_selected);
+  if (cell)
+    gtk_column_view_cell_do_notify (cell, notify_item, notify_position, notify_selected);
 }
 
 static int

@@ -86,6 +86,7 @@
 #include <gtk/gtkcolordialogbutton.h>
 #include <gtk/gtkcolorutils.h>
 #include <gtk/gtkcolumnview.h>
+#include <gtk/gtkcolumnviewcell.h>
 #include <gtk/gtkcolumnviewcolumn.h>
 #include <gtk/gtkcolumnviewrow.h>
 #include <gtk/gtkcolumnviewsorter.h>
