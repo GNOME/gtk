@@ -90,10 +90,15 @@ gtk_column_view_title_measure (GtkWidget      *widget,
     {
       if (fixed_width > -1)
         {
+          int min;
+
           if (for_size == -1)
             for_size = unadj_width;
           else
             for_size = MIN (for_size, unadj_width);
+
+          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+          for_size = MAX (for_size, min);
         }
     }
 
