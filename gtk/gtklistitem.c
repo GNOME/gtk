@@ -457,8 +457,6 @@ gtk_list_item_set_selectable (GtkListItem *self,
 
   if (self->owner)
     gtk_list_factory_widget_set_selectable (GTK_LIST_FACTORY_WIDGET (self->owner), selectable);
-  if (self->cell)
-    gtk_list_factory_widget_set_selectable (GTK_LIST_FACTORY_WIDGET (self->cell), selectable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
 }
@@ -508,8 +506,6 @@ gtk_list_item_set_activatable (GtkListItem *self,
 
   if (self->owner)
     gtk_list_factory_widget_set_activatable (GTK_LIST_FACTORY_WIDGET (self->owner), activatable);
-  if (self->cell)
-    gtk_list_factory_widget_set_activatable (GTK_LIST_FACTORY_WIDGET (self->cell), activatable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
 }

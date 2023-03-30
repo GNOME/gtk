@@ -139,8 +139,6 @@ gtk_column_view_cell_widget_setup_object (GtkListFactoryWidget *fw,
 
   list_item->cell = self;
 
-  gtk_list_factory_widget_set_activatable (fw, list_item->activatable);
-  gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
   gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), list_item->child);
 
   gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
@@ -164,8 +162,6 @@ gtk_column_view_cell_widget_teardown_object (GtkListFactoryWidget *fw,
 
   gtk_column_view_cell_widget_set_child (GTK_COLUMN_VIEW_CELL_WIDGET (self), NULL);
 
-  gtk_list_factory_widget_set_activatable (fw, FALSE);
-  gtk_list_factory_widget_set_selectable (fw, FALSE);
   gtk_widget_set_focusable (GTK_WIDGET (self), FALSE);
 
   gtk_list_item_do_notify (list_item,
