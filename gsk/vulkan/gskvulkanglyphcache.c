@@ -270,11 +270,8 @@ render_glyph (Atlas          *atlas,
 
   gi.glyph = key->glyph;
   gi.geometry.width = value->draw_width * 1024;
-  if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    gi.geometry.x_offset = key->xshift * 256;
-  else
-    gi.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
-  gi.geometry.y_offset = key->yshift * 256 - value->draw_y * 1024;
+  gi.geometry.x_offset = (0.25 * key->xshift - value->draw_x) * 1024;
+  gi.geometry.y_offset = (0.25 * key->yshift - value->draw_y) * 1024;
 
   glyphs.num_glyphs = 1;
   glyphs.glyphs = &gi;
@@ -380,6 +377,11 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
 
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
+
+      ink_rect.x -= 1;
+      ink_rect.y -= 1;
+      ink_rect.width += 2;
+      ink_rect.height += 2;
 
       value->draw_x = ink_rect.x;
       value->draw_y = ink_rect.y;
