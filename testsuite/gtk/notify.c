@@ -266,6 +266,26 @@ check_property (GObject *instance, GParamSpec *pspec)
 
       g_signal_handler_disconnect (instance, id);
     }
+  else if (pspec->value_type == G_TYPE_STRV)
+    {
+      NotifyData data;
+      gulong id;
+      const char *value[] = { "bla", "bla", NULL };
+
+      data.name = pspec->name;
+      data.count = 0;
+      id = g_signal_connect (instance, "notify", G_CALLBACK (count_notify), &data);
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      value[1] = "foo";
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 2);
+
+      g_signal_handler_disconnect (instance, id);
+    }
   else if (pspec->value_type == G_TYPE_DOUBLE)
     {
       GParamSpecDouble *p = G_PARAM_SPEC_DOUBLE (pspec);
@@ -342,6 +362,57 @@ check_property (GObject *instance, GParamSpec *pspec)
 
       g_signal_handler_disconnect (instance, id);
     }
+  else if (pspec->value_type == G_TYPE_LIST_MODEL)
+    {
+      NotifyData data;
+      gulong id;
+      GListStore *value;
+
+      data.name = pspec->name;
+      data.count = 0;
+      id = g_signal_connect (instance, "notify", G_CALLBACK (count_notify), &data);
+
+      value = g_list_store_new (GTK_TYPE_WIDGET);
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      g_object_set (instance, pspec->name, NULL, NULL);
+      assert_notifies (instance, pspec->name, data.count, 2);
+
+      g_object_unref (value);
+
+      g_signal_handler_disconnect (instance, id);
+    }
+  else if (pspec->value_type == GTK_TYPE_ADJUSTMENT)
+    {
+      NotifyData data;
+      gulong id;
+      GtkAdjustment *value;
+
+      data.name = pspec->name;
+      data.count = 0;
+      id = g_signal_connect (instance, "notify", G_CALLBACK (count_notify), &data);
+
+      value = gtk_adjustment_new (100, 0, 200, 1, 1, 10);
+      g_object_ref_sink (value);
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 1);
+
+      g_object_set (instance, pspec->name, NULL, NULL);
+      assert_notifies (instance, pspec->name, data.count, 2);
+
+      g_object_unref (value);
+
+      g_signal_handler_disconnect (instance, id);
+    }
   else if (pspec->value_type == GTK_TYPE_WIDGET)
     {
       NotifyData data;
@@ -353,6 +424,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       id = g_signal_connect (instance, "notify", G_CALLBACK (count_notify), &data);
 
       value = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      g_object_ref_sink (value);
 
       g_object_set (instance, pspec->name, value, NULL);
       assert_notifies (instance, pspec->name, data.count, 1);
@@ -362,6 +434,8 @@ check_property (GObject *instance, GParamSpec *pspec)
 
       g_object_set (instance, pspec->name, NULL, NULL);
       assert_notifies (instance, pspec->name, data.count, 2);
+
+      g_object_unref (value);
 
       g_signal_handler_disconnect (instance, id);
     }
@@ -536,6 +610,7 @@ test_type (gconstpointer data)
       if (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET) &&
           (g_str_equal (pspec->name, "has-focus") ||
            g_str_equal (pspec->name, "has-default") ||
+           g_str_equal (pspec->name, "focus-widget") ||
            g_str_equal (pspec->name, "is-focus") ||
            g_str_equal (pspec->name, "hexpand") ||
            g_str_equal (pspec->name, "vexpand") ||
@@ -566,24 +641,17 @@ test_type (gconstpointer data)
         continue;
 
       /* Too many special cases involving -set properties */
-      if (g_str_equal (g_type_name (pspec->owner_type), "GtkCellRendererText") ||
-          g_str_equal (g_type_name (pspec->owner_type), "GtkTextTag"))
+      if (pspec->owner_type == GTK_TYPE_CELL_RENDERER_TEXT ||
+          pspec->owner_type == GTK_TYPE_TEXT_TAG)
         continue;
 
       /* Most things assume a model is set */
-      if (g_str_equal (g_type_name (pspec->owner_type), "GtkComboBox"))
+      if (pspec->owner_type == GTK_TYPE_COMBO_BOX)
         continue;
 
       /* Can only be set on unmapped windows */
       if (pspec->owner_type == GTK_TYPE_WINDOW &&
           g_str_equal (pspec->name, "type-hint"))
-        continue;
-
-      /* Special restrictions on allowed values */
-      if (pspec->owner_type == GTK_TYPE_COMBO_BOX &&
-          (g_str_equal (pspec->name, "id-column") ||
-           g_str_equal (pspec->name, "active-id") ||
-           g_str_equal (pspec->name, "entry-text-column")))
         continue;
 
       if (pspec->owner_type == GTK_TYPE_ENTRY_COMPLETION &&
@@ -681,12 +749,19 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "position"))
         continue;
 
-       /* This one is special */
-      if (g_str_equal (pspec->name, "focus-widget"))
-        continue;
-
       if (pspec->owner_type == GTK_TYPE_TREE_VIEW_COLUMN &&
           g_str_equal (pspec->name, "widget"))
+        continue;
+
+      /* Interface does not do explicit notify, so we can't fix it */
+      if (pspec->owner_type == GTK_TYPE_SCROLLABLE &&
+          (g_str_equal (pspec->name, "hadjustment") ||
+           g_str_equal (pspec->name, "vadjustment")))
+        continue;
+
+      /* deprecated, not getting fixed */
+      if (pspec->owner_type == GTK_TYPE_CELL_RENDERER_SPIN &&
+          g_str_equal (pspec->name, "adjustment"))
         continue;
 
       if (g_test_verbose ())
