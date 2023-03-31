@@ -423,11 +423,11 @@ const char *ui_file =
 "            <property name='bytes'><![CDATA[\n"
 "<?xml version='1.0' encoding='UTF-8'?>\n"
 "<interface>\n"
-"  <template class='GtkListItem'>\n"
+"  <template class='GtkColumnViewCell'>\n"
 "    <property name='child'>\n"
 "      <object class='GtkTreeExpander' id='expander'>\n"
 "        <binding name='list-row'>\n"
-"          <lookup name='item'>GtkListItem</lookup>\n"
+"          <lookup name='item'>GtkColumnViewCell</lookup>\n"
 "        </binding>\n"
 "        <property name='child'>\n"
 "          <object class='GtkBox'>\n"
@@ -477,12 +477,12 @@ const char *ui_file =
 #define SIMPLE_STRING_FACTORY(attr, type) \
 "<?xml version='1.0' encoding='UTF-8'?>\n" \
 "<interface>\n" \
-"  <template class='GtkListItem'>\n" \
+"  <template class='GtkColumnViewCell'>\n" \
 "    <property name='child'>\n" \
 "      <object class='GtkInscription'>\n" \
 "        <binding name='text'>\n" \
 "          <closure type='gchararray' function='get_string'>\n" \
-"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkListItem</lookup></lookup>\n" \
+"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkColumnViewCell</lookup></lookup>\n" \
 "            <constant type='gchararray'>" attr "</constant>" \
 "          </closure>\n" \
 "        </binding>\n" \
@@ -494,12 +494,12 @@ const char *ui_file =
 #define BOOLEAN_FACTORY(attr) \
 "<?xml version='1.0' encoding='UTF-8'?>\n" \
 "<interface>\n" \
-"  <template class='GtkListItem'>\n" \
+"  <template class='GtkColumnViewCell'>\n" \
 "    <property name='child'>\n" \
 "      <object class='GtkCheckButton'>\n" \
 "        <binding name='active'>\n" \
 "          <closure type='gboolean' function='get_boolean'>\n" \
-"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkListItem</lookup></lookup>\n" \
+"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkColumnViewCell</lookup></lookup>\n" \
 "            <constant type='gchararray'>" attr "</constant>" \
 "          </closure>\n" \
 "        </binding>\n" \
@@ -511,12 +511,12 @@ const char *ui_file =
 #define ICON_FACTORY(attr) \
 "<?xml version='1.0' encoding='UTF-8'?>\n" \
 "<interface>\n" \
-"  <template class='GtkListItem'>\n" \
+"  <template class='GtkColumnViewCell'>\n" \
 "    <property name='child'>\n" \
 "      <object class='GtkImage'>\n" \
 "        <binding name='gicon'>\n" \
 "          <closure type='GIcon' function='get_object'>\n" \
-"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkListItem</lookup></lookup>\n" \
+"            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkColumnViewCell</lookup></lookup>\n" \
 "            <constant type='gchararray'>" attr "</constant>" \
 "          </closure>\n" \
 "        </binding>\n" \
