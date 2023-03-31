@@ -5951,6 +5951,9 @@ gtk_widget_reposition_after (GtkWidget *widget,
   prev_parent = priv->parent;
   prev_previous = priv->prev_sibling;
 
+  if (priv->parent == parent && previous_sibling == prev_previous)
+    return;
+
   if (priv->parent != NULL && priv->parent != parent)
     {
       g_warning ("Can't set new parent %s %p on widget %s %p, "
