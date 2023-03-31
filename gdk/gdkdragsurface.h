@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GDK_DRAG_SURFACE_H__
-#define __GDK_DRAG_SURFACE_H__
+#pragma once
 
 #if !defined(__GDK_H_INSIDE__) && !defined(GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -40,4 +39,3 @@ gboolean gdk_drag_surface_present (GdkDragSurface *drag_surface,
 
 G_END_DECLS
 
-#endif /* __GDK_DRAG_SURFACE_H__ */

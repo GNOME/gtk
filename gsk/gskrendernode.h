@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_RENDER_NODE_H__
-#define __GSK_RENDER_NODE_H__
+#pragma once
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -585,4 +584,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
 
 G_END_DECLS
 
-#endif /* __GSK_RENDER_NODE_H__ */

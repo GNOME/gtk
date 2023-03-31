@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_BUILDER_SCOPE_H__
-#define __GTK_BUILDER_SCOPE_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -126,4 +125,3 @@ GCallback               gtk_builder_cscope_lookup_callback_symbol(GtkBuilderCSco
 
 G_END_DECLS
 
-#endif /* __GTK_BUILDER_SCOPE_H__ */

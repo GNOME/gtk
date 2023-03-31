@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_CHOOSER_UTILS_H__
-#define __GTK_FILE_CHOOSER_UTILS_H__
+#pragma once
 
 #include "gtkfilechooserprivate.h"
 #include "gtkicontheme.h"
@@ -62,4 +61,3 @@ GFile *         _gtk_file_info_get_file (GFileInfo *info);
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_CHOOSER_UTILS_H__ */

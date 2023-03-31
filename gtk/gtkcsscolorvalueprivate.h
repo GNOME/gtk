@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_COLOR_VALUE_PRIVATE_H__
-#define __GTK_CSS_COLOR_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -51,4 +50,3 @@ const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *colo
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_COLOR_VALUE_PRIVATE_H__ */

@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GTK_PRINTER_OPTION_WIDGET_H__
-#define __GTK_PRINTER_OPTION_WIDGET_H__
+#pragma once
 
 #include "gtkprinteroption.h"
 #include "gtkbox.h"
@@ -71,4 +70,3 @@ const char *gtk_printer_option_widget_get_value          (GtkPrinterOptionWidget
 
 G_END_DECLS
 
-#endif /* __GTK_PRINTER_OPTION_WIDGET_H__ */

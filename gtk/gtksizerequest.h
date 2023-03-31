@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SIZE_REQUEST_H__
-#define __GTK_SIZE_REQUEST_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -55,4 +54,3 @@ int                 gtk_distribute_natural_allocation               (int        
 
 G_END_DECLS
 
-#endif /* __GTK_SIZE_REQUEST_H__ */

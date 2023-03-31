@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_DIALOG_PRIVATE_H__
-#define __GTK_DIALOG_PRIVATE_H__
+#pragma once
 
 #include "gtkdialog.h"
 
@@ -34,4 +33,3 @@ GtkWidget *gtk_dialog_get_action_area (GtkDialog *dialog);
 
 G_END_DECLS
 
-#endif /* __GTK_DIALOG_PRIVATE_H__ */

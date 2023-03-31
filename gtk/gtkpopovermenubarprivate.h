@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_POPOVER_MENU_BAR_PRIVATE_H__
-#define __GTK_POPOVER_MENU_BAR_PRIVATE_H__
+#pragma once
 
 #include "gtkpopovermenubar.h"
 
@@ -28,4 +27,3 @@ GList* gtk_popover_menu_bar_get_viewable_menu_bars (GtkWindow         *window);
 
 G_END_DECLS
 
-#endif /* __GTK_POPOVER_PRIVATE_H__ */

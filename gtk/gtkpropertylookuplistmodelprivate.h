@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_PROPERTY_LOOKUP_LIST_MODEL_H__
-#define __GTK_PROPERTY_LOOKUP_LIST_MODEL_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -47,4 +46,3 @@ gpointer                        gtk_property_lookup_list_model_get_object       
 
 G_END_DECLS
 
-#endif /* __GTK_PROPERTY_LOOKUP_LIST_MODEL_H__ */

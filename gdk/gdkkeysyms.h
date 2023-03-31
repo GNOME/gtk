@@ -32,8 +32,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_KEYSYMS_H__
-#define __GDK_KEYSYMS_H__
+#pragma once
 
 
 #define GDK_KEY_VoidSymbol 0xffffff
@@ -2315,4 +2314,3 @@
 #define GDK_KEY_LogWindowTree 0x1008fe24
 #define GDK_KEY_LogGrabInfo 0x1008fe25
 
-#endif /* __GDK_KEYSYMS_H__ */

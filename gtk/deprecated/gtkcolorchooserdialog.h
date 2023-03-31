@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_CHOOSER_DIALOG_H__
-#define __GTK_COLOR_CHOOSER_DIALOG_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -43,4 +42,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkColorChooserDialog, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_CHOOSER_DIALOG_H__ */

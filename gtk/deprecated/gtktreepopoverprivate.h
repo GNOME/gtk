@@ -17,8 +17,7 @@
  * Author: Matthias Clasen
  */
 
-#ifndef __GTK_TREE_POPOVER_PRIVATE_H__
-#define __GTK_TREE_POPOVER_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -40,4 +39,3 @@ void gtk_tree_popover_open_submenu           (GtkTreePopover              *popov
 
 G_END_DECLS
 
-#endif /* __GTK_TREE_POPOVER_PRIVATE_H__ */

@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SHOW_H__
-#define __GTK_SHOW_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -49,4 +48,3 @@ void gtk_show_uri (GtkWindow  *parent,
 
 G_END_DECLS
 
-#endif /* __GTK_SHOW_H__ */

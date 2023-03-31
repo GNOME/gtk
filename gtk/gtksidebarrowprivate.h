@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GTK_SIDEBAR_ROW_PRIVATE_H
-#define GTK_SIDEBAR_ROW_PRIVATE_H
+#pragma once
 
 #include <glib.h>
 #include "gtklistbox.h"
@@ -58,4 +57,3 @@ void           gtk_sidebar_row_set_busy         (GtkSidebarRow *row,
 
 G_END_DECLS
 
-#endif /* GTK_SIDEBAR_ROW_PRIVATE_H */

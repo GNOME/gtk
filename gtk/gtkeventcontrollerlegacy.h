@@ -17,8 +17,7 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GTK_EVENT_CONTROLLER_LEGACY_H__
-#define __GTK_EVENT_CONTROLLER_LEGACY_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -46,4 +45,3 @@ GtkEventController *gtk_event_controller_legacy_new        (void);
 
 G_END_DECLS
 
-#endif /* __GTK_EVENT_CONTROLLER_LEGACY_H__ */

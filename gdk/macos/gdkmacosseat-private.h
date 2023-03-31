@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_SEAT_PRIVATE_H__
-#define __GDK_MACOS_SEAT_PRIVATE_H__
+#pragma once
 
 #include <AppKit/AppKit.h>
 
@@ -43,4 +42,3 @@ double *_gdk_macos_seat_get_tablet_axes_from_nsevent (GdkMacosSeat *seat,
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_SEAT_PRIVATE_H__ */

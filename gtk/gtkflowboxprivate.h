@@ -16,11 +16,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FLOW_BOX_PRIVATE_H__
-#define __GTK_FLOW_BOX_PRIVATE_H__
+#pragma once
 
 #include "gtkflowbox.h"
 
 void gtk_flow_box_disable_move_cursor (GtkFlowBox *box);
 
-#endif

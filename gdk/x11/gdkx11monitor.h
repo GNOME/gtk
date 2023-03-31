@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_MONITOR_H__
-#define __GDK_X11_MONITOR_H__
+#pragma once
 
 #if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/x11/gdkx.h> can be included directly."
@@ -49,4 +48,3 @@ void              gdk_x11_monitor_get_workarea        (GdkMonitor   *monitor,
 
 G_END_DECLS
 
-#endif  /* __GDK_X11_MONITOR_H__ */

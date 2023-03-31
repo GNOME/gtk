@@ -17,8 +17,7 @@
  * Author: Matthias Clasen
  */
 
-#ifndef __GTK_SEARCH_ENGINE_MODEL_H__
-#define __GTK_SEARCH_ENGINE_MODEL_H__
+#pragma once
 
 #include "gtksearchengineprivate.h"
 #include "gtkfilesystemmodelprivate.h"
@@ -41,4 +40,3 @@ GtkSearchEngine *_gtk_search_engine_model_new      (GtkFileSystemModel *model);
 
 G_END_DECLS
 
-#endif /* __GTK_SEARCH_ENGINE_MODEL_H__ */

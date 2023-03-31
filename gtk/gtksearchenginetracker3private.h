@@ -21,8 +21,7 @@
  * Based on nautilus-search-engine-tracker.h
  */
 
-#ifndef __GTK_SEARCH_ENGINE_TRACKER3_H__
-#define __GTK_SEARCH_ENGINE_TRACKER3_H__
+#pragma once
 
 #include "gtksearchengineprivate.h"
 
@@ -38,4 +37,3 @@ GtkSearchEngine * gtk_search_engine_tracker3_new (void);
 
 G_END_DECLS
 
-#endif /* __GTK_SEARCH_ENGINE_TRACKER3_H__ */

@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU Library General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GTK_ICON_CACHE_PRIVATE_H__
-#define __GTK_ICON_CACHE_PRIVATE_H__
+#pragma once
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkiconthemeprivate.h>
@@ -48,4 +47,3 @@ void          gtk_icon_cache_unref                      (GtkIconCache *cache);
 
 G_END_DECLS
 
-#endif /* __GTK_ICON_CACHE_PRIVATE_H__ */

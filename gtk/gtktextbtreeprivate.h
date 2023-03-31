@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_BTREE_PRIVATE_H__
-#define __GTK_TEXT_BTREE_PRIVATE_H__
+#pragma once
 
 #if 0
 #define DEBUG_VALIDATION_AND_SCROLLING
@@ -345,6 +344,5 @@ void _gtk_text_btree_notify_will_remove_tag (GtkTextBTree *tree,
 
 G_END_DECLS
 
-#endif
 
 

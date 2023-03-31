@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_ACTION_EDITOR_H_
-#define _GTK_INSPECTOR_ACTION_EDITOR_H_
+#pragma once
 
 
 #include <gtk/gtkwidget.h>
@@ -44,6 +43,5 @@ void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *self,
 G_END_DECLS
 
 
-#endif // _GTK_INSPECTOR_ACTION_EDITOR_H_
 
 // vim: set et:

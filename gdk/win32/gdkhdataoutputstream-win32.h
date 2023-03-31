@@ -19,8 +19,7 @@
  *         Christian Kellner <gicmo@gnome.org>
  */
 
-#ifndef __GDK_WIN32_HDATA_OUTPUT_STREAM_H__
-#define __GDK_WIN32_HDATA_OUTPUT_STREAM_H__
+#pragma once
 
 #include <gio/gio.h>
 #include "gdktypes.h"
@@ -60,4 +59,3 @@ HANDLE         gdk_win32_hdata_output_stream_get_handle (GdkWin32HDataOutputStre
 
 G_END_DECLS
 
-#endif /* __GDK_WIN32_HDATA_OUTPUT_STREAM_H__ */

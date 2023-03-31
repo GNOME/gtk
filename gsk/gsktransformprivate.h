@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GSK_TRANSFORM_PRIVATE_H__
-#define __GSK_TRANSFORM_PRIVATE_H__
+#pragma once
 
 #include "gsktransform.h"
 
@@ -58,5 +57,4 @@ void gsk_matrix_transform_rect    (const graphene_matrix_t  *m,
 
 G_END_DECLS
 
-#endif /* __GSK_TRANSFORM_PRIVATE_H__ */
 

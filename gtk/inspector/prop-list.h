@@ -20,8 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTK_INSPECTOR_PROP_LIST_H_
-#define _GTK_INSPECTOR_PROP_LIST_H_
+#pragma once
 
 
 #include <gtk/gtkbox.h>
@@ -64,6 +63,5 @@ void strdup_value_contents (const GValue  *value,
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_PROP_LIST_H_
 
 // vim: set et sw=2 ts=2:

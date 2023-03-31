@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_LOCK_BUTTON_PRIVATE_H__
-#define __GTK_LOCK_BUTTON_PRIVATE_H__
+#pragma once
 
 #include "gtklockbutton.h"
 
@@ -27,4 +26,3 @@ const char *    _gtk_lock_button_get_current_text       (GtkLockButton  *button)
 
 G_END_DECLS
 
-#endif /* __GTK_LOCK_BUTTON_PRIVATE_H__ */

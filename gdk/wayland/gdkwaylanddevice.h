@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_DEVICE_H__
-#define __GDK_WAYLAND_DEVICE_H__
+#pragma once
 
 #if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
@@ -60,4 +59,3 @@ const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
 G_END_DECLS
 
-#endif /* __GDK_WAYLAND_DEVICE_H__ */

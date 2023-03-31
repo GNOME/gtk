@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __FP16_PRIVATE_H__
-#define __FP16_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -73,4 +72,3 @@ void half_to_float_c (const guint16 *h,
 
 G_END_DECLS
 
-#endif

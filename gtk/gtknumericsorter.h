@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_NUMERIC_SORTER_H__
-#define __GTK_NUMERIC_SORTER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -50,4 +49,3 @@ void                    gtk_numeric_sorter_set_sort_order        (GtkNumericSort
 
 G_END_DECLS
 
-#endif /* __GTK_NUMERIC_SORTER_H__ */

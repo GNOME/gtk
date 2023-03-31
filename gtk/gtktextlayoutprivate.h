@@ -75,8 +75,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_LAYOUT_PRIVATE_H__
-#define __GTK_TEXT_LAYOUT_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 #include <gtk/gtktextattributesprivate.h>
@@ -384,4 +383,3 @@ void gtk_text_layout_set_mru_size (GtkTextLayout *layout,
 
 G_END_DECLS
 
-#endif  /* __GTK_TEXT_LAYOUT_PRIVATE_H__ */

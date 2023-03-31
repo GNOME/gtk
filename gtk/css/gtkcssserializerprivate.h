@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_CSS_SERIALIZER_H__
-#define __GTK_CSS_SERIALIZER_H__
+#pragma once
 
 #include <glib.h>
 
@@ -31,4 +30,3 @@ void gtk_css_print_string (GString    *str,
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_SERIALIZER_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SHORTCUT_CONTROLLER_PRIVATE_H__
-#define __GTK_SHORTCUT_CONTROLLER_PRIVATE_H__
+#pragma once
 
 #include "gtkshortcutcontroller.h"
 
@@ -27,4 +26,3 @@ void                    gtk_shortcut_controller_unroot                  (GtkShor
 
 void                    gtk_shortcut_controller_update_accels           (GtkShortcutController  *self);
 
-#endif /* __GTK_SHORTCUT_CONTROLLER_H__ */

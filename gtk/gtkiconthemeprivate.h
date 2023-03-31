@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_ICON_THEME_PRIVATE_H__
-#define __GTK_ICON_THEME_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkcssstyleprivate.h>
@@ -32,4 +31,3 @@ void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
 
 int gtk_icon_theme_get_serial (GtkIconTheme *self);
 
-#endif /* __GTK_ICON_THEME_PRIVATE_H__ */

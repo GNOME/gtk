@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_BOXES_IMPL_PRIVATE_H__
-#define __GTK_CSS_BOXES_IMPL_PRIVATE_H__
+#pragma once
 
 #include "gtkcssboxesprivate.h"
 
@@ -564,4 +563,3 @@ gtk_css_boxes_get_outline_box (GtkCssBoxes *boxes)
   return &boxes->box[GTK_CSS_AREA_OUTLINE_BOX];
 }
 
-#endif /* __GTK_CSS_BOXES_IMPL_PRIVATE_H__ */

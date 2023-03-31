@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CLIPBOARD_WAYLAND_H__
-#define __GDK_CLIPBOARD_WAYLAND_H__
+#pragma once
 
 #include "gdk/gdkclipboard.h"
 
@@ -40,4 +39,3 @@ void                    gdk_wayland_clipboard_claim_remote          (GdkWaylandC
 
 G_END_DECLS
 
-#endif /* __GDK_CLIPBOARD_WAYLAND_H__ */

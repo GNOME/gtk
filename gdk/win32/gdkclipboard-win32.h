@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CLIPBOARD_WIN32_H__
-#define __GDK_CLIPBOARD_WIN32_H__
+#pragma once
 
 #include "gdk/gdkclipboard.h"
 
@@ -36,4 +35,3 @@ void                    gdk_win32_clipboard_claim_remote        (GdkWin32Clipboa
 
 G_END_DECLS
 
-#endif /* __GDK_CLIPBOARD_WIN32_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_DROP_PRIVATE_H__
-#define __GTK_DROP_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -35,4 +34,3 @@ gboolean                gtk_drop_status                         (GdkDrop        
 
 G_END_DECLS
 
-#endif

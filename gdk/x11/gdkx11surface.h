@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_X11_SURFACE_H__
-#define __GDK_X11_SURFACE_H__
+#pragma once
 
 #if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/x11/gdkx.h> can be included directly."
@@ -124,4 +123,3 @@ GdkSurface *  gdk_x11_surface_get_group    (GdkSurface *surface);
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SURFACE_H__ */

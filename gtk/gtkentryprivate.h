@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_ENTRY_PRIVATE_H__
-#define __GTK_ENTRY_PRIVATE_H__
+#pragma once
 
 #include "gtkentry.h"
 
@@ -111,4 +110,3 @@ gboolean gtk_entry_activate_icon (GtkEntry             *entry,
 
 G_END_DECLS
 
-#endif /* __GTK_ENTRY_PRIVATE_H__ */

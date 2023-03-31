@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_PROVIDER_H__
-#define __GTK_CSS_PROVIDER_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/css/gtkcss.h>
@@ -70,4 +69,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PROVIDER_H__ */

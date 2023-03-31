@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_BOXES_PRIVATE_H__
-#define __GTK_CSS_BOXES_PRIVATE_H__
+#pragma once
 
 #include "gtkcsstypesprivate.h"
 #include "gtktypes.h"
@@ -85,7 +84,6 @@ static inline const GskRoundedRect *    gtk_css_boxes_get_outline_box           
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_BOXES_PRIVATE_H__ */
 
 /* and finally include the actual code for the functions */
 #include "gtkcssboxesimplprivate.h"

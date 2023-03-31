@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_IMAGE_CROSS_FADE_PRIVATE_H__
-#define __GTK_CSS_IMAGE_CROSS_FADE_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcssimageprivate.h"
 
@@ -55,4 +54,3 @@ GtkCssImage *  _gtk_css_image_cross_fade_new                  (GtkCssImage      
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_CROSS_FADE_PRIVATE_H__ */

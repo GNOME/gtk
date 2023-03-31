@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_NODE_PRIVATE_H__
-#define __GTK_CSS_NODE_PRIVATE_H__
+#pragma once
 
 #include "gtkcountingbloomfilterprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
@@ -170,4 +169,3 @@ GListModel *            gtk_css_node_observe_children   (GtkCssNode             
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_NODE_PRIVATE_H__ */

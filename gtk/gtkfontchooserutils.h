@@ -22,8 +22,7 @@
  *	Copyright (C) 2003 Red Hat, Inc.
  */
  
-#ifndef __GTK_FONT_CHOOSER_UTILS_H__
-#define __GTK_FONT_CHOOSER_UTILS_H__
+#pragma once
 
 #include "deprecated/gtkfontchooserprivate.h"
 
@@ -52,4 +51,3 @@ GQuark _gtk_font_chooser_delegate_get_quark  (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_FONT_CHOOSER_UTILS_H__ */

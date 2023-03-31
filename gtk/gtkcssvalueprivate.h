@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_VALUE_PRIVATE_H__
-#define __GTK_CSS_VALUE_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -97,4 +96,3 @@ gboolean     gtk_css_value_is_computed                (const GtkCssValue        
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_VALUE_PRIVATE_H__ */

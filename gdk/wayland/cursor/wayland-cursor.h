@@ -23,8 +23,7 @@
  * SOFTWARE.
  */
 
-#ifndef WAYLAND_CURSOR_H
-#define WAYLAND_CURSOR_H
+#pragma once
 
 #include <stdint.h>
 
@@ -69,4 +68,3 @@ wl_cursor_image_get_buffer(struct wl_cursor_image *image);
 }
 #endif
 
-#endif

@@ -23,8 +23,7 @@
  * Based on similar code from Mx.
  */
 
-#ifndef __GTK_SWITCH_H__
-#define __GTK_SWITCH_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -63,4 +62,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSwitch, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_SWITCH_H__ */

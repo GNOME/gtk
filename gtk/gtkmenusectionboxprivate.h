@@ -17,8 +17,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MENU_SECTION_BOX_PRIVATE_H__
-#define __GTK_MENU_SECTION_BOX_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkmenutrackeritemprivate.h>
 #include <gtk/gtkbox.h>
@@ -54,4 +53,3 @@ gboolean                gtk_menu_section_box_remove_custom              (GtkPopo
 
 G_END_DECLS
 
-#endif /* __GTK_MENU_SECTION_BOX_PRIVATE_H__ */

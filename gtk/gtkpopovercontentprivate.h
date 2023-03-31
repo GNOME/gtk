@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_POPOVER_CONTENT_H__
-#define __GTK_POPOVER_CONTENT_H__
+#pragma once
 
 #include "gtkwidget.h"
 #include "gtkenums.h"
@@ -48,4 +47,3 @@ GType      gtk_popover_content_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gtk_popover_content_new (void);
 
-#endif

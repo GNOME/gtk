@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WAYLAND_H__
-#define __GDK_WAYLAND_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -40,4 +39,3 @@
 
 #undef __GDKWAYLAND_H_INSIDE__
 
-#endif /* __GDK_WAYLAND_H__ */

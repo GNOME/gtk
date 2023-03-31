@@ -1,6 +1,5 @@
 
-#ifndef __ACTION_HOLDER_H__
-#define __ACTION_HOLDER_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -14,4 +13,3 @@ ActionHolder * action_holder_new     (GObject    *owner,
 GObject      *action_holder_get_owner (ActionHolder *holder);
 const char   *action_holder_get_name  (ActionHolder *holder);
 
-#endif /* __ACTION_HOLDER_H__ */

@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_ICON_HELPER_H__
-#define __GTK_ICON_HELPER_H__
+#pragma once
 
 #include "gtk/gtkimage.h"
 #include "gtk/gtktypes.h"
@@ -75,4 +74,3 @@ void      gtk_icon_size_set_style_classes (GtkCssNode  *cssnode,
 
 G_END_DECLS
 
-#endif /* __GTK_ICON_HELPER_H__ */

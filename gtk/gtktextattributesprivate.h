@@ -47,8 +47,7 @@
  *
  */
 
-#ifndef __GTK_TEXT_ATTRIBUTES_PRIVATE_H__
-#define __GTK_TEXT_ATTRIBUTES_PRIVATE_H__
+#pragma once
 
 
 #include <gdk/gdk.h>
@@ -173,4 +172,3 @@ GtkTextAttributes *gtk_text_attributes_ref         (GtkTextAttributes *values);
 
 G_END_DECLS
 
-#endif

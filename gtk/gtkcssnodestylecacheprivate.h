@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_NODE_STYLE_CACHE_PRIVATE_H__
-#define __GTK_CSS_NODE_STYLE_CACHE_PRIVATE_H__
+#pragma once
 
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssstyleprivate.h"
@@ -43,4 +42,3 @@ GtkCssNodeStyleCache *  gtk_css_node_style_cache_lookup         (GtkCssNodeStyle
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_NODE_STYLE_CACHE_PRIVATE_H__ */

@@ -19,8 +19,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#ifndef __GTK_APP_CHOOSER_PRIVATE_H__
-#define __GTK_APP_CHOOSER_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -50,4 +49,3 @@ _gtk_app_chooser_widget_set_search_entry (GtkAppChooserWidget *self,
 
 G_END_DECLS
 
-#endif /* __GTK_APP_CHOOSER_PRIVATE_H__ */

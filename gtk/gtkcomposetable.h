@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COMPOSETABLE_H__
-#define __GTK_COMPOSETABLE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -97,4 +96,3 @@ char *            gtk_compose_table_get_x11_compose_file_dir (void);
 
 G_END_DECLS
 
-#endif /* __GTK_COMPOSETABLE_H__ */

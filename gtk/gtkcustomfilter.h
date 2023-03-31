@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CUSTOM_FILTER_H__
-#define __GTK_CUSTOM_FILTER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -58,4 +57,3 @@ void                    gtk_custom_filter_set_filter_func       (GtkCustomFilter
 
 G_END_DECLS
 
-#endif /* __GTK_CUSTOM_FILTER_H__ */

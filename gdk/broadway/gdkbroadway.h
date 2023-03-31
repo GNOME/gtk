@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_BROADWAY_H__
-#define __GDK_BROADWAY_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -36,4 +35,3 @@
 
 #undef __GDKBROADWAY_H_INSIDE__
 
-#endif /* __GDK_BROADWAY_H__ */

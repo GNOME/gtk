@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_SEAT_PRIVATE_H__
-#define __GDK_SEAT_PRIVATE_H__
+#pragma once
 
 typedef struct _GdkSeatClass GdkSeatClass;
 
@@ -91,4 +90,3 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
 void           gdk_seat_ungrab           (GdkSeat                *seat);
 
 
-#endif /* __GDK_SEAT_PRIVATE_H__ */

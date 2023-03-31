@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_FLATTEN_LIST_MODEL_H__
-#define __GTK_FLATTEN_LIST_MODEL_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -50,4 +49,3 @@ GListModel *            gtk_flatten_list_model_get_model_for_item (GtkFlattenLis
 
 G_END_DECLS
 
-#endif /* __GTK_FLATTEN_LIST_MODEL_H__ */

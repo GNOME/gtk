@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_IMAGE_PRIVATE_H__
-#define __GTK_CSS_IMAGE_PRIVATE_H__
+#pragma once
 
 #include <cairo.h>
 #include <glib-object.h>
@@ -148,4 +147,3 @@ gboolean       gtk_css_image_is_computed           (GtkCssImage                *
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_PRIVATE_H__ */

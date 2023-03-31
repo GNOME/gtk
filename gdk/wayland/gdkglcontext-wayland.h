@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_GL_CONTEXT__
-#define __GDK_WAYLAND_GL_CONTEXT__
+#pragma once
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
@@ -45,4 +44,3 @@ GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay 
 
 G_END_DECLS
 
-#endif /* __GDK_WAYLAND_GL_CONTEXT__ */

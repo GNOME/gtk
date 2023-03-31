@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_H__
-#define __GTK_H__
+#pragma once
 
 #define __GTK_H_INSIDE__
 
@@ -300,4 +299,3 @@
 
 #undef __GTK_H_INSIDE__
 
-#endif /* __GTK_H__ */

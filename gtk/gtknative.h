@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_NATIVE_H__
-#define __GTK_NATIVE_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -56,4 +55,3 @@ void         gtk_native_get_surface_transform (GtkNative *self,
 
 G_END_DECLS
 
-#endif /* __GTK_NATIVE_H__ */

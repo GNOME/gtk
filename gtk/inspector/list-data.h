@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_LIST_DATA_H_
-#define _GTK_INSPECTOR_LIST_DATA_H_
+#pragma once
 
 #include <gtk/gtkbox.h>
 
@@ -33,6 +32,5 @@ void       gtk_inspector_list_data_set_object (GtkInspectorListData *sl,
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_LIST_DATA_H_
 
 // vim: set et sw=2 ts=2:

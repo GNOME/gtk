@@ -19,8 +19,7 @@
  *         Christian Kellner <gicmo@gnome.org>
  */
 
-#ifndef __GDK_X11_SELECTION_OUTPUT_STREAM_H__
-#define __GDK_X11_SELECTION_OUTPUT_STREAM_H__
+#pragma once
 
 #include <gio/gio.h>
 #include "gdktypes.h"
@@ -66,4 +65,3 @@ void            gdk_x11_selection_output_streams_create         (GdkDisplay     
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SELECTION_OUTPUT_STREAM_H__ */

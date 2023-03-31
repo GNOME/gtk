@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_INSPECTOR_OVERLAY_H__
-#define __GTK_INSPECTOR_OVERLAY_H__
+#pragma once
 
 #include <gtk/gtksnapshot.h>
 
@@ -47,4 +46,3 @@ void                    gtk_inspector_overlay_queue_draw        (GtkInspectorOve
 
 G_END_DECLS
 
-#endif /* __GTK_INSPECTOR_OVERLAY_H__ */

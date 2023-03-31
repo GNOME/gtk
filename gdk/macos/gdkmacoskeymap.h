@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_KEYMAP_H__
-#define __GDK_MACOS_KEYMAP_H__
+#pragma once
 
 #if !defined (__GDKMACOS_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/macos/gdkmacos.h> can be included directly."
@@ -40,4 +39,3 @@ GType gdk_macos_keymap_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_KEYMAP_H__ */

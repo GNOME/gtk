@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CONTENT_PROVIDER_PRIVATE_H__
-#define __GDK_CONTENT_PROVIDER_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkcontentprovider.h>
 
@@ -30,4 +29,3 @@ void                    gdk_content_provider_detach_clipboard   (GdkContentProvi
 
 G_END_DECLS
 
-#endif /* __GDK_CONTENT_PROVIDER_PRIVATE_H__ */

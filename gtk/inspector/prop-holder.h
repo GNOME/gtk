@@ -1,5 +1,4 @@
-#ifndef __PROP_HOLDER_H__
-#define __PROP_HOLDER_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -14,4 +13,3 @@ GObject    *prop_holder_get_object   (PropHolder *holder);
 GParamSpec *prop_holder_get_pspec    (PropHolder *holder);
 const char *prop_holder_get_name     (PropHolder *holder);
 
-#endif /* __PROP_HOLDER_H__ */

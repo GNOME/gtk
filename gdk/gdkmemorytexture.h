@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GDK_MEMORY_TEXTURE__H__
-#define __GDK_MEMORY_TEXTURE__H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -72,4 +71,3 @@ GdkTexture *            gdk_memory_texture_new              (int                
 
 G_END_DECLS
 
-#endif /* __GDK_MEMORY_TEXTURE_H__ */

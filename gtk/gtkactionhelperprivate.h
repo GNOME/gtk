@@ -17,8 +17,7 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_ACTION_HELPER_H__
-#define __GTK_ACTION_HELPER_H__
+#pragma once
 
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkactionable.h>
@@ -51,4 +50,3 @@ void                    gtk_action_helper_activate                      (GtkActi
 GtkButtonRole           gtk_action_helper_get_role                      (GtkActionHelper *helper);
 
 
-#endif /* __GTK_ACTION_HELPER_H__ */

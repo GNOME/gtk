@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_SURFACE_BROADWAY_H__
-#define __GDK_SURFACE_BROADWAY_H__
+#pragma once
 
 #include <gdk/gdksurfaceprivate.h>
 #include "gdkbroadwaysurface.h"
@@ -80,4 +79,3 @@ GType gdk_surface_broadway_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_SURFACE_BROADWAY_H__ */

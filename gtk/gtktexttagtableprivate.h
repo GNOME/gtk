@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_TAG_TABLE_PRIVATE_H__
-#define __GTK_TEXT_TAG_TABLE_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktexttagtable.h>
 
@@ -40,4 +39,3 @@ gboolean _gtk_text_tag_table_affects_visibility (GtkTextTagTable *table);
 
 G_END_DECLS
 
-#endif

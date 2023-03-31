@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_PRIMARY_WAYLAND_H__
-#define __GDK_PRIMARY_WAYLAND_H__
+#pragma once
 
 #include "gdk/gdkclipboard.h"
 
@@ -37,4 +36,3 @@ GdkClipboard *          gdk_wayland_primary_new                 (GdkWaylandSeat 
 
 G_END_DECLS
 
-#endif /* __GDK_PRIMARY_WAYLAND_H__ */

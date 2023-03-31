@@ -26,8 +26,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_H__
-#define __GTK_TEXT_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -168,4 +167,3 @@ void            gtk_text_compute_cursor_extents         (GtkText         *self,
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_H__ */

@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_STATUSBAR_PRIVATE_H__
-#define __GTK_STATUSBAR_PRIVATE_H__
+#pragma once
 
 #include "gtkwidget.h"
 
@@ -27,4 +26,3 @@ const char *    gtk_statusbar_get_message   (GtkStatusbar *statusbar);
 
 G_END_DECLS
 
-#endif /* __GTK_STATUSBAR_H__ */

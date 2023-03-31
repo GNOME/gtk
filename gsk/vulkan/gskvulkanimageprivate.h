@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_IMAGE_PRIVATE_H__
-#define __GSK_VULKAN_IMAGE_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -64,4 +63,3 @@ VkImageView             gsk_vulkan_image_get_image_view                 (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_IMAGE_PRIVATE_H__ */

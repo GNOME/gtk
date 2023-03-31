@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SEARCH_ENGINE_QUARTZ_H__
-#define __GTK_SEARCH_ENGINE_QUARTZ_H__
+#pragma once
 
 #include "gtksearchengineprivate.h"
 
@@ -50,4 +49,3 @@ GtkSearchEngine *_gtk_search_engine_quartz_new      (void);
 
 G_END_DECLS
 
-#endif /* __GTK_SEARCH_ENGINE_QUARTZ_H__ */

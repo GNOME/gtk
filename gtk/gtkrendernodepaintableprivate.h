@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_RENDER_NODE_PAINTABLE_H__
-#define __GTK_RENDER_NODE_PAINTABLE_H__
+#pragma once
 
 #include <gsk/gsk.h>
 
@@ -35,4 +34,3 @@ GskRenderNode * gtk_render_node_paintable_get_render_node       (GtkRenderNodePa
 
 G_END_DECLS
 
-#endif /* __GTK_RENDER_NODE_PAINTABLE_H__ */

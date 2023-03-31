@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_WIDGET_PAINTABLE_H__
-#define __GTK_WIDGET_PAINTABLE_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -40,4 +39,3 @@ void            gtk_widget_paintable_set_widget         (GtkWidgetPaintable     
 
 G_END_DECLS
 
-#endif /* __GTK_WIDGET_PAINTABLE_H__ */

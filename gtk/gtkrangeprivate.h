@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_RANGE_PRIVATE_H__
-#define __GTK_RANGE_PRIVATE_H__
+#pragma once
 
 
 #include <gtk/gtkrange.h>
@@ -51,4 +50,3 @@ void               gtk_range_stop_autoscroll               (GtkRange      *range
 G_END_DECLS
 
 
-#endif /* __GTK_RANGE_PRIVATE_H__ */

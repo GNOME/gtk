@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_DEVICE_PAD_H__
-#define __GDK_DEVICE_PAD_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -71,4 +70,3 @@ int   gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_PAD_H__ */

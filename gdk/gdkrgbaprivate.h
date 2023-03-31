@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_RGBA_PRIVATE_H__
-#define __GDK_RGBA_PRIVATE_H__
+#pragma once
 
 #include "gdkrgba.h"
 
@@ -41,4 +40,3 @@ gboolean               gdk_rgba_parser_parse                    (GtkCssParser   
 
 G_END_DECLS
 
-#endif

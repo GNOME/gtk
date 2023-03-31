@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_BROADWAY_CAIRO_CONTEXT__
-#define __GDK_BROADWAY_CAIRO_CONTEXT__
+#pragma once
 
 #include "gdkconfig.h"
 
@@ -52,4 +51,3 @@ GType gdk_broadway_cairo_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_BROADWAY_CAIRO_CONTEXT__ */

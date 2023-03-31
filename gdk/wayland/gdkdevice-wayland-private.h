@@ -1,5 +1,4 @@
-#ifndef __GDK_DEVICE_WAYLAND_PRIVATE_H__
-#define __GDK_DEVICE_WAYLAND_PRIVATE_H__
+#pragma once
 
 #include "gdkwaylanddevice.h"
 #include "gdkwaylandseat.h"
@@ -264,4 +263,3 @@ gboolean gdk_wayland_device_update_surface_cursor (GdkDevice *device);
 
 GdkModifierType gdk_wayland_device_get_modifiers (GdkDevice *device);
 
-#endif

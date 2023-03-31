@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_RENDERER_H__
-#define __GSK_GL_RENDERER_H__
+#pragma once
 
 #include <gsk/gskrenderer.h>
 
@@ -47,4 +46,3 @@ GDK_DEPRECATED_IN_4_4_FOR (gsk_gl_renderer_new)
 GskRenderer *gsk_ngl_renderer_new      (void);
 G_END_DECLS
 
-#endif /* __GSK_GL_RENDERER__ */

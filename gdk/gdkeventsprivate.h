@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_EVENTS_PRIVATE_H__
-#define __GDK_EVENTS_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdrag.h>
@@ -635,4 +634,3 @@ double * gdk_event_dup_axes (GdkEvent *event);
 
 G_END_DECLS
 
-#endif /* __GDK_EVENTS_PRIVATE_H__ */

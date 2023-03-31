@@ -16,8 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_BUTTON_PRIVATE_H__
-#define __GTK_BUTTON_PRIVATE_H__
+#pragma once
 
 #include "gtkbutton.h"
 
@@ -27,4 +26,3 @@
 GtkGesture      * gtk_button_get_gesture       (GtkButton *button);
 GtkActionHelper * gtk_button_get_action_helper (GtkButton *button);
 
-#endif /* __GTK_BUTTON_PRIVATE_H__ */

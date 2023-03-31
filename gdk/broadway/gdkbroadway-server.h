@@ -1,5 +1,4 @@
-#ifndef __GDK_BROADWAY_SERVER__
-#define __GDK_BROADWAY_SERVER__
+#pragma once
 
 #include <gdk/gdktypes.h>
 
@@ -82,4 +81,3 @@ void               _gdk_broadway_server_surface_set_modal_hint   (GdkBroadwaySer
                                                                   int                id,
                                                                   gboolean           modal_hint);
 
-#endif /* __GDK_BROADWAY_SERVER__ */

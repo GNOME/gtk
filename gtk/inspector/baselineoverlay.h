@@ -1,5 +1,4 @@
-#ifndef __GTK_BASELINE_OVERLAY_H__
-#define __GTK_BASELINE_OVERLAY_H__
+#pragma once
 
 #include "inspectoroverlay.h"
 
@@ -14,4 +13,3 @@ G_END_DECLS
 
 
 
-#endif

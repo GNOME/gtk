@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_QUARTZ_H__
-#define __GTK_QUARTZ_H__
+#pragma once
 
 #import <Cocoa/Cocoa.h>
 
@@ -35,4 +34,3 @@ const char *_gtk_get_data_prefix                  (void);
 
 G_END_DECLS
 
-#endif /* __GTK_QUARTZ_H__ */

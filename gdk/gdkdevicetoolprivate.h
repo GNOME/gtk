@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_TOOL_PRIVATE_H__
-#define __GDK_DEVICE_TOOL_PRIVATE_H__
+#pragma once
 
 #include "gdkdevicetool.h"
 
@@ -45,4 +44,3 @@ GdkDeviceTool *gdk_device_tool_new    (guint64            serial,
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_TOOL_PRIVATE_H__ */

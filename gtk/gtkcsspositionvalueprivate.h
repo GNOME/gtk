@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_POSITION_VALUE_PRIVATE_H__
-#define __GTK_CSS_POSITION_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -41,4 +40,3 @@ double          _gtk_css_position_value_get_y         (const GtkCssValue      *p
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_POSITION_VALUE_PRIVATE_H__ */

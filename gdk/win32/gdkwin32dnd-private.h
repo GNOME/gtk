@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WIN32_DND_PRIVATE_H__
-#define __GDK_WIN32_DND_PRIVATE_H__
+#pragma once
 
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
@@ -99,4 +98,3 @@ GdkDrag *_gdk_win32_find_drag_for_dest_window     (HWND             dest_window)
 
 G_END_DECLS
 
-#endif /* __GDK_WIN32_DND_PRIVATE_H__ */

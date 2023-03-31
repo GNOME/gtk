@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COLUMN_VIEW_TITLE_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_TITLE_PRIVATE_H__
+#pragma once
 
 #include "gtkcolumnviewcolumn.h"
 
@@ -49,4 +48,3 @@ GtkColumnViewColumn *   gtk_column_view_title_get_column        (GtkColumnViewTi
 
 G_END_DECLS
 
-#endif  /* __GTK_COLUMN_VIEW_TITLE_PRIVATE_H__ */

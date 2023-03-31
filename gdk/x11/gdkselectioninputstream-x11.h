@@ -19,8 +19,7 @@
  *         Christian Kellner <gicmo@gnome.org>
  */
 
-#ifndef __GDK_X11_SELECTION_INPUT_STREAM_H__
-#define __GDK_X11_SELECTION_INPUT_STREAM_H__
+#pragma once
 
 #include <gio/gio.h>
 #include "gdktypes.h"
@@ -66,4 +65,3 @@ GInputStream * gdk_x11_selection_input_stream_new_finish    (GAsyncResult       
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SELECTION_INPUT_STREAM_H__ */

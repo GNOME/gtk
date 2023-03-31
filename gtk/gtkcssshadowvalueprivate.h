@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SHADOW_H__
-#define __GTK_SHADOW_H__
+#pragma once
 
 #include <cairo.h>
 #include <pango/pango.h>
@@ -60,4 +59,3 @@ void            gtk_css_shadow_value_pop_snapshot     (const GtkCssValue        
 
 G_END_DECLS
 
-#endif /* __GTK_SHADOW_H__ */

@@ -1,5 +1,4 @@
-#ifndef __GDK_GL_TEXTURE_PRIVATE_H__
-#define __GDK_GL_TEXTURE_PRIVATE_H__
+#pragma once
 
 #include "gdkgltexture.h"
 
@@ -13,4 +12,3 @@ gboolean                gdk_gl_texture_has_mipmap       (GdkGLTexture           
 
 G_END_DECLS
 
-#endif /* __GDK_GL_TEXTURE_PRIVATE_H__ */

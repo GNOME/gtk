@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_CONTROLLERS_H_
-#define _GTK_INSPECTOR_CONTROLLERS_H_
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -31,6 +30,5 @@ void            gtk_inspector_controllers_set_object            (GtkInspectorCon
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_CONTROLLERS_H_
 
 // vim: set et sw=2 ts=2:

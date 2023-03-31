@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_DISPLAY_H__
-#define __GDK_WAYLAND_DISPLAY_H__
+#pragma once
 
 #if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
@@ -68,4 +67,3 @@ gpointer                gdk_wayland_display_get_egl_display     (GdkDisplay  *di
 
 G_END_DECLS
 
-#endif /* __GDK_WAYLAND_DISPLAY_H__ */

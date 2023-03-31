@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_BUFFER_PRIVATE_H__
-#define __GSK_VULKAN_BUFFER_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -22,4 +21,3 @@ void                    gsk_vulkan_buffer_unmap                         (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_BUFFER_PRIVATE_H__ */

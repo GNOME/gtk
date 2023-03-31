@@ -1,5 +1,4 @@
-#ifndef __GSK_GL_PROFILER_PRIVATE_H__
-#define __GSK_GL_PROFILER_PRIVATE_H__
+#pragma once
 
 #include <gsk/gsktypes.h>
 
@@ -15,4 +14,3 @@ guint64         gsk_gl_profiler_end_gpu_region          (GskGLProfiler *profiler
 
 G_END_DECLS
 
-#endif /* __GSK_GL_PROFILER_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GDK_MEMORY_TEXTURE_PRIVATE_H__
-#define __GDK_MEMORY_TEXTURE_PRIVATE_H__
+#pragma once
 
 #include "gdkmemorytexture.h"
 
@@ -43,4 +42,3 @@ GBytes *                gdk_memory_texture_get_bytes        (GdkMemoryTexture  *
 
 G_END_DECLS
 
-#endif /* __GDK_MEMORY_TEXTURE_PRIVATE_H__ */

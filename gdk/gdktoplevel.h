@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GDK_TOPLEVEL_H__
-#define __GDK_TOPLEVEL_H__
+#pragma once
 
 #if !defined(__GDK_H_INSIDE__) && !defined(GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -217,4 +216,3 @@ gboolean      gdk_toplevel_titlebar_gesture          (GdkToplevel        *toplev
 
 G_END_DECLS
 
-#endif /* __GDK_TOPLEVEL_H__ */

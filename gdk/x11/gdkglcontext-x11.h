@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_GL_CONTEXT__
-#define __GDK_X11_GL_CONTEXT__
+#pragma once
 
 #include "gdkx11glcontext.h"
 
@@ -80,4 +79,3 @@ GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CO
 
 G_END_DECLS
 
-#endif /* __GDK_X11_GL_CONTEXT__ */

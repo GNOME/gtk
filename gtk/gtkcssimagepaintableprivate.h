@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_IMAGE_PAINTABLE_PRIVATE_H__
-#define __GTK_CSS_IMAGE_PAINTABLE_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcssimageprivate.h"
 
@@ -54,4 +53,3 @@ GtkCssImage *   gtk_css_image_paintable_new                   (GdkPaintable     
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_PAINTABLE_PRIVATE_H__ */

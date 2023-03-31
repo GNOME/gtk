@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_ITER_PRIVATE_H__
-#define __GTK_TEXT_ITER_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktextiter.h>
 
@@ -52,6 +51,5 @@ void _gtk_text_iter_check (const GtkTextIter *iter);
 
 G_END_DECLS
 
-#endif
 
 

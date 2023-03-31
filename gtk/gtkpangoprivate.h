@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_PANGO_PRIVATE_H__
-#define __GTK_PANGO_PRIVATE_H__
+#pragma once
 
 #include <pango/pangocairo.h>
 #include  "gtkbuildable.h"
@@ -63,4 +62,3 @@ const char *pango_align_to_string (PangoAlignment align);
 
 G_END_DECLS
 
-#endif /* __GTK_PANGO_PRIVATE_H__ */

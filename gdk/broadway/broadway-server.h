@@ -1,5 +1,4 @@
-#ifndef __BROADWAY_SERVER__
-#define __BROADWAY_SERVER__
+#pragma once
 
 #include "broadway-protocol.h"
 #include <glib-object.h>
@@ -136,4 +135,3 @@ void                broadway_server_surface_set_modal_hint    (BroadwayServer *s
                                                                gboolean        modal_hint);
 
 
-#endif /* __BROADWAY_SERVER__ */

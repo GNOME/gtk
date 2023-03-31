@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_CURSOR_PRIVATE_H__
-#define __GDK_CURSOR_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkcursor.h>
 
@@ -58,4 +57,3 @@ gboolean                gdk_cursor_equal                        (gconstpointer  
 
 G_END_DECLS
 
-#endif /* __GDK_CURSOR_PRIVATE_H__ */

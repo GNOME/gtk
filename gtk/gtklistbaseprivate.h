@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_LIST_BASE_PRIVATE_H__
-#define __GTK_LIST_BASE_PRIVATE_H__
+#pragma once
 
 #include "gtklistbase.h"
 
@@ -92,4 +91,3 @@ GtkListTabBehavior     gtk_list_base_get_tab_behavior           (GtkListBase    
 
 void                   gtk_list_base_allocate                   (GtkListBase            *self);
 
-#endif /* __GTK_LIST_BASE_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_INSPECTOR_MEASURE_GRAPH_H__
-#define __GTK_INSPECTOR_MEASURE_GRAPH_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -37,4 +36,3 @@ GdkTexture *            gtk_inspector_measure_graph_get_texture (GtkInspectorMea
 
 G_END_DECLS
 
-#endif /* __GTK_INSPECTOR_MEASURE_GRAPH_H__ */

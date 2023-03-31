@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_SCALE_H__
-#define __GTK_COLOR_SCALE_H__
+#pragma once
 
 #include <gtk/gtkscale.h>
 
@@ -48,4 +47,3 @@ void        gtk_color_scale_snapshot_trough (GtkColorScale     *scale,
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_SCALE_H__ */

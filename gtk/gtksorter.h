@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_SORTER_H__
-#define __GTK_SORTER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -118,5 +117,4 @@ void                    gtk_sorter_changed                      (GtkSorter      
 
 G_END_DECLS
 
-#endif /* __GTK_SORTER_H__ */
 

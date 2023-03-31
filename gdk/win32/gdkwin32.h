@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WIN32_H__
-#define __GDK_WIN32_H__
+#pragma once
 
 #define __GDKWIN32_H_INSIDE__
 
@@ -39,4 +38,3 @@
 
 #undef __GDKWIN32_H_INSIDE__
 
-#endif /* __GDK_WIN32_H__ */

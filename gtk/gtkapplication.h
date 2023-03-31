@@ -17,8 +17,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_APPLICATION_H__
-#define __GTK_APPLICATION_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -139,4 +138,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_APPLICATION_H__ */

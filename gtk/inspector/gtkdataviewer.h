@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_DATA_VIEWER_H__
-#define __GTK_DATA_VIEWER_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -44,4 +43,3 @@ void            gtk_data_viewer_load_error                      (GtkDataViewer  
 
 G_END_DECLS
 
-#endif  /* __GTK_DATA_VIEWER_H__ */

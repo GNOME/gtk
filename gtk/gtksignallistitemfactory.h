@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SIGNAL_LIST_ITEM_FACTORY_H__
-#define __GTK_SIGNAL_LIST_ITEM_FACTORY_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -48,4 +47,3 @@ GtkListItemFactory *    gtk_signal_list_item_factory_new        (void);
 
 G_END_DECLS
 
-#endif /* __GTK_SIGNAL_LIST_ITEM_FACTORY_H__ */

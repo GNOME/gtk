@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_RENDER_JOB_H__
-#define __GSK_GL_RENDER_JOB_H__
+#pragma once
 
 #include "gskgltypesprivate.h"
 
@@ -37,4 +36,3 @@ void            gsk_gl_render_job_render_flipped     (GskGLRenderJob        *job
 void            gsk_gl_render_job_set_debug_fallback (GskGLRenderJob        *job,
                                                       gboolean               debug_fallback);
 
-#endif /* __GSK_GL_RENDER_JOB_H__ */

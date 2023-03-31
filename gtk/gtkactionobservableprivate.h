@@ -17,8 +17,7 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_ACTION_OBSERVABLE_PRIVATE_H__
-#define __GTK_ACTION_OBSERVABLE_PRIVATE_H__
+#pragma once
 
 #include "gtkactionobserverprivate.h"
 
@@ -57,4 +56,3 @@ void                    gtk_action_observable_unregister_observer       (GtkActi
 
 G_END_DECLS
 
-#endif /* __GTK_ACTION_OBSERVABLE_PRIVATE_H__ */

@@ -26,8 +26,7 @@
  * Private uninstalled header defining things local to X windowing code
  */
 
-#ifndef __GDK_PRIVATE_BROADWAY_H__
-#define __GDK_PRIVATE_BROADWAY_H__
+#pragma once
 
 #include <gdk/gdkcursor.h>
 #include "gdksurface-broadway.h"
@@ -124,4 +123,3 @@ void _gdk_broadway_surface_resize_surface        (GdkSurface *surface);
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);
 
-#endif /* __GDK_PRIVATE_BROADWAY_H__ */

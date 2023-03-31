@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_SCREEN__
-#define __GDK_X11_SCREEN__
+#pragma once
 
 #include "gdkx11screen.h"
 #include <X11/X.h>
@@ -110,4 +109,3 @@ _gdk_x11_screen_get_xft_setting             (GdkX11Screen *screen,
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SCREEN__ */

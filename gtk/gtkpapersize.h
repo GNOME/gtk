@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PAPER_SIZE_H__
-#define __GTK_PAPER_SIZE_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -173,4 +172,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPaperSize, gtk_paper_size_free)
 
 G_END_DECLS
 
-#endif /* __GTK_PAPER_SIZE_H__ */

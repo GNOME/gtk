@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_SEAT_DEFAULT_PRIVATE_H__
-#define __GDK_SEAT_DEFAULT_PRIVATE_H__
+#pragma once
 
 #include "gdkseat.h"
 #include "gdkseatprivate.h"
@@ -61,4 +60,3 @@ void      gdk_seat_default_remove_tool                  (GdkSeatDefault *seat,
 
 G_END_DECLS
 
-#endif /* __GDK_SEAT_DEFAULT_PRIVATE_H__ */

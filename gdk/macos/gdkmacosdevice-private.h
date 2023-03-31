@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_DEVICE_PRIVATE_H__
-#define __GDK_MACOS_DEVICE_PRIVATE_H__
+#pragma once
 
 #include "gdkdeviceprivate.h"
 
@@ -33,4 +32,3 @@ void gdk_macos_device_query_state (GdkDevice        *device,
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_DEVICE_PRIVATE_H__ */

@@ -18,8 +18,7 @@
  * Author: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GDK_X11_TEXT_LIST_CONVERTER_H__
-#define __GDK_X11_TEXT_LIST_CONVERTER_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gdk/gdktypes.h>
@@ -44,4 +43,3 @@ GConverter *       gdk_x11_text_list_converter_from_utf8_new    (GdkDisplay     
 
 G_END_DECLS
 
-#endif /* __GDK_X11_TEXT_LIST_CONVERTER_H__ */

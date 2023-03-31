@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_CHOOSER_PRIVATE_H__
-#define __GTK_FILE_CHOOSER_PRIVATE_H__
+#pragma once
 
 #include "deprecated/gtkfilechooser.h"
 #include "gtkfilesystemmodelprivate.h"
@@ -117,4 +116,3 @@ void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
                                                    GFile           *file);
 G_END_DECLS
 
-#endif /* __GTK_FILE_CHOOSER_PRIVATE_H__ */

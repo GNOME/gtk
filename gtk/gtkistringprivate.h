@@ -1,5 +1,4 @@
-#ifndef __GTK_ISTRING_PRIVATE_H__
-#define __GTK_ISTRING_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 #include <string.h>
@@ -168,4 +167,3 @@ istring_append (IString *str,
   istring_str (str)[str->n_bytes] = 0;
 }
 
-#endif /* __GTK_ISTRING_PRIVATE_H__ */

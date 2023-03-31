@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SETTINGS_PRIVATE_H__
-#define __GTK_SETTINGS_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtksettings.h>
 #include "gtkstylecascadeprivate.h"
@@ -51,4 +50,3 @@ gboolean     gtk_settings_get_font_size_is_absolute (GtkSettings *settings);
 
 G_END_DECLS
 
-#endif /* __GTK_SETTINGS_PRIVATE_H__ */

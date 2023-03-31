@@ -20,8 +20,7 @@
  *
  * Author:  Owen Taylor, Red Hat, Inc.
  */
-#ifndef XSETTINGS_CLIENT_H
-#define XSETTINGS_CLIENT_H
+#pragma once
 
 #include <gdk/x11/gdkprivate-x11.h>
 #include <gdk/x11/gdkx11screen.h>
@@ -36,4 +35,3 @@ GdkFilterReturn gdk_xsettings_manager_window_filter (const XEvent *xevent,
                                                      gpointer      data);
 
 
-#endif /* XSETTINGS_CLIENT_H */

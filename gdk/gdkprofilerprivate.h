@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_PROFILER_PRIVATE_H__
-#define __GDK_PROFILER_PRIVATE_H__
+#pragma once
 
 #include "gdk/gdkframeclock.h"
 #include "gdk/gdkdisplay.h"
@@ -94,4 +93,3 @@ void    gdk_profiler_set_int_counter    (guint  id,
 
 G_END_DECLS
 
-#endif  /* __GDK_PROFILER_PRIVATE_H__ */

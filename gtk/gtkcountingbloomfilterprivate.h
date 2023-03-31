@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COUNTING_BLOOM_FILTER_PRIVATE_H__
-#define __GTK_COUNTING_BLOOM_FILTER_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -154,4 +153,3 @@ gtk_counting_bloom_filter_may_contain (const GtkCountingBloomFilter *self,
 G_END_DECLS
 
 
-#endif /* __GTK_COUNTING_BLOOM_FILTER_PRIVATE_H_ */

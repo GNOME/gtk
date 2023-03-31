@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
-#define __GTK_FONT_CHOOSER_DIALOG_PRIVATE_H__
+#pragma once
 
 #include "deprecated/gtkfontchooserdialog.h"
 #include "gtkfilter.h"
@@ -28,4 +27,3 @@ void gtk_font_chooser_dialog_set_filter (GtkFontChooserDialog *dialog,
 
 G_END_DECLS
 
-#endif /* __GTK_FONT_CHOOSER_WIDGET_PRIVATE_H__ */

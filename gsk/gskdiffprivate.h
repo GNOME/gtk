@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GSK_DIFF_PRIVATE_H__
-#define __GSK_DIFF_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -52,4 +51,3 @@ GskDiffResult           gsk_diff                                (gconstpointer  
 
 G_END_DECLS
 
-#endif /* __GSK_DIFF_PRIVATE_H__ */

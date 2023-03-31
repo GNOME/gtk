@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_PICTURE_H__
-#define __GTK_PICTURE_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -95,4 +94,3 @@ const char *    gtk_picture_get_alternative_text        (GtkPicture             
 
 G_END_DECLS
 
-#endif /* __GTK_PICTURE_H__ */

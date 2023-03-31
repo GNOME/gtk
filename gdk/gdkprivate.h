@@ -1,5 +1,4 @@
-#ifndef __GDK__PRIVATE_H__
-#define __GDK__PRIVATE_H__
+#pragma once
 
 #include "gdk/gdktypes.h"
 
@@ -42,4 +41,3 @@ g_set_str (char       **str_pointer,
 }
 #endif
 
-#endif /* __GDK__PRIVATE_H__ */

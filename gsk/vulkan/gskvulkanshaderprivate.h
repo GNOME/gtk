@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_SHADER_PRIVATE_H__
-#define __GSK_VULKAN_SHADER_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -31,4 +30,3 @@ VkShaderModule          gsk_vulkan_shader_get_module                    (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_SHADER_PRIVATE_H__ */

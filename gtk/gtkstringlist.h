@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_STRING_LIST_H__
-#define __GTK_STRING_LIST_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -73,4 +72,3 @@ const char *    gtk_string_list_get_string      (GtkStringList         *self,
 
 G_END_DECLS
 
-#endif /* __GTK_STRING_LIST_H__ */

@@ -1,5 +1,4 @@
-#ifndef __GSK_ROUNDED_RECT_PRIVATE_H__
-#define __GSK_ROUNDED_RECT_PRIVATE_H__
+#pragma once
 
 #include "gskroundedrect.h"
 
@@ -38,4 +37,3 @@ char *                   gsk_rounded_rect_to_string             (const GskRounde
 
 G_END_DECLS
 
-#endif /* __GSK_ROUNDED_RECT_PRIVATE_H__ */

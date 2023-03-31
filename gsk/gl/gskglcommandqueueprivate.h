@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_COMMAND_QUEUE_PRIVATE_H__
-#define __GSK_GL_COMMAND_QUEUE_PRIVATE_H__
+#pragma once
 
 #include <gsk/gskprofilerprivate.h>
 
@@ -374,4 +373,3 @@ gsk_gl_command_queue_bind_framebuffer (GskGLCommandQueue *self,
 
 G_END_DECLS
 
-#endif /* __GSK_GL_COMMAND_QUEUE_PRIVATE_H__ */

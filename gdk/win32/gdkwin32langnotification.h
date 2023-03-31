@@ -17,10 +17,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WIN32_LANGNOTIFICATION_H__
-#define __GDK_WIN32_LANGNOTIFICATION_H__
+#pragma once
 
 void _gdk_win32_lang_notification_init (void);
 void _gdk_win32_lang_notification_exit (void);
 
-#endif

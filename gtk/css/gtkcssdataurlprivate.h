@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_CSS_DATA_URL_PRIVATE_H__
-#define __GTK_CSS_DATA_URL_PRIVATE_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -31,5 +30,4 @@ GBytes *                gtk_css_data_url_parse                  (const char     
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_DATA_URL_PRIVATE_H__ */
 

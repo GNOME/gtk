@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_PROGRAM_PRIVATE_H__
-#define __GSK_GL_PROGRAM_PRIVATE_H__
+#pragma once
 
 #include "gskgltypesprivate.h"
 
@@ -301,4 +300,3 @@ gsk_gl_program_set_uniform_matrix (GskGLProgram            *self,
 
 G_END_DECLS
 
-#endif /* __GSK_GL_PROGRAM_PRIVATE_H__ */

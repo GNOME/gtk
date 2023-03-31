@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_DRAWING_AREA_H__
-#define __GTK_DRAWING_AREA_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -110,4 +109,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDrawingArea, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_DRAWING_AREA_H__ */

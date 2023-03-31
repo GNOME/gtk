@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_TREE_LIST_MODEL_H__
-#define __GTK_TREE_LIST_MODEL_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -106,4 +105,3 @@ GtkTreeListRow *        gtk_tree_list_row_get_child_row         (GtkTreeListRow 
 
 G_END_DECLS
 
-#endif /* __GTK_TREE_LIST_MODEL_H__ */

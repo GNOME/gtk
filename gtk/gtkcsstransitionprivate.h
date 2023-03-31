@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_TRANSITION_PRIVATE_H__
-#define __GTK_CSS_TRANSITION_PRIVATE_H__
+#pragma once
 
 #include "gtkstyleanimationprivate.h"
 #include "gtkprogresstrackerprivate.h"
@@ -47,4 +46,3 @@ gboolean                _gtk_css_transition_is_transition   (GtkStyleAnimation  
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_TRANSITION_PRIVATE_H__ */

@@ -23,8 +23,7 @@
  * SOFTWARE.
  */
 
-#ifndef XCURSOR_H
-#define XCURSOR_H
+#pragma once
 
 typedef int		XcursorBool;
 typedef unsigned int	XcursorUInt;
@@ -58,4 +57,3 @@ xcursor_images_destroy (XcursorImages *images);
 XcursorImages *
 xcursor_load_images (const char *path, int size);
 
-#endif

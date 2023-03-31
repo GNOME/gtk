@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FONT_CHOOSER_PRIVATE_H__
-#define __GTK_FONT_CHOOSER_PRIVATE_H__
+#pragma once
 
 #include "gtkfontchooser.h"
 
@@ -32,4 +31,3 @@ void            _gtk_font_chooser_font_activated        (GtkFontChooser *chooser
 
 G_END_DECLS
 
-#endif /* ! __GTK_FONT_CHOOSER_PRIVATE_H__ */

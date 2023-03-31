@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_KEYS_H__
-#define __GDK_X11_KEYS_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysprivate.h>
@@ -46,4 +45,3 @@ gboolean gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
                                          guint      keycode);
 G_END_DECLS
 
-#endif /* __GDK_X11_KEYMAP_H__ */

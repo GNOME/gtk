@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_ASYNC_H__
-#define __GDK_ASYNC_H__
+#pragma once
 
 #include "gdkdisplay.h"
 #include <X11/Xlib.h>
@@ -66,4 +65,3 @@ void _gdk_x11_roundtrip_async           (GdkDisplay           *display,
 
 G_END_DECLS
 
-#endif /* __GDK_ASYNC_H__ */

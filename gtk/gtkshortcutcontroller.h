@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_SHORTCUT_CONTROLLER_H__
-#define __GTK_SHORTCUT_CONTROLLER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -67,4 +66,3 @@ void                    gtk_shortcut_controller_remove_shortcut         (GtkShor
 
 G_END_DECLS
 
-#endif /* __GTK_SHORTCUT_CONTROLLER_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GRAPH_DATA_H__
-#define __GRAPH_DATA_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -39,4 +38,3 @@ void             graph_data_prepend_value   (GraphData   *data,
 
 G_END_DECLS
 
-#endif /* __GRAPH_DATA_H__ */

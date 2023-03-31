@@ -17,8 +17,7 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GTK_PAD_CONTROLLER_H__
-#define __GTK_PAD_CONTROLLER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -95,4 +94,3 @@ void  gtk_pad_controller_set_action         (GtkPadController *controller,
 
 G_END_DECLS
 
-#endif /* __GTK_PAD_CONTROLLER_H__ */

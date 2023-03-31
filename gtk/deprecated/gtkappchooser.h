@@ -19,8 +19,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#ifndef __GTK_APP_CHOOSER_H__
-#define __GTK_APP_CHOOSER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -52,5 +51,4 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooser, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_APP_CHOOSER_H__ */
 

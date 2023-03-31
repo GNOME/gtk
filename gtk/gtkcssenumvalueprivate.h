@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_ENUM_VALUE_PRIVATE_H__
-#define __GTK_CSS_ENUM_VALUE_PRIVATE_H__
+#pragma once
 
 #include "gtkenums.h"
 #include <gtk/css/gtkcss.h>
@@ -120,4 +119,3 @@ GtkCssValue *          _gtk_css_text_transform_value_try_parse (GtkCssParser    
 GtkTextTransform       _gtk_css_text_transform_value_get       (const GtkCssValue      *value);
 G_END_DECLS
 
-#endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */

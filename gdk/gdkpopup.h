@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GDK_POPUP_H__
-#define __GDK_POPUP_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -60,4 +59,3 @@ gboolean        gdk_popup_get_autohide          (GdkPopup       *popup);
 
 G_END_DECLS
 
-#endif /* __GDK_POPUP_H__ */

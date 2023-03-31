@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_APP_LAUNCH_CONTEXT_PRIVATE_H__
-#define __GDK_APP_LAUNCH_CONTEXT_PRIVATE_H__
+#pragma once
 
 #include "gdkapplaunchcontext.h"
 #include "gdktypes.h"
@@ -43,4 +42,3 @@ struct _GdkAppLaunchContext
 
 G_END_DECLS
 
-#endif

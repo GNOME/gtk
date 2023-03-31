@@ -17,8 +17,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MENU_TRACKER_ITEM_PRIVATE_H__
-#define __GTK_MENU_TRACKER_ITEM_PRIVATE_H__
+#pragma once
 
 #include "gtkactionobservableprivate.h"
 
@@ -98,4 +97,3 @@ void                    gtk_menu_tracker_item_request_submenu_shown     (GtkMenu
 
 gboolean                gtk_menu_tracker_item_get_submenu_shown         (GtkMenuTrackerItem *self);
 
-#endif

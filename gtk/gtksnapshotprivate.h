@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SNAPSHOT_PRIVATE_H__
-#define __GTK_SNAPSHOT_PRIVATE_H__
+#pragma once
 
 #include "gtksnapshot.h"
 
@@ -36,4 +35,3 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 
 G_END_DECLS
 
-#endif /* __GTK_SNAPSHOT_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GRAPH_RENDERER_H__
-#define __GRAPH_RENDERER_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 #include "graphdata.h"
@@ -34,4 +33,3 @@ void           graph_renderer_set_data (GraphRenderer *self,
 
 G_END_DECLS
 
-#endif /* __GRAPH_RENDERER_H__ */

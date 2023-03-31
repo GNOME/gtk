@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_IMAGE_VALUE_PRIVATE_H__
-#define __GTK_CSS_IMAGE_VALUE_PRIVATE_H__
+#pragma once
 
 #include "gtkcssimageprivate.h"
 #include "gtkcssvalueprivate.h"
@@ -32,4 +31,3 @@ GtkCssImage *   _gtk_css_image_value_get_image     (const GtkCssValue   *image);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_VALUE_PRIVATE_H__ */

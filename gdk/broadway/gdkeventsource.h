@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_BROADWAY_EVENT_SOURCE_H__
-#define __GDK_BROADWAY_EVENT_SOURCE_H__
+#pragma once
 
 #include "gdkprivate-broadway.h"
 
@@ -29,4 +28,3 @@ GSource * _gdk_broadway_event_source_new            (GdkDisplay *display);
 
 G_END_DECLS
 
-#endif /* __GDK_BROADWAY_EVENT_SOURCE_H__ */

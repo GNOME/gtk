@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_DRAG_ICON_H__
-#define __GTK_DRAG_ICON_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -57,4 +56,3 @@ GtkWidget *     gtk_drag_icon_create_widget_for_value           (const GValue   
 G_END_DECLS
 
 
-#endif /* __GTK_DRAG_ICON_H__ */

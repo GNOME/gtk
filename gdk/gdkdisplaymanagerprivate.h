@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DISPLAY_MANAGER_PRIVATE_H__
-#define __GDK_DISPLAY_MANAGER_PRIVATE_H__
+#pragma once
 
 #include "gdkdisplaymanager.h"
 
@@ -53,4 +52,3 @@ void            _gdk_display_manager_remove_display     (GdkDisplayManager      
 
 G_END_DECLS
 
-#endif

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GDK_MEMORY_CONVERT_PRIVATE_H__
-#define __GDK_MEMORY_CONVERT_PRIVATE_H__
+#pragma once
 
 #include "gdkenums.h"
 
@@ -52,4 +51,3 @@ void                    gdk_memory_convert                  (guchar             
 
 G_END_DECLS
 
-#endif /* __GDK_MEMORY_CONVERT_PRIVATE_H__ */

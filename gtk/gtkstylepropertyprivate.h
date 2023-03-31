@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_STYLEPROPERTY_PRIVATE_H__
-#define __GTK_STYLEPROPERTY_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -68,4 +67,3 @@ GtkCssValue *            _gtk_style_property_parse_value   (GtkStyleProperty *  
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_STYLEPROPERTY_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_TREE_EXPANDER_H__
-#define __GTK_TREE_EXPANDER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -68,4 +67,3 @@ void                    gtk_tree_expander_set_hide_expander    (GtkTreeExpander 
 
 G_END_DECLS
 
-#endif  /* __GTK_TREE_EXPANDER_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SLICE_LIST_MODEL_H__
-#define __GTK_SLICE_LIST_MODEL_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -59,4 +58,3 @@ guint                   gtk_slice_list_model_get_size           (GtkSliceListMod
 
 G_END_DECLS
 
-#endif /* __GTK_SLICE_LIST_MODEL_H__ */

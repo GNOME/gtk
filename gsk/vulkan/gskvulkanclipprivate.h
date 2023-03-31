@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_CLIP_PRIVATE_H__
-#define __GSK_VULKAN_CLIP_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <graphene.h>
@@ -54,4 +53,3 @@ gboolean                gsk_vulkan_clip_contains_rect                   (const G
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_CLIP_PRIVATE_H__ */

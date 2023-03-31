@@ -1,5 +1,4 @@
-#ifndef __GSK_PROFILER_PRIVATE_H__
-#define __GSK_PROFILER_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -53,4 +52,3 @@ void            gsk_profiler_append_timers      (GskProfiler *profiler,
 
 G_END_DECLS
 
-#endif /* __GSK_PROFILER_PRIVATE_H__ */

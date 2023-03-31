@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CAIRO_CONTEXT__
-#define __GDK_CAIRO_CONTEXT__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -46,4 +45,3 @@ cairo_t *               gdk_cairo_context_cairo_create                  (GdkCair
 
 G_END_DECLS
 
-#endif /* __GDK_CAIRO_CONTEXT__ */

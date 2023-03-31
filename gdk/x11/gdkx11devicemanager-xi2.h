@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_DEVICE_MANAGER_XI2_H__
-#define __GDK_X11_DEVICE_MANAGER_XI2_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -39,4 +38,3 @@ GType gdk_x11_device_manager_xi2_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_X11_DEVICE_MANAGER_XI2_H__ */

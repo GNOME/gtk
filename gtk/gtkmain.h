@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_MAIN_H__
-#define __GTK_MAIN_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -91,4 +90,3 @@ GtkTextDirection  gtk_get_locale_direction (void);
 
 G_END_DECLS
 
-#endif /* __GTK_MAIN_H__ */

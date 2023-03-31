@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef GSK_GL_UNIFORM_STATE_PRIVATE_H
-#define GSK_GL_UNIFORM_STATE_PRIVATE_H
+#pragma once
 
 #include "gskgltypesprivate.h"
 
@@ -833,4 +832,3 @@ gsk_gl_uniform_state_apply (GskGLUniformState *state,
 
 G_END_DECLS
 
-#endif /* GSK_GL_UNIFORM_STATE_PRIVATE_H */

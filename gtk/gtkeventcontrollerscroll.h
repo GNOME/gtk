@@ -17,8 +17,7 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GTK_EVENT_CONTROLLER_SCROLL_H__
-#define __GTK_EVENT_CONTROLLER_SCROLL_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -76,4 +75,3 @@ GdkScrollUnit       gtk_event_controller_scroll_get_unit (GtkEventControllerScro
 
 G_END_DECLS
 
-#endif /* __GTK_EVENT_CONTROLLER_SCROLL_H__ */

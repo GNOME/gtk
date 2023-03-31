@@ -18,8 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_VULKAN_CONTEXT__
-#define __GDK_WAYLAND_VULKAN_CONTEXT__
+#pragma once
 
 #include "gdkconfig.h"
 
@@ -58,4 +57,3 @@ G_END_DECLS
 
 #endif /* !GDK_RENDERING_VULKAN */
 
-#endif /* __GDK_WAYLAND_VULKAN_CONTEXT__ */

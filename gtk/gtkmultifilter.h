@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_MULTI_FILTER_H__
-#define __GTK_MULTI_FILTER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -55,4 +54,3 @@ GtkEveryFilter *        gtk_every_filter_new                    (void);
 
 G_END_DECLS
 
-#endif /* __GTK_MULTI_FILTER_H__ */

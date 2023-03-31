@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_STRING_SORTER_H__
-#define __GTK_STRING_SORTER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -77,4 +76,3 @@ GtkCollation            gtk_string_sorter_get_collation         (GtkStringSorter
 
 G_END_DECLS
 
-#endif /* __GTK_STRING_SORTER_H__ */

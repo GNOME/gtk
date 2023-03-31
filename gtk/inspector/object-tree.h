@@ -20,8 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTK_INSPECTOR_OBJECT_TREE_H_
-#define _GTK_INSPECTOR_OBJECT_TREE_H_
+#pragma once
 
 #include <gtk/gtkbox.h>
 #include <gtk/deprecated/gtktreemodel.h>
@@ -73,6 +72,5 @@ void       gtk_inspector_object_tree_set_display         (GtkInspectorObjectTree
 G_END_DECLS
 
 
-#endif // _GTK_INSPECTOR_WIDGETTREE_H_
 
 // vim: set et sw=2 ts=2:

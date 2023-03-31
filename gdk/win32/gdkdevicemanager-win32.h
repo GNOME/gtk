@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_MANAGER_WIN32_H__
-#define __GDK_DEVICE_MANAGER_WIN32_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -65,4 +64,3 @@ GdkEvent * gdk_wintab_make_event      (GdkDisplay *display,
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_MANAGER_WIN32_H__ */

@@ -17,8 +17,7 @@
  *
  */
 
-#ifndef __GTK_HEADER_BAR_PRIVATE_H__
-#define __GTK_HEADER_BAR_PRIVATE_H__
+#pragma once
 
 #include "gtkheaderbar.h"
 
@@ -28,4 +27,3 @@ void         _gtk_header_bar_track_default_decoration (GtkHeaderBar *bar);
 
 G_END_DECLS
 
-#endif /* __GTK_HEADER_BAR_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_BROADWAY_DISPLAY_MANAGER_H__
-#define __GDK_BROADWAY_DISPLAY_MANAGER_H__
+#pragma once
 
 #if !defined(__GDKBROADWAY_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/broadway/gdkbroadway.h> can be included directly."
@@ -43,4 +42,3 @@ GType gdk_broadway_display_manager_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_BROADWAY_DISPLAY_MANAGER_H__ */

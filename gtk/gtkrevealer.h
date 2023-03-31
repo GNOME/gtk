@@ -19,8 +19,7 @@
  *
  */
 
-#ifndef __GTK_REVEALER_H__
-#define __GTK_REVEALER_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -78,4 +77,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRevealer, g_object_unref)
 
 G_END_DECLS
 
-#endif  /* __GTK_REVEALER_H__ */

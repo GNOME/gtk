@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_GL_SHADER_H__
-#define __GSK_GL_SHADER_H__
+#pragma once
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -164,4 +163,3 @@ void    gsk_shader_args_builder_set_vec4  (GskShaderArgsBuilder *builder,
 
 G_END_DECLS
 
-#endif /* __GSK_GL_SHADER_H__ */

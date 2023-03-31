@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SHORTCUT_TRIGGER_H__
-#define __GTK_SHORTCUT_TRIGGER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -139,4 +138,3 @@ GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkAlternativeT
 
 G_END_DECLS
 
-#endif /* __GTK_SHORTCUT_TRIGGER_H__ */

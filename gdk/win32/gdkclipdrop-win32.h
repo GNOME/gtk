@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CLIPDROP_WIN32_H__
-#define __GDK_CLIPDROP_WIN32_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -275,4 +274,3 @@ void     _gdk_win32_advertise_clipboard_contentformats             (GTask       
 
 
 
-#endif /* __GDK_CLIPDROP_WIN32_H__ */

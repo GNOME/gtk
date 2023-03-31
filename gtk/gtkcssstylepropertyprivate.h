@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_STYLE_PROPERTY_PRIVATE_H__
-#define __GTK_CSS_STYLE_PROPERTY_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkstylepropertyprivate.h"
 
@@ -86,4 +85,3 @@ GtkCssValue * gtk_css_font_size_value_parse   (GtkCssParser *parser);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_STYLE_PROPERTY_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SHORTCUT_ACTION_PRIVATE_H__
-#define __GTK_SHORTCUT_ACTION_PRIVATE_H__
+#pragma once
 
 #include "gtkshortcutaction.h"
 
@@ -26,4 +25,3 @@ GtkShortcutAction *     gtk_shortcut_action_parse_builder       (GtkBuilder     
                                                                  const char              *string,
                                                                  GError                 **error);
 
-#endif /* __GTK_SHORTCUT_ACTION_PRIVATE_H__ */

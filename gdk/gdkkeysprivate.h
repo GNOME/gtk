@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_KEYS_PRIVATE_H__
-#define __GDK_KEYS_PRIVATE_H__
+#pragma once
 
 #include "gdkkeys.h"
 
@@ -123,4 +122,3 @@ void           gdk_keymap_get_cached_entries_for_keyval (GdkKeymap     *keymap,
 
 G_END_DECLS
 
-#endif

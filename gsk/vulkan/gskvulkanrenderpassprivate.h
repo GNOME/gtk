@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_RENDER_PASS_PRIVATE_H__
-#define __GSK_VULKAN_RENDER_PASS_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
@@ -42,4 +41,3 @@ gsize                   gsk_vulkan_render_pass_get_signal_semaphores    (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_RENDER_PASS_PRIVATE_H__ */

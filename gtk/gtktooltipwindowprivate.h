@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TOOLTIP_WINDOW_PRIVATE_H__
-#define __GTK_TOOLTIP_WINDOW_PRIVATE_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -63,4 +62,3 @@ void            gtk_tooltip_window_position                     (GtkTooltipWindo
 
 G_END_DECLS
 
-#endif /* __GTK_TOOLTIP_WINDOW_PRIVATE_H__ */

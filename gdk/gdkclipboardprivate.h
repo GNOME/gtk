@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CLIPBOARD_PRIVATE_H__
-#define __GDK_CLIPBOARD_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkclipboard.h>
 
@@ -82,4 +81,3 @@ gboolean                gdk_clipboard_write_finish              (GdkClipboard   
 
 G_END_DECLS
 
-#endif /* __GDK_CLIPBOARD_PRIVATE_H__ */

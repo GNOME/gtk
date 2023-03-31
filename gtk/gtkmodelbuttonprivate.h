@@ -17,8 +17,7 @@
  * Author: Matthias Clasen
  */
 
-#ifndef __GTK_MODEL_BUTTON_PRIVATE_H__
-#define __GTK_MODEL_BUTTON_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -57,4 +56,3 @@ GtkWidget * gtk_model_button_new      (void);
 
 G_END_DECLS
 
-#endif /* __GTK_MODEL_BUTTON_PRIVATE_H__ */

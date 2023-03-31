@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_WAYLAND_SEAT_H__
-#define __GDK_WAYLAND_SEAT_H__
+#pragma once
 
 #include "config.h"
 
@@ -39,4 +38,3 @@ void gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat);
 void gdk_wayland_seat_clear_touchpoints (GdkWaylandSeat *seat,
                                          GdkSurface     *surface);
 
-#endif /* __GDK_WAYLAND_SEAT_H__ */

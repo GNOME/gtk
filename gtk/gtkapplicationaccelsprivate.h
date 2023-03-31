@@ -19,8 +19,7 @@
  *          Sébastien Wilmet <swilmet@gnome.org>
  */
 
-#ifndef __GTK_APPLICATION_ACCELS_H__
-#define __GTK_APPLICATION_ACCELS_H__
+#pragma once
 
 #include <gio/gio.h>
 #include "gtkwindowprivate.h"
@@ -51,4 +50,3 @@ GListModel *    gtk_application_accels_get_shortcuts                (GtkApplicat
 
 G_END_DECLS
 
-#endif /* __GTK_APPLICATION_ACCELS_H__ */

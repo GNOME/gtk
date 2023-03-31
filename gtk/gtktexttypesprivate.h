@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_TYPES_PRIVATE_H__
-#define __GTK_TEXT_TYPES_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 #include <gtk/gtktexttagprivate.h>
@@ -75,5 +74,4 @@ gboolean gtk_text_byte_begins_utf8_char (const char *byte);
 
 G_END_DECLS
 
-#endif
 

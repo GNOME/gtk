@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GTK_PLACES_VIEW_ROW_H
-#define GTK_PLACES_VIEW_ROW_H
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -60,4 +59,3 @@ void               gtk_places_view_row_set_space_size_group      (GtkPlacesViewR
 
 G_END_DECLS
 
-#endif /* GTK_PLACES_VIEW_ROW_H */

@@ -1,5 +1,4 @@
-#ifndef __INLINE_ARRAY_H__
-#define __INLINE_ARRAY_H__
+#pragma once
 
 #define DEFINE_INLINE_ARRAY(Type, prefix, ElementType)              \
   typedef struct _##Type {                                          \
@@ -74,4 +73,3 @@
     return element - &ar->items[0];                                 \
   }
 
-#endif /* __INLINE_ARRAY_H__ */

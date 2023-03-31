@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_TYPES_PRIVATE_H__
-#define __GTK_CSS_TYPES_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gsk/gsk.h>
@@ -550,4 +549,3 @@ gtk_css_hash_id (GQuark id)
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_TYPES_PRIVATE_H__ */

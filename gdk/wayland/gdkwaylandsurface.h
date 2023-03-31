@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_SURFACE_H__
-#define __GDK_WAYLAND_SURFACE_H__
+#pragma once
 
 #if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
@@ -46,4 +45,3 @@ struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *s
 
 G_END_DECLS
 
-#endif /* __GDK_WAYLAND_SURFACE_H__ */

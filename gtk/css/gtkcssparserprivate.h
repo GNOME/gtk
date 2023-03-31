@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_CSS_PARSER_H__
-#define __GTK_CSS_PARSER_H__
+#pragma once
 
 #include "gtkcssenums.h"
 #include "gtkcsstokenizerprivate.h"
@@ -152,4 +151,3 @@ gsize                   gtk_css_parser_consume_any              (GtkCssParser   
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PARSER_H__ */

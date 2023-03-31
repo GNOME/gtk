@@ -16,8 +16,7 @@
  *  License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SHORTCUT_LABEL_H__
-#define __GTK_SHORTCUT_LABEL_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -53,4 +52,3 @@ void         gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
 
 G_END_DECLS
 
-#endif /* __GTK_SHORTCUT_LABEL_H__ */

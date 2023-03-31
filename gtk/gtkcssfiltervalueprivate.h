@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_FILTER_VALUE_PRIVATE_H__
-#define __GTK_CSS_FILTER_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -37,4 +36,3 @@ void            gtk_css_filter_value_pop_snapshot       (const GtkCssValue      
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_FILTER_VALUE_PRIVATE_H__ */

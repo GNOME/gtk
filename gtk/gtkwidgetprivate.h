@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_WIDGET_PRIVATE_H__
-#define __GTK_WIDGET_PRIVATE_H__
+#pragma once
 
 #include "gtkwidget.h"
 
@@ -481,4 +480,3 @@ _gtk_widget_is_sensitive (GtkWidget *widget)
 
 G_END_DECLS
 
-#endif /* __GTK_WIDGET_PRIVATE_H__ */

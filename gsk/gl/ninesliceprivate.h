@@ -19,8 +19,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __NINE_SLICE_PRIVATE_H__
-#define __NINE_SLICE_PRIVATE_H__
+#pragma once
 
 #include "gskgltextureprivate.h"
 
@@ -307,4 +306,3 @@ nine_slice_grow (GskGLTextureNineSlice *slices,
 
 G_END_DECLS
 
-#endif /* __NINE_SLICE_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_INSCRIPTION_H__
-#define __GTK_INSCRIPTION_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -113,4 +112,3 @@ void                    gtk_inscription_set_yalign              (GtkInscription 
 
 G_END_DECLS
 
-#endif  /* __GTK_INSCRIPTION_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_RECORDING_H_
-#define _GTK_INSPECTOR_RECORDING_H_
+#pragma once
 
 #include <glib-object.h>
 
@@ -50,6 +49,5 @@ gint64          gtk_inspector_recording_get_timestamp           (GtkInspectorRec
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_RECORDING_H_
 
 // vim: set et sw=2 ts=2:

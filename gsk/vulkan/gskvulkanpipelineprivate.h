@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_PIPELINE_PRIVATE_H__
-#define __GSK_VULKAN_PIPELINE_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -50,4 +49,3 @@ VkPipelineLayout        gsk_vulkan_pipeline_get_pipeline_layout         (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_PIPELINE_PRIVATE_H__ */

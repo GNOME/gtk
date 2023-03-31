@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINTER_H__
-#define __GTK_PRINTER_H__
+#pragma once
 
 #if !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkunixprint.h> can be included directly."
@@ -163,4 +162,3 @@ void                     gtk_enumerate_printers        (GtkPrinterFunc   func,
 
 G_END_DECLS
 
-#endif /* __GTK_PRINTER_H__ */

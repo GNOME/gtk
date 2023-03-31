@@ -1,5 +1,4 @@
-#ifndef __BROADWAY_H__
-#define __BROADWAY_H__
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -74,4 +73,3 @@ void            broadway_output_pong                (BroadwayOutput *output);
 void            broadway_output_set_show_keyboard   (BroadwayOutput *output,
                                                      gboolean        show);
 
-#endif /* __BROADWAY_H__ */

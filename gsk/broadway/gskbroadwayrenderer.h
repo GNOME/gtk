@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_BROADWAY_RENDERER_H__
-#define __GSK_BROADWAY_RENDERER_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gsk/gskrenderer.h>
@@ -49,4 +48,3 @@ G_END_DECLS
 
 #endif /* GDK_WINDOWING_BROADWAY */
 
-#endif /* __GSK_BROADWAY_RENDERER_H__ */

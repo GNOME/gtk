@@ -17,8 +17,7 @@
 
 /* A Red-Black Tree implementation used specifically by GtkTreeView.
  */
-#ifndef __GTK_RB_TREE_H__
-#define __GTK_RB_TREE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -72,4 +71,3 @@ void                 gtk_rb_tree_remove_all             (GtkRbTree              
 G_END_DECLS
 
 
-#endif /* __GTK_RB_TREE_H__ */

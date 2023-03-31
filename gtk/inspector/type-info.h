@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_TYPE_INFO_H_
-#define _GTK_INSPECTOR_TYPE_INFO_H_
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -32,4 +31,3 @@ void gtk_inspector_type_popover_set_gtype (GtkInspectorTypePopover *self,
 
 G_END_DECLS
 
-#endif

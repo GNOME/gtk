@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WIN32_GL_CONTEXT__
-#define __GDK_WIN32_GL_CONTEXT__
+#pragma once
 
 #ifndef DONT_INCLUDE_LIBEPOXY
 #include <epoxy/gl.h>
@@ -97,4 +96,3 @@ void      gdk_win32_private_wglDeleteContext     (HGLRC hglrc);
 
 G_END_DECLS
 
-#endif /* __GDK_WIN32_GL_CONTEXT__ */

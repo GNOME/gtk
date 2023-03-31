@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_BOOKMARK_LIST_H__
-#define __GTK_BOOKMARK_LIST_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -61,4 +60,3 @@ gboolean             gtk_bookmark_list_is_loading           (GtkBookmarkList *se
 
 G_END_DECLS
 
-#endif /* __GTK_BOOKMARK_LIST_H__ */

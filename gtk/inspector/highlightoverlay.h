@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_HIGHLIGHT_OVERLAY_H__
-#define __GTK_HIGHLIGHT_OVERLAY_H__
+#pragma once
 
 #include "inspectoroverlay.h"
 
@@ -35,4 +34,3 @@ void                    gtk_highlight_overlay_set_color         (GtkHighlightOve
 
 G_END_DECLS
 
-#endif /* __GTK_HIGHLIGHT_OVERLAY_H__ */

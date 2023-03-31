@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_MODULES_PRIVATE_H__
-#define __GTK_MODULES_PRIVATE_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -31,4 +30,3 @@ char ** _gtk_get_module_path          (const char   *type);
 
 G_END_DECLS
 
-#endif /* __GTK_MODULES_PRIVATE_H__ */
