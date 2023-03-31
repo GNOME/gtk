@@ -697,11 +697,11 @@ parse_template (GtkBuildableParseContext  *context,
   const char *parent_class = NULL;
   int line;
   gpointer line_ptr;
-  gboolean has_duplicate;
+  gboolean has_duplicate, allow_parents;
   GType template_type;
   GType parsed_type;
 
-  template_type = _gtk_builder_get_template_type (data->builder);
+  template_type = gtk_builder_get_template_type (data->builder, &allow_parents);
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "class", &object_class,
@@ -729,7 +729,8 @@ parse_template (GtkBuildableParseContext  *context,
     }
 
   parsed_type = g_type_from_name (object_class);
-  if (template_type != parsed_type)
+  if (template_type != parsed_type &&
+      (!allow_parents || !g_type_is_a (template_type, parsed_type)))
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR,
@@ -768,10 +769,11 @@ parse_template (GtkBuildableParseContext  *context,
 
   object_info = g_new0 (ObjectInfo, 1);
   object_info->tag_type = TAG_TEMPLATE;
-  object_info->type = parsed_type;
-  object_info->oclass = g_type_class_ref (parsed_type);
-  object_info->id = g_strdup (object_class);
   object_info->object = gtk_builder_get_object (data->builder, object_class);
+  object_info->type = template_type;
+  object_info->oclass = g_type_class_ref (template_type);
+  object_info->id = g_strdup (object_class);
+  g_assert (object_info->object);
   state_push (data, object_info);
 
   has_duplicate = g_hash_table_lookup_extended (data->object_ids, object_class, NULL, &line_ptr);

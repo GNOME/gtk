@@ -264,6 +264,7 @@ typedef struct
   char *filename;
   char *resource_prefix;
   GType template_type;
+  gboolean allow_template_parents;
   GObject *current_object;
   GtkBuilderScope *scope;
 } GtkBuilderPrivate;
@@ -1334,6 +1335,15 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   return TRUE;
 }
 
+void
+gtk_builder_set_allow_template_parents (GtkBuilder *builder,
+                                        gboolean    allow_parents)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  priv->allow_template_parents = allow_parents;
+}
+
 /**
  * gtk_builder_extend_with_template:
  * @builder: a `GtkBuilder`
@@ -1385,6 +1395,18 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   name = g_type_name (template_type);
   if (gtk_builder_get_object (builder, name) != object)
     gtk_builder_expose_object (builder, name, object);
+  if (priv->allow_template_parents)
+    {
+      GType subtype;
+      for (subtype = g_type_parent (template_type);
+           subtype != G_TYPE_OBJECT;
+           subtype = g_type_parent (subtype))
+        {
+          name = g_type_name (subtype);
+          if (gtk_builder_get_object (builder, name) != object)
+            gtk_builder_expose_object (builder, name, object);
+        }
+    }
 
   filename = g_strconcat ("<", name, " template>", NULL);
   _gtk_builder_parser_parse_buffer (builder, filename,
@@ -2815,9 +2837,12 @@ _gtk_builder_get_absolute_filename (GtkBuilder  *builder,
 }
 
 GType
-_gtk_builder_get_template_type (GtkBuilder *builder)
+gtk_builder_get_template_type (GtkBuilder *builder,
+                               gboolean   *out_allow_parents)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  *out_allow_parents = priv->allow_template_parents;
 
   return priv->template_type;
 }
