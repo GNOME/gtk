@@ -3771,7 +3771,7 @@ pointer_surface_update_scale (GdkDevice *device)
   guint32 scale;
   GSList *l;
 
-  if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+  if (display_wayland->compositor_version < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
     {
       /* We can't set the scale on this surface */
       return;
