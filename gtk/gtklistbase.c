@@ -639,6 +639,8 @@ gtk_list_base_set_adjustment (GtkListBase    *self,
 
   if (adjustment == NULL)
     adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  else
+    gtk_adjustment_configure (adjustment, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   g_object_ref_sink (adjustment);
 
   gtk_list_base_clear_adjustment (self, orientation);
