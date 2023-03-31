@@ -229,7 +229,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_ADJUSTMENT,
                                    g_param_spec_object ("adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkScaleButton:icons: (attributes org.gtk.Property.set=gtk_scale_button_set_icons)

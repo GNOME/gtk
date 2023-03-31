@@ -587,7 +587,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_HADJUSTMENT] =
       g_param_spec_object ("hadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolleWindow:vadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_vadjustment org.gtk.Property.set=gtk_scrolled_window_set_vadjustment)
@@ -597,7 +597,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_VADJUSTMENT] =
       g_param_spec_object ("vadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:hscrollbar-policy:

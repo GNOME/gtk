@@ -376,7 +376,7 @@ gtk_range_class_init (GtkRangeClass *class)
   properties[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:inverted: (attributes org.gtk.Property.get=gtk_range_get_inverted org.gtk.Property.set=gtk_range_set_inverted)
