@@ -148,9 +148,9 @@ settings_key_new (GSettings          *settings,
 }
 
 static void
-item_value_changed (GtkEditableLabel *label,
-                    GParamSpec       *pspec,
-                    GtkListItem      *item)
+item_value_changed (GtkEditableLabel  *label,
+                    GParamSpec        *pspec,
+                    GtkColumnViewCell *cell)
 {
   SettingsKey *self;
   const char *text;
@@ -162,8 +162,7 @@ item_value_changed (GtkEditableLabel *label,
 
   text = gtk_editable_get_text (GTK_EDITABLE (label));
 
-  g_object_get (item, "item", &self, NULL);
-  g_object_unref (self);
+  self = gtk_column_view_cell_get_item (cell);
 
   type = g_settings_schema_key_get_value_type (self->key);
   name = g_settings_schema_key_get_name (self->key);
