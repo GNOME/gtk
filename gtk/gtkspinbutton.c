@@ -374,7 +374,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_ADJUSTMENT] =
     g_param_spec_object ("adjustment", NULL, NULL,
                          GTK_TYPE_ADJUSTMENT,
-                         GTK_PARAM_READWRITE);
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:climb-rate: (attributes org.gtk.Property.get=gtk_spin_button_get_climb_rate org.gtk.Property.set=gtk_spin_button_set_climb_rate)
@@ -1860,6 +1860,8 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 
   if (!adjustment)
     adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  else if (spin_button->adjustment == adjustment)
+    return;
 
   gtk_spin_button_configure (spin_button,
                              adjustment,

@@ -479,7 +479,7 @@ gtk_file_dialog_get_filters (GtkFileDialog *self)
 /**
  * gtk_file_dialog_set_filters:
  * @self: a `GtkFileDialog`
- * @filters: a `GListModel` of `GtkFileFilters`
+ * @filters: (nullable): a `GListModel` of `GtkFileFilters`
  *
  * Sets the filters that will be offered to the user
  * in the file chooser dialog.
@@ -491,7 +491,7 @@ gtk_file_dialog_set_filters (GtkFileDialog *self,
                              GListModel    *filters)
 {
   g_return_if_fail (GTK_IS_FILE_DIALOG (self));
-  g_return_if_fail (G_IS_LIST_MODEL (filters));
+  g_return_if_fail (filters == NULL || G_IS_LIST_MODEL (filters));
 
   if (!g_set_object (&self->filters, filters))
     return;

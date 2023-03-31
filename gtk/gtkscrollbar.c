@@ -218,7 +218,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   props[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
@@ -310,6 +310,9 @@ gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
   adj = gtk_range_get_adjustment (GTK_RANGE (priv->range));
+  if (adj == adjustment)
+    return;
+
   if (adj)
     {
       g_signal_handlers_disconnect_by_func (adj, gtk_scrollbar_adjustment_changed, self);
