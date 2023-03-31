@@ -138,7 +138,6 @@ struct _GdkWaylandDisplay
   int gtk_shell_version;
   int xdg_output_manager_version;
   int pointer_gestures_version;
-  int xdg_activation_version;
 
   uint32_t server_decoration_mode;
 

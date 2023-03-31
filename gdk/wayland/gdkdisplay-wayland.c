@@ -511,12 +511,10 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "xdg_activation_v1") == 0)
     {
-      display_wayland->xdg_activation_version =
-        MIN (version, XDG_ACTIVATION_VERSION);
       display_wayland->xdg_activation =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_activation_v1_interface,
-                          display_wayland->xdg_activation_version);
+                          MIN (version, XDG_ACTIVATION_VERSION));
     }
 
   g_hash_table_insert (display_wayland->known_globals,
