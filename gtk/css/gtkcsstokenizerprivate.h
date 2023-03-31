@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_TOKENIZER_PRIVATE_H__
-#define __GTK_CSS_TOKENIZER_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -151,4 +150,3 @@ gboolean                gtk_css_tokenizer_read_token            (GtkCssTokenizer
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_TOKENIZER_PRIVATE_H__ */

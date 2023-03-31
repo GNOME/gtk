@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_ENUMS_H__
-#define __GSK_ENUMS_H__
+#pragma once
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -276,4 +275,3 @@ typedef enum
   GSK_MASK_MODE_INVERTED_LUMINANCE
 } GskMaskMode;
 
-#endif /* __GSK_TYPES_H__ */

@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_H__
-#define __GDK_MACOS_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -29,4 +28,3 @@
 #include "gdkmacosmonitor.h"
 #include "gdkmacossurface.h"
 
-#endif /* __GDK_MACOS_H__ */

@@ -1,5 +1,4 @@
-#ifndef __GSK_GLSHADER_PRIVATE_H__
-#define __GSK_GLSHADER_PRIVATE_H__
+#pragma once
 
 #include <gsk/gskglshader.h>
 
@@ -16,4 +15,3 @@ const GskGLUniform *gsk_gl_shader_get_uniforms (GskGLShader *shader,
 
 G_END_DECLS
 
-#endif /* __GSK_GLSHADER_PRIVATE_H__ */

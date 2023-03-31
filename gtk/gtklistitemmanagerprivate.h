@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_LIST_ITEM_MANAGER_H__
-#define __GTK_LIST_ITEM_MANAGER_H__
+#pragma once
 
 #include "gtk/gtktypes.h"
 #include "gtk/gtkenums.h"
@@ -119,4 +118,3 @@ guint                   gtk_list_item_tracker_get_position      (GtkListItemMana
 
 G_END_DECLS
 
-#endif /* __GTK_LIST_ITEM_MANAGER_H__ */

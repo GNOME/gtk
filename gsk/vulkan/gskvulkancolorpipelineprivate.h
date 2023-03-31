@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_COLOR_PIPELINE_PRIVATE_H__
-#define __GSK_VULKAN_COLOR_PIPELINE_PRIVATE_H__
+#pragma once
 
 #include <graphene.h>
 
@@ -30,4 +29,3 @@ gsize                   gsk_vulkan_color_pipeline_draw                  (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_COLOR_PIPELINE_PRIVATE_H__ */

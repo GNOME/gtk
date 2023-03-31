@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_SHORTCUTS_H_
-#define _GTK_INSPECTOR_SHORTCUTS_H_
+#pragma once
 
 #include <gtk/gtkbox.h>
 
@@ -28,4 +27,3 @@ G_DECLARE_FINAL_TYPE (GtkInspectorShortcuts, gtk_inspector_shortcuts, GTK, INSPE
 void gtk_inspector_shortcuts_set_object (GtkInspectorShortcuts *sl,
                                          GObject               *object);
 
-#endif

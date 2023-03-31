@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_PRIVATE_H__
-#define __GTK_TEXT_PRIVATE_H__
+#pragma once
 
 #include "gtktext.h"
 
@@ -106,4 +105,3 @@ GtkEventController *gtk_text_get_key_controller (GtkText    *entry);
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_PRIVATE_H__ */

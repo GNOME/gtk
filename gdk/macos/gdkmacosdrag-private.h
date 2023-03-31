@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_DRAG_PRIVATE_H__
-#define __GDK_MACOS_DRAG_PRIVATE_H__
+#pragma once
 
 #include "gdkdragprivate.h"
 
@@ -80,4 +79,3 @@ void            _gdk_macos_drag_set_actions        (GdkMacosDrag   *self,
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_DRAG_PRIVATE_H__ */

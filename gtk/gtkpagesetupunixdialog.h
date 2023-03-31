@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PAGE_SETUP_UNIX_DIALOG_H__
-#define __GTK_PAGE_SETUP_UNIX_DIALOG_H__
+#pragma once
 
 #if !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkunixprint.h> can be included directly."
@@ -52,4 +51,3 @@ GtkPrintSettings *gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUni
 
 G_END_DECLS
 
-#endif /* __GTK_PAGE_SETUP_UNIX_DIALOG_H__ */

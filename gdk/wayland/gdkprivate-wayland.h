@@ -26,8 +26,7 @@
  * Private uninstalled header defining things local to the Wayland backend
  */
 
-#ifndef __GDK_PRIVATE_WAYLAND_H__
-#define __GDK_PRIVATE_WAYLAND_H__
+#pragma once
 
 #include "config.h"
 
@@ -194,4 +193,3 @@ void gdk_wayland_surface_update_scale (GdkSurface *surface);
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       guint32    mods);
 
-#endif /* __GDK_PRIVATE_WAYLAND_H__ */

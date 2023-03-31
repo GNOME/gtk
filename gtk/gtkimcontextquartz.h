@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_IM_CONTEXT_QUARTZ_H__
-#define __GTK_IM_CONTEXT_QUARTZ_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -26,4 +25,3 @@ GType gtk_im_context_quartz_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_IM_CONTEXT_QUARTZ_H__ */

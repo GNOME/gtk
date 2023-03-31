@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_TYPES_H__
-#define __GSK_TYPES_H__
+#pragma once
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -29,4 +28,3 @@
 typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskTransform            GskTransform;
 
-#endif /* __GSK_TYPES_H__ */

@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_PRIVATE_WIN32_H__
-#define __GDK_PRIVATE_WIN32_H__
+#pragma once
 
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/gdkdebugprivate.h>
@@ -464,4 +463,3 @@ void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
 gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
 
-#endif /* __GDK_PRIVATE_WIN32_H__ */

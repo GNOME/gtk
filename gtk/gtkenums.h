@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_ENUMS_H__
-#define __GTK_ENUMS_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -1698,4 +1697,3 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
 
 G_END_DECLS
 
-#endif /* __GTK_ENUMS_H__ */

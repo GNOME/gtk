@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_SNAPSHOT_H__
-#define __GTK_SNAPSHOT_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -236,4 +235,3 @@ void            gtk_snapshot_append_layout              (GtkSnapshot            
 
 G_END_DECLS
 
-#endif /* __GTK_SNAPSHOT_H__ */

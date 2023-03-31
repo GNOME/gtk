@@ -26,8 +26,7 @@
  * Private uninstalled header defining things local to X windowing code
  */
 
-#ifndef __GDK_PRIVATE_X11_H__
-#define __GDK_PRIVATE_X11_H__
+#pragma once
 
 #include "gdkcursor.h"
 #include "gdkx.h"
@@ -267,4 +266,3 @@ extern const int         _gdk_x11_event_mask_table_size;
 #define GDK_SURFACE_XID(win)           (GDK_X11_SURFACE (win)->xid)
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_X11_SCREEN (screen)->xdisplay)
 
-#endif /* __GDK_PRIVATE_X11_H__ */

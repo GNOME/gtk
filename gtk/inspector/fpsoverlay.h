@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_FPS_OVERLAY_H__
-#define __GTK_FPS_OVERLAY_H__
+#pragma once
 
 #include "inspectoroverlay.h"
 
@@ -31,4 +30,3 @@ GtkInspectorOverlay *   gtk_fps_overlay_new                     (void);
 
 G_END_DECLS
 
-#endif /* __GTK_FPS_OVERLAY_H__ */

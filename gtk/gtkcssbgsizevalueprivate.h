@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
-#define __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -42,4 +41,3 @@ void            _gtk_css_bg_size_value_compute_size (const GtkCssValue      *bg_
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_BG_SIZE_VALUE_PRIVATE_H__ */

@@ -54,8 +54,7 @@
 //       INCLUDE SECTION
 //
 
-#ifndef STB_INCLUDE_STB_RECT_PACK_H
-#define STB_INCLUDE_STB_RECT_PACK_H
+#pragma once
 
 #define STB_RECT_PACK_VERSION  1
 
@@ -187,5 +186,4 @@ struct stbrp_context
 }
 #endif
 
-#endif
 

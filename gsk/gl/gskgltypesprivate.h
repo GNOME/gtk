@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_TYPES_PRIVATE_H__
-#define __GSK_GL_TYPES_PRIVATE_H__
+#pragma once
 
 #include <epoxy/gl.h>
 #include <graphene.h>
@@ -63,4 +62,3 @@ struct _GskGLDrawVertex
 
 G_END_DECLS
 
-#endif /* __GSK_GL_TYPES_PRIVATE_H__ */

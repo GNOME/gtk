@@ -1,5 +1,4 @@
-#ifndef __GDK_POPUP_PRIVATE_H__
-#define __GDK_POPUP_PRIVATE_H__
+#pragma once
 
 #include "gdkpopup.h"
 
@@ -32,4 +31,3 @@ guint gdk_popup_install_properties (GObjectClass *object_class,
 
 G_END_DECLS
 
-#endif /* __GDK_POPUP_PRIVATE_H__ */

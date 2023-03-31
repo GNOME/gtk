@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PATH_BAR_PRIVATE_H__
-#define __GTK_PATH_BAR_PRIVATE_H__
+#pragma once
 
 #include "gtkwidget.h"
 
@@ -38,4 +37,3 @@ void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 
 G_END_DECLS
 
-#endif /* __GTK_PATH_BAR_PRIVATE_H__ */

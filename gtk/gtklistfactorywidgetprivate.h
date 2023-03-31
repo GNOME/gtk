@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_LIST_FACTORY_WIDGET_PRIVATE_H__
-#define __GTK_LIST_FACTORY_WIDGET_PRIVATE_H__
+#pragma once
 
 #include "gtklistitembaseprivate.h"
 
@@ -83,4 +82,3 @@ gboolean                gtk_list_factory_widget_get_selectable  (GtkListFactoryW
 
 G_END_DECLS
 
-#endif  /* __GTK_LIST_FACTORY_WIDGET_PRIVATE_H__ */

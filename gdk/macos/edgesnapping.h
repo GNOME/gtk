@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __EDGE_SNAPPING_H__
-#define __EDGE_SNAPPING_H__
+#pragma once
 
 #include "gdktypes.h"
 #include "gdkmacosutils-private.h"
@@ -48,4 +47,3 @@ void _edge_snapping_set_monitor (EdgeSnapping       *self,
 
 G_END_DECLS
 
-#endif /* __EDGE_SNAPPING_H__ */

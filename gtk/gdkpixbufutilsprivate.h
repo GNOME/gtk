@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_PIXBUF_UTILS_PRIVATE_H__
-#define __GDK_PIXBUF_UTILS_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -92,4 +91,3 @@ GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
 
 G_END_DECLS
 
-#endif  /* __GDK_PIXBUF_UTILS_PRIVATE_H__ */

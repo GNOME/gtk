@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_DRIVER_PRIVATE_H__
-#define __GSK_GL_DRIVER_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkgltextureprivate.h>
 
@@ -242,4 +241,3 @@ gsk_gl_driver_slice_texture (GskGLDriver        *self,
 
 G_END_DECLS
 
-#endif /* __GSK_GL_DRIVER_PRIVATE_H__ */

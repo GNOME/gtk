@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_BUFFER_PRIVATE_H__
-#define __GSK_GL_BUFFER_PRIVATE_H__
+#pragma once
 
 #include "gskgltypesprivate.h"
 
@@ -79,4 +78,3 @@ gsk_gl_buffer_get_offset (GskGLBuffer *buffer)
 
 G_END_DECLS
 
-#endif /* __GSK_GL_BUFFER_PRIVATE_H__ */

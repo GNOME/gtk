@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_CHOOSER_PRIVATE_H__
-#define __GTK_COLOR_CHOOSER_PRIVATE_H__
+#pragma once
 
 #include "gtkcolorchooser.h"
 
@@ -32,4 +31,3 @@ void _gtk_color_chooser_snapshot_checkered_pattern (GtkSnapshot *snapshot,
 
 G_END_DECLS
 
-#endif /* ! __GTK_COLOR_CHOOSER_PRIVATE_H__ */

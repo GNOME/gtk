@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GSK_GL_RENDERER_PRIVATE_H__
-#define __GSK_GL_RENDERER_PRIVATE_H__
+#pragma once
 
 #include "gskglrenderer.h"
 
@@ -31,4 +30,3 @@ gboolean gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
 
 G_END_DECLS
 
-#endif /* __GSK_GL_RENDERER_PRIVATE_H__ */

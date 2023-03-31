@@ -17,8 +17,7 @@
  */
 
 
-#ifndef __GTK_TEXTURE_DOWNLOADER_PRIVATE_H__
-#define __GTK_TEXTURE_DOWNLOADER_PRIVATE_H__
+#pragma once
 
 #include "gdktexturedownloader.h"
 
@@ -38,4 +37,3 @@ void                    gdk_texture_downloader_finish            (GdkTextureDown
 
 G_END_DECLS
 
-#endif /* __GTK_TEXTURE_DOWNLOADER_PRIVATE_H__ */

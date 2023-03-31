@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_KINETIC_SCROLLING_H__
-#define __GTK_KINETIC_SCROLLING_H__
+#pragma once
 
 #include <glib.h>
 
@@ -54,4 +53,3 @@ void                     gtk_kinetic_scrolling_stop (GtkKineticScrolling  *data)
 
 G_END_DECLS
 
-#endif /* __GTK_KINETIC_SCROLLING_H__ */

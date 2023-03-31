@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_PRIVATE_H__
-#define __GDK_DEVICE_PRIVATE_H__
+#pragma once
 
 #include "gdkdevice.h"
 #include "gdkdevicetool.h"
@@ -201,4 +200,3 @@ gboolean gdk_device_grab_info (GdkDisplay  *display,
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_PRIVATE_H__ */

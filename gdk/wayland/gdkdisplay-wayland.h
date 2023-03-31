@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_DISPLAY__
-#define __GDK_WAYLAND_DISPLAY__
+#pragma once
 
 #include "config.h"
 
@@ -163,4 +162,3 @@ void gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
 
 G_END_DECLS
 
-#endif  /* __GDK_WAYLAND_DISPLAY__ */

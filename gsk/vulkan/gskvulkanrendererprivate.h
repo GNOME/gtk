@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_RENDERER_PRIVATE_H__
-#define __GSK_VULKAN_RENDERER_PRIVATE_H__
+#pragma once
 
 #include "gskvulkanrenderer.h"
 #include "gskvulkanimageprivate.h"
@@ -48,4 +47,3 @@ GskVulkanCachedGlyph * gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_RENDERER_PRIVATE_H__ */

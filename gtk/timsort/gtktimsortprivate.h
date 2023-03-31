@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TIMSORT_PRIVATE_H__
-#define __GTK_TIMSORT_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -119,4 +118,3 @@ void            gtk_tim_sort                                    (gpointer       
                                                                  GCompareDataFunc        compare_func,
                                                                  gpointer                user_data);
 
-#endif /* __GTK_TIMSORT_PRIVATE_H__ */

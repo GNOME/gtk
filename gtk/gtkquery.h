@@ -19,8 +19,7 @@
  * Based on nautilus-query.h
  */
 
-#ifndef __GTK_QUERY_H__
-#define __GTK_QUERY_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -64,4 +63,3 @@ gboolean     gtk_query_matches_string (GtkQuery    *query,
 
 G_END_DECLS
 
-#endif /* __GTK_QUERY_H__ */

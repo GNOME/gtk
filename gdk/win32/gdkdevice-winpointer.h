@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_WINPOINTER_H__
-#define __GDK_DEVICE_WINPOINTER_H__
+#pragma once
 
 #include <gdk/gdkdeviceprivate.h>
 
@@ -64,4 +63,3 @@ GType gdk_device_winpointer_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_WINPOINTER_H__ */

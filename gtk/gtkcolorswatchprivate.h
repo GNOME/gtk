@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_SWATCH_PRIVATE_H__
-#define __GTK_COLOR_SWATCH_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkdrawingarea.h>
 
@@ -58,4 +57,3 @@ void        gtk_color_swatch_customize (GtkColorSwatch *swatch);
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_SWATCH_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_POPOVER_MENU_PRIVATE_H__
-#define __GTK_POPOVER_MENU_PRIVATE_H__
+#pragma once
 
 #include "gtkpopovermenu.h"
 
@@ -46,4 +45,3 @@ GtkWidget * gtk_popover_menu_get_stack (GtkPopoverMenu *menu);
 
 G_END_DECLS
 
-#endif /* __GTK_POPOVER_MENU_PRIVATE_H__ */

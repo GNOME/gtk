@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen
  */
 
-#ifndef __GTK_CSS_FONT_FEATURES_VALUE_PRIVATE_H__
-#define __GTK_CSS_FONT_FEATURES_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -35,4 +34,3 @@ char *          gtk_css_font_features_value_get_features (GtkCssValue  *value);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_FONT_FEATURES_VALUE_PRIVATE_H__ */

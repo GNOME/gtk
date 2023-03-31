@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_STYLE_PRIVATE_H__
-#define __GTK_CSS_STYLE_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/css/gtkcss.h>
@@ -321,4 +320,3 @@ void gtk_css_other_values_compute_changes_and_affects (GtkCssStyle *style1,
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_STYLE_PRIVATE_H__ */

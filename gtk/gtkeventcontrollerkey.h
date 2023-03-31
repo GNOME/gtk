@@ -17,8 +17,7 @@
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GTK_EVENT_CONTROLLER_KEY_H__
-#define __GTK_EVENT_CONTROLLER_KEY_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -61,4 +60,3 @@ guint               gtk_event_controller_key_get_group      (GtkEventControllerK
 
 G_END_DECLS
 
-#endif /* __GTK_EVENT_CONTROLLER_KEY_H__ */

@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_GL_CONTEXT_H__
-#define __GDK_GL_CONTEXT_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -118,4 +117,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLContext, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GDK_GL_CONTEXT_H__ */

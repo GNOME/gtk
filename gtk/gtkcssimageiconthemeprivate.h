@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_IMAGE_ICON_THEME_PRIVATE_H__
-#define __GTK_CSS_IMAGE_ICON_THEME_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcssimageprivate.h"
 #include "gtk/gtkicontheme.h"
@@ -59,4 +58,3 @@ GType          _gtk_css_image_icon_theme_get_type             (void) G_GNUC_CONS
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_ICON_THEME_PRIVATE_H__ */

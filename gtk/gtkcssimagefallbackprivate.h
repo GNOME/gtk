@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_CSS_IMAGE_FALLBACK_PRIVATE_H__
-#define __GTK_CSS_IMAGE_FALLBACK_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcssimageprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
@@ -58,4 +57,3 @@ GtkCssImage *_gtk_css_image_fallback_new_for_color (GtkCssValue *color);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_FALLBACK_PRIVATE_H__ */

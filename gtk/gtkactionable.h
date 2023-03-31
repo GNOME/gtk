@@ -17,8 +17,7 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_ACTIONABLE_H__
-#define __GTK_ACTIONABLE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
@@ -79,4 +78,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkActionable, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_ACTIONABLE_H__ */

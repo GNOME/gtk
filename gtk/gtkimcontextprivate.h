@@ -15,11 +15,9 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_IM_CONTEXT_PRIVATE_H__
-#define __GTK_IM_CONTEXT_PRIVATE_H__
+#pragma once
 
 #include "gtkimcontext.h"
 
 void gtk_im_context_activate_osk (GtkIMContext *context);
 
-#endif /* __GTK_IM_CONTEXT_PRIVATE_H__ */

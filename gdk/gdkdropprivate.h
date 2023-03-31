@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GDK_DROP_PRIVATE_H__
-#define __GDK_DROP_PRIVATE_H__
+#pragma once
 
 #include "gdkdrop.h"
 
@@ -81,4 +80,3 @@ void                    gdk_drop_emit_drop_event                (GdkDrop        
 
 G_END_DECLS
 
-#endif

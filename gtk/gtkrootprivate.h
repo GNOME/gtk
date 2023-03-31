@@ -1,5 +1,4 @@
-#ifndef __GTK_ROOT_PRIVATE_H__
-#define __GTK_ROOT_PRIVATE_H__
+#pragma once
 
 #include "gtkroot.h"
 
@@ -36,4 +35,3 @@ void             gtk_root_queue_restyle (GtkRoot *self);
 
 G_END_DECLS
 
-#endif /* __GTK_ROOT_PRIVATE_H__ */

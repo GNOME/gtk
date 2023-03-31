@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTK_INSPECTOR_CSS_EDITOR_H_
-#define _GTK_INSPECTOR_CSS_EDITOR_H_
+#pragma once
 
 #include <gtk/gtkbox.h>
 
@@ -54,6 +53,5 @@ void       gtk_inspector_css_editor_set_display (GtkInspectorCssEditor *ce,
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_CSS_EDITOR_H_
 
 // vim: set et sw=2 ts=2:

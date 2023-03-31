@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_BUILDER_SCOPE_PRIVATE_H__
-#define __GTK_BUILDER_SCOPE_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkbuilderscope.h>
 
@@ -40,4 +39,3 @@ GClosure *              gtk_builder_scope_create_closure        (GtkBuilderScope
 
 G_END_DECLS
 
-#endif /* __GTK_BUILDER_SCOPE_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FILE_TRANSFER_PROTOCOL_H__
-#define __FILE_TRANSFER_PROTOCOL_H__
+#pragma once
 
 
 void     file_transfer_portal_register              (void);
@@ -37,4 +36,3 @@ gboolean file_transfer_portal_retrieve_files_finish (GAsyncResult          *resu
                                                      GError               **error);
 
 
-#endif

@@ -36,8 +36,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_IM_CONTEXT_SIMPLE_SEQS_H__
-#define __GTK_IM_CONTEXT_SIMPLE_SEQS_H__
+#pragma once
 
 /* === These are the original comments of the file; we keep for historical purposes ===
  *
@@ -4878,5 +4877,4 @@ GDK_KEY_Greek_iota, GDK_KEY_dead_tilde, GDK_KEY_dead_dasia, GDK_KEY_Greek_alpha,
 GDK_KEY_Greek_iota, GDK_KEY_dead_tilde, GDK_KEY_dead_dasia, GDK_KEY_Greek_eta, 0x1F97, 
 };
 
-#endif /* __GTK_IM_CONTEXT_SIMPLE_SEQS_H__ */
 

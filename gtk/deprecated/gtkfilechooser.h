@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_CHOOSER_H__
-#define __GTK_FILE_CHOOSER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -185,4 +184,3 @@ const char *         gtk_file_chooser_get_choice           (GtkFileChooser      
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_CHOOSER_H__ */

@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_X11_SURFACE__
-#define __GDK_X11_SURFACE__
+#pragma once
 
 #include "gdksurfaceprivate.h"
 #include "gdkx11surface.h"
@@ -211,4 +210,3 @@ void            gdk_x11_surface_check_monitor        (GdkSurface *surface,
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SURFACE__ */

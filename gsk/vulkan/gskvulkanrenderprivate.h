@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_RENDER_PRIVATE_H__
-#define __GSK_VULKAN_RENDER_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
@@ -92,4 +91,3 @@ VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_RENDER_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_MAGNIFIER_H__
-#define __GTK_MAGNIFIER_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -51,4 +50,3 @@ gboolean    _gtk_magnifier_get_resize        (GtkMagnifier *magnifier);
 
 G_END_DECLS
 
-#endif /* __GTK_MAGNIFIER_H__ */

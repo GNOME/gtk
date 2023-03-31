@@ -1,5 +1,4 @@
-#ifndef __GDK_SNAPSHOT_PRIVATE_H__
-#define __GDK_SNAPSHOT_PRIVATE_H__
+#pragma once
 
 #include "gdksnapshot.h"
 
@@ -20,4 +19,3 @@ struct _GdkSnapshotClass {
 
 G_END_DECLS
 
-#endif /* __GDK_SNAPSHOT_PRIVATE_H__ */

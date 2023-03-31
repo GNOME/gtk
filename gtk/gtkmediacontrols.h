@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_MEDIA_CONTROLS_H__
-#define __GTK_MEDIA_CONTROLS_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -46,4 +45,3 @@ void            gtk_media_controls_set_media_stream     (GtkMediaControls       
 
 G_END_DECLS
 
-#endif  /* __GTK_MEDIA_CONTROLS_H__ */

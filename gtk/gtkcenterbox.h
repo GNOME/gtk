@@ -19,8 +19,7 @@
  *
  */
 
-#ifndef __GTK_CENTER_BOX_H__
-#define __GTK_CENTER_BOX_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -70,4 +69,3 @@ GtkBaselinePosition gtk_center_box_get_baseline_position (GtkCenterBox        *s
 
 G_END_DECLS
 
-#endif

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_STYLE_CONTEXT_PRIVATE_H__
-#define __GTK_STYLE_CONTEXT_PRIVATE_H__
+#pragma once
 
 #include "gtkstylecontext.h"
 
@@ -44,4 +43,3 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
 
 G_END_DECLS
 
-#endif /* __GTK_STYLE_CONTEXT_PRIVATE_H__ */

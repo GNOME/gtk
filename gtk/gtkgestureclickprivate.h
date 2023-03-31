@@ -16,8 +16,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_CLICK_PRIVATE_H__
-#define __GTK_GESTURE_CLICK_PRIVATE_H__
+#pragma once
 
 #include "gtkgesturesingleprivate.h"
 #include "gtkgestureclick.h"
@@ -45,4 +44,3 @@ struct _GtkGestureClickClass
   gpointer padding[10];
 };
 
-#endif /* __GTK_GESTURE_CLICK_PRIVATE_H__ */

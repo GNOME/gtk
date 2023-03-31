@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_CSS_LOCATION_PRIVATE_H__
-#define __GTK_CSS_LOCATION_PRIVATE_H__
+#pragma once
 
 #include "gtkcsslocation.h"
 
@@ -55,5 +54,4 @@ gtk_css_location_advance_newline (GtkCssLocation *location,
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_LOCATION_PRIVATE_H__ */
 

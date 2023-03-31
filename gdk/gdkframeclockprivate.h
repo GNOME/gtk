@@ -24,8 +24,7 @@
 
 /* Uninstalled header, internal to GDK */
 
-#ifndef __GDK_FRAME_CLOCK_PRIVATE_H__
-#define __GDK_FRAME_CLOCK_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkframeclock.h>
 #include <gdk/gdkprofilerprivate.h>
@@ -129,4 +128,3 @@ void _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock);
 
 G_END_DECLS
 
-#endif /* __GDK_FRAME_CLOCK_PRIVATE_H__ */

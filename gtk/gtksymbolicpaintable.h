@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SYMBOLIC_PAINTABLE_H__
-#define __GTK_SYMBOLIC_PAINTABLE_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -67,4 +66,3 @@ void                    gtk_symbolic_paintable_snapshot_symbolic        (GtkSymb
 
 G_END_DECLS
 
-#endif /* __GTK_SYMBOLIC_PAINTABLE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_DRAG_SOURCE_PRIVATE_H__
-#define __GTK_DRAG_SOURCE_PRIVATE_H__
+#pragma once
 
 #include "gtkdragsource.h"
 
@@ -30,4 +29,3 @@ gboolean gtk_drag_check_threshold_double (GtkWidget *widget,
 
 G_END_DECLS
 
-#endif /* __GTK_DRAG_SOURCE_PRIVATE_H__ */

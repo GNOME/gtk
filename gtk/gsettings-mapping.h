@@ -17,8 +17,7 @@
  * Author: Vincent Untz <vuntz@gnome.org>
  */
 
-#ifndef __G_SETTINGS_MAPPING_H__
-#define __G_SETTINGS_MAPPING_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -31,4 +30,3 @@ gboolean                g_settings_get_mapping                          (GValue 
 gboolean                g_settings_mapping_is_compatible                (GType               gvalue_type,
                                                                          const GVariantType *variant_type);
 
-#endif /* __G_SETTINGS_MAPPING_H__ */

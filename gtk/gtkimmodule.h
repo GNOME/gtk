@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_IM_MODULE_H__
-#define __GTK_IM_MODULE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -26,4 +25,3 @@ G_BEGIN_DECLS
 
 G_END_DECLS
 
-#endif /* __GTK_IM_MODULE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_HSLA_PRIVATE_H__
-#define __GTK_HSLA_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdkrgba.h>
 
@@ -43,4 +42,3 @@ void            _gdk_hsla_shade             (GdkHSLA          *dest,
 
 G_END_DECLS
 
-#endif /* __GTK_HSLA_PRIVATE_H__ */

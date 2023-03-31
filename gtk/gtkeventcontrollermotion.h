@@ -17,8 +17,7 @@
  * Author(s): Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_EVENT_CONTROLLER_MOTION_H__
-#define __GTK_EVENT_CONTROLLER_MOTION_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -52,4 +51,3 @@ gboolean            gtk_event_controller_motion_is_pointer         (GtkEventCont
 
 G_END_DECLS
 
-#endif /* __GTK_EVENT_CONTROLLER_MOTION_H__ */

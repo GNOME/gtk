@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU Library General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__
-#define __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -38,4 +37,3 @@ gboolean gtk_icon_cache_validate (CacheInfo *info);
 
 G_END_DECLS
 
-#endif  /* __GTK_ICON_CACHE_VALIDATOR_PRIVATE_H__ */

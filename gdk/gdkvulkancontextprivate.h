@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_VULKAN_CONTEXT_PRIVATE__
-#define __GDK_VULKAN_CONTEXT_PRIVATE__
+#pragma once
 
 #include "gdkvulkancontext.h"
 
@@ -92,4 +91,3 @@ gdk_display_ref_vulkan (GdkDisplay  *display,
 
 G_END_DECLS
 
-#endif /* __GDK__VULKAN_CONTEXT_PRIVATE__ */

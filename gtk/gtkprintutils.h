@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_UTILS_H__
-#define __GTK_PRINT_UTILS_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include "gtkenums.h"
@@ -32,4 +31,3 @@ double _gtk_print_convert_from_mm (double len, GtkUnit unit);
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_UTILS_H__ */

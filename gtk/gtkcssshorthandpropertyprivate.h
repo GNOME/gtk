@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_SHORTHAND_PROPERTY_PRIVATE_H__
-#define __GTK_CSS_SHORTHAND_PROPERTY_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -69,4 +68,3 @@ guint                   _gtk_css_shorthand_property_get_n_subproperties (GtkCssS
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_SHORTHAND_PROPERTY_PRIVATE_H__ */

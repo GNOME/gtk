@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen
  */
 
-#ifndef __GTK_SELECTION_FILTER_MODEL_H__
-#define __GTK_SELECTION_FILTER_MODEL_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -46,4 +45,3 @@ GtkSelectionModel *       gtk_selection_filter_model_get_model    (GtkSelectionF
 
 G_END_DECLS
 
-#endif /* __GTK_SELECTION_FILTER_MODEL_H__ */

@@ -24,8 +24,7 @@
 
 /* Uninstalled header, internal to GDK */
 
-#ifndef __GDK_FRAME_CLOCK_IDLE_H__
-#define __GDK_FRAME_CLOCK_IDLE_H__
+#pragma once
 
 #include "gdkframeclockprivate.h"
 
@@ -62,4 +61,3 @@ GdkFrameClock *_gdk_frame_clock_idle_new            (void);
 
 G_END_DECLS
 
-#endif /* __GDK_FRAME_CLOCK_IDLE_H__ */

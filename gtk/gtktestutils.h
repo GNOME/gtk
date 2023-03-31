@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEST_UTILS_H__
-#define __GTK_TEST_UTILS_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -42,4 +41,3 @@ void            gtk_test_widget_wait_for_draw   (GtkWidget      *widget);
 
 G_END_DECLS
 
-#endif /* __GTK_TEST_UTILS_H__ */

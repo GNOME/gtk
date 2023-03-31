@@ -17,8 +17,7 @@
  * Authors: Cosimo Cecchi <cosimoc@gnome.org>
  */
 
-#ifndef __GTK_BUILTIN_ICON_PRIVATE_H__
-#define __GTK_BUILTIN_ICON_PRIVATE_H__
+#pragma once
 
 #include "gtkwidget.h"
 #include "gtkcsstypesprivate.h"
@@ -35,4 +34,3 @@ void         gtk_builtin_icon_set_css_name (GtkBuiltinIcon *self,
 
 G_END_DECLS
 
-#endif /* __GTK_BUILTIN_ICON_PRIVATE_H__ */

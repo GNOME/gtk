@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_MONITOR_PRIVATE_H__
-#define __GDK_MONITOR_PRIVATE_H__
+#pragma once
 
 #include "gdkmonitor.h"
 
@@ -76,4 +75,3 @@ void            gdk_monitor_set_description     (GdkMonitor *monitor,
 
 G_END_DECLS
 
-#endif  /* __GDK_MONITOR_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_WIN32_H__
-#define __GDK_DEVICE_WIN32_H__
+#pragma once
 
 #include <gdk/gdkdeviceprivate.h>
 
@@ -58,4 +57,3 @@ void _gdk_device_win32_query_state             (GdkDevice        *device,
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_WIN32_H__ */

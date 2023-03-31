@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_VIEW_PRIVATE_H__
-#define __GTK_TEXT_VIEW_PRIVATE_H__
+#pragma once
 
 #include "gtktextview.h"
 #include "gtktextattributesprivate.h"
@@ -35,4 +34,3 @@ GtkEventController *gtk_text_view_get_key_controller    (GtkTextView *text_view)
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_VIEW_PRIVATE_H__ */

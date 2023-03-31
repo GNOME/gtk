@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WIN32_MONITOR_PRIVATE_H__
-#define __GDK_WIN32_MONITOR_PRIVATE_H__
+#pragma once
 
 #include <windows.h>
 #include <glib.h>
@@ -54,4 +53,3 @@ struct _GdkWin32MonitorClass {
 
 int        _gdk_win32_monitor_compare  (GdkWin32Monitor *a, GdkWin32Monitor *b);
 
-#endif

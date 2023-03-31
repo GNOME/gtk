@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CLIPBOARD_X11_H__
-#define __GDK_CLIPBOARD_X11_H__
+#pragma once
 
 #include "gdk/gdkclipboard.h"
 
@@ -44,4 +43,3 @@ Atom *                  gdk_x11_clipboard_formats_to_atoms      (GdkDisplay     
 
 G_END_DECLS
 
-#endif /* __GDK_CLIPBOARD_X11_H__ */

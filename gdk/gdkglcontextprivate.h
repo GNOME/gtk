@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_GL_CONTEXT_PRIVATE_H__
-#define __GDK_GL_CONTEXT_PRIVATE_H__
+#pragma once
 
 #include "gdkglcontext.h"
 #include "gdkdrawcontextprivate.h"
@@ -170,4 +169,3 @@ gboolean                gdk_gl_context_has_vertex_half_float    (GdkGLContext   
 
 G_END_DECLS
 
-#endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */

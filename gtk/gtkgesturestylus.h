@@ -16,8 +16,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_STYLUS_H__
-#define __GTK_GESTURE_STYLUS_H__
+#pragma once
 
 #include <gtk/gtkgesture.h>
 
@@ -66,4 +65,3 @@ GdkDeviceTool *   gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture)
 
 G_END_DECLS
 
-#endif /* __GTK_GESTURE_STYLUS_H__ */

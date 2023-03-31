@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_WIDGET_PAINTABLE_PRIVATE_H__
-#define __GTK_WIDGET_PAINTABLE_PRIVATE_H__
+#pragma once
 
 #include "gtkwidgetpaintable.h"
 
@@ -28,4 +27,3 @@ void            gtk_widget_paintable_update_image               (GtkWidgetPainta
 void            gtk_widget_paintable_push_snapshot_count        (GtkWidgetPaintable     *self);
 void            gtk_widget_paintable_pop_snapshot_count         (GtkWidgetPaintable     *self);
 
-#endif /* __GTK_WIDGET_PAINTABLE_PRIVATE_H__ */

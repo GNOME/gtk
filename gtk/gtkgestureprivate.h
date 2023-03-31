@@ -16,8 +16,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_PRIVATE_H__
-#define __GTK_GESTURE_PRIVATE_H__
+#pragma once
 
 #include "gtkeventcontrollerprivate.h"
 #include "gtkgesture.h"
@@ -76,4 +75,3 @@ GtkWidget  *gtk_gesture_get_last_target      (GtkGesture       *gesture,
 
 G_END_DECLS
 
-#endif /* __GTK_GESTURE_PRIVATE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CUSTOM_PAPER_UNIX_DIALOG_H__
-#define __GTK_CUSTOM_PAPER_UNIX_DIALOG_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -39,4 +38,3 @@ GList *           _gtk_load_custom_papers                          (void);
 
 G_END_DECLS
 
-#endif /* __GTK_CUSTOM_PAPER_UNIX_DIALOG_H__ */

@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COLUMN_VIEW_ROW_WIDGET_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_ROW_WIDGET_PRIVATE_H__
+#pragma once
 
 #include "gtklistfactorywidgetprivate.h"
 
@@ -58,4 +57,3 @@ void                    gtk_column_view_row_widget_remove_child         (GtkColu
 
 G_END_DECLS
 
-#endif  /* __GTK_COLUMN_VIEW_ROW_WIDGET_PRIVATE_H__ */

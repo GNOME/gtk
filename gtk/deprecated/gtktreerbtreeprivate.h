@@ -17,8 +17,7 @@
 
 /* A Red-Black Tree implementation used specifically by GtkTreeView.
  */
-#ifndef __GTK_TREE_RBTREE_PRIVATE_H__
-#define __GTK_TREE_RBTREE_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 
@@ -169,4 +168,3 @@ int             gtk_tree_rbtree_get_depth               (GtkTreeRBTree          
 G_END_DECLS
 
 
-#endif /* __GTK_TREE_RBTREE_PRIVATE_H__ */

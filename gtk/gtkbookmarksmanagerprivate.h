@@ -21,8 +21,7 @@
  * Authors: Federico Mena Quintero <federico@gnome.org>
  */
 
-#ifndef __GTK_BOOKMARKS_MANAGER_H__
-#define __GTK_BOOKMARKS_MANAGER_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -86,4 +85,3 @@ gboolean _gtk_bookmarks_manager_get_is_builtin (GtkBookmarksManager *manager,
 
 gboolean _gtk_bookmarks_manager_get_is_xdg_dir_builtin (GUserDirectory xdg_type);
 
-#endif /* __GTK_BOOKMARKS_MANAGER_H__ */

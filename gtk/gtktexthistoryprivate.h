@@ -14,8 +14,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_HISTORY_PRIVATE_H__
-#define __GTK_TEXT_HISTORY_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -81,4 +80,3 @@ void            gtk_text_history_set_enabled               (GtkTextHistory      
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_HISTORY_PRIVATE_H__ */

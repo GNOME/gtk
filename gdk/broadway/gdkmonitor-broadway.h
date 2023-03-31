@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_BROADWAY_MONITOR_PRIVATE_H__
-#define __GDK_BROADWAY_MONITOR_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -35,4 +34,3 @@ struct _GdkBroadwayMonitorClass {
   GdkMonitorClass parent_class;
 };
 
-#endif

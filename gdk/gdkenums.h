@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_ENUMS_H__
-#define __GDK_ENUMS_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -333,4 +332,3 @@ typedef enum {
 
 G_END_DECLS
 
-#endif /* __GDK_ENUMS_H__ */

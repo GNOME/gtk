@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TOOLTIP_PRIVATE_H__
-#define __GTK_TOOLTIP_PRIVATE_H__
+#pragma once
 
 
 #include <gtk/gtktooltip.h>
@@ -49,4 +48,3 @@ void gtk_tooltip_unset_surface           (GtkNative          *native);
 G_END_DECLS
 
 
-#endif /* __GTK_TOOLTIP_PRIVATE_H__ */

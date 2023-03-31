@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_RENDER_BORDER_H__
-#define __GTK_RENDER_BORDER_H__
+#pragma once
 
 #include "gtkborder.h"
 #include "gtkcssboxesprivate.h"
@@ -36,4 +35,3 @@ void            gtk_css_style_snapshot_outline          (GtkCssBoxes            
 
 G_END_DECLS
 
-#endif /* __GTK_RENDER_BORDER_H__ */

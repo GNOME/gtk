@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_DEVICE_PAD_PRIVATE_H__
-#define __GDK_DEVICE_PAD_PRIVATE_H__
+#pragma once
 
 #include "gdkdevicepad.h"
 
@@ -42,4 +41,3 @@ struct _GdkDevicePadInterface {
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_PAD_PRIVATE_H__ */

@@ -29,8 +29,7 @@
  *   when sizeof(long) == 8.
  **/
 
-#ifndef MWMUTIL_H_INCLUDED
-#define MWMUTIL_H_INCLUDED
+#pragma once
 
 #include <X11/Xmd.h>
 
@@ -131,4 +130,3 @@ typedef PropMotifWmInfo PropMwmInfo;
 
 G_END_DECLS
 
-#endif /* MWMUTIL_H_INCLUDED */

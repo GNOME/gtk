@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_INPUT_WINPOINTER_H__
-#define __GDK_INPUT_WINPOINTER_H__
+#pragma once
 
 #include "winpointer.h"
 
@@ -40,4 +39,3 @@ gboolean gdk_winpointer_get_message_info (MSG *msg,
                                           guint32 *time_);
 void     gdk_winpointer_interaction_ended (MSG *msg);
 
-#endif /* __GDK_INPUT_WINPOINTER_H__ */

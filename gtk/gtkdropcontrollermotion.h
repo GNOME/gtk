@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_DROP_CONTROLLER_MOTION_H__
-#define __GTK_DROP_CONTROLLER_MOTION_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -54,4 +53,3 @@ gboolean                gtk_drop_controller_motion_is_pointer           (GtkDrop
 
 G_END_DECLS
 
-#endif /* __GTK_DROP_CONTROLLER_MOTION_H__ */

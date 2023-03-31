@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_INIT_H_
-#define _GTK_INSPECTOR_INIT_H_
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -25,6 +24,5 @@ void gtk_inspector_register_extension (void);
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_INIT_H_
 
 // vim: set et sw=2 ts=2:

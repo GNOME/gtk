@@ -17,8 +17,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MENU_TRACKER_PRIVATE_H__
-#define __GTK_MENU_TRACKER_PRIVATE_H__
+#pragma once
 
 #include "gtkmenutrackeritemprivate.h"
 
@@ -52,4 +51,3 @@ GtkMenuTracker *        gtk_menu_tracker_new_for_item_link              (GtkMenu
 
 void                    gtk_menu_tracker_free                           (GtkMenuTracker           *tracker);
 
-#endif /* __GTK_MENU_TRACKER_PRIVATE_H__ */

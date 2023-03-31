@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_BACKEND_PRIVATE_H__
-#define __GTK_PRINT_BACKEND_PRIVATE_H__
+#pragma once
 
 /* This is a "semi-private" header; it is meant only for
  * alternate GtkPrintDialog backend modules; no stability guarantees
@@ -232,4 +231,3 @@ void        gtk_print_backends_init (void);
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_BACKEND_PRIVATE_H__ */

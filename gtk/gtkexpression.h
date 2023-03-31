@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_EXPRESSION_H__
-#define __GTK_EXPRESSION_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -202,4 +201,3 @@ GParamSpec *    gtk_param_spec_expression       (const char    *name,
 
 G_END_DECLS
 
-#endif /* __GTK_EXPRESSION_H__ */

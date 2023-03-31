@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_RECTANGLE_H__
-#define __GDK_RECTANGLE_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -61,4 +60,3 @@ GType gdk_rectangle_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK__RECTANGLE_H__ */

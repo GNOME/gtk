@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_VARIANT_EDITOR_H_
-#define _GTK_INSPECTOR_VARIANT_EDITOR_H_
+#pragma once
 
 
 #include <gtk/gtkwidget.h>
@@ -49,6 +48,5 @@ GVariant * gtk_inspector_variant_editor_get_value (GtkWidget                    
 G_END_DECLS
 
 
-#endif // _GTK_INSPECTOR_VARIANT_EDITOR_H_
 
 // vim: set et:

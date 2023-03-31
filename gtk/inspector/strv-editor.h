@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_STRV_EDITOR_H_
-#define _GTK_INSPECTOR_STRV_EDITOR_H_
+#pragma once
 
 
 #include <gtk/gtkbox.h>
@@ -62,6 +61,5 @@ char **gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor  *editor);
 G_END_DECLS
 
 
-#endif // _GTK_INSPECTOR_STRV_EDITOR_H_
 
 // vim: set et:

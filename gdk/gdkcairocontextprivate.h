@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CAIRO_CONTEXT_PRIVATE__
-#define __GDK_CAIRO_CONTEXT_PRIVATE__
+#pragma once
 
 #include "gdkcairocontext.h"
 
@@ -49,4 +48,3 @@ struct _GdkCairoContextClass
 
 G_END_DECLS
 
-#endif /* __GDK__CAIRO_CONTEXT_PRIVATE__ */

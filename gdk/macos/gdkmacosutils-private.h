@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_UTILS_PRIVATE_H__
-#define __GDK_MACOS_UTILS_PRIVATE_H__
+#pragma once
 
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
@@ -72,4 +71,3 @@ convert_nspoint_to_screen (NSWindow *window,
 #endif
 }
 
-#endif /* __GDK_MACOS_UTILS_PRIVATE_H__ */

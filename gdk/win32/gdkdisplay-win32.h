@@ -19,8 +19,7 @@
 
 #include "gdkdisplayprivate.h"
 
-#ifndef __GDK_DISPLAY__WIN32_H__
-#define __GDK_DISPLAY__WIN32_H__
+#pragma once
 
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
@@ -196,4 +195,3 @@ struct _GdkWin32MessageFilter
   guint ref_count;
 };
 
-#endif /* __GDK_DISPLAY__WIN32_H__ */

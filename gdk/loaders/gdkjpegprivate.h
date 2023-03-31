@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_JPEG_PRIVATE_H__
-#define __GDK_JPEG_PRIVATE_H__
+#pragma once
 
 #include "gdkmemorytexture.h"
 #include <gio/gio.h>
@@ -40,4 +39,3 @@ gdk_is_jpeg (GBytes *bytes)
          memcmp (data, JPEG_SIGNATURE, strlen (JPEG_SIGNATURE)) == 0;
 }
 
-#endif

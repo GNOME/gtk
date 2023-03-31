@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_BUFFER_PRIVATE_H__
-#define __GTK_TEXT_BUFFER_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktextbuffer.h>
 #include "gtktexttypesprivate.h"
@@ -47,4 +46,3 @@ void gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
 
 G_END_DECLS
 
-#endif

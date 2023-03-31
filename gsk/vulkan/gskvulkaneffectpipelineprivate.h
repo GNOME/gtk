@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_EFFECT_PIPELINE_PRIVATE_H__
-#define __GSK_VULKAN_EFFECT_PIPELINE_PRIVATE_H__
+#pragma once
 
 #include <graphene.h>
 
@@ -32,4 +31,3 @@ gsize                   gsk_vulkan_effect_pipeline_draw                 (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_EFFECT_PIPELINE_PRIVATE_H__ */

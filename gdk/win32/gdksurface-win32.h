@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_SURFACE_WIN32_H__
-#define __GDK_SURFACE_WIN32_H__
+#pragma once
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/win32/gdkwin32cursor.h"
@@ -376,4 +375,3 @@ EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
 
 G_END_DECLS
 
-#endif /* __GDK_SURFACE_WIN32_H__ */

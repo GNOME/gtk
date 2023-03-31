@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_CSS_LINE_HEIGHT_VALUE_PRIVATE_H__
-#define __GTK_CSS_LINE_HEIGHT_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -34,4 +33,3 @@ double        gtk_css_line_height_value_get         (const GtkCssValue *value);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_LINE_HEIGHT_VALUE_PRIVATE_H__ */

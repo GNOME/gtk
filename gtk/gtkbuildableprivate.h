@@ -1,5 +1,4 @@
-#ifndef __GTK_BUILDABLE_PRIVATE_H__
-#define __GTK_BUILDABLE_PRIVATE_H__
+#pragma once
 
 #include "gtkbuildable.h"
 
@@ -38,4 +37,3 @@ GObject * gtk_buildable_get_internal_child     (GtkBuildable        *buildable,
 
 G_END_DECLS
 
-#endif /* __GTK_BUILDABLE_PRIVATE_H__ */

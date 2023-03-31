@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_OPERATION_H__
-#define __GTK_PRINT_OPERATION_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -335,4 +334,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintOperation, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_OPERATION_H__ */

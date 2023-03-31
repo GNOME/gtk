@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_CROSS_FADE_PIPELINE_PRIVATE_H__
-#define __GSK_VULKAN_CROSS_FADE_PIPELINE_PRIVATE_H__
+#pragma once
 
 #include <graphene.h>
 
@@ -32,4 +31,3 @@ gsize               gsk_vulkan_cross_fade_pipeline_draw                (GskVulka
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_CROSS_FADE_PIPELINE_PRIVATE_H__ */

@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_RENDERER_PRIVATE_H__
-#define __GSK_RENDERER_PRIVATE_H__
+#pragma once
 
 #include "gskrenderer.h"
 #include "gskprofilerprivate.h"
@@ -61,4 +60,3 @@ void                    gsk_renderer_set_debug_flags            (GskRenderer    
 
 G_END_DECLS
 
-#endif /* __GSK_RENDERER_PRIVATE_H__ */

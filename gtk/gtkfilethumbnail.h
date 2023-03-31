@@ -19,8 +19,7 @@
  */
 
 
-#ifndef __GTK_FILE_THUMBNAIL_H__
-#define __GTK_FILE_THUMBNAIL_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -46,5 +45,4 @@ void _gtk_file_thumbnail_set_icon_size (GtkFileThumbnail *self,
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_THUMBNAIL_H__ */
 

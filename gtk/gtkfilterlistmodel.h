@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_FILTER_LIST_MODEL_H__
-#define __GTK_FILTER_LIST_MODEL_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -61,4 +60,3 @@ guint                   gtk_filter_list_model_get_pending       (GtkFilterListMo
 
 G_END_DECLS
 
-#endif /* __GTK_FILTER_LIST_MODEL_H__ */

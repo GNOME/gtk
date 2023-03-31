@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_PIXBUF_H__
-#define __GDK_PIXBUF_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -49,4 +48,3 @@ GdkPixbuf *gdk_pixbuf_get_from_texture (GdkTexture      *texture);
 
 G_END_DECLS
 
-#endif /* __GDK_PIXBUF_H__ */

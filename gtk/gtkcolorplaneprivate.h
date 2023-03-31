@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_PLANE_H__
-#define __GTK_COLOR_PLANE_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -37,4 +36,3 @@ GtkWidget * gtk_color_plane_new      (GtkAdjustment *h_adj,
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_PLANE_H__ */

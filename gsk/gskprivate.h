@@ -1,5 +1,4 @@
-#ifndef __GSK_PRIVATE_H__
-#define __GSK_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 #include <pango/pango.h>
@@ -13,4 +12,3 @@ typedef struct _GskVulkanRenderPass GskVulkanRenderPass;
 
 G_END_DECLS
 
-#endif /* __GSK_PRIVATE_H__ */

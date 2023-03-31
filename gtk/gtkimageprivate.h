@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_IMAGE_PRIVATE_H__
-#define __GTK_IMAGE_PRIVATE_H__
+#pragma once
 
 
 #include "gtkimage.h"
@@ -45,4 +44,3 @@ void            gtk_image_get_image_size                (GtkImage               
 
 G_END_DECLS
 
-#endif /* __GTK_IMAGE_H__ */

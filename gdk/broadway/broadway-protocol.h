@@ -1,5 +1,4 @@
-#ifndef __BROADWAY_PROTOCOL_H__
-#define __BROADWAY_PROTOCOL_H__
+#pragma once
 
 #include <glib.h>
 
@@ -370,4 +369,3 @@ typedef union {
   BroadwayReplyUngrabPointer ungrab_pointer;
 } BroadwayReply;
 
-#endif /* __BROADWAY_PROTOCOL_H__ */

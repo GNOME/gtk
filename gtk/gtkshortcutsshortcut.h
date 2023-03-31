@@ -16,8 +16,7 @@
  *  License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GTK_SHORTCUTS_SHORTCUT_H
-#define GTK_SHORTCUTS_SHORTCUT_H
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -82,4 +81,3 @@ GType        gtk_shortcuts_shortcut_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* GTK_SHORTCUTS_SHORTCUT_H */

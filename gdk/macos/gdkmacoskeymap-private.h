@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_KEYMAP_PRIVATE_H__
-#define __GDK_MACOS_KEYMAP_PRIVATE_H__
+#pragma once
 
 #include <AppKit/AppKit.h>
 
@@ -34,4 +33,3 @@ gunichar        _gdk_macos_keymap_get_equivalent (guint            key);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_KEYMAP_PRIVATE_H__ */

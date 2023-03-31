@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_NO_MEDIA_FILE_H__
-#define __GTK_NO_MEDIA_FILE_H__
+#pragma once
 
 #include <gtk/gtkmediafile.h>
 
@@ -30,4 +29,3 @@ G_DECLARE_FINAL_TYPE (GtkNoMediaFile, gtk_no_media_file, GTK, NO_MEDIA_FILE, Gtk
 
 G_END_DECLS
 
-#endif /* __GTK_NO_MEDIA_FILE_H__ */

@@ -20,8 +20,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WIN32_MONITOR_H__
-#define __GDK_WIN32_MONITOR_H__
+#pragma once
 
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
@@ -50,4 +49,3 @@ void gdk_win32_monitor_get_workarea (GdkMonitor   *monitor,
 
 G_END_DECLS
 
-#endif  /* __GDK_WIN32_MONITOR_H__ */

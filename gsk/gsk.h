@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_H__
-#define __GSK_H__
+#pragma once
 
 #define __GSK_H_INSIDE__
 
@@ -34,4 +33,3 @@
 
 #undef __GSK_H_INSIDE__
 
-#endif /* __GSK_H__ */

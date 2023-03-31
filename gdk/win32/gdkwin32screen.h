@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WIN32_SCREEN_H__
-#define __GDK_WIN32_SCREEN_H__
+#pragma once
 
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
@@ -48,4 +47,3 @@ GType    gdk_win32_screen_get_type          (void);
 
 G_END_DECLS
 
-#endif /* __GDK_WIN32_SCREEN_H__ */

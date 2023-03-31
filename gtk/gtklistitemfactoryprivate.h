@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_LIST_ITEM_FACTORY_PRIVATE_H__
-#define __GTK_LIST_ITEM_FACTORY_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtklistitem.h>
 #include "gtk/gtklistitemwidgetprivate.h"
@@ -79,4 +78,3 @@ void                    gtk_list_item_factory_update            (GtkListItemFact
 
 G_END_DECLS
 
-#endif /* __GTK_LIST_ITEM_FACTORY_PRIVATE_H__ */

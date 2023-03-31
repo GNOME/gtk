@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_NO_SELECTION_H__
-#define __GTK_NO_SELECTION_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -40,4 +39,3 @@ void                    gtk_no_selection_set_model              (GtkNoSelection 
 
 G_END_DECLS
 
-#endif /* __GTK_NO_SELECTION_H__ */

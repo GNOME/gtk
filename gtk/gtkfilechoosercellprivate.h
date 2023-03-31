@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen
  */
 
-#ifndef __GTK_FILE_CHOOSER_CELL_PRIVATE_H__
-#define __GTK_FILE_CHOOSER_CELL_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkexpression.h>
@@ -34,4 +33,3 @@ GtkFileChooserCell * gtk_file_chooser_cell_new (void);
 
 G_END_DECLS
 
-#endif  /* __GTK_FILE_CHOOSER_CELL_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#ifndef __GDK_SEAT_H__
-#define __GDK_SEAT_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -90,4 +89,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkSeat, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GDK_SEAT_H__ */

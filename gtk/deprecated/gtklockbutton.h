@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_LOCK_BUTTON_H__
-#define __GTK_LOCK_BUTTON_H__
+#pragma once
 
 #include <gtk/gtkbutton.h>
 #include <gio/gio.h>
@@ -44,4 +43,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLockButton, g_object_unref)
 
 G_END_DECLS
 
-#endif  /* __GTK_LOCK_BUTTON_H__ */

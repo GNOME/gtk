@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_PRIVATE_H__
-#define __GTK_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
@@ -176,4 +175,3 @@ void gtk_synthesize_crossing_events (GtkRoot         *toplevel,
 
 G_END_DECLS
 
-#endif /* __GTK_PRIVATE_H__ */

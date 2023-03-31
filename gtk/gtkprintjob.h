@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_JOB_H__
-#define __GTK_PRINT_JOB_H__
+#pragma once
 
 #if !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkunixprint.h> can be included directly."
@@ -143,4 +142,3 @@ void              gtk_print_job_set_reverse     (GtkPrintJob       *job,
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_JOB_H__ */

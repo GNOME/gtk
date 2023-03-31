@@ -12,8 +12,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_CHOOSER_ERROR_STACK_H__
-#define __GTK_FILE_CHOOSER_ERROR_STACK_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -57,4 +56,3 @@ void   gtk_file_chooser_error_stack_set_custom_error  (GtkFileChooserErrorStack 
 
 G_END_DECLS
 
-#endif

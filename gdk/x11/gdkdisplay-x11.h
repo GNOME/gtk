@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_DISPLAY__
-#define __GDK_X11_DISPLAY__
+#pragma once
 
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
@@ -178,4 +177,3 @@ GdkFilterReturn _gdk_wm_protocols_filter        (const XEvent   *xevent,
 
 G_END_DECLS
 
-#endif  /* __GDK_X11_DISPLAY__ */

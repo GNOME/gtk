@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SCALER_H__
-#define __GTK_SCALER_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -33,4 +32,3 @@ GdkPaintable *  gtk_scaler_new                  (GdkPaintable   *paintable,
 
 G_END_DECLS
 
-#endif /* __GTK_SCALER_H__ */

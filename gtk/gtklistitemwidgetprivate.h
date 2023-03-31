@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
-#define __GTK_LIST_ITEM_WIDGET_PRIVATE_H__
+#pragma once
 
 #include "gtklistfactorywidgetprivate.h"
 
@@ -55,4 +54,3 @@ void                    gtk_list_item_widget_set_child          (GtkListItemWidg
 
 G_END_DECLS
 
-#endif  /* __GTK_LIST_ITEM_WIDGET_PRIVATE_H__ */

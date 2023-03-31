@@ -1,6 +1,5 @@
 
-#ifndef __GTK_PANED_HANDLE_H__
-#define __GTK_PANED_HANDLE_H__
+#pragma once
 
 #include "gtkwidget.h"
 #include "gtkenums.h"
@@ -29,4 +28,3 @@ GType      gtk_paned_handle_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gtk_paned_handle_new (void);
 
-#endif

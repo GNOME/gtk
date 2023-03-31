@@ -14,8 +14,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_UNIX_PRINT_H__
-#define __GTK_UNIX_PRINT_H__
+#pragma once
 
 #define __GTK_UNIX_PRINT_H_INSIDE__
 
@@ -28,4 +27,3 @@
 
 #undef __GTK_UNIX_PRINT_H_INSIDE__
 
-#endif /* __GTK_UNIX_PRINT_H__ */

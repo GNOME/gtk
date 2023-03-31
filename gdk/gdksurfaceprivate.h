@@ -17,8 +17,7 @@
 
 /* Uninstalled header defining types and functions internal to GDK */
 
-#ifndef __GDK_SURFACE_PRIVATE_H__
-#define __GDK_SURFACE_PRIVATE_H__
+#pragma once
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkenumtypes.h"
@@ -351,4 +350,3 @@ gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
 G_END_DECLS
 
-#endif /* __GDK_SURFACE_PRIVATE_H__ */

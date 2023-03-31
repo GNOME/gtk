@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_PROP_EDITOR_H_
-#define _GTK_INSPECTOR_PROP_EDITOR_H_
+#pragma once
 
 
 #include <gtk/gtk.h>
@@ -38,6 +37,5 @@ gboolean   gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *edit
 G_END_DECLS
 
 
-#endif // _GTK_INSPECTOR_PROP_EDITOR_H_
 
 // vim: set et:

@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen
  */
 
-#ifndef __GTK_DROP_DOWN_H__
-#define __GTK_DROP_DOWN_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkexpression.h>
@@ -85,4 +84,3 @@ gboolean        gtk_drop_down_get_show_arrow                    (GtkDropDown    
 
 G_END_DECLS
 
-#endif  /* __GTK_DROP_DOWN_H__ */

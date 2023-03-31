@@ -19,8 +19,7 @@
  *   Christian Hergert <christian@hergert.me>
  */
 
-#ifndef GDK_DISPLAY_LINK_SOURCE_H
-#define GDK_DISPLAY_LINK_SOURCE_H
+#pragma once
 
 #include <glib.h>
 
@@ -49,4 +48,3 @@ void     gdk_display_link_source_unpause (GdkDisplayLinkSource *source);
 
 G_END_DECLS
 
-#endif /* GDK_DISPLAY_LINK_SOURCE_H */

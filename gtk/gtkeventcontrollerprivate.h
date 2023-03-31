@@ -17,8 +17,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_EVENT_CONTROLLER_PRIVATE_H__
-#define __GTK_EVENT_CONTROLLER_PRIVATE_H__
+#pragma once
 
 #include "gtkeventcontroller.h"
 
@@ -130,4 +129,3 @@ void       gtk_event_controller_handle_crossing (GtkEventController    *controll
                                                  double                 x,
                                                  double                 y);
 
-#endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */

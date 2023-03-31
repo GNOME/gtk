@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_PNG_PRIVATE_H__
-#define __GDK_PNG_PRIVATE_H__
+#pragma once
 
 #include "gdktexture.h"
 #include <gio/gio.h>
@@ -40,4 +39,3 @@ gdk_is_png (GBytes *bytes)
          memcmp (data, PNG_SIGNATURE, strlen (PNG_SIGNATURE)) == 0;
 }
 
-#endif

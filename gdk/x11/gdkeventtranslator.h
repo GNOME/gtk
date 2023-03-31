@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_EVENT_TRANSLATOR_H__
-#define __GDK_EVENT_TRANSLATOR_H__
+#pragma once
 
 #include "gdktypes.h"
 #include "gdkdisplay.h"
@@ -67,4 +66,3 @@ GdkSurface *  _gdk_x11_event_translator_get_surface          (GdkEventTranslator
 
 G_END_DECLS
 
-#endif /* __GDK_EVENT_TRANSLATOR_H__ */

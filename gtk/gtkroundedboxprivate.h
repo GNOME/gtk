@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_ROUNDED_BOX_PRIVATE_H__
-#define __GTK_ROUNDED_BOX_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <cairo.h>
@@ -49,4 +48,3 @@ void            _gtk_rounded_box_path_left                      (const GskRounde
 
 G_END_DECLS
 
-#endif /* __GTK_ROUNDED_BOX_PRIVATE_H__ */

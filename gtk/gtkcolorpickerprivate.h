@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_COLOR_PICKER_H__
-#define __GTK_COLOR_PICKER_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -62,4 +61,3 @@ GdkRGBA *        gtk_color_picker_pick_finish (GtkColorPicker       *picker,
 
 G_END_DECLS
 
-#endif  /* __GTK_COLOR_PICKER_H__ */

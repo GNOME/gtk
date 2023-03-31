@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_TAG_PRIVATE_H__
-#define __GTK_TEXT_TAG_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 #include <gtk/gtktextattributesprivate.h>
@@ -107,4 +106,3 @@ void _gtk_text_tag_array_sort              (GPtrArray           *tags);
 gboolean _gtk_text_tag_affects_size               (GtkTextTag *tag);
 gboolean _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag);
 
-#endif

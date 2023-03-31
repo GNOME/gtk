@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_PUSH_CONSTANTS_PRIVATE_H__
-#define __GSK_VULKAN_PUSH_CONSTANTS_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <graphene.h>
@@ -42,4 +41,3 @@ void                    gsk_vulkan_push_constants_push                  (const G
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_PUSH_CONSTANTS_PRIVATE_H__ */

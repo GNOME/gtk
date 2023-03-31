@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_INSPECTOR_RENDER_RECORDING_H_
-#define _GTK_INSPECTOR_RENDER_RECORDING_H_
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
@@ -71,6 +70,5 @@ const char *    gtk_inspector_render_recording_get_profiler_info
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_RENDER_RECORDING_H_
 
 // vim: set et sw=2 ts=2:

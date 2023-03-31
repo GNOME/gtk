@@ -21,8 +21,7 @@
  *
  */
 
-#ifndef _GSK_CAIRO_BLUR_H
-#define _GSK_CAIRO_BLUR_H
+#pragma once
 
 #include <gdk/gdk.h>
 #include <cairo.h>
@@ -51,4 +50,3 @@ cairo_t *       gsk_cairo_blur_finish_drawing   (cairo_t         *cr,
 
 G_END_DECLS
 
-#endif /* _GSK_CAIRO_BLUR_H */

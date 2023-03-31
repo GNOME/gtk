@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_OPERATION_PRIVATE_H__
-#define __GTK_PRINT_OPERATION_PRIVATE_H__
+#pragma once
 
 #include "gtkprintoperation.h"
 
@@ -147,4 +146,3 @@ void             _gtk_print_context_set_hard_margins                (GtkPrintCon
 
 G_END_DECLS
 
-#endif /* __GTK_PRINT_OPERATION_PRIVATE_H__ */

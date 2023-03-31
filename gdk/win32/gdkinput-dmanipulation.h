@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_INPUT_DMANIPULATION_H__
-#define __GDK_INPUT_DMANIPULATION_H__
+#pragma once
 
 void gdk_dmanipulation_initialize (void);
 
@@ -29,4 +28,3 @@ void gdk_dmanipulation_finalize_surface   (GdkSurface *surface);
 void gdk_dmanipulation_maybe_add_contact  (GdkSurface *surface,
                                            MSG        *msg);
 
-#endif /* __GDK_INPUT_DMANIPULATION_H__ */

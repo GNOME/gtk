@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_INSCRIPTION_PRIVATE_H__
-#define __GTK_INSCRIPTION_PRIVATE_H__
+#pragma once
 
 
 #include <gtk/gtkinscription.h>
@@ -30,4 +29,3 @@ PangoLayout *           gtk_inscription_get_layout              (GtkInscription 
 
 G_END_DECLS
 
-#endif /* __GTK_INSCRIPTION_PRIVATE_H__ */

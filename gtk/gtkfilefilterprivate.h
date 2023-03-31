@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_FILTER_PRIVATE_H__
-#define __GTK_FILE_FILTER_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkfilefilter.h>
 #include <gdk/gdkconfig.h>
@@ -37,4 +36,3 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter);
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_FILTER_PRIVATE_H__ */

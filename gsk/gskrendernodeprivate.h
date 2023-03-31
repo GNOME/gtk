@@ -1,5 +1,4 @@
-#ifndef __GSK_RENDER_NODE_PRIVATE_H__
-#define __GSK_RENDER_NODE_PRIVATE_H__
+#pragma once
 
 #include "gskrendernode.h"
 #include <cairo.h>
@@ -121,4 +120,3 @@ gboolean       gsk_render_node_use_offscreen_for_opacity (const GskRenderNode *n
 
 G_END_DECLS
 
-#endif /* __GSK_RENDER_NODE_PRIVATE_H__ */

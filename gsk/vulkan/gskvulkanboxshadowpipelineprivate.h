@@ -1,5 +1,4 @@
-#ifndef __GSK_VULKAN_BOX_SHADOW_PIPELINE_PRIVATE_H__
-#define __GSK_VULKAN_BOX_SHADOW_PIPELINE_PRIVATE_H__
+#pragma once
 
 #include <graphene.h>
 
@@ -36,4 +35,3 @@ gsize                   gsk_vulkan_box_shadow_pipeline_draw             (GskVulk
 
 G_END_DECLS
 
-#endif /* __GSK_VULKAN_BOX_SHADOW_PIPELINE_PRIVATE_H__ */

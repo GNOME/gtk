@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_LINE_DISPLAY_CACHE_PRIVATE_H__
-#define __GTK_TEXT_LINE_DISPLAY_CACHE_PRIVATE_H__
+#pragma once
 
 #include "gtktextlayoutprivate.h"
 
@@ -59,4 +58,3 @@ void                     gtk_text_line_display_cache_set_mru_size       (GtkText
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_LINE_DISPLAY_CACHE_PRIVATE_H__ */

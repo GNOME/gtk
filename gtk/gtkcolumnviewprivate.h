@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COLUMN_VIEW_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcolumnview.h"
 #include "gtk/gtklistview.h"
@@ -42,4 +41,3 @@ void                    gtk_column_view_set_focus_column        (GtkColumnView  
                                                                  GtkColumnViewColumn    *focus_column);
 GtkColumnViewColumn *   gtk_column_view_get_focus_column        (GtkColumnView          *self);
 
-#endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */

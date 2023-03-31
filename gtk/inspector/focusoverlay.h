@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_FOCUS_OVERLAY_H__
-#define __GTK_FOCUS_OVERLAY_H__
+#pragma once
 
 #include "inspectoroverlay.h"
 
@@ -33,4 +32,3 @@ void                    gtk_focus_overlay_set_color         (GtkFocusOverlay    
 
 G_END_DECLS
 
-#endif /* __GTK_FOCUS_OVERLAY_H__ */

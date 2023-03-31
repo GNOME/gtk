@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_LOOKUP_PRIVATE_H__
-#define __GTK_CSS_LOOKUP_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -57,4 +56,3 @@ _gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_LOOKUP_PRIVATE_H__ */

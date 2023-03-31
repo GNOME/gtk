@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_ROUNDED_RECT_H__
-#define __GSK_ROUNDED_RECT_H__
+#pragma once
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -97,4 +96,3 @@ gboolean                gsk_rounded_rect_intersects_rect        (const GskRounde
 
 G_END_DECLS
 
-#endif /* __GSK_ROUNDED_RECT_H__ */

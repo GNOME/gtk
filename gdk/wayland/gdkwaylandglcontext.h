@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_WAYLAND_GL_CONTEXT_H__
-#define __GDK_WAYLAND_GL_CONTEXT_H__
+#pragma once
 
 #if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
@@ -42,4 +41,3 @@ GType gdk_wayland_gl_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_WAYLAND_GL_CONTEXT_H__ */

@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_CSS_H__
-#define __GTK_CSS_H__
+#pragma once
 
 #define __GTK_CSS_H_INSIDE__
 
@@ -38,4 +37,3 @@
 
 #undef __GTK_CSS_H_INSIDE__
 
-#endif /* __GTK_CSS_H__ */

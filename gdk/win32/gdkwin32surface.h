@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_WIN32_SURFACE_H__
-#define __GDK_WIN32_SURFACE_H__
+#pragma once
 
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
@@ -56,4 +55,3 @@ void gdk_win32_surface_set_urgency_hint    (GdkSurface *surface,
 
 G_END_DECLS
 
-#endif /* __GDK_X11_SURFACE_H__ */

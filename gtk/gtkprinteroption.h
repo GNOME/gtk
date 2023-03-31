@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINTER_OPTION_H__
-#define __GTK_PRINTER_OPTION_H__
+#pragma once
 
 /* This is a "semi-private" header; it is meant only for
  * alternate GtkPrintDialog backend modules; no stability guarantees
@@ -126,6 +125,5 @@ gboolean          gtk_printer_option_get_activates_default (GtkPrinterOption    
 
 G_END_DECLS
 
-#endif /* __GTK_PRINTER_OPTION_H__ */
 
 

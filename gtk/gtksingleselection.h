@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SINGLE_SELECTION_H__
-#define __GTK_SINGLE_SELECTION_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -57,4 +56,3 @@ void                    gtk_single_selection_set_can_unselect   (GtkSingleSelect
 
 G_END_DECLS
 
-#endif /* __GTK_SINGLE_SELECTION_H__ */

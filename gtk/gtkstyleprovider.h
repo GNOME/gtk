@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_STYLE_PROVIDER_H__
-#define __GTK_STYLE_PROVIDER_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -101,4 +100,3 @@ void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
 
 G_END_DECLS
 
-#endif /* __GTK_STYLE_PROVIDER_H__ */

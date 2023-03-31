@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_BROADWAY_DRAW_CONTEXT__
-#define __GDK_BROADWAY_DRAW_CONTEXT__
+#pragma once
 
 #include "gdkconfig.h"
 
@@ -55,4 +54,3 @@ GdkBroadwayDrawContext *gdk_broadway_draw_context_context (GdkSurface *surface);
 
 G_END_DECLS
 
-#endif /* __GDK_BROADWAY_DRAW_CONTEXT__ */

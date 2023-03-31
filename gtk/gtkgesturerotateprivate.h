@@ -17,8 +17,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_ROTATE_PRIVATE_H__
-#define __GTK_GESTURE_ROTATE_PRIVATE_H__
+#pragma once
 
 #include "gtkgestureprivate.h"
 #include "gtkgesturerotate.h"
@@ -39,4 +38,3 @@ struct _GtkGestureRotateClass
   gpointer padding[10];
 };
 
-#endif /* __GTK_GESTURE_ROTATE_PRIVATE_H__ */

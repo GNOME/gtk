@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_LIST_ITEM_PRIVATE_H__
-#define __GTK_LIST_ITEM_PRIVATE_H__
+#pragma once
 
 #include "gtklistitem.h"
 
@@ -48,4 +47,3 @@ void            gtk_list_item_do_notify                         (GtkListItem *li
 
 G_END_DECLS
 
-#endif  /* __GTK_LIST_ITEM_PRIVATE_H__ */

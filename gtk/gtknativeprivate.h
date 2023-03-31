@@ -1,5 +1,4 @@
-#ifndef __GTK_NATIVE_PRIVATE_H__
-#define __GTK_NATIVE_PRIVATE_H__
+#pragma once
 
 #include "gtknative.h"
 
@@ -37,4 +36,3 @@ void    gtk_native_update_opaque_region   (GtkNative    *native,
 
 G_END_DECLS
 
-#endif /* __GTK_NATIVE_PRIVATE_H__ */

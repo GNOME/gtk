@@ -18,8 +18,7 @@
  */
 
 
-#ifndef __GTK_LIST_LIST_MODEL_H__
-#define __GTK_LIST_LIST_MODEL_H__
+#pragma once
 
 #include <gio/gio.h>
 
@@ -71,4 +70,3 @@ void                    gtk_list_list_model_clear               (GtkListListMode
 
 G_END_DECLS
 
-#endif /* __GTK_LIST_LIST_MODEL_H__ */

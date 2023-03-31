@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_SEGMENT_PRIVATE_H__
-#define __GTK_TEXT_SEGMENT_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktextiter.h>
@@ -167,6 +166,5 @@ void                _gtk_toggle_segment_free               (GtkTextLineSegment *
 
 G_END_DECLS
 
-#endif
 
 

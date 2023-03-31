@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -47,5 +46,4 @@ gboolean                gtk_column_view_sorter_set_column       (GtkColumnViewSo
 
 G_END_DECLS
 
-#endif /* __GTK_COLUMN_VIEW_SORTER_PRIVATE_H__ */
 

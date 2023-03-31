@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_TEXT_UTIL_PRIVATE_H__
-#define __GTK_TEXT_UTIL_PRIVATE_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -48,4 +47,3 @@ gboolean _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 
 G_END_DECLS
 
-#endif /* __GTK_TEXT_UTIL_PRIVATE_H__ */

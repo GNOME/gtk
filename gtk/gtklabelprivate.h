@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_LABEL_PRIVATE_H__
-#define __GTK_LABEL_PRIVATE_H__
+#pragma once
 
 
 #include <gtk/gtklabel.h>
@@ -29,4 +28,3 @@ int _gtk_label_get_selection_bound (GtkLabel *label);
 
 G_END_DECLS
 
-#endif /* __GTK_LABEL_PRIVATE_H__ */

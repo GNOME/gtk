@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_SORT_KEYS_PRIVATE_H__
-#define __GTK_SORT_KEYS_PRIVATE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
@@ -93,5 +92,4 @@ gtk_sort_keys_clear_key (GtkSortKeys *self,
     self->klass->clear_key (self, key_memory);
 }
 
-#endif /* __GTK_SORT_KEYS_PRIVATE_H__ */
 

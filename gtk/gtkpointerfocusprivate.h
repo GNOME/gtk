@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GTK_POINTER_FOCUS_PRIVATE_H_
-#define _GTK_POINTER_FOCUS_PRIVATE_H_
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -57,4 +56,3 @@ GtkWidget *       gtk_pointer_focus_get_effective_target (GtkPointerFocus *focus
 
 void              gtk_pointer_focus_repick_target (GtkPointerFocus *focus);
 
-#endif /* _GTK_POINTER_FOCUS_PRIVATE_H_ */

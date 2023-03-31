@@ -1,5 +1,4 @@
-#ifndef __RESOURCE_HOLDER_H__
-#define __RESOURCE_HOLDER_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -20,5 +19,4 @@ gsize       resource_holder_get_size     (ResourceHolder *holder);
 GListModel *resource_holder_get_children (ResourceHolder *holder);
 ResourceHolder *resource_holder_get_parent   (ResourceHolder *holder);
 
-#endif /* __RESOURCE_HOLDER_H__ */
 

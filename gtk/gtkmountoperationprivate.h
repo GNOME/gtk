@@ -23,8 +23,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_MOUNT_OPERATION_PRIVATE_H__
-#define __GTK_MOUNT_OPERATION_PRIVATE_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gdk/gdk.h>
@@ -48,4 +47,3 @@ void     _gtk_mount_operation_lookup_context_free (GtkMountOperationLookupContex
 gboolean _gtk_mount_operation_kill_process (GPid      pid,
                                             GError  **error);
 
-#endif /* __GTK_MOUNT_OPERATION_PRIVATE_H__ */

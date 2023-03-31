@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_CAIRO_CONTEXT_PRIVATE_H__
-#define __GDK_MACOS_CAIRO_CONTEXT_PRIVATE_H__
+#pragma once
 
 #include "gdkcairocontextprivate.h"
 
@@ -35,4 +34,3 @@ GType _gdk_macos_cairo_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_CAIRO_CONTEXT_PRIVATE_H__ */

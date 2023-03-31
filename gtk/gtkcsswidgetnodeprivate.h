@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_WIDGET_NODE_PRIVATE_H__
-#define __GTK_CSS_WIDGET_NODE_PRIVATE_H__
+#pragma once
 
 #include "gtkcssnodeprivate.h"
 #include "gtkwidget.h"
@@ -57,4 +56,3 @@ GtkWidget *             gtk_css_widget_node_get_widget          (GtkCssWidgetNod
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_WIDGET_NODE_PRIVATE_H__ */

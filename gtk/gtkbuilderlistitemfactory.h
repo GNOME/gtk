@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_BUILDER_LIST_ITEM_FACTORY_H__
-#define __GTK_BUILDER_LIST_ITEM_FACTORY_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -57,4 +56,3 @@ GtkBuilderScope *       gtk_builder_list_item_factory_get_scope         (GtkBuil
 
 G_END_DECLS
 
-#endif /* __GTK_BUILDER_LIST_ITEM_FACTORY_H__ */

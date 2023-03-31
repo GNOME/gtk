@@ -27,8 +27,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_COLOR_UTILS_H__
-#define __GTK_COLOR_UTILS_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -48,4 +47,3 @@ void gtk_rgb_to_hsv (float  r, float  g, float  b,
 
 G_END_DECLS
 
-#endif /* __GTK_COLOR_UTILS_H__ */

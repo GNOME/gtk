@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcolumnviewcolumn.h"
 
@@ -57,4 +56,3 @@ void                    gtk_column_view_column_get_header_allocation    (GtkColu
                                                                          int                    *offset,
                                                                          int                    *size);
 
-#endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */

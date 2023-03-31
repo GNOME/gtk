@@ -17,8 +17,7 @@
  * Authors: Alexander Larsson <alexl@gnome.org>
  */
 
-#ifndef __GTK_CSS_PALETTE_VALUE_PRIVATE_H__
-#define __GTK_CSS_PALETTE_VALUE_PRIVATE_H__
+#pragma once
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
@@ -36,4 +35,3 @@ const GdkRGBA * gtk_css_palette_value_get_color         (GtkCssValue         *va
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PALETTE_VALUE_PRIVATE_H__ */

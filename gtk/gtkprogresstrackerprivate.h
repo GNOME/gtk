@@ -17,8 +17,7 @@
  * Authors: Matthew Watson <mattdangerw@gmail.com>
  */
 
-#ifndef __GTK_PROGRESS_TRACKER_PRIVATE_H__
-#define __GTK_PROGRESS_TRACKER_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include "gtkcsseasevalueprivate.h"
@@ -72,4 +71,3 @@ double               gtk_progress_tracker_get_ease_out_cubic  (GtkProgressTracke
 
 G_END_DECLS
 
-#endif /* __GTK_PROGRESS_TRACKER_PRIVATE_H__ */

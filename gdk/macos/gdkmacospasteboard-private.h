@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_PASTEBOARD_PRIVATE_H__
-#define __GDK_MACOS_PASTEBOARD_PRIVATE_H__
+#pragma once
 
 #include <AppKit/AppKit.h>
 #include <gio/gio.h>
@@ -71,4 +70,3 @@ GInputStream      *_gdk_macos_pasteboard_read_finish         (GObject           
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_PASTEBOARD_PRIVATE_H__ */

@@ -17,8 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_ACCEL_GROUP_PRIVATE_H__
-#define __GTK_ACCEL_GROUP_PRIVATE_H__
+#pragma once
 
 
 #include <gtk/gtkaccelgroup.h>
@@ -30,4 +29,3 @@ void    gtk_accelerator_print_label             (GString                *gstring
                                                  GdkModifierType         accelerator_mods);
 G_END_DECLS
 
-#endif /* __GTK_ACCEL_GROUP_PRIVATE_H__ */

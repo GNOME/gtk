@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DRAW_CONTEXT_PRIVATE__
-#define __GDK_DRAW_CONTEXT_PRIVATE__
+#pragma once
 
 #include "gdkdrawcontext.h"
 
@@ -55,4 +54,3 @@ void                    gdk_draw_context_begin_frame_full       (GdkDrawContext 
                                                                  const cairo_region_t   *region);
 G_END_DECLS
 
-#endif /* __GDK__DRAW_CONTEXT_PRIVATE__ */

@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_DRAG_DEST_PRIVATE_H__
-#define __GTK_DRAG_DEST_PRIVATE_H__
+#pragma once
 
 #include "gtkdragdest.h"
 
@@ -29,4 +28,3 @@ void           gtk_drag_dest_handle_event (GtkWidget     *toplevel,
 
 G_END_DECLS
 
-#endif

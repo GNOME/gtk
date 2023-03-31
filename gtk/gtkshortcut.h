@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_SHORTCUT_H__
-#define __GTK_SHORTCUT_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 
@@ -59,4 +58,3 @@ void            gtk_shortcut_set_arguments                      (GtkShortcut    
 
 G_END_DECLS
 
-#endif  /* __GTK_SHORTCUT_H__ */

@@ -19,8 +19,7 @@
  * Based on nautilus-search-engine.h
  */
 
-#ifndef __GTK_SEARCH_ENGINE_H__
-#define __GTK_SEARCH_ENGINE_H__
+#pragma once
 
 #include "gtkquery.h"
 #include "gtkfilesystemmodelprivate.h"
@@ -97,4 +96,3 @@ void             _gtk_search_engine_set_model       (GtkSearchEngine    *engine,
 
 G_END_DECLS
 
-#endif /* __GTK_SEARCH_ENGINE_H__ */

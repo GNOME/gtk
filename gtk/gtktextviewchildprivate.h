@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TEXT_VIEW_CHILD_PRIVATE_H__
-#define __GTK_TEXT_VIEW_CHILD_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktextview.h>
@@ -52,4 +51,3 @@ void               gtk_text_view_child_set_offset      (GtkTextViewChild  *child
                                                         int                xoffset,
                                                         int                yoffset);
 
-#endif /* __GTK_TEXT_VIEW_CHILD_PRIVATE_H__ */

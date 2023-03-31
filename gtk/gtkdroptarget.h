@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_DROP_TARGET_H__
-#define __GTK_DROP_TARGET_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -86,4 +85,3 @@ void                    gtk_drop_target_reject           (GtkDropTarget         
 
 G_END_DECLS
 
-#endif /* __GTK_DROP_TARGET_H__ */

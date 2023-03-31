@@ -1,5 +1,4 @@
-#ifndef __GDK_TOPLEVEL_PRIVATE_H__
-#define __GDK_TOPLEVEL_PRIVATE_H__
+#pragma once
 
 #include "gdktoplevel.h"
 #include "gdktoplevelsizeprivate.h"
@@ -87,4 +86,3 @@ void  gdk_toplevel_unexport_handle      (GdkToplevel          *toplevel);
 
 G_END_DECLS
 
-#endif /* __GDK_TOPLEVEL_PRIVATE_H__ */

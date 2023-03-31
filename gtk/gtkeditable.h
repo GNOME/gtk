@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_EDITABLE_H__
-#define __GTK_EDITABLE_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -202,4 +201,3 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEditable, g_object_unref)
 
 G_END_DECLS
 
-#endif /* __GTK_EDITABLE_H__ */

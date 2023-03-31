@@ -1,5 +1,4 @@
-#ifndef __GDK_TEXTURE_PRIVATE_H__
-#define __GDK_TEXTURE_PRIVATE_H__
+#pragma once
 
 #include "gdktexture.h"
 
@@ -53,4 +52,3 @@ gpointer                gdk_texture_get_render_data     (GdkTexture             
 
 G_END_DECLS
 
-#endif /* __GDK_TEXTURE_PRIVATE_H__ */

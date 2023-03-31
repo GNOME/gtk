@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__
-#define __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtkfilefilter.h>
@@ -63,4 +62,3 @@ void                _gtk_file_system_model_set_can_select_files (GtkFileSystemMo
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_SYSTEM_MODEL_PRIVATE_H__ */

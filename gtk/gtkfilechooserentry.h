@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FILE_CHOOSER_ENTRY_H__
-#define __GTK_FILE_CHOOSER_ENTRY_H__
+#pragma once
 
 #include "deprecated/gtkfilechooser.h"
 
@@ -49,4 +48,3 @@ void               gtk_file_chooser_entry_set_text            (GtkFileChooserEnt
 
 G_END_DECLS
 
-#endif /* __GTK_FILE_CHOOSER_ENTRY_H__ */

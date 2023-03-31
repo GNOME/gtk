@@ -19,8 +19,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CELL_AREA_BOX_CONTEXT_H__
-#define __GTK_CELL_AREA_BOX_CONTEXT_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -134,4 +133,3 @@ _gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *contex
 
 G_END_DECLS
 
-#endif /* __GTK_CELL_AREA_BOX_CONTEXT_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_STYLE_CHANGE_PRIVATE_H__
-#define __GTK_CSS_STYLE_CHANGE_PRIVATE_H__
+#pragma once
 
 #include "gtkcssstyleprivate.h"
 
@@ -48,4 +47,3 @@ void            gtk_css_style_change_print              (GtkCssStyleChange      
 char *          gtk_css_style_change_to_string          (GtkCssStyleChange      *change);
 G_END_DECLS
 
-#endif /* __GTK_CSS_STYLE_CHANGE_PRIVATE_H__ */

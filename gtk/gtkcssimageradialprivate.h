@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_CSS_IMAGE_RADIAL_PRIVATE_H__
-#define __GTK_CSS_IMAGE_RADIAL_PRIVATE_H__
+#pragma once
 
 #include "gtk/gtkcssimageprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
@@ -71,4 +70,3 @@ GType          _gtk_css_image_radial_get_type             (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_IMAGE_RADIAL_PRIVATE_H__ */

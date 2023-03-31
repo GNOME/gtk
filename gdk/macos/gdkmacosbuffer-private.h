@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_BUFFER_PRIVATE_H__
-#define __GDK_MACOS_BUFFER_PRIVATE_H__
+#pragma once
 
 #include <CoreGraphics/CoreGraphics.h>
 #include <Foundation/Foundation.h>
@@ -57,4 +56,3 @@ void                  _gdk_macos_buffer_set_flipped      (GdkMacosBuffer  *self,
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_BUFFER_PRIVATE_H__ */

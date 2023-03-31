@@ -23,8 +23,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_DRAG_SOURCE_H__
-#define __GTK_DRAG_SOURCE_H__
+#pragma once
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -85,4 +84,3 @@ gboolean           gtk_drag_check_threshold    (GtkWidget         *widget,
 
 G_END_DECLS
 
-#endif /* __GTK_DRAG_SOURCE_H__ */

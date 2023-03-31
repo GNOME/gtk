@@ -17,8 +17,7 @@
  */
 
 
-#ifndef __GTK_CONTENT_FORMATS_PRIVATE_H__
-#define __GTK_CONTENT_FORMATS_PRIVATE_H__
+#pragma once
 
 #include "gdkcontentformats.h"
 
@@ -29,4 +28,3 @@ G_BEGIN_DECLS
 
 G_END_DECLS
 
-#endif /* __GTK_CONTENT_FORMATS_PRIVATE_H__ */

@@ -1,5 +1,4 @@
-#ifndef __GSK_DEBUG_PRIVATE_H__
-#define __GSK_DEBUG_PRIVATE_H__
+#pragma once
 
 #include <glib.h>
 #include "gdk/gdkdebugprivate.h"
@@ -59,4 +58,3 @@ gboolean gsk_check_debug_flags (GskDebugFlags flags);
 
 G_END_DECLS
 
-#endif /* __GSK_DEBUG_PRIVATE_H__ */

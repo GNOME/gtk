@@ -18,8 +18,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef _GSK_GL_TEXTURE_PRIVATE_H__
-#define _GSK_GL_TEXTURE_PRIVATE_H__
+#pragma once
 
 #include "gskgltypesprivate.h"
 
@@ -90,4 +89,3 @@ void                          gsk_gl_texture_free           (GskGLTexture       
 
 G_END_DECLS
 
-#endif /* _GSK_GL_TEXTURE_PRIVATE_H__ */

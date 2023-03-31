@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_MULTI_SELECTION_H__
-#define __GTK_MULTI_SELECTION_H__
+#pragma once
 
 #include <gtk/gtktypes.h>
 #include <gtk/gtkselectionmodel.h>
@@ -41,4 +40,3 @@ void                gtk_multi_selection_set_model          (GtkMultiSelection   
 
 G_END_DECLS
 
-#endif /* __GTK_MULTI_SELECTION_H__ */

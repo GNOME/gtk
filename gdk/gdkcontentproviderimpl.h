@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_CONTENT_PROVIDER_IMPL_H__
-#define __GDK_CONTENT_PROVIDER_IMPL_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -44,4 +43,3 @@ GdkContentProvider *    gdk_content_provider_new_for_bytes              (const c
 
 G_END_DECLS
 
-#endif /* __GDK_CONTENT_PROVIDER_IMPL_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CONTENT_SERIALIZER_H__
-#define __GTK_CONTENT_SERIALIZER_H__
+#pragma once
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -102,4 +101,3 @@ gboolean                gdk_content_serialize_finish                    (GAsyncR
 
 G_END_DECLS
 
-#endif /* __GDK_CONTENT_SERIALIZER_H__ */

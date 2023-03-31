@@ -47,8 +47,7 @@
  *
  */
 
-#ifndef __GTK_TEXT_CHILD_PRIVATE_H__
-#define __GTK_TEXT_CHILD_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktexttypesprivate.h>
 
@@ -89,4 +88,3 @@ const char *        gtk_text_child_anchor_get_replacement (GtkTextChildAnchor *a
 
 G_END_DECLS
 
-#endif

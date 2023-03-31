@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GTK_TEXT_MARK_PRIVATE_H__
-#define __GTK_TEXT_MARK_PRIVATE_H__
+#pragma once
 
 #include <gtk/gtktexttypesprivate.h>
 #include "gtktextlayoutprivate.h"
@@ -52,7 +51,6 @@ void _gtk_mark_segment_set_tree (GtkTextLineSegment *mark,
 
 G_END_DECLS
 
-#endif
 
 
 

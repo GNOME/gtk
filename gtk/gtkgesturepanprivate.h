@@ -16,8 +16,7 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_PAN_PRIVATE_H__
-#define __GTK_GESTURE_PAN_PRIVATE_H__
+#pragma once
 
 #include "gtkgesturedragprivate.h"
 #include "gtkgesturepan.h"
@@ -39,4 +38,3 @@ struct _GtkGesturePanClass
   gpointer padding[10];
 };
 
-#endif /* __GTK_GESTURE_PAN_PRIVATE_H__ */

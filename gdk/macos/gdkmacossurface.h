@@ -17,8 +17,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef __GDK_MACOS_SURFACE_H__
-#define __GDK_MACOS_SURFACE_H__
+#pragma once
 
 #if !defined (__GDKMACOS_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/macos/gdkmacos.h> can be included directly."
@@ -42,4 +41,3 @@ gpointer gdk_macos_surface_get_native_window (GdkMacosSurface *self);
 
 G_END_DECLS
 
-#endif /* __GDK_MACOS_SURFACE_H__ */

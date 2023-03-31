@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_X11_EVENT_SOURCE_H__
-#define __GDK_X11_EVENT_SOURCE_H__
+#pragma once
 
 #include "gdkeventtranslator.h"
 #include "gdkx11display.h"
@@ -44,4 +43,3 @@ gboolean  gdk_event_source_xevent             (GdkX11Display  *x11_display,
 
 G_END_DECLS
 
-#endif /* __GDK_X11_EVENT_SOURCE_H__ */

@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_RENDER_LAYOUT_PRIVATE_H__
-#define __GTK_RENDER_LAYOUT_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <cairo.h>
@@ -45,4 +44,3 @@ void            gtk_css_style_snapshot_caret  (GtkCssBoxes    *boxes,
 
 G_END_DECLS
 
-#endif /* __GTK_RENDER_LAYOUT_PRIVATE_H__ */

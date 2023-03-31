@@ -22,8 +22,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_DEBUG_H__
-#define __GTK_DEBUG_H__
+#pragma once
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -102,4 +101,3 @@ void          gtk_set_debug_flags (GtkDebugFlags flags);
 
 G_END_DECLS
 
-#endif /* __GTK_DEBUG_H__ */

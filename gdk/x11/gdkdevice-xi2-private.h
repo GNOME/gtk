@@ -18,8 +18,7 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DEVICE_XI2_PRIVATE_H__
-#define __GDK_DEVICE_XI2_PRIVATE_H__
+#pragma once
 
 #include "gdkx11device-xi2.h"
 
@@ -37,4 +36,3 @@ void             gdk_x11_device_xi2_set_device_type (GdkX11DeviceXI2  *device,
 
 G_END_DECLS
 
-#endif

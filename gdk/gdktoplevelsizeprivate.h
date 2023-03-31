@@ -16,8 +16,7 @@
  *
  */
 
-#ifndef __GDK_TOPLEVEL_SIZE_PRIVATE_H__
-#define __GDK_TOPLEVEL_SIZE_PRIVATE_H__
+#pragma once
 
 #include "gdktoplevelsize.h"
 
@@ -46,4 +45,3 @@ void gdk_toplevel_size_init (GdkToplevelSize *size,
 
 void gdk_toplevel_size_validate (GdkToplevelSize *size);
 
-#endif /* __GDK_TOPLEVEL_SIZE_PRIVATE_H__ */

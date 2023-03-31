@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_STYLE_PROVIDER_PRIVATE_H__
-#define __GTK_STYLE_PROVIDER_PRIVATE_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtkstyleprovider.h>
@@ -75,4 +74,3 @@ void                    gtk_style_provider_emit_error            (GtkStyleProvid
 
 G_END_DECLS
 
-#endif /* __GTK_STYLE_PROVIDER_PRIVATE_H__ */

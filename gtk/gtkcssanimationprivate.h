@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_CSS_ANIMATION_PRIVATE_H__
-#define __GTK_CSS_ANIMATION_PRIVATE_H__
+#pragma once
 
 #include "gtkstyleanimationprivate.h"
 
@@ -70,4 +69,3 @@ gboolean                _gtk_css_animation_is_animation    (GtkStyleAnimation *a
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_ANIMATION_PRIVATE_H__ */

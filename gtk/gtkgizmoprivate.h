@@ -1,6 +1,5 @@
 
-#ifndef __GTK_GIZMO_H__
-#define __GTK_GIZMO_H__
+#pragma once
 
 #include "gtkwidget.h"
 #include "gtkenums.h"
@@ -72,4 +71,3 @@ GtkWidget *gtk_gizmo_new_with_role (const char            *css_name,
                                     GtkGizmoGrabFocusFunc  grab_focus_func);
 
 
-#endif

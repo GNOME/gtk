@@ -20,8 +20,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTK_INSPECTOR_LOGS_H_
-#define _GTK_INSPECTOR_LOGS_H_
+#pragma once
 
 #include <gtk/gtkwidget.h>
 
@@ -41,6 +40,5 @@ void       gtk_inspector_logs_set_display (GtkInspectorLogs *logs,
 
 G_END_DECLS
 
-#endif // _GTK_INSPECTOR_LOGS_H_
 
 // vim: set et sw=2 ts=2:
