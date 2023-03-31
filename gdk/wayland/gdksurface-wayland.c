@@ -426,7 +426,8 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
   guint32 scale;
   GSList *l;
 
-  if (wl_compositor_get_version (display_wayland->compositor) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+  if (!impl->display_server.wl_surface ||
+      wl_surface_get_version (impl->display_server.wl_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
     {
       /* We can't set the scale on this surface */
       return;
@@ -782,7 +783,6 @@ static void
 gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display;
 
   if (!impl->display_server.wl_surface)
     return;
@@ -791,8 +791,7 @@ gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
     return;
 
   /* Only set the buffer scale if supported by the compositor */
-  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  if (wl_compositor_get_version (display->compositor) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+  if (wl_surface_get_version (impl->display_server.wl_surface) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
     wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
 
   impl->buffer_scale_dirty = FALSE;
