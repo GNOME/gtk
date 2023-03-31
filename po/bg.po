@@ -7252,7 +7252,7 @@ msgstr "Грешка при анализа на опциите на команд
 #: tools/gtk-launch.c:90 tools/gtk-launch.c:111
 #, c-format
 msgid "Try “%s --help” for more information."
-msgstr "За повече информация въведете „%s --help“."
+msgstr "За повече информация изпълнете „%s --help“."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
