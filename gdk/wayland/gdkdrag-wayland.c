@@ -387,7 +387,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   gdk_wayland_drag_create_data_source (drag);
 
-  if (GDK_WAYLAND_DISPLAY (display)->data_device_manager_version >= WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
+  if (wl_data_device_manager_get_version (GDK_WAYLAND_DISPLAY (display)->data_device_manager) >= WL_DATA_SOURCE_SET_ACTIONS_SINCE_VERSION)
     wl_data_source_set_actions (drag_wayland->data_source, gdk_to_wl_actions (actions));
 
   gdk_wayland_seat_set_drag (seat, drag);

@@ -134,7 +134,6 @@ struct _GdkWaylandDisplay
   GSource *event_source;
 
   int seat_version;
-  int data_device_manager_version;
   int gtk_shell_version;
   int pointer_gestures_version;
 
