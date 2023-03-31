@@ -431,7 +431,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_MODEL] =
     g_param_spec_object ("model", NULL, NULL,
                          G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSingleSelection:n-items:
