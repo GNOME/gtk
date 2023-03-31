@@ -495,11 +495,10 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
     {
-      display_wayland->xdg_output_manager_version = MIN (version, 3);
       display_wayland->xdg_output_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_output_manager_v1_interface,
-                          display_wayland->xdg_output_manager_version);
+                          MIN (version, 3));
       gdk_wayland_display_init_xdg_output (display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
@@ -2309,7 +2308,7 @@ should_expect_xdg_output_done (GdkWaylandMonitor *monitor)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   return (monitor_has_xdg_output (monitor) &&
-          display_wayland->xdg_output_manager_version < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
+          zxdg_output_manager_v1_get_version (display_wayland->xdg_output_manager) < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
 }
 
 static void
