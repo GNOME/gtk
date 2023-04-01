@@ -355,7 +355,7 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
                                              .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
                                              .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
                                              .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                             .buffer = gsk_vulkan_buffer_get_buffer(staging),
+                                             .buffer = gsk_vulkan_buffer_get_buffer (staging),
                                              .offset = 0,
                                              .size = buffer_size,
                                          });
@@ -569,7 +569,6 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
                                       gsize             height)
 {
   GskVulkanImage *self;
-
 
   self = gsk_vulkan_image_new (context,
                                width,
