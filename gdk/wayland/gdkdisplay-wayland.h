@@ -133,8 +133,6 @@ struct _GdkWaylandDisplay
 
   GSource *event_source;
 
-  int seat_version;
-
   uint32_t server_decoration_mode;
 
   struct xkb_context *xkb_context;
