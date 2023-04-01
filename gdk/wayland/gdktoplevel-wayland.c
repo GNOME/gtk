@@ -434,7 +434,7 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
                                       width, height,
                                       &width, &height);
         }
-      gdk_wayland_surface_update_size (surface, width, height, wayland_surface->scale);
+      gdk_wayland_surface_update_size (surface, width, height, &wayland_surface->scale);
 
       if (!wayland_toplevel->next_layout.size_is_fixed)
         {
@@ -452,7 +452,7 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       gdk_surface_constrain_size (&geometry, mask,
                                   width, height,
                                   &width, &height);
-      gdk_wayland_surface_update_size (surface, width, height, wayland_surface->scale);
+      gdk_wayland_surface_update_size (surface, width, height, &wayland_surface->scale);
     }
 
   wayland_surface->next_layout.surface_geometry_dirty = FALSE;

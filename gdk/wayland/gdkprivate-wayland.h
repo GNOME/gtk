@@ -47,6 +47,45 @@
  */
 #define GDK_WAYLAND_LOCAL_DND_MIME_TYPE "application/x-gtk-local-dnd"
 
+#define GDK_FRACTIONAL_SCALE_FACTOR 120
+
+typedef struct _GdkFractionalScale GdkFractionalScale;
+
+struct _GdkFractionalScale
+{
+  guint32 scale;
+};
+
+#define GDK_FRACTIONAL_SCALE_INIT(fractional_scale) (GdkFractionalScale) { fractional_scale }
+#define GDK_FRACTIONAL_SCALE_INIT_INT(scale) GDK_FRACTIONAL_SCALE_INIT (scale * GDK_FRACTIONAL_SCALE_FACTOR)
+
+static inline int
+gdk_fractional_scale_to_int (const GdkFractionalScale *self)
+{
+  /* ceil() */
+  return (self->scale + GDK_FRACTIONAL_SCALE_FACTOR - 1) / GDK_FRACTIONAL_SCALE_FACTOR;
+}
+
+static inline double
+gdk_fractional_scale_to_double (const GdkFractionalScale *self)
+{
+  return (double) self->scale / GDK_FRACTIONAL_SCALE_FACTOR;
+}
+
+static inline int
+gdk_fractional_scale_scale (const GdkFractionalScale *self,
+                            int                       value)
+{
+  return (value * self->scale + GDK_FRACTIONAL_SCALE_FACTOR / 2) / GDK_FRACTIONAL_SCALE_FACTOR;
+}
+
+static inline gboolean
+gdk_fractional_scale_equal (const GdkFractionalScale *a,
+                            const GdkFractionalScale *b)
+{
+  return a->scale == b->scale;
+}
+
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                                uint32_t   format,
@@ -89,11 +128,11 @@ guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
                                                      guint              current_image_index,
                                                      guint             *next_image_delay);
 
-void       gdk_wayland_surface_sync (GdkSurface *surface);
-void       gdk_wayland_surface_commit (GdkSurface *surface);
-void       gdk_wayland_surface_notify_committed (GdkSurface *surface);
-void       gdk_wayland_surface_request_frame (GdkSurface *surface);
-gboolean   gdk_wayland_surface_has_surface (GdkSurface *surface);
+void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
+void            gdk_wayland_surface_commit                 (GdkSurface           *surface);
+void            gdk_wayland_surface_notify_committed       (GdkSurface           *surface);
+void            gdk_wayland_surface_request_frame          (GdkSurface           *surface);
+gboolean        gdk_wayland_surface_has_surface            (GdkSurface           *surface);
 void            gdk_wayland_surface_attach_image           (GdkSurface           *surface,
                                                             cairo_surface_t      *cairo_surface,
                                                             const cairo_region_t *damage);
@@ -168,10 +207,10 @@ GdkMonitor *gdk_wayland_display_get_monitor_for_output (GdkDisplay       *displa
 void _gdk_wayland_surface_set_grab_seat (GdkSurface      *surface,
                                         GdkSeat        *seat);
 
-cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
-                                                           int                width,
-                                                           int                height,
-                                                           guint              scale);
+cairo_surface_t * gdk_wayland_display_create_shm_surface  (GdkWaylandDisplay        *display,
+                                                           int                       width,
+                                                           int                       height,
+                                                           const GdkFractionalScale *scale);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
 

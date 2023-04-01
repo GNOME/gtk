@@ -221,10 +221,10 @@ from_texture:
       surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
       if (surface == NULL)
         {
-          surface = _gdk_wayland_display_create_shm_surface (display,
-                                                             gdk_texture_get_width (texture),
-                                                             gdk_texture_get_height (texture),
-                                                             1);
+          surface = gdk_wayland_display_create_shm_surface (display,
+                                                            gdk_texture_get_width (texture),
+                                                            gdk_texture_get_height (texture),
+                                                            &GDK_FRACTIONAL_SCALE_INIT_INT (1));
           
           gdk_texture_download (texture,
                                 cairo_image_surface_get_data (surface),
