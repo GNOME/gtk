@@ -97,6 +97,9 @@ gboolean gdk_surface_translate_coordinates (GdkSurface *from,
 GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
+GDK_AVAILABLE_IN_4_12
+double        gdk_surface_get_scale         (GdkSurface     *surface);
+
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_device_position (GdkSurface      *surface,
                                                GdkDevice       *device,

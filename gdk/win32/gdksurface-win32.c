@@ -4445,15 +4445,12 @@ gdk_win32_surface_set_shadow_width (GdkSurface *window,
 }
 
 
-int
-_gdk_win32_surface_get_scale_factor (GdkSurface *surface)
+double
+_gdk_win32_surface_get_scale (GdkSurface *surface)
 {
   GdkDisplay *display;
   GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 1;
 
   g_return_val_if_fail (surface != NULL, 1);
 
@@ -4654,7 +4651,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
-  impl_class->get_scale_factor = _gdk_win32_surface_get_scale_factor;
+  impl_class->get_scale = _gdk_win32_surface_get_scale;
   impl_class->request_layout = _gdk_win32_surface_request_layout;
   impl_class->compute_size = _gdk_win32_surface_compute_size;
 }

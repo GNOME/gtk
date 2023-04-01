@@ -269,7 +269,10 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   if (height_changed)
     g_object_notify (G_OBJECT (surface), "height");
   if (scale_changed)
-    g_object_notify (G_OBJECT (surface), "scale-factor");
+    {
+      g_object_notify (G_OBJECT (surface), "scale-factor");
+      g_object_notify (G_OBJECT (surface), "scale");
+    }
 
   _gdk_surface_update_size (surface);
 }
@@ -1253,15 +1256,12 @@ gdk_wayland_surface_destroy_notify (GdkSurface *surface)
   g_object_unref (surface);
 }
 
-static int
-gdk_wayland_surface_get_scale_factor (GdkSurface *surface)
+static double
+gdk_wayland_surface_get_scale (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 1;
-
-  return gdk_fractional_scale_to_int (&impl->scale);
+  return gdk_fractional_scale_to_double (&impl->scale);
 }
 
 static void
@@ -1313,7 +1313,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
 
   surface_class->destroy_notify = gdk_wayland_surface_destroy_notify;
   surface_class->drag_begin = _gdk_wayland_surface_drag_begin;
-  surface_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
+  surface_class->get_scale = gdk_wayland_surface_get_scale;
   surface_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   surface_class->request_layout = gdk_wayland_surface_request_layout;
 
