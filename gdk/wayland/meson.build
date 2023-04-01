@@ -65,6 +65,7 @@ proto_sources = [
   ['xdg-output', 'unstable', 'v1', ],
   ['idle-inhibit', 'unstable', 'v1', ],
   ['xdg-activation', 'staging', 'v1', ],
+  ['fractional-scale', 'staging', 'v1', ],
 ]
 
 gdk_wayland_gen_headers = []

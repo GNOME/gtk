@@ -509,6 +509,14 @@ gdk_registry_handle_global (void               *data,
                           &xdg_activation_v1_interface,
                           MIN (version, XDG_ACTIVATION_VERSION));
     }
+  else if (strcmp (interface, "wp_fractional_scale_manager_v1") == 0)
+    {
+      display_wayland->fractional_scale =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_fractional_scale_manager_v1_interface,
+                          MIN (version, 1));
+    }
+
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
