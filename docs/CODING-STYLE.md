@@ -500,8 +500,9 @@ Public headers should never be included directly:
 Private headers should include the public header first, if one exists:
 
 ```c
-  #ifndef __GTK_FOO_PRIVATE_H__
-  #define __GTK_FOO_PRIVATE_H__
+  #pragma once
+
+  /* gtkfooprivate.h */
 
   #include "gtkfoo.h"
 
@@ -510,18 +511,8 @@ Private headers should include the public header first, if one exists:
   #endif /* __GTK_FOO_PRIVATE_H__ */
 ```
 
-All headers should have inclusion guards:
-
-```c
-  #ifndef __GTK_FOO_H__
-  #define __GTK_FOO_H__
-
-  ...
-
-  #endif /* __GTK_FOO_H__ */
-```
-
-You can also use the `once` pragma instead of the classic pre-processor guard:
+All headers should use the `once` pragma to prevent multiple inclusion,
+instead of the classic pre-processor guards:
 
 ```c
   #pragma once
@@ -553,6 +544,8 @@ the source file, either the public installed header, or the private header, if
 it exists.
 
 ```c
+  /* gtkfoo.c */
+
   #include "config.h"
 
   #include "gtkfoo.h"
@@ -594,8 +587,8 @@ Finally, source files should include the system headers last:
   #include <string.h>
 ```
 
-Cyclic dependencies should be avoided if at all possible; for instance, you
-could use additional headers to break cycles.
+Cyclic dependencies should be avoided if at all possible;
+for instance, you could use additional headers to break cycles.
 
 ### GObject
 
@@ -636,7 +629,8 @@ Instance structures should only contain the parent type:
 ```
 
 You should use the `G_DECLARE_DERIVABLE_TYPE()` and `G_DECLARE_FINAL_TYPE()`
-macros in newly written headers.
+macros in newly written headers. There is also a `GDK_DECLARE_INTERNAL_TYPE()`
+for declaring types that can be derived inside GTK, but not in 3rd party code.
 
 Inside your source file, always use the `G_DEFINE_TYPE()`,
 `G_DEFINE_TYPE_WITH_PRIVATE()`, and `G_DEFINE_TYPE_WITH_CODE()` macros, or their
@@ -676,12 +670,20 @@ Interfaces must have the following macros:
 | `GTK_IS_<iface_name>`        | `G_TYPE_CHECK_INSTANCE_TYPE`    |
 | `GTK_<iface_name>_GET_IFACE` | `G_TYPE_INSTANCE_GET_INTERFACE` |
 
+The `G_DECLARE` macros define these as static inline functions instead.
+
 ### Memory allocation
 
 When dynamically allocating data on the heap use `g_new()`.
 
 Public structure types should always be returned after being zero-ed,
-either explicitly for each member, or by using `g_new0()`.
+either explicitly for each member, or by using `g_new0()`. Do not use
+`g_slice` in new code.
+
+Memory that is only needed within the scope of a function can be
+stack-allocated using `g_newa()` or `g_alloca()`. But limit the amount
+of stack memory that you consume this way, in particular in recursive
+functions.
 
 ### Macros
 
