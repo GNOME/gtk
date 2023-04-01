@@ -34,7 +34,6 @@
 #include "gtkbinlayout.h"
 #include "gtkwidgetprivate.h"
 
-
 struct _GtkInspectorMiscInfo
 {
   GtkWidget parent;
@@ -79,6 +78,8 @@ struct _GtkInspectorMiscInfo
   GtkWidget *tick_callback;
   GtkWidget *framerate_row;
   GtkWidget *framerate;
+  GtkWidget *scale_row;
+  GtkWidget *scale;
   GtkWidget *framecount_row;
   GtkWidget *framecount;
   GtkWidget *mapped_row;
@@ -424,6 +425,15 @@ update_info (gpointer data)
       sl->last_frame = frame;
     }
 
+  if (GDK_IS_SURFACE (sl->object))
+    {
+      char buf[64];
+
+      g_snprintf (buf, sizeof (buf), "%g", gdk_surface_get_scale (GDK_SURFACE (sl->object)));
+
+      gtk_label_set_label (GTK_LABEL (sl->scale), buf);
+    }
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -507,6 +517,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->buildable_id_row, GTK_IS_BUILDABLE (object));
   gtk_widget_set_visible (sl->framecount_row, GDK_IS_FRAME_CLOCK (object));
   gtk_widget_set_visible (sl->framerate_row, GDK_IS_FRAME_CLOCK (object));
+  gtk_widget_set_visible (sl->scale_row, GDK_IS_SURFACE (object));
 
   if (GTK_IS_WIDGET (object))
     {
@@ -618,6 +629,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, framecount);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, framerate_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, framerate);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, scale_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, scale);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mapped_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mapped);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, realized_row);
