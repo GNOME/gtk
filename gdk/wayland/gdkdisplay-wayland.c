@@ -235,10 +235,9 @@ _gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
 {
   struct wl_seat *seat;
 
-  display_wayland->seat_version = MIN (version, 8);
   seat = wl_registry_bind (display_wayland->wl_registry,
                            id, &wl_seat_interface,
-                           display_wayland->seat_version);
+                           MIN (version, 8));
   _gdk_wayland_display_create_seat (display_wayland, id, seat);
   _gdk_wayland_display_async_roundtrip (display_wayland);
 }
@@ -370,7 +369,6 @@ gdk_registry_handle_global (void               *data,
       display_wayland->compositor =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wl_compositor_interface, MIN (version, 5));
-      display_wayland->compositor_version = MIN (version, 4);
     }
   else if (strcmp (interface, "wl_shm") == 0)
     {
@@ -394,7 +392,6 @@ gdk_registry_handle_global (void               *data,
                           &gtk_shell1_interface,
                           MIN (version, GTK_SHELL1_VERSION));
       gdk_wayland_display_set_has_gtk_shell (display_wayland);
-      display_wayland->gtk_shell_version = version;
     }
   else if (strcmp (interface, "wl_output") == 0)
     {
@@ -423,10 +420,9 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "wl_data_device_manager") == 0)
     {
-      display_wayland->data_device_manager_version = MIN (version, 3);
       display_wayland->data_device_manager =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_data_device_manager_interface,
-                          display_wayland->data_device_manager_version);
+                          MIN (version, 3));
     }
   else if (strcmp (interface, "wl_subcompositor") == 0)
     {
@@ -435,9 +431,6 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "zwp_pointer_gestures_v1") == 0)
     {
-      display_wayland->pointer_gestures_version =
-          MIN (version, GDK_ZWP_POINTER_GESTURES_V1_VERSION);
-
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
                           id, &zwp_pointer_gestures_v1_interface,
@@ -496,11 +489,10 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
     {
-      display_wayland->xdg_output_manager_version = MIN (version, 3);
       display_wayland->xdg_output_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_output_manager_v1_interface,
-                          display_wayland->xdg_output_manager_version);
+                          MIN (version, 3));
       gdk_wayland_display_init_xdg_output (display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
@@ -512,12 +504,10 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "xdg_activation_v1") == 0)
     {
-      display_wayland->xdg_activation_version =
-        MIN (version, XDG_ACTIVATION_VERSION);
       display_wayland->xdg_activation =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_activation_v1_interface,
-                          display_wayland->xdg_activation_version);
+                          MIN (version, XDG_ACTIVATION_VERSION));
     }
 
   g_hash_table_insert (display_wayland->known_globals,
@@ -2312,7 +2302,7 @@ should_expect_xdg_output_done (GdkWaylandMonitor *monitor)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   return (monitor_has_xdg_output (monitor) &&
-          display_wayland->xdg_output_manager_version < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
+          zxdg_output_manager_v1_get_version (display_wayland->xdg_output_manager) < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
 }
 
 static void

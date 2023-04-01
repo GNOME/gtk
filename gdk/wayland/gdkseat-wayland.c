@@ -523,7 +523,6 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                              gint                value120_x,
                              gint                value120_y)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event = NULL;
   GdkDevice *source;
   GdkScrollDirection direction;
@@ -539,7 +538,7 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
 
   source = get_scroll_device (seat, seat->pointer_info.frame.source);
 
-  if (display_wayland->seat_version >= WL_POINTER_AXIS_VALUE120_SINCE_VERSION)
+  if (wl_seat_get_version (seat->wl_seat) >= WL_POINTER_AXIS_VALUE120_SINCE_VERSION)
     {
       event = gdk_scroll_event_new_value120 (seat->pointer_info.focus,
                                              source,
@@ -668,7 +667,6 @@ pointer_handle_enter (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!surface)
     return;
@@ -702,7 +700,7 @@ pointer_handle_enter (void              *data,
                   "enter, seat %p surface %p",
                   seat, seat->pointer_info.focus);
 
-  if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
+  if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -714,7 +712,6 @@ pointer_handle_leave (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkDeviceGrabInfo *grab;
 
   if (!seat->pointer_info.focus)
@@ -758,7 +755,7 @@ pointer_handle_leave (void              *data,
   if (seat->cursor)
     gdk_wayland_seat_stop_cursor_animation (seat, &seat->pointer_info);
 
-  if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
+  if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -770,7 +767,6 @@ pointer_handle_motion (void              *data,
                        wl_fixed_t         sy)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   if (!seat->pointer_info.focus)
@@ -798,7 +794,7 @@ pointer_handle_motion (void              *data,
                  x, y, seat, gdk_event_get_modifier_state (event));
     }
 
-  if (display->seat_version < WL_POINTER_HAS_FRAME)
+  if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -811,7 +807,6 @@ pointer_handle_button (void              *data,
                        uint32_t           state)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
   uint32_t modifier;
   int gdk_button;
@@ -878,7 +873,7 @@ pointer_handle_button (void              *data,
                   seat,
                   gdk_event_get_modifier_state (event));
 
-  if (display->seat_version < WL_POINTER_HAS_FRAME)
+  if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -909,7 +904,6 @@ pointer_handle_axis (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkWaylandPointerFrameData *pointer_frame = &seat->pointer_info.frame;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!seat->pointer_info.focus)
     return;
@@ -934,7 +928,7 @@ pointer_handle_axis (void              *data,
                   get_axis_name (axis), wl_fixed_to_double (value),
                   seat);
 
-  if (display->seat_version < WL_POINTER_HAS_FRAME)
+  if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
@@ -2372,7 +2366,7 @@ seat_handle_capabilities (void                    *data,
           zwp_pointer_gesture_pinch_v1_add_listener (seat->wp_pointer_gesture_pinch,
                                                      &gesture_pinch_listener, seat);
 
-          if (display_wayland->pointer_gestures_version >= ZWP_POINTER_GESTURES_V1_GET_HOLD_GESTURE_SINCE_VERSION)
+          if (zwp_pointer_gestures_v1_get_version (display_wayland->pointer_gestures) >= ZWP_POINTER_GESTURES_V1_GET_HOLD_GESTURE_SINCE_VERSION)
             {
               seat->wp_pointer_gesture_hold =
                   zwp_pointer_gestures_v1_get_hold_gesture (display_wayland->pointer_gestures,
@@ -3771,7 +3765,7 @@ pointer_surface_update_scale (GdkDevice *device)
   guint32 scale;
   GSList *l;
 
-  if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+  if (wl_surface_get_version (pointer->pointer_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
     {
       /* We can't set the scale on this surface */
       return;

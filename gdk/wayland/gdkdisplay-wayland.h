@@ -133,14 +133,6 @@ struct _GdkWaylandDisplay
 
   GSource *event_source;
 
-  int compositor_version;
-  int seat_version;
-  int data_device_manager_version;
-  int gtk_shell_version;
-  int xdg_output_manager_version;
-  int pointer_gestures_version;
-  int xdg_activation_version;
-
   uint32_t server_decoration_mode;
 
   struct xkb_context *xkb_context;
