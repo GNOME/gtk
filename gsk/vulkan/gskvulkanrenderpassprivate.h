@@ -12,7 +12,8 @@ G_BEGIN_DECLS
 
 GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context,
                                                                          GskVulkanImage         *target,
-                                                                         int                     scale_factor,
+                                                                         float                   scale_x,
+                                                                         float                   scale_y,
                                                                          graphene_matrix_t      *mv,
                                                                          graphene_rect_t        *viewport,
                                                                          cairo_region_t         *clip,

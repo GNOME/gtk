@@ -536,23 +536,21 @@ extract_matrix_metadata (GskGLRenderModelview *modelview)
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
       {
-        graphene_vec3_t col1;
-        graphene_vec3_t col2;
+        graphene_quaternion_t rotation;
+        graphene_vec4_t perspective;
+        graphene_vec3_t translation;
+        graphene_vec3_t scale;
+        graphene_vec3_t shear;
 
-        /* TODO: 90% sure this is incorrect. But we should never hit this code
-         * path anyway. */
-        graphene_vec3_init (&col1,
-                            graphene_matrix_get_value (&modelview->matrix, 0, 0),
-                            graphene_matrix_get_value (&modelview->matrix, 1, 0),
-                            graphene_matrix_get_value (&modelview->matrix, 2, 0));
+        graphene_matrix_decompose (&modelview->matrix,
+                                   &translation,
+                                   &scale,
+                                   &rotation,
+                                   &shear,
+                                   &perspective);
 
-        graphene_vec3_init (&col2,
-                            graphene_matrix_get_value (&modelview->matrix, 0, 1),
-                            graphene_matrix_get_value (&modelview->matrix, 1, 1),
-                            graphene_matrix_get_value (&modelview->matrix, 2, 1));
-
-        modelview->scale_x = graphene_vec3_length (&col1);
-        modelview->scale_y = graphene_vec3_length (&col2);
+        modelview->scale_x = graphene_vec3_get_x (&scale);
+        modelview->scale_y = graphene_vec3_get_y (&scale);
         modelview->dx = 0;
         modelview->dy = 0;
       }
