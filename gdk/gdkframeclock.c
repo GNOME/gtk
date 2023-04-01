@@ -48,7 +48,7 @@
  * for the synchronization being implemented, the clock will process a frame and
  * emit signals for each phase that has been requested. (See the signals of the
  * `GdkFrameClock` class for documentation of the phases.
- * %GDK_FRAME_CLOCK_PHASE_UPDATE and the [signal@GdkFrameClock::update] signal
+ * %GDK_FRAME_CLOCK_PHASE_UPDATE and the [signal@Gdk.FrameClock::update] signal
  * are most interesting for application writers, and are used to update the
  * animations, using the frame time given by [method@Gdk.FrameClock.get_frame_time].
  *
@@ -60,7 +60,7 @@
  * are called at a “similar” time get the same value. This means that
  * if different animations are timed by looking at the difference in
  * time between an initial value from [method@Gdk.FrameClock.get_frame_time]
- * and the value inside the [signal@GdkFrameClock::update] signal of the clock,
+ * and the value inside the [signal@Gdk.FrameClock::update] signal of the clock,
  * they will stay exactly synchronized.
  */
 

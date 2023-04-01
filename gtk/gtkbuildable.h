@@ -105,7 +105,7 @@ struct _GtkBuildableParser
  * @set_buildable_property: Sets a property of a buildable object.
  *  It is normally not necessary to implement this, g_object_set_property()
  *  is used by default. `GtkWindow` implements this to delay showing itself
- *  (i.e. setting the [property@GtkWidget:visible] property) until the whole
+ *  (i.e. setting the [property@Gtk.Widget:visible] property) until the whole
  *  interface is created.
  * @construct_child: Constructs a child of a buildable that has been
  *  specified as “constructor” in the UI definition. This can be used to

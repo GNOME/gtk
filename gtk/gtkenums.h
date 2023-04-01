@@ -852,8 +852,6 @@ typedef enum {
   GTK_LEVEL_BAR_MODE_DISCRETE
 } GtkLevelBarMode;
 
-G_END_DECLS
-
 /**
  * GtkInputPurpose:
  * @GTK_INPUT_PURPOSE_FREE_FORM: Allow any character
@@ -1669,5 +1667,7 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
   GTK_ACCESSIBLE_SORT_DESCENDING,
   GTK_ACCESSIBLE_SORT_OTHER
 } GtkAccessibleSort;
+
+G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */

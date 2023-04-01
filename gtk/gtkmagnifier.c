@@ -256,8 +256,7 @@ _gtk_magnifier_set_coords (GtkMagnifier *magnifier,
   magnifier->x = x;
   magnifier->y = y;
 
-  if (gtk_widget_is_visible (GTK_WIDGET (magnifier)))
-    gtk_widget_queue_draw (GTK_WIDGET (magnifier));
+  gtk_widget_queue_draw (GTK_WIDGET (magnifier));
 }
 
 void
@@ -289,8 +288,7 @@ _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
   if (magnifier->resize)
     gtk_widget_queue_resize (GTK_WIDGET (magnifier));
 
-  if (gtk_widget_is_visible (GTK_WIDGET (magnifier)))
-    gtk_widget_queue_draw (GTK_WIDGET (magnifier));
+  gtk_widget_queue_draw (GTK_WIDGET (magnifier));
 }
 
 double

@@ -3837,7 +3837,7 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
 
-  g_signal_handlers_disconnect_by_func (settings, gtk_scrolled_window_sync_use_indicators, widget);
+  g_signal_handlers_disconnect_by_func (settings, gtk_scrolled_window_update_use_indicators, widget);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }

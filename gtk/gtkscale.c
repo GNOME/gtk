@@ -51,7 +51,7 @@
  * ![An example GtkScale](scales.png)
  *
  * To use it, you’ll probably want to investigate the methods on its base
- * class, [class@GtkRange], in addition to the methods for `GtkScale` itself.
+ * class, [class@Gtk.Range], in addition to the methods for `GtkScale` itself.
  * To set the value of a scale, you would normally use [method@Gtk.Range.set_value].
  * To detect changes to the value, you would normally use the
  * [signal@Gtk.Range::value-changed] signal.
@@ -648,11 +648,11 @@ gtk_scale_class_init (GtkScaleClass *class)
   GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass  *range_class;
-  
+
   gobject_class = G_OBJECT_CLASS (class);
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  
+
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
   gobject_class->notify = gtk_scale_notify;
@@ -715,7 +715,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   /* All bindings (even arrow keys) are on both h/v scale, because
    * blind users etc. don't care about scale orientation.
    */
-  
+
   add_slider_binding (binding_set, GDK_KEY_Left, 0,
                       GTK_SCROLL_STEP_LEFT);
 
@@ -763,19 +763,19 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   add_slider_binding (binding_set, GDK_KEY_KP_Down, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_DOWN);
-   
+
   add_slider_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_LEFT);
 
   add_slider_binding (binding_set, GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_LEFT);  
+                      GTK_SCROLL_PAGE_LEFT);
 
   add_slider_binding (binding_set, GDK_KEY_Page_Up, 0,
                       GTK_SCROLL_PAGE_UP);
 
   add_slider_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
                       GTK_SCROLL_PAGE_UP);
-  
+
   add_slider_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_RIGHT);
 
@@ -791,26 +791,26 @@ gtk_scale_class_init (GtkScaleClass *class)
   /* Logical bindings (vs. visual bindings above) */
 
   add_slider_binding (binding_set, GDK_KEY_plus, 0,
-                      GTK_SCROLL_STEP_FORWARD);  
+                      GTK_SCROLL_STEP_FORWARD);
 
   add_slider_binding (binding_set, GDK_KEY_minus, 0,
-                      GTK_SCROLL_STEP_BACKWARD);  
+                      GTK_SCROLL_STEP_BACKWARD);
 
   add_slider_binding (binding_set, GDK_KEY_plus, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_FORWARD);  
+                      GTK_SCROLL_PAGE_FORWARD);
 
   add_slider_binding (binding_set, GDK_KEY_minus, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_BACKWARD);
 
 
   add_slider_binding (binding_set, GDK_KEY_KP_Add, 0,
-                      GTK_SCROLL_STEP_FORWARD);  
+                      GTK_SCROLL_STEP_FORWARD);
 
   add_slider_binding (binding_set, GDK_KEY_KP_Subtract, 0,
-                      GTK_SCROLL_STEP_BACKWARD);  
+                      GTK_SCROLL_STEP_BACKWARD);
 
   add_slider_binding (binding_set, GDK_KEY_KP_Add, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_FORWARD);  
+                      GTK_SCROLL_PAGE_FORWARD);
 
   add_slider_binding (binding_set, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_BACKWARD);
@@ -997,9 +997,9 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  *
  * Also causes the value of the adjustment to be rounded to this number
  * of digits, so the retrieved value matches the displayed one, if
- * [property@GtkScale:draw-value] is %TRUE when the value changes. If
- * you want to enforce rounding the value when [property@GtkScale:draw-value]
- * is %FALSE, you can set [property@GtkRange:round-digits] instead.
+ * [property@Gtk.Scale:draw-value] is %TRUE when the value changes. If
+ * you want to enforce rounding the value when [property@Gtk.Scale:draw-value]
+ * is %FALSE, you can set [property@Gtk.Range:round-digits] instead.
  *
  * Note that rounding to a small number of digits can interfere with
  * the smooth autoscrolling that is built into `GtkScale`. As an alternative,
@@ -1016,7 +1016,7 @@ gtk_scale_set_digits (GtkScale *scale,
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   range = GTK_RANGE (scale);
-  
+
   digits = CLAMP (digits, -1, MAX_DIGITS);
 
   if (priv->digits != digits)
@@ -1153,7 +1153,7 @@ gtk_scale_get_draw_value (GtkScale *scale)
  *
  * Sets whether the scale has an origin.
  *
- * If [property@GtkScale:has-origin] is set to %TRUE (the default),
+ * If [property@Gtk.Scale:has-origin] is set to %TRUE (the default),
  * the scale will highlight the part of the trough between the origin
  * (bottom or left side) and the current value.
  */
@@ -1562,7 +1562,7 @@ gtk_scale_finalize (GObject *object)
  * to be freed by the caller.
  *
  * Returns: (transfer none) (nullable): the [class@Pango.Layout]
- *   for this scale, or %NULL if the [property@GtkScale:draw-value]
+ *   for this scale, or %NULL if the [property@Gtk.Scale:draw-value]
  *   property is %FALSE.
  */
 PangoLayout *
@@ -1590,15 +1590,15 @@ gtk_scale_get_layout (GtkScale *scale)
  * Remember when using the `PangoLayout` function you need to
  * convert to and from pixels using `PANGO_PIXELS()` or `PANGO_SCALE`.
  *
- * If the [property@GtkScale:draw-value] property is %FALSE, the return
+ * If the [property@Gtk.Scale:draw-value] property is %FALSE, the return
  * values are undefined.
  */
-void 
+void
 gtk_scale_get_layout_offsets (GtkScale *scale,
                               int      *x,
                               int      *y)
 {
-  int local_x = 0; 
+  int local_x = 0;
   int local_y = 0;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
@@ -1608,7 +1608,7 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
 
   if (x)
     *x = local_x;
-  
+
   if (y)
     *y = local_y;
 }
@@ -2041,7 +2041,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
  *
  * If #NULL is passed as @func, the value will be displayed on
  * its own, rounded according to the value of the
- * [property@GtkScale:digits] property.
+ * [property@Gtk.Scale:digits] property.
  */
 void
 gtk_scale_set_format_value_func (GtkScale                *scale,

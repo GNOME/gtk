@@ -31,7 +31,7 @@ test_unset_display (void)
 
   g_test_trap_subprocess ("/display/unset-display/subprocess/2", 0, 0);
   g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*cannot open display*");
+  g_test_trap_assert_stderr ("*Failed to open display*");
 }
 
 static void
@@ -62,7 +62,7 @@ test_bad_display (void)
 
   g_test_trap_subprocess ("/display/bad-display/subprocess/2", 0, 0);
   g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*cannot open display*");
+  g_test_trap_assert_stderr ("*Failed to open display*");
 }
 
 int

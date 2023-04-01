@@ -126,7 +126,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * style class applied.
  *
  * Deprecated: 4.10: There is no replacement in GTK for an "info bar" widget;
- *   you can use [class@Gtk.Revealer] with a [class@GtkBox] containing a
+ *   you can use [class@Gtk.Revealer] with a [class@Gtk.Box] containing a
  *   [class@Gtk.Label] and an optional [class@Gtk.Button], according to
  *   your application's design.
  */

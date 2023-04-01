@@ -660,10 +660,7 @@ gtk_init (void)
 {
   if (!gtk_init_check ())
     {
-      const char *display_name_arg;
-
-      display_name_arg = getenv ("DISPLAY");
-      g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : "");
+      g_warning ("Failed to open display");
       exit (1);
     }
 }

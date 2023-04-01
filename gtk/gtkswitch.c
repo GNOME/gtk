@@ -34,7 +34,7 @@
  * empty area, or by dragging the handle.
  *
  * `GtkSwitch` can also handle situations where the underlying state
- * changes with a delay. See [signal@GtkSwitch::state-set] for details.
+ * changes with a delay. See [signal@Gtk.Switch::state-set] for details.
  *
  * # CSS nodes
  *
@@ -246,7 +246,7 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 
   if (self->is_active)
     offset += width / 2;
-  
+
   offset /= width / 2;
   /* constrain the handle within the trough width */
   self->handle_pos = CLAMP (offset, 0, 1.0);
@@ -526,7 +526,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    *
    * The backend state that is controlled by the switch.
    *
-   * See [signal@GtkSwitch::state-set] for details.
+   * See [signal@Gtk.Switch::state-set] for details.
    */
   switch_props[PROP_STATE] =
     g_param_spec_boolean ("state", NULL, NULL,

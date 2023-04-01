@@ -2950,7 +2950,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
  * the label) you need to set it explicitly using this function.
  *
  * The target widget will be accelerated by emitting the
- * [signal@GtkWidget::mnemonic-activate] signal on it. The default handler for
+ * [signal@Gtk.Widget::mnemonic-activate] signal on it. The default handler for
  * this signal will activate the widget if there are no mnemonic collisions
  * and toggle focus between the colliding widgets otherwise.
  */
