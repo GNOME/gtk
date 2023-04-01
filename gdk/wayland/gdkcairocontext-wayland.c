@@ -21,6 +21,7 @@
 #include "gdkcairocontext-wayland.h"
 
 #include "gdkprivate-wayland.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkprofilerprivate.h"
 
@@ -130,7 +131,7 @@ gdk_wayland_cairo_context_create_surface (GdkWaylandCairoContext *self)
   height = gdk_surface_get_height (surface);
   cairo_surface = gdk_wayland_display_create_shm_surface (display_wayland,
                                                           width, height,
-                                                          &GDK_FRACTIONAL_SCALE_INIT_INT (gdk_surface_get_scale_factor (surface)));
+                                                          &GDK_WAYLAND_SURFACE (surface)->scale);
   buffer = _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface);
   wl_buffer_add_listener (buffer, &buffer_listener, cairo_surface);
   gdk_wayland_cairo_context_add_surface (self, cairo_surface);
