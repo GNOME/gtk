@@ -575,7 +575,7 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                               VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                               VK_IMAGE_LAYOUT_UNDEFINED,
                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
