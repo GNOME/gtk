@@ -61,11 +61,6 @@ G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
-static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
-static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
-static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
-static void gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface);
-
 /* {{{ Utilities */
 
 static void
@@ -176,6 +171,7 @@ static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
   impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (1);
+  impl->viewport_dirty = TRUE;
 }
 
 void
@@ -256,7 +252,10 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
     {
       impl->scale = *scale;
       impl->buffer_scale_dirty = TRUE;
+      impl->viewport_dirty = TRUE;
     }
+  if (width_changed || height_changed)
+    impl->viewport_dirty = TRUE;
 
   if (impl->display_server.egl_window)
     wl_egl_window_resize (impl->display_server.egl_window,
@@ -617,15 +616,6 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
     }
 }
 
-void
-gdk_wayland_surface_sync (GdkSurface *surface)
-{
-  gdk_wayland_surface_sync_shadow (surface);
-  gdk_wayland_surface_sync_opaque_region (surface);
-  gdk_wayland_surface_sync_input_region (surface);
-  gdk_wayland_surface_sync_buffer_scale (surface);
-}
-
 static gboolean
 gdk_wayland_surface_beep (GdkSurface *surface)
 {
@@ -781,20 +771,53 @@ gdk_wayland_surface_sync_input_region (GdkSurface *surface)
 static void
 gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
 
-  if (!impl->display_server.wl_surface)
+  if (!self->display_server.wl_surface)
     return;
 
-  if (!impl->buffer_scale_dirty)
+  if (!self->buffer_scale_dirty)
     return;
 
-  /* Only set the buffer scale if supported by the compositor */
-  if (wl_surface_get_version (impl->display_server.wl_surface) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    wl_surface_set_buffer_scale (impl->display_server.wl_surface,
-                                 gdk_fractional_scale_to_int (&impl->scale));
+  if (self->display_server.viewport)
+    {
+      /* The viewport takes care of buffer scale */
+    }
+  else if (wl_surface_get_version (self->display_server.wl_surface) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+    {
+      wl_surface_set_buffer_scale (self->display_server.wl_surface,
+                                   gdk_fractional_scale_to_int (&self->scale));
+    }
 
-  impl->buffer_scale_dirty = FALSE;
+  self->buffer_scale_dirty = FALSE;
+}
+
+static void
+gdk_wayland_surface_sync_viewport (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+
+  if (!self->display_server.viewport)
+    return;
+
+  if (!self->viewport_dirty)
+    return;
+
+  wp_viewport_set_destination (self->display_server.viewport,
+                               surface->width,
+                               surface->height);
+
+  self->viewport_dirty = FALSE;
+}
+
+void
+gdk_wayland_surface_sync (GdkSurface *surface)
+{
+  gdk_wayland_surface_sync_shadow (surface);
+  gdk_wayland_surface_sync_opaque_region (surface);
+  gdk_wayland_surface_sync_input_region (surface);
+  gdk_wayland_surface_sync_buffer_scale (surface);
+  gdk_wayland_surface_sync_viewport (surface);
 }
 
 static void
@@ -880,6 +903,11 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
                                                                wl_surface);
       wp_fractional_scale_v1_add_listener (self->display_server.fractional_scale,
                                            &fractional_scale_listener, self);
+    }
+  if (display_wayland->viewporter)
+    {
+      self->display_server.viewport =
+          wp_viewporter_get_viewport (display_wayland->viewporter, wl_surface);
     }
 
   self->display_server.wl_surface = wl_surface;
@@ -1051,6 +1079,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
         }
 
       g_clear_pointer (&impl->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
+      g_clear_pointer (&impl->display_server.viewport, wp_viewport_destroy);
 
       g_clear_pointer (&impl->display_server.wl_surface, wl_surface_destroy);
 
@@ -1061,6 +1090,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   impl->has_uncommitted_ack_configure = FALSE;
   impl->input_region_dirty = TRUE;
   impl->opaque_region_dirty = TRUE;
+  impl->viewport_dirty = TRUE;
   if (!gdk_fractional_scale_equal (&impl->scale, &GDK_FRACTIONAL_SCALE_INIT_INT (1)))
     impl->buffer_scale_dirty = TRUE;
 

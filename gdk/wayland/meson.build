@@ -55,6 +55,7 @@ proto_sources = [
   ['gtk-shell', 'private', ],
   ['primary-selection', 'unstable', 'v1', ],
   ['pointer-gestures', 'unstable', 'v1', ],
+  ['viewporter', 'stable', ],
   ['xdg-shell', 'unstable', 'v6', ],
   ['xdg-shell', 'stable', ],
   ['xdg-foreign', 'unstable', 'v1', ],

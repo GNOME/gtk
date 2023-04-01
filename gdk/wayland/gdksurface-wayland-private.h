@@ -36,6 +36,7 @@ struct _GdkWaylandSurface
     struct zxdg_surface_v6 *zxdg_surface_v6;
     struct wl_egl_window *egl_window;
     struct wp_fractional_scale_v1 *fractional_scale;
+    struct wp_viewport *viewport;
   } display_server;
 
   struct wl_event_queue *event_queue;
@@ -52,6 +53,7 @@ struct _GdkWaylandSurface
   gint64 pending_frame_counter;
   GdkFractionalScale scale;
   gboolean buffer_scale_dirty;
+  gboolean viewport_dirty;
 
   int shadow_left;
   int shadow_right;

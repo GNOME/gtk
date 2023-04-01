@@ -516,6 +516,13 @@ gdk_registry_handle_global (void               *data,
                           &wp_fractional_scale_manager_v1_interface,
                           MIN (version, 1));
     }
+  else if (strcmp (interface, "wp_viewporter") == 0)
+    {
+      display_wayland->viewporter =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_viewporter_interface,
+                          MIN (version, 1));
+    }
 
 
   g_hash_table_insert (display_wayland->known_globals,
