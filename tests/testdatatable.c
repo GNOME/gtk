@@ -5,6 +5,11 @@
 #include "frame-stats.h"
 
 
+static gboolean no_auto_scroll = FALSE;
+static gint n_columns = 20;
+static double scroll_pages = 0;
+
+
 /* This is our dummy item for the model. */
 #define DATA_TABLE_TYPE_ITEM (data_table_item_get_type ())
 G_DECLARE_FINAL_TYPE (DataTableItem, data_table_item, DATA_TABLE, ITEM, GObject)
@@ -48,6 +53,18 @@ set_adjustment_to_fraction (GtkAdjustment *adjustment,
                             fraction * (upper - page_size));
 }
 
+static void
+move_adjustment_by_pages (GtkAdjustment *adjustment,
+                          double         n_pages)
+{
+  double page_size = gtk_adjustment_get_page_size (adjustment);
+  double value = gtk_adjustment_get_value (adjustment);
+
+  value += page_size * n_pages;
+  /* the adjustment will clamp properly */
+  gtk_adjustment_set_value (adjustment, value);
+}
+
 static gboolean
 scroll_column_view (GtkWidget     *column_view,
                     GdkFrameClock *frame_clock,
@@ -57,7 +74,10 @@ scroll_column_view (GtkWidget     *column_view,
 
   vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (column_view));
 
-  set_adjustment_to_fraction (vadjustment, g_random_double ());
+  if (scroll_pages == 0.0)
+    set_adjustment_to_fraction (vadjustment, g_random_double ());
+  else
+    move_adjustment_by_pages (vadjustment, (g_random_double () * 2 - 1) * scroll_pages);
 
   return TRUE;
 }
@@ -172,9 +192,6 @@ parse_widget_arg (const gchar* option_name,
     }
 }
 
-static gboolean no_auto_scroll = FALSE;
-static gint n_columns = 20;
-
 static GOptionEntry options[] = {
   {
     "widget",
@@ -201,6 +218,15 @@ static GOptionEntry options[] = {
     G_OPTION_ARG_INT,
     &n_columns,
     "Column count",
+    "COUNT"
+  },
+  {
+    "pages",
+    'p',
+    G_OPTION_FLAG_NONE,
+    G_OPTION_ARG_DOUBLE,
+    &scroll_pages,
+    "Maximum number of pages to scroll (or 0 for random)",
     "COUNT"
   },
   { NULL }

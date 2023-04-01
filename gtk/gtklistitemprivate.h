@@ -22,6 +22,8 @@
 #include "gtklistitem.h"
 
 #include "gtklistitemwidgetprivate.h"
+#include "gtkcolumnviewcellwidgetprivate.h"
+#include "gtkversion.h"
 
 G_BEGIN_DECLS
 
@@ -35,6 +37,15 @@ struct _GtkListItem
 
   guint activatable : 1;
   guint selectable : 1;
+  guint focusable : 1;
+#if !GTK_CHECK_VERSION (5, 0, 0)
+  guint focusable_set : 1;
+#endif
+};
+
+struct _GtkListItemClass
+{
+  GObjectClass parent_class;
 };
 
 GtkListItem *   gtk_list_item_new                               (void);

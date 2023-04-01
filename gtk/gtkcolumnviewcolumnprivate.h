@@ -21,7 +21,7 @@
 
 #include "gtk/gtkcolumnviewcolumn.h"
 
-#include "gtk/gtkcolumnviewcellprivate.h"
+#include "gtk/gtkcolumnviewcellwidgetprivate.h"
 
 
 void                    gtk_column_view_column_set_column_view          (GtkColumnViewColumn    *self,
@@ -31,12 +31,14 @@ void                    gtk_column_view_column_set_position             (GtkColu
                                                                          guint                   position);
 
 void                    gtk_column_view_column_add_cell                 (GtkColumnViewColumn    *self,
-                                                                         GtkColumnViewCell      *cell);
+                                                                         GtkColumnViewCellWidget      *cell);
 void                    gtk_column_view_column_remove_cell              (GtkColumnViewColumn    *self,
-                                                                         GtkColumnViewCell      *cell);
-GtkColumnViewCell *     gtk_column_view_column_get_first_cell           (GtkColumnViewColumn    *self);
+                                                                         GtkColumnViewCellWidget      *cell);
+GtkColumnViewCellWidget *     gtk_column_view_column_get_first_cell           (GtkColumnViewColumn    *self);
 GtkWidget *             gtk_column_view_column_get_header               (GtkColumnViewColumn    *self);
 
+void                    gtk_column_view_column_update_factory           (GtkColumnViewColumn    *self,
+                                                                         gboolean                inert);
 void                    gtk_column_view_column_queue_resize             (GtkColumnViewColumn    *self);
 void                    gtk_column_view_column_measure                  (GtkColumnViewColumn    *self,
                                                                          int                    *minimum,

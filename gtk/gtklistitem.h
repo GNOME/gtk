@@ -27,18 +27,9 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_LIST_ITEM         (gtk_list_item_get_type ())
-#define GTK_LIST_ITEM(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_LIST_ITEM, GtkListItem))
-#define GTK_LIST_ITEM_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_LIST_ITEM, GtkListItemClass))
-#define GTK_IS_LIST_ITEM(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_LIST_ITEM))
-#define GTK_IS_LIST_ITEM_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_LIST_ITEM))
-#define GTK_LIST_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_LIST_ITEM, GtkListItemClass))
-
-typedef struct _GtkListItem GtkListItem;
-typedef struct _GtkListItemClass GtkListItemClass;
-
+#define GTK_TYPE_LIST_ITEM (gtk_list_item_get_type ())
 GDK_AVAILABLE_IN_ALL
-GType           gtk_list_item_get_type                          (void) G_GNUC_CONST;
+GDK_DECLARE_INTERNAL_TYPE (GtkListItem, gtk_list_item, GTK, LIST_ITEM, GObject)
 
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
@@ -56,14 +47,17 @@ gboolean        gtk_list_item_get_activatable                   (GtkListItem    
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_activatable                   (GtkListItem            *self,
                                                                  gboolean                activatable);
+GDK_AVAILABLE_IN_4_12
+gboolean        gtk_list_item_get_focusable                     (GtkListItem            *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_item_set_focusable                     (GtkListItem            *self,
+                                                                 gboolean                focusable);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_child                         (GtkListItem            *self,
                                                                  GtkWidget              *child);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_list_item_get_child                         (GtkListItem            *self);
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListItem, g_object_unref)
 
 G_END_DECLS
 

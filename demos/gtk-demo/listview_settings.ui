@@ -90,13 +90,13 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkLabel">
         <property name="xalign">0</property>
         <binding name="label">
           <lookup name="name" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
       </object>
@@ -118,12 +118,12 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkEditableLabel">
         <binding name="text">
           <lookup name="value" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
         <signal name="notify::label" handler="item_value_changed"/>
@@ -146,13 +146,13 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkLabel">
         <property name="xalign">0</property>
         <binding name="label">
           <lookup name="type" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
       </object>
@@ -175,13 +175,13 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkLabel">
         <property name="xalign">0</property>
         <binding name="label">
           <lookup name="default-value" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
       </object>
@@ -205,14 +205,14 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkLabel">
         <property name="xalign">0</property>
         <property name="wrap">1</property>
         <binding name="label">
           <lookup name="summary" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
       </object>
@@ -236,14 +236,14 @@
                             <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkLabel">
         <property name="xalign">0</property>
         <property name="wrap">1</property>
         <binding name="label">
           <lookup name="description" type="SettingsKey">
-            <lookup name="item">GtkListItem</lookup>
+            <lookup name="item">GtkColumnViewCell</lookup>
           </lookup>
         </binding>
       </object>

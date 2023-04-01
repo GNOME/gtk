@@ -264,7 +264,10 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
-GType     _gtk_builder_get_template_type (GtkBuilder *builder);
+GType     gtk_builder_get_template_type (GtkBuilder *builder,
+                                         gboolean *out_allow_parents);
+void      gtk_builder_set_allow_template_parents (GtkBuilder *builder,
+                                                  gboolean    allow_parents);
 
 void     _gtk_builder_prefix_error        (GtkBuilder                *builder,
                                            GtkBuildableParseContext  *context,

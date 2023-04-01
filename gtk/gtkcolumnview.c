@@ -113,52 +113,6 @@
  * some parameters for item creation.
  */
 
-#define GTK_TYPE_COLUMN_LIST_VIEW (gtk_column_list_view_get_type ())
-G_DECLARE_FINAL_TYPE (GtkColumnListView, gtk_column_list_view, GTK, COLUMN_LIST_VIEW, GtkListView)
-
-struct _GtkColumnListView
-{
-  GtkListView parent_instance;
-};
-
-struct _GtkColumnListViewClass
-{
-  GtkListViewClass parent_class;
-};
-
-G_DEFINE_TYPE (GtkColumnListView, gtk_column_list_view, GTK_TYPE_LIST_VIEW)
-
-static void
-gtk_column_list_view_init (GtkColumnListView *view)
-{
-}
-
-static GtkListItemBase *
-gtk_column_list_view_create_list_widget (GtkListBase *base)
-{
-  GtkListView *self = GTK_LIST_VIEW (base);
-  GtkWidget *result;
-
-  result = gtk_column_view_row_widget_new (FALSE);
-
-  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
-
-  return GTK_LIST_ITEM_BASE (result);
-}
-
-static void
-gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
-{
-  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
-
-  gtk_widget_class_set_css_name (widget_class, I_("listview"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
-}
-
-
 struct _GtkColumnView
 {
   GtkWidget parent_instance;
@@ -197,6 +151,69 @@ struct _GtkColumnViewClass
   GtkWidgetClass parent_class;
 };
 
+
+#define GTK_TYPE_COLUMN_LIST_VIEW (gtk_column_list_view_get_type ())
+G_DECLARE_FINAL_TYPE (GtkColumnListView, gtk_column_list_view, GTK, COLUMN_LIST_VIEW, GtkListView)
+
+struct _GtkColumnListView
+{
+  GtkListView parent_instance;
+};
+
+struct _GtkColumnListViewClass
+{
+  GtkListViewClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkColumnListView, gtk_column_list_view, GTK_TYPE_LIST_VIEW)
+
+static void
+gtk_column_list_view_init (GtkColumnListView *view)
+{
+}
+
+static GtkListItemBase *
+gtk_column_list_view_create_list_widget (GtkListBase *base)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (gtk_widget_get_parent (GTK_WIDGET (base)));
+  GtkWidget *result;
+  guint i;
+
+  result = gtk_column_view_row_widget_new (gtk_list_view_get_factory (self->listview), FALSE);
+
+  gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), GTK_LIST_VIEW (base)->single_click_activate);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (gtk_column_view_column_get_visible (column))
+        {
+          GtkWidget *cell;
+
+          cell = gtk_column_view_cell_widget_new (column, gtk_column_view_is_inert (self));
+          gtk_column_view_row_widget_add_child (GTK_COLUMN_VIEW_ROW_WIDGET (result), cell);
+        }
+
+      g_object_unref (column);
+    }
+
+  return GTK_LIST_ITEM_BASE (result);
+}
+
+static void
+gtk_column_list_view_class_init (GtkColumnListViewClass *klass)
+{
+  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  list_base_class->create_list_widget = gtk_column_list_view_create_list_widget;
+
+  gtk_widget_class_set_css_name (widget_class, I_("listview"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
+}
+
+
 enum
 {
   PROP_0,
@@ -206,6 +223,7 @@ enum
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
   PROP_REORDERABLE,
+  PROP_ROW_FACTORY,
   PROP_SHOW_ROW_SEPARATORS,
   PROP_SHOW_COLUMN_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
@@ -279,6 +297,31 @@ G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
+
+gboolean
+gtk_column_view_is_inert (GtkColumnView *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  return !gtk_widget_get_visible (widget) ||
+         gtk_widget_get_root (widget) == NULL;
+}
+
+static void
+gtk_column_view_update_cell_factories (GtkColumnView *self,
+                                       gboolean       inert)
+{
+  guint i, n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      gtk_column_view_column_update_factory (column, inert);
+    }
+}
 
 static void
 gtk_column_view_measure (GtkWidget      *widget,
@@ -459,6 +502,50 @@ gtk_column_view_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_column_view_root (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->root (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, FALSE);
+}
+
+static void
+gtk_column_view_unroot (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->unroot (widget);
+}
+
+static void
+gtk_column_view_show (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->show (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, FALSE);
+}
+
+static void
+gtk_column_view_hide (GtkWidget *widget)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  if (!gtk_column_view_is_inert (self))
+    gtk_column_view_update_cell_factories (self, TRUE);
+
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->hide (widget);
+}
+
+static void
 gtk_column_view_activate_cb (GtkListView   *listview,
                              guint          pos,
                              GtkColumnView *self)
@@ -549,6 +636,14 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_view_get_model (self->listview));
       break;
 
+    case PROP_REORDERABLE:
+      g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
+      break;
+
+    case PROP_ROW_FACTORY:
+      g_value_set_object (value, gtk_column_view_get_row_factory (self));
+      break;
+
     case PROP_SHOW_ROW_SEPARATORS:
       g_value_set_boolean (value, gtk_list_view_get_show_separators (self->listview));
       break;
@@ -571,10 +666,6 @@ gtk_column_view_get_property (GObject    *object,
 
     case PROP_SINGLE_CLICK_ACTIVATE:
       g_value_set_boolean (value, gtk_column_view_get_single_click_activate (self));
-      break;
-
-    case PROP_REORDERABLE:
-      g_value_set_boolean (value, gtk_column_view_get_reorderable (self));
       break;
 
     case PROP_TAB_BEHAVIOR:
@@ -632,6 +723,14 @@ gtk_column_view_set_property (GObject      *object,
       gtk_column_view_set_model (self, g_value_get_object (value));
       break;
 
+    case PROP_REORDERABLE:
+      gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_ROW_FACTORY:
+      gtk_column_view_set_row_factory (self, g_value_get_object (value));
+      break;
+
     case PROP_SHOW_ROW_SEPARATORS:
       gtk_column_view_set_show_row_separators (self, g_value_get_boolean (value));
       break;
@@ -660,10 +759,6 @@ gtk_column_view_set_property (GObject      *object,
       gtk_column_view_set_single_click_activate (self, g_value_get_boolean (value));
       break;
 
-    case PROP_REORDERABLE:
-      gtk_column_view_set_reorderable (self, g_value_get_boolean (value));
-      break;
-
     case PROP_TAB_BEHAVIOR:
       gtk_column_view_set_tab_behavior (self, g_value_get_enum (value));
       break;
@@ -685,6 +780,10 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->measure = gtk_column_view_measure;
   widget_class->size_allocate = gtk_column_view_allocate;
+  widget_class->root = gtk_column_view_root;
+  widget_class->unroot = gtk_column_view_unroot;
+  widget_class->show = gtk_column_view_show;
+  widget_class->hide = gtk_column_view_hide;
 
   gobject_class->dispose = gtk_column_view_dispose;
   gobject_class->finalize = gtk_column_view_finalize;
@@ -737,6 +836,28 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkColumnView:reorderable: (attributes org.gtk.Property.get=gtk_column_view_get_reorderable org.gtk.Property.set=gtk_column_view_set_reorderable)
+   *
+   * Whether columns are reorderable.
+   */
+  properties[PROP_REORDERABLE] =
+    g_param_spec_boolean ("reorderable", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnView:row-factory: (attributes org.gtk.Property.get=gtk_column_view_get_row_factory org.gtk.Property.set=gtk_column_view_set_row_factory)
+   *
+   * The factory used for configuring rows.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_ROW_FACTORY] =
+    g_param_spec_object ("row-factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkColumnView:show-row-separators: (attributes org.gtk.Property.get=gtk_column_view_get_show_row_separators org.gtk.Property.set=gtk_column_view_set_show_row_separators)
    *
    * Show separators between rows.
@@ -775,16 +896,6 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkColumnView:reorderable: (attributes org.gtk.Property.get=gtk_column_view_get_reorderable org.gtk.Property.set=gtk_column_view_set_reorderable)
-   *
-   * Whether columns are reorderable.
-   */
-  properties[PROP_REORDERABLE] =
-    g_param_spec_boolean ("reorderable", NULL, NULL,
-                          TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkColumnView:tab-behavior: (attributes org.gtk.Property.get=gtk_column_view_get_tab_behavior org.gtk.Property.set=gtk_column_view_set_tab_behavior)
@@ -1312,7 +1423,7 @@ gtk_column_view_init (GtkColumnView *self)
 
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
-  self->header = gtk_column_view_row_widget_new (TRUE);
+  self->header = gtk_column_view_row_widget_new (NULL, TRUE);
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
 
@@ -1905,6 +2016,53 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_enable_rubberband (self->listview);
+}
+
+/**
+ * gtk_column_view_set_row_factory: (attributes org.gtk.Method.set_property=row-factory)
+ * @self: a `GtkColumnView`
+ * @factory: (nullable): The row factory
+ *
+ * Sets the factory used for configuring rows. The factory must be for configuring
+ * [class@Gtk.ColumnViewRow] objects.
+ *
+ * If this factory is not set - which is the default - then the defaults will be used.
+ *
+ * This factory is not used to set the widgets displayed in the individual cells. For
+ * that see [method@GtkColumnViewColumn.set_factory] and [class@GtkColumnViewCell].
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_set_row_factory (GtkColumnView      *self,
+                                 GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (factory == gtk_list_view_get_factory (self->listview))
+    return;
+
+  gtk_list_view_set_factory (self->listview, factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ROW_FACTORY]);
+}
+
+/**
+ * gtk_column_view_get_row_factory: (attributes org.gtk.Method.get_property=row-factory)
+ * @self: a `GtkColumnView`
+ *
+ * Gets the factory set via [method@Gtk.ColumnView.set_row_factory].
+ *
+ * Returns: (nullable) (transfer none): The factory
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_column_view_get_row_factory (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return gtk_list_view_get_factory (self->listview);
 }
 
 /**

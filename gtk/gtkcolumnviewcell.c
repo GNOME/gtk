@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 Benjamin Otte
+ * Copyright © 2023 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,235 +21,404 @@
 
 #include "gtkcolumnviewcellprivate.h"
 
-#include "gtkcolumnviewcolumnprivate.h"
-#include "gtkcolumnviewrowwidgetprivate.h"
-#include "gtkcssnodeprivate.h"
-#include "gtkcssnumbervalueprivate.h"
-#include "gtklistitemwidgetprivate.h"
-#include "gtkprivate.h"
-#include "gtkwidgetprivate.h"
+#include "gtklistitembaseprivate.h"
 
-
-struct _GtkColumnViewCell
-{
-  GtkListItemWidget parent_instance;
-
-  GtkColumnViewColumn *column;
-
-  /* This list isn't sorted - next/prev refer to list elements, not rows in the list */
-  GtkColumnViewCell *next_cell;
-  GtkColumnViewCell *prev_cell;
-};
+/**
+ * GtkColumnViewCell:
+ *
+ * `GtkColumnViewCell` is used by [class@Gtk.ColumnViewColumn] to represent items
+ * in a cell in [class@Gtk.ColumnView].
+ *
+ * The `GtkColumnViewCell`s are managed by the columnview widget (with its factory)
+ * and cannot be created by applications, but they need to be populated
+ * by application code. This is done by calling [method@Gtk.ColumnViewCell.set_child].
+ *
+ * `GtkColumnViewCell`s exist in 2 stages:
+ *
+ * 1. The unbound stage where the listitem is not currently connected to
+ *    an item in the list. In that case, the [property@Gtk.ColumnViewCell:item]
+ *    property is set to %NULL.
+ *
+ * 2. The bound stage where the listitem references an item from the list.
+ *    The [property@Gtk.ColumnViewCell:item] property is not %NULL.
+ *
+ * Since: 4.12
+ */
 
 struct _GtkColumnViewCellClass
 {
-  GtkListItemWidgetClass parent_class;
+  GtkListItemClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM_WIDGET)
-
-static int
-get_number (GtkCssValue *value)
+enum
 {
-  double d = _gtk_css_number_value_get (value, 100);
+  PROP_0,
+  PROP_CHILD,
+  PROP_FOCUSABLE,
+  PROP_ITEM,
+  PROP_POSITION,
+  PROP_SELECTED,
 
-  if (d < 1)
-    return ceil (d);
-  else
-    return floor (d);
-}
+  N_PROPS
+};
 
-static int
-unadjust_width (GtkWidget *widget,
-                int        width)
-{
-  GtkCssStyle *style;
-  int widget_margins;
-  int css_extra;
+G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM)
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  css_extra = get_number (style->size->margin_left) +
-              get_number (style->size->margin_right) +
-              get_number (style->border->border_left_width) +
-              get_number (style->border->border_right_width) +
-              get_number (style->size->padding_left) +
-              get_number (style->size->padding_right);
-  widget_margins = widget->priv->margin.left + widget->priv->margin.right;
-
-  return MAX (0, width - widget_margins - css_extra);
-}
-
-static void
-gtk_column_view_cell_measure (GtkWidget      *widget,
-                              GtkOrientation  orientation,
-                              int             for_size,
-                              int            *minimum,
-                              int            *natural,
-                              int            *minimum_baseline,
-                              int            *natural_baseline)
-{
-  GtkColumnViewCell *cell = GTK_COLUMN_VIEW_CELL (widget);
-  GtkWidget *child = gtk_widget_get_first_child (widget);
-  int fixed_width = gtk_column_view_column_get_fixed_width (cell->column);
-  int unadj_width;
-
-  unadj_width = unadjust_width (widget, fixed_width);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      if (fixed_width > -1)
-        {
-          if (for_size == -1)
-            for_size = unadj_width;
-          else
-            for_size = MIN (for_size, unadj_width);
-        }
-    }
-
-  if (child)
-    gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (fixed_width > -1)
-        {
-          *minimum = 0;
-          *natural = unadj_width;
-        }
-    }
-}
-
-static void
-gtk_column_view_cell_size_allocate (GtkWidget *widget,
-                                    int        width,
-                                    int        height,
-                                    int        baseline)
-{
-  GtkWidget *child = gtk_widget_get_first_child (widget);
-
-  if (child)
-    {
-      int min;
-
-      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, height, &min, NULL, NULL, NULL);
-
-      gtk_widget_allocate (child, MAX (min, width), height, baseline, NULL);
-    }
-}
+static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
 gtk_column_view_cell_dispose (GObject *object)
 {
   GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (object);
 
-  if (self->column)
-    {
-      gtk_column_view_column_remove_cell (self->column, self);
-
-      if (self->prev_cell)
-        self->prev_cell->next_cell = self->next_cell;
-      if (self->next_cell)
-        self->next_cell->prev_cell = self->prev_cell;
-
-      self->prev_cell = NULL;
-      self->next_cell = NULL;
-
-      g_clear_object (&self->column);
-    }
+  g_assert (self->cell == NULL); /* would hold a reference */
+  g_clear_object (&self->child);
 
   G_OBJECT_CLASS (gtk_column_view_cell_parent_class)->dispose (object);
 }
 
-static GtkSizeRequestMode
-gtk_column_view_cell_get_request_mode (GtkWidget *widget)
+static void
+gtk_column_view_cell_get_property (GObject    *object,
+                                   guint       property_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
 {
-  GtkWidget *child = gtk_widget_get_first_child (widget);
+  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (object);
 
-  if (child)
-    return gtk_widget_get_request_mode (child);
-  else
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  switch (property_id)
+    {
+    case PROP_CHILD:
+      g_value_set_object (value, self->child);
+      break;
+
+    case PROP_FOCUSABLE:
+      g_value_set_boolean (value, self->focusable);
+      break;
+
+    case PROP_ITEM:
+      if (self->cell)
+        g_value_set_object (value, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->cell)));
+      break;
+
+    case PROP_POSITION:
+      if (self->cell)
+        g_value_set_uint (value, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->cell)));
+      else
+        g_value_set_uint (value, GTK_INVALID_LIST_POSITION);
+      break;
+
+    case PROP_SELECTED:
+      if (self->cell)
+        g_value_set_boolean (value, gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->cell)));
+      else
+        g_value_set_boolean (value, FALSE);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_column_view_cell_set_property (GObject      *object,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (object);
+
+  switch (property_id)
+    {
+    case PROP_CHILD:
+      gtk_column_view_cell_set_child (self, g_value_get_object (value));
+      break;
+
+    case PROP_FOCUSABLE:
+      gtk_column_view_cell_set_focusable (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
 }
 
 static void
 gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  widget_class->measure = gtk_column_view_cell_measure;
-  widget_class->size_allocate = gtk_column_view_cell_size_allocate;
-  widget_class->get_request_mode = gtk_column_view_cell_get_request_mode;
-
   gobject_class->dispose = gtk_column_view_cell_dispose;
+  gobject_class->get_property = gtk_column_view_cell_get_property;
+  gobject_class->set_property = gtk_column_view_cell_set_property;
 
-  gtk_widget_class_set_css_name (widget_class, I_("cell"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
-}
+  /**
+   * GtkColumnViewCell:child: (attributes org.gtk.Property.get=gtk_column_view_cell_get_child org.gtk.Property.set=gtk_column_view_cell_set_child)
+   *
+   * Widget used for display.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_CHILD] =
+    g_param_spec_object ("child", NULL, NULL,
+                         GTK_TYPE_WIDGET,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-static void
-gtk_column_view_cell_resize_func (GtkWidget *widget)
-{
-  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (widget);
+  /**
+   * GtkColumnViewCell:focusable: (attributes org.gtk.Property.get=gtk_column_view_cell_get_focusable org.gtk.Property.set=gtk_column_view_cell_set_focusable)
+   *
+   * If the item can be focused with the keyboard.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_FOCUSABLE] =
+    g_param_spec_boolean ("focusable", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  if (self->column)
-    gtk_column_view_column_queue_resize (self->column);
+  /**
+   * GtkColumnViewCell:item: (attributes org.gtk.Property.get=gtk_column_view_cell_get_item)
+   *
+   * Displayed item.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_ITEM] =
+    g_param_spec_object ("item", NULL, NULL,
+                         G_TYPE_OBJECT,
+                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewCell:position: (attributes org.gtk.Property.get=gtk_column_view_cell_get_position)
+   *
+   * Position of the item.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_POSITION] =
+    g_param_spec_uint ("position", NULL, NULL,
+                       0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
+                       G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewCell:selected: (attributes org.gtk.Property.get=gtk_column_view_cell_get_selected)
+   *
+   * If the item is currently selected.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_SELECTED] =
+    g_param_spec_boolean ("selected", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
 static void
 gtk_column_view_cell_init (GtkColumnViewCell *self)
 {
-  GtkWidget *widget = GTK_WIDGET (self);
-
-  gtk_widget_set_focusable (widget, FALSE);
-  gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
-  /* FIXME: Figure out if setting the manager class to INVALID should work */
-  gtk_widget_set_layout_manager (widget, NULL);
-  widget->priv->resize_func = gtk_column_view_cell_resize_func;
+  self->focusable = FALSE;
 }
 
-GtkWidget *
-gtk_column_view_cell_new (GtkColumnViewColumn *column)
+GtkColumnViewCell *
+gtk_column_view_cell_new (void)
 {
-  GtkColumnViewCell *self;
-
-  self = g_object_new (GTK_TYPE_COLUMN_VIEW_CELL,
-                       "factory", gtk_column_view_column_get_factory (column),
-                       NULL);
-
-  self->column = g_object_ref (column);
-
-  self->next_cell = gtk_column_view_column_get_first_cell (self->column);
-  if (self->next_cell)
-    self->next_cell->prev_cell = self;
-
-  gtk_column_view_column_add_cell (self->column, self);
-
-  return GTK_WIDGET (self);
+  return g_object_new (GTK_TYPE_COLUMN_VIEW_CELL, NULL);
 }
 
 void
-gtk_column_view_cell_remove (GtkColumnViewCell *self)
+gtk_column_view_cell_do_notify (GtkColumnViewCell *column_view_cell,
+                                gboolean notify_item,
+                                gboolean notify_position,
+                                gboolean notify_selected)
 {
-  GtkWidget *widget = GTK_WIDGET (self);
+  GObject *object = G_OBJECT (column_view_cell);
 
-  gtk_column_view_row_widget_remove_child (GTK_COLUMN_VIEW_ROW_WIDGET (gtk_widget_get_parent (widget)), widget);
+  if (notify_item)
+    g_object_notify_by_pspec (object, properties[PROP_ITEM]);
+  if (notify_position)
+    g_object_notify_by_pspec (object, properties[PROP_POSITION]);
+  if (notify_selected)
+    g_object_notify_by_pspec (object, properties[PROP_SELECTED]);
 }
 
-GtkColumnViewCell *
-gtk_column_view_cell_get_next (GtkColumnViewCell *self)
+/**
+ * gtk_column_view_cell_get_item: (attributes org.gtk.Method.get_property=item)
+ * @self: a `GtkColumnViewCell`
+ *
+ * Gets the model item that associated with @self.
+ *
+ * If @self is unbound, this function returns %NULL.
+ *
+ * Returns: (nullable) (transfer none) (type GObject): The item displayed
+ *
+ * Since: 4.12
+ **/
+gpointer
+gtk_column_view_cell_get_item (GtkColumnViewCell *self)
 {
-  return self->next_cell;
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_CELL (self), NULL);
+
+  if (self->cell == NULL)
+    return NULL;
+
+  return gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self->cell));
 }
 
-GtkColumnViewCell *
-gtk_column_view_cell_get_prev (GtkColumnViewCell *self)
+/**
+ * gtk_column_view_cell_get_child: (attributes org.gtk.Method.get_property=child)
+ * @self: a `GtkColumnViewCell`
+ *
+ * Gets the child previously set via gtk_column_view_cell_set_child() or
+ * %NULL if none was set.
+ *
+ * Returns: (transfer none) (nullable): The child
+ *
+ * Since: 4.12
+ */
+GtkWidget *
+gtk_column_view_cell_get_child (GtkColumnViewCell *self)
 {
-  return self->prev_cell;
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_CELL (self), NULL);
+
+  return self->child;
 }
 
-GtkColumnViewColumn *
-gtk_column_view_cell_get_column (GtkColumnViewCell *self)
+/**
+ * gtk_column_view_cell_set_child: (attributes org.gtk.Method.set_property=child)
+ * @self: a `GtkColumnViewCell`
+ * @child: (nullable): The list item's child or %NULL to unset
+ *
+ * Sets the child to be used for this listitem.
+ *
+ * This function is typically called by applications when
+ * setting up a listitem so that the widget can be reused when
+ * binding it multiple times.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_cell_set_child (GtkColumnViewCell *self,
+                                GtkWidget   *child)
 {
-  return self->column;
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_CELL (self));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  if (self->child == child)
+    return;
+
+  g_clear_object (&self->child);
+
+  if (child)
+    {
+      g_object_ref_sink (child);
+      self->child = child;
+    }
+
+  if (self->cell)
+    gtk_column_view_cell_widget_set_child (self->cell, child);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
+}
+
+/**
+ * gtk_column_view_cell_get_position: (attributes org.gtk.Method.get_property=position)
+ * @self: a `GtkColumnViewCell`
+ *
+ * Gets the position in the model that @self currently displays.
+ *
+ * If @self is unbound, %GTK_INVALID_LIST_POSITION is returned.
+ *
+ * Returns: The position of this item
+ *
+ * Since: 4.12
+ */
+guint
+gtk_column_view_cell_get_position (GtkColumnViewCell *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_CELL (self), GTK_INVALID_LIST_POSITION);
+
+  if (self->cell == NULL)
+    return GTK_INVALID_LIST_POSITION;
+
+  return gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self->cell));
+}
+
+/**
+ * gtk_column_view_cell_get_selected: (attributes org.gtk.Method.get_property=selected)
+ * @self: a `GtkColumnViewCell`
+ *
+ * Checks if the item is displayed as selected.
+ *
+ * The selected state is maintained by the liste widget and its model
+ * and cannot be set otherwise.
+ *
+ * Returns: %TRUE if the item is selected.
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_column_view_cell_get_selected (GtkColumnViewCell *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_CELL (self), FALSE);
+
+  if (self->cell == NULL)
+    return FALSE;
+
+  return gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (self->cell));
+}
+
+/**
+ * gtk_column_view_cell_get_focusable: (attributes org.gtk.Method.get_property=focusable)
+ * @self: a `GtkColumnViewCell`
+ *
+ * Checks if a list item has been set to be focusable via
+ * gtk_column_view_cell_set_focusable().
+ *
+ * Returns: %TRUE if the item is focusable
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_column_view_cell_get_focusable (GtkColumnViewCell *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_CELL (self), FALSE);
+
+  return self->focusable;
+}
+
+/**
+ * gtk_column_view_cell_set_focusable: (attributes org.gtk.Method.set_property=focusable)
+ * @self: a `GtkColumnViewCell`
+ * @focusable: if the item should be focusable
+ *
+ * Sets @self to be focusable.
+ *
+ * If an item is focusable, it can be focused using the keyboard.
+ * This works similar to [method@Gtk.Widget.set_focusable].
+ *
+ * Note that if items are not focusable, the keyboard cannot be used to activate
+ * them and selecting only works if one of the listitem's children is focusable.
+ *
+ * By default, list items are focusable.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_cell_set_focusable (GtkColumnViewCell *self,
+                                    gboolean     focusable)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_CELL (self));
+
+  if (self->focusable == focusable)
+    return;
+
+  self->focusable = focusable;
+
+  if (self->cell)
+    gtk_widget_set_focusable (GTK_WIDGET (self->cell), focusable);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUSABLE]);
 }

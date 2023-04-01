@@ -24,6 +24,8 @@
 #include "gtkcolumnviewprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
+#include "gtkcssboxesprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkprivate.h"
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
@@ -32,8 +34,6 @@
 #include "gtkgestureclick.h"
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
-#include "gtkcssnodeprivate.h"
-#include "gtkcssnumbervalueprivate.h"
 
 struct _GtkColumnViewTitle
 {
@@ -55,34 +55,19 @@ struct _GtkColumnViewTitleClass
 G_DEFINE_TYPE (GtkColumnViewTitle, gtk_column_view_title, GTK_TYPE_WIDGET)
 
 static int
-get_number (GtkCssValue *value)
-{
-  double d = _gtk_css_number_value_get (value, 100);
-
-  if (d < 1)
-    return ceil (d);
-  else
-    return floor (d);
-}
-
-static int
 unadjust_width (GtkWidget *widget,
                 int        width)
 {
-  GtkCssStyle *style;
-  int widget_margins;
-  int css_extra;
+  GtkCssBoxes boxes;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  css_extra = get_number (style->size->margin_left) +
-              get_number (style->size->margin_right) +
-              get_number (style->border->border_left_width) +
-              get_number (style->border->border_right_width) +
-              get_number (style->size->padding_left) +
-              get_number (style->size->padding_right);
-  widget_margins = widget->priv->margin.left + widget->priv->margin.right;
+  if (width <= -1)
+    return -1;
 
-  return MAX (0, width - widget_margins - css_extra);
+  gtk_css_boxes_init_border_box (&boxes,
+                                 gtk_css_node_get_style (gtk_widget_get_css_node (widget)),
+                                 0, 0,
+                                 width, 100000);
+  return MAX (0, floor (gtk_css_boxes_get_content_rect (&boxes)->size.width));
 }
 
 static void
@@ -96,19 +81,24 @@ gtk_column_view_title_measure (GtkWidget      *widget,
 {
   GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
-  int fixed_width = gtk_column_view_column_get_fixed_width (self->column);
-  int unadj_width;
+  int fixed_width, unadj_width;
 
+  fixed_width = gtk_column_view_column_get_fixed_width (self->column);
   unadj_width = unadjust_width (widget, fixed_width);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       if (fixed_width > -1)
         {
+          int min;
+
           if (for_size == -1)
             for_size = unadj_width;
           else
             for_size = MIN (for_size, unadj_width);
+
+          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+          for_size = MAX (for_size, min);
         }
     }
 

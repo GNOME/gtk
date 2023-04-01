@@ -19,30 +19,29 @@
 
 #pragma once
 
-#include "gtkcolumnviewcell.h"
+#include "gtkcolumnviewrow.h"
 
-#include "gtkcolumnviewcellwidgetprivate.h"
-#include "gtklistitemprivate.h"
+#include "gtkcolumnviewrowwidgetprivate.h"
 
 G_BEGIN_DECLS
 
-struct _GtkColumnViewCell
+struct _GtkColumnViewRow
 {
-  GtkListItem parent_instance;
+  GObject parent_instance;
 
-  GtkColumnViewCellWidget *cell; /* has a reference */
+  GtkColumnViewRowWidget *owner; /* has a reference */
 
-  GtkWidget *child;
-
+  guint activatable : 1;
+  guint selectable : 1;
   guint focusable : 1;
 };
 
-GtkColumnViewCell *     gtk_column_view_cell_new                        (void);
+GtkColumnViewRow *      gtk_column_view_row_new                         (void);
 
-void                    gtk_column_view_cell_do_notify                  (GtkColumnViewCell *column_view_cell,
-                                                                         gboolean notify_item,
-                                                                         gboolean notify_position,
-                                                                         gboolean notify_selected);
+void                    gtk_column_view_row_do_notify                   (GtkColumnViewRow       *self,
+                                                                         gboolean                notify_item,
+                                                                         gboolean                notify_position,
+                                                                         gboolean                notify_selected);
 
 
 G_END_DECLS

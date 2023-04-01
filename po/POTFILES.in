@@ -142,7 +142,7 @@ gtk/gtkcolorplane.c
 gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcolumnview.c
-gtk/gtkcolumnviewcell.c
+gtk/gtkcolumnviewcellwidget.c
 gtk/gtkcolumnviewcolumn.c
 gtk/gtkcolumnviewtitle.c
 gtk/gtkconstraint.c
