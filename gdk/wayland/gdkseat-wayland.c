@@ -2372,7 +2372,7 @@ seat_handle_capabilities (void                    *data,
           zwp_pointer_gesture_pinch_v1_add_listener (seat->wp_pointer_gesture_pinch,
                                                      &gesture_pinch_listener, seat);
 
-          if (display_wayland->pointer_gestures_version >= ZWP_POINTER_GESTURES_V1_GET_HOLD_GESTURE_SINCE_VERSION)
+          if (zwp_pointer_gestures_v1_get_version (display_wayland->pointer_gestures) >= ZWP_POINTER_GESTURES_V1_GET_HOLD_GESTURE_SINCE_VERSION)
             {
               seat->wp_pointer_gesture_hold =
                   zwp_pointer_gestures_v1_get_hold_gesture (display_wayland->pointer_gestures,
