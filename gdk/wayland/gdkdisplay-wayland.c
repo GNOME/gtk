@@ -2569,8 +2569,7 @@ gdk_wayland_display_add_output (GdkWaylandDisplay *display_wayland,
 
   wl_output_add_listener (output, &output_listener, monitor);
 
-  GDK_DEBUG (MISC, "xdg_output_manager %p",
-                   display_wayland->xdg_output_manager);
+  GDK_DEBUG (MISC, "add output %u, version %u", id, version);
 
   if (display_has_xdg_output_support (display_wayland))
     gdk_wayland_display_get_xdg_output (monitor);
@@ -2612,6 +2611,8 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *self,
                                    guint32            id)
 {
   guint i, n;
+
+  GDK_DEBUG (MISC, "remove output %u", id);
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->monitors));
   for (i = 0; i < n; i++)
@@ -2668,7 +2669,7 @@ gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
  * Returns: %TRUE if the global is offered by the compositor
  */
 gboolean
-gdk_wayland_display_query_registry (GdkDisplay  *display,
+gdk_wayland_display_query_registry (GdkDisplay *display,
 				    const char *global)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
