@@ -217,7 +217,7 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 
   if (toplevel->display_server.gtk_surface)
     {
-      if (display_wayland->gtk_shell_version >= GTK_SURFACE1_RELEASE_SINCE_VERSION)
+      if (gtk_shell1_get_version (display_wayland->gtk_shell) >= GTK_SURFACE1_RELEASE_SINCE_VERSION)
         gtk_surface1_release (toplevel->display_server.gtk_surface);
       else
         gtk_surface1_destroy (toplevel->display_server.gtk_surface);
@@ -2136,7 +2136,7 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
     {
       if (timestamp != GDK_CURRENT_TIME)
         gtk_surface1_present (wayland_toplevel->display_server.gtk_surface, timestamp);
-      else if (startup_id && display_wayland->gtk_shell_version >= 3)
+      else if (startup_id && gtk_surface1_get_version (wayland_toplevel->display_server.gtk_surface) >= GTK_SURFACE1_REQUEST_FOCUS_SINCE_VERSION)
         gtk_surface1_request_focus (wayland_toplevel->display_server.gtk_surface,
                                     startup_id);
     }

@@ -134,7 +134,6 @@ struct _GdkWaylandDisplay
   GSource *event_source;
 
   int seat_version;
-  int gtk_shell_version;
   int pointer_gestures_version;
 
   uint32_t server_decoration_mode;

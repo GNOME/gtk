@@ -393,7 +393,6 @@ gdk_registry_handle_global (void               *data,
                           &gtk_shell1_interface,
                           MIN (version, GTK_SHELL1_VERSION));
       gdk_wayland_display_set_has_gtk_shell (display_wayland);
-      display_wayland->gtk_shell_version = version;
     }
   else if (strcmp (interface, "wl_output") == 0)
     {
