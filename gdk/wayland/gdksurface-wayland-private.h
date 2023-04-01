@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "gdkprivate-wayland.h"
+
 typedef enum _PopupState
 {
   POPUP_STATE_IDLE,
@@ -52,6 +54,7 @@ struct _GdkWaylandSurface
 
   gint64 pending_frame_counter;
   GdkFractionalScale scale;
+  gboolean buffer_is_fractional;
   gboolean buffer_scale_dirty;
   gboolean viewport_dirty;
 
