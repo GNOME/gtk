@@ -154,7 +154,7 @@ struct _GdkSurfaceClass
                                          double              dx,
                                          double              dy);
 
-  int          (* get_scale_factor)       (GdkSurface      *surface);
+  double       (* get_scale)              (GdkSurface      *surface);
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);

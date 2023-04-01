@@ -95,6 +95,7 @@ enum {
   PROP_WIDTH,
   PROP_HEIGHT,
   PROP_SCALE_FACTOR,
+  PROP_SCALE,
   LAST_PROP
 };
 
@@ -489,6 +490,12 @@ gdk_surface_init (GdkSurface *surface)
                                                  NULL, g_object_unref);
 }
 
+static double
+gdk_surface_real_get_scale (GdkSurface *surface)
+{
+  return 1.0;
+}
+
 static void
 gdk_surface_class_init (GdkSurfaceClass *klass)
 {
@@ -499,6 +506,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+  klass->get_scale = gdk_surface_real_get_scale;
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -568,6 +576,18 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT, 1,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkSurface:scale: (attributes org.gtk.Property.get=gdk_surface_get_scale)
+   *
+   * The scale of the surface.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_SCALE] =
+      g_param_spec_double ("scale", NULL, NULL,
+                        1., G_MAXDOUBLE, 1.,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
@@ -798,6 +818,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_SCALE_FACTOR:
       g_value_set_int (value, gdk_surface_get_scale_factor (surface));
+      break;
+
+    case PROP_SCALE:
+      g_value_set_double (value, gdk_surface_get_scale (surface));
       break;
 
     default:
@@ -2360,10 +2384,10 @@ _gdk_windowing_got_event (GdkDisplay *display,
  *   with it.
  */
 cairo_surface_t *
-gdk_surface_create_similar_surface (GdkSurface *     surface,
-                                    cairo_content_t content,
-                                    int             width,
-                                    int             height)
+gdk_surface_create_similar_surface (GdkSurface      *surface,
+                                    cairo_content_t  content,
+                                    int              width,
+                                    int              height)
 {
   cairo_surface_t *similar_surface;
   int scale;
@@ -2596,25 +2620,40 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
  * pixel-based data the scale value can be used to determine whether to
  * use a pixel resource with higher resolution data.
  *
- * The scale of a surface may change during runtime.
+ * The scale may change during the lifetime of the surface.
  *
  * Returns: the scale factor
  */
 int
 gdk_surface_get_scale_factor (GdkSurface *surface)
 {
-  GdkSurfaceClass *class;
-
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 1);
 
+  return (int) ceil (gdk_surface_get_scale (surface));
+}
+
+/**
+ * gdk_surface_get_scale: (attributes org.gtk.Method.get_property=scale)
+ * @surface: surface to get scale for
+ *
+ * Returns the internal scale that maps from surface coordinates
+ * to the actual device pixels.
+ *
+ * The scale may change during the lifetime of the surface.
+ *
+ * Returns: the scale
+ *
+ * Since: 4.12
+ */
+double
+gdk_surface_get_scale (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), 1.);
+
   if (GDK_SURFACE_DESTROYED (surface))
-    return 1;
+    return 1.;
 
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->get_scale_factor)
-    return class->get_scale_factor (surface);
-
-  return 1;
+  return GDK_SURFACE_GET_CLASS (surface)->get_scale (surface);
 }
 
 /**

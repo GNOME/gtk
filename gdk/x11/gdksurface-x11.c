@@ -2092,6 +2092,7 @@ _gdk_x11_surface_set_surface_scale (GdkSurface *surface,
   gdk_surface_invalidate_rect (surface, NULL);
 
   g_object_notify (G_OBJECT (surface), "scale-factor");
+  g_object_notify (G_OBJECT (surface), "scale");
 }
 
 void
@@ -4741,13 +4742,10 @@ gdk_x11_surface_get_xid (GdkSurface *surface)
   return GDK_X11_SURFACE (surface)->xid;
 }
 
-static int
-gdk_x11_surface_get_scale_factor (GdkSurface *surface)
+static double
+gdk_x11_surface_get_scale (GdkSurface *surface)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return 1;
 
   return impl->surface_scale;
 }
@@ -4888,7 +4886,7 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
 
   impl_class->destroy_notify = gdk_x11_surface_destroy_notify;
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
-  impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
+  impl_class->get_scale = gdk_x11_surface_get_scale;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
