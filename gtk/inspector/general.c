@@ -639,6 +639,7 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->idle_inhibit_manager);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->xdg_activation);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->fractional_scale);
+      append_wayland_protocol_row (gen, (struct wl_proxy *)d->viewporter);
     }
 }
 #endif
