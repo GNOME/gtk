@@ -175,11 +175,11 @@
  * (See the Pango manual for complete documentation] of available
  * tags, [func@Pango.parse_markup])
  *
- * The markup passed to gtk_label_set_markup() must be valid; for example,
- * literal <, > and & characters must be escaped as &lt;, &gt;, and &amp;.
+ * The markup passed to [method@Gtk.Label.set_markup] must be valid; for example,
+ * literal `<`, `>` and `&` characters must be escaped as `&lt;`, `&gt;`, and `&amp;`.
  * If you pass text obtained from the user, file, or a network to
  * [method@Gtk.Label.set_markup], you’ll want to escape it with
- * g_markup_escape_text() or g_markup_printf_escaped().
+ * [func@GLib.markup_escape_text] or [func@GLib.markup_printf_escaped].
  *
  * Markup strings are just a convenient way to set the [struct@Pango.AttrList]
  * on a label; [method@Gtk.Label.set_attributes] may be a simpler way to set
