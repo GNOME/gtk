@@ -32,6 +32,7 @@
 #include "gtkmenubutton.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbinlayout.h"
+#include "gtkwidgetprivate.h"
 
 
 struct _GtkInspectorMiscInfo
@@ -370,6 +371,10 @@ update_info (gpointer data)
       g_list_free (list);
 
       gtk_widget_set_visible (sl->tick_callback, gtk_widget_has_tick_callback (GTK_WIDGET (sl->object)));
+      gtk_widget_set_visible (sl->realized, gtk_widget_get_realized (GTK_WIDGET (sl->object)));
+      gtk_widget_set_visible (sl->mapped, gtk_widget_get_mapped (GTK_WIDGET (sl->object)));
+      gtk_widget_set_visible (sl->is_toplevel, GTK_IS_NATIVE (sl->object));
+      gtk_widget_set_visible (sl->child_visible, _gtk_widget_get_child_visible (GTK_WIDGET (sl->object)));
     }
 
   update_surface (sl);
@@ -497,6 +502,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->mapped_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->realized_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->is_toplevel_row, GTK_IS_WIDGET (object));
+  gtk_widget_set_visible (sl->child_visible_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->frame_clock_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->buildable_id_row, GTK_IS_BUILDABLE (object));
   gtk_widget_set_visible (sl->framecount_row, GDK_IS_FRAME_CLOCK (object));
