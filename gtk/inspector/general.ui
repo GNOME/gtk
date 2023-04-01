@@ -747,13 +747,6 @@
       <widget name="vk_driver_version_label"/>
       <widget name="app_id_label"/>
       <widget name="resource_path_label"/>
-      <widget name="prefix_label"/>
-      <widget name="xdg_data_home_label"/>
-      <widget name="xdg_data_dirs_label"/>
-      <widget name="gtk_path_label"/>
-      <widget name="gtk_exe_prefix_label"/>
-      <widget name="gtk_data_prefix_label"/>
-      <widget name="gsettings_schema_dir_label"/>
       <widget name="display_label"/>
       <widget name="display_rgba_label"/>
       <widget name="display_composited_label"/>
