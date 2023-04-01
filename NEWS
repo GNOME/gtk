@@ -1,6 +1,60 @@
 Overview of Changes in 4.11.1, xx-xx-xxxx
 =========================================
 
+* GtkLabel, GtkLinkButton:
+ - Make file:// uris work again
+
+* GtkListView/GtkColumnView/GtkGridView:
+ - Fix clipping issues
+ - Handle focus movement better
+ - Introduce ::tab-behavior properties
+
+* Drag-and-Drop:
+ - Support resizing drag surfaces
+
+* Theme:
+ - Port .boxed-list style from Adwaita
+ - Make insensitive pictures appear grayed out
+
+* Accessibility:
+ - Fix memory leaks
+ - Fix a crash
+
+* GSK:
+ - Allow limiting texture sizes with GSK_MAX_TEXTURE_SIZE
+ - Use samplers for GL texture filtering
+ - Fix problems with texture slicing
+ - Avoid re-uploading textures when possible
+ - Use mipmaps when it is beneficial
+
+* Wayland:
+ - Fix handling of Drag hotspots
+ - Fix a crash with cursor size 0
+ - Support absolute paths in WAYLAND_DISPLAY
+ - Use the fractional scale protocol
+
+* Windows:
+ - Fix problems with WGL
+
+* Vulkan:
+ - Some fixes to the experimental Vulkan renderer
+
+* Deprecations:
+ - gtk_widget_translate_coordinates
+
+* Documentation:
+ - Add a section on coordinate systems
+
+* Translation updates
+ - British English
+ - Bulgarian
+ - Chinese (China)
+ - Dutch
+ - French
+ - Persian
+ - Russian
+
+
 Overview of Changes in 4.10.1, 14-03-2023
 =========================================
 
