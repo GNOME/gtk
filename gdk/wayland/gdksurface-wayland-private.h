@@ -50,7 +50,7 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_y;
 
   gint64 pending_frame_counter;
-  guint32 scale;
+  GdkFractionalScale scale;
   gboolean buffer_scale_dirty;
 
   int shadow_left;
@@ -99,11 +99,11 @@ struct _GdkWaylandSurfaceClass
 
 #define GDK_WAYLAND_SURFACE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
 
-void gdk_wayland_surface_create_wl_surface (GdkSurface *surface);
-void gdk_wayland_surface_update_size       (GdkSurface *surface,
-                                            int32_t     width,
-                                            int32_t     height,
-                                            int         scale);
+void gdk_wayland_surface_create_wl_surface (GdkSurface               *surface);
+void gdk_wayland_surface_update_size       (GdkSurface               *surface,
+                                            int32_t                   width,
+                                            int32_t                   height,
+                                            const GdkFractionalScale *scale);
 void gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface);
 void _gdk_wayland_surface_save_size (GdkSurface *surface);
 

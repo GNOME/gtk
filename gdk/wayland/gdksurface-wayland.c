@@ -59,11 +59,6 @@
 
 G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
-static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
-                                              int         width,
-                                              int         height,
-                                              int         scale);
-
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
@@ -180,7 +175,7 @@ wl_region_from_cairo_region (GdkWaylandDisplay *display,
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
-  impl->scale = 1;
+  impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (1);
 }
 
 void
@@ -207,30 +202,66 @@ gdk_wayland_surface_thaw_state (GdkSurface *surface)
     gdk_wayland_surface_configure (surface);
 }
 
+static void
+gdk_wayland_surface_maybe_resize (GdkSurface               *surface,
+                                  int                       width,
+                                  int                       height,
+                                  const GdkFractionalScale *scale)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  gboolean hide_temporarily;
+
+  if (surface->width == width &&
+      surface->height == height &&
+      gdk_fractional_scale_equal (&impl->scale, scale))
+    return;
+
+  /* For xdg_popup using an xdg_positioner, there is a race condition if
+   * the application tries to change the size after it's mapped, but before
+   * the initial configure is received, so hide and show the surface again
+   * force the new size onto the compositor. See bug #772505.
+   */
+  hide_temporarily = GDK_IS_WAYLAND_POPUP (surface) &&
+                     gdk_surface_get_mapped (surface) &&
+                     !impl->initial_configure_received;
+
+  if (hide_temporarily)
+    gdk_surface_hide (surface);
+
+  gdk_wayland_surface_update_size (surface, width, height, scale);
+
+  if (hide_temporarily)
+    gdk_wayland_surface_create_wl_surface (surface);
+}
+
 void
-gdk_wayland_surface_update_size (GdkSurface *surface,
-                                 int32_t     width,
-                                 int32_t     height,
-                                 int         scale)
+gdk_wayland_surface_update_size (GdkSurface               *surface,
+                                 int32_t                   width,
+                                 int32_t                   height,
+                                 const GdkFractionalScale *scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   gboolean width_changed, height_changed, scale_changed;
 
   width_changed = surface->width != width;
   height_changed = surface->height != height;
-  scale_changed = impl->scale != scale;
+  scale_changed = !gdk_fractional_scale_equal (&impl->scale, scale);
 
   if (!width_changed && !height_changed && !scale_changed)
     return;
 
   surface->width = width;
   surface->height = height;
-  impl->scale = scale;
+  if (scale_changed)
+    {
+      impl->scale = *scale;
+      impl->buffer_scale_dirty = TRUE;
+    }
 
   if (impl->display_server.egl_window)
-    wl_egl_window_resize (impl->display_server.egl_window, width * scale, height * scale, 0, 0);
-  if (scale_changed)
-    impl->buffer_scale_dirty = TRUE;
+    wl_egl_window_resize (impl->display_server.egl_window,
+                          width * gdk_fractional_scale_to_int (scale),
+                          height * gdk_fractional_scale_to_int (scale), 0, 0);
 
   gdk_surface_invalidate_rect (surface, NULL);
 
@@ -435,27 +466,23 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
     return;
 
   if (!impl->display_server.outputs)
-    {
-      scale = impl->scale;
-    }
-  else
-    {
-      scale = 1;
-      for (l = impl->display_server.outputs; l != NULL; l = l->next)
-        {
-          struct wl_output *output = l->data;
-          uint32_t output_scale;
+    return;
 
-          output_scale = gdk_wayland_display_get_output_scale (display_wayland,
-                                                               output);
-          scale = MAX (scale, output_scale);
-        }
+  scale = 1;
+  for (l = impl->display_server.outputs; l != NULL; l = l->next)
+    {
+      struct wl_output *output = l->data;
+      uint32_t output_scale;
+
+      output_scale = gdk_wayland_display_get_output_scale (display_wayland,
+                                                           output);
+      scale = MAX (scale, output_scale);
     }
 
   /* Notify app that scale changed */
   gdk_wayland_surface_maybe_resize (surface,
                                     surface->width, surface->height,
-                                    scale);
+                                    &GDK_FRACTIONAL_SCALE_INIT_INT (scale));
 }
 
 GdkSurface *
@@ -532,10 +559,13 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       if (monitor)
         {
           GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+          guint32 monitor_scale = gdk_monitor_get_scale_factor (monitor);
 
-          impl->scale = gdk_monitor_get_scale_factor (monitor);
-          if (impl->scale != 1)
-            impl->buffer_scale_dirty = TRUE;
+          if (monitor_scale != 1)
+            {
+              impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (monitor_scale);
+              impl->buffer_scale_dirty = TRUE;
+            }
 
           g_object_unref (monitor);
         }
@@ -658,38 +688,6 @@ gdk_wayland_surface_finalize (GObject *object)
 }
 
 static void
-gdk_wayland_surface_maybe_resize (GdkSurface *surface,
-                                  int         width,
-                                  int         height,
-                                  int         scale)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  gboolean hide_temporarily;
-
-  if (surface->width == width &&
-      surface->height == height &&
-      impl->scale == scale)
-    return;
-
-  /* For xdg_popup using an xdg_positioner, there is a race condition if
-   * the application tries to change the size after it's mapped, but before
-   * the initial configure is received, so hide and show the surface again
-   * force the new size onto the compositor. See bug #772505.
-   */
-  hide_temporarily = GDK_IS_WAYLAND_POPUP (surface) &&
-                     gdk_surface_get_mapped (surface) &&
-                     !impl->initial_configure_received;
-
-  if (hide_temporarily)
-    gdk_surface_hide (surface);
-
-  gdk_wayland_surface_update_size (surface, width, height, scale);
-
-  if (hide_temporarily)
-    gdk_wayland_surface_create_wl_surface (surface);
-}
-
-static void
 gdk_wayland_surface_sync_shadow (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -793,7 +791,8 @@ gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
 
   /* Only set the buffer scale if supported by the compositor */
   if (wl_surface_get_version (impl->display_server.wl_surface) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
+    wl_surface_set_buffer_scale (impl->display_server.wl_surface,
+                                 gdk_fractional_scale_to_int (&impl->scale));
 
   impl->buffer_scale_dirty = FALSE;
 }
@@ -809,7 +808,7 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
   /* Notify app that scale changed */
   gdk_wayland_surface_maybe_resize (surface,
                                     surface->width, surface->height,
-                                    ceil (scale / 120.0));
+                                    &GDK_FRACTIONAL_SCALE_INIT (scale));
 }
 
 static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
@@ -1062,7 +1061,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   impl->has_uncommitted_ack_configure = FALSE;
   impl->input_region_dirty = TRUE;
   impl->opaque_region_dirty = TRUE;
-  if (impl->scale != 1)
+  if (!gdk_fractional_scale_equal (&impl->scale, &GDK_FRACTIONAL_SCALE_INIT_INT (1)))
     impl->buffer_scale_dirty = TRUE;
 
   impl->last_sent_window_geometry = (GdkRectangle) { 0 };
@@ -1097,7 +1096,7 @@ gdk_wayland_surface_move_resize (GdkSurface *surface,
 
   surface->x = x;
   surface->y = y;
-  gdk_wayland_surface_maybe_resize (surface, width, height, impl->scale);
+  gdk_wayland_surface_maybe_resize (surface, width, height, &impl->scale);
 }
 
 static void
@@ -1232,7 +1231,7 @@ gdk_wayland_surface_get_scale_factor (GdkSurface *surface)
   if (GDK_SURFACE_DESTROYED (surface))
     return 1;
 
-  return impl->scale;
+  return gdk_fractional_scale_to_int (&impl->scale);
 }
 
 static void
@@ -1335,8 +1334,8 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
     {
       impl->display_server.egl_window =
         wl_egl_window_create (impl->display_server.wl_surface,
-                              surface->width * impl->scale,
-                              surface->height * impl->scale);
+                              surface->width * gdk_fractional_scale_to_int (&impl->scale),
+                              surface->height * gdk_fractional_scale_to_int (&impl->scale));
       gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
 }
