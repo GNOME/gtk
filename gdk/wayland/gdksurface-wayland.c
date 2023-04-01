@@ -28,7 +28,6 @@
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"
 #include "gdkprivate-wayland.h"
-#include "gdkprivate-wayland.h"
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
@@ -426,12 +425,14 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
   guint32 scale;
   GSList *l;
 
+  /* We can't set the scale on this surface */
   if (!impl->display_server.wl_surface ||
       wl_surface_get_version (impl->display_server.wl_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    {
-      /* We can't set the scale on this surface */
-      return;
-    }
+    return;
+
+  /* scale is tracked by the fractional scale extension */
+  if (impl->display_server.fractional_scale)
+    return;
 
   if (!impl->display_server.outputs)
     {
@@ -798,6 +799,24 @@ gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
 }
 
 static void
+gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
+                                                         struct wp_fractional_scale_v1 *fractional_scale,
+                                                         uint32_t scale)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
+  GdkSurface *surface = GDK_SURFACE (self);
+  
+  /* Notify app that scale changed */
+  gdk_wayland_surface_maybe_resize (surface,
+                                    surface->width, surface->height,
+                                    ceil (scale / 120.0));
+}
+
+static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
+  gdk_wayland_surface_fractional_scale_preferred_scale_cb,
+};
+
+static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -848,15 +867,23 @@ static const struct wl_surface_listener surface_listener = {
 void
 gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   struct wl_surface *wl_surface;
 
   wl_surface = wl_compositor_create_surface (display_wayland->compositor);
-  wl_proxy_set_queue ((struct wl_proxy *) wl_surface, impl->event_queue);
-  wl_surface_add_listener (wl_surface, &surface_listener, surface);
+  wl_proxy_set_queue ((struct wl_proxy *) wl_surface, self->event_queue);
+  wl_surface_add_listener (wl_surface, &surface_listener, self);
+  if (display_wayland->fractional_scale)
+    {
+      self->display_server.fractional_scale =
+          wp_fractional_scale_manager_v1_get_fractional_scale (display_wayland->fractional_scale,
+                                                               wl_surface);
+      wp_fractional_scale_v1_add_listener (self->display_server.fractional_scale,
+                                           &fractional_scale_listener, self);
+    }
 
-  impl->display_server.wl_surface = wl_surface;
+  self->display_server.wl_surface = wl_surface;
 }
 
 static void
@@ -1023,6 +1050,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           else
             impl->initial_configure_received = FALSE;
         }
+
+      g_clear_pointer (&impl->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
 
       g_clear_pointer (&impl->display_server.wl_surface, wl_surface_destroy);
 
