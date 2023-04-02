@@ -211,6 +211,9 @@ A number of options affect behavior instead of logging:
 `gl-disable`
 : Disable OpenGL support
 
+`gl-fractional`
+: Enable fractional scaling for OpenGL. This is experimental
+
 `gl-legacy`
 : Use a legacy OpenGL context
 
@@ -367,6 +370,13 @@ nVidia graphics driver and/or the Nahimic 3 code, we are not able
 to rememdy this on the GTK side; the best bet before trying the above
 workarounds is to try to update your graphics drivers and Nahimic
 installation.
+
+### `GSK_MAX_TEXTURE_SIZE`
+
+Limit texture size to the minimum of this value and the OpenGL limit
+for texture sizes. This can be used to debug issues with texture slicing
+on systems where the OpenGL texture size limit would otherwise make
+texture slicing difficult to test.
 
 ### `GTK_CSD`
 

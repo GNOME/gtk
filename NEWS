@@ -14,7 +14,8 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
  - Make list grid and column views inert when not rendering
 
 * Drag-and-Drop:
- - Support resizing drag surfaces
+ - Support resizing drag surfaces, using the new
+   GdkDragSurface::compute-size signal
 
 * Theme:
  - Port .boxed-list style from Adwaita
@@ -55,6 +56,7 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
 
 * Deprecations:
  - gtk_widget_translate_coordinates
+ - gdk_surface_create_similar_surface
 
 * Documentation:
  - Add a section on coordinate systems
