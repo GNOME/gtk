@@ -67,10 +67,13 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext *draw_context,
   cairo_region_get_extents (region, &clip_box);
 
   self->window_surface = create_cairo_surface_for_surface (surface);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   self->paint_surface = gdk_surface_create_similar_surface (surface,
                                                             cairo_surface_get_content (self->window_surface),
                                                             MAX (clip_box.width, 1),
                                                             MAX (clip_box.height, 1));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   sx = sy = 1;
   cairo_surface_get_device_scale (self->paint_surface, &sx, &sy);
