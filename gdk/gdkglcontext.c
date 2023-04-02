@@ -560,6 +560,23 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 #endif
 }
 
+double
+gdk_gl_context_get_scale (GdkGLContext *self)
+{
+  GdkDisplay *display;
+  GdkSurface *surface;
+  double scale;
+
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  scale = gdk_surface_get_scale (surface);
+
+  display = gdk_gl_context_get_display (self);
+  if (!(gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_FRACTIONAL))
+    scale = ceil (scale);
+
+  return scale;
+}
+
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  gboolean        prefers_high_depth,
@@ -569,9 +586,11 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   G_GNUC_UNUSED GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkSurface *surface;
   cairo_region_t *damage;
+  double scale;
   int ww, wh;
 
   surface = gdk_draw_context_get_surface (draw_context);
+  scale = gdk_gl_context_get_scale (context);
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
@@ -588,8 +607,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  ww = (int) ceil (gdk_surface_get_width (surface) * gdk_surface_get_scale (surface));
-  wh = (int) ceil (gdk_surface_get_height (surface) * gdk_surface_get_scale (surface));
+  ww = (int) ceil (gdk_surface_get_width (surface) * scale);
+  wh = (int) ceil (gdk_surface_get_height (surface) * scale);
 
   gdk_gl_context_make_current (context);
 
@@ -633,7 +652,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
       int surface_height = gdk_surface_get_height (surface);
-      double scale = gdk_surface_get_scale (surface);
+      double scale = gdk_gl_context_get_scale (context);
       EGLint *rects;
 
       if (n_rects < G_N_ELEMENTS (stack_rects) / 4)

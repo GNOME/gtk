@@ -230,6 +230,30 @@ gdk_wayland_surface_maybe_resize (GdkSurface               *surface,
     gdk_wayland_surface_create_wl_surface (surface);
 }
 
+static inline void
+get_egl_window_size (GdkSurface *surface,
+                     int        *width,
+                     int        *height)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_FRACTIONAL)
+    {
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Using fractional scale %g for EGL window", gdk_fractional_scale_to_double (&impl->scale));
+
+      *width = gdk_fractional_scale_scale (&impl->scale, surface->width),
+      *height = gdk_fractional_scale_scale (&impl->scale, surface->height);
+    }
+  else
+    {
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Using integer scale %d for EGL window", gdk_fractional_scale_to_int (&impl->scale));
+
+      *width = surface->width * gdk_fractional_scale_to_int (&impl->scale);
+      *height = surface->height * gdk_fractional_scale_to_int (&impl->scale);
+    }
+}
+
 void
 gdk_wayland_surface_update_size (GdkSurface               *surface,
                                  int32_t                   width,
@@ -258,10 +282,11 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
     impl->viewport_dirty = TRUE;
 
   if (impl->display_server.egl_window)
-    wl_egl_window_resize (impl->display_server.egl_window,
-                          gdk_fractional_scale_scale (scale, width),
-                          gdk_fractional_scale_scale (scale, height),
-                          0, 0);
+    {
+      int w, h;
+      get_egl_window_size (surface, &w, &h);
+      wl_egl_window_resize (impl->display_server.egl_window, w, h, 0, 0);
+    }
 
   gdk_surface_invalidate_rect (surface, NULL);
 
@@ -1363,10 +1388,11 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
 
   if (impl->display_server.egl_window == NULL)
     {
+      int width, height;
+
+      get_egl_window_size (surface, &width, &height);
       impl->display_server.egl_window =
-        wl_egl_window_create (impl->display_server.wl_surface,
-                              gdk_fractional_scale_scale (&impl->scale, surface->width),
-                              gdk_fractional_scale_scale (&impl->scale, surface->height));
+        wl_egl_window_create (impl->display_server.wl_surface, width, height);
       gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
 }

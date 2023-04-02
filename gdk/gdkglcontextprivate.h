@@ -167,5 +167,7 @@ gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext   
 
 gboolean                gdk_gl_context_has_vertex_half_float    (GdkGLContext    *self) G_GNUC_PURE;
 
+double                  gdk_gl_context_get_scale                (GdkGLContext    *self);
+
 G_END_DECLS
 
