@@ -572,6 +572,9 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * GdkSurface:scale-factor: (attributes org.gtk.Property.get=gdk_surface_get_scale_factor)
    *
    * The scale factor of the surface.
+   *
+   * The scale factor is the next larger integer,
+   * compared to [property@Gdk.Surface:scale].
    */
   properties[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
@@ -2622,7 +2625,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
  * pixel-based data the scale value can be used to determine whether to
  * use a pixel resource with higher resolution data.
  *
- * The scale may change during the lifetime of the surface.
+ * The scale factor may change during the lifetime of the surface.
  *
  * Returns: the scale factor
  */
@@ -2640,6 +2643,13 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
  *
  * Returns the internal scale that maps from surface coordinates
  * to the actual device pixels.
+ *
+ * When the scale is bigger than 1, the windowing system prefers to get
+ * buffers with a resolution that is bigger than the surface size (e.g.
+ * to show the surface on a high-resolution display, or in a magnifier).
+ *
+ * Compare with [method@Gdk.Surface.get_scale_factor], which returns the
+ * next larger integer.
  *
  * The scale may change during the lifetime of the surface.
  *
