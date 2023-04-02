@@ -58,6 +58,7 @@ struct _GdkFractionalScale
 
 #define GDK_FRACTIONAL_SCALE_INIT(fractional_scale) (GdkFractionalScale) { fractional_scale }
 #define GDK_FRACTIONAL_SCALE_INIT_INT(scale) GDK_FRACTIONAL_SCALE_INIT (scale * GDK_FRACTIONAL_SCALE_FACTOR)
+#define GDK_FRACTIONAL_SCALE_INIT_FLOAT(scale) GDK_FRACTIONAL_SCALE_INIT ((int) (scale * GDK_FRACTIONAL_SCALE_FACTOR))
 
 static inline int
 gdk_fractional_scale_to_int (const GdkFractionalScale *self)

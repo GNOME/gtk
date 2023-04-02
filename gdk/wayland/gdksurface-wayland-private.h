@@ -48,6 +48,7 @@ struct _GdkWaylandSurface
   unsigned int mapped : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
+  unsigned int scale_overridden : 1;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;

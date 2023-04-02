@@ -172,6 +172,31 @@ gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
   impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (1);
   impl->viewport_dirty = TRUE;
+
+  if (g_getenv ("GDK_SCALE"))
+    {
+      const char *scale_str;
+      char *endptr = NULL;
+      double scale;
+
+      scale_str = g_getenv ("GDK_SCALE");
+
+      scale = g_ascii_strtod (scale_str, &endptr);
+
+      if (endptr && *endptr != '\0')
+        {
+          if (strcmp (endptr, "%") == 0)
+            scale /= 100.;
+          else
+            {
+              g_warning ("Failed to parse GDK_SCALE");
+              return;
+            }
+        }
+
+      impl->scale = GDK_FRACTIONAL_SCALE_INIT_FLOAT (scale);
+      impl->scale_overridden = TRUE;
+    }
 }
 
 void
@@ -462,6 +487,9 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
   /* We can't set the scale on this surface */
   if (!impl->display_server.wl_surface ||
       wl_surface_get_version (impl->display_server.wl_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+    return;
+
+  if (impl->scale_overridden)
     return;
 
   /* scale is tracked by the fractional scale extension */
@@ -831,7 +859,10 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
   GdkSurface *surface = GDK_SURFACE (self);
-  
+
+  if (self->scale_overridden)
+    return;
+
   /* Notify app that scale changed */
   gdk_wayland_surface_maybe_resize (surface,
                                     surface->width, surface->height,
