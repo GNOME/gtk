@@ -88,10 +88,12 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
 
           g_clear_pointer (&self->db_surface, cairo_surface_destroy);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           self->db_surface = gdk_surface_create_similar_surface (surface,
                                                                  cairo_surface_get_content (self->window_surface),
                                                                  self->db_width,
                                                                  self->db_height);
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
       /* Double-buffered windows paint on a DB surface.

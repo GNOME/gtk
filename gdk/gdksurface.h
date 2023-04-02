@@ -107,7 +107,7 @@ gboolean      gdk_surface_get_device_position (GdkSurface      *surface,
                                                double          *y,
                                                GdkModifierType *mask);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12
 cairo_surface_t *
               gdk_surface_create_similar_surface (GdkSurface *surface,
                                                   cairo_content_t  content,

@@ -2382,6 +2382,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
  * Returns: a pointer to the newly allocated surface. The caller
  *   owns the surface and should call cairo_surface_destroy() when done
  *   with it.
+ *
+ * Deprecated: 4.12: Create a suitable cairo image surface yourself
  */
 cairo_surface_t *
 gdk_surface_create_similar_surface (GdkSurface      *surface,

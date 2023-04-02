@@ -1360,15 +1360,17 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_t *cr;
       graphene_point_t p;
       double native_x, native_y;
+      int width, height, scale;
 
       gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
       gtk_css_boxes_init (&content_css_boxes, priv->contents_widget);
 
-      cairo_surface =
-        gdk_surface_create_similar_surface (priv->surface,
-                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                           gdk_surface_get_width (priv->surface),
-                                           gdk_surface_get_height (priv->surface));
+      width = gdk_surface_get_width (priv->surface);
+      height = gdk_surface_get_height (priv->surface);
+      scale = gdk_surface_get_scale_factor (priv->surface);
+
+      cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
+      cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
       cr = cairo_create (cairo_surface);
 
