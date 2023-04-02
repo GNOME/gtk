@@ -1661,7 +1661,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
  * Returns %TRUE if @iter is the end iterator.
  *
  * This means it is one past the last dereferenceable iterator
- * in the buffer. [method@Gtk.TextBuffer.is_end] is the most efficient
+ * in the buffer. [method@Gtk.TextIter.is_end] is the most efficient
  * way to check whether an iterator is the end iterator.
  *
  * Returns: whether @iter is the end iterator
@@ -3897,7 +3897,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @byte_on_line: a byte index relative to the start of @iter’s current line
  *
- * Same as [method@Gtk.TextBuffer.set_line_offset], but works with a
+ * Same as [method@Gtk.TextIter.set_line_offset], but works with a
  * byte index. The given byte index must be at
  * the start of a character, it can’t be in the middle of a UTF-8
  * encoded character.
@@ -3943,7 +3943,7 @@ gtk_text_iter_set_line_index (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @char_on_line: a character offset
  *
- * Like [method@Gtk.TextBuffer.set_line_offset], but the offset is in visible
+ * Like [method@Gtk.TextIter.set_line_offset], but the offset is in visible
  * characters, i.e. text with a tag making it invisible is not
  * counted in the offset.
  */
@@ -3984,7 +3984,7 @@ gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @byte_on_line: a byte index
  *
- * Like [method@Gtk.TextBuffer.set_line_index], but the index is in visible
+ * Like [method@Gtk.TextIter.set_line_index], but the index is in visible
  * bytes, i.e. text with a tag making it invisible is not counted
  * in the index.
  */
