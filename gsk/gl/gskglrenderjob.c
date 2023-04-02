@@ -4401,7 +4401,7 @@ get_framebuffer_format (GdkGLContext *context,
 GskGLRenderJob *
 gsk_gl_render_job_new (GskGLDriver           *driver,
                        const graphene_rect_t *viewport,
-                       float                  scale_factor,
+                       float                  scale,
                        const cairo_region_t  *region,
                        guint                  framebuffer,
                        gboolean               clear_framebuffer)
@@ -4414,7 +4414,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), NULL);
   g_return_val_if_fail (viewport != NULL, NULL);
-  g_return_val_if_fail (scale_factor > 0, NULL);
+  g_return_val_if_fail (scale > 0, NULL);
 
   /* Check for non-standard framebuffer binding as we might not be using
    * the default framebuffer on systems like macOS where we've bound an
@@ -4436,14 +4436,14 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->default_framebuffer = default_framebuffer;
   job->offset_x = 0;
   job->offset_y = 0;
-  job->scale_x = scale_factor;
-  job->scale_y = scale_factor;
+  job->scale_x = scale;
+  job->scale_y = scale;
   job->viewport = *viewport;
   job->target_format = get_framebuffer_format (job->command_queue->context, framebuffer);
 
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_render_job_set_projection_from_rect (job, viewport, NULL);
-  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale_factor, scale_factor));
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale, scale));
 
   /* Setup our initial clip. If region is NULL then we are drawing the
    * whole viewport. Otherwise, we need to convert the region to a
