@@ -31,10 +31,9 @@ resize_cb (GtkWidget *widget,
 
   if (gtk_native_get_surface (gtk_widget_get_native (widget)))
     {
-      surface = gdk_surface_create_similar_surface (gtk_native_get_surface (gtk_widget_get_native (widget)),
-                                                   CAIRO_CONTENT_COLOR,
-                                                   gtk_widget_get_width (widget),
-                                                   gtk_widget_get_height (widget));
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            gtk_widget_get_width (widget),
+                                            gtk_widget_get_height (widget));
 
       /* Initialize the surface to white */
       clear_surface ();
