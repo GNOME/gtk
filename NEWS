@@ -8,6 +8,10 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
  - Fix clipping issues
  - Handle focus movement better
  - Introduce ::tab-behavior properties
+ - Introduce GtkListItem::focusable
+ - Introduce GtkColumnViewCell
+ - Introduce row factories in GtkColumnView
+ - Make list grid and column views inert when not rendering
 
 * Drag-and-Drop:
  - Support resizing drag surfaces
@@ -19,6 +23,12 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
 * Accessibility:
  - Fix memory leaks
  - Fix a crash
+
+* GDK:
+ - Add gdk_surface_get_scale to get the fractional scale
+ - Use fractional scales on Wayland with cairo
+ - Use fractional scales on Wayland with GL if GDK_DEBUG=gl-fractional
+   is set. This support is still experimental
 
 * GSK:
  - Allow limiting texture sizes with GSK_MAX_TEXTURE_SIZE
@@ -32,6 +42,7 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
  - Fix a crash with cursor size 0
  - Support absolute paths in WAYLAND_DISPLAY
  - Use the fractional scale protocol
+ - Use a viewporter to set buffer scale
 
 * Windows:
  - Fix problems with WGL
@@ -39,11 +50,17 @@ Overview of Changes in 4.11.1, xx-xx-xxxx
 * Vulkan:
  - Some fixes to the experimental Vulkan renderer
 
+* Debugging:
+ - Show more Wayland-specific information in the inspector
+
 * Deprecations:
  - gtk_widget_translate_coordinates
 
 * Documentation:
  - Add a section on coordinate systems
+
+* Build:
+ - Require wayland-protocols 1.31
 
 * Translation updates
  - British English
