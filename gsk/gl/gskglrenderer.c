@@ -282,18 +282,18 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   GskGLRenderJob *job;
   GdkSurface *surface;
   gboolean clear_framebuffer;
-  float scale_factor;
+  float scale;
 
   g_assert (GSK_IS_GL_RENDERER (renderer));
   g_assert (root != NULL);
 
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->context));
-  scale_factor = gdk_surface_get_scale_factor (surface);
+  scale = gdk_surface_get_scale_factor (surface);
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;
-  viewport.size.width = gdk_surface_get_width (surface) * scale_factor;
-  viewport.size.height = gdk_surface_get_height (surface) * scale_factor;
+  viewport.size.width = gdk_surface_get_width (surface) * scale;
+  viewport.size.height = gdk_surface_get_height (surface) * scale;
 
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->context),
                                      gsk_render_node_prefers_high_depth (root),
@@ -306,7 +306,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   clear_framebuffer = update_area_requires_clear (surface, render_region);
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-  job = gsk_gl_render_job_new (self->driver, &viewport, scale_factor, render_region, 0, clear_framebuffer);
+  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
