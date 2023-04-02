@@ -259,8 +259,9 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
 
   if (impl->display_server.egl_window)
     wl_egl_window_resize (impl->display_server.egl_window,
-                          width * gdk_fractional_scale_to_int (scale),
-                          height * gdk_fractional_scale_to_int (scale), 0, 0);
+                          gdk_fractional_scale_scale (scale, width),
+                          gdk_fractional_scale_scale (scale, height),
+                          0, 0);
 
   gdk_surface_invalidate_rect (surface, NULL);
 
@@ -1364,8 +1365,8 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
     {
       impl->display_server.egl_window =
         wl_egl_window_create (impl->display_server.wl_surface,
-                              surface->width * gdk_fractional_scale_to_int (&impl->scale),
-                              surface->height * gdk_fractional_scale_to_int (&impl->scale));
+                              gdk_fractional_scale_scale (&impl->scale, surface->width),
+                              gdk_fractional_scale_scale (&impl->scale, surface->height));
       gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
 }
