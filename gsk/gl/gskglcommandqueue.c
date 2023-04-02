@@ -993,7 +993,7 @@ gsk_gl_command_queue_sort_batches (GskGLCommandQueue *self)
  * gsk_gl_command_queue_execute:
  * @self: a `GskGLCommandQueue`
  * @surface_height: the height of the backing surface
- * @scale_factor: the scale factor of the backing surface
+ * @scale: the scale of the backing surface
  * @scissor: (nullable): the scissor clip if any
  * @default_framebuffer: the default framebuffer id if not zero
  *
@@ -1009,7 +1009,7 @@ gsk_gl_command_queue_sort_batches (GskGLCommandQueue *self)
 void
 gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                               guint                 surface_height,
-                              guint                 scale_factor,
+                              float                 scale,
                               const cairo_region_t *scissor,
                               guint                 default_framebuffer)
 {
@@ -1097,10 +1097,10 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
       g_assert (cairo_region_num_rectangles (scissor) == 1);
       cairo_region_get_rectangle (scissor, 0, &r);
 
-      scissor_test.origin.x = r.x * scale_factor;
-      scissor_test.origin.y = surface_height - (r.height * scale_factor) - (r.y * scale_factor);
-      scissor_test.size.width = r.width * scale_factor;
-      scissor_test.size.height = r.height * scale_factor;
+      scissor_test.origin.x = (int) floor (r.x * scale);
+      scissor_test.origin.y = (int) floor (surface_height - (r.height * scale) - (r.y * scale));
+      scissor_test.size.width = (int) ceil (r.width * scale);
+      scissor_test.size.height = (int) ceil (r.height * scale);
     }
 
   next_batch_index = self->head_batch_index;
