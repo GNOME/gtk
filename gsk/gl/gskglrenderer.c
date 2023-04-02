@@ -288,7 +288,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   g_assert (root != NULL);
 
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->context));
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = gdk_surface_get_scale (surface);
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;

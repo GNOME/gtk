@@ -94,6 +94,8 @@
 #include <epoxy/egl.h>
 #endif
 
+#include <math.h>
+
 #define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
 
 typedef struct {
@@ -586,8 +588,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  ww = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
-  wh = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
+  ww = (int) ceil (gdk_surface_get_width (surface) * gdk_surface_get_scale (surface));
+  wh = (int) ceil (gdk_surface_get_height (surface) * gdk_surface_get_scale (surface));
 
   gdk_gl_context_make_current (context);
 
@@ -631,7 +633,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
       int surface_height = gdk_surface_get_height (surface);
-      int scale = gdk_surface_get_scale_factor (surface);
+      double scale = gdk_surface_get_scale (surface);
       EGLint *rects;
 
       if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
@@ -644,10 +646,10 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (painted, i, &rect);
-          rects[j++] = rect.x * scale;
-          rects[j++] = (surface_height - rect.height - rect.y) * scale;
-          rects[j++] = rect.width * scale;
-          rects[j++] = rect.height * scale;
+          rects[j++] = (int) floor (rect.x * scale);
+          rects[j++] = (int) floor ((surface_height - rect.height - rect.y) * scale);
+          rects[j++] = (int) ceil (rect.width * scale);
+          rects[j++] = (int) ceil (rect.height * scale);
         }
       priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
       g_free (heap_rects);
