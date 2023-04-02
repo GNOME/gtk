@@ -482,6 +482,27 @@ gtk_drop_down_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (self->button);
 }
 
+static void
+gtk_drop_down_root (GtkWidget *widget)
+{
+  GtkDropDown *self = GTK_DROP_DOWN (widget);
+
+  GTK_WIDGET_CLASS (gtk_drop_down_parent_class)->root (widget);
+
+  if (self->factory)
+    gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), self->factory);
+}
+
+static void
+gtk_drop_down_unroot (GtkWidget *widget)
+{
+  GtkDropDown *self = GTK_DROP_DOWN (widget);
+
+  if (self->factory)
+    gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), NULL);
+
+  GTK_WIDGET_CLASS (gtk_drop_down_parent_class)->unroot (widget);
+}
 
 static void
 gtk_drop_down_class_init (GtkDropDownClass *klass)
@@ -497,6 +518,8 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   widget_class->size_allocate = gtk_drop_down_size_allocate;
   widget_class->focus = gtk_drop_down_focus;
   widget_class->grab_focus = gtk_drop_down_grab_focus;
+  widget_class->root = gtk_drop_down_root;
+  widget_class->unroot = gtk_drop_down_unroot;
 
   /**
    * GtkDropDown:factory: (attributes org.gtk.Property.get=gtk_drop_down_get_factory org.gtk.Property.set=gtk_drop_down_set_factory)
@@ -915,7 +938,9 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
   if (!g_set_object (&self->factory, factory))
     return;
 
-  gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), factory);
+  if (gtk_widget_get_root (GTK_WIDGET (self)))
+    gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), factory);
+
   if (self->list_factory == NULL)
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
 
