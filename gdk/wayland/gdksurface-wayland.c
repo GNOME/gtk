@@ -261,11 +261,12 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
                                  const GdkFractionalScale *scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  gboolean width_changed, height_changed, scale_changed;
+  gboolean width_changed, height_changed, scale_changed, scale_factor_changed;
 
   width_changed = surface->width != width;
   height_changed = surface->height != height;
   scale_changed = !gdk_fractional_scale_equal (&impl->scale, scale);
+  scale_factor_changed = gdk_fractional_scale_to_int (&impl->scale) != gdk_fractional_scale_to_int (scale);
 
   if (!width_changed && !height_changed && !scale_changed)
     return;
@@ -295,10 +296,9 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   if (height_changed)
     g_object_notify (G_OBJECT (surface), "height");
   if (scale_changed)
-    {
-      g_object_notify (G_OBJECT (surface), "scale-factor");
-      g_object_notify (G_OBJECT (surface), "scale");
-    }
+    g_object_notify (G_OBJECT (surface), "scale");
+  if (scale_factor_changed)
+    g_object_notify (G_OBJECT (surface), "scale-factor");
 
   _gdk_surface_update_size (surface);
 }
