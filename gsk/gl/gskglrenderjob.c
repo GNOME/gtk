@@ -4322,14 +4322,14 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
                           GskRenderNode  *root)
 {
   G_GNUC_UNUSED gint64 start_time;
-  guint scale_factor;
+  float scale;
   guint surface_height;
 
   g_return_if_fail (job != NULL);
   g_return_if_fail (root != NULL);
   g_return_if_fail (GSK_IS_GL_DRIVER (job->driver));
 
-  scale_factor = MAX (job->scale_x, job->scale_y);
+  scale = MAX (job->scale_x, job->scale_y);
   surface_height = job->viewport.size.height;
 
   gsk_gl_command_queue_make_current (job->command_queue);
@@ -4360,7 +4360,7 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   start_time = GDK_PROFILER_CURRENT_TIME;
   gsk_gl_command_queue_make_current (job->command_queue);
   gdk_gl_context_push_debug_group (job->command_queue->context, "Executing command queue");
-  gsk_gl_command_queue_execute (job->command_queue, surface_height, scale_factor, job->region, job->default_framebuffer);
+  gsk_gl_command_queue_execute (job->command_queue, surface_height, scale, job->region, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Execute GL command queue", "");
 }
