@@ -258,7 +258,7 @@ surface_transform_changed_cb (GtkWidget               *widget,
                               const graphene_matrix_t *transform,
                               gpointer                 user_data)
 {
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
+  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (user_data);
 
   gtk_tooltip_window_relayout (window);
 
