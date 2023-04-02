@@ -46,7 +46,7 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
   self->memory = gsk_vulkan_memory_new (context,
                                         requirements.memoryTypeBits,
                                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-                                        size);
+                                        requirements.size);
 
   GSK_VK_CHECK (vkBindBufferMemory, gdk_vulkan_context_get_device (context),
                                     self->vk_buffer,
