@@ -79,11 +79,11 @@ get_render_region (GskVulkanRenderer *self)
   GdkRectangle whole_surface;
   GdkRectangle extents;
   GdkSurface *surface;
-  int scale;
+  double scale;
 
   render_region = NULL;
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->vulkan));
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = gdk_surface_get_scale (surface);
 
   whole_surface.x = 0;
   whole_surface.y = 0;
@@ -97,10 +97,10 @@ get_render_region (GskVulkanRenderer *self)
       cairo_rectangle_int_t rect;
       cairo_region_get_rectangle (damage, i, &rect);
       cairo_region_union_rectangle (scaled_damage, &(cairo_rectangle_int_t) {
-                                      .x = rect.x * scale,
-                                      .y = rect.y * scale,
-                                      .width = rect.width * scale,
-                                      .height = rect.height * scale,
+                                      .x = (int) floor (rect.x * scale),
+                                      .y = (int) floor (rect.y * scale),
+                                      .width = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale),
+                                      .height = (int) ceil ((rect.y + rect.height) * scale) - floor (rect.y * scale),
                                     });
     }
 
@@ -138,7 +138,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
   GdkSurface *window;
-  int scale_factor;
+  double scale;
   gsize width, height;
   guint i;
 
@@ -148,9 +148,9 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   self->targets = g_new (GskVulkanImage *, self->n_targets);
 
   window = gsk_renderer_get_surface (GSK_RENDERER (self));
-  scale_factor = gdk_surface_get_scale_factor (window);
-  width = gdk_surface_get_width (window) * scale_factor;
-  height = gdk_surface_get_height (window) * scale_factor;
+  scale = gdk_surface_get_scale (window);
+  width = (int) ceil (gdk_surface_get_width (window) * scale);
+  height = (int) ceil (gdk_surface_get_height (window) * scale);
 
   for (i = 0; i < self->n_targets; i++)
     {

@@ -31,7 +31,7 @@ struct _GskVulkanRender
   GskRenderer *renderer;
   GdkVulkanContext *vulkan;
 
-  int scale_factor;
+  double scale;
   graphene_rect_t viewport;
   cairo_region_t *clip;
 
@@ -75,14 +75,14 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
   if (rect)
     {
       self->viewport = *rect;
-      self->scale_factor = 1;
+      self->scale = 1.0;
     }
   else
     {
-      self->scale_factor = gdk_surface_get_scale_factor (surface);
+      self->scale = gdk_surface_get_scale (surface);
       self->viewport = GRAPHENE_RECT_INIT (0, 0,
-                                           gdk_surface_get_width (surface) * self->scale_factor,
-                                           gdk_surface_get_height (surface) * self->scale_factor);
+                                           (int) ceil (gdk_surface_get_width (surface) * self->scale),
+                                           (int) ceil (gdk_surface_get_height (surface) * self->scale));
     }
   if (clip)
     {
@@ -340,12 +340,12 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   GskVulkanRenderPass *pass;
   graphene_matrix_t mv;
 
-  graphene_matrix_init_scale (&mv, self->scale_factor, self->scale_factor, 1.0);
+  graphene_matrix_init_scale (&mv, self->scale, self->scale, 1.0);
 
   pass = gsk_vulkan_render_pass_new (self->vulkan,
                                      self->target,
-                                     self->scale_factor,
-                                     self->scale_factor,
+                                     self->scale,
+                                     self->scale,
                                      &mv,
                                      &self->viewport,
                                      self->clip,
