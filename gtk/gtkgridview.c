@@ -253,7 +253,7 @@ gtk_grid_view_split (GtkListBase *base,
                                tile,
                                column_end (self, xspacing, col + n_items - 1) - tile->area.x,
                                tile->area.height);
-  
+
   return split;
 }
 
@@ -264,7 +264,7 @@ gtk_grid_view_is_inert (GtkGridView *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   return !gtk_widget_get_visible (widget) ||
-         gtk_widget_get_root (widget) == NULL || 
+         gtk_widget_get_root (widget) == NULL ||
          self->factory == NULL;
 }
 
@@ -679,7 +679,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
             row_height = MAX (row_height, child_nat);
           measured = TRUE;
         }
-      
+
       i += tile->n_items;
 
       if (i >= n_columns)
@@ -767,7 +767,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
 
   /* step 1: determine width of the list */
   gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
-  self->n_columns = gtk_grid_view_compute_n_columns (self, 
+  self->n_columns = gtk_grid_view_compute_n_columns (self,
                                                      orientation == GTK_ORIENTATION_VERTICAL ? width : height,
                                                      xspacing,
                                                      col_min, col_nat);
@@ -1024,7 +1024,7 @@ gtk_grid_view_set_property (GObject      *object,
     case PROP_MIN_COLUMNS:
       gtk_grid_view_set_min_columns (self, g_value_get_uint (value));
       break;
- 
+
     case PROP_MODEL:
       gtk_grid_view_set_model (self, g_value_get_object (value));
       break;
@@ -1560,7 +1560,7 @@ gtk_grid_view_set_tab_behavior (GtkGridView        *self,
  *
  * Since: 4.12
  */
-gboolean
+GtkListTabBehavior
 gtk_grid_view_get_tab_behavior (GtkGridView *self)
 {
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), FALSE);

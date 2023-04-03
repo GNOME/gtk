@@ -222,7 +222,7 @@ gtk_list_view_is_inert (GtkListView *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   return !gtk_widget_get_visible (widget) ||
-         gtk_widget_get_root (widget) == NULL || 
+         gtk_widget_get_root (widget) == NULL ||
          self->factory == NULL;
 }
 
@@ -1233,7 +1233,7 @@ gtk_list_view_set_tab_behavior (GtkListView        *self,
  *
  * Since: 4.12
  */
-gboolean
+GtkListTabBehavior
 gtk_list_view_get_tab_behavior (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), FALSE);

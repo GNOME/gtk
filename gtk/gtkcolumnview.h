@@ -112,7 +112,8 @@ GDK_AVAILABLE_IN_4_12
 void            gtk_column_view_set_tab_behavior                (GtkColumnView          *self,
                                                                  GtkListTabBehavior      tab_behavior);
 GDK_AVAILABLE_IN_4_12
-gboolean        gtk_column_view_get_tab_behavior                (GtkColumnView          *self);
+GtkListTabBehavior
+                gtk_column_view_get_tab_behavior                (GtkColumnView          *self);
 
 GDK_AVAILABLE_IN_4_12
 void            gtk_column_view_set_row_factory                 (GtkColumnView          *self,
