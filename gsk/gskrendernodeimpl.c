@@ -5812,7 +5812,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_CONTAINER_NODE,
       sizeof (GskContainerNode),
-      NULL,
       gsk_container_node_finalize,
       gsk_container_node_draw,
       NULL,
@@ -5828,7 +5827,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_CAIRO_NODE,
       sizeof (GskCairoNode),
-      NULL,
       gsk_cairo_node_finalize,
       gsk_cairo_node_draw,
       NULL,
@@ -5845,7 +5843,6 @@ gsk_render_node_init_types_once (void)
       GSK_COLOR_NODE,
       sizeof (GskColorNode),
       NULL,
-      NULL,
       gsk_color_node_draw,
       NULL,
       gsk_color_node_diff,
@@ -5860,7 +5857,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_LINEAR_GRADIENT_NODE,
       sizeof (GskLinearGradientNode),
-      NULL,
       gsk_linear_gradient_node_finalize,
       gsk_linear_gradient_node_draw,
       NULL,
@@ -5876,7 +5872,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_REPEATING_LINEAR_GRADIENT_NODE,
       sizeof (GskLinearGradientNode),
-      NULL,
       gsk_linear_gradient_node_finalize,
       gsk_linear_gradient_node_draw,
       NULL,
@@ -5892,7 +5887,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_RADIAL_GRADIENT_NODE,
       sizeof (GskRadialGradientNode),
-      NULL,
       gsk_radial_gradient_node_finalize,
       gsk_radial_gradient_node_draw,
       NULL,
@@ -5908,7 +5902,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_REPEATING_RADIAL_GRADIENT_NODE,
       sizeof (GskRadialGradientNode),
-      NULL,
       gsk_radial_gradient_node_finalize,
       gsk_radial_gradient_node_draw,
       NULL,
@@ -5924,7 +5917,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_CONIC_GRADIENT_NODE,
       sizeof (GskConicGradientNode),
-      NULL,
       gsk_conic_gradient_node_finalize,
       gsk_conic_gradient_node_draw,
       NULL,
@@ -5941,7 +5933,6 @@ gsk_render_node_init_types_once (void)
       GSK_BORDER_NODE,
       sizeof (GskBorderNode),
       NULL,
-      NULL,
       gsk_border_node_draw,
       NULL,
       gsk_border_node_diff,
@@ -5956,7 +5947,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_TEXTURE_NODE,
       sizeof (GskTextureNode),
-      NULL,
       gsk_texture_node_finalize,
       gsk_texture_node_draw,
       NULL,
@@ -5972,7 +5962,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_TEXTURE_SCALE_NODE,
       sizeof (GskTextureScaleNode),
-      NULL,
       gsk_texture_scale_node_finalize,
       gsk_texture_scale_node_draw,
       NULL,
@@ -5989,7 +5978,6 @@ gsk_render_node_init_types_once (void)
       GSK_INSET_SHADOW_NODE,
       sizeof (GskInsetShadowNode),
       NULL,
-      NULL,
       gsk_inset_shadow_node_draw,
       NULL,
       gsk_inset_shadow_node_diff,
@@ -6005,7 +5993,6 @@ gsk_render_node_init_types_once (void)
       GSK_OUTSET_SHADOW_NODE,
       sizeof (GskOutsetShadowNode),
       NULL,
-      NULL,
       gsk_outset_shadow_node_draw,
       NULL,
       gsk_outset_shadow_node_diff,
@@ -6020,7 +6007,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_TRANSFORM_NODE,
       sizeof (GskTransformNode),
-      NULL,
       gsk_transform_node_finalize,
       gsk_transform_node_draw,
       gsk_transform_node_can_diff,
@@ -6036,7 +6022,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_OPACITY_NODE,
       sizeof (GskOpacityNode),
-      NULL,
       gsk_opacity_node_finalize,
       gsk_opacity_node_draw,
       NULL,
@@ -6052,7 +6037,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_COLOR_MATRIX_NODE,
       sizeof (GskColorMatrixNode),
-      NULL,
       gsk_color_matrix_node_finalize,
       gsk_color_matrix_node_draw,
       NULL,
@@ -6068,7 +6052,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_REPEAT_NODE,
       sizeof (GskRepeatNode),
-      NULL,
       gsk_repeat_node_finalize,
       gsk_repeat_node_draw,
       NULL,
@@ -6084,7 +6067,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_CLIP_NODE,
       sizeof (GskClipNode),
-      NULL,
       gsk_clip_node_finalize,
       gsk_clip_node_draw,
       NULL,
@@ -6100,7 +6082,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_ROUNDED_CLIP_NODE,
       sizeof (GskRoundedClipNode),
-      NULL,
       gsk_rounded_clip_node_finalize,
       gsk_rounded_clip_node_draw,
       NULL,
@@ -6116,7 +6097,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_SHADOW_NODE,
       sizeof (GskShadowNode),
-      NULL,
       gsk_shadow_node_finalize,
       gsk_shadow_node_draw,
       NULL,
@@ -6132,7 +6112,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_BLEND_NODE,
       sizeof (GskBlendNode),
-      NULL,
       gsk_blend_node_finalize,
       gsk_blend_node_draw,
       NULL,
@@ -6148,7 +6127,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_CROSS_FADE_NODE,
       sizeof (GskCrossFadeNode),
-      NULL,
       gsk_cross_fade_node_finalize,
       gsk_cross_fade_node_draw,
       NULL,
@@ -6164,7 +6142,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_TEXT_NODE,
       sizeof (GskTextNode),
-      NULL,
       gsk_text_node_finalize,
       gsk_text_node_draw,
       NULL,
@@ -6180,7 +6157,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_BLUR_NODE,
       sizeof (GskBlurNode),
-      NULL,
       gsk_blur_node_finalize,
       gsk_blur_node_draw,
       NULL,
@@ -6196,7 +6172,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_MASK_NODE,
       sizeof (GskMaskNode),
-      NULL,
       gsk_mask_node_finalize,
       gsk_mask_node_draw,
       NULL,
@@ -6212,7 +6187,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_GL_SHADER_NODE,
       sizeof (GskGLShaderNode),
-      NULL,
       gsk_gl_shader_node_finalize,
       gsk_gl_shader_node_draw,
       NULL,
@@ -6228,7 +6202,6 @@ gsk_render_node_init_types_once (void)
     {
       GSK_DEBUG_NODE,
       sizeof (GskDebugNode),
-      NULL,
       gsk_debug_node_finalize,
       gsk_debug_node_draw,
       gsk_debug_node_can_diff,

@@ -312,7 +312,7 @@ gsk_render_node_type_register_static (const char                  *node_name,
 
   info.instance_size = node_info->instance_size;
   info.n_preallocs = 0;
-  info.instance_init = (GInstanceInitFunc) node_info->instance_init;
+  info.instance_init = NULL;
   info.value_table = NULL;
 
   return g_type_register_static (GSK_TYPE_RENDER_NODE, node_name, &info, 0);

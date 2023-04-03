@@ -69,7 +69,6 @@ typedef struct
 
   gsize instance_size;
 
-  void            (* instance_init) (GskRenderNode        *node);
   void            (* finalize)      (GskRenderNode        *node);
   void            (* draw)          (GskRenderNode        *node,
                                      cairo_t              *cr);
