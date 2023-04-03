@@ -48,14 +48,16 @@ struct _GskRenderNodeClass
 
   GskRenderNodeType node_type;
 
-  void            (* finalize)    (GskRenderNode  *node);
-  void            (* draw)        (GskRenderNode  *node,
-                                   cairo_t        *cr);
-  gboolean        (* can_diff)    (const GskRenderNode  *node1,
-                                   const GskRenderNode  *node2);
-  void            (* diff)        (GskRenderNode  *node1,
-                                   GskRenderNode  *node2,
-                                   GskDiffData    *data);
+  void          (* finalize)                            (GskRenderNode               *node);
+  void          (* draw)                                (GskRenderNode               *node,
+                                                         cairo_t                     *cr);
+  gboolean      (* can_diff)                            (const GskRenderNode         *node1,
+                                                         const GskRenderNode         *node2);
+  void          (* diff)                                (GskRenderNode               *node1,
+                                                         GskRenderNode               *node2,
+                                                         GskDiffData                 *data);
+  gboolean      (* get_opaque_rect)                     (GskRenderNode               *node,
+                                                         graphene_rect_t             *out_opaque);
 };
 
 void            gsk_render_node_init_types              (void);
