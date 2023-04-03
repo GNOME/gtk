@@ -47,42 +47,11 @@ struct _GskRenderNodeClass
                                    cairo_region_t *region);
 };
 
-/*< private >
- * GskRenderNodeTypeInfo:
- * @node_type: the render node type in the `GskRenderNodeType` enumeration
- * @instance_size: the size of the render node instance
- * @instance_init: (nullable): the instance initialization function
- * @finalize: (nullable): the instance finalization function; must chain up to the
- *   implementation of the parent class
- * @draw: the function called by gsk_render_node_draw()
- * @can_diff: (nullable): the function called by gsk_render_node_can_diff(); if
- *   unset, gsk_render_node_can_diff_true() will be used
- * @diff: (nullable): the function called by gsk_render_node_diff(); if unset,
- *   gsk_render_node_diff_impossible() will be used
- *
- * A struction that contains the type information for a `GskRenderNode` subclass,
- * to be used by gsk_render_node_type_register_static().
- */
-typedef struct
-{
-  GskRenderNodeType node_type;
-
-  gsize instance_size;
-
-  void            (* finalize)      (GskRenderNode        *node);
-  void            (* draw)          (GskRenderNode        *node,
-                                     cairo_t              *cr);
-  gboolean        (* can_diff)      (const GskRenderNode  *node1,
-                                     const GskRenderNode  *node2);
-  void            (* diff)          (GskRenderNode        *node1,
-                                     GskRenderNode        *node2,
-                                     cairo_region_t       *region);
-} GskRenderNodeTypeInfo;
-
 void            gsk_render_node_init_types              (void);
 
 GType           gsk_render_node_type_register_static    (const char                  *node_name,
-                                                         const GskRenderNodeTypeInfo *node_info);
+                                                         gsize                        instance_size,
+                                                         GClassInitFunc               class_init);
 
 gpointer        gsk_render_node_alloc                   (GskRenderNodeType            node_type);
 
