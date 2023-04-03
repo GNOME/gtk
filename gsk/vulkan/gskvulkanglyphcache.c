@@ -261,8 +261,8 @@ render_glyph (Atlas          *atlas,
   PangoGlyphInfo gi;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        value->draw_width * key->scale / 1024,
-                                        value->draw_height * key->scale / 1024);
+                                        ceil (value->draw_width * key->scale / 1024.0),
+                                        ceil (value->draw_height * key->scale / 1024.0));
   cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);

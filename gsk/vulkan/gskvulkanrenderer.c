@@ -70,6 +70,55 @@ struct _GskVulkanRendererClass
 
 G_DEFINE_TYPE (GskVulkanRenderer, gsk_vulkan_renderer, GSK_TYPE_RENDERER)
 
+static cairo_region_t *
+get_render_region (GskVulkanRenderer *self)
+{
+  const cairo_region_t *damage;
+  cairo_region_t *render_region;
+  cairo_region_t *scaled_damage;
+  GdkRectangle whole_surface;
+  GdkRectangle extents;
+  GdkSurface *surface;
+  double scale;
+
+  render_region = NULL;
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->vulkan));
+  scale = gdk_surface_get_scale (surface);
+
+  whole_surface.x = 0;
+  whole_surface.y = 0;
+  whole_surface.width = gdk_surface_get_width (surface);
+  whole_surface.height = gdk_surface_get_height (surface);
+
+  damage = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->vulkan));
+  scaled_damage = cairo_region_create ();
+  for (int i = 0; i < cairo_region_num_rectangles (damage); i++)
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_get_rectangle (damage, i, &rect);
+      cairo_region_union_rectangle (scaled_damage, &(cairo_rectangle_int_t) {
+                                      .x = (int) floor (rect.x * scale),
+                                      .y = (int) floor (rect.y * scale),
+                                      .width = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale),
+                                      .height = (int) ceil ((rect.y + rect.height) * scale) - floor (rect.y * scale),
+                                    });
+    }
+
+  if (cairo_region_contains_rectangle (scaled_damage, &whole_surface) == CAIRO_REGION_OVERLAP_IN)
+    goto out;
+
+  cairo_region_get_extents (scaled_damage, &extents);
+  if (gdk_rectangle_equal (&extents, &whole_surface))
+    goto out;
+
+  render_region = cairo_region_create_rectangle (&extents);
+
+out:
+  g_clear_pointer (&scaled_damage, cairo_region_destroy);
+
+  return g_steal_pointer (&render_region);
+}
+
 static void
 gsk_vulkan_renderer_free_targets (GskVulkanRenderer *self)
 {
@@ -89,7 +138,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
   GdkSurface *window;
-  int scale_factor;
+  double scale;
   gsize width, height;
   guint i;
 
@@ -99,9 +148,9 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   self->targets = g_new (GskVulkanImage *, self->n_targets);
 
   window = gsk_renderer_get_surface (GSK_RENDERER (self));
-  scale_factor = gdk_surface_get_scale_factor (window);
-  width = gdk_surface_get_width (window) * scale_factor;
-  height = gdk_surface_get_height (window) * scale_factor;
+  scale = gdk_surface_get_scale (window);
+  width = (int) ceil (gdk_surface_get_width (window) * scale);
+  height = (int) ceil (gdk_surface_get_height (window) * scale);
 
   for (i = 0; i < self->n_targets; i++)
     {
@@ -200,11 +249,8 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                                 ceil (viewport->size.height));
 
   gsk_vulkan_render_reset (render, image, viewport, NULL);
-
   gsk_vulkan_render_add_node (render, root);
-
   gsk_vulkan_render_upload (render);
-
   gsk_vulkan_render_draw (render);
 
   texture = gsk_vulkan_render_download_target (render);
@@ -239,11 +285,12 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
-  const cairo_region_t *clip;
+  cairo_region_t *render_region;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
 #endif
+  uint32_t draw_index;
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
@@ -256,13 +303,12 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->vulkan), region);
   render = self->render;
 
-  clip = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->vulkan));
-  gsk_vulkan_render_reset (render, self->targets[gdk_vulkan_context_get_draw_index (self->vulkan)], NULL, clip);
+  render_region = get_render_region (self);
+  draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);
 
+  gsk_vulkan_render_reset (render, self->targets[draw_index], NULL, render_region);
   gsk_vulkan_render_add_node (render, root);
-
   gsk_vulkan_render_upload (render);
-
   gsk_vulkan_render_draw (render);
 
 #ifdef G_ENABLE_DEBUG
@@ -275,6 +321,8 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
 #endif
 
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->vulkan));
+
+  g_clear_pointer (&render_region, cairo_region_destroy);
 }
 
 static void

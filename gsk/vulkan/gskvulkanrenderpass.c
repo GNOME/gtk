@@ -2258,8 +2258,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                        0,
                        1,
                        &(VkRect2D) {
-                          { rect.x * self->scale_x, rect.y * self->scale_y },
-                          { rect.width * self->scale_x, rect.height * self->scale_y }
+                          { rect.x, rect.y },
+                          { rect.width, rect.height }
                        });
 
       vkCmdBeginRenderPass (command_buffer,
@@ -2268,8 +2268,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                 .renderPass = self->render_pass,
                                 .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
                                 .renderArea = { 
-                                    { rect.x * self->scale_x, rect.y * self->scale_y },
-                                    { rect.width * self->scale_x, rect.height * self->scale_y }
+                                    { rect.x, rect.y },
+                                    { rect.width, rect.height }
                                 },
                                 .clearValueCount = 1,
                                 .pClearValues = (VkClearValue [1]) {

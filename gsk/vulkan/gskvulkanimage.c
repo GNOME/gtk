@@ -355,7 +355,7 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
                                              .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
                                              .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
                                              .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                             .buffer = gsk_vulkan_buffer_get_buffer(staging),
+                                             .buffer = gsk_vulkan_buffer_get_buffer (staging),
                                              .offset = 0,
                                              .size = buffer_size,
                                          });
@@ -570,13 +570,12 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
 {
   GskVulkanImage *self;
 
-
   self = gsk_vulkan_image_new (context,
                                width,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                               VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                               VK_IMAGE_LAYOUT_UNDEFINED,
                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
@@ -723,6 +722,8 @@ gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
         }
 
       bufferImageCopy[i].bufferOffset = offset;
+      bufferImageCopy[i].bufferRowLength = regions[i].width;
+      bufferImageCopy[i].bufferImageHeight = regions[i].height;
       bufferImageCopy[i].imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
       bufferImageCopy[i].imageSubresource.mipLevel = 0;
       bufferImageCopy[i].imageSubresource.baseArrayLayer = 0;

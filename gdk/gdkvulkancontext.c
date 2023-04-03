@@ -26,6 +26,7 @@
 
 #include "gdkdisplayprivate.h"
 #include <glib/gi18n-lib.h>
+#include <math.h>
 
 /**
  * GdkVulkanContext:
@@ -339,8 +340,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      capabilities.currentExtent.width = MAX (1, gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface));
-      capabilities.currentExtent.height = MAX (1, gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface));
+      double scale = gdk_surface_get_scale (surface);
+
+      capabilities.currentExtent.width = MAX (1, (int) ceil (gdk_surface_get_width (surface) * scale));
+      capabilities.currentExtent.height = MAX (1, (int) ceil (gdk_surface_get_height (surface) * scale));
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -475,10 +478,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   VkPresentRegionsKHR *regionsptr = VK_NULL_HANDLE;
   VkPresentRegionsKHR regions;
   VkRectLayerKHR *rectangles;
+  double scale;
   int n_regions;
-  int scale;
 
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = gdk_surface_get_scale (surface);
   n_regions = cairo_region_num_rectangles (painted);
   rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
 
@@ -490,10 +493,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 
       rectangles[i] = (VkRectLayerKHR) {
           .layer = 0,
-          .offset.x = r.x * scale,
-          .offset.y = r.y * scale,
-          .extent.width = r.width * scale,
-          .extent.height = r.height * scale,
+          .offset.x = (int) floor (r.x * scale),
+          .offset.y = (int) floor (r.y * scale),
+          .extent.width = (int) ceil (r.width * scale),
+          .extent.height = (int) ceil (r.height * scale),
       };
     }
 
