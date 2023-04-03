@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-28 06:34+0000\n"
-"PO-Revision-Date: 2022-10-28 17:01+0300\n"
+"POT-Creation-Date: 2023-03-24 08:45+0000\n"
+"PO-Revision-Date: 2023-03-24 12:30+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-DL-Team: ru\n"
 "X-DL-Module: gtk\n"
 "X-DL-Branch: gtk-3-24\n"
@@ -493,24 +493,24 @@ msgid "Unable to create a GL pixel format"
 msgstr "Невозможно создать формат пикселя GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Невозможно создать контекст GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
-#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
+#: gdk/wayland/gdkglcontext-wayland.c:422
+#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1497
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:476
+#: gdk/wayland/gdkglcontext-wayland.c:480
 msgid "Core GL is not available on EGL implementation"
 msgstr "«Core GL» не доступно в реализации EGL"
 
@@ -676,15 +676,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Закрыть"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
 msgstr "Свернуть"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9364
 msgid "Maximize"
 msgstr "Развернуть"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9321
 msgid "Restore"
 msgstr "Восстановить"
 
@@ -1228,12 +1228,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
-#: gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:6573
+#: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1282,7 +1282,7 @@ msgid "_Apply"
 msgstr "_Применить"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12830
 msgid "_OK"
 msgstr "_OK"
 
@@ -2265,24 +2265,24 @@ msgstr "_Правое:"
 msgid "Paper Margins"
 msgstr "Поля страницы"
 
-#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6687 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6688 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6688 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6689 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6689 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6690 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1503
+#: gtk/gtkfilechooserwidget.c:2338 gtk/gtklabel.c:6692 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6700 gtk/gtktextview.c:9551
+#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6701 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
@@ -2473,226 +2473,226 @@ msgstr "Папки, имена которых начинаются с «.», я�
 msgid "File names starting with a “.” are hidden"
 msgstr "Файлы, имена которых начинаются с «.», являются скрытыми"
 
-#: gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Уверены что хотите безвозвратно удалить «%s»?"
 
-#: gtk/gtkfilechooserwidget.c:1498
+#: gtk/gtkfilechooserwidget.c:1501
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Если вы удалите элемент, он будет навсегда утерян."
 
-#: gtk/gtkfilechooserwidget.c:1635
+#: gtk/gtkfilechooserwidget.c:1638
 msgid "The file could not be renamed"
 msgstr "Файл не может быть переименован"
 
-#: gtk/gtkfilechooserwidget.c:1980
+#: gtk/gtkfilechooserwidget.c:1983
 msgid "Could not select file"
 msgstr "Не удалось выделить файл"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Visit File"
 msgstr "_Перейти к файлу"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2334
 msgid "_Open With File Manager"
 msgstr "_Открыть в файловом менеджере"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Copy Location"
 msgstr "Копировать _адрес"
 
-#: gtk/gtkfilechooserwidget.c:2333
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Add to Bookmarks"
 msgstr "_Добавить в закладки"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
+#: gtk/gtkfilechooserwidget.c:2337 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "_Переименовать"
 
-#: gtk/gtkfilechooserwidget.c:2336
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Move to Trash"
 msgstr "П_ереместить в корзину"
 
-#: gtk/gtkfilechooserwidget.c:2340
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Hidden Files"
 msgstr "Показывать _скрытые файлы"
 
-#: gtk/gtkfilechooserwidget.c:2341
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Show _Size Column"
 msgstr "Показывать _размер"
 
-#: gtk/gtkfilechooserwidget.c:2342
+#: gtk/gtkfilechooserwidget.c:2345
 msgid "Show T_ype Column"
 msgstr "Показывать _тип"
 
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2346
 msgid "Show _Time"
 msgstr "Показывать _время"
 
-#: gtk/gtkfilechooserwidget.c:2344
+#: gtk/gtkfilechooserwidget.c:2347
 msgid "Sort _Folders before Files"
 msgstr "Помещать _папки перед файлами"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Расположение"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2719
+#: gtk/gtkfilechooserwidget.c:2722
 msgid "_Name:"
 msgstr "_Имя:"
 
-#: gtk/gtkfilechooserwidget.c:3344 gtk/gtkfilechooserwidget.c:3358
+#: gtk/gtkfilechooserwidget.c:3347 gtk/gtkfilechooserwidget.c:3361
 #, c-format
 msgid "Searching in %s"
 msgstr "Поиск в %s"
 
-#: gtk/gtkfilechooserwidget.c:3364
+#: gtk/gtkfilechooserwidget.c:3367
 msgid "Searching"
 msgstr "Поиск"
 
-#: gtk/gtkfilechooserwidget.c:3371
+#: gtk/gtkfilechooserwidget.c:3374
 msgid "Enter location"
 msgstr "Введите расположение"
 
-#: gtk/gtkfilechooserwidget.c:3373
+#: gtk/gtkfilechooserwidget.c:3376
 msgid "Enter location or URL"
 msgstr "Введите расположение или URL"
 
-#: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
+#: gtk/gtkfilechooserwidget.c:4454 gtk/gtkfilechooserwidget.c:7498
 #: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "Изменён"
 
-#: gtk/gtkfilechooserwidget.c:4729
+#: gtk/gtkfilechooserwidget.c:4734
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не удалось прочитать содержимое %s"
 
-#: gtk/gtkfilechooserwidget.c:4733
+#: gtk/gtkfilechooserwidget.c:4738
 msgid "Could not read the contents of the folder"
 msgstr "Не удалось прочитать содержимое папки"
 
-#: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
+#: gtk/gtkfilechooserwidget.c:4898 gtk/gtkfilechooserwidget.c:4946
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
+#: gtk/gtkfilechooserwidget.c:4900 gtk/gtkfilechooserwidget.c:4948
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4899
+#: gtk/gtkfilechooserwidget.c:4904
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserwidget.c:4907
+#: gtk/gtkfilechooserwidget.c:4912
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4911
+#: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
 msgstr "%-e %b. %Y"
 
-#: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
 msgstr "Программа"
 
-#: gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfilechooserwidget.c:5016
 msgid "Audio"
 msgstr "Аудио"
 
-#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5017 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Шрифт"
 
-#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5018 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Изображение"
 
-#: gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Archive"
 msgstr "Архив"
 
-#: gtk/gtkfilechooserwidget.c:5015
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Markup"
 msgstr "Разметка"
 
-#: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfilechooserwidget.c:5021 gtk/gtkfilechooserwidget.c:5022
 msgid "Text"
 msgstr "Текст"
 
-#: gtk/gtkfilechooserwidget.c:5019
+#: gtk/gtkfilechooserwidget.c:5024
 msgid "Video"
 msgstr "Видео"
 
-#: gtk/gtkfilechooserwidget.c:5020
+#: gtk/gtkfilechooserwidget.c:5025
 msgid "Contacts"
 msgstr "Контакты"
 
-#: gtk/gtkfilechooserwidget.c:5021
+#: gtk/gtkfilechooserwidget.c:5026
 msgid "Calendar"
 msgstr "Календарь"
 
-#: gtk/gtkfilechooserwidget.c:5022
+#: gtk/gtkfilechooserwidget.c:5027
 msgid "Document"
 msgstr "Документ"
 
-#: gtk/gtkfilechooserwidget.c:5023
+#: gtk/gtkfilechooserwidget.c:5028
 msgid "Presentation"
 msgstr "Презентация"
 
-#: gtk/gtkfilechooserwidget.c:5024
+#: gtk/gtkfilechooserwidget.c:5029
 msgid "Spreadsheet"
 msgstr "Таблица"
 
-#: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
+#: gtk/gtkfilechooserwidget.c:5060 gtk/gtkfilechooserwidget.c:5249
 #: gtk/inspector/prop-editor.c:1689
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
+#: gtk/gtkfilechooserwidget.c:5288 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Домашняя папка"
 
-#: gtk/gtkfilechooserwidget.c:5780
+#: gtk/gtkfilechooserwidget.c:5785
 msgid "Cannot change to folder because it is not local"
 msgstr "Не удалось перейти в папку, так как она не является локальной"
 
-#: gtk/gtkfilechooserwidget.c:6566 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6571 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл с именем «%s» уже существует. Заменить его?"
 
-#: gtk/gtkfilechooserwidget.c:6569 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
-#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6579 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Заменить"
 
-#: gtk/gtkfilechooserwidget.c:6793
+#: gtk/gtkfilechooserwidget.c:6798
 msgid "You do not have access to the specified folder."
 msgstr "У вас нет доступа к указанной папке."
 
-#: gtk/gtkfilechooserwidget.c:7416
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "Could not send the search request"
 msgstr "Не удалось послать запрос на поиск"
 
-#: gtk/gtkfilechooserwidget.c:7704
+#: gtk/gtkfilechooserwidget.c:7709
 msgid "Accessed"
 msgstr "Доступ"
 
-#: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
+#: gtk/gtkfilechooserwidget.c:8829 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "Создать папку"
 
@@ -2775,7 +2775,7 @@ msgstr "Не удалось создать контекст OpenGL"
 msgid "Application menu"
 msgstr "Меню приложения"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9391
 msgid "Close"
 msgstr "Закрыть"
 
@@ -2826,12 +2826,12 @@ msgid "Error"
 msgstr "Ошибка"
 
 #. Open Link
-#: gtk/gtklabel.c:6668
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "_Открыть ссылку"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6677
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "_Скопировать адрес ссылки"
 
@@ -4058,24 +4058,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9329
+#: gtk/gtkwindow.c:9339
 msgid "Move"
 msgstr "Переместить"
 
-#: gtk/gtkwindow.c:9337
+#: gtk/gtkwindow.c:9347
 msgid "Resize"
 msgstr "Изменить размер"
 
-#: gtk/gtkwindow.c:9368
+#: gtk/gtkwindow.c:9378
 msgid "Always on Top"
 msgstr "Всегда сверху"
 
-#: gtk/gtkwindow.c:12803
+#: gtk/gtkwindow.c:12817
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Хотите использовать инспектор GTK+?"
 
-#: gtk/gtkwindow.c:12805
+#: gtk/gtkwindow.c:12819
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4086,7 +4086,7 @@ msgstr ""
 "изменять внутренние данные любого приложения GTK+. Использование инспектора "
 "может привести к зависанию или аварийному завершению приложения."
 
-#: gtk/gtkwindow.c:12810
+#: gtk/gtkwindow.c:12824
 msgid "Don't show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -4099,7 +4099,7 @@ msgstr "Включить"
 msgid "State"
 msgstr "Состояние"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Префикс"
@@ -4160,15 +4160,19 @@ msgstr "Значение"
 msgid "Show data"
 msgstr "Показать данные"
 
-#: gtk/inspector/general.c:330
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:331
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Нет"
+
+#: gtk/inspector/general.c:550
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "Контекст IM жестко кодируется GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:34
 msgid "GTK+ Version"
@@ -4178,31 +4182,39 @@ msgstr "Версия GTK+"
 msgid "GDK Backend"
 msgstr "Движок GDK"
 
-#: gtk/inspector/general.ui:115
-msgid "Application ID"
-msgstr "ID Приложения"
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr "Карта шрифтов Pango"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:136
+msgid "Input Method"
+msgstr "Способ ввода"
+
+#: gtk/inspector/general.ui:183
+msgid "Application ID"
+msgstr "ID приложения"
+
+#: gtk/inspector/general.ui:217
 msgid "Resource Path"
 msgstr "Путь к ресурсам"
 
-#: gtk/inspector/general.ui:454
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "Дисплей"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "Визуальный RGBA"
 
-#: gtk/inspector/general.ui:523
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "Скомпоновано"
 
-#: gtk/inspector/general.ui:570
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "Версия GL"
 
-#: gtk/inspector/general.ui:605
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "Поставщик GL"
 
@@ -7799,12 +7811,6 @@ msgid "Wayland"
 msgstr "Wayland"
 
 #. ID
-#: modules/input/imwaylandgtk.c:82
-msgctxt "input method menu"
-msgid "Waylandgtk"
-msgstr "Waylandgtk"
-
-#. ID
 #: modules/input/imxim.c:26
 msgctxt "input method menu"
 msgid "X Input Method"
@@ -8416,3 +8422,7 @@ msgstr "тест-печати.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Печатать на тестовый принтер"
+
+#~ msgctxt "input method menu"
+#~ msgid "Waylandgtk"
+#~ msgstr "Waylandgtk"
