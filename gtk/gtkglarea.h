@@ -75,11 +75,20 @@ GType gtk_gl_area_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_gl_area_new                         (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_12
+void            gtk_gl_area_set_allowed_apis            (GtkGLArea    *area,
+                                                         GdkGLAPI      apis);
+GDK_AVAILABLE_IN_4_12
+GdkGLAPI        gtk_gl_area_get_allowed_apis            (GtkGLArea    *area);
+GDK_AVAILABLE_IN_4_12
+GdkGLAPI        gtk_gl_area_get_api                     (GtkGLArea    *area);
+
+GDK_DEPRECATED_IN_4_12_FOR(gtk_gl_area_set_allowed_apis)
 void            gtk_gl_area_set_use_es                  (GtkGLArea    *area,
                                                          gboolean      use_es);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_gl_area_get_api)
 gboolean        gtk_gl_area_get_use_es                  (GtkGLArea    *area);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_gl_area_set_required_version        (GtkGLArea    *area,
                                                          int           major,
