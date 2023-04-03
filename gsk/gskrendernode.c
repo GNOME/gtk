@@ -148,7 +148,7 @@ static gboolean
 gsk_render_node_real_can_diff (const GskRenderNode *node1,
                                const GskRenderNode *node2)
 {
-  return FALSE;
+  return TRUE;
 }
 
 static void
@@ -156,6 +156,7 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
                            GskRenderNode  *node2,
                            cairo_region_t *region)
 {
+  gsk_render_node_diff_impossible (node1, node2, region);
 }
 
 static void
@@ -229,50 +230,6 @@ gsk_render_node_get_type (void)
   return render_node_type__volatile;
 }
 
-typedef struct
-{
-  GskRenderNodeType node_type;
-
-  void     (* finalize) (GskRenderNode        *node);
-  void     (* draw)     (GskRenderNode        *node,
-                         cairo_t              *cr);
-  gboolean (* can_diff) (const GskRenderNode  *node1,
-                         const GskRenderNode  *node2);
-  void     (* diff)     (GskRenderNode        *node1,
-                         GskRenderNode        *node2,
-                         cairo_region_t       *region);
-} RenderNodeClassData;
-
-static void
-gsk_render_node_generic_class_init (gpointer g_class,
-                                    gpointer class_data)
-{
-  GskRenderNodeClass *node_class = g_class;
-  RenderNodeClassData *node_data = class_data;
-
-  /* Mandatory */
-  node_class->node_type = node_data->node_type;
-
-  /* Optional */
-  if (node_data->finalize != NULL)
-    node_class->finalize = node_data->finalize;
-  if (node_data->can_diff != NULL)
-    node_class->can_diff = node_data->can_diff;
-
-  /* Mandatory */
-  node_class->draw = node_data->draw;
-  node_class->diff = node_data->diff;
-
-  g_free (node_data);
-}
-
-static gboolean
-gsk_render_node_can_diff_true (const GskRenderNode *node1,
-                               const GskRenderNode *node2)
-{
-  return TRUE;
-}
-
 /*< private >
  * gsk_render_node_type_register_static:
  * @node_name: the name of the node
@@ -284,35 +241,20 @@ gsk_render_node_can_diff_true (const GskRenderNode *node1,
  * Returns: the newly registered GType
  */
 GType
-gsk_render_node_type_register_static (const char                  *node_name,
-                                      const GskRenderNodeTypeInfo *node_info)
+gsk_render_node_type_register_static (const char     *node_name,
+                                      gsize           instance_size,
+                                      GClassInitFunc  class_init)
 {
   GTypeInfo info;
 
   info.class_size = sizeof (GskRenderNodeClass);
   info.base_init = NULL;
   info.base_finalize = NULL;
-  info.class_init = gsk_render_node_generic_class_init;
+  info.class_init = class_init;
   info.class_finalize = NULL;
-
-  /* Avoid having a class_init() and a class struct for every GskRenderNode,
-   * by passing the various virtual functions and class data when initializing
-   * the base class
-   */
-  info.class_data = g_new (RenderNodeClassData, 1);
-  ((RenderNodeClassData *) info.class_data)->node_type = node_info->node_type;
-  ((RenderNodeClassData *) info.class_data)->finalize = node_info->finalize;
-  ((RenderNodeClassData *) info.class_data)->draw = node_info->draw;
-  ((RenderNodeClassData *) info.class_data)->can_diff = node_info->can_diff != NULL
-                                                      ? node_info->can_diff
-                                                      : gsk_render_node_can_diff_true;
-  ((RenderNodeClassData *) info.class_data)->diff = node_info->diff != NULL
-                                                  ? node_info->diff
-                                                  : gsk_render_node_diff_impossible;
-
-  info.instance_size = node_info->instance_size;
+  info.instance_size = instance_size;
   info.n_preallocs = 0;
-  info.instance_init = (GInstanceInitFunc) node_info->instance_init;
+  info.instance_init = NULL;
   info.value_table = NULL;
 
   return g_type_register_static (GSK_TYPE_RENDER_NODE, node_name, &info, 0);
