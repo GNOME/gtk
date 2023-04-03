@@ -45,6 +45,8 @@ struct _GskRenderNodeClass
   void            (* diff)        (GskRenderNode  *node1,
                                    GskRenderNode  *node2,
                                    cairo_region_t *region);
+  gboolean        (* get_opaque)  (GskRenderNode  *node,
+                                   graphene_rect_t*opaque);
 };
 
 void            gsk_render_node_init_types              (void);
@@ -66,6 +68,9 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
 void            gsk_container_node_diff_with            (GskRenderNode               *container,
                                                          GskRenderNode               *other,
                                                          cairo_region_t              *region);
+
+gboolean        gsk_render_node_get_opaque              (GskRenderNode               *node,
+                                                         graphene_rect_t             *opaque);
 
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self);
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self);

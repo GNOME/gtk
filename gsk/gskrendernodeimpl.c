@@ -115,6 +115,19 @@ gsk_color_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_color_node_get_opaque (GskRenderNode   *node,
+                           graphene_rect_t *opaque)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  if (!gdk_rgba_is_opaque (&self->color))
+    return FALSE;
+
+  *opaque = node->bounds;
+  return TRUE;
+}
+
 static void
 gsk_color_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -125,6 +138,7 @@ gsk_color_node_class_init (gpointer g_class,
 
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
+  node_class->get_opaque = gsk_color_node_get_opaque;
 }
 
 /**
@@ -275,6 +289,23 @@ gsk_linear_gradient_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_linear_gradient_node_get_opaque (GskRenderNode   *node,
+                                     graphene_rect_t *opaque)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+  guint i;
+
+  for (i = 0; i < self->n_stops; i++)
+    {
+      if (!gdk_rgba_is_opaque (&self->stops[i].color))
+        return FALSE;
+    }
+
+  *opaque = node->bounds;
+  return TRUE;
+}
+
 static void
 gsk_linear_gradient_node_class_init (gpointer g_class,
                                      gpointer class_data)
@@ -286,6 +317,7 @@ gsk_linear_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_linear_gradient_node_finalize;
   node_class->draw = gsk_linear_gradient_node_draw;
   node_class->diff = gsk_linear_gradient_node_diff;
+  node_class->get_opaque = gsk_linear_gradient_node_get_opaque;
 }
 
 static void
@@ -299,6 +331,7 @@ gsk_repeating_linear_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_linear_gradient_node_finalize;
   node_class->draw = gsk_linear_gradient_node_draw;
   node_class->diff = gsk_linear_gradient_node_diff;
+  node_class->get_opaque = gsk_linear_gradient_node_get_opaque;
 }
 
 /**
@@ -591,6 +624,23 @@ gsk_radial_gradient_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_radial_gradient_node_get_opaque (GskRenderNode   *node,
+                                     graphene_rect_t *opaque)
+{
+  GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+  guint i;
+
+  for (i = 0; i < self->n_stops; i++)
+    {
+      if (!gdk_rgba_is_opaque (&self->stops[i].color))
+        return FALSE;
+    }
+
+  *opaque = node->bounds;
+  return TRUE;
+}
+
 static void
 gsk_radial_gradient_node_class_init (gpointer g_class,
                                      gpointer class_data)
@@ -615,6 +665,7 @@ gsk_repeating_radial_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_radial_gradient_node_finalize;
   node_class->draw = gsk_radial_gradient_node_draw;
   node_class->diff = gsk_radial_gradient_node_diff;
+  node_class->get_opaque = gsk_radial_gradient_node_get_opaque;
 }
 
 /**
@@ -1077,6 +1128,23 @@ gsk_conic_gradient_node_diff (GskRenderNode  *node1,
     }
 }
 
+static gboolean
+gsk_conic_gradient_node_get_opaque (GskRenderNode   *node,
+                                    graphene_rect_t *opaque)
+{
+  GskConicGradientNode *self = (GskConicGradientNode *) node;
+  guint i;
+
+  for (i = 0; i < self->n_stops; i++)
+    {
+      if (!gdk_rgba_is_opaque (&self->stops[i].color))
+        return FALSE;
+    }
+
+  *opaque = node->bounds;
+  return TRUE;
+}
+
 static void
 gsk_conic_gradient_node_class_init (gpointer g_class,
                                     gpointer class_data)
@@ -1088,6 +1156,7 @@ gsk_conic_gradient_node_class_init (gpointer g_class,
   node_class->finalize = gsk_conic_gradient_node_finalize;
   node_class->draw = gsk_conic_gradient_node_draw;
   node_class->diff = gsk_conic_gradient_node_diff;
+  node_class->get_opaque = gsk_conic_gradient_node_get_opaque;
 }
 
 /**
@@ -2644,7 +2713,7 @@ gsk_outset_shadow_node_diff (GskRenderNode  *node1,
 
 static void
 gsk_outset_shadow_node_class_init (gpointer g_class,
-                          gpointer class_data)
+                                   gpointer class_data)
 {
   GskRenderNodeClass *node_class = g_class;
 
@@ -2841,6 +2910,19 @@ gsk_cairo_node_draw (GskRenderNode *node,
   cairo_paint (cr);
 }
 
+static gboolean
+gsk_cairo_node_get_opaque (GskRenderNode   *node,
+                           graphene_rect_t *opaque)
+{
+  GskCairoNode *self = (GskCairoNode *) node;
+
+  if (cairo_surface_get_content (self->surface) & CAIRO_CONTENT_ALPHA)
+    return FALSE;
+
+  *opaque = node->bounds;
+  return TRUE;
+}
+
 static void
 gsk_cairo_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -2851,6 +2933,7 @@ gsk_cairo_node_class_init (gpointer g_class,
 
   node_class->finalize = gsk_cairo_node_finalize;
   node_class->draw = gsk_cairo_node_draw;
+  node_class->get_opaque = gsk_cairo_node_get_opaque;
 }
 
 /**
@@ -3092,6 +3175,51 @@ gsk_container_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_container_node_get_opaque (GskRenderNode   *node,
+                               graphene_rect_t *opaque)
+{
+  GskContainerNode *self = (GskContainerNode *) node;
+  graphene_rect_t child_opaque;
+  double size, child_size, desired_size;
+  guint i;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      if (gsk_render_node_get_opaque (self->children[i], opaque))
+        break;
+    }
+
+  if (i == self->n_children)
+    return FALSE;
+
+  size = opaque->size.width * opaque->size.height;
+  /* the 80% is random. I just want it to be low enough to catch
+   * rounded corners, but not so small it catches on to .view
+   * backgrounds for the smaller child of a paned.
+   */
+  desired_size = node->bounds.size.width * node->bounds.size.height * 0.8; 
+
+  for (i++; i < self->n_children; i++)
+    {
+      if (size >= desired_size)
+        break;
+
+      if (!gsk_render_node_get_opaque (self->children[i], &child_opaque))
+        continue;
+
+      child_size = child_opaque.size.width * child_opaque.size.height;
+      /* We allow == here because we want to find the topmost opaque child */
+      if (child_size < size)
+        continue;
+
+      *opaque = child_opaque;
+      size = child_size;
+    }
+
+  return TRUE;
+}
+
 static void
 gsk_container_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -3103,6 +3231,7 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->finalize = gsk_container_node_finalize;
   node_class->draw = gsk_container_node_draw;
   node_class->diff = gsk_container_node_diff;
+  node_class->get_opaque = gsk_container_node_get_opaque;
 }
 
 /**
@@ -3365,6 +3494,37 @@ gsk_transform_node_diff (GskRenderNode  *node1,
     }
 }
 
+static gboolean
+gsk_transform_node_get_opaque (GskRenderNode   *node,
+                               graphene_rect_t *opaque)
+{
+  GskTransformNode *self = (GskTransformNode *) node;
+  graphene_rect_t child_opaque;
+
+  switch (gsk_transform_get_category (self->transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    default:
+      return FALSE;
+    }
+
+  if (!gsk_render_node_get_opaque (self->child, &child_opaque))
+    return FALSE;
+
+  gsk_transform_transform_bounds (self->transform,
+                                  &child_opaque,
+                                  opaque);
+  return TRUE;
+}
+
 static void
 gsk_transform_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -3377,6 +3537,7 @@ gsk_transform_node_class_init (gpointer g_class,
   node_class->draw = gsk_transform_node_draw;
   node_class->can_diff = gsk_transform_node_can_diff;
   node_class->diff = gsk_transform_node_diff;
+  node_class->get_opaque = gsk_transform_node_get_opaque;
 }
 
 /**
@@ -4076,9 +4237,22 @@ gsk_clip_node_diff (GskRenderNode  *node1,
     }
 }
  
+static gboolean
+gsk_clip_node_get_opaque (GskRenderNode   *node,
+                          graphene_rect_t *opaque)
+{
+  GskClipNode *self = (GskClipNode *) node;
+  graphene_rect_t child_opaque;
+
+  if (!gsk_render_node_get_opaque (self->child, &child_opaque))
+    return FALSE;
+
+  return graphene_rect_intersection (&self->clip, &child_opaque, opaque);
+}
+
 static void
 gsk_clip_node_class_init (gpointer g_class,
-                               gpointer class_data)
+                          gpointer class_data)
 {
   GskRenderNodeClass *node_class = g_class;
 
@@ -4087,6 +4261,7 @@ gsk_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_clip_node_finalize;
   node_class->draw = gsk_clip_node_draw;
   node_class->diff = gsk_clip_node_diff;
+  node_class->get_opaque = gsk_clip_node_get_opaque;
 }
 
 /**
@@ -4224,6 +4399,39 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
     }
 }
 
+static gboolean
+gsk_rounded_clip_node_get_opaque (GskRenderNode   *node,
+                                  graphene_rect_t *opaque)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  graphene_rect_t child_opaque, wide_opaque, high_opaque;
+  double start, end;
+
+  if (!gsk_render_node_get_opaque (self->child, &child_opaque))
+    return FALSE;
+
+  wide_opaque = self->clip.bounds;
+  start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].height, self->clip.corner[GSK_CORNER_TOP_RIGHT].height);
+  end = MAX(self->clip.corner[GSK_CORNER_BOTTOM_LEFT].height, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].height);
+  wide_opaque.size.height -= MIN (wide_opaque.size.height, start + end);
+  wide_opaque.origin.y += start;
+  graphene_rect_intersection (&wide_opaque, &child_opaque, &wide_opaque);
+
+  high_opaque = self->clip.bounds;
+  start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].width, self->clip.corner[GSK_CORNER_BOTTOM_LEFT].width);
+  end = MAX(self->clip.corner[GSK_CORNER_TOP_RIGHT].width, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].width);
+  high_opaque.size.width -= MIN (high_opaque.size.width, start + end);
+  high_opaque.origin.x += start;
+  graphene_rect_intersection (&high_opaque, &child_opaque, &high_opaque);
+
+  if (wide_opaque.size.width * wide_opaque.size.height > high_opaque.size.width * high_opaque.size.height)
+    *opaque = wide_opaque;
+  else
+    *opaque = high_opaque;
+
+  return TRUE;
+}
+
 static void
 gsk_rounded_clip_node_class_init (gpointer g_class,
                                   gpointer class_data)
@@ -4235,6 +4443,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_rounded_clip_node_finalize;
   node_class->draw = gsk_rounded_clip_node_draw;
   node_class->diff = gsk_rounded_clip_node_diff;
+  node_class->get_opaque = gsk_rounded_clip_node_get_opaque;
 }
 
 /**
@@ -4832,6 +5041,20 @@ gsk_cross_fade_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_cross_fade_node_get_opaque (GskRenderNode   *node,
+                                graphene_rect_t *opaque)
+{
+  GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+  graphene_rect_t start_opaque, end_opaque;
+
+  if (!gsk_render_node_get_opaque (self->start, &start_opaque) ||
+      !gsk_render_node_get_opaque (self->end, &end_opaque))
+    return FALSE;
+
+  return graphene_rect_intersection (&start_opaque, &end_opaque, opaque);
+}
+
 static void
 gsk_cross_fade_node_class_init (gpointer g_class,
                                 gpointer class_data)
@@ -4843,6 +5066,7 @@ gsk_cross_fade_node_class_init (gpointer g_class,
   node_class->finalize = gsk_cross_fade_node_finalize;
   node_class->draw = gsk_cross_fade_node_draw;
   node_class->diff = gsk_cross_fade_node_diff;
+  node_class->get_opaque = gsk_cross_fade_node_get_opaque;
 }
 
 /**
@@ -5807,6 +6031,15 @@ gsk_debug_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff (self1->child, self2->child, region);
 }
 
+static gboolean
+gsk_debug_node_get_opaque (GskRenderNode   *node,
+                           graphene_rect_t *opaque)
+{
+  GskDebugNode *self = (GskDebugNode *) node;
+
+  return gsk_render_node_get_opaque (self->child, opaque);
+}
+
 static void
 gsk_debug_node_class_init (gpointer g_class,
                            gpointer class_data)
@@ -5819,6 +6052,7 @@ gsk_debug_node_class_init (gpointer g_class,
   node_class->draw = gsk_debug_node_draw;
   node_class->can_diff = gsk_debug_node_can_diff;
   node_class->diff = gsk_debug_node_diff;
+  node_class->get_opaque = gsk_debug_node_get_opaque;
 }
 
 /**

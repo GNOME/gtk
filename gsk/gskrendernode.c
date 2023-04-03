@@ -159,6 +159,13 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
+static gboolean
+gsk_render_node_real_get_opaque (GskRenderNode   *node,
+                                 graphene_rect_t *opaque)
+{
+  return FALSE;
+}
+
 static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
@@ -167,6 +174,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->draw = gsk_render_node_real_draw;
   klass->can_diff = gsk_render_node_real_can_diff;
   klass->diff = gsk_render_node_real_diff;
+  klass->get_opaque = gsk_render_node_real_get_opaque;
 }
 
 static void
@@ -499,6 +507,13 @@ gsk_render_node_diff (GskRenderNode  *node1,
     gsk_container_node_diff_with (node2, node1, region);
   else
     gsk_render_node_diff_impossible (node1, node2, region);
+}
+
+gboolean
+gsk_render_node_get_opaque (GskRenderNode   *self,
+                            graphene_rect_t *opaque)
+{
+  return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque (self, opaque);
 }
 
 /**
