@@ -182,6 +182,8 @@ struct _GdkWaylandSeat
   GdkWaylandPointerData pointer_info;
   GdkWaylandPointerData touch_info;
 
+  uint32_t latest_touch_down_serial;
+
   GdkModifierType key_modifiers;
   GdkSurface *keyboard_focus;
   GdkSurface *grab_surface;
