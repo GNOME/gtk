@@ -2098,7 +2098,7 @@ gtk_column_view_set_tab_behavior (GtkColumnView      *self,
  *
  * Since: 4.12
  */
-gboolean
+GtkListTabBehavior
 gtk_column_view_get_tab_behavior (GtkColumnView *self)
 {
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);

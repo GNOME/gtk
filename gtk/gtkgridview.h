@@ -76,7 +76,8 @@ GDK_AVAILABLE_IN_4_12
 void            gtk_grid_view_set_tab_behavior                  (GtkGridView            *self,
                                                                  GtkListTabBehavior      tab_behavior);
 GDK_AVAILABLE_IN_4_12
-gboolean        gtk_grid_view_get_tab_behavior                  (GtkGridView            *self);
+GtkListTabBehavior
+                gtk_grid_view_get_tab_behavior                  (GtkGridView            *self);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_single_click_activate         (GtkGridView            *self,
