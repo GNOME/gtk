@@ -6154,195 +6154,142 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
 static void
 gsk_render_node_init_types_once (void)
 {
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskContainerNode"),
-                                                            sizeof (GskContainerNode),
-                                                            gsk_container_node_class_init);
-    gsk_render_node_types[GSK_CONTAINER_NODE] = node_type;
-  }
+  GType node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskCairoNode"),
-                                                            sizeof (GskCairoNode),
-                                                            gsk_cairo_node_class_init);
-    gsk_render_node_types[GSK_CAIRO_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskContainerNode"),
+                                                    sizeof (GskContainerNode),
+                                                    gsk_container_node_class_init);
+  gsk_render_node_types[GSK_CONTAINER_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskColorNode"),
-                                                            sizeof (GskColorNode),
-                                                            gsk_color_node_class_init);
-    gsk_render_node_types[GSK_COLOR_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskCairoNode"),
+                                                    sizeof (GskCairoNode),
+                                                    gsk_cairo_node_class_init);
+  gsk_render_node_types[GSK_CAIRO_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskLinearGradientNode"),
-                                                            sizeof (GskLinearGradientNode),
-                                                            gsk_linear_gradient_node_class_init);
-    gsk_render_node_types[GSK_LINEAR_GRADIENT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskColorNode"),
+                                                    sizeof (GskColorNode),
+                                                    gsk_color_node_class_init);
+  gsk_render_node_types[GSK_COLOR_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingLinearGradientNode"),
-                                                            sizeof (GskLinearGradientNode),
-                                                            gsk_repeating_linear_gradient_node_class_init);
-    gsk_render_node_types[GSK_REPEATING_LINEAR_GRADIENT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskLinearGradientNode"),
+                                                    sizeof (GskLinearGradientNode),
+                                                    gsk_linear_gradient_node_class_init);
+  gsk_render_node_types[GSK_LINEAR_GRADIENT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskRadialGradientNode"),
-                                                            sizeof (GskRadialGradientNode),
-                                                            gsk_radial_gradient_node_class_init);
-    gsk_render_node_types[GSK_RADIAL_GRADIENT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskRepeatingLinearGradientNode"),
+                                                    sizeof (GskLinearGradientNode),
+                                                    gsk_repeating_linear_gradient_node_class_init);
+  gsk_render_node_types[GSK_REPEATING_LINEAR_GRADIENT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskRepeatingRadialGradientNode"),
-                                                            sizeof (GskRadialGradientNode),
-                                                            gsk_repeating_radial_gradient_node_class_init);
-    gsk_render_node_types[GSK_REPEATING_RADIAL_GRADIENT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskRadialGradientNode"),
+                                                    sizeof (GskRadialGradientNode),
+                                                    gsk_radial_gradient_node_class_init);
+  gsk_render_node_types[GSK_RADIAL_GRADIENT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskConicGradientNode"),
-                                                            sizeof (GskConicGradientNode),
-                                                            gsk_conic_gradient_node_class_init);
-    gsk_render_node_types[GSK_CONIC_GRADIENT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskRepeatingRadialGradientNode"),
+                                                    sizeof (GskRadialGradientNode),
+                                                    gsk_repeating_radial_gradient_node_class_init);
+  gsk_render_node_types[GSK_REPEATING_RADIAL_GRADIENT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskBorderNode"),
-                                                            sizeof (GskBorderNode),
-                                                            gsk_border_node_class_init);
-    gsk_render_node_types[GSK_BORDER_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskConicGradientNode"),
+                                                    sizeof (GskConicGradientNode),
+                                                    gsk_conic_gradient_node_class_init);
+  gsk_render_node_types[GSK_CONIC_GRADIENT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskTextureNode"),
-                                                            sizeof (GskTextureNode),
-                                                            gsk_texture_node_class_init);
-    gsk_render_node_types[GSK_TEXTURE_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskBorderNode"),
+                                                    sizeof (GskBorderNode),
+                                                    gsk_border_node_class_init);
+  gsk_render_node_types[GSK_BORDER_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskTextureScaleNode"),
-                                                            sizeof (GskTextureScaleNode),
-                                                            gsk_texture_scale_node_class_init);
-    gsk_render_node_types[GSK_TEXTURE_SCALE_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskTextureNode"),
+                                                    sizeof (GskTextureNode),
+                                                    gsk_texture_node_class_init);
+  gsk_render_node_types[GSK_TEXTURE_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskInsetShadowNode"),
-                                                            sizeof (GskInsetShadowNode),
-                                                            gsk_inset_shadow_node_class_init);
-    gsk_render_node_types[GSK_INSET_SHADOW_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskTextureScaleNode"),
+                                                    sizeof (GskTextureScaleNode),
+                                                    gsk_texture_scale_node_class_init);
+  gsk_render_node_types[GSK_TEXTURE_SCALE_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskOutsetShadowNode"),
-                                                            sizeof (GskOutsetShadowNode),
-                                                            gsk_outset_shadow_node_class_init);
-    gsk_render_node_types[GSK_OUTSET_SHADOW_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskInsetShadowNode"),
+                                                    sizeof (GskInsetShadowNode),
+                                                    gsk_inset_shadow_node_class_init);
+  gsk_render_node_types[GSK_INSET_SHADOW_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskTransformNode"),
-                                                            sizeof (GskTransformNode),
-                                                            gsk_transform_node_class_init);
-    gsk_render_node_types[GSK_TRANSFORM_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskOutsetShadowNode"),
+                                                    sizeof (GskOutsetShadowNode),
+                                                    gsk_outset_shadow_node_class_init);
+  gsk_render_node_types[GSK_OUTSET_SHADOW_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskOpacityNode"),
-                                                            sizeof (GskOpacityNode),
-                                                            gsk_opacity_node_class_init);
-    gsk_render_node_types[GSK_OPACITY_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskTransformNode"),
+                                                    sizeof (GskTransformNode),
+                                                    gsk_transform_node_class_init);
+  gsk_render_node_types[GSK_TRANSFORM_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskColorMatrixNode"),
-                                                            sizeof (GskColorMatrixNode),
-                                                            gsk_color_matrix_node_class_init);
-    gsk_render_node_types[GSK_COLOR_MATRIX_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskOpacityNode"),
+                                                    sizeof (GskOpacityNode),
+                                                    gsk_opacity_node_class_init);
+  gsk_render_node_types[GSK_OPACITY_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskRepeatNode"),
-                                                            sizeof (GskRepeatNode),
-                                                            gsk_repeat_node_class_init);
-    gsk_render_node_types[GSK_REPEAT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskColorMatrixNode"),
+                                                    sizeof (GskColorMatrixNode),
+                                                    gsk_color_matrix_node_class_init);
+  gsk_render_node_types[GSK_COLOR_MATRIX_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskClipNode"),
-                                                            sizeof (GskClipNode),
-                                                            gsk_clip_node_class_init);
-    gsk_render_node_types[GSK_CLIP_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskRepeatNode"),
+                                                    sizeof (GskRepeatNode),
+                                                    gsk_repeat_node_class_init);
+  gsk_render_node_types[GSK_REPEAT_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskRoundedClipNode"),
-                                                            sizeof (GskRoundedClipNode),
-                                                            gsk_rounded_clip_node_class_init);
-    gsk_render_node_types[GSK_ROUNDED_CLIP_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskClipNode"),
+                                                    sizeof (GskClipNode),
+                                                    gsk_clip_node_class_init);
+  gsk_render_node_types[GSK_CLIP_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskShadowNode"),
-                                                            sizeof (GskShadowNode),
-                                                            gsk_shadow_node_class_init);
-    gsk_render_node_types[GSK_SHADOW_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskRoundedClipNode"),
+                                                    sizeof (GskRoundedClipNode),
+                                                    gsk_rounded_clip_node_class_init);
+  gsk_render_node_types[GSK_ROUNDED_CLIP_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskBlendNode"),
-                                                            sizeof (GskBlendNode),
-                                                            gsk_blend_node_class_init);
-    gsk_render_node_types[GSK_BLEND_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskShadowNode"),
+                                                    sizeof (GskShadowNode),
+                                                    gsk_shadow_node_class_init);
+  gsk_render_node_types[GSK_SHADOW_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskCrossFadeNode"),
-                                                            sizeof (GskCrossFadeNode),
-                                                            gsk_cross_fade_node_class_init);
-    gsk_render_node_types[GSK_CROSS_FADE_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskBlendNode"),
+                                                    sizeof (GskBlendNode),
+                                                    gsk_blend_node_class_init);
+  gsk_render_node_types[GSK_BLEND_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskTextNode"),
-                                                            sizeof (GskTextNode),
-                                                            gsk_text_node_class_init);
-    gsk_render_node_types[GSK_TEXT_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskCrossFadeNode"),
+                                                    sizeof (GskCrossFadeNode),
+                                                    gsk_cross_fade_node_class_init);
+  gsk_render_node_types[GSK_CROSS_FADE_NODE] = node_type;
 
-  {
+  node_type = gsk_render_node_type_register_static (I_("GskTextNode"),
+                                                    sizeof (GskTextNode),
+                                                    gsk_text_node_class_init);
+  gsk_render_node_types[GSK_TEXT_NODE] = node_type;
 
-    GType node_type = gsk_render_node_type_register_static (I_("GskBlurNode"),
-                                                            sizeof (GskBlurNode),
-                                                            gsk_blur_node_class_init);
-    gsk_render_node_types[GSK_BLUR_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskBlurNode"),
+                                                    sizeof (GskBlurNode),
+                                                    gsk_blur_node_class_init);
+  gsk_render_node_types[GSK_BLUR_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskMaskNode"),
-                                                            sizeof (GskMaskNode),
-                                                            gsk_mask_node_class_init);
-    gsk_render_node_types[GSK_MASK_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskMaskNode"),
+                                                    sizeof (GskMaskNode),
+                                                    gsk_mask_node_class_init);
+  gsk_render_node_types[GSK_MASK_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskGLShaderNode"),
-                                                            sizeof (GskGLShaderNode),
-                                                            gsk_gl_shader_node_class_init);
-    gsk_render_node_types[GSK_GL_SHADER_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskGLShaderNode"),
+                                                    sizeof (GskGLShaderNode),
+                                                    gsk_gl_shader_node_class_init);
+  gsk_render_node_types[GSK_GL_SHADER_NODE] = node_type;
 
-  {
-    GType node_type = gsk_render_node_type_register_static (I_("GskDebugNode"),
-                                                            sizeof (GskDebugNode),
-                                                            gsk_debug_node_class_init);
-    gsk_render_node_types[GSK_DEBUG_NODE] = node_type;
-  }
+  node_type = gsk_render_node_type_register_static (I_("GskDebugNode"),
+                                                    sizeof (GskDebugNode),
+                                                    gsk_debug_node_class_init);
+  gsk_render_node_types[GSK_DEBUG_NODE] = node_type;
 }
 
 static void
