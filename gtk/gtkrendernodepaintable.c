@@ -52,8 +52,8 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
   gtk_snapshot_save (snapshot);
 
   gtk_snapshot_scale (snapshot,
-                      width / (self->bounds.size.width),
-                      height / (self->bounds.size.height));
+                      width / ceilf (self->bounds.size.width),
+                      height / ceilf (self->bounds.size.height));
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->bounds.origin.x, -self->bounds.origin.y));
 
   gtk_snapshot_push_clip (snapshot, &self->bounds);
@@ -88,17 +88,6 @@ gtk_render_node_paintable_paintable_get_intrinsic_height (GdkPaintable *paintabl
   return ceilf (self->bounds.size.height);
 }
 
-static double
-gtk_render_node_paintable_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
-{
-  GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
-
-  if (self->bounds.size.height != 0)
-    return self->bounds.size.width / self->bounds.size.height;
-
-  return 0;
-}
-
 static void
 gtk_render_node_paintable_paintable_init (GdkPaintableInterface *iface)
 {
@@ -106,7 +95,6 @@ gtk_render_node_paintable_paintable_init (GdkPaintableInterface *iface)
   iface->get_flags = gtk_render_node_paintable_paintable_get_flags;
   iface->get_intrinsic_width = gtk_render_node_paintable_paintable_get_intrinsic_width;
   iface->get_intrinsic_height = gtk_render_node_paintable_paintable_get_intrinsic_height;
-  iface->get_intrinsic_aspect_ratio = gtk_render_node_paintable_paintable_get_intrinsic_aspect_ratio;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkRenderNodePaintable, gtk_render_node_paintable, G_TYPE_OBJECT, 0,
