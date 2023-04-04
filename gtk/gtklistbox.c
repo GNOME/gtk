@@ -433,7 +433,18 @@ gtk_list_box_set_property (GObject      *obj,
 static void
 gtk_list_box_dispose (GObject *object)
 {
-  gtk_list_box_remove_all (GTK_LIST_BOX (object));
+  GtkListBox *self = GTK_LIST_BOX (object);
+
+  if (self->bound_model)
+    {
+      if (self->create_widget_func_data_destroy)
+        self->create_widget_func_data_destroy (self->create_widget_func_data);
+
+      g_signal_handlers_disconnect_by_func (self->bound_model, gtk_list_box_bound_model_changed, self);
+      g_clear_object (&self->bound_model);
+    }
+
+  gtk_list_box_remove_all (self);
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
 }
@@ -455,15 +466,6 @@ gtk_list_box_finalize (GObject *obj)
 
   g_sequence_free (box->children);
   g_hash_table_unref (box->header_hash);
-
-  if (box->bound_model)
-    {
-      if (box->create_widget_func_data_destroy)
-        box->create_widget_func_data_destroy (box->create_widget_func_data);
-
-      g_signal_handlers_disconnect_by_func (box->bound_model, gtk_list_box_bound_model_changed, obj);
-      g_clear_object (&box->bound_model);
-    }
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->finalize (obj);
 }
@@ -874,9 +876,9 @@ gtk_list_box_unselect_row (GtkListBox    *box,
 {
   g_return_if_fail (GTK_IS_LIST_BOX (box));
   g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
-  
+
   gtk_list_box_unselect_row_internal (box, row);
-} 
+}
 
 /**
  * gtk_list_box_select_all:
@@ -1514,7 +1516,7 @@ gtk_list_box_add_move_binding (GtkWidgetClass  *widget_class,
                                        "(iibb)", step, count, FALSE, TRUE);
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask | GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                       "move-cursor", 
+                                       "move-cursor",
                                        "(iibb)", step, count, TRUE, TRUE);
 }
 
@@ -1922,7 +1924,7 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
 
 static void
 gtk_list_box_click_gesture_stopped (GtkGestureClick *gesture,
-                                         GtkListBox           *box)
+                                    GtkListBox      *box)
 {
   if (box->active_row)
     {
