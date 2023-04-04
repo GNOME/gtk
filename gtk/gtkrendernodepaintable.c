@@ -52,8 +52,8 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
   gtk_snapshot_save (snapshot);
 
   gtk_snapshot_scale (snapshot,
-                      width / (self->bounds.size.width),
-                      height / (self->bounds.size.height));
+                      width / ceilf (self->bounds.size.width),
+                      height / ceilf (self->bounds.size.height));
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->bounds.origin.x, -self->bounds.origin.y));
 
   gtk_snapshot_push_clip (snapshot, &self->bounds);
