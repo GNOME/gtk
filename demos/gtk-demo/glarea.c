@@ -221,16 +221,13 @@ static void
 realize (GtkWidget *widget)
 {
   const char *vertex_path, *fragment_path;
-  GdkGLContext *context;
 
   gtk_gl_area_make_current (GTK_GL_AREA (widget));
 
   if (gtk_gl_area_get_error (GTK_GL_AREA (widget)) != NULL)
     return;
 
-  context = gtk_gl_area_get_context (GTK_GL_AREA (widget));
-
-  if (gdk_gl_context_get_use_es (context))
+  if (gtk_gl_area_get_api (GTK_GL_AREA (widget)) == GDK_GL_API_GLES)
     {
       vertex_path = "/glarea/glarea-gles.vs.glsl";
       fragment_path = "/glarea/glarea-gles.fs.glsl";

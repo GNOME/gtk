@@ -737,7 +737,6 @@ gtk_gears_realize (GtkWidget *widget)
   GtkGLArea *glarea = GTK_GL_AREA (widget);
   GtkGears *gears = GTK_GEARS (widget);
   GtkGearsPrivate *priv = gtk_gears_get_instance_private (gears);
-  GdkGLContext *context;
   GLuint vao, v, f, program;
   const char *p;
   char msg[512];
@@ -748,8 +747,6 @@ gtk_gears_realize (GtkWidget *widget)
   if (gtk_gl_area_get_error (glarea) != NULL)
     return;
 
-  context = gtk_gl_area_get_context (glarea);
-
   glEnable (GL_CULL_FACE);
   glEnable (GL_DEPTH_TEST);
 
@@ -759,7 +756,7 @@ gtk_gears_realize (GtkWidget *widget)
   priv->vao = vao;
 
   /* Compile the vertex shader */
-  if (gdk_gl_context_get_use_es (context))
+  if (gtk_gl_area_get_api (glarea) == GDK_GL_API_GLES)
     p = vertex_shader_gles;
   else
     p = vertex_shader_gl;
@@ -770,7 +767,7 @@ gtk_gears_realize (GtkWidget *widget)
   g_debug ("vertex shader info: %s\n", msg);
 
   /* Compile the fragment shader */
-  if (gdk_gl_context_get_use_es (context))
+  if (gtk_gl_area_get_api (glarea) == GDK_GL_API_GLES)
     p = fragment_shader_gles;
   else
     p = fragment_shader_gl;

@@ -169,6 +169,7 @@ typedef struct {
   gboolean needs_render;
   gboolean auto_render;
   gboolean use_es;
+  GdkGLAPI allowed_apis;
 } GtkGLAreaPrivate;
 
 enum {
@@ -178,6 +179,8 @@ enum {
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
   PROP_USE_ES,
+  PROP_ALLOWED_APIS,
+  PROP_API,
 
   PROP_AUTO_RENDER,
 
@@ -224,7 +227,13 @@ gtk_gl_area_set_property (GObject      *gobject,
       break;
 
     case PROP_USE_ES:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_gl_area_set_use_es (self, g_value_get_boolean (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
+      break;
+
+    case PROP_ALLOWED_APIS:
+      gtk_gl_area_set_allowed_apis (self, g_value_get_flags (value));
       break;
 
     default:
@@ -259,7 +268,17 @@ gtk_gl_area_get_property (GObject    *gobject,
       break;
 
     case PROP_USE_ES:
-      g_value_set_boolean (value, priv->use_es);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      g_value_set_boolean (value, gtk_gl_area_get_use_es (GTK_GL_AREA (gobject)));
+G_GNUC_END_IGNORE_DEPRECATIONS
+      break;
+
+    case PROP_ALLOWED_APIS:
+      g_value_set_flags (value, priv->allowed_apis);
+      break;
+
+    case PROP_API:
+      g_value_set_flags (value, gtk_gl_area_get_api (GTK_GL_AREA (gobject)));
       break;
 
     default:
@@ -321,7 +340,7 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
       return NULL;
     }
 
-  gdk_gl_context_set_allowed_apis (context, priv->use_es ? GDK_GL_API_GLES : GDK_GL_API_GL);
+  gdk_gl_context_set_allowed_apis (context, priv->allowed_apis);
   gdk_gl_context_set_required_version (context,
                                        priv->required_gl_version / 10,
                                        priv->required_gl_version % 10);
@@ -502,7 +521,7 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-      if (gdk_gl_context_get_use_es (priv->context))
+      if (gdk_gl_context_get_api (priv->context) == GDK_GL_API_GLES)
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       else
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
@@ -859,6 +878,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * If set to %TRUE the widget will try to create a `GdkGLContext` using
    * OpenGL ES instead of OpenGL.
+   *
+   * Deprecated: 4.12: Use [property@Gtk.GLArea:allowed-apis]
    */
   obj_props[PROP_USE_ES] =
     g_param_spec_boolean ("use-es", NULL, NULL,
@@ -866,6 +887,36 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
                           G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkGLArea:allowed-apis: (attributes org.gtk.Property.get=gtk_gl_area_get_allowed_apis org.gtk.Property.set=gtk_gl_area_set_allowed_apis)
+   *
+   * The allowed APIs.
+   *
+   * Since: 4.12
+   */
+  obj_props[PROP_ALLOWED_APIS] =
+    g_param_spec_flags ("allowed-apis", NULL, NULL,
+                        GDK_TYPE_GL_API,
+                        GDK_GL_API_GL | GDK_GL_API_GLES,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkGLArea:api: (attributes org.gtk.Property.get=gtk_gl_area_get_api)
+   *
+   * The API currently in use.
+   *
+   * Since: 4.12
+   */
+  obj_props[PROP_API] =
+    g_param_spec_flags ("api", NULL, NULL,
+                        GDK_TYPE_GL_API,
+                        0,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
 
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
@@ -968,6 +1019,7 @@ gtk_gl_area_init (GtkGLArea *area)
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;
   priv->required_gl_version = 0;
+  priv->allowed_apis = GDK_GL_API_GL | GDK_GL_API_GLES;
 }
 
 /**
@@ -1034,6 +1086,8 @@ gtk_gl_area_get_error (GtkGLArea *area)
  *
  * You should check the capabilities of the `GdkGLContext` before drawing
  * with either API.
+ *
+ * Deprecated: 4.12: Use [method@Gtk.GLArea.set_allowed_apis]
  */
 void
 gtk_gl_area_set_use_es (GtkGLArea *area,
@@ -1044,14 +1098,10 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
   g_return_if_fail (GTK_IS_GL_AREA (area));
   g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
 
-  use_es = !!use_es;
+  priv->allowed_apis = use_es ? GDK_GL_API_GLES : GDK_GL_API_GL;
 
-  if (priv->use_es != use_es)
-    {
-      priv->use_es = use_es;
-
-      g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
-    }
+  g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
+  g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_ALLOWED_APIS]);
 }
 
 /**
@@ -1064,6 +1114,8 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
  *
  * Returns: %TRUE if the `GtkGLArea` should create an OpenGL ES context
  *   and %FALSE otherwise
+ *
+ * Deprecated: 4.12: Use [method@Gtk.GLArea.get_api]
  */
 gboolean
 gtk_gl_area_get_use_es (GtkGLArea *area)
@@ -1072,7 +1124,89 @@ gtk_gl_area_get_use_es (GtkGLArea *area)
 
   g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
 
-  return priv->use_es;
+  if (priv->context)
+    return gdk_gl_context_get_api (priv->context) == GDK_GL_API_GLES;
+  else
+    return priv->allowed_apis == GDK_GL_API_GLES;
+}
+
+/**
+ * gtk_gl_area_set_allowed_apis:
+ * @area: a `GtkGLArea`
+ * @apis: the allowed APIs
+ *
+ * Sets the allowed APIs to create a context with.
+ *
+ * You should check [property@Gtk.GLArea:api] before drawing
+ * with either API.
+ *
+ * By default, all APIs are allowed.
+ *
+ * Since: 4.12
+ */
+void
+gtk_gl_area_set_allowed_apis (GtkGLArea *area,
+                              GdkGLAPI   apis)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
+
+  if (priv->allowed_apis == apis)
+    return;
+
+  priv->allowed_apis = apis;
+
+  g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
+  g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_ALLOWED_APIS]);
+}
+
+/**
+ * gtk_gl_area_get_allowed_apis:
+ * @area: a `GtkGLArea`
+ *
+ * Gets the allowed APIs.
+ *
+ * See [method@Gtk.GLArea.set_allowed_apis].
+ *
+ * Returns: the allowed APIs
+ *
+ * Since: 4.12
+ */
+GdkGLAPI
+gtk_gl_area_get_allowed_apis (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_val_if_fail (GTK_IS_GL_AREA (area), 0);
+
+  return priv->allowed_apis;
+}
+
+/**
+ * gtk_gl_area_get_api:
+ * @area: a `GtkGLArea`
+ *
+ * Gets the API that is currently in use.
+ *
+ * If the GL area has not been realized yet, 0 is returned.
+ *
+ * Returns: the currently used API
+ *
+ * Since: 4.12
+ */
+GdkGLAPI
+gtk_gl_area_get_api (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_val_if_fail (GTK_IS_GL_AREA (area), 0);
+
+  if (priv->context)
+    return gdk_gl_context_get_api (priv->context);
+  else
+    return 0;
 }
 
 /**
