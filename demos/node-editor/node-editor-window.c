@@ -174,6 +174,7 @@ text_changed (GtkTextBuffer    *buffer,
   GtkTextIter iter;
   GtkTextIter start, end;
   float scale;
+  GskRenderNode *big_node;
 
   g_array_remove_range (self->errors, 0, self->errors->len);
   text = get_current_text (self->text_buffer);
@@ -186,13 +187,18 @@ text_changed (GtkTextBuffer    *buffer,
   self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
 
   scale = gtk_scale_button_get_value (GTK_SCALE_BUTTON (self->scale_scale));
-  if (self->node && scale != 1.0)
+  if (self->node && scale != 0.)
     {
-      GskRenderNode *node;
-
-      node = gsk_transform_node_new (self->node, gsk_transform_scale (NULL, scale, scale));
-      gsk_render_node_unref (self->node);
-      self->node = node;
+      scale = pow (2., scale);
+      big_node = gsk_transform_node_new (self->node, gsk_transform_scale (NULL, scale, scale));
+    }
+  else if (self->node)
+    {
+      big_node = gsk_render_node_ref (self->node);
+    }
+  else
+    {
+      big_node = NULL;
     }
 
   g_bytes_unref (bytes);
@@ -205,23 +211,34 @@ text_changed (GtkTextBuffer    *buffer,
       guint i;
 
       snapshot = gtk_snapshot_new ();
+      gsk_render_node_get_bounds (big_node, &bounds);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- bounds.origin.x, - bounds.origin.y));
+      gtk_snapshot_append_node (snapshot, big_node);
+      paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
+      gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
+      g_clear_object (&paintable);
+
+      snapshot = gtk_snapshot_new ();
       gsk_render_node_get_bounds (self->node, &bounds);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- bounds.origin.x, - bounds.origin.y));
       gtk_snapshot_append_node (snapshot, self->node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
-      gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
+
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
         {
           gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
           gtk_renderer_paintable_set_paintable (item, paintable);
           g_object_unref (item);
         }
+
       g_clear_object (&paintable);
     }
   else
     {
       gtk_picture_set_paintable (GTK_PICTURE (self->picture), NULL);
     }
+
+  g_clear_pointer (&big_node, gsk_render_node_unref);
 
   gtk_text_buffer_get_start_iter (self->text_buffer, &iter);
 
