@@ -3,6 +3,9 @@
   <template class="GtkColorChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select a Color</property>
     <property name="resizable">0</property>
+    <style>
+      <class name="colorchooser"/>
+    </style>
     <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">1</property>
