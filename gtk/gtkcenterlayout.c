@@ -42,6 +42,7 @@ struct _GtkCenterLayout
 
   GtkBaselinePosition baseline_pos;
   GtkOrientation orientation;
+  gboolean shrink_center_last;
 
   union {
     struct {
@@ -52,6 +53,14 @@ struct _GtkCenterLayout
     GtkWidget *children[3];
   };
 };
+
+enum {
+  PROP_0,
+  PROP_SHRINK_CENTER_LAST,
+  LAST_PROP
+};
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE (GtkCenterLayout, gtk_center_layout, GTK_TYPE_LAYOUT_MANAGER)
 
@@ -146,7 +155,16 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
 
   if (self->center_widget)
     {
-      center_size = CLAMP (size - needed_spacing - (sizes[0].minimum_size + sizes[2].minimum_size), sizes[1].minimum_size, sizes[1].natural_size);
+      int natural_size;
+
+      avail = size - needed_spacing - (sizes[0].minimum_size + sizes[2].minimum_size);
+
+      if (self->shrink_center_last)
+        natural_size = CLAMP (size - needed_spacing - (sizes[0].natural_size + sizes[2].natural_size), sizes[1].minimum_size, sizes[1].natural_size);
+      else
+        natural_size = sizes[1].natural_size;
+
+      center_size = CLAMP (avail, sizes[1].minimum_size, natural_size);
       center_expand = get_expand (self->center_widget, self->orientation);
     }
 
@@ -523,6 +541,46 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
 }
 
 static void
+gtk_center_layout_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GtkCenterLayout *self = GTK_CENTER_LAYOUT (object);
+
+  switch (prop_id)
+    {
+    case PROP_SHRINK_CENTER_LAST:
+      gtk_center_layout_set_shrink_center_last (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_center_layout_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GtkCenterLayout *self = GTK_CENTER_LAYOUT (object);
+
+  switch (prop_id)
+    {
+    case PROP_SHRINK_CENTER_LAST:
+      g_value_set_boolean (value, self->shrink_center_last);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_center_layout_dispose (GObject *object)
 {
   GtkCenterLayout *self = GTK_CENTER_LAYOUT (object);
@@ -540,11 +598,34 @@ gtk_center_layout_class_init (GtkCenterLayoutClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS (klass);
 
+  object_class->get_property = gtk_center_layout_get_property;
+  object_class->set_property = gtk_center_layout_set_property;
   object_class->dispose = gtk_center_layout_dispose;
 
   layout_class->get_request_mode = gtk_center_layout_get_request_mode;
   layout_class->measure = gtk_center_layout_measure;
   layout_class->allocate = gtk_center_layout_allocate;
+
+  /**
+   * GtkCenterLayout:shrink-center-last: (attributes org.gtk.Property.get=gtk_center_layout_get_shrink_center_last org.gtk.Property.set=gtk_center_layout_set_shrink_center_last)
+   *
+   * Whether to shrink the center widget after other children.
+   *
+   * By default, when there's no space to give all three children their
+   * natural widths, the start and end widgets start shrinking and the
+   * center child keeps natural width until they reach minimum width.
+   *
+   * If set to `TRUE`, start and end widgets keep natural width and the
+   * center widget starts shrinking instead.
+   *
+   * Since: 4.12
+   */
+  props[PROP_SHRINK_CENTER_LAST] =
+      g_param_spec_boolean ("shrink-center-last", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 }
 
 static void
@@ -745,4 +826,56 @@ gtk_center_layout_get_end_widget (GtkCenterLayout *self)
   g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), NULL);
 
   return self->end_widget;
+}
+
+/**
+ * gtk_center_layout_set_shrink_center_last: (attributes org.gtk.Method.set_property=shrink-center-last)
+ * @self: a `GtkCenterLayout`
+ * @shrink_center_last: whether to shrink the center widget after others
+ *
+ * Sets whether to shrink the center widget after other children.
+ *
+ * By default, when there's no space to give all three children their
+ * natural widths, the start and end widgets start shrinking and the
+ * center child keeps natural width until they reach minimum width.
+ *
+ * If set to `TRUE`, start and end widgets keep natural width and the
+ * center widget starts shrinking instead.
+ *
+ * Since: 4.12
+ */
+void
+gtk_center_layout_set_shrink_center_last (GtkCenterLayout *self,
+                                          gboolean         shrink_center_last)
+{
+  g_return_if_fail (GTK_IS_CENTER_LAYOUT (self));
+
+  shrink_center_last = !!shrink_center_last;
+
+  if (shrink_center_last == self->shrink_center_last)
+    return;
+
+  self->shrink_center_last = shrink_center_last;
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHRINK_CENTER_LAST]);
+}
+
+/**
+ * gtk_center_layout_get_shrink_center_last: (attributes org.gtk.Method.get_property=shrink-center-last)
+ * @self: a `GtkCenterLayout`
+ *
+ * Gets whether @self shrinks the center widget after other children.
+ *
+ * Returns: whether to shrink the center widget after others
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_center_layout_get_shrink_center_last (GtkCenterLayout *self)
+{
+  g_return_val_if_fail (GTK_IS_CENTER_LAYOUT (self), FALSE);
+
+  return self->shrink_center_last;
 }
