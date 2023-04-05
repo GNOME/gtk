@@ -38,6 +38,11 @@
  * To set the heading that is shown above the `GtkAppChooserWidget`,
  * use [method@Gtk.AppChooserDialog.set_heading].
  *
+ * ## CSS nodes
+ *
+ * `GtkAppChooserDialog` has a single CSS node with the name `window` and style
+ * class `.appchooser`.
+ *
  * Deprecated: 4.10: The application selection widgets should be
  *   implemented according to the design of each platform and/or
  *   application requiring them.

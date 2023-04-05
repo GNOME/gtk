@@ -87,6 +87,11 @@
  * and "Terminal Shortcuts".
  *
  * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/main/demos/gtk-demo/shortcuts-builder.ui).
+ *
+ * ## CSS nodes
+ *
+ * `GtkShortcutsWindow` has a single CSS node with the name `window` and style
+ * class `.shortcuts`.
  */
 
 struct _GtkShortcutsWindow
@@ -980,4 +985,5 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   g_signal_connect_object (self->stack, "notify::visible-child",
                            G_CALLBACK (update_title_stack), self, G_CONNECT_SWAPPED);
 
+  gtk_widget_add_css_class (GTK_WIDGET (self), "shortcuts");
 }

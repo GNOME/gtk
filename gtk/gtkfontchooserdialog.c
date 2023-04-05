@@ -74,6 +74,11 @@ struct _GtkFontChooserDialogClass
  * interface exposes the buttons with the names “select_button”
  * and “cancel_button”.
  *
+ * ## CSS nodes
+ *
+ * `GtkFontChooserDialog` has a single CSS node with the name `window` and style
+ * class `.fontchooser`.
+ *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] instead
  */
 

@@ -48,6 +48,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * `GtkColorChooserDialog` has been deprecated in favor of [class@Gtk.ColorDialog].
  *
+ * ## CSS nodes
+ *
+ * `GtkColorChooserDialog` has a single CSS node with the name `window` and style
+ * class `.colorchooser`.
+ *
  * Deprecated: 4.10: Use [class@Gtk.ColorDialog] instead
  */
 

@@ -48,6 +48,11 @@
  * It can be used very much like any other GTK dialog, at the
  * cost of the portability offered by the high-level printing
  * API in [class@Gtk.PrintOperation].
+ *
+ * ## CSS nodes
+ *
+ * `GtkPageSetupUnixDialog` has a single CSS node with the name `window` and
+ * style class `.pagesetup`.
  */
 
 typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;
