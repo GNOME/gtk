@@ -621,6 +621,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
 
   tile = gtk_rb_tree_insert_before (self->items, tile);
+  tile->type = GTK_LIST_TILE_ITEM;
   tile->n_items = n_items;
   gtk_rb_tree_node_mark_dirty (tile);
 
@@ -632,7 +633,8 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
                                         GtkListTile        *first,
                                         GtkListTile        *second)
 {
-  if (first->widget || second->widget)
+  if (first->widget || second->widget ||
+      first->type != GTK_LIST_TILE_ITEM || second->type != GTK_LIST_TILE_ITEM)
     return FALSE;
 
   first->n_items += second->n_items;
@@ -666,8 +668,10 @@ gtk_list_tile_split (GtkListItemManager *self,
   GtkListTile *result;
 
   g_assert (n_items <= tile->n_items);
+  g_assert (tile->type == GTK_LIST_TILE_ITEM);
 
   result = gtk_rb_tree_insert_after (self->items, tile);
+  result->type = GTK_LIST_TILE_ITEM;
   result->n_items = tile->n_items - n_items;
   tile->n_items = n_items;
   gtk_rb_tree_node_mark_dirty (tile);
