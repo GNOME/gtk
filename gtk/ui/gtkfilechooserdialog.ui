@@ -3,6 +3,9 @@
   <template class="GtkFileChooserDialog" parent="GtkDialog">
     <property name="default-width">600</property>
     <signal name="response" handler="response_cb" swapped="no"/>
+    <style>
+      <class name="filechooser"/>
+    </style>
     <child internal-child="content_area">
       <object class="GtkBox">
         <property name="orientation">1</property>
