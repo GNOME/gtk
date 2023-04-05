@@ -3,6 +3,9 @@
   <template class="GtkPageSetupUnixDialog" parent="GtkDialog">
     <property name="resizable">0</property>
     <property name="title" translatable="yes">Page Setup</property>
+    <style>
+      <class name="pagesetup"/>
+    </style>
     <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">1</property>
