@@ -45,7 +45,9 @@ typedef struct _GtkListItemTracker GtkListItemTracker;
 
 typedef enum
 {
-  GTK_LIST_TILE_ITEM
+  GTK_LIST_TILE_ITEM,
+  GTK_LIST_TILE_FILLER,
+  GTK_LIST_TILE_REMOVED,
 } GtkListTileType;
 
 struct _GtkListTile
@@ -103,6 +105,8 @@ void                    gtk_list_tile_set_area_size             (GtkListItemMana
 GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
+GtkListTile *           gtk_list_tile_append_filler             (GtkListItemManager     *self,
+                                                                 GtkListTile            *previous);
 GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
 
