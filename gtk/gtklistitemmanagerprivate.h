@@ -43,8 +43,14 @@ typedef struct _GtkListTile GtkListTile;
 typedef struct _GtkListTileAugment GtkListTileAugment;
 typedef struct _GtkListItemTracker GtkListItemTracker;
 
+typedef enum
+{
+  GTK_LIST_TILE_ITEM
+} GtkListTileType;
+
 struct _GtkListTile
 {
+  GtkListTileType type;
   GtkWidget *widget;
   guint n_items;
   /* area occupied by tile. May be empty if tile has no allcoation */
