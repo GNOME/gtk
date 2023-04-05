@@ -54,5 +54,10 @@ void                    gtk_center_layout_set_end_widget        (GtkCenterLayout
 GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_center_layout_get_end_widget        (GtkCenterLayout     *self);
 
+GDK_AVAILABLE_IN_4_12
+void                    gtk_center_layout_set_shrink_center_last (GtkCenterLayout    *self,
+                                                                  gboolean            shrink_center_last);
+GDK_AVAILABLE_IN_4_12
+gboolean                gtk_center_layout_get_shrink_center_last (GtkCenterLayout    *self);
 
 G_END_DECLS
