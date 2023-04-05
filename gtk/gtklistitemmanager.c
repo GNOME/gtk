@@ -597,6 +597,7 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
       tile->widget = NULL;
       n_items -= tile->n_items;
       tile->n_items = 0;
+      tile->type = GTK_LIST_TILE_REMOVED;
       gtk_rb_tree_node_mark_dirty (tile);
 
       tile = next;
@@ -655,7 +656,7 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
  * items will be given to the new tile, which will be
  * nserted after the tile.
  *
- * It is valid for either tile to have 0 items after
+ * It is not valid for either tile to have 0 items after
  * the split.
  *
  * Returns: The new tile
@@ -667,7 +668,8 @@ gtk_list_tile_split (GtkListItemManager *self,
 {
   GtkListTile *result;
 
-  g_assert (n_items <= tile->n_items);
+  g_assert (n_items > 0);
+  g_assert (n_items < tile->n_items);
   g_assert (tile->type == GTK_LIST_TILE_ITEM);
 
   result = gtk_rb_tree_insert_after (self->items, tile);
@@ -680,9 +682,37 @@ gtk_list_tile_split (GtkListItemManager *self,
 }
 
 /*
+ * gtk_list_tile_append_filler:
+ * @self: the listitemmanager
+ * @previous: tile to append to
+ *
+ * Appends a filler tile.
+ *
+ * Filler tiles don't refer to any items or header and exist
+ * just to take up space, so that finding items by position gets
+ * easier.
+ *
+ * They ave a special garbage-collection behavior, see
+ * gtk_list_tile_gc().
+ *
+ * Returns: The new filler tile
+ **/
+GtkListTile *
+gtk_list_tile_append_filler (GtkListItemManager *self,
+                             GtkListTile        *previous)
+{
+  GtkListTile *result;
+
+  result = gtk_rb_tree_insert_after (self->items, previous);
+  result->type = GTK_LIST_TILE_FILLER;
+
+  return result;
+}
+
+/*
  * gtk_list_tile_gc:
  * @self: the listitemmanager
- * @tile: a tile
+ * @tile: a tile or NULL
  *
  * Tries to get rid of tiles when they aren't needed anymore,
  * either because their referenced listitems were deleted or
@@ -690,7 +720,11 @@ gtk_list_tile_split (GtkListItemManager *self,
  *
  * Note that this only looks forward, but never backward.
  *
- * Returns: The next tile
+ * A special case here are filler tiles. They only get
+ * collected, when they are explicitly passed in, but never
+ * otherwise.
+ *
+ * Returns: The next tile or NULL if everything was gc'ed
  **/
 GtkListTile *
 gtk_list_tile_gc (GtkListItemManager *self,
@@ -698,22 +732,47 @@ gtk_list_tile_gc (GtkListItemManager *self,
 {
   GtkListTile *next;
 
+  if (tile == NULL)
+    return NULL;
+
+  if (tile->type == GTK_LIST_TILE_FILLER)
+    {
+      next = gtk_rb_tree_node_get_next (tile);
+      gtk_rb_tree_remove (self->items, tile);
+      tile = next;
+    }
+
   while (tile)
     {
       next = gtk_rb_tree_node_get_next (tile);
-
-      if (tile->n_items == 0)
+      while (next && next->type == GTK_LIST_TILE_REMOVED)
         {
+          gtk_rb_tree_remove (self->items, next);
+          next = gtk_rb_tree_node_get_next (tile);
+        }
+
+      switch (tile->type)
+        {
+        case GTK_LIST_TILE_ITEM:
+          g_assert (tile->n_items > 0);
+          if (next == NULL)
+            break;
+          if (gtk_list_item_manager_merge_list_items (self, tile, next))
+            continue;
+          break;
+
+        case GTK_LIST_TILE_FILLER:
+          break;
+
+        case GTK_LIST_TILE_REMOVED:
           gtk_rb_tree_remove (self->items, tile);
           tile = next;
           continue;
+
+        default:
+          g_assert_not_reached ();
+          break;
         }
-
-      if (next == NULL)
-        break;
-
-      if (gtk_list_item_manager_merge_list_items (self, tile, next))
-        continue;
 
       break;
     }

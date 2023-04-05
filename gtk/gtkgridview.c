@@ -886,7 +886,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     {
       GtkListTile *filler;
       tile = gtk_list_item_manager_get_last (self->item_manager);
-      filler = gtk_list_tile_split (self->item_manager, tile, tile->n_items);
+      filler = gtk_list_tile_append_filler (self->item_manager, tile);
       gtk_list_tile_set_area_position (self->item_manager,
                                        filler,
                                        column_start (self, xspacing, i),
