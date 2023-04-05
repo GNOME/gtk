@@ -81,8 +81,7 @@ gsk_vulkan_color_text_pipeline_new (GdkVulkanContext        *context,
                                     const char              *shader_name,
                                     VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new_full (GSK_TYPE_VULKAN_COLOR_TEXT_PIPELINE, context, layout, shader_name, render_pass,
-                                       VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_COLOR_TEXT_PIPELINE, context, layout, shader_name, render_pass);
 }
 
 gsize
