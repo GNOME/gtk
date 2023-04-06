@@ -5020,6 +5020,7 @@ gtk_widget_real_focus (GtkWidget        *widget,
                        GtkDirectionType  direction)
 {
   GtkWidget *focus;
+  GtkRoot *root;
 
   /* For focusable widgets, we want to focus the widget
    * before its children. We differentiate 3 cases:
@@ -5037,7 +5038,12 @@ gtk_widget_real_focus (GtkWidget        *widget,
       return FALSE;
     }
 
-  focus = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (widget)));
+  root = gtk_widget_get_root (widget);
+  if (!root) {
+    g_warning ("Attempted to focus a widget with no GtkRoot");
+    return FALSE;
+  }
+  focus = gtk_window_get_focus (GTK_WINDOW (root));
 
   if (focus && gtk_widget_is_ancestor (focus, widget))
     {
@@ -6883,7 +6889,8 @@ gtk_widget_child_focus (GtkWidget       *widget,
 
   if (!_gtk_widget_get_visible (widget) ||
       !gtk_widget_is_sensitive (widget) ||
-      !gtk_widget_get_can_focus (widget))
+      !gtk_widget_get_can_focus (widget)||
+      !gtk_widget_get_root (widget))
     return FALSE;
 
   /* Emit ::focus in any case, even if focusable is FALSE,
