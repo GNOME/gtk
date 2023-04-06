@@ -1098,6 +1098,9 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
   g_return_if_fail (GTK_IS_GL_AREA (area));
   g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
 
+  if ((priv->allowed_apis == GDK_GL_API_GLES) == use_es)
+    return;
+
   priv->allowed_apis = use_es ? GDK_GL_API_GLES : GDK_GL_API_GL;
 
   g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
@@ -1149,6 +1152,7 @@ gtk_gl_area_set_allowed_apis (GtkGLArea *area,
                               GdkGLAPI   apis)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+  GdkGLAPI old_allowed_apis;
 
   g_return_if_fail (GTK_IS_GL_AREA (area));
   g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
@@ -1156,9 +1160,12 @@ gtk_gl_area_set_allowed_apis (GtkGLArea *area,
   if (priv->allowed_apis == apis)
     return;
 
+  old_allowed_apis = priv->allowed_apis;
+
   priv->allowed_apis = apis;
 
-  g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
+  if ((old_allowed_apis == GDK_GL_API_GLES) != (apis == GDK_GL_API_GLES))
+    g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_USE_ES]);
   g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_ALLOWED_APIS]);
 }
 
