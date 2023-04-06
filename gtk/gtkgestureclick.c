@@ -220,7 +220,8 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   _gtk_gesture_click_update_timeout (click);
   gtk_gesture_get_point (gesture, current, &x, &y);
 
-  if (!_gtk_gesture_click_check_within_threshold (click, x, y))
+  if (gdk_device_get_source (priv->current_device) == GDK_SOURCE_MOUSE &&
+      !_gtk_gesture_click_check_within_threshold (click, x, y))
     _gtk_gesture_click_stop (click);
 
   /* Increment later the real counter, just if the gesture is
@@ -243,14 +244,17 @@ gtk_gesture_click_update (GtkGesture       *gesture,
                           GdkEventSequence *sequence)
 {
   GtkGestureClick *click;
+  GtkGestureClickPrivate *priv;
   GdkEventSequence *current;
   double x, y;
 
   click = GTK_GESTURE_CLICK (gesture);
+  priv = gtk_gesture_click_get_instance_private (click);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_get_point (gesture, current, &x, &y);
 
-  if (!_gtk_gesture_click_check_within_threshold (click, x, y))
+  if (gdk_device_get_source (priv->current_device) == GDK_SOURCE_MOUSE &&
+      !_gtk_gesture_click_check_within_threshold (click, x, y))
     _gtk_gesture_click_stop (click);
 }
 
