@@ -37,28 +37,109 @@ create_source_model (guint min_size, guint max_size)
 }
 
 static void
-check_list_item_manager (GtkListItemManager *items)
+check_list_item_manager (GtkListItemManager  *items,
+                         GtkListItemTracker **trackers,
+                         gsize                n_trackers)
 {
   GListModel *model = G_LIST_MODEL (gtk_list_item_manager_get_model (items));
   GtkListTile *tile;
   guint n_items = 0;
+  guint i;
 
   for (tile = gtk_list_item_manager_get_first (items);
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (tile->widget)
+      switch (tile->type)
         {
-          GObject *item = g_list_model_get_item (model, n_items);
-          g_assert_cmphex (GPOINTER_TO_SIZE (item), ==, GPOINTER_TO_SIZE (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget))));
-          g_object_unref (item);
-          g_assert_cmpint (n_items, ==, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (tile->widget)));
+          case GTK_LIST_TILE_ITEM:
+            if (tile->widget)
+              {
+                GObject *item = g_list_model_get_item (model, n_items);
+                g_assert_cmphex (GPOINTER_TO_SIZE (item), ==, GPOINTER_TO_SIZE (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget))));
+                g_object_unref (item);
+                g_assert_cmpint (n_items, ==, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (tile->widget)));
+                g_assert_cmpint (tile->n_items, ==, 1);
+              }
+            if (tile->n_items)
+              n_items += tile->n_items;
+            break;
+
+          case GTK_LIST_TILE_FILLER:
+            /* We don't add fillers */
+            g_assert_not_reached ();
+            break;
+
+          case GTK_LIST_TILE_REMOVED:
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            break;
+
+          default:
+            g_assert_not_reached ();
+            break;
         }
-      if (tile->n_items)
-        n_items += tile->n_items;
     }
 
   g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
+
+  for (i = 0; i < n_trackers; i++)
+    {
+      guint pos, offset;
+
+      pos = gtk_list_item_tracker_get_position (items, trackers[i]);
+      if (pos == GTK_INVALID_LIST_POSITION)
+        continue;
+      tile = gtk_list_item_manager_get_nth (items, pos, &offset);
+      g_assert_cmpint (tile->n_items, ==, 1);
+      g_assert_cmpint (offset, ==, 0);
+      g_assert_true (tile->widget);
+    }
+
+  for (tile = gtk_list_tile_gc (items, gtk_list_item_manager_get_first (items));
+       tile != NULL;
+       tile = gtk_list_tile_gc (items, gtk_rb_tree_node_get_next (tile)))
+    ;
+
+  n_items = 0;
+
+  for (tile = gtk_list_item_manager_get_first (items);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      switch (tile->type)
+        {
+          case GTK_LIST_TILE_ITEM:
+            if (tile->widget)
+              {
+                g_assert_cmpint (tile->n_items, ==, 1);
+              }
+            if (tile->n_items)
+              n_items += tile->n_items;
+            break;
+
+          case GTK_LIST_TILE_FILLER:
+          case GTK_LIST_TILE_REMOVED:
+          default:
+            g_assert_not_reached ();
+            break;
+        }
+    }
+
+  g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
+
+  for (i = 0; i < n_trackers; i++)
+    {
+      guint pos, offset;
+
+      pos = gtk_list_item_tracker_get_position (items, trackers[i]);
+      if (pos == GTK_INVALID_LIST_POSITION)
+        continue;
+      tile = gtk_list_item_manager_get_nth (items, pos, &offset);
+      g_assert_cmpint (tile->n_items, ==, 1);
+      g_assert_cmpint (offset, ==, 0);
+      g_assert_true (tile->widget);
+    }
 }
 
 static GtkListTile *
@@ -74,7 +155,7 @@ split_simple (GtkWidget   *widget,
 static GtkListItemBase *
 create_simple (GtkWidget *widget)
 {
-  return g_object_new (GTK_TYPE_LIST_BASE, NULL);
+  return g_object_new (GTK_TYPE_LIST_ITEM_BASE, NULL);
 }
 
 static void
@@ -114,9 +195,14 @@ test_create_with_items (void)
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
+#define N_TRACKERS 3
+#define N_WIDGETS_PER_TRACKER 10
+#define N_RUNS 500
+
 static void
 test_exhaustive (void)
 {
+  GtkListItemTracker *trackers[N_TRACKERS];
   GListStore *store;
   GtkFlattenListModel *flatten;
   GtkNoSelection *selection;
@@ -128,6 +214,9 @@ test_exhaustive (void)
   items = gtk_list_item_manager_new (widget,
                                      split_simple,
                                      create_simple);
+  for (i = 0; i < N_TRACKERS; i++)
+    trackers[i] = gtk_list_item_tracker_new (items);
+
   g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
 
   store = g_list_store_new (G_TYPE_OBJECT);
@@ -135,15 +224,15 @@ test_exhaustive (void)
   selection = gtk_no_selection_new (G_LIST_MODEL (flatten));
   gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
 
-  for (i = 0; i < 500; i++)
+  for (i = 0; i < N_RUNS; i++)
     {
       gboolean add = FALSE, remove = FALSE;
-      guint position;
+      guint position, n_items;
 
-      switch (g_test_rand_int_range (0, 4))
+      switch (g_test_rand_int_range (0, 5))
       {
         case 0:
-          check_list_item_manager (items);
+          check_list_item_manager (items, trackers, N_TRACKERS);
           break;
 
         case 1:
@@ -160,6 +249,18 @@ test_exhaustive (void)
           /* replace a model */
           remove = TRUE;
           add = TRUE;
+          break;
+
+        case 4:
+          n_items = g_list_model_get_n_items (G_LIST_MODEL (selection));
+          if (n_items > 0)
+            {
+              gtk_list_item_tracker_set_position (items,
+                                                  trackers [g_test_rand_int_range (0, N_TRACKERS)],
+                                                  g_test_rand_int_range (0, n_items),
+                                                  g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2),
+                                                  g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2));
+            }
           break;
 
         default:
@@ -187,8 +288,10 @@ test_exhaustive (void)
         }
     }
 
-  check_list_item_manager (items);
+  check_list_item_manager (items, trackers, N_TRACKERS);
 
+  for (i = 0; i < N_TRACKERS; i++)
+    gtk_list_item_tracker_free (items, trackers[i]);
   g_object_unref (selection);
   gtk_window_destroy (GTK_WINDOW (widget));
 }
