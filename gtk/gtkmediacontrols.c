@@ -399,6 +399,7 @@ update_playing (GtkMediaControls *controls)
 {
   gboolean playing;
   const char *icon_name;
+  const char *tooltip_text;
 
   if (controls->stream)
     playing = gtk_media_stream_get_playing (controls->stream);
@@ -406,11 +407,18 @@ update_playing (GtkMediaControls *controls)
     playing = FALSE;
 
   if (playing)
-    icon_name = "media-playback-pause-symbolic";
+    {
+      icon_name = "media-playback-pause-symbolic";
+      tooltip_text = C_("media controls tooltip", "Stop");
+    }
   else
-    icon_name = "media-playback-start-symbolic";
+    {
+      icon_name = "media-playback-start-symbolic";
+      tooltip_text = C_("media controls tooltip", "Play");
+    }
 
   gtk_button_set_icon_name (GTK_BUTTON (controls->play_button), icon_name);
+  gtk_widget_set_tooltip_text (controls->play_button, tooltip_text);
 }
 
 static void
