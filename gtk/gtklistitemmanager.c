@@ -23,6 +23,7 @@
 
 #include "gtklistitembaseprivate.h"
 #include "gtklistitemwidgetprivate.h"
+#include "gtksectionmodel.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkListItemManager
@@ -159,7 +160,6 @@ gtk_list_item_manager_new (GtkWidget         *widget,
                            GtkListItemBase *  (* create_widget) (GtkWidget *))
 {
   GtkListItemManager *self;
-  GtkListTile *header, *footer;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -176,13 +176,16 @@ gtk_list_item_manager_new (GtkWidget         *widget,
                                           gtk_list_item_manager_clear_node,
                                           NULL);
 
-  header = gtk_rb_tree_insert_after (self->items, NULL);
-  header->type = GTK_LIST_TILE_HEADER;
-
-  footer = gtk_rb_tree_insert_before (self->items, NULL);
-  footer->type = GTK_LIST_TILE_FOOTER;
-
   return self;
+}
+
+static gboolean
+gtk_list_item_manager_has_sections (GtkListItemManager *self)
+{
+  if (self->model == NULL)
+    return FALSE;
+
+  return GTK_IS_SECTION_MODEL (self->model);
 }
 
 void
@@ -270,6 +273,110 @@ gtk_list_item_manager_get_nth (GtkListItemManager *self,
     *offset = tile ? position : 0;
 
   return tile;
+}
+
+static GtkListTile *
+gtk_list_tile_get_header (GtkListItemManager *self,
+                          GtkListTile        *tile)
+{
+  GtkListTileAugment *aug;
+  GtkListTile *other;
+  gboolean check_right = FALSE;
+
+  while (TRUE)
+    {
+      if (check_right)
+        {
+          other = gtk_rb_tree_node_get_right (tile);
+          if (other)
+            {
+              aug = gtk_rb_tree_get_augment (self->items, other);
+              if (aug->has_header)
+                {
+                  check_right = TRUE;
+                  tile = other;
+                  continue;
+                }
+            }
+        }
+
+      if (tile->type == GTK_LIST_TILE_HEADER ||
+          tile->type == GTK_LIST_TILE_UNMATCHED_HEADER)
+        return tile;
+
+      other = gtk_rb_tree_node_get_left (tile);
+      if (other)
+        {
+          aug = gtk_rb_tree_get_augment (self->items, other);
+          if (aug->has_header)
+            {
+              check_right = TRUE;
+              tile = other;
+              continue;
+            }
+        }
+
+      while ((other = gtk_rb_tree_node_get_parent (tile)))
+        {
+          if (gtk_rb_tree_node_get_right (other) == tile)
+            break;
+          tile = other;
+        }
+      tile = other;
+      check_right = FALSE;
+    }
+}
+
+static GtkListTile *
+gtk_list_tile_get_footer (GtkListItemManager *self,
+                          GtkListTile        *tile)
+{
+  GtkListTileAugment *aug;
+  GtkListTile *other;
+  gboolean check_left = FALSE;
+
+  while (TRUE)
+    {
+      if (check_left)
+        {
+          other = gtk_rb_tree_node_get_left (tile);
+          if (other)
+            {
+              aug = gtk_rb_tree_get_augment (self->items, other);
+              if (aug->has_footer)
+                {
+                  check_left = TRUE;
+                  tile = other;
+                  continue;
+                }
+            }
+        }
+
+      if (tile->type == GTK_LIST_TILE_FOOTER ||
+          tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER)
+        return tile;
+
+      other = gtk_rb_tree_node_get_right (tile);
+      if (other)
+        {
+          aug = gtk_rb_tree_get_augment (self->items, other);
+          if (aug->has_footer)
+            {
+              check_left = TRUE;
+              tile = other;
+              continue;
+            }
+        }
+
+      while ((other = gtk_rb_tree_node_get_parent (tile)))
+        {
+          if (gtk_rb_tree_node_get_left (other) == tile)
+            break;
+          tile = other;
+        }
+      tile = other;
+      check_left = FALSE;
+    }
 }
 
 /* This computes Manhattan distance */
@@ -607,7 +714,7 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
                                     guint               position,
                                     guint               n_items)
 {
-  GtkListTile *tile, *next;
+  GtkListTile *tile, *header;
   guint offset;
 
   if (n_items == 0)
@@ -616,25 +723,81 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
   tile = gtk_list_item_manager_get_nth (self, position, &offset);
   if (offset)
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
+  for (header = gtk_rb_tree_node_get_previous (tile);
+       header->type != GTK_LIST_TILE_HEADER && header->type != GTK_LIST_TILE_UNMATCHED_HEADER;
+       header = gtk_rb_tree_node_get_previous (header))
+    {
+      if (header->type == GTK_LIST_TILE_ITEM)
+        {
+          header = NULL;
+          break;
+        }
+    }
 
   while (n_items > 0)
     {
-      if (tile->n_items > n_items)
+      switch (tile->type)
         {
-          gtk_list_item_manager_ensure_split (self, tile, n_items);
-          g_assert (tile->n_items <= n_items);
+        case GTK_LIST_TILE_HEADER:
+        case GTK_LIST_TILE_UNMATCHED_HEADER:
+          g_assert (header == NULL);
+          header = tile;
+          break;
+
+        case GTK_LIST_TILE_FOOTER:
+        case GTK_LIST_TILE_UNMATCHED_FOOTER:
+          if (header)
+            {
+              header->type = GTK_LIST_TILE_REMOVED;
+              gtk_rb_tree_node_mark_dirty (header);
+              tile->type = GTK_LIST_TILE_REMOVED;
+              gtk_rb_tree_node_mark_dirty (tile);
+              header = NULL;
+            }
+          break;
+
+        case GTK_LIST_TILE_FILLER:
+        case GTK_LIST_TILE_REMOVED:
+          break;
+
+        case GTK_LIST_TILE_ITEM:
+          if (tile->n_items > n_items)
+            {
+              gtk_list_item_manager_ensure_split (self, tile, n_items);
+              g_assert (tile->n_items <= n_items);
+            }
+          if (tile->widget)
+            gtk_list_item_manager_release_list_item (self, change, tile->widget);
+          tile->widget = NULL;
+          n_items -= tile->n_items;
+          tile->n_items = 0;
+          tile->type = GTK_LIST_TILE_REMOVED;
+          gtk_rb_tree_node_mark_dirty (tile);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
         }
 
-      next = gtk_rb_tree_node_get_next (tile);
-      if (tile->widget)
-        gtk_list_item_manager_release_list_item (self, change, tile->widget);
-      tile->widget = NULL;
-      n_items -= tile->n_items;
-      tile->n_items = 0;
-      tile->type = GTK_LIST_TILE_REMOVED;
-      gtk_rb_tree_node_mark_dirty (tile);
+      tile = gtk_rb_tree_node_get_next (tile);
+    }
 
-      tile = next;
+  if (header)
+    {
+      for (;
+           tile->type != GTK_LIST_TILE_ITEM;
+           tile = gtk_rb_tree_node_get_next (tile))
+        {
+          if (tile->type == GTK_LIST_TILE_FOOTER || tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER)
+            {
+              header->type = GTK_LIST_TILE_REMOVED;
+              gtk_rb_tree_node_mark_dirty (header);
+              tile->type = GTK_LIST_TILE_REMOVED;
+              gtk_rb_tree_node_mark_dirty (tile);
+              break;
+            }
+        }
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self->widget));
@@ -647,20 +810,59 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
 {  
   GtkListTile *tile;
   guint offset;
+  gboolean has_sections;
 
   if (n_items == 0)
     return;
 
+  has_sections = gtk_list_item_manager_has_sections (self);
+
   tile = gtk_list_item_manager_get_nth (self, position, &offset);
   if (tile == NULL)
-    tile = gtk_rb_tree_get_last (self->items);
+    {
+      /* at end of list, pick the footer */
+      for (tile = gtk_rb_tree_get_last (self->items);
+           tile && (tile->type == GTK_LIST_TILE_REMOVED || tile->type == GTK_LIST_TILE_FILLER);
+           tile = gtk_rb_tree_node_get_previous (tile))
+        { }
+
+      if (tile == NULL)
+        {
+          /* empty list, there isn't even a footer yet */
+          tile = gtk_rb_tree_insert_after (self->items, NULL);
+          tile->type = has_sections ? GTK_LIST_TILE_UNMATCHED_HEADER : GTK_LIST_TILE_HEADER;
+
+          tile = gtk_rb_tree_insert_after (self->items, tile);
+          tile->type = has_sections ? GTK_LIST_TILE_UNMATCHED_FOOTER : GTK_LIST_TILE_FOOTER;
+        }
+      else if (has_sections && tile->type == GTK_LIST_TILE_FOOTER)
+        {
+          gtk_list_tile_set_type (tile,
+                                  GTK_LIST_TILE_UNMATCHED_FOOTER);
+          gtk_list_tile_set_type (gtk_list_tile_get_header (self, tile),
+                                  GTK_LIST_TILE_UNMATCHED_HEADER);
+        }
+    }
   if (offset)
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
-
+  
   tile = gtk_rb_tree_insert_before (self->items, tile);
   tile->type = GTK_LIST_TILE_ITEM;
   tile->n_items = n_items;
   gtk_rb_tree_node_mark_dirty (tile);
+
+  if (has_sections)
+    {
+      GtkListTile *section = gtk_rb_tree_node_get_previous (tile);
+
+      if (section->type == GTK_LIST_TILE_HEADER)
+        {
+          gtk_list_tile_set_type (section,
+                                  GTK_LIST_TILE_UNMATCHED_HEADER);
+          gtk_list_tile_set_type (gtk_list_tile_get_footer (self, section),
+                                  GTK_LIST_TILE_UNMATCHED_FOOTER);
+        }
+    }
 
   gtk_widget_queue_resize (GTK_WIDGET (self->widget));
 }
@@ -1138,6 +1340,7 @@ gtk_list_item_manager_model_selection_changed_cb (GListModel         *model,
 static void
 gtk_list_item_manager_clear_model (GtkListItemManager *self)
 {
+  GtkListTile *tile;
   GSList *l;
 
   if (self->model == NULL)
@@ -1156,6 +1359,15 @@ gtk_list_item_manager_clear_model (GtkListItemManager *self)
                                         gtk_list_item_manager_model_items_changed_cb,
                                         self);
   g_clear_object (&self->model);
+
+  /* really empty the tiles */
+  for (tile = gtk_list_tile_gc (self, gtk_list_item_manager_get_first (self));
+       tile;
+       tile = gtk_list_tile_gc (self, tile))
+    {
+      g_assert (tile->type == GTK_LIST_TILE_FILLER);
+    }
+  g_assert (gtk_rb_tree_get_root (self->items) == NULL);
 }
 
 static void
