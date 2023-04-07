@@ -9231,7 +9231,8 @@ append_bubble_item (GtkTextView *text_view,
   muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE);
   if (muxer)
     {
-      gtk_action_muxer_query_action (muxer, action_name, &enabled, &param_type, &state_type, NULL, NULL);
+      if (!gtk_action_muxer_query_action (muxer, action_name, &enabled, &param_type, &state_type, NULL, NULL))
+        return;
 
       if (!enabled)
         return;
