@@ -21,7 +21,7 @@
 #include "variant-editor.h"
 
 #include "gtksizegroup.h"
-#include "gtktogglebutton.h"
+#include "gtkcheckbutton.h"
 #include "gtkentry.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
@@ -66,10 +66,11 @@ dispose (GObject *object)
   GtkInspectorVariantEditor *self = GTK_INSPECTOR_VARIANT_EDITOR (object);
 
   if (self->editor)
-    {
+   {
       g_signal_handlers_disconnect_by_func (self->editor, variant_editor_changed_cb, self->data);
 
       gtk_widget_unparent (self->editor);
+      self->editor = NULL;
     }
 
   G_OBJECT_CLASS (gtk_inspector_variant_editor_parent_class)->dispose (object);
@@ -94,14 +95,18 @@ ensure_editor (GtkInspectorVariantEditor *self,
       g_variant_type_equal (self->type, type))
     return;
 
+  self->type = type;
+
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
     {
       if (self->editor)
         gtk_widget_unparent (self->editor);
 
-      self->editor = gtk_toggle_button_new_with_label ("FALSE");
+      self->editor = gtk_check_button_new ();
       g_signal_connect (self->editor, "notify::active",
                         G_CALLBACK (variant_editor_changed_cb), self);
+
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
     }
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
@@ -112,6 +117,8 @@ ensure_editor (GtkInspectorVariantEditor *self,
       gtk_editable_set_width_chars (GTK_EDITABLE (self->editor), 10);
       g_signal_connect (self->editor, "notify::text",
                         G_CALLBACK (variant_editor_changed_cb), self);
+
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
     }
   else if (!GTK_IS_BOX (self->editor))
     {
@@ -128,10 +135,9 @@ ensure_editor (GtkInspectorVariantEditor *self,
       gtk_box_append (GTK_BOX (self->editor), label);
       g_signal_connect (entry, "notify::text",
                         G_CALLBACK (variant_editor_changed_cb), self);
-    }
 
-  self->type = type;
-  gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
+    }
 }
 
 GtkWidget *
@@ -169,18 +175,14 @@ gtk_inspector_variant_editor_set_value (GtkWidget *editor,
 
   ensure_editor (self, g_variant_get_type (value));
 
-  g_signal_handlers_block_by_func (self->editor, variant_editor_changed_cb, self->data);
+  g_signal_handlers_block_by_func (self->editor, variant_editor_changed_cb, self);
 
   if (g_variant_type_equal (self->type, G_VARIANT_TYPE_BOOLEAN))
     {
-      GtkToggleButton *tb = GTK_TOGGLE_BUTTON (self->editor);
+      GtkCheckButton *b = GTK_CHECK_BUTTON (self->editor);
 
-      if (gtk_toggle_button_get_active (tb) != g_variant_get_boolean (value))
-        {
-          gtk_toggle_button_set_active (tb, g_variant_get_boolean (value));
-          gtk_button_set_label (GTK_BUTTON (tb),
-                                g_variant_get_boolean (value) ? "TRUE" : "FALSE");
-        }
+      if (gtk_check_button_get_active (b) != g_variant_get_boolean (value))
+        gtk_check_button_set_active (b, g_variant_get_boolean (value));
     }
   else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_STRING))
     {
@@ -201,7 +203,7 @@ gtk_inspector_variant_editor_set_value (GtkWidget *editor,
       g_free (text);
     }
 
-  g_signal_handlers_unblock_by_func (self->editor, variant_editor_changed_cb, self->data);
+  g_signal_handlers_unblock_by_func (self->editor, variant_editor_changed_cb, self);
 }
 
 GVariant *
@@ -215,8 +217,8 @@ gtk_inspector_variant_editor_get_value (GtkWidget *editor)
 
   if (g_variant_type_equal (self->type, G_VARIANT_TYPE_BOOLEAN))
     {
-      GtkToggleButton *tb = GTK_TOGGLE_BUTTON (self->editor);
-      value = g_variant_new_boolean (gtk_toggle_button_get_active (tb));
+      GtkCheckButton *b = GTK_CHECK_BUTTON (self->editor);
+      value = g_variant_new_boolean (gtk_check_button_get_active (b));
     }
   else if (g_variant_type_equal (self->type, G_VARIANT_TYPE_STRING))
     {

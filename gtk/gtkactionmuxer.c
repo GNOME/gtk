@@ -232,6 +232,8 @@ gtk_action_muxer_list_actions (GtkActionMuxer *muxer,
   GHashTable *actions;
   char **keys;
 
+  g_return_val_if_fail (GTK_IS_ACTION_MUXER (muxer), NULL);
+
   actions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   for ( ; muxer != NULL; muxer = muxer->parent)
