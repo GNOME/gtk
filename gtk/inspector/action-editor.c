@@ -185,18 +185,36 @@ action_state_changed_cb (GActionGroup             *group,
 static void
 update_widgets (GtkInspectorActionEditor *r)
 {
-  GVariant *state = NULL;
+  GVariant *state;
 
   if (G_IS_ACTION_GROUP (r->owner))
-    g_action_group_query_action (G_ACTION_GROUP (r->owner), r->name,
-                                 &r->enabled, &r->parameter_type, NULL, NULL,
-                                 &state);
+    {
+      if (!g_action_group_query_action (G_ACTION_GROUP (r->owner), r->name,
+                                        &r->enabled, &r->parameter_type, NULL, NULL,
+                                        &state))
+        {
+          r->enabled = FALSE;
+          r->parameter_type = NULL;
+          state = NULL;
+        }
+    }
   else if (GTK_IS_ACTION_MUXER (r->owner))
-    gtk_action_muxer_query_action (GTK_ACTION_MUXER (r->owner), r->name,
-                                   &r->enabled, &r->parameter_type, NULL, NULL,
-                                   &state);
+    {
+      if (!gtk_action_muxer_query_action (GTK_ACTION_MUXER (r->owner), r->name,
+                                          &r->enabled, &r->parameter_type, NULL, NULL,
+                                          &state))
+        {
+          r->enabled = FALSE;
+          r->parameter_type = NULL;
+          state = NULL;
+        }
+    }
   else
-    state = NULL;
+    {
+      r->enabled = FALSE;
+      r->parameter_type = NULL;
+      state = NULL;
+    }
 
   gtk_widget_set_sensitive (r->activate_button, r->enabled);
   gtk_widget_set_sensitive (r->parameter_entry, r->enabled);
