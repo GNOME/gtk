@@ -66,10 +66,11 @@ dispose (GObject *object)
   GtkInspectorVariantEditor *self = GTK_INSPECTOR_VARIANT_EDITOR (object);
 
   if (self->editor)
-    {
+   {
       g_signal_handlers_disconnect_by_func (self->editor, variant_editor_changed_cb, self->data);
 
       gtk_widget_unparent (self->editor);
+      self->editor = NULL;
     }
 
   G_OBJECT_CLASS (gtk_inspector_variant_editor_parent_class)->dispose (object);
@@ -94,6 +95,8 @@ ensure_editor (GtkInspectorVariantEditor *self,
       g_variant_type_equal (self->type, type))
     return;
 
+  self->type = type;
+
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
     {
       if (self->editor)
@@ -102,6 +105,8 @@ ensure_editor (GtkInspectorVariantEditor *self,
       self->editor = gtk_toggle_button_new_with_label ("FALSE");
       g_signal_connect (self->editor, "notify::active",
                         G_CALLBACK (variant_editor_changed_cb), self);
+
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
     }
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
@@ -112,6 +117,8 @@ ensure_editor (GtkInspectorVariantEditor *self,
       gtk_editable_set_width_chars (GTK_EDITABLE (self->editor), 10);
       g_signal_connect (self->editor, "notify::text",
                         G_CALLBACK (variant_editor_changed_cb), self);
+
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
     }
   else if (!GTK_IS_BOX (self->editor))
     {
@@ -128,10 +135,9 @@ ensure_editor (GtkInspectorVariantEditor *self,
       gtk_box_append (GTK_BOX (self->editor), label);
       g_signal_connect (entry, "notify::text",
                         G_CALLBACK (variant_editor_changed_cb), self);
-    }
 
-  self->type = type;
-  gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
+      gtk_widget_set_parent (self->editor, GTK_WIDGET (self));
+    }
 }
 
 GtkWidget *
