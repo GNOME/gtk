@@ -132,6 +132,7 @@ gtk_list_item_manager_new (GtkWidget         *widget,
                            GtkListItemBase *  (* create_widget) (GtkWidget *))
 {
   GtkListItemManager *self;
+  GtkListTile *header, *footer;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -147,6 +148,12 @@ gtk_list_item_manager_new (GtkWidget         *widget,
                                           gtk_list_item_manager_augment_node,
                                           gtk_list_item_manager_clear_node,
                                           NULL);
+
+  header = gtk_rb_tree_insert_after (self->items, NULL);
+  header->type = GTK_LIST_TILE_HEADER;
+
+  footer = gtk_rb_tree_insert_before (self->items, NULL);
+  footer->type = GTK_LIST_TILE_FOOTER;
 
   return self;
 }
@@ -618,6 +625,8 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     return;
 
   tile = gtk_list_item_manager_get_nth (self, position, &offset);
+  if (tile == NULL)
+    tile = gtk_rb_tree_get_last (self->items);
   if (offset)
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
 
@@ -761,6 +770,10 @@ gtk_list_tile_gc (GtkListItemManager *self,
             continue;
           break;
 
+        case GTK_LIST_TILE_HEADER:
+        case GTK_LIST_TILE_FOOTER:
+        case GTK_LIST_TILE_UNMATCHED_HEADER:
+        case GTK_LIST_TILE_UNMATCHED_FOOTER:
         case GTK_LIST_TILE_FILLER:
           break;
 
