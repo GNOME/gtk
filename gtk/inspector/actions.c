@@ -172,10 +172,9 @@ bind_parameter_cb (GtkSignalListItemFactory *factory,
   name = action_holder_get_name (ACTION_HOLDER (item));
   if (G_IS_ACTION_GROUP (owner))
     parameter = (const char *)g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
-  else if (GTK_IS_ACTION_MUXER (owner))
-    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                   NULL, (const GVariantType **)&parameter, NULL, NULL, NULL);
-  else
+  else if (!GTK_IS_ACTION_MUXER (owner) ||
+           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                           NULL, (const GVariantType **)&parameter, NULL, NULL, NULL))
     parameter = "(Unknown)";
 
   gtk_label_set_label (GTK_LABEL (label), parameter);
@@ -212,10 +211,9 @@ bind_state_cb (GtkSignalListItemFactory *factory,
   name = action_holder_get_name (ACTION_HOLDER (item));
   if (G_IS_ACTION_GROUP (owner))
     state = g_action_group_get_action_state (G_ACTION_GROUP (owner), name);
-  else if (GTK_IS_ACTION_MUXER (owner))
-    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                   NULL, NULL, NULL, NULL, &state);
-  else
+  else if (!GTK_IS_ACTION_MUXER (owner) ||
+           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                           NULL, NULL, NULL, NULL, &state))
     state = NULL;
 
   if (state)
