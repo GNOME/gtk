@@ -229,6 +229,8 @@ update_widgets (GtkInspectorActionEditor *r)
         g_variant_type_free (r->state_type);
       r->state_type = g_variant_type_copy (g_variant_get_type (state));
       gtk_inspector_variant_editor_set_value (r->state_entry, state);
+
+      g_variant_unref (state);
     }
 
   if (G_IS_ACTION_GROUP (r->owner))
