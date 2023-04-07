@@ -136,9 +136,10 @@ bind_enabled_cb (GtkSignalListItemFactory *factory,
   name = action_holder_get_name (ACTION_HOLDER (item));
   if (G_IS_ACTION_GROUP (owner))
     enabled = g_action_group_get_action_enabled (G_ACTION_GROUP (owner), name);
-  else if (GTK_IS_ACTION_MUXER (owner))
-    gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                   &enabled, NULL, NULL, NULL, NULL);
+  else if (!GTK_IS_ACTION_MUXER (owner) ||
+           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
+                                           &enabled, NULL, NULL, NULL, NULL))
+    enabled = FALSE;
 
   gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-");
 }
