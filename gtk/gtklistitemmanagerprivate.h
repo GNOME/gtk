@@ -66,6 +66,10 @@ struct _GtkListTile
 struct _GtkListTileAugment
 {
   guint n_items;
+
+  guint has_header :1;
+  guint has_footer :1;
+
   /* union of all areas of tile and children */
   cairo_rectangle_int_t area;
 };

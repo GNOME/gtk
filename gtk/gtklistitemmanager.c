@@ -101,11 +101,36 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
   aug->n_items = tile->n_items;
   aug->area = tile->area;
 
+  switch (tile->type)
+  {
+    case GTK_LIST_TILE_HEADER:
+    case GTK_LIST_TILE_UNMATCHED_HEADER:
+      aug->has_header = TRUE;
+      aug->has_footer = FALSE;
+      break;
+    case GTK_LIST_TILE_FOOTER:
+    case GTK_LIST_TILE_UNMATCHED_FOOTER:
+      aug->has_header = FALSE;
+      aug->has_footer = TRUE;
+      break;
+    case GTK_LIST_TILE_ITEM:
+    case GTK_LIST_TILE_FILLER:
+    case GTK_LIST_TILE_REMOVED:
+      aug->has_header = FALSE;
+      aug->has_footer = FALSE;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
   if (left)
     {
       GtkListTileAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
 
       aug->n_items += left_aug->n_items;
+      aug->has_header |= left_aug->has_header;
+      aug->has_footer |= left_aug->has_footer;
       potentially_empty_rectangle_union (&aug->area, &left_aug->area);
     }
 
@@ -114,6 +139,8 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
       GtkListTileAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
 
       aug->n_items += right_aug->n_items;
+      aug->has_header |= right_aug->has_header;
+      aug->has_footer |= right_aug->has_footer;
       potentially_empty_rectangle_union (&aug->area, &right_aug->area);
     }
 }
