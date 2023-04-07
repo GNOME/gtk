@@ -45,6 +45,11 @@ check_list_item_manager (GtkListItemManager  *items,
   GtkListTile *tile;
   guint n_items = 0;
   guint i;
+  enum {
+    NO_SECTION,
+    MATCHED_SECTION,
+    UNMATCHED_SECTION
+  } section_state = NO_SECTION;
 
   for (tile = gtk_list_item_manager_get_first (items);
        tile != NULL;
@@ -52,7 +57,36 @@ check_list_item_manager (GtkListItemManager  *items,
     {
       switch (tile->type)
         {
+          case GTK_LIST_TILE_HEADER:
+            g_assert_cmpint (section_state, ==, NO_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = MATCHED_SECTION;
+            break;
+
+          case GTK_LIST_TILE_UNMATCHED_HEADER:
+            g_assert_cmpint (section_state, ==, NO_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = UNMATCHED_SECTION;
+            break;
+
+          case GTK_LIST_TILE_FOOTER:
+            g_assert_cmpint (section_state, ==, MATCHED_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = NO_SECTION;
+            break;
+
+          case GTK_LIST_TILE_UNMATCHED_FOOTER:
+            g_assert_cmpint (section_state, ==, UNMATCHED_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = NO_SECTION;
+            break;
+
           case GTK_LIST_TILE_ITEM:
+            g_assert_cmpint (section_state, !=, NO_SECTION);
             if (tile->widget)
               {
                 GObject *item = g_list_model_get_item (model, n_items);
@@ -81,6 +115,7 @@ check_list_item_manager (GtkListItemManager  *items,
         }
     }
 
+  g_assert_cmpint (section_state, ==, NO_SECTION);
   g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
 
   for (i = 0; i < n_trackers; i++)
@@ -109,7 +144,36 @@ check_list_item_manager (GtkListItemManager  *items,
     {
       switch (tile->type)
         {
+          case GTK_LIST_TILE_HEADER:
+            g_assert_cmpint (section_state, ==, NO_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = MATCHED_SECTION;
+            break;
+
+          case GTK_LIST_TILE_UNMATCHED_HEADER:
+            g_assert_cmpint (section_state, ==, NO_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = UNMATCHED_SECTION;
+            break;
+
+          case GTK_LIST_TILE_FOOTER:
+            g_assert_cmpint (section_state, ==, MATCHED_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = NO_SECTION;
+            break;
+
+          case GTK_LIST_TILE_UNMATCHED_FOOTER:
+            g_assert_cmpint (section_state, ==, UNMATCHED_SECTION);
+            g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_false (tile->widget);
+            section_state = NO_SECTION;
+            break;
+
           case GTK_LIST_TILE_ITEM:
+            g_assert_cmpint (section_state, !=, NO_SECTION);
             if (tile->widget)
               {
                 g_assert_cmpint (tile->n_items, ==, 1);
@@ -126,6 +190,7 @@ check_list_item_manager (GtkListItemManager  *items,
         }
     }
 
+  g_assert_cmpint (section_state, ==, NO_SECTION);
   g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
 
   for (i = 0; i < n_trackers; i++)
