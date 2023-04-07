@@ -662,7 +662,7 @@ msgstr "_Изчистване"
 #: gtk/a11y/gtkimageaccessible.c:58 gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Close"
-msgstr "Зат_варяне"
+msgstr "_Затваряне"
 
 #: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
@@ -4350,7 +4350,7 @@ msgstr "Показалец: %p"
 #: gtk/inspector/prop-editor.c:694
 msgctxt "type name"
 msgid "Unknown"
-msgstr "Неизвестен"
+msgstr "Неизвестно"
 
 #: gtk/inspector/prop-editor.c:695
 #, c-format
@@ -8397,7 +8397,7 @@ msgstr "На пауза"
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
-msgstr "(неизвестен)"
+msgstr "неизвестно"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:232
