@@ -273,8 +273,6 @@ get_child_position (GtkOverlay     *overlay,
                     GtkColorEditor *editor)
 {
   GtkRequisition req;
-  GtkAllocation alloc;
-  int s, e;
   graphene_point_t p;
 
   gtk_widget_get_preferred_size (widget, &req, NULL);
@@ -298,22 +296,20 @@ get_child_position (GtkOverlay     *overlay,
     }
   else if (widget == editor->h_popup)
     {
-      gtk_widget_get_allocation (editor->h_slider, &alloc);
-      gtk_range_get_slider_range (GTK_RANGE (editor->h_slider), &s, &e);
+      int slider_width;
+
+      slider_width = gtk_widget_get_width (editor->h_slider);
 
       if (!gtk_widget_compute_point (editor->h_slider,
                                      gtk_widget_get_parent (editor->grid),
                                      gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL
                                        ? &GRAPHENE_POINT_INIT (- req.width - 6, editor->popup_position - req.height / 2)
-                                       : &GRAPHENE_POINT_INIT (alloc.width + 6, editor->popup_position - req.height / 2),
+                                       : &GRAPHENE_POINT_INIT (slider_width + 6, editor->popup_position - req.height / 2),
                                      &p))
         return FALSE;
     }
   else if (widget == editor->a_popup)
     {
-      gtk_widget_get_allocation (editor->a_slider, &alloc);
-      gtk_range_get_slider_range (GTK_RANGE (editor->a_slider), &s, &e);
-
       if (!gtk_widget_compute_point (editor->a_slider,
                                      gtk_widget_get_parent (editor->grid),
                                      &GRAPHENE_POINT_INIT (editor->popup_position - req.width / 2, - req.height - 6),
