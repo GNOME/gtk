@@ -22,6 +22,7 @@
 #define CHECK_INTERVAL 10
 #define MAX_OLD 0.333
 
+#define PADDING 1
 
 typedef struct {
   GskVulkanImage *image;
@@ -65,9 +66,9 @@ create_atlas (GskVulkanGlyphCache *cache)
   atlas = g_new0 (Atlas, 1);
   atlas->width = 512;
   atlas->height = 512;
-  atlas->y0 = 1;
-  atlas->y = 1;
-  atlas->x = 1;
+  atlas->y0 = 0;
+  atlas->y = 0;
+  atlas->x = 0;
   atlas->image = NULL;
   atlas->num_glyphs = 0;
   atlas->dirty_glyphs = NULL;
@@ -180,8 +181,10 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   Atlas *atlas;
   int i;
   DirtyGlyph *dirty;
-  int width = value->draw_width * key->scale / 1024;
-  int height = value->draw_height * key->scale / 1024;
+  int width = ceil (value->draw_width * key->scale / 1024.0);
+  int height = ceil (value->draw_height * key->scale / 1024.0);
+  int width_with_padding = width + 2 * PADDING;
+  int height_with_padding = height + 2 * PADDING;
 
   for (i = 0; i < cache->atlases->len; i++)
     {
@@ -192,14 +195,14 @@ add_to_cache (GskVulkanGlyphCache  *cache,
       y = atlas->y;
       y0 = atlas->y0;
 
-      if (atlas->x + width + 1 >= atlas->width)
+      if (atlas->x + width_with_padding >= atlas->width)
         {
           /* start a new row */
-          y0 = y + 1;
-          x = 1;
+          y0 = y + PADDING;
+          x = PADDING;
         }
 
-      if (y0 + height + 1 >= atlas->height)
+      if (y0 + height_with_padding >= atlas->height)
         continue;
 
       atlas->y0 = y0;
@@ -214,8 +217,11 @@ add_to_cache (GskVulkanGlyphCache  *cache,
       g_ptr_array_add (cache->atlases, atlas);
     }
 
-  value->tx = (float)atlas->x / atlas->width;
-  value->ty = (float)atlas->y0 / atlas->height;
+  value->atlas_x = atlas->x;
+  value->atlas_y = atlas->y0;
+
+  value->tx = (float)(atlas->x + PADDING) / atlas->width;
+  value->ty = (float)(atlas->y0 + PADDING) / atlas->height;
   value->tw = (float)width / atlas->width;
   value->th = (float)height / atlas->height;
 
@@ -226,8 +232,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   dirty->value = value;
   atlas->dirty_glyphs = g_list_prepend (atlas->dirty_glyphs, dirty);
 
-  atlas->x = atlas->x + width + 1;
-  atlas->y = MAX (atlas->y, atlas->y0 + height + 1);
+  atlas->x = atlas->x + width_with_padding;
+  atlas->y = MAX (atlas->y, atlas->y0 + height_with_padding);
 
   atlas->num_glyphs++;
 
@@ -259,13 +265,23 @@ render_glyph (Atlas          *atlas,
   cairo_t *cr;
   PangoGlyphString glyphs;
   PangoGlyphInfo gi;
+  int surface_height;
+  int surface_width;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (value->draw_width * key->scale / 1024.0),
-                                        ceil (value->draw_height * key->scale / 1024.0));
+  surface_width = ceil (value->draw_width * key->scale / 1024.0) + 2 * PADDING;
+  surface_height = ceil (value->draw_height * key->scale / 1024.0) + 2 * PADDING;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surface_width, surface_height);
   cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);
+
+  /* Make sure the entire surface is initialized to black */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_rectangle (cr, 0.0, 0.0, surface_width, surface_width);
+  cairo_fill (cr);
+
+  /* Draw glyph */
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
   gi.glyph = key->glyph;
@@ -286,8 +302,8 @@ render_glyph (Atlas          *atlas,
   region->width = cairo_image_surface_get_width (surface);
   region->height = cairo_image_surface_get_height (surface);
   region->stride = cairo_image_surface_get_stride (surface);
-  region->x = (gsize)(value->tx * atlas->width);
-  region->y = (gsize)(value->ty * atlas->height);
+  region->x = value->atlas_x;
+  region->y = value->atlas_y;
 }
 
 static void

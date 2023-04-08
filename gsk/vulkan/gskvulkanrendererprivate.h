@@ -23,6 +23,9 @@ typedef struct
   int draw_width;
   int draw_height;
 
+  int atlas_x;
+  int atlas_y;
+
   guint64 timestamp;
 } GskVulkanCachedGlyph;
 
