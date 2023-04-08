@@ -1010,7 +1010,7 @@ gtk_range_get_slider_range (GtkRange *range,
   else
     {
       if (slider_start)
-        *slider_start = slider_bounds.origin.y;
+        *slider_start = slider_bounds.origin.x;
       if (slider_end)
         *slider_end = slider_bounds.origin.x + slider_bounds.size.width;
     }
