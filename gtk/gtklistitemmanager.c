@@ -603,6 +603,17 @@ gtk_list_tile_set_area_size (GtkListItemManager *self,
 }
 
 static void
+gtk_list_tile_set_type (GtkListTile     *tile,
+                        GtkListTileType  type)
+{
+  if (tile->type == type)
+    return;
+
+  tile->type = type;
+  gtk_rb_tree_node_mark_dirty (tile);
+}
+
+static void
 gtk_list_item_tracker_unset_position (GtkListItemManager *self,
                                       GtkListItemTracker *tracker)
 {
@@ -748,10 +759,8 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
         case GTK_LIST_TILE_UNMATCHED_FOOTER:
           if (header)
             {
-              header->type = GTK_LIST_TILE_REMOVED;
-              gtk_rb_tree_node_mark_dirty (header);
-              tile->type = GTK_LIST_TILE_REMOVED;
-              gtk_rb_tree_node_mark_dirty (tile);
+              gtk_list_tile_set_type (header, GTK_LIST_TILE_REMOVED);
+              gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
               header = NULL;
             }
           break;
@@ -771,8 +780,7 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
           tile->widget = NULL;
           n_items -= tile->n_items;
           tile->n_items = 0;
-          tile->type = GTK_LIST_TILE_REMOVED;
-          gtk_rb_tree_node_mark_dirty (tile);
+          gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
           break;
 
         default:
@@ -791,10 +799,8 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
         {
           if (tile->type == GTK_LIST_TILE_FOOTER || tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER)
             {
-              header->type = GTK_LIST_TILE_REMOVED;
-              gtk_rb_tree_node_mark_dirty (header);
-              tile->type = GTK_LIST_TILE_REMOVED;
-              gtk_rb_tree_node_mark_dirty (tile);
+              gtk_list_tile_set_type (header, GTK_LIST_TILE_REMOVED);
+              gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
               break;
             }
         }
