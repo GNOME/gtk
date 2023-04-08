@@ -139,15 +139,15 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                                         gi->geometry.y_offset,
                                                         scale);
 
-          instance->tex_rect[0] = glyph->tx;
-          instance->tex_rect[1] = glyph->ty;
-          instance->tex_rect[2] = glyph->tw;
-          instance->tex_rect[3] = glyph->th;
-
           instance->rect[0] = offset->x + cx + glyph->draw_x;
           instance->rect[1] = offset->y + cy + glyph->draw_y;
           instance->rect[2] = glyph->draw_width;
           instance->rect[3] = glyph->draw_height;
+
+          instance->tex_rect[0] = glyph->tx;
+          instance->tex_rect[1] = glyph->ty;
+          instance->tex_rect[2] = glyph->tw;
+          instance->tex_rect[3] = glyph->th;
 
           instance->color[0] = color->red;
           instance->color[1] = color->green;
