@@ -688,9 +688,6 @@ gdk_vulkan_context_real_init (GInitable     *initable,
       priv->image_format = formats[i];
       priv->has_present_region = device_supports_incremental_present (display->vk_physical_device);
 
-      if (!gdk_vulkan_context_check_swapchain (context, error))
-        goto out_surface;
-
       GDK_VK_CHECK (vkCreateSemaphore, gdk_vulkan_context_get_device (context),
                                        &(VkSemaphoreCreateInfo) {
                                            .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
