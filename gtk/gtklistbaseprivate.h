@@ -37,6 +37,10 @@ struct _GtkListBaseClass
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
   GtkListItemBase *    (* create_list_widget)                   (GtkListBase            *self);
+  void                 (* prepare_section)                      (GtkListBase            *self,
+                                                                 GtkListTile            *tile,
+                                                                 guint                   position);
+  GtkListHeaderBase *  (* create_header_widget)                 (GtkListBase            *self);
 
   gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,

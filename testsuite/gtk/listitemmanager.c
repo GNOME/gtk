@@ -270,10 +270,23 @@ split_simple (GtkWidget   *widget,
   return gtk_list_tile_split (items, tile, n_items);
 }
 
+static void
+prepare_simple (GtkWidget   *widget,
+                GtkListTile *tile,
+                guint        n_items)
+{
+}
+
 static GtkListItemBase *
-create_simple (GtkWidget *widget)
+create_simple_item (GtkWidget *widget)
 {
   return g_object_new (GTK_TYPE_LIST_ITEM_BASE, NULL);
+}
+
+static GtkListHeaderBase *
+create_simple_header (GtkWidget *widget)
+{
+  return g_object_new (GTK_TYPE_LIST_HEADER_BASE, NULL);
 }
 
 static void
@@ -285,7 +298,9 @@ test_create (void)
   widget = gtk_window_new ();
   items = gtk_list_item_manager_new (widget,
                                      split_simple,
-                                     create_simple);
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
   g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
 
   gtk_window_destroy (GTK_WINDOW (widget));
@@ -302,7 +317,9 @@ test_create_with_items (void)
   widget = gtk_window_new ();
   items = gtk_list_item_manager_new (widget,
                                      split_simple,
-                                     create_simple);
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
   g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
 
   source = create_source_model (1, 50);
@@ -352,7 +369,9 @@ test_exhaustive (void)
   widget = gtk_window_new ();
   items = gtk_list_item_manager_new (widget,
                                      split_simple,
-                                     create_simple);
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
   for (i = 0; i < N_TRACKERS; i++)
     trackers[i] = gtk_list_item_tracker_new (items);
 

@@ -1954,9 +1954,23 @@ gtk_list_base_split_func (GtkWidget   *widget,
 }
 
 static GtkListItemBase *
-gtk_list_base_create_widget_func (GtkWidget *widget)
+gtk_list_base_create_list_widget_func (GtkWidget *widget)
 {
   return GTK_LIST_BASE_GET_CLASS (widget)->create_list_widget (GTK_LIST_BASE (widget));
+}
+
+static void
+gtk_list_base_prepare_section_func (GtkWidget   *widget,
+                                    GtkListTile *tile,
+                                    guint        pos)
+{
+  GTK_LIST_BASE_GET_CLASS (widget)->prepare_section (GTK_LIST_BASE (widget), tile, pos);
+}
+
+static GtkListHeaderBase *
+gtk_list_base_create_header_widget_func (GtkWidget *widget)
+{
+  return GTK_LIST_BASE_GET_CLASS (widget)->create_header_widget (GTK_LIST_BASE (widget));
 }
 
 static void
@@ -1968,7 +1982,9 @@ gtk_list_base_init_real (GtkListBase      *self,
 
   priv->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self),
                                                   gtk_list_base_split_func,
-                                                  gtk_list_base_create_widget_func);
+                                                  gtk_list_base_create_list_widget_func,
+                                                  gtk_list_base_prepare_section_func,
+                                                  gtk_list_base_create_header_widget_func);
   priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;
