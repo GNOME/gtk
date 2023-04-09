@@ -263,7 +263,7 @@ drawing_area_apply_stroke (DrawingArea   *area,
                            double         y,
                            double         pressure)
 {
-  if (gdk_device_tool_get_tool_type (tool) == GDK_DEVICE_TOOL_TYPE_ERASER)
+  if (tool && gdk_device_tool_get_tool_type (tool) == GDK_DEVICE_TOOL_TYPE_ERASER)
     {
       cairo_set_line_width (area->cr, 10 * pressure * area->brush_size);
       cairo_set_operator (area->cr, CAIRO_OPERATOR_DEST_OUT);
@@ -314,7 +314,9 @@ stylus_gesture_motion (GtkGestureStylus *gesture,
           drawing_area_apply_stroke (area, tool,
                                      backlog[i].axes[GDK_AXIS_X],
                                      backlog[i].axes[GDK_AXIS_Y],
-                                     backlog[i].axes[GDK_AXIS_PRESSURE]);
+                                     backlog[i].flags & GDK_AXIS_FLAG_PRESSURE
+                                        ? backlog[i].axes[GDK_AXIS_PRESSURE]
+                                        : 1);
         }
 
       g_free (backlog);
