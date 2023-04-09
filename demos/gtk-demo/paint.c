@@ -103,13 +103,11 @@ drawing_area_size_allocate (GtkWidget *widget,
 static void
 drawing_area_map (GtkWidget *widget)
 {
-  GtkAllocation allocation;
-
   GTK_WIDGET_CLASS (drawing_area_parent_class)->map (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
   drawing_area_ensure_surface ((DrawingArea *) widget,
-                               allocation.width, allocation.height);
+                               gtk_widget_get_width (widget),
+                               gtk_widget_get_height (widget));
 }
 
 static void

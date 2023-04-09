@@ -297,12 +297,13 @@ blur_overlay_snapshot (GtkWidget   *widget,
   GtkWidget *main_widget;
   GskRenderNode *main_widget_node = NULL;
   GtkWidget *child;
-  GtkAllocation main_alloc;
+  int width, height;
   cairo_region_t *clip = NULL;
   int i;
 
   main_widget = BLUR_OVERLAY (widget)->main_widget;
-  gtk_widget_get_allocation (widget, &main_alloc);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -315,7 +316,7 @@ blur_overlay_snapshot (GtkWidget   *widget,
 
       if (blur > 0)
         {
-          GtkAllocation alloc;
+          cairo_rectangle_int_t rect;
           graphene_rect_t bounds;
 
           if (main_widget_node == NULL)
@@ -327,8 +328,8 @@ blur_overlay_snapshot (GtkWidget   *widget,
               main_widget_node = gtk_snapshot_free_to_node (child_snapshot);
             }
 
-          gtk_widget_get_allocation (child, &alloc);
-          graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
+          if (!gtk_widget_compute_bounds (child, gtk_widget_get_parent (child), &bounds))
+            graphene_rect_init (&bounds, 0, 0, 0, 0);
           gtk_snapshot_push_blur (snapshot, blur);
           gtk_snapshot_push_clip (snapshot, &bounds);
           gtk_snapshot_append_node (snapshot, main_widget_node);
@@ -337,13 +338,17 @@ blur_overlay_snapshot (GtkWidget   *widget,
 
           if (clip == NULL)
             {
-              cairo_rectangle_int_t rect;
               rect.x = rect.y = 0;
-              rect.width = main_alloc.width;
-              rect.height = main_alloc.height;
+              rect.width = width;
+              rect.height = height;
               clip = cairo_region_create_rectangle (&rect);
             }
-          cairo_region_subtract_rectangle (clip, (cairo_rectangle_int_t *)&alloc);
+
+          rect.x = floor (bounds.origin.x);
+          rect.y = floor (bounds.origin.y);
+          rect.width = ceil (bounds.origin.x + bounds.size.width - rect.x);
+          rect.height = ceil (bounds.origin.y + bounds.size.height - rect.y);
+          cairo_region_subtract_rectangle (clip, &rect);
         }
     }
 
