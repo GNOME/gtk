@@ -7694,14 +7694,16 @@ gtk_widget_real_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_widget_real_realize (GtkWidget *widget)
+update_tick_callbacks (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  gboolean should_tick = FALSE;
 
-  priv->realized = TRUE;
+  if (priv->realized && priv->tick_callbacks != NULL)
+    should_tick = TRUE;
 
   /* Connect frame clock */
-  if (priv->tick_callbacks != NULL && !priv->clock_tick_id)
+  if (!priv->clock_tick_id && should_tick)
     {
       GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
 
@@ -7710,6 +7712,24 @@ gtk_widget_real_realize (GtkWidget *widget)
                                               widget);
       gdk_frame_clock_begin_updating (frame_clock);
     }
+  else if (priv->clock_tick_id && !should_tick)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
+      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
+      priv->clock_tick_id = 0;
+      gdk_frame_clock_end_updating (frame_clock);
+    }
+}
+
+static void
+gtk_widget_real_realize (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  priv->realized = TRUE;
+
+  update_tick_callbacks (widget);
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 }
@@ -7729,19 +7749,11 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   gtk_widget_forall (widget, (GtkCallback)gtk_widget_unrealize, NULL);
 
-  /* Disconnect frame clock */
+  priv->realized = FALSE;
+
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
-  if (priv->clock_tick_id)
-    {
-      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-
-      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
-      priv->clock_tick_id = 0;
-      gdk_frame_clock_end_updating (frame_clock);
-    }
-
-  priv->realized = FALSE;
+  update_tick_callbacks (widget);
 }
 
 void
