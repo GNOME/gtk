@@ -1,26 +1,26 @@
 # Serbian translation of gtk+
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003–2022.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003–2023.
 # This file is distributed under the same license as the gtk package.
 # Translators:
 # Данило Шеган <dsegan@gmx.net>, 2004–2005.
 # Милош Поповић <gpopac@gmail.com>, 2010–2017.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011–2022.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 14:31+0000\n"
-"PO-Revision-Date: 2022-11-20 18:39+0100\n"
+"POT-Creation-Date: 2023-04-07 16:28+0000\n"
+"PO-Revision-Date: 2023-04-09 13:34+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <српски <gnome-sr@googlegroups.org>>\n"
+"Language-Team: Serbian <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -473,24 +473,23 @@ msgid "Suspend"
 msgstr "Обустави"
 
 #: gdk/quartz/gdkglcontext-quartz.c:123
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
 msgstr "Не могу да направим формат ГЛ пиксела"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Не могу да направим ГЛ садржај"
 
 #: gdk/wayland/gdkglcontext-wayland.c:422
 #: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
-#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
+#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Нема доступних подешавања за дати формат пиксела"
 
-#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1491
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1497
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Није доступна ГЛ подршка"
@@ -501,7 +500,6 @@ msgstr "Језгарни ГЛ није доступан уз ЕГЛ подршк
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:298
 #, c-format
-#| msgid "Starting “%s”"
 msgid "Starting %s"
 msgstr "Покрећем „%s“"
 
@@ -530,22 +528,16 @@ msgid "Toggles the cell"
 msgstr "Бирање ћелије"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:63 gtk/a11y/gtkswitchaccessible.c:89
-#| msgctxt "accessibility"
-#| msgid "Toggle"
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "Окини"
 
 #: gtk/a11y/gtkbuttonaccessible.c:321 gtk/a11y/gtkmenuitemaccessible.c:436
-#| msgctxt "accessibility"
-#| msgid "Click"
 msgctxt "Action name"
 msgid "Click"
 msgstr "Кликни"
 
 #: gtk/a11y/gtkbuttonaccessible.c:330
-#| msgctxt "accessibility"
-#| msgid "Clicks the button"
 msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "Клика на дугме"
@@ -582,36 +574,27 @@ msgid "Activates the cell"
 msgstr "Активира поље"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:148
-#| msgctxt "accessibility"
-#| msgid "Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "Изабери"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:150
-#| msgid "Customize"
 msgctxt "Action name"
 msgid "Customize"
 msgstr "Прилагоди"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:161
-#| msgctxt "accessibility"
-#| msgid "Selects the color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Бира боју"
 
 # Mozda "vedrina boje"?
 #: gtk/a11y/gtkcolorswatchaccessible.c:162
-#| msgctxt "accessibility"
-#| msgid "Activates the color"
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Покреће боју"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:163
-#| msgctxt "accessibility"
-#| msgid "Customizes the color"
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Прилагођава боју"
@@ -627,21 +610,16 @@ msgid "Presses the combobox"
 msgstr "Притиска поље за избор"
 
 #: gtk/a11y/gtkentryaccessible.c:1566
-#| msgctxt "accessibility"
-#| msgid "Activates the entry"
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Покреће унос"
 
 #: gtk/a11y/gtkexpanderaccessible.c:290
-#| msgctxt "accessibility"
-#| msgid "Activates the expander"
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "Покреће проширивач"
 
 #: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
-#| msgid "Show other locations"
 msgctxt "Action name"
 msgid "Show location"
 msgstr "Приказује место"
@@ -675,8 +653,6 @@ msgid "_CD-ROM"
 msgstr "_ЦД уређај"
 
 #: gtk/a11y/gtkimageaccessible.c:57 gtk/deprecated/gtkstock.c:351
-#| msgctxt "accessibility"
-#| msgid "Clear"
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Очисти"
@@ -686,15 +662,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Затвори"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
 msgstr "Умањи"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9364
 msgid "Maximize"
 msgstr "Увећај"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9321
 msgid "Restore"
 msgstr "Поврати"
 
@@ -835,8 +811,6 @@ msgid "Increase Indent"
 msgstr "Повећај увлачење"
 
 #: gtk/a11y/gtkimageaccessible.c:87 gtk/deprecated/gtkstock.c:391
-#| msgctxt "Font variation axis"
-#| msgid "Italic"
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Искошено"
@@ -901,7 +875,6 @@ msgstr "_Пусти"
 
 #. Media label, as in  "previous song"
 #: gtk/a11y/gtkimageaccessible.c:98 gtk/deprecated/gtkstock.c:411
-#| msgid "Previous tab"
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Претходно"
@@ -914,8 +887,6 @@ msgstr "С_ними"
 
 #. Media label
 #: gtk/a11y/gtkimageaccessible.c:100 gtk/deprecated/gtkstock.c:415
-#| msgctxt "keyboard label"
-#| msgid "AudioRewind"
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "П_ремотај"
@@ -967,7 +938,6 @@ msgid "_Quit"
 msgstr "_Изађи"
 
 #: gtk/a11y/gtkimageaccessible.c:110 gtk/deprecated/gtkstock.c:438
-#| msgid "_Redo"
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Понови"
@@ -1037,7 +1007,6 @@ msgid "_Underline"
 msgstr "_Подвуци"
 
 #: gtk/a11y/gtkimageaccessible.c:123 gtk/deprecated/gtkstock.c:458
-#| msgid "_Undo"
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Опозови"
@@ -1074,8 +1043,6 @@ msgid "Menu"
 msgstr "Изборник"
 
 #: gtk/a11y/gtkmenuitemaccessible.c:445
-#| msgctxt "accessibility"
-#| msgid "Clicks the button"
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "Клика на ставку изборника"
@@ -1101,8 +1068,6 @@ msgid "Dismiss"
 msgstr "Одбаци"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
-#| msgctxt "accessibility"
-#| msgid "banner"
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Вртешка"
@@ -1112,8 +1077,6 @@ msgid "Provides visual indication of progress"
 msgstr "Обезбеђује видљив приказ напретка неке радње"
 
 #: gtk/a11y/gtkswitchaccessible.c:98
-#| msgctxt "accessibility"
-#| msgid "Toggles the switch"
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Окида прекидач"
@@ -1160,7 +1123,6 @@ msgid "Brightness of the color."
 msgstr "Осветљеност боје."
 
 #: gtk/deprecated/gtkcolorsel.c:468
-#| msgid "_Redo"
 msgid "_Red:"
 msgstr "_Црвена:"
 
@@ -1169,8 +1131,6 @@ msgid "Amount of red light in the color."
 msgstr "Количина црвене светлости у боји."
 
 #: gtk/deprecated/gtkcolorsel.c:470
-#| msgctxt "Color name"
-#| msgid "Green"
 msgid "_Green:"
 msgstr "_Зелена:"
 
@@ -1179,8 +1139,6 @@ msgid "Amount of green light in the color."
 msgstr "Количина зелене светлости у боји."
 
 #: gtk/deprecated/gtkcolorsel.c:472
-#| msgctxt "Color name"
-#| msgid "Blue"
 msgid "_Blue:"
 msgstr "_Плава:"
 
@@ -1247,7 +1205,6 @@ msgid "The color you’ve chosen."
 msgstr "Изабрана боја."
 
 #: gtk/deprecated/gtkcolorsel.c:1458
-#| msgid "_Save color here"
 msgid "_Save color here"
 msgstr "Овде _сачувај боју"
 
@@ -1262,12 +1219,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
-#: gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:6573
+#: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1294,7 +1251,6 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "абвгдђшжчћљњџ АБВГДЂШЖЧЋЉЊЏ abcčćdđ ABCČĆDĐ"
 
 #: gtk/deprecated/gtkfontsel.c:386
-#| msgid "Font Family"
 msgid "_Family:"
 msgstr "_Породица:"
 
@@ -1317,7 +1273,7 @@ msgid "_Apply"
 msgstr "_Примени"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12830
 msgid "_OK"
 msgstr "У _реду"
 
@@ -1454,8 +1410,6 @@ msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d° реду, знак %d"
 
 #: gtk/deprecated/gtkuimanager.c:2709
-#| msgctxt "clipboard"
-#| msgid "empty"
 msgid "Empty"
 msgstr "Празно"
 
@@ -1470,19 +1424,16 @@ msgstr "Неисправна величина %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:671
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can't load file: %s\n"
 msgstr "Не могу да учитам датотеку: %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
 #, c-format
-#| msgid "Can’t save file %s: %s\n"
 msgid "Can't save file %s: %s\n"
 msgstr "Не могу да сачувам датотеку „%s“: %s\n"
 
 #: gtk/encodesymbolic.c:319
 #, c-format
-#| msgid "Can’t close stream"
 msgid "Can't close stream"
 msgstr "Не могу да затворим ток"
 
@@ -1800,19 +1751,16 @@ msgstr "Својство ћелије %s::%s није пронађено\n"
 
 #: gtk/gtk-builder-tool.c:128
 #, c-format
-#| msgid "Cell property %s::%s not found\n"
 msgid "Property %s::%s not found\n"
 msgstr "Нисам нашао својство „%s::%s“\n"
 
 #: gtk/gtk-builder-tool.c:136
 #, c-format
-#| msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgid "Couldn't parse value for %s::%s: %s\n"
 msgstr "Не могу да обрадим вредност за „%s::%s: %s“\n"
 
 #: gtk/gtk-builder-tool.c:692
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can't parse file: %s\n"
 msgstr "Не могу да обрадим датотеку: %s\n"
 
@@ -2308,24 +2256,24 @@ msgstr "Де_сно:"
 msgid "Paper Margins"
 msgstr "Маргине"
 
-#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6687 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:9596 gtk/gtklabel.c:6688 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "_Исеци"
 
-#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6688 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:9600 gtk/gtklabel.c:6689 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "У_множи"
 
-#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6689 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6690 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "У_баци"
 
-#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:9607 gtk/gtkfilechooserwidget.c:1503
+#: gtk/gtkfilechooserwidget.c:2338 gtk/gtklabel.c:6692 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "_Обриши"
 
-#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6700 gtk/gtktextview.c:9551
+#: gtk/gtkentry.c:9618 gtk/gtklabel.c:6701 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "Изабери _све"
 
@@ -2410,10 +2358,6 @@ msgid "The folder could not be created"
 msgstr "Не могу да направим фасциклу"
 
 #: gtk/gtkfilechooserwidget.c:822
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
 msgstr ""
@@ -2421,10 +2365,6 @@ msgstr ""
 "називом."
 
 #: gtk/gtkfilechooserwidget.c:824
-#| msgid ""
-#| "The folder could not be created, as a file with the same name already "
-#| "exists.  Try using a different name for the folder, or rename the file "
-#| "first."
 msgid "Try using a different name for the folder, or rename the file first."
 msgstr ""
 "Покушајте да користите неки други назив за фасциклу, или прво преименујте "
@@ -2529,228 +2469,227 @@ msgstr "Фасцикле чији назив почиње „.“ су скри�
 msgid "File names starting with a “.” are hidden"
 msgstr "Датотеке чији назив почиње „.“ су скривене"
 
-#: gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Да ли сигурно желите да трајно обришете „%s“?"
 
-#: gtk/gtkfilechooserwidget.c:1498
+#: gtk/gtkfilechooserwidget.c:1501
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Ако обришете ставку, она ће бити трајно изгубљена."
 
-#: gtk/gtkfilechooserwidget.c:1635
+#: gtk/gtkfilechooserwidget.c:1638
 msgid "The file could not be renamed"
 msgstr "Не могу да преименујем датотеку"
 
-#: gtk/gtkfilechooserwidget.c:1980
+#: gtk/gtkfilechooserwidget.c:1983
 msgid "Could not select file"
 msgstr "Не могу да изаберем датотеку"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Visit File"
 msgstr "_Посети датотеку"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2334
 msgid "_Open With File Manager"
 msgstr "Прикажи садржајну _фасциклу"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Copy Location"
 msgstr "Умножи _путању"
 
-#: gtk/gtkfilechooserwidget.c:2333
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Add to Bookmarks"
 msgstr "_Додај међу обележиваче"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
+#: gtk/gtkfilechooserwidget.c:2337 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "П_реименуј"
 
-#: gtk/gtkfilechooserwidget.c:2336
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Move to Trash"
 msgstr "Пре_мести у смеће"
 
-#: gtk/gtkfilechooserwidget.c:2340
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Hidden Files"
 msgstr "Прикажи _скривене датотеке"
 
-#: gtk/gtkfilechooserwidget.c:2341
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Show _Size Column"
 msgstr "Прикажи колону _величине"
 
-#: gtk/gtkfilechooserwidget.c:2342
+#: gtk/gtkfilechooserwidget.c:2345
 msgid "Show T_ype Column"
 msgstr "Прикажи колону _врсте"
 
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2346
 msgid "Show _Time"
 msgstr "Прикажи вре_ме"
 
-#: gtk/gtkfilechooserwidget.c:2344
-#| msgid "Sort _Folders Before Files"
+#: gtk/gtkfilechooserwidget.c:2347
 msgid "Sort _Folders before Files"
 msgstr "Пор_еђај фасцикле пре датотека"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Путања"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2719
+#: gtk/gtkfilechooserwidget.c:2722
 msgid "_Name:"
 msgstr "_Назив:"
 
-#: gtk/gtkfilechooserwidget.c:3344 gtk/gtkfilechooserwidget.c:3358
+#: gtk/gtkfilechooserwidget.c:3347 gtk/gtkfilechooserwidget.c:3361
 #, c-format
 msgid "Searching in %s"
 msgstr "Тражим унутар „%s“"
 
-#: gtk/gtkfilechooserwidget.c:3364
+#: gtk/gtkfilechooserwidget.c:3367
 msgid "Searching"
 msgstr "Претражујем"
 
-#: gtk/gtkfilechooserwidget.c:3371
+#: gtk/gtkfilechooserwidget.c:3374
 msgid "Enter location"
 msgstr "Унесите путању"
 
-#: gtk/gtkfilechooserwidget.c:3373
+#: gtk/gtkfilechooserwidget.c:3376
 msgid "Enter location or URL"
 msgstr "Унесите путању или адресу"
 
-#: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
+#: gtk/gtkfilechooserwidget.c:4454 gtk/gtkfilechooserwidget.c:7498
 #: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "Измењена"
 
-#: gtk/gtkfilechooserwidget.c:4729
+#: gtk/gtkfilechooserwidget.c:4734
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не могу да прочитам садржај „%s“"
 
-#: gtk/gtkfilechooserwidget.c:4733
+#: gtk/gtkfilechooserwidget.c:4738
 msgid "Could not read the contents of the folder"
 msgstr "Не могу да прочитам садржај фасцикле"
 
-#: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
+#: gtk/gtkfilechooserwidget.c:4898 gtk/gtkfilechooserwidget.c:4946
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
+#: gtk/gtkfilechooserwidget.c:4900 gtk/gtkfilechooserwidget.c:4948
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4899
+#: gtk/gtkfilechooserwidget.c:4904
 msgid "Yesterday"
 msgstr "Јуче"
 
-#: gtk/gtkfilechooserwidget.c:4907
+#: gtk/gtkfilechooserwidget.c:4912
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4911
+#: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
 msgstr "%-e. %b %Y."
 
-#: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
+#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
 msgstr "Програм"
 
-#: gtk/gtkfilechooserwidget.c:5011
+#: gtk/gtkfilechooserwidget.c:5016
 msgid "Audio"
 msgstr "Звук"
 
-#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5017 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Слова"
 
-#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5018 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Слика"
 
-#: gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Archive"
 msgstr "Архива"
 
-#: gtk/gtkfilechooserwidget.c:5015
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Markup"
 msgstr "Означавање"
 
-#: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfilechooserwidget.c:5021 gtk/gtkfilechooserwidget.c:5022
 msgid "Text"
 msgstr "Текст"
 
-#: gtk/gtkfilechooserwidget.c:5019
+#: gtk/gtkfilechooserwidget.c:5024
 msgid "Video"
 msgstr "Видео"
 
-#: gtk/gtkfilechooserwidget.c:5020
+#: gtk/gtkfilechooserwidget.c:5025
 msgid "Contacts"
 msgstr "Контакти"
 
-#: gtk/gtkfilechooserwidget.c:5021
+#: gtk/gtkfilechooserwidget.c:5026
 msgid "Calendar"
 msgstr "Календар"
 
-#: gtk/gtkfilechooserwidget.c:5022
+#: gtk/gtkfilechooserwidget.c:5027
 msgid "Document"
 msgstr "Документ"
 
-#: gtk/gtkfilechooserwidget.c:5023
+#: gtk/gtkfilechooserwidget.c:5028
 msgid "Presentation"
 msgstr "Презентација"
 
-#: gtk/gtkfilechooserwidget.c:5024
+#: gtk/gtkfilechooserwidget.c:5029
 msgid "Spreadsheet"
 msgstr "Табела"
 
-#: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
+#: gtk/gtkfilechooserwidget.c:5060 gtk/gtkfilechooserwidget.c:5249
 #: gtk/inspector/prop-editor.c:1689
 msgid "Unknown"
 msgstr "Непознато"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
+#: gtk/gtkfilechooserwidget.c:5288 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Лична фасцикла"
 
-#: gtk/gtkfilechooserwidget.c:5780
+#: gtk/gtkfilechooserwidget.c:5785
 msgid "Cannot change to folder because it is not local"
 msgstr "Не могу да уђем у фасциклу зато што није локална"
 
-#: gtk/gtkfilechooserwidget.c:6566 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6571 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Датотека под називом „%s“ већ постоји.  Да ли желите да је замените?"
 
-#: gtk/gtkfilechooserwidget.c:6569 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Датотека већ постоји у „%s“.  Ако је замените преписаћете њен садржај."
 
-#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6579 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Замени"
 
-#: gtk/gtkfilechooserwidget.c:6793
+#: gtk/gtkfilechooserwidget.c:6798
 msgid "You do not have access to the specified folder."
 msgstr "Немате овлашћења за приступ наведеној фасцикли."
 
-#: gtk/gtkfilechooserwidget.c:7416
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "Could not send the search request"
 msgstr "Не могу да пошаљем захтев претраге"
 
 # Треба проверити на шта се односи.
-#: gtk/gtkfilechooserwidget.c:7704
+#: gtk/gtkfilechooserwidget.c:7709
 msgid "Accessed"
 msgstr "Датум приступа"
 
-#: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
+#: gtk/gtkfilechooserwidget.c:8829 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "Направи фасциклу"
 
@@ -2777,32 +2716,22 @@ msgid "None"
 msgstr "Ништа"
 
 #: gtk/gtkfontchooserwidget.c:1604
-#| msgctxt "Font variation axis"
-#| msgid "Width"
 msgid "Width"
 msgstr "Ширина"
 
 #: gtk/gtkfontchooserwidget.c:1605
-#| msgctxt "Font variation axis"
-#| msgid "Weight"
 msgid "Weight"
 msgstr "Тежина"
 
 #: gtk/gtkfontchooserwidget.c:1606
-#| msgctxt "Font variation axis"
-#| msgid "Italic"
 msgid "Italic"
 msgstr "Искошено"
 
 #: gtk/gtkfontchooserwidget.c:1607
-#| msgctxt "Font variation axis"
-#| msgid "Slant"
 msgid "Slant"
 msgstr "Нагнуто"
 
 #: gtk/gtkfontchooserwidget.c:1608
-#| msgctxt "Font variation axis"
-#| msgid "Optical Size"
 msgid "Optical Size"
 msgstr "Оптичка величина"
 
@@ -2831,7 +2760,6 @@ msgid "Number Formatting"
 msgstr "Запис бројева"
 
 #: gtk/gtkfontchooserwidget.c:2360
-#| msgid "Character Variations"
 msgid "Character Variants"
 msgstr "Варијанте знака"
 
@@ -2843,13 +2771,12 @@ msgstr "Не могу да направим ОпенГЛ садржај"
 msgid "Application menu"
 msgstr "Изборник програма"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9391
 msgid "Close"
 msgstr "Затвори"
 
 #: gtk/gtkicontheme.c:2358 gtk/gtkicontheme.c:2423
 #, c-format
-#| msgid "Icon “%s” not present in theme %s"
 msgid "Icon '%s' not present in theme %s"
 msgstr "Иконица „%s“ није присутна у теми „%s“"
 
@@ -2868,7 +2795,6 @@ msgid "None"
 msgstr "Ништа"
 
 #: gtk/gtkimmulticontext.c:615
-#| msgid "System"
 msgctxt "input method menu"
 msgid "System"
 msgstr "Систем"
@@ -2888,8 +2814,6 @@ msgid "Question"
 msgstr "Питање"
 
 #: gtk/gtkinfobar.c:1315 gtk/gtkmessagedialog.c:393
-#| msgctxt "Stock label"
-#| msgid "Warning"
 msgid "Warning"
 msgstr "Упозорење"
 
@@ -2898,12 +2822,12 @@ msgid "Error"
 msgstr "Грешка"
 
 #. Open Link
-#: gtk/gtklabel.c:6668
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "Отвори _везу"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6677
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "Умножи _адресу везе"
 
@@ -2912,7 +2836,6 @@ msgid "Show program version"
 msgstr "Приказује издање програма"
 
 #: gtk/gtk-launch.c:76
-#| msgid "APPLICATION [URI…] — launch an APPLICATION"
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "ПРОГРАМ [ПУТАЊА…] — покреће ПРОГРАМ"
 
@@ -2933,7 +2856,6 @@ msgstr "Грешка обраде опција линије наредби: %s\n
 
 #: gtk/gtk-launch.c:94 gtk/gtk-launch.c:115
 #, c-format
-#| msgid "Try “%s --help” for more information."
 msgid "Try \"%s --help\" for more information."
 msgstr "Покрените „%s --help“ за више података."
 
@@ -2966,7 +2888,6 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: грешка покретања програма: %s\n"
 
 #: gtk/gtklinkbutton.c:374
-#| msgid "_Copy URL"
 msgid "Copy URL"
 msgstr "Умножи адресу"
 
@@ -3779,7 +3700,6 @@ msgstr "%.0f %%"
 
 #: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
-#| msgid "No item for URI “%s” found"
 msgid "No item for URI '%s' found"
 msgstr "Нисам пронашао ставку за адресу „%s“"
 
@@ -3788,12 +3708,10 @@ msgid "Untitled filter"
 msgstr "Неименовани филтер"
 
 #: gtk/gtkrecentchooserdefault.c:1561
-#| msgid "Could not select file"
 msgid "Could not remove item"
 msgstr "Не могу да уклоним ставку"
 
 #: gtk/gtkrecentchooserdefault.c:1605
-#| msgid "Could not select file"
 msgid "Could not clear list"
 msgstr "Не могу да очистим списак"
 
@@ -3806,7 +3724,6 @@ msgid "_Remove From List"
 msgstr "Уклони са _списка"
 
 #: gtk/gtkrecentchooserdefault.c:1707
-#| msgid "Clear entry"
 msgid "_Clear List"
 msgstr "Очисти _списак"
 
@@ -3825,24 +3742,20 @@ msgstr "Прикажи _приватне ресурсе"
 #. * recent chooser menu widget.
 #.
 #: gtk/gtkrecentchoosermenu.c:343
-#| msgid "No printer found"
 msgid "No items found"
 msgstr "Нисам нашао ставке"
 
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
 #, c-format
-#| msgid "No recently used resource found with URI “%s”"
 msgid "No recently used resource found with URI '%s'"
 msgstr "Није пронађен недавно коришћен ресурс на адреси „%s“"
 
 #: gtk/gtkrecentchoosermenu.c:789
 #, c-format
-#| msgid "Open %s"
 msgid "Open '%s'"
 msgstr "Отвори „%s“"
 
 #: gtk/gtkrecentchoosermenu.c:819
-#| msgid "Unknown"
 msgid "Unknown item"
 msgstr "Непозната ставка"
 
@@ -3870,27 +3783,21 @@ msgstr "%d. %s"
 #: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
 #: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
 #, c-format
-#| msgid "Unable to find an item with URI “%s”"
 msgid "Unable to find an item with URI '%s'"
 msgstr "Не могу да пронађем ставку са путањом „%s“"
 
 #: gtk/gtkrecentmanager.c:1289
 #, c-format
-#| msgid "Unable to move the item with URI “%s” to “%s”"
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Не могу да преместим ставку са путањом „%s“ у „%s“"
 
 #: gtk/gtkrecentmanager.c:2507
 #, c-format
-#| msgid ""
-#| "No registered application with name “%s” for item with URI “%s” found"
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
 "Нисам пронашао регистрован програм под називом „%s“ за ставку са путањом „%s“"
 
 #: gtk/gtksearchentry.c:371
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search"
 msgstr "Претрага"
 
@@ -3976,43 +3883,36 @@ msgstr "Нисам пронашао функцију за распакивање
 
 #: gtk/gtktextbufferserialize.c:792 gtk/gtktextbufferserialize.c:818
 #, c-format
-#| msgid "Both “id” and “name” were found on the <%s> element"
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Пронашао сам и „id“ и „name“ у елементу <%s>"
 
 #: gtk/gtktextbufferserialize.c:802 gtk/gtktextbufferserialize.c:828
 #, c-format
-#| msgid "The attribute “%s” was found twice on the <%s> element"
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Атрибут „%s“ сам пронашао два пута у елементу <%s>"
 
 #: gtk/gtktextbufferserialize.c:844
 #, c-format
-#| msgid "<%s> element has invalid ID “%s”"
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "Елемент <%s> има неисправан ИД „%s“"
 
 #: gtk/gtktextbufferserialize.c:855
 #, c-format
-#| msgid "<%s> element has neither a “name” nor an “id” attribute"
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Елемент <%s> нема ни атрибут „id“ нити „name“"
 
 #: gtk/gtktextbufferserialize.c:942
 #, c-format
-#| msgid "Attribute “%s” repeated twice on the same <%s> element"
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Атрибут „%s“ је поновљен два пута у истом <%s> елементу"
 
 #: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
 #, c-format
-#| msgid "Attribute “%s” is invalid on <%s> element in this context"
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Атрибут „%s“ је неисправан у елементу <%s> у овом контексту"
 
 #: gtk/gtktextbufferserialize.c:1024
 #, c-format
-#| msgid "Tag “%s” has not been defined."
 msgid "Tag \"%s\" has not been defined."
 msgstr "Ознака „%s“ није дефинисана."
 
@@ -4022,7 +3922,6 @@ msgstr "Безимена ознака је пронађена па ознаке 
 
 #: gtk/gtktextbufferserialize.c:1047
 #, c-format
-#| msgid "Tag “%s” does not exist in buffer and tags can not be created."
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Ознака „%s“ не постоји у међумеморији па ознаке не могу бити направљене."
@@ -4035,39 +3934,32 @@ msgstr "Елемент <%s> није дозвољен испод <%s>"
 
 #: gtk/gtktextbufferserialize.c:1179
 #, c-format
-#| msgid "“%s” is not a valid attribute type"
 msgid "\"%s\" is not a valid attribute type"
 msgstr "„%s“ није исправна врста атрибута"
 
 #: gtk/gtktextbufferserialize.c:1187
 #, c-format
-#| msgid "“%s” is not a valid attribute name"
 msgid "\"%s\" is not a valid attribute name"
 msgstr "„%s“ није исправан назив атрибута"
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
-#| msgid ""
-#| "“%s” could not be converted to a value of type “%s” for attribute “%s”"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "Не могу да претворим „%s“ у вредност врсте „%s“ за атрибут „%s“"
 
 #: gtk/gtktextbufferserialize.c:1206
 #, c-format
-#| msgid "“%s” is not a valid value for attribute “%s”"
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "„%s“ није испрана вредност атрибута „%s“"
 
 #: gtk/gtktextbufferserialize.c:1291
 #, c-format
-#| msgid "Tag “%s” already defined"
 msgid "Tag \"%s\" already defined"
 msgstr "Ознака „%s“ је већ дефинисана"
 
 #: gtk/gtktextbufferserialize.c:1304
 #, c-format
-#| msgid "Tag “%s” has invalid priority “%s”"
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Ознака „%s“ има неисправан приоритет „%s“"
 
@@ -4082,7 +3974,6 @@ msgid "A <%s> element has already been specified"
 msgstr "Елемент <%s> је већ наведен"
 
 #: gtk/gtktextbufferserialize.c:1388
-#| msgid "A <text> element can’t occur before a <tags> element"
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Елемент <text> се не може појавити пре елемента <tags>"
 
@@ -4091,9 +3982,6 @@ msgid "Serialized data is malformed"
 msgstr "Подаци нису лепо запаковани у ниску"
 
 #: gtk/gtktextbufferserialize.c:1873
-#| msgid ""
-#| "Serialized data is malformed. First section isn’t "
-#| "GTKTEXTBUFFERCONTENTS-0001"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -4101,12 +3989,10 @@ msgstr ""
 "„GTKTEXTBUFFERCONTENTS-0001“"
 
 #: gtk/gtktextutil.c:57
-#| msgid "LRO Left-to-right _override"
 msgid "LRM _Left-to-right mark"
 msgstr "LRМ — Ознака _слева-на-десно"
 
 #: gtk/gtktextutil.c:58
-#| msgid "RLO Right-to-left o_verride"
 msgid "RLM _Right-to-left mark"
 msgstr "RLМ — Ознака _сдесна-на-лево"
 
@@ -4165,30 +4051,25 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9329
+#: gtk/gtkwindow.c:9339
 msgid "Move"
 msgstr "Премести"
 
-#: gtk/gtkwindow.c:9337
+#: gtk/gtkwindow.c:9347
 msgid "Resize"
 msgstr "Промени величину"
 
-#: gtk/gtkwindow.c:9368
+#: gtk/gtkwindow.c:9378
 msgid "Always on Top"
 msgstr "Увек у првом плану"
 
-#: gtk/gtkwindow.c:12803
+#: gtk/gtkwindow.c:12817
 #, c-format
-#| msgid "Do you want to use GTK Inspector?"
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Да ли желите да користите Гтк+ Надзорника?"
 
-#: gtk/gtkwindow.c:12805
+#: gtk/gtkwindow.c:12819
 #, c-format
-#| msgid ""
-#| "GTK Inspector is an interactive debugger that lets you explore and modify "
-#| "the internals of any GTK application. Using it may cause the application "
-#| "to break or crash."
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -4198,8 +4079,7 @@ msgstr ""
 "истражујете и мењате унутрашњост било ког Гтк+ програма. Његово коришћење "
 "може довести до пада или урушавања програма."
 
-#: gtk/gtkwindow.c:12810
-#| msgid "Don’t show this message again"
+#: gtk/gtkwindow.c:12824
 msgid "Don't show this message again"
 msgstr "Више не приказуј ову поруку"
 
@@ -4212,7 +4092,7 @@ msgstr "Покрени"
 msgid "State"
 msgstr "Стaњe"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Префикс"
@@ -4226,7 +4106,6 @@ msgid "Parameter Type"
 msgstr "Врста параметра"
 
 #: gtk/inspector/css-editor.c:112
-#| msgid "You can type here any CSS rule recognized by GTK."
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "Овде можете уписати ЦСС правило које Гтк+ препознаје."
 
@@ -4275,18 +4154,21 @@ msgstr "Вредност"
 msgid "Show data"
 msgstr "Прикажи податке"
 
-#: gtk/inspector/general.c:330
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "Ништа"
 
-#: gtk/inspector/general.c:331
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ништа"
 
+#: gtk/inspector/general.c:550
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "ИМ контекст је стриктно кодиран са „GTK_IM_MODULE“"
+
 #: gtk/inspector/general.ui:34
-#| msgid "GTK Version"
 msgid "GTK+ Version"
 msgstr "Гтк+ издање"
 
@@ -4294,32 +4176,41 @@ msgstr "Гтк+ издање"
 msgid "GDK Backend"
 msgstr "ГДК позадинац"
 
-#: gtk/inspector/general.ui:115
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr "Панго словна мапа"
+
+#: gtk/inspector/general.ui:136
+#| msgctxt "input method menu"
+#| msgid "X Input Method"
+msgid "Input Method"
+msgstr "Начин уноса"
+
+#: gtk/inspector/general.ui:183
 msgid "Application ID"
 msgstr "ИД програма"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:217
 msgid "Resource Path"
 msgstr "Путања изворишта"
 
-#: gtk/inspector/general.ui:454
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "Приказ"
 
-#: gtk/inspector/general.ui:489
-#| msgid "RGBA Visual"
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "РГБА видљиво"
 
-#: gtk/inspector/general.ui:523
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "Сложени"
 
-#: gtk/inspector/general.ui:570
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "ГЛ издање"
 
-#: gtk/inspector/general.ui:605
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "ГЛ произвођач"
 
@@ -4368,7 +4259,6 @@ msgid "Address"
 msgstr "Адреса"
 
 #: gtk/inspector/misc-info.ui:68
-#| msgid "Reference Count"
 msgid "Reference count"
 msgstr "Број упуте"
 
@@ -4388,7 +4278,6 @@ msgid "Properties"
 msgstr "Својства"
 
 #: gtk/inspector/misc-info.ui:214
-#| msgid "Default Widget"
 msgid "Focus Widget"
 msgstr "Елемент фокуса"
 
@@ -4397,7 +4286,6 @@ msgid "Mnemonic Label"
 msgstr "Мнемонички натпис"
 
 #: gtk/inspector/misc-info.ui:294
-#| msgid "Request Mode"
 msgid "Request mode"
 msgstr "Режим захтева"
 
@@ -4410,7 +4298,6 @@ msgid "Baseline"
 msgstr "Подножје"
 
 #: gtk/inspector/misc-info.ui:396
-#| msgid "Clip Area"
 msgid "Clip area"
 msgstr "Исеци област"
 
@@ -4421,38 +4308,32 @@ msgid "Frame Clock"
 msgstr "Време освежавања оквира"
 
 #: gtk/inspector/misc-info.ui:475
-#| msgid "Tick Callback"
 msgid "Tick callback"
 msgstr "Откуцај поновног позива"
 
 # Треба проверити на шта се односи.
 # Исто као горе.
 #: gtk/inspector/misc-info.ui:511
-#| msgid "Frame Count"
 msgid "Frame count"
 msgstr "Број оквира"
 
 # Треба проверити на шта се односи.
 #: gtk/inspector/misc-info.ui:545
-#| msgid "Frame Rate"
 msgid "Frame rate"
 msgstr "Учесталост оквира"
 
 # Треба проверити на шта се односи.
 #: gtk/inspector/misc-info.ui:579
-#| msgid "Accessible Name"
 msgid "Accessible role"
 msgstr "Приступачна улога"
 
 # Треба проверити на шта се односи.
 #: gtk/inspector/misc-info.ui:613
-#| msgid "Accessible Name"
 msgid "Accessible name"
 msgstr "Приступачни назив"
 
 # Треба проверити на шта се односи.
 #: gtk/inspector/misc-info.ui:649
-#| msgid "Accessible Description"
 msgid "Accessible description"
 msgstr "Приступачан опис"
 
@@ -4473,7 +4354,6 @@ msgid "Child Visible"
 msgstr "Видљиви садржани"
 
 #: gtk/inspector/object-tree.ui:95
-#| msgid "Objects"
 msgid "Object"
 msgstr "Објекат"
 
@@ -4489,7 +4369,6 @@ msgstr "Непознато"
 
 #: gtk/inspector/prop-editor.c:695
 #, c-format
-#| msgid "Defined at: %p (%s)"
 msgid "Object: %p (%s)"
 msgstr "Објекат: %p (%s)"
 
@@ -4503,7 +4382,6 @@ msgid "Attribute mapping"
 msgstr "Мапирање особина"
 
 #: gtk/inspector/prop-editor.c:1264
-#| msgid "Model"
 msgid "Model:"
 msgstr "Модел:"
 
@@ -4555,14 +4433,10 @@ msgid "Reset"
 msgstr "Поново постави"
 
 #: gtk/inspector/prop-editor.c:1679
-#| msgctxt "GtkSettings source"
-#| msgid "Theme"
 msgid "Theme"
 msgstr "Тема"
 
 #: gtk/inspector/prop-editor.c:1682
-#| msgctxt "GtkSettings source"
-#| msgid "XSettings"
 msgid "XSettings"
 msgstr "Поставке Икса"
 
@@ -4653,7 +4527,6 @@ msgid "Both"
 msgstr "Оба"
 
 #: gtk/inspector/statistics.c:377
-#| msgid "GLib must be configured with -Dbuildtype=debug"
 msgid "GLib must be configured with --enable-debug"
 msgstr "Глиб мора бити подешено са „--enable-debug“"
 
@@ -4711,7 +4584,6 @@ msgid "GL rendering is disabled"
 msgstr "Цртање помоћу ГЛ-а је онемогућено"
 
 #: gtk/inspector/visual.ui:61
-#| msgid "GTK Theme"
 msgid "GTK+ Theme"
 msgstr "Гтк+ тема"
 
@@ -4748,7 +4620,6 @@ msgid "Right-to-Left"
 msgstr "Са десна на лево"
 
 #: gtk/inspector/visual.ui:347
-#| msgid "Window Scaling"
 msgid "Window scaling"
 msgstr "Сразмеравање прозора"
 
@@ -4769,8 +4640,6 @@ msgid "Similar"
 msgstr "Слично"
 
 #: gtk/inspector/visual.ui:489
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recording"
 msgstr "Снимање"
 
@@ -4795,7 +4664,6 @@ msgid "Show Widget Resizes"
 msgstr "Прикажи промене величина елемената"
 
 #: gtk/inspector/visual.ui:683
-#| msgid "Simulate Touchscreen"
 msgid "Simulate touchscreen"
 msgstr "Опонашај екран на додир"
 
@@ -4804,7 +4672,6 @@ msgid "GL Rendering"
 msgstr "ГЛ исцртавање"
 
 #: gtk/inspector/visual.ui:740
-#| msgid "When Needed"
 msgid "When needed"
 msgstr "По потреби"
 
@@ -4813,8 +4680,6 @@ msgid "Always"
 msgstr "Увек"
 
 #: gtk/inspector/visual.ui:742
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Disabled"
 msgstr "Искључена"
 
@@ -4863,12 +4728,10 @@ msgid "Miscellaneous"
 msgstr "Додатна подешавања"
 
 #: gtk/inspector/window.ui:393
-#| msgid "Signal"
 msgid "Signals"
 msgstr "Сигнали"
 
 #: gtk/inspector/window.ui:404
-#| msgid "Properties"
 msgid "Child Properties"
 msgstr "Својства детета"
 
@@ -4881,7 +4744,6 @@ msgid "CSS Selector"
 msgstr "ЦСС изаборник"
 
 #: gtk/inspector/window.ui:431
-#| msgid "CSS Nodes"
 msgid "CSS nodes"
 msgstr "ЦСС тачке"
 
@@ -7321,8 +7183,6 @@ msgid "A"
 msgstr "А"
 
 #: gtk/ui/gtkcoloreditor.ui:196
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "Провидност"
 
@@ -7346,43 +7206,30 @@ msgid "V"
 msgstr "V"
 
 #: gtk/ui/gtkcoloreditor.ui:301
-#| msgid "S_aturation:"
 msgid "Saturation"
 msgstr "Засићеност"
 
 #: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
-#| msgctxt "emoji category"
-#| msgid "Smileys & People"
 msgid "Smileys & People"
 msgstr "Смешци и људи"
 
 #: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
-#| msgctxt "emoji category"
-#| msgid "Body & Clothing"
 msgid "Body & Clothing"
 msgstr "Изглед и облачење"
 
 #: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
-#| msgctxt "emoji category"
-#| msgid "Animals & Nature"
 msgid "Animals & Nature"
 msgstr "Животиње и природа"
 
 #: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
-#| msgctxt "emoji category"
-#| msgid "Food & Drink"
 msgid "Food & Drink"
 msgstr "Јело и пиће"
 
 #: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
-#| msgctxt "emoji category"
-#| msgid "Travel & Places"
 msgid "Travel & Places"
 msgstr "Путовање и места"
 
 #: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
-#| msgctxt "emoji category"
-#| msgid "Activities"
 msgid "Activities"
 msgstr "Активности"
 
@@ -7392,14 +7239,10 @@ msgid "Objects"
 msgstr "Предмети"
 
 #: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
-#| msgctxt "emoji category"
-#| msgid "Symbols"
 msgid "Symbols"
 msgstr "Симболи"
 
 #: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
-#| msgctxt "emoji category"
-#| msgid "Flags"
 msgid "Flags"
 msgstr "Заставе"
 
@@ -7416,8 +7259,6 @@ msgid "Browse Header Revealer"
 msgstr "Разгледа откривача заглавља"
 
 #: gtk/ui/gtkfilechooserwidget.ui:65
-#| msgctxt "accessibility"
-#| msgid "row header"
 msgid "Browse Header Stack"
 msgstr "Разгледа спремник заглавља"
 
@@ -7426,13 +7267,10 @@ msgid "PathBar Layer"
 msgstr "Распоред траке путање"
 
 #: gtk/ui/gtkfilechooserwidget.ui:121
-#| msgid "Location"
 msgid "Location Layer"
 msgstr "Распоред места"
 
 #: gtk/ui/gtkfilechooserwidget.ui:137
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search Layer"
 msgstr "Распоред претраге"
 
@@ -7465,7 +7303,6 @@ msgid "Font Family"
 msgstr "Породица фонтова"
 
 #: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
-#| msgid "Preview Font"
 msgid "Preview text"
 msgstr "Текст претпрегледа"
 
@@ -7762,7 +7599,6 @@ msgid "Turns volume up or down"
 msgstr "Појачава или смањује јачину звука"
 
 #: gtk/ui/gtkvolumebutton.ui:34
-#| msgid "Volume type"
 msgid "Volume Up"
 msgstr "Појачај звук"
 
@@ -7838,12 +7674,10 @@ msgid "Overwrite an existing cache, even if up to date"
 msgstr "Преписује постојећу оставу, чак и ако је ажурна"
 
 #: gtk/updateiconcache.c:1663
-#| msgid "Don’t check for the existence of index.theme"
 msgid "Don't check for the existence of index.theme"
 msgstr "Не проверава присуство датотеке „index.theme“"
 
 #: gtk/updateiconcache.c:1664
-#| msgid "Don’t include image data in the cache"
 msgid "Don't include image data in the cache"
 msgstr "Не укључује податке слике у оставу"
 
@@ -7880,10 +7714,6 @@ msgstr "Нема датотеке индекса за тему.\n"
 
 #: gtk/updateiconcache.c:1758
 #, c-format
-#| msgid ""
-#| "No theme index file in “%s”.\n"
-#| "If you really want to create an icon cache here, use --ignore-theme-"
-#| "index.\n"
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
@@ -7917,7 +7747,6 @@ msgid "Cyrillic (Transliterated)"
 msgstr "Ћирилично (транслитеровано)"
 
 #: modules/input/imime.c:30
-#| msgid "_Windows system"
 msgctxt "input method menu"
 msgid "Windows IME"
 msgstr "ИМЕ прозора"
@@ -7947,8 +7776,6 @@ msgstr "Мек ОС Икс Кварц"
 
 #. ID
 #: modules/input/imthai.c:33
-#| msgctxt "Script"
-#| msgid "Thai"
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Тај-Лао"
@@ -7978,14 +7805,7 @@ msgid "Wayland"
 msgstr "Вејланд"
 
 #. ID
-#: modules/input/imwaylandgtk.c:82
-msgctxt "input method menu"
-msgid "Waylandgtk"
-msgstr "Вејландгтк"
-
-#. ID
 #: modules/input/imxim.c:26
-#| msgid "Input Method"
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Начин уноса Икса"
@@ -8530,7 +8350,6 @@ msgid "PDF"
 msgstr "ПДФ"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
-#| msgid "PostScript"
 msgid "Postscript"
 msgstr "Постскрипт"
 
@@ -8597,6 +8416,10 @@ msgstr "тест-излаз.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Штампај на пробном штампачу"
+
+#~ msgctxt "input method menu"
+#~ msgid "Waylandgtk"
+#~ msgstr "Вејландгтк"
 
 #~ msgid "This clipboard cannot store data."
 #~ msgstr "Ова остава не може да чува податке."
@@ -8743,13 +8566,13 @@ msgstr "Штампај на пробном штампачу"
 
 #~ msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 #~ msgstr ""
-#~ "Не могу да добавим податке оставе. Није успела функција „GlobalLock(0×"
-#~ "%p)“: 0×%lx."
+#~ "Не могу да добавим податке оставе. Није успела функција "
+#~ "„GlobalLock(0×%p)“: 0×%lx."
 
 #~ msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 #~ msgstr ""
-#~ "Не могу да добавим податке оставе. Није успела функција „GlobalSize(0×"
-#~ "%p)“: 0×%lx."
+#~ "Не могу да добавим податке оставе. Није успела функција "
+#~ "„GlobalSize(0×%p)“: 0×%lx."
 
 #~ msgid ""
 #~ "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -9378,14 +9201,8 @@ msgstr "Штампај на пробном штампачу"
 #~ msgid "None"
 #~ msgstr "Ништа"
 
-#~ msgid "IM Context is hardcoded by GTK_IM_MODULE"
-#~ msgstr "ИМ контекст је стриктно кодиран са „GTK_IM_MODULE“"
-
 #~ msgid "GSK Renderer"
 #~ msgstr "ГСК исцртавач"
-
-#~ msgid "Pango Fontmap"
-#~ msgstr "Панго словна мапа"
 
 #~ msgid "Media Backend"
 #~ msgstr "Позадинац медија"
