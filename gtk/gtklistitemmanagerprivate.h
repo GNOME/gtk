@@ -121,6 +121,9 @@ GtkListTile *           gtk_list_tile_gc                        (GtkListItemMana
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
                                                                  GtkSelectionModel      *model);
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);
+void                    gtk_list_item_manager_set_has_sections  (GtkListItemManager     *self,
+                                                                 gboolean                has_sections);
+gboolean                gtk_list_item_manager_get_has_sections  (GtkListItemManager     *self);
 
 GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
 void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,

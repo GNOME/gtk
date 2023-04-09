@@ -372,7 +372,7 @@ test_exhaustive (void)
       if (g_test_verbose ())
         print_list_item_manager_tiles (items);
 
-      switch (g_test_rand_int_range (0, 5))
+      switch (g_test_rand_int_range (0, 6))
       {
         case 0:
           if (g_test_verbose ())
@@ -411,6 +411,15 @@ test_exhaustive (void)
                                                   pos,
                                                   n_before, n_after);
             }
+          break;
+
+        case 5:
+          {
+            gboolean has_sections = g_test_rand_bit ();
+            if (g_test_verbose ())
+              g_test_message ("Setting has_sections to %s", has_sections ? "true" : "false");
+            gtk_list_item_manager_set_has_sections (items, has_sections);
+          }
           break;
 
         default:
