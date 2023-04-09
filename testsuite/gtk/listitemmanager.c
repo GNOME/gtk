@@ -142,6 +142,7 @@ check_list_item_manager (GtkListItemManager  *items,
             if (tile->widget)
               {
                 GObject *item = g_list_model_get_item (model, n_items);
+                g_assert_cmpint (section_state, ==, MATCHED_SECTION);
                 g_assert_cmphex (GPOINTER_TO_SIZE (item), ==, GPOINTER_TO_SIZE (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget))));
                 g_object_unref (item);
                 g_assert_cmpint (n_items, ==, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (tile->widget)));
