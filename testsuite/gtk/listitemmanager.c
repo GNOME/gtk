@@ -255,6 +255,9 @@ test_create_with_items (void)
   source = create_source_model (1, 50);
   selection = gtk_no_selection_new (G_LIST_MODEL (source));
   gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  check_list_item_manager (items, NULL, 0);
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  check_list_item_manager (items, NULL, 0);
 
   g_object_unref (selection);
   gtk_window_destroy (GTK_WINDOW (widget));
@@ -263,6 +266,24 @@ test_create_with_items (void)
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
+
+static void
+print_changes_cb (GListModel *model,
+                  guint       position,
+                  guint       removed,
+                  guint       added,
+                  gpointer    unused)
+{
+  if (!g_test_verbose ())
+    return;
+
+  if (removed == 0)
+    g_test_message ("%u/%u: adding %u items", position, g_list_model_get_n_items (model), added);
+  else if (added == 0)
+    g_test_message ("%u/%u: removing %u items", position, g_list_model_get_n_items (model), removed);
+  else
+    g_test_message ("%u/%u: removing %u and adding %u items", position, g_list_model_get_n_items (model), removed, added);
+}
 
 static void
 test_exhaustive (void)
@@ -287,6 +308,7 @@ test_exhaustive (void)
   store = g_list_store_new (G_TYPE_OBJECT);
   flatten = gtk_flatten_list_model_new (G_LIST_MODEL (store));
   selection = gtk_no_selection_new (G_LIST_MODEL (flatten));
+  g_signal_connect (selection, "items-changed", G_CALLBACK (print_changes_cb), NULL);
   gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
 
   for (i = 0; i < N_RUNS; i++)
@@ -297,6 +319,8 @@ test_exhaustive (void)
       switch (g_test_rand_int_range (0, 5))
       {
         case 0:
+          if (g_test_verbose ())
+            g_test_message ("GC and checking");
           check_list_item_manager (items, trackers, N_TRACKERS);
           break;
 
@@ -320,11 +344,16 @@ test_exhaustive (void)
           n_items = g_list_model_get_n_items (G_LIST_MODEL (selection));
           if (n_items > 0)
             {
+              guint tracker_id = g_test_rand_int_range (0, N_TRACKERS);
+              guint pos = g_test_rand_int_range (0, n_items);
+              guint n_before = g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2);
+              guint n_after = g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2);
+              if (g_test_verbose ())
+                g_test_message ("setting tracker %u to %u -%u + %u", tracker_id, pos, n_before, n_after);
               gtk_list_item_tracker_set_position (items,
-                                                  trackers [g_test_rand_int_range (0, N_TRACKERS)],
-                                                  g_test_rand_int_range (0, n_items),
-                                                  g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2),
-                                                  g_test_rand_int_range (0, N_WIDGETS_PER_TRACKER / 2));
+                                                  trackers [tracker_id],
+                                                  pos,
+                                                  n_before, n_after);
             }
           break;
 
