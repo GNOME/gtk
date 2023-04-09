@@ -24,6 +24,7 @@
 #include "gtk/gtkenums.h"
 
 #include "gtk/gtklistitembaseprivate.h"
+#include "gtk/gtklistheaderbaseprivate.h"
 #include "gtk/gtklistitemfactory.h"
 #include "gtk/gtkrbtreeprivate.h"
 #include "gtk/gtkselectionmodel.h"
@@ -79,7 +80,9 @@ GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CO
 
 GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget,
                                                                  GtkListTile *           (* split_func) (GtkWidget *, GtkListTile *, guint),
-                                                                 GtkListItemBase *       (* create_widget) (GtkWidget *));
+                                                                 GtkListItemBase *       (* create_widget) (GtkWidget *),
+                                                                 void                    (* prepare_section) (GtkWidget *, GtkListTile *, guint),
+                                                                 GtkListHeaderBase *     (* create_header_widget) (GtkWidget *));
 
 void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
                                                                  GdkRectangle           *out_bounds);

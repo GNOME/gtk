@@ -39,6 +39,8 @@ struct _GtkListItemManager
 
   GtkListTile * (* split_func) (GtkWidget *, GtkListTile *, guint);
   GtkListItemBase * (* create_widget) (GtkWidget *);
+  void (* prepare_section) (GtkWidget *, GtkListTile *, guint);
+  GtkListHeaderBase * (* create_header_widget) (GtkWidget *);
 };
 
 struct _GtkListItemManagerClass
@@ -156,9 +158,11 @@ gtk_list_item_manager_clear_node (gpointer _tile)
 }
 
 GtkListItemManager *
-gtk_list_item_manager_new (GtkWidget         *widget,
-                           GtkListTile *      (* split_func) (GtkWidget *, GtkListTile *, guint),
-                           GtkListItemBase *  (* create_widget) (GtkWidget *))
+gtk_list_item_manager_new (GtkWidget          *widget,
+                           GtkListTile *       (* split_func) (GtkWidget *, GtkListTile *, guint),
+                           GtkListItemBase *   (* create_widget) (GtkWidget *),
+                           void                (* prepare_section) (GtkWidget *, GtkListTile *, guint),
+                           GtkListHeaderBase * (* create_header_widget) (GtkWidget *))
 {
   GtkListItemManager *self;
 
@@ -170,6 +174,8 @@ gtk_list_item_manager_new (GtkWidget         *widget,
   self->widget = widget;
   self->split_func = split_func;
   self->create_widget = create_widget;
+  self->prepare_section = prepare_section;
+  self->create_header_widget = create_header_widget;
 
   self->items = gtk_rb_tree_new_for_size (sizeof (GtkListTile),
                                           sizeof (GtkListTileAugment),
@@ -1141,6 +1147,8 @@ gtk_list_item_manager_insert_section (GtkListItemManager *self,
     }
   else
     {
+      self->prepare_section (self->widget, tile, pos);
+
       other = gtk_rb_tree_insert_before (self->items, tile);
       gtk_list_tile_set_type (other, header_type);
       other = gtk_rb_tree_insert_before (self->items, other);
