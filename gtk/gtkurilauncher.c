@@ -213,20 +213,64 @@ gtk_uri_launcher_set_uri (GtkUriLauncher *self,
 /* {{{ Async implementation */
 
 #ifndef G_OS_WIN32
+static void show_uri_done (GObject      *source,
+                           GAsyncResult *result,
+                           gpointer      data);
+
+typedef struct {
+  GtkUriLauncher *launcher;
+  GtkWindow *window;
+  GCancellable *cancellable;
+  GTask *task;
+  GAsyncReadyCallback orig_callback;
+  gpointer orig_callback_data;
+} CallbackData;
+
+static void
+free_callback_data (CallbackData *data)
+{
+  g_clear_object (&data->launcher);
+  g_clear_object (&data->task);
+  g_clear_object (&data->window);
+  g_clear_object (&data->cancellable);
+  g_free (data);
+}
+
+static gboolean
+show_uri_in_idle (CallbackData *cbdata)
+{
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_show_uri_full (cbdata->window, cbdata->launcher->uri, GDK_CURRENT_TIME,
+                     cbdata->cancellable, show_uri_done, cbdata->task);
+G_GNUC_END_IGNORE_DEPRECATIONS
+  free_callback_data (cbdata);
+
+  return FALSE;
+}
+
 static void
 open_done (GObject      *source,
            GAsyncResult *result,
            gpointer      data)
 {
-  GTask *task = G_TASK (data);
+  CallbackData *cbdata = (CallbackData *) data;
   GError *error = NULL;
 
-  if (!gtk_openuri_portal_open_uri_finish (result, &error))
-    g_task_return_error (task, error);
-  else
-    g_task_return_boolean (task, TRUE);
-
-  g_object_unref (task);
+  if (!gtk_openuri_portal_open_uri_finish (result, &error)) {
+    /* DBus method failed or is not implemented,
+     * try again without using portal - Issue #5733 */
+    GTask *task;
+    task = g_task_new (cbdata->launcher, cbdata->cancellable,
+                       cbdata->orig_callback, cbdata->orig_callback_data);
+    g_task_set_check_cancellable (task, FALSE);
+    g_task_set_source_tag (task, open_done);
+    g_clear_object (&cbdata->task);
+    cbdata->task = g_object_ref (task);
+    g_idle_add (G_SOURCE_FUNC (show_uri_in_idle), cbdata);
+  } else {
+    g_task_return_boolean (cbdata->task, TRUE);
+    free_callback_data (cbdata);
+  }
 }
 #endif
 
@@ -300,9 +344,19 @@ gtk_uri_launcher_launch (GtkUriLauncher     *self,
     }
 
 #ifndef G_OS_WIN32
-  if (gtk_openuri_portal_is_available ())
-    gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
-  else
+  if (gtk_openuri_portal_is_available ()) {
+    CallbackData *callback_data;
+
+    callback_data = g_new (CallbackData, 1);
+    callback_data->launcher = g_object_ref (self);
+    callback_data->task = g_object_ref (task);
+    callback_data->window =  parent ? g_object_ref (parent) : NULL;
+    callback_data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+    callback_data->orig_callback = callback;
+    callback_data->orig_callback_data = user_data;
+
+    gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, callback_data);
+  } else
 #endif
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     gtk_show_uri_full (parent, self->uri, GDK_CURRENT_TIME, cancellable, show_uri_done, task);
