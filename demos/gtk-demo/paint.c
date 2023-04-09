@@ -24,6 +24,7 @@ typedef struct
   GdkRGBA draw_color;
   GtkPadController *pad_controller;
   double brush_size;
+  GtkGesture *gesture;
 } DrawingArea;
 
 typedef struct
@@ -343,6 +344,8 @@ drawing_area_init (DrawingArea *area)
 
   area->draw_color = (GdkRGBA) { 0, 0, 0, 1 };
   area->brush_size = 1;
+
+  area->gesture = gesture;
 }
 
 static GtkWidget *
@@ -381,6 +384,12 @@ drawing_area_color_set (DrawingArea          *area,
   gtk_color_dialog_button_set_rgba (button, color);
 }
 
+static GtkGesture *
+drawing_area_get_gesture (DrawingArea *area)
+{
+  return area->gesture;
+}
+
 GtkWidget *
 do_paint (GtkWidget *toplevel)
 {
@@ -388,7 +397,7 @@ do_paint (GtkWidget *toplevel)
 
   if (!window)
     {
-      GtkWidget *draw_area, *headerbar, *colorbutton;
+      GtkWidget *draw_area, *headerbar, *button;
 
       window = gtk_window_new ();
 
@@ -397,15 +406,22 @@ do_paint (GtkWidget *toplevel)
 
       headerbar = gtk_header_bar_new ();
 
-      colorbutton = gtk_color_dialog_button_new (gtk_color_dialog_new ());
-      g_signal_connect (colorbutton, "notify::rgba",
+      button = gtk_color_dialog_button_new (gtk_color_dialog_new ());
+      g_signal_connect (button, "notify::rgba",
                         G_CALLBACK (color_button_color_set), draw_area);
       g_signal_connect (draw_area, "color-set",
-                        G_CALLBACK (drawing_area_color_set), colorbutton);
-      gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (colorbutton),
+                        G_CALLBACK (drawing_area_color_set), button);
+      gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (button),
                                         &(GdkRGBA) { 0, 0, 0, 1 });
 
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), colorbutton);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), button);
+
+      button = gtk_check_button_new_with_label ("Stylus only");
+      g_object_bind_property (button, "active",
+                              drawing_area_get_gesture ((DrawingArea *)draw_area), "stylus-only",
+                              G_BINDING_SYNC_CREATE);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (headerbar), button);
+
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
       gtk_window_set_title (GTK_WINDOW (window), "Paint");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
