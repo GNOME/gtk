@@ -720,6 +720,30 @@ guint gtk_widget_add_tick_callback (GtkWidget       *widget,
                                     gpointer         user_data,
                                     GDestroyNotify   notify);
 
+/**
+ * GtkTickCallbackFlags:
+ * @GTK_TICK_CALLBACK_DEFAULT_FLAGS: The default behavior. The tick
+ *   callback will run while the widget is realized
+ * @GTK_TICK_CALLBACK_WHEN_MAPPED: The tick callback runs while the
+ *   widget is mapped
+ *
+ * Flags that influence the behavior of tick callbacks.
+ *
+ * Since: 4.12
+ */
+typedef enum
+{
+  GTK_TICK_CALLBACK_DEFAULT_FLAGS = 0,
+  GTK_TICK_CALLBACK_WHEN_MAPPED   = 1 << 0
+} GtkTickCallbackFlags;
+
+GDK_AVAILABLE_IN_4_12
+guint gtk_widget_add_tick_callback_with_flags (GtkWidget            *widget,
+                                               GtkTickCallback       callback,
+                                               gpointer              user_data,
+                                               GDestroyNotify        notify,
+                                               GtkTickCallbackFlags  flags);
+
 GDK_AVAILABLE_IN_ALL
 void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                       guint            id);

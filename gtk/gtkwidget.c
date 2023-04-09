@@ -2897,6 +2897,7 @@ struct _GtkTickCallbackInfo
   GDestroyNotify notify;
 
   guint destroyed : 1;
+  guint flags     : 16;
 };
 
 static void
@@ -2989,6 +2990,45 @@ gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
   g_object_unref (widget);
 }
 
+static void
+update_tick_callbacks (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  gboolean should_tick = FALSE;
+
+  for (GList *l = priv->tick_callbacks; l; l = l->next)
+    {
+      GtkTickCallbackInfo *info = l->data;
+
+      if (info->flags & GTK_TICK_CALLBACK_WHEN_MAPPED)
+        should_tick = priv->mapped;
+      else
+        should_tick = priv->realized;
+
+      if (should_tick)
+        break;
+    }
+
+  /* Connect frame clock */
+  if (!priv->clock_tick_id && should_tick)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
+      priv->clock_tick_id = g_signal_connect (frame_clock, "update",
+                                              G_CALLBACK (gtk_widget_on_frame_clock_update),
+                                              widget);
+      gdk_frame_clock_begin_updating (frame_clock);
+    }
+  else if (priv->clock_tick_id && !should_tick)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+
+      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
+      priv->clock_tick_id = 0;
+      gdk_frame_clock_end_updating (frame_clock);
+    }
+}
+
 static guint tick_callback_id;
 
 /**
@@ -3001,16 +3041,48 @@ static guint tick_callback_id;
  * Queues an animation frame update and adds a callback to be called
  * before each frame.
  *
+ * See [method@Gtk.Widget.add_tick_callback_with_flags] for details.
+ *
+ * Returns: an id for the connection of this callback. Remove the callback
+ *   by passing the id returned from this function to
+ *   [method@Gtk.Widget.remove_tick_callback]
+ */
+guint
+gtk_widget_add_tick_callback (GtkWidget       *widget,
+                              GtkTickCallback  callback,
+                              gpointer         user_data,
+                              GDestroyNotify   notify)
+{
+  return gtk_widget_add_tick_callback_with_flags (widget,
+                                                  callback,
+                                                  user_data,
+                                                  notify,
+                                                  GTK_TICK_CALLBACK_DEFAULT_FLAGS);
+}
+
+/**
+ * gtk_widget_add_tick_callback_with_flags:
+ * @widget: a `GtkWidget`
+ * @callback: function to call for updating animations
+ * @user_data: (closure): data to pass to @callback
+ * @notify: function to call to free @user_data when the callback is removed.
+ * @flags: `GtkTickCallbackFlags` that influence the behavior of the
+ *   tick callback
+ *
+ * Queues an animation frame update and adds a callback to be called
+ * before each frame.
+ *
  * Until the tick callback is removed, it will be called frequently
  * (usually at the frame rate of the output device or as quickly as
  * the application can be repainted, whichever is slower). For this
  * reason, is most suitable for handling graphics that change every
- * frame or every few frames. The tick callback does not automatically
- * imply a relayout or repaint. If you want a repaint or relayout, and
- * aren’t changing widget properties that would trigger that (for example,
- * changing the text of a `GtkLabel`), then you will have to call
- * [method@Gtk.Widget.queue_resize] or [method@Gtk.Widget.queue_draw]
- * yourself.
+ * frame or every few frames.
+ *
+ * The tick callback does not automatically imply a relayout or repaint.
+ * If you want a repaint or relayout, and aren’t changing widget properties
+ * that would trigger that (for example, changing the text of a `GtkLabel`),
+ * then you will have to call [method@Gtk.Widget.queue_resize] or
+ * [method@Gtk.Widget.queue_draw] yourself.
  *
  * [method@Gdk.FrameClock.get_frame_time] should generally be used
  * for timing continuous animations and
@@ -3024,12 +3096,15 @@ static guint tick_callback_id;
  * Returns: an id for the connection of this callback. Remove the callback
  *   by passing the id returned from this function to
  *   [method@Gtk.Widget.remove_tick_callback]
+ *
+ * Since: 4.12
  */
 guint
-gtk_widget_add_tick_callback (GtkWidget       *widget,
-                              GtkTickCallback  callback,
-                              gpointer         user_data,
-                              GDestroyNotify   notify)
+gtk_widget_add_tick_callback_with_flags (GtkWidget            *widget,
+                                         GtkTickCallback       callback,
+                                         gpointer              user_data,
+                                         GDestroyNotify        notify,
+                                         GtkTickCallbackFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkTickCallbackInfo *info;
@@ -3057,9 +3132,9 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
   info->callback = callback;
   info->user_data = user_data;
   info->notify = notify;
+  info->flags = flags;
 
-  priv->tick_callbacks = g_list_prepend (priv->tick_callbacks,
-                                         info);
+  priv->tick_callbacks = g_list_prepend (priv->tick_callbacks, info);
 
   return info->id;
 }
@@ -7665,6 +7740,8 @@ gtk_widget_real_map (GtkWidget *widget)
               !_gtk_widget_get_mapped (p))
             gtk_widget_map (p);
         }
+
+      update_tick_callbacks (widget);
     }
 }
 
@@ -7685,40 +7762,13 @@ gtk_widget_real_unmap (GtkWidget *widget)
           gtk_widget_unmap (child);
         }
 
+      update_tick_callbacks (widget);
+
       gtk_widget_update_paintables (widget);
 
       gtk_widget_unset_state_flags (widget,
                                     GTK_STATE_FLAG_PRELIGHT |
                                     GTK_STATE_FLAG_ACTIVE);
-    }
-}
-
-static void
-update_tick_callbacks (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gboolean should_tick = FALSE;
-
-  if (priv->realized && priv->tick_callbacks != NULL)
-    should_tick = TRUE;
-
-  /* Connect frame clock */
-  if (!priv->clock_tick_id && should_tick)
-    {
-      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-
-      priv->clock_tick_id = g_signal_connect (frame_clock, "update",
-                                              G_CALLBACK (gtk_widget_on_frame_clock_update),
-                                              widget);
-      gdk_frame_clock_begin_updating (frame_clock);
-    }
-  else if (priv->clock_tick_id && !should_tick)
-    {
-      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-
-      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
-      priv->clock_tick_id = 0;
-      gdk_frame_clock_end_updating (frame_clock);
     }
 }
 
