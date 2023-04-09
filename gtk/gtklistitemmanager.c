@@ -1041,10 +1041,11 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
 {
   GtkListTile *tile;
   guint position, i, n_items, query_n_items;
-  gboolean tracked;
+  gboolean tracked, deleted_section;
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
   position = 0;
+  deleted_section = FALSE;
 
   while (position < n_items)
     {
@@ -1060,15 +1061,89 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
       while (i < position + query_n_items)
         {
           g_assert (tile != NULL);
-          if (tile->widget)
+          switch (tile->type)
             {
-              g_queue_push_tail (released, tile->widget);
-              tile->widget = NULL;
+            case GTK_LIST_TILE_ITEM:
+              if (tile->widget)
+                {
+                  g_queue_push_tail (released, tile->widget);
+                  tile->widget = NULL;
+                }
+              i += tile->n_items;
+              break;
+
+            case GTK_LIST_TILE_HEADER:
+            case GTK_LIST_TILE_UNMATCHED_HEADER:
+              g_assert (deleted_section);
+              G_GNUC_FALLTHROUGH;
+            case GTK_LIST_TILE_FOOTER:
+            case GTK_LIST_TILE_UNMATCHED_FOOTER:
+              gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
+              deleted_section = TRUE;
+              break;
+
+            case GTK_LIST_TILE_FILLER:
+            case GTK_LIST_TILE_REMOVED:
+            default:
+              g_assert_not_reached ();
+              break;
             }
-          i += tile->n_items;
-          tile = gtk_rb_tree_node_get_next (tile);
+          tile = gtk_list_tile_get_next_skip (tile);
+        }
+      if (deleted_section)
+        {
+          gtk_list_tile_set_type (gtk_list_tile_get_header (self, tile),
+                                  GTK_LIST_TILE_UNMATCHED_HEADER);
+          gtk_list_tile_set_type (gtk_list_tile_get_footer (self, tile),
+                                  GTK_LIST_TILE_UNMATCHED_FOOTER);
         }
       position += query_n_items;
+    }
+}
+
+static void
+gtk_list_item_manager_insert_section (GtkListItemManager *self,
+                                      guint               pos,
+                                      GtkListTileType     footer_type,
+                                      GtkListTileType     header_type)
+{
+  GtkListTile *tile, *other;
+  guint offset;
+  
+  tile = gtk_list_item_manager_get_nth (self, pos, &offset);
+  if (tile == NULL)
+    {
+      if (footer_type == GTK_LIST_TILE_FOOTER)
+        {
+          other = gtk_rb_tree_get_last (self->items);
+          if (other->type != GTK_LIST_TILE_FOOTER && other->type != GTK_LIST_TILE_UNMATCHED_FOOTER)
+            other = gtk_list_tile_get_previous_skip (other);
+          gtk_list_tile_set_type (other, footer_type);
+        }
+      return;
+    }
+
+  if (offset)
+    tile = gtk_list_item_manager_ensure_split (self, tile, offset);
+
+  other = gtk_list_tile_get_previous_skip (tile);
+  if (other->type == GTK_LIST_TILE_HEADER || other->type == GTK_LIST_TILE_UNMATCHED_HEADER)
+    {
+      if (header_type == GTK_LIST_TILE_HEADER)
+        gtk_list_tile_set_type (other, header_type);
+      if (footer_type == GTK_LIST_TILE_FOOTER)
+        {
+          other = gtk_list_tile_get_previous_skip (other);
+          if (other)
+            gtk_list_tile_set_type (other, footer_type);
+        }
+    }
+  else
+    {
+      other = gtk_rb_tree_insert_before (self->items, tile);
+      gtk_list_tile_set_type (other, header_type);
+      other = gtk_rb_tree_insert_before (self->items, other);
+      gtk_list_tile_set_type (other, footer_type);
     }
 }
 
@@ -1077,17 +1152,18 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
                                     GHashTable         *change,
                                     guint               update_start)
 {
-  GtkListTile *tile, *other_tile;
+  GtkListTile *tile, *other_tile, *header;
   GtkWidget *widget, *insert_after;
   guint position, i, n_items, query_n_items, offset;
   GQueue released = G_QUEUE_INIT;
-  gboolean tracked;
+  gboolean tracked, has_sections;
 
   if (self->model == NULL)
     return;
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
   position = 0;
+  has_sections = gtk_list_item_manager_has_sections (self);
 
   gtk_list_item_manager_release_items (self, &released);
 
@@ -1101,61 +1177,106 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
         }
 
       tile = gtk_list_item_manager_get_nth (self, position, &offset);
+      if (offset > 0)
+        tile = gtk_list_item_manager_ensure_split (self, tile, offset);
+
+      if (has_sections)
+        {
+          header = gtk_list_tile_get_header (self, tile);
+          if (header->type == GTK_LIST_TILE_UNMATCHED_HEADER)
+            {
+              guint start, end;
+              gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position, &start, &end);
+              gtk_list_item_manager_insert_section (self,
+                                                    start,
+                                                    GTK_LIST_TILE_UNMATCHED_FOOTER,
+                                                    GTK_LIST_TILE_HEADER);
+              gtk_list_item_manager_insert_section (self,
+                                                    end,
+                                                    GTK_LIST_TILE_FOOTER,
+                                                    GTK_LIST_TILE_UNMATCHED_HEADER);
+            }
+        }
+
       for (other_tile = tile;
            other_tile && other_tile->widget == NULL;
            other_tile = gtk_rb_tree_node_get_previous (other_tile))
          { /* do nothing */ }
       insert_after = other_tile ? other_tile->widget : NULL;
 
-      if (offset > 0)
-        tile = gtk_list_item_manager_ensure_split (self, tile, offset);
-
-      for (i = 0; i < query_n_items; i++)
+      for (i = 0; i < query_n_items;)
         {
           g_assert (tile != NULL);
 
-          while (tile->n_items == 0)
-            tile = gtk_rb_tree_node_get_next (tile);
+          switch (tile->type)
+          {
+            case GTK_LIST_TILE_ITEM:
+              if (tile->n_items > 1)
+                gtk_list_item_manager_ensure_split (self, tile, 1);
 
-          if (tile->n_items > 1)
-            gtk_list_item_manager_ensure_split (self, tile, 1);
-
-          if (tile->widget == NULL)
-            {
-              if (change)
-                {
-                  tile->widget = gtk_list_item_manager_try_reacquire_list_item (self,
-                                                                                change,
-                                                                                position + i,
-                                                                                insert_after);
-                }
               if (tile->widget == NULL)
                 {
-                  tile->widget = g_queue_pop_head (&released);
-                  if (tile->widget)
+                  if (change)
                     {
-                      gtk_list_item_manager_move_list_item (self,
-                                                            tile->widget,
-                                                            position + i,
-                                                            insert_after);
+                      tile->widget = gtk_list_item_manager_try_reacquire_list_item (self,
+                                                                                    change,
+                                                                                    position + i,
+                                                                                    insert_after);
                     }
-                  else
+                  if (tile->widget == NULL)
                     {
-                      tile->widget = gtk_list_item_manager_acquire_list_item (self,
-                                                                              position + i,
-                                                                              insert_after);
+                      tile->widget = g_queue_pop_head (&released);
+                      if (tile->widget)
+                        {
+                          gtk_list_item_manager_move_list_item (self,
+                                                                tile->widget,
+                                                                position + i,
+                                                                insert_after);
+                        }
+                      else
+                        {
+                          tile->widget = gtk_list_item_manager_acquire_list_item (self,
+                                                                                  position + i,
+                                                                                  insert_after);
+                        }
                     }
                 }
-            }
-          else
-            {
-              if (update_start <= position + i)
-                gtk_list_item_manager_update_list_item (self, tile->widget, position + i);
-            }
-          insert_after = tile->widget;
+              else
+                {
+                  if (update_start <= position + i)
+                    gtk_list_item_manager_update_list_item (self, tile->widget, position + i);
+                }
+              insert_after = tile->widget;
+              i++;
+              break;
 
-          tile = gtk_rb_tree_node_get_next (tile);
+            case GTK_LIST_TILE_UNMATCHED_HEADER:
+              if (has_sections)
+                {
+                  guint start, end;
+                  gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position + i, &start, &end);
+                  gtk_list_tile_set_type (tile, GTK_LIST_TILE_HEADER);
+                  gtk_list_item_manager_insert_section (self,
+                                                        end,
+                                                        GTK_LIST_TILE_FOOTER,
+                                                        GTK_LIST_TILE_UNMATCHED_HEADER);
+                }
+              break;
+
+            case GTK_LIST_TILE_HEADER:
+            case GTK_LIST_TILE_FOOTER:
+              break;
+
+            case GTK_LIST_TILE_UNMATCHED_FOOTER:
+            case GTK_LIST_TILE_FILLER:
+            case GTK_LIST_TILE_REMOVED:
+            default:
+              g_assert_not_reached ();
+              break;
+            }
+          tile = gtk_list_tile_get_next_skip (tile);
         }
+
       position += query_n_items;
     }
 
