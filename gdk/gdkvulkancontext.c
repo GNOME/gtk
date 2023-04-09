@@ -424,6 +424,49 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   return res == VK_SUCCESS;
 }
 
+static void
+surface_mapped_changed_cb (GdkSurface       *surface,
+                           GParamSpec       *pspec,
+                           GdkVulkanContext *self)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+
+  if (GDK_SURFACE_IS_MAPPED (surface) && priv->swapchain == VK_NULL_HANDLE)
+    {
+      GError *error = NULL;
+      VkResult res;
+
+      res = GDK_VULKAN_CONTEXT_GET_CLASS (self)->create_surface (self, &priv->surface);
+      if (res != VK_SUCCESS)
+        return;
+
+      if (!gdk_vulkan_context_check_swapchain (self, &error))
+        {
+          g_warning ("%s", error->message);
+          g_error_free (error);
+          return;
+        }
+    }
+  else if (!GDK_SURFACE_IS_MAPPED (surface))
+    {
+      if (priv->swapchain != VK_NULL_HANDLE)
+        {
+          vkDestroySwapchainKHR (gdk_vulkan_context_get_device (self),
+                                 priv->swapchain,
+                                 NULL);
+          priv->swapchain = VK_NULL_HANDLE;
+        }
+
+      if (priv->surface != VK_NULL_HANDLE)
+        {
+          vkDestroySurfaceKHR (gdk_vulkan_context_get_instance (self),
+                               priv->surface,
+                               NULL);
+          priv->surface = VK_NULL_HANDLE;
+        }
+    }
+}
+
 static gboolean
 device_supports_incremental_present (VkPhysicalDevice device)
 {
@@ -654,6 +697,12 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                                        },
                                        NULL,
                                        &priv->draw_semaphore);
+
+
+      g_signal_connect_object (gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context)),
+                               "notify::mapped",
+                               G_CALLBACK (surface_mapped_changed_cb),
+                               context, 0);
 
       return TRUE;
     }
