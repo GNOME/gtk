@@ -36,6 +36,58 @@ create_source_model (guint min_size, guint max_size)
   return G_LIST_MODEL (list);
 }
 
+void
+print_list_item_manager_tiles (GtkListItemManager *items)
+{
+  GString *string;
+  GtkListTile *tile;
+
+  string = g_string_new ("");
+
+  for (tile = gtk_list_item_manager_get_first (items);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      switch (tile->type)
+        {
+          case GTK_LIST_TILE_ITEM:
+            if (tile->widget)
+              g_string_append_c (string, 'W');
+            else if (tile->n_items == 1)
+              g_string_append_c (string, 'x');
+            else
+              g_string_append_printf (string, "%u,", tile->n_items);
+            break;
+          case GTK_LIST_TILE_HEADER:
+            g_string_append_c (string, '[');
+            break;
+          case GTK_LIST_TILE_UNMATCHED_HEADER:
+            g_string_append_c (string, '(');
+            break;
+          case GTK_LIST_TILE_FOOTER:
+            g_string_append_c (string, ']');
+            break;
+          case GTK_LIST_TILE_UNMATCHED_FOOTER:
+            g_string_append_c (string, ')');
+            break;
+
+          case GTK_LIST_TILE_FILLER:
+            g_string_append_c (string, '_');
+            break;
+          case GTK_LIST_TILE_REMOVED:
+            g_string_append_c (string, '.');
+            break;
+          default:
+            g_assert_not_reached ();
+            break;
+        }
+    }
+
+  g_print ("%s\n", string->str);
+
+  g_string_free (string, TRUE);
+}
+
 static void
 check_list_item_manager (GtkListItemManager  *items,
                          GtkListItemTracker **trackers,
@@ -315,6 +367,9 @@ test_exhaustive (void)
     {
       gboolean add = FALSE, remove = FALSE;
       guint position, n_items;
+
+      if (g_test_verbose ())
+        print_list_item_manager_tiles (items);
 
       switch (g_test_rand_int_range (0, 5))
       {
