@@ -26,6 +26,8 @@
 #include "gtksectionmodel.h"
 #include "gtkwidgetprivate.h"
 
+typedef struct _GtkListItemChange GtkListItemChange;
+
 struct _GtkListItemManager
 {
   GObject parent_instance;
@@ -56,25 +58,81 @@ struct _GtkListItemTracker
   guint n_after;
 };
 
-static GtkWidget *      gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
-                                                                 guint                   position,
-                                                                 GtkWidget              *prev_sibling);
-static GtkWidget *      gtk_list_item_manager_try_reacquire_list_item
-                                                                (GtkListItemManager     *self,
-                                                                 GHashTable             *change,
-                                                                 guint                   position,
-                                                                 GtkWidget              *prev_sibling);
-static void             gtk_list_item_manager_update_list_item  (GtkListItemManager     *self,
-                                                                 GtkWidget              *item,
-                                                                 guint                   position);
-static void             gtk_list_item_manager_move_list_item    (GtkListItemManager     *self,
-                                                                 GtkWidget              *list_item,
-                                                                 guint                   position,
-                                                                 GtkWidget              *prev_sibling);
-static void             gtk_list_item_manager_release_list_item (GtkListItemManager     *self,
-                                                                 GHashTable             *change,
-                                                                 GtkWidget              *widget);
+struct _GtkListItemChange
+{
+  GHashTable *deleted_items;
+  GQueue recycled_items;
+};
+
 G_DEFINE_TYPE (GtkListItemManager, gtk_list_item_manager, G_TYPE_OBJECT)
+
+static void
+gtk_list_item_change_init (GtkListItemChange *change)
+{
+  change->deleted_items = NULL;
+  g_queue_init (&change->recycled_items);
+}
+
+static void
+gtk_list_item_change_finish (GtkListItemChange *change)
+{
+  GtkWidget *widget;
+
+  g_clear_pointer (&change->deleted_items, g_hash_table_destroy);
+
+  while ((widget = g_queue_pop_head (&change->recycled_items)))
+    gtk_widget_unparent (widget);
+}
+
+static void
+gtk_list_item_change_recycle (GtkListItemChange *change,
+                              GtkListItemBase   *widget)
+{
+  g_queue_push_tail (&change->recycled_items, widget);
+}
+
+static void
+gtk_list_item_change_release (GtkListItemChange *change,
+                              GtkListItemBase   *widget)
+{
+  if (change->deleted_items == NULL)
+    change->deleted_items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) gtk_widget_unparent);
+
+  if (!g_hash_table_replace (change->deleted_items, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (widget)), widget))
+    {
+      g_warning ("Duplicate item detected in list. Picking one randomly.");
+      gtk_list_item_change_recycle (change, widget);
+    }
+}
+
+static GtkListItemBase *
+gtk_list_item_change_find (GtkListItemChange *change,
+                           gpointer           item)
+{
+  gpointer result;
+
+  if (change->deleted_items && g_hash_table_steal_extended (change->deleted_items, item, NULL, &result))
+    return result;
+
+  return NULL;
+}
+
+static GtkListItemBase *
+gtk_list_item_change_get (GtkListItemChange *change,
+                          gpointer           item)
+{
+  GtkListItemBase *result;
+
+  result = gtk_list_item_change_find (change, item);
+  if (result)
+    return result;
+
+  result = g_queue_pop_head (&change->recycled_items);
+  if (result)
+    return result;
+
+  return NULL;
+}
 
 static void
 potentially_empty_rectangle_union (cairo_rectangle_int_t       *self,
@@ -750,7 +808,7 @@ gtk_list_item_manager_ensure_split (GtkListItemManager *self,
 
 static void
 gtk_list_item_manager_remove_items (GtkListItemManager *self,
-                                    GHashTable         *change,
+                                    GtkListItemChange  *change,
                                     guint               position,
                                     guint               n_items)
 {
@@ -794,7 +852,7 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
               g_assert (tile->n_items <= n_items);
             }
           if (tile->widget)
-            gtk_list_item_manager_release_list_item (self, change, tile->widget);
+            gtk_list_item_change_release (change, GTK_LIST_ITEM_BASE (tile->widget));
           tile->widget = NULL;
           n_items -= tile->n_items;
           tile->n_items = 0;
@@ -1044,7 +1102,7 @@ gtk_list_tile_gc (GtkListItemManager *self,
 
 static void
 gtk_list_item_manager_release_items (GtkListItemManager *self,
-                                     GQueue             *released)
+                                     GtkListItemChange  *change)
 {
   GtkListTile *tile;
   guint position, i, n_items, query_n_items;
@@ -1073,7 +1131,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
             case GTK_LIST_TILE_ITEM:
               if (tile->widget)
                 {
-                  g_queue_push_tail (released, tile->widget);
+                  gtk_list_item_change_recycle (change, GTK_LIST_ITEM_BASE (tile->widget));
                   tile->widget = NULL;
                 }
               i += tile->n_items;
@@ -1158,13 +1216,12 @@ gtk_list_item_manager_insert_section (GtkListItemManager *self,
 
 static void
 gtk_list_item_manager_ensure_items (GtkListItemManager *self,
-                                    GHashTable         *change,
+                                    GtkListItemChange  *change,
                                     guint               update_start)
 {
   GtkListTile *tile, *other_tile, *header;
-  GtkWidget *widget, *insert_after;
+  GtkWidget *insert_after;
   guint position, i, n_items, query_n_items, offset;
-  GQueue released = G_QUEUE_INIT;
   gboolean tracked, has_sections;
 
   if (self->model == NULL)
@@ -1174,7 +1231,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
   position = 0;
   has_sections = gtk_list_item_manager_has_sections (self);
 
-  gtk_list_item_manager_release_items (self, &released);
+  gtk_list_item_manager_release_items (self, change);
 
   while (position < n_items)
     {
@@ -1225,35 +1282,25 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
               if (tile->widget == NULL)
                 {
-                  if (change)
-                    {
-                      tile->widget = gtk_list_item_manager_try_reacquire_list_item (self,
-                                                                                    change,
-                                                                                    position + i,
-                                                                                    insert_after);
-                    }
+                  gpointer item = g_list_model_get_item (G_LIST_MODEL (self->model), position + i);
+                  tile->widget = GTK_WIDGET (gtk_list_item_change_get (change, item));
                   if (tile->widget == NULL)
-                    {
-                      tile->widget = g_queue_pop_head (&released);
-                      if (tile->widget)
-                        {
-                          gtk_list_item_manager_move_list_item (self,
-                                                                tile->widget,
-                                                                position + i,
-                                                                insert_after);
-                        }
-                      else
-                        {
-                          tile->widget = gtk_list_item_manager_acquire_list_item (self,
-                                                                                  position + i,
-                                                                                  insert_after);
-                        }
-                    }
+                    tile->widget = GTK_WIDGET (self->create_widget (self->widget));
+                  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (tile->widget),
+                                             position + i,
+                                             item,
+                                             gtk_selection_model_is_selected (self->model, position + i));
+                  gtk_widget_insert_after (tile->widget, self->widget, insert_after);
                 }
               else
                 {
                   if (update_start <= position + i)
-                    gtk_list_item_manager_update_list_item (self, tile->widget, position + i);
+                    {
+                      gtk_list_item_base_update (GTK_LIST_ITEM_BASE (tile->widget),
+                                                 position + i,
+                                                 gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget)),
+                                                 gtk_selection_model_is_selected (self->model, position + i));
+                    }
                 }
               insert_after = tile->widget;
               i++;
@@ -1288,9 +1335,6 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
       position += query_n_items;
     }
-
-  while ((widget = g_queue_pop_head (&released)))
-    gtk_list_item_manager_release_list_item (self, NULL, widget);
 }
 
 static void
@@ -1300,14 +1344,14 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
                                               guint               added,
                                               GtkListItemManager *self)
 {
-  GHashTable *change;
+  GtkListItemChange change;
   GSList *l;
   guint n_items;
 
+  gtk_list_item_change_init (&change);
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
-  change = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify )gtk_widget_unparent);
 
-  gtk_list_item_manager_remove_items (self, change, position, removed);
+  gtk_list_item_manager_remove_items (self, &change, position, removed);
   gtk_list_item_manager_add_items (self, position, added);
 
   /* Check if any tracked item was removed */
@@ -1318,7 +1362,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       if (tracker->widget == NULL)
         continue;
 
-      if (g_hash_table_lookup (change, gtk_list_item_base_get_item (tracker->widget)))
+      if (tracker->position >= position && tracker->position < position + removed)
         break;
     }
 
@@ -1342,12 +1386,14 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
 
       for (i = 0; i < added; i++)
         {
-          GtkWidget *widget;
+          GtkListItemBase *widget;
+          gpointer item;
 
-          widget = gtk_list_item_manager_try_reacquire_list_item (self,
-                                                                  change,
-                                                                  position + i,
-                                                                  insert_after);
+          /* XXX: can we avoid temporarily allocating items on failure? */
+          item = g_list_model_get_item (G_LIST_MODEL (self->model), position + i);
+          widget = gtk_list_item_change_find (&change, item);
+          g_object_unref (item);
+
           if (widget == NULL)
             {
               offset++;
@@ -1371,8 +1417,13 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
           else
             tile = gtk_list_item_manager_ensure_split (self, tile, 1);
 
-          new_tile->widget = widget;
-          insert_after = widget;
+          new_tile->widget = GTK_WIDGET (widget);
+          gtk_list_item_base_update (widget,
+                                     position + i,
+                                     item,
+                                     gtk_selection_model_is_selected (self->model, position + i));
+          gtk_widget_insert_after (new_tile->widget, self->widget, insert_after);
+          insert_after = new_tile->widget;
         }
     }
 
@@ -1396,9 +1447,13 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
         }
       else if (tracker->position >= position)
         {
-          if (g_hash_table_lookup (change, gtk_list_item_base_get_item (tracker->widget)))
+          GtkListItemBase *widget = gtk_list_item_change_find (&change, gtk_list_item_base_get_item (tracker->widget));
+          if (widget)
             {
-              /* The item is gone. Guess a good new position */
+              /* The item is still in the recycling pool, which means it got deleted.
+               * Put the widget back and then guess a good new position */
+              gtk_list_item_change_release (&change, widget);
+
               tracker->position = position + (tracker->position - position) * added / removed;
               if (tracker->position >= n_items)
                 {
@@ -1423,7 +1478,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
         }
     }
 
-  gtk_list_item_manager_ensure_items (self, change, position + added);
+  gtk_list_item_manager_ensure_items (self, &change, position + added);
 
   /* final loop through the trackers: Grab the missing widgets.
    * For items that had been removed and a new position was set, grab
@@ -1444,7 +1499,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
     }
 
-  g_hash_table_unref (change);
+  gtk_list_item_change_finish (&change);
 
   gtk_widget_queue_resize (self->widget);
 }
@@ -1472,24 +1527,32 @@ gtk_list_item_manager_model_selection_changed_cb (GListModel         *model,
 
   while (n_items > 0)
     {
-      if (tile->widget)
-        gtk_list_item_manager_update_list_item (self, tile->widget, position);
+      if (tile->widget && tile->type == GTK_LIST_TILE_ITEM)
+        {
+          gtk_list_item_base_update (GTK_LIST_ITEM_BASE (tile->widget),
+                                     position,
+                                     gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget)),
+                                     gtk_selection_model_is_selected (self->model, position));
+        }
       position += tile->n_items;
       n_items -= MIN (n_items, tile->n_items);
-      tile = gtk_rb_tree_node_get_next (tile);
+      tile = gtk_list_tile_get_next_skip (tile);
     }
 }
 
 static void
 gtk_list_item_manager_clear_model (GtkListItemManager *self)
 {
+  GtkListItemChange change;
   GtkListTile *tile;
   GSList *l;
 
   if (self->model == NULL)
     return;
 
-  gtk_list_item_manager_remove_items (self, NULL, 0, g_list_model_get_n_items (G_LIST_MODEL (self->model)));
+  gtk_list_item_change_init (&change);
+  gtk_list_item_manager_remove_items (self, &change, 0, g_list_model_get_n_items (G_LIST_MODEL (self->model)));
+  gtk_list_item_change_finish (&change);
   for (l = self->trackers; l; l = l->next)
     {
       gtk_list_item_tracker_unset_position (self, l->data);
@@ -1579,6 +1642,7 @@ void
 gtk_list_item_manager_set_has_sections (GtkListItemManager *self,
                                         gboolean            has_sections)
 {
+  GtkListItemChange change;
   GtkListTile *tile;
   gboolean had_sections;
 
@@ -1642,7 +1706,9 @@ gtk_list_item_manager_set_has_sections (GtkListItemManager *self,
         }
     }
 
-  gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
+  gtk_list_item_change_init (&change);
+  gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT);
+  gtk_list_item_change_finish (&change);
 
   gtk_widget_queue_resize (self->widget);
 }
@@ -1651,187 +1717,6 @@ gboolean
 gtk_list_item_manager_get_has_sections (GtkListItemManager *self)
 {
   return self->has_sections;
-}
-
-/*
- * gtk_list_item_manager_acquire_list_item:
- * @self: a `GtkListItemManager`
- * @position: the row in the model to create a list item for
- * @prev_sibling: the widget this widget should be inserted before or %NULL
- *   if it should be the first widget
- *
- * Creates a list item widget to use for @position. No widget may
- * yet exist that is used for @position.
- *
- * When the returned item is no longer needed, the caller is responsible
- * for calling gtk_list_item_manager_release_list_item().
- * A particular case is when the row at @position is removed. In that case,
- * all list items in the removed range must be released before
- * gtk_list_item_manager_model_changed() is called.
- *
- * Returns: a properly setup widget to use in @position
- **/
-static GtkWidget *
-gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
-                                         guint               position,
-                                         GtkWidget          *prev_sibling)
-{
-  GtkListItemBase *result;
-  gpointer item;
-  gboolean selected;
-
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-  g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
-
-  result = self->create_widget (self->widget);
-
-  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
-  selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_base_update (result, position, item, selected);
-  g_object_unref (item);
-  gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
-
-  return GTK_WIDGET (result);
-}
-
-/**
- * gtk_list_item_manager_try_acquire_list_item_from_change:
- * @self: a `GtkListItemManager`
- * @position: the row in the model to create a list item for
- * @prev_sibling: the widget this widget should be inserted after or %NULL
- *   if it should be the first widget
- *
- * Like gtk_list_item_manager_acquire_list_item(), but only tries to acquire list
- * items from those previously released as part of @change.
- * If no matching list item is found, %NULL is returned and the caller should use
- * gtk_list_item_manager_acquire_list_item().
- *
- * Returns: (nullable): a properly setup widget to use in @position or %NULL if
- *   no item for reuse existed
- **/
-static GtkWidget *
-gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
-                                               GHashTable         *change,
-                                               guint               position,
-                                               GtkWidget          *prev_sibling)
-{
-  GtkWidget *result;
-  gpointer item;
-
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
-  g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
-
-  /* XXX: can we avoid temporarily allocating items on failure? */
-  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
-  if (g_hash_table_steal_extended (change, item, NULL, (gpointer *) &result))
-    {
-      GtkListItemBase *list_item = GTK_LIST_ITEM_BASE (result);
-      gtk_list_item_base_update (list_item,
-                                 position,
-                                 gtk_list_item_base_get_item (list_item),
-                                 gtk_selection_model_is_selected (self->model, position));
-      gtk_widget_insert_after (result, self->widget, prev_sibling);
-      /* XXX: Should we let the listview do this? */
-      gtk_widget_queue_resize (result);
-    }
-  else
-    {
-      result = NULL;
-    }
-  g_object_unref (item);
-
-  return result;
-}
-
-/**
- * gtk_list_item_manager_move_list_item:
- * @self: a `GtkListItemManager`
- * @list_item: an acquired `GtkListItem` that should be moved to represent
- *   a different row
- * @position: the new position of that list item
- * @prev_sibling: the new previous sibling
- *
- * Moves the widget to represent a new position in the listmodel without
- * releasing the item.
- *
- * This is most useful when scrolling.
- **/
-static void
-gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
-                                      GtkWidget              *list_item,
-                                      guint                   position,
-                                      GtkWidget              *prev_sibling)
-{
-  gpointer item;
-  gboolean selected;
-
-  item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
-  selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (list_item),
-                             position,
-                             item,
-                             selected);
-  gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
-  g_object_unref (item);
-}
-
-/**
- * gtk_list_item_manager_update_list_item:
- * @self: a `GtkListItemManager`
- * @item: a `GtkListItem` that has been acquired
- * @position: the new position of that list item
- *
- * Updates the position of the given @item. This function must be called whenever
- * the position of an item changes, like when new items are added before it.
- **/
-static void
-gtk_list_item_manager_update_list_item (GtkListItemManager *self,
-                                        GtkWidget          *item,
-                                        guint               position)
-{
-  GtkListItemBase *list_item = GTK_LIST_ITEM_BASE (item);
-  gboolean selected;
-
-  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_BASE (item));
-
-  selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_base_update (list_item,
-                             position,
-                             gtk_list_item_base_get_item (list_item),
-                             selected);
-}
-
-/*
- * gtk_list_item_manager_release_list_item:
- * @self: a `GtkListItemManager`
- * @change: (nullable): The change associated with this release or
- *   %NULL if this is a final removal
- * @item: an item previously acquired with
- *   gtk_list_item_manager_acquire_list_item()
- *
- * Releases an item that was previously acquired via
- * gtk_list_item_manager_acquire_list_item() and is no longer in use.
- **/
-static void
-gtk_list_item_manager_release_list_item (GtkListItemManager *self,
-                                         GHashTable         *change,
-                                         GtkWidget          *item)
-{
-  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_BASE (item));
-
-  if (change != NULL)
-    {
-      if (!g_hash_table_replace (change, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (item)), item))
-        {
-          g_warning ("Duplicate item detected in list. Picking one randomly.");
-        }
-
-      return;
-    }
-
-  gtk_widget_unparent (item);
 }
 
 GtkListItemTracker *
@@ -1854,13 +1739,17 @@ void
 gtk_list_item_tracker_free (GtkListItemManager *self,
                             GtkListItemTracker *tracker)
 {
+  GtkListItemChange change;
+
   gtk_list_item_tracker_unset_position (self, tracker);
 
   self->trackers = g_slist_remove (self->trackers, tracker);
 
   g_free (tracker);
 
-  gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
+  gtk_list_item_change_init (&change);
+  gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT);
+  gtk_list_item_change_finish (&change);
 
   gtk_widget_queue_resize (self->widget);
 }
@@ -1872,6 +1761,7 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
                                     guint               n_before,
                                     guint               n_after)
 {
+  GtkListItemChange change;
   GtkListTile *tile;
   guint n_items;
 
@@ -1888,7 +1778,9 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
   tracker->n_before = n_before;
   tracker->n_after = n_after;
 
-  gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
+  gtk_list_item_change_init (&change);
+  gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT);
+  gtk_list_item_change_finish (&change);
 
   tile = gtk_list_item_manager_get_nth (self, position, NULL);
   if (tile)
