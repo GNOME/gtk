@@ -81,6 +81,11 @@ gtk_list_item_base_update (GtkListItemBase *self,
   GtkListItemBasePrivate *priv = gtk_list_item_base_get_instance_private (self);
   gboolean was_selected;
 
+  if (priv->position == position &&
+      priv->item == item &&
+      priv->selected == selected)
+    return;
+
   was_selected = priv->selected;
 
   GTK_LIST_ITEM_BASE_GET_CLASS (self)->update (self, position, item, selected);
