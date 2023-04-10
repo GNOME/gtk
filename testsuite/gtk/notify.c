@@ -383,6 +383,9 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_set (instance, pspec->name, NULL, NULL);
       assert_notifies (instance, pspec->name, data.count, 2);
 
+      g_object_set (instance, pspec->name, value, NULL);
+      assert_notifies (instance, pspec->name, data.count, 3);
+
       g_object_unref (value);
 
       g_signal_handler_disconnect (instance, id);

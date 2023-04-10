@@ -4202,9 +4202,7 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
   if (priv->child)
     {
       if (priv->auto_added_viewport)
-        {
-          gtk_viewport_set_child (GTK_VIEWPORT (priv->child), NULL);
-        }
+        gtk_viewport_set_child (GTK_VIEWPORT (priv->child), NULL);
 
       g_object_set (priv->child,
                     "hadjustment", NULL,
@@ -4212,6 +4210,7 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
                     NULL);
 
       g_clear_pointer (&priv->child, gtk_widget_unparent);
+      priv->auto_added_viewport = FALSE;
     }
 
   if (child)
