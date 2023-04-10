@@ -30,6 +30,7 @@ struct _GtkListView
 
   GtkListItemManager *item_manager;
   GtkListItemFactory *factory;
+  GtkListItemFactory *header_factory;
   gboolean show_separators;
   gboolean single_click_activate;
 };
