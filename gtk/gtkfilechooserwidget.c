@@ -27,6 +27,7 @@
 #include "gtkbutton.h"
 #include "gtkdropdown.h"
 #include "gtkcolumnview.h"
+#include "gtkcolumnviewcell.h"
 #include "gtkcolumnviewcolumn.h"
 #include "gtkcolumnviewrow.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -44,7 +45,6 @@
 #include "gtkgesturelongpress.h"
 #include "gtkgrid.h"
 #include "gtklabel.h"
-#include "gtklistitem.h"
 #include "gtkmarshalers.h"
 #include "gtkalertdialog.h"
 #include "gtkmountoperation.h"
@@ -1946,8 +1946,8 @@ files_list_restrict_key_presses (GtkEventControllerKey *controller,
 }
 
 static char *
-column_view_get_file_date (GtkListItem *item,
-                           GFileInfo   *info)
+column_view_get_file_date (GtkColumnViewCell *cell,
+                           GFileInfo        *info)
 {
   GtkFileChooserWidget *impl;
   glong time;
@@ -1955,7 +1955,7 @@ column_view_get_file_date (GtkListItem *item,
   if (!info)
     return NULL;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
   if (!impl)
     return NULL;
@@ -1972,8 +1972,8 @@ column_view_get_file_date (GtkListItem *item,
 }
 
 static char *
-column_view_get_file_display_name (GtkListItem *item,
-                                   GFileInfo   *info)
+column_view_get_file_display_name (GtkColumnViewCell *cell,
+                                   GFileInfo        *info)
 {
   if (info)
     return g_strdup (g_file_info_get_display_name (info));
@@ -1982,8 +1982,8 @@ column_view_get_file_display_name (GtkListItem *item,
 }
 
 static char *
-column_view_get_file_time (GtkListItem *item,
-                           GFileInfo   *info)
+column_view_get_file_time (GtkColumnViewCell *cell,
+                           GFileInfo        *info)
 {
   GtkFileChooserWidget *impl;
   glong time;
@@ -1991,7 +1991,7 @@ column_view_get_file_time (GtkListItem *item,
   if (!info)
     return NULL;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
   if (!impl)
     return NULL;
@@ -2008,8 +2008,8 @@ column_view_get_file_time (GtkListItem *item,
 }
 
 static char *
-column_view_get_file_type (GtkListItem *item,
-                           GFileInfo   *info)
+column_view_get_file_type (GtkColumnViewCell *cell,
+                           GFileInfo        *info)
 {
   GtkFileChooserWidget *impl;
 
@@ -2097,12 +2097,12 @@ file_chooser_get_location (GtkFileChooserWidget *impl,
 }
 
 static char *
-column_view_get_location (GtkListItem *list_item,
-                          GFileInfo   *info)
+column_view_get_location (GtkColumnViewCell *cell,
+                          GFileInfo         *info)
 {
   GtkFileChooserWidget *impl;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (list_item),
+  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
   if (!impl)
     return NULL;
@@ -2111,8 +2111,8 @@ column_view_get_location (GtkListItem *list_item,
 }
 
 static char *
-column_view_get_size (GtkListItem *item,
-                      GFileInfo   *info)
+column_view_get_size (GtkColumnViewCell *cell,
+                      GFileInfo         *info)
 {
   if (info && !_gtk_file_info_consider_as_directory (info))
     return g_format_size (g_file_info_get_size (info));
@@ -2121,8 +2121,8 @@ column_view_get_size (GtkListItem *item,
 }
 
 static char *
-column_view_get_tooltip_text (GtkListItem *list_item,
-                              GFileInfo   *info)
+column_view_get_tooltip_text (GtkColumnViewCell *cell,
+                              GFileInfo         *info)
 {
   GFile *file;
 

@@ -23,22 +23,21 @@
 
 #include "gtkprivate.h"
 #include "gtkbinlayout.h"
+#include "gtkcolumnviewcell.h"
 #include "gtkdragsource.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkicontheme.h"
-#include "gtklistitem.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
-#include "gtklistitem.h"
 
 struct _GtkFileChooserCell
 {
   GtkWidget parent_instance;
 
   GFileInfo *item;
-  GtkListItem *list_item;
+  GtkColumnViewCell *list_item;
 
   gboolean show_time;
 };
@@ -79,7 +78,7 @@ popup_menu (GtkFileChooserCell *self,
 
   if (self->list_item)
     gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                                "(udd)", gtk_list_item_get_position (self->list_item), p.x, p.y);
+                                "(udd)", gtk_column_view_cell_get_position (self->list_item), p.x, p.y);
 }
 
 static void
@@ -125,7 +124,7 @@ drag_prepare_cb (GtkDragSource *source,
   impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
-  if (self->list_item && !gtk_list_item_get_selected (self->list_item))
+  if (self->list_item && !gtk_column_view_cell_get_selected (self->list_item))
     {
       gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
     }
@@ -206,13 +205,6 @@ get_selectable (GtkFileChooserCell *self)
 }
 
 static void
-update_list_item (GtkFileChooserCell *self)
-{
-  if (self->list_item)
-    gtk_list_item_set_selectable (self->list_item, get_selectable (self));
-}
-
-static void
 gtk_file_chooser_cell_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
@@ -230,7 +222,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
       else
         gtk_widget_add_css_class (GTK_WIDGET (self), "dim-label");
 
-      update_list_item (self);
       break;
 
     case PROP_SHOW_TIME:
@@ -239,8 +230,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
     case PROP_LIST_ITEM:
       self->list_item = g_value_get_object (value);
-
-      update_list_item (self);
       break;
 
     default:
