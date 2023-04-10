@@ -505,8 +505,8 @@ static void     set_model_filter             (GtkFileChooserWidget *impl,
 static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
 static void     set_show_hidden              (GtkFileChooserWidget *impl,
                                               gboolean              show_hidden);
-static char *   get_type_information         (GtkFileChooserWidget *impl,
-                                              GFileInfo            *info);
+static char *   get_type_information         (TypeFormat type_format,
+                                              GFileInfo *info);
 static char *   my_g_format_date_for_display (GtkFileChooserWidget *impl,
                                               glong                 secs);
 static char *   my_g_format_time_for_display (GtkFileChooserWidget *impl,
@@ -2011,17 +2011,17 @@ static char *
 column_view_get_file_type (GtkColumnViewCell *cell,
                            GFileInfo        *info)
 {
-  GtkFileChooserWidget *impl;
+  GtkFileChooserCell *child;
 
   if (!info || _gtk_file_info_consider_as_directory (info))
     return NULL;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_list_item_get_child (item),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
+  child = GTK_FILE_CHOOSER_CELL (gtk_column_view_cell_get_child (cell));
+
+  if (!child)
     return NULL;
 
-  return get_type_information (impl, info);
+  return get_type_information (gtk_file_chooser_cell_get_type_format (child), info);
 }
 
 static void
@@ -3284,7 +3284,6 @@ settings_save (GtkFileChooserWidget *impl)
   g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
                       gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
   g_settings_set_enum (settings, SETTINGS_KEY_DATE_FORMAT, impl->show_time ? DATE_FORMAT_WITH_TIME : DATE_FORMAT_REGULAR);
-  g_settings_set_enum (settings, SETTINGS_KEY_TYPE_FORMAT, impl->type_format);
   g_settings_set_enum (settings, SETTINGS_KEY_VIEW_TYPE, impl->view_type);
 
   /* Now apply the settings */
@@ -3947,8 +3946,8 @@ get_category_from_content_type (const char *content_type)
 }
 
 static char *
-get_type_information (GtkFileChooserWidget *impl,
-                      GFileInfo            *info)
+get_type_information (TypeFormat type_format,
+                      GFileInfo *info)
 {
   const char *content_type;
   char *mime_type;
@@ -3960,7 +3959,7 @@ get_type_information (GtkFileChooserWidget *impl,
   if (!content_type)
     goto end;
 
-  switch (impl->type_format)
+  switch (type_format)
     {
     case TYPE_FORMAT_MIME:
       mime_type = g_content_type_get_mime_type (content_type);
@@ -7085,8 +7084,8 @@ type_sort_func (gconstpointer a,
   GtkOrdering result;
 
   /* FIXME: use sortkeys for these */
-  key_a = get_type_information (impl, (GFileInfo *)a);
-  key_b = get_type_information (impl, (GFileInfo *)b);
+  key_a = get_type_information (impl->type_format, (GFileInfo *)a);
+  key_b = get_type_information (impl->type_format, (GFileInfo *)b);
 
   result = g_strcmp0 (key_a, key_b);
 
