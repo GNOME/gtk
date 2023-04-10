@@ -400,7 +400,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
       gdk_content_formats_get_gtypes (formats, &n_gtypes);
 
       if (n_gtypes)
-        [ret addObject:NSPasteboardTypeURL];
+        [ret addObject:PTYPE(URL)];
 
       gdk_content_formats_unref (formats);
     }

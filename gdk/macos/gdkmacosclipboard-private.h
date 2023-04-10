@@ -27,10 +27,6 @@
 
 G_BEGIN_DECLS
 
-#ifndef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
-typedef NSString *NSPasteboardType;
-#endif
-
 #define GDK_TYPE_MACOS_CLIPBOARD (_gdk_macos_clipboard_get_type())
 
 G_DECLARE_FINAL_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK, MACOS_CLIPBOARD, GdkClipboard)
