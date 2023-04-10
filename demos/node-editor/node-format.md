@@ -2,7 +2,7 @@
 
 GSK render nodes can be serialized and deserialized using APIs such as `gsk_render_node_serialize()` and `gsk_render_node_deserialize()`. The intended use for this is development - primarily the development of GTK - by allowing things such as creating testsuites and benchmarks, exchanging nodes in bug reports. GTK includes the `gtk4-node-editor` application for creating such test files.
 
-The format is a text format that follows the [CSS syntax rules](https://drafts.csswg.org/css-syntax-3/). In particular, this means that every array of bytes will produce a render node when parsed, as there is a defined error recovery method. For more details on error handling, please refer to the documentation of the aprsing APIs.
+The format is a text format that follows the [CSS syntax rules](https://drafts.csswg.org/css-syntax-3/). In particular, this means that every array of bytes will produce a render node when parsed, as there is a defined error recovery method. For more details on error handling, please refer to the documentation of the parsing APIs.
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
 **document**: `<node>\*`
@@ -23,7 +23,7 @@ Nodes can be given a name by adding a string after the `<node-type>` in their de
 
 ### Textures
 
-Just like nodes, textures can be referenced by name. When definining the named texture, the name has to be placed in front of the URL.
+Just like nodes, textures can be referenced by name. When defining a named texture, the name has to be placed in front of the URL.
 
 # Nodes
 
