@@ -76,6 +76,13 @@ gtk_list_header_base_update (GtkListHeaderBase *self,
                              guint              start,
                              guint              end)
 {
+  GtkListHeaderBasePrivate *priv = gtk_list_header_base_get_instance_private (self);
+
+  if (priv->item == item &&
+      priv->start == start && 
+      priv->end == end)
+    return;
+
   GTK_LIST_HEADER_BASE_GET_CLASS (self)->update (self, item, start, end);
 }
 

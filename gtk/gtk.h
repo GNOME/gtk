@@ -174,6 +174,7 @@
 #include <gtk/gtklistbase.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
+#include <gtk/gtklistheader.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtklistitemfactory.h>
 #include <gtk/deprecated/gtkliststore.h>
