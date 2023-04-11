@@ -671,19 +671,19 @@
         <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkColumnViewCell">
+  <template class="GtkListItem">
     <property name="child">
       <object class="GtkFileChooserCell">
         <binding name="item">
-          <lookup name="item">GtkColumnViewCell</lookup>
+          <lookup name="item">GtkListItem</lookup>
         </binding>
-        <property name="list-item">GtkColumnViewCell</property>
+        <property name="list-item">GtkListItem</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <binding name="tooltip-text">
               <closure type="gchararray" function="column_view_get_tooltip_text">
-                <lookup name="item">GtkColumnViewCell</lookup>
+                <lookup name="item">GtkListItem</lookup>
               </closure>
             </binding>
             <child>
@@ -692,7 +692,7 @@
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
                 <binding name="file-info">
-                  <lookup name="item">GtkColumnViewCell</lookup>
+                  <lookup name="item">GtkListItem</lookup>
                 </binding>
               </object>
             </child>
@@ -708,7 +708,7 @@
                 </attributes>
                 <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_display_name">
-                    <lookup name="item">GtkColumnViewCell</lookup>
+                    <lookup name="item">GtkListItem</lookup>
                   </closure>
                 </binding>
               </object>
