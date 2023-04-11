@@ -330,25 +330,25 @@
                                                     <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkFileChooserCell">
         <binding name="item">
-          <lookup name="item">GtkListItem</lookup>
+          <lookup name="item">GtkColumnViewCell</lookup>
         </binding>
-        <property name="list-item">GtkListItem</property>
+        <property name="list-item">GtkColumnViewCell</property>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
             <binding name="label">
               <closure type="gchararray" function="column_view_get_file_type">
-                <lookup name="item">GtkListItem</lookup>
+                <lookup name="item">GtkColumnViewCell</lookup>
               </closure>
             </binding>
             <binding name="tooltip-text">
               <closure type="gchararray" function="column_view_get_tooltip_text">
-                <lookup name="item">GtkListItem</lookup>
+                <lookup name="item">GtkColumnViewCell</lookup>
               </closure>
             </binding>
           </object>
@@ -378,6 +378,7 @@
           <lookup name="item">GtkColumnViewCell</lookup>
         </binding>
         <property name="list-item">GtkColumnViewCell</property>
+        <property name="date-column">true</property>
         <child>
           <object class="GtkBox">
             <property name="spacing">6</property>
@@ -388,21 +389,11 @@
             </binding>
             <child>
               <object class="GtkLabel">
-                <binding name="label">
-                  <closure type="gchararray" function="column_view_get_file_date">
-                    <lookup name="item">GtkColumnViewCell</lookup>
-                  </closure>
-                </binding>
               </object>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="visible" bind-source="file_chooser_cell" bind-property="show-time" bind-flags="sync-create"/>
-                <binding name="label">
-                  <closure type="gchararray" function="column_view_get_file_time">
-                    <lookup name="item">GtkColumnViewCell</lookup>
-                  </closure>
-                </binding>
               </object>
             </child>
           </object>
@@ -680,19 +671,19 @@
         <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GtkListItem">
+  <template class="GtkColumnViewCell">
     <property name="child">
       <object class="GtkFileChooserCell">
         <binding name="item">
-          <lookup name="item">GtkListItem</lookup>
+          <lookup name="item">GtkColumnViewCell</lookup>
         </binding>
-        <property name="list-item">GtkListItem</property>
+        <property name="list-item">GtkColumnViewCell</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <binding name="tooltip-text">
               <closure type="gchararray" function="column_view_get_tooltip_text">
-                <lookup name="item">GtkListItem</lookup>
+                <lookup name="item">GtkColumnViewCell</lookup>
               </closure>
             </binding>
             <child>
@@ -701,7 +692,7 @@
                 <property name="margin-start">6</property>
                 <property name="margin-end">6</property>
                 <binding name="file-info">
-                  <lookup name="item">GtkListItem</lookup>
+                  <lookup name="item">GtkColumnViewCell</lookup>
                 </binding>
               </object>
             </child>
@@ -717,7 +708,7 @@
                 </attributes>
                 <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_display_name">
-                    <lookup name="item">GtkListItem</lookup>
+                    <lookup name="item">GtkColumnViewCell</lookup>
                   </closure>
                 </binding>
               </object>

@@ -23,22 +23,25 @@
 
 #include "gtkprivate.h"
 #include "gtkbinlayout.h"
+#include "gtkcolumnviewcell.h"
 #include "gtkdragsource.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkicontheme.h"
-#include "gtklistitem.h"
+#include "gtklabel.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
-#include "gtklistitem.h"
 
 struct _GtkFileChooserCell
 {
   GtkWidget parent_instance;
 
   GFileInfo *item;
-  GtkListItem *list_item;
+  GtkColumnViewCell *list_item;
+
+  gboolean date_column;
+  guint type_format;
 
   gboolean show_time;
 };
@@ -52,13 +55,20 @@ G_DEFINE_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK_TYPE_WIDGET)
 
 enum
 {
-  PROP_POSITION = 1,
+  PROP_DATE_COLUMN = 1,
+  PROP_POSITION,
   PROP_ITEM,
   PROP_SHOW_TIME,
   PROP_LIST_ITEM,
 };
 
 #define ICON_SIZE 16
+
+guint
+gtk_file_chooser_cell_get_type_format (GtkFileChooserCell *self)
+{
+  return self->type_format;
+}
 
 static void
 popup_menu (GtkFileChooserCell *self,
@@ -79,7 +89,7 @@ popup_menu (GtkFileChooserCell *self,
 
   if (self->list_item)
     gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                                "(udd)", gtk_list_item_get_position (self->list_item), p.x, p.y);
+                                "(udd)", gtk_column_view_cell_get_position (self->list_item), p.x, p.y);
 }
 
 static void
@@ -125,7 +135,7 @@ drag_prepare_cb (GtkDragSource *source,
   impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
-  if (self->list_item && !gtk_list_item_get_selected (self->list_item))
+  if (self->list_item && !gtk_column_view_cell_get_selected (self->list_item))
     {
       gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
     }
@@ -161,6 +171,23 @@ gtk_file_chooser_cell_realize (GtkWidget *widget)
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
   g_object_bind_property (impl, "show-time", self, "show-time", G_BINDING_SYNC_CREATE);
+
+  if (self->date_column)
+    {
+      GtkWidget *box;
+      GtkWidget *label;
+      char *text;
+
+      box = gtk_widget_get_first_child (GTK_WIDGET (self));
+      label = gtk_widget_get_first_child (box);
+      text = gtk_file_chooser_widget_get_file_date (self->list_item, self->item);
+      gtk_label_set_text (GTK_LABEL (label), text);
+      g_free (text);
+      label = gtk_widget_get_last_child (box);
+      text = gtk_file_chooser_widget_get_file_time (self->list_item, self->item);
+      gtk_label_set_text (GTK_LABEL (label), text);
+      g_free (text);
+    }
 }
 
 static void
@@ -168,6 +195,11 @@ gtk_file_chooser_cell_init (GtkFileChooserCell *self)
 {
   GtkGesture *gesture;
   GtkDragSource *drag_source;
+  GSettings *settings;
+
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (self));
+
+  self->type_format = g_settings_get_enum (settings, SETTINGS_KEY_TYPE_FORMAT);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
@@ -206,13 +238,6 @@ get_selectable (GtkFileChooserCell *self)
 }
 
 static void
-update_list_item (GtkFileChooserCell *self)
-{
-  if (self->list_item)
-    gtk_list_item_set_selectable (self->list_item, get_selectable (self));
-}
-
-static void
 gtk_file_chooser_cell_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
@@ -222,6 +247,10 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DATE_COLUMN:
+      self->date_column = g_value_get_boolean (value);
+      break;
+
     case PROP_ITEM:
       self->item = g_value_get_object (value);
 
@@ -230,7 +259,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
       else
         gtk_widget_add_css_class (GTK_WIDGET (self), "dim-label");
 
-      update_list_item (self);
       break;
 
     case PROP_SHOW_TIME:
@@ -239,8 +267,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
     case PROP_LIST_ITEM:
       self->list_item = g_value_get_object (value);
-
-      update_list_item (self);
       break;
 
     default:
@@ -259,6 +285,10 @@ gtk_file_chooser_cell_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DATE_COLUMN:
+      g_value_set_boolean (value, self->date_column);
+      break;
+
     case PROP_ITEM:
       g_value_set_object (value, self->item);
       break;
@@ -283,6 +313,12 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->dispose = gtk_file_chooser_cell_dispose;
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
+
+  g_object_class_install_property (object_class, PROP_DATE_COLUMN,
+                                   g_param_spec_boolean ("date-column", NULL, NULL,
+                                                        FALSE,
+                                                        GTK_PARAM_READWRITE));
+
 
   g_object_class_install_property (object_class, PROP_ITEM,
                                    g_param_spec_object ("item", NULL, NULL,

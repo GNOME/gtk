@@ -22,6 +22,7 @@
 
 #include <glib.h>
 #include "deprecated/gtkfilechooserwidget.h"
+#include "gtkcolumnviewcell.h"
 #include "gtkselectionmodel.h"
 
 G_BEGIN_DECLS
@@ -35,6 +36,14 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *chooser);
 
 void
 gtk_file_chooser_widget_initial_focus  (GtkFileChooserWidget *chooser);
+
+char *
+gtk_file_chooser_widget_get_file_date   (GtkColumnViewCell *cell,
+                                       GFileInfo         *info);
+
+char *
+gtk_file_chooser_widget_get_file_time   (GtkColumnViewCell *cell,
+                                       GFileInfo        *info);
 
 GSList *
 gtk_file_chooser_widget_get_selected_files (GtkFileChooserWidget *impl);
