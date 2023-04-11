@@ -3377,13 +3377,21 @@ columnview row:not(:selected) cell editablelabel.editing text selection {
 
 
 .rich-list { /* rich lists usually containing other widgets than just labels/text */
-  & > row {
+  & > row, & > header {
     padding: 8px 12px;
     min-height: 32px; /* should be tall even when only containing a label */
 
     & > box {
       border-spacing: 12px;
     }
+  }
+  & > header {
+    @extend %osd;
+    background-color: $osd_bg_color;
+
+    border-bottom: 1px solid $borders-color;
+    border-top: 1px solid $borders-color;
+    font-weight: bold;
   }
 }
 
