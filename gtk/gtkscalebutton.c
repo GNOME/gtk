@@ -71,8 +71,14 @@
  *
  * # CSS nodes
  *
- * `GtkScaleButton` has a single CSS node with name button. To differentiate
- * it from a plain `GtkButton`, it gets the .scale style class.
+ * ```
+ * scalebutton.scale
+ * ╰── button.toggle
+ *     ╰── <icon>
+ * ```
+ *
+ * `GtkScaleButton` has a single CSS node with name scalebutton and `.scale`
+ * style class, and contains a `button` node with a `.toggle` style class.
  */
 
 
