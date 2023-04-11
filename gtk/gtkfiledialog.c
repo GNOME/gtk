@@ -976,6 +976,9 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return finish_file_op (self, G_TASK (result), error);
 }
 
@@ -1050,6 +1053,9 @@ gtk_file_dialog_select_folder_finish (GtkFileDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_folder, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return finish_file_op (self, G_TASK (result), error);
 }
 
@@ -1119,6 +1125,9 @@ gtk_file_dialog_save_finish (GtkFileDialog   *self,
   g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_save, NULL);
+
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
 
   return finish_file_op (self, G_TASK (result), error);
 }
@@ -1194,6 +1203,9 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open_multiple, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return finish_multiple_files_op (self, G_TASK (result), error);
 }
 
@@ -1267,6 +1279,9 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
   g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_multiple_folders, NULL);
+
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
 
   return finish_multiple_files_op (self, G_TASK (result), error);
 }

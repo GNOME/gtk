@@ -492,6 +492,9 @@ gtk_color_dialog_choose_rgba_finish (GtkColorDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_color_dialog_choose_rgba, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
