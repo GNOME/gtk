@@ -378,6 +378,7 @@
           <lookup name="item">GtkColumnViewCell</lookup>
         </binding>
         <property name="list-item">GtkColumnViewCell</property>
+        <property name="date-column">true</property>
         <child>
           <object class="GtkBox">
             <property name="spacing">6</property>
@@ -388,21 +389,11 @@
             </binding>
             <child>
               <object class="GtkLabel">
-                <binding name="label">
-                  <closure type="gchararray" function="column_view_get_file_date">
-                    <lookup name="item">GtkColumnViewCell</lookup>
-                  </closure>
-                </binding>
               </object>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="visible" bind-source="file_chooser_cell" bind-property="show-time" bind-flags="sync-create"/>
-                <binding name="label">
-                  <closure type="gchararray" function="column_view_get_file_time">
-                    <lookup name="item">GtkColumnViewCell</lookup>
-                  </closure>
-                </binding>
               </object>
             </child>
           </object>

@@ -1945,9 +1945,9 @@ files_list_restrict_key_presses (GtkEventControllerKey *controller,
   return GDK_EVENT_PROPAGATE;
 }
 
-static char *
-column_view_get_file_date (GtkColumnViewCell *cell,
-                           GFileInfo        *info)
+char *
+gtk_file_chooser_widget_get_file_date (GtkColumnViewCell *cell,
+                                     GFileInfo        *info)
 {
   GtkFileChooserWidget *impl;
   glong time;
@@ -1981,9 +1981,9 @@ column_view_get_file_display_name (GtkColumnViewCell *cell,
     return NULL;
 }
 
-static char *
-column_view_get_file_time (GtkColumnViewCell *cell,
-                           GFileInfo        *info)
+char *
+gtk_file_chooser_widget_get_file_time (GtkColumnViewCell *cell,
+                                     GFileInfo        *info)
 {
   GtkFileChooserWidget *impl;
   glong time;
@@ -6847,9 +6847,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_name_changed);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_date);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_display_name);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_time);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_type);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
