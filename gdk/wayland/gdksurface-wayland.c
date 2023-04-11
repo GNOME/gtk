@@ -599,8 +599,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
         }
     }
 
-  gdk_wayland_surface_create_wl_surface (surface);
-
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
   g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), surface);
 
