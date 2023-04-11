@@ -131,6 +131,7 @@ extra_demo_sources = files([
   'demo4widget.c',
   'pixbufpaintable.c',
   'script-names.c',
+  'settings-key.c',
   'unicode-names.c',
   'suggestionentry.c',
   'language-names.c',
