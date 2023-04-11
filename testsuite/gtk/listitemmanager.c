@@ -97,11 +97,14 @@ check_list_item_manager (GtkListItemManager  *items,
   GtkListTile *tile;
   guint n_items = 0;
   guint i;
+  gboolean has_sections;
   enum {
     NO_SECTION,
     MATCHED_SECTION,
     UNMATCHED_SECTION
   } section_state = NO_SECTION;
+
+  has_sections = gtk_list_item_manager_get_has_sections (items);
 
   for (tile = gtk_list_item_manager_get_first (items);
        tile != NULL;
@@ -112,7 +115,8 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_HEADER:
             g_assert_cmpint (section_state, ==, NO_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_true (has_sections);
+            g_assert_true (tile->widget);
             section_state = MATCHED_SECTION;
             break;
 
@@ -126,6 +130,7 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_FOOTER:
             g_assert_cmpint (section_state, ==, MATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_true (has_sections);
             g_assert_false (tile->widget);
             section_state = NO_SECTION;
             break;
@@ -142,7 +147,10 @@ check_list_item_manager (GtkListItemManager  *items,
             if (tile->widget)
               {
                 GObject *item = g_list_model_get_item (model, n_items);
-                g_assert_cmpint (section_state, ==, MATCHED_SECTION);
+                if (has_sections)
+                  g_assert_cmpint (section_state, ==, MATCHED_SECTION);
+                else
+                  g_assert_cmpint (section_state, ==, UNMATCHED_SECTION);
                 g_assert_cmphex (GPOINTER_TO_SIZE (item), ==, GPOINTER_TO_SIZE (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (tile->widget))));
                 g_object_unref (item);
                 g_assert_cmpint (n_items, ==, gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (tile->widget)));
@@ -200,7 +208,8 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_HEADER:
             g_assert_cmpint (section_state, ==, NO_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_true (has_sections);
+            g_assert_true (tile->widget);
             section_state = MATCHED_SECTION;
             break;
 
@@ -214,6 +223,7 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_FOOTER:
             g_assert_cmpint (section_state, ==, MATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
+            g_assert_true (has_sections);
             g_assert_false (tile->widget);
             section_state = NO_SECTION;
             break;
