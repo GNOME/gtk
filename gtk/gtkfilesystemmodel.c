@@ -331,8 +331,6 @@ list_model_get_item (GListModel *list_model,
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (list_model);
   FileModelNode *node;
 
-  /* The first items of GtkFileSystemModel is not really a file,
-   * so ignore it. */
   if (position >= model->files->len)
     return NULL;
 
@@ -502,7 +500,7 @@ remove_file (GtkFileSystemModel *model,
 
   g_array_remove_index (model->files, id);
 
-  g_list_model_items_changed (G_LIST_MODEL (model), id - 1, 1, 0);
+  g_list_model_items_changed (G_LIST_MODEL (model), id, 1, 0);
 }
 
 static void
