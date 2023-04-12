@@ -2124,7 +2124,7 @@ gtk_column_view_set_row_factory (GtkColumnView      *self,
 GtkListItemFactory *
 gtk_column_view_get_row_factory (GtkColumnView *self)
 {
-  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
 
   return gtk_list_view_get_factory (self->listview);
 }
