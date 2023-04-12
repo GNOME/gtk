@@ -193,28 +193,30 @@ match_func (GtkEntryCompletion *compl,
             gpointer            user_data)
 {
   GtkFileChooserEntry *chooser_entry = user_data;
+  GFileInfo *info;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
+                      iter,
+                      FILE_INFO_COLUMN, &info,
+                      -1);
+
+  g_assert (info != NULL);
+  g_object_unref (info);
+
+  if (g_file_info_get_attribute_boolean (info, "filechooser::filtered-out"))
+    return FALSE;
 
   /* If we arrive here, the GtkFileSystemModel's GtkFileFilter already filtered out all
    * files that don't start with the current prefix, so we manually apply the GtkFileChooser's
-   * current file filter (e.g. just jpg files) here. */
+   * current file filter (e.g. just jpg files) here.
+   */
   if (chooser_entry->current_filter != NULL)
     {
-      GFileInfo *info;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
-                          iter,
-                          FILE_INFO_COLUMN, &info,
-                          -1);
-
-      g_assert (info != NULL);
-      g_object_unref (info);
-
       /* We always allow navigating into subfolders, so don't ever filter directories */
       if (g_file_info_get_file_type (info) != G_FILE_TYPE_REGULAR)
         return TRUE;
 
       g_assert (g_file_info_has_attribute (info, "standard::file"));
-
       return gtk_filter_match (GTK_FILTER (chooser_entry->current_filter), info);
     }
 
@@ -597,6 +599,9 @@ model_items_changed_cb (GListModel          *model,
                                          FULL_PATH_COLUMN, full_path,
                                          DISPLAY_NAME_COLUMN, display_name,
                                          -1);
+
+      g_free (display_name);
+      g_free (full_path);
 
       g_clear_object (&info);
 
