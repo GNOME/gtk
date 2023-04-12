@@ -5640,6 +5640,26 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
       if (state & GDK_SHIFT_MASK)
         extends = TRUE;
 
+      if (n_press > 1)
+	{
+          GtkTextBuffer *buffer;
+          GtkTextIter cur, ins;
+
+          buffer = get_buffer (text_view);
+          get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
+                                 &cur, NULL, NULL);
+          gtk_text_buffer_get_iter_at_mark (buffer, &ins,
+                                            gtk_text_buffer_get_insert (buffer));
+
+          /* Reset count if double/triple clicking on a different line */
+          if (gtk_text_iter_get_line (&cur) !=
+              gtk_text_iter_get_line (&ins))
+            {
+              gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+              n_press = 1;
+            }
+        }
+
       switch (n_press)
         {
         case 1:
