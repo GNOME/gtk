@@ -889,7 +889,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkGLArea:allowed-apis: (attributes org.gtk.Property.get=gtk_gl_area_get_allowed_apis org.gtk.Property.set=gtk_gl_area_set_allowed_apis)
+   * GtkGLArea:allowed-apis: (attributes org.gtk.Property.get=gtk_gl_area_get_allowed_apis org.gtk.Property.set=gtk_gl_area_set_allowed_apis)
    *
    * The allowed APIs.
    *
@@ -904,7 +904,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkGLArea:api: (attributes org.gtk.Property.get=gtk_gl_area_get_api)
+   * GtkGLArea:api: (attributes org.gtk.Property.get=gtk_gl_area_get_api)
    *
    * The API currently in use.
    *
