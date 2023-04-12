@@ -600,6 +600,9 @@ model_items_changed_cb (GListModel          *model,
                                          DISPLAY_NAME_COLUMN, display_name,
                                          -1);
 
+      g_free (display_name);
+      g_free (full_path);
+
       g_clear_object (&info);
 
       position++;
