@@ -1176,7 +1176,7 @@ gtk_list_view_set_header_factory (GtkListView        *self,
         }
     }
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
 }
 
 /**
