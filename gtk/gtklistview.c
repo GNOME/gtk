@@ -293,7 +293,7 @@ gtk_list_view_create_header_widget (GtkListBase *base)
   else
     factory = self->header_factory;
 
-  return GTK_LIST_HEADER_BASE (gtk_list_header_widget_new (factory));;
+  return GTK_LIST_HEADER_BASE (gtk_list_header_widget_new (factory));
 }
 
 static gboolean
