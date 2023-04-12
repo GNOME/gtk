@@ -220,6 +220,7 @@ enum
   PROP_COLUMNS,
   PROP_ENABLE_RUBBERBAND,
   PROP_HADJUSTMENT,
+  PROP_HEADER_FACTORY,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
   PROP_REORDERABLE,
@@ -628,6 +629,10 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, self->hadjustment);
       break;
 
+    case PROP_HEADER_FACTORY:
+      g_value_set_object (value, gtk_column_view_get_header_factory (self));
+      break;
+
     case PROP_HSCROLL_POLICY:
       g_value_set_enum (value, gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview)));
       break;
@@ -709,6 +714,10 @@ gtk_column_view_set_property (GObject      *object,
 
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
         }
+      break;
+
+    case PROP_HEADER_FACTORY:
+      gtk_column_view_set_header_factory (self, g_value_get_object (value));
       break;
 
     case PROP_HSCROLL_POLICY:
@@ -824,6 +833,18 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_boolean ("enable-rubberband", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkColumnView:header-factory: (attributes org.gtk.Property.get=gtk_column_view_get_header_factory org.gtk.Property.set=gtk_column_view_set_header_factory)
+   *
+   * The factory used for creating section headers.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HEADER_FACTORY] =
+    g_param_spec_object ("header-factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkColumnView:model: (attributes org.gtk.Property.get=gtk_column_view_get_model org.gtk.Property.set=gtk_column_view_set_model)
@@ -2016,6 +2037,49 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
 
   return gtk_list_view_get_enable_rubberband (self->listview);
+}
+
+/**
+ * gtk_column_view_set_header_factory: (attributes org.gtk.Method.set_property=header-factory)
+ * @self: a `GtkColumnView`
+ * @factory: (nullable): The header factory
+ *
+ * Sets the factory used for creating seciton headers.
+ *
+ * If this factory is not set - which is the default - then no headers will be used.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_set_header_factory (GtkColumnView      *self,
+                                    GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (factory == gtk_list_view_get_header_factory (self->listview))
+    return;
+
+  gtk_list_view_set_header_factory (self->listview, factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
+}
+
+/**
+ * gtk_column_view_get_header_factory: (attributes org.gtk.Method.get_property=header-factory)
+ * @self: a `GtkColumnView`
+ *
+ * Gets the factory set via [method@Gtk.ColumnView.set_header_factory].
+ *
+ * Returns: (nullable) (transfer none): The factory
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_column_view_get_header_factory (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
+
+  return gtk_list_view_get_header_factory (self->listview);
 }
 
 /**
