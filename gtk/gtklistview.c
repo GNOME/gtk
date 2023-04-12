@@ -208,8 +208,7 @@ gtk_list_view_is_inert (GtkListView *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   return !gtk_widget_get_visible (widget) ||
-         gtk_widget_get_root (widget) == NULL ||
-         self->factory == NULL;
+         gtk_widget_get_root (widget) == NULL;
 }
 
 static void
@@ -1101,18 +1100,13 @@ void
 gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
-  gboolean was_inert;
-
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
-
-  was_inert = gtk_list_view_is_inert (self);
 
   if (!g_set_object (&self->factory, factory))
     return;
 
-  if (!was_inert || !gtk_list_view_is_inert (self))
-    gtk_list_view_update_factories (self);
+  gtk_list_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
@@ -1163,7 +1157,8 @@ gtk_list_view_set_header_factory (GtkListView        *self,
 
   gtk_list_item_manager_set_has_sections (self->item_manager, factory != NULL);
 
-  if (had_sections && gtk_list_item_manager_get_has_sections (self->item_manager))
+  if (!gtk_list_view_is_inert (self) &&
+      had_sections && gtk_list_item_manager_get_has_sections (self->item_manager))
     {
       GtkListTile *tile;
 
