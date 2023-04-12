@@ -63,6 +63,19 @@ ucd_item_get_name (UcdItem *item)
   return item->name;
 }
 
+static int
+compare_script (gconstpointer a, gconstpointer b, gpointer data)
+{
+  const UcdItem *ai = a;
+  const UcdItem *bi = b;
+  int s1, s2;
+
+  s1 = (int) g_unichar_get_script (ai->codepoint);
+  s2 = (int) g_unichar_get_script (bi->codepoint);
+
+  return s2 - s1;
+}
+
 static GListModel *
 ucd_model_new (void)
 {
@@ -72,6 +85,7 @@ ucd_model_new (void)
   GListStore *store;
   guint u;
   char *name;
+  GtkSortListModel *sortmodel;
 
   bytes = g_resources_lookup_data ("/listview_ucd_data/ucdnames.data", 0, NULL);
   v = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(us)"), bytes, TRUE));
@@ -93,7 +107,10 @@ ucd_model_new (void)
   g_variant_unref (v);
   g_bytes_unref (bytes);
 
-  return G_LIST_MODEL (store);
+  sortmodel = gtk_sort_list_model_new (G_LIST_MODEL (store), NULL);
+  gtk_sort_list_model_set_section_sorter (sortmodel, GTK_SORTER (gtk_custom_sorter_new (compare_script, NULL, NULL)));
+
+  return G_LIST_MODEL (sortmodel);
 }
 
 static void
@@ -224,6 +241,16 @@ bind_combining_class (GtkSignalListItemFactory *factory,
 }
 
 static void
+setup_header (GtkSignalListItemFactory *factory,
+              GObject                  *listitem)
+{
+  GtkWidget *label;
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_list_header_set_child (GTK_LIST_HEADER (listitem), label);
+}
+
+static void
 bind_script (GtkSignalListItemFactory *factory,
              GObject                  *listitem)
 {
@@ -232,8 +259,8 @@ bind_script (GtkSignalListItemFactory *factory,
   gunichar codepoint;
   GUnicodeScript script;
 
-  label = gtk_list_item_get_child (GTK_LIST_ITEM (listitem));
-  item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
+  label = gtk_list_header_get_child (GTK_LIST_HEADER (listitem));
+  item = gtk_list_header_get_item (GTK_LIST_HEADER (listitem));
   codepoint = ucd_item_get_codepoint (UCD_ITEM (item));
   script = g_unichar_get_script (codepoint);
 
@@ -325,12 +352,10 @@ create_ucd_view (GtkWidget *label)
   g_object_unref (column);
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_header), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_script), NULL);
-  column = gtk_column_view_column_new ("Script", factory);
-  gtk_column_view_column_set_resizable (column, TRUE);
-  gtk_column_view_append_column (GTK_COLUMN_VIEW (cv), column);
-  g_object_unref (column);
+  gtk_column_view_set_header_factory (GTK_COLUMN_VIEW (cv), factory);
+  g_object_unref (factory);
 
   return cv;
 }
