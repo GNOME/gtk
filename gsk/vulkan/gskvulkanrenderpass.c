@@ -894,6 +894,13 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass          *self,
     .render.node = node
   };
 
+  /* Skip blur when no actual blurring will happen */
+  if (G_APPROX_VALUE (gsk_blur_node_get_radius (node), 0.0, FLT_EPSILON))
+    {
+      gsk_vulkan_render_pass_add_node (self, render, constants, gsk_blur_node_get_child (node));
+      return TRUE;
+    }
+
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR;
   else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
