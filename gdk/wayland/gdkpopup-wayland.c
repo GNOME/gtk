@@ -1289,11 +1289,6 @@ show_popup (GdkWaylandPopup *wayland_popup,
             int              height,
             GdkPopupLayout  *layout)
 {
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_popup);
-
-  if (!wayland_surface->display_server.wl_surface)
-    gdk_wayland_surface_create_wl_surface (GDK_SURFACE (wayland_popup));
-
   if (wayland_popup->thaw_upon_show)
     {
       wayland_popup->thaw_upon_show = FALSE;

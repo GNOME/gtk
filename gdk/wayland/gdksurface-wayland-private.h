@@ -104,7 +104,6 @@ struct _GdkWaylandSurfaceClass
 
 #define GDK_WAYLAND_SURFACE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_SURFACE, GdkWaylandSurfaceClass))
 
-void gdk_wayland_surface_create_wl_surface (GdkSurface               *surface);
 void gdk_wayland_surface_update_size       (GdkSurface               *surface,
                                             int32_t                   width,
                                             int32_t                   height,
