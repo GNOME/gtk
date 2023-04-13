@@ -1843,11 +1843,6 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkDragAnim *anim;
-/*
-  cairo_surface_t *win_surface;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-*/
   guint id;
 
   gdk_x11_drag_release_selection (drag);
@@ -1861,26 +1856,6 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
       g_object_unref (drag);
       return;
     }
-
-/*
-  win_surface = _gdk_surface_ref_cairo_surface (x11_drag->drag_surface);
-  surface = gdk_surface_create_similar_surface (x11_drag->drag_surface,
-                                               cairo_surface_get_content (win_surface),
-                                               gdk_surface_get_width (x11_drag->drag_surface),
-                                               gdk_surface_get_height (x11_drag->drag_surface));
-  cr = cairo_create (surface);
-  cairo_set_source_surface (cr, win_surface, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-  cairo_surface_destroy (win_surface);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-
-  gdk_surface_set_background_pattern (x11_drag->drag_surface, pattern);
-
-  cairo_pattern_destroy (pattern);
-  cairo_surface_destroy (surface);
-*/
 
   anim = g_new0 (GdkDragAnim, 1);
   anim->drag = g_object_ref (x11_drag);

@@ -110,8 +110,6 @@ struct _GdkSurfaceClass
 {
   GObjectClass parent_class;
 
-  cairo_surface_t *
-               (* ref_cairo_surface)    (GdkSurface      *surface);
   void         (* hide)                 (GdkSurface      *surface);
   void         (* get_geometry)         (GdkSurface      *surface,
                                          int             *x,
