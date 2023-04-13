@@ -291,16 +291,6 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   return surface;
 }
 
-static cairo_surface_t *
-gdk_broadway_surface_ref_cairo_surface (GdkSurface *surface)
-{
-  if (GDK_IS_BROADWAY_SURFACE (surface) &&
-      GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  return cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 1);
-}
-
 static void
 _gdk_broadway_surface_destroy (GdkSurface *surface,
                                gboolean    foreign_destroy)
@@ -1254,7 +1244,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
 
   object_class->finalize = gdk_broadway_surface_finalize;
 
-  impl_class->ref_cairo_surface = gdk_broadway_surface_ref_cairo_surface;
   impl_class->hide = gdk_broadway_surface_hide;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
