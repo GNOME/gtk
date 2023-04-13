@@ -19,9 +19,6 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">1</property>
         <property name="spacing">2</property>
-        <style>
-          <class name="view"/>
-        </style>
         <child>
           <object class="GtkBox" id="box1">
             <property name="orientation">1</property>
