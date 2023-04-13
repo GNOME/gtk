@@ -125,6 +125,7 @@ struct _ButtonData
   GCancellable *cancellable;
   guint ignore_changes : 1;
   guint file_is_hidden : 1;
+  GMount *mount;
 };
 /* This macro is used to check if a button can be used as a fake root.
  * All buttons in front of a fake root are automatically hidden when in a
@@ -417,30 +418,30 @@ set_button_image (GtkPathBar *path_bar,
                   ButtonData *button_data)
 {
   struct SetButtonImageData *data;
-  GMount *mount;
 
   switch (button_data->type)
     {
     case ROOT_BUTTON:
 
-      if (path_bar->root_icon != NULL)
+      GIcon *root_icon = NULL;
+
+      if (!button_data->mount && path_bar->root_icon != NULL &&
+          g_file_is_native (button_data->file))
         {
           gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->root_icon);
-	  break;
-	}
+          break;
+        }
 
-      mount = g_file_find_enclosing_mount (button_data->file, NULL, NULL);
-
-      if (!mount && g_file_is_native (button_data->file))
-        path_bar->root_icon = g_themed_icon_new ("drive-harddisk-symbolic");
-      else if (mount)
-        path_bar->root_icon = g_mount_get_symbolic_icon (mount);
+      if (!button_data->mount && g_file_is_native (button_data->file))
+        root_icon = path_bar->root_icon = g_object_ref (g_themed_icon_new ("drive-harddisk-symbolic"));
+      else if (button_data->mount)
+        root_icon = g_mount_get_symbolic_icon (button_data->mount);
       else
-        path_bar->root_icon = NULL;
+        root_icon = NULL;
 
-      g_clear_object (&mount);
+      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), root_icon);
 
-      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->root_icon);
+      g_clear_object (&root_icon);
 
       break;
 
@@ -515,6 +516,7 @@ static void
 button_data_free (ButtonData *button_data)
 {
   g_clear_object (&button_data->file);
+  g_clear_object (&button_data->mount);
   g_free (button_data->dir_name);
   g_free (button_data);
 }
@@ -571,11 +573,11 @@ file_is_recent_uri (GFile *file)
 }
 
 static ButtonType
-find_button_type (GtkPathBar  *path_bar,
-		  GFile       *file)
+find_button_type (GtkPathBar *path_bar,
+                  GFile *file,
+                  GFile *root_file)
 {
-  if (path_bar->root_file != NULL &&
-      g_file_equal (file, path_bar->root_file))
+  if (root_file != NULL && g_file_equal (file, root_file))
     return ROOT_BUTTON;
   if (path_bar->home_file != NULL &&
       g_file_equal (file, path_bar->home_file))
@@ -593,6 +595,8 @@ static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
 		       GFile       *file,
+		       GMount      *mount,
+		       GFile       *root_file,
 		       gboolean     current_dir,
 		       gboolean     file_is_hidden)
 {
@@ -604,17 +608,26 @@ make_directory_button (GtkPathBar  *path_bar,
   file_is_hidden = !! file_is_hidden;
   /* Is it a special button? */
   button_data = g_new0 (ButtonData, 1);
-  button_data->type = find_button_type (path_bar, file);
+  button_data->type = find_button_type (path_bar, file, root_file);
   button_data->button = gtk_toggle_button_new ();
   gtk_widget_set_focus_on_click (button_data->button, FALSE);
 
   switch (button_data->type)
     {
     case ROOT_BUTTON:
-      button_data->image = gtk_image_new ();
-      child = button_data->image;
-      button_data->label = NULL;
-      break;
+      if (mount)
+        {
+          button_data->dir_name = g_mount_get_name (mount);
+          button_data->mount = g_object_ref (mount);
+        }
+      else
+        {
+          button_data->image = gtk_image_new ();
+          child = button_data->image;
+          button_data->label = NULL;
+          break;
+        }
+      G_GNUC_FALLTHROUGH;
     case HOME_BUTTON:
     case DESKTOP_BUTTON:
     case RECENT_BUTTON:
@@ -631,7 +644,8 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = NULL;
     }
 
-  button_data->dir_name = g_strdup (dir_name);
+  if (button_data->dir_name == NULL)
+    button_data->dir_name = g_strdup (dir_name);
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
 
@@ -715,6 +729,8 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 struct SetFileInfo
 {
   GFile *file;
+  GMount *mount;
+  GFile *root_file;
   GFile *parent_file;
   GtkPathBar *path_bar;
   GList *new_buttons;
@@ -762,9 +778,14 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
     g_object_unref (info->file);
   if (info->parent_file)
     g_object_unref (info->parent_file);
+  if (info->root_file)
+    g_object_unref (info->root_file);
+  if (info->mount)
+    g_object_unref (info->mount);
 
   g_free (info);
 }
+
 
 static void
 gtk_path_bar_get_info_callback (GObject      *source,
@@ -802,6 +823,8 @@ gtk_path_bar_get_info_callback (GObject      *source,
 
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
+                                       file_info->mount,
+                                       file_info->root_file,
                                        file_info->first_directory, is_hidden);
   g_clear_object (&file_info->file);
 
@@ -824,7 +847,54 @@ gtk_path_bar_get_info_callback (GObject      *source,
       return;
     }
 
-  file_info->parent_file = g_file_get_parent (file_info->file);
+  if (g_file_equal (file_info->file, file_info->root_file))
+    file_info->parent_file = NULL;
+  else
+    file_info->parent_file = g_file_get_parent (file_info->file);
+
+  /* Recurse asynchronously */
+  file_info->cancellable = g_cancellable_new ();
+  file_info->path_bar->get_info_cancellable = file_info->cancellable;
+  g_file_query_info_async (file_info->file,
+                           "standard::display-name,"
+                           "standard::is-hidden,"
+                           "standard::is-backup",
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           file_info->cancellable,
+                           gtk_path_bar_get_info_callback,
+                           file_info);
+  add_cancellable (file_info->path_bar, file_info->cancellable);
+}
+
+static void
+gtk_path_bar_get_mount_callback (GObject      *source,
+				 GAsyncResult *result,
+				 gpointer      data)
+{
+  GFile *file = G_FILE (source);
+  struct SetFileInfo *file_info = data;
+
+  file_info->mount = g_file_find_enclosing_mount_finish (file, result, NULL);
+
+  if (file_info->mount)
+    file_info->root_file = g_mount_get_root (file_info->mount);
+
+  g_assert (GTK_IS_PATH_BAR (file_info->path_bar));
+  g_assert (G_OBJECT (file_info->path_bar)->ref_count > 0);
+
+  if (file_info->root_file == NULL)
+    file_info->root_file = g_object_ref (file_info->path_bar->root_file);
+
+  if (g_file_equal (file_info->file, file_info->root_file))
+    file_info->parent_file = NULL;
+  else
+    file_info->parent_file = g_file_get_parent (file_info->file);
+
+  cancellable_async_done (file_info->path_bar, file_info->cancellable);
+  if (file_info->path_bar->get_info_cancellable == file_info->cancellable)
+    file_info->path_bar->get_info_cancellable = NULL;
+  file_info->cancellable = NULL;
 
   /* Recurse asynchronously */
   file_info->cancellable = g_cancellable_new ();
@@ -861,22 +931,36 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
   info->file = g_object_ref (file);
   info->path_bar = path_bar;
   info->first_directory = TRUE;
-  info->parent_file = g_file_get_parent (info->file);
 
   if (path_bar->get_info_cancellable)
     cancel_cancellable (path_bar, path_bar->get_info_cancellable);
 
   info->cancellable = g_cancellable_new ();
   path_bar->get_info_cancellable = info->cancellable;
-  g_file_query_info_async (info->file,
-                           "standard::display-name,"
-                           "standard::is-hidden,"
-                           "standard::is-backup",
-                           G_FILE_QUERY_INFO_NONE,
-                           G_PRIORITY_DEFAULT,
-                           info->cancellable,
-                           gtk_path_bar_get_info_callback,
-                           info);
+
+  if (g_file_is_native (info->file))
+    {
+      info->root_file = g_object_ref (path_bar->root_file);
+      info->parent_file = g_file_get_parent (info->file);
+
+      g_file_query_info_async (info->file,
+                               "standard::display-name,"
+                               "standard::is-hidden,"
+                               "standard::is-backup",
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               info->cancellable,
+                               gtk_path_bar_get_info_callback,
+                               info);
+    }
+  else
+    {
+      g_file_find_enclosing_mount_async (info->file,
+                                         G_PRIORITY_DEFAULT,
+                                         info->cancellable,
+                                         gtk_path_bar_get_mount_callback,
+                                         info);
+    }
   add_cancellable (path_bar, info->cancellable);
 }
 
