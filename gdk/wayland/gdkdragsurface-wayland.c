@@ -127,9 +127,6 @@ gdk_wayland_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (!impl->display_server.wl_surface)
-    gdk_wayland_surface_create_wl_surface (surface);
-
   impl->next_layout.configured_width = width;
   impl->next_layout.configured_height = height;
   impl->next_layout.surface_geometry_dirty = TRUE;

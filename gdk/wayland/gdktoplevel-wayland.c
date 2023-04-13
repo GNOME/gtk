@@ -1526,9 +1526,6 @@ gdk_wayland_toplevel_show (GdkWaylandToplevel *toplevel)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
 
-  if (!impl->display_server.wl_surface)
-    gdk_wayland_surface_create_wl_surface (GDK_SURFACE (impl));
-
   if (impl->mapped)
     return;
 
