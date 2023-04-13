@@ -71,8 +71,14 @@
  *
  * # CSS nodes
  *
- * `GtkScaleButton` has a single CSS node with name button. To differentiate
- * it from a plain `GtkButton`, it gets the .scale style class.
+ * ```
+ * scalebutton.scale
+ * ╰── button.toggle
+ *     ╰── <icon>
+ * ```
+ *
+ * `GtkScaleButton` has a single CSS node with name scalebutton and `.scale`
+ * style class, and contains a `button` node with a `.toggle` style class.
  */
 
 
@@ -811,6 +817,40 @@ gtk_scale_button_get_active (GtkScaleButton *button)
 }
 
 static void
+apply_orientation (GtkScaleButton *button,
+                   GtkOrientation  orientation)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  if (priv->applied_orientation != orientation)
+    {
+      priv->applied_orientation = orientation;
+
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), orientation);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->scale), orientation);
+
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->scale,
+                                                            priv->plus_button);
+          gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->minus_button,
+                                                            priv->scale);
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale), -1, SCALE_SIZE);
+          gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
+        }
+      else
+        {
+          gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->scale,
+                                                            priv->minus_button);
+          gtk_box_reorder_child_after (GTK_BOX (priv->box), priv->plus_button,
+                                                            priv->scale);
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale), SCALE_SIZE, -1);
+          gtk_range_set_inverted (GTK_RANGE (priv->scale), FALSE);
+        }
+    }
+}
+
+static void
 gtk_scale_button_set_orientation_private (GtkScaleButton *button,
                                           GtkOrientation  orientation)
 {
@@ -819,6 +859,9 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
+
+      apply_orientation (button, priv->orientation);
+
       g_object_notify (G_OBJECT (button), "orientation");
     }
 }
@@ -854,6 +897,8 @@ gtk_scale_popup (GtkWidget *widget)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (widget);
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  apply_orientation (button, priv->orientation);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), TRUE);
 }
