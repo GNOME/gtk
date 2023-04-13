@@ -243,6 +243,74 @@ gdk_vulkan_strerror (VkResult result)
   }
 }
 
+#ifdef G_ENABLE_DEBUG
+static const char *
+surface_present_mode_to_string (VkPresentModeKHR present_mode)
+{
+  switch (present_mode)
+    {
+    case VK_PRESENT_MODE_MAILBOX_KHR:
+      return "VK_PRESENT_MODE_MAILBOX_KHR";
+    case VK_PRESENT_MODE_IMMEDIATE_KHR:
+      return "VK_PRESENT_MODE_IMMEDIATE_KHR";
+    case VK_PRESENT_MODE_FIFO_KHR:
+      return "VK_PRESENT_MODE_FIFO_KHR";
+    case VK_PRESENT_MODE_FIFO_RELAXED_KHR:
+      return "VK_PRESENT_MODE_FIFO_RELAXED_KHR";
+    case VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR:
+    case VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR:
+    case VK_PRESENT_MODE_MAX_ENUM_KHR:
+    default:
+      return "(invalid)";
+    }
+
+  return "(unknown)";
+}
+#endif
+
+static const VkPresentModeKHR preferred_present_modes[] = {
+  VK_PRESENT_MODE_MAILBOX_KHR,
+  VK_PRESENT_MODE_IMMEDIATE_KHR,
+};
+
+static VkPresentModeKHR
+find_best_surface_present_mode (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  VkPresentModeKHR *available_present_modes;
+  uint32_t n_present_modes;
+  VkResult res;
+
+  res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfacePresentModesKHR, gdk_vulkan_context_get_physical_device (context),
+                                                                 priv->surface,
+                                                                 &n_present_modes,
+                                                                 NULL);
+
+  if (res != VK_SUCCESS)
+    goto fallback_present_mode;
+
+  available_present_modes = g_alloca (sizeof (VkPresentModeKHR) * n_present_modes);
+  res = GDK_VK_CHECK (vkGetPhysicalDeviceSurfacePresentModesKHR, gdk_vulkan_context_get_physical_device (context),
+                                                                 priv->surface,
+                                                                 &n_present_modes,
+                                                                 available_present_modes);
+
+  if (res != VK_SUCCESS)
+    goto fallback_present_mode;
+
+  for (uint32_t i = 0; i < G_N_ELEMENTS (preferred_present_modes); i++)
+    {
+      for (uint32_t j = 0; j < n_present_modes; j++)
+        {
+          if (preferred_present_modes[i] == available_present_modes[j])
+            return available_present_modes[j];
+        }
+    }
+
+fallback_present_mode:
+  return VK_PRESENT_MODE_FIFO_KHR;
+}
+
 static void
 gdk_vulkan_context_dispose (GObject *gobject)
 {
@@ -302,6 +370,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   VkSurfaceCapabilitiesKHR capabilities;
   VkCompositeAlphaFlagBitsKHR composite_alpha;
+  VkPresentModeKHR present_mode;
   VkSwapchainKHR new_swapchain;
   VkResult res;
   VkDevice device;
@@ -332,6 +401,11 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                         "Vulkan swapchain doesn't do transparency. Using opaque swapchain instead.");
       composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     }
+
+  present_mode = find_best_surface_present_mode (context);
+
+  GDK_DEBUG (VULKAN, "Using surface present mode %s",
+             surface_present_mode_to_string (present_mode));
 
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
@@ -367,7 +441,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 },
                                                 .preTransform = capabilities.currentTransform,
                                                 .compositeAlpha = composite_alpha,
-                                                .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+                                                .presentMode = present_mode,
                                                 .clipped = VK_FALSE,
                                                 .oldSwapchain = priv->swapchain
                                             },
