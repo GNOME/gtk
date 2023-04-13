@@ -817,6 +817,12 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 static void
 gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 {
+  if (self->display_server.egl_window)
+    {
+      gdk_surface_set_egl_native_window (GDK_SURFACE (self), NULL);
+      g_clear_pointer (&self->display_server.egl_window, wl_egl_window_destroy);
+    }
+
   g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
   g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
 
@@ -1052,13 +1058,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
     return;
 
   unmap_popups_for_surface (surface);
-
-  if (impl->display_server.egl_window)
-    {
-      gdk_surface_set_egl_native_window (surface, NULL);
-      wl_egl_window_destroy (impl->display_server.egl_window);
-      impl->display_server.egl_window = NULL;
-    }
 
   impl->awaiting_frame = FALSE;
   if (impl->awaiting_frame_frozen)
