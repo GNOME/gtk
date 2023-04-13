@@ -911,6 +911,17 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 }
 
 static void
+gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
+{
+  g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
+
+  g_clear_pointer (&self->display_server.wl_surface, wl_surface_destroy);
+
+  g_clear_pointer (&self->display_server.outputs, g_slist_free);
+}
+
+static void
 maybe_notify_mapped (GdkSurface *surface)
 {
   if (surface->destroyed)
@@ -1075,13 +1086,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
             impl->initial_configure_received = FALSE;
         }
 
-      g_clear_pointer (&impl->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
-      g_clear_pointer (&impl->display_server.viewport, wp_viewport_destroy);
-
-      g_clear_pointer (&impl->display_server.wl_surface, wl_surface_destroy);
-
-      g_slist_free (impl->display_server.outputs);
-      impl->display_server.outputs = NULL;
+      gdk_wayland_surface_destroy_wl_surface (impl);
     }
 
   impl->has_uncommitted_ack_configure = FALSE;
