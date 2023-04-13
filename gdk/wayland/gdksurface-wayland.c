@@ -198,22 +198,6 @@ gdk_wayland_surface_thaw_state (GdkSurface *surface)
     gdk_wayland_surface_configure (surface);
 }
 
-static void
-gdk_wayland_surface_maybe_resize (GdkSurface               *surface,
-                                  int                       width,
-                                  int                       height,
-                                  const GdkFractionalScale *scale)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (surface->width == width &&
-      surface->height == height &&
-      gdk_fractional_scale_equal (&impl->scale, scale))
-    return;
-
-  gdk_wayland_surface_update_size (surface, width, height, scale);
-}
-
 static inline void
 get_egl_window_size (GdkSurface *surface,
                      int        *width,
@@ -492,9 +476,9 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
     }
 
   /* Notify app that scale changed */
-  gdk_wayland_surface_maybe_resize (surface,
-                                    surface->width, surface->height,
-                                    &GDK_FRACTIONAL_SCALE_INIT_INT (scale));
+  gdk_wayland_surface_update_size (surface,
+                                   surface->width, surface->height,
+                                   &GDK_FRACTIONAL_SCALE_INIT_INT (scale));
 }
 
 GdkSurface *
@@ -842,9 +826,9 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
   GdkSurface *surface = GDK_SURFACE (self);
   
   /* Notify app that scale changed */
-  gdk_wayland_surface_maybe_resize (surface,
-                                    surface->width, surface->height,
-                                    &GDK_FRACTIONAL_SCALE_INIT (scale));
+  gdk_wayland_surface_update_size (surface,
+                                   surface->width, surface->height,
+                                   &GDK_FRACTIONAL_SCALE_INIT (scale));
 }
 
 static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
@@ -1139,7 +1123,7 @@ gdk_wayland_surface_move_resize (GdkSurface *surface,
 
   surface->x = x;
   surface->y = y;
-  gdk_wayland_surface_maybe_resize (surface, width, height, &impl->scale);
+  gdk_wayland_surface_update_size (surface, width, height, &impl->scale);
 }
 
 static void
