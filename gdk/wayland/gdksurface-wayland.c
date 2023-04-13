@@ -205,29 +205,13 @@ gdk_wayland_surface_maybe_resize (GdkSurface               *surface,
                                   const GdkFractionalScale *scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  gboolean hide_temporarily;
 
   if (surface->width == width &&
       surface->height == height &&
       gdk_fractional_scale_equal (&impl->scale, scale))
     return;
 
-  /* For xdg_popup using an xdg_positioner, there is a race condition if
-   * the application tries to change the size after it's mapped, but before
-   * the initial configure is received, so hide and show the surface again
-   * force the new size onto the compositor. See bug #772505.
-   */
-  hide_temporarily = GDK_IS_WAYLAND_POPUP (surface) &&
-                     gdk_surface_get_mapped (surface) &&
-                     !impl->initial_configure_received;
-
-  if (hide_temporarily)
-    gdk_surface_hide (surface);
-
   gdk_wayland_surface_update_size (surface, width, height, scale);
-
-  if (hide_temporarily)
-    gdk_wayland_surface_create_wl_surface (surface);
 }
 
 static inline void
