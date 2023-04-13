@@ -1882,11 +1882,6 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   GdkDragAnim *anim;
   GdkWin32Clipdrop *clipdrop;
   gpointer ddd;
-/*
-  cairo_surface_t *win_surface;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-*/
   guint id;
 
   GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_done: 0x%p %s\n",
@@ -1915,26 +1910,6 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
 
       return;
     }
-
-/*
-  win_surface = _gdk_surface_ref_cairo_surface (drag_win32->drag_surface);
-  surface = gdk_surface_create_similar_surface (drag_win32->drag_surface,
-                                                cairo_surface_get_content (win_surface),
-                                                gdk_surface_get_width (drag_win32->drag_surface),
-                                                gdk_surface_get_height (drag_win32->drag_surface));
-  cr = cairo_create (surface);
-  cairo_set_source_surface (cr, win_surface, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-  cairo_surface_destroy (win_surface);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-
-  gdk_surface_set_background_pattern (drag_win32->drag_surface, pattern);
-
-  cairo_pattern_destroy (pattern);
-  cairo_surface_destroy (surface);
-*/
 
   anim = g_new0 (GdkDragAnim, 1);
   g_set_object (&anim->drag, drag_win32);
