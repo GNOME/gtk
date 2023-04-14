@@ -647,9 +647,12 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 GdkTexture *
 gsk_vulkan_render_download_target (GskVulkanRender *self)
 {
+  GdkTexture *texture;
+
+  texture = gsk_vulkan_image_download (self->target, self->uploader);
   gsk_vulkan_uploader_reset (self->uploader);
 
-  return gsk_vulkan_image_download (self->target, self->uploader);
+  return texture;
 }
 
 static void
