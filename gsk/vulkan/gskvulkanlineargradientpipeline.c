@@ -213,9 +213,9 @@ gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradient
 
 gsize
 gsk_vulkan_linear_gradient_pipeline_draw (GskVulkanLinearGradientPipeline *pipeline,
-                                   VkCommandBuffer            command_buffer,
-                                   gsize                      offset,
-                                   gsize                      n_commands)
+                                          VkCommandBuffer                  command_buffer,
+                                          gsize                            offset,
+                                          gsize                            n_commands)
 {
   vkCmdDraw (command_buffer,
              6, n_commands,
