@@ -116,6 +116,20 @@ save_image (GdkTexture *texture,
 }
 
 static void
+save_node (GskRenderNode *node,
+           const char    *test_name,
+           const char    *extension)
+{
+  char *filename = get_output_file (test_name, ".node", extension);
+  gboolean result;
+
+  g_print ("Storing modified nodes at %s\n", filename);
+  result = gsk_render_node_write_to_file (node, filename, NULL);
+  g_assert_true (result);
+  g_free (filename);
+}
+
+static void
 deserialize_error_func (const GskParseLocation *start,
                         const GskParseLocation *end,
                         const GError           *error,
@@ -278,6 +292,7 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
+          save_node (node2, node_file, "-flipped.node");
           save_image (diff_texture, node_file, "-flipped.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -291,36 +306,55 @@ main (int argc, char **argv)
   if (repeat)
     {
       GskRenderNode *node2;
-      GdkPixbuf *pixbuf, *pixbuf2;
+      GdkPixbuf *pixbuf, *pixbuf2, *pixbuf3;
       int width, height;
       graphene_rect_t node_bounds;
       graphene_rect_t bounds;
+      float offset_x, offset_y;
 
       gsk_render_node_get_bounds (node, &node_bounds);
+
+      if (node_bounds.size.width > 32768. || node_bounds.size.height > 32768.)
+        {
+          g_print ("Avoiding repeat test that exceeds cairo image surface dimensions");
+          exit (77);
+        }
+
       bounds.origin.x = 0.;
       bounds.origin.y = 0.;
       bounds.size.width = 2 * node_bounds.size.width;
       bounds.size.height = 2 * node_bounds.size.height;
 
+      offset_x = floorf (fmodf (node_bounds.origin.x, node_bounds.size.width));
+      offset_y = floorf (fmodf (node_bounds.origin.y, node_bounds.size.height));
+      if (offset_x < 0)
+        offset_x += node_bounds.size.width;
+      if (offset_y < 0)
+        offset_y += node_bounds.size.height;
+
       node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-
       save_image (rendered_texture, node_file, "-repeated.out.png");
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
+
       width = gdk_pixbuf_get_width (pixbuf);
       height = gdk_pixbuf_get_height (pixbuf);
       pixbuf2 = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
                                 gdk_pixbuf_get_has_alpha (pixbuf),
                                 gdk_pixbuf_get_bits_per_sample (pixbuf),
-                                width * 2,
-                                height * 2);
-      gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, 0, 0);
-      gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, width, 0);
-      gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, 0, height);
-      gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, width, height);
+                                width * 3,
+                                height * 3);
 
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+          gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, i * width,  j * height);
+
+      pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width - (int) offset_x, height - (int) offset_y, 2 * width, 2 * height);
+
+      reference_texture = gdk_texture_new_for_pixbuf (pixbuf3);
+
+      g_object_unref (pixbuf3);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
@@ -330,6 +364,7 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
+          save_node (node2, node_file, "-repeated.node");
           save_image (diff_texture, node_file, "-repeated.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -362,6 +397,7 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
+          save_node (node2, node_file, "-rotated.node");
           save_image (diff_texture, node_file, "-rotated.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
