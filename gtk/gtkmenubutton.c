@@ -128,6 +128,7 @@ struct _GtkMenuButton
   gboolean always_show_arrow;
 
   gboolean primary;
+  gboolean can_shrink;
 };
 
 struct _GtkMenuButtonClass
@@ -151,6 +152,7 @@ enum
   PROP_PRIMARY,
   PROP_CHILD,
   PROP_ACTIVE,
+  PROP_CAN_SHRINK,
   LAST_PROP
 };
 
@@ -212,6 +214,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_ACTIVE:
         gtk_menu_button_set_active (self, g_value_get_boolean (value));
         break;
+      case PROP_CAN_SHRINK:
+        gtk_menu_button_set_can_shrink (self, g_value_get_boolean (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -259,6 +264,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_ACTIVE:
         g_value_set_boolean (value, gtk_menu_button_get_active (self));
+        break;
+      case PROP_CAN_SHRINK:
+        g_value_set_boolean (value, gtk_menu_button_get_can_shrink (self));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -531,6 +539,19 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    */
   menu_button_props[PROP_ACTIVE] =
     g_param_spec_boolean ("active", NULL, NULL,
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkMenuButton:can-shrink: (attributes org.gtk.Property.get=gtk_menu_button_get_can_shrink org.gtk.Property.set=gtk_menu_button_set_can_shrink)
+   *
+   * Whether the size of the button can be made smaller than the natural
+   * size of its contents.
+   *
+   * Since: 4.12
+   */
+  menu_button_props[PROP_CAN_SHRINK] =
+    g_param_spec_boolean ("can-shrink", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1150,6 +1171,9 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   gtk_label_set_xalign (GTK_LABEL (label_widget), 0);
   gtk_label_set_use_underline (GTK_LABEL (label_widget),
                                gtk_button_get_use_underline (GTK_BUTTON (menu_button->button)));
+  gtk_label_set_ellipsize (GTK_LABEL (label_widget),
+                           menu_button->can_shrink ? PANGO_ELLIPSIZE_END
+                                                   : PANGO_ELLIPSIZE_NONE);
   gtk_widget_set_hexpand (label_widget, TRUE);
   gtk_widget_set_halign (label_widget, GTK_ALIGN_CENTER);
   arrow = gtk_builtin_icon_new ("arrow");
@@ -1565,4 +1589,60 @@ gtk_menu_button_get_active (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
 
   return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (menu_button->button));
+}
+
+/**
+ * gtk_menu_button_set_can_shrink:
+ * @menu_button: a menu button
+ * @can_shrink: whether the button can shrink
+ *
+ * Sets whether the button size can be smaller than the natural size of
+ * its contents.
+ *
+ * For text buttons, setting @can_shrink to true will ellipsize the label.
+ *
+ * For icon buttons, this function has no effect.
+ *
+ * Since: 4.12
+ */
+void
+gtk_menu_button_set_can_shrink (GtkMenuButton *menu_button,
+                                gboolean       can_shrink)
+{
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  can_shrink = !!can_shrink;
+
+  if (menu_button->can_shrink == can_shrink)
+    return;
+
+  menu_button->can_shrink = can_shrink;
+
+  if (menu_button->label_widget != NULL)
+    {
+      gtk_label_set_ellipsize (GTK_LABEL (menu_button->label_widget),
+                               can_shrink ? PANGO_ELLIPSIZE_END
+                                          : PANGO_ELLIPSIZE_NONE);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CAN_SHRINK]);
+}
+
+/**
+ * gtk_menu_button_get_can_shrink:
+ * @menu_button: a button
+ *
+ * Retrieves whether the button can be smaller than the natural
+ * size of its contents.
+ *
+ * Returns: true if the button can shrink, and false otherwise
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_menu_button_get_can_shrink (GtkMenuButton *menu_button)
+{
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
+
+  return menu_button->can_shrink;
 }

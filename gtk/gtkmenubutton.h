@@ -127,10 +127,17 @@ GDK_AVAILABLE_IN_4_6
 GtkWidget *   gtk_menu_button_get_child   (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_4_10
-void       gtk_menu_button_set_active (GtkMenuButton *menu_button,
+void          gtk_menu_button_set_active (GtkMenuButton *menu_button,
                                        gboolean       active);
 GDK_AVAILABLE_IN_4_10
-gboolean   gtk_menu_button_get_active (GtkMenuButton *menu_button);
+gboolean      gtk_menu_button_get_active (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_4_12
+void          gtk_menu_button_set_can_shrink  (GtkMenuButton *menu_button,
+                                               gboolean       can_shrink);
+GDK_AVAILABLE_IN_4_12
+gboolean      gtk_menu_button_get_can_shrink  (GtkMenuButton *menu_button);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenuButton, g_object_unref)
 
