@@ -538,7 +538,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
    *
    * Emitted when the user activates a child widget in a `GtkFlowBox`.
    *
-   * This can be happen either by clicking or double-clicking,
+   * This can happen either by clicking or double-clicking,
    * or via a keybinding.
    *
    * This is a [keybinding signal](class.SignalAction.html),

@@ -409,7 +409,7 @@ gtk_box_set_spacing (GtkBox *box,
  * gtk_box_get_spacing: (attributes org.gtk.Method.get_property=spacing)
  * @box: a `GtkBox`
  *
- * Gets the value set by gtk_box_set_spacing().
+ * Gets the value set by [method@Gtk.Box.set_spacing].
  *
  * Returns: spacing between children
  */
@@ -458,7 +458,7 @@ gtk_box_set_baseline_position (GtkBox             *box,
  * gtk_box_get_baseline_position: (attributes org.gtk.Method.get_property=baseline-position)
  * @box: a `GtkBox`
  *
- * Gets the value set by gtk_box_set_baseline_position().
+ * Gets the value set by [method@Gtk.Box.set_baseline_position].
  *
  * Returns: the baseline position
  */
