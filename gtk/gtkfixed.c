@@ -311,7 +311,7 @@ gtk_fixed_set_child_transform (GtkFixed     *fixed,
  * @widget: a `GtkWidget`, child of @fixed
  *
  * Retrieves the transformation for @widget set using
- * [method@Gtk.Fixed.set_child_transform].
+ * gtk_fixed_set_child_transform().
  *
  * Returns: (transfer none) (nullable): a `GskTransform`
  */

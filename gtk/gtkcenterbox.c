@@ -497,7 +497,7 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
  * gtk_center_box_get_baseline_position: (attributes org.gtk.Method.get_property=baseline-position)
  * @self: a `GtkCenterBox`
  *
- * Gets the value set by [method@Gtk.CenterBox.set_baseline_position].
+ * Gets the value set by gtk_center_box_set_baseline_position().
  *
  * Returns: the baseline position
  */

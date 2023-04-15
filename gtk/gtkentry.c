@@ -2098,7 +2098,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_invisible_char: (attributes org.gtk.Method.set_property=invisible-char)
+ * gtk_entry_set_invisible_char: (attributes org.gtk.Method.sets_property=invisible-char)
  * @entry: a `GtkEntry`
  * @ch: a Unicode character
  *
@@ -2293,7 +2293,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
  * gtk_entry_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
  * @entry: a `GtkEntry`
  *
- * Retrieves the value set by [method@Gtk.Entry.set_activates_default].
+ * Retrieves the value set by gtk_entry_set_activates_default().
  *
  * Returns: %TRUE if the entry will activate the default widget
  */
@@ -2337,7 +2337,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
  * gtk_entry_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
  * @entry: a `GtkEntry`
  *
- * Gets the value set by [method@Gtk.Entry.set_has_frame].
+ * Gets the value set by gtk_entry_set_has_frame().
  *
  * Returns: whether the entry has a beveled frame
  */
@@ -2377,7 +2377,7 @@ gtk_entry_set_alignment (GtkEntry *entry,
  * gtk_entry_get_alignment:
  * @entry: a `GtkEntry`
  *
- * Gets the value set by [method@Gtk.Entry.set_alignment].
+ * Gets the value set by gtk_entry_set_alignment().
  *
  * See also: [property@Gtk.Editable:xalign]
  *
@@ -3369,7 +3369,7 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
  * @entry: a `GtkEntry`
  *
  * Retrieves the pulse step set with
- * [method@Gtk.Entry.set_progress_pulse_step].
+ * gtk_entry_set_progress_pulse_step().
  *
  * Returns: a fraction from 0.0 to 1.0
  */
@@ -3724,7 +3724,7 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
  * gtk_entry_get_extra_menu: (attributes org.gtk.Method.get_property=extra-menu)
  * @entry: a `GtkEntry`
  *
- * Gets the menu model set with [method@Gtk.Entry.set_extra_menu].
+ * Gets the menu model set with gtk_entry_set_extra_menu().
  *
  * Returns: (transfer none) (nullable): the menu model
  */
