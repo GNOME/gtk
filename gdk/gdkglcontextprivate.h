@@ -100,7 +100,6 @@ typedef struct {
 } GdkGLContextProgram;
 
 typedef struct {
-  guint vertex_array_object;
   guint tmp_framebuffer;
   guint tmp_vertex_buffer;
 
