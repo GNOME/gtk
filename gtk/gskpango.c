@@ -462,7 +462,9 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
  * current node.
  *
  * Note that if the layout does not contain any printable character, then
- * no node will be added to the @snapshot.
+ * current node.
+ *
+ * Note that if the layout does not produce any visible output, then nodes may not be added to the @snapshot.
  **/
 void
 gtk_snapshot_append_layout (GtkSnapshot   *snapshot,

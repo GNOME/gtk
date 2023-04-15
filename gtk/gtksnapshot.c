@@ -300,7 +300,7 @@ gtk_snapshot_new (void)
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
  *
- * See also gtk_snapshot_to_node().
+ * See also [method@Gtk.Snapshot.to_node].
  *
  * Returns: (transfer full) (nullable): a newly-created [class@Gsk.RenderNode]
  */
