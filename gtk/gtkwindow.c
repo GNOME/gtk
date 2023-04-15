@@ -2023,7 +2023,7 @@ gtk_window_root_set_focus (GtkRoot   *root,
   synthesize_focus_change_events (self, old_focus, focus, GTK_CROSSING_FOCUS);
 
   if (focus)
-    gtk_widget_set_has_focus (focus, TRUE);
+    gtk_widget_set_has_focus (focus, priv->is_active);
 
   g_set_object (&priv->focus_widget, focus);
 
