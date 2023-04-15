@@ -109,7 +109,6 @@ struct _GdkDisplay
   guint have_egl_buffer_age : 1;
   guint have_egl_no_config_context : 1;
   guint have_egl_pixel_format_float : 1;
-  guint have_egl_win32_libangle : 1;
 };
 
 struct _GdkDisplayClass

@@ -488,7 +488,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy, 0,
+  gdk_gl_context_get_matching_version (api, legacy,
                                        &min_major, &min_minor);
   gdk_gl_context_get_clipped_version (context, min_major, min_minor,
                                       &major, &minor);

@@ -295,7 +295,6 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
   gdk_gl_context_get_matching_version (api, legacy,
-                                       display->have_egl_win32_libangle,
                                        &min_major, &min_minor);
   gdk_gl_context_get_clipped_version (context,
                                       min_major, min_minor,
@@ -968,7 +967,6 @@ gdk_gl_context_get_forward_compatible (GdkGLContext *context)
 void
 gdk_gl_context_get_matching_version (GdkGLAPI  api,
                                      gboolean  legacy,
-                                     gboolean  win32_libangle,
                                      int      *major,
                                      int      *minor)
 {
@@ -989,16 +987,8 @@ gdk_gl_context_get_matching_version (GdkGLAPI  api,
     }
   else
     {
-      if (win32_libangle)
-        {
-          maj = GDK_GL_MIN_GLES_WIN32_ANGLE_VERSION_MAJOR;
-          min = GDK_GL_MIN_GLES_WIN32_ANGLE_VERSION_MINOR;
-        }
-      else
-        {
-          maj = GDK_GL_MIN_GLES_VERSION_MAJOR;
-          min = GDK_GL_MIN_GLES_VERSION_MINOR;
-        }
+      maj = GDK_GL_MIN_GLES_VERSION_MAJOR;
+      min = GDK_GL_MIN_GLES_VERSION_MINOR;
     }
 
   if (major != NULL)
