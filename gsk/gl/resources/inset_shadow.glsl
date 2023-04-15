@@ -22,6 +22,9 @@ void main() {
   gsk_rounded_rect_transform(outside, u_modelview);
   gsk_rounded_rect_transform(inside, u_modelview);
 
+  gsk_rounded_rect_normalize(outside);
+  gsk_rounded_rect_normalize(inside);
+
   gsk_rounded_rect_encode(outside, transformed_outside_outline);
   gsk_rounded_rect_encode(inside, transformed_inside_outline);
 }

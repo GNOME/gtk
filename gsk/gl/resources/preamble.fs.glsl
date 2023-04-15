@@ -16,11 +16,15 @@ _IN_ vec2 vUv;
 
 GskRoundedRect gsk_decode_rect(_GSK_ROUNDED_RECT_UNIFORM_ r)
 {
+  GskRoundedRect rect;
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  return GskRoundedRect(r[0], r[1], r[2]);
+  rect = GskRoundedRect(r[0], r[1], r[2]);
 #else
-  return r;
+  rect = r;
 #endif
+  gsk_rounded_rect_normalize (rect);
+
+  return rect;
 }
 
 float

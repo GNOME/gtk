@@ -19,6 +19,9 @@ void main() {
   gsk_rounded_rect_transform(outside, u_modelview);
   gsk_rounded_rect_transform(inside, u_modelview);
 
+  gsk_rounded_rect_normalize(outside);
+  gsk_rounded_rect_normalize(inside);
+
   gsk_rounded_rect_encode(outside, transformed_outside_outline);
   gsk_rounded_rect_encode(inside, transformed_inside_outline);
 }
@@ -34,10 +37,9 @@ _IN_ _GSK_ROUNDED_RECT_UNIFORM_ transformed_inside_outline;
 
 void main() {
   vec2 frag = gsk_get_frag_coord();
-
-  float alpha = clamp(gsk_rounded_rect_coverage(gsk_decode_rect(transformed_outside_outline), frag) -
-                      gsk_rounded_rect_coverage(gsk_decode_rect(transformed_inside_outline), frag),
-                      0.0, 1.0);
+  float outer_coverage = gsk_rounded_rect_coverage(gsk_decode_rect(transformed_outside_outline), frag);
+  float inner_coverage = gsk_rounded_rect_coverage(gsk_decode_rect(transformed_inside_outline), frag);
+  float alpha = clamp(outer_coverage - inner_coverage, 0.0, 1.0);
 
   gskSetScaledOutputColor(final_color, alpha);
 }
