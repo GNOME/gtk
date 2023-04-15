@@ -71,7 +71,7 @@ free_changes (gpointer data)
 }
 
 static void
-test_list_list_model (void)
+test_change (void)
 {
   GtkWidget *box;
   GListModel *model;
@@ -111,6 +111,87 @@ test_list_list_model (void)
   g_object_unref (box);
 }
 
+static void
+test_exhaustive (void)
+{
+  GtkBox *box;
+  GListModel *model, *compare;
+  guint i;
+
+  box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  g_object_ref_sink (box);
+
+  model = gtk_widget_observe_children (GTK_WIDGET (box));
+  compare = G_LIST_MODEL (g_list_store_new (GTK_TYPE_WIDGET));
+
+  for (i = 0; i < 500; i++)
+    {
+      switch (g_test_rand_int_range (0, 4))
+      {
+        case 0:
+          /* compare */
+          g_assert_cmpint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare));
+          if (g_list_model_get_n_items (compare) > 0)
+            {
+              guint n = g_list_model_get_n_items (compare);
+              guint step = n == 1 ? 1 : g_test_rand_int_range (1, n);
+              guint j = 0;
+              do
+                {
+                  gpointer o1 = g_list_model_get_item (model, j);
+                  gpointer o2 = g_list_model_get_item (compare, j);
+                  g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
+                  g_object_unref (o1);
+                  g_object_unref (o2);
+                  j = (j + step) % n;
+                }
+              while (j != 0);
+            }
+          break;
+
+        case 1:
+          /* remove a widget */
+          if (g_list_model_get_n_items (compare) > 0)
+            {
+              guint position = g_test_rand_int_range (0, g_list_model_get_n_items (compare));
+              GtkWidget *child = g_list_model_get_item (compare, position);
+              gtk_box_remove (box, child);
+              g_list_store_remove (G_LIST_STORE (compare), position);
+              g_object_unref (child);
+            }
+          break;
+
+        case 2:
+          /* add a widget */
+          {
+            guint position = g_test_rand_int_range (0, g_list_model_get_n_items (compare) + 1);
+            GtkWidget *child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+            GtkWidget *sibling;
+            if (position == 0)
+              sibling = NULL;
+            else
+              sibling = g_list_model_get_item (compare, position - 1);
+            gtk_box_insert_child_after (box, child, sibling);
+            g_list_store_insert (G_LIST_STORE (compare), position, child);
+            g_clear_object (&sibling);
+          }
+          break;
+
+        case 3:
+          /* move a widget (FIXME) */
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+      }
+    }
+
+  g_object_unref (compare);
+  g_object_unref (box);
+  g_object_unref (model);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -120,7 +201,8 @@ main (int argc, char *argv[])
 
   changes_quark = g_quark_from_static_string ("What did I see? Can I believe what I saw?");
 
-  g_test_add_func ("/listlistmodel/change", test_list_list_model);
+  g_test_add_func ("/listlistmodel/change", test_change);
+  g_test_add_func ("/listlistmodel/exhaustive", test_exhaustive);
 
   return g_test_run ();
 }
