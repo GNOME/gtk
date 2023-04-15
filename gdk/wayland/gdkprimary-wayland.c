@@ -99,7 +99,7 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
 
   if (cb->source)
     {
-      GDK_DISPLAY_DEBUG (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD, "%p: Ignoring clipboard offer for self", cb);
+      GDK_DISPLAY_DEBUG (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD, "%p: Ignoring primary offer for self", cb);
       gdk_content_formats_unref (formats);
       g_clear_pointer (&offer, zwp_primary_selection_offer_v1_destroy);
       return;
@@ -111,7 +111,7 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
-      gdk_debug_message ("%p: remote clipboard claim for %s", cb, s);
+      gdk_debug_message ("%p: remote primary claim for %s", cb, s);
       g_free (s);
     }
 #endif
@@ -119,8 +119,7 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
   cb->offer_formats = formats;
   cb->offer = offer;
 
-  gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb),
-                              cb->offer_formats);
+  gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), cb->offer_formats);
 }
 
 static void
@@ -271,6 +270,14 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
 {
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (clipboard);
 
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (clipboard), CLIPBOARD))
+    {
+      char *s = gdk_content_formats_to_string (formats);
+      gdk_debug_message ("%p: claim primary (%s) for %s", cb, local ? "local" : "remote", s);
+      g_free (s);
+    }
+#endif
   if (local)
     {
       GdkWaylandDisplay *wdisplay = GDK_WAYLAND_DISPLAY (gdk_clipboard_get_display (clipboard));
