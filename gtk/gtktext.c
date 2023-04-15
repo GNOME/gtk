@@ -3260,6 +3260,7 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
       gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
       gtk_text_check_cursor_blink (self);
+      gtk_text_update_primary_selection (self);
     }
   else /* Focus out */
     {
@@ -5362,6 +5363,9 @@ gtk_text_update_primary_selection (GtkText *self)
   GdkClipboard *clipboard;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (self)))
+    return;
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
     return;
 
   clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (self));
