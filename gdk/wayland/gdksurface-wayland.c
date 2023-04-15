@@ -832,13 +832,9 @@ gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 }
 
 GdkSurface *
-_gdk_wayland_display_create_surface (GdkDisplay     *display,
-                                     GdkSurfaceType  surface_type,
-                                     GdkSurface     *parent,
-                                     int             x,
-                                     int             y,
-                                     int             width,
-                                     int             height)
+gdk_wayland_display_create_surface (GdkDisplay     *display,
+                                    GdkSurfaceType  surface_type,
+                                    GdkSurface     *parent)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkSurface *surface;
@@ -879,22 +875,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
       g_assert_not_reached ();
       break;
     }
-
-  if (width > 65535)
-    {
-      g_warning ("Native Surfaces wider than 65535 pixels are not supported");
-      width = 65535;
-    }
-  if (height > 65535)
-    {
-      g_warning ("Native Surfaces taller than 65535 pixels are not supported");
-      height = 65535;
-    }
-
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
 
   /* More likely to be right than just assuming 1 */
   if (wl_compositor_get_version (display_wayland->compositor) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)

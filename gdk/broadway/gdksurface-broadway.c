@@ -208,13 +208,9 @@ disconnect_frame_clock (GdkSurface *surface)
 }
 
 GdkSurface *
-_gdk_broadway_display_create_surface (GdkDisplay     *display,
-                                      GdkSurfaceType  surface_type,
-                                      GdkSurface     *parent,
-                                      int             x,
-                                      int             y,
-                                      int             width,
-                                      int             height)
+gdk_broadway_display_create_surface (GdkDisplay     *display,
+                                     GdkSurfaceType  surface_type,
+                                     GdkSurface     *parent)
 {
   GdkBroadwayDisplay *broadway_display;
   GdkFrameClock *frame_clock;
@@ -251,27 +247,22 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   g_object_unref (frame_clock);
 
   surface->parent = parent;
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
   impl = GDK_BROADWAY_SURFACE (surface);
-  impl->root_x = x;
-  impl->root_y = y;
+  impl->root_x = 0;
+  impl->root_y = 0;
   if (parent)
     {
-      impl->root_x += GDK_BROADWAY_SURFACE (parent)->root_x;
-      impl->root_y += GDK_BROADWAY_SURFACE (parent)->root_y;
+      impl->root_x = GDK_BROADWAY_SURFACE (parent)->root_x;
+      impl->root_y = GDK_BROADWAY_SURFACE (parent)->root_y;
     }
 
   impl->id = _gdk_broadway_server_new_surface (broadway_display->server,
                                                impl->root_x,
                                                impl->root_y,
-                                               surface->width,
-                                               surface->height);
+                                               1, 1);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
 
   g_object_ref (surface);
@@ -1108,11 +1099,11 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
   mv_resize->moveresize_emulation_surface =
-      _gdk_broadway_display_create_surface (mv_resize->display,
-                                            GDK_SURFACE_DRAG,
-                                            NULL,
-                                            -100, -100, 1, 1);
+      gdk_broadway_display_create_surface (mv_resize->display,
+                                           GDK_SURFACE_DRAG,
+                                           NULL);
 
+  gdk_broadway_surface_move_resize_internal (mv_resize->moveresize_emulation_surface, TRUE, -100, -100, 1, 1);
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
   seat = gdk_display_get_default_seat (mv_resize->display);

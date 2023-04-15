@@ -382,7 +382,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   drag = GDK_DRAG (drag_wayland);
 
-  drag_wayland->dnd_surface = _gdk_wayland_display_create_surface (display, GDK_SURFACE_DRAG, NULL, 0, 0, 100, 100);
+  drag_wayland->dnd_surface = gdk_wayland_display_create_surface (display, GDK_SURFACE_DRAG, NULL);
   drag_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface);
 
   gdk_wayland_drag_create_data_source (drag);

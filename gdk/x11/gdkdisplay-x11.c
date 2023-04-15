@@ -2753,6 +2753,14 @@ gdk_x11_display_get_screen (GdkDisplay *display)
   return GDK_X11_DISPLAY (display)->screen;
 }
 
+static GdkSurface *
+gdk_x11_display_create_surface (GdkDisplay     *display,
+                                GdkSurfaceType  surface_type,
+                                GdkSurface     *parent)
+{
+  return _gdk_x11_display_create_surface (display, surface_type, parent, 0, 0, 100, 100);
+}
+
 static GdkKeymap *
 gdk_x11_display_get_keymap (GdkDisplay *display)
 {
@@ -3052,7 +3060,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
 G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
-  display_class->create_surface = _gdk_x11_display_create_surface;
+  display_class->create_surface = gdk_x11_display_create_surface;
   display_class->get_keymap = gdk_x11_display_get_keymap;
 
   display_class->init_gl = gdk_x11_display_init_gl;

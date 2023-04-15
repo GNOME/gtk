@@ -987,7 +987,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
 G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_surface = _gdk_wayland_display_create_surface;
+  display_class->create_surface = gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
 
   display_class->init_gl = gdk_wayland_display_init_gl;

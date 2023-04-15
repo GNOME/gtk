@@ -848,16 +848,11 @@ _gdk_surface_update_size (GdkSurface *surface)
 static GdkSurface *
 gdk_surface_new (GdkDisplay     *display,
                  GdkSurfaceType  surface_type,
-                 GdkSurface     *parent,
-                 int             x,
-                 int             y,
-                 int             width,
-                 int             height)
+                 GdkSurface     *parent)
 {
   return gdk_display_create_surface (display,
                                      surface_type,
-                                     parent,
-                                     x, y, width, height);
+                                     parent);
 }
 
 /**
@@ -874,7 +869,7 @@ gdk_surface_new_toplevel (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL,
-                          NULL, 0, 0, 1, 1);
+                          NULL);
 }
 
 /**
@@ -898,7 +893,7 @@ gdk_surface_new_popup (GdkSurface *parent,
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
   surface = gdk_surface_new (parent->display, GDK_SURFACE_POPUP,
-                             parent, 0, 0, 100, 100);
+                             parent);
 
   surface->autohide = autohide;
 

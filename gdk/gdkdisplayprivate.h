@@ -134,15 +134,11 @@ struct _GdkDisplayClass
                                                          const char *startup_id);
   const char *              (*get_startup_notification_id) (GdkDisplay  *display);
 
-  GdkSurface *               (*create_surface) (GdkDisplay     *display,
-                                                GdkSurfaceType  surface_type,
-                                                GdkSurface     *parent,
-                                                int             x,
-                                                int             y,
-                                                int             width,
-                                                int             height);
+  GdkSurface *           (*create_surface)             (GdkDisplay        *display,
+                                                        GdkSurfaceType     surface_type,
+                                                        GdkSurface        *parent);
 
-  GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
+  GdkKeymap *            (*get_keymap)                 (GdkDisplay        *display);
 
   GdkGLContext *         (* init_gl)                   (GdkDisplay        *display,
                                                         GError           **error);
@@ -209,11 +205,7 @@ void                _gdk_display_pause_events         (GdkDisplay       *display
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
 GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display,
                                                        GdkSurfaceType    surface_type,
-                                                       GdkSurface       *parent,
-                                                       int               x,
-                                                       int               y,
-                                                       int               width,
-                                                       int               height);
+                                                       GdkSurface       *parent);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
 

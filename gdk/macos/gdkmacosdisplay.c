@@ -542,11 +542,7 @@ _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
 static GdkSurface *
 gdk_macos_display_create_surface (GdkDisplay     *display,
                                   GdkSurfaceType  surface_type,
-                                  GdkSurface     *parent,
-                                  int             x,
-                                  int             y,
-                                  int             width,
-                                  int             height)
+                                  GdkSurface     *parent)
 {
   GdkMacosDisplay *self = (GdkMacosDisplay *)display;
   GdkMacosSurface *surface;
@@ -554,7 +550,7 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
   g_assert (GDK_IS_MACOS_DISPLAY (self));
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
-  surface = _gdk_macos_surface_new (self, surface_type, parent, x, y, width, height);
+  surface = _gdk_macos_surface_new (self, surface_type, parent, 0, 0, 100, 100);
 
   if (surface != NULL)
     _gdk_macos_display_surface_added (self, surface);

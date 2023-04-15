@@ -488,7 +488,7 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
-  display_class->create_surface = _gdk_broadway_display_create_surface;
+  display_class->create_surface = gdk_broadway_display_create_surface;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
 
   display_class->get_monitors = gdk_broadway_display_get_monitors;

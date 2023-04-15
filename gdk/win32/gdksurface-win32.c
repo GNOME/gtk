@@ -447,25 +447,10 @@ RegisterGdkClass (GdkSurfaceType wtype)
   return klass;
 }
 
-/*
- * Create native windows.
- *
- * With the default Gdk the created windows are mostly toplevel windows.
- *
- * Placement of the window is derived from the passed in window,
- * except for toplevel window where OS/Window Manager placement
- * is used.
- *
- * [1] http://mail.gnome.org/archives/gtk-devel-list/2010-August/msg00214.html
- */
 GdkSurface *
-_gdk_win32_display_create_surface (GdkDisplay     *display,
-                                   GdkSurfaceType  surface_type,
-                                   GdkSurface     *parent,
-                                   int             x,
-                                   int             y,
-                                   int             width,
-                                   int             height)
+gdk_win32_display_create_surface (GdkDisplay     *display,
+                                  GdkSurfaceType  surface_type,
+                                  GdkSurface     *parent)
 {
   HWND hwndNew;
   HANDLE owner;
@@ -477,9 +462,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   GdkSurface *surface;
   const char *title;
   wchar_t *wtitle;
-  int window_width, window_height;
-  int window_x, window_y;
-  int real_x = 0, real_y = 0;
   GdkFrameClock *frame_clock;
 
   g_return_val_if_fail (display == _gdk_display, NULL);
@@ -522,12 +504,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       break;
     }
 
-  surface = GDK_SURFACE (impl);
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
-
   impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   dwExStyle = 0;
@@ -557,32 +533,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       g_assert_not_reached ();
     }
 
-  rect.left = x * impl->surface_scale;
-  rect.top = y * impl->surface_scale;
-  rect.right = rect.left + width * impl->surface_scale;
-  rect.bottom = rect.top + height * impl->surface_scale;
-
-  AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-
-  real_x = x * impl->surface_scale;
-  real_y = y * impl->surface_scale;
-
-  if (surface_type == GDK_SURFACE_TOPLEVEL)
-    {
-      /* We initially place it at default so that we can get the
-         default window positioning if we want */
-      window_x = window_y = CW_USEDEFAULT;
-    }
-  else
-    {
-      /* TEMP: Put these where requested */
-      window_x = real_x;
-      window_y = real_y;
-    }
-
-  window_width = rect.right - rect.left;
-  window_height = rect.bottom - rect.top;
-
   title = get_default_title ();
   if (!title || !*title)
     title = "";
@@ -595,8 +545,8 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			     MAKEINTRESOURCEW (klass),
 			     wtitle,
 			     dwStyle,
-			     window_x, window_y,
-			     window_width, window_height,
+			     CW_USEDEFAULT, CW_USEDEFAULT,
+			     CW_USEDEFAULT, CW_USEDEFAULT,
 			     owner,
 			     NULL,
 			     _gdk_dll_hinstance,
@@ -606,15 +556,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   GetWindowRect (hwndNew, &rect);
   impl->initial_x = rect.left;
   impl->initial_y = rect.top;
-
-  /* Now we know the initial position, move to actually specified position */
-  if (real_x != window_x || real_y != window_y)
-    {
-      API_CALL (SetWindowPos, (hwndNew,
-                SWP_NOZORDER_SPECIFIED,
-                real_x, real_y, 0, 0,
-                SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
-    }
 
   g_object_ref (impl);
   /* Take note: we're inserting a pointer into a heap-allocated
