@@ -3236,10 +3236,10 @@ gtk_label_set_attributes (GtkLabel         *self,
  *
  * This is the [struct@Pango.AttrList] that was set on the label using
  * [method@Gtk.Label.set_attributes], if any. This function does not
- * reflect attributes that come from the labels markup (see
+ * reflect attributes that come from the label's markup (see
  * [method@Gtk.Label.set_markup]). If you want to get the effective
  * attributes for the label, use
- * `pango_layout_get_attribute (gtk_label_get_layout (self))`.
+ * `pango_layout_get_attributes (gtk_label_get_layout (self))`.
  *
  * Returns: (nullable) (transfer none): the attribute list
  */
@@ -3889,7 +3889,7 @@ gtk_label_get_justify (GtkLabel *self)
  * @self: a `GtkLabel`
  * @mode: a `PangoEllipsizeMode`
  *
- * Sets the mode used to ellipsizei the text.
+ * Sets the mode used to ellipsize the text.
  *
  * The text will be ellipsized if there is not enough space
  * to render the entire string.
@@ -5894,7 +5894,7 @@ gtk_label_get_xalign (GtkLabel *self)
 }
 
 /**
- * gtk_label_set_yalign: (attributes org.gtk.Method.get_property=yalign)
+ * gtk_label_set_yalign: (attributes org.gtk.Method.set_property=yalign)
  * @self: a `GtkLabel`
  * @yalign: the new yalign value, between 0 and 1
  *
@@ -5920,7 +5920,7 @@ gtk_label_set_yalign (GtkLabel *self,
 }
 
 /**
- * gtk_label_get_yalign: (attributes org.gtk.Method.set_property=yalign)
+ * gtk_label_get_yalign: (attributes org.gtk.Method.get_property=yalign)
  * @self: a `GtkLabel`
  *
  * Gets the `yalign` of the label.
