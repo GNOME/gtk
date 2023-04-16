@@ -261,6 +261,7 @@ foreach test : focus_chain_tests
       join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
       join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]),
     ],
+    is_parallel: false,
     env: test_env,
     suite: [ 'gtk', 'focus' ],
   )
