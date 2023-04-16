@@ -2098,7 +2098,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_invisible_char: (attributes org.gtk.Method.sets_property=invisible-char)
+ * gtk_entry_set_invisible_char: (attributes org.gtk.Method.set_property=invisible-char)
  * @entry: a `GtkEntry`
  * @ch: a Unicode character
  *
