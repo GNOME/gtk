@@ -632,7 +632,7 @@ gdk_wayland_surface_dispose (GObject *object)
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
       display_wayland->event_queues =
-        g_list_remove (display_wayland->event_queues, surface);
+        g_list_remove (display_wayland->event_queues, impl->event_queue);
       g_clear_pointer (&impl->event_queue, wl_event_queue_destroy);
     }
 
