@@ -1259,26 +1259,35 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 static void
 gdk_wayland_toplevel_finalize (GObject *object)
 {
-  GdkWaylandToplevel *wayland_toplevel;
+  GdkWaylandToplevel *self = GDK_WAYLAND_TOPLEVEL (object);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (object)));
 
-  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (object));
+  display_wayland->toplevels = g_list_remove (display_wayland->toplevels, self);
 
-  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (object);
+  if (gdk_wayland_toplevel_is_exported (self))
+    gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (self));
 
-  if (gdk_wayland_toplevel_is_exported (wayland_toplevel))
-    gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (wayland_toplevel));
+  g_free (self->application.application_id);
+  g_free (self->application.app_menu_path);
+  g_free (self->application.menubar_path);
+  g_free (self->application.window_object_path);
+  g_free (self->application.application_object_path);
+  g_free (self->application.unique_bus_name);
 
-  g_free (wayland_toplevel->application.application_id);
-  g_free (wayland_toplevel->application.app_menu_path);
-  g_free (wayland_toplevel->application.menubar_path);
-  g_free (wayland_toplevel->application.window_object_path);
-  g_free (wayland_toplevel->application.application_object_path);
-  g_free (wayland_toplevel->application.unique_bus_name);
-
-  g_free (wayland_toplevel->title);
-  g_clear_pointer (&wayland_toplevel->shortcuts_inhibitors, g_hash_table_unref);
+  g_free (self->title);
+  g_clear_pointer (&self->shortcuts_inhibitors, g_hash_table_unref);
 
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
+}
+
+static void
+gdk_wayland_toplevel_constructed (GObject *object)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (object)));
+
+  display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, object);
+
+  G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->constructed (object);
 }
 
 static void
@@ -1291,6 +1300,7 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
   object_class->get_property = gdk_wayland_toplevel_get_property;
   object_class->set_property = gdk_wayland_toplevel_set_property;
   object_class->finalize = gdk_wayland_toplevel_finalize;
+  object_class->constructed = gdk_wayland_toplevel_constructed;
 
   surface_class->compute_size = gdk_wayland_toplevel_compute_size;
 

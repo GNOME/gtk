@@ -854,7 +854,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
                               "frame-clock", frame_clock,
                               "title", get_default_title (),
                               NULL);
-      display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
       break;
     case GDK_SURFACE_POPUP:
       g_warn_if_fail (parent != NULL);
@@ -1196,10 +1195,7 @@ static void
 gdk_wayland_surface_destroy (GdkSurface *surface,
                              gboolean    foreign_destroy)
 {
-  GdkWaylandDisplay *display;
   GdkFrameClock *frame_clock;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
 
   /* Wayland surfaces can't be externally destroyed; we may possibly
    * eventually want to use this path at display close-down
@@ -1213,9 +1209,6 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
   frame_clock = gdk_surface_get_frame_clock (surface);
   g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_before_paint, surface);
   g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_after_paint, surface);
-
-  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  display->toplevels = g_list_remove (display->toplevels, surface);
 }
 
 static void
