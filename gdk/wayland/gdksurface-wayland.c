@@ -526,21 +526,6 @@ gdk_wayland_surface_beep (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_constructed (GObject *object)
-{
-  GdkSurface *surface = GDK_SURFACE (object);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-
-  G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->constructed (object);
-
-  impl->event_queue = wl_display_create_queue (display_wayland->wl_display);
-  display_wayland->event_queues = g_list_prepend (display_wayland->event_queues,
-                                                  impl->event_queue);
-}
-
-static void
 gdk_wayland_surface_dispose (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
@@ -815,6 +800,45 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 }
 
 static void
+gdk_wayland_surface_constructed (GObject *object)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+  self->event_queue = wl_display_create_queue (display_wayland->wl_display);
+  display_wayland->event_queues = g_list_prepend (display_wayland->event_queues,
+                                                  self->event_queue);
+
+  /* More likely to be right than just assuming 1 */
+  if (wl_compositor_get_version (display_wayland->compositor) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
+    {
+      GdkMonitor *monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+      if (monitor)
+        {
+          guint32 monitor_scale = gdk_monitor_get_scale_factor (monitor);
+
+          if (monitor_scale != 1)
+            {
+              self->scale = GDK_FRACTIONAL_SCALE_INIT_INT (monitor_scale);
+              self->buffer_scale_dirty = TRUE;
+            }
+
+          g_object_unref (monitor);
+        }
+    }
+
+  gdk_wayland_surface_create_wl_surface (surface);
+
+  g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
+  g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), surface);
+
+  G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->constructed (object);
+}
+
+static void
 gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 {
   if (self->display_server.egl_window)
@@ -836,7 +860,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
                                     GdkSurfaceType  surface_type,
                                     GdkSurface     *parent)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
 
@@ -874,30 +897,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
       g_assert_not_reached ();
       break;
     }
-
-  /* More likely to be right than just assuming 1 */
-  if (wl_compositor_get_version (display_wayland->compositor) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    {
-      GdkMonitor *monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      if (monitor)
-        {
-          GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-          guint32 monitor_scale = gdk_monitor_get_scale_factor (monitor);
-
-          if (monitor_scale != 1)
-            {
-              impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (monitor_scale);
-              impl->buffer_scale_dirty = TRUE;
-            }
-
-          g_object_unref (monitor);
-        }
-    }
-
-  gdk_wayland_surface_create_wl_surface (surface);
-
-  g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
-  g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), surface);
 
   g_object_unref (frame_clock);
 
