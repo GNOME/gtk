@@ -1641,7 +1641,7 @@ test_widget (void)
   builder = builder_new_from_string (buffer, -1, NULL);
   button1 = gtk_builder_get_object (builder, "button1");
 
-  g_assert_true (gtk_widget_has_focus (GTK_WIDGET (button1)));
+  g_assert_true (gtk_widget_is_focus (GTK_WIDGET (button1)));
   window1 = gtk_builder_get_object (builder, "window1");
   gtk_window_destroy (GTK_WINDOW (window1));
 
