@@ -556,7 +556,7 @@ gdk_wayland_surface_dispose (GObject *object)
         GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
 
       display_wayland->event_queues =
-        g_list_remove (display_wayland->event_queues, surface);
+        g_list_remove (display_wayland->event_queues, impl->event_queue);
       g_clear_pointer (&impl->event_queue, wl_event_queue_destroy);
     }
 
@@ -895,8 +895,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   surface->y = y;
   surface->width = width;
   surface->height = height;
-
-  g_object_ref (surface);
 
   /* More likely to be right than just assuming 1 */
   if (wl_compositor_get_version (display_wayland->compositor) >= WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
