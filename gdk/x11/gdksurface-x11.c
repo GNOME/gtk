@@ -1218,9 +1218,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   long xattributes_mask;
   XClassHint *class_hint;
 
-  int abs_x;
-  int abs_y;
-
   display_x11 = GDK_X11_DISPLAY (display);
   x11_screen = GDK_X11_SCREEN (display_x11->screen);
   xparent = GDK_SCREEN_XROOTWIN (x11_screen);
@@ -1309,12 +1306,9 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   impl->unscaled_width = surface->width * impl->surface_scale;
   impl->unscaled_height = surface->height * impl->surface_scale;
 
-  abs_x = 0;
-  abs_y = 0;
-
   impl->xid = XCreateWindow (xdisplay, xparent,
-                             (surface->x + abs_x) * impl->surface_scale,
-                             (surface->y + abs_y) * impl->surface_scale,
+                             surface->x * impl->surface_scale,
+                             surface->y * impl->surface_scale,
                              MAX (1, surface->width * impl->surface_scale),
                              MAX (1, surface->height * impl->surface_scale),
                              0,
