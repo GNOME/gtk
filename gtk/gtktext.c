@@ -320,6 +320,8 @@ static void   gtk_text_get_property         (GObject      *object,
                                              guint         prop_id,
                                              GValue       *value,
                                              GParamSpec   *pspec);
+static void   gtk_text_notify               (GObject      *object,
+                                             GParamSpec   *pspec);
 static void   gtk_text_finalize             (GObject      *object);
 static void   gtk_text_dispose              (GObject      *object);
 
@@ -738,6 +740,7 @@ gtk_text_class_init (GtkTextClass *class)
   gobject_class->finalize = gtk_text_finalize;
   gobject_class->set_property = gtk_text_set_property;
   gobject_class->get_property = gtk_text_get_property;
+  gobject_class->notify = gtk_text_notify;
 
   widget_class->map = gtk_text_map;
   widget_class->unmap = gtk_text_unmap;
@@ -1813,6 +1816,17 @@ gtk_text_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_text_notify (GObject    *object,
+                 GParamSpec *pspec)
+{
+  if (pspec->name == I_("has-focus"))
+    gtk_text_check_cursor_blink (GTK_TEXT (object));
+
+  if (G_OBJECT_CLASS (gtk_text_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_text_parent_class)->notify (object, pspec);
 }
 
 static void
@@ -6455,8 +6469,11 @@ static gboolean
 cursor_blinks (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
 
-  if (gtk_event_controller_focus_is_focus (GTK_EVENT_CONTROLLER_FOCUS (priv->focus_controller)) &&
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)) &&
+      gtk_window_is_active (GTK_WINDOW (root)) &&
+      gtk_event_controller_focus_is_focus (GTK_EVENT_CONTROLLER_FOCUS (priv->focus_controller)) &&
       priv->editable &&
       priv->selection_bound == priv->current_pos)
     {
