@@ -372,7 +372,11 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
       return texture;
     }
 
-  format = gsk_render_node_prefers_high_depth (root) ? GL_RGBA32F : GL_RGBA8;
+  if (gsk_render_node_prefers_high_depth (root) &&
+      gdk_gl_context_check_version (self->context, 3, 0, 3, 0))
+    format = GL_RGBA32F;
+  else 
+    format = GL_RGBA8;
 
   gdk_gl_context_make_current (self->context);
 
