@@ -460,13 +460,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
   wchar_t *wtitle;
   GdkFrameClock *frame_clock;
 
-  g_return_val_if_fail (display == _gdk_display, NULL);
-
-  GDK_NOTE (MISC,
-            g_print ("_gdk_surface_new: %s\n", (surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
-                                                       (surface_type == GDK_SURFACE_DRAG? "TEMP" :
-                                                      (surface_type == GDK_SURFACE_DRAG ? "POPUP" : "???")))));
-
   display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (parent)
@@ -563,14 +556,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
    * so this works out in the end.
    */
   gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
-
-  GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
-			   title,
-			   window_width, window_height,
-			   surface->x,
-			   surface->y,
-			   owner,
-			   hwndNew));
 
   g_free (wtitle);
 
