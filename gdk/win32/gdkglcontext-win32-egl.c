@@ -83,20 +83,13 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkWin32GLContextEGL *context_egl = GDK_WIN32_GL_CONTEXT_EGL (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
-  cairo_rectangle_int_t whole_window;
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->end_frame (draw_context, painted);
 
   gdk_gl_context_make_current (context);
-  whole_window =
-    (GdkRectangle) { 0, 0,
-	                 gdk_surface_get_width (surface),
-					 gdk_surface_get_height (surface)
-                   };
 
   egl_surface = gdk_surface_get_egl_surface (surface);
 
