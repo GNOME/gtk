@@ -212,10 +212,6 @@ gdk_surface_win32_finalize (GObject *object)
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
 
-  g_signal_handlers_disconnect_by_func (GDK_SURFACE (object),
-                                        gdk_win32_toplevel_state_callback,
-                                        NULL);
-
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -607,13 +603,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
   g_object_unref (frame_clock);
   impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
-
-  if (surface_type == GDK_SURFACE_TOPLEVEL)
-    {
-      g_signal_connect (surface, "notify::state",
-                        G_CALLBACK (gdk_win32_toplevel_state_callback),
-                        NULL);
-    }
 
   return surface;
 }
@@ -4765,15 +4754,20 @@ G_DEFINE_TYPE_WITH_CODE (GdkWin32Toplevel, gdk_win32_toplevel, GDK_TYPE_WIN32_SU
                                                 gdk_win32_toplevel_iface_init))
 
 static void
-gdk_win32_toplevel_init (GdkWin32Toplevel *toplevel)
+gdk_win32_toplevel_constructed (GObject *object)
 {
+  g_signal_connect (object, "notify::state",
+                    G_CALLBACK (gdk_win32_toplevel_state_callback),
+                    NULL);
+
+  G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->constructed (object);
 }
 
 static void
 gdk_win32_toplevel_set_property (GObject      *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4832,9 +4826,9 @@ gdk_win32_toplevel_set_property (GObject      *object,
 
 static void
 gdk_win32_toplevel_get_property (GObject    *object,
-                                   guint       prop_id,
-                                   GValue     *value,
-                                   GParamSpec *pspec)
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4884,14 +4878,33 @@ gdk_win32_toplevel_get_property (GObject    *object,
 }
 
 static void
+gdk_win32_toplevel_finalize (GObject *object)
+{
+  GdkWin32Surface *self = GDK_WIN32_SURFACE (object);
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        gdk_win32_toplevel_state_callback,
+                                        NULL);
+
+  G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->finalize (object);
+}
+
+static void
 gdk_win32_toplevel_class_init (GdkWin32ToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_win32_toplevel_constructed;
+  object_class->finalize = gdk_win32_toplevel_finalize;
   object_class->get_property = gdk_win32_toplevel_get_property;
   object_class->set_property = gdk_win32_toplevel_set_property;
 
   gdk_toplevel_install_properties (object_class, 1);
+}
+
+static void
+gdk_win32_toplevel_init (GdkWin32Toplevel *toplevel)
+{
 }
 
 static void
