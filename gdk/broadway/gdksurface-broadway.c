@@ -216,7 +216,6 @@ gdk_broadway_display_create_surface (GdkDisplay     *display,
   GdkFrameClock *frame_clock;
   GdkSurface *surface;
   GdkBroadwaySurface *impl;
-  GType type;
 
   if (parent)
     frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
@@ -226,27 +225,30 @@ gdk_broadway_display_create_surface (GdkDisplay     *display,
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
-      type = GDK_TYPE_BROADWAY_TOPLEVEL;
+      surface = g_object_new (GDK_TYPE_BROADWAY_TOPLEVEL,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
       break;
     case GDK_SURFACE_POPUP:
-      type = GDK_TYPE_BROADWAY_POPUP;
+      surface = g_object_new (GDK_TYPE_BROADWAY_POPUP,
+                              "parent", parent,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
       break;
     case GDK_SURFACE_DRAG:
-      type = GDK_TYPE_BROADWAY_DRAG_SURFACE;
+      surface = g_object_new (GDK_TYPE_BROADWAY_DRAG_SURFACE,
+                              "display", display,
+                              "frame-clock", frame_clock,
+                              NULL);
       break;
     default:
       g_assert_not_reached ();
       break;
     }
 
-  surface = g_object_new (type,
-                          "display", display,
-                          "frame-clock", frame_clock,
-                          NULL);
-
   g_object_unref (frame_clock);
-
-  surface->parent = parent;
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
