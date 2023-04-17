@@ -448,7 +448,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
                                   GdkSurfaceType  surface_type,
                                   GdkSurface     *parent)
 {
-  HWND hwndNew;
   HANDLE owner;
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
@@ -530,19 +529,23 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
 
-  hwndNew = CreateWindowExW (dwExStyle,
-			     MAKEINTRESOURCEW (klass),
-			     wtitle,
-			     dwStyle,
-			     CW_USEDEFAULT, CW_USEDEFAULT,
-			     CW_USEDEFAULT, CW_USEDEFAULT,
-			     owner,
-			     NULL,
-			     _gdk_dll_hinstance,
-			     surface);
-  impl->handle = hwndNew;
+  impl->handle = CreateWindowExW (dwExStyle,
+                                  MAKEINTRESOURCEW (klass),
+                                  wtitle,
+                                  dwStyle,
+                                  CW_USEDEFAULT, CW_USEDEFAULT,
+                                  CW_USEDEFAULT, CW_USEDEFAULT,
+                                  owner,
+                                  NULL,
+                                  _gdk_dll_hinstance,
+                                  surface);
+  if (impl->handle == NULL)
+    {
+      WIN32_API_FAILED ("CreateWindowExW");
+      g_error ("Fatal error: CreateWindowExW failed.");
+    }
 
-  GetWindowRect (hwndNew, &rect);
+  GetWindowRect (impl->handle, &rect);
   impl->initial_x = rect.left;
   impl->initial_y = rect.top;
 
@@ -558,13 +561,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
   gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
 
   g_free (wtitle);
-
-  if (impl->handle == NULL)
-    {
-      WIN32_API_FAILED ("CreateWindowExW");
-      g_object_unref (impl);
-      return NULL;
-    }
 
   gdk_surface_set_egl_native_window (surface, (void *) impl->handle);
 
