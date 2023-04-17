@@ -1260,10 +1260,9 @@ create_drag_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = _gdk_x11_display_create_surface (display,
-                                             GDK_SURFACE_DRAG,
-                                             NULL,
-                                             0, 0, 100, 100);
+  surface = gdk_x11_display_create_surface (display,
+                                            GDK_SURFACE_DRAG,
+                                            NULL);
 
   return surface;
 }
@@ -2001,10 +2000,9 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   display = gdk_surface_get_display (surface);
 
-  ipc_surface = _gdk_x11_display_create_surface (display,
-                                                 GDK_SURFACE_DRAG,
-                                                 NULL,
-                                                 -99, -99, 1, 1);
+  ipc_surface = gdk_x11_display_create_surface (display,
+                                                GDK_SURFACE_DRAG,
+                                                NULL);
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
                                    "surface", ipc_surface,

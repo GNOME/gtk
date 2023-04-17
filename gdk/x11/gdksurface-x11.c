@@ -1197,13 +1197,9 @@ static void gdk_x11_surface_set_type_hint (GdkSurface        *surface,
                                            GdkSurfaceTypeHint hint);
 
 GdkSurface *
-_gdk_x11_display_create_surface (GdkDisplay     *display,
-                                 GdkSurfaceType  surface_type,
-                                 GdkSurface     *parent,
-                                 int             x,
-                                 int             y,
-                                 int             width,
-                                 int             height)
+gdk_x11_display_create_surface (GdkDisplay     *display,
+                                GdkSurfaceType  surface_type,
+                                GdkSurface     *parent)
 {
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
@@ -1255,11 +1251,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   g_object_unref (frame_clock);
 
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
-
   impl = GDK_X11_SURFACE (surface);
   impl->surface_scale = x11_screen->surface_scale;
 
@@ -1292,25 +1283,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
       impl->override_redirect = TRUE;
     }
 
-  if (surface->width * impl->surface_scale > 32767 ||
-      surface->height * impl->surface_scale > 32767)
-    {
-      g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
-
-      if (surface->width * impl->surface_scale > 32767)
-        surface->width = 32767 / impl->surface_scale;
-      if (surface->height  * impl->surface_scale > 32767)
-        surface->height = 32767 /  impl->surface_scale;
-    }
-
-  impl->unscaled_width = surface->width * impl->surface_scale;
-  impl->unscaled_height = surface->height * impl->surface_scale;
-
   impl->xid = XCreateWindow (xdisplay, xparent,
-                             surface->x * impl->surface_scale,
-                             surface->y * impl->surface_scale,
-                             MAX (1, surface->width * impl->surface_scale),
-                             MAX (1, surface->height * impl->surface_scale),
+                             0, 0, 1, 1,
                              0,
                              gdk_x11_display_get_window_depth (display_x11),
                              InputOutput,
@@ -4435,10 +4409,9 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
   mv_resize->moveresize_emulation_surface =
-      _gdk_x11_display_create_surface (mv_resize->display,
-                                       GDK_SURFACE_DRAG,
-                                       NULL,
-                                       -100, -100, 1, 1);
+      gdk_x11_display_create_surface (mv_resize->display,
+                                      GDK_SURFACE_DRAG,
+                                      NULL);
 
   gdk_surface_set_is_mapped (mv_resize->moveresize_emulation_surface, TRUE);
   gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);

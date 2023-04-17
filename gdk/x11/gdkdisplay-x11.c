@@ -1391,11 +1391,9 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
 
   gdk_event_init (display);
 
-  self->leader_gdk_surface =
-      _gdk_x11_display_create_surface (display,
-                                       GDK_SURFACE_DRAG,
-                                       NULL,
-                                       -100, -100, 1, 1);
+  self->leader_gdk_surface = gdk_x11_display_create_surface (display,
+                                                             GDK_SURFACE_DRAG,
+                                                             NULL);
 
   (_gdk_x11_surface_get_toplevel (self->leader_gdk_surface))->is_leader = TRUE;
   self->leader_window = GDK_SURFACE_XID (self->leader_gdk_surface);
@@ -2751,14 +2749,6 @@ GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
 {
   return GDK_X11_DISPLAY (display)->screen;
-}
-
-static GdkSurface *
-gdk_x11_display_create_surface (GdkDisplay     *display,
-                                GdkSurfaceType  surface_type,
-                                GdkSurface     *parent)
-{
-  return _gdk_x11_display_create_surface (display, surface_type, parent, 0, 0, 100, 100);
 }
 
 static GdkKeymap *
