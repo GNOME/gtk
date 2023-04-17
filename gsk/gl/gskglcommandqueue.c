@@ -1429,28 +1429,44 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
 static GdkMemoryFormat
 memory_format_gl_format (GdkMemoryFormat  data_format,
                          gboolean         use_es,
+                         guint            major,
+                         guint            minor,
                          guint           *gl_internalformat,
                          guint           *gl_format,
                          guint           *gl_type)
 {
+  if (gdk_memory_format_gl_format (data_format,
+                                   use_es,
+                                   major,
+                                   minor,
+                                   gl_internalformat,
+                                   gl_format,
+                                   gl_type))
+    return data_format;
+
+  if (gdk_memory_format_prefers_high_depth (data_format))
+    {
+      data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      if (gdk_memory_format_gl_format (data_format,
+                                       use_es,
+                                       major,
+                                       minor,
+                                       gl_internalformat,
+                                       gl_format,
+                                       gl_type))
+        return data_format;
+    }
+
+  data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
   if (!gdk_memory_format_gl_format (data_format,
                                     use_es,
+                                    major,
+                                    minor,
                                     gl_internalformat,
                                     gl_format,
                                     gl_type))
     {
-      if (gdk_memory_format_prefers_high_depth (data_format))
-        data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-      else
-        data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      if (!gdk_memory_format_gl_format (data_format,
-                                        use_es,
-                                        gl_internalformat,
-                                        gl_format,
-                                        gl_type))
-        {
-          g_assert_not_reached ();
-        }
+      g_assert_not_reached ();
     }
 
   return data_format;
@@ -1462,7 +1478,6 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                               int                x,
                                               int                y)
 {
-  GdkGLContext *context;
   const guchar *data;
   gsize stride;
   GBytes *bytes;
@@ -1474,15 +1489,18 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   GLenum gl_type;
   gsize bpp;
   gboolean use_es;
+  int major, minor;
 
-  context = gdk_gl_context_get_current ();
-  use_es = gdk_gl_context_get_use_es (context);
+  use_es = gdk_gl_context_get_use_es (self->context);
+  gdk_gl_context_get_version (self->context, &major, &minor);
   data_format = gdk_texture_get_format (texture);
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
   data_format = memory_format_gl_format (data_format,
                                          use_es,
+                                         major,
+                                         minor,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type);
@@ -1504,7 +1522,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
       glTexSubImage2D (GL_TEXTURE_2D, 0, x, y, width, height, gl_format, gl_type, data);
     }
   else if (stride % bpp == 0 &&
-           (gdk_gl_context_check_version (context, 0, 0, 3, 0) || gdk_gl_context_has_unpack_subimage (context)))
+           (gdk_gl_context_check_version (self->context, 0, 0, 3, 0) || gdk_gl_context_has_unpack_subimage (self->context)))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
@@ -1536,6 +1554,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   GLenum gl_type;
   gboolean use_es;
   int texture_id;
+  int major, minor;
 
   g_assert (GSK_IS_GL_COMMAND_QUEUE (self));
 
@@ -1568,10 +1587,13 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
   /* Initialize the texture */
-  use_es = gdk_gl_context_get_use_es (gdk_gl_context_get_current ());
+  use_es = gdk_gl_context_get_use_es (self->context);
+  gdk_gl_context_get_version (self->context, &major, &minor);
   data_format = gdk_texture_get_format (chunks[0].texture);
   memory_format_gl_format (data_format,
                            use_es,
+                           major,
+                           minor,
                            &gl_internalformat,
                            &gl_format,
                            &gl_type);

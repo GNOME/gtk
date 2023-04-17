@@ -131,6 +131,8 @@ struct _Download
 
 static gboolean
 gdk_gl_texture_find_format (gboolean         use_es,
+                            guint            gl_major,
+                            guint            gl_minor,
                             GLint            gl_format,
                             GLint            gl_type,
                             GdkMemoryFormat *out_format)
@@ -141,7 +143,7 @@ gdk_gl_texture_find_format (gboolean         use_es,
     {
       GLenum q_internal_format, q_format, q_type;
 
-      if (!gdk_memory_format_gl_format (format, use_es, &q_internal_format, &q_format, &q_type))
+      if (!gdk_memory_format_gl_format (format, use_es, gl_major, gl_minor, &q_internal_format, &q_format, &q_type))
         continue;
 
       if (q_format != gl_format || q_type != gl_type)
@@ -163,12 +165,14 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   gsize expected_stride;
   Download *download = download_;
   GLenum gl_internal_format, gl_format, gl_type;
+  int major, minor;
 
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
+  gdk_gl_context_get_version (context, &major, &minor);
 
   if (download->stride == expected_stride &&
       !gdk_gl_context_get_use_es (context) &&
-      gdk_memory_format_gl_format (download->format, TRUE, &gl_internal_format, &gl_format, &gl_type))
+      gdk_memory_format_gl_format (download->format, TRUE, major, minor, &gl_internal_format, &gl_format, &gl_type))
     {
       glGetTexImage (GL_TEXTURE_2D,
                      0,
@@ -187,9 +191,10 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
       glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
       if (gdk_gl_context_check_version (context, 4, 3, 3, 1))
         {
+          gdk_gl_context_get_version (context, &major, &minor);
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
-          if (!gdk_gl_texture_find_format (gdk_gl_context_get_use_es (context), gl_read_format, gl_read_type, &actual_format))
+          if (!gdk_gl_texture_find_format (gdk_gl_context_get_use_es (context), major, minor, gl_read_format, gl_read_type, &actual_format))
             actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
         }
       else
