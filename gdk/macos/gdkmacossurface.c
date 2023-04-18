@@ -527,6 +527,9 @@ gdk_macos_surface_constructed (GObject *object)
                                G_CONNECT_SWAPPED);
     }
 
+  gdk_surface_freeze_updates (GDK_SURFACE (self));
+  _gdk_macos_surface_monitor_changed (self);
+
   if (self->window != NULL)
     _gdk_macos_surface_configure (self);
 }
@@ -612,13 +615,9 @@ gdk_macos_surface_init (GdkMacosSurface *self)
 }
 
 GdkMacosSurface *
-_gdk_macos_surface_new (GdkMacosDisplay   *display,
-                        GdkSurfaceType     surface_type,
-                        GdkSurface        *parent,
-                        int                x,
-                        int                y,
-                        int                width,
-                        int                height)
+_gdk_macos_surface_new (GdkMacosDisplay *display,
+                        GdkSurfaceType   surface_type,
+                        GdkSurface      *parent)
 {
   GdkFrameClock *frame_clock;
   GdkMacosSurface *ret;
@@ -647,12 +646,6 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
     default:
       g_warn_if_reached ();
       ret = NULL;
-    }
-
-  if (ret != NULL)
-    {
-      gdk_surface_freeze_updates (GDK_SURFACE (ret));
-      _gdk_macos_surface_monitor_changed (ret);
     }
 
   g_object_unref (frame_clock);
