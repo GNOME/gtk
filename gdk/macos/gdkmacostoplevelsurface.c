@@ -650,11 +650,7 @@ _gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
 
 GdkMacosSurface *
 _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
-                                 GdkFrameClock   *frame_clock,
-                                 int              x,
-                                 int              y,
-                                 int              width,
-                                 int              height)
+                                 GdkFrameClock   *frame_clock)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
@@ -675,11 +671,11 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
                 NSWindowStyleMaskMiniaturizable |
                 NSWindowStyleMaskResizable);
 
-  _gdk_macos_display_to_display_coords (display, x, y + height, &nx, &ny);
+  _gdk_macos_display_to_display_coords (display, 0, 100, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
   visible_frame = [screen visibleFrame];
-  content_rect = NSMakeRect (nx - visible_frame.origin.x, ny - visible_frame.origin.y, width, height);
+  content_rect = NSMakeRect (nx - visible_frame.origin.x, ny - visible_frame.origin.y, 100, 100);
   window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
                                              styleMask:style_mask
                                                backing:NSBackingStoreBuffered

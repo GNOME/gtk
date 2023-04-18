@@ -306,11 +306,7 @@ _gdk_macos_popup_surface_init (GdkMacosPopupSurface *self)
 GdkMacosSurface *
 _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
                               GdkSurface      *parent,
-                              GdkFrameClock   *frame_clock,
-                              int              x,
-                              int              y,
-                              int              width,
-                              int              height)
+                              GdkFrameClock   *frame_clock)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
@@ -329,13 +325,13 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
 
   style_mask = NSWindowStyleMaskBorderless;
 
-  _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
+  _gdk_macos_display_to_display_coords (display, 0, 0, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
   screen_rect = [screen frame];
   nx -= screen_rect.origin.x;
   ny -= screen_rect.origin.y;
-  content_rect = NSMakeRect (nx, ny - height, width, height);
+  content_rect = NSMakeRect (nx, ny - 100, 100, 100);
 
   window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
                                              styleMask:style_mask

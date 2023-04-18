@@ -630,11 +630,11 @@ _gdk_macos_surface_new (GdkMacosDisplay *display,
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
-      ret = _gdk_macos_toplevel_surface_new (display, frame_clock, x, y, width, height);
+      ret = _gdk_macos_toplevel_surface_new (display, frame_clock);
       break;
 
     case GDK_SURFACE_POPUP:
-      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock, x, y, width, height);
+      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock);
       break;
 
     case GDK_SURFACE_DRAG:
