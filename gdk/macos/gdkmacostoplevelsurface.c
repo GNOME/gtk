@@ -650,7 +650,6 @@ _gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
 
 GdkMacosSurface *
 _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
-                                 GdkSurface      *parent,
                                  GdkFrameClock   *frame_clock,
                                  int              x,
                                  int              y,
@@ -670,18 +669,11 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
   g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
-  g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
 
   style_mask = (NSWindowStyleMaskTitled |
                 NSWindowStyleMaskClosable |
                 NSWindowStyleMaskMiniaturizable |
                 NSWindowStyleMaskResizable);
-
-  if (parent != NULL)
-    {
-      x += GDK_MACOS_SURFACE (parent)->root_x;
-      y += GDK_MACOS_SURFACE (parent)->root_y;
-    }
 
   _gdk_macos_display_to_display_coords (display, x, y + height, &nx, &ny);
 
