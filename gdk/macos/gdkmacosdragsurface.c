@@ -25,6 +25,8 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosutils-private.h"
 
+#include "gdk/gdkframeclockidleprivate.h"
+
 struct _GdkMacosDragSurface
 {
   GdkMacosSurface parent_instance;
@@ -73,7 +75,6 @@ _gdk_macos_drag_surface_init (GdkMacosDragSurface *self)
 
 GdkMacosSurface *
 _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
-                             GdkFrameClock   *frame_clock,
                              int              x,
                              int              y,
                              int              width,
@@ -81,6 +82,7 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
+  GdkFrameClock *frame_clock;
   GdkMacosWindow *window;
   GdkMacosSurface *self;
   NSScreen *screen;
@@ -113,11 +115,15 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
 
+  frame_clock = _gdk_frame_clock_idle_new ();
+
   self = g_object_new (GDK_TYPE_MACOS_DRAG_SURFACE,
                        "display", display,
                        "frame-clock", frame_clock,
                        "native", window,
                        NULL);
+
+  g_object_unref (frame_clock);
 
   GDK_END_MACOS_ALLOC_POOL;
 

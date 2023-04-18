@@ -429,10 +429,8 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
 
   gdk_macos_device_query_state (device, surface, NULL, &px, &py, NULL);
   _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
-  drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
-                                         GDK_SURFACE_DRAG,
-                                         NULL,
-                                         sx, sy, 1, 1);
+  drag_surface = _gdk_macos_drag_surface_new (GDK_MACOS_DISPLAY (surface->display),
+                                              sx, sy, 1, 1);
   drag = g_object_new (GDK_TYPE_MACOS_DRAG,
                        "drag-surface", drag_surface,
                        "surface", surface,
@@ -640,9 +638,6 @@ _gdk_macos_surface_new (GdkMacosDisplay *display,
       break;
 
     case GDK_SURFACE_DRAG:
-      ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y, width, height);
-      break;
-
     default:
       g_warn_if_reached ();
       ret = NULL;
