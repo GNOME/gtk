@@ -274,12 +274,12 @@ gdk_api_to_egl_api (GdkGLAPI api)
     }
 }
 
-static GdkGLAPI
-gdk_gl_context_create_egl_context (GdkGLContext *context,
-                                   GdkGLAPI      api,
-                                   gboolean      legacy)
+static EGLContext
+gdk_gl_context_create_actual_egl_context (GdkGLContext *context,
+                                          GdkGLAPI      api,
+                                          gboolean      legacy,
+                                          gboolean      use_es3)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   GdkGLContext *share = gdk_display_get_gl_context (display);
@@ -289,10 +289,6 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   EGLint context_attribs[N_EGL_ATTRS], i = 0, flags = 0;
   gboolean debug_bit, forward_bit;
   int min_major, min_minor, major = 0, minor = 0;
-  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-
-  if (!gdk_gl_context_is_api_allowed (context, api, NULL))
-    return 0;
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
@@ -303,7 +299,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
                                       &major, &minor);
 
   if (!eglBindAPI (gdk_api_to_egl_api (api)))
-    return 0;
+    return NULL;
 
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   forward_bit = gdk_gl_context_get_forward_compatible (context);
@@ -353,8 +349,27 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
                           share ? share_priv->egl_context : EGL_NO_CONTEXT,
                           context_attribs);
 
+  return ctx;
+}
+
+static GdkGLAPI
+gdk_gl_context_create_egl_context (GdkGLContext *context,
+                                   GdkGLAPI      api,
+                                   gboolean      legacy)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  EGLContext ctx;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+
+  if (!gdk_gl_context_is_api_allowed (context, api, NULL))
+    return 0;
+
+  ctx = gdk_gl_context_create_actual_egl_context (context, api, legacy, FALSE);
+
   if (ctx == NULL)
-      return 0;
+    return 0;
 
   GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
 
