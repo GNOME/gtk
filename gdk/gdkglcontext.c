@@ -121,6 +121,7 @@ typedef struct {
 #ifdef HAVE_EGL
   EGLContext egl_context;
   EGLBoolean (*eglSwapBuffersWithDamage) (EGLDisplay, EGLSurface, const EGLint *, EGLint);
+  guint use_es3 : 1;
 #endif
 } GdkGLContextPrivate;
 
@@ -361,13 +362,94 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  GdkGLContext *share = gdk_display_get_gl_context (display);
+  GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
   EGLContext ctx;
+  gboolean use_es3 = FALSE;
+  gboolean share_has_half_float = FALSE;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   if (!gdk_gl_context_is_api_allowed (context, api, NULL))
     return 0;
 
-  ctx = gdk_gl_context_create_actual_egl_context (context, api, legacy, FALSE);
+  /*
+   * The new context must use an OpenGL/ES 3.0 context if the
+   * shared context is an OpenGL/ES 3.0 context
+   */
+  use_es3 = share != NULL ? share_priv->use_es3 : FALSE;
+  share_has_half_float = share != NULL ? share_priv->has_half_float : FALSE;
+
+  ctx = gdk_gl_context_create_actual_egl_context (context,
+                                                  api,
+                                                  legacy,
+                                                  use_es3);
+
+  /*
+   * If we are using an OpenGL/ES 2.0 context, check whether
+   * it supports the needed extension(s) if not already done so
+   */
+  if (api == GDK_GL_API_GLES &&
+      !share_has_half_float &&
+      !use_es3 &&
+      ctx != NULL)
+    {
+      gboolean surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+      EGLContext ctx_es3 = NULL;
+      gboolean destroy_es2_ctx = FALSE;
+      EGLSurface egl_surface;
+
+      if (!surfaceless)
+        egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
+      else
+        egl_surface = EGL_NO_SURFACE;
+
+      if (eglMakeCurrent (egl_display,
+                          egl_surface,
+                          egl_surface,
+                          ctx))
+        {
+          /*
+           * If we don't support the needed extension(s) in the OpenGL/ES 2.0 context,
+           * destroy the context and re-create an OpenGL/ES 3.0 context, and use it
+           * if it is successfully created.
+           */
+          if (epoxy_gl_version () < 30 &&
+              !epoxy_has_gl_extension ("OES_vertex_half_float"))
+            {
+              GDK_DISPLAY_DEBUG (display, OPENGL,
+                                 "No OES_vertex_half_float extension found.\n"
+                                 "Creating new OpenGL/ES 3.0 context to replace OpenGL/ES 2.0 context...");
+              ctx_es3 = gdk_gl_context_create_actual_egl_context (context,
+                                                                  api,
+                                                                  legacy,
+                                                                  TRUE);
+
+              if (ctx_es3 != NULL)
+                use_es3 = TRUE;
+
+              destroy_es2_ctx = TRUE;
+            }
+          else
+            priv->has_half_float = TRUE;
+
+          eglMakeCurrent (egl_display,
+                          EGL_NO_SURFACE,
+                          EGL_NO_SURFACE,
+                          EGL_NO_CONTEXT);
+        }
+      else
+        /* no point going on if the EGLContext isn't working */
+        destroy_es2_ctx = TRUE;
+
+      if (destroy_es2_ctx)
+        {
+          eglDestroyContext (egl_display, ctx);
+          ctx = NULL;
+        }
+
+      if (use_es3)
+        ctx = ctx_es3;
+    }
 
   if (ctx == NULL)
     return 0;
@@ -375,6 +457,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
 
   priv->egl_context = ctx;
+  priv->use_es3 = use_es3;
   gdk_gl_context_set_is_legacy (context, legacy);
 
   if (epoxy_has_egl_extension (egl_display, "EGL_KHR_swap_buffers_with_damage"))
@@ -1579,8 +1662,11 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
 
-  priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
-                         epoxy_has_gl_extension ("OES_vertex_half_float");
+  if (!priv->has_half_float)
+    {
+      priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+                             epoxy_has_gl_extension ("OES_vertex_half_float");
+    }
 
 #ifdef G_ENABLE_DEBUG
   {
