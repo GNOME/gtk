@@ -129,6 +129,7 @@ if have_vulkan
     'vulkan/gskvulkanrenderer.c',
     'vulkan/gskvulkanrenderpass.c',
     'vulkan/gskvulkanshader.c',
+    'vulkan/gskvulkanshadowpipeline.c',
   ])
 
   subdir('vulkan/resources')

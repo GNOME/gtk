@@ -51,6 +51,7 @@ typedef enum {
   GSK_VULKAN_OP_REPEAT,
   GSK_VULKAN_OP_CROSS_FADE,
   GSK_VULKAN_OP_BLEND_MODE,
+  GSK_VULKAN_OP_SHADOW,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
   GSK_VULKAN_OP_COLOR_TEXT,
@@ -711,6 +712,34 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass          *self
 }
 
 static inline gboolean
+gsk_vulkan_render_pass_add_shadow_node (GskVulkanRenderPass          *self,
+                                        GskVulkanRender              *render,
+                                        const GskVulkanPushConstants *constants,
+                                        GskRenderNode                *node)
+{
+  GskVulkanPipelineType pipeline_type;
+  GskVulkanOp op = {
+    .render.node = node
+  };
+
+  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+    pipeline_type = GSK_VULKAN_PIPELINE_SHADOW;
+  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+    pipeline_type = GSK_VULKAN_PIPELINE_SHADOW_CLIP;
+  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+    pipeline_type = GSK_VULKAN_PIPELINE_SHADOW_CLIP_ROUNDED;
+  else
+    FALLBACK ("Shadow nodes can't deal with clip type %u", constants->clip.type);
+
+
+  op.type = GSK_VULKAN_OP_SHADOW;
+  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  g_array_append_val (self->render_ops, op);
+
+  return TRUE;
+}
+
+static inline gboolean
 gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
                                         GskVulkanRender              *render,
                                         const GskVulkanPushConstants *constants,
@@ -957,7 +986,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[N_RENDER_NODES] = {
   [GSK_REPEAT_NODE] = gsk_vulkan_render_pass_add_repeat_node,
   [GSK_CLIP_NODE] = gsk_vulkan_render_pass_add_clip_node,
   [GSK_ROUNDED_CLIP_NODE] = gsk_vulkan_render_pass_add_rounded_clip_node,
-  [GSK_SHADOW_NODE] = NULL,
+  [GSK_SHADOW_NODE] = gsk_vulkan_render_pass_add_shadow_node,
   [GSK_BLEND_NODE] = gsk_vulkan_render_pass_add_blend_node,
   [GSK_CROSS_FADE_NODE] = gsk_vulkan_render_pass_add_cross_fade_node,
   [GSK_TEXT_NODE] = gsk_vulkan_render_pass_add_text_node,
@@ -1727,6 +1756,21 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
           }
           break;
 
+        case GSK_VULKAN_OP_SHADOW:
+          {
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_shadow_pipeline_collect_vertex_data (GSK_VULKAN_SHADOW_PIPELINE (op->render.pipeline),
+                                                            data + n_bytes + offset,
+                                                            gsk_shadow_pipeline_get (op->render.node),
+                                                            gsk_outset_shadow_node_get_color (op->render.node),
+                                                            gsk_outset_shadow_node_get_dx (op->render.node),
+                                                            gsk_outset_shadow_node_get_dy (op->render.node),
+                                                            gsk_outset_shadow_node_get_spread (op->render.node),
+                                                            gsk_outset_shadow_node_get_blur_radius (op->render.node));
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
         case GSK_VULKAN_OP_CROSS_FADE:
           {
             op->render.vertex_offset = offset + n_bytes;
@@ -1836,6 +1880,13 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
+          if (op->render.source && op->render.source2)
+            {
+              op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
+              op->render.descriptor_set_index2 = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source2, FALSE);
+            }
+          break;
+        case GSK_VULKAN_OP_SHADOW:
           if (op->render.source && op->render.source2)
             {
               op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
@@ -2053,6 +2104,41 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           current_draw_index += gsk_vulkan_blur_pipeline_draw (GSK_VULKAN_BLUR_PIPELINE (current_pipeline),
                                                                command_buffer,
                                                                current_draw_index, 1);
+          break;
+
+        case GSK_VULKAN_OP_SHADOW:
+          if (!op->render.source)
+            continue;
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                        gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+
+          vkCmdBindDescriptorSets (command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   0,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                     gsk_vulkan_render_get_descriptor_set (render, op->render.descriptor_set_index)
+                                   },
+                                   0,
+                                   NULL);
+
+          current_draw_index += gsk_vulkan_shadow_pipeline_draw (GSK_VULKAN_SHADOW_PIPELINE (current_pipeline),
+                                                                 command_buffer,
+                                                                 current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_COLOR:
