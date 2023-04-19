@@ -293,7 +293,8 @@ gdk_gl_context_create_actual_egl_context (GdkGLContext *context,
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
   gdk_gl_context_get_matching_version (api, legacy,
-                                       &min_major, &min_minor);
+                                       &min_major, &min_minor,
+                                       use_es3);
   gdk_gl_context_get_clipped_version (context,
                                       min_major, min_minor,
                                       &major, &minor);
@@ -1004,7 +1005,8 @@ void
 gdk_gl_context_get_matching_version (GdkGLAPI  api,
                                      gboolean  legacy,
                                      int      *major,
-                                     int      *minor)
+                                     int      *minor,
+                                     gboolean  use_es3)
 {
   int maj, min;
 
@@ -1023,8 +1025,16 @@ gdk_gl_context_get_matching_version (GdkGLAPI  api,
     }
   else
     {
-      maj = GDK_GL_MIN_GLES_VERSION_MAJOR;
-      min = GDK_GL_MIN_GLES_VERSION_MINOR;
+      if (use_es3)
+        {
+          maj = GDK_GL_MIN_GLES3_VERSION_MAJOR;
+          min = GDK_GL_MIN_GLES3_VERSION_MINOR;
+        }
+      else
+        {
+          maj = GDK_GL_MIN_GLES_VERSION_MAJOR;
+          min = GDK_GL_MIN_GLES_VERSION_MINOR;
+        }
     }
 
   if (major != NULL)

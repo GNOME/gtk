@@ -44,6 +44,8 @@ G_BEGIN_DECLS
 #define GDK_GL_MIN_GL_LEGACY_VERSION_MINOR (0)
 #define GDK_GL_MIN_GLES_VERSION_MAJOR (2)
 #define GDK_GL_MIN_GLES_VERSION_MINOR (0)
+#define GDK_GL_MIN_GLES3_VERSION_MAJOR (3)
+#define GDK_GL_MIN_GLES3_VERSION_MINOR (0)
 
 typedef enum {
   GDK_GL_NONE = 0,
@@ -137,7 +139,8 @@ void                    gdk_gl_context_get_clipped_version      (GdkGLContext   
 void                    gdk_gl_context_get_matching_version     (GdkGLAPI         api,
                                                                  gboolean         legacy,
                                                                  int             *major,
-                                                                 int             *minor);
+                                                                 int             *minor,
+                                                                 gboolean         use_es3);
 
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
