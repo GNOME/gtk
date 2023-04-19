@@ -255,7 +255,7 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 static inline gboolean G_GNUC_PURE
 node_supports_2d_transform (const GskRenderNode *node)
 {
-  switch ((int)gsk_render_node_get_node_type (node))
+  switch (gsk_render_node_get_node_type (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -273,6 +273,7 @@ node_supports_2d_transform (const GskRenderNode *node)
     case GSK_CAIRO_NODE:
     case GSK_BLEND_NODE:
     case GSK_BLUR_NODE:
+    case GSK_MASK_NODE:
       return TRUE;
 
     case GSK_SHADOW_NODE:
@@ -289,8 +290,18 @@ node_supports_2d_transform (const GskRenderNode *node)
         }
       return TRUE;
 
-    default:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_GL_SHADER_NODE:
       return FALSE;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -304,7 +315,7 @@ node_supports_transform (const GskRenderNode *node)
    * opacity or color matrix.
    */
 
-  switch ((int)gsk_render_node_get_node_type (node))
+  switch (gsk_render_node_get_node_type (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -325,8 +336,25 @@ node_supports_transform (const GskRenderNode *node)
     case GSK_TRANSFORM_NODE:
       return node_supports_transform (gsk_transform_node_get_child (node));
 
-    default:
+    case GSK_CONTAINER_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
       return FALSE;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
     }
 }
 
