@@ -272,6 +272,7 @@ node_supports_2d_transform (const GskRenderNode *node)
     case GSK_CAIRO_NODE:
     case GSK_BLEND_NODE:
     case GSK_BLUR_NODE:
+    case GSK_MASK_NODE:
       return TRUE;
 
     case GSK_SHADOW_NODE:
