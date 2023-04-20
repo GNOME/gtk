@@ -115,9 +115,6 @@ static void gdk_surface_get_property (GObject      *object,
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 
-static void gdk_surface_set_frame_clock (GdkSurface      *surface,
-                                         GdkFrameClock  *clock);
-
 static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
                                              gboolean    is_mapped);
 
@@ -497,10 +494,21 @@ gdk_surface_real_get_scale (GdkSurface *surface)
 }
 
 static void
+gdk_surface_constructed (GObject *object)
+{
+  G_GNUC_UNUSED GdkSurface *surface = GDK_SURFACE (object);
+
+  g_assert (surface->frame_clock != NULL);
+
+  G_OBJECT_CLASS (gdk_surface_parent_class)->constructed (object);
+}
+
+static void
 gdk_surface_class_init (GdkSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gdk_surface_constructed;
   object_class->finalize = gdk_surface_finalize;
   object_class->set_property = gdk_surface_set_property;
   object_class->get_property = gdk_surface_get_property;
@@ -2452,7 +2460,7 @@ gdk_surface_resume_events (GdkFrameClock *clock,
     }
 }
 
-static void
+void
 gdk_surface_set_frame_clock (GdkSurface     *surface,
                              GdkFrameClock *clock)
 {
