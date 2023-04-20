@@ -352,6 +352,21 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
     }
 }
 
+static double
+gtk_adjustment_sanitize_value (GtkAdjustment *self,
+                               double         value)
+{
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (self);
+
+  /* don't use CLAMP() so we don't end up below lower if upper - page_size
+   * is smaller than lower
+   */
+  value = MIN (value, priv->upper - priv->page_size);
+  value = MAX (value, priv->lower);
+
+  return value;
+}
+
 /**
  * gtk_adjustment_new:
  * @value: the initial value
@@ -497,11 +512,7 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
-  /* don't use CLAMP() so we don't end up below lower if upper - page_size
-   * is smaller than lower
-   */
-  value = MIN (value, priv->upper - priv->page_size);
-  value = MAX (value, priv->lower);
+  value = gtk_adjustment_sanitize_value (adjustment, value);
 
   if (animate && priv->duration != 0 && priv->clock != NULL)
     {
@@ -825,11 +836,7 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
   gtk_adjustment_set_page_increment (adjustment, page_increment);
   gtk_adjustment_set_page_size (adjustment, page_size);
 
-  /* don't use CLAMP() so we don't end up below lower if upper - page_size
-   * is smaller than lower
-   */
-  value = MIN (value, upper - page_size);
-  value = MAX (value, lower);
+  value = gtk_adjustment_sanitize_value (adjustment, value);
 
   if (value != priv->value)
     {
