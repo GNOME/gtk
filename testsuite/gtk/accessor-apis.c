@@ -126,6 +126,22 @@ property_name_mangle (GString    *symbol_name,
     }
 }
 
+static void
+add_type_name (GPtrArray *type_names,
+               GType      type)
+{
+  char *options[2];
+
+  options[0] = type_name_mangle (g_type_name (type), FALSE);
+  g_ptr_array_add (type_names, options[0]);
+
+  options[1] = type_name_mangle (g_type_name (type), TRUE);
+  if (g_str_equal (options[0], options[1]))
+    g_free (options[1]);
+  else
+    g_ptr_array_add (type_names, options[1]);
+}
+
 const char *getters[] = { "get", "is", "ref" };
 const char *setters[] = { "set" };
 
@@ -135,8 +151,9 @@ get_potential_names (GType       type,
                      const char *property_name)
 {
   GPtrArray *options;
-  char *type_name_options[2];
-  guint n_type_name_options, n_verbs;
+  GPtrArray *type_names;
+  GType *interfaces;
+  guint n_verbs, n_interfaces;
   const char **verbs;
   guint i, j;
 
@@ -151,22 +168,22 @@ get_potential_names (GType       type,
       n_verbs = G_N_ELEMENTS (setters);
     }
 
-  type_name_options[0] = type_name_mangle (g_type_name (type), FALSE);
-  type_name_options[1] = type_name_mangle (g_type_name (type), TRUE);
-  if (g_str_equal (type_name_options[0], type_name_options[1]))
-    n_type_name_options = 1;
-  else
-    n_type_name_options = 2;
+  type_names = g_ptr_array_new_with_free_func (g_free);
+  add_type_name (type_names, type);
+  interfaces = g_type_interfaces (type, &n_interfaces);
+  for (i = 0; i < n_interfaces; i++)
+    add_type_name (type_names, interfaces[i]);
+  g_free (interfaces);
 
   options = g_ptr_array_new ();
 
-  for (i = 0; i < n_type_name_options; i++)
+  for (i = 0; i < type_names->len; i++)
     {
       for (j = 0; j < n_verbs; j++)
         {
           GString *str;
 
-          str = g_string_new (type_name_options[i]);
+          str = g_string_new (g_ptr_array_index (type_names, i));
           g_string_append_c (str, '_');
           g_string_append (str, verbs[j]);
           g_string_append_c (str, '_');
@@ -182,7 +199,7 @@ get_potential_names (GType       type,
           GString *str;
 
           /* try without a verb */
-          str = g_string_new (type_name_options[i]);
+          str = g_string_new (g_ptr_array_index (type_names, i));
           g_string_append_c (str, '_');
           property_name_mangle (str, property_name);
 
@@ -190,8 +207,7 @@ get_potential_names (GType       type,
         }
     }
 
-  g_free (type_name_options[0]);
-  g_free (type_name_options[1]);
+  g_ptr_array_free (type_names, TRUE);
 
   g_ptr_array_add (options, NULL);
 
