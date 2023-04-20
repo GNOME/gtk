@@ -214,6 +214,11 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
                                                    &pos,
                                                    &cell_area))
     {
+      /* If we get here with n-items == 0, then somebody cleared the list but
+       * GC hasn't run. So no item to be found. */
+      if (gtk_list_base_get_n_items (self) == 0)
+        return;
+
       g_warning ("%s failed to scroll to given position. Ignoring...", G_OBJECT_TYPE_NAME (self));
       return;
     }
