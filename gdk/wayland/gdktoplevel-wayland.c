@@ -1283,7 +1283,13 @@ gdk_wayland_toplevel_finalize (GObject *object)
 static void
 gdk_wayland_toplevel_constructed (GObject *object)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (object)));
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkFrameClock *frame_clock;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, object);
 

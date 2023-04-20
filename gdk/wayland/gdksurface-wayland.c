@@ -861,12 +861,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
                                     GdkSurface     *parent)
 {
   GdkSurface *surface;
-  GdkFrameClock *frame_clock;
-
-  if (parent)
-    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
@@ -874,7 +868,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
       g_warn_if_fail (parent == NULL);
       surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
                               "display", display,
-                              "frame-clock", frame_clock,
                               "title", get_default_title (),
                               NULL);
       break;
@@ -883,22 +876,18 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
       surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
                               "parent", parent,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
       g_warn_if_fail (parent == NULL);
       surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     default:
       g_assert_not_reached ();
       break;
     }
-
-  g_object_unref (frame_clock);
 
   return surface;
 }

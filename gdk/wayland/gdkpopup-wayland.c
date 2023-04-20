@@ -1041,6 +1041,17 @@ gdk_wayland_popup_init (GdkWaylandPopup *popup)
 }
 
 static void
+gdk_wayland_popup_constructed (GObject *object)
+{
+  GdkWaylandPopup *self = GDK_WAYLAND_POPUP (object);
+  GdkSurface *surface = GDK_SURFACE (self);
+
+  gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (gdk_popup_get_parent (GDK_POPUP (self))));
+
+  G_OBJECT_CLASS (gdk_wayland_popup_parent_class)->constructed (object);
+}
+
+static void
 gdk_wayland_popup_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
@@ -1097,6 +1108,7 @@ gdk_wayland_popup_class_init (GdkWaylandPopupClass *class)
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (class);
   GdkWaylandSurfaceClass *wayland_surface_class = GDK_WAYLAND_SURFACE_CLASS (class);
 
+  object_class->constructed = gdk_wayland_popup_constructed;
   object_class->get_property = gdk_wayland_popup_get_property;
   object_class->set_property = gdk_wayland_popup_set_property;
 
