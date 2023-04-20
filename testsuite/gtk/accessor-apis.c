@@ -218,9 +218,12 @@ check_function_name (GType       type,
     }
 
   g_test_message ("No %s for property %s::%s", get ? "getter" : "setter", g_type_name (type), property_name);
-  for (i = 0; names[i] != NULL; i++)
+  if (g_test_verbose ())
     {
-      g_test_message ("    %s", names[i]);
+      for (i = 0; names[i] != NULL; i++)
+        {
+          g_test_message ("    %s", names[i]);
+        }
     }
 
   g_test_fail ();
