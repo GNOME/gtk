@@ -45,8 +45,6 @@ struct _GdkMacosToplevelSurfaceClass
 };
 
 GType            _gdk_macos_toplevel_surface_get_type           (void);
-GdkMacosSurface *_gdk_macos_toplevel_surface_new                (GdkMacosDisplay         *display,
-                                                                 GdkFrameClock           *frame_clock);
 void             _gdk_macos_toplevel_surface_attach_to_parent   (GdkMacosToplevelSurface *self);
 void             _gdk_macos_toplevel_surface_detach_from_parent (GdkMacosToplevelSurface *self);
 

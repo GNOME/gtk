@@ -626,45 +626,19 @@ _gdk_macos_toplevel_surface_set_property (GObject      *object,
 }
 
 static void
-_gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
-
-  object_class->get_property = _gdk_macos_toplevel_surface_get_property;
-  object_class->set_property = _gdk_macos_toplevel_surface_set_property;
-
-  surface_class->destroy = _gdk_macos_toplevel_surface_destroy;
-  surface_class->hide = _gdk_macos_toplevel_surface_hide;
-  surface_class->compute_size = _gdk_macos_toplevel_surface_compute_size;
-  surface_class->request_layout = _gdk_macos_toplevel_surface_request_layout;
-
-  gdk_toplevel_install_properties (object_class, LAST_PROP);
-}
-
-static void
-_gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
-{
-  self->decorated = TRUE;
-}
-
-GdkMacosSurface *
-_gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
-                                 GdkFrameClock   *frame_clock)
+_gdk_macos_toplevel_surface_constructed (GObject *object)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   GdkMacosWindow *window;
-  GdkMacosSurface *self;
+  GdkMacosToplevelSurface *self = GDK_MACOS_TOPLEVEL_SURFACE (object);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
   NSUInteger style_mask;
   NSRect content_rect;
   NSRect visible_frame;
   NSScreen *screen;
   int nx;
   int ny;
-
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
 
   style_mask = (NSWindowStyleMaskTitled |
                 NSWindowStyleMaskClosable |
@@ -685,15 +659,35 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
   /* Allow NSWindow to go fullscreen */
   [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 
-  self = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
-                       "display", display,
-                       "frame-clock", frame_clock,
-                       "native", window,
-                       NULL);
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
 
   GDK_END_MACOS_ALLOC_POOL;
 
-  return g_steal_pointer (&self);
+  G_OBJECT_CLASS (_gdk_macos_toplevel_surface_parent_class)->constructed (object);
+}
+
+static void
+_gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
+
+  object_class->constructed = _gdk_macos_toplevel_surface_constructed;
+  object_class->get_property = _gdk_macos_toplevel_surface_get_property;
+  object_class->set_property = _gdk_macos_toplevel_surface_set_property;
+
+  surface_class->destroy = _gdk_macos_toplevel_surface_destroy;
+  surface_class->hide = _gdk_macos_toplevel_surface_hide;
+  surface_class->compute_size = _gdk_macos_toplevel_surface_compute_size;
+  surface_class->request_layout = _gdk_macos_toplevel_surface_request_layout;
+
+  gdk_toplevel_install_properties (object_class, LAST_PROP);
+}
+
+static void
+_gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
+{
+  self->decorated = TRUE;
 }
 
 void

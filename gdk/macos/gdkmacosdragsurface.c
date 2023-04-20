@@ -64,27 +64,13 @@ G_DEFINE_TYPE_WITH_CODE (GdkMacosDragSurface, _gdk_macos_drag_surface, GDK_TYPE_
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_DRAG_SURFACE, drag_surface_iface_init))
 
 static void
-_gdk_macos_drag_surface_class_init (GdkMacosDragSurfaceClass *klass)
-{
-}
-
-static void
-_gdk_macos_drag_surface_init (GdkMacosDragSurface *self)
-{
-}
-
-GdkMacosSurface *
-_gdk_macos_drag_surface_new (GdkMacosDisplay *display,
-                             int              x,
-                             int              y,
-                             int              width,
-                             int              height)
+_gdk_macos_drag_surface_constructed (GObject *object)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
-  GdkFrameClock *frame_clock;
   GdkMacosWindow *window;
-  GdkMacosSurface *self;
+  GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
   NSScreen *screen;
   NSUInteger style_mask;
   NSRect content_rect;
@@ -92,18 +78,15 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
   int nx;
   int ny;
 
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
-
   style_mask = NSWindowStyleMaskBorderless;
 
-  _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
+  _gdk_macos_display_to_display_coords (display, 0, 0, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
   screen_rect = [screen frame];
   nx -= screen_rect.origin.x;
   ny -= screen_rect.origin.y;
-  content_rect = NSMakeRect (nx, ny - height, width, height);
+  content_rect = NSMakeRect (nx, ny - 1, 1, 1);
 
   window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
                                              styleMask:style_mask
@@ -115,17 +98,41 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display,
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
 
+  _gdk_macos_surface_set_native (self, window);
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  G_OBJECT_CLASS (_gdk_macos_drag_surface_parent_class)->constructed (object);
+}
+
+static void
+_gdk_macos_drag_surface_class_init (GdkMacosDragSurfaceClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = _gdk_macos_drag_surface_constructed;
+}
+
+static void
+_gdk_macos_drag_surface_init (GdkMacosDragSurface *self)
+{
+}
+
+GdkMacosSurface *
+_gdk_macos_drag_surface_new (GdkMacosDisplay *display)
+{
+  GdkFrameClock *frame_clock;
+
+  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
+
   frame_clock = _gdk_frame_clock_idle_new ();
 
   self = g_object_new (GDK_TYPE_MACOS_DRAG_SURFACE,
                        "display", display,
                        "frame-clock", frame_clock,
-                       "native", window,
                        NULL);
 
   g_object_unref (frame_clock);
-
-  GDK_END_MACOS_ALLOC_POOL;
 
   return g_steal_pointer (&self);
 }
