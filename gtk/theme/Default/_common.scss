@@ -951,6 +951,10 @@ modelbutton.flat arrow {
   margin: 1px;
 
    @extend %button_basic_flat;
+
+   &:hover { @include button(undecorated-hover, $c:darken($bg_color, 4%)); }
+   &:active,
+   &:checked { @include button(undecorated-active, $c:darken($bg_color, 4%)); }
 }
 
 button.color {
