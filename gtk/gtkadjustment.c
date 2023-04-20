@@ -434,6 +434,8 @@ adjustment_set_value (GtkAdjustment *adjustment,
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
+  value = gtk_adjustment_sanitize_value (adjustment, value);
+
   if (priv->value != value)
     {
       priv->value = value;
