@@ -30,7 +30,6 @@ typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
   GDK_SURFACE_POPUP,
-  GDK_SURFACE_DRAG
 } GdkSurfaceType;
 
 struct _GdkSurface

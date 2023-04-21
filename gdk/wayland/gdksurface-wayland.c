@@ -878,12 +878,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
                               "display", display,
                               NULL);
       break;
-    case GDK_SURFACE_DRAG:
-      g_warn_if_fail (parent == NULL);
-      surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
-                              "display", display,
-                              NULL);
-      break;
     default:
       g_assert_not_reached ();
       break;

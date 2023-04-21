@@ -608,7 +608,6 @@ _gdk_macos_surface_new (GdkMacosDisplay *display,
 
       break;
 
-    case GDK_SURFACE_DRAG:
     default:
       g_warn_if_reached ();
       ret = NULL;

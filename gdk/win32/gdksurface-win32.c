@@ -455,7 +455,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
                               "display", display,
                               NULL);
       break;
-    case GDK_SURFACE_DRAG:
     default:
       g_assert_not_reached ();
       break;
