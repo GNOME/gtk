@@ -28,7 +28,6 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkicontheme.h"
-#include "gtklabel.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
@@ -39,8 +38,6 @@ struct _GtkFileChooserCell
 
   GFileInfo *item;
   GtkColumnViewCell *list_item;
-
-  gboolean date_column;
 
   gboolean show_time;
 };
@@ -54,8 +51,7 @@ G_DEFINE_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK_TYPE_WIDGET)
 
 enum
 {
-  PROP_DATE_COLUMN = 1,
-  PROP_POSITION,
+  PROP_POSITION = 1,
   PROP_ITEM,
   PROP_SHOW_TIME,
   PROP_LIST_ITEM,
@@ -164,23 +160,6 @@ gtk_file_chooser_cell_realize (GtkWidget *widget)
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
   g_object_bind_property (impl, "show-time", self, "show-time", G_BINDING_SYNC_CREATE);
-
-  if (self->date_column)
-    {
-      GtkWidget *box;
-      GtkWidget *label;
-      char *text;
-
-      box = gtk_widget_get_first_child (GTK_WIDGET (self));
-      label = gtk_widget_get_first_child (box);
-      text = gtk_file_chooser_widget_get_file_date (self->list_item, self->item);
-      gtk_label_set_text (GTK_LABEL (label), text);
-      g_free (text);
-      label = gtk_widget_get_last_child (box);
-      text = gtk_file_chooser_widget_get_file_time (self->list_item, self->item);
-      gtk_label_set_text (GTK_LABEL (label), text);
-      g_free (text);
-    }
 }
 
 static void
@@ -235,10 +214,6 @@ gtk_file_chooser_cell_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DATE_COLUMN:
-      self->date_column = g_value_get_boolean (value);
-      break;
-
     case PROP_ITEM:
       self->item = g_value_get_object (value);
 
@@ -273,10 +248,6 @@ gtk_file_chooser_cell_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DATE_COLUMN:
-      g_value_set_boolean (value, self->date_column);
-      break;
-
     case PROP_ITEM:
       g_value_set_object (value, self->item);
       break;
@@ -301,12 +272,6 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->dispose = gtk_file_chooser_cell_dispose;
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
-
-  g_object_class_install_property (object_class, PROP_DATE_COLUMN,
-                                   g_param_spec_boolean ("date-column", NULL, NULL,
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE));
-
 
   g_object_class_install_property (object_class, PROP_ITEM,
                                    g_param_spec_object ("item", NULL, NULL,
