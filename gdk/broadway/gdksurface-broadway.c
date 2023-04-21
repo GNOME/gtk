@@ -233,40 +233,29 @@ gdk_broadway_display_create_surface (GdkDisplay     *display,
                                      GdkSurface     *parent)
 {
   GdkSurface *surface;
-  GdkFrameClock *frame_clock;
-
-  if (parent)
-    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_BROADWAY_TOPLEVEL,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_BROADWAY_POPUP,
                               "parent", parent,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
       surface = g_object_new (GDK_TYPE_BROADWAY_DRAG_SURFACE,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     default:
       g_assert_not_reached ();
       break;
     }
-
-  g_object_unref (frame_clock);
 
   return surface;
 }
@@ -1270,6 +1259,8 @@ gdk_broadway_popup_constructed (GObject *object)
   self->root_x = GDK_BROADWAY_SURFACE (surface->parent)->root_x;
   self->root_y = GDK_BROADWAY_SURFACE (surface->parent)->root_y;
 
+  gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
+
   G_OBJECT_CLASS (gdk_broadway_popup_parent_class)->constructed (object);
 
   /* We treat the real parent as a default transient for to get stacking right */
@@ -1404,6 +1395,19 @@ gdk_broadway_toplevel_init (GdkBroadwayToplevel *toplevel)
 }
 
 static void
+gdk_broadway_toplevel_constructed (GObject *object)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkFrameClock *frame_clock;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
+
+  G_OBJECT_CLASS (gdk_broadway_toplevel_parent_class)->constructed (object);
+}
+
+static void
 gdk_broadway_toplevel_set_property (GObject      *object,
                                     guint         prop_id,
                                     const GValue *value,
@@ -1506,6 +1510,7 @@ gdk_broadway_toplevel_class_init (GdkBroadwayToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_broadway_toplevel_constructed;
   object_class->get_property = gdk_broadway_toplevel_get_property;
   object_class->set_property = gdk_broadway_toplevel_set_property;
 
@@ -1667,8 +1672,24 @@ gdk_broadway_drag_surface_init (GdkBroadwayDragSurface *surface)
 }
 
 static void
+gdk_broadway_drag_surface_constructed (GObject *object)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkFrameClock *frame_clock;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
+
+  G_OBJECT_CLASS (gdk_broadway_drag_surface_parent_class)->constructed (object);
+}
+
+static void
 gdk_broadway_drag_surface_class_init (GdkBroadwayDragSurfaceClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->constructed = gdk_broadway_drag_surface_constructed;
 }
 
 static gboolean
