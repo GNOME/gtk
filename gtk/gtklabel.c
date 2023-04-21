@@ -29,10 +29,10 @@
 #include "gtkbuildable.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerfocus.h"
+#include "gtkfilelauncher.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
 #include "gtkpangoprivate.h"
@@ -59,6 +59,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib/gi18n-lib.h>
 
 /**
  * GtkLabel:
@@ -174,11 +175,11 @@
  * (See the Pango manual for complete documentation] of available
  * tags, [func@Pango.parse_markup])
  *
- * The markup passed to gtk_label_set_markup() must be valid; for example,
- * literal <, > and & characters must be escaped as &lt;, &gt;, and &amp;.
+ * The markup passed to [method@Gtk.Label.set_markup] must be valid; for example,
+ * literal `<`, `>` and `&` characters must be escaped as `&lt;`, `&gt;`, and `&amp;`.
  * If you pass text obtained from the user, file, or a network to
  * [method@Gtk.Label.set_markup], you’ll want to escape it with
- * g_markup_escape_text() or g_markup_printf_escaped().
+ * [func@GLib.markup_escape_text] or [func@GLib.markup_printf_escaped].
  *
  * Markup strings are just a convenient way to set the [struct@Pango.AttrList]
  * on a label; [method@Gtk.Label.set_attributes] may be a simpler way to set
@@ -2102,14 +2103,31 @@ gtk_label_activate_link (GtkLabel    *self,
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  GtkUriLauncher *launcher;
+  const char *uri_scheme;
 
   if (!GTK_IS_WINDOW (toplevel))
     return FALSE;
 
-  launcher = gtk_uri_launcher_new (uri);
-  gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
-  g_object_unref (launcher);
+  uri_scheme = g_uri_peek_scheme (uri);
+  if (g_strcmp0 (uri_scheme, "file") == 0)
+    {
+      GFile *file;
+      GtkFileLauncher *launcher;
+
+      file = g_file_new_for_uri (uri);
+      launcher = gtk_file_launcher_new (file);
+      gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      g_object_unref (launcher);
+      g_object_unref (file);
+    }
+  else
+    {
+      GtkUriLauncher *launcher;
+
+      launcher = gtk_uri_launcher_new (uri);
+      gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      g_object_unref (launcher);
+    }
 
   return TRUE;
 }
@@ -2219,9 +2237,11 @@ gtk_label_class_init (GtkLabelClass *class)
    * the variant with the Shift modifier extends the selection,
    * the variant without the Shift modifier does not.
    * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
+   *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual characters/lines
+   * - <kbd>Ctrl</kbd>+<kbd>←</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd> and <kbd>End</kbd> move to the ends of the buffer
    */
   signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
@@ -2243,7 +2263,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
-   * The default binding for this signal is Ctrl-c.
+   * The default binding for this signal is <kbd>Ctrl</kbd>+<kbd>c</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -2265,7 +2285,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * Applications may also emit the signal with g_signal_emit_by_name()
      * if they need to control activation of URIs programmatically.
      *
-     * The default bindings for this signal are all forms of the Enter key.
+     * The default bindings for this signal are all forms of the <kbd>Enter</kbd> key.
      */
     signals[ACTIVATE_CURRENT_LINK] =
       g_signal_new_class_handler (I_("activate-current-link"),
@@ -2343,7 +2363,8 @@ gtk_label_class_init (GtkLabelClass *class)
   /**
    * GtkLabel:use-underline: (attributes org.gtk.Property.get=gtk_label_get_use_underline org.gtk.Property.set=gtk_label_set_use_underline)
    *
-   * %TRUE if the text of the label indicates a mnemonic with _.
+   * %TRUE if the text of the label indicates a mnemonic with an _
+   * before the mnemonic character.
    */
   label_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline", NULL, NULL,
@@ -3214,10 +3235,10 @@ gtk_label_set_attributes (GtkLabel         *self,
  *
  * This is the [struct@Pango.AttrList] that was set on the label using
  * [method@Gtk.Label.set_attributes], if any. This function does not
- * reflect attributes that come from the labels markup (see
+ * reflect attributes that come from the label's markup (see
  * [method@Gtk.Label.set_markup]). If you want to get the effective
  * attributes for the label, use
- * `pango_layout_get_attribute (gtk_label_get_layout (self))`.
+ * `pango_layout_get_attributes (gtk_label_get_layout (self))`.
  *
  * Returns: (nullable) (transfer none): the attribute list
  */
@@ -3867,7 +3888,7 @@ gtk_label_get_justify (GtkLabel *self)
  * @self: a `GtkLabel`
  * @mode: a `PangoEllipsizeMode`
  *
- * Sets the mode used to ellipsizei the text.
+ * Sets the mode used to ellipsize the text.
  *
  * The text will be ellipsized if there is not enough space
  * to render the entire string.
@@ -5872,7 +5893,7 @@ gtk_label_get_xalign (GtkLabel *self)
 }
 
 /**
- * gtk_label_set_yalign: (attributes org.gtk.Method.get_property=yalign)
+ * gtk_label_set_yalign: (attributes org.gtk.Method.set_property=yalign)
  * @self: a `GtkLabel`
  * @yalign: the new yalign value, between 0 and 1
  *
@@ -5898,7 +5919,7 @@ gtk_label_set_yalign (GtkLabel *self,
 }
 
 /**
- * gtk_label_get_yalign: (attributes org.gtk.Method.set_property=yalign)
+ * gtk_label_get_yalign: (attributes org.gtk.Method.get_property=yalign)
  * @self: a `GtkLabel`
  *
  * Gets the `yalign` of the label.

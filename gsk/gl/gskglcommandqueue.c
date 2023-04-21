@@ -1002,8 +1002,11 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
-  glGenVertexArrays (1, &vao_id);
-  glBindVertexArray (vao_id);
+  if (!gdk_gl_context_get_use_es (self->context))
+    {
+      glGenVertexArrays (1, &vao_id);
+      glBindVertexArray (vao_id);
+    }
 
   vbo_id = gsk_gl_buffer_submit (&self->vertices);
 
@@ -1159,7 +1162,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
     }
 
   glDeleteBuffers (1, &vbo_id);
-  glDeleteVertexArrays (1, &vao_id);
+  if (!gdk_gl_context_get_use_es (self->context))
+    glDeleteVertexArrays (1, &vao_id);
 
   gdk_profiler_set_int_counter (self->metrics.n_binds, n_binds);
   gdk_profiler_set_int_counter (self->metrics.n_uniforms, n_uniforms);

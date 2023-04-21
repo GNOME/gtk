@@ -208,13 +208,17 @@ load_ui_file (GFile *ui_file,
   timeout_handle_id = g_timeout_add (2000,
                                      quit_iteration_loop,
                                      &keep_running);
-  while (keep_running)
-    {
-      if (!g_main_context_iteration (NULL, FALSE))
-        break;
-    }
+  while (keep_running && !gtk_window_is_active (GTK_WINDOW (window)))
+    g_main_context_iteration (NULL, TRUE);
+
   if (keep_running)
     g_source_remove (timeout_handle_id);
+
+  if (!gtk_window_is_active (GTK_WINDOW (window)))
+    {
+      g_print ("Skipping focus tests because window did not get focus. Headless display?");
+      exit (77);
+    }
 
   if (ext)
     {

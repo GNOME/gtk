@@ -697,6 +697,9 @@ gtk_font_dialog_choose_family_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_family, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
@@ -777,6 +780,9 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_face, NULL);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
@@ -854,6 +860,9 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
   g_return_val_if_fail (GTK_IS_FONT_DIALOG (self), NULL);
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font, NULL);
+
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
@@ -944,6 +953,8 @@ gtk_font_dialog_choose_font_and_features_finish (GtkFontDialog         *self,
   g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_font_dialog_choose_font_and_features, FALSE);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
   font_result = g_task_propagate_pointer (G_TASK (result), error);
 
   if (font_result)

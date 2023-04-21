@@ -150,6 +150,7 @@ _gtk_gesture_click_update_timeout (GtkGestureClick *gesture)
 
 static gboolean
 _gtk_gesture_click_check_within_threshold (GtkGestureClick *gesture,
+                                           const char      *setting,
                                            double           x,
                                            double           y)
 {
@@ -165,9 +166,7 @@ _gtk_gesture_click_check_within_threshold (GtkGestureClick *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   settings = gtk_widget_get_settings (widget);
-  g_object_get (settings,
-                "gtk-double-click-distance", &double_click_distance,
-                NULL);
+  g_object_get (settings, setting, &double_click_distance, NULL);
 
   if (ABS (priv->initial_press_x - x) < double_click_distance &&
       ABS (priv->initial_press_y - y) < double_click_distance)
@@ -220,7 +219,8 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   _gtk_gesture_click_update_timeout (click);
   gtk_gesture_get_point (gesture, current, &x, &y);
 
-  if (!_gtk_gesture_click_check_within_threshold (click, x, y))
+  if (gdk_device_get_source (priv->current_device) == GDK_SOURCE_MOUSE &&
+      !_gtk_gesture_click_check_within_threshold (click, "gtk-double-click-distance", x, y))
     _gtk_gesture_click_stop (click);
 
   /* Increment later the real counter, just if the gesture is
@@ -250,7 +250,7 @@ gtk_gesture_click_update (GtkGesture       *gesture,
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   gtk_gesture_get_point (gesture, current, &x, &y);
 
-  if (!_gtk_gesture_click_check_within_threshold (click, x, y))
+  if (!_gtk_gesture_click_check_within_threshold (click, "gtk-dnd-drag-threshold", x, y))
     _gtk_gesture_click_stop (click);
 }
 

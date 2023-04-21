@@ -263,9 +263,12 @@ the question you have, this list is a good place to start.
 *  How do I load an image or animation from a file?
 
     To load an image file straight into a display widget, use
-    [ctor@Gtk.Picture.new_for_file] or [ctor@GTk.Picture.new_for_filename].
+    [ctor@Gtk.Picture.new_for_file] or [ctor@Gtk.Picture.new_for_filename].
     To load an image for another purpose, use [ctor@Gdk.Texture.new_from_file].
     To load a video from a file, use [ctor@Gtk.MediaFile.new_for_file].
+
+    Note that [class@Gtk.Image] is meant for fixed-size icons. For arbitrary
+    image files, you should use [class@Gtk.Picture].
 
 *  How do I draw text?
 
@@ -283,8 +286,8 @@ the question you have, this list is a good place to start.
         pango_font_description_free (fontdesc);
         g_object_unref (layout);
 
-    See also the [Cairo Rendering](https://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html)
-    section of the [Pango documentation](https://developer.gnome.org/pango/stable/).
+    See also the [Cairo Rendering](https://docs.gtk.org/PangoCairo/pango_cairo.html)
+    section of the [Pango documentation](https://docs.gtk.org/Pango/).
 
     To draw a piece of text in a widget [vfunc@Gtk.Widget.snapshot] implementation,
     use [method@Gtk.Snapshot.append_layout].
@@ -301,8 +304,8 @@ the question you have, this list is a good place to start.
         pango_font_description_free (fontdesc);
         g_object_unref (layout);
 
-    See also the [Layout Objects](https://developer.gnome.org/pango/stable/pango-Layout-Objects.html)
-    section of the [Pango documentation](https://developer.gnome.org/pango/stable/).
+    See also the [Layout Objects](https://docs.gtk.org/Pango/class.Layout.html)
+    section of the [Pango documentation](https://docs.gtk.org/Pango/).
 
 *  Why are types not registered if I use their `GTK_TYPE_BLAH` macro?
 

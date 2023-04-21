@@ -103,14 +103,14 @@ fields, but e.g. buttons can take the focus too.
 
 Input widgets can be given the focus by clicking on them, but focus
 can also be moved around with certain key events (this is known as
-“keyboard navigation”). GTK reserves the Tab key to move the focus
-to the next location, and Shift-Tab to move it back to the previous
+“keyboard navigation”). GTK reserves the <kbd>Tab</kbd> key to move the focus
+to the next location, and <kbd>Shift</kbd>+<kbd>Tab</kbd> to move it back to the previous
 one. In addition many containers allow “directional navigation” with
 the arrow keys.
 
 Many widgets can be “activated” to trigger and action. E.g., you can
 activate a button or switch by clicking on them, but you can also
-activate them with the keyboard, by using the Enter or Space keys.
+activate them with the keyboard, by using the <kbd>Enter</kbd> or <kbd>␣</kbd> keys.
 
 Apart from keyboard navigation, activation and directly typing into
 entries or text views, GTK widgets can use key events for activating

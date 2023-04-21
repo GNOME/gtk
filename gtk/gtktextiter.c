@@ -592,7 +592,7 @@ _gtk_text_iter_get_btree (const GtkTextIter *iter)
  *
  * Each character in a `GtkTextBuffer` has an offset,
  * starting with 0 for the first character in the buffer.
- * Use [method@Gtk,TextBuffer.get_iter_at_offset] to convert
+ * Use [method@Gtk.TextBuffer.get_iter_at_offset] to convert
  * an offset back into an iterator.
  *
  * Returns: a character offset
@@ -1198,7 +1198,7 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
  * @iter is at the beginning of the tagged range, and that the
  * character at @iter is inside the tagged range. In other
  * words, unlike [method@Gtk.TextIter.ends_tag], if
- * this function returns %TRUE, [method@Gtk.TextIter.has_tag
+ * this function returns %TRUE, [method@Gtk.TextIter.has_tag]
  * will also return %TRUE for the same parameters.
  *
  * Returns: whether @iter is the start of a range tagged with @tag
@@ -1661,7 +1661,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
  * Returns %TRUE if @iter is the end iterator.
  *
  * This means it is one past the last dereferenceable iterator
- * in the buffer. gtk_text_iter_is_end() is the most efficient
+ * in the buffer. [method@Gtk.TextIter.is_end] is the most efficient
  * way to check whether an iterator is the end iterator.
  *
  * Returns: whether @iter is the end iterator
@@ -3324,7 +3324,7 @@ gtk_text_iter_backward_word_start (GtkTextIter *iter)
  * @iter: a `GtkTextIter`
  * @count: number of times to move
  *
- * Calls gtk_text_iter_forward_word_end() up to @count times.
+ * Calls [method@Gtk.TextIter.forward_word_end] up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator
  */
@@ -3342,7 +3342,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
  * @iter: a `GtkTextIter`
  * @count: number of times to move
  *
- * Calls gtk_text_iter_backward_word_start() up to @count times.
+ * Calls [method@Gtk.TextIter.backward_word_start] up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator
  */
@@ -3400,7 +3400,7 @@ gtk_text_iter_backward_visible_word_start (GtkTextIter      *iter)
  * @iter: a `GtkTextIter`
  * @count: number of times to move
  *
- * Calls gtk_text_iter_forward_visible_word_end() up to @count times.
+ * Calls [method@Gtk.TextIter.forward_visible_word_end] up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator
  */
@@ -3418,7 +3418,7 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @count: number of times to move
  *
- * Calls gtk_text_iter_backward_visible_word_start() up to @count times.
+ * Calls [method@Gtk.TextIter.backward_visible_word_start] up to @count times.
  *
  * Returns: %TRUE if @iter moved and is not the end iterator
  */
@@ -3588,7 +3588,7 @@ gtk_text_iter_backward_sentence_start (GtkTextIter *iter)
  * @iter: a `GtkTextIter`
  * @count: number of sentences to move
  *
- * Calls gtk_text_iter_forward_sentence_end() @count times.
+ * Calls [method@Gtk.TextIter.forward_sentence_end] @count times.
  *
  * If @count is negative, moves backward instead of forward.
  *
@@ -3608,7 +3608,7 @@ gtk_text_iter_forward_sentence_ends (GtkTextIter      *iter,
  * @iter: a `GtkTextIter`
  * @count: number of sentences to move
  *
- * Calls gtk_text_iter_backward_sentence_start() up to @count times.
+ * Calls [method@Gtk.TextIter.backward_sentence_start] up to @count times.
  *
  * If @count is negative, moves forward instead of backward.
  *
@@ -3712,7 +3712,7 @@ gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_backward_cursor_position:
  * @iter: a `GtkTextIter`
  *
- * Like gtk_text_iter_forward_cursor_position(), but moves backward.
+ * Like [method@Gtk.TextIter.forward_cursor_position], but moves backward.
  *
  * Returns: %TRUE if we moved
  */
@@ -3782,7 +3782,7 @@ gtk_text_iter_forward_visible_cursor_position (GtkTextIter *iter)
  * gtk_text_iter_backward_visible_cursor_position:
  * @iter: a `GtkTextIter`
  *
- * Moves @iter forward to the previous visible cursor position.
+ * Moves @iter backward to the previous visible cursor position.
  *
  * See [method@Gtk.TextIter.backward_cursor_position] for details.
  *
@@ -3897,7 +3897,7 @@ gtk_text_iter_set_line_offset (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @byte_on_line: a byte index relative to the start of @iter’s current line
  *
- * Same as gtk_text_iter_set_line_offset(), but works with a
+ * Same as [method@Gtk.TextIter.set_line_offset], but works with a
  * byte index. The given byte index must be at
  * the start of a character, it can’t be in the middle of a UTF-8
  * encoded character.
@@ -3943,7 +3943,7 @@ gtk_text_iter_set_line_index (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @char_on_line: a character offset
  *
- * Like gtk_text_iter_set_line_offset(), but the offset is in visible
+ * Like [method@Gtk.TextIter.set_line_offset], but the offset is in visible
  * characters, i.e. text with a tag making it invisible is not
  * counted in the offset.
  */
@@ -3984,7 +3984,7 @@ gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
  * @iter: a `GtkTextIter`
  * @byte_on_line: a byte index
  *
- * Like gtk_text_iter_set_line_index(), but the index is in visible
+ * Like [method@Gtk.TextIter.set_line_index], but the index is in visible
  * bytes, i.e. text with a tag making it invisible is not counted
  * in the index.
  */
@@ -4128,7 +4128,7 @@ gtk_text_iter_set_offset (GtkTextIter *iter,
  * Moves @iter forward to the “end iterator”, which points
  * one past the last valid character in the buffer.
  *
- * gtk_text_iter_get_char() called on the end iterator
+ * [method@Gtk.TextIter.get_char] called on the end iterator
  * returns 0, which is convenient for writing loops.
  */
 void
@@ -4480,7 +4480,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
  * @user_data: (closure): user data for @pred
  * @limit: (nullable): search limit
  *
- * Same as gtk_text_iter_forward_find_char(),
+ * Same as [method@Gtk.TextIter.forward_find_char],
  * but goes backward from @iter.
  *
  * Returns: whether a match was found
@@ -5292,7 +5292,7 @@ lines_window_free (LinesWindow *win)
  * @match_end: (out caller-allocates) (optional): return location for end of match
  * @limit: (nullable): location of last possible @match_start, or %NULL for start of buffer
  *
- * Same as gtk_text_iter_forward_search(), but moves backward.
+ * Same as [method@Gtk.TextIter.forward_search], but moves backward.
  *
  * @match_end will never be set to a `GtkTextIter` located after @iter,
  * even if there is a possible @match_start before or at @iter.

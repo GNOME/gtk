@@ -37,9 +37,7 @@ GtkWidget *gtk_inspector_action_editor_new      (void);
 void       gtk_inspector_action_editor_set      (GtkInspectorActionEditor *self,
                                                  GObject                  *owner,
                                                  const char               *name);
-void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *self,
-                                                 gboolean                  enabled,
-                                                 GVariant                 *state);
+void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *self);
 
 G_END_DECLS
 

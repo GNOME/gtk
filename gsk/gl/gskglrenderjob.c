@@ -254,7 +254,7 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 static inline gboolean G_GNUC_PURE
 node_supports_2d_transform (const GskRenderNode *node)
 {
-  switch ((int)gsk_render_node_get_node_type (node))
+  switch (gsk_render_node_get_node_type (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -272,6 +272,7 @@ node_supports_2d_transform (const GskRenderNode *node)
     case GSK_CAIRO_NODE:
     case GSK_BLEND_NODE:
     case GSK_BLUR_NODE:
+    case GSK_MASK_NODE:
       return TRUE;
 
     case GSK_SHADOW_NODE:
@@ -288,8 +289,18 @@ node_supports_2d_transform (const GskRenderNode *node)
         }
       return TRUE;
 
-    default:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_GL_SHADER_NODE:
       return FALSE;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -303,7 +314,7 @@ node_supports_transform (const GskRenderNode *node)
    * opacity or color matrix.
    */
 
-  switch ((int)gsk_render_node_get_node_type (node))
+  switch (gsk_render_node_get_node_type (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -324,8 +335,25 @@ node_supports_transform (const GskRenderNode *node)
     case GSK_TRANSFORM_NODE:
       return node_supports_transform (gsk_transform_node_get_child (node));
 
-    default:
+    case GSK_CONTAINER_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
       return FALSE;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -535,23 +563,21 @@ extract_matrix_metadata (GskGLRenderModelview *modelview)
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
       {
-        graphene_vec3_t col1;
-        graphene_vec3_t col2;
+        graphene_quaternion_t rotation;
+        graphene_vec4_t perspective;
+        graphene_vec3_t translation;
+        graphene_vec3_t scale;
+        graphene_vec3_t shear;
 
-        /* TODO: 90% sure this is incorrect. But we should never hit this code
-         * path anyway. */
-        graphene_vec3_init (&col1,
-                            graphene_matrix_get_value (&modelview->matrix, 0, 0),
-                            graphene_matrix_get_value (&modelview->matrix, 1, 0),
-                            graphene_matrix_get_value (&modelview->matrix, 2, 0));
+        graphene_matrix_decompose (&modelview->matrix,
+                                   &translation,
+                                   &scale,
+                                   &rotation,
+                                   &shear,
+                                   &perspective);
 
-        graphene_vec3_init (&col2,
-                            graphene_matrix_get_value (&modelview->matrix, 0, 1),
-                            graphene_matrix_get_value (&modelview->matrix, 1, 1),
-                            graphene_matrix_get_value (&modelview->matrix, 2, 1));
-
-        modelview->scale_x = graphene_vec3_length (&col1);
-        modelview->scale_y = graphene_vec3_length (&col2);
+        modelview->scale_x = graphene_vec3_get_x (&scale);
+        modelview->scale_y = graphene_vec3_get_y (&scale);
         modelview->dx = 0;
         modelview->dy = 0;
       }

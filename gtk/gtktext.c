@@ -320,6 +320,8 @@ static void   gtk_text_get_property         (GObject      *object,
                                              guint         prop_id,
                                              GValue       *value,
                                              GParamSpec   *pspec);
+static void   gtk_text_notify               (GObject      *object,
+                                             GParamSpec   *pspec);
 static void   gtk_text_finalize             (GObject      *object);
 static void   gtk_text_dispose              (GObject      *object);
 
@@ -738,6 +740,7 @@ gtk_text_class_init (GtkTextClass *class)
   gobject_class->finalize = gtk_text_finalize;
   gobject_class->set_property = gtk_text_set_property;
   gobject_class->get_property = gtk_text_get_property;
+  gobject_class->notify = gtk_text_notify;
 
   widget_class->map = gtk_text_map;
   widget_class->unmap = gtk_text_unmap;
@@ -982,7 +985,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::activate:
    * @self: The widget on which the signal is emitted
    *
-   * Emitted when the user hits the Enter key.
+   * Emitted when the user hits the <kbd>Enter</kbd> key.
    *
    * The default bindings for this signal are all forms
    * of the <kbd>Enter</kbd> key.
@@ -1021,8 +1024,8 @@ gtk_text_class_init (GtkTextClass *class)
    *
    * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
    *   move by individual characters/lines
-   * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
-   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
+   * - <kbd>Ctrl</kbd>+<kbd>←</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd> and <kbd>End</kbd> move to the ends of the buffer
    */
   signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
@@ -1073,7 +1076,7 @@ gtk_text_class_init (GtkTextClass *class)
    * of characters.
    *
    * The default bindings for this signal are <kbd>Delete</kbd>
-   * for deleting a character and <kbd>Ctrl</kbd>-<kbd>Delete</kbd>
+   * for deleting a character and <kbd>Ctrl</kbd>+<kbd>Delete</kbd>
    * for deleting a word.
    */
   signals[DELETE_FROM_CURSOR] =
@@ -1096,7 +1099,7 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>-<kbd>Backspace</kbd>.
+   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>+<kbd>Backspace</kbd>.
    */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
@@ -1116,8 +1119,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>x</kbd> and
-   * <kbd>Shift</kbd>-<kbd>Delete</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>x</kbd> and
+   * <kbd>Shift</kbd>+<kbd>Delete</kbd>.
    */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
@@ -1137,8 +1140,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>c</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>c</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>Insert</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -1158,7 +1161,7 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>v</kbd> and <kbd>Shift</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>v</kbd> and <kbd>Shift</kbd>+<kbd>Insert</kbd>.
    */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
@@ -1218,8 +1221,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>.</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>;</kbd>
+   * <kbd>Ctrl</kbd>+<kbd>.</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>;</kbd>
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -1813,6 +1816,17 @@ gtk_text_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_text_notify (GObject    *object,
+                 GParamSpec *pspec)
+{
+  if (pspec->name == I_("has-focus"))
+    gtk_text_check_cursor_blink (GTK_TEXT (object));
+
+  if (G_OBJECT_CLASS (gtk_text_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_text_parent_class)->notify (object, pspec);
 }
 
 static void
@@ -3260,6 +3274,7 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
       gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
       gtk_text_check_cursor_blink (self);
+      gtk_text_update_primary_selection (self);
     }
   else /* Focus out */
     {
@@ -5364,6 +5379,9 @@ gtk_text_update_primary_selection (GtkText *self)
   if (!gtk_widget_get_realized (GTK_WIDGET (self)))
     return;
 
+  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+    return;
+
   clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (self));
 
   if (priv->selection_bound != priv->current_pos)
@@ -6451,8 +6469,11 @@ static gboolean
 cursor_blinks (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
 
-  if (gtk_event_controller_focus_is_focus (GTK_EVENT_CONTROLLER_FOCUS (priv->focus_controller)) &&
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)) &&
+      gtk_window_is_active (GTK_WINDOW (root)) &&
+      gtk_event_controller_focus_is_focus (GTK_EVENT_CONTROLLER_FOCUS (priv->focus_controller)) &&
       priv->editable &&
       priv->selection_bound == priv->current_pos)
     {

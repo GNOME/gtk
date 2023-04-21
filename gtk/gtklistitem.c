@@ -323,7 +323,7 @@ gtk_list_item_set_child (GtkListItem *self,
         gtk_list_item_widget_add_child (self->owner, child);
     }
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
 }
 
 /**

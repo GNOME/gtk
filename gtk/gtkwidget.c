@@ -1837,6 +1837,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @direction: the direction of the focus move
    *
    * Emitted when the focus is moved.
+   *
+   * The ::move-focus signal is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal are <kbd>Tab</kbd> to move forward,
+   * and <kbd>Shift</kbd>+<kbd>Tab</kbd> to move backward.
    */
   widget_signals[MOVE_FOCUS] =
     g_signal_new (I_("move-focus"),
@@ -10635,7 +10640,11 @@ gtk_widget_set_has_focus (GtkWidget *widget,
 gboolean
 gtk_widget_in_destruction (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidgetPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  priv = gtk_widget_get_instance_private (widget);
 
   return priv->in_destruction;
 }

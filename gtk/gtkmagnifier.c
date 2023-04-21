@@ -20,6 +20,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtksnapshot.h"
+#include "gtkcssboxesprivate.h"
 
 enum {
   PROP_INSPECTED = 1,
@@ -105,9 +106,22 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 {
   GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
   double width, height, paintable_width, paintable_height;
+  GtkWidget *inspected;
+  GtkCssBoxes boxes;
+  const graphene_rect_t *content_rect;
+  const graphene_rect_t *border_rect;
+  graphene_point_t offset;
 
-  if (gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable)) == NULL)
+  inspected = gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable));
+  if (inspected == NULL)
     return;
+
+  gtk_css_boxes_init (&boxes, inspected);
+  content_rect = gtk_css_boxes_get_content_rect (&boxes);
+  border_rect = gtk_css_boxes_get_border_rect (&boxes);
+
+  offset.x = content_rect->origin.x - border_rect->origin.x;
+  offset.y = content_rect->origin.y - border_rect->origin.y;
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
@@ -121,8 +135,8 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
     gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
   gtk_snapshot_scale (snapshot, magnifier->magnification, magnifier->magnification);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
-                          - CLAMP (magnifier->x, 0, paintable_width),
-                          - CLAMP (magnifier->y, 0, paintable_height)));
+                          - CLAMP (magnifier->x + offset.x, 0, paintable_width),
+                          - CLAMP (magnifier->y + offset.y, 0, paintable_height)));
 
   gdk_paintable_snapshot (magnifier->paintable, snapshot, paintable_width, paintable_height);
   gtk_snapshot_restore (snapshot);

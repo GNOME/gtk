@@ -747,6 +747,9 @@ gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
   g_return_val_if_fail (g_task_is_valid (result, self), -1);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_alert_dialog_choose, -1);
 
+  /* Destroy the dialog window not to be bound to GTask lifecycle */
+  g_task_set_task_data (G_TASK (result), NULL, NULL);
+
   return (int) g_task_propagate_int (G_TASK (result), error);
 }
 

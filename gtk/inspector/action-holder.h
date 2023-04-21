@@ -13,5 +13,6 @@ ActionHolder * action_holder_new     (GObject    *owner,
 
 GObject      *action_holder_get_owner (ActionHolder *holder);
 const char   *action_holder_get_name  (ActionHolder *holder);
+void          action_holder_changed   (ActionHolder *holder);
 
 #endif /* __ACTION_HOLDER_H__ */

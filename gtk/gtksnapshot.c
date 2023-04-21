@@ -300,6 +300,8 @@ gtk_snapshot_new (void)
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
  *
+ * See also [method@Gtk.Snapshot.to_node].
+ *
  * Returns: (transfer full) (nullable): a newly-created [class@Gsk.RenderNode]
  */
 GskRenderNode *
@@ -1569,11 +1571,16 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
  * Returns the render node that was constructed
  * by @snapshot.
  *
+ * Note that this function may return %NULL if nothing has been
+ * added to the snapshot or if its content does not produce pixels
+ * to be rendered.
+ *
  * After calling this function, it is no longer possible to
  * add more nodes to @snapshot. The only function that should
  * be called after this is [method@GObject.Object.unref].
  *
- * Returns: (transfer full) (nullable): the constructed `GskRenderNode`
+ * Returns: (transfer full) (nullable): the constructed `GskRenderNode` or
+ *   %NULL if there are no nodes to render.
  */
 GskRenderNode *
 gtk_snapshot_to_node (GtkSnapshot *snapshot)

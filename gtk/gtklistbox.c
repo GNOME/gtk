@@ -72,7 +72,7 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * list[.separators][.rich-list][.navigation-sidebar]
+ * list[.separators][.rich-list][.navigation-sidebar][.boxed-list]
  * ╰── row[.activatable]
  * ]|
  *
@@ -80,6 +80,9 @@
  * style class, when the [property@Gtk.ListBox:show-separators] property is set.
  * Each `GtkListBoxRow` uses a single CSS node named row. The row nodes get the
  * .activatable style class added when appropriate.
+ *
+ * It may also carry the .boxed-list style class. In this case, the list will be
+ * automatically surrounded by a frame and have separators.
  *
  * The main list node may also carry style classes to select
  * the style of [list presentation](section-list-widget.html#list-styles):

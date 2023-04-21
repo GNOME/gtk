@@ -1207,6 +1207,7 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
         {
           return g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL,
                                "display", display,
+                               "allowed-apis", GDK_GL_API_GLES,
                                NULL);
         }
       else

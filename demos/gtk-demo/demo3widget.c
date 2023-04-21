@@ -224,7 +224,14 @@ demo3_widget_set_property (GObject      *object,
     case PROP_TEXTURE:
       g_clear_object (&self->texture);
       self->texture = g_value_dup_object (value);
+      self->scale = 1.f;
+      self->angle = 0.f;
+      self->filter = GSK_SCALING_FILTER_LINEAR;
+      update_actions (self);
       gtk_widget_queue_resize (GTK_WIDGET (object));
+      g_object_notify (object, "scale");
+      g_object_notify (object, "angle");
+      g_object_notify (object, "filter");
       break;
 
     case PROP_SCALE:

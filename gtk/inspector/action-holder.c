@@ -8,6 +8,8 @@ struct _ActionHolder {
   char *name;
 };
 
+static guint changed_signal;
+
 G_DEFINE_TYPE (ActionHolder, action_holder, G_TYPE_OBJECT)
 
 static void
@@ -32,6 +34,15 @@ action_holder_class_init (ActionHolderClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = action_holder_finalize;
+
+  changed_signal =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 ActionHolder *
@@ -58,4 +69,10 @@ const char *
 action_holder_get_name (ActionHolder *holder)
 {
   return holder->name;
+}
+
+void
+action_holder_changed (ActionHolder *holder)
+{
+  g_signal_emit (holder, changed_signal, 0);
 }

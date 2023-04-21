@@ -98,16 +98,16 @@
  * # CSS nodes
  *
  * ```
- * expander
+ * expander-widget
  * ╰── box
  *     ├── title
- *     │   ├── arrow
+ *     │   ├── expander
  *     │   ╰── <label widget>
  *     ╰── <child>
  * ```
  *
- * `GtkExpander` has three CSS nodes, the main node with the name expander,
- * a subnode with name title and node below it with name arrow. The arrow of an
+ * `GtkExpander` has three CSS nodes, the main node with the name expander-widget,
+ * a subnode with name title and node below it with name expander. The arrow of an
  * expander that is showing its child gets the :checked pseudoclass added to it.
  *
  * # Accessibility

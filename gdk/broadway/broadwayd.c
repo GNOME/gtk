@@ -101,8 +101,7 @@ client_disconnected (BroadwayClient *client)
     }
 
   for (l = client->surfaces; l != NULL; l = l->next)
-    broadway_server_destroy_surface (server,
-                                     GPOINTER_TO_UINT (l->data));
+    broadway_server_destroy_surface (server, GPOINTER_TO_UINT (l->data), TRUE);
   g_list_free (client->surfaces);
   client->surfaces = NULL;
 
@@ -268,7 +267,7 @@ client_handle_request (BroadwayClient *client,
       client->surfaces =
         g_list_remove (client->surfaces,
                        GUINT_TO_POINTER (request->destroy_surface.id));
-      broadway_server_destroy_surface (server, request->destroy_surface.id);
+      broadway_server_destroy_surface (server, request->destroy_surface.id, FALSE);
       break;
     case BROADWAY_REQUEST_SHOW_SURFACE:
       broadway_server_surface_show (server, request->show_surface.id);

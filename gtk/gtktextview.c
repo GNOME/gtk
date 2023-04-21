@@ -1171,10 +1171,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
    *   move by individual characters/lines
-   * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
-   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
-   * - <kbd>PgUp</kbd>, <kbd>PgDn</kbd> move vertically by pages
-   * - <kbd>Ctrl</kbd>-<kbd>PgUp</kbd>, <kbd>Ctrl</kbd>-<kbd>PgDn</kbd>
+   * - <kbd>Ctrl</kbd>+<kbd>←</kbd>, etc. move by words/paragraphs
+   * - <kbd>Home</kbd> and <kbd>End</kbd> move to the ends of the buffer
+   * - <kbd>PgUp</kbd> and <kbd>PgDn</kbd> move vertically by pages
+   * - <kbd>Ctrl</kbd>+<kbd>PgUp</kbd> and <kbd>Ctrl</kbd>+<kbd>PgDn</kbd>
    *   move horizontally by pages
    */
   signals[MOVE_CURSOR] =
@@ -1280,8 +1280,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * of characters.
    *
    * The default bindings for this signal are <kbd>Delete</kbd> for
-   * deleting a character, <kbd>Ctrl</kbd>-<kbd>Delete</kbd> for
-   * deleting a word and <kbd>Ctrl</kbd>-<kbd>Backspace</kbd> for
+   * deleting a character, <kbd>Ctrl</kbd>+<kbd>Delete</kbd> for
+   * deleting a word and <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> for
    * deleting a word backwards.
    */
   signals[DELETE_FROM_CURSOR] =
@@ -1307,7 +1307,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::backspace signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>-<kbd>Backspace</kbd>.
+   * <kbd>Backspace</kbd> and <kbd>Shift</kbd>+<kbd>Backspace</kbd>.
    */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
@@ -1327,8 +1327,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::cut-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>x</kbd> and
-   * <kbd>Shift</kbd>-<kbd>Delete</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>x</kbd> and
+   * <kbd>Shift</kbd>+<kbd>Delete</kbd>.
    */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
@@ -1348,8 +1348,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::copy-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>c</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>c</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>Insert</kbd>.
    */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
@@ -1370,8 +1370,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::paste-clipboard signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>v</kbd> and
-   * <kbd>Shift</kbd>-<kbd>Insert</kbd>.
+   * <kbd>Ctrl</kbd>+<kbd>v</kbd> and
+   * <kbd>Shift</kbd>+<kbd>Insert</kbd>.
    */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
@@ -1411,10 +1411,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::select-all signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>a</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>/</kbd> for selecting and
-   * <kbd>Shift</kbd>-<kbd>Ctrl</kbd>-<kbd>a</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>\</kbd> for unselecting.
+   * <kbd>Ctrl</kbd>+<kbd>a</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>/</kbd> for selecting and
+   * <kbd>Shift</kbd>+<kbd>Ctrl</kbd>+<kbd>a</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>\</kbd> for unselecting.
    */
   signals[SELECT_ALL] =
     g_signal_new_class_handler (I_("select-all"),
@@ -1507,8 +1507,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The ::insert-emoji signal is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * <kbd>Ctrl</kbd>-<kbd>.</kbd> and
-   * <kbd>Ctrl</kbd>-<kbd>;</kbd>
+   * <kbd>Ctrl</kbd>+<kbd>.</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>;</kbd>
    */
   signals[INSERT_EMOJI] =
     g_signal_new (I_("insert-emoji"),
@@ -5640,6 +5640,26 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
       if (state & GDK_SHIFT_MASK)
         extends = TRUE;
 
+      if (n_press > 1)
+	{
+          GtkTextBuffer *buffer;
+          GtkTextIter cur, ins;
+
+          buffer = get_buffer (text_view);
+          get_iter_from_gesture (text_view, GTK_GESTURE (gesture),
+                                 &cur, NULL, NULL);
+          gtk_text_buffer_get_iter_at_mark (buffer, &ins,
+                                            gtk_text_buffer_get_insert (buffer));
+
+          /* Reset count if double/triple clicking on a different line */
+          if (gtk_text_iter_get_line (&cur) !=
+              gtk_text_iter_get_line (&ins))
+            {
+              gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+              n_press = 1;
+            }
+        }
+
       switch (n_press)
         {
         case 1:
@@ -7173,6 +7193,8 @@ gtk_text_view_set_overwrite (GtkTextView *text_view,
  * If @accepts_tab is %TRUE, a tab character is inserted. If @accepts_tab
  * is %FALSE the keyboard focus is moved to the next widget in the focus
  * chain.
+ *
+ * Focus can always be moved using <kbd>Ctrl</kbd>+<kbd>Tab</kbd>.
  */
 void
 gtk_text_view_set_accepts_tab (GtkTextView *text_view,
@@ -9229,7 +9251,8 @@ append_bubble_item (GtkTextView *text_view,
   muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE);
   if (muxer)
     {
-      gtk_action_muxer_query_action (muxer, action_name, &enabled, &param_type, &state_type, NULL, NULL);
+      if (!gtk_action_muxer_query_action (muxer, action_name, &enabled, &param_type, &state_type, NULL, NULL))
+        return;
 
       if (!enabled)
         return;

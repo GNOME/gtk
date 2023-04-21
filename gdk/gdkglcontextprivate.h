@@ -37,8 +37,7 @@ G_BEGIN_DECLS
  * Backends should make sure to never create a context of a previous version.
  *
  * The macros refer to OpenGL; OpenGL with OPENGL_COMPATIBILITY_PROFILE_BIT as
- * OPENGL_PROFILE_MASK; OpenGL ES; and OpenGL ES win32 Angle implementation,
- * respectively
+ * OPENGL_PROFILE_MASK; and OpenGL ES respectively
  */
 #define GDK_GL_MIN_GL_VERSION_MAJOR (3)
 #define GDK_GL_MIN_GL_VERSION_MINOR (2)
@@ -46,8 +45,6 @@ G_BEGIN_DECLS
 #define GDK_GL_MIN_GL_LEGACY_VERSION_MINOR (0)
 #define GDK_GL_MIN_GLES_VERSION_MAJOR (2)
 #define GDK_GL_MIN_GLES_VERSION_MINOR (0)
-#define GDK_GL_MIN_GLES_WIN32_ANGLE_VERSION_MAJOR (3)
-#define GDK_GL_MIN_GLES_WIN32_ANGLE_VERSION_MINOR (0)
 
 typedef enum {
   GDK_GL_NONE = 0,
@@ -101,7 +98,6 @@ typedef struct {
 } GdkGLContextProgram;
 
 typedef struct {
-  guint vertex_array_object;
   guint tmp_framebuffer;
   guint tmp_vertex_buffer;
 
@@ -141,7 +137,6 @@ void                    gdk_gl_context_get_clipped_version      (GdkGLContext   
                                                                  int             *minor);
 void                    gdk_gl_context_get_matching_version     (GdkGLAPI         api,
                                                                  gboolean         legacy,
-                                                                 gboolean         win32_libangle,
                                                                  int             *major,
                                                                  int             *minor);
 

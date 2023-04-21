@@ -443,16 +443,38 @@ create_popup_layout (GtkPopover *popover)
   GtkWidget *parent;
   GtkCssStyle *style;
   GtkBorder shadow_width;
+  GtkNative *native;
+  double nx, ny;
+  graphene_rect_t bounds;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
-  gtk_widget_get_surface_allocation (parent, &rect);
+  native = gtk_widget_get_native (parent);
+
   if (priv->has_pointing_to)
     {
-      rect.x += priv->pointing_to.x;
-      rect.y += priv->pointing_to.y;
-      rect.width = priv->pointing_to.width;
-      rect.height = priv->pointing_to.height;
+      graphene_matrix_t transform;
+      graphene_rect_t pointing_to = GRAPHENE_RECT_INIT (priv->pointing_to.x,
+                                                        priv->pointing_to.y,
+                                                        priv->pointing_to.width,
+                                                        priv->pointing_to.height);
+
+      if (!gtk_widget_compute_transform (parent, GTK_WIDGET (native), &transform))
+        graphene_matrix_init_identity (&transform);
+
+      graphene_matrix_transform_bounds (&transform, &pointing_to, &bounds);
     }
+  else
+    {
+      if (!gtk_widget_compute_bounds (parent, GTK_WIDGET (native), &bounds))
+        g_warning ("Failed to compute bounds");
+    }
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+
+  rect.x = (int) floor (bounds.origin.x + nx);
+  rect.y = (int) floor (bounds.origin.y + ny);
+  rect.width = (int) ceilf (bounds.size.width);
+  rect.width = (int) ceilf (bounds.size.height);
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
@@ -1056,20 +1078,12 @@ gtk_popover_show (GtkWidget *widget)
     {
       if (!gtk_widget_get_focus_child (widget))
         gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
-
-      gtk_grab_add (widget);
     }
 }
 
 static void
 gtk_popover_hide (GtkWidget *widget)
 {
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (priv->autohide)
-    gtk_grab_remove (widget);
-
   gtk_popover_set_mnemonics_visible (GTK_POPOVER (widget), FALSE);
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
@@ -1116,6 +1130,9 @@ gtk_popover_map (GtkWidget *widget)
                                                        unset_surface_transform_changed_cb);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
+
+  if (priv->autohide)
+    gtk_grab_add (widget);
 }
 
 static void
@@ -1124,6 +1141,9 @@ gtk_popover_unmap (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *parent;
+
+  if (priv->autohide)
+    gtk_grab_remove (widget);
 
   parent = gtk_widget_get_parent (widget);
   gtk_widget_remove_surface_transform_changed_callback (parent,

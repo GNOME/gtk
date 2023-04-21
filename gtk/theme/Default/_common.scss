@@ -43,6 +43,10 @@ image:disabled {
   -gtk-icon-filter: opacity(0.5);
 }
 
+picture:disabled {
+  opacity: 0.5;
+}
+
 .view,
 %view {
   color: $text_color;
@@ -3397,6 +3401,38 @@ columnview.complex {
     > * {
       padding-top: 2px;
       padding-bottom: 2px;
+    }
+  }
+}
+
+
+/**********************************************************************
+ * Boxed Lists                                                        *
+ * Lists inside a rounded frame. Can be used together with .rich-list *                                     *
+ **********************************************************************/
+
+.boxed-list {
+  border-radius: $window_radius;
+  border: 1px solid $borders_color;
+
+  > row {
+    @include focus-ring($offset: -1px);
+
+    border-bottom: 1px solid transparentize($borders_color, 0.5);
+
+    &:backdrop {
+      border-bottom-color: transparentize($backdrop_borders_color, 0.5);
+    }
+
+    &:first-child {
+      border-top-left-radius: $window_radius;
+      border-top-right-radius: $window_radius;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: $window_radius;
+      border-bottom-right-radius: $window_radius;
+      border-bottom: none;
     }
   }
 }

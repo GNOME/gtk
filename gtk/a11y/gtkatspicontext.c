@@ -142,10 +142,10 @@ collect_states (GtkAtSpiContext    *self,
   accessible = gtk_at_context_get_accessible (ctx);
 
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
+  set_atspi_state (&states, ATSPI_STATE_SHOWING);
 
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_WINDOW)
     {
-      set_atspi_state (&states, ATSPI_STATE_SHOWING);
       if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
         set_atspi_state (&states, ATSPI_STATE_ACTIVE);
     }
@@ -918,6 +918,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
         {
           gtk_at_spi_root_child_changed (self->root, change, accessible);
           emit_state_changed (self, "showing", gtk_boolean_accessible_value_get (value));
+          emit_state_changed (self, "visible", gtk_boolean_accessible_value_get (value));
         }
       else
         {
