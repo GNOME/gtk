@@ -248,10 +248,6 @@ gdk_broadway_display_create_surface (GdkDisplay     *display,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
-      surface = g_object_new (GDK_TYPE_BROADWAY_DRAG_SURFACE,
-                              "display", display,
-                              NULL);
-      break;
     default:
       g_assert_not_reached ();
       break;
@@ -1066,6 +1062,14 @@ _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
   return TRUE;
 }
 
+static GdkSurface *
+gdk_broadway_drag_surface_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DRAG_SURFACE,
+                       "display", display,
+                       NULL);
+}
+
 static void
 create_moveresize_surface (MoveResizeData *mv_resize,
                            guint32         timestamp)
@@ -1077,9 +1081,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
   mv_resize->moveresize_emulation_surface =
-      gdk_broadway_display_create_surface (mv_resize->display,
-                                           GDK_SURFACE_DRAG,
-                                           NULL);
+      gdk_broadway_drag_surface_new (mv_resize->display);
 
   gdk_broadway_surface_move_resize_internal (mv_resize->moveresize_emulation_surface, TRUE, -100, -100, 1, 1);
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
