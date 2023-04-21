@@ -1,5 +1,44 @@
-Overview of Changes in 4.10.2, xx-xx-xxxx
+Overview of Changes in 4.10.2, 21-04-2023
 =========================================
+
+* Fixed issues:
+ - Holding control to select multiple files broken in filechooser (#5669)
+ - Inspector crash (#5681)
+ - Listbase doesn't account for bottom padding in size_allocate_child (#5380)
+ - Leaking AT contexts (#5690)
+ - OpenGL / Windows: Crash when closing gtk4-widget-factory (#5685)
+ - GTK apps crash on startup when setting cursor-size to 0 on Wayland (#5700)
+ - Segmentation fault: gdk_wayland_toplevel_set_startup_id() needs to null-check
+   display->xdg_activation before using it (#5701)
+ - Possible use-after-free under gtk_scrolled_window_update_use_indicators() (#5684)
+ - Wrong error message in `gtk_init` (#5704)
+ - Segfault when scrolling after changing ListView model (#5763)
+ - Bluetooth panel from the Settings app: clicking in the "Downloads" link
+   no longer opens Nautilus (#5671)
+ - Broadway docs or code is broken (#5662)
+ - Disabled GtkPicture's are not properly themed (#5683)
+ - Setting CSS padding to a GtkTextView gives the context menu an offset (#5695)
+ - A11y: the Showing state is used only for windows (#5194)
+ - Gtk4 expander: CSS nodes mismatch code vs. documentation (#5723)
+ - Invoking gtk inspector on a folder results in a crash (#5729)
+ - Double tap requires very precise touch input (#5580)
+ - Name autocompletion dropdown in the GTK4 FileChooser's Save dialog gets
+   stuck, creates artifacts, jumps around (#5743)
+ - Links are not opened when xdg-desktop-portal OpenURI is not available (#5733)
+ - GtkSnapshot generates no nodes appending whitespace-only layouts (#5747)
+
+* Translation updates
+ British English
+ Bulgarian
+ Chinese (China)
+ French
+ Indonesian
+ Korean
+ Russian
+ Serbian
+ Slovenian
+ Turkish
+
 
 Overview of Changes in 4.10.1, 14-03-2023
 =========================================
