@@ -333,7 +333,7 @@ gdk_macos_display_queue_events (GdkDisplay *display)
     }
 }
 
-static void
+void
 _gdk_macos_display_surface_added (GdkMacosDisplay *self,
                                   GdkMacosSurface *surface)
 {
@@ -551,9 +551,6 @@ gdk_macos_display_create_surface (GdkDisplay     *display,
   g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
 
   surface = _gdk_macos_surface_new (self, surface_type, parent);
-
-  if (surface != NULL)
-    _gdk_macos_display_surface_added (self, surface);
 
   return GDK_SURFACE (surface);
 }

@@ -71,7 +71,7 @@ _gdk_macos_drag_surface_constructed (GObject *object)
   GdkMacosWindow *window;
   GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
   GdkSurface *surface = GDK_SURFACE (self);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
   GdkFrameClock *frame_clock;
   NSScreen *screen;
   NSUInteger style_mask;
@@ -129,9 +129,7 @@ _gdk_macos_drag_surface_new (GdkMacosDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
 
-  self = g_object_new (GDK_TYPE_MACOS_DRAG_SURFACE,
+  return g_object_new (GDK_TYPE_MACOS_DRAG_SURFACE,
                        "display", display,
                        NULL);
-
-  return g_steal_pointer (&self);
 }

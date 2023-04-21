@@ -522,6 +522,9 @@ gdk_macos_surface_constructed (GObject *object)
 
   if (self->window != NULL)
     _gdk_macos_surface_configure (self);
+
+  _gdk_macos_display_surface_added (GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self))),
+                                    self);
 }
 
 static void

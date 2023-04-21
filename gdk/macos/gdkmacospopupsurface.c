@@ -291,7 +291,7 @@ _gdk_macos_popup_surface_constructed (GObject *object)
   GdkMacosWindow *window;
   GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
   GdkSurface *surface = GDK_SURFACE (self);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
   NSScreen *screen;
   NSUInteger style_mask;
   NSRect content_rect;
