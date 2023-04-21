@@ -1260,10 +1260,6 @@ gdk_x11_display_create_surface (GdkDisplay     *display,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
-      surface = g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
-                              "display", display,
-                              NULL);
-      break;
     default:
       g_assert_not_reached ();
       break;
@@ -4354,10 +4350,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
-  mv_resize->moveresize_emulation_surface =
-      gdk_x11_display_create_surface (mv_resize->display,
-                                      GDK_SURFACE_DRAG,
-                                      NULL);
+  mv_resize->moveresize_emulation_surface = gdk_x11_drag_surface_new (mv_resize->display);
 
   gdk_surface_set_is_mapped (mv_resize->moveresize_emulation_surface, TRUE);
   gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
@@ -5453,3 +5446,12 @@ gdk_x11_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 {
   iface->present = gdk_x11_drag_surface_present;
 }
+
+GdkSurface *
+gdk_x11_drag_surface_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
+                       "display", display,
+                       NULL);
+}
+

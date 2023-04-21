@@ -1391,9 +1391,7 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
 
   gdk_event_init (display);
 
-  self->leader_gdk_surface = gdk_x11_display_create_surface (display,
-                                                             GDK_SURFACE_DRAG,
-                                                             NULL);
+  self->leader_gdk_surface = gdk_x11_drag_surface_new (display);
 
   (_gdk_x11_surface_get_toplevel (self->leader_gdk_surface))->is_leader = TRUE;
   self->leader_window = GDK_SURFACE_XID (self->leader_gdk_surface);

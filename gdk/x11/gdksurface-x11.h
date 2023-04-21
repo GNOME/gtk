@@ -191,6 +191,8 @@ struct _GdkToplevelX11
 #endif
 };
 
+GdkSurface     *gdk_x11_drag_surface_new             (GdkDisplay *display);
+
 GdkToplevelX11 *_gdk_x11_surface_get_toplevel        (GdkSurface *window);
 
 GdkCursor      *_gdk_x11_surface_get_cursor          (GdkSurface *window);

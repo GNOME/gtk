@@ -1255,18 +1255,6 @@ gdk_drag_do_leave (GdkX11Drag *drag_x11)
     }
 }
 
-static GdkSurface *
-create_drag_surface (GdkDisplay *display)
-{
-  GdkSurface *surface;
-
-  surface = gdk_x11_display_create_surface (display,
-                                            GDK_SURFACE_DRAG,
-                                            NULL);
-
-  return surface;
-}
-
 static Window
 _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
                                     Window           xid,
@@ -2000,9 +1988,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   display = gdk_surface_get_display (surface);
 
-  ipc_surface = gdk_x11_display_create_surface (display,
-                                                GDK_SURFACE_DRAG,
-                                                NULL);
+  ipc_surface = gdk_x11_drag_surface_new (display);
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
                                    "surface", ipc_surface,
@@ -2036,7 +2022,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   gdk_surface_set_is_mapped (x11_drag->ipc_surface, TRUE);
   gdk_x11_surface_show (x11_drag->ipc_surface, FALSE);
 
-  x11_drag->drag_surface = create_drag_surface (display);
+  x11_drag->drag_surface = gdk_x11_drag_surface_new (display);
 
   if (!drag_grab (drag))
     {
