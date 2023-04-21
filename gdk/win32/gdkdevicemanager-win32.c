@@ -427,10 +427,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 			    ndevices, ncursors));
 #endif
   /* Create a dummy window to receive wintab events */
-  wintab_window =
-      gdk_win32_display_create_surface (display,
-                                        GDK_SURFACE_DRAG,
-                                        NULL);
+  wintab_window = gdk_win32_drag_surface_new (display);
 
   g_object_ref (wintab_window);
 

@@ -364,6 +364,8 @@ void gdk_win32_surface_move_resize (GdkSurface *window,
                                     int         width,
                                     int         height);
 
+GdkSurface *gdk_win32_drag_surface_new       (GdkDisplay *display);
+
 RECT
 gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);
 

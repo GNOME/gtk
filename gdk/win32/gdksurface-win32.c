@@ -456,10 +456,6 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
-      surface = g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
-                              "display", display,
-                              NULL);
-      break;
     default:
       g_assert_not_reached ();
       break;
@@ -5158,4 +5154,12 @@ _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
       impl->egl_force_redraw_all = TRUE;
     }
 #endif
+}
+
+GdkSurface *
+gdk_win32_drag_surface_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
+                       "display", display,
+                       NULL);
 }

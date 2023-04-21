@@ -1644,18 +1644,6 @@ _gdk_win32_dnd_exit (void)
   CoUninitialize ();
 }
 
-static GdkSurface *
-create_drag_surface (GdkDisplay *display)
-{
-  GdkSurface *surface;
-
-  surface = gdk_win32_display_create_surface (display,
-                                              GDK_SURFACE_DRAG,
-                                              NULL);
-
-  return surface;
-}
-
 GdkDrag *
 _gdk_win32_surface_drag_begin (GdkSurface         *surface,
                                GdkDevice          *device,
@@ -1695,7 +1683,7 @@ _gdk_win32_surface_drag_begin (GdkSurface         *surface,
 
   g_set_object (&drag_win32->grab_surface, surface);
 
-  drag_win32->drag_surface = create_drag_surface (gdk_surface_get_display (surface));
+  drag_win32->drag_surface = gdk_win32_drag_surface_new (gdk_surface_get_display (surface));
 
   if (!drag_context_grab (drag))
     {
