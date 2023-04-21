@@ -841,36 +841,6 @@ gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
   g_clear_pointer (&self->display_server.outputs, g_slist_free);
 }
 
-GdkSurface *
-gdk_wayland_display_create_surface (GdkDisplay     *display,
-                                    GdkSurfaceType  surface_type,
-                                    GdkSurface     *parent)
-{
-  GdkSurface *surface;
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      g_warn_if_fail (parent == NULL);
-      surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
-                              "display", display,
-                              NULL);
-      break;
-    case GDK_SURFACE_POPUP:
-      g_warn_if_fail (parent != NULL);
-      surface = g_object_new (GDK_TYPE_WAYLAND_POPUP,
-                              "parent", parent,
-                              "display", display,
-                              NULL);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return surface;
-}
-
 static void
 maybe_notify_mapped (GdkSurface *surface)
 {

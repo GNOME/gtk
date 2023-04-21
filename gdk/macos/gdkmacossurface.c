@@ -44,6 +44,7 @@
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospopupsurface-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 
 G_DEFINE_ABSTRACT_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
@@ -584,39 +585,6 @@ gdk_macos_surface_init (GdkMacosSurface *self)
   self->main.data = self;
   self->sorted.data = self;
   self->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-}
-
-GdkMacosSurface *
-_gdk_macos_surface_new (GdkMacosDisplay *display,
-                        GdkSurfaceType   surface_type,
-                        GdkSurface      *parent)
-{
-  GdkMacosSurface *ret;
-
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      ret = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
-                          "display", display,
-                          NULL);
-      break;
-
-    case GDK_SURFACE_POPUP:
-      ret = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
-                          "display", display,
-                          "parent", parent,
-                          NULL);
-
-      break;
-
-    default:
-      g_warn_if_reached ();
-      ret = NULL;
-    }
-
-  return g_steal_pointer (&ret);
 }
 
 void

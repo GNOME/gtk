@@ -84,9 +84,6 @@ struct _GdkMacosSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GdkMacosSurface   *_gdk_macos_surface_new                     (GdkMacosDisplay      *display,
-                                                               GdkSurfaceType        surface_type,
-                                                               GdkSurface           *parent);
 NSWindow          *_gdk_macos_surface_get_native              (GdkMacosSurface      *self);
 void               _gdk_macos_surface_set_native              (GdkMacosSurface      *self,
                                                                GdkMacosWindow       *window);

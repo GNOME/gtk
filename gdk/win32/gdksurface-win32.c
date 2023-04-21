@@ -135,14 +135,6 @@ static void     gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
 
 G_DEFINE_TYPE (GdkWin32Surface, gdk_win32_surface, GDK_TYPE_SURFACE)
 
-GType gdk_win32_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_win32_popup_get_type (void) G_GNUC_CONST;
-GType gdk_win32_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_WIN32_TOPLEVEL (gdk_win32_toplevel_get_type ())
-#define GDK_TYPE_WIN32_POPUP (gdk_win32_popup_get_type ())
-#define GDK_TYPE_WIN32_DRAG_SURFACE (gdk_win32_drag_surface_get_type ())
-
 static void
 gdk_win32_surface_init (GdkWin32Surface *impl)
 {
@@ -433,34 +425,6 @@ RegisterGdkClass (GType wtype)
       g_error ("That is a fatal error");
     }
   return klass;
-}
-
-GdkSurface *
-gdk_win32_display_create_surface (GdkDisplay     *display,
-                                  GdkSurfaceType  surface_type,
-                                  GdkSurface     *parent)
-{
-  GdkSurface *surface;
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      surface = g_object_new (GDK_TYPE_WIN32_TOPLEVEL,
-                              "display", display,
-                              NULL);
-      break;
-    case GDK_SURFACE_POPUP:
-      surface = g_object_new (GDK_TYPE_WIN32_POPUP,
-                              "parent", parent,
-                              "display", display,
-                              NULL);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return surface;
 }
 
 static void

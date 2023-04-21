@@ -36,6 +36,14 @@
 
 G_BEGIN_DECLS
 
+GType gdk_x11_toplevel_get_type (void) G_GNUC_CONST;
+GType gdk_x11_popup_get_type (void) G_GNUC_CONST;
+GType gdk_x11_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_X11_TOPLEVEL (gdk_x11_toplevel_get_type ())
+#define GDK_TYPE_X11_POPUP (gdk_x11_popup_get_type ())
+#define GDK_TYPE_X11_DRAG_SURFACE (gdk_x11_drag_surface_get_type ())
+
 typedef struct _GdkToplevelX11 GdkToplevelX11;
 typedef struct _GdkXPositionInfo GdkXPositionInfo;
 

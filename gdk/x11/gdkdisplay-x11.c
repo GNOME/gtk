@@ -3028,6 +3028,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->dispose = gdk_x11_display_dispose;
   object_class->finalize = gdk_x11_display_finalize;
 
+  display_class->toplevel_type = GDK_TYPE_X11_TOPLEVEL;
+  display_class->popup_type = GDK_TYPE_X11_POPUP;
   display_class->cairo_context_type = GDK_TYPE_X11_CAIRO_CONTEXT;
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_X11_VULKAN_CONTEXT;
@@ -3048,7 +3050,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
 G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
-  display_class->create_surface = gdk_x11_display_create_surface;
   display_class->get_keymap = gdk_x11_display_get_keymap;
 
   display_class->init_gl = gdk_x11_display_init_gl;

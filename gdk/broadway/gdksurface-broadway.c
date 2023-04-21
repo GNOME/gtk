@@ -49,14 +49,6 @@
 
 G_DEFINE_TYPE (GdkBroadwaySurface, gdk_broadway_surface, GDK_TYPE_SURFACE)
 
-GType gdk_broadway_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_broadway_popup_get_type (void) G_GNUC_CONST;
-GType gdk_broadway_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_BROADWAY_TOPLEVEL (gdk_broadway_toplevel_get_type ())
-#define GDK_TYPE_BROADWAY_POPUP (gdk_broadway_popup_get_type ())
-#define GDK_TYPE_BROADWAY_DRAG_SURFACE (gdk_broadway_drag_surface_get_type ())
-
 /* We need to flush in an idle rather than AFTER_PAINT, as the clock
    is frozen during e.g. surface resizes so the paint will not happen
    and the surface resize request is never flushed. */
@@ -225,34 +217,6 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 #endif
     }
-}
-
-GdkSurface *
-gdk_broadway_display_create_surface (GdkDisplay     *display,
-                                     GdkSurfaceType  surface_type,
-                                     GdkSurface     *parent)
-{
-  GdkSurface *surface;
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      surface = g_object_new (GDK_TYPE_BROADWAY_TOPLEVEL,
-                              "display", display,
-                              NULL);
-      break;
-    case GDK_SURFACE_POPUP:
-      surface = g_object_new (GDK_TYPE_BROADWAY_POPUP,
-                              "parent", parent,
-                              "display", display,
-                              NULL);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return surface;
 }
 
 static void

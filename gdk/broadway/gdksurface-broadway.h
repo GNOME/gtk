@@ -32,6 +32,14 @@ G_BEGIN_DECLS
 /* Surface implementation for Broadway
  */
 
+GType gdk_broadway_toplevel_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_popup_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_BROADWAY_TOPLEVEL (gdk_broadway_toplevel_get_type ())
+#define GDK_TYPE_BROADWAY_POPUP (gdk_broadway_popup_get_type ())
+#define GDK_TYPE_BROADWAY_DRAG_SURFACE (gdk_broadway_drag_surface_get_type ())
+
 struct _GdkBroadwaySurface
 {
   GdkSurface parent_instance;

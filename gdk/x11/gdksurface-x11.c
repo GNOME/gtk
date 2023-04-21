@@ -130,14 +130,6 @@ static void gdk_x11_surface_set_geometry_hints (GdkSurface        *surface,
 
 G_DEFINE_TYPE (GdkX11Surface, gdk_x11_surface, GDK_TYPE_SURFACE)
 
-GType gdk_x11_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_x11_popup_get_type (void) G_GNUC_CONST;
-GType gdk_x11_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_X11_TOPLEVEL (gdk_x11_toplevel_get_type ())
-#define GDK_TYPE_X11_POPUP (gdk_x11_popup_get_type ())
-#define GDK_TYPE_X11_DRAG_SURFACE (gdk_x11_drag_surface_get_type ())
-
 static void
 gdk_x11_surface_init (GdkX11Surface *impl)
 {  
@@ -1238,34 +1230,6 @@ gdk_x11_surface_create_pixmap_surface (GdkSurface *surface,
 
 static void gdk_x11_surface_set_type_hint (GdkSurface        *surface,
                                            GdkSurfaceTypeHint hint);
-
-GdkSurface *
-gdk_x11_display_create_surface (GdkDisplay     *display,
-                                GdkSurfaceType  surface_type,
-                                GdkSurface     *parent)
-{
-  GdkSurface *surface;
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      surface = g_object_new (GDK_TYPE_X11_TOPLEVEL,
-                              "display", display,
-                              NULL);
-      break;
-    case GDK_SURFACE_POPUP:
-      surface = g_object_new (GDK_TYPE_X11_POPUP,
-                              "parent", parent,
-                              "display", display,
-                              NULL);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  return surface;
-}
 
 static void
 gdk_toplevel_x11_free_contents (GdkDisplay *display,

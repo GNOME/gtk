@@ -36,8 +36,10 @@
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacosmonitor-private.h"
+#include "gdkmacospopupsurface-private.h"
 #include "gdkmacosseat-private.h"
 #include "gdkmacossurface-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
 G_DEFINE_TYPE (GdkMacosDisplay, gdk_macos_display, GDK_TYPE_DISPLAY)
@@ -539,22 +541,6 @@ _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
   _gdk_macos_display_clear_sorting (self);
 }
 
-static GdkSurface *
-gdk_macos_display_create_surface (GdkDisplay     *display,
-                                  GdkSurfaceType  surface_type,
-                                  GdkSurface     *parent)
-{
-  GdkMacosDisplay *self = (GdkMacosDisplay *)display;
-  GdkMacosSurface *surface;
-
-  g_assert (GDK_IS_MACOS_DISPLAY (self));
-  g_assert (!parent || GDK_IS_MACOS_SURFACE (parent));
-
-  surface = _gdk_macos_surface_new (self, surface_type, parent);
-
-  return GDK_SURFACE (surface);
-}
-
 static GdkKeymap *
 gdk_macos_display_get_keymap (GdkDisplay *display)
 {
@@ -610,10 +596,11 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
 
   object_class->finalize = gdk_macos_display_finalize;
 
+  display_class->toplevel_type = GDK_TYPE_MACOS_TOPLEVEL_SURFACE;
+  display_class->popup_type = GDK_TYPE_MACOS_POPUP_SURFACE;
   display_class->cairo_context_type = GDK_TYPE_MACOS_CAIRO_CONTEXT;
 
   display_class->beep = gdk_macos_display_beep;
-  display_class->create_surface = gdk_macos_display_create_surface;
   display_class->flush = gdk_macos_display_flush;
   display_class->get_keymap = gdk_macos_display_get_keymap;
   display_class->get_monitors = gdk_macos_display_get_monitors;

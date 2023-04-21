@@ -1196,16 +1196,6 @@ _gdk_display_unpause_events (GdkDisplay *display)
   display->event_pause_count--;
 }
 
-GdkSurface *
-gdk_display_create_surface (GdkDisplay     *display,
-                            GdkSurfaceType  surface_type,
-                            GdkSurface     *parent)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->create_surface (display,
-                                                          surface_type,
-                                                          parent);
-}
-
 /*< private >
  * gdk_display_get_keymap:
  * @display: the `GdkDisplay`
