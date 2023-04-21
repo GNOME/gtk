@@ -31,7 +31,5 @@ G_DECLARE_FINAL_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK, FILE_CHOOS
 
 GtkFileChooserCell * gtk_file_chooser_cell_new (void);
 
-guint                gtk_file_chooser_cell_get_type_format (GtkFileChooserCell *self);
-
 G_END_DECLS
 

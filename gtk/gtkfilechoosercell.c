@@ -41,7 +41,6 @@ struct _GtkFileChooserCell
   GtkColumnViewCell *list_item;
 
   gboolean date_column;
-  guint type_format;
 
   gboolean show_time;
 };
@@ -63,12 +62,6 @@ enum
 };
 
 #define ICON_SIZE 16
-
-guint
-gtk_file_chooser_cell_get_type_format (GtkFileChooserCell *self)
-{
-  return self->type_format;
-}
 
 static void
 popup_menu (GtkFileChooserCell *self,
@@ -195,11 +188,6 @@ gtk_file_chooser_cell_init (GtkFileChooserCell *self)
 {
   GtkGesture *gesture;
   GtkDragSource *drag_source;
-  GSettings *settings;
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (self));
-
-  self->type_format = g_settings_get_enum (settings, SETTINGS_KEY_TYPE_FORMAT);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
