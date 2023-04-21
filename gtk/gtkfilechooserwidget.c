@@ -44,6 +44,7 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgrid.h"
+#include "gtkinscription.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkalertdialog.h"
@@ -70,6 +71,7 @@
 #include "gtkscrollable.h"
 #include "gtkpopover.h"
 #include "gtkrevealer.h"
+#include "gtksignallistitemfactory.h"
 #include "gtkspinner.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkdebug.h"
@@ -1946,18 +1948,12 @@ files_list_restrict_key_presses (GtkEventControllerKey *controller,
 }
 
 static char *
-column_view_get_file_date (GtkColumnViewCell *cell,
+get_file_date (GtkFileChooserWidget *impl,
                            GFileInfo        *info)
 {
-  GtkFileChooserWidget *impl;
   glong time;
 
   if (!info)
-    return NULL;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
     return NULL;
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
@@ -1982,18 +1978,12 @@ column_view_get_file_display_name (GtkColumnViewCell *cell,
 }
 
 static char *
-column_view_get_file_time (GtkColumnViewCell *cell,
+get_file_time (GtkFileChooserWidget *impl,
                            GFileInfo        *info)
 {
-  GtkFileChooserWidget *impl;
   glong time;
 
   if (!info)
-    return NULL;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
     return NULL;
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
@@ -2005,23 +1995,6 @@ column_view_get_file_time (GtkColumnViewCell *cell,
     return g_strdup (_("Unknown"));
 
   return my_g_format_time_for_display (impl, time);
-}
-
-static char *
-column_view_get_file_type (GtkColumnViewCell *cell,
-                           GFileInfo        *info)
-{
-  GtkFileChooserWidget *impl;
-
-  if (!info || _gtk_file_info_consider_as_directory (info))
-    return NULL;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
-    return NULL;
-
-  return get_type_information (impl, info);
 }
 
 static void
@@ -2097,22 +2070,7 @@ file_chooser_get_location (GtkFileChooserWidget *impl,
 }
 
 static char *
-column_view_get_location (GtkColumnViewCell *cell,
-                          GFileInfo         *info)
-{
-  GtkFileChooserWidget *impl;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (gtk_column_view_cell_get_child (cell),
-                                                           GTK_TYPE_FILE_CHOOSER_WIDGET));
-  if (!impl)
-    return NULL;
-
-  return file_chooser_get_location (impl, info);
-}
-
-static char *
-column_view_get_size (GtkColumnViewCell *cell,
-                      GFileInfo         *info)
+column_view_get_size (GFileInfo *info)
 {
   if (info && !_gtk_file_info_consider_as_directory (info))
     return g_format_size (g_file_info_get_size (info));
@@ -2121,8 +2079,8 @@ column_view_get_size (GtkColumnViewCell *cell,
 }
 
 static char *
-column_view_get_tooltip_text (GtkColumnViewCell *cell,
-                              GFileInfo         *info)
+column_view_get_tooltip_text (GtkListItem *cell,
+                              GFileInfo   *info)
 {
   GFile *file;
 
@@ -6809,12 +6767,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_path_bar_size_group);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_path_bar);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, browse_toggle_view_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_name_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_location_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_size_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_time_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo_hbox);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, column_view_type_column);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, filter_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, extra_align);
   gtk_widget_class_bind_template_child (widget_class, GtkFileChooserWidget, extra_and_filters);
@@ -6848,12 +6801,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_name_changed);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_date);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_display_name);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_time);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_file_type);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_location);
-  gtk_widget_class_bind_template_callback (widget_class, column_view_get_size);
   gtk_widget_class_bind_template_callback (widget_class, column_view_get_tooltip_text);
   gtk_widget_class_bind_template_callback (widget_class, column_view_row_bind);
 
@@ -7310,6 +7258,170 @@ file_chooser_widget_long_pressed (GtkEventController *controller,
 }
 
 static void
+bind_cell_common (GtkColumnViewCell *column_cell,
+                  GtkWidget         *child,
+                  GFileInfo         *info)
+{
+  char *tooltip;
+  GtkFileChooserCell *cell = gtk_file_chooser_cell_new ();
+
+  g_object_set (cell, "list-item", column_cell, "item", info, NULL);
+  gtk_widget_insert_before (child, GTK_WIDGET (cell), NULL);
+  tooltip = column_view_get_tooltip_text (NULL, info);
+  gtk_widget_set_tooltip_text (child, tooltip);
+  gtk_column_view_cell_set_child (column_cell, GTK_WIDGET (cell));
+
+  g_free (tooltip);
+}
+
+static void
+bind_name_cell (GtkFileChooserWidget *impl,
+                GtkColumnViewCell    *column_cell)
+{
+  GtkFileThumbnail *thumbnail;
+  GtkWidget *box;
+  GtkWidget *inscription;
+  GFileInfo *info = gtk_column_view_cell_get_item (column_cell);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  thumbnail = g_object_new (GTK_TYPE_FILE_THUMBNAIL, NULL);
+  gtk_widget_set_margin_start (GTK_WIDGET (thumbnail), 6);
+  gtk_widget_set_margin_end (GTK_WIDGET (thumbnail), 6);
+  _gtk_file_thumbnail_set_info (thumbnail, info);
+
+  inscription = gtk_inscription_new (g_file_info_get_display_name (info));
+  gtk_widget_set_hexpand (inscription, TRUE);
+  gtk_inscription_set_min_chars (GTK_INSCRIPTION (inscription), 10);
+
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (thumbnail));
+  gtk_box_append (GTK_BOX (box), inscription);
+
+  bind_cell_common (column_cell, box, info);
+}
+
+
+static void
+bind_location_cell (GtkFileChooserWidget *impl,
+                    GtkColumnViewCell    *column_cell)
+{
+  GtkWidget *inscription;
+  char *text;
+  GFileInfo *info = gtk_column_view_cell_get_item (column_cell);
+
+  text = file_chooser_get_location (impl, info);
+  inscription = gtk_inscription_new (text);
+  gtk_widget_set_hexpand (inscription, TRUE);
+  gtk_inscription_set_xalign (GTK_INSCRIPTION (inscription), 0);
+  gtk_inscription_set_min_chars (GTK_INSCRIPTION (inscription), 10);
+  gtk_widget_set_margin_start (inscription, 6);
+  gtk_widget_set_margin_end (inscription, 6);
+
+  bind_cell_common (column_cell, inscription, info);
+
+  g_free (text);
+}
+
+static void
+bind_size_cell (GtkFileChooserWidget *impl,
+                GtkColumnViewCell    *column_cell)
+{
+  GtkWidget *label;
+  char *text;
+  GFileInfo *info = gtk_column_view_cell_get_item (column_cell);
+
+  text = column_view_get_size (info);
+  label = gtk_label_new (text);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  bind_cell_common (column_cell, label, info);
+
+  g_free (text);
+}
+
+static void
+bind_time_cell (GtkFileChooserWidget *impl,
+                GtkColumnViewCell    *column_cell)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  char *text;
+  GFileInfo *info = gtk_column_view_cell_get_item (column_cell);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  text = get_file_date (impl, info);
+  label = gtk_label_new (text);
+  g_free (text);
+  gtk_box_append (GTK_BOX (box), label);
+  text = get_file_time (impl, info);
+  label = gtk_label_new (text);
+  g_object_bind_property (impl, "show-time", label, "visible", G_BINDING_SYNC_CREATE);
+  gtk_box_append (GTK_BOX (box), label);
+
+  bind_cell_common (column_cell, box, info);
+
+  g_free (text);
+}
+
+static void
+bind_type_cell (GtkFileChooserWidget *impl,
+                GtkColumnViewCell    *column_cell)
+{
+  GtkWidget *label;
+  char *display_name;
+  GFileInfo *info = gtk_column_view_cell_get_item (column_cell);
+
+  if (_gtk_file_info_consider_as_directory (info))
+    display_name = NULL;
+  else
+    display_name = get_type_information (impl, info);
+
+  label = gtk_label_new (display_name);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  bind_cell_common (column_cell, label, info);
+
+  g_free (display_name);
+}
+
+static void
+setup_columns (GtkColumnView        *view,
+               GtkFileChooserWidget *impl)
+{
+  GtkListItemFactory *factory;
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_name_cell), impl);
+  impl->column_view_name_column = gtk_column_view_column_new (_("Name"), factory);
+  gtk_column_view_column_set_expand (impl->column_view_name_column, TRUE);
+  gtk_column_view_column_set_resizable (impl->column_view_name_column, TRUE);
+  gtk_column_view_append_column (view, impl->column_view_name_column);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_location_cell), impl);
+  impl->column_view_location_column = gtk_column_view_column_new (_("Location"), factory);
+  gtk_column_view_column_set_expand (impl->column_view_location_column, TRUE);
+  gtk_column_view_column_set_resizable (impl->column_view_location_column, TRUE);
+  gtk_column_view_column_set_visible (impl->column_view_location_column, FALSE);
+  gtk_column_view_append_column (view, impl->column_view_location_column);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_size_cell), impl);
+  impl->column_view_size_column = gtk_column_view_column_new (_("Size"), factory);
+  gtk_column_view_append_column (view, impl->column_view_size_column);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_type_cell), impl);
+  impl->column_view_type_column = gtk_column_view_column_new (_("Type"), factory);
+  gtk_column_view_column_set_resizable (impl->column_view_type_column, TRUE);
+  gtk_column_view_append_column (view, impl->column_view_type_column);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_time_cell), impl);
+  impl->column_view_time_column = gtk_column_view_column_new (_("Modified"), factory);
+  gtk_column_view_append_column (view, impl->column_view_time_column);
+}
+
+static void
 gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 {
   GtkExpression *expression;
@@ -7359,6 +7471,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   gtk_sort_list_model_set_model (impl->sort_model, G_LIST_MODEL (impl->filter_model));
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (impl->browse_files_column_view), impl->selection_model);
+  setup_columns (GTK_COLUMN_VIEW (impl->browse_files_column_view), impl);
 
   g_object_set_data (G_OBJECT (impl->column_view_name_column), "column", GINT_TO_POINTER (0));
   g_object_set_data (G_OBJECT (impl->column_view_size_column), "column", GINT_TO_POINTER (1));
