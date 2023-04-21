@@ -1245,40 +1245,29 @@ gdk_x11_display_create_surface (GdkDisplay     *display,
                                 GdkSurface     *parent)
 {
   GdkSurface *surface;
-  GdkFrameClock *frame_clock;
-
-  if (parent)
-    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_X11_TOPLEVEL,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_X11_POPUP,
                               "parent", parent,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
       surface = g_object_new (GDK_TYPE_X11_DRAG_SURFACE,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     default:
       g_assert_not_reached ();
       break;
     }
-
-  g_object_unref (frame_clock);
 
   return surface;
 }
@@ -4887,6 +4876,8 @@ gdk_x11_popup_constructed (GObject *object)
 
   x11_surface->override_redirect = TRUE;
 
+  gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
+
   G_OBJECT_CLASS (gdk_x11_popup_parent_class)->constructed (object);
 
   gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
@@ -5013,12 +5004,17 @@ gdk_x11_toplevel_constructed (GObject *object)
 {
   GdkX11Surface *x11_surface = GDK_X11_SURFACE (object);
   GdkSurface *surface = GDK_SURFACE (x11_surface);
+  GdkFrameClock *frame_clock;
   XSetWindowAttributes xattributes;
   long xattributes_mask;
 
   xattributes_mask = 0;
 
   gdk_x11_surface_create_window (x11_surface, &xattributes, xattributes_mask);
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   G_OBJECT_CLASS (gdk_x11_toplevel_parent_class)->constructed (object);
 
@@ -5404,6 +5400,8 @@ static void
 gdk_x11_drag_surface_constructed (GObject *object)
 {
   GdkX11Surface *x11_surface = GDK_X11_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkFrameClock *frame_clock;
   XSetWindowAttributes xattributes;
   long xattributes_mask;
 
@@ -5414,6 +5412,10 @@ gdk_x11_drag_surface_constructed (GObject *object)
   gdk_x11_surface_create_window (x11_surface, &xattributes, xattributes_mask);
 
   x11_surface->override_redirect = TRUE;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   G_OBJECT_CLASS (gdk_x11_drag_surface_parent_class)->constructed (object);
 }
