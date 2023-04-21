@@ -777,6 +777,336 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
  * X11 specific implementations of generic functions *
  *****************************************************/
 
+static const char *
+get_default_title (void)
+{
+  const char *title;
+
+  title = g_get_application_name ();
+  if (!title)
+    title = g_get_prgname ();
+  if (!title)
+    title = "";
+
+  return title;
+}
+
+static void
+set_wm_protocols (GdkSurface *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  Atom protocols[4];
+  int n = 0;
+  
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS");
+  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING");
+
+#ifdef HAVE_XSYNC
+  if (GDK_X11_DISPLAY (display)->use_sync)
+    protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST");
+#endif
+  
+  XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface), protocols, n);
+}
+
+static void
+check_leader_window_title (GdkDisplay *display)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  if (display_x11->leader_window && !display_x11->leader_window_title_set)
+    {
+      set_wm_name (display,
+		   display_x11->leader_window,
+		   get_default_title ());
+      
+      display_x11->leader_window_title_set = TRUE;
+    }
+}
+
+static Window
+create_focus_window (GdkDisplay *display,
+		     XID         parent)
+{
+  GdkX11Display *display_x11;
+  GdkEventMask event_mask;
+  Display *xdisplay;
+  Window focus_window;
+  XSetWindowAttributes attrs;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  display_x11 = GDK_X11_DISPLAY (display);
+
+  focus_window = XCreateWindow (xdisplay, parent,
+                                -1, -1, 1, 1, 0,
+                                0, /* depth */
+                                InputOnly,
+                                CopyFromParent,
+                                0, &attrs);
+
+  event_mask = (GDK_KEY_PRESS_MASK |
+                GDK_KEY_RELEASE_MASK |
+                GDK_FOCUS_CHANGE_MASK);
+
+  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                      focus_window,
+                                      event_mask, 0);
+
+  XMapWindow (xdisplay, focus_window);
+
+  return focus_window;
+}
+
+static void
+ensure_sync_counter (GdkSurface *surface)
+{
+#ifdef HAVE_XSYNC
+  if (!GDK_SURFACE_DESTROYED (surface))
+    {
+      GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
+      GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+
+      if (toplevel &&
+	  toplevel->update_counter == None &&
+	  GDK_X11_DISPLAY (display)->use_sync)
+	{
+	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+	  XSyncValue value;
+	  Atom atom;
+	  XID counters[2];
+
+	  XSyncIntToValue (&value, 0);
+	  
+	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
+	  toplevel->extended_update_counter = XSyncCreateCounter (xdisplay, value);
+	  
+	  atom = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_SYNC_REQUEST_COUNTER");
+
+	  counters[0] = toplevel->update_counter;
+	  counters[1] = toplevel->extended_update_counter;
+	  XChangeProperty (xdisplay, GDK_SURFACE_XID (surface),
+			   atom, XA_CARDINAL,
+			   32, PropModeReplace,
+			   (guchar *)counters, 2);
+	  
+	  toplevel->current_counter_value = 0;
+	}
+    }
+#endif
+}
+
+static void
+setup_toplevel_window (GdkSurface *surface)
+{
+  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
+  XID xid = GDK_SURFACE_XID (surface);
+  XSizeHints size_hints;
+  Window leader_window;
+
+  set_wm_protocols (surface);
+
+  /* The focus surface is off the visible area, and serves to receive key
+   * press events so they don't get sent to child surfaces.
+   */
+  toplevel->focus_window = create_focus_window (display, xid);
+  _gdk_x11_display_add_window (display,
+                               &toplevel->focus_window,
+                               surface);
+
+  check_leader_window_title (display);
+
+  /* FIXME: Is there any point in doing this? Do any WM's pay
+   * attention to PSize, and even if they do, is this the
+   * correct value???
+   */
+  size_hints.flags = PSize;
+  size_hints.width = surface->width * impl->surface_scale;
+  size_hints.height = surface->height * impl->surface_scale;
+  
+  XSetWMNormalHints (xdisplay, xid, &size_hints);
+  
+  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
+  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+  
+  if (!gdk_running_in_sandbox ())
+    {
+      /* if sandboxed, we're likely in a pid namespace and would only confuse the wm with this */
+      long pid = getpid ();
+      XChangeProperty (xdisplay, xid,
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PID"),
+                       XA_CARDINAL, 32,
+                       PropModeReplace,
+                       (guchar *)&pid, 1);
+    }
+
+  leader_window = GDK_X11_DISPLAY (display)->leader_window;
+  if (!leader_window)
+    leader_window = xid;
+  XChangeProperty (xdisplay, xid, 
+		   gdk_x11_get_xatom_by_name_for_display (display, "WM_CLIENT_LEADER"),
+		   XA_WINDOW, 32, PropModeReplace,
+		   (guchar *) &leader_window, 1);
+
+  if (toplevel->focus_window != None)
+    XChangeProperty (xdisplay, xid, 
+                     gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME_WINDOW"),
+                     XA_WINDOW, 32, PropModeReplace,
+                     (guchar *) &toplevel->focus_window, 1);
+
+  if (GDK_X11_DISPLAY (display)->user_time != 0)
+    gdk_x11_surface_set_user_time (surface, GDK_X11_DISPLAY (display)->user_time);
+
+  ensure_sync_counter (surface);
+
+  /* Start off in a frozen state - we'll finish this when we first paint */
+  gdk_x11_surface_begin_frame (surface, TRUE);
+}
+
+static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkSurface     *surface)
+{
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_x11_surface_predict_presentation_time (surface);
+  gdk_x11_surface_begin_frame (surface, FALSE);
+}
+
+static void
+on_frame_clock_after_update (GdkFrameClock *clock,
+                             GdkSurface    *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  if (impl->compute_size_source_id)
+    {
+      g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
+      compute_size_idle (surface);
+    }
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *clock,
+                            GdkSurface     *surface)
+{
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_x11_surface_end_frame (surface);
+}
+
+static void
+connect_frame_clock (GdkSurface *surface)
+{
+  GdkX11Surface *impl;
+
+  impl = GDK_X11_SURFACE (surface);
+  if (!impl->frame_clock_connected)
+    {
+      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+      g_signal_connect (frame_clock, "before-paint",
+                        G_CALLBACK (on_frame_clock_before_paint), surface);
+      g_signal_connect_after (frame_clock, "update",
+                              G_CALLBACK (on_frame_clock_after_update), surface);
+      g_signal_connect (frame_clock, "after-paint",
+                        G_CALLBACK (on_frame_clock_after_paint), surface);
+
+      impl->frame_clock_connected = TRUE;
+    }
+}
+
+static void
+disconnect_frame_clock (GdkSurface *surface)
+{
+  GdkX11Surface *impl;
+
+  impl = GDK_X11_SURFACE (surface);
+  if (impl->frame_clock_connected)
+    {
+      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_before_paint, surface);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_after_update, surface);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_after_paint, surface);
+
+      impl->frame_clock_connected = FALSE;
+    }
+}
+
+typedef enum
+{
+  GDK_SURFACE_TYPE_HINT_NORMAL,
+  GDK_SURFACE_TYPE_HINT_DIALOG,
+  GDK_SURFACE_TYPE_HINT_MENU,           /* Torn off menu */
+  GDK_SURFACE_TYPE_HINT_TOOLBAR,
+  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
+  GDK_SURFACE_TYPE_HINT_UTILITY,
+  GDK_SURFACE_TYPE_HINT_DOCK,
+  GDK_SURFACE_TYPE_HINT_DESKTOP,
+  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,  /* A drop down menu (from a menubar) */
+  GDK_SURFACE_TYPE_HINT_POPUP_MENU,     /* A popup menu (from right-click) */
+  GDK_SURFACE_TYPE_HINT_TOOLTIP,
+  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
+  GDK_SURFACE_TYPE_HINT_COMBO,
+  GDK_SURFACE_TYPE_HINT_DND
+} GdkSurfaceTypeHint;
+
+static void gdk_x11_surface_set_title (GdkSurface *surface,
+                                       const char *title);
+static void
+gdk_x11_surface_constructed (GObject *object)
+{
+  GdkX11Surface *self = GDK_X11_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  XClassHint *class_hint;
+
+  g_assert (self->xid);
+
+  g_object_ref (surface);
+  _gdk_x11_display_add_window (display, &self->xid, surface);
+
+  self->surface_scale = display_x11->screen->surface_scale;
+
+  gdk_surface_set_egl_native_window (surface, (void *) self->xid);
+
+  gdk_x11_surface_set_title (surface, get_default_title ());
+
+  class_hint = XAllocClassHint ();
+  class_hint->res_name = (char *) g_get_prgname ();
+  if (display_x11->program_class)
+    class_hint->res_class = (char *) display_x11->program_class;
+  else
+    class_hint->res_class = class_hint->res_name;
+  XSetClassHint (GDK_DISPLAY_XDISPLAY (display), self->xid, class_hint);
+  XFree (class_hint);
+
+  setup_toplevel_window (surface);
+
+  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                      GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
+                                      StructureNotifyMask | PropertyChangeMask);
+
+  _gdk_x11_surface_register_dnd (surface);
+
+  connect_frame_clock (surface);
+
+  gdk_surface_freeze_updates (surface);
+
+  G_OBJECT_CLASS (gdk_x11_surface_parent_class)->constructed (object);
+}
+
 static void
 gdk_x11_surface_finalize (GObject *object)
 {
@@ -906,293 +1236,6 @@ gdk_x11_surface_create_pixmap_surface (GdkSurface *surface,
   return cairo_surface;
 }
 
-static void
-set_wm_protocols (GdkSurface *surface)
-{
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  Atom protocols[4];
-  int n = 0;
-  
-  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
-  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS");
-  protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING");
-
-#ifdef HAVE_XSYNC
-  if (GDK_X11_DISPLAY (display)->use_sync)
-    protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST");
-#endif
-  
-  XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface), protocols, n);
-}
-
-static const char *
-get_default_title (void)
-{
-  const char *title;
-
-  title = g_get_application_name ();
-  if (!title)
-    title = g_get_prgname ();
-  if (!title)
-    title = "";
-
-  return title;
-}
-
-static void
-check_leader_window_title (GdkDisplay *display)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (display_x11->leader_window && !display_x11->leader_window_title_set)
-    {
-      set_wm_name (display,
-		   display_x11->leader_window,
-		   get_default_title ());
-      
-      display_x11->leader_window_title_set = TRUE;
-    }
-}
-
-static Window
-create_focus_window (GdkDisplay *display,
-		     XID         parent)
-{
-  GdkX11Display *display_x11;
-  GdkEventMask event_mask;
-  Display *xdisplay;
-  Window focus_window;
-  XSetWindowAttributes attrs;
-
-  xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  display_x11 = GDK_X11_DISPLAY (display);
-
-  focus_window = XCreateWindow (xdisplay, parent,
-                                -1, -1, 1, 1, 0,
-                                0, /* depth */
-                                InputOnly,
-                                CopyFromParent,
-                                0, &attrs);
-
-  event_mask = (GDK_KEY_PRESS_MASK |
-                GDK_KEY_RELEASE_MASK |
-                GDK_FOCUS_CHANGE_MASK);
-
-  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      focus_window,
-                                      event_mask, 0);
-
-  XMapWindow (xdisplay, focus_window);
-
-  return focus_window;
-}
-
-static void
-ensure_sync_counter (GdkSurface *surface)
-{
-#ifdef HAVE_XSYNC
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
-      GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
-
-      if (toplevel &&
-	  toplevel->update_counter == None &&
-	  GDK_X11_DISPLAY (display)->use_sync)
-	{
-	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-	  XSyncValue value;
-	  Atom atom;
-	  XID counters[2];
-
-	  XSyncIntToValue (&value, 0);
-	  
-	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
-	  toplevel->extended_update_counter = XSyncCreateCounter (xdisplay, value);
-	  
-	  atom = gdk_x11_get_xatom_by_name_for_display (display,
-							"_NET_WM_SYNC_REQUEST_COUNTER");
-
-	  counters[0] = toplevel->update_counter;
-	  counters[1] = toplevel->extended_update_counter;
-	  XChangeProperty (xdisplay, GDK_SURFACE_XID (surface),
-			   atom, XA_CARDINAL,
-			   32, PropModeReplace,
-			   (guchar *)counters, 2);
-	  
-	  toplevel->current_counter_value = 0;
-	}
-    }
-#endif
-}
-
-static void
-setup_toplevel_window (GdkSurface    *surface,
-		       GdkX11Screen *x11_screen)
-{
-  GdkToplevelX11 *toplevel = _gdk_x11_surface_get_toplevel (surface);
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
-  XID xid = GDK_SURFACE_XID (surface);
-  XSizeHints size_hints;
-  Window leader_window;
-
-  set_wm_protocols (surface);
-
-  /* The focus surface is off the visible area, and serves to receive key
-   * press events so they don't get sent to child surfaces.
-   */
-  toplevel->focus_window = create_focus_window (display, xid);
-  _gdk_x11_display_add_window (x11_screen->display,
-                               &toplevel->focus_window,
-                               surface);
-
-  check_leader_window_title (x11_screen->display);
-
-  /* FIXME: Is there any point in doing this? Do any WM's pay
-   * attention to PSize, and even if they do, is this the
-   * correct value???
-   */
-  size_hints.flags = PSize;
-  size_hints.width = surface->width * impl->surface_scale;
-  size_hints.height = surface->height * impl->surface_scale;
-  
-  XSetWMNormalHints (xdisplay, xid, &size_hints);
-  
-  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
-  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
-  
-  if (!gdk_running_in_sandbox ())
-    {
-      /* if sandboxed, we're likely in a pid namespace and would only confuse the wm with this */
-      long pid = getpid ();
-      XChangeProperty (xdisplay, xid,
-                       gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
-                       XA_CARDINAL, 32,
-                       PropModeReplace,
-                       (guchar *)&pid, 1);
-    }
-
-  leader_window = GDK_X11_DISPLAY (x11_screen->display)->leader_window;
-  if (!leader_window)
-    leader_window = xid;
-  XChangeProperty (xdisplay, xid, 
-		   gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "WM_CLIENT_LEADER"),
-		   XA_WINDOW, 32, PropModeReplace,
-		   (guchar *) &leader_window, 1);
-
-  if (toplevel->focus_window != None)
-    XChangeProperty (xdisplay, xid, 
-                     gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_USER_TIME_WINDOW"),
-                     XA_WINDOW, 32, PropModeReplace,
-                     (guchar *) &toplevel->focus_window, 1);
-
-  if (GDK_X11_DISPLAY (x11_screen->display)->user_time != 0)
-    gdk_x11_surface_set_user_time (surface, GDK_X11_DISPLAY (x11_screen->display)->user_time);
-
-  ensure_sync_counter (surface);
-
-  /* Start off in a frozen state - we'll finish this when we first paint */
-  gdk_x11_surface_begin_frame (surface, TRUE);
-}
-
-static void
-on_frame_clock_before_paint (GdkFrameClock *clock,
-                             GdkSurface     *surface)
-{
-  if (surface->update_freeze_count > 0)
-    return;
-
-  gdk_x11_surface_predict_presentation_time (surface);
-  gdk_x11_surface_begin_frame (surface, FALSE);
-}
-
-static void
-on_frame_clock_after_update (GdkFrameClock *clock,
-                             GdkSurface    *surface)
-{
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-
-  if (impl->compute_size_source_id)
-    {
-      g_clear_handle_id (&impl->compute_size_source_id, g_source_remove);
-      compute_size_idle (surface);
-    }
-}
-
-static void
-on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkSurface     *surface)
-{
-  if (surface->update_freeze_count > 0)
-    return;
-
-  gdk_x11_surface_end_frame (surface);
-}
-
-static void
-connect_frame_clock (GdkSurface *surface)
-{
-  GdkX11Surface *impl;
-
-  impl = GDK_X11_SURFACE (surface);
-  if (!impl->frame_clock_connected)
-    {
-      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
-
-      g_signal_connect (frame_clock, "before-paint",
-                        G_CALLBACK (on_frame_clock_before_paint), surface);
-      g_signal_connect_after (frame_clock, "update",
-                              G_CALLBACK (on_frame_clock_after_update), surface);
-      g_signal_connect (frame_clock, "after-paint",
-                        G_CALLBACK (on_frame_clock_after_paint), surface);
-
-      impl->frame_clock_connected = TRUE;
-    }
-}
-
-static void
-disconnect_frame_clock (GdkSurface *surface)
-{
-  GdkX11Surface *impl;
-
-  impl = GDK_X11_SURFACE (surface);
-  if (impl->frame_clock_connected)
-    {
-      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
-
-      g_signal_handlers_disconnect_by_func (frame_clock,
-                                            on_frame_clock_before_paint, surface);
-      g_signal_handlers_disconnect_by_func (frame_clock,
-                                            on_frame_clock_after_update, surface);
-      g_signal_handlers_disconnect_by_func (frame_clock,
-                                            on_frame_clock_after_paint, surface);
-
-      impl->frame_clock_connected = FALSE;
-    }
-}
-
-typedef enum
-{
-  GDK_SURFACE_TYPE_HINT_NORMAL,
-  GDK_SURFACE_TYPE_HINT_DIALOG,
-  GDK_SURFACE_TYPE_HINT_MENU,           /* Torn off menu */
-  GDK_SURFACE_TYPE_HINT_TOOLBAR,
-  GDK_SURFACE_TYPE_HINT_SPLASHSCREEN,
-  GDK_SURFACE_TYPE_HINT_UTILITY,
-  GDK_SURFACE_TYPE_HINT_DOCK,
-  GDK_SURFACE_TYPE_HINT_DESKTOP,
-  GDK_SURFACE_TYPE_HINT_DROPDOWN_MENU,  /* A drop down menu (from a menubar) */
-  GDK_SURFACE_TYPE_HINT_POPUP_MENU,     /* A popup menu (from right-click) */
-  GDK_SURFACE_TYPE_HINT_TOOLTIP,
-  GDK_SURFACE_TYPE_HINT_NOTIFICATION,
-  GDK_SURFACE_TYPE_HINT_COMBO,
-  GDK_SURFACE_TYPE_HINT_DND
-} GdkSurfaceTypeHint;
-
-static void gdk_x11_surface_set_title (GdkSurface *surface,
-                                       const char *title);
 static void gdk_x11_surface_set_type_hint (GdkSurface        *surface,
                                            GdkSurfaceTypeHint hint);
 
@@ -1203,20 +1246,6 @@ gdk_x11_display_create_surface (GdkDisplay     *display,
 {
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
-  GdkX11Surface *impl;
-  GdkX11Screen *x11_screen;
-  GdkX11Display *display_x11;
-
-  Window xparent;
-  Display *xdisplay;
-
-  XSetWindowAttributes xattributes;
-  long xattributes_mask;
-  XClassHint *class_hint;
-
-  display_x11 = GDK_X11_DISPLAY (display);
-  x11_screen = GDK_X11_SCREEN (display_x11->screen);
-  xparent = GDK_SCREEN_XROOTWIN (x11_screen);
 
   if (parent)
     frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
@@ -1250,78 +1279,6 @@ gdk_x11_display_create_surface (GdkDisplay     *display,
     }
 
   g_object_unref (frame_clock);
-
-  impl = GDK_X11_SURFACE (surface);
-  impl->surface_scale = x11_screen->surface_scale;
-
-  xdisplay = x11_screen->xdisplay;
-
-  xattributes_mask = 0;
-
-  impl->override_redirect = FALSE;
-
-  xattributes.background_pixmap = None;
-  xattributes_mask |= CWBackPixmap;
-
-  xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
-  xattributes_mask |= CWBorderPixel;
-
-  xattributes.bit_gravity = NorthWestGravity;
-  xattributes_mask |= CWBitGravity;
-
-  xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
-  xattributes_mask |= CWColormap;
-
-  if (surface_type == GDK_SURFACE_DRAG ||
-      surface_type == GDK_SURFACE_POPUP)
-    {
-      xattributes.save_under = True;
-      xattributes.override_redirect = True;
-      xattributes.cursor = None;
-      xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
-
-      impl->override_redirect = TRUE;
-    }
-
-  impl->xid = XCreateWindow (xdisplay, xparent,
-                             0, 0, 1, 1,
-                             0,
-                             gdk_x11_display_get_window_depth (display_x11),
-                             InputOutput,
-                             gdk_x11_display_get_window_visual (display_x11),
-                             xattributes_mask, &xattributes);
-
-  g_object_ref (surface);
-  _gdk_x11_display_add_window (x11_screen->display, &impl->xid, surface);
-
-  gdk_surface_set_egl_native_window (surface, (void *) impl->xid);
-
-  gdk_x11_surface_set_title (surface, get_default_title ());
-  if (surface_type == GDK_SURFACE_TOPLEVEL)
-    gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_NORMAL);
-  else if (surface_type == GDK_SURFACE_POPUP)
-    gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
-
-  class_hint = XAllocClassHint ();
-  class_hint->res_name = (char *) g_get_prgname ();
-  if (display_x11->program_class)
-    class_hint->res_class = (char *) display_x11->program_class;
-  else
-    class_hint->res_class = class_hint->res_name;
-  XSetClassHint (xdisplay, impl->xid, class_hint);
-  XFree (class_hint);
-
-  setup_toplevel_window (surface, x11_screen);
-
-  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
-                                      StructureNotifyMask | PropertyChangeMask);
-
-  _gdk_x11_surface_register_dnd (surface);
-
-  connect_frame_clock (surface);
-
-  gdk_surface_freeze_updates (surface);
 
   return surface;
 }
@@ -2263,7 +2220,7 @@ gdk_x11_surface_focus (GdkSurface *surface,
 
 static void
 gdk_x11_surface_set_type_hint (GdkSurface        *surface,
-			      GdkSurfaceTypeHint hint)
+                               GdkSurfaceTypeHint hint)
 {
   GdkDisplay *display;
   Atom atom;
@@ -4841,6 +4798,7 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
   
+  object_class->constructed = gdk_x11_surface_constructed;
   object_class->finalize = gdk_x11_surface_finalize;
   
   impl_class->hide = gdk_x11_surface_hide;
@@ -4857,6 +4815,39 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
+}
+
+static void
+gdk_x11_surface_create_window (GdkX11Surface        *self,
+                               XSetWindowAttributes *xattributes,
+                               long                  xattributes_mask)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  g_assert (self->xid == 0);
+
+  xattributes->background_pixmap = None;
+  xattributes_mask |= CWBackPixmap;
+
+  xattributes->border_pixel = BlackPixel (GDK_DISPLAY_XDISPLAY (display),
+                                          display_x11->screen->screen_num);
+  xattributes_mask |= CWBorderPixel;
+
+  xattributes->bit_gravity = NorthWestGravity;
+  xattributes_mask |= CWBitGravity;
+
+  xattributes->colormap = gdk_x11_display_get_window_colormap (display_x11);
+  xattributes_mask |= CWColormap;
+
+  self->xid = XCreateWindow (GDK_DISPLAY_XDISPLAY (display),
+                             display_x11->screen->xroot_window,
+                             0, 0, 1, 1,
+                             0,
+                             gdk_x11_display_get_window_depth (display_x11),
+                             InputOutput,
+                             gdk_x11_display_get_window_visual (display_x11),
+                             xattributes_mask, xattributes);
 }
 
 #define LAST_PROP 1
@@ -4878,6 +4869,27 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11Popup, gdk_x11_popup, GDK_TYPE_X11_SURFACE,
 static void
 gdk_x11_popup_init (GdkX11Popup *popup)
 {
+}
+
+static void
+gdk_x11_popup_constructed (GObject *object)
+{
+  GdkX11Surface *x11_surface = GDK_X11_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (x11_surface);
+  XSetWindowAttributes xattributes;
+  long xattributes_mask;
+
+  xattributes.save_under = True;
+  xattributes.override_redirect = True;
+  xattributes_mask = CWSaveUnder | CWOverrideRedirect;
+
+  gdk_x11_surface_create_window (x11_surface, &xattributes, xattributes_mask);
+
+  x11_surface->override_redirect = TRUE;
+
+  G_OBJECT_CLASS (gdk_x11_popup_parent_class)->constructed (object);
+
+  gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 }
 
 static void
@@ -4930,12 +4942,12 @@ gdk_x11_popup_set_property (GObject      *object,
     }
 }
 
-
 static void
 gdk_x11_popup_class_init (GdkX11PopupClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_x11_popup_constructed;
   object_class->get_property = gdk_x11_popup_get_property;
   object_class->set_property = gdk_x11_popup_set_property;
 
@@ -4995,6 +5007,24 @@ static void
 gdk_x11_toplevel_init (GdkX11Toplevel *toplevel)
 {
 }
+
+static void
+gdk_x11_toplevel_constructed (GObject *object)
+{
+  GdkX11Surface *x11_surface = GDK_X11_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (x11_surface);
+  XSetWindowAttributes xattributes;
+  long xattributes_mask;
+
+  xattributes_mask = 0;
+
+  gdk_x11_surface_create_window (x11_surface, &xattributes, xattributes_mask);
+
+  G_OBJECT_CLASS (gdk_x11_toplevel_parent_class)->constructed (object);
+
+  gdk_x11_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_NORMAL);
+}
+
 static void
 gdk_x11_toplevel_set_property (GObject      *object,
                                guint         prop_id,
@@ -5124,6 +5154,7 @@ gdk_x11_toplevel_class_init (GdkX11ToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_x11_toplevel_constructed;
   object_class->get_property = gdk_x11_toplevel_get_property;
   object_class->set_property = gdk_x11_toplevel_set_property;
 
@@ -5370,6 +5401,24 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11DragSurface, gdk_x11_drag_surface, GDK_TYPE_X11_S
                                                 gdk_x11_drag_surface_iface_init))
 
 static void
+gdk_x11_drag_surface_constructed (GObject *object)
+{
+  GdkX11Surface *x11_surface = GDK_X11_SURFACE (object);
+  XSetWindowAttributes xattributes;
+  long xattributes_mask;
+
+  xattributes.save_under = True;
+  xattributes.override_redirect = True;
+  xattributes_mask = CWSaveUnder | CWOverrideRedirect;
+
+  gdk_x11_surface_create_window (x11_surface, &xattributes, xattributes_mask);
+
+  x11_surface->override_redirect = TRUE;
+
+  G_OBJECT_CLASS (gdk_x11_drag_surface_parent_class)->constructed (object);
+}
+
+static void
 gdk_x11_drag_surface_init (GdkX11DragSurface *surface)
 {
 }
@@ -5377,6 +5426,9 @@ gdk_x11_drag_surface_init (GdkX11DragSurface *surface)
 static void
 gdk_x11_drag_surface_class_init (GdkX11DragSurfaceClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->constructed = gdk_x11_drag_surface_constructed;
 }
 
 static gboolean
