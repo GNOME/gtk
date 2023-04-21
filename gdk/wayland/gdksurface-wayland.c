@@ -107,20 +107,6 @@ fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
     }
 }
 
-static const char *
-get_default_title (void)
-{
-  const char *title;
-
-  title = g_get_application_name ();
-  if (!title)
-    title = g_get_prgname ();
-  if (!title)
-    title = "";
-
-  return title;
-}
-
 static gboolean
 is_realized_shell_surface (GdkWaylandSurface *impl)
 {
@@ -868,7 +854,6 @@ gdk_wayland_display_create_surface (GdkDisplay     *display,
       g_warn_if_fail (parent == NULL);
       surface = g_object_new (GDK_TYPE_WAYLAND_TOPLEVEL,
                               "display", display,
-                              "title", get_default_title (),
                               NULL);
       break;
     case GDK_SURFACE_POPUP:

@@ -823,6 +823,20 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   wl_surface_commit (wayland_surface->display_server.wl_surface);
 }
 
+static const char *
+get_default_title (void)
+{
+  const char *title;
+
+  title = g_get_application_name ();
+  if (!title)
+    title = g_get_prgname ();
+  if (!title)
+    title = "";
+
+  return title;
+}
+
 static void
 gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
 {
@@ -830,6 +844,8 @@ gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
   toplevel->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
   toplevel->saved_width = -1;
   toplevel->saved_height = -1;
+
+  toplevel->title = g_strdup (get_default_title ());
 }
 
 static void
