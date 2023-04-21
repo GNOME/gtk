@@ -24,6 +24,7 @@
 #include "gdkdisplay-wayland.h"
 #include <glib/gi18n-lib.h>
 #include "gdkseat-wayland.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 
@@ -381,7 +382,9 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   drag = GDK_DRAG (drag_wayland);
 
-  drag_wayland->dnd_surface = gdk_wayland_display_create_surface (display, GDK_SURFACE_DRAG, NULL);
+  drag_wayland->dnd_surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
+                                            "display", display,
+                                            NULL);
 
   gdk_wayland_drag_create_data_source (drag);
 
