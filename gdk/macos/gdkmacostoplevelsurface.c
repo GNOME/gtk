@@ -23,6 +23,7 @@
 
 #include "gdkmacostoplevelsurface-private.h"
 
+#include "gdkframeclockidleprivate.h"
 #include "gdkseatprivate.h"
 #include "gdktoplevelprivate.h"
 
@@ -632,7 +633,9 @@ _gdk_macos_toplevel_surface_constructed (GObject *object)
 
   GdkMacosWindow *window;
   GdkMacosToplevelSurface *self = GDK_MACOS_TOPLEVEL_SURFACE (object);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (surface));
+  GdkFrameClock *frame_clock;
   NSUInteger style_mask;
   NSRect content_rect;
   NSRect visible_frame;
@@ -660,6 +663,10 @@ _gdk_macos_toplevel_surface_constructed (GObject *object)
   [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 
   _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   GDK_END_MACOS_ALLOC_POOL;
 

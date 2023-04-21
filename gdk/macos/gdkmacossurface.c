@@ -31,7 +31,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
-#include "gdkframeclockidleprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 
@@ -588,29 +588,21 @@ _gdk_macos_surface_new (GdkMacosDisplay *display,
                         GdkSurfaceType   surface_type,
                         GdkSurface      *parent)
 {
-  GdkFrameClock *frame_clock;
   GdkMacosSurface *ret;
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-
-  if (parent != NULL)
-    frame_clock = g_object_ref (parent->frame_clock);
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
       ret = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
                           "display", display,
-                          "frame-clock", frame_clock,
                           NULL);
       break;
 
     case GDK_SURFACE_POPUP:
       ret = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                           "display", display,
-                          "frame-clock", frame_clock,
                           "parent", parent,
                           NULL);
 
@@ -621,8 +613,6 @@ _gdk_macos_surface_new (GdkMacosDisplay *display,
       g_warn_if_reached ();
       ret = NULL;
     }
-
-  g_object_unref (frame_clock);
 
   return g_steal_pointer (&ret);
 }

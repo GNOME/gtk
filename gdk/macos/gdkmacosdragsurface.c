@@ -70,7 +70,9 @@ _gdk_macos_drag_surface_constructed (GObject *object)
 
   GdkMacosWindow *window;
   GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkFrameClock *frame_clock;
   NSScreen *screen;
   NSUInteger style_mask;
   NSRect content_rect;
@@ -100,6 +102,10 @@ _gdk_macos_drag_surface_constructed (GObject *object)
 
   _gdk_macos_surface_set_native (self, window);
 
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
+
   GDK_END_MACOS_ALLOC_POOL;
 
   G_OBJECT_CLASS (_gdk_macos_drag_surface_parent_class)->constructed (object);
@@ -121,18 +127,11 @@ _gdk_macos_drag_surface_init (GdkMacosDragSurface *self)
 GdkMacosSurface *
 _gdk_macos_drag_surface_new (GdkMacosDisplay *display)
 {
-  GdkFrameClock *frame_clock;
-
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-
-  frame_clock = _gdk_frame_clock_idle_new ();
 
   self = g_object_new (GDK_TYPE_MACOS_DRAG_SURFACE,
                        "display", display,
-                       "frame-clock", frame_clock,
                        NULL);
-
-  g_object_unref (frame_clock);
 
   return g_steal_pointer (&self);
 }

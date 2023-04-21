@@ -290,6 +290,7 @@ _gdk_macos_popup_surface_constructed (GObject *object)
 
   GdkMacosWindow *window;
   GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
   NSScreen *screen;
   NSUInteger style_mask;
@@ -321,6 +322,8 @@ _gdk_macos_popup_surface_constructed (GObject *object)
   [window setLevel:NSPopUpMenuWindowLevel];
 
   _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
+  gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
 
   GDK_END_MACOS_ALLOC_POOL;
 
