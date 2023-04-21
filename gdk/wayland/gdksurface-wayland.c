@@ -520,8 +520,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   surface->width = width;
   surface->height = height;
 
-  g_object_ref (surface);
-
   /* More likely to be right than just assuming 1 */
   if (display_wayland->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
     {
