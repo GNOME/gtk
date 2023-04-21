@@ -47,9 +47,6 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Forward declarations */
-static void        gdk_broadway_surface_finalize   (GObject            *object);
-
 G_DEFINE_TYPE (GdkBroadwaySurface, gdk_broadway_surface, GDK_TYPE_SURFACE)
 
 GType gdk_broadway_toplevel_get_type (void) G_GNUC_CONST;
@@ -72,6 +69,93 @@ queue_flush (GdkSurface *surface)
 static void
 gdk_broadway_surface_init (GdkBroadwaySurface *impl)
 {
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *clock,
+                            GdkSurface    *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
+  GdkBroadwayDisplay *broadway_display;
+
+  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  gdk_surface_freeze_updates (surface);
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  _gdk_broadway_server_roundtrip (broadway_display->server, impl->id, _gdk_display_get_next_serial (display));
+
+  gdk_display_flush (display);
+}
+
+static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkSurface    *surface)
+{
+  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
+  gint64 presentation_time;
+  gint64 refresh_interval;
+
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    timings->frame_time,
+                                    &refresh_interval, &presentation_time);
+  if (presentation_time != 0)
+    {
+      timings->predicted_presentation_time = presentation_time + refresh_interval;
+    }
+  else
+    {
+      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
+    }
+}
+
+static void
+connect_frame_clock (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+  g_signal_connect (frame_clock, "before-paint",
+                    G_CALLBACK (on_frame_clock_before_paint), surface);
+  g_signal_connect (frame_clock, "after-paint",
+                    G_CALLBACK (on_frame_clock_after_paint), surface);
+}
+
+static void
+disconnect_frame_clock (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+  g_signal_handlers_disconnect_by_func (frame_clock,
+                                        on_frame_clock_before_paint, surface);
+  g_signal_handlers_disconnect_by_func (frame_clock,
+                                        on_frame_clock_after_paint, surface);
+}
+
+static void
+gdk_broadway_surface_constructed (GObject *object)
+{
+  GdkBroadwaySurface *self = GDK_BROADWAY_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
+
+  if (!surface->parent)
+    broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, self);
+
+  self->id = _gdk_broadway_server_new_surface (broadway_display->server,
+                                               self->root_x,
+                                               self->root_y,
+                                               1, 1);
+  g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER (self->id), surface);
+
+  g_object_ref (self);
+
+  G_OBJECT_CLASS (gdk_broadway_surface_parent_class)->constructed (object);
+
+  connect_frame_clock (surface);
 }
 
 static void
@@ -143,79 +227,13 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
     }
 }
 
-static void
-on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkSurface    *surface)
-{
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
-  GdkBroadwayDisplay *broadway_display;
-
-  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  gdk_surface_freeze_updates (surface);
-
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  _gdk_broadway_server_roundtrip (broadway_display->server, impl->id, _gdk_display_get_next_serial (display));
-
-  gdk_display_flush (display);
-}
-
-static void
-on_frame_clock_before_paint (GdkFrameClock *clock,
-                             GdkSurface    *surface)
-{
-  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  if (surface->update_freeze_count > 0)
-    return;
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-  if (presentation_time != 0)
-    {
-      timings->predicted_presentation_time = presentation_time + refresh_interval;
-    }
-  else
-    {
-      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
-    }
-}
-
-static void
-connect_frame_clock (GdkSurface *surface)
-{
-  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
-
-  g_signal_connect (frame_clock, "before-paint",
-                    G_CALLBACK (on_frame_clock_before_paint), surface);
-  g_signal_connect (frame_clock, "after-paint",
-                    G_CALLBACK (on_frame_clock_after_paint), surface);
-}
-
-static void
-disconnect_frame_clock (GdkSurface *surface)
-{
-  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
-
-  g_signal_handlers_disconnect_by_func (frame_clock,
-                                        on_frame_clock_before_paint, surface);
-  g_signal_handlers_disconnect_by_func (frame_clock,
-                                        on_frame_clock_after_paint, surface);
-}
-
 GdkSurface *
 gdk_broadway_display_create_surface (GdkDisplay     *display,
                                      GdkSurfaceType  surface_type,
                                      GdkSurface     *parent)
 {
-  GdkBroadwayDisplay *broadway_display;
-  GdkFrameClock *frame_clock;
   GdkSurface *surface;
-  GdkBroadwaySurface *impl;
+  GdkFrameClock *frame_clock;
 
   if (parent)
     frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
@@ -249,37 +267,6 @@ gdk_broadway_display_create_surface (GdkDisplay     *display,
     }
 
   g_object_unref (frame_clock);
-
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  impl = GDK_BROADWAY_SURFACE (surface);
-  impl->root_x = 0;
-  impl->root_y = 0;
-  if (parent)
-    {
-      impl->root_x = GDK_BROADWAY_SURFACE (parent)->root_x;
-      impl->root_y = GDK_BROADWAY_SURFACE (parent)->root_y;
-    }
-
-  impl->id = _gdk_broadway_server_new_surface (broadway_display->server,
-                                               impl->root_x,
-                                               impl->root_y,
-                                               1, 1);
-  g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
-
-  g_object_ref (surface);
-
-  if (!surface->parent)
-    broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
-
-  connect_frame_clock (surface);
-
-  /* We treat the real parent as a default transient for to get stacking right */
-  if (parent)
-    {
-      impl->transient_for = GDK_BROADWAY_SURFACE (parent)->id;
-      _gdk_broadway_server_surface_set_transient_for (broadway_display->server, impl->id, impl->transient_for);
-    }
 
   return surface;
 }
@@ -1235,6 +1222,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
 
+  object_class->constructed = gdk_broadway_surface_constructed;
   object_class->finalize = gdk_broadway_surface_finalize;
 
   impl_class->hide = gdk_broadway_surface_hide;
@@ -1270,6 +1258,23 @@ G_DEFINE_TYPE_WITH_CODE (GdkBroadwayPopup, gdk_broadway_popup, GDK_TYPE_BROADWAY
 static void
 gdk_broadway_popup_init (GdkBroadwayPopup *popup)
 {
+}
+
+static void
+gdk_broadway_popup_constructed (GObject *object)
+{
+  GdkBroadwaySurface *self = GDK_BROADWAY_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
+
+  self->root_x = GDK_BROADWAY_SURFACE (surface->parent)->root_x;
+  self->root_y = GDK_BROADWAY_SURFACE (surface->parent)->root_y;
+
+  G_OBJECT_CLASS (gdk_broadway_popup_parent_class)->constructed (object);
+
+  /* We treat the real parent as a default transient for to get stacking right */
+  self->transient_for = GDK_BROADWAY_SURFACE (surface->parent)->id;
+  _gdk_broadway_server_surface_set_transient_for (broadway_display->server, self->id, self->transient_for);
 }
 
 static void
@@ -1327,6 +1332,7 @@ gdk_broadway_popup_class_init (GdkBroadwayPopupClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_broadway_popup_constructed;
   object_class->get_property = gdk_broadway_popup_get_property;
   object_class->set_property = gdk_broadway_popup_set_property;
 
