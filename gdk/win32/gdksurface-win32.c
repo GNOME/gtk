@@ -441,40 +441,29 @@ gdk_win32_display_create_surface (GdkDisplay     *display,
                                   GdkSurface     *parent)
 {
   GdkSurface *surface;
-  GdkFrameClock *frame_clock;
-
-  if (parent)
-    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
       surface = g_object_new (GDK_TYPE_WIN32_TOPLEVEL,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_POPUP:
       surface = g_object_new (GDK_TYPE_WIN32_POPUP,
                               "parent", parent,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     case GDK_SURFACE_DRAG:
       surface = g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
                               "display", display,
-                              "frame-clock", frame_clock,
                               NULL);
       break;
     default:
       g_assert_not_reached ();
       break;
     }
-
-  g_object_unref (frame_clock);
 
   return surface;
 }
@@ -486,6 +475,7 @@ gdk_win32_surface_constructed (GObject *object)
   GdkSurface *surface = GDK_SURFACE (impl);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkFrameClock *frame_clock;
   HANDLE owner;
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
@@ -504,21 +494,28 @@ gdk_win32_surface_constructed (GObject *object)
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
+      frame_clock = _gdk_frame_clock_idle_new ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_DRAG_SURFACE)
     {
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       dwStyle |= WS_POPUP;
+      frame_clock = _gdk_frame_clock_idle_new ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_POPUP)
     {
+      GdkSurface *parent = gdk_popup_get_parent (GDK_POPUP (impl));
       dwStyle |= WS_POPUP;
-      owner = GDK_SURFACE_HWND (gdk_popup_get_parent (GDK_POPUP (impl)));
+      owner = GDK_SURFACE_HWND (parent);
+      frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
     }
   else
     {
       g_assert_not_reached ();
     }
+
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   title = get_default_title ();
   if (!title || !*title)
@@ -575,7 +572,7 @@ gdk_win32_surface_constructed (GObject *object)
   _gdk_win32_surface_register_dnd (surface);
   _gdk_win32_surface_update_style_bits (surface);
 
-  g_signal_connect (gdk_surface_get_frame_clock (surface),
+  g_signal_connect (frame_clock,
                     "after-paint",
                     G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
                     impl);
