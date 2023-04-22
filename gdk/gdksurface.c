@@ -1270,40 +1270,6 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
                          NULL);
 }
 
-/* Code for dirty-region queueing
- */
-static GSList *update_surfaces = NULL;
-
-static void
-gdk_surface_add_update_surface (GdkSurface *surface)
-{
-  GSList *tmp;
-
-  /*  Check whether "surface" is already in "update_surfaces" list.
-   *  It could be added during execution of gtk_widget_destroy() when
-   *  setting focus widget to NULL and redrawing old focus widget.
-   *  See bug 711552.
-   */
-  tmp = g_slist_find (update_surfaces, surface);
-  if (tmp != NULL)
-    return;
-
-  update_surfaces = g_slist_prepend (update_surfaces, g_object_ref (surface));
-}
-
-static void
-gdk_surface_remove_update_surface (GdkSurface *surface)
-{
-  GSList *link;
-
-  link = g_slist_find (update_surfaces, surface);
-  if (link != NULL)
-    {
-      update_surfaces = g_slist_delete_link (update_surfaces, link);
-      g_object_unref (surface);
-    }
-}
-
 static gboolean
 gdk_surface_is_toplevel_frozen (GdkSurface *surface)
 {
@@ -1330,46 +1296,6 @@ gdk_surface_schedule_update (GdkSurface *surface)
   if (frame_clock)
     gdk_frame_clock_request_phase (gdk_surface_get_frame_clock (surface),
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
-}
-
-static void
-gdk_surface_process_updates_internal (GdkSurface *surface)
-{
-  /* Ensure the surface lives while updating it */
-  g_object_ref (surface);
-
-  surface->in_update = TRUE;
-
-  /* If an update got queued during update processing, we can get a
-   * surface in the update queue that has an empty update_area.
-   * just ignore it.
-   */
-  if (surface->update_area)
-    {
-      g_assert (surface->active_update_area == NULL); /* No reentrancy */
-
-      surface->active_update_area = surface->update_area;
-      surface->update_area = NULL;
-
-      if (GDK_SURFACE_IS_MAPPED (surface))
-        {
-          cairo_region_t *expose_region;
-          gboolean handled;
-
-          expose_region = cairo_region_copy (surface->active_update_area);
-
-          g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
-
-          cairo_region_destroy (expose_region);
-        }
-
-      cairo_region_destroy (surface->active_update_area);
-      surface->active_update_area = NULL;
-    }
-
-  surface->in_update = FALSE;
-
-  g_object_unref (surface);
 }
 
 static void
@@ -1429,28 +1355,32 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
                             void          *data)
 {
   GdkSurface *surface = GDK_SURFACE (data);
+  cairo_region_t *expose_region;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface))
+  if (GDK_SURFACE_DESTROYED (surface) ||
+      !surface->update_area ||
+      surface->update_freeze_count ||
+      gdk_surface_is_toplevel_frozen (surface))
     return;
 
-  g_object_ref (surface);
+  surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
+  expose_region = surface->update_area;
+  surface->update_area = NULL;
 
-  if (surface->update_area &&
-      !surface->update_freeze_count &&
-      !gdk_surface_is_toplevel_frozen (surface) &&
-
-      /* Don't recurse into process_updates_internal, we'll
-       * do the update later when idle instead. */
-      !surface->in_update)
+  if (GDK_SURFACE_IS_MAPPED (surface))
     {
-      surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
-      gdk_surface_process_updates_internal (surface);
-      gdk_surface_remove_update_surface (surface);
+      gboolean handled;
+
+      g_object_ref (surface);
+
+      g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
+
+      g_object_unref (surface);
     }
 
-  g_object_unref (surface);
+  cairo_region_destroy (expose_region);
 }
 
 /*
@@ -1498,7 +1428,6 @@ impl_surface_add_update_area (GdkSurface     *impl_surface,
     cairo_region_union (impl_surface->update_area, region);
   else
     {
-      gdk_surface_add_update_surface (impl_surface);
       impl_surface->update_area = cairo_region_copy (region);
       gdk_surface_schedule_update (impl_surface);
     }
@@ -1582,8 +1511,6 @@ _gdk_surface_clear_update_area (GdkSurface *surface)
 
   if (surface->update_area)
     {
-      gdk_surface_remove_update_surface (surface);
-
       cairo_region_destroy (surface->update_area);
       surface->update_area = NULL;
     }
