@@ -55,10 +55,6 @@ struct _GdkSurface
   cairo_region_t *update_area;
   guint update_freeze_count;
   GdkFrameClockPhase pending_phases;
-  /* This is the update_area that was in effect when the current expose
-     started. It may be smaller than the expose area if we'e painting
-     more than we have to, but it represents the "true" damage. */
-  cairo_region_t *active_update_area;
 
   GdkToplevelState pending_set_flags;
   GdkToplevelState pending_unset_flags;

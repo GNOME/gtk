@@ -1346,25 +1346,19 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
    */
   if (surface->update_area)
     {
-      g_assert (surface->active_update_area == NULL); /* No reentrancy */
+      cairo_region_t *expose_region;
 
-      surface->active_update_area = surface->update_area;
+      expose_region = surface->update_area;
       surface->update_area = NULL;
 
       if (GDK_SURFACE_IS_MAPPED (surface))
         {
-          cairo_region_t *expose_region;
           gboolean handled;
 
-          expose_region = cairo_region_copy (surface->active_update_area);
-
           g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
-
-          cairo_region_destroy (expose_region);
         }
 
-      cairo_region_destroy (surface->active_update_area);
-      surface->active_update_area = NULL;
+      cairo_region_destroy (expose_region);
     }
 
   surface->in_update = FALSE;
