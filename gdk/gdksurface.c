@@ -1365,13 +1365,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
       gdk_surface_is_toplevel_frozen (surface))
     return;
 
-  g_object_ref (surface);
-
   surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
-
-  /* Ensure the surface lives while updating it */
-  g_object_ref (surface);
-
   expose_region = surface->update_area;
   surface->update_area = NULL;
 
@@ -1379,14 +1373,14 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
     {
       gboolean handled;
 
+      g_object_ref (surface);
+
       g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
+
+      g_object_unref (surface);
     }
 
   cairo_region_destroy (expose_region);
-
-  g_object_unref (surface);
-
-  g_object_unref (surface);
 }
 
 /*
