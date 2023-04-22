@@ -384,6 +384,7 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
   for (i = 0; i < model->files->len; i++)
     node_compute_visibility_and_filters (model, i);
 
+  g_list_model_items_changed (G_LIST_MODEL (model), 0, model->files->len, model->files->len);
   model->filter_on_thaw = FALSE;
   thaw_updates (model);
 }
@@ -408,6 +409,7 @@ thaw_updates (GtkFileSystemModel *model)
   if (stuff_added)
     {
       guint i;
+      guint changed_idx = G_MAXUINT;
 
       for (i = 0; i < model->files->len; i++)
         {
@@ -415,9 +417,17 @@ thaw_updates (GtkFileSystemModel *model)
 
           if (!node->frozen_add)
             continue;
+
           node->frozen_add = FALSE;
           node_compute_visibility_and_filters (model, i);
+          if (changed_idx == G_MAXUINT)
+            changed_idx = i;
         }
+
+      if (changed_idx != G_MAXUINT)
+        g_list_model_items_changed (G_LIST_MODEL (model), changed_idx,
+                                    model->files->len - changed_idx,
+                                    model->files->len - changed_idx);
     }
 }
 
@@ -448,9 +458,10 @@ add_file (GtkFileSystemModel *model,
   position = model->files->len - 1;
 
   if (!model->frozen)
-    node_compute_visibility_and_filters (model, position);
-
-  g_list_model_items_changed (G_LIST_MODEL (model), position, 0, 1);
+    {
+      node_compute_visibility_and_filters (model, position);
+      g_list_model_items_changed (G_LIST_MODEL (model), position, 0, 1);
+    }
 }
 
 static void
