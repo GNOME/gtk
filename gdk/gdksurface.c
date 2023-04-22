@@ -1270,40 +1270,6 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
                          NULL);
 }
 
-/* Code for dirty-region queueing
- */
-static GSList *update_surfaces = NULL;
-
-static void
-gdk_surface_add_update_surface (GdkSurface *surface)
-{
-  GSList *tmp;
-
-  /*  Check whether "surface" is already in "update_surfaces" list.
-   *  It could be added during execution of gtk_widget_destroy() when
-   *  setting focus widget to NULL and redrawing old focus widget.
-   *  See bug 711552.
-   */
-  tmp = g_slist_find (update_surfaces, surface);
-  if (tmp != NULL)
-    return;
-
-  update_surfaces = g_slist_prepend (update_surfaces, g_object_ref (surface));
-}
-
-static void
-gdk_surface_remove_update_surface (GdkSurface *surface)
-{
-  GSList *link;
-
-  link = g_slist_find (update_surfaces, surface);
-  if (link != NULL)
-    {
-      update_surfaces = g_slist_delete_link (update_surfaces, link);
-      g_object_unref (surface);
-    }
-}
-
 static gboolean
 gdk_surface_is_toplevel_frozen (GdkSurface *surface)
 {
@@ -1433,7 +1399,6 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
     {
       surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
       gdk_surface_process_updates_internal (surface);
-      gdk_surface_remove_update_surface (surface);
     }
 
   g_object_unref (surface);
@@ -1484,7 +1449,6 @@ impl_surface_add_update_area (GdkSurface     *impl_surface,
     cairo_region_union (impl_surface->update_area, region);
   else
     {
-      gdk_surface_add_update_surface (impl_surface);
       impl_surface->update_area = cairo_region_copy (region);
       gdk_surface_schedule_update (impl_surface);
     }
@@ -1568,8 +1532,6 @@ _gdk_surface_clear_update_area (GdkSurface *surface)
 
   if (surface->update_area)
     {
-      gdk_surface_remove_update_surface (surface);
-
       cairo_region_destroy (surface->update_area);
       surface->update_area = NULL;
     }
