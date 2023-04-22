@@ -1,5 +1,10 @@
-Overview of Changes in 4.10.3, xx-xx-xxxx
+Overview of Changes in 4.10.3, 22-04-2023
 =========================================
+
+* Fix a popover positioning regression in 4.10.2
+
+* Fix issues with slow loading files in the file chooser
+
 
 Overview of Changes in 4.10.2, 21-04-2023
 =========================================
