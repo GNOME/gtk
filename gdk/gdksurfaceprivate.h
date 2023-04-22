@@ -67,7 +67,6 @@ struct _GdkSurface
 
   guint modal_hint : 1;
   guint destroyed : 2;
-  guint in_update : 1;
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
   guint shortcuts_inhibited : 1;

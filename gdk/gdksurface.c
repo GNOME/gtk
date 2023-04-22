@@ -1338,8 +1338,6 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
   /* Ensure the surface lives while updating it */
   g_object_ref (surface);
 
-  surface->in_update = TRUE;
-
   /* If an update got queued during update processing, we can get a
    * surface in the update queue that has an empty update_area.
    * just ignore it.
@@ -1360,8 +1358,6 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
 
       cairo_region_destroy (expose_region);
     }
-
-  surface->in_update = FALSE;
 
   g_object_unref (surface);
 }
@@ -1433,11 +1429,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
 
   if (surface->update_area &&
       !surface->update_freeze_count &&
-      !gdk_surface_is_toplevel_frozen (surface) &&
-
-      /* Don't recurse into process_updates_internal, we'll
-       * do the update later when idle instead. */
-      !surface->in_update)
+      !gdk_surface_is_toplevel_frozen (surface))
     {
       surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
       gdk_surface_process_updates_internal (surface);
