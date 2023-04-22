@@ -431,21 +431,15 @@ update_popover_layout (GtkPopover     *popover,
   gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
-static GdkPopupLayout *
-create_popup_layout (GtkPopover *popover)
+static void
+compute_surface_pointing_to (GtkPopover   *popover,
+                             GdkRectangle *rect)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkRectangle rect;
-  GdkGravity parent_anchor;
-  GdkGravity surface_anchor;
-  GdkAnchorHints anchor_hints;
-  GdkPopupLayout *layout;
   GtkWidget *parent;
-  GtkCssStyle *style;
-  GtkBorder shadow_width;
   GtkNative *native;
-  double nx, ny;
   graphene_rect_t bounds;
+  double nx, ny;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
   native = gtk_widget_get_native (parent);
@@ -471,10 +465,25 @@ create_popup_layout (GtkPopover *popover)
 
   gtk_native_get_surface_transform (native, &nx, &ny);
 
-  rect.x = (int) floor (bounds.origin.x + nx);
-  rect.y = (int) floor (bounds.origin.y + ny);
-  rect.width = (int) ceilf (bounds.size.width);
-  rect.width = (int) ceilf (bounds.size.height);
+  rect->x = (int) floor (bounds.origin.x + nx);
+  rect->y = (int) floor (bounds.origin.y + ny);
+  rect->width = (int) ceilf (bounds.size.width);
+  rect->height = (int) ceilf (bounds.size.height);
+}
+
+static GdkPopupLayout *
+create_popup_layout (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GdkRectangle rect;
+  GdkGravity parent_anchor;
+  GdkGravity surface_anchor;
+  GdkAnchorHints anchor_hints;
+  GdkPopupLayout *layout;
+  GtkCssStyle *style;
+  GtkBorder shadow_width;
+
+  compute_surface_pointing_to (popover, &rect);
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
@@ -1205,21 +1214,12 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   int border_radius;
   int popover_width, popover_height;
   GtkCssStyle *style;
-  GtkWidget *parent;
   GtkBorder shadow_width;
 
   popover_width = gtk_widget_get_allocated_width (widget);
   popover_height = gtk_widget_get_allocated_height (widget);
-  parent = gtk_widget_get_parent (widget);
 
-  gtk_widget_get_surface_allocation (parent, &rect);
-  if (priv->has_pointing_to)
-    {
-      rect.x += priv->pointing_to.x;
-      rect.y += priv->pointing_to.y;
-      rect.width = priv->pointing_to.width;
-      rect.height = priv->pointing_to.height;
-    }
+  compute_surface_pointing_to (popover, &rect);
 
   rect.x -= priv->final_rect.x;
   rect.y -= priv->final_rect.y;
@@ -1356,7 +1356,7 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_surface_t *cairo_surface;
       cairo_region_t *region;
       cairo_t *cr;
-      double x, y;
+      graphene_point_t p;
       double native_x, native_y;
 
       gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
@@ -1378,10 +1378,11 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_fill (cr);
 
       box = gtk_css_boxes_get_border_box (&content_css_boxes);
-      gtk_widget_translate_coordinates (priv->contents_widget, GTK_WIDGET (popover),
-                                        0, 0,
-                                        &x, &y);
-      cairo_translate (cr, x, y);
+      if (!gtk_widget_compute_point (priv->contents_widget, GTK_WIDGET (popover),
+                                     &GRAPHENE_POINT_INIT (0, 0), &p))
+        graphene_point_init (&p, 0, 0);
+
+      cairo_translate (cr, p.x, p.y);
       gsk_rounded_rect_path (box, cr);
       cairo_fill (cr);
       cairo_destroy (cr);
