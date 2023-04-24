@@ -485,6 +485,9 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
  *
  * Return value: (transfer full) (type GdkGLTexture): A newly-created
  *   `GdkTexture`
+ *
+ * Deprecated: 4.12: [class@Gdk.GLTextureBuilder] supercedes this function
+ *   and provides extended functionality for creating GL textures.
  */
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,
