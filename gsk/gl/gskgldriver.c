@@ -1126,14 +1126,20 @@ write_atlas_to_png (GskGLDriver       *driver,
                     GskGLTextureAtlas *atlas,
                     const char        *filename)
 {
+  GdkGLTextureBuilder *builder;
   GdkTexture *texture;
 
-  texture = gdk_gl_texture_new (gsk_gl_driver_get_context (driver),
-                                atlas->texture_id,
-                                atlas->width, atlas->height,
-                                NULL, NULL);
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_context (builder, gsk_gl_driver_get_context (driver));
+  gdk_gl_texture_builder_set_id (builder, atlas->texture_id);
+  gdk_gl_texture_builder_set_width (builder, atlas->width);
+  gdk_gl_texture_builder_set_height (builder, atlas->height);
+
+  texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
   gdk_texture_save_to_png (texture, filename);
+
   g_object_unref (texture);
+  g_object_unref (builder);
 }
 
 void
@@ -1578,8 +1584,9 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
                                   guint        texture_id)
 {
   GskGLTextureState *state;
+  GdkGLTextureBuilder *builder;
   GskGLTexture *texture;
-  int width, height;
+  GdkTexture *result;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (self), NULL);
   g_return_val_if_fail (self->command_queue != NULL, NULL);
@@ -1597,16 +1604,19 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
 
-  width = texture->width;
-  height = texture->height;
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_context (builder, self->command_queue->context);
+  gdk_gl_texture_builder_set_id (builder, texture_id);
+  gdk_gl_texture_builder_set_width (builder, texture->width);
+  gdk_gl_texture_builder_set_height (builder, texture->height);
+
+  result = gdk_gl_texture_builder_build (builder,
+                                         create_texture_from_texture_destroy,
+                                         state);
 
   texture->texture_id = 0;
   gsk_gl_texture_free (texture);
+  g_object_unref (builder);
 
-  return gdk_gl_texture_new (self->command_queue->context,
-                             texture_id,
-                             width,
-                             height,
-                             create_texture_from_texture_destroy,
-                             state);
+  return result;
 }
