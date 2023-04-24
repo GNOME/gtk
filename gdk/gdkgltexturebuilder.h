@@ -73,12 +73,9 @@ void                    gdk_gl_texture_builder_set_has_mipmap   (GdkGLTextureBui
                                                                  gboolean                has_mipmap);
 
 GDK_AVAILABLE_IN_4_12
-void                    gdk_gl_texture_builder_set_notify       (GdkGLTextureBuilder    *self,
+GdkTexture *            gdk_gl_texture_builder_build            (GdkGLTextureBuilder    *self,
                                                                  GDestroyNotify          destroy,
                                                                  gpointer                data);
-
-GDK_AVAILABLE_IN_4_12
-GdkTexture *            gdk_gl_texture_builder_build            (GdkGLTextureBuilder    *self);
 
 G_END_DECLS
 

@@ -35,8 +35,6 @@ struct _GdkGLTextureBuilder
   int height;
   GdkMemoryFormat format;
   gboolean has_mipmap;
-  GDestroyNotify destroy;
-  gpointer data;
 };
 
 struct _GdkGLTextureBuilderClass
@@ -387,7 +385,7 @@ gdk_gl_texture_builder_get_id (GdkGLTextureBuilder *self)
  * @id: The texture id to be used for creating the texture
  *
  * Sets the texture id of the texture. The texture id must remain unmodified
- * until the texture was finalized. See [method@Gdk.GLTextureBuilder.set_notify]
+ * until the texture was finalized. See [method@Gdk.GLTextureBuilder.build]
  * for a longer discussion.
  *
  * The id must be set before calling [method@Gdk.GLTextureBuilder.build].
@@ -450,32 +448,6 @@ gdk_gl_texture_builder_set_width (GdkGLTextureBuilder *self,
   self->width = width;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
-}
-
-/**
- * gdk_gl_texture_builder_set_notify:
- * @self: a `GdkGLTextureBuilder`
- * @destroy: (nullable): destroy function to be called when a texture is
- *   released
- * @data: user data to pass to the destroy function
- *
- * Sets the funciton to be called when the texture built with
- * [method@Gdk.GLTextureBuilder.build] gets released, either when the
- * texture is finalized or by an explicit call to [method@Gdk.Texture.release].
- *
- * This function should release all GL resources associated with the texture,
- * such as the [property@Gdk.GLTextureBuilder:id].
- **/
-void
-gdk_gl_texture_builder_set_notify (GdkGLTextureBuilder *self,
-                                   GDestroyNotify       destroy,
-                                   gpointer             data)
-{
-  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
-  g_return_if_fail (destroy == NULL || data != NULL);
-
-  self->destroy = destroy;
-  self->data = data;
 }
 
 /**
@@ -573,10 +545,20 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
 /**
  * gdk_gl_texture_builder_build:
  * @self: a `GdkGLTextureBuilder`
+ * @destroy: (nullable): destroy function to be called when the texture is
+ *   released
+ * @data: user data to pass to the destroy function
  *
  * Builds a new `GdkTexture` with the values set up in the builder.
  *
- * Note that it is a programming error if any mandatory property has not been set.
+ * The `destroy` function gets called when the returned texture gets released;
+ * either when the texture is finalized or by an explicit call to
+ * [method@Gdk.GLTexture.release].
+ * This function should release all GL resources associated with the texture,
+ * such as the [property@Gdk.GLTextureBuilder:id].
+ *
+ * Note that it is a programming error to call this function if any mandatory
+ * property has not been set.
  *
  * It is possible to call this function multiple times to create multiple textures,
  * possibly with changing properties in between.
@@ -586,14 +568,17 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
  * Since: 4.12
  */
 GdkTexture *
-gdk_gl_texture_builder_build (GdkGLTextureBuilder *self)
+gdk_gl_texture_builder_build (GdkGLTextureBuilder *self,
+                              GDestroyNotify       destroy,
+                              gpointer             data)
 {
   g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), NULL);
+  g_return_val_if_fail (destroy == NULL || data != NULL, NULL);
   g_return_val_if_fail (self->context != NULL, NULL);
   g_return_val_if_fail (self->id != 0, NULL);
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
 
-  return gdk_gl_texture_new_from_builder (self, self->destroy, self->data);
+  return gdk_gl_texture_new_from_builder (self, destroy, data);
 }
 
