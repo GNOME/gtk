@@ -94,6 +94,7 @@ struct _GtkButtonPrivate
   guint          button_down           : 1;
   guint          use_underline         : 1;
   guint          child_type            : 2;
+  guint          can_shrink            : 1;
 };
 
 enum {
@@ -109,6 +110,7 @@ enum {
   PROP_USE_UNDERLINE,
   PROP_ICON_NAME,
   PROP_CHILD,
+  PROP_CAN_SHRINK,
 
   /* actionable properties */
   PROP_ACTION_NAME,
@@ -259,6 +261,24 @@ gtk_button_class_init (GtkButtonClass *klass)
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkButton:can-shrink:
+   *
+   * Whether the size of the button can be made smaller than the natural
+   * size of its contents.
+   *
+   * For text buttons, setting this property will allow ellipsizing the label.
+   *
+   * If the contents of a button are an icon or a custom widget, setting this
+   * property has no effect.
+   *
+   * Since: 4.12
+   */
+  props[PROP_CAN_SHRINK] =
+    g_param_spec_boolean ("can-shrink", NULL, NULL,
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
@@ -510,6 +530,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_CHILD:
       gtk_button_set_child (button, g_value_get_object (value));
       break;
+    case PROP_CAN_SHRINK:
+      gtk_button_set_can_shrink (button, g_value_get_boolean (value));
+      break;
     case PROP_ACTION_NAME:
       gtk_button_set_action_name (GTK_ACTIONABLE (button), g_value_get_string (value));
       break;
@@ -547,6 +570,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_CHILD:
       g_value_set_object (value, priv->child);
+      break;
+    case PROP_CAN_SHRINK:
+      g_value_set_boolean (value, priv->can_shrink);
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
@@ -837,6 +863,10 @@ gtk_button_set_label (GtkButton   *button,
     }
 
   gtk_label_set_label (GTK_LABEL (priv->child), label);
+  gtk_label_set_ellipsize (GTK_LABEL (priv->child),
+                           priv->can_shrink ? PANGO_ELLIPSIZE_END
+                                            : PANGO_ELLIPSIZE_NONE);
+
   gtk_button_set_child_type (button, LABEL_CHILD);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (button),
@@ -1066,4 +1096,74 @@ gtk_button_get_child (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   return priv->child;
+}
+
+/**
+ * gtk_button_set_can_shrink:
+ * @button: a button
+ * @can_shrink: whether the button can shrink
+ *
+ * Sets whether the button size can be smaller than the natural size of
+ * its contents.
+ *
+ * For text buttons, setting @can_shrink to true will ellipsize the label.
+ *
+ * For icons and custom children, this function has no effect.
+ *
+ * Since: 4.12
+ */
+void
+gtk_button_set_can_shrink (GtkButton *button,
+                           gboolean   can_shrink)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  can_shrink = !!can_shrink;
+
+  if (priv->can_shrink != can_shrink)
+    {
+      priv->can_shrink = can_shrink;
+
+      switch (priv->child_type)
+        {
+        case LABEL_CHILD:
+          gtk_label_set_ellipsize (GTK_LABEL (priv->child),
+                                   priv->can_shrink ? PANGO_ELLIPSIZE_END
+                                                    : PANGO_ELLIPSIZE_NONE);
+          break;
+
+        case ICON_CHILD:
+        case WIDGET_CHILD:
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_CAN_SHRINK]);
+    }
+}
+
+/**
+ * gtk_button_get_can_shrink:
+ * @button: a button
+ *
+ * Retrieves whether the button can be smaller than the natural
+ * size of its contents.
+ *
+ * Returns: true if the button can shrink, and false otherwise
+ *
+ * Since: 4.12
+ */
+gboolean
+gtk_button_get_can_shrink (GtkButton *button)
+{
+  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+
+  return priv->can_shrink;
 }
