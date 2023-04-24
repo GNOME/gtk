@@ -32,6 +32,7 @@ test_gltexture (int test)
   GdkDisplay *display;
   GdkGLContext *context;
   GdkGLContext *context2 = NULL;
+  GdkGLTextureBuilder *builder;
   GdkTexture *texture;
   cairo_surface_t *surface;
   GError *error = NULL;
@@ -80,7 +81,12 @@ test_gltexture (int test)
       gdk_gl_context_make_current (context2);
     }
 
-  texture = gdk_gl_texture_new (context, id, 64, 64, NULL, NULL);
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_id (builder, id);
+  gdk_gl_texture_builder_set_context (builder, context);
+  gdk_gl_texture_builder_set_width (builder, 64);
+  gdk_gl_texture_builder_set_height (builder, 64);
+  texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
 
   data = g_malloc0 (64 * 64 * 4);
   gdk_texture_download (texture, data, 64 * 4);
@@ -89,6 +95,7 @@ test_gltexture (int test)
 
   g_free (data);
   g_object_unref (texture);
+  g_object_unref (builder);
 
   cairo_surface_destroy (surface);
 
