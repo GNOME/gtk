@@ -21,8 +21,9 @@
 
 #include "gdkgltexturebuilder.h"
 
+#include "gdkenumtypes.h"
 #include "gdkglcontext.h"
-#include "gdkgltexture.h"
+#include "gdkgltextureprivate.h"
 
 struct _GdkGLTextureBuilder
 {
@@ -32,6 +33,8 @@ struct _GdkGLTextureBuilder
   guint id;
   int width;
   int height;
+  GdkMemoryFormat format;
+  gboolean has_mipmap;
   GDestroyNotify destroy;
   gpointer data;
 };
@@ -63,6 +66,8 @@ enum
 {
   PROP_0,
   PROP_CONTEXT,
+  PROP_FORMAT,
+  PROP_HAS_MIPMAP,
   PROP_HEIGHT,
   PROP_ID,
   PROP_WIDTH,
@@ -98,6 +103,14 @@ gdk_gl_texture_builder_get_property (GObject    *object,
       g_value_set_object (value, self->context);
       break;
 
+    case PROP_FORMAT:
+      g_value_set_enum (value, self->format);
+      break;
+
+    case PROP_HAS_MIPMAP:
+      g_value_set_boolean (value, self->has_mipmap);
+      break;
+
     case PROP_HEIGHT:
       g_value_set_int (value, self->height);
       break;
@@ -128,6 +141,14 @@ gdk_gl_texture_builder_set_property (GObject      *object,
     {
     case PROP_CONTEXT:
       gdk_gl_texture_builder_set_context (self, g_value_get_object (value));
+      break;
+
+    case PROP_FORMAT:
+      gdk_gl_texture_builder_set_format (self, g_value_get_enum (value));
+      break;
+
+    case PROP_HAS_MIPMAP:
+      gdk_gl_texture_builder_set_has_mipmap (self, g_value_get_boolean (value));
       break;
 
     case PROP_HEIGHT:
@@ -170,6 +191,31 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkGLTextureBuilder:format: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_format org.gdk.Property.set=gdk_gl_texture_builder_set_format)
+   *
+   * The format when downloading the texture.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_FORMAT] =
+    g_param_spec_enum ("format", NULL, NULL,
+                       GDK_TYPE_MEMORY_FORMAT,
+                       GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLTextureBuilder:has-mipmap: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_has_mipmap org.gdk.Property.set=gdk_gl_texture_builder_set_has_mipmap)
+   *
+   * If the texture has a mipmap.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HAS_MIPMAP] =
+    g_param_spec_boolean ("has-mipmap", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GdkGLTextureBuilder:height: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_height org.gdk.Property.set=gdk_gl_texture_builder_set_height)
    *
    * The height of the texture.
@@ -210,6 +256,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
 static void
 gdk_gl_texture_builder_init (GdkGLTextureBuilder *self)
 {
+  self->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
 }
 
 /**
@@ -432,6 +479,98 @@ gdk_gl_texture_builder_set_notify (GdkGLTextureBuilder *self,
 }
 
 /**
+ * gdk_gl_texture_builder_get_has_mipmap: (attributes org.gdk.Method.get_property=has-mipmap)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets whether the texture has a mipmap.
+ *
+ * Returns: Whether the texture has a mipmap
+ *
+ * Since: 4.12
+ */
+gboolean
+gdk_gl_texture_builder_get_has_mipmap (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), FALSE);
+
+  return self->has_mipmap;
+}
+
+/**
+ * gdk_gl_texture_builder_set_has_mipmap: (attributes org.gdk.Method.set_property=has-mipmap)
+ * @self: a `GdkGLTextureBuilder`
+ * @has_mipmap: Whether the texture has a mipmap
+ *
+ * Sets whether the texture has a mipmap. This allows the renderer and other users of the
+ * generated texture to use a higher quality downscaling.
+ *
+ * Typically, the `glGenerateMipmap` function is used to generate a mimap.
+ *
+ * Since: 4.12
+ */
+void
+gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
+                                       gboolean             has_mipmap)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+
+  if (self->has_mipmap == has_mipmap)
+    return;
+
+  self->has_mipmap = has_mipmap;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_MIPMAP]);
+}
+
+/**
+ * gdk_gl_texture_builder_get_format: (attributes org.gdk.Method.get_property=format)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets the format previously set via gdk_gl_texture_builder_set_format().
+ *
+ * Returns: The format
+ *
+ * Since: 4.12
+ */
+GdkMemoryFormat
+gdk_gl_texture_builder_get_format (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
+
+  return self->format;
+}
+
+/**
+ * gdk_gl_texture_builder_set_format: (attributes org.gdk.Method.set_property=format)
+ * @self: a `GdkGLTextureBuilder`
+ * @format: The texture's format
+ *
+ * Sets the format of the texture. The default is `GDK_MEMORY_R8G8B8A8_PREMULTIPLIED`.
+ *
+ * The format is the preferred format the texture data should be downloaded to. The
+ * format must be supported by the GL version of [property@Gdk.GLTextureBuilder:context].
+ *
+ * Setting the right format is particularly useful when using high bit depth textures
+ * to preserve the bit depth, to set the correct value for unpremultiplied textures
+ * and to make sure opaque textures are treated as such.
+ *
+ * Since: 4.12
+ */
+void
+gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
+                                   GdkMemoryFormat      format)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+
+  if (self->format == format)
+    return;
+
+  self->format = format;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMAT]);
+}
+
+/**
  * gdk_gl_texture_builder_build:
  * @self: a `GdkGLTextureBuilder`
  *
@@ -450,11 +589,6 @@ gdk_gl_texture_builder_build (GdkGLTextureBuilder *self)
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
 
-  return gdk_gl_texture_new (self->context,
-                             self->id,
-                             self->width,
-                             self->height,
-                             self->destroy,
-                             self->data);
+  return gdk_gl_texture_new_from_builder (self, self->destroy, self->data);
 }
 

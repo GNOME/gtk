@@ -321,6 +321,28 @@ gdk_gl_texture_release (GdkGLTexture *self)
   drop_gl_resources (self);
 }
 
+GdkTexture *
+gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
+                                 GDestroyNotify       destroy,
+                                 gpointer             data)
+{
+  GdkGLTexture *self;
+
+  self = g_object_new (GDK_TYPE_GL_TEXTURE,
+                       "width", gdk_gl_texture_builder_get_width (builder),
+                       "height", gdk_gl_texture_builder_get_height (builder),
+                       NULL);
+
+  self->context = g_object_ref (gdk_gl_texture_builder_get_context (builder));
+  self->id = gdk_gl_texture_builder_get_id (builder);
+  GDK_TEXTURE (self)->format = gdk_gl_texture_builder_get_format (builder);
+  self->has_mipmap = gdk_gl_texture_builder_get_has_mipmap (builder);
+  self->destroy = destroy;
+  self->data = data;
+
+  return GDK_TEXTURE (self);
+}
+
 static void
 gdk_gl_texture_determine_format (GdkGLTexture *self)
 {

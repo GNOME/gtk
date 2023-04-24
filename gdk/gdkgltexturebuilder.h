@@ -23,6 +23,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
+#include <gdk/gdkenums.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkversionmacros.h>
 
@@ -58,6 +59,18 @@ int                     gdk_gl_texture_builder_get_height       (GdkGLTextureBui
 GDK_AVAILABLE_IN_4_12
 void                    gdk_gl_texture_builder_set_height       (GdkGLTextureBuilder    *self,
                                                                  int                     height);
+
+GDK_AVAILABLE_IN_4_12
+GdkMemoryFormat         gdk_gl_texture_builder_get_format       (GdkGLTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_12
+void                    gdk_gl_texture_builder_set_format       (GdkGLTextureBuilder    *self,
+                                                                 GdkMemoryFormat         format);
+
+GDK_AVAILABLE_IN_4_12
+gboolean                gdk_gl_texture_builder_get_has_mipmap   (GdkGLTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_12
+void                    gdk_gl_texture_builder_set_has_mipmap   (GdkGLTextureBuilder    *self,
+                                                                 gboolean                has_mipmap);
 
 GDK_AVAILABLE_IN_4_12
 void                    gdk_gl_texture_builder_set_notify       (GdkGLTextureBuilder    *self,
