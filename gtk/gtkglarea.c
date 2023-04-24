@@ -143,9 +143,7 @@
  */
 
 typedef struct {
-  guint id;
-  int width;
-  int height;
+  GdkGLTextureBuilder *builder;
   GdkTexture *holder;
 } Texture;
 
@@ -403,15 +401,16 @@ static void
 delete_one_texture (gpointer data)
 {
   Texture *texture = data;
+  guint id;
 
   if (texture->holder)
     gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
 
-  if (texture->id != 0)
-    {
-      glDeleteTextures (1, &texture->id);
-      texture->id = 0;
-    }
+  id = gdk_gl_texture_builder_get_id (texture->builder);
+  if (id != 0)
+    glDeleteTextures (1, &id);
+
+  g_object_unref (texture->builder);
 
   g_free (texture);
 }
@@ -452,13 +451,20 @@ gtk_gl_area_ensure_texture (GtkGLArea *area)
 
   if (priv->texture == NULL)
     {
-      priv->texture = g_new (Texture, 1);
+      GLuint id;
 
-      priv->texture->width = 0;
-      priv->texture->height = 0;
+      priv->texture = g_new (Texture, 1);
       priv->texture->holder = NULL;
 
-      glGenTextures (1, &priv->texture->id);
+      priv->texture->builder = gdk_gl_texture_builder_new ();
+      gdk_gl_texture_builder_set_context (priv->texture->builder, priv->context);
+      if (gdk_gl_context_get_api (priv->context) == GDK_GL_API_GLES)
+        gdk_gl_texture_builder_set_format (priv->texture->builder, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
+      else
+        gdk_gl_texture_builder_set_format (priv->texture->builder, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED);
+
+      glGenTextures (1, &id);
+      gdk_gl_texture_builder_set_id (priv->texture->builder, id);
     }
 
   gtk_gl_area_allocate_texture (area);
@@ -512,10 +518,10 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
   width = gtk_widget_get_width (widget) * scale;
   height = gtk_widget_get_height (widget) * scale;
 
-  if (priv->texture->width != width ||
-      priv->texture->height != height)
+  if (gdk_gl_texture_builder_get_width (priv->texture->builder) != width ||
+      gdk_gl_texture_builder_get_height (priv->texture->builder) != height)
     {
-      glBindTexture (GL_TEXTURE_2D, priv->texture->id);
+      glBindTexture (GL_TEXTURE_2D, gdk_gl_texture_builder_get_id (priv->texture->builder));
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -526,8 +532,8 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
       else
         glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 
-      priv->texture->width = width;
-      priv->texture->height = height;
+      gdk_gl_texture_builder_set_width (priv->texture->builder, width);
+      gdk_gl_texture_builder_set_height (priv->texture->builder, height);
     }
 }
 
@@ -571,7 +577,7 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
 
   if (priv->texture != NULL)
     glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                            GL_TEXTURE_2D, priv->texture->id, 0);
+                            GL_TEXTURE_2D, gdk_gl_texture_builder_get_id (priv->texture->builder), 0);
 
   if (priv->depth_stencil_buffer)
     {
@@ -754,11 +760,9 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      texture->holder = gdk_gl_texture_new (priv->context,
-                                            texture->id,
-                                            texture->width,
-                                            texture->height,
-                                            release_texture, texture);
+      texture->holder = gdk_gl_texture_builder_build (texture->builder,
+                                                      release_texture,
+                                                      texture);
 
       /* Our texture is rendered by OpenGL, so it is upside down,
        * compared to what GSK expects, so flip it back.
