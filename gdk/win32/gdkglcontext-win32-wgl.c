@@ -340,8 +340,7 @@ create_wgl_context_with_attribs (HDC           hdc,
                                  HGLRC         hglrc_base,
                                  GdkGLContext *share,
                                  int           flags,
-                                 int           major,
-                                 int           minor,
+                                 GdkGLVersion *version,
                                  gboolean     *is_legacy)
 {
   HGLRC hglrc;
@@ -356,8 +355,8 @@ create_wgl_context_with_attribs (HDC           hdc,
 
   int attribs[] = {
     WGL_CONTEXT_PROFILE_MASK_ARB,   profile,
-    WGL_CONTEXT_MAJOR_VERSION_ARB, *is_legacy ? 3 : major,
-    WGL_CONTEXT_MINOR_VERSION_ARB, *is_legacy ? 0 : minor,
+    WGL_CONTEXT_MAJOR_VERSION_ARB,  gdk_gl_version_get_major (version),
+    WGL_CONTEXT_MINOR_VERSION_ARB,  gdk_gl_version_get_minor (version),
     WGL_CONTEXT_FLAGS_ARB,          flags,
     0
   };
@@ -373,13 +372,12 @@ create_wgl_context_with_attribs (HDC           hdc,
 }
 
 static HGLRC
-create_wgl_context (HDC           hdc,
-                    GdkGLContext *share,
-                    int           flags,
-                    int           major,
-                    int           minor,
-                    gboolean     *is_legacy,
-                    gboolean      hasWglARBCreateContext)
+create_wgl_context (HDC                 hdc,
+                    GdkGLContext       *share,
+                    int                 flags,
+                    GdkGLVersion       *version,
+                    gboolean           *is_legacy,
+                    gboolean            hasWglARBCreateContext)
 {
   /* We need a legacy context for *all* cases */
   HGLRC hglrc_base = wglCreateContext (hdc);
@@ -415,8 +413,7 @@ create_wgl_context (HDC           hdc,
                                                hglrc_base,
                                                share,
                                                flags,
-                                               major,
-                                               minor,
+                                               version,
                                                is_legacy);
 
       /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
@@ -429,7 +426,7 @@ create_wgl_context (HDC           hdc,
                                                        hglrc_base,
                                                        share,
                                                        flags,
-                                                       0, 0,
+                                                       version,
                                                        is_legacy);
 
               *is_legacy = TRUE;
@@ -581,8 +578,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   hglrc = create_wgl_context (hdc,
                               share,
                               flags,
-                              gdk_gl_version_get_major (&version),
-                              gdk_gl_version_get_minor (&version),
+                              &version,
                               &legacy_bit,
                               display_win32->hasWglARBCreateContext);
 
