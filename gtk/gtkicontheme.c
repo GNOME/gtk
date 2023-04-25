@@ -2592,7 +2592,8 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
 
   ensure_valid_themes (self, FALSE);
 
-  if (gtk_string_set_lookup (&self->icons, icon_name) != NULL)
+  if (gtk_string_set_lookup (&self->icons, icon_name) != NULL ||
+      g_hash_table_contains (self->unthemed_icons, icon_name))
     {
       res = TRUE;
       goto out;
@@ -2634,7 +2635,8 @@ gtk_icon_theme_has_gicon (GtkIconTheme *self,
 
   for (int i = 0; names[i]; i++)
     {
-      if (gtk_string_set_lookup (&self->icons, names[i]) != NULL)
+      if (gtk_string_set_lookup (&self->icons, names[i]) != NULL ||
+          g_hash_table_contains (self->unthemed_icons, names[i]))
         {
           res = TRUE;
           goto out;
