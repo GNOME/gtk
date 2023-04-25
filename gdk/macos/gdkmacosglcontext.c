@@ -324,6 +324,7 @@ gdk_macos_gl_context_release (GdkMacosGLContext *self)
 
 static CGLPixelFormatObj
 create_pixel_format (GdkGLVersion  *version,
+                     gboolean      *out_legacy,
                      GError       **error)
 {
   CGLPixelFormatAttribute attrs[] = {
@@ -337,6 +338,8 @@ create_pixel_format (GdkGLVersion  *version,
   };
   CGLPixelFormatObj format = NULL;
   GLint n_format = 1;
+
+  *out_legacy = FALSE;
 
   if (gdk_gl_version_get_major (version) >= 4)
     {
@@ -355,6 +358,8 @@ create_pixel_format (GdkGLVersion  *version,
   attrs[1] = (CGLPixelFormatAttribute) kCGLOGLPVersion_Legacy;
   if (!CHECK (error, CGLChoosePixelFormat (attrs, &format, &n_format)))
     return NULL;
+
+  *out_legacy = TRUE;
 
   return g_steal_pointer (&format);
 }
@@ -376,6 +381,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   GLint renderer_id = 0;
   GLint swapRect[4];
   GdkGLVersion min_version, version;
+  gboolean legacy;
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
@@ -411,7 +417,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                      "Creating CGLContextObj (version %d.%d)",
                      gdk_gl_version_get_major (&min_version), gdk_gl_version_get_minor (&min_version));
 
-  if (!(pixelFormat = create_pixel_format (&min_version, error)))
+  if (!(pixelFormat = create_pixel_format (&min_version, &legacy, error)))
     return 0;
 
   if (!CHECK (error, CGLCreateContext (pixelFormat, shared_gl_context, &cgl_context)))
@@ -462,6 +468,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                      get_renderer_name (renderer_id));
 
   gdk_gl_context_set_version (context, &version);
+  gdk_gl_context_set_is_legacy (context, legacy);
 
   self->cgl_context = g_steal_pointer (&cgl_context);
 
