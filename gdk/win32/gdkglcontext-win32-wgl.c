@@ -340,35 +340,46 @@ create_wgl_context_with_attribs (HDC           hdc,
                                  HGLRC         hglrc_base,
                                  GdkGLContext *share,
                                  int           flags,
-                                 GdkGLVersion *version,
-                                 gboolean     *is_legacy)
+                                 gboolean      is_legacy,
+                                 GdkGLVersion *version)
 {
   HGLRC hglrc;
   GdkWin32GLContextWGL *context_wgl;
+  const GdkGLVersion *supported_versions = gdk_gl_versions_get_for_api (GDK_GL_API_GL);
+  guint i;
 
-  /* if we have wglCreateContextAttribsARB(), create a
-  * context with the compatibility profile if a legacy
-  * context is requested, or when we go into fallback mode
-  */
-  int profile = *is_legacy ? WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB :
-                             WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
+  for (i = 0; gdk_gl_version_greater_equal (&supported_versions[i], version); i++)
+    {
+      /* if we have wglCreateContextAttribsARB(), create a
+      * context with the compatibility profile if a legacy
+      * context is requested, or when we go into fallback mode
+      */
+      int profile = is_legacy ? WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB :
+                                WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
 
-  int attribs[] = {
-    WGL_CONTEXT_PROFILE_MASK_ARB,   profile,
-    WGL_CONTEXT_MAJOR_VERSION_ARB,  gdk_gl_version_get_major (version),
-    WGL_CONTEXT_MINOR_VERSION_ARB,  gdk_gl_version_get_minor (version),
-    WGL_CONTEXT_FLAGS_ARB,          flags,
-    0
-  };
+      int attribs[] = {
+        WGL_CONTEXT_PROFILE_MASK_ARB,   profile,
+        WGL_CONTEXT_MAJOR_VERSION_ARB,  gdk_gl_version_get_major (&supported_versions[i]),
+        WGL_CONTEXT_MINOR_VERSION_ARB,  gdk_gl_version_get_minor (&supported_versions[i]),
+        WGL_CONTEXT_FLAGS_ARB,          flags,
+        0
+      };
 
-  if (share != NULL)
-    context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
+      if (share != NULL)
+        context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
 
-  hglrc = wglCreateContextAttribsARB (hdc,
-                                      share != NULL ? context_wgl->wgl_context : NULL,
-                                      attribs);
+      hglrc = wglCreateContextAttribsARB (hdc,
+                                          share != NULL ? context_wgl->wgl_context : NULL,
+                                          attribs);
 
-  return hglrc;
+      if (hglrc)
+        {
+          *version = supported_versions[i];
+          return hglrc;
+        }
+    }
+
+  return NULL;
 }
 
 static HGLRC
@@ -413,8 +424,8 @@ create_wgl_context (HDC                 hdc,
                                                hglrc_base,
                                                share,
                                                flags,
-                                               version,
-                                               is_legacy);
+                                               *is_legacy,
+                                               version);
 
       /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
       if (hglrc == NULL)
@@ -426,8 +437,8 @@ create_wgl_context (HDC                 hdc,
                                                        hglrc_base,
                                                        share,
                                                        flags,
-                                                       version,
-                                                       is_legacy);
+                                                       TRUE,
+                                                       version);
 
               *is_legacy = TRUE;
             }
@@ -523,16 +534,17 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   /*
-   * We may need a Core GL 4.1+ context in order to use the GL support in
-   * the GStreamer media widget backend (such as on Intel drivers), but
-   * wglCreateContextAttribsARB() may only give us the GL context version
-   * that we ask for here, and nothing more.  So, improve things here by
-   * asking for the GL version that is reported to us via epoxy_gl_version(),
-   * rather than the default GL core 3.2 context.
+   * A legacy context cannot be shared with core profile ones, so this means we
+   * must stick to a legacy context if the shared context is a legacy context
    */
-  gdk_gl_context_get_clipped_version (context,
-                                      &display_win32->gl_version,
-                                      &version);
+  legacy_bit = (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_LEGACY)
+                 ? TRUE
+                 : share != NULL && gdk_gl_context_is_legacy (share);
+
+  gdk_gl_context_get_matching_version (context,
+                                       GDK_GL_API_GL,
+                                       legacy_bit,
+                                       &version);
 
   if (surface != NULL)
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
@@ -598,6 +610,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   context_wgl->wgl_context = hglrc;
 
   /* Ensure that any other context is created with a legacy bit set */
+  gdk_gl_context_set_version (context, &version);
   gdk_gl_context_set_is_legacy (context, legacy_bit);
 
   return GDK_GL_API_GL;
