@@ -3148,12 +3148,12 @@ gsk_container_node_new (GskRenderNode **children,
           self->children[i] = gsk_render_node_ref (children[i]);
           self->disjoint &= !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
-          node->prefers_high_depth |= gsk_render_node_prefers_high_depth (children[i]);
-          node->offscreen_for_opacity |= children[i]->offscreen_for_opacity;
+          node->prefers_high_depth = node->prefers_high_depth || gsk_render_node_prefers_high_depth (children[i]);
+          node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
         }
 
       graphene_rect_init_from_rect (&node->bounds, &bounds);
-      node->offscreen_for_opacity |= !self->disjoint;
+      node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
     }
 
   return node;
@@ -6034,7 +6034,7 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
       for (guint i = 0; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
-          node->prefers_high_depth |= gsk_render_node_prefers_high_depth (children[i]);
+          node->prefers_high_depth = node->prefers_high_depth || gsk_render_node_prefers_high_depth (children[i]);
         }
     }
 
