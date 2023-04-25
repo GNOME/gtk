@@ -104,12 +104,20 @@ gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext   
                                                                  GError         **error);
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
                                                                  gboolean         is_legacy);
+gboolean                gdk_gl_context_check_gl_version         (GdkGLContext           *context,
+                                                                 const GdkGLVersion     *gl_version,
+                                                                 const GdkGLVersion     *gles_version);
 
-gboolean                gdk_gl_context_check_version            (GdkGLContext           *context,
-                                                                 int                     required_gl_major,
-                                                                 int                     required_gl_minor,
-                                                                 int                     required_gles_major,
-                                                                 int                     required_gles_minor);
+static inline gboolean
+gdk_gl_context_check_version (GdkGLContext *context,
+                              const char   *gl_version,
+                              const char   *gles_version)
+{
+  return gdk_gl_context_check_gl_version (context,
+                                          gl_version ? &GDK_GL_VERSION_STRING (gl_version) : NULL,
+                                          gles_version ? &GDK_GL_VERSION_STRING (gles_version) : NULL);
+}
+
 void                    gdk_gl_context_get_clipped_version      (GdkGLContext           *context,
                                                                  const GdkGLVersion     *min_version,
                                                                  GdkGLVersion           *out_clipped);

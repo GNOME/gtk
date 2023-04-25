@@ -101,7 +101,7 @@
 
 typedef struct {
   GdkGLVersion required;
-  int gl_version;
+  GdkGLVersion gl_version;
 
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
@@ -617,7 +617,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   glViewport (0, 0, ww, wh);
 
 #ifdef HAVE_EGL
-  if (priv->egl_context && gdk_gl_context_check_version (context, 0, 0, 3, 0))
+  if (priv->egl_context && gdk_gl_context_check_version (context, NULL, "3.0"))
     glDrawBuffers (1, (GLenum[1]) { gdk_gl_context_get_use_es (context) ? GL_BACK : GL_BACK_LEFT });
 #endif
 }
@@ -1030,17 +1030,13 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 }
 
 gboolean
-gdk_gl_context_check_version (GdkGLContext *self,
-                              int           required_gl_major,
-                              int           required_gl_minor,
-                              int           required_gles_major,
-                              int           required_gles_minor)
+gdk_gl_context_check_gl_version (GdkGLContext       *self,
+                                 const GdkGLVersion *required_gl,
+                                 const GdkGLVersion *required_gles)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
-  g_return_val_if_fail (required_gl_minor < 10, FALSE);
-  g_return_val_if_fail (required_gles_minor < 10, FALSE);
 
   if (!gdk_gl_context_is_realized (self))
     return FALSE;
@@ -1048,10 +1044,10 @@ gdk_gl_context_check_version (GdkGLContext *self,
   switch (priv->api)
     {
     case GDK_GL_API_GL:
-      return priv->gl_version >= required_gl_major * 10 + required_gl_minor;
+      return required_gl == NULL || gdk_gl_version_greater_equal (&priv->gl_version, required_gl);
 
     case GDK_GL_API_GLES:
-      return priv->gl_version >= required_gles_major * 10 + required_gles_minor;
+      return required_gles == NULL || gdk_gl_version_greater_equal (&priv->gl_version, required_gles);
 
     default:
       g_return_val_if_reached (FALSE);
@@ -1497,7 +1493,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   if (priv->extensions_checked)
     return;
 
-  priv->gl_version = epoxy_gl_version ();
+  gdk_gl_version_init_epoxy (&priv->gl_version);
 
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");
@@ -1524,7 +1520,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
-      if (priv->gl_version < 32)
+      if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
         priv->is_legacy = TRUE;
     }
 
@@ -1534,7 +1530,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
 
-  priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+  priv->has_half_float = gdk_gl_context_check_version (context, "3.0", "3.0") ||
                          epoxy_has_gl_extension ("OES_vertex_half_float");
 
 #ifdef G_ENABLE_DEBUG
@@ -1550,7 +1546,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_EXT_unpack_subimage: %s\n"
                        " - OES_vertex_half_float: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
-                       priv->gl_version / 10, priv->gl_version % 10,
+                       gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
                        max_texture_size,
@@ -1694,9 +1690,9 @@ gdk_gl_context_get_version (GdkGLContext *context,
   g_return_if_fail (gdk_gl_context_is_realized (context));
 
   if (major != NULL)
-    *major = priv->gl_version / 10;
+    *major = gdk_gl_version_get_major (&priv->gl_version);
   if (minor != NULL)
-    *minor = priv->gl_version % 10;
+    *minor = gdk_gl_version_get_minor (&priv->gl_version);
 }
 
 /**

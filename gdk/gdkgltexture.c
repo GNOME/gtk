@@ -189,7 +189,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
       glGenFramebuffers (1, &fbo);
       glBindFramebuffer (GL_FRAMEBUFFER, fbo);
       glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
-      if (gdk_gl_context_check_version (context, 4, 3, 3, 1))
+      if (gdk_gl_context_check_version (context, "4.3", "3.1"))
         {
           gdk_gl_context_get_version (context, &major, &minor);
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
@@ -335,7 +335,7 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
   if (context == NULL ||
       !gdk_gl_context_is_shared (self->context, context) ||
       /* ... or glGetTexLevelParameter() isn't supported */
-      !gdk_gl_context_check_version (context, 0, 0, 3, 1))
+      !gdk_gl_context_check_version (context, NULL, "3.1"))
     {
       texture->format = GDK_MEMORY_DEFAULT;
       self->has_mipmap = FALSE;
