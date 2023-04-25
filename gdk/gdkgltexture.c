@@ -39,6 +39,7 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   guint id;
   gboolean has_mipmap;
+  gboolean has_mipmap_set;
 
   GdkTexture *saved;
 
@@ -338,7 +339,6 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
       !gdk_gl_context_check_version (context, 0, 0, 3, 1))
     {
       texture->format = GDK_MEMORY_DEFAULT;
-      self->has_mipmap = FALSE;
       return;
     }
 
@@ -428,18 +428,21 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
       break;
   }
 
-  /* Determine if the texture has a mipmap.
-   * We do this here, since it requires binding the texture,
-   * and we're already doing that here.
-   * GL has no way to directly query 'mipmap completeness' of textures,
-   * so we just check that level 1 has the expected size, and assume
-   * that means somebody called glGenerateMipmap().
-   */
-  glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_WIDTH, &width);
-  glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_HEIGHT, &height);
+  if (!self->has_mipmap)
+    {
+      /* Determine if the texture has a mipmap.
+       * We do this here, since it requires binding the texture,
+       * and we're already doing that here.
+       * GL has no way to directly query 'mipmap completeness' of textures,
+       * so we just check that level 1 has the expected size, and assume
+       * that means somebody called glGenerateMipmap().
+       */
+      glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_WIDTH, &width);
+      glGetTexLevelParameteriv (GL_TEXTURE_2D, 1, GL_TEXTURE_HEIGHT, &height);
 
-  self->has_mipmap = width == texture->width / 2 &&
-                     height == texture->height / 2;
+      self->has_mipmap = width == texture->width / 2 &&
+                         height == texture->height / 2;
+    }
 
   /* restore previous state */
   glBindTexture (GL_TEXTURE_2D, active_texture);
@@ -472,7 +475,7 @@ gdk_gl_texture_new (GdkGLContext   *context,
                     GDestroyNotify  destroy,
                     gpointer        data)
 {
-  return gdk_gl_texture_new_full (context, id, width, height, destroy, data);
+  return gdk_gl_texture_new_full (context, id, width, height, FALSE, destroy, data);
 }
 
 GdkTexture *
@@ -480,6 +483,7 @@ gdk_gl_texture_new_full (GdkGLContext   *context,
                          guint           id,
                          int             width,
                          int             height,
+                         gboolean        has_mipmap,
                          GDestroyNotify  destroy,
                          gpointer        data)
 {
@@ -497,6 +501,7 @@ gdk_gl_texture_new_full (GdkGLContext   *context,
 
   self->context = g_object_ref (context);
   self->id = id;
+  self->has_mipmap = has_mipmap;
   self->destroy = destroy;
   self->data = data;
 

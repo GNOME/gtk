@@ -14,6 +14,7 @@ GdkTexture *            gdk_gl_texture_new_full         (GdkGLContext           
                                                          guint                   id,
                                                          int                     width,
                                                          int                     height,
+                                                         gboolean                has_mipmap,
                                                          GDestroyNotify          destroy,
                                                          gpointer                data);
 
