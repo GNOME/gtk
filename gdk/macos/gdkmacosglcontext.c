@@ -323,9 +323,8 @@ gdk_macos_gl_context_release (GdkMacosGLContext *self)
 }
 
 static CGLPixelFormatObj
-create_pixel_format (int      major,
-                     int      minor,
-                     GError **error)
+create_pixel_format (GdkGLVersion  *version,
+                     GError       **error)
 {
   CGLPixelFormatAttribute attrs[] = {
     kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy,
@@ -339,9 +338,9 @@ create_pixel_format (int      major,
   CGLPixelFormatObj format = NULL;
   GLint n_format = 1;
 
-  if (major == 3 && minor == 2)
+  if (gdk_gl_version_get_major (version) == 3)
     attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL3_Core;
-  else if (major == 4 && minor == 1)
+  else
     attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL4_Core;
 
   if (!CHECK (error, CGLChoosePixelFormat (attrs, &format, &n_format)))
@@ -366,7 +365,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   GLint validate = 0;
   GLint renderer_id = 0;
   GLint swapRect[4];
-  int major, minor;
+  GdkGLVersion version;
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
@@ -379,9 +378,8 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   existing = CGLGetCurrentContext ();
 
   gdk_gl_context_get_clipped_version (context,
-                                      GDK_GL_MIN_GL_VERSION_MAJOR,
-                                      GDK_GL_MIN_GL_VERSION_MINOR,
-                                      &major, &minor);
+                                      GDK_GL_MIN_GL_VERSION,
+                                      &version);
 
   display = gdk_gl_context_get_display (context);
   shared = gdk_display_get_gl_context (display);
@@ -400,9 +398,9 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating CGLContextObj (version %d.%d)",
-                     major, minor);
+                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version));
 
-  if (!(pixelFormat = create_pixel_format (major, minor, error)))
+  if (!(pixelFormat = create_pixel_format (&version, error)))
     return 0;
 
   if (!CHECK (error, CGLCreateContext (pixelFormat, shared_gl_context, &cgl_context)))

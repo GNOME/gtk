@@ -24,6 +24,8 @@
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
  
+#include "gdkglversionprivate.h"
+
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
@@ -124,7 +126,7 @@ struct _GdkWin32Display
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
-  guint gl_version;
+  GdkGLVersion gl_version;
 
   GListModel *monitors;
 

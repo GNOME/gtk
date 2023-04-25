@@ -278,7 +278,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return FALSE;
     }
 
-  display_win32->gl_version = epoxy_gl_version ();
+  gdk_gl_version_init_epoxy (&display_win32->gl_version);
 
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
@@ -300,8 +300,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                      "\t* WGL_EXT_swap_control: %s\n"
                      "\t* WGL_OML_sync_control: %s\n"
                      "\t* WGL_ARB_multisample: %s\n",
-                     display_win32->gl_version / 10,
-                     display_win32->gl_version % 10,
+                     gdk_gl_version_get_major (&display_win32->gl_version),
+                     gdk_gl_version_get_minor (&display_win32->gl_version),
                      glGetString (GL_VENDOR),
                      display_win32->hasWglARBPixelFormat ? "yes" : "no",
                      display_win32->hasWglARBCreateContext ? "yes" : "no",
@@ -509,8 +509,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   /* request flags and specific versions for core (3.2+) WGL context */
   int flags = 0;
-  int major = 0;
-  int minor = 0;
+  GdkGLVersion version;
   HGLRC hglrc;
   int pixel_format;
   HDC hdc;
@@ -535,9 +534,8 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
    * rather than the default GL core 3.2 context.
    */
   gdk_gl_context_get_clipped_version (context,
-                                      display_win32->gl_version / 10,
-                                      display_win32->gl_version % 10,
-                                      &major, &minor);
+                                      &display_win32->gl_version,
+                                      &version);
 
   if (surface != NULL)
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
@@ -574,8 +572,8 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   GDK_NOTE (OPENGL,
             g_print ("Creating %s WGL context (version:%d.%d, debug:%s, forward:%s, legacy: %s)\n",
                       compat_bit ? "core" : "compat",
-                      major,
-                      minor,
+                      gdk_gl_version_get_major (&version),
+                      gdk_gl_version_get_minor (&version),
                       debug_bit ? "yes" : "no",
                       compat_bit ? "yes" : "no",
                       legacy_bit ? "yes" : "no"));
@@ -583,9 +581,9 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   hglrc = create_wgl_context (hdc,
                               share,
                               flags,
-                              major,
-                              minor,
-                             &legacy_bit,
+                              gdk_gl_version_get_major (&version),
+                              gdk_gl_version_get_minor (&version),
+                              &legacy_bit,
                               display_win32->hasWglARBCreateContext);
 
   if (hglrc == NULL)
@@ -714,9 +712,9 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (major != NULL)
-    *major = display_win32->gl_version / 10;
+    *major = gdk_gl_version_get_major (&display_win32->gl_version);
   if (minor != NULL)
-    *minor = display_win32->gl_version % 10;
+    *major = gdk_gl_version_get_major (&display_win32->gl_version);
 
   return TRUE;
 }

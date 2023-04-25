@@ -477,7 +477,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GLXContext ctx;
   int context_attribs[N_GLX_ATTRS], i = 0, flags = 0;
-  int min_major, min_minor, major, minor;
+  GdkGLVersion min, version;
   gboolean debug_bit, compat_bit;
 
   if (!gdk_gl_context_is_api_allowed (context, api, NULL))
@@ -488,10 +488,8 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy,
-                                       &min_major, &min_minor);
-  gdk_gl_context_get_clipped_version (context, min_major, min_minor,
-                                      &major, &minor);
+  gdk_gl_context_get_matching_version (api, legacy, &min);
+  gdk_gl_context_get_clipped_version (context, &min, &version);
 
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
@@ -511,9 +509,9 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
     context_attribs[i++] = GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
 
   context_attribs[i++] = GLX_CONTEXT_MAJOR_VERSION_ARB;
-  context_attribs[i++] = major;
+  context_attribs[i++] = gdk_gl_version_get_major (&version);
   context_attribs[i++] = GLX_CONTEXT_MINOR_VERSION_ARB;
-  context_attribs[i++] = minor;
+  context_attribs[i++] = gdk_gl_version_get_minor (&version);
   context_attribs[i++] = GLX_CONTEXT_FLAGS_ARB;
   context_attribs[i++] = flags;
 
@@ -522,7 +520,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating GLX context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                     major, minor,
+                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version),
                      debug_bit ? "yes" : "no",
                      compat_bit ? "yes" : "no",
                      legacy ? "yes" : "no",
