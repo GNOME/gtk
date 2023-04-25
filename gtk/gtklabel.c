@@ -5773,10 +5773,10 @@ gtk_label_get_current_uri (GtkLabel *self)
   if (!self->select_info)
     return NULL;
 
-  if (self->select_info->link_clicked)
-    link = self->select_info->active_link;
-  else
+  if (!self->select_info->link_clicked && self->select_info->selectable)
     link = gtk_label_get_focus_link (self, NULL);
+  else
+    link = self->select_info->active_link;
 
   if (link)
     return link->uri;
