@@ -472,6 +472,17 @@ gdk_gl_texture_new (GdkGLContext   *context,
                     GDestroyNotify  destroy,
                     gpointer        data)
 {
+  return gdk_gl_texture_new_full (context, id, width, height, destroy, data);
+}
+
+GdkTexture *
+gdk_gl_texture_new_full (GdkGLContext   *context,
+                         guint           id,
+                         int             width,
+                         int             height,
+                         GDestroyNotify  destroy,
+                         gpointer        data)
+{
   GdkGLTexture *self;
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);

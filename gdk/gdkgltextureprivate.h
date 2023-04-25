@@ -10,5 +10,12 @@ GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           
 guint                   gdk_gl_texture_get_id           (GdkGLTexture           *self);
 gboolean                gdk_gl_texture_has_mipmap       (GdkGLTexture           *self);
 
+GdkTexture *            gdk_gl_texture_new_full         (GdkGLContext           *context,
+                                                         guint                   id,
+                                                         int                     width,
+                                                         int                     height,
+                                                         GDestroyNotify          destroy,
+                                                         gpointer                data);
+
 G_END_DECLS
 

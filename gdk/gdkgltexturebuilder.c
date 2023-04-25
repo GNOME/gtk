@@ -22,7 +22,7 @@
 #include "gdkgltexturebuilder.h"
 
 #include "gdkglcontext.h"
-#include "gdkgltexture.h"
+#include "gdkgltextureprivate.h"
 
 struct _GdkGLTextureBuilder
 {
@@ -450,11 +450,11 @@ gdk_gl_texture_builder_build (GdkGLTextureBuilder *self)
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
 
-  return gdk_gl_texture_new (self->context,
-                             self->id,
-                             self->width,
-                             self->height,
-                             self->destroy,
-                             self->data);
+  return gdk_gl_texture_new_full (self->context,
+                                  self->id,
+                                  self->width,
+                                  self->height,
+                                  self->destroy,
+                                  self->data);
 }
 
