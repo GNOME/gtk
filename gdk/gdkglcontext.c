@@ -287,8 +287,11 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   EGLConfig egl_config;
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS], i = 0, flags = 0;
+  gsize major_idx, minor_idx;
   gboolean debug_bit, forward_bit;
   GdkGLVersion min, version;
+  const GdkGLVersion* supported_versions;
+  gsize j;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   if (!gdk_gl_context_is_api_allowed (context, api, NULL))
@@ -328,9 +331,9 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
     flags &= ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
   context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
-  context_attribs[i++] = gdk_gl_version_get_major (&version);
+  major_idx = i++;
   context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
-  context_attribs[i++] = gdk_gl_version_get_minor (&version);
+  minor_idx = i++;
   context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
   context_attribs[i++] = flags;
 
@@ -345,17 +348,27 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
                      legacy ? "yes" : "no",
                      api == GDK_GL_API_GLES ? "yes" : "no");
 
-  ctx = eglCreateContext (egl_display,
-                          egl_config,
-                          share ? share_priv->egl_context : EGL_NO_CONTEXT,
-                          context_attribs);
+  supported_versions = gdk_gl_versions_get_for_api (api);
+  for (j = 0; gdk_gl_version_greater_equal (&supported_versions[j], &version); j++)
+    {
+      context_attribs [major_idx] = gdk_gl_version_get_major (&supported_versions[j]);
+      context_attribs [minor_idx] = gdk_gl_version_get_minor (&supported_versions[j]);
+
+      ctx = eglCreateContext (egl_display,
+                              egl_config,
+                              share ? share_priv->egl_context : EGL_NO_CONTEXT,
+                              context_attribs);
+      if (ctx != NULL)
+        break;
+    }
 
   if (ctx == NULL)
-      return 0;
+    return 0;
 
   GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
 
   priv->egl_context = ctx;
+  gdk_gl_context_set_version (context, &supported_versions[j]);
   gdk_gl_context_set_is_legacy (context, legacy);
 
   if (epoxy_has_egl_extension (egl_display, "EGL_KHR_swap_buffers_with_damage"))
@@ -1133,6 +1146,15 @@ gdk_gl_context_is_legacy (GdkGLContext *context)
 }
 
 void
+gdk_gl_context_set_version (GdkGLContext       *context,
+                            const GdkGLVersion *version)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  priv->gl_version = *version;
+}
+
+void
 gdk_gl_context_set_is_legacy (GdkGLContext *context,
                               gboolean      is_legacy)
 {
@@ -1493,7 +1515,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   if (priv->extensions_checked)
     return;
 
-  gdk_gl_version_init_epoxy (&priv->gl_version);
+  if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (0, 0)))
+    gdk_gl_version_init_epoxy (&priv->gl_version);
 
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");

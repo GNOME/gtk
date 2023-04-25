@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <glib.h>
+#include <gdkenums.h>
 
 G_BEGIN_DECLS
 
@@ -51,6 +51,46 @@ struct _GdkGLVersion
 
 #define GDK_GL_VERSION_INIT(maj,min) (GdkGLVersion) { maj, min }
 #define GDK_GL_VERSION_STRING(str) GDK_GL_VERSION_INIT(str[0] - '0', str[2] - '0')
+
+static const GdkGLVersion supported_gl_versions[] = {
+  GDK_GL_VERSION_INIT (4, 6),
+  GDK_GL_VERSION_INIT (4, 5),
+  GDK_GL_VERSION_INIT (4, 4),
+  GDK_GL_VERSION_INIT (4, 3),
+  GDK_GL_VERSION_INIT (4, 2),
+  GDK_GL_VERSION_INIT (4, 1),
+  GDK_GL_VERSION_INIT (4, 0),
+  GDK_GL_VERSION_INIT (3, 3),
+  GDK_GL_VERSION_INIT (3, 2),
+  GDK_GL_VERSION_INIT (3, 1),
+  GDK_GL_VERSION_INIT (3, 0),
+
+  GDK_GL_VERSION_INIT (0, 0)
+};
+
+static const GdkGLVersion supported_gles_versions[] = {
+  GDK_GL_VERSION_INIT (3, 2),
+  GDK_GL_VERSION_INIT (3, 1),
+  GDK_GL_VERSION_INIT (3, 0),
+  GDK_GL_VERSION_INIT (2, 0),
+
+  GDK_GL_VERSION_INIT (0, 0)
+};
+
+static inline const GdkGLVersion *
+gdk_gl_versions_get_for_api (GdkGLAPI api)
+{
+  switch (api)
+    {
+      case GDK_GL_API_GL:
+        return supported_gl_versions;
+      case GDK_GL_API_GLES:
+        return supported_gles_versions;
+      default:
+        g_assert_not_reached ();
+        return NULL;
+    }
+}
 
 static inline int
 gdk_gl_version_get_major (const GdkGLVersion *self)

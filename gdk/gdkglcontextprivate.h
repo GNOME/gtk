@@ -99,11 +99,13 @@ void                    gdk_gl_context_clear_current_if_surface (GdkSurface     
 GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
                                                                  GdkSurface      *surface);
 
-gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext    *self,
-                                                                 GdkGLAPI         api,
-                                                                 GError         **error);
-void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
-                                                                 gboolean         is_legacy);
+gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext           *self,
+                                                                 GdkGLAPI                api,
+                                                                 GError                **error);
+void                    gdk_gl_context_set_version              (GdkGLContext           *context,
+                                                                 const GdkGLVersion     *version);
+void                    gdk_gl_context_set_is_legacy            (GdkGLContext           *context,
+                                                                 gboolean                is_legacy);
 gboolean                gdk_gl_context_check_gl_version         (GdkGLContext           *context,
                                                                  const GdkGLVersion     *gl_version,
                                                                  const GdkGLVersion     *gles_version);
