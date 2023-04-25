@@ -327,7 +327,7 @@ create_pixel_format (GdkGLVersion  *version,
                      GError       **error)
 {
   CGLPixelFormatAttribute attrs[] = {
-    kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy,
+    kCGLPFAOpenGLProfile, 0,
     kCGLPFAAllowOfflineRenderers, /* allow sharing across GPUs */
     kCGLPFADepthSize, 0,
     kCGLPFAStencilSize, 0,
@@ -338,11 +338,21 @@ create_pixel_format (GdkGLVersion  *version,
   CGLPixelFormatObj format = NULL;
   GLint n_format = 1;
 
-  if (gdk_gl_version_get_major (version) == 3)
-    attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL3_Core;
-  else
-    attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL4_Core;
+  if (gdk_gl_version_get_major (version) >= 4)
+    {
+      attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL4_Core;
+      if (CGLChoosePixelFormat (attrs, &format, &n_format))
+        return g_steal_pointer (&format);
+    }
 
+  if (gdk_gl_version_greater_equal (version, &GDK_GL_MIN_GL_VERSION))
+    {
+      attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL3_Core;
+      if (CGLChoosePixelFormat (attrs, &format, &n_format))
+        return g_steal_pointer (&format);
+    }
+
+  attrs[1] = (CGLPixelFormatAttribute) kCGLOGLPVersion_Legacy;
   if (!CHECK (error, CGLChoosePixelFormat (attrs, &format, &n_format)))
     return NULL;
 
@@ -365,7 +375,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   GLint validate = 0;
   GLint renderer_id = 0;
   GLint swapRect[4];
-  GdkGLVersion version;
+  GdkGLVersion min_version, version;
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
@@ -399,9 +409,9 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating CGLContextObj (version %d.%d)",
-                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version));
+                     gdk_gl_version_get_major (&min_version), gdk_gl_version_get_minor (&min_version));
 
-  if (!(pixelFormat = create_pixel_format (&version, error)))
+  if (!(pixelFormat = create_pixel_format (&min_version, error)))
     return 0;
 
   if (!CHECK (error, CGLCreateContext (pixelFormat, shared_gl_context, &cgl_context)))
@@ -412,6 +422,13 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   CGLSetCurrentContext (cgl_context);
   CGLReleasePixelFormat (pixelFormat);
+
+  gdk_gl_version_init_epoxy (&version);
+  if (!gdk_gl_version_greater_equal (&version, &min_version))
+    {
+      CGLReleaseContext (cgl_context);
+      return 0;
+    }
 
   if (validate)
     CHECK (NULL, CGLEnable (cgl_context, kCGLCEStateValidation));
@@ -443,6 +460,8 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                      "Created CGLContextObj@%p using %s",
                      cgl_context,
                      get_renderer_name (renderer_id));
+
+  gdk_gl_context_set_version (context, &version);
 
   self->cgl_context = g_steal_pointer (&cgl_context);
 
