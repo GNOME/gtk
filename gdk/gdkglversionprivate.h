@@ -49,8 +49,7 @@ struct _GdkGLVersion
   int minor;
 };
 
-#define GDK_GL_VERSION_INIT(maj,min) (GdkGLVersion) { maj, min }
-#define GDK_GL_VERSION_STRING(str) GDK_GL_VERSION_INIT(str[0] - '0', str[2] - '0')
+#define GDK_GL_VERSION_INIT(maj,min) { maj, min }
 
 static const GdkGLVersion supported_gl_versions[] = {
   GDK_GL_VERSION_INIT (4, 6),
@@ -76,6 +75,10 @@ static const GdkGLVersion supported_gles_versions[] = {
 
   GDK_GL_VERSION_INIT (0, 0)
 };
+
+#undef GDK_GL_VERSION_INIT
+#define GDK_GL_VERSION_INIT(maj,min) (GdkGLVersion) { maj, min }
+#define GDK_GL_VERSION_STRING(str) GDK_GL_VERSION_INIT(str[0] - '0', str[2] - '0')
 
 static inline const GdkGLVersion *
 gdk_gl_versions_get_for_api (GdkGLAPI api)
