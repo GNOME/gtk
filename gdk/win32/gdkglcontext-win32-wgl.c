@@ -280,22 +280,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
 
   display_win32->gl_version = epoxy_gl_version ();
 
-  /* We must have OpenGL/WGL 2.0 or later, or have the GL_ARB_shader_objects extension */
-  if (display_win32->gl_version < 20)
-    {
-      if (!epoxy_has_gl_extension ("GL_ARB_shader_objects"))
-        {
-          wglMakeCurrent (NULL, NULL);
-          wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("No GL implementation is available"));
-
-          return FALSE;
-        }
-    }
-
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
   display_win32->hasWglEXTSwapControl =
