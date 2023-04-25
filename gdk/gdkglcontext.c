@@ -1485,7 +1485,11 @@ gdk_gl_context_realize (GdkGLContext  *context,
   priv->api = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
 
   if (priv->api)
-    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+    {
+      g_assert (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (0, 0)));
+
+      g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+    }
 
   return priv->api;
 }
@@ -1510,9 +1514,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->extensions_checked)
     return;
-
-  if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (0, 0)))
-    gdk_gl_version_init_epoxy (&priv->gl_version);
 
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");
@@ -1693,10 +1694,6 @@ gdk_gl_context_get_shared_context (GdkGLContext *context)
  * Retrieves the OpenGL version of the @context.
  *
  * The @context must be realized prior to calling this function.
- *
- * If the @context has never been made current, the version cannot
- * be known and it will return 0 for both @major and @minor.
- *
  */
 void
 gdk_gl_context_get_version (GdkGLContext *context,
