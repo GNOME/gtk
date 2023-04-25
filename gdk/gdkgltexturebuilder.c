@@ -35,6 +35,7 @@ struct _GdkGLTextureBuilder
   int height;
   GdkMemoryFormat format;
   gboolean has_mipmap;
+  gpointer sync;
 };
 
 struct _GdkGLTextureBuilderClass
@@ -68,6 +69,7 @@ enum
   PROP_HAS_MIPMAP,
   PROP_HEIGHT,
   PROP_ID,
+  PROP_SYNC,
   PROP_WIDTH,
 
   N_PROPS
@@ -117,6 +119,10 @@ gdk_gl_texture_builder_get_property (GObject    *object,
       g_value_set_uint (value, self->id);
       break;
 
+    case PROP_SYNC:
+      g_value_set_pointer (value, self->sync);
+      break;
+
     case PROP_WIDTH:
       g_value_set_int (value, self->width);
       break;
@@ -155,6 +161,10 @@ gdk_gl_texture_builder_set_property (GObject      *object,
 
     case PROP_ID:
       gdk_gl_texture_builder_set_id (self, g_value_get_uint (value));
+      break;
+
+    case PROP_SYNC:
+      gdk_gl_texture_builder_set_sync (self, g_value_get_pointer (value));
       break;
 
     case PROP_WIDTH:
@@ -236,6 +246,19 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
     g_param_spec_uint ("id", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLTextureBuilder:sync: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_sync org.gdk.Property.set=gdk_gl_texture_builder_set_sync)
+   *
+   * An optional `GLSync` object.
+   *
+   * If this is set, GTK will wait on it before using the texture.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_SYNC] =
+    g_param_spec_pointer ("sync", NULL, NULL,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkGLTextureBuilder:width: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_width org.gdk.Property.set=gdk_gl_texture_builder_set_width)
@@ -495,6 +518,54 @@ gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
 }
 
 /**
+ * gdk_gl_texture_builder_get_sync: (attributes org.gdk.Method.get_property=sync)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets the `GLsync` previously set via gdk_gl_texture_builder_set_sync().
+ *
+ * Returns: (nullable): the `GLSync`
+ *
+ * Since: 4.12
+ */
+gpointer
+gdk_gl_texture_builder_get_sync (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), NULL);
+
+  return self->sync;
+}
+
+/**
+ * gdk_gl_texture_builder_set_sync: (attributes org.gdk.Method.set_property=sync)
+ * @self: a `GdkGLTextureBuilder`
+ * @sync: (nullable): the GLSync object
+ *
+ * Sets the GLSync object to use for the texture.
+ *
+ * GTK will wait on this object before using the created `GdkTexture`.
+ *
+ * The `destroy` function that is passed to [method@Gdk.GLTextureBuilder.build]
+ * is responsible for freeing the sync object when it is no longer needed.
+ * The texture builder does not destroy it and it is the callers
+ * responsibility to make sure it doesn't leak.
+ *
+ * Since: 4.12
+ */
+void
+gdk_gl_texture_builder_set_sync (GdkGLTextureBuilder *self,
+                                 gpointer             sync)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+
+  if (self->sync == sync)
+    return;
+
+  self->sync = sync;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SYNC]);
+}
+
+/**
  * gdk_gl_texture_builder_get_format: (attributes org.gdk.Method.get_property=format)
  * @self: a `GdkGLTextureBuilder`
  *
@@ -553,9 +624,9 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
  *
  * The `destroy` function gets called when the returned texture gets released;
  * either when the texture is finalized or by an explicit call to
- * [method@Gdk.GLTexture.release].
- * This function should release all GL resources associated with the texture,
- * such as the [property@Gdk.GLTextureBuilder:id].
+ * [method@Gdk.GLTexture.release]. It should release all GL resources associated
+ * with the texture, such as the [property@Gdk.GLTextureBuilder:id] and the
+ * [property@Gdk.GLTextureBuilder:sync].
  *
  * Note that it is a programming error to call this function if any mandatory
  * property has not been set.
