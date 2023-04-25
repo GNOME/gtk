@@ -39,6 +39,7 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   guint id;
   gboolean has_mipmap;
+  gpointer sync;
 
   GdkTexture *saved;
 
@@ -296,6 +297,12 @@ gdk_gl_texture_has_mipmap (GdkGLTexture *self)
   return self->has_mipmap;
 }
 
+gpointer
+gdk_gl_texture_get_sync (GdkGLTexture *self)
+{
+  return self->sync;
+}
+
 /**
  * gdk_gl_texture_release:
  * @self: a `GdkTexture` wrapping a GL texture
@@ -337,6 +344,7 @@ gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
   self->id = gdk_gl_texture_builder_get_id (builder);
   GDK_TEXTURE (self)->format = gdk_gl_texture_builder_get_format (builder);
   self->has_mipmap = gdk_gl_texture_builder_get_has_mipmap (builder);
+  self->sync = gdk_gl_texture_builder_get_sync (builder);
   self->destroy = destroy;
   self->data = data;
 

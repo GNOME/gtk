@@ -73,6 +73,12 @@ void                    gdk_gl_texture_builder_set_has_mipmap   (GdkGLTextureBui
                                                                  gboolean                has_mipmap);
 
 GDK_AVAILABLE_IN_4_12
+gpointer                gdk_gl_texture_builder_get_sync         (GdkGLTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_12
+void                    gdk_gl_texture_builder_set_sync         (GdkGLTextureBuilder    *self,
+                                                                 gpointer                sync);
+
+GDK_AVAILABLE_IN_4_12
 GdkTexture *            gdk_gl_texture_builder_build            (GdkGLTextureBuilder    *self,
                                                                  GDestroyNotify          destroy,
                                                                  gpointer                data);
