@@ -60,6 +60,12 @@ void                    gdk_gl_texture_builder_set_height       (GdkGLTextureBui
                                                                  int                     height);
 
 GDK_AVAILABLE_IN_4_12
+gboolean                gdk_gl_texture_builder_get_has_mipmap   (GdkGLTextureBuilder    *self);
+GDK_AVAILABLE_IN_4_12
+void                    gdk_gl_texture_builder_set_has_mipmap   (GdkGLTextureBuilder    *self,
+                                                                 gboolean                has_mipmap);
+
+GDK_AVAILABLE_IN_4_12
 void                    gdk_gl_texture_builder_set_notify       (GdkGLTextureBuilder    *self,
                                                                  GDestroyNotify          destroy,
                                                                  gpointer                data);

@@ -32,6 +32,7 @@ struct _GdkGLTextureBuilder
   guint id;
   int width;
   int height;
+  gboolean has_mipmap;
   GDestroyNotify destroy;
   gpointer data;
 };
@@ -63,6 +64,7 @@ enum
 {
   PROP_0,
   PROP_CONTEXT,
+  PROP_HAS_MIPMAP,
   PROP_HEIGHT,
   PROP_ID,
   PROP_WIDTH,
@@ -98,6 +100,10 @@ gdk_gl_texture_builder_get_property (GObject    *object,
       g_value_set_object (value, self->context);
       break;
 
+    case PROP_HAS_MIPMAP:
+      g_value_set_boolean (value, self->has_mipmap);
+      break;
+
     case PROP_HEIGHT:
       g_value_set_int (value, self->height);
       break;
@@ -128,6 +134,10 @@ gdk_gl_texture_builder_set_property (GObject      *object,
     {
     case PROP_CONTEXT:
       gdk_gl_texture_builder_set_context (self, g_value_get_object (value));
+      break;
+
+    case PROP_HAS_MIPMAP:
+      gdk_gl_texture_builder_set_has_mipmap (self, g_value_get_boolean (value));
       break;
 
     case PROP_HEIGHT:
@@ -168,6 +178,18 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
     g_param_spec_object ("context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLTextureBuilder:has-mipmap: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_has_mipmap org.gdk.Property.set=gdk_gl_texture_builder_set_has_mipmap)
+   *
+   * Whether the texture has a mipmap.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HAS_MIPMAP] =
+    g_param_spec_boolean ("has-mipmap", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkGLTextureBuilder:height: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_height org.gdk.Property.set=gdk_gl_texture_builder_set_height)
@@ -405,6 +427,28 @@ gdk_gl_texture_builder_set_width (GdkGLTextureBuilder *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
 }
 
+gboolean
+gdk_gl_texture_builder_get_has_mipmap (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), FALSE);
+
+  return self->has_mipmap;
+}
+
+void
+gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
+                                       gboolean             has_mipmap)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+
+  if (self->has_mipmap == has_mipmap)
+    return;
+
+  self->has_mipmap = has_mipmap;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_MIPMAP]);
+}
+
 /**
  * gdk_gl_texture_builder_set_notify:
  * @self: a `GdkGLTextureBuilder`
@@ -454,6 +498,7 @@ gdk_gl_texture_builder_build (GdkGLTextureBuilder *self)
                                   self->id,
                                   self->width,
                                   self->height,
+                                  self->has_mipmap,
                                   self->destroy,
                                   self->data);
 }
