@@ -478,7 +478,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   GLXContext ctx;
   int context_attribs[N_GLX_ATTRS], i = 0, flags = 0;
   gsize major_idx, minor_idx;
-  GdkGLVersion min, version;
+  GdkGLVersion version;
   const GdkGLVersion* supported_versions;
   gboolean debug_bit, compat_bit;
   gsize j;
@@ -491,8 +491,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy, &min);
-  gdk_gl_context_get_clipped_version (context, &min, &version);
+  gdk_gl_context_get_matching_version (context, api, legacy, &version);
 
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);

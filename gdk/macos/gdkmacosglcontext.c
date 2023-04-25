@@ -377,9 +377,10 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   existing = CGLGetCurrentContext ();
 
-  gdk_gl_context_get_clipped_version (context,
-                                      GDK_GL_MIN_GL_VERSION,
-                                      &version);
+  gdk_gl_context_get_matching_version (context,
+                                       GDK_GL_API_GL,
+                                       FALSE,
+                                       &version);
 
   display = gdk_gl_context_get_display (context);
   shared = gdk_display_get_gl_context (display);

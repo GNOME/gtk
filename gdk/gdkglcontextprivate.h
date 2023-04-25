@@ -120,10 +120,8 @@ gdk_gl_context_check_version (GdkGLContext *context,
                                           gles_version ? &GDK_GL_VERSION_STRING (gles_version) : NULL);
 }
 
-void                    gdk_gl_context_get_clipped_version      (GdkGLContext           *context,
-                                                                 const GdkGLVersion     *min_version,
-                                                                 GdkGLVersion           *out_clipped);
-void                    gdk_gl_context_get_matching_version     (GdkGLAPI                api,
+void                    gdk_gl_context_get_matching_version     (GdkGLContext           *context,
+                                                                 GdkGLAPI                api,
                                                                  gboolean                legacy,
                                                                  GdkGLVersion           *out_version);
 

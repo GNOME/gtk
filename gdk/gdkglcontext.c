@@ -289,7 +289,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   EGLint context_attribs[N_EGL_ATTRS], i = 0, flags = 0;
   gsize major_idx, minor_idx;
   gboolean debug_bit, forward_bit;
-  GdkGLVersion min, version;
+  GdkGLVersion version;
   const GdkGLVersion* supported_versions;
   gsize j;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
@@ -299,8 +299,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy, &min);
-  gdk_gl_context_get_clipped_version (context, &min, &version);
+  gdk_gl_context_get_matching_version (context, api, legacy, &version);
 
   if (!eglBindAPI (gdk_api_to_egl_api (api)))
     return 0;
@@ -996,21 +995,33 @@ gdk_gl_context_get_forward_compatible (GdkGLContext *context)
 }
 
 void
-gdk_gl_context_get_matching_version (GdkGLAPI      api,
+gdk_gl_context_get_matching_version (GdkGLContext *context,
+                                     GdkGLAPI      api,
                                      gboolean      legacy,
                                      GdkGLVersion *out_version)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLVersion min_version;
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+
   if (api == GDK_GL_API_GL)
     {
       if (legacy)
-        *out_version = GDK_GL_MIN_GL_LEGACY_VERSION;
+        min_version = GDK_GL_MIN_GL_LEGACY_VERSION;
       else
-        *out_version = GDK_GL_MIN_GL_VERSION;
+        min_version = GDK_GL_MIN_GL_VERSION;
     }
   else
     {
-      *out_version = GDK_GL_MIN_GLES_VERSION;
+      min_version = GDK_GL_MIN_GLES_VERSION;
     }
+
+  if (gdk_gl_version_greater_equal (&priv->required, &min_version))
+    *out_version = priv->required;
+  else
+    *out_version = min_version;
+
 }
 
 /**
@@ -1094,21 +1105,6 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
     *major = gdk_gl_version_get_major (&priv->required);
   if (minor != NULL)
     *minor = gdk_gl_version_get_minor (&priv->required);
-}
-
-void
-gdk_gl_context_get_clipped_version (GdkGLContext       *context,
-                                    const GdkGLVersion *min_version,
-                                    GdkGLVersion       *out_clipped)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-
-  if (gdk_gl_version_greater_equal (&priv->required, min_version))
-    *out_clipped = priv->required;
-  else
-    *out_clipped = *min_version;
 }
 
 /**

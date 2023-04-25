@@ -551,14 +551,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   else
     hdc = display_win32->dummy_context_wgl.hdc;
 
-  /*
-   * A legacy context cannot be shared with core profile ones, so this means we
-   * must stick to a legacy context if the shared context is a legacy context
-   */
-  legacy_bit = (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_LEGACY)
-                 ? TRUE
-                 : share != NULL && gdk_gl_context_is_legacy (share);
-
   if (!set_wgl_pixformat_for_hdc (hdc,
                                  &pixel_format,
                                   display_win32))
