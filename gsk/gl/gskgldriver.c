@@ -1563,6 +1563,7 @@ typedef struct _GskGLTextureState
 {
   GdkGLContext *context;
   GLuint        texture_id;
+  GLsync        sync;
 } GskGLTextureState;
 
 static void
@@ -1575,6 +1576,8 @@ create_texture_from_texture_destroy (gpointer data)
 
   gdk_gl_context_make_current (state->context);
   glDeleteTextures (1, &state->texture_id);
+  if (state->sync)
+    glDeleteSync (state->sync);
   g_clear_object (&state->context);
   g_free (state);
 }
@@ -1601,6 +1604,8 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
   state = g_new0 (GskGLTextureState, 1);
   state->texture_id = texture_id;
   state->context = g_object_ref (self->command_queue->context);
+  if (gdk_gl_context_has_sync (self->command_queue->context))
+    state->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
 
@@ -1609,6 +1614,7 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
   gdk_gl_texture_builder_set_id (builder, texture_id);
   gdk_gl_texture_builder_set_width (builder, texture->width);
   gdk_gl_texture_builder_set_height (builder, texture->height);
+  gdk_gl_texture_builder_set_sync (builder, state->sync);
 
   result = gdk_gl_texture_builder_build (builder,
                                          create_texture_from_texture_destroy,
