@@ -247,17 +247,17 @@ gdk_init_dummy_wgl_context (GdkWin32Display *display_win32)
   return best_idx;
 }
 
-gboolean
+GdkGLContext *
 gdk_win32_display_init_wgl (GdkDisplay  *display,
                             GError     **error)
 {
   int best_idx = 0;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkGLVersion gl_version;
+  GdkGLContext *context;
   HDC hdc;
 
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
-    return FALSE;
+    return NULL;
 
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
@@ -276,7 +276,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No GL implementation is available"));
 
-      return FALSE;
+      return NULL;
     }
 
   display_win32->hasWglARBCreateContext =
@@ -290,29 +290,40 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasWglARBmultisample =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_multisample");
 
-  gdk_gl_version_init_epoxy (&gl_version);
+  context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
+                          "display", display,
+                          NULL);
+  if (!gdk_gl_context_realize (context, error))
+    {
+      g_object_unref (context);
+      return NULL;
+    }
 
-  GDK_NOTE (OPENGL,
-            g_print ("WGL API version %d.%d found\n"
-                     " - Vendor: %s\n"
-                     " - Checked extensions:\n"
-                     "\t* WGL_ARB_pixel_format: %s\n"
-                     "\t* WGL_ARB_create_context: %s\n"
-                     "\t* WGL_EXT_swap_control: %s\n"
-                     "\t* WGL_OML_sync_control: %s\n"
-                     "\t* WGL_ARB_multisample: %s\n",
-                     gdk_gl_version_get_major (&gl_version),
-                     gdk_gl_version_get_minor (&gl_version),
-                     glGetString (GL_VENDOR),
-                     display_win32->hasWglARBPixelFormat ? "yes" : "no",
-                     display_win32->hasWglARBCreateContext ? "yes" : "no",
-                     display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                     display_win32->hasWglOMLSyncControl ? "yes" : "no",
-                     display_win32->hasWglARBmultisample ? "yes" : "no"));
+#if G_ENABLE_DEBUG
+  {
+    int major, minor;
+    gdk_gl_context_get_version (context, &major, &minor);
+    GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
+                         " - Vendor: %s\n"
+                         " - Checked extensions:\n"
+                         "\t* WGL_ARB_pixel_format: %s\n"
+                         "\t* WGL_ARB_create_context: %s\n"
+                         "\t* WGL_EXT_swap_control: %s\n"
+                         "\t* WGL_OML_sync_control: %s\n"
+                         "\t* WGL_ARB_multisample: %s\n",
+                         major, minor,
+                         glGetString (GL_VENDOR),
+                         display_win32->hasWglARBPixelFormat ? "yes" : "no",
+                         display_win32->hasWglARBCreateContext ? "yes" : "no",
+                         display_win32->hasWglEXTSwapControl ? "yes" : "no",
+                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
+                         display_win32->hasWglARBmultisample ? "yes" : "no"));
+  }
+#endif
 
   wglMakeCurrent (NULL, NULL);
 
-  return TRUE;
+  return context;
 }
 
 /* Setup the legacy context after creating it */
