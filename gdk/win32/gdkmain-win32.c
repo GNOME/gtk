@@ -109,16 +109,6 @@ gdk_win32_ensure_com (void)
   return co_initialized;
 }
 
-static void
-gdk_win32_finalize_com (void)
-{
-  if (co_initialized)
-    {
-      CoUninitialize ();
-      co_initialized = FALSE;
-    }
-}
-
 gboolean
 gdk_win32_ensure_ole (void)
 {
@@ -140,16 +130,6 @@ gdk_win32_ensure_ole (void)
     }
 
   return ole_initialized;
-}
-
-static void
-gdk_win32_finalize_ole (void)
-{
-  if (ole_initialized)
-    {
-      OleUninitialize ();
-      ole_initialized = FALSE;
-    }
 }
 
 void

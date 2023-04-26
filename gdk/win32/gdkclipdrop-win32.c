@@ -2546,13 +2546,11 @@ transmute_cf_shell_id_list_to_text_uri_list (const guchar    *data,
       ILFree (file_id_full);
     }
 
-  *set_data = (guchar *) result->str;
   if (set_data_length)
     *set_data_length = result->len;
+  *set_data = (guchar *) g_string_free (result, FALSE);
   if (set_data_destroy)
     *set_data_destroy = g_free;
-
-  g_string_free (result, FALSE);
 }
 
 void

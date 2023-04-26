@@ -354,12 +354,13 @@ reset_viewport (IDirectManipulationViewport *viewport)
   HRESULT hr;
 
   hr = IDirectManipulationViewport_GetPrimaryContent (viewport, iid, (void**)&content);
-  HR_CHECK (hr);
+  HR_CHECK_GOTO (hr, failed);
 
   hr = IDirectManipulationContent_SyncContentTransform (content, identity,
                                                         G_N_ELEMENTS (identity));
-  HR_CHECK (hr);
+  HR_CHECK_GOTO (hr, failed);
 
+failed:
   IUnknown_Release (content);
 }
 
@@ -384,7 +385,7 @@ create_viewport (GdkSurface *surface,
 {
   DIRECTMANIPULATION_CONFIGURATION configuration = 0;
   HWND hwnd = GDK_SURFACE_HWND (surface);
-  IDirectManipulationViewportEventHandler *handler;
+  IDirectManipulationViewportEventHandler *handler = NULL;
   DWORD cookie = 0;
   HRESULT hr;
 
@@ -500,7 +501,7 @@ void gdk_dmanipulation_initialize_surface (GdkSurface *surface)
 
   hr = IDirectManipulationManager_Activate (dmanipulation_manager,
                                             GDK_SURFACE_HWND (surface));
-  HR_CHECK (hr);
+  HR_CHECK_RETURN (hr);
 }
 
 void gdk_dmanipulation_finalize_surface (GdkSurface *surface)
@@ -536,11 +537,11 @@ void gdk_dmanipulation_maybe_add_contact (GdkSurface *surface,
 
       hr = IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_pan,
                                                    pointer_id);
-      HR_CHECK (hr);
+      HR_CHECK_RETURN (hr);
 
       hr = IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_zoom,
                                                    pointer_id);
-      HR_CHECK (hr);
+      HR_CHECK_RETURN (hr);
     }
 }
 
