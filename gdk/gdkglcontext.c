@@ -106,6 +106,7 @@ typedef struct {
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_half_float : 1;
+  guint has_sync : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -1553,6 +1554,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->has_half_float = gdk_gl_context_check_version (context, "3.0", "3.0") ||
                          epoxy_has_gl_extension ("OES_vertex_half_float");
 
+  priv->has_sync = gdk_gl_context_check_version (context, "3.2", "3.0") ||
+                   epoxy_has_gl_extension ("GL_ARB_sync") ||
+                   epoxy_has_gl_extension ("GK_APPLE_sync");
+
 #ifdef G_ENABLE_DEBUG
   {
     int max_texture_size;
@@ -1564,7 +1569,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Extensions checked:\n"
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s\n"
-                       " - OES_vertex_half_float: %s",
+                       " - half float: %s\n"
+                       " - sync: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
@@ -1572,7 +1578,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        max_texture_size,
                        priv->has_khr_debug ? "yes" : "no",
                        priv->has_unpack_subimage ? "yes" : "no",
-                       priv->has_half_float ? "yes" : "no");
+                       priv->has_half_float ? "yes" : "no",
+                       priv->has_sync ? "yes" : "no");
   }
 #endif
 
@@ -1798,6 +1805,14 @@ gdk_gl_context_has_vertex_half_float (GdkGLContext *self)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   return priv->has_half_float;
+}
+
+gboolean
+gdk_gl_context_has_sync (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  return priv->has_sync;
 }
 
 /* This is currently private! */
