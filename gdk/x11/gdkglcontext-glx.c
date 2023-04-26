@@ -955,8 +955,6 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_buffer_age");
   display_x11->has_glx_sync_control =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_OML_sync_control");
-  display_x11->has_glx_multisample =
-    epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_multisample");
   display_x11->has_glx_visual_rating =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_visual_rating");
 
@@ -1011,7 +1009,6 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                        "\t* GLX_SGI_video_sync: %s\n"
                        "\t* GLX_EXT_buffer_age: %s\n"
                        "\t* GLX_OML_sync_control: %s\n"
-                       "\t* GLX_ARB_multisample: %s\n"
                        "\t* GLX_EXT_visual_rating: %s",
                      display_x11->glx_version / 10,
                      display_x11->glx_version % 10,
@@ -1023,7 +1020,6 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                      display_x11->has_glx_video_sync ? "yes" : "no",
                      display_x11->has_glx_buffer_age ? "yes" : "no",
                      display_x11->has_glx_sync_control ? "yes" : "no",
-                     display_x11->has_glx_multisample ? "yes" : "no",
                      display_x11->has_glx_visual_rating ? "yes" : "no");
 
   return TRUE;
