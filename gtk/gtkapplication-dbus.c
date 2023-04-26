@@ -46,6 +46,12 @@ G_DEFINE_TYPE (GtkApplicationImplDBus, gtk_application_impl_dbus, GTK_TYPE_APPLI
 #define GNOME_SCREENSAVER_DBUS_OBJECT_PATH      "/org/gnome/ScreenSaver"
 #define GNOME_SCREENSAVER_DBUS_INTERFACE        "org.gnome.ScreenSaver"
 
+static void client_proxy_signal (GDBusProxy  *proxy,
+                                 const gchar *sender_name,
+                                 const gchar *signal_name,
+                                 GVariant    *parameters,
+                                 gpointer     user_data);
+
 static void
 unregister_client (GtkApplicationImplDBus *dbus)
 {
@@ -67,6 +73,7 @@ unregister_client (GtkApplicationImplDBus *dbus)
       g_error_free (error);
     }
 
+  g_signal_handlers_disconnect_by_func (dbus->client_proxy, client_proxy_signal, dbus);
   g_clear_object (&dbus->client_proxy);
 
   g_free (dbus->client_path);
@@ -888,6 +895,7 @@ gtk_application_impl_dbus_finalize (GObject *object)
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
   g_clear_object (&dbus->sm_proxy);
+  g_signal_handlers_disconnect_by_func (dbus->ss_proxy, screensaver_signal_session, dbus->impl.application);
   g_clear_object (&dbus->ss_proxy);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);
