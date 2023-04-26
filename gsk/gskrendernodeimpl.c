@@ -3146,7 +3146,7 @@ gsk_container_node_new (GskRenderNode **children,
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
-          self->disjoint &= !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
+          self->disjoint = self->disjoint && !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
           node->prefers_high_depth = node->prefers_high_depth || gsk_render_node_prefers_high_depth (children[i]);
           node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
