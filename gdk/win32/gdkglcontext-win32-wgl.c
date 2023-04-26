@@ -253,6 +253,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
 {
   int best_idx = 0;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkGLVersion gl_version;
   HDC hdc;
 
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
@@ -278,8 +279,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return FALSE;
     }
 
-  gdk_gl_version_init_epoxy (&display_win32->gl_version);
-
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
   display_win32->hasWglEXTSwapControl =
@@ -291,6 +290,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasWglARBmultisample =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_multisample");
 
+  gdk_gl_version_init_epoxy (&gl_version);
+
   GDK_NOTE (OPENGL,
             g_print ("WGL API version %d.%d found\n"
                      " - Vendor: %s\n"
@@ -300,8 +301,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                      "\t* WGL_EXT_swap_control: %s\n"
                      "\t* WGL_OML_sync_control: %s\n"
                      "\t* WGL_ARB_multisample: %s\n",
-                     gdk_gl_version_get_major (&display_win32->gl_version),
-                     gdk_gl_version_get_minor (&display_win32->gl_version),
+                     gdk_gl_version_get_major (&gl_version),
+                     gdk_gl_version_get_minor (&gl_version),
                      glGetString (GL_VENDOR),
                      display_win32->hasWglARBPixelFormat ? "yes" : "no",
                      display_win32->hasWglARBCreateContext ? "yes" : "no",
@@ -683,10 +684,11 @@ gdk_win32_gl_context_wgl_init (GdkWin32GLContextWGL *wgl_context)
  */
 gboolean
 gdk_win32_display_get_wgl_version (GdkDisplay *display,
-                                   int *major,
-                                   int *minor)
+                                   int         *major,
+                                   int         *minor)
 {
-  GdkWin32Display *display_win32;
+  GdkGLContext *context;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   if (!GDK_IS_WIN32_DISPLAY (display))
@@ -695,12 +697,11 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     return FALSE;
 
-  display_win32 = GDK_WIN32_DISPLAY (display);
+  context = gdk_display_get_gl_context (display);
+  if (context == NULL)
+    return FALSE;
 
-  if (major != NULL)
-    *major = gdk_gl_version_get_major (&display_win32->gl_version);
-  if (minor != NULL)
-    *major = gdk_gl_version_get_major (&display_win32->gl_version);
+  gdk_gl_context_get_version (context, major, minor);
 
   return TRUE;
 }
