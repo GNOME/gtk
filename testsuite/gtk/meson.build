@@ -26,6 +26,7 @@ tests = [
   ['gtkmenu'],
   ['icontheme'],
   ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
+  ['label'],
   ['listbox'],
   ['notify'],
   ['no-gtk-init'],
