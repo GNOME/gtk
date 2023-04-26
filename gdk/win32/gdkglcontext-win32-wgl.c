@@ -153,7 +153,7 @@ get_wgl_pfd (HDC                    hdc,
       HGLRC hglrc_current = wglGetCurrentContext ();
 
       /* Update PIXEL_ATTRIBUTES above if any groups are added here! */
-      pixelAttribs[i] = WGL_DRAW_TO_WINDOW_ARB;
+      pixelAttribs[i++] = WGL_DRAW_TO_WINDOW_ARB;
       pixelAttribs[i++] = GL_TRUE;
 
       pixelAttribs[i++] = WGL_SUPPORT_OPENGL_ARB;
@@ -183,6 +183,7 @@ get_wgl_pfd (HDC                    hdc,
         }
 
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
+      g_assert (i <= PIXEL_ATTRIBUTES);
       best_pf = gdk_init_dummy_wgl_context (display_win32);
 
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
@@ -196,8 +197,8 @@ get_wgl_pfd (HDC                    hdc,
                                pixelAttribs,
                                NULL,
                                1,
-                              &best_pf,
-                              &num_formats);
+                               &best_pf,
+                               &num_formats);
 
       /* Go back to the HDC that we were using, since we are done with the dummy HDC and GL Context */
       wglMakeCurrent (hdc_current, hglrc_current);
