@@ -403,6 +403,7 @@ delete_one_texture (gpointer data)
 {
   Texture *texture = data;
   guint id;
+  gpointer sync;
 
   if (texture->holder)
     gdk_gl_texture_release (GDK_GL_TEXTURE (texture->holder));
@@ -410,6 +411,10 @@ delete_one_texture (gpointer data)
   id = gdk_gl_texture_builder_get_id (texture->builder);
   if (id != 0)
     glDeleteTextures (1, &id);
+
+  sync = gdk_gl_texture_builder_get_sync (texture->builder);
+  if (sync)
+    glDeleteSync (sync);
 
   g_object_unref (texture->builder);
 
@@ -743,6 +748,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
   if (status == GL_FRAMEBUFFER_COMPLETE)
     {
       Texture *texture;
+      gpointer sync;
 
       if (priv->needs_render || priv->auto_render)
         {
@@ -761,7 +767,8 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      gdk_gl_texture_builder_set_sync (texture->builder, glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0));
+      sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      gdk_gl_texture_builder_set_sync (texture->builder, sync);
 
       texture->holder = gdk_gl_texture_builder_build (texture->builder,
                                                       release_texture,
