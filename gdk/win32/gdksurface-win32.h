@@ -39,6 +39,14 @@
 
 G_BEGIN_DECLS
 
+GType gdk_win32_toplevel_get_type (void) G_GNUC_CONST;
+GType gdk_win32_popup_get_type (void) G_GNUC_CONST;
+GType gdk_win32_drag_surface_get_type (void) G_GNUC_CONST;
+
+#define GDK_TYPE_WIN32_TOPLEVEL (gdk_win32_toplevel_get_type ())
+#define GDK_TYPE_WIN32_POPUP (gdk_win32_popup_get_type ())
+#define GDK_TYPE_WIN32_DRAG_SURFACE (gdk_win32_drag_surface_get_type ())
+
 typedef enum
 {
   GDK_DECOR_ALL         = 1 << 0,
@@ -363,6 +371,8 @@ void gdk_win32_surface_move_resize (GdkSurface *window,
                                     int         y,
                                     int         width,
                                     int         height);
+
+GdkSurface *gdk_win32_drag_surface_new       (GdkDisplay *display);
 
 RECT
 gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);

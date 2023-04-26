@@ -381,14 +381,6 @@ GdkModifierType _gdk_win32_keymap_get_mod_mask   (GdkWin32Keymap *keymap);
 
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
-GdkSurface *_gdk_win32_display_create_surface  (GdkDisplay    *display,
-                                                GdkSurfaceType surface_type,
-                                                GdkSurface     *parent,
-                                                int             x,
-                                                int             y,
-                                                int             width,
-                                                int             height);
-
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
 void _gdk_win32_surface_unregister_dnd (GdkSurface *window);

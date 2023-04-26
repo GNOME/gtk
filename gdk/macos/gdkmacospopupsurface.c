@@ -284,38 +284,14 @@ _gdk_macos_popup_surface_set_property (GObject      *object,
 }
 
 static void
-_gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
-
-  object_class->finalize = _gdk_macos_popup_surface_finalize;
-  object_class->get_property = _gdk_macos_popup_surface_get_property;
-  object_class->set_property = _gdk_macos_popup_surface_set_property;
-
-  surface_class->hide = _gdk_macos_popup_surface_hide;
-
-  gdk_popup_install_properties (object_class, LAST_PROP);
-}
-
-static void
-_gdk_macos_popup_surface_init (GdkMacosPopupSurface *self)
-{
-}
-
-GdkMacosSurface *
-_gdk_macos_popup_surface_new (GdkMacosDisplay *display,
-                              GdkSurface      *parent,
-                              GdkFrameClock   *frame_clock,
-                              int              x,
-                              int              y,
-                              int              width,
-                              int              height)
+_gdk_macos_popup_surface_constructed (GObject *object)
 {
   GDK_BEGIN_MACOS_ALLOC_POOL;
 
   GdkMacosWindow *window;
-  GdkMacosSurface *self;
+  GdkMacosPopupSurface *self = GDK_MACOS_POPUP_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
   NSScreen *screen;
   NSUInteger style_mask;
   NSRect content_rect;
@@ -323,19 +299,15 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
   int nx;
   int ny;
 
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
-  g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
-
   style_mask = NSWindowStyleMaskBorderless;
 
-  _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
+  _gdk_macos_display_to_display_coords (display, 0, 0, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
   screen_rect = [screen frame];
   nx -= screen_rect.origin.x;
   ny -= screen_rect.origin.y;
-  content_rect = NSMakeRect (nx, ny - height, width, height);
+  content_rect = NSMakeRect (nx, ny - 100, 100, 100);
 
   window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
                                              styleMask:style_mask
@@ -349,16 +321,34 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
   [window setExcludedFromWindowsMenu:YES];
   [window setLevel:NSPopUpMenuWindowLevel];
 
-  self = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
-                       "display", display,
-                       "frame-clock", frame_clock,
-                       "native", window,
-                       "parent", parent,
-                       NULL);
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
+  gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
 
   GDK_END_MACOS_ALLOC_POOL;
 
-  return g_steal_pointer (&self);
+  G_OBJECT_CLASS (_gdk_macos_popup_surface_parent_class)->constructed (object);
+}
+
+static void
+_gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
+
+  object_class->constructed = _gdk_macos_popup_surface_constructed;
+  object_class->finalize = _gdk_macos_popup_surface_finalize;
+  object_class->get_property = _gdk_macos_popup_surface_get_property;
+  object_class->set_property = _gdk_macos_popup_surface_set_property;
+
+  surface_class->hide = _gdk_macos_popup_surface_hide;
+
+  gdk_popup_install_properties (object_class, LAST_PROP);
+}
+
+static void
+_gdk_macos_popup_surface_init (GdkMacosPopupSurface *self)
+{
 }
 
 void

@@ -121,6 +121,8 @@ GdkMonitor      *_gdk_macos_display_get_monitor_at_coords          (GdkMacosDisp
 GdkMonitor      *_gdk_macos_display_get_monitor_at_display_coords  (GdkMacosDisplay *self,
                                                                     int              x,
                                                                     int              y);
+void             _gdk_macos_display_surface_added                  (GdkMacosDisplay *self,
+                                                                    GdkMacosSurface *surface);
 GdkEvent        *_gdk_macos_display_translate                      (GdkMacosDisplay *self,
                                                                     NSEvent         *event);
 void             _gdk_macos_display_feedback_init                  (GdkMacosDisplay *self);

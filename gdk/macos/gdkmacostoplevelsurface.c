@@ -23,6 +23,7 @@
 
 #include "gdkmacostoplevelsurface-private.h"
 
+#include "gdkframeclockidleprivate.h"
 #include "gdkseatprivate.h"
 #include "gdktoplevelprivate.h"
 
@@ -626,11 +627,59 @@ _gdk_macos_toplevel_surface_set_property (GObject      *object,
 }
 
 static void
+_gdk_macos_toplevel_surface_constructed (GObject *object)
+{
+  GDK_BEGIN_MACOS_ALLOC_POOL;
+
+  GdkMacosWindow *window;
+  GdkMacosToplevelSurface *self = GDK_MACOS_TOPLEVEL_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (gdk_surface_get_display (surface));
+  GdkFrameClock *frame_clock;
+  NSUInteger style_mask;
+  NSRect content_rect;
+  NSRect visible_frame;
+  NSScreen *screen;
+  int nx;
+  int ny;
+
+  style_mask = (NSWindowStyleMaskTitled |
+                NSWindowStyleMaskClosable |
+                NSWindowStyleMaskMiniaturizable |
+                NSWindowStyleMaskResizable);
+
+  _gdk_macos_display_to_display_coords (display, 0, 100, &nx, &ny);
+
+  screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
+  visible_frame = [screen visibleFrame];
+  content_rect = NSMakeRect (nx - visible_frame.origin.x, ny - visible_frame.origin.y, 100, 100);
+  window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
+                                             styleMask:style_mask
+                                               backing:NSBackingStoreBuffered
+                                                 defer:NO
+                                                screen:screen];
+
+  /* Allow NSWindow to go fullscreen */
+  [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
+
+  GDK_END_MACOS_ALLOC_POOL;
+
+  G_OBJECT_CLASS (_gdk_macos_toplevel_surface_parent_class)->constructed (object);
+}
+
+static void
 _gdk_macos_toplevel_surface_class_init (GdkMacosToplevelSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
+  object_class->constructed = _gdk_macos_toplevel_surface_constructed;
   object_class->get_property = _gdk_macos_toplevel_surface_get_property;
   object_class->set_property = _gdk_macos_toplevel_surface_set_property;
 
@@ -646,66 +695,6 @@ static void
 _gdk_macos_toplevel_surface_init (GdkMacosToplevelSurface *self)
 {
   self->decorated = TRUE;
-}
-
-GdkMacosSurface *
-_gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
-                                 GdkSurface      *parent,
-                                 GdkFrameClock   *frame_clock,
-                                 int              x,
-                                 int              y,
-                                 int              width,
-                                 int              height)
-{
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
-  GdkMacosWindow *window;
-  GdkMacosSurface *self;
-  NSUInteger style_mask;
-  NSRect content_rect;
-  NSRect visible_frame;
-  NSScreen *screen;
-  int nx;
-  int ny;
-
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!frame_clock || GDK_IS_FRAME_CLOCK (frame_clock), NULL);
-  g_return_val_if_fail (!parent || GDK_IS_MACOS_SURFACE (parent), NULL);
-
-  style_mask = (NSWindowStyleMaskTitled |
-                NSWindowStyleMaskClosable |
-                NSWindowStyleMaskMiniaturizable |
-                NSWindowStyleMaskResizable);
-
-  if (parent != NULL)
-    {
-      x += GDK_MACOS_SURFACE (parent)->root_x;
-      y += GDK_MACOS_SURFACE (parent)->root_y;
-    }
-
-  _gdk_macos_display_to_display_coords (display, x, y + height, &nx, &ny);
-
-  screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
-  visible_frame = [screen visibleFrame];
-  content_rect = NSMakeRect (nx - visible_frame.origin.x, ny - visible_frame.origin.y, width, height);
-  window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
-                                             styleMask:style_mask
-                                               backing:NSBackingStoreBuffered
-                                                 defer:NO
-                                                screen:screen];
-
-  /* Allow NSWindow to go fullscreen */
-  [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-
-  self = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
-                       "display", display,
-                       "frame-clock", frame_clock,
-                       "native", window,
-                       NULL);
-
-  GDK_END_MACOS_ALLOC_POOL;
-
-  return g_steal_pointer (&self);
 }
 
 void

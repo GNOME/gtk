@@ -115,9 +115,6 @@ static void gdk_surface_get_property (GObject      *object,
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 
-static void gdk_surface_set_frame_clock (GdkSurface      *surface,
-                                         GdkFrameClock  *clock);
-
 static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
                                              gboolean    is_mapped);
 
@@ -497,10 +494,21 @@ gdk_surface_real_get_scale (GdkSurface *surface)
 }
 
 static void
+gdk_surface_constructed (GObject *object)
+{
+  G_GNUC_UNUSED GdkSurface *surface = GDK_SURFACE (object);
+
+  g_assert (surface->frame_clock != NULL);
+
+  G_OBJECT_CLASS (gdk_surface_parent_class)->constructed (object);
+}
+
+static void
 gdk_surface_class_init (GdkSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gdk_surface_constructed;
   object_class->finalize = gdk_surface_finalize;
   object_class->set_property = gdk_surface_set_property;
   object_class->get_property = gdk_surface_get_property;
@@ -845,21 +853,6 @@ _gdk_surface_update_size (GdkSurface *surface)
   g_object_notify (G_OBJECT (surface), "height");
 }
 
-static GdkSurface *
-gdk_surface_new (GdkDisplay     *display,
-                 GdkSurfaceType  surface_type,
-                 GdkSurface     *parent,
-                 int             x,
-                 int             y,
-                 int             width,
-                 int             height)
-{
-  return gdk_display_create_surface (display,
-                                     surface_type,
-                                     parent,
-                                     x, y, width, height);
-}
-
 /**
  * gdk_surface_new_toplevel: (constructor)
  * @display: the display to create the surface on
@@ -873,8 +866,9 @@ gdk_surface_new_toplevel (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL,
-                          NULL, 0, 0, 1, 1);
+  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->toplevel_type,
+                       "display", display,
+                       NULL);
 }
 
 /**
@@ -894,11 +888,16 @@ gdk_surface_new_popup (GdkSurface *parent,
                        gboolean    autohide)
 {
   GdkSurface *surface;
+  GdkDisplay *display;
 
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  surface = gdk_surface_new (parent->display, GDK_SURFACE_POPUP,
-                             parent, 0, 0, 100, 100);
+  display = gdk_surface_get_display (parent);
+
+  surface = g_object_new (GDK_DISPLAY_GET_CLASS (display)->popup_type,
+                         "display", display,
+                         "parent", parent,
+                         NULL);
 
   surface->autohide = autohide;
 
@@ -2457,7 +2456,7 @@ gdk_surface_resume_events (GdkFrameClock *clock,
     }
 }
 
-static void
+void
 gdk_surface_set_frame_clock (GdkSurface     *surface,
                              GdkFrameClock *clock)
 {

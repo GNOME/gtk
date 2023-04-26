@@ -157,14 +157,6 @@ void             gdk_wayland_drop_set_source_actions       (GdkDrop             
 void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
                                                             uint32_t               action);
 
-GdkSurface * _gdk_wayland_display_create_surface (GdkDisplay *display,
-                                                  GdkSurfaceType surface_type,
-                                                  GdkSurface *parent,
-                                                  int         x,
-                                                  int         y,
-                                                  int         width,
-                                                  int         height);
-
 void        _gdk_wayland_display_create_seat    (GdkWaylandDisplay *display,
                                                  guint32                  id,
                                                  struct wl_seat          *seat);

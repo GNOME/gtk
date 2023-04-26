@@ -31,7 +31,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
-#include "gdkframeclockidleprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 
@@ -43,8 +43,8 @@
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospopupsurface-private.h"
-#include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdkmacostoplevelsurface-private.h"
 
 G_DEFINE_ABSTRACT_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
@@ -416,10 +416,6 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   GdkMacosSurface *drag_surface;
   GdkMacosDrag *drag;
   GdkCursor *cursor;
-  double px;
-  double py;
-  int sx;
-  int sy;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self) ||
@@ -427,12 +423,7 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   g_assert (GDK_IS_MACOS_DEVICE (device));
   g_assert (GDK_IS_CONTENT_PROVIDER (content));
 
-  gdk_macos_device_query_state (device, surface, NULL, &px, &py, NULL);
-  _gdk_macos_surface_get_root_coords (GDK_MACOS_SURFACE (surface), &sx, &sy);
-  drag_surface = _gdk_macos_surface_new (GDK_MACOS_DISPLAY (surface->display),
-                                         GDK_SURFACE_DRAG,
-                                         NULL,
-                                         sx, sy, 1, 1);
+  drag_surface = _gdk_macos_drag_surface_new (GDK_MACOS_DISPLAY (surface->display));
   drag = g_object_new (GDK_TYPE_MACOS_DRAG,
                        "drag-surface", drag_surface,
                        "surface", surface,
@@ -527,8 +518,14 @@ gdk_macos_surface_constructed (GObject *object)
                                G_CONNECT_SWAPPED);
     }
 
+  gdk_surface_freeze_updates (GDK_SURFACE (self));
+  _gdk_macos_surface_monitor_changed (self);
+
   if (self->window != NULL)
     _gdk_macos_surface_configure (self);
+
+  _gdk_macos_display_surface_added (GDK_MACOS_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self))),
+                                    self);
 }
 
 static void
@@ -551,26 +548,6 @@ gdk_macos_surface_get_property (GObject    *object,
 }
 
 static void
-gdk_macos_surface_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  GdkMacosSurface *self = GDK_MACOS_SURFACE (object);
-
-  switch (prop_id)
-    {
-    case PROP_NATIVE:
-      self->window = g_value_get_pointer (value);
-      [self->window setGdkSurface:self];
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -578,7 +555,6 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
 
   object_class->constructed = gdk_macos_surface_constructed;
   object_class->get_property = gdk_macos_surface_get_property;
-  object_class->set_property = gdk_macos_surface_set_property;
 
   surface_class->destroy = gdk_macos_surface_destroy;
   surface_class->drag_begin = gdk_macos_surface_drag_begin;
@@ -597,7 +573,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
    */
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -609,55 +585,6 @@ gdk_macos_surface_init (GdkMacosSurface *self)
   self->main.data = self;
   self->sorted.data = self;
   self->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-}
-
-GdkMacosSurface *
-_gdk_macos_surface_new (GdkMacosDisplay   *display,
-                        GdkSurfaceType     surface_type,
-                        GdkSurface        *parent,
-                        int                x,
-                        int                y,
-                        int                width,
-                        int                height)
-{
-  GdkFrameClock *frame_clock;
-  GdkMacosSurface *ret;
-
-  g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
-
-  if (parent != NULL)
-    frame_clock = g_object_ref (parent->frame_clock);
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      ret = _gdk_macos_toplevel_surface_new (display, parent, frame_clock, x, y, width, height);
-      break;
-
-    case GDK_SURFACE_POPUP:
-      ret = _gdk_macos_popup_surface_new (display, parent, frame_clock, x, y, width, height);
-      break;
-
-    case GDK_SURFACE_DRAG:
-      ret = _gdk_macos_drag_surface_new (display, frame_clock, x, y, width, height);
-      break;
-
-    default:
-      g_warn_if_reached ();
-      ret = NULL;
-    }
-
-  if (ret != NULL)
-    {
-      gdk_surface_freeze_updates (GDK_SURFACE (ret));
-      _gdk_macos_surface_monitor_changed (ret);
-    }
-
-  g_object_unref (frame_clock);
-
-  return g_steal_pointer (&ret);
 }
 
 void
@@ -753,6 +680,16 @@ _gdk_macos_surface_get_native (GdkMacosSurface *self)
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
   return (NSWindow *)self->window;
+}
+
+void
+_gdk_macos_surface_set_native (GdkMacosSurface *self,
+                               GdkMacosWindow  *window)
+{
+  g_assert (self->window == NULL);
+
+  self->window = window;
+  [self->window setGdkSurface:self];
 }
 
 /**

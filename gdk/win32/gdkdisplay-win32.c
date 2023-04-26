@@ -28,6 +28,7 @@
 #include "gdkdisplay-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkglcontext-win32.h"
+#include "gdksurface-win32.h"
 #include "gdkwin32display.h"
 #include "gdkwin32screen.h"
 #include "gdkwin32surface.h"
@@ -1268,6 +1269,8 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   object_class->dispose = gdk_win32_display_dispose;
   object_class->finalize = gdk_win32_display_finalize;
 
+  display_class->toplevel_type = GDK_TYPE_WIN32_TOPLEVEL;
+  display_class->popup_type = GDK_TYPE_WIN32_POPUP;
   display_class->cairo_context_type = GDK_TYPE_WIN32_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_win32_display_get_name;
@@ -1281,7 +1284,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
-  display_class->create_surface = _gdk_win32_display_create_surface;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
 

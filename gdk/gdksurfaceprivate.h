@@ -26,13 +26,6 @@
 
 G_BEGIN_DECLS
 
-typedef enum
-{
-  GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_POPUP,
-  GDK_SURFACE_DRAG
-} GdkSurfaceType;
-
 struct _GdkSurface
 {
   GObject parent_instance;
@@ -285,6 +278,8 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                int        *width,
                                int        *height);
 
+void                    gdk_surface_set_frame_clock             (GdkSurface             *surface,
+                                                                 GdkFrameClock          *clock);
 void                    gdk_surface_set_egl_native_window       (GdkSurface             *self,
                                                                  gpointer                native_window);
 void                    gdk_surface_ensure_egl_surface          (GdkSurface             *self,

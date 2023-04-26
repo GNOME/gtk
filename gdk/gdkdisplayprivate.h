@@ -114,6 +114,8 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
 
+  GType toplevel_type;        /* Type for GdkToplevel, must be set */
+  GType popup_type;           /* Type for GdkPopup, must be set */
   GType cairo_context_type;   /* type for GdkCairoContext, must be set */
   GType vk_context_type;      /* type for GdkVulkanContext, must be set if vk_extension_name != NULL */
   const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
@@ -134,15 +136,7 @@ struct _GdkDisplayClass
                                                          const char *startup_id);
   const char *              (*get_startup_notification_id) (GdkDisplay  *display);
 
-  GdkSurface *               (*create_surface) (GdkDisplay     *display,
-                                                GdkSurfaceType  surface_type,
-                                                GdkSurface     *parent,
-                                                int             x,
-                                                int             y,
-                                                int             width,
-                                                int             height);
-
-  GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
+  GdkKeymap *            (*get_keymap)                 (GdkDisplay        *display);
 
   GdkGLContext *         (* init_gl)                   (GdkDisplay        *display,
                                                         GError           **error);
@@ -207,13 +201,6 @@ void                _gdk_display_pointer_info_foreach (GdkDisplay       *display
 gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
-GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display,
-                                                       GdkSurfaceType    surface_type,
-                                                       GdkSurface       *parent,
-                                                       int               x,
-                                                       int               y,
-                                                       int               width,
-                                                       int               height);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
 

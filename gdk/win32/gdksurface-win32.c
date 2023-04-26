@@ -135,14 +135,6 @@ static void     gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
 
 G_DEFINE_TYPE (GdkWin32Surface, gdk_win32_surface, GDK_TYPE_SURFACE)
 
-GType gdk_win32_toplevel_get_type (void) G_GNUC_CONST;
-GType gdk_win32_popup_get_type (void) G_GNUC_CONST;
-GType gdk_win32_drag_surface_get_type (void) G_GNUC_CONST;
-
-#define GDK_TYPE_WIN32_TOPLEVEL (gdk_win32_toplevel_get_type ())
-#define GDK_TYPE_WIN32_POPUP (gdk_win32_popup_get_type ())
-#define GDK_TYPE_WIN32_DRAG_SURFACE (gdk_win32_drag_surface_get_type ())
-
 static void
 gdk_win32_surface_init (GdkWin32Surface *impl)
 {
@@ -211,10 +203,6 @@ gdk_surface_win32_finalize (GObject *object)
 
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
-
-  g_signal_handlers_disconnect_by_func (GDK_SURFACE (object),
-                                        gdk_win32_toplevel_state_callback,
-                                        NULL);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -334,7 +322,7 @@ get_default_title (void)
  *   get its own class
  */
 static ATOM
-RegisterGdkClass (GdkSurfaceType wtype)
+RegisterGdkClass (GType wtype)
 {
   static ATOM klassTOPLEVEL = 0;
   static ATOM klassTEMP     = 0;
@@ -407,10 +395,8 @@ RegisterGdkClass (GdkSurfaceType wtype)
   /* MSDN: CS_OWNDC is needed for OpenGL contexts */
   wcl.style |= CS_OWNDC;
 
-  switch (wtype)
+  if (wtype != GDK_TYPE_WIN32_DRAG_SURFACE)
     {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_POPUP:
       if (0 == klassTOPLEVEL)
         {
           wcl.lpszClassName = L"gdkSurfaceToplevel";
@@ -419,9 +405,9 @@ RegisterGdkClass (GdkSurfaceType wtype)
           klassTOPLEVEL = RegisterClassExW (&wcl);
         }
       klass = klassTOPLEVEL;
-      break;
-
-    case GDK_SURFACE_DRAG:
+    }
+  else
+    {
       if (klassTEMP == 0)
         {
           wcl.lpszClassName = L"gdkSurfaceTemp";
@@ -431,12 +417,6 @@ RegisterGdkClass (GdkSurfaceType wtype)
         }
 
       klass = klassTEMP;
-
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
     }
 
   if (klass == 0)
@@ -447,86 +427,20 @@ RegisterGdkClass (GdkSurfaceType wtype)
   return klass;
 }
 
-/*
- * Create native windows.
- *
- * With the default Gdk the created windows are mostly toplevel windows.
- *
- * Placement of the window is derived from the passed in window,
- * except for toplevel window where OS/Window Manager placement
- * is used.
- *
- * [1] http://mail.gnome.org/archives/gtk-devel-list/2010-August/msg00214.html
- */
-GdkSurface *
-_gdk_win32_display_create_surface (GdkDisplay     *display,
-                                   GdkSurfaceType  surface_type,
-                                   GdkSurface     *parent,
-                                   int             x,
-                                   int             y,
-                                   int             width,
-                                   int             height)
+static void
+gdk_win32_surface_constructed (GObject *object)
 {
-  HWND hwndNew;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (object);
+  GdkSurface *surface = GDK_SURFACE (impl);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkFrameClock *frame_clock;
   HANDLE owner;
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
   RECT rect;
-  GdkWin32Surface *impl;
-  GdkWin32Display *display_win32;
-  GdkSurface *surface;
   const char *title;
   wchar_t *wtitle;
-  int window_width, window_height;
-  int window_x, window_y;
-  int real_x = 0, real_y = 0;
-  GdkFrameClock *frame_clock;
-
-  g_return_val_if_fail (display == _gdk_display, NULL);
-
-  GDK_NOTE (MISC,
-            g_print ("_gdk_surface_new: %s\n", (surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
-                                                       (surface_type == GDK_SURFACE_DRAG? "TEMP" :
-                                                      (surface_type == GDK_SURFACE_DRAG ? "POPUP" : "???")))));
-
-  display_win32 = GDK_WIN32_DISPLAY (display);
-
-  if (parent)
-    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
-  else
-    frame_clock = _gdk_frame_clock_idle_new ();
-
-  switch (surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-      impl = g_object_new (GDK_TYPE_WIN32_TOPLEVEL,
-                           "display", display,
-                           "frame-clock", frame_clock,
-                           NULL);
-      break;
-    case GDK_SURFACE_POPUP:
-      impl = g_object_new (GDK_TYPE_WIN32_POPUP,
-                           "parent", parent,
-                           "display", display,
-                           "frame-clock", frame_clock,
-                           NULL);
-      break;
-    case GDK_SURFACE_DRAG:
-      impl = g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
-                           "display", display,
-                           "frame-clock", frame_clock,
-                           NULL);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  surface = GDK_SURFACE (impl);
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
 
   impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
@@ -536,85 +450,59 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
   dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
-  switch (surface_type)
+  if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
-    case GDK_SURFACE_TOPLEVEL:
       dwStyle |= WS_OVERLAPPEDWINDOW;
-      break;
-
-    case GDK_SURFACE_DRAG:
-      dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
-      /* fall through */
-    case GDK_SURFACE_POPUP:
-      dwStyle |= WS_POPUP;
-
-      /* Only popup and temp windows are fit to use the Owner Window mechanism */
-      if (parent != NULL)
-        owner = GDK_SURFACE_HWND (parent);
-      break;
-
-    default:
-      g_assert_not_reached ();
+      frame_clock = _gdk_frame_clock_idle_new ();
     }
-
-  rect.left = x * impl->surface_scale;
-  rect.top = y * impl->surface_scale;
-  rect.right = rect.left + width * impl->surface_scale;
-  rect.bottom = rect.top + height * impl->surface_scale;
-
-  AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-
-  real_x = x * impl->surface_scale;
-  real_y = y * impl->surface_scale;
-
-  if (surface_type == GDK_SURFACE_TOPLEVEL)
+  else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_DRAG_SURFACE)
     {
-      /* We initially place it at default so that we can get the
-         default window positioning if we want */
-      window_x = window_y = CW_USEDEFAULT;
+      dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+      dwStyle |= WS_POPUP;
+      frame_clock = _gdk_frame_clock_idle_new ();
+    }
+  else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_POPUP)
+    {
+      GdkSurface *parent = gdk_popup_get_parent (GDK_POPUP (impl));
+      dwStyle |= WS_POPUP;
+      owner = GDK_SURFACE_HWND (parent);
+      frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
     }
   else
     {
-      /* TEMP: Put these where requested */
-      window_x = real_x;
-      window_y = real_y;
+      g_assert_not_reached ();
     }
 
-  window_width = rect.right - rect.left;
-  window_height = rect.bottom - rect.top;
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
   title = get_default_title ();
   if (!title || !*title)
     title = "";
 
-  klass = RegisterGdkClass (surface_type);
+  klass = RegisterGdkClass (G_OBJECT_TYPE (impl));
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
 
-  hwndNew = CreateWindowExW (dwExStyle,
-			     MAKEINTRESOURCEW (klass),
-			     wtitle,
-			     dwStyle,
-			     window_x, window_y,
-			     window_width, window_height,
-			     owner,
-			     NULL,
-			     _gdk_dll_hinstance,
-			     surface);
-  impl->handle = hwndNew;
+  impl->handle = CreateWindowExW (dwExStyle,
+                                  MAKEINTRESOURCEW (klass),
+                                  wtitle,
+                                  dwStyle,
+                                  CW_USEDEFAULT, CW_USEDEFAULT,
+                                  CW_USEDEFAULT, CW_USEDEFAULT,
+                                  owner,
+                                  NULL,
+                                  _gdk_dll_hinstance,
+                                  surface);
+  if (impl->handle == NULL)
+    {
+      WIN32_API_FAILED ("CreateWindowExW");
+      g_error ("Fatal error: CreateWindowExW failed.");
+    }
 
-  GetWindowRect (hwndNew, &rect);
+  GetWindowRect (impl->handle, &rect);
   impl->initial_x = rect.left;
   impl->initial_y = rect.top;
-
-  /* Now we know the initial position, move to actually specified position */
-  if (real_x != window_x || real_y != window_y)
-    {
-      API_CALL (SetWindowPos, (hwndNew,
-                SWP_NOZORDER_SPECIFIED,
-                real_x, real_y, 0, 0,
-                SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
-    }
 
   g_object_ref (impl);
   /* Take note: we're inserting a pointer into a heap-allocated
@@ -627,26 +515,11 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
    */
   gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
 
-  GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
-			   title,
-			   window_width, window_height,
-			   surface->x,
-			   surface->y,
-			   owner,
-			   hwndNew));
-
   g_free (wtitle);
-
-  if (impl->handle == NULL)
-    {
-      WIN32_API_FAILED ("CreateWindowExW");
-      g_object_unref (impl);
-      return NULL;
-    }
 
   gdk_surface_set_egl_native_window (surface, (void *) impl->handle);
 
-  if (surface_type != GDK_SURFACE_DRAG)
+  if (G_OBJECT_TYPE (impl) != GDK_TYPE_WIN32_DRAG_SURFACE)
     {
       if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
         gdk_winpointer_initialize_surface (surface);
@@ -663,18 +536,10 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                     G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
                     impl);
 
-  g_object_unref (frame_clock);
   impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
 
-  if (surface_type == GDK_SURFACE_TOPLEVEL)
-    {
-      g_signal_connect (surface, "notify::state",
-                        G_CALLBACK (gdk_win32_toplevel_state_callback),
-                        NULL);
-    }
-
-  return surface;
+  G_OBJECT_CLASS (parent_class)->constructed (object);
 }
 
 static void
@@ -4636,6 +4501,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->constructed = gdk_win32_surface_constructed;
   object_class->dispose = gdk_surface_win32_dispose;
   object_class->finalize = gdk_surface_win32_finalize;
 
@@ -4824,15 +4690,20 @@ G_DEFINE_TYPE_WITH_CODE (GdkWin32Toplevel, gdk_win32_toplevel, GDK_TYPE_WIN32_SU
                                                 gdk_win32_toplevel_iface_init))
 
 static void
-gdk_win32_toplevel_init (GdkWin32Toplevel *toplevel)
+gdk_win32_toplevel_constructed (GObject *object)
 {
+  g_signal_connect (object, "notify::state",
+                    G_CALLBACK (gdk_win32_toplevel_state_callback),
+                    NULL);
+
+  G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->constructed (object);
 }
 
 static void
 gdk_win32_toplevel_set_property (GObject      *object,
-                                   guint         prop_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4891,9 +4762,9 @@ gdk_win32_toplevel_set_property (GObject      *object,
 
 static void
 gdk_win32_toplevel_get_property (GObject    *object,
-                                   guint       prop_id,
-                                   GValue     *value,
-                                   GParamSpec *pspec)
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
@@ -4943,14 +4814,33 @@ gdk_win32_toplevel_get_property (GObject    *object,
 }
 
 static void
+gdk_win32_toplevel_finalize (GObject *object)
+{
+  GdkWin32Surface *self = GDK_WIN32_SURFACE (object);
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        gdk_win32_toplevel_state_callback,
+                                        NULL);
+
+  G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->finalize (object);
+}
+
+static void
 gdk_win32_toplevel_class_init (GdkWin32ToplevelClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructed = gdk_win32_toplevel_constructed;
+  object_class->finalize = gdk_win32_toplevel_finalize;
   object_class->get_property = gdk_win32_toplevel_get_property;
   object_class->set_property = gdk_win32_toplevel_set_property;
 
   gdk_toplevel_install_properties (object_class, 1);
+}
+
+static void
+gdk_win32_toplevel_init (GdkWin32Toplevel *toplevel)
+{
 }
 
 static void
@@ -5227,4 +5117,12 @@ _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
       impl->egl_force_redraw_all = TRUE;
     }
 #endif
+}
+
+GdkSurface *
+gdk_win32_drag_surface_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_WIN32_DRAG_SURFACE,
+                       "display", display,
+                       NULL);
 }

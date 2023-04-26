@@ -24,6 +24,7 @@
 #include "gdkdisplay-wayland.h"
 #include <glib/gi18n-lib.h>
 #include "gdkseat-wayland.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 
@@ -46,7 +47,6 @@ struct _GdkWaylandDrag
 {
   GdkDrag drag;
   GdkSurface *dnd_surface;
-  struct wl_surface *dnd_wl_surface;
   struct wl_data_source *data_source;
   struct wl_data_offer *offer;
   uint32_t serial;
@@ -382,8 +382,9 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   drag = GDK_DRAG (drag_wayland);
 
-  drag_wayland->dnd_surface = _gdk_wayland_display_create_surface (display, GDK_SURFACE_DRAG, NULL, 0, 0, 100, 100);
-  drag_wayland->dnd_wl_surface = gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface);
+  drag_wayland->dnd_surface = g_object_new (GDK_TYPE_WAYLAND_DRAG_SURFACE,
+                                            "display", display,
+                                            NULL);
 
   gdk_wayland_drag_create_data_source (drag);
 
@@ -395,7 +396,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
                              drag_wayland->data_source,
                              gdk_wayland_surface_get_wl_surface (surface),
-                             drag_wayland->dnd_wl_surface,
+                             gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface),
                              _gdk_wayland_seat_get_implicit_grab_serial (seat, NULL));
 
   cursor = gdk_drag_get_cursor (drag, gdk_drag_get_selected_action (drag));
