@@ -271,9 +271,7 @@ gboolean
 _gdk_win32_surface_enable_transparency (GdkSurface *window)
 {
   DWM_BLURBEHIND blur_behind;
-  HRGN empty_region;
-  HRESULT call_result;
-  HWND thiswindow;
+  HRESULT hr;
 
   if (window == NULL || GDK_SURFACE_HWND (window) == NULL)
     return FALSE;
@@ -281,26 +279,12 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
   if (!gdk_display_is_composited (gdk_surface_get_display (window)))
     return FALSE;
 
-  thiswindow = GDK_SURFACE_HWND (window);
-
-  empty_region = CreateRectRgn (0, 0, -1, -1);
-
-  if (empty_region == NULL)
-    return FALSE;
-
   memset (&blur_behind, 0, sizeof (blur_behind));
-  blur_behind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
-  blur_behind.hRgnBlur = empty_region;
+  blur_behind.dwFlags = DWM_BB_ENABLE;
   blur_behind.fEnable = TRUE;
-  call_result = DwmEnableBlurBehindWindow (thiswindow, &blur_behind);
+  hr = HR_CHECK (DwmEnableBlurBehindWindow (GDK_SURFACE_HWND (window), &blur_behind));
 
-  if (!SUCCEEDED (call_result))
-    g_warning ("%s: %s (%p) failed: %" G_GINT32_MODIFIER "x",
-        G_STRLOC, "DwmEnableBlurBehindWindow", thiswindow, (guint32) call_result);
-
-  DeleteObject (empty_region);
-
-  return SUCCEEDED (call_result);
+  return SUCCEEDED (hr);
 }
 
 static const char *
