@@ -33,6 +33,7 @@
 #include "gtkrenderlayoutprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gdk/gdkgltextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -748,7 +749,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
   if (status == GL_FRAMEBUFFER_COMPLETE)
     {
       Texture *texture;
-      gpointer sync;
+      gpointer sync = NULL;
 
       if (priv->needs_render || priv->auto_render)
         {
@@ -767,7 +768,9 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      if (gdk_gl_context_has_fence_sync (priv->context))
+        sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
       gdk_gl_texture_builder_set_sync (texture->builder, sync);
 
       texture->holder = gdk_gl_texture_builder_build (texture->builder,
