@@ -101,8 +101,15 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 static GtkTreeListModel *
 tree_node_get_tree_list_model (TreeNode *node)
 {
-  for (; !node->is_root; node = node->parent)
-    { }
+  if (node->is_root)
+    return node->list;
+
+  for (node = node->parent; !node->is_root; node = node->parent)
+    {
+      /* This can happen during collapsing of a parent node */
+      if (node->children == NULL)
+        return NULL;
+    }
 
   return node->list;
 }
@@ -316,6 +323,9 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
   guint i, tree_position, tree_removed, tree_added, n_local;
 
   self = tree_node_get_tree_list_model (node);
+  if (self == NULL)
+    return;
+
   n_local = g_list_model_get_n_items (model) - added + removed;
 
   if (position < n_local)
@@ -1180,6 +1190,8 @@ gtk_tree_list_row_set_expanded (GtkTreeListRow *self,
     return;
 
   list = tree_node_get_tree_list_model (self->node);
+  if (list == NULL)
+    return;
 
   if (expanded)
     {
@@ -1255,6 +1267,9 @@ gtk_tree_list_row_is_expandable (GtkTreeListRow *self)
     return TRUE;
 
   list = tree_node_get_tree_list_model (self->node);
+  if (list == NULL)
+    return FALSE;
+
   model = tree_node_create_model (list, self->node);
   if (model)
     {
