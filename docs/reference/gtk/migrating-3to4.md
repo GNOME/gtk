@@ -402,9 +402,9 @@ is open, use the [property@Gtk.Window:modal] property of the dialog.
 
 ### Adapt to coordinate API changes
 
-A number of coordinate APIs in GTK 3 had `double` variants:
+A number of coordinate APIs in GTK 3 had variants taking `int` arguments:
 `gdk_device_get_surface_at_position()`, `gdk_surface_get_device_position()`.
-These have been changed to use doubles, and the `double` variants
+These have been changed to use `double` arguments, and the `int` variants
 have been removed. Update your code accordingly.
 
 Any APIs that deal with global (or root) coordinates have been
