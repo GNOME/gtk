@@ -272,6 +272,7 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
 {
   DWM_BLURBEHIND blur_behind;
   HRESULT hr;
+  HWND hwnd;
 
   if (window == NULL || GDK_SURFACE_HWND (window) == NULL)
     return FALSE;
@@ -279,10 +280,14 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
   if (!gdk_display_is_composited (gdk_surface_get_display (window)))
     return FALSE;
 
+  hwnd = GDK_SURFACE_HWND (window);
+
   memset (&blur_behind, 0, sizeof (blur_behind));
   blur_behind.dwFlags = DWM_BB_ENABLE;
   blur_behind.fEnable = TRUE;
-  hr = HR_CHECK (DwmEnableBlurBehindWindow (GDK_SURFACE_HWND (window), &blur_behind));
+  hr = HR_CHECK (DwmEnableBlurBehindWindow (hwnd, &blur_behind));
+
+  HR_CHECK (DwmExtendFrameIntoClientArea (hwnd, &(MARGINS) { -1 }));
 
   return SUCCEEDED (hr);
 }
