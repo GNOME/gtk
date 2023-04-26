@@ -250,7 +250,9 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   /**
    * GdkGLTextureBuilder:sync: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_sync org.gdk.Property.set=gdk_gl_texture_builder_set_sync)
    *
-   * An optional sync object to wait on before using the texture.
+   * An optional GLSync object.
+   *
+   * If this is not `NULL, you have to call `glWaitSync` on it before using the texture.
    *
    * Since: 4.12
    */
@@ -521,6 +523,9 @@ gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
  *
  * Gets the GLSync object associated with the texture builder.
  *
+ * If this function is returning something other than `NULL`, you have to
+ * call `glWaitSync` on the returned object before using the texture.
+ *
  * Returns: (nullable): the GLSync object
  *
  * Since: 4.12
@@ -539,6 +544,9 @@ gdk_gl_texture_builder_get_sync (GdkGLTextureBuilder *self)
  * @sync: (nullable): the GLSync object
  *
  * Sets the GLSync object to use for the texture.
+ *
+ * The `destroy` function that is passed to [method@Gdk.GLTextureBuilder.build]
+ * is responsible for freeing the sync object when it is no longer needed.
  *
  * Since: 4.12
  */
@@ -615,15 +623,20 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
  *
  * The `destroy` function gets called when the returned texture gets released;
  * either when the texture is finalized or by an explicit call to
- * [method@Gdk.GLTexture.release].
- * This function should release all GL resources associated with the texture,
- * such as the [property@Gdk.GLTextureBuilder:id].
+ * [method@Gdk.GLTexture.release]. It should release all GL resources associated
+ * with the texture, such as the [property@Gdk.GLTextureBuilder:id] and the
+ * [property@Gdk.GLTextureBuilder:sync].
  *
  * Note that it is a programming error to call this function if any mandatory
  * property has not been set.
  *
+ * It is possible to call this function multiple times to create multiple textures,
+ * possibly with changing properties in between.
+ *
  * Returns: (transfer full): a newly built `GdkTexture`
- **/
+ *
+ * Since: 4.12
+ */
 GdkTexture *
 gdk_gl_texture_builder_build (GdkGLTextureBuilder *self,
                               GDestroyNotify       destroy,
