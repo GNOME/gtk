@@ -21,6 +21,12 @@ struct _GdkTexture
   gpointer render_key;
   gpointer render_data;
   GDestroyNotify render_notify;
+
+  /* for diffing swapchain-like textures.
+   * Links are only valid if both textures agree on them */
+  gpointer next_texture; /* atomic, no reference, may be invalid pointer */
+  gpointer previous_texture; /* no reference, may be invalid pointer */
+  cairo_region_t *diff_to_previous;
 };
 
 struct _GdkTextureClass {
@@ -42,6 +48,14 @@ void                    gdk_texture_do_download         (GdkTexture             
                                                          GdkMemoryFormat         format,
                                                          guchar                 *data,
                                                          gsize                   stride);
+void                    gdk_texture_diff                (GdkTexture             *self,
+                                                         GdkTexture             *other,
+                                                         cairo_region_t         *region);
+
+void                    gdk_texture_set_diff            (GdkTexture             *self,
+                                                         GdkTexture             *previous,
+                                                         cairo_region_t         *diff);
+
 gboolean                gdk_texture_set_render_data     (GdkTexture             *self,
                                                          gpointer                key,
                                                          gpointer                data,
