@@ -895,7 +895,8 @@ gtk_application_impl_dbus_finalize (GObject *object)
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
   g_clear_object (&dbus->sm_proxy);
-  g_signal_handlers_disconnect_by_func (dbus->ss_proxy, screensaver_signal_session, dbus->impl.application);
+  if (dbus->ss_proxy)
+    g_signal_handlers_disconnect_by_func (dbus->ss_proxy, screensaver_signal_session, dbus->impl.application);
   g_clear_object (&dbus->ss_proxy);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);

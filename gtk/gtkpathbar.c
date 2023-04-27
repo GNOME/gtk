@@ -418,13 +418,11 @@ set_button_image (GtkPathBar *path_bar,
                   ButtonData *button_data)
 {
   struct SetButtonImageData *data;
+  GIcon *root_icon = NULL;
 
   switch (button_data->type)
     {
     case ROOT_BUTTON:
-
-      GIcon *root_icon = NULL;
-
       if (!button_data->mount && path_bar->root_icon != NULL &&
           g_file_is_native (button_data->file))
         {
