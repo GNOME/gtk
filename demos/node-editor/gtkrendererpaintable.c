@@ -78,6 +78,8 @@ gtk_renderer_paintable_paintable_snapshot (GdkPaintable *paintable,
 
   gdk_paintable_snapshot (GDK_PAINTABLE (texture), snapshot, width, height);
   g_object_unref (texture);
+
+  gsk_render_node_unref (node);
 }
 
 static int
