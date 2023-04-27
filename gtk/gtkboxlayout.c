@@ -55,6 +55,7 @@ struct _GtkBoxLayout
   guint spacing;
   GtkOrientation orientation;
   GtkBaselinePosition baseline_position;
+  int baseline_child;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkBoxLayout, gtk_box_layout, GTK_TYPE_LAYOUT_MANAGER,
@@ -63,6 +64,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkBoxLayout, gtk_box_layout, GTK_TYPE_LAYOUT_MANAGER,
 enum {
   PROP_HOMOGENEOUS = 1,
   PROP_SPACING,
+  PROP_BASELINE_CHILD,
   PROP_BASELINE_POSITION,
 
   /* From GtkOrientable */
@@ -112,6 +114,10 @@ gtk_box_layout_set_property (GObject      *gobject,
       gtk_box_layout_set_spacing (self, g_value_get_int (value));
       break;
 
+    case PROP_BASELINE_CHILD:
+      gtk_box_layout_set_baseline_child (self, g_value_get_int (value));
+      break;
+
     case PROP_BASELINE_POSITION:
       gtk_box_layout_set_baseline_position (self, g_value_get_enum (value));
       break;
@@ -142,6 +148,10 @@ gtk_box_layout_get_property (GObject    *gobject,
 
     case PROP_SPACING:
       g_value_set_int (value, box_layout->spacing);
+      break;
+
+    case PROP_BASELINE_CHILD:
+      g_value_set_int (value, box_layout->baseline_child);
       break;
 
     case PROP_BASELINE_POSITION:
@@ -204,20 +214,28 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
                              GtkWidget    *widget,
                              int           for_size,
                              int          *minimum,
-                             int          *natural)
+                             int          *natural,
+                             int          *minimum_baseline,
+                             int          *natural_baseline)
 {
   GtkWidget *child;
   int n_visible_children = 0;
   int required_min = 0, required_nat = 0;
   int largest_min = 0, largest_nat = 0;
   int spacing = get_spacing (self, gtk_widget_get_css_node (widget));
+  int child_above_min = 0, child_above_nat = 0;
+  int above_min = 0, above_nat = 0;
+  gboolean have_baseline = FALSE;
+  int pos;
 
-  for (child = gtk_widget_get_first_child (widget);
+  for (child = gtk_widget_get_first_child (widget), pos = 0;
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = gtk_widget_get_next_sibling (child), pos++)
     {
       int child_min = 0;
       int child_nat = 0;
+      int child_min_baseline = -1;
+      int child_nat_baseline = -1;
 
       if (!gtk_widget_should_layout (child))
         continue;
@@ -225,13 +243,36 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
       gtk_widget_measure (child, self->orientation,
                           for_size,
                           &child_min, &child_nat,
-                          NULL, NULL);
+                          &child_min_baseline, &child_nat_baseline);
 
       largest_min = MAX (largest_min, child_min);
       largest_nat = MAX (largest_nat, child_nat);
 
       required_min += child_min;
       required_nat += child_nat;
+
+      if (self->orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          if (pos < self->baseline_child)
+            {
+              above_min += child_min;
+              above_nat += child_nat;
+            }
+          else if (pos == self->baseline_child)
+            {
+              have_baseline = TRUE;
+              if (child_min_baseline > -1)
+                {
+                  child_above_min = child_min_baseline;
+                  child_above_nat = child_nat_baseline;
+                }
+              else
+                {
+                  child_above_min = child_min;
+                  child_above_nat = child_nat;
+                }
+            }
+        }
 
       n_visible_children += 1;
     }
@@ -242,14 +283,31 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
         {
           required_min = largest_min * n_visible_children;
           required_nat = largest_nat * n_visible_children;
+
+          above_min = largest_min * MAX (self->baseline_child, 0);
+          above_nat = largest_nat * MAX (self->baseline_child, 0);
         }
 
       required_min += (n_visible_children - 1) * spacing;
       required_nat += (n_visible_children - 1) * spacing;
+
+      above_min += MAX (self->baseline_child, 0) * spacing;
+      above_nat += MAX (self->baseline_child, 0) * spacing;
     }
 
   *minimum = required_min;
   *natural = required_nat;
+
+  if (have_baseline)
+    {
+      *minimum_baseline = above_min + child_above_min;
+      *natural_baseline = above_nat + child_above_nat;
+    }
+  else
+    {
+      *minimum_baseline = -1;
+      *natural_baseline = -1;
+    }
 }
 
 static void
@@ -264,6 +322,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   int largest_min = 0, largest_nat = 0;
   int largest_min_above = -1, largest_min_below = -1;
   int largest_nat_above = -1, largest_nat_below = -1;
+  gboolean have_baseline = FALSE;
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -290,6 +349,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
         {
           if (child_min_baseline > -1)
             {
+              have_baseline = TRUE;
               largest_min_above = MAX (largest_min_above, child_min_baseline);
               largest_min_below = MAX (largest_min_below, child_min - child_min_baseline);
               largest_nat_above = MAX (largest_nat_above, child_nat_baseline);
@@ -307,8 +367,16 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   *minimum = largest_min;
   *natural = largest_nat;
 
-  *min_baseline = largest_min_above;
-  *nat_baseline = largest_nat_above;
+  if (have_baseline)
+    {
+      *min_baseline = largest_min_above;
+      *nat_baseline = largest_nat_above;
+    }
+  else
+    {
+      *min_baseline = -1;
+      *nat_baseline = -1;
+    }
 }
 
 /* if widgets haven't reached their min opposite size at this
@@ -469,13 +537,21 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               &child_minimum, &child_natural,
                               &child_minimum_baseline, &child_natural_baseline);
 
-          if (child_minimum_baseline >= 0)
+          if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              have_baseline = TRUE;
-              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
-              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
-              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
-              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+              if (child_minimum_baseline > -1)
+                {
+                  have_baseline = TRUE;
+                  computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+                  computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+                  computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+                  computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+                }
+              else
+                {
+                  computed_minimum = MAX (computed_minimum, child_minimum);
+                  computed_natural = MAX (computed_natural, child_natural);
+                }
             }
           else
             {
@@ -585,13 +661,21 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               &child_minimum, &child_natural,
                               &child_minimum_baseline, &child_natural_baseline);
 
-          if (child_minimum_baseline >= 0)
+          if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              have_baseline = TRUE;
-              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
-              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
-              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
-              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+              if (child_minimum_baseline > -1)
+                {
+                  have_baseline = TRUE;
+                  computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+                  computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+                  computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+                  computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+                }
+              else
+                {
+                  computed_minimum = MAX (computed_minimum, child_minimum);
+                  computed_natural = MAX (computed_natural, child_natural);
+                }
             }
           else
             {
@@ -603,24 +687,27 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
 
   if (have_baseline)
     {
-      computed_minimum = MAX (computed_minimum, computed_minimum_below + computed_minimum_above);
-      computed_natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
-      switch (self->baseline_position)
+      if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-        case GTK_BASELINE_POSITION_TOP:
-          computed_minimum_baseline = computed_minimum_above;
-          computed_natural_baseline = computed_natural_above;
-          break;
-        case GTK_BASELINE_POSITION_CENTER:
-          computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
-          computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
-          break;
-        case GTK_BASELINE_POSITION_BOTTOM:
-          computed_minimum_baseline = computed_minimum - computed_minimum_below;
-          computed_natural_baseline = computed_natural - computed_natural_below;
-          break;
-        default:
-          break;
+          computed_minimum = MAX (computed_minimum, computed_minimum_below + computed_minimum_above);
+          computed_natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
+          switch (self->baseline_position)
+            {
+            case GTK_BASELINE_POSITION_TOP:
+              computed_minimum_baseline = computed_minimum_above;
+              computed_natural_baseline = computed_natural_above;
+            break;
+            case GTK_BASELINE_POSITION_CENTER:
+              computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
+              computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
+              break;
+            case GTK_BASELINE_POSITION_BOTTOM:
+              computed_minimum_baseline = computed_minimum - computed_minimum_below;
+              computed_natural_baseline = computed_natural - computed_natural_below;
+              break;
+            default:
+              break;
+            }
         }
     }
 
@@ -660,7 +747,8 @@ gtk_box_layout_measure (GtkLayoutManager *layout_manager,
   else
     {
       gtk_box_layout_compute_size (self, widget, for_size,
-                                   minimum, natural);
+                                   minimum, natural,
+                                   min_baseline, nat_baseline);
     }
 }
 
@@ -735,7 +823,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
       /* We still need to run the above loop to populate the minimum sizes for
        * children that aren't going to fill.
        */
-
       size_given_to_child = extra_space / nvis_children;
       n_extra_widgets = extra_space % nvis_children;
     }
@@ -936,6 +1023,24 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkBoxLayout:baseline-child: (attributes org.gtk.Property.get=gtk_box_layout_get_baseline_child org.gtk.Property.set=gtk_box_layout_set_baseline_child)
+   *
+   * The child that determines the baseline of the box
+   * in vertical layout.
+   *
+   * If the child does baseline positioning, then its baseline
+   * is lined up with the baseline of the box. If it doesn't, then
+   * the bottom edge of the child is used.
+   *
+   * Since: 4.12
+   */
+  box_layout_props[PROP_BASELINE_CHILD] =
+    g_param_spec_int ("baseline-child", NULL, NULL,
+                      -1, G_MAXINT, -1,
+                      GTK_PARAM_READWRITE |
+                      G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkBoxLayout:baseline-position: (attributes org.gtk.Property.get=gtk_box_layout_get_baseline_position org.gtk.Property.set=gtk_box_layout_set_baseline_position)
    *
    * The position of the allocated baseline within the extra space
@@ -962,6 +1067,7 @@ gtk_box_layout_init (GtkBoxLayout *self)
   self->spacing = 0;
   self->orientation = GTK_ORIENTATION_HORIZONTAL;
   self->baseline_position = GTK_BASELINE_POSITION_CENTER;
+  self->baseline_child = -1;
 }
 
 /**
@@ -1101,4 +1207,50 @@ gtk_box_layout_get_baseline_position (GtkBoxLayout *box_layout)
   g_return_val_if_fail (GTK_IS_BOX_LAYOUT (box_layout), GTK_BASELINE_POSITION_CENTER);
 
   return box_layout->baseline_position;
+}
+
+/**
+ * gtk_box_layout_set_baseline_child: (attributes org.gtk.Method.set_property=baseline-child)
+ * @box_layout: a `GtkBoxLayout`
+ * @child: the child position, or -1
+ *
+ * Sets the index of the child that determines the baseline
+ * in vertical layout.
+ *
+ * Since: 4.12
+ */
+void
+gtk_box_layout_set_baseline_child (GtkBoxLayout *box_layout,
+                                   int           child)
+{
+  g_return_if_fail (GTK_IS_BOX_LAYOUT (box_layout));
+  g_return_if_fail (child >= -1);
+
+  if (box_layout->baseline_child == child)
+    return;
+
+  box_layout->baseline_child = child;
+
+  g_object_notify_by_pspec (G_OBJECT (box_layout), box_layout_props[PROP_BASELINE_CHILD]);
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (box_layout));
+}
+
+/**
+ * gtk_box_layout_get_baseline_child:
+ * @box_layout: a `GtkBoxLayout`
+ *
+ * Gets the value set by gtk_box_layout_set_baseline_child().
+ *
+ * Returns: the index of the child that determines the baseline
+ *     in vertical layout, or -1
+ *
+ * Since: 4.12
+ */
+int
+gtk_box_layout_get_baseline_child (GtkBoxLayout *box_layout)
+{
+  g_return_val_if_fail (GTK_IS_BOX_LAYOUT (box_layout), -1);
+
+  return box_layout->baseline_child;
 }

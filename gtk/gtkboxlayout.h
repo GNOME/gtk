@@ -51,4 +51,10 @@ void                    gtk_box_layout_set_baseline_position    (GtkBoxLayout   
 GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition     gtk_box_layout_get_baseline_position    (GtkBoxLayout        *box_layout);
 
+GDK_AVAILABLE_IN_4_12
+void                    gtk_box_layout_set_baseline_child       (GtkBoxLayout        *box_layout,
+                                                                 int                  child);
+GDK_AVAILABLE_IN_4_12
+int                     gtk_box_layout_get_baseline_child       (GtkBoxLayout        *box_layout);
+
 G_END_DECLS
