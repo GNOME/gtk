@@ -320,6 +320,7 @@ gtk_column_view_update_cell_factories (GtkColumnView *self,
       GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
 
       gtk_column_view_column_update_factory (column, inert);
+      g_object_unref (column);
     }
 }
 
