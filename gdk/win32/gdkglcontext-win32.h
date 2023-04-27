@@ -64,10 +64,10 @@ struct _GdkWin32GLContextClass
 
 typedef struct _GdkWin32GLContextWGL      GdkWin32GLContextWGL;
 
-gboolean  gdk_win32_display_init_wgl                (GdkDisplay *display,
-                                                     GError    **error);
-void      gdk_win32_gl_context_wgl_bind_surface     (GdkWin32GLContextWGL *ctx,
-                                                     GdkWin32Surface      *win32_surface);
+GdkGLContext *  gdk_win32_display_init_wgl              (GdkDisplay             *display,
+                                                         GError                **error);
+void            gdk_win32_gl_context_wgl_bind_surface   (GdkWin32GLContextWGL   *ctx,
+                                                         GdkWin32Surface        *win32_surface);
 
 GType     gdk_win32_gl_context_wgl_get_type         (void) G_GNUC_CONST;
 

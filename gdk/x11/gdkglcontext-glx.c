@@ -477,8 +477,11 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GLXContext ctx;
   int context_attribs[N_GLX_ATTRS], i = 0, flags = 0;
-  int min_major, min_minor, major, minor;
+  gsize major_idx, minor_idx;
+  GdkGLVersion version;
+  const GdkGLVersion* supported_versions;
   gboolean debug_bit, compat_bit;
+  gsize j;
 
   if (!gdk_gl_context_is_api_allowed (context, api, NULL))
     return 0;
@@ -488,10 +491,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy,
-                                       &min_major, &min_minor);
-  gdk_gl_context_get_clipped_version (context, min_major, min_minor,
-                                      &major, &minor);
+  gdk_gl_context_get_matching_version (context, api, legacy, &version);
 
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
@@ -511,9 +511,9 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
     context_attribs[i++] = GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
 
   context_attribs[i++] = GLX_CONTEXT_MAJOR_VERSION_ARB;
-  context_attribs[i++] = major;
+  major_idx = i++;
   context_attribs[i++] = GLX_CONTEXT_MINOR_VERSION_ARB;
-  context_attribs[i++] = minor;
+  minor_idx = i++;
   context_attribs[i++] = GLX_CONTEXT_FLAGS_ARB;
   context_attribs[i++] = flags;
 
@@ -522,7 +522,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating GLX context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                     major, minor,
+                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version),
                      debug_bit ? "yes" : "no",
                      compat_bit ? "yes" : "no",
                      legacy ? "yes" : "no",
@@ -533,25 +533,44 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
 
   gdk_x11_display_error_trap_push (display);
 
-  /* If we don't have access to GLX_ARB_create_context_profile, then
-   * we have to fall back to the old GLX 1.3 API.
-   */
-  if (legacy && !display_x11->has_glx_create_context)
-    ctx = glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
-                               display_x11->glx_config,
-                               GLX_RGBA_TYPE,
-                               share_glx != NULL ? share_glx->glx_context : NULL,
-                               TRUE);
+  supported_versions = gdk_gl_versions_get_for_api (api);
+  for (j = 0; gdk_gl_version_greater_equal (&supported_versions[j], &version); j++)
+    {
+      context_attribs [major_idx] = gdk_gl_version_get_major (&supported_versions[j]);
+      context_attribs [minor_idx] = gdk_gl_version_get_minor (&supported_versions[j]);
 
-  else
-    ctx = glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
-                                      display_x11->glx_config,
-                                      share_glx != NULL ? share_glx->glx_context : NULL,
-                                      True,
-                                      context_attribs);
+      /* If we don't have access to GLX_ARB_create_context_profile, then
+       * we have to fall back to the old GLX 1.3 API.
+       */
+      if (legacy && !display_x11->has_glx_create_context)
+        ctx = glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
+                                   display_x11->glx_config,
+                                   GLX_RGBA_TYPE,
+                                   share_glx != NULL ? share_glx->glx_context : NULL,
+                                   TRUE);
 
-  if (gdk_x11_display_error_trap_pop (display) || ctx == NULL)
-    return 0;
+      else
+        ctx = glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
+                                          display_x11->glx_config,
+                                          share_glx != NULL ? share_glx->glx_context : NULL,
+                                          True,
+                                          context_attribs);
+
+      if (ctx)
+        break;
+    }
+
+  if (ctx == NULL)
+    {
+      gdk_x11_display_error_trap_pop_ignored (display);
+      return 0;
+    }
+
+  if (gdk_x11_display_error_trap_pop (display))
+    {
+      glXDestroyContext (dpy, ctx);
+      return 0;
+    }
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Realized GLX context[%p], %s, version: %d.%d",
@@ -561,6 +580,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
                      display_x11->glx_version % 10);
 
   context_glx->glx_context = ctx;
+  gdk_gl_context_set_version (context, &supported_versions[j]);
   gdk_gl_context_set_is_legacy (context, legacy);
 
 #ifdef HAVE_XDAMAGE

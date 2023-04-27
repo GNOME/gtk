@@ -82,6 +82,7 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
+#include "gdkglversionprivate.h"
 
 #include "gdkprivate.h"
 
@@ -99,9 +100,8 @@
 #define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
 
 typedef struct {
-  int major;
-  int minor;
-  int gl_version;
+  GdkGLVersion required;
+  GdkGLVersion gl_version;
 
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
@@ -287,8 +287,11 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   EGLConfig egl_config;
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS], i = 0, flags = 0;
+  gsize major_idx, minor_idx;
   gboolean debug_bit, forward_bit;
-  int min_major, min_minor, major = 0, minor = 0;
+  GdkGLVersion version;
+  const GdkGLVersion* supported_versions;
+  gsize j;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   if (!gdk_gl_context_is_api_allowed (context, api, NULL))
@@ -296,11 +299,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
 
   /* We will use the default version matching the context status
    * unless the user requested a version which makes sense */
-  gdk_gl_context_get_matching_version (api, legacy,
-                                       &min_major, &min_minor);
-  gdk_gl_context_get_clipped_version (context,
-                                      min_major, min_minor,
-                                      &major, &minor);
+  gdk_gl_context_get_matching_version (context, api, legacy, &version);
 
   if (!eglBindAPI (gdk_api_to_egl_api (api)))
     return 0;
@@ -331,9 +330,9 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
     flags &= ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
   context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
-  context_attribs[i++] = major;
+  major_idx = i++;
   context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
-  context_attribs[i++] = minor;
+  minor_idx = i++;
   context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
   context_attribs[i++] = flags;
 
@@ -342,23 +341,33 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                     major, minor,
+                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version),
                      debug_bit ? "yes" : "no",
                      forward_bit ? "yes" : "no",
                      legacy ? "yes" : "no",
                      api == GDK_GL_API_GLES ? "yes" : "no");
 
-  ctx = eglCreateContext (egl_display,
-                          egl_config,
-                          share ? share_priv->egl_context : EGL_NO_CONTEXT,
-                          context_attribs);
+  supported_versions = gdk_gl_versions_get_for_api (api);
+  for (j = 0; gdk_gl_version_greater_equal (&supported_versions[j], &version); j++)
+    {
+      context_attribs [major_idx] = gdk_gl_version_get_major (&supported_versions[j]);
+      context_attribs [minor_idx] = gdk_gl_version_get_minor (&supported_versions[j]);
+
+      ctx = eglCreateContext (egl_display,
+                              egl_config,
+                              share ? share_priv->egl_context : EGL_NO_CONTEXT,
+                              context_attribs);
+      if (ctx != NULL)
+        break;
+    }
 
   if (ctx == NULL)
-      return 0;
+    return 0;
 
   GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
 
   priv->egl_context = ctx;
+  gdk_gl_context_set_version (context, &supported_versions[j]);
   gdk_gl_context_set_is_legacy (context, legacy);
 
   if (epoxy_has_egl_extension (egl_display, "EGL_KHR_swap_buffers_with_damage"))
@@ -620,7 +629,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   glViewport (0, 0, ww, wh);
 
 #ifdef HAVE_EGL
-  if (priv->egl_context && gdk_gl_context_check_version (context, 0, 0, 3, 0))
+  if (priv->egl_context && gdk_gl_context_check_version (context, NULL, "3.0"))
     glDrawBuffers (1, (GLenum[1]) { gdk_gl_context_get_use_es (context) ? GL_BACK : GL_BACK_LEFT });
 #endif
 }
@@ -986,36 +995,33 @@ gdk_gl_context_get_forward_compatible (GdkGLContext *context)
 }
 
 void
-gdk_gl_context_get_matching_version (GdkGLAPI  api,
-                                     gboolean  legacy,
-                                     int      *major,
-                                     int      *minor)
+gdk_gl_context_get_matching_version (GdkGLContext *context,
+                                     GdkGLAPI      api,
+                                     gboolean      legacy,
+                                     GdkGLVersion *out_version)
 {
-  int maj, min;
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLVersion min_version;
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   if (api == GDK_GL_API_GL)
     {
       if (legacy)
-        {
-          maj = GDK_GL_MIN_GL_LEGACY_VERSION_MAJOR;
-          min = GDK_GL_MIN_GL_LEGACY_VERSION_MINOR;
-        }
+        min_version = GDK_GL_MIN_GL_LEGACY_VERSION;
       else
-        {
-          maj = GDK_GL_MIN_GL_VERSION_MAJOR;
-          min = GDK_GL_MIN_GL_VERSION_MINOR;
-        }
+        min_version = GDK_GL_MIN_GL_VERSION;
     }
   else
     {
-      maj = GDK_GL_MIN_GLES_VERSION_MAJOR;
-      min = GDK_GL_MIN_GLES_VERSION_MINOR;
+      min_version = GDK_GL_MIN_GLES_VERSION;
     }
 
-  if (major != NULL)
-    *major = maj;
-  if (minor != NULL)
-    *minor = min;
+  if (gdk_gl_version_greater_equal (&priv->required, &min_version))
+    *out_version = priv->required;
+  else
+    *out_version = min_version;
+
 }
 
 /**
@@ -1044,22 +1050,17 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!gdk_gl_context_is_realized (context));
 
-  priv->major = major;
-  priv->minor = minor;
+  priv->required = GDK_GL_VERSION_INIT (major, minor);
 }
 
 gboolean
-gdk_gl_context_check_version (GdkGLContext *self,
-                              int           required_gl_major,
-                              int           required_gl_minor,
-                              int           required_gles_major,
-                              int           required_gles_minor)
+gdk_gl_context_check_gl_version (GdkGLContext       *self,
+                                 const GdkGLVersion *required_gl,
+                                 const GdkGLVersion *required_gles)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
-  g_return_val_if_fail (required_gl_minor < 10, FALSE);
-  g_return_val_if_fail (required_gles_minor < 10, FALSE);
 
   if (!gdk_gl_context_is_realized (self))
     return FALSE;
@@ -1067,10 +1068,10 @@ gdk_gl_context_check_version (GdkGLContext *self,
   switch (priv->api)
     {
     case GDK_GL_API_GL:
-      return priv->gl_version >= required_gl_major * 10 + required_gl_minor;
+      return required_gl == NULL || gdk_gl_version_greater_equal (&priv->gl_version, required_gl);
 
     case GDK_GL_API_GLES:
-      return priv->gl_version >= required_gles_major * 10 + required_gles_minor;
+      return required_gles == NULL || gdk_gl_version_greater_equal (&priv->gl_version, required_gles);
 
     default:
       g_return_val_if_reached (FALSE);
@@ -1101,33 +1102,9 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   if (major != NULL)
-    *major = priv->major;
+    *major = gdk_gl_version_get_major (&priv->required);
   if (minor != NULL)
-    *minor = priv->minor;
-}
-
-void
-gdk_gl_context_get_clipped_version (GdkGLContext *context,
-                                    int           min_major,
-                                    int           min_minor,
-                                    int          *major,
-                                    int          *minor)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  int maj = min_major, min = min_minor;
-
-  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-
-  if (priv->major > maj || (priv->major == maj && priv->minor > min))
-    {
-      maj = priv->major;
-      min = priv->minor;
-    }
-
-  if (major != NULL)
-    *major = maj;
-  if (minor != NULL)
-    *minor = min;
+    *minor = gdk_gl_version_get_minor (&priv->required);
 }
 
 /**
@@ -1162,6 +1139,15 @@ gdk_gl_context_is_legacy (GdkGLContext *context)
   g_return_val_if_fail (gdk_gl_context_is_realized (context), FALSE);
 
   return priv->is_legacy;
+}
+
+void
+gdk_gl_context_set_version (GdkGLContext       *context,
+                            const GdkGLVersion *version)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  priv->gl_version = *version;
 }
 
 void
@@ -1499,9 +1485,21 @@ gdk_gl_context_realize (GdkGLContext  *context,
   priv->api = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
 
   if (priv->api)
-    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+    {
+      g_assert (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (0, 0)));
+
+      g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+    }
 
   return priv->api;
+}
+
+void
+gdk_gl_version_init_epoxy (GdkGLVersion *version)
+{
+  int epoxy_version = epoxy_gl_version ();
+
+  *version = GDK_GL_VERSION_INIT (epoxy_version / 10, epoxy_version % 10);
 }
 
 static void
@@ -1516,8 +1514,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->extensions_checked)
     return;
-
-  priv->gl_version = epoxy_gl_version ();
 
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");
@@ -1544,7 +1540,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
-      if (priv->gl_version < 32)
+      if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
         priv->is_legacy = TRUE;
     }
 
@@ -1554,7 +1550,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
 
-  priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+  priv->has_half_float = gdk_gl_context_check_version (context, "3.0", "3.0") ||
                          epoxy_has_gl_extension ("OES_vertex_half_float");
 
 #ifdef G_ENABLE_DEBUG
@@ -1570,7 +1566,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_EXT_unpack_subimage: %s\n"
                        " - OES_vertex_half_float: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
-                       priv->gl_version / 10, priv->gl_version % 10,
+                       gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
                        max_texture_size,
@@ -1698,10 +1694,6 @@ gdk_gl_context_get_shared_context (GdkGLContext *context)
  * Retrieves the OpenGL version of the @context.
  *
  * The @context must be realized prior to calling this function.
- *
- * If the @context has never been made current, the version cannot
- * be known and it will return 0 for both @major and @minor.
- *
  */
 void
 gdk_gl_context_get_version (GdkGLContext *context,
@@ -1714,9 +1706,9 @@ gdk_gl_context_get_version (GdkGLContext *context,
   g_return_if_fail (gdk_gl_context_is_realized (context));
 
   if (major != NULL)
-    *major = priv->gl_version / 10;
+    *major = gdk_gl_version_get_major (&priv->gl_version);
   if (minor != NULL)
-    *minor = priv->gl_version % 10;
+    *minor = gdk_gl_version_get_minor (&priv->gl_version);
 }
 
 /**

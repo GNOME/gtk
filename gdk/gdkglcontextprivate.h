@@ -22,28 +22,9 @@
 
 #include "gdkglcontext.h"
 #include "gdkdrawcontextprivate.h"
+#include "gdkglversionprivate.h"
 
 G_BEGIN_DECLS
-
-/* Version requirements for EGL contexts.
- *
- * If you add support for EGL to your backend, please require this.
- */
-#define GDK_EGL_MIN_VERSION_MAJOR (1)
-#define GDK_EGL_MIN_VERSION_MINOR (4)
-
-/* Minimum OpenGL versions supported by GTK.
- * Backends should make sure to never create a context of a previous version.
- *
- * The macros refer to OpenGL; OpenGL with OPENGL_COMPATIBILITY_PROFILE_BIT as
- * OPENGL_PROFILE_MASK; and OpenGL ES respectively
- */
-#define GDK_GL_MIN_GL_VERSION_MAJOR (3)
-#define GDK_GL_MIN_GL_VERSION_MINOR (2)
-#define GDK_GL_MIN_GL_LEGACY_VERSION_MAJOR (3)
-#define GDK_GL_MIN_GL_LEGACY_VERSION_MINOR (0)
-#define GDK_GL_MIN_GLES_VERSION_MAJOR (2)
-#define GDK_GL_MIN_GLES_VERSION_MINOR (0)
 
 typedef enum {
   GDK_GL_NONE = 0,
@@ -118,26 +99,31 @@ void                    gdk_gl_context_clear_current_if_surface (GdkSurface     
 GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
                                                                  GdkSurface      *surface);
 
-gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext    *self,
-                                                                 GdkGLAPI         api,
-                                                                 GError         **error);
-void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
-                                                                 gboolean         is_legacy);
+gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext           *self,
+                                                                 GdkGLAPI                api,
+                                                                 GError                **error);
+void                    gdk_gl_context_set_version              (GdkGLContext           *context,
+                                                                 const GdkGLVersion     *version);
+void                    gdk_gl_context_set_is_legacy            (GdkGLContext           *context,
+                                                                 gboolean                is_legacy);
+gboolean                gdk_gl_context_check_gl_version         (GdkGLContext           *context,
+                                                                 const GdkGLVersion     *gl_version,
+                                                                 const GdkGLVersion     *gles_version);
 
-gboolean                gdk_gl_context_check_version            (GdkGLContext    *context,
-                                                                 int              required_gl_major,
-                                                                 int              required_gl_minor,
-                                                                 int              required_gles_major,
-                                                                 int              required_gles_minor);
-void                    gdk_gl_context_get_clipped_version      (GdkGLContext    *context,
-                                                                 int              min_major,
-                                                                 int              min_minor,
-                                                                 int             *major,
-                                                                 int             *minor);
-void                    gdk_gl_context_get_matching_version     (GdkGLAPI         api,
-                                                                 gboolean         legacy,
-                                                                 int             *major,
-                                                                 int             *minor);
+static inline gboolean
+gdk_gl_context_check_version (GdkGLContext *context,
+                              const char   *gl_version,
+                              const char   *gles_version)
+{
+  return gdk_gl_context_check_gl_version (context,
+                                          gl_version ? &GDK_GL_VERSION_STRING (gl_version) : NULL,
+                                          gles_version ? &GDK_GL_VERSION_STRING (gles_version) : NULL);
+}
+
+void                    gdk_gl_context_get_matching_version     (GdkGLContext           *context,
+                                                                 GdkGLAPI                api,
+                                                                 gboolean                legacy,
+                                                                 GdkGLVersion           *out_version);
 
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,

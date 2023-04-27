@@ -32,6 +32,20 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GdkGLAPI:
+ * @GDK_GL_API_GL: The OpenGL API
+ * @GDK_GL_API_GLES: The OpenGL ES API
+ *
+ * The list of the different APIs that GdkGLContext can potentially support.
+ *
+ * Since: 4.6
+ */
+typedef enum { /*< underscore_name=GDK_GL_API >*/
+  GDK_GL_API_GL   = 1 << 0,
+  GDK_GL_API_GLES = 1 << 1
+} GdkGLAPI;
+
 /* Currently, these are the same values numerically as in the
  * X protocol. If you change that, gdksurface-x11.c/gdk_surface_set_geometry_hints()
  * will need fixing.

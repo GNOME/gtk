@@ -4408,7 +4408,7 @@ get_framebuffer_format (GdkGLContext *context,
 {
   int size;
 
-  if (!gdk_gl_context_check_version (context, 0, 0, 3, 0))
+  if (!gdk_gl_context_check_version (context, NULL, "3.0"))
     return GL_RGBA8;
 
   glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);

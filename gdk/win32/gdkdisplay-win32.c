@@ -1182,6 +1182,7 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   HDC init_gl_hdc = NULL;
+  GdkGLContext *context;
 
   if (display_win32->dummy_context_wgl.hdc == NULL)
     display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
@@ -1216,12 +1217,9 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
     }
 #endif
 
-  if (gdk_win32_display_init_wgl (display, error))
-    {
-      return g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
-                           "display", display,
-                           NULL);
-    }
+  context = gdk_win32_display_init_wgl (display, error);
+  if (context)
+    return context;
 
 #ifdef HAVE_EGL
   g_clear_error (error);

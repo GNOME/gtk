@@ -247,16 +247,17 @@ gdk_init_dummy_wgl_context (GdkWin32Display *display_win32)
   return best_idx;
 }
 
-gboolean
+GdkGLContext *
 gdk_win32_display_init_wgl (GdkDisplay  *display,
                             GError     **error)
 {
   int best_idx = 0;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkGLContext *context;
   HDC hdc;
 
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
-    return FALSE;
+    return NULL;
 
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
@@ -275,25 +276,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No GL implementation is available"));
 
-      return FALSE;
-    }
-
-  display_win32->gl_version = epoxy_gl_version ();
-
-  /* We must have OpenGL/WGL 2.0 or later, or have the GL_ARB_shader_objects extension */
-  if (display_win32->gl_version < 20)
-    {
-      if (!epoxy_has_gl_extension ("GL_ARB_shader_objects"))
-        {
-          wglMakeCurrent (NULL, NULL);
-          wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("No GL implementation is available"));
-
-          return FALSE;
-        }
+      return NULL;
     }
 
   display_win32->hasWglARBCreateContext =
@@ -307,45 +290,92 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasWglARBmultisample =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_multisample");
 
-  GDK_NOTE (OPENGL,
-            g_print ("WGL API version %d.%d found\n"
-                     " - Vendor: %s\n"
-                     " - Checked extensions:\n"
-                     "\t* WGL_ARB_pixel_format: %s\n"
-                     "\t* WGL_ARB_create_context: %s\n"
-                     "\t* WGL_EXT_swap_control: %s\n"
-                     "\t* WGL_OML_sync_control: %s\n"
-                     "\t* WGL_ARB_multisample: %s\n",
-                     display_win32->gl_version / 10,
-                     display_win32->gl_version % 10,
-                     glGetString (GL_VENDOR),
-                     display_win32->hasWglARBPixelFormat ? "yes" : "no",
-                     display_win32->hasWglARBCreateContext ? "yes" : "no",
-                     display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                     display_win32->hasWglOMLSyncControl ? "yes" : "no",
-                     display_win32->hasWglARBmultisample ? "yes" : "no"));
+  context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
+                          "display", display,
+                          NULL);
+  if (!gdk_gl_context_realize (context, error))
+    {
+      g_object_unref (context);
+      return NULL;
+    }
+
+#if G_ENABLE_DEBUG
+  {
+    int major, minor;
+    gdk_gl_context_get_version (context, &major, &minor);
+    GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
+                         " - Vendor: %s\n"
+                         " - Checked extensions:\n"
+                         "\t* WGL_ARB_pixel_format: %s\n"
+                         "\t* WGL_ARB_create_context: %s\n"
+                         "\t* WGL_EXT_swap_control: %s\n"
+                         "\t* WGL_OML_sync_control: %s\n"
+                         "\t* WGL_ARB_multisample: %s\n",
+                         major, minor,
+                         glGetString (GL_VENDOR),
+                         display_win32->hasWglARBPixelFormat ? "yes" : "no",
+                         display_win32->hasWglARBCreateContext ? "yes" : "no",
+                         display_win32->hasWglEXTSwapControl ? "yes" : "no",
+                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
+                         display_win32->hasWglARBmultisample ? "yes" : "no"));
+  }
+#endif
 
   wglMakeCurrent (NULL, NULL);
 
-  return TRUE;
+  return context;
 }
 
 /* Setup the legacy context after creating it */
 static gboolean
-ensure_legacy_wgl_context (HDC           hdc,
-                           HGLRC         hglrc_legacy,
-                           GdkGLContext *share)
+ensure_legacy_wgl_context (HDC            hdc,
+                           HGLRC          hglrc_legacy,
+                           GdkGLContext  *share,
+                           GdkGLVersion  *version,
+                           GError       **error)
 {
   GdkWin32GLContextWGL *context_wgl;
+  GdkGLVersion legacy_version;
+
+  GDK_NOTE (OPENGL,
+            g_print ("Creating legacy WGL context (version:%d.%d)\n",
+                      gdk_gl_version_get_major (version),
+                      gdk_gl_version_get_minor (version)));
 
   if (!wglMakeCurrent (hdc, hglrc_legacy))
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+      return FALSE;
+    }
+
+  gdk_gl_version_init_epoxy (&legacy_version);
+  if (!gdk_gl_version_greater_equal (&legacy_version, version))
+    {
+      g_set_error (error, GDK_GL_ERROR,
+                   GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("WGL version %d.%d is too low, need at least %d.%d"),
+                   gdk_gl_version_get_major (&legacy_version),
+                   gdk_gl_version_get_minor (&legacy_version),
+                   gdk_gl_version_get_major (version),
+                   gdk_gl_version_get_minor (version));
+      return FALSE;
+    }
+
+  *version = legacy_version;
 
   if (share != NULL)
     {
       context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
 
-      return wglShareLists (hglrc_legacy, context_wgl->wgl_context);
+      if (!wglShareLists (hglrc_legacy, context_wgl->wgl_context))
+        {
+          g_set_error (error, GDK_GL_ERROR,
+                       GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                       _("GL implementation cannot share GL contexts"));
+          return FALSE;
+        }
     }
 
   return TRUE;
@@ -356,130 +386,138 @@ create_wgl_context_with_attribs (HDC           hdc,
                                  HGLRC         hglrc_base,
                                  GdkGLContext *share,
                                  int           flags,
-                                 int           major,
-                                 int           minor,
-                                 gboolean     *is_legacy)
+                                 gboolean      is_legacy,
+                                 GdkGLVersion *version)
 {
   HGLRC hglrc;
   GdkWin32GLContextWGL *context_wgl;
+  const GdkGLVersion *supported_versions = gdk_gl_versions_get_for_api (GDK_GL_API_GL);
+  guint i;
 
-  /* if we have wglCreateContextAttribsARB(), create a
-  * context with the compatibility profile if a legacy
-  * context is requested, or when we go into fallback mode
-  */
-  int profile = *is_legacy ? WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB :
-                             WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
+  GDK_NOTE (OPENGL,
+            g_print ("Creating %s WGL context (version:%d.%d, debug:%s, forward:%s)\n",
+                      is_legacy ? "core" : "compat",
+                      gdk_gl_version_get_major (version),
+                      gdk_gl_version_get_minor (version),
+                      (flags & WGL_CONTEXT_DEBUG_BIT_ARB) ? "yes" : "no",
+                      (flags & WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB) ? "yes" : "no"));
 
-  int attribs[] = {
-    WGL_CONTEXT_PROFILE_MASK_ARB,   profile,
-    WGL_CONTEXT_MAJOR_VERSION_ARB, *is_legacy ? 3 : major,
-    WGL_CONTEXT_MINOR_VERSION_ARB, *is_legacy ? 0 : minor,
-    WGL_CONTEXT_FLAGS_ARB,          flags,
-    0
-  };
+  for (i = 0; gdk_gl_version_greater_equal (&supported_versions[i], version); i++)
+    {
+      /* if we have wglCreateContextAttribsARB(), create a
+      * context with the compatibility profile if a legacy
+      * context is requested, or when we go into fallback mode
+      */
+      int profile = is_legacy ? WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB :
+                                WGL_CONTEXT_CORE_PROFILE_BIT_ARB;
 
-  if (share != NULL)
-    context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
+      int attribs[] = {
+        WGL_CONTEXT_PROFILE_MASK_ARB,   profile,
+        WGL_CONTEXT_MAJOR_VERSION_ARB,  gdk_gl_version_get_major (&supported_versions[i]),
+        WGL_CONTEXT_MINOR_VERSION_ARB,  gdk_gl_version_get_minor (&supported_versions[i]),
+        WGL_CONTEXT_FLAGS_ARB,          flags,
+        0
+      };
 
-  hglrc = wglCreateContextAttribsARB (hdc,
-                                      share != NULL ? context_wgl->wgl_context : NULL,
-                                      attribs);
+      if (share != NULL)
+        context_wgl = GDK_WIN32_GL_CONTEXT_WGL (share);
 
-  return hglrc;
+      hglrc = wglCreateContextAttribsARB (hdc,
+                                          share != NULL ? context_wgl->wgl_context : NULL,
+                                          attribs);
+
+      if (hglrc)
+        {
+          *version = supported_versions[i];
+          return hglrc;
+        }
+    }
+
+  return NULL;
 }
 
 static HGLRC
-create_wgl_context (HDC           hdc,
-                    GdkGLContext *share,
-                    int           flags,
-                    int           major,
-                    int           minor,
-                    gboolean     *is_legacy,
-                    gboolean      hasWglARBCreateContext)
+create_wgl_context (GdkGLContext  *context,
+                    HDC            hdc,
+                    gboolean       hasWglARBCreateContext,
+                    GdkGLContext  *share,
+                    int            flags,
+                    gboolean       legacy,
+                    GError       **error)
 {
   /* We need a legacy context for *all* cases */
-  HGLRC hglrc_base = wglCreateContext (hdc);
-  gboolean success = TRUE;
-
+  HGLRC hglrc_base, hglrc;
+  GdkGLVersion version;
   /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here  */
   HDC hdc_current = wglGetCurrentDC ();
   HGLRC hglrc_current = wglGetCurrentContext ();
 
-  /* if we have no wglCreateContextAttribsARB(), return the legacy context when all is set */
-  if (*is_legacy && !hasWglARBCreateContext)
+  hglrc_base = wglCreateContext (hdc);
+  if (hglrc_base == NULL ||
+      !wglMakeCurrent (hdc, hglrc_base))
     {
-      if (ensure_legacy_wgl_context (hdc, hglrc_base, share))
-        {
-          wglMakeCurrent (hdc_current, hglrc_current);
-          return hglrc_base;
-        }
-
-      success = FALSE;
-      goto gl_fail;
+      g_clear_pointer (&hglrc_base, wglDeleteContext);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+      return 0;
     }
-  else
+
+  hglrc = NULL;
+
+  if (hasWglARBCreateContext)
     {
-      HGLRC hglrc = NULL;
-
-      if (!wglMakeCurrent (hdc, hglrc_base))
+      if (!legacy)
         {
-          success = FALSE;
-          goto gl_fail;
+          gdk_gl_context_get_matching_version (context,
+                                               GDK_GL_API_GL,
+                                               FALSE,
+                                               &version);
+          hglrc = create_wgl_context_with_attribs (hdc,
+                                                   hglrc_base,
+                                                   share,
+                                                   flags,
+                                                   FALSE,
+                                                   &version);
         }
-
-      hglrc = create_wgl_context_with_attribs (hdc,
-                                               hglrc_base,
-                                               share,
-                                               flags,
-                                               major,
-                                               minor,
-                                               is_legacy);
-
-      /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
       if (hglrc == NULL)
         {
-          if (!(*is_legacy))
-            {
-              /* If we aren't using a legacy context in the beginning, try again with a compatibility profile 3.0 context */
-              hglrc = create_wgl_context_with_attribs (hdc,
-                                                       hglrc_base,
-                                                       share,
-                                                       flags,
-                                                       0, 0,
-                                                       is_legacy);
-
-              *is_legacy = TRUE;
-            }
-
-          if (hglrc == NULL)
-            {
-              if (!ensure_legacy_wgl_context (hdc, hglrc_base, share))
-                success = FALSE;
-            }
-
-          if (success)
-            GDK_NOTE (OPENGL, g_print ("Using legacy context as fallback\n"));
+          legacy = TRUE;
+          gdk_gl_context_get_matching_version (context,
+                                               GDK_GL_API_GL,
+                                               TRUE,
+                                               &version);
+          hglrc = create_wgl_context_with_attribs (hdc,
+                                                   hglrc_base,
+                                                   share,
+                                                   flags,
+                                                   TRUE,
+                                                   &version);
         }
+    }
 
-gl_fail:
+  if (hglrc == NULL)
+    {
+      legacy = TRUE;
+      gdk_gl_context_get_matching_version (context,
+                                           GDK_GL_API_GL,
+                                           TRUE,
+                                           &version);
+      if (ensure_legacy_wgl_context (hdc, hglrc_base, share, &version, error))
+        hglrc = g_steal_pointer (&hglrc_base);
+    }
 
-      if (!success)
-        {
-          wglMakeCurrent (NULL, NULL);
-          wglDeleteContext (hglrc_base);
-          return NULL;
-        }
+  if (hglrc)
+    {
+      gdk_gl_context_set_version (context, &version);
+      gdk_gl_context_set_is_legacy (context, legacy);
+    }
 
-      wglMakeCurrent (hdc_current, hglrc_current);
+  g_clear_pointer (&hglrc_base, wglDeleteContext);
 
-      if (hglrc != NULL)
-        {
-          wglDeleteContext (hglrc_base);
-          return hglrc;
-        }
+  wglMakeCurrent (hdc_current, hglrc_current);
 
-      return hglrc_base;
-  }
+  return hglrc;
 }
 
 static gboolean
@@ -525,8 +563,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   /* request flags and specific versions for core (3.2+) WGL context */
   int flags = 0;
-  int major = 0;
-  int minor = 0;
   HGLRC hglrc;
   int pixel_format;
   HDC hdc;
@@ -543,30 +579,17 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
   /*
-   * We may need a Core GL 4.1+ context in order to use the GL support in
-   * the GStreamer media widget backend (such as on Intel drivers), but
-   * wglCreateContextAttribsARB() may only give us the GL context version
-   * that we ask for here, and nothing more.  So, improve things here by
-   * asking for the GL version that is reported to us via epoxy_gl_version(),
-   * rather than the default GL core 3.2 context.
-   */
-  gdk_gl_context_get_clipped_version (context,
-                                      display_win32->gl_version / 10,
-                                      display_win32->gl_version % 10,
-                                      &major, &minor);
-
-  if (surface != NULL)
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
-  else
-    hdc = display_win32->dummy_context_wgl.hdc;
-
-  /*
    * A legacy context cannot be shared with core profile ones, so this means we
    * must stick to a legacy context if the shared context is a legacy context
    */
   legacy_bit = (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_LEGACY)
                  ? TRUE
                  : share != NULL && gdk_gl_context_is_legacy (share);
+
+  if (surface != NULL)
+    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+  else
+    hdc = display_win32->dummy_context_wgl.hdc;
 
   if (!set_wgl_pixformat_for_hdc (hdc,
                                  &pixel_format,
@@ -587,30 +610,15 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   if (compat_bit)
     flags |= WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
-  GDK_NOTE (OPENGL,
-            g_print ("Creating %s WGL context (version:%d.%d, debug:%s, forward:%s, legacy: %s)\n",
-                      compat_bit ? "core" : "compat",
-                      major,
-                      minor,
-                      debug_bit ? "yes" : "no",
-                      compat_bit ? "yes" : "no",
-                      legacy_bit ? "yes" : "no"));
-
-  hglrc = create_wgl_context (hdc,
+  hglrc = create_wgl_context (context,
+                              hdc,
+                              display_win32->hasWglARBCreateContext,
                               share,
                               flags,
-                              major,
-                              minor,
-                             &legacy_bit,
-                              display_win32->hasWglARBCreateContext);
-
+                              legacy_bit,
+                              error);
   if (hglrc == NULL)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Unable to create a GL context"));
-      return 0;
-    }
+    return 0;
 
   GDK_NOTE (OPENGL,
             g_print ("Created WGL context[%p], pixel_format=%d\n",
@@ -618,9 +626,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                      pixel_format));
 
   context_wgl->wgl_context = hglrc;
-
-  /* Ensure that any other context is created with a legacy bit set */
-  gdk_gl_context_set_is_legacy (context, legacy_bit);
 
   return GDK_GL_API_GL;
 }
@@ -715,10 +720,11 @@ gdk_win32_gl_context_wgl_init (GdkWin32GLContextWGL *wgl_context)
  */
 gboolean
 gdk_win32_display_get_wgl_version (GdkDisplay *display,
-                                   int *major,
-                                   int *minor)
+                                   int         *major,
+                                   int         *minor)
 {
-  GdkWin32Display *display_win32;
+  GdkGLContext *context;
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   if (!GDK_IS_WIN32_DISPLAY (display))
@@ -727,12 +733,11 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     return FALSE;
 
-  display_win32 = GDK_WIN32_DISPLAY (display);
+  context = gdk_display_get_gl_context (display);
+  if (context == NULL)
+    return FALSE;
 
-  if (major != NULL)
-    *major = display_win32->gl_version / 10;
-  if (minor != NULL)
-    *minor = display_win32->gl_version % 10;
+  gdk_gl_context_get_version (context, major, minor);
 
   return TRUE;
 }

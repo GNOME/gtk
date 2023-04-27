@@ -24,24 +24,11 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkversionmacros.h>
+#include <gdk/gdkenums.h>
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
-
-/**
- * GdkGLAPI:
- * @GDK_GL_API_GL: The OpenGL API
- * @GDK_GL_API_GLES: The OpenGL ES API
- *
- * The list of the different APIs that GdkGLContext can potentially support.
- *
- * Since: 4.6
- */
-typedef enum { /*< underscore_name=GDK_GL_API >*/
-  GDK_GL_API_GL   = 1 << 0,
-  GDK_GL_API_GLES = 1 << 1
-} GdkGLAPI;
 
 #define GDK_TYPE_GL_CONTEXT             (gdk_gl_context_get_type ())
 #define GDK_GL_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContext))
