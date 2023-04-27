@@ -83,7 +83,7 @@ typedef struct
 
   GskDebugFlags debug_flags;
 
-  gboolean is_realized : 1;
+  unsigned int is_realized : 1;
 } GskRendererPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)

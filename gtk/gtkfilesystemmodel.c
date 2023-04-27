@@ -66,22 +66,21 @@ struct _GtkFileSystemModel
   GArray *              files;          /* array of FileModelNode containing all our files */
   guint                 n_nodes_valid;  /* count of valid nodes (i.e. those whose node->row is accurate) */
   GHashTable *          file_lookup;    /* mapping of GFile => array index in model->files
-                                         * This hash table doesn't always have the same number of entries as the files array;
-                                         * The hash table gets re-populated in node_get_for_file() if this mismatch is
-                                         * detected.
+                                         * This hash table doesn't always have the same number of entries
+                                         * as the files array; it gets re-populated in node_get_for_file()
+                                         * if this mismatch is detected.
                                          */
 
   GtkFileFilter *       filter;         /* filter to use for deciding which nodes are visible */
 
   guint                 frozen;         /* number of times we're frozen */
 
-  gboolean              filter_on_thaw :1;/* set when filtering needs to happen upon thawing */
-
-  guint                 show_hidden :1; /* whether to show hidden files */
-  guint                 show_folders :1;/* whether to show folders */
-  guint                 show_files :1;  /* whether to show files */
-  guint                 filter_folders :1;/* whether filter applies to folders */
-  guint                 can_select_files : 1;
+  unsigned int          filter_on_thaw   : 1; /* set when filtering needs to happen upon thawing */
+  unsigned int          show_hidden      : 1; /* whether to show hidden files */
+  unsigned int          show_folders     : 1; /* whether to show folders */
+  unsigned int          show_files       : 1; /* whether to show files */
+  unsigned int          filter_folders   : 1; /* whether filter applies to folders */
+  unsigned int          can_select_files : 1;
 };
 
 static void freeze_updates (GtkFileSystemModel *model);

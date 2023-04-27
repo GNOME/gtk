@@ -9,7 +9,7 @@ typedef struct {
   char *description;
   gint64 value;
   gint64 n_samples;
-  gboolean can_reset : 1;
+  unsigned int can_reset : 1;
 } NamedCounter;
 
 typedef struct {
@@ -21,9 +21,9 @@ typedef struct {
   gint64 max_value;
   gint64 avg_value;
   gint64 n_samples;
-  gboolean in_flight : 1;
-  gboolean can_reset : 1;
-  gboolean invert : 1;
+  unsigned int in_flight : 1;
+  unsigned int can_reset : 1;
+  unsigned int invert : 1;
 } NamedTimer;
 
 typedef struct {

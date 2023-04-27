@@ -69,9 +69,9 @@ typedef struct {
   GParamSpec *pspec;
   gpointer value;
   GString *text;
-  gboolean translatable : 1;
-  gboolean bound        : 1;
-  gboolean applied      : 1;
+  unsigned int translatable : 1;
+  unsigned int bound        : 1;
+  unsigned int applied      : 1;
   char *context;
   int line;
   int col;

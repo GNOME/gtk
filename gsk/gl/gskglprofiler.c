@@ -18,9 +18,9 @@ struct _GskGLProfiler
   GLuint gl_queries[N_QUERIES];
   GLuint active_query;
 
-  gboolean has_queries : 1;
-  gboolean has_timer : 1;
-  gboolean first_frame : 1;
+  unsigned int has_queries : 1;
+  unsigned int has_timer : 1;
+  unsigned int first_frame : 1;
 };
 
 enum {
