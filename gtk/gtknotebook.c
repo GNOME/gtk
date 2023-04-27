@@ -4902,7 +4902,6 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook          *notebook,
   else /* !show_arrows */
     {
       GtkOrientation tab_expand_orientation;
-      int c = 0;
       *n = 0;
 
       if (notebook->tab_pos == GTK_POS_TOP || notebook->tab_pos == GTK_POS_BOTTOM)
@@ -4926,8 +4925,6 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook          *notebook,
           if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
               !gtk_widget_get_visible (page->child))
             continue;
-
-          c++;
 
           if (page->expand ||
               (gtk_widget_compute_expand (page->tab_label, tab_expand_orientation)))
