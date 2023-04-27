@@ -587,6 +587,12 @@ gtk_file_chooser_widget_finalize (GObject *object)
   g_clear_object (&impl->sort_model);
   g_clear_object (&impl->filter_model);
 
+  g_clear_object (&impl->column_view_name_column);
+  g_clear_object (&impl->column_view_location_column);
+  g_clear_object (&impl->column_view_size_column);
+  g_clear_object (&impl->column_view_time_column);
+  g_clear_object (&impl->column_view_type_column);
+
   /* stopping the load above should have cleared this */
   g_assert (impl->load_timeout_id == 0);
 
