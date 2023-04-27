@@ -1653,6 +1653,8 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
       g_simple_action_set_enabled (trash_action, FALSE);
       g_simple_action_set_enabled (delete_action, FALSE);
     }
+
+  g_clear_object (&info);
 }
 
 static void
