@@ -164,12 +164,17 @@ response_cb (GDBusConnection  *connection,
       g_object_unref (filters);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (self), filter_to_select);
       g_object_unref (filter_to_select);
+
+      g_variant_unref (current_filter);
     }
 
   g_slist_free_full (self->custom_files, g_object_unref);
   self->custom_files = NULL;
   for (i = 0; uris[i]; i++)
     self->custom_files = g_slist_prepend (self->custom_files, g_file_new_for_uri (uris[i]));
+
+  g_free (uris);
+  g_variant_unref (response_data);
 
   switch (portal_response)
     {
