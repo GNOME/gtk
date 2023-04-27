@@ -3758,11 +3758,22 @@ static void
 adjust_for_align (GtkAlign  align,
                   int       natural_size,
                   int      *allocated_pos,
-                  int      *allocated_size)
+                  int      *allocated_size,
+                  int       nat_baseline,
+                  int      *allocated_baseline)
 {
   switch (align)
     {
     case GTK_ALIGN_BASELINE:
+      if (*allocated_size > natural_size &&
+          nat_baseline > -1 &&
+          *allocated_baseline > -1)
+        {
+          *allocated_pos = *allocated_baseline - nat_baseline;
+          *allocated_size = MIN (*allocated_size, natural_size);
+          *allocated_baseline = nat_baseline;
+        }
+      break;
     case GTK_ALIGN_FILL:
     default:
       /* change nothing */
@@ -3790,11 +3801,13 @@ adjust_for_align (GtkAlign  align,
 
 static inline void
 gtk_widget_adjust_size_allocation (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
+                                   GtkAllocation *allocation,
+                                   int           *baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   int natural_width, natural_height;
   int min_width, min_height;
+  int nat_baseline;
 
   if (priv->halign == GTK_ALIGN_FILL && priv->valign == GTK_ALIGN_FILL)
     return;
@@ -3816,14 +3829,17 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
                         natural_width - priv->margin.left - priv->margin.right,
                         &allocation->x,
-                        &allocation->width);
+                        &allocation->width,
+                        -1, NULL);
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                           allocation->width + priv->margin.left + priv->margin.right,
-                          &min_height, &natural_height, NULL, NULL);
+                          NULL, &natural_height, NULL, &nat_baseline);
       adjust_for_align (priv->valign,
                         natural_height - priv->margin.top - priv->margin.bottom,
                         &allocation->y,
-                        &allocation->height);
+                        &allocation->height,
+                        nat_baseline - priv->margin.top,
+                        baseline);
     }
   else
     {
@@ -3832,19 +3848,22 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                           &min_height, NULL, NULL, NULL);
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                           -1,
-                          NULL, &natural_height, NULL, NULL);
+                          NULL, &natural_height, NULL, &nat_baseline);
       natural_height = MAX (min_height, natural_height);
       adjust_for_align (priv->valign,
-                        natural_height - priv->margin.top - priv->margin.bottom,
+                                natural_height - priv->margin.top - priv->margin.bottom,
                         &allocation->y,
-                        &allocation->height);
+                        &allocation->height,
+                        nat_baseline - priv->margin.top,
+                        baseline);
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           allocation->height + priv->margin.top + priv->margin.bottom,
                           &min_width, &natural_width, NULL, NULL);
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
                         natural_width - priv->margin.left - priv->margin.right,
                         &allocation->x,
-                        &allocation->width);
+                        &allocation->width,
+                        -1, NULL);
     }
 }
 
@@ -3972,7 +3991,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (baseline >= 0)
     baseline -= priv->margin.top;
 
-  gtk_widget_adjust_size_allocation (widget, &adjusted);
+  gtk_widget_adjust_size_allocation (widget, &adjusted, &baseline);
 
   if (adjusted.width < 0 || adjusted.height < 0)
     {
