@@ -1,6 +1,74 @@
 Overview of Changes in 4.11.2, xx-xx-xxxx
 =========================================
 
+* GtkGLArea:
+ - Add an allowed-apis property
+
+* GtkListBox:
+ - Fix a problem with gtk_list_box_remove_all
+
+* GtkCenterBox:
+ - Add a shrink-center-last property
+
+* GtkButton, GtkMenuButton:
+ - Add a can-shrink property
+
+* GtkPopover:
+ - Fix problems with grabs
+
+* GtkFileChooser:
+ - Fix a problem with removing files
+ - Make the date, time and location columns work
+ - Fix filtering in the save entry popup
+ - A few memory leak fixes
+ - Handle webdav in the pathbar
+
+* Dialogs:
+ - Destroy windows promptly when the async callback finishes
+ - Detect absence of the OpenURI portal and fall back
+
+* Theme:
+ - Add explicit style classes to a number of widgets
+ - Fix some contrast issues in the dark theme
+
+* Accessibility:
+ - Fix alert dialogs in the a11y tree
+
+* Layout:
+ - Some fixes to baseline alignment
+
+* GL:
+ - Add GdkGLTextureBuilder, a more flexible api for creating textures
+ - Ensure that we work with GLES 2
+
+* Vulkan:
+ - More fixes to the experimental Vulkan renderer
+ - Rework glyph caching
+
+* Wayland:
+ - Don't destroy wl_surfaces on hide
+ - Plug leaks of compositor-side resources
+
+* Inspector:
+ - Improve the action list
+ - Fix a crash
+
+* Tools:
+ - gtk4-node-editor: Improve scaling
+ - gtk4-node-editor: Preserve aspect ratio of textures
+ - gtk4-demo: Make the stylus demo work with mice
+
+* Translation updates
+ Bulgarian
+ Chinese (China)
+ Galician
+ Hebrew
+ Polish
+ Portuguese
+ Russian
+ Turkish
+
+
 Overview of Changes in 4.11.1, 03-04-2023
 =========================================
 
