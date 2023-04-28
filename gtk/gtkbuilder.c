@@ -153,9 +153,10 @@
  * specifies the function to connect to the signal.
  * The remaining attributes, “after”, “swapped” and “object”, have the
  * same meaning as the corresponding parameters of the
- * g_signal_connect_object() or g_signal_connect_data() functions. A
- * “last_modification_time” attribute is also allowed, but it does not
- * have a meaning to the builder.
+ * g_signal_connect_object() or g_signal_connect_data() functions. By
+ * default "swapped" will be set to "yes" if not specified otherwise, in the
+ * case where "object" is set, for convenience. A “last_modification_time”
+ * attribute is also allowed, but it does not have a meaning to the builder.
  *
  * If you rely on `GModule` support to lookup callbacks in the symbol table,
  * the following details should be noted:
