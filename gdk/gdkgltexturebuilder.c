@@ -25,6 +25,8 @@
 #include "gdkglcontext.h"
 #include "gdkgltextureprivate.h"
 
+#include <cairo-gobject.h>
+
 struct _GdkGLTextureBuilder
 {
   GObject parent_instance;
@@ -36,6 +38,9 @@ struct _GdkGLTextureBuilder
   GdkMemoryFormat format;
   gboolean has_mipmap;
   gpointer sync;
+
+  GdkTexture *update_texture;
+  cairo_region_t *update_region;
 };
 
 struct _GdkGLTextureBuilderClass
@@ -70,6 +75,8 @@ enum
   PROP_HEIGHT,
   PROP_ID,
   PROP_SYNC,
+  PROP_UPDATE_REGION,
+  PROP_UPDATE_TEXTURE,
   PROP_WIDTH,
 
   N_PROPS
@@ -85,6 +92,9 @@ gdk_gl_texture_builder_dispose (GObject *object)
   GdkGLTextureBuilder *self = GDK_GL_TEXTURE_BUILDER (object);
 
   g_clear_object (&self->context);
+
+  g_clear_object (&self->update_texture);
+  g_clear_pointer (&self->update_region, cairo_region_destroy);
 
   G_OBJECT_CLASS (gdk_gl_texture_builder_parent_class)->dispose (object);
 }
@@ -121,6 +131,14 @@ gdk_gl_texture_builder_get_property (GObject    *object,
 
     case PROP_SYNC:
       g_value_set_pointer (value, self->sync);
+      break;
+
+    case PROP_UPDATE_REGION:
+      g_value_set_boxed (value, self->update_region);
+      break;
+
+    case PROP_UPDATE_TEXTURE:
+      g_value_set_object (value, self->update_texture);
       break;
 
     case PROP_WIDTH:
@@ -165,6 +183,14 @@ gdk_gl_texture_builder_set_property (GObject      *object,
 
     case PROP_SYNC:
       gdk_gl_texture_builder_set_sync (self, g_value_get_pointer (value));
+      break;
+
+    case PROP_UPDATE_REGION:
+      gdk_gl_texture_builder_set_update_region (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_UPDATE_TEXTURE:
+      gdk_gl_texture_builder_set_update_texture (self, g_value_get_object (value));
       break;
 
     case PROP_WIDTH:
@@ -261,6 +287,30 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkGLTextureBuilder:update-region: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_update_region org.gdk.Property.set=gdk_gl_texture_builder_set_update_region)
+   *
+   * The update region for [property@Gdk.GLTextureBuilder:update-texture].
+   *
+   * Since: 4.12
+   */
+  properties[PROP_UPDATE_REGION] =
+    g_param_spec_boxed ("update-region", NULL, NULL,
+                        CAIRO_GOBJECT_TYPE_REGION,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLTextureBuilder:update-texture: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_update_texture org.gdk.Property.set=gdk_gl_texture_builder_set_update_texture)
+   *
+   * The texture [property@Gdk.GLTextureBuilder:update-region] is an update for.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_UPDATE_TEXTURE] =
+    g_param_spec_object ("update-texture", NULL, NULL,
+                         GDK_TYPE_TEXTURE,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GdkGLTextureBuilder:width: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_width org.gdk.Property.set=gdk_gl_texture_builder_set_width)
    *
    * The width of the texture.
@@ -271,6 +321,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
     g_param_spec_int ("width", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
@@ -611,6 +662,102 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
   self->format = format;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMAT]);
+}
+
+/**
+ * gdk_gl_texture_builder_get_update_texture: (attributes org.gdk.Method.get_property=update_texture)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets the texture previously set via gdk_gl_texture_builder_set_update_texture() or
+ * %NULL if none was set.
+ *
+ * Returns: (transfer none) (nullable): The texture 
+ *
+ * Since: 4.12
+ */
+GdkTexture *
+gdk_gl_texture_builder_get_update_texture (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), NULL);
+
+  return self->update_texture;
+}
+
+/**
+ * gdk_gl_texture_builder_set_update_texture: (attributes org.gdk.Method.set_property=update_texture)
+ * @self: a `GdkGLTextureBuilder`
+ * @texture: (nullable): the texture to update
+ *
+ * Sets the texture to be updated by this texture. See
+ * [method@Gdk.GLTextureBuilder.set_update_region] for an explanation.
+ *
+ * Since: 4.12
+ */
+void
+gdk_gl_texture_builder_set_update_texture (GdkGLTextureBuilder *self,
+                                           GdkTexture          *texture)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+  g_return_if_fail (texture == NULL || GDK_IS_TEXTURE (texture));
+
+  if (!g_set_object (&self->update_texture, texture))
+    return;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_TEXTURE]);
+}
+
+/**
+ * gdk_gl_texture_builder_get_update_region: (attributes org.gdk.Method.get_property=update_region)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets the region previously set via gdk_gl_texture_builder_set_update_region() or
+ * %NULL if none was set.
+ *
+ * Returns: (transfer none) (nullable): The region 
+ *
+ * Since: 4.12
+ */
+cairo_region_t *
+gdk_gl_texture_builder_get_update_region (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), NULL);
+
+  return self->update_region;
+}
+
+/**
+ * gdk_gl_texture_builder_set_update_region: (attributes org.gdk.Method.set_property=update_region)
+ * @self: a `GdkGLTextureBuilder`
+ * @region: (nullable): the region to update
+ *
+ * Sets the region to be updated by this texture. Together with
+ * [property@Gdk.GLTextureBuilder:update-texture] this describes an
+ * update of a previous texture.
+ *
+ * When rendering animations of large textures, it is possible that
+ * consecutive textures are only updating contents in parts of the texture.
+ * It is then possible to describe this update via these two properties,
+ * so that GTK can avoid rerendering parts that did not change.
+ *
+ * An example would be a screen recording where only the mouse pointer moves.
+ *
+ * Since: 4.12
+ */
+void
+gdk_gl_texture_builder_set_update_region (GdkGLTextureBuilder *self,
+                                         cairo_region_t      *region)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+
+  if (self->update_region == region)
+    return;
+
+  g_clear_pointer (&self->update_region, cairo_region_destroy);
+
+  if (region)
+    self->update_region = cairo_region_reference (region);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_REGION]);
 }
 
 /**
