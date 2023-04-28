@@ -1162,7 +1162,7 @@ grid_request_allocate (GridRequest    *request,
   lines = &request->lines[orientation];
   spacing = get_spacing (request->layout, request->widget, orientation);
 
-  baseline = gtk_widget_get_allocated_baseline (request->widget);
+  baseline = gtk_widget_get_baseline (request->widget);
 
   if (orientation == GTK_ORIENTATION_VERTICAL && baseline != -1 &&
       self->baseline_row >= lines->min && self->baseline_row < lines->max &&
@@ -1298,7 +1298,7 @@ grid_request_position (GridRequest    *request,
   lines = &request->lines[orientation];
   spacing = get_spacing (request->layout, request->widget, orientation);
 
-  allocated_baseline = gtk_widget_get_allocated_baseline (request->widget);
+  allocated_baseline = gtk_widget_get_baseline (request->widget);
 
   position = 0;
   for (i = 0; i < lines->max - lines->min; i++)

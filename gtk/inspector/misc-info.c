@@ -160,7 +160,7 @@ update_allocation (GtkWidget            *w,
   gtk_label_set_label (GTK_LABEL (sl->bounds), size_label);
   g_free (size_label);
 
-  size_label = g_strdup_printf ("%d", gtk_widget_get_allocated_baseline (w));
+  size_label = g_strdup_printf ("%d", gtk_widget_get_baseline (w));
   gtk_label_set_label (GTK_LABEL (sl->baseline), size_label);
   g_free (size_label);
 
