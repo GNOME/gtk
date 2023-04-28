@@ -12529,12 +12529,14 @@ int
 gtk_widget_get_size (GtkWidget      *widget,
                      GtkOrientation  orientation)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    return gtk_widget_get_width (widget);
+    return priv->width;
   else
-    return gtk_widget_get_height (widget);
+    return priv->height;
 }
 
 /**
