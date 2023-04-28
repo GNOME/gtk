@@ -56,8 +56,10 @@ G_BEGIN_DECLS
  * are interpreted relative to text direction.
  *
  * %GTK_ALIGN_BASELINE support is optional for containers and widgets, and
- * it is only supported for vertical alignment.  When it's not supported by
- * a child or a container it is treated as %GTK_ALIGN_FILL.
+ * it is only supported for vertical alignment.  Where it is supported, it is
+ * treated similar to %GTK_ALIGN_CENTER, except that it positions the widget
+ * to line up the baselines. When it's not supported by a child or a container,
+ * it is treated as %GTK_ALIGN_FILL.
  */
 typedef enum
 {
