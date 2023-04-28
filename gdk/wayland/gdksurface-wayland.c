@@ -272,17 +272,13 @@ frame_callback (void               *data,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "frame event");
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
-  wl_callback_destroy (callback);
+  g_assert (impl->frame_callback == callback);
+  g_assert (!GDK_SURFACE_DESTROYED (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface))
-    return;
-
-  if (!impl->awaiting_frame)
-    return;
+  g_clear_pointer (&impl->frame_callback, wl_callback_destroy);
 
   GDK_WAYLAND_SURFACE_GET_CLASS (impl)->handle_frame (impl);
 
-  impl->awaiting_frame = FALSE;
   if (impl->awaiting_frame_frozen)
     {
       impl->awaiting_frame_frozen = FALSE;
@@ -370,20 +366,17 @@ gdk_wayland_surface_request_layout (GdkSurface *surface)
 void
 gdk_wayland_surface_request_frame (GdkSurface *surface)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  struct wl_callback *callback;
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
   GdkFrameClock *clock;
 
-  if (impl->awaiting_frame)
-    return;
+  g_assert (self->frame_callback == NULL);
 
   clock = gdk_surface_get_frame_clock (surface);
 
-  callback = wl_surface_frame (impl->display_server.wl_surface);
-  wl_proxy_set_queue ((struct wl_proxy *) callback, NULL);
-  wl_callback_add_listener (callback, &frame_listener, surface);
-  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  impl->awaiting_frame = TRUE;
+  self->frame_callback = wl_surface_frame (self->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) self->frame_callback, NULL);
+  wl_callback_add_listener (self->frame_callback, &frame_listener, surface);
+  self->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 }
 
 gboolean
@@ -422,9 +415,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
       gdk_wayland_surface_notify_committed (surface);
     }
 
-  if (impl->awaiting_frame &&
+  if (impl->frame_callback &&
       impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
     {
+      g_assert (!impl->awaiting_frame_frozen);
       impl->awaiting_frame_frozen = TRUE;
       gdk_surface_freeze_updates (surface);
     }
@@ -973,7 +967,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   unmap_popups_for_surface (surface);
 
-  impl->awaiting_frame = FALSE;
+  g_clear_pointer (&impl->frame_callback, wl_callback_destroy);
   if (impl->awaiting_frame_frozen)
     {
       impl->awaiting_frame_frozen = FALSE;
