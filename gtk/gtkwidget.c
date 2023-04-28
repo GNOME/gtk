@@ -241,7 +241,7 @@
  *
  * If a widget ends up baseline aligned it will be allocated all the space in
  * the parent as if it was %GTK_ALIGN_FILL, but the selected baseline can be
- * found via [id@gtk_widget_get_allocated_baseline]. If the baseline has a
+ * found via [id@gtk_widget_get_baseline]. If the baseline has a
  * value other than -1 you need to align the widget such that the baseline
  * appears at the position.
  *
@@ -10479,6 +10479,26 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  */
 int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)
+{
+  return gtk_widget_get_baseline (widget);
+}
+
+/**
+ * gtk_widget_get_baseline:
+ * @widget: the widget to query
+ *
+ * Returns the baseline that has currently been allocated to @widget.
+ *
+ * This function is intended to be used when implementing handlers
+ * for the `GtkWidget`Class.snapshot() function, and when allocating
+ * child widgets in `GtkWidget`Class.size_allocate().
+ *
+ * Returns: the baseline of the @widget, or -1 if none
+ *
+ * Since: 4.12
+ */
+int
+gtk_widget_get_baseline (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssStyle *style;
