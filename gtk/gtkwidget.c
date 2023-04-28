@@ -10476,6 +10476,8 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  * child widgets in `GtkWidget`Class.size_allocate().
  *
  * Returns: the baseline of the @widget, or -1 if none
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Widget.get_baseline] instead
  */
 int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)

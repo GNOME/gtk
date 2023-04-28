@@ -473,7 +473,7 @@ GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_baseline)
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);
 
 GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_compute_bounds)
