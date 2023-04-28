@@ -262,6 +262,8 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
 {
   GtkWidget *child;
   int largest_min = 0, largest_nat = 0;
+  int largest_min_above = -1, largest_min_below = -1;
+  int largest_nat_above = -1, largest_nat_below = -1;
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -269,6 +271,8 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
     {
       int child_min = 0;
       int child_nat = 0;
+      int child_min_baseline = -1;
+      int child_nat_baseline = -1;
 
       if (!gtk_widget_should_layout (child))
         continue;
@@ -277,14 +281,34 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
                           OPPOSITE_ORIENTATION (self->orientation),
                           -1,
                           &child_min, &child_nat,
-                          NULL, NULL);
+                          &child_min_baseline, &child_nat_baseline);
 
       largest_min = MAX (largest_min, child_min);
       largest_nat = MAX (largest_nat, child_nat);
+
+      if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (child_min_baseline > -1)
+            {
+              largest_min_above = MAX (largest_min_above, child_min_baseline);
+              largest_min_below = MAX (largest_min_below, child_min - child_min_baseline);
+              largest_nat_above = MAX (largest_nat_above, child_nat_baseline);
+              largest_nat_below = MAX (largest_nat_below, child_nat - child_nat_baseline);
+            }
+        }
+    }
+
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      largest_min = MAX (largest_min, largest_min_above + largest_min_below);
+      largest_nat = MAX (largest_nat, largest_nat_above + largest_nat_below);
     }
 
   *minimum = largest_min;
   *natural = largest_nat;
+
+  *min_baseline = largest_min_above;
+  *nat_baseline = largest_nat_above;
 }
 
 /* if widgets haven't reached their min opposite size at this

@@ -1168,10 +1168,8 @@ gtk_image_measure (GtkWidget      *widget,
   if (orientation == GTK_ORIENTATION_VERTICAL)
     {
       baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
-      if (minimum_baseline)
-        *minimum_baseline = *minimum * baseline_align;
-      if (natural_baseline)
-        *natural_baseline = *natural * baseline_align;
+      *minimum_baseline = *minimum * baseline_align;
+      *natural_baseline = *natural * baseline_align;
     }
 }
 
