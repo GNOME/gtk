@@ -258,7 +258,7 @@ Instead of implementing GtkWidget.destroy, you can implement GObject.dispose.
 GTK 4 removes `gtk_container_add()` and `gtk_container_remove()`. While there
 is not always a replacement for `gtk_container_remove()` in GTK 3, you can
 replace many uses of `gtk_container_add()` with equivalent container-specific
-APIs such as `gtk_box_pack_start()` or `gtk_grid_attach()`, and thereby reduce
+APIs such as `gtk_grid_attach()`, and thereby reduce
 the amount of work you have to do at the time of the switch.
 
 ### Review your use of icon resources
