@@ -32,6 +32,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
+#include "gdk/gdkrectangleprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -72,6 +73,25 @@ _graphene_rect_init_from_clip_extents (graphene_rect_t *rect,
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
   graphene_rect_init (rect, x1c, y1c, x2c - x1c, y2c - y1c);
+}
+
+static void
+region_union_region_affine (cairo_region_t       *region,
+                            const cairo_region_t *sub,
+                            float                 scale_x,
+                            float                 scale_y,
+                            float                 offset_x,
+                            float                 offset_y)
+{
+  cairo_rectangle_int_t rect;
+  int i;
+
+  for (i = 0; i < cairo_region_num_rectangles (sub); i++)
+    {
+      cairo_region_get_rectangle (sub, i, &rect);
+      gdk_rectangle_transform_affine (&rect, scale_x, scale_y, offset_x, offset_y, &rect);
+      cairo_region_union_rectangle (region, &rect);
+    }
 }
 
 /* {{{ GSK_COLOR_NODE */
@@ -3354,11 +3374,22 @@ gsk_transform_node_diff (GskRenderNode  *node1,
       }
       break;
 
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        cairo_region_t *sub;
+        float scale_x, scale_y, dx, dy;
+        gsk_transform_to_affine (self1->transform, &scale_x, &scale_y, &dx, &dy);
+        sub = cairo_region_create ();
+        gsk_render_node_diff (self1->child, self2->child, sub);
+        region_union_region_affine (region, sub, scale_x, scale_y, dx, dy);
+        cairo_region_destroy (sub);
+      }
+      break;
+
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
     default:
       gsk_render_node_diff_impossible (node1, node2, region);
       break;
