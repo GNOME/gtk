@@ -10092,6 +10092,8 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  * So a layout container is guaranteed that its children stay inside
  * the assigned bounds, but not that they have exactly the bounds the
  * container assigned.
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Widget.compute_bounds] or [method@Gtk.Widget.get_width] instead
  */
 void
 gtk_widget_get_allocation (GtkWidget     *widget,
