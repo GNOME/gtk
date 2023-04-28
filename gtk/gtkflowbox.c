@@ -2548,7 +2548,9 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           GtkWidget *child;
 
           child = g_sequence_get (iter);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_widget_get_allocation (GTK_WIDGET (child), &rect);
+G_GNUC_END_IGNORE_DEPRECATIONS
           if (line_rect.width == 0)
             line_rect = rect;
           else
@@ -3350,7 +3352,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
         {
           child = priv->cursor_child;
           iter = CHILD_PRIV (child)->iter;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_widget_get_allocation (GTK_WIDGET (child), &allocation);
+G_GNUC_END_IGNORE_DEPRECATIONS
           start = vertical ? allocation.x : allocation.y;
 
           if (count < 0)
@@ -3369,7 +3373,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
                   /* go up an even number of rows */
                   if (i % priv->cur_children_per_line == 0)
                     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       gtk_widget_get_allocation (GTK_WIDGET (prev), &allocation);
+G_GNUC_END_IGNORE_DEPRECATIONS
                       if ((vertical ? allocation.x : allocation.y) < start - page_size)
                         break;
                     }
@@ -3393,7 +3399,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
 
                   if (i % priv->cur_children_per_line == 0)
                     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       gtk_widget_get_allocation (GTK_WIDGET (next), &allocation);
+G_GNUC_END_IGNORE_DEPRECATIONS
                       if ((vertical ? allocation.x : allocation.y) > start + page_size)
                         break;
                     }
@@ -3402,7 +3410,9 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
                   i++;
                 }
             }
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_widget_get_allocation (GTK_WIDGET (child), &allocation);
+G_GNUC_END_IGNORE_DEPRECATIONS
         }
       break;
 

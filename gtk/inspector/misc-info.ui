@@ -287,14 +287,14 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow" id="allocated_size_row">
+                  <object class="GtkListBoxRow" id="bounds_row">
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Allocation</property>
+                            <property name="label" translatable="yes">Bounds</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -302,7 +302,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="allocated_size">
+                          <object class="GtkLabel" id="bounds">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                           </object>

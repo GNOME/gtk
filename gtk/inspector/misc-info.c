@@ -61,8 +61,8 @@ struct _GtkInspectorMiscInfo
   GtkWidget *measure_expand_toggle;
   GtkWidget *measure_picture;
   GdkPaintable *measure_graph;
-  GtkWidget *allocated_size_row;
-  GtkWidget *allocated_size;
+  GtkWidget *bounds_row;
+  GtkWidget *bounds;
   GtkWidget *baseline_row;
   GtkWidget *baseline;
   GtkWidget *surface_row;
@@ -145,20 +145,22 @@ static void
 update_allocation (GtkWidget            *w,
                    GtkInspectorMiscInfo *sl)
 {
-  GtkAllocation alloc;
+  graphene_rect_t bounds;
   char *size_label;
   GEnumClass *class;
   GEnumValue *value;
 
-  gtk_widget_get_allocation (w, &alloc);
-  size_label = g_strdup_printf ("%d × %d +%d +%d",
-                                alloc.width, alloc.height,
-                                alloc.x, alloc.y);
+  if (!gtk_widget_compute_bounds (w, gtk_widget_get_parent (w), &bounds))
+    graphene_rect_init (&bounds, 0, 0, 0, 0);
 
-  gtk_label_set_label (GTK_LABEL (sl->allocated_size), size_label);
+  size_label = g_strdup_printf ("%g × %g +%g +%g",
+                                bounds.size.width, bounds.size.height,
+                                bounds.origin.x, bounds.origin.y);
+
+  gtk_label_set_label (GTK_LABEL (sl->bounds), size_label);
   g_free (size_label);
 
-  size_label = g_strdup_printf ("%d", gtk_widget_get_allocated_baseline (w));
+  size_label = g_strdup_printf ("%d", gtk_widget_get_baseline (w));
   gtk_label_set_label (GTK_LABEL (sl->baseline), size_label);
   g_free (size_label);
 
@@ -503,7 +505,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->state_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->direction_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->request_mode_row, GTK_IS_WIDGET (object));
-  gtk_widget_set_visible (sl->allocated_size_row, GTK_IS_WIDGET (object));
+  gtk_widget_set_visible (sl->bounds_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->baseline_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->measure_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->measure_info_row, GTK_IS_WIDGET (object));
@@ -610,8 +612,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_expand_toggle);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_picture);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_graph);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, allocated_size_row);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, allocated_size);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, bounds_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, bounds);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, baseline_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, baseline);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, surface_row);

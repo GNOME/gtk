@@ -131,7 +131,7 @@ baseline_widget_snapshot (GtkWidget   *widget,
   GskRoundedRect outline;
 
   height = gtk_widget_get_height (widget);
-  baseline = gtk_widget_get_allocated_baseline (widget);
+  baseline = gtk_widget_get_baseline (widget);
 
   gtk_snapshot_save (snapshot);
 

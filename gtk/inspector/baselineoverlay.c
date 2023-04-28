@@ -36,7 +36,7 @@ recurse_child_widgets (GtkWidget   *widget,
       gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
     }
 
-  baseline = gtk_widget_get_allocated_baseline (widget);
+  baseline = gtk_widget_get_baseline (widget);
 
   if (baseline != -1)
     {

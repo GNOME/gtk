@@ -1014,7 +1014,7 @@ gtk_image_snapshot (GtkWidget   *widget,
 
       x = (width - ceil (w)) / 2;
 
-      baseline = gtk_widget_get_allocated_baseline (widget);
+      baseline = gtk_widget_get_baseline (widget);
       if (baseline == -1)
         y = floor(height - ceil (h)) / 2;
       else
