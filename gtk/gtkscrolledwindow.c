@@ -1855,24 +1855,22 @@ gtk_scrolled_window_snapshot_scrollbars_junction (GtkScrolledWindow *scrolled_wi
                                                   GtkSnapshot       *snapshot)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkAllocation hscr_allocation, vscr_allocation;
+  graphene_rect_t hscr_bounds, vscr_bounds;
   GtkCssStyle *style;
-  GdkRectangle junction_rect;
   GtkCssBoxes boxes;
 
-  gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
-  gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
+  if (!gtk_widget_compute_bounds (GTK_WIDGET (priv->hscrollbar), GTK_WIDGET (scrolled_window), &hscr_bounds))
+    return;
 
-  junction_rect.x = vscr_allocation.x;
-  junction_rect.y = hscr_allocation.y;
-  junction_rect.width = vscr_allocation.width;
-  junction_rect.height = hscr_allocation.height;
+  if (!gtk_widget_compute_bounds (GTK_WIDGET (priv->vscrollbar), GTK_WIDGET (scrolled_window), &vscr_bounds))
+    return;
 
   style = gtk_css_node_get_style (priv->junction_node);
 
   gtk_css_boxes_init_border_box (&boxes, style,
-                                 junction_rect.x, junction_rect.y,
-                                 junction_rect.width, junction_rect.height);
+                                 vscr_bounds.origin.x, hscr_bounds.origin.y,
+                                 vscr_bounds.size.width, hscr_bounds.size.height);
+
   gtk_css_style_snapshot_background (&boxes, snapshot);
   gtk_css_style_snapshot_border (&boxes, snapshot);
 }
