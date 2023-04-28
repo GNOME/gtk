@@ -287,21 +287,30 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
     {
       GstGLSyncMeta *sync_meta;
+      GdkGLTextureBuilder *builder;
 
       sync_meta = gst_buffer_get_gl_sync_meta (buffer);
-      if (sync_meta) {
+      if (sync_meta)
         gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
-        gst_gl_context_activate (self->gst_gdk_context, TRUE);
-        gst_gl_sync_meta_wait (sync_meta, self->gst_gdk_context);
-        gst_gl_context_activate (self->gst_gdk_context, FALSE);
-      }
 
-      texture = gdk_gl_texture_new (self->gdk_context,
-                                    *(guint *) frame->data[0],
-                                    frame->info.width,
-                                    frame->info.height,
-                                    (GDestroyNotify) video_frame_free,
-                                    frame);
+      /* Note: using the gdk_context here is a (harmless) lie,
+       * since the texture really originates in the gst_context.
+       * But that is not a GdkGLContext. It is harmless, because
+       * we are never using the texture in the gdk_context, so we
+       * never make the (erroneous) decision to ignore the sync.
+       */
+      builder = gdk_gl_texture_builder_new ();
+      gdk_gl_texture_builder_set_context (builder, self->gdk_context);
+      gdk_gl_texture_builder_set_id (builder, *(guint *) frame->data[0]);
+      gdk_gl_texture_builder_set_width (builder, frame->info.width);
+      gdk_gl_texture_builder_set_height (builder, frame->info.height);
+      gdk_gl_texture_builder_set_sync (builder, sync_meta ? sync_meta->data : NULL);
+
+      texture = gdk_gl_texture_builder_build (builder,
+                                              (GDestroyNotify) video_frame_free,
+                                              frame);
+
+      g_object_unref (builder);
 
       *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
     }

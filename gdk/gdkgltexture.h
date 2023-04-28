@@ -38,7 +38,7 @@ typedef struct _GdkGLTextureClass       GdkGLTextureClass;
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_gl_texture_get_type                (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(GdkGLTextureBuilder)
 GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    *context,
                                                                 guint            id,
                                                                 int              width,

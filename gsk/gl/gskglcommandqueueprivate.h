@@ -168,9 +168,15 @@ typedef union _GskGLCommandBatch
 
 G_STATIC_ASSERT (sizeof (GskGLCommandBatch) == 32);
 
+typedef struct _GskGLSync {
+  guint id;
+  gpointer sync;
+} GskGLSync;
+
 DEFINE_INLINE_ARRAY (GskGLCommandBatches, gsk_gl_command_batches, GskGLCommandBatch)
 DEFINE_INLINE_ARRAY (GskGLCommandBinds, gsk_gl_command_binds, GskGLCommandBind)
 DEFINE_INLINE_ARRAY (GskGLCommandUniforms, gsk_gl_command_uniforms, GskGLCommandUniform)
+DEFINE_INLINE_ARRAY (GskGLSyncs, gsk_gl_syncs, GskGLSync)
 
 struct _GskGLCommandQueue
 {
@@ -232,6 +238,10 @@ struct _GskGLCommandQueue
    * setting the texture filter, but that needs to be done for every texture.
    */
   GLuint samplers[GSK_GL_N_FILTERS * GSK_GL_N_FILTERS];
+
+  /* Array of sync objects to wait on.
+   */
+  GskGLSyncs syncs;
 
   /* Discovered max texture size when loading the command queue so that we
    * can either scale down or slice textures to fit within this size. Assumed
@@ -369,6 +379,37 @@ gsk_gl_command_queue_bind_framebuffer (GskGLCommandQueue *self,
   guint ret = self->attachments->fbo.id;
   gsk_gl_attachment_state_bind_framebuffer (self->attachments, framebuffer);
   return ret;
+}
+
+static inline GskGLSync *
+gsk_gl_syncs_get_sync (GskGLSyncs *syncs,
+                       guint       id)
+{
+  for (unsigned int i = 0; i < syncs->len; i++)
+    {
+      GskGLSync *sync = &syncs->items[i];
+      if (sync->id == id)
+        return sync;
+    }
+  return NULL;
+}
+
+static inline void
+gsk_gl_syncs_add_sync (GskGLSyncs *syncs,
+                       guint       id,
+                       gpointer    sync)
+{
+  GskGLSync *s;
+
+  s = gsk_gl_syncs_get_sync (syncs, id);
+  if (s)
+    g_assert (s->sync == sync);
+  else
+    {
+      s = gsk_gl_syncs_append (syncs);
+      s->id = id;
+      s->sync = sync;
+    }
 }
 
 G_END_DECLS

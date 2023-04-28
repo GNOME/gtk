@@ -39,6 +39,7 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   guint id;
   gboolean has_mipmap;
+  gpointer sync;
 
   GdkTexture *saved;
 
@@ -99,6 +100,10 @@ gdk_gl_texture_invoke_callback (gpointer data)
   context = gdk_display_get_gl_context (gdk_gl_context_get_display (invoke->self->context));
 
   gdk_gl_context_make_current (context);
+
+  if (invoke->self->sync && context != invoke->self->context)
+    glWaitSync (invoke->self->sync, 0, GL_TIMEOUT_IGNORED);
+
   glBindTexture (GL_TEXTURE_2D, invoke->self->id);
 
   invoke->func (invoke->self, context, invoke->data);
@@ -296,6 +301,12 @@ gdk_gl_texture_has_mipmap (GdkGLTexture *self)
   return self->has_mipmap;
 }
 
+gpointer
+gdk_gl_texture_get_sync (GdkGLTexture *self)
+{
+  return self->sync;
+}
+
 /**
  * gdk_gl_texture_release:
  * @self: a `GdkTexture` wrapping a GL texture
@@ -319,6 +330,30 @@ gdk_gl_texture_release (GdkGLTexture *self)
                                                               gdk_texture_get_format (texture)));
 
   drop_gl_resources (self);
+}
+
+GdkTexture *
+gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
+                                 GDestroyNotify       destroy,
+                                 gpointer             data)
+{
+  GdkGLTexture *self;
+
+  self = g_object_new (GDK_TYPE_GL_TEXTURE,
+                       "width", gdk_gl_texture_builder_get_width (builder),
+                       "height", gdk_gl_texture_builder_get_height (builder),
+                       NULL);
+
+  self->context = g_object_ref (gdk_gl_texture_builder_get_context (builder));
+  self->id = gdk_gl_texture_builder_get_id (builder);
+  GDK_TEXTURE (self)->format = gdk_gl_texture_builder_get_format (builder);
+  self->has_mipmap = gdk_gl_texture_builder_get_has_mipmap (builder);
+  if (gdk_gl_context_has_sync (self->context))
+    self->sync = gdk_gl_texture_builder_get_sync (builder);
+  self->destroy = destroy;
+  self->data = data;
+
+  return GDK_TEXTURE (self);
 }
 
 static void
@@ -463,6 +498,9 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
  *
  * Return value: (transfer full) (type GdkGLTexture): A newly-created
  *   `GdkTexture`
+ *
+ * Deprecated: 4.12: [class@Gdk.GLTextureBuilder] supercedes this function
+ *   and provides extended functionality for creating GL textures.
  */
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,
