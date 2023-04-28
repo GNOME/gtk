@@ -207,7 +207,6 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                      GtkTextIter   *start,
                                      GtkTextIter   *end)
 {
-  GtkAllocation      allocation;
   GdkPaintable      *paintable;
   GtkSnapshot       *snapshot;
   int                layout_width, layout_height;
@@ -244,8 +243,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
   style = gtk_text_attributes_new ();
 
-  gtk_widget_get_allocation (widget, &allocation);
-  layout_width = allocation.width;
+  layout_width = gtk_widget_get_width (widget);
 
   set_attributes_from_style (widget, style);
 
