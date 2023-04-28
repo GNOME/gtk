@@ -42,11 +42,11 @@ struct _GdkWaylandSurface
   } display_server;
 
   struct wl_event_queue *event_queue;
+  struct wl_callback *frame_callback;
 
   unsigned int initial_configure_received : 1;
   unsigned int has_uncommitted_ack_configure : 1;
   unsigned int mapped : 1;
-  unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
 
   int pending_buffer_offset_x;
