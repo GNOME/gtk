@@ -6234,7 +6234,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
   const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
+  graphene_point_t p;
   gboolean has_selection;
   int start_x, end_x;
   GtkWidget *box;
@@ -6279,13 +6279,15 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
 
   g_object_unref (model);
 
-  gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
+  if (!gtk_widget_compute_point (GTK_WIDGET (self), gtk_widget_get_parent (GTK_WIDGET (self)),
+                                 &GRAPHENE_POINT_INIT (0, 0), &p))
+    graphene_point_init (&p, 0, 0);
 
   gtk_text_get_cursor_locations (self, &start_x, NULL);
 
   start_x -= priv->scroll_offset;
   start_x = CLAMP (start_x, 0, text_width);
-  rect.y = - allocation.y;
+  rect.y = - p.y;
   rect.height = text_height;
 
   if (has_selection)
@@ -6293,12 +6295,12 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
       end_x = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
       end_x = CLAMP (end_x, 0, text_width);
 
-      rect.x = - allocation.x + MIN (start_x, end_x);
+      rect.x = - p.x + MIN (start_x, end_x);
       rect.width = ABS (end_x - start_x);
     }
   else
     {
-      rect.x = - allocation.x + start_x;
+      rect.x = - p.x + start_x;
       rect.width = 0;
     }
 
