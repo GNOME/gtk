@@ -116,19 +116,12 @@ docs/reference/gtk/html/gtk-building.html
 
 Or [online](https://docs.gtk.org/gtk4/building.html)
 
-Default branch renamed to `main`
---------------------------------
+Building from git
+-----------------
 
-The default development branch of GTK has been renamed to `main`.
-To update your local checkout, use:
-```sh
-git checkout master
-git branch -m master main
-git fetch
-git branch --unset-upstream
-git branch -u origin/main
-git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
-```
+The GTK sources are hosted on [gitlab.gnome.org](http://gitlab.gnome.org). The main
+development branch is called `main`, and stable branches are named after their minor
+version, for example `gtk-4-10`.
 
 How to report bugs
 ------------------
