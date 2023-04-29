@@ -2738,7 +2738,7 @@ gtk_widget_real_show (GtkWidget *widget)
  * gtk_widget_hide:
  * @widget: a `GtkWidget`
  *
- * Reverses the effects of gtk_widget_show().
+ * Reverses the effects of [method@Gtk.Widget.show].
  *
  * This is causing the widget to be hidden (invisible to the user).
  *
@@ -3070,7 +3070,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
  * @id: an id returned by [method@Gtk.Widget.add_tick_callback]
  *
  * Removes a tick callback previously registered with
- * gtk_widget_add_tick_callback().
+ * [method@Gtk.Widget.add_tick_callback].
  */
 void
 gtk_widget_remove_tick_callback (GtkWidget *widget,
@@ -3598,9 +3598,9 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
  * [class@Gtk.Label], the label queues a resize to ensure there’s
  * enough space for the new text.
  *
- * Note that you cannot call gtk_widget_queue_resize() on a widget
+ * Note that you cannot call [method@Gtk.Widget.queue_resize] on a widget
  * from inside its implementation of the [vfunc@Gtk.Widget.size_allocate]
- * virtual method. Calls to gtk_widget_queue_resize() from inside
+ * virtual method. Calls to [method@Gtk.Widget.queue_resize] from inside
  * [vfunc@Gtk.Widget.size_allocate] will be silently ignored.
  *
  * This function is only for use in widget implementations.
@@ -3634,7 +3634,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
  * clock, but won’t necessarily repaint any widgets. To repaint a
  * widget, you have to use [method@Gtk.Widget.queue_draw] which invalidates
  * the widget (thus scheduling it to receive a draw on the next
- * frame). gtk_widget_queue_draw() will also end up requesting a frame
+ * frame). [method@Gtk.Widget.queue_draw] will also end up requesting a frame
  * on the appropriate frame clock.
  *
  * A widget’s frame clock will not change while the widget is
@@ -4275,7 +4275,7 @@ gtk_widget_compute_point (GtkWidget              *widget,
  * with arguments read according to @format_string.
  *
  * The arguments and format string must be provided in the same way as
- * with g_variant_new().
+ * with [ctor@GLib.Variant.new].
  *
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
@@ -4325,7 +4325,7 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
  * @signal with arguments read according to @format_string.
  *
  * The arguments and format string must be provided in the same way as
- * with g_variant_new().
+ * with [ctor@GLib.Variant.new].
  *
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
@@ -4375,7 +4375,7 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
  * @action_name with arguments read according to @format_string.
  *
  * The arguments and format string must be provided in the same way as
- * with g_variant_new().
+ * with [ctor@GLib.Variant.new].
  *
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
@@ -4796,8 +4796,8 @@ gtk_widget_class_get_activate_signal (GtkWidgetClass *widget_class)
  *
  * The signal will be emitted when calling [method@Gtk.Widget.activate].
  *
- * The @signal_id must have been registered with `g_signal_new()`
- * or g_signal_newv() before calling this function.
+ * The @signal_id must have been registered with [func@GObject.signal_new]
+ * before calling this function.
  */
 void
 gtk_widget_class_set_activate_signal (GtkWidgetClass *widget_class,
@@ -4820,7 +4820,7 @@ gtk_widget_class_set_activate_signal (GtkWidgetClass *widget_class,
  * The signal will be emitted when calling [method@Gtk.Widget.activate].
  *
  * The @signal_name of @widget_type must have been registered with
- * g_signal_new() or g_signal_newv() before calling this function.
+ * [func@GObject.signal_new] before calling this function.
  */
 void
 gtk_widget_class_set_activate_signal_from_name (GtkWidgetClass *widget_class,
@@ -6758,7 +6758,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
  * gtk_widget_get_child_visible:
  * @widget: a `GtkWidget`
  *
- * Gets the value set with gtk_widget_set_child_visible().
+ * Gets the value set with [method@Gtk.Widget.set_child_visible].
  *
  * If you feel a need to use this function, your code probably
  * needs reorganization.
@@ -7100,7 +7100,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
  * @height: (out) (optional): return location for height
  *
  * Gets the size request that was explicitly set for the widget using
- * gtk_widget_set_size_request().
+ * [method@Gtk.Widget.set_size_request].
  *
  * A value of -1 stored in @width or @height indicates that that
  * dimension has not been set explicitly and the natural requisition
@@ -8343,7 +8343,7 @@ gtk_widget_set_hexpand (GtkWidget      *widget,
  * gtk_widget_get_hexpand_set: (attributes org.gtk.Method.get_property=hexpand-set)
  * @widget: the widget
  *
- * Gets whether gtk_widget_set_hexpand() has been used
+ * Gets whether [method@Gtk.Widget.set_hexpand] has been used
  * to explicitly set the expand flag on this widget.
  *
  * If [property@Gtk.Widget:hexpand] property is set, then it
@@ -8440,7 +8440,7 @@ gtk_widget_set_vexpand (GtkWidget      *widget,
  * gtk_widget_get_vexpand_set: (attributes org.gtk.Method.get_property=vexpand-set)
  * @widget: the widget
  *
- * Gets whether gtk_widget_set_vexpand() has been used to
+ * Gets whether [method@Gtk.Widget.set_vexpand] has been used to
  * explicitly set the expand flag on this widget.
  *
  * See [method@Gtk.Widget.get_hexpand_set] for more detail.
@@ -10479,8 +10479,8 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  * Returns the baseline that has currently been allocated to @widget.
  *
  * This function is intended to be used when implementing handlers
- * for the `GtkWidget`Class.snapshot() function, and when allocating
- * child widgets in `GtkWidget`Class.size_allocate().
+ * for the [vfunc@Gtk.Widget.snapshot] function, and when allocating
+ * child widgets in [vfunc@Gtk.Widget.size_allocate].
  *
  * Returns: the baseline of the @widget, or -1 if none
  *
@@ -10499,8 +10499,8 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  * Returns the baseline that has currently been allocated to @widget.
  *
  * This function is intended to be used when implementing handlers
- * for the `GtkWidget`Class.snapshot() function, and when allocating
- * child widgets in `GtkWidget`Class.size_allocate().
+ * for the [vfunc@Gtk.Widget.snapshot] function, and when allocating
+ * child widgets in [vfunc@Gtk.Widget.size_allocate].
  *
  * Returns: the baseline of the @widget, or -1 if none
  *
@@ -10543,7 +10543,7 @@ gtk_widget_get_baseline (GtkWidget *widget)
  * there are some limitations: For toplevel widgets, applying opacity
  * depends on the capabilities of the windowing system. On X11, this
  * has any effect only on X displays with a compositing manager,
- * see gdk_display_is_composited(). On Windows and Wayland it should
+ * see [method@Gdk.Display.is_composited]. On Windows and Wayland it should
  * always work, although setting a window’s opacity after the window
  * has been shown may cause some flicker.
  *
@@ -11226,8 +11226,8 @@ out:
  * in the instance private data structure, the field will be set to `NULL`
  * after this function returns.
  *
- * You should call this function inside the `GObjectClass.dispose()`
- * implementation of any widget that called `gtk_widget_init_template()`.
+ * You should call this function inside the [vfunc@GObject.Object.dispose]
+ * implementation of any widget that called [method@Gtk.Widget.init_template]`.
  * Typically, you will want to call this function last, right before
  * chaining up to the parent type's dispose implementation, e.g.
  *
@@ -11467,10 +11467,10 @@ gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
  *
  * An explicit strong reference will be held automatically for the duration
  * of your instance’s life cycle, it will be released automatically when
- * `GObjectClass.dispose()` runs on your instance and if a @struct_offset
+ * [vfunc@GObject.Object.dispose] runs on your instance and if a @struct_offset
  * that is `!= 0` is specified, then the automatic location in your instance
  * public or private data will be set to %NULL. You can however access an
- * automated child pointer the first time your classes `GObjectClass.dispose()`
+ * automated child pointer the first time your classes [vfunc@GObject.Object.dispose]`
  * runs, or alternatively in [signal@Gtk.Widget::destroy].
  *
  * If @internal_child is specified, [vfunc@Gtk.Buildable.get_internal_child]
@@ -11560,7 +11560,7 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * inserted.
  *
  * The arguments must match the actions expected parameter type,
- * as returned by `g_action_get_parameter_type()`.
+ * as returned by [method@Gio.Action.get_parameter_type].
  *
  * Returns: %TRUE if the action was activated, %FALSE if the
  *   action does not exist.
@@ -12258,13 +12258,13 @@ gtk_widget_forall (GtkWidget   *widget,
  * to all children. This function provides a convenient way
  * of doing this. A widget, when it receives a call to its
  * [vfunc@Gtk.Widget.snapshot] function, calls
- * gtk_widget_snapshot_child() once for each child, passing in
+ * this method once for each child, passing in
  * the @snapshot the widget received.
  *
- * gtk_widget_snapshot_child() takes care of translating the origin of
+ * It also takes care of translating the origin of
  * @snapshot, and deciding whether the child needs to be snapshot.
  *
- * This function does nothing for children that implement `GtkNative`.
+ * This function does nothing for children that implement [iface@Gtk.Native].
  */
 void
 gtk_widget_snapshot_child (GtkWidget   *widget,
@@ -12860,7 +12860,7 @@ gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
  * @enabled: whether the action is now enabled
  *
  * Enable or disable an action installed with
- * gtk_widget_class_install_action().
+ * [vfunc@Gtk.Widget.install_action].
  */
 void
 gtk_widget_action_set_enabled (GtkWidget  *widget,
