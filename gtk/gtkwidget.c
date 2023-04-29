@@ -2308,7 +2308,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
   priv->baseline = -1;
-  priv->allocated_size_baseline = -1;
+  priv->allocated_baseline = -1;
 
   priv->sensitive = TRUE;
   priv->alloc_needed = TRUE;
@@ -2806,7 +2806,7 @@ gtk_widget_real_hide (GtkWidget *widget)
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
   priv->allocated_width = 0;
   priv->allocated_height = 0;
-  priv->allocated_size_baseline = 0;
+  priv->allocated_baseline = 0;
   g_clear_pointer (&priv->transform, gsk_transform_unref);
   priv->width = 0;
   priv->height = 0;
@@ -3979,14 +3979,14 @@ gtk_widget_allocate (GtkWidget    *widget,
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
-  baseline_changed = priv->allocated_size_baseline != baseline;
+  baseline_changed = priv->allocated_baseline != baseline;
   transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
 
   gsk_transform_unref (priv->allocated_transform);
   priv->allocated_transform = gsk_transform_ref (transform);
   priv->allocated_width = width;
   priv->allocated_height = height;
-  priv->allocated_size_baseline = baseline;
+  priv->allocated_baseline = baseline;
 
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     adjusted.x = priv->margin.left;
@@ -5730,7 +5730,7 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
       priv->allocated_width = 0;
       priv->allocated_height = 0;
-      priv->allocated_size_baseline = 0;
+      priv->allocated_baseline = 0;
       g_clear_pointer (&priv->transform, gsk_transform_unref);
       priv->width = 0;
       priv->height = 0;
@@ -10764,7 +10764,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
       gtk_widget_allocate (widget,
                            priv->allocated_width,
                            priv->allocated_height,
-                           priv->allocated_size_baseline,
+                           priv->allocated_baseline,
                            gsk_transform_ref (priv->allocated_transform));
     }
   else

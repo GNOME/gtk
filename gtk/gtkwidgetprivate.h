@@ -153,7 +153,7 @@ struct _GtkWidgetPrivate
   GskTransform *allocated_transform;
   int allocated_width;
   int allocated_height;
-  int allocated_size_baseline;
+  int allocated_baseline;
 
   int width;
   int height;
