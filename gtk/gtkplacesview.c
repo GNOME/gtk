@@ -1693,19 +1693,17 @@ _popover_set_pointing_to_widget (GtkPopover *popover,
 {
   GtkWidget *parent;
   graphene_point_t p;
-  double x, y, w, h;
+  double w, h;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
 
   if (!gtk_widget_compute_point (target, parent, &GRAPHENE_POINT_INIT (0, 0), &p))
     return;
 
-  x = p.x;
-  y = p.y;
-  w = gtk_widget_get_allocated_width (GTK_WIDGET (target));
-  h = gtk_widget_get_allocated_height (GTK_WIDGET (target));
+  w = gtk_widget_get_width (target);
+  h = gtk_widget_get_height (target);
 
-  gtk_popover_set_pointing_to (popover, &(GdkRectangle){x, y, w, h});
+  gtk_popover_set_pointing_to (popover, &(GdkRectangle){p.x, p.y, w, h});
 }
 
 static gboolean
