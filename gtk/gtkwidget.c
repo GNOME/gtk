@@ -3805,15 +3805,15 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                                    int           *baseline)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  int natural_width, natural_height;
+  int natural_width, natural_height, nat_baseline;
   int min_width, min_height;
-  int nat_baseline;
 
   if (priv->halign == GTK_ALIGN_FILL && priv->valign == GTK_ALIGN_FILL)
-    return;
+    goto out;
 
   /* Note that adjust_for_align removes any margins from the
-   * allocated sizes and possibly limits them to the natural sizes */
+   * allocated sizes and possibly limits them to the natural sizes
+   */
 
   if (priv->halign == GTK_ALIGN_FILL ||
       (priv->valign != GTK_ALIGN_FILL &&
@@ -3830,7 +3830,7 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         natural_width - priv->margin.left - priv->margin.right,
                         &allocation->x,
                         &allocation->width,
-                        -1, NULL);
+                        -1, baseline);
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                           allocation->width + priv->margin.left + priv->margin.right,
                           NULL, &natural_height, NULL, &nat_baseline);
@@ -3838,7 +3838,7 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         natural_height - priv->margin.top - priv->margin.bottom,
                         &allocation->y,
                         &allocation->height,
-                        nat_baseline - priv->margin.top,
+                        nat_baseline > -1 ? nat_baseline - priv->margin.top : -1,
                         baseline);
     }
   else
@@ -3851,10 +3851,10 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                           NULL, &natural_height, NULL, &nat_baseline);
       natural_height = MAX (min_height, natural_height);
       adjust_for_align (priv->valign,
-                                natural_height - priv->margin.top - priv->margin.bottom,
+                        natural_height - priv->margin.top - priv->margin.bottom,
                         &allocation->y,
                         &allocation->height,
-                        nat_baseline - priv->margin.top,
+                        nat_baseline > -1 ? nat_baseline - priv->margin.top : -1,
                         baseline);
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           allocation->height + priv->margin.top + priv->margin.bottom,
@@ -3865,6 +3865,10 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->width,
                         -1, NULL);
     }
+
+out:
+  if (priv->valign != GTK_ALIGN_BASELINE)
+    *baseline = -1;
 }
 
 static void
@@ -3928,6 +3932,9 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
+
+  if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkScale") == 0)
+    g_print ("scale allocate: %d %d %d\n", width, height, baseline);
 
   gtk_widget_push_verify_invariants (widget);
 
@@ -10515,6 +10522,9 @@ gtk_widget_get_baseline (GtkWidget *widget)
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
+
+  if (strcmp (G_OBJECT_TYPE_NAME (widget),"GtkScale") == 0)
+    g_print ("baseline %d -> %d\n", priv->baseline, priv->baseline - margin.top - border.top - padding.top);
 
   return priv->baseline - margin.top - border.top - padding.top;
 }
