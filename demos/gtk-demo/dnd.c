@@ -109,15 +109,21 @@ static void
 apply_transform (CanvasItem *item)
 {
   GskTransform *transform;
+  graphene_rect_t bounds;
   double x, y;
 
-  x = gtk_widget_get_allocated_width (item->label) / 2.0;
-  y = gtk_widget_get_allocated_height (item->label) / 2.0;
-  item->r = sqrt (x*x + y*y);
+  /* Add css padding and margin */
+  if (!gtk_widget_compute_bounds (item->label, item->label, &bounds))
+    return;
+
+  x = bounds.size.width / 2.;
+  y = bounds.size.height / 2.;
+
+  item->r = sqrt (x * x + y * y);
 
   transform = gsk_transform_translate (NULL, &(graphene_point_t) { item->r, item->r });
   transform = gsk_transform_rotate (transform, item->angle + item->delta);
-  transform = gsk_transform_translate (transform, &(graphene_point_t) { -x, -y });
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (-x, -y));
 
   gtk_fixed_set_child_transform (GTK_FIXED (item->fixed), item->label, transform);
   gsk_transform_unref (transform);

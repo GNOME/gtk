@@ -471,7 +471,7 @@ suggestion_entry_size_allocate (GtkWidget *widget,
                               &(GtkAllocation) { width - arrow_nat, 0, arrow_nat, height },
                               baseline);
 
-  gtk_widget_set_size_request (self->popup, gtk_widget_get_allocated_width (GTK_WIDGET (self)), -1);
+  gtk_widget_set_size_request (self->popup, gtk_widget_get_width (GTK_WIDGET (self)), -1);
   gtk_widget_queue_resize (self->popup);
 
   gtk_popover_present (GTK_POPOVER (self->popup));

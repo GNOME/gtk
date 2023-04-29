@@ -42,8 +42,8 @@ val_to_xy (GtkFontPlane *plane,
   double u, v;
   int width, height;
 
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
+  width = gtk_widget_get_width (GTK_WIDGET (plane));
+  height = gtk_widget_get_height (GTK_WIDGET (plane));
 
   u = adjustment_get_normalized_value (plane->width_adj);
   v = adjustment_get_normalized_value (plane->weight_adj);
@@ -62,8 +62,8 @@ plane_snapshot (GtkWidget   *widget,
   cairo_t *cr;
 
   val_to_xy (plane, &x, &y);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (0, 0, width, height));
@@ -131,8 +131,8 @@ update_value (GtkFontPlane *plane,
   GtkWidget *widget = GTK_WIDGET (plane);
   double u, v;
 
-  u = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
-  v = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
+  u = CLAMP (x * (1.0 / gtk_widget_get_width (widget)), 0, 1);
+  v = CLAMP (1 - y * (1.0 / gtk_widget_get_height (widget)), 0, 1);
 
   adjustment_set_normalized_value (plane->width_adj, u);
   adjustment_set_normalized_value (plane->weight_adj, v);
