@@ -996,6 +996,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkEventController *controller;
   GtkGesture *gesture;
+  GtkLayoutManager *layout;
 
   spin_button->adjustment = NULL;
   spin_button->timer = 0;
@@ -1010,6 +1011,9 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->wrap = FALSE;
   spin_button->snap_to_ticks = FALSE;
   spin_button->width_chars = -1;
+
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (spin_button));
+  gtk_box_layout_set_baseline_child (GTK_BOX_LAYOUT (layout), 1);
 
   gtk_widget_update_orientation (GTK_WIDGET (spin_button), GTK_ORIENTATION_HORIZONTAL);
 
@@ -1058,8 +1062,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
   g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button->up_button), GTK_EVENT_CONTROLLER (gesture));
-  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->up_button)),
-		     gesture);
+  gtk_gesture_group (gtk_button_get_gesture (GTK_BUTTON (spin_button->up_button)), gesture);
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
 
@@ -1075,7 +1078,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                              GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
-				                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+                                                GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (scroll_controller_scroll), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
