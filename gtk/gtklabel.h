@@ -183,6 +183,12 @@ void             gtk_label_set_tabs (GtkLabel      *self,
 GDK_AVAILABLE_IN_4_8
 PangoTabArray * gtk_label_get_tabs  (GtkLabel      *self);
 
+GDK_AVAILABLE_IN_4_12
+void             gtk_label_set_baseline_row (GtkLabel     *self,
+                                             unsigned int  baseline_row);
+
+GDK_AVAILABLE_IN_4_12
+unsigned int     gtk_label_get_baseline_row (GtkLabel *self);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
