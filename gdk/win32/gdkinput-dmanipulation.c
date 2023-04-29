@@ -478,7 +478,7 @@ void gdk_dmanipulation_initialize (void)
           if (hr == REGDB_E_CLASSNOTREG || hr == E_NOINTERFACE);
             /* Not an error,
              * DirectManipulation is not available */
-          else HR_LOG (hr);
+          else HR_CHECK (hr);
         }
     }
 }

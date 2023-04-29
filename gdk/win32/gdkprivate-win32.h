@@ -299,8 +299,6 @@ hr_check (HRESULT         hr,
 #define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
 
-#define HR_LOG(hr)
-
 #define HR_CHECK_RETURN(hr) { if G_UNLIKELY (FAILED (hr)) return; }
 #define HR_CHECK_RETURN_VAL(hr, val) { if G_UNLIKELY (FAILED (hr)) return val; }
 #define HR_CHECK_GOTO(hr, label) { if G_UNLIKELY (FAILED (hr)) goto label; }

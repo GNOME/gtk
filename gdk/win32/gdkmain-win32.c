@@ -101,7 +101,7 @@ gdk_win32_ensure_com (void)
                      "thread with an incompatible apartment model");
         break;
         default:
-          HR_LOG (hr);
+          HR_CHECK (hr);
         break;
         }
     }
@@ -124,7 +124,7 @@ gdk_win32_ensure_ole (void)
                      "the thread has an incompatible apartment model");
         break;
         default:
-          HR_LOG (hr);
+          HR_CHECK (hr);
         break;
         }
     }
