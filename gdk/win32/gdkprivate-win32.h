@@ -251,11 +251,38 @@ void   _gdk_win32_print_event            (GdkEvent     *event);
 
 #endif
 
-char   *_gdk_win32_last_error_string (void);
 void    _gdk_win32_api_failed        (const char *where,
                                       const char *api);
 void    _gdk_other_api_failed        (const char *where,
                                       const char *api);
+
+static inline HRESULT
+hr_check (HRESULT         hr,
+          const char     *domain,
+          const char     *file,
+          const char     *line,
+          const char     *func,
+          const char     *expr)
+{
+  char *error_string;
+
+  if (G_LIKELY (SUCCEEDED (hr)))
+    return hr;
+
+  error_string = g_win32_error_message (hr);
+
+  g_log_structured_standard (domain,
+                             G_LOG_LEVEL_WARNING, 
+                             file,
+                             line,
+                             func,
+                             "%s = 0x%lx: %s", expr, hr, error_string);
+  g_free (error_string);
+
+  return hr;
+}
+
+#define HR_CHECK(expr) hr_check (expr, G_LOG_DOMAIN, __FILE__, G_STRINGIFY (__LINE__), G_STRFUNC, #expr);
 
 #define WIN32_API_FAILED(api) _gdk_win32_api_failed (G_STRLOC , api)
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
