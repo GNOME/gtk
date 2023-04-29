@@ -173,15 +173,6 @@ get_wgl_pfd (HDC                    hdc,
 
       /* end of "Update PIXEL_ATTRIBUTES above if any groups are added here!" */
 
-      if (display_win32->hasWglARBmultisample)
-        {
-          pixelAttribs[i++] = WGL_SAMPLE_BUFFERS_ARB;
-          pixelAttribs[i++] = 1;
-
-          pixelAttribs[i++] = WGL_SAMPLES_ARB;
-          pixelAttribs[i++] = 8;
-        }
-
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
       g_assert (i <= PIXEL_ATTRIBUTES);
       best_pf = gdk_init_dummy_wgl_context (display_win32);
@@ -335,8 +326,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     epoxy_has_wgl_extension (hdc, "WGL_OML_sync_control");
   display_win32->hasWglARBPixelFormat =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_pixel_format");
-  display_win32->hasWglARBmultisample =
-    epoxy_has_wgl_extension (hdc, "WGL_ARB_multisample");
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
@@ -357,15 +346,13 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
                          "\t* WGL_EXT_swap_control: %s\n"
-                         "\t* WGL_OML_sync_control: %s\n"
-                         "\t* WGL_ARB_multisample: %s\n",
+                         "\t* WGL_OML_sync_control: %s\n",
                          major, minor,
                          glGetString (GL_VENDOR),
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
-                         display_win32->hasWglARBmultisample ? "yes" : "no"));
+                         display_win32->hasWglOMLSyncControl ? "yes" : "no"));
   }
 #endif
 
