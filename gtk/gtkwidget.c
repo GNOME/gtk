@@ -3933,9 +3933,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
 
-  if (strcmp (G_OBJECT_TYPE_NAME (widget), "GtkScale") == 0)
-    g_print ("scale allocate: %d %d %d\n", width, height, baseline);
-
   gtk_widget_push_verify_invariants (widget);
 
   if (!priv->visible && !GTK_IS_ROOT (widget))
@@ -10522,9 +10519,6 @@ gtk_widget_get_baseline (GtkWidget *widget)
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
-
-  if (strcmp (G_OBJECT_TYPE_NAME (widget),"GtkScale") == 0)
-    g_print ("baseline %d -> %d\n", priv->baseline, priv->baseline - margin.top - border.top - padding.top);
 
   return priv->baseline - margin.top - border.top - padding.top;
 }

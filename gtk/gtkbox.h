@@ -86,6 +86,12 @@ void        gtk_box_set_baseline_position (GtkBox             *box,
 GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
+GDK_AVAILABLE_IN_4_12
+void        gtk_box_set_baseline_child (GtkBox         *box,
+                                        int             child);
+GDK_AVAILABLE_IN_4_12
+int         gtk_box_get_baseline_child (GtkBox         *box);
+
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_append             (GtkBox         *box,
                                         GtkWidget      *child);

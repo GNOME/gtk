@@ -51,7 +51,7 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkgridlayout.h"
+#include "gtkboxlayout.h"
 #include "gtktextprivate.h"
 
 #include <stdio.h>
@@ -587,7 +587,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_GRID_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("spinbutton"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SPIN_BUTTON);
 }
@@ -813,7 +813,7 @@ gtk_spin_button_get_property (GObject      *object,
        g_value_set_double (value, gtk_adjustment_get_value (spin_button->adjustment));
       break;
     case PROP_ORIENTATION:
-      g_value_set_enum (value, spin_button->orientation);
+      g_value_set_enum (value, gtk_orientable_get_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (spin_button)))));
       break;
     case PROP_EDITING_CANCELED:
       g_value_set_boolean (value, spin_button->editing_canceled);
@@ -992,52 +992,11 @@ key_controller_focus_out (GtkEventController   *controller,
 }
 
 static void
-gtk_spin_button_update_orientation (GtkSpinButton *spin_button)
-{
-  GtkLayoutManager *layout;
-  GtkGridLayoutChild *child;
-
-  layout = gtk_widget_get_layout_manager (GTK_WIDGET (spin_button));
-
-  if (spin_button->orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gtk_grid_layout_set_baseline_row (GTK_GRID_LAYOUT (layout), 0);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->entry));
-      gtk_grid_layout_child_set_row (child, 0);
-      gtk_grid_layout_child_set_column (child, 0);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->up_button));
-      gtk_grid_layout_child_set_row (child, 0);
-      gtk_grid_layout_child_set_column (child, 1);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->down_button));
-      gtk_grid_layout_child_set_row (child, 0);
-      gtk_grid_layout_child_set_column (child, 2);
-    }
-  else
-    {
-      gtk_grid_layout_set_baseline_row (GTK_GRID_LAYOUT (layout), 1);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->up_button));
-      gtk_grid_layout_child_set_row (child, 0);
-      gtk_grid_layout_child_set_column (child, 0);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->entry));
-      gtk_grid_layout_child_set_row (child, 1);
-      gtk_grid_layout_child_set_column (child, 0);
-
-      child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout, spin_button->down_button));
-      gtk_grid_layout_child_set_row (child, 2);
-      gtk_grid_layout_child_set_column (child, 0);
-    }
-}
-
-static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkEventController *controller;
   GtkGesture *gesture;
+  GtkLayoutManager *layout;
 
   spin_button->adjustment = NULL;
   spin_button->timer = 0;
@@ -1052,6 +1011,9 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->wrap = FALSE;
   spin_button->snap_to_ticks = FALSE;
   spin_button->width_chars = -1;
+
+  layout = gtk_widget_get_layout_manager (GTK_WIDGET (spin_button));
+  gtk_box_layout_set_baseline_child (GTK_BOX_LAYOUT (layout), 1);
 
   gtk_widget_update_orientation (GTK_WIDGET (spin_button), GTK_ORIENTATION_HORIZONTAL);
 
@@ -1129,8 +1091,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (controller, "leave",
                     G_CALLBACK (key_controller_focus_out), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
-
-  gtk_spin_button_update_orientation (spin_button);
 }
 
 static void
@@ -1234,12 +1194,14 @@ static void
 gtk_spin_button_set_orientation (GtkSpinButton  *spin,
                                  GtkOrientation  orientation)
 {
+  GtkBoxLayout *layout_manager;
   GtkEditable *editable = GTK_EDITABLE (spin->entry);
 
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (spin)) == orientation)
     return;
 
-  spin->orientation = orientation;
+  layout_manager = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (spin)));
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout_manager), orientation);
 
   gtk_widget_update_orientation (GTK_WIDGET (spin), orientation);
 
@@ -1251,7 +1213,16 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
            gtk_editable_get_alignment (editable) == 0.5)
     gtk_editable_set_alignment (editable, 0.0);
 
-  gtk_spin_button_update_orientation (spin);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      /* Current orientation of the box is vertical! */
+      gtk_widget_insert_after (spin->up_button, GTK_WIDGET (spin), spin->down_button);
+    }
+  else
+    {
+      /* Current orientation of the box is horizontal! */
+      gtk_widget_insert_before (spin->up_button, GTK_WIDGET (spin), spin->entry);
+    }
 
   g_object_notify (G_OBJECT (spin), "orientation");
 }
