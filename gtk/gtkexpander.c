@@ -184,8 +184,10 @@ static void     gtk_expander_realize        (GtkWidget        *widget);
 static void     gtk_expander_unrealize      (GtkWidget        *widget);
 static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
+
 static void     gtk_expander_map            (GtkWidget        *widget);
 static void     gtk_expander_unmap          (GtkWidget        *widget);
+
 static gboolean gtk_expander_draw           (GtkWidget        *widget,
                                              cairo_t          *cr);
 
@@ -203,6 +205,9 @@ static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
 static void     gtk_expander_drag_leave     (GtkWidget        *widget,
                                              GdkDragContext   *context,
                                              guint             time);
+
+static void gtk_expander_update_child_mapped (GtkExpander *expander,
+                                              GtkWidget   *child);
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -696,7 +701,8 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 static void
 gtk_expander_map (GtkWidget *widget)
 {
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
+  GtkExpander *expander = GTK_EXPANDER (widget);
+  GtkExpanderPrivate *priv = expander->priv;
 
   if (priv->label_widget)
     gtk_widget_map (priv->label_widget);
@@ -705,6 +711,8 @@ gtk_expander_map (GtkWidget *widget)
 
   if (priv->event_window)
     gdk_window_show (priv->event_window);
+
+  gtk_expander_update_child_mapped (expander, NULL);
 }
 
 static void
@@ -1100,6 +1108,9 @@ gtk_expander_update_child_mapped (GtkExpander *expander,
   /* If collapsing, we must unmap the child, as gtk_box_gadget_remove() does
    * not, so otherwise the child is not drawn but still consumes input in-place.
    */
+
+  if (child == NULL)
+    child = gtk_bin_get_child (GTK_BIN (expander));
 
   if (expander->priv->expanded &&
       gtk_widget_get_realized (child) &&
