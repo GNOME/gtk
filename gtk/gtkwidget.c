@@ -10433,6 +10433,8 @@ gtk_widget_compute_bounds (GtkWidget       *widget,
  * system [overview](coordinates.html).
  *
  * Returns: the width of the @widget
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Widget.get_width] instead
  */
 int
 gtk_widget_get_allocated_width (GtkWidget *widget)
@@ -10456,6 +10458,8 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
  * system [overview](coordinates.html).
  *
  * Returns: the height of the @widget
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Widget.get_height] instead
  */
 int
 gtk_widget_get_allocated_height (GtkWidget *widget)

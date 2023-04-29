@@ -469,9 +469,9 @@ void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_width)
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_height)
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
 GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_baseline)
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);

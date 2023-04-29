@@ -1216,8 +1216,8 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   GtkCssStyle *style;
   GtkBorder shadow_width;
 
-  popover_width = gtk_widget_get_allocated_width (widget);
-  popover_height = gtk_widget_get_allocated_height (widget);
+  popover_width = gtk_widget_get_width (widget);
+  popover_height = gtk_widget_get_height (widget);
 
   compute_surface_pointing_to (popover, &rect);
 

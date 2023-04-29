@@ -51,6 +51,7 @@ update_transform (GtkZoom *zoom)
   GtkLayoutManager *manager;
   GtkLayoutChild *child;
   GskTransform *transform;
+  graphene_rect_t bounds;
   int w, h;
   int x, y;
 
@@ -60,8 +61,11 @@ update_transform (GtkZoom *zoom)
   w = gtk_widget_get_width (GTK_WIDGET (zoom));
   h = gtk_widget_get_height (GTK_WIDGET (zoom));
 
-  x = gtk_widget_get_allocated_width (GTK_WIDGET (zoom->child));
-  y = gtk_widget_get_allocated_height (GTK_WIDGET (zoom->child));
+  if (!gtk_widget_compute_bounds (GTK_WIDGET (zoom->child), GTK_WIDGET (zoom->child), &bounds))
+    return;
+
+  x = bounds.size.width;
+  y = bounds.size.height;
 
   transform = NULL;
   transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (w/2, h/2));

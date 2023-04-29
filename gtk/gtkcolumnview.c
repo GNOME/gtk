@@ -1246,7 +1246,7 @@ update_column_reorder (GtkColumnView *self,
   int size;
 
   column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (self->header));
+  width = gtk_widget_get_width (GTK_WIDGET (self->header));
   gtk_column_view_column_get_allocation (column, NULL, &size);
 
   self->drag_x = CLAMP (x - self->drag_offset, 0, width - size);
