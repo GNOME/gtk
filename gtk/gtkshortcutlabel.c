@@ -362,9 +362,6 @@ parse_range (GtkShortcutLabel *self,
 static void
 clear_children (GtkShortcutLabel *self)
 {
-                                 gtk_accessible_reset_relation (GTK_ACCESSIBLE (self),
-                                                                GTK_ACCESSIBLE_RELATION_LABELLED_BY);
-
   GtkWidget *child;
 
   child = gtk_widget_get_first_child (GTK_WIDGET (self));
@@ -388,6 +385,8 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   GValue value = G_VALUE_INIT;
   GList *parts = NULL;
   GtkWidget *child;
+
+  gtk_accessible_reset_relation (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
 
   clear_children (self);
 
