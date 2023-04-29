@@ -12860,7 +12860,7 @@ gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
  * @enabled: whether the action is now enabled
  *
  * Enable or disable an action installed with
- * [vfunc@Gtk.Widget.install_action].
+ * [method@Gtk.WidgetClass.install_action].
  */
 void
 gtk_widget_action_set_enabled (GtkWidget  *widget,
