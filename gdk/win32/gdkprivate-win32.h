@@ -163,33 +163,12 @@ typedef enum
   GDK_DRAG_PROTO_OLE2,
 } GdkDragProtocol;
 
-GType _gdk_gc_win32_get_type (void);
-
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 
 BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
 
-void _gdk_surface_init_position     (GdkSurface *window);
-void _gdk_surface_move_resize_child (GdkSurface *window,
-                                     int        x,
-                                     int        y,
-                                     int        width,
-                                     int        height);
-
 void gdk_win32_surface_enable_transparency (GdkSurface *self);
 
-
-/* GdkSurfaceImpl methods */
-void _gdk_win32_surface_scroll (GdkSurface *window,
-                                int        dx,
-                                int        dy);
-void _gdk_win32_surface_move_region (GdkSurface       *window,
-                                     const cairo_region_t *region,
-                                     int              dx,
-                                     int              dy);
-
-
-void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 
 void     gdk_win32_handle_table_insert  (HANDLE   *handle,
@@ -205,8 +184,6 @@ cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
 
 void    _gdk_win32_adjust_client_rect   (GdkSurface *window,
                                          RECT      *RECT);
-
-void    _gdk_selection_property_delete (GdkSurface *);
 
 void       _gdk_push_modal_window   (GdkSurface *window);
 void       _gdk_remove_modal_window (GdkSurface *window);
