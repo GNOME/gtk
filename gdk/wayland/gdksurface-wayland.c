@@ -28,6 +28,7 @@
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"
 #include "gdkprivate-wayland.h"
+#include "gdkrectangleprivate.h"
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
@@ -468,6 +469,7 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   cairo_rectangle_int_t rect;
+  uint32_t wl_surface_version;
   int i, n;
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -475,14 +477,15 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
 
   g_assert (_gdk_wayland_is_shm_surface (cairo_surface));
 
+  wl_surface_version = wl_surface_get_version (impl->display_server.wl_surface);
+
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->display_server.wl_surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface),
                      0, 0);
 
   if ((impl->pending_buffer_offset_x || impl->pending_buffer_offset_y) &&
-      wl_surface_get_version (impl->display_server.wl_surface) >=
-      WL_SURFACE_OFFSET_SINCE_VERSION)
+      wl_surface_version >= WL_SURFACE_OFFSET_SINCE_VERSION)
     wl_surface_offset (impl->display_server.wl_surface,
                        impl->pending_buffer_offset_x,
                        impl->pending_buffer_offset_y);
@@ -493,7 +496,16 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
   for (i = 0; i < n; i++)
     {
       cairo_region_get_rectangle (damage, i, &rect);
-      wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
+      if (wl_surface_version >= WL_SURFACE_DAMAGE_BUFFER_SINCE_VERSION)
+        {
+          float scale = gdk_surface_get_scale (surface);
+          gdk_rectangle_transform_affine (&rect, scale, scale, 0, 0, &rect);
+          wl_surface_damage_buffer (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
+        }
+      else
+        {
+          wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
+        }
     }
 }
 
