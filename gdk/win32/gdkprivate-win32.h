@@ -176,7 +176,7 @@ void _gdk_surface_move_resize_child (GdkSurface *window,
                                      int        width,
                                      int        height);
 
-gboolean _gdk_win32_surface_enable_transparency (GdkSurface *window);
+void gdk_win32_surface_enable_transparency (GdkSurface *self);
 
 
 /* GdkSurfaceImpl methods */
