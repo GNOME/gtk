@@ -44,6 +44,10 @@ widgets (although most of the time, the transformation will be a simple 2D trans
 The transform to go from one widgets coordinate system to another one can be obtained
 with [method@Gtk.Widget.compute_transform].
 
+In addition to a size, widgets can optionally have a **_baseline_** to position text on.
+Containers such as [class@Gtk.Box] may position their children to match up their baselines.
+[method@Gtk.Widget.get_baseline] returns the y position of the baseline in widget coordinates.
+
 When widget APIs expect positions or areas, they need to be expressed in this coordinate
 system, typically called **_widget coordinates_**. GTK provides a number of APIs to translate
 between different widgets' coordinate systems, such as [method@Gtk.Widget.compute_point]
