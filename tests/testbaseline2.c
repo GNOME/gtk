@@ -381,7 +381,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
-  gtk_widget_set_size_request (child, 100, 0);
+  gtk_widget_set_size_request (child, 100, -1);
   //gtk_scale_add_mark (GTK_SCALE (child), 50, GTK_POS_BOTTOM, "50");
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
   gtk_box_append (GTK_BOX (box), child);
