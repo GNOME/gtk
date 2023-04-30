@@ -174,6 +174,8 @@ set (code-page) used by that is not necessarily the same as the system
 default ANSI code-page. Strings in this character set are returned by
 functions like `strftime()`.
 
+## Debugging with GDB
+
 GLib ships with a set of Python macros for the GDB debugger. These includes
 pretty printers for lists, hashtables and GObject types. It also has a
 backtrace filter that makes backtraces with signal emissions easier to read.
