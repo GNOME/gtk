@@ -140,14 +140,14 @@ fedora-mingw64:
             mingw64-glib2
             mingw64-libepoxy
             mingw64-pango
-            # mingw64-graphene (rawhide)
+            mingw64-graphene
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=1.0
     - meson subprojects download
     - meson subprojects update --reset
-    - meson -Dintrospection=disabled -Dgraphene:introspection=disabled _build
+    - meson -Dintrospection=disabled ${COMMON_MESON_FLAGS} _build
     - meson compile -C _build
 
 .mingw-defaults:
