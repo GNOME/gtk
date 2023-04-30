@@ -875,10 +875,10 @@ reference.
 ### Adapt to coordinate API changes
 
 A number of APIs that are accepting or returning coordinates have
-been changed from ints to doubles: `gtk_widget_translate_coordinates()`,
+been changed from `int`s to `double`s: `gtk_widget_translate_coordinates()`,
 `gtk_fixed_put()`, `gtk_fixed_move()`. This change is mostly transparent,
 except for cases where out parameters are involved: you need to
-pass double* now, instead of int*.
+pass `double*` now, instead of `int*`.
 
 ### Adapt to GtkStyleContext API changes
 
