@@ -563,12 +563,11 @@ add_emoji (GtkWidget    *box,
   int i;
   PangoLayout *layout;
   PangoRectangle rect;
+  gunichar code = 0;
 
   codes = g_variant_get_child_value (item, 0);
   for (i = 0; i < g_variant_n_children (codes); i++)
     {
-      gunichar code;
-
       g_variant_get_child (codes, i, "u", &code);
       if (code == 0)
         code = modifier;
@@ -576,7 +575,10 @@ add_emoji (GtkWidget    *box,
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
-  p += g_unichar_to_utf8 (0xFE0F, p); /* U+FE0F is the Emoji variation selector */
+
+  if (code != 0xFE0F && code != 0xFE0E)
+    p += g_unichar_to_utf8 (0xFE0F, p); /* Append a variation selector, if there isn't one already */
+
   p[0] = 0;
 
   label = gtk_label_new (text);
