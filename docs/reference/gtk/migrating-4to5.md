@@ -119,3 +119,17 @@ it no longer has a resize handle for the window.
 
 These are very specialized widgets that should better live with the application
 where they are used.
+
+## Widget size api changes
+
+The functions gtk_widget_get_allocated_width() and gtk_widget_get_allocated_height()
+are going away. In most cases, [method@Gtk.Widget.get_width] and [method@Gtk.Widget.get_height]
+are suitable replacements. Note that the semantics are slightly different though:
+the old functions return the size of the CSS border area, while the new functions return
+the size of the widgets content area. In places where this difference matters, you can
+use `gtk_widget_compute_bounds (widget, widget, &bounds)` instead.
+
+The function gtk_widget_get_allocation() is also going away. It does not have a direct
+replacement, but the previously mentioned alternatives can be used for it too.
+
+The function gtk_widget_get_allocated_baseline() has been renamed to [method@Gtk.Widget.get_baseline].

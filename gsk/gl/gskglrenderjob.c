@@ -4145,6 +4145,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                                      flipped_x ? -1 : 1,
                                                      flipped_y ? -1 : 1);
       gsk_gl_render_job_push_modelview (job, transform);
+      gsk_transform_unref (transform);
     }
 
   gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
@@ -4182,6 +4183,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
     {
       GskTransform *transform = gsk_transform_scale (NULL, downscale_x, downscale_y);
       gsk_gl_render_job_push_modelview (job, transform);
+      gsk_transform_unref (transform);
       gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
     }
 
