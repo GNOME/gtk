@@ -15,6 +15,7 @@ compare_render_tests = [
   'big-checkerboard-scaled-down-nearest',
   'big-checkerboard-scaled-down2',
   'blend-difference',
+  'blend-modes',
   'blend-invisible-child',
   'blend-normal',
   'border-bottom-right',
