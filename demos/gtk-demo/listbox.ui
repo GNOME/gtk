@@ -64,6 +64,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="short_time_label">
+                <property name="hexpand">1</property>
+                <property name="xalign">1</property>
                 <property name="valign">baseline</property>
                 <property name="label" translatable="yes">38m</property>
                 <style>
