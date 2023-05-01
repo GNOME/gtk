@@ -3322,10 +3322,14 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
   bottom_offscreen.force_offscreen = TRUE;
   bottom_offscreen.reset_clip = TRUE;
 
+  gsk_gl_render_job_set_modelview (job, NULL);
+
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, bottom_child, &bottom_offscreen))
     {
+      gsk_gl_render_job_pop_modelview (job);
+
       gsk_gl_render_job_visit_node (job, top_child);
       return;
     }
@@ -3334,6 +3338,8 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
 
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, top_child, &top_offscreen))
     {
+      gsk_gl_render_job_pop_modelview (job);
+
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
       gsk_gl_program_set_uniform_texture (job->current_program,
                                           UNIFORM_SHARED_SOURCE, 0,
@@ -3346,6 +3352,8 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
     }
 
   g_assert (top_offscreen.was_offscreen);
+
+  gsk_gl_render_job_pop_modelview (job);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blend));
   gsk_gl_program_set_uniform_texture (job->current_program,
