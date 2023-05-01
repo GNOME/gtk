@@ -17,6 +17,7 @@ compare_render_tests = [
   'blend-difference',
   'blend-modes',
   'blend-invisible-child',
+  'blend-in-rotate',
   'blend-normal',
   'border-bottom-right',
   'border-one-rounded',
