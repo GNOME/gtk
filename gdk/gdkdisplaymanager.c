@@ -437,7 +437,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
             }
         }
 
-      if (!found && !display)
+      if (!found && !any && !display)
         g_warning ("No such backend: %s", backend);
     }
 
