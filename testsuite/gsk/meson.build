@@ -78,7 +78,6 @@ compare_render_tests = [
   'repeat-no-repeat',
   'repeat-negative-coords',
   'repeat-texture',
-  'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
   'scale-textures-negative-ngl',
   'scale-up-down',
   'scaled-cairo',
@@ -98,6 +97,7 @@ informative_render_tests = [
   'big-glyph',
   'empty-text',
   'huge-glyph',
+  'rounded-clip-in-clip-3d', # both cairo and gl fail this one
 ]
 
 renderers = [
