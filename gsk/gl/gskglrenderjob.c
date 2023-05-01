@@ -466,13 +466,14 @@ extract_matrix_metadata (GskGLRenderModelview *modelview)
 
     case GSK_TRANSFORM_CATEGORY_2D:
       {
-        float xx, xy, yx, yy, dx, dy;
+        float skew_x, skew_y, angle, dx, dy;
 
-        gsk_transform_to_2d (modelview->transform,
-                             &xx, &xy, &yx, &yy, &dx, &dy);
-
-        modelview->scale_x = sqrtf (xx * xx + xy * xy);
-        modelview->scale_y = sqrtf (yx * yx + yy * yy);
+        gsk_transform_to_2d_components (modelview->transform,
+                                        &skew_x, &skew_y,
+                                        &modelview->scale_x, &modelview->scale_y,
+                                        &angle, &dx, &dy);
+        modelview->dx = 0;
+        modelview->dy = 0;
       }
       break;
 
