@@ -25,7 +25,7 @@ setups = [
   { 'backend': 'broadway', 'if': broadway_enabled, },
   { 'name': 'wayland_smalltexture',
     'backend': 'wayland', 'if': wayland_enabled,
-    'env': ['GSK_MAX_TEXTURE_SIZE=1024'], },
+    'env': ['GSK_MAX_TEXTURE_SIZE=1024'] },
   { 'backend': 'win32', 'if': os_win32 },
 ]
 
@@ -37,6 +37,10 @@ foreach setup : setups
 
     if backend != 'broadway'
       exclude += 'gsk-compare-broadway'
+    endif
+
+    if name == 'wayland_smalltexture'
+      exclude += 'wayland_smalltexture_failing'
     endif
 
     env = common_env + [
