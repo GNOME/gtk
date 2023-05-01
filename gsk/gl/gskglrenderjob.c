@@ -2903,8 +2903,12 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
   offscreen_end.reset_clip = TRUE;
   offscreen_end.bounds = &node->bounds;
 
+  gsk_gl_render_job_set_modelview (job, NULL);
+
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, start_node, &offscreen_start))
     {
+      gsk_gl_render_job_pop_modelview (job);
+
       gsk_gl_render_job_visit_node (job, end_node);
       return;
     }
@@ -2913,11 +2917,17 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
 
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, end_node, &offscreen_end))
     {
-      float prev_alpha = gsk_gl_render_job_set_alpha (job, job->alpha * progress);
+      float prev_alpha;
+
+      gsk_gl_render_job_pop_modelview (job);
+
+      prev_alpha = gsk_gl_render_job_set_alpha (job, job->alpha * progress);
       gsk_gl_render_job_visit_node (job, start_node);
       gsk_gl_render_job_set_alpha (job, prev_alpha);
       return;
     }
+
+  gsk_gl_render_job_pop_modelview (job);
 
   g_assert (offscreen_end.texture_id);
 
