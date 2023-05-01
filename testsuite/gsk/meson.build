@@ -34,6 +34,7 @@ compare_render_tests = [
   'color-matrix-identity',
   'color-matrix-parsing',
   'cross-fade-in-opacity',
+  'cross-fade-in-rotate',
   'css-background',
   'empty-blend',
   'empty-blur',
