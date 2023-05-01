@@ -935,6 +935,7 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
 
   info->cancellable = g_cancellable_new ();
   path_bar->get_info_cancellable = info->cancellable;
+  add_cancellable (path_bar, info->cancellable);
 
   if (g_file_is_native (info->file))
     {
@@ -959,7 +960,6 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
                                          gtk_path_bar_get_mount_callback,
                                          info);
     }
-  add_cancellable (path_bar, info->cancellable);
 }
 
 /**
