@@ -223,7 +223,7 @@ gdk_vulkan_strerror (VkResult result)
 #if VK_HEADER_VERSION < 140
     case VK_RESULT_RANGE_SIZE:
 #endif
-#if VK_HEADER_VERSION >= 218
+#if VK_HEADER_VERSION >= 238
     case VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR:
       return "The requested VkImageUsageFlags are not supported. (VK_ERROR_IMAGE_USAGE_NOT_SUPPORTED_KHR)";
     case VK_ERROR_VIDEO_PICTURE_LAYOUT_NOT_SUPPORTED_KHR:
