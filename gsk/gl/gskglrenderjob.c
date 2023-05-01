@@ -918,44 +918,61 @@ gsk_gl_render_job_untransform_bounds (GskGLRenderJob        *job,
 }
 
 static inline void
-gsk_gl_render_job_transform_rounded_rect (GskGLRenderJob       *job,
+gsk_gl_render_job_translate_rounded_rect (GskGLRenderJob       *job,
                                           const GskRoundedRect *rect,
-                                          GskRoundedRect       *out)
+                                          GskRoundedRect       *out_rect)
+ {
+  out_rect->bounds.origin.x = job->offset_x + rect->bounds.origin.x;
+  out_rect->bounds.origin.y = job->offset_y + rect->bounds.origin.y;
+  out_rect->bounds.size.width = rect->bounds.size.width;
+  out_rect->bounds.size.height = rect->bounds.size.height;
+  memcpy (out_rect->corner, rect->corner, sizeof rect->corner);
+}
+
+static inline void
+rounded_rect_scale_corners (const GskRoundedRect *rect,
+                            GskRoundedRect       *out_rect,
+                            float                 scale_x,
+                            float                 scale_y)
 {
-  float scale_x = job->scale_x;
-  float scale_y = job->scale_y;
-
-  gsk_gl_render_job_transform_bounds (job, &rect->bounds, &out->bounds);
-
-  for (guint i = 0; i < G_N_ELEMENTS (out->corner); i++)
+  for (guint i = 0; i < G_N_ELEMENTS (out_rect->corner); i++)
     {
-      out->corner[i].width = rect->corner[i].width * fabs (scale_x);
-      out->corner[i].height = rect->corner[i].height * fabs (scale_y);
+      out_rect->corner[i].width = rect->corner[i].width * fabs (scale_x);
+      out_rect->corner[i].height = rect->corner[i].height * fabs (scale_y);
     }
 
   if (scale_x < 0)
     {
       graphene_size_t p;
 
-      p = out->corner[GSK_CORNER_TOP_LEFT];
-      out->corner[GSK_CORNER_TOP_LEFT] = out->corner[GSK_CORNER_TOP_RIGHT];
-      out->corner[GSK_CORNER_TOP_RIGHT] = p;
-      p = out->corner[GSK_CORNER_BOTTOM_LEFT];
-      out->corner[GSK_CORNER_BOTTOM_LEFT] = out->corner[GSK_CORNER_BOTTOM_RIGHT];
-      out->corner[GSK_CORNER_BOTTOM_RIGHT] = p;
+      p = out_rect->corner[GSK_CORNER_TOP_LEFT];
+      out_rect->corner[GSK_CORNER_TOP_LEFT] = out_rect->corner[GSK_CORNER_TOP_RIGHT];
+      out_rect->corner[GSK_CORNER_TOP_RIGHT] = p;
+      p = out_rect->corner[GSK_CORNER_BOTTOM_LEFT];
+      out_rect->corner[GSK_CORNER_BOTTOM_LEFT] = out_rect->corner[GSK_CORNER_BOTTOM_RIGHT];
+      out_rect->corner[GSK_CORNER_BOTTOM_RIGHT] = p;
     }
 
   if (scale_y < 0)
     {
       graphene_size_t p;
 
-      p = out->corner[GSK_CORNER_TOP_LEFT];
-      out->corner[GSK_CORNER_TOP_LEFT] = out->corner[GSK_CORNER_BOTTOM_LEFT];
-      out->corner[GSK_CORNER_BOTTOM_LEFT] = p;
-      p = out->corner[GSK_CORNER_TOP_RIGHT];
-      out->corner[GSK_CORNER_TOP_RIGHT] = out->corner[GSK_CORNER_BOTTOM_RIGHT];
-      out->corner[GSK_CORNER_BOTTOM_RIGHT] = p;
+      p = out_rect->corner[GSK_CORNER_TOP_LEFT];
+      out_rect->corner[GSK_CORNER_TOP_LEFT] = out_rect->corner[GSK_CORNER_BOTTOM_LEFT];
+      out_rect->corner[GSK_CORNER_BOTTOM_LEFT] = p;
+      p = out_rect->corner[GSK_CORNER_TOP_RIGHT];
+      out_rect->corner[GSK_CORNER_TOP_RIGHT] = out_rect->corner[GSK_CORNER_BOTTOM_RIGHT];
+      out_rect->corner[GSK_CORNER_BOTTOM_RIGHT] = p;
     }
+}
+
+static inline void
+gsk_gl_render_job_transform_rounded_rect (GskGLRenderJob       *job,
+                                          const GskRoundedRect *rect,
+                                          GskRoundedRect       *out_rect)
+{
+  gsk_gl_render_job_transform_bounds (job, &rect->bounds, &out_rect->bounds);
+  rounded_rect_scale_corners (rect, out_rect, job->scale_x, job->scale_y);
 }
 
 static inline void
@@ -1260,13 +1277,12 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
 {
   float scale_x = job->scale_x;
   float scale_y = job->scale_y;
-  int surface_width = ceilf (node->bounds.size.width * scale_x);
-  int surface_height = ceilf (node->bounds.size.height * scale_y);
+  int surface_width = ceilf (node->bounds.size.width * fabs (scale_x));
+  int surface_height = ceilf (node->bounds.size.height * fabs (scale_y));
   GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_surface_t *rendered_surface;
   cairo_t *cr;
-  int cached_id;
   int texture_id;
   GskTextureKey key;
 
@@ -1278,18 +1294,10 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   key.scale_x = scale_x;
   key.scale_y = scale_y;
 
-  cached_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
 
-  if (cached_id != 0)
-    {
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D, GL_TEXTURE0, cached_id);
-      gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
-      gsk_gl_render_job_end_draw (job);
-      return;
-    }
+  if (texture_id != 0)
+    goto done;
 
   /* We first draw the recording surface on an image surface,
    * just because the scaleY(-1) later otherwise screws up the
@@ -1299,7 +1307,7 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
                                                    surface_width,
                                                    surface_height);
 
-    cairo_surface_set_device_scale (rendered_surface, scale_x, scale_y);
+    cairo_surface_set_device_scale (rendered_surface, fabs (scale_x), fabs (scale_y));
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
@@ -1313,15 +1321,16 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         surface_width,
                                         surface_height);
-  cairo_surface_set_device_scale (surface, scale_x, scale_y);
+  cairo_surface_set_device_scale (surface, fabs (scale_x), fabs (scale_y));
   cr = cairo_create (surface);
 
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
-  cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, - surface_height / scale_y);
+  cairo_scale (cr, scale_x < 0 ? -1 : 1, scale_y < 0 ? 1 : -1);
+  cairo_translate (cr, scale_x < 0 ? - surface_width / fabs (scale_x) : 0,
+                       scale_y < 0 ? 0 : - surface_height / fabs (scale_y));
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
-  cairo_rectangle (cr, 0, 0, surface_width / scale_x, surface_height / scale_y);
+  cairo_rectangle (cr, 0, 0, surface_width / fabs (scale_x), surface_height / fabs (scale_y));
   cairo_fill (cr);
   cairo_restore (cr);
 
@@ -1360,6 +1369,16 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
 
   gsk_gl_driver_cache_texture (job->driver, &key, texture_id);
 
+done:
+  if (scale_x < 0 || scale_y < 0)
+    {
+      GskTransform *transform = gsk_transform_translate (NULL,
+                                                         &GRAPHENE_POINT_INIT (scale_x < 0 ? - surface_width : 0,
+                                                                               scale_y < 0 ? - surface_height : 0));
+      gsk_gl_render_job_push_modelview (job, transform);
+      gsk_transform_unref (transform);
+    }
+
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
   gsk_gl_program_set_uniform_texture (job->current_program,
                                       UNIFORM_SHARED_SOURCE, 0,
@@ -1368,6 +1387,9 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
                                       texture_id);
   gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
   gsk_gl_render_job_end_draw (job);
+
+  if (scale_x < 0 || scale_y < 0)
+    gsk_gl_render_job_pop_modelview (job);
 }
 
 static guint
@@ -1522,10 +1544,10 @@ blur_node (GskGLRenderJob       *job,
 
       offscreen->texture_id = blur_offscreen (job,
                                               offscreen,
-                                              texture_width * scale_x,
-                                              texture_height * scale_y,
-                                              blur_radius * scale_x,
-                                              blur_radius * scale_y);
+                                              texture_width * fabs (scale_x),
+                                              texture_height * fabs (scale_y),
+                                              blur_radius * fabs (scale_x),
+                                              blur_radius * fabs (scale_y));
       init_full_texture_region (offscreen);
     }
 
@@ -1935,7 +1957,7 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
       sizes[3].w = MAX (widths[3], rounded_outline->corner[3].width);
     }
 
-  gsk_gl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+  gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, border));
 
@@ -2039,7 +2061,7 @@ gsk_gl_render_job_visit_css_background (GskGLRenderJob      *job,
   rgba_to_half (&gsk_border_node_get_colors (node2)[0], color);
   rgba_to_half (gsk_color_node_get_color (child), color2);
 
-  gsk_gl_render_job_transform_rounded_rect (job, rounded_outline, &outline);
+  gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, filled_border));
 
@@ -2180,6 +2202,7 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
                   scale = gsk_transform_translate (gsk_transform_scale (NULL, sx, sy), &GRAPHENE_POINT_INIT (tx, ty));
                   gsk_gl_render_job_push_modelview (job, scale);
                   transform = gsk_transform_transform (gsk_transform_invert (scale), transform);
+                  gsk_transform_unref (scale);
                 }
             }
 
@@ -2230,7 +2253,7 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
   GskRoundedRect transformed_outline;
   guint16 color[4];
 
-  gsk_gl_render_job_transform_rounded_rect (job, outline, &transformed_outline);
+  gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
   gsk_gl_program_set_uniform_rounded_rect (job->current_program,
@@ -2330,7 +2353,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
       gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
 
-      gsk_gl_render_job_transform_rounded_rect (job, &outline_to_blur, &transformed_outline);
+      gsk_gl_render_job_translate_rounded_rect (job, &outline_to_blur, &transformed_outline);
 
       /* Actual inset shadow outline drawing */
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
@@ -2363,8 +2386,8 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
                                            &offscreen,
                                            texture_width,
                                            texture_height,
-                                           blur_radius * scale_x,
-                                           blur_radius * scale_y);
+                                           blur_radius * fabs (scale_x),
+                                           blur_radius * fabs (scale_y));
 
       gsk_gl_driver_release_render_target (job->driver, render_target, TRUE);
 
@@ -2386,7 +2409,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       {
         GskRoundedRect node_clip;
 
-        gsk_gl_render_job_transform_rounded_rect (job, node_outline, &node_clip);
+        gsk_gl_render_job_translate_rounded_rect (job, node_outline, &node_clip);
         gsk_gl_render_job_push_clip (job, &node_clip);
       }
 
@@ -2436,7 +2459,7 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
 
   rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
 
-  gsk_gl_render_job_transform_rounded_rect (job, outline, &transformed_outline);
+  gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, unblurred_outset_shadow));
   gsk_gl_program_set_uniform_rounded_rect (job->current_program,
@@ -2629,8 +2652,8 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                            &offscreen,
                                            texture_width,
                                            texture_height,
-                                           blur_radius * scale_x,
-                                           blur_radius * scale_y);
+                                           blur_radius * fabs (scale_x),
+                                           blur_radius * fabs (scale_y));
 
       gsk_gl_shadow_library_insert (job->driver->shadows_library,
                                     &scaled_outline,
@@ -2644,7 +2667,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       blurred_texture_id = cached_tid;
     }
 
-  gsk_gl_render_job_transform_rounded_rect (job, outline, &transformed_outline);
+  gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
   if (!do_slicing)
     {
@@ -3601,8 +3624,8 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
   float scale_y = bounds->size.height / texture->height;
   gboolean use_mipmap;
 
-  use_mipmap = (scale_x * job->scale_x) < 0.5 ||
-               (scale_y * job->scale_y) < 0.5;
+  use_mipmap = (scale_x * fabs (job->scale_x)) < 0.5 ||
+               (scale_y * fabs (job->scale_y)) < 0.5;
 
   if G_LIKELY (texture->width <= max_texture_size &&
                texture->height <= max_texture_size)
@@ -4134,7 +4157,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
     }
 
   if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE &&
-      offscreen->force_offscreen == FALSE)
+      !offscreen->force_offscreen)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (node);
       gsk_gl_render_job_upload_texture (job, texture, FALSE, offscreen);
@@ -4152,6 +4175,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   gboolean flipped_x = job->scale_x < 0;
   gboolean flipped_y = job->scale_y < 0;
   graphene_rect_t viewport;
+  gboolean reset_clip = FALSE;
 
   if (flipped_x || flipped_y)
     {
@@ -4199,6 +4223,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       gsk_gl_render_job_push_modelview (job, transform);
       gsk_transform_unref (transform);
       gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
+      graphene_rect_scale (&viewport, downscale_x, downscale_y, &viewport);
     }
 
   if (downscale_x == 1)
@@ -4282,11 +4307,25 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
 
   if (offscreen->reset_clip)
-    gsk_gl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (job->viewport));
+    {
+      gsk_gl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (job->viewport));
+      reset_clip = TRUE;
+    }
+  else if (flipped_x || flipped_y || downscale_x != 1 || downscale_y != 1)
+    {
+      GskRoundedRect new_clip;
+      float scale_x = flipped_x ? - downscale_x : downscale_x;
+      float scale_y = flipped_y ? - downscale_y : downscale_y;
+
+      graphene_rect_scale (&job->current_clip->rect.bounds, scale_x, scale_y, &new_clip.bounds);
+      rounded_rect_scale_corners (&job->current_clip->rect, &new_clip, scale_x, scale_y);
+      gsk_gl_render_job_push_clip (job, &new_clip);
+      reset_clip = TRUE;
+    }
 
   gsk_gl_render_job_visit_node (job, node);
 
-  if (offscreen->reset_clip)
+  if (reset_clip)
     gsk_gl_render_job_pop_clip (job);
 
   if (downscale_x != 1 || downscale_y != 1)
