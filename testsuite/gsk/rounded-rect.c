@@ -229,6 +229,8 @@ test_intersect_with_rect (void)
             }
           g_assert_true (gsk_rounded_rect_equal (&out, &test[i].expected));
         }
+
+      g_assert_true ((res != GSK_INTERSECTION_EMPTY) == gsk_rounded_rect_intersects_rect (&test[i].rounded, &test[i].rect));
     }
 }
 
