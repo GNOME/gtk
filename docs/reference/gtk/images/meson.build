@@ -68,6 +68,7 @@ ui_files = [
   'stackswitcher.ui',
   'statusbar.ui',
   'switch.ui',
+  'switch-state.ui',
   'toggle-button.ui',
   'video.ui',
   'volumebutton.ui',
