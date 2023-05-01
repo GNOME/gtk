@@ -34,6 +34,16 @@ gboolean                 gsk_rounded_rect_equal                 (gconstpointer  
                                                                  gconstpointer             rect2) G_GNUC_PURE;
 char *                   gsk_rounded_rect_to_string             (const GskRoundedRect     *self) G_GNUC_MALLOC;
 
+typedef enum {
+  GSK_INTERSECTION_EMPTY,
+  GSK_INTERSECTION_NONEMPTY,
+  GSK_INTERSECTION_NOT_REPRESENTABLE
+} GskRoundedRectIntersection;
+
+GskRoundedRectIntersection gsk_rounded_rect_intersect_with_rect   (const GskRoundedRect     *self,
+                                                                   const graphene_rect_t    *rect,
+                                                                   GskRoundedRect           *result) G_GNUC_PURE;
+
 
 G_END_DECLS
 

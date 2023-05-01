@@ -54,27 +54,6 @@
 /* Make sure gradient stops fits in packed array_count */
 G_STATIC_ASSERT ((MAX_GRADIENT_STOPS * 5) < (1 << GSK_GL_UNIFORM_ARRAY_BITS));
 
-#define rounded_rect_top_left(r)                                                        \
-  (GRAPHENE_RECT_INIT(r->bounds.origin.x,                                               \
-                      r->bounds.origin.y,                                               \
-                      r->corner[0].width, r->corner[0].height))
-#define rounded_rect_top_right(r) \
-  (GRAPHENE_RECT_INIT(r->bounds.origin.x + r->bounds.size.width - r->corner[1].width,   \
-                      r->bounds.origin.y, \
-                      r->corner[1].width, r->corner[1].height))
-#define rounded_rect_bottom_right(r) \
-  (GRAPHENE_RECT_INIT(r->bounds.origin.x + r->bounds.size.width - r->corner[2].width,   \
-                      r->bounds.origin.y + r->bounds.size.height - r->corner[2].height, \
-                      r->corner[2].width, r->corner[2].height))
-#define rounded_rect_bottom_left(r)                                                     \
-  (GRAPHENE_RECT_INIT(r->bounds.origin.x,                                               \
-                      r->bounds.origin.y + r->bounds.size.height - r->corner[2].height, \
-                      r->corner[3].width, r->corner[3].height))
-#define rounded_rect_corner0(r)   rounded_rect_top_left(r)
-#define rounded_rect_corner1(r)   rounded_rect_top_right(r)
-#define rounded_rect_corner2(r)   rounded_rect_bottom_right(r)
-#define rounded_rect_corner3(r)   rounded_rect_bottom_left(r)
-#define rounded_rect_corner(r, i) (rounded_rect_corner##i(r))
 #define ALPHA_IS_CLEAR(alpha) ((alpha) < ((float) 0x00ff / (float) 0xffff))
 #define RGBA_IS_CLEAR(rgba) ALPHA_IS_CLEAR((rgba)->alpha)
 
@@ -427,70 +406,6 @@ rect_intersects (const graphene_rect_t *r1,
     return FALSE;
   else
     return TRUE;
-}
-
-static inline gboolean
-rounded_rect_has_corner (const GskRoundedRect *r,
-                         guint                 i)
-{
-  return r->corner[i].width > 0 && r->corner[i].height > 0;
-}
-
-/* Current clip is NOT rounded but new one is definitely! */
-static inline gboolean
-intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
-                               const GskRoundedRect  *rounded,
-                               GskRoundedRect        *result)
-{
-  gboolean corners[4];
-
-  /* Intersects with top left corner? */
-  corners[0] = rounded_rect_has_corner (rounded, 0) &&
-               rect_intersects (non_rounded,
-                                &rounded_rect_corner (rounded, 0));
-  if (corners[0] && !rect_contains_rect (non_rounded,
-                                         &rounded_rect_corner (rounded, 0)))
-    return FALSE;
-
-  /* top right ? */
-  corners[1] = rounded_rect_has_corner (rounded, 1) &&
-               rect_intersects (non_rounded,
-                                &rounded_rect_corner (rounded, 1));
-  if (corners[1] && !rect_contains_rect (non_rounded,
-                                         &rounded_rect_corner (rounded, 1)))
-    return FALSE;
-
-  /* bottom right ? */
-  corners[2] = rounded_rect_has_corner (rounded, 2) &&
-               rect_intersects (non_rounded,
-                                &rounded_rect_corner (rounded, 2));
-  if (corners[2] && !rect_contains_rect (non_rounded,
-                                         &rounded_rect_corner (rounded, 2)))
-    return FALSE;
-
-  /* bottom left ? */
-  corners[3] = rounded_rect_has_corner (rounded, 3) &&
-               rect_intersects (non_rounded,
-                                &rounded_rect_corner (rounded, 3));
-  if (corners[3] && !rect_contains_rect (non_rounded,
-                                         &rounded_rect_corner (rounded, 3)))
-    return FALSE;
-
-  /* We do intersect with at least one of the corners, but in such a way that the
-   * intersection between the two clips can still be represented by a single rounded
-   * rect in a trivial way. do that.
-   */
-  graphene_rect_intersection (non_rounded, &rounded->bounds, &result->bounds);
-
-  for (guint i = 0; i < 4; i++)
-    {
-      if (corners[i])
-        result->corner[i] = rounded->corner[i];
-      else
-        result->corner[i].width = result->corner[i].height = 0;
-    }
-
-  return TRUE;
 }
 
 static inline void
@@ -1729,6 +1644,7 @@ gsk_gl_render_job_visit_clipped_child (GskGLRenderJob        *job,
 {
   graphene_rect_t transformed_clip;
   GskRoundedRect intersection;
+  GskRoundedRectIntersection result;
 
   gsk_gl_render_job_transform_bounds (job, clip, &transformed_clip);
 
@@ -1742,10 +1658,17 @@ gsk_gl_render_job_visit_clipped_child (GskGLRenderJob        *job,
       gsk_gl_render_job_push_clip (job, &intersection);
       gsk_gl_render_job_visit_node (job, child);
       gsk_gl_render_job_pop_clip (job);
+      return;
     }
-  else if (intersect_rounded_rectilinear (&transformed_clip,
-                                          &job->current_clip->rect,
-                                          &intersection))
+
+  result = gsk_rounded_rect_intersect_with_rect (&job->current_clip->rect,
+                                                 &transformed_clip,
+                                                 &intersection);
+
+  if (result == GSK_INTERSECTION_EMPTY)
+    return;
+
+  if (result == GSK_INTERSECTION_NONEMPTY)
     {
       gsk_gl_render_job_push_clip (job, &intersection);
       gsk_gl_render_job_visit_node (job, child);
@@ -1802,10 +1725,16 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
   if (job->current_clip->is_rectilinear)
     {
       GskRoundedRect intersected_clip;
+      GskRoundedRectIntersection result;
 
-      if (intersect_rounded_rectilinear (&job->current_clip->rect.bounds,
-                                         &transformed_clip,
-                                         &intersected_clip))
+      result = gsk_rounded_rect_intersect_with_rect (&transformed_clip,
+                                                     &job->current_clip->rect.bounds,
+                                                     &intersected_clip);
+
+      if (result == GSK_INTERSECTION_EMPTY)
+        return;
+
+      if (result == GSK_INTERSECTION_NONEMPTY)
         {
           gsk_gl_render_job_push_clip (job, &intersected_clip);
           gsk_gl_render_job_visit_node (job, child);
