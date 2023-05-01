@@ -582,6 +582,14 @@ test_transform_bounds (void)
   t = gsk_transform_translate (t, &GRAPHENE_POINT_INIT (-50, -50));
   gsk_transform_transform_bounds (t, &bounds, &out);
   g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(0, 0, 100, 100)));
+
+  t = gsk_transform_scale (NULL, -1, 1);
+  gsk_transform_transform_bounds (t, &bounds, &out);
+  g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(-100, 0, 100, 100)));
+
+  t = gsk_transform_scale (NULL, -1, -2);
+  gsk_transform_transform_bounds (t, &bounds, &out);
+  g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(-100, -200, 100, 200)));
 }
 
 #define DEG_TO_RAD(x) ((x) / 180.0 * G_PI)

@@ -356,7 +356,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
           for (x = 0; x < width; x += max_size)
             {
               texture = gsk_gl_renderer_render_texture (renderer, root,
-                                                        &GRAPHENE_RECT_INIT (x, y,
+                                                        &GRAPHENE_RECT_INIT (viewport->origin.x + x,
+                                                                             viewport->origin.y + y,
                                                                              MIN (max_size, viewport->size.width - x),
                                                                              MIN (max_size, viewport->size.height - y)));
               gdk_texture_download (texture,

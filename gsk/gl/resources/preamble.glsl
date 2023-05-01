@@ -22,6 +22,55 @@ struct GskRoundedRect
   vec4 corner_points2; // xy = bottom right, zw = bottom left
 };
 
+void gsk_rounded_rect_normalize(inout GskRoundedRect r)
+{
+  if (r.bounds.x > r.bounds.z)
+    {
+      float t = r.bounds.x;
+      r.bounds.x = r.bounds.z;
+      r.bounds.z = t;
+
+      vec2 c = r.corner_points1.xy;
+      r.corner_points1.xy = r.corner_points1.zw;
+      r.corner_points1.zw = c;
+
+      c = r.corner_points2.xy;
+      r.corner_points2.xy = r.corner_points2.zw;
+      r.corner_points2.zw = c;
+    }
+
+  if (r.bounds.y > r.bounds.w)
+    {
+      float t = r.bounds.y;
+      r.bounds.y = r.bounds.w;
+      r.bounds.w = t;
+
+      vec2 c = r.corner_points1.xy;
+      r.corner_points1.xy = r.corner_points2.xy;
+      r.corner_points2.xy = c;
+
+      c = r.corner_points1.zw;
+      r.corner_points1.zw = r.corner_points2.zw;
+      r.corner_points2.zw = c;
+    }
+}
+
+void gsk_bounds_normalize (inout vec4 bounds)
+{
+  if (bounds.x > bounds.z)
+    {
+      float t = bounds.x;
+      bounds.x = bounds.z;
+      bounds.z = t;
+    }
+  if (bounds.y > bounds.w)
+    {
+      float t = bounds.y;
+      bounds.y = bounds.w;
+      bounds.w = t;
+    }
+}
+
 // Transform from a C GskRoundedRect to what we need.
 GskRoundedRect
 gsk_create_rect(vec4[3] data)
@@ -33,13 +82,21 @@ gsk_create_rect(vec4[3] data)
   vec4 corner_points2 = vec4(bounds.zw + (data[2].xy * vec2(-1, -1)),
                              bounds.xw + vec2(data[2].zw * vec2(1, -1)));
 
-  return GskRoundedRect(bounds, corner_points1, corner_points2);
+  GskRoundedRect rect = GskRoundedRect(bounds, corner_points1, corner_points2);
+
+  gsk_rounded_rect_normalize (rect);
+
+  return rect;
 }
 
 vec4
 gsk_get_bounds(vec4[3] data)
 {
-  return vec4(data[0].xy, data[0].xy + data[0].zw);
+  vec4 bounds = vec4(data[0].xy, data[0].xy + data[0].zw);
+
+  gsk_bounds_normalize (bounds);
+
+  return bounds;
 }
 
 vec4 gsk_premultiply(vec4 c) {

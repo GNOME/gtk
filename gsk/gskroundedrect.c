@@ -519,8 +519,174 @@ gsk_rounded_rect_intersects_rect (const GskRoundedRect  *self,
       gsk_rounded_rect_locate_point (self, &GRAPHENE_POINT_INIT (rect->origin.x, rect->origin.y + rect->size.height)) == OUTSIDE_TOP_RIGHT ||
       gsk_rounded_rect_locate_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y + rect->size.height)) == OUTSIDE_TOP_LEFT)
     return FALSE;
+return TRUE;
+}
 
-  return TRUE;
+#define rect_point0(r) ((r)->origin)
+#define rect_point1(r) (GRAPHENE_POINT_INIT ((r)->origin.x + (r)->size.width, (r)->origin.y))
+#define rect_point2(r) (GRAPHENE_POINT_INIT ((r)->origin.x + (r)->size.width, (r)->origin.y + (r)->size.height))
+#define rect_point3(r) (GRAPHENE_POINT_INIT ((r)->origin.x, (r)->origin.y + (r)->size.height))
+
+#define rounded_rect_corner0(r)                                                        \
+  (GRAPHENE_RECT_INIT((r)->bounds.origin.x,                                               \
+                      (r)->bounds.origin.y,                                               \
+                      (r)->corner[0].width, (r)->corner[0].height))
+#define rounded_rect_corner1(r) \
+  (GRAPHENE_RECT_INIT((r)->bounds.origin.x + (r)->bounds.size.width - (r)->corner[1].width,   \
+                      (r)->bounds.origin.y, \
+                      (r)->corner[1].width, (r)->corner[1].height))
+#define rounded_rect_corner2(r) \
+  (GRAPHENE_RECT_INIT((r)->bounds.origin.x + (r)->bounds.size.width - (r)->corner[2].width,   \
+                      (r)->bounds.origin.y + (r)->bounds.size.height - (r)->corner[2].height, \
+                      (r)->corner[2].width, (r)->corner[2].height))
+#define rounded_rect_corner3(r)                                                     \
+  (GRAPHENE_RECT_INIT((r)->bounds.origin.x,                                               \
+                      (r)->bounds.origin.y + (r)->bounds.size.height - (r)->corner[3].height, \
+                      (r)->corner[3].width, (r)->corner[3].height))
+
+enum {
+  BELOW,
+  INNER,
+  ABOVE
+};
+
+static inline void
+classify_point (const graphene_point_t *p, const graphene_rect_t *rect, int *px, int *py)
+{
+  if (p->x <= rect->origin.x)
+    *px = BELOW;
+  else if (p->x >= rect->origin.x + rect->size.width)
+    *px = ABOVE;
+  else
+    *px = INNER;
+
+  if (p->y <= rect->origin.y)
+    *py = BELOW;
+  else if (p->y >= rect->origin.y + rect->size.height)
+    *py = ABOVE;
+  else
+    *py = INNER;
+}
+
+GskRoundedRectIntersection
+gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
+                                      const graphene_rect_t *rect,
+                                      GskRoundedRect        *result)
+{
+  int px, py, qx, qy;
+
+  if (!graphene_rect_intersection (&self->bounds, rect, &result->bounds))
+    return GSK_INTERSECTION_EMPTY;
+
+  classify_point (&rect_point0 (rect), &rounded_rect_corner0 (self), &px, &py);
+
+  if (px == BELOW && py == BELOW)
+    {
+      classify_point (&rect_point2 (rect), &rounded_rect_corner0 (self), &qx, &qy);
+
+      if (qx == BELOW || qy == BELOW)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == INNER && qy == INNER &&
+               gsk_rounded_rect_locate_point (self, &rect_point2 (rect)) != INSIDE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == ABOVE && qy == ABOVE)
+        result->corner[0] = self->corner[0];
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else if ((px == INNER || py == INNER) &&
+           gsk_rounded_rect_locate_point (self, &rect_point0 (rect)) != INSIDE)
+    {
+      if (gsk_rounded_rect_locate_point (self, &rect_point2 (rect)) == OUTSIDE_TOP_LEFT)
+        return GSK_INTERSECTION_EMPTY;
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else
+    result->corner[0].width = result->corner[0].height = 0;
+
+  classify_point (&rect_point1 (rect), &rounded_rect_corner1 (self), &px, &py);
+
+  if (px == ABOVE && py == BELOW)
+    {
+      classify_point (&rect_point3 (rect), &rounded_rect_corner1 (self), &qx, &qy);
+
+      if (qx == ABOVE || qy == BELOW)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == INNER && qy == INNER &&
+               gsk_rounded_rect_locate_point (self, &rect_point3 (rect)) != INSIDE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == BELOW && qy == ABOVE)
+        result->corner[1] = self->corner[1];
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else if ((px == INNER || py == INNER) &&
+           gsk_rounded_rect_locate_point (self, &rect_point1 (rect)) != INSIDE)
+    {
+      if (gsk_rounded_rect_locate_point (self, &rect_point3 (rect)) == OUTSIDE_TOP_RIGHT)
+        return GSK_INTERSECTION_EMPTY;
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else
+    result->corner[1].width = result->corner[1].height = 0;
+
+  classify_point (&rect_point2 (rect), &rounded_rect_corner2 (self), &px, &py);
+
+  if (px == ABOVE && py == ABOVE)
+    {
+      classify_point (&rect_point0 (rect), &rounded_rect_corner2 (self), &qx, &qy);
+
+      if (qx == ABOVE || qy == ABOVE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == INNER && qy == INNER &&
+               gsk_rounded_rect_locate_point (self, &rect_point0 (rect)) != INSIDE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == BELOW && qy == BELOW)
+        result->corner[2] = self->corner[2];
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else if ((px == INNER || py == INNER) &&
+           gsk_rounded_rect_locate_point (self, &rect_point2 (rect)) != INSIDE)
+    {
+      if (gsk_rounded_rect_locate_point (self, &rect_point0 (rect)) == OUTSIDE_BOTTOM_RIGHT)
+        return GSK_INTERSECTION_EMPTY;
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else
+    result->corner[2].width = result->corner[2].height = 0;
+
+  classify_point (&rect_point3 (rect), &rounded_rect_corner3 (self), &px, &py);
+
+  if (px == BELOW && py == ABOVE)
+    {
+      classify_point (&rect_point1 (rect), &rounded_rect_corner3 (self), &qx, &qy);
+
+      if (qx == BELOW || qy == ABOVE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == INNER && qy == INNER &&
+               gsk_rounded_rect_locate_point (self, &rect_point1 (rect)) != INSIDE)
+        return GSK_INTERSECTION_EMPTY;
+      else if (qx == ABOVE && qy == BELOW)
+        result->corner[3] = self->corner[3];
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else if ((px == INNER || py == INNER) &&
+           gsk_rounded_rect_locate_point (self, &rect_point3 (rect)) != INSIDE)
+    {
+      if (gsk_rounded_rect_locate_point (self, &rect_point1 (rect)) == OUTSIDE_BOTTOM_LEFT)
+        return GSK_INTERSECTION_EMPTY;
+      else
+        return GSK_INTERSECTION_NOT_REPRESENTABLE;
+    }
+  else
+    result->corner[3].width = result->corner[3].height = 0;
+
+  return GSK_INTERSECTION_NONEMPTY;
 }
 
 static void
@@ -565,7 +731,7 @@ gsk_rounded_rect_path (const GskRoundedRect *self,
                    self->corner[GSK_CORNER_TOP_LEFT].width,
                    self->corner[GSK_CORNER_TOP_LEFT].height,
                    G_PI, 3 * G_PI_2);
-  _cairo_ellipsis (cr, 
+  _cairo_ellipsis (cr,
                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width,
                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height,
                    self->corner[GSK_CORNER_TOP_RIGHT].width,
@@ -649,5 +815,4 @@ gsk_rounded_rect_to_string (const GskRoundedRect *self)
                           self->corner[2].height,
                           self->corner[3].width,
                           self->corner[3].height);
-
 }

@@ -15,6 +15,7 @@ void main() {
 
   GskRoundedRect outline = gsk_create_rect(u_outline_rect);
   gsk_rounded_rect_transform(outline, u_modelview);
+  gsk_rounded_rect_normalize(outline);
   gsk_rounded_rect_encode(outline, transformed_outline);
 }
 

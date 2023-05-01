@@ -50,6 +50,7 @@ case "${backend}" in
                 --suite=gtk \
                 --no-suite=failing \
                 --no-suite=flaky \
+                --no-suite=${backend}_failing \
                 --no-suite=gsk-compare-broadway
     exit_code=$?
 

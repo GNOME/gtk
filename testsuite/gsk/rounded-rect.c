@@ -160,6 +160,80 @@ test_to_float (void)
   g_assert_true (flt[10] == 9. && flt[11] == 11.);
 }
 
+#define ROUNDED_RECT_INIT_FULL(x,y,w,h,w0,h0,w1,h1,w2,h2,w3,h3) \
+  (GskRoundedRect) { .bounds = GRAPHENE_RECT_INIT (x, y, w, h), \
+                     .corner = { \
+                       GRAPHENE_SIZE_INIT (w0, h0), \
+                       GRAPHENE_SIZE_INIT (w1, h1), \
+                       GRAPHENE_SIZE_INIT (w2, h2), \
+                       GRAPHENE_SIZE_INIT (w3, h3), \
+                   }}
+
+#define ROUNDED_RECT_INIT(x,y,w,h,r) \
+  ROUNDED_RECT_INIT_FULL (x, y, w, h, r, r, r, r, r, r, r, r)
+
+#define ROUNDED_RECT_INIT_UNIFORM(x,y,w,h,r1,r2,r3,r4) \
+  ROUNDED_RECT_INIT_FULL (x, y, w, h, r1, r1, r2, r2, r3, r3, r4, r4)
+
+
+static void
+test_intersect_with_rect (void)
+{
+  struct {
+    GskRoundedRect rounded;
+    graphene_rect_t rect;
+    GskRoundedRect expected;
+    GskRoundedRectIntersection result;
+  } test[] = {
+    { ROUNDED_RECT_INIT (20, 50, 100, 100, 50), GRAPHENE_RECT_INIT (60, 80, 60, 70),
+      ROUNDED_RECT_INIT (0, 0, 0, 0, 0), GSK_INTERSECTION_NOT_REPRESENTABLE },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (0, 0, 100, 100),
+      ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GSK_INTERSECTION_NONEMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (0, 0, 80, 80),
+      ROUNDED_RECT_INIT_UNIFORM (0, 0, 80, 80, 10, 0, 0, 0), GSK_INTERSECTION_NONEMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (10, 10, 80, 80),
+      ROUNDED_RECT_INIT (10, 10, 80, 80, 0), GSK_INTERSECTION_NONEMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (10, 15, 100, 70),
+      ROUNDED_RECT_INIT (10, 15, 90, 70, 0), GSK_INTERSECTION_NONEMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (110, 0, 10, 10),
+      ROUNDED_RECT_INIT (0, 0, 0, 0, 0), GSK_INTERSECTION_EMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (5, 5, 90, 90),
+      ROUNDED_RECT_INIT (5, 5, 90, 90, 0), GSK_INTERSECTION_NONEMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (1, 1, 1, 1),
+      ROUNDED_RECT_INIT (0, 0, 0, 0, 0), GSK_INTERSECTION_EMPTY },
+    { ROUNDED_RECT_INIT (0, 0, 100, 100, 10), GRAPHENE_RECT_INIT (5, -5, 10, 20),
+      ROUNDED_RECT_INIT (0, 0, 0, 0, 0), GSK_INTERSECTION_NOT_REPRESENTABLE },
+    { ROUNDED_RECT_INIT_UNIFORM (-200, 0, 200, 100, 0, 0, 0, 40), GRAPHENE_RECT_INIT (-200, 0, 160, 100),
+      ROUNDED_RECT_INIT_UNIFORM (-200, 0, 160, 100, 0, 0, 0, 40), GSK_INTERSECTION_NONEMPTY },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (test); i++)
+    {
+      GskRoundedRect out;
+      GskRoundedRectIntersection res;
+
+      if (g_test_verbose ())
+        g_test_message ("intersection test %u", i);
+
+      memset (&out, 0, sizeof (GskRoundedRect));
+
+      res = gsk_rounded_rect_intersect_with_rect (&test[i].rounded, &test[i].rect, &out);
+      g_assert_true (res == test[i].result);
+      if (res == GSK_INTERSECTION_NONEMPTY)
+        {
+          if (!gsk_rounded_rect_equal (&out, &test[i].expected))
+            {
+              char *s = gsk_rounded_rect_to_string (&test[i].expected);
+              char *s2 = gsk_rounded_rect_to_string (&out);
+              g_test_message ("expected %s, got %s\n", s, s2);
+            }
+          g_assert_true (gsk_rounded_rect_equal (&out, &test[i].expected));
+        }
+
+      g_assert_true ((res != GSK_INTERSECTION_EMPTY) == gsk_rounded_rect_intersects_rect (&test[i].rounded, &test[i].rect));
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -171,6 +245,7 @@ main (int   argc,
   g_test_add_func ("/rounded-rect/contains-point", test_contains_point);
   g_test_add_func ("/rounded-rect/is-circular", test_is_circular);
   g_test_add_func ("/rounded-rect/to-float", test_to_float);
+  g_test_add_func ("/rounded-rect/intersect-with-rect", test_intersect_with_rect);
 
   return g_test_run ();
 }
