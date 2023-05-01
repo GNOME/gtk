@@ -2810,6 +2810,7 @@ gtk_widget_real_hide (GtkWidget *widget)
   g_clear_pointer (&priv->transform, gsk_transform_unref);
   priv->width = 0;
   priv->height = 0;
+  priv->baseline = 0;
   gtk_widget_update_paintables (widget);
 }
 
