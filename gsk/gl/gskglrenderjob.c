@@ -3391,11 +3391,14 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
   mask_offscreen.reset_clip = TRUE;
   mask_offscreen.do_not_cache = TRUE;
 
+  gsk_gl_render_job_set_modelview (job, NULL);
+
   /* TODO: We create 2 textures here as big as the mask node, but both
    * nodes might be a lot smaller than that.
    */
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, source, &source_offscreen))
     {
+      gsk_gl_render_job_pop_modelview (job);
       gsk_gl_render_job_visit_node (job, source);
       return;
     }
@@ -3404,10 +3407,13 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
 
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, mask, &mask_offscreen))
     {
+      gsk_gl_render_job_pop_modelview (job);
       return;
     }
 
   g_assert (mask_offscreen.was_offscreen);
+
+  gsk_gl_render_job_pop_modelview (job);
 
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, mask));
   gsk_gl_program_set_uniform_texture (job->current_program,
