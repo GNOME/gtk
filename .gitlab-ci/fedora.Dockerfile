@@ -73,6 +73,7 @@ RUN dnf -y install \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libGLES-devel \
+    mutter \
     ninja-build \
     pango-devel \
     pcre-devel \
@@ -84,6 +85,7 @@ RUN dnf -y install \
     python3-markdown \
     python3-packaging \
     python3-pip \
+    python3-pydbus \
     python3-pygments \
     python3-typogrify \
     python3-wheel \
