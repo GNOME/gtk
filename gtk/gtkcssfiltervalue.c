@@ -102,10 +102,10 @@ gtk_css_filter_clear (GtkCssFilter *filter)
 }
 
 static void
-gtk_css_filter_init_identity (GtkCssFilter     *filter,
-                              GtkCssFilterType  type)
+gtk_css_filter_init_identity (GtkCssFilter       *filter,
+                              const GtkCssFilter *other)
 {
-  switch (type)
+  switch (other->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
       filter->brightness.value = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
@@ -135,7 +135,7 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
       filter->blur.value = _gtk_css_number_value_new (0, GTK_CSS_PX);
       break;
     case GTK_CSS_FILTER_DROP_SHADOW:
-      filter->drop_shadow.value = gtk_css_shadow_value_new_filter ();
+      filter->drop_shadow.value = gtk_css_shadow_value_new_filter (other->drop_shadow.value);
       break;
     case GTK_CSS_FILTER_NONE:
     default:
@@ -143,7 +143,7 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
       break;
     }
 
-  filter->type = type;
+  filter->type = other->type;
 }
 
 #define R 0.2126
@@ -466,7 +466,7 @@ gtk_css_value_filter_equal (const GtkCssValue *value1,
     {
       GtkCssFilter filter;
 
-      gtk_css_filter_init_identity (&filter, larger->filters[i].type);
+      gtk_css_filter_init_identity (&filter, &larger->filters[i]);
 
       if (!gtk_css_filter_equal (&larger->filters[i], &filter))
         {
@@ -590,7 +590,7 @@ gtk_css_value_filter_transition (GtkCssValue *start,
     {
       GtkCssFilter filter;
 
-      gtk_css_filter_init_identity (&filter, start->filters[i].type);
+      gtk_css_filter_init_identity (&filter, &start->filters[i]);
       gtk_css_filter_transition (&result->filters[i],
                                  &start->filters[i],
                                  &filter,
@@ -602,7 +602,7 @@ gtk_css_value_filter_transition (GtkCssValue *start,
     {
       GtkCssFilter filter;
 
-      gtk_css_filter_init_identity (&filter, end->filters[i].type);
+      gtk_css_filter_init_identity (&filter, &end->filters[i]);
       gtk_css_filter_transition (&result->filters[i],
                                  &filter,
                                  &end->filters[i],
