@@ -6,6 +6,7 @@ set +e
 srcdir=$( pwd )
 builddir=$1
 backend=$2
+multiplier=${MESON_TEST_TIMEOUT_MULTIPLIER:-1}
 
 # Ignore memory leaks lower in dependencies
 export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:verbosity=1:log_threads=1
@@ -15,7 +16,7 @@ case "${backend}" in
   x11)
     xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
           meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
@@ -29,7 +30,7 @@ case "${backend}" in
 
     xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
           meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend}_unstable \
                 --suite=flaky \
@@ -44,7 +45,7 @@ case "${backend}" in
     export WAYLAND_DISPLAY=wayland-5
 
     meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
@@ -55,7 +56,7 @@ case "${backend}" in
     exit_code=$?
 
     meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend}_unstable \
                 --suite=flaky \
@@ -72,7 +73,7 @@ case "${backend}" in
     export BROADWAY_DISPLAY=:5
 
     meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
                 --suite=gtk \
@@ -84,7 +85,7 @@ case "${backend}" in
     exit_code=0
 
     meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend}_unstable \
                 --suite=flaky \
