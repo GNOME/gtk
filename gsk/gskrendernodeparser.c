@@ -871,7 +871,7 @@ create_ascii_glyphs (PangoFont *font)
       if (!pango_coverage_get (coverage, i))
         break;
     }
-  pango_coverage_unref (coverage);
+  g_object_unref (coverage);
   if (i < MAX_ASCII_GLYPH)
     return NULL;
 
