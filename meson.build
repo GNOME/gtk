@@ -387,7 +387,8 @@ cairo_dep      = dependency('cairo', version: cairo_req,
                             default_options: ['zlib=enabled', 'tests=disabled'])
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
 pango_dep      = dependency('pango', version: pango_req)
-fribidi_dep    = dependency('fribidi', version: fribidi_req)
+fribidi_dep    = dependency('fribidi', version: fribidi_req,
+                            default_options: ['docs=false'])
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             default_options: ['coretext=enabled'])
 
