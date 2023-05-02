@@ -33,7 +33,10 @@ case "${backend}" in
   wayland*)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
-    weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 &
+    dbus-run-session sh <<EOF
+
+    mutter --headless --no-x11 --wayland-display wayland-5 >&mutter.log &
+
     compositor=$!
     export WAYLAND_DISPLAY=wayland-5
 
@@ -50,6 +53,7 @@ case "${backend}" in
     exit_code=$?
 
     kill ${compositor}
+EOF
     ;;
 
   broadway)
