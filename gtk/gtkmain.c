@@ -637,8 +637,10 @@ gtk_init_check (void)
  * applications. It will initialize everything needed to operate the
  * toolkit.
  *
- * If you are using `GtkApplication`, you don't have to call this
- * function; the `GApplication::startup` handler does it for you.
+ * If you are using `GtkApplication`, you usually don't have to call this
+ * function; the `GApplication::startup` handler does it for you. Though,
+ * if you are using GApplication methods that will be invoked before `startup`,
+ * such as `local_command_line`, you may need to initialize stuff explicitly.
  *
  * This function will terminate your program if it was unable to
  * initialize the windowing system for some reason. If you want
