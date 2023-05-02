@@ -1012,9 +1012,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                             GskVulkanRender       *render,
                                             GskVulkanUploader     *uploader,
                                             GskRenderNode         *node,
-                                            const graphene_rect_t *bounds,
                                             GskVulkanClip         *current_clip,
-                                            graphene_rect_t       *tex_rect)
+                                            graphene_rect_t       *tex_bounds)
 {
   GskVulkanImage *result;
   cairo_surface_t *surface;
@@ -1023,16 +1022,12 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
   switch ((guint) gsk_render_node_get_node_type (node))
     {
     case GSK_TEXTURE_NODE:
-      if (graphene_rect_equal (bounds, &node->bounds))
-        {
-          result = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                          gsk_texture_node_get_texture (node),
-                                                          uploader);
-          gsk_vulkan_render_add_cleanup_image (render, result);
-          *tex_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
-          return result;
-        }
-      break;
+      result = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                      gsk_texture_node_get_texture (node),
+                                                      uploader);
+      gsk_vulkan_render_add_cleanup_image (render, result);
+      *tex_bounds = node->bounds;
+      return result;
 
     case GSK_CAIRO_NODE:
       /* We're using recording surfaces, so drawing them to an image
@@ -1050,9 +1045,9 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         graphene_rect_t clipped;
 
         if (current_clip)
-          graphene_rect_intersection (&current_clip->rect.bounds, bounds, &clipped);
+          graphene_rect_intersection (&current_clip->rect.bounds, &node->bounds, &clipped);
         else
-          clipped = *bounds;
+          clipped = node->bounds;
 
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
@@ -1111,33 +1106,30 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         /* assuming the unclipped bounds should go to texture coordinates 0..1,
          * calculate the coordinates for the clipped texture size
          */
-        tex_rect->origin.x = (bounds->origin.x - clipped.origin.x)/clipped.size.width;
-        tex_rect->origin.y = (bounds->origin.y - clipped.origin.y)/clipped.size.height;
-        tex_rect->size.width = bounds->size.width/clipped.size.width;
-        tex_rect->size.height = bounds->size.height/clipped.size.height;
+        *tex_bounds = clipped;
 
         return result;
       }
    }
 
   GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK, "Node as texture not implemented for this case. Using %gx%g fallback surface",
-                      ceil (bounds->size.width),
-                      ceil (bounds->size.height));
+                      ceil (node->bounds.size.width),
+                      ceil (node->bounds.size.height));
 #ifdef G_ENABLE_DEBUG
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
     gsk_profiler_counter_add (profiler,
                               self->fallback_pixels,
-                              ceil (bounds->size.width) * ceil (bounds->size.height));
+                              ceil (node->bounds.size.width) * ceil (node->bounds.size.height));
   }
 #endif
 
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (bounds->size.width),
-                                        ceil (bounds->size.height));
+                                        ceil (node->bounds.size.width),
+                                        ceil (node->bounds.size.height));
   cr = cairo_create (surface);
-  cairo_translate (cr, -bounds->origin.x, -bounds->origin.y);
+  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
   gsk_render_node_draw (node, cr);
 
@@ -1153,10 +1145,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
   gsk_vulkan_render_add_cleanup_image (render, result);
 
-  tex_rect->origin.x = (node->bounds.origin.x - bounds->origin.x)/bounds->size.width;
-  tex_rect->origin.y = (node->bounds.origin.y - bounds->origin.y)/bounds->size.height;
-  tex_rect->size.width = node->bounds.size.width/bounds->size.width;
-  tex_rect->size.height = node->bounds.size.height/bounds->size.height;
+  *tex_bounds = node->bounds;
 
   return result;
 }
@@ -1250,6 +1239,18 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   gsk_vulkan_render_add_cleanup_image (render, op->source);
 }
 
+static void
+get_tex_rect (graphene_rect_t       *tex_coords,
+              const graphene_rect_t *rect,
+              const graphene_rect_t *tex)
+{
+  graphene_rect_init (tex_coords,
+                      (rect->origin.x - tex->origin.x) / tex->size.width,
+                      (rect->origin.y - tex->origin.y) / tex->size.height,
+                      rect->size.width / tex->size.width,
+                      rect->size.height / tex->size.height);
+}
+
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                GskVulkanRender      *render,
@@ -1294,63 +1295,61 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_OPACITY:
           {
             GskRenderNode *child = gsk_opacity_node_get_child (op->render.node);
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
-                                                                            &child->bounds,
                                                                             clip,
-                                                                            &op->render.source_rect);
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
         case GSK_VULKAN_OP_REPEAT:
           {
             GskRenderNode *child = gsk_repeat_node_get_child (op->render.node);
-            const graphene_rect_t *bounds = &op->render.node->bounds;
             const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (op->render.node);
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
-                                                                            child_bounds,
                                                                             NULL,
-                                                                            &op->render.source_rect);
-
-            op->render.source_rect.origin.x = (bounds->origin.x - child_bounds->origin.x)/child_bounds->size.width;
-            op->render.source_rect.origin.y = (bounds->origin.y - child_bounds->origin.y)/child_bounds->size.height;
-            op->render.source_rect.size.width = bounds->size.width / child_bounds->size.width;
-            op->render.source_rect.size.height = bounds->size.height / child_bounds->size.height;
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, child_bounds, &tex_bounds);
           }
           break;
 
         case GSK_VULKAN_OP_BLUR:
           {
             GskRenderNode *child = gsk_blur_node_get_child (op->render.node);
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
-                                                                            &child->bounds,
                                                                             clip,
-                                                                            &op->render.source_rect);
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
         case GSK_VULKAN_OP_COLOR_MATRIX:
           {
             GskRenderNode *child = gsk_color_matrix_node_get_child (op->render.node);
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
-                                                                            &child->bounds,
                                                                             clip,
-                                                                            &op->render.source_rect);
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
@@ -1358,31 +1357,23 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             GskRenderNode *start = gsk_cross_fade_node_get_start_child (op->render.node);
             GskRenderNode *end = gsk_cross_fade_node_get_end_child (op->render.node);
-            const graphene_rect_t *bounds = &op->render.node->bounds;
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             start,
-                                                                            &start->bounds,
                                                                             clip,
-                                                                            &op->render.source_rect);
-            op->render.source_rect.origin.x = (bounds->origin.x - start->bounds.origin.x)/start->bounds.size.width;
-            op->render.source_rect.origin.y = (bounds->origin.y - start->bounds.origin.y)/start->bounds.size.height;
-            op->render.source_rect.size.width = bounds->size.width / start->bounds.size.width;
-            op->render.source_rect.size.height = bounds->size.height / start->bounds.size.height;
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
                                                                              uploader,
                                                                              end,
-                                                                             &end->bounds,
                                                                              clip,
-                                                                             &op->render.source2_rect);
-            op->render.source2_rect.origin.x = (bounds->origin.x - end->bounds.origin.x)/end->bounds.size.width;
-            op->render.source2_rect.origin.y = (bounds->origin.y - end->bounds.origin.y)/end->bounds.size.height;
-            op->render.source2_rect.size.width = bounds->size.width / end->bounds.size.width;
-            op->render.source2_rect.size.height = bounds->size.height / end->bounds.size.height;
+                                                                             &tex_bounds);
+            get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
@@ -1390,31 +1381,23 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             GskRenderNode *top = gsk_blend_node_get_top_child (op->render.node);
             GskRenderNode *bottom = gsk_blend_node_get_bottom_child (op->render.node);
-            const graphene_rect_t *bounds = &op->render.node->bounds;
+            graphene_rect_t tex_bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             top,
-                                                                            &top->bounds,
                                                                             clip,
-                                                                            &op->render.source_rect);
-            op->render.source_rect.origin.x = (bounds->origin.x - top->bounds.origin.x)/top->bounds.size.width;
-            op->render.source_rect.origin.y = (bounds->origin.y - top->bounds.origin.y)/top->bounds.size.height;
-            op->render.source_rect.size.width = bounds->size.width / top->bounds.size.width;
-            op->render.source_rect.size.height = bounds->size.height / top->bounds.size.height;
+                                                                            &tex_bounds);
+            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
                                                                              uploader,
                                                                              bottom,
-                                                                             &bottom->bounds,
                                                                              clip,
-                                                                             &op->render.source2_rect);
-            op->render.source2_rect.origin.x = (bounds->origin.x - bottom->bounds.origin.x)/bottom->bounds.size.width;
-            op->render.source2_rect.origin.y = (bounds->origin.y - bottom->bounds.origin.y)/bottom->bounds.size.height;
-            op->render.source2_rect.size.width = bounds->size.width / bottom->bounds.size.width;
-            op->render.source2_rect.size.height = bounds->size.height / bottom->bounds.size.height;
+                                                                             &tex_bounds);
+            get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
