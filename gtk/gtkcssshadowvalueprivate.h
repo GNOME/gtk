@@ -35,7 +35,7 @@
 G_BEGIN_DECLS
 
 GtkCssValue *   gtk_css_shadow_value_new_none         (void);
-GtkCssValue *   gtk_css_shadow_value_new_filter       (void);
+GtkCssValue *   gtk_css_shadow_value_new_filter       (const GtkCssValue        *other);
 
 GtkCssValue *   gtk_css_shadow_value_parse            (GtkCssParser             *parser,
                                                        gboolean                  box_shadow_mode);
