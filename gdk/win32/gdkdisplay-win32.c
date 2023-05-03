@@ -1129,7 +1129,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
         {
           if (GDK_WIN32_SURFACE (surface)->hdc == NULL)
             GDK_WIN32_SURFACE (surface)->hdc = GetDC (GDK_SURFACE_HWND (surface));
-
+g_message ("acquire surface HDC");
           hdc = GDK_WIN32_SURFACE (surface)->hdc;
         }
       else
@@ -1176,6 +1176,63 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
 #define EGL_PLATFORM_ANGLE_ANGLE          0x3202
 #endif
 
+static LRESULT CALLBACK
+dummy_gl_window_procedure (HWND   hwnd,
+                           UINT   message,
+                           WPARAM wparam,
+                           LPARAM lparam)
+{
+  switch (message)
+    {
+    case WM_DESTROY:
+      {
+        PostQuitMessage (0);
+        return 0;
+      }
+    default:
+      /* Otherwise call DefWindowProcW(). */
+      GDK_NOTE (EVENTS, g_print (" DefWindowProcW"));
+      return DefWindowProc (hwnd, message, wparam, lparam);
+    }
+}
+
+/*
+ * Use a dummy HWND to init GL, sadly we can't just use the
+ * HWND that we use for notifications as we may only call
+ * SetPixelFormat() on an HDC once, and that notification HWND
+ * uses the CS_OWNDC style meaning that even if we were to call
+ * DeleteDC() on it, we would get the exact same HDC when we call
+ * GetDC() on it later, meaning SetPixelFormat() cannot be used on
+ * the HDC that we acquire from the notification HWND.
+ */
+static HWND
+create_dummy_gl_window (void)
+{
+  WNDCLASS wclass = { 0, };
+  ATOM klass;
+  HWND hwnd;
+
+  wclass.lpszClassName = "GdkGLDummyWindow";
+  wclass.lpfnWndProc = dummy_gl_window_procedure;
+  wclass.hInstance = _gdk_app_hmodule;
+  wclass.style = CS_OWNDC;
+
+  klass = RegisterClass (&wclass);
+  if (klass)
+    {
+      hwnd = CreateWindow (MAKEINTRESOURCE (klass),
+                           NULL, WS_POPUP,
+                           0, 0, 0, 0, NULL, NULL,
+                           _gdk_app_hmodule, NULL);
+      if (!hwnd)
+        {
+          UnregisterClass (MAKEINTRESOURCE (klass), _gdk_app_hmodule);
+        }
+    }
+
+  return hwnd;
+}
+
 static GdkGLContext *
 gdk_win32_display_init_gl (GdkDisplay  *display,
                            GError     **error)
@@ -1183,11 +1240,6 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   HDC init_gl_hdc = NULL;
   GdkGLContext *context;
-
-  if (display_win32->dummy_context_wgl.hdc == NULL)
-    display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-
-  init_gl_hdc = display_win32->dummy_context_wgl.hdc;
 
   /*
    * No env vars set, do the regular GL initialization, first WGL and then EGL,
@@ -1201,6 +1253,8 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
    */
   if (gdk_display_get_debug_flags (display) & (GDK_DEBUG_GL_EGL|GDK_DEBUG_GL_GLES))
     {
+      init_gl_hdc = GetDC (display_win32->hwnd);
+
       if (gdk_display_init_egl (display,
                                 EGL_PLATFORM_ANGLE_ANGLE,
                                 init_gl_hdc,
@@ -1217,13 +1271,28 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
     }
 #endif
 
+  if (display_win32->dummy_context_wgl.hdc == NULL)
+    {
+      if (display_win32->dummy_context_wgl.realized)
+        display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
+      else
+        {
+          display_win32->dummy_context_wgl.hwnd = create_dummy_gl_window ();
+
+          if (display_win32->dummy_context_wgl.hwnd != NULL)
+            display_win32->dummy_context_wgl.hdc = GetDC (display_win32->dummy_context_wgl.hwnd);
+		}
+    }
+
   context = gdk_win32_display_init_wgl (display, error);
+
   if (context)
     return context;
 
 #ifdef HAVE_EGL
   g_clear_error (error);
 
+  init_gl_hdc = GetDC (display_win32->hwnd);
   if (gdk_display_init_egl (display,
                             EGL_PLATFORM_ANGLE_ANGLE,
                             init_gl_hdc,

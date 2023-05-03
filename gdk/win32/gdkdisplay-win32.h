@@ -108,8 +108,10 @@ typedef enum {
 
 typedef struct
 {
+  HWND hwnd;
   HDC hdc;
   HGLRC hglrc;
+  guint realized : 1;
 } GdkWin32GLDummyContextWGL;
 
 struct _GdkWin32Display
