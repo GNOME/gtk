@@ -16,7 +16,7 @@ pid=\$!
 export WAYLAND_DISPLAY=gtk-test
 export GDK_BACKEND=wayland
 
-python ${srcdir}/headless-monitor-tests.py
+python3 ${srcdir}/headless-monitor-tests.py
 status=\$?
 
 kill \$pid
