@@ -185,85 +185,123 @@
       </object>
     </child>
     <child>
-      <object class="GtkPaned">
-        <property name="shrink-start-child">false</property>
-        <property name="shrink-end-child">false</property>
-        <property name="position">400</property>
-        <property name="start-child">
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
-            <property name="hexpand">1</property>
-            <property name="vexpand">1</property>
-            <child>
-              <object class="GtkTextView" id="text_view">
-                <property name="wrap-mode">word</property>
-                <property name="monospace">1</property>
-                <property name="top-margin">6</property>
-                <property name="left-margin">6</property>
-                <property name="right-margin">6</property>
-                <property name="bottom-margin">6</property>
-                <property name="has-tooltip">1</property>
-                <property name="extra-menu">extra_menu</property>
-                <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
-                <style>
-                  <class name="editor" />
-                </style>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkListView">
+            <property name="orientation">horizontal</property>
+            <property name="single-click-activate">1</property>
+            <property name="model">
+              <object class="GtkNoSelection">
+                <property name="model">
+                  <object class="GListStore" id="saved_nodes" />
+                </property>
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkImage">
+        <property name="icon-size">large</property>
+        <binding name="paintable">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                ]]></property>
+              </object>
+            </property>
+            <signal name="activate" handler="saved_node_activate_cb"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPaned">
+            <property name="shrink-start-child">false</property>
+            <property name="shrink-end-child">false</property>
+            <property name="position">400</property>
+            <property name="start-child">
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <child>
-                  <object class="GtkGestureClick">
-                    <property name="button">1</property>
-                    <signal name="pressed" handler="click_gesture_pressed"/>
+                  <object class="GtkTextView" id="text_view">
+                    <property name="wrap-mode">word</property>
+                    <property name="monospace">1</property>
+                    <property name="top-margin">6</property>
+                    <property name="left-margin">6</property>
+                    <property name="right-margin">6</property>
+                    <property name="bottom-margin">6</property>
+                    <property name="has-tooltip">1</property>
+                    <property name="extra-menu">extra_menu</property>
+                    <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
+                    <style>
+                      <class name="editor" />
+                    </style>
+                    <child>
+                      <object class="GtkGestureClick">
+                        <property name="button">1</property>
+                        <signal name="pressed" handler="click_gesture_pressed"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
-            </child>
-          </object>
-        </property>
-        <property name="end-child">
-          <object class="GtkBox">
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="hexpand">1</property>
-                <property name="vexpand">1</property>
-                <property name="min-content-height">100</property>
-                <property name="min-content-width">100</property>
+            </property>
+            <property name="end-child">
+              <object class="GtkBox">
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkScrolledWindow">
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="min-content-height">100</property>
+                    <property name="min-content-width">100</property>
                     <child>
-                      <object class="GtkPicture" id="picture">
-                        <property name="can-shrink">0</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
+                      <object class="GtkViewport">
                         <child>
-                          <object class="GtkDragSource">
+                          <object class="GtkPicture" id="picture">
+                            <property name="can-shrink">0</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkDragSource">
+                                <property name="actions">copy</property>
+                                <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropTargetAsync">
                             <property name="actions">copy</property>
-                            <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                            <property name="formats">application/x-gtk-render-node</property>
+                            <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
                           </object>
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkDropTargetAsync">
-                        <property name="actions">copy</property>
-                        <property name="formats">application/x-gtk-render-node</property>
-                        <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
+                      <object class="GtkListBox" id="renderer_listbox">
+                        <property name="selection-mode">none</property>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkListBox" id="renderer_listbox">
-                    <property name="selection-mode">none</property>
-                  </object>
-                </child>
-              </object>
-            </child>
+            </property>
           </object>
-        </property>
+        </child>
       </object>
     </child>
   </template>

@@ -61,6 +61,7 @@ struct _NodeEditorWindow
   GtkWidget *scale_scale;
 
   GtkWidget *renderer_listbox;
+  GListStore *saved_nodes;
   GListStore *renderers;
   GskRenderNode *node;
 
@@ -209,7 +210,7 @@ text_changed (GtkTextBuffer    *buffer,
       GtkSnapshot *snapshot;
       GdkPaintable *paintable;
       graphene_rect_t bounds;
-      guint i;
+      guint i, n;
 
       snapshot = gtk_snapshot_new ();
       gsk_render_node_get_bounds (big_node, &bounds);
@@ -225,6 +226,8 @@ text_changed (GtkTextBuffer    *buffer,
       gtk_snapshot_append_node (snapshot, self->node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
 
+      n = g_list_model_get_n_items (G_LIST_MODEL (self->saved_nodes));
+      g_list_store_splice (self->saved_nodes, MAX (n, 1) - 1, MIN (n, 1), (gpointer[1]) { paintable }, 1);
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
         {
           gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
@@ -307,6 +310,17 @@ text_changed (GtkTextBuffer    *buffer,
   gtk_text_buffer_get_bounds (self->text_buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (self->text_buffer, "no-hyphens",
                                      &start, &end);
+}
+
+static void
+stash_current_node (NodeEditorWindow *self)
+{
+  GdkPaintable *last;
+
+  last = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes),
+                                g_list_model_get_n_items (G_LIST_MODEL (self->saved_nodes)) - 1);
+  g_list_store_append (self->saved_nodes, last);
+  g_object_unref (last);
 }
 
 static void
@@ -412,6 +426,8 @@ load_bytes (NodeEditorWindow *self,
       g_bytes_unref (bytes);
       return FALSE;
     }
+  
+  stash_current_node (self);
 
   gtk_text_buffer_set_text (self->text_buffer,
                             g_bytes_get_data (bytes, NULL),
@@ -438,6 +454,28 @@ load_file_contents (NodeEditorWindow *self,
     }
 
   return load_bytes (self, bytes);
+}
+
+static void
+saved_node_activate_cb (GtkListView      *listview,
+                        guint             pos,
+                        NodeEditorWindow *self)
+{
+  GdkPaintable *paintable;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GBytes *bytes;
+
+  paintable = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes), pos);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  bytes = gsk_render_node_serialize (node);
+  load_bytes (self, bytes);
+
+  g_object_unref (paintable);
 }
 
 static GdkContentProvider *
@@ -649,6 +687,10 @@ save_response_cb (GObject *source,
                                  GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
           g_object_unref (alert);
           g_error_free (error);
+        }
+      else
+        {
+          stash_current_node (self);
         }
 
       g_free (text);
@@ -1074,6 +1116,8 @@ testcase_save_clicked_cb (GtkWidget        *button,
 
   gtk_editable_set_text (GTK_EDITABLE (self->testcase_name_entry), "");
   gtk_popover_popdown (GTK_POPOVER (self->testcase_popover));
+
+  stash_current_node (self);
 
 out:
   g_free (text);
@@ -1565,8 +1609,10 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_name_entry);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_save_button);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, scale_scale);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, saved_nodes);
 
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
+  gtk_widget_class_bind_template_callback (widget_class, saved_node_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
   gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
