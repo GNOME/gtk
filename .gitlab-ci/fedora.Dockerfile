@@ -78,6 +78,7 @@ RUN dnf -y install \
     pcre-devel \
     pcre-static \
     pipewire \
+    pipewire-gstreamer \
     python3 \
     python3-docutils \
     python3-gobject \
