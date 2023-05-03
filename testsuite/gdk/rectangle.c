@@ -37,6 +37,7 @@ test_rectangle_intersect (void)
 
   /* non-empty, non-intersecting rectangles */
   res = gdk_rectangle_intersect (&e, &f, &f);
+  g_assert_false (res);
   g_assert_cmpint (f.width, ==, 0);
   g_assert_cmpint (f.height, ==, 0);
 
