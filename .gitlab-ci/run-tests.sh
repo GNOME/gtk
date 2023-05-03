@@ -28,13 +28,6 @@ case "${backend}" in
     # generate the reports
     exit_code=$?
 
-    xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
-          meson test -C ${builddir} \
-                --timeout-multiplier "${multiplier}" \
-                --print-errorlogs \
-                --setup=${backend}_unstable \
-                --suite=flaky \
-                --suite=failing || true
     ;;
 
   wayland*)
@@ -54,13 +47,6 @@ case "${backend}" in
                 --no-suite=${backend}_failing \
                 --no-suite=gsk-compare-broadway
     exit_code=$?
-
-    meson test -C ${builddir} \
-                --timeout-multiplier "${multiplier}" \
-                --print-errorlogs \
-                --setup=${backend}_unstable \
-                --suite=flaky \
-                --suite=failing || true
 
     kill ${compositor}
     ;;
@@ -83,13 +69,6 @@ case "${backend}" in
 
     # don't let Broadway failures fail the run, for now
     exit_code=0
-
-    meson test -C ${builddir} \
-                --timeout-multiplier "${multiplier}" \
-                --print-errorlogs \
-                --setup=${backend}_unstable \
-                --suite=flaky \
-                --suite=failing || true
 
     kill ${server}
     ;;
