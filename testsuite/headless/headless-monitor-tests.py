@@ -36,10 +36,10 @@ def stream_added_closure(name):
         # Use gstreamer out-of-process, since the gst gl support gets
         # itself into a twist with its wayland connection when monitors
         # disappear
-        pipeline_desc = f'gst-launch-1.0 pipewiresrc path={node_id} ! video/x-raw,max-framerate={freq}/1,width={width},height={height} ! videoconvert ! glimagesink'
+        pipeline_desc = f'gst-launch-1.0 --verbose pipewiresrc path={node_id} ! video/x-raw,max-framerate={freq}/1,width={width},height={height} ! videoconvert ! glimagesink'
         if verbose:
             print(f'launching {pipeline_desc}')
-        monitor['pipeline'] = subprocess.Popen([pipeline_desc], shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        monitor['pipeline'] = subprocess.Popen([pipeline_desc], shell=True)
 
     return stream_added
 

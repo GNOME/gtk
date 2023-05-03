@@ -2,6 +2,9 @@
 
 srcdir=${MESON_CURRENT_SOURCE_DIR:-./testsuite/headless}
 
+export GTK_A11Y=none
+export GIO_USE_VFS=local
+
 dbus-run-session sh <<EOF
 
 export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
@@ -14,9 +17,6 @@ sleep 1
 
 # echo DBUS_SESSION_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS
 # echo WAYLAND_DISPLAY=gtk-test
-
-export GTK_A11Y=none
-export GIO_USE_VFS=local
 
 mutter --headless --no-x11 --wayland-display gtk-test >&mutter.log &
 mutter_pid=\$!
