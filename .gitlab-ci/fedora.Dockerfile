@@ -32,7 +32,6 @@ RUN dnf -y install \
     glib2-static \
     glibc-devel \
     glibc-headers \
-    gnome-desktop-testing \
     gnupg2 \
     gobject-introspection-devel \
     graphene-devel \
@@ -78,6 +77,7 @@ RUN dnf -y install \
     pango-devel \
     pcre-devel \
     pcre-static \
+    pipewire \
     python3 \
     python3-docutils \
     python3-gobject \
@@ -97,6 +97,7 @@ RUN dnf -y install \
     weston \
     weston-libs \
     which \
+    wireplumber \
     xorg-x11-server-Xvfb \
  && dnf clean all
 
