@@ -3,6 +3,7 @@ node_editor_sources = [
   'main.c',
   'node-editor-application.c',
   'node-editor-window.c',
+  'rendernodeutils.c'
 ]
 
 node_editor_resources = gnome.compile_resources('node_editor_resources',

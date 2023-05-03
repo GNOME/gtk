@@ -22,6 +22,7 @@
 #include "node-editor-window.h"
 
 #include "gtkrendererpaintableprivate.h"
+#include "rendernodeutilsprivate.h"
 
 #include "gsk/gskrendernodeparserprivate.h"
 #include "gsk/gl/gskglrenderer.h"
@@ -64,6 +65,7 @@ struct _NodeEditorWindow
   GListStore *saved_nodes;
   GListStore *renderers;
   GskRenderNode *node;
+  GtkAdjustment *compare_progress;
 
   GFile *file;
   GFileMonitor *file_monitor;
@@ -392,7 +394,8 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 
 static gboolean
 load_bytes (NodeEditorWindow *self,
-            GBytes           *bytes);
+            GBytes           *bytes,
+            gboolean          stash);
 
 static void
 load_error (NodeEditorWindow *self,
@@ -410,7 +413,7 @@ load_error (NodeEditorWindow *self,
   node = gtk_snapshot_free_to_node (snapshot);
   bytes = gsk_render_node_serialize (node);
 
-  load_bytes (self, bytes);
+  load_bytes (self, bytes, TRUE);
 
   gsk_render_node_unref (node);
   g_object_unref (layout);
@@ -418,7 +421,8 @@ load_error (NodeEditorWindow *self,
 
 static gboolean
 load_bytes (NodeEditorWindow *self,
-            GBytes           *bytes)
+            GBytes           *bytes,
+            gboolean          stash)
 {
   if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
     {
@@ -427,7 +431,8 @@ load_bytes (NodeEditorWindow *self,
       return FALSE;
     }
   
-  stash_current_node (self);
+  if (stash)
+    stash_current_node (self);
 
   gtk_text_buffer_set_text (self->text_buffer,
                             g_bytes_get_data (bytes, NULL),
@@ -453,7 +458,7 @@ load_file_contents (NodeEditorWindow *self,
       return FALSE;
     }
 
-  return load_bytes (self, bytes);
+  return load_bytes (self, bytes, TRUE);
 }
 
 static void
@@ -473,7 +478,7 @@ saved_node_activate_cb (GtkListView      *listview,
   node = gtk_snapshot_free_to_node (snapshot);
 
   bytes = gsk_render_node_serialize (node);
-  load_bytes (self, bytes);
+  load_bytes (self, bytes, TRUE);
 
   g_object_unref (paintable);
 }
@@ -504,7 +509,7 @@ on_picture_drop_read_done_cb (GObject      *source,
   if (g_output_stream_splice_finish (stream, res, NULL) >= 0)
     {
       bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream));
-      if (load_bytes (self, bytes))
+      if (load_bytes (self, bytes, TRUE))
         action = GDK_ACTION_COPY;
     }
 
@@ -1127,8 +1132,54 @@ out:
 }
 
 static void
-dark_mode_cb (GtkToggleButton *button,
-              GParamSpec      *pspec,
+update_compare (NodeEditorWindow *self)
+{
+  GdkPaintable *from, *to;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node, *node_from, *node_to;
+  GBytes *bytes;
+  guint n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->saved_nodes));
+
+  from = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes), n - 3);
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (from, snapshot, gdk_paintable_get_intrinsic_width (from), gdk_paintable_get_intrinsic_height (from));
+  node_from = gtk_snapshot_free_to_node (snapshot);
+  g_object_unref (from);
+
+  to = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes), n - 2);
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (to, snapshot, gdk_paintable_get_intrinsic_width (to), gdk_paintable_get_intrinsic_height (to));
+  node_to = gtk_snapshot_free_to_node (snapshot);
+  g_object_unref (to);
+
+  node = render_node_interpolate (node_from, node_to, gtk_adjustment_get_value (self->compare_progress));
+
+  bytes = gsk_render_node_serialize (node);
+  load_bytes (self, bytes, FALSE);
+
+  gsk_render_node_unref (node);
+  gsk_render_node_unref (node_to);
+  gsk_render_node_unref (node_from);
+}
+
+static void
+compare_toggled_cb (GtkToggleButton  *button,
+                    GParamSpec       *pspec,
+                    NodeEditorWindow *self)
+{
+  if (!gtk_toggle_button_get_active (button))
+    return;
+
+  stash_current_node (self);
+
+  update_compare (self);
+}
+
+static void
+dark_mode_cb (GtkToggleButton  *button,
+              GParamSpec       *pspec,
               NodeEditorWindow *self)
 {
   g_object_set (gtk_widget_get_settings (GTK_WIDGET (self)),
@@ -1602,6 +1653,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, compare_progress);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, renderer_listbox);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_popover);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_error_label);
@@ -1619,10 +1671,12 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_image_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, compare_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, click_gesture_pressed);
+  gtk_widget_class_bind_template_callback (widget_class, update_compare);
 
   gtk_widget_class_install_action (widget_class, "smart-edit", NULL, edit_action_cb);
 

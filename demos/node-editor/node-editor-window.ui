@@ -166,6 +166,16 @@
           </object>
         </child>
         <child type="end">
+          <object class="GtkToggleButton" id="compare_button">
+            <property name="focus-on-click">0</property>
+            <property name="valign">center</property>
+            <property name="has-frame">0</property>
+            <property name="icon-name">emblem-synchronizing-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Compare the last 2 items</property>
+            <signal name="notify::active" handler="compare_toggled_cb" swapped="0"/>
+          </object>
+        </child>
+        <child type="end">
           <object class="GtkScaleButton" id="scale_scale">
             <property name="focus-on-click">0</property>
             <property name="valign">center</property>
@@ -257,31 +267,65 @@
             <property name="end-child">
               <object class="GtkBox">
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="hexpand">1</property>
-                    <property name="vexpand">1</property>
-                    <property name="min-content-height">100</property>
-                    <property name="min-content-width">100</property>
+                  <object class="GtkOverlay">
                     <child>
-                      <object class="GtkViewport">
+                      <object class="GtkScrolledWindow">
+                        <property name="hexpand">1</property>
+                        <property name="vexpand">1</property>
+                        <property name="min-content-height">100</property>
+                        <property name="min-content-width">100</property>
                         <child>
-                          <object class="GtkPicture" id="picture">
-                            <property name="can-shrink">0</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
+                          <object class="GtkViewport">
                             <child>
-                              <object class="GtkDragSource">
+                              <object class="GtkPicture" id="picture">
+                                <property name="can-shrink">0</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <child>
+                                  <object class="GtkDragSource">
+                                    <property name="actions">copy</property>
+                                    <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropTargetAsync">
                                 <property name="actions">copy</property>
-                                <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                                <property name="formats">application/x-gtk-render-node</property>
+                                <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
                               </object>
                             </child>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child type="overlay">
+                      <object class="GtkBox">
+                        <property name="margin-top">16</property>
+                        <property name="margin-start">16</property>
+                        <property name="margin-end">16</property>
+                        <property name="margin-bottom">16</property>
+                        <property name="halign">fill</property>
+                        <property name="valign">end</property>
+                        <property name="visible" bind-source="compare_button" bind-property="active">0</property>
+                        <style>
+                          <class name="osd" />
+                        </style>
                         <child>
-                          <object class="GtkDropTargetAsync">
-                            <property name="actions">copy</property>
-                            <property name="formats">application/x-gtk-render-node</property>
-                            <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
+                          <object class="GtkScale">
+                            <property name="width-request">200</property>
+                            <property name="draw-value">0</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment" id="compare_progress">
+                                <property name="upper">1</property>
+                                <property name="value">0.5</property>
+                                <property name="step-increment">0.01</property>
+                                <property name="page-increment">0.1</property>
+                                <signal name="notify::value" handler="update_compare" swapped="yes"/>
+                              </object>
+                            </property>
+                            <property name="hexpand">1</property>
                           </object>
                         </child>
                       </object>
