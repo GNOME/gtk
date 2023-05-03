@@ -16,6 +16,7 @@ case "${backend}" in
   x11)
     xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
           meson test -C ${builddir} \
+                --quiet \
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
@@ -37,6 +38,7 @@ case "${backend}" in
     export WAYLAND_DISPLAY=wayland-5
 
     meson test -C ${builddir} \
+                --quiet \
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
@@ -58,6 +60,7 @@ case "${backend}" in
     export BROADWAY_DISPLAY=:5
 
     meson test -C ${builddir} \
+                --quiet \
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${backend} \
