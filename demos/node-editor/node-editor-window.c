@@ -64,6 +64,7 @@ struct _NodeEditorWindow
   GListStore *saved_nodes;
   GListStore *renderers;
   GskRenderNode *node;
+  GtkAdjustment *compare_progress;
 
   GFileMonitor *file_monitor;
 
@@ -391,7 +392,8 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 
 static gboolean
 load_bytes (NodeEditorWindow *self,
-            GBytes           *bytes);
+            GBytes           *bytes,
+            gboolean          stash);
 
 static void
 load_error (NodeEditorWindow *self,
@@ -409,7 +411,7 @@ load_error (NodeEditorWindow *self,
   node = gtk_snapshot_free_to_node (snapshot);
   bytes = gsk_render_node_serialize (node);
 
-  load_bytes (self, bytes);
+  load_bytes (self, bytes, TRUE);
 
   gsk_render_node_unref (node);
   g_object_unref (layout);
@@ -417,7 +419,8 @@ load_error (NodeEditorWindow *self,
 
 static gboolean
 load_bytes (NodeEditorWindow *self,
-            GBytes           *bytes)
+            GBytes           *bytes,
+            gboolean          stash)
 {
   if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
     {
@@ -426,7 +429,8 @@ load_bytes (NodeEditorWindow *self,
       return FALSE;
     }
   
-  stash_current_node (self);
+  if (stash)
+    stash_current_node (self);
 
   gtk_text_buffer_set_text (self->text_buffer,
                             g_bytes_get_data (bytes, NULL),
@@ -452,7 +456,7 @@ load_file_contents (NodeEditorWindow *self,
       return FALSE;
     }
 
-  return load_bytes (self, bytes);
+  return load_bytes (self, bytes, TRUE);
 }
 
 static void
@@ -472,7 +476,7 @@ saved_node_activate_cb (GtkListView      *listview,
   node = gtk_snapshot_free_to_node (snapshot);
 
   bytes = gsk_render_node_serialize (node);
-  load_bytes (self, bytes);
+  load_bytes (self, bytes, TRUE);
 
   g_object_unref (paintable);
 }
@@ -503,7 +507,7 @@ on_picture_drop_read_done_cb (GObject      *source,
   if (g_output_stream_splice_finish (stream, res, NULL) >= 0)
     {
       bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream));
-      if (load_bytes (self, bytes))
+      if (load_bytes (self, bytes, TRUE))
         action = GDK_ACTION_COPY;
     }
 
@@ -1108,9 +1112,147 @@ out:
   g_free (source_dir);
 }
 
+static inline double
+double_transform (double start,
+                  double end,
+                  double progress)
+{
+  return start + (end - start) * progress;
+}
+
 static void
-dark_mode_cb (GtkToggleButton *button,
-              GParamSpec      *pspec,
+rgba_transform (GdkRGBA       *result,
+                const GdkRGBA *start,
+                const GdkRGBA *end,
+                double         progress)
+{
+  result->alpha = CLAMP (double_transform (start->alpha, end->alpha, progress), 0, 1);
+
+  if (result->alpha <= 0.0)
+    {
+      result->red = result->green = result->blue = 0.0;
+    }
+  else
+    {
+      result->red   = CLAMP (double_transform (start->red * start->alpha, end->red * end->alpha, progress), 0,  1) / result->alpha;
+      result->green = CLAMP (double_transform (start->green * start->alpha, end->green * end->alpha, progress), 0,  1) / result->alpha;
+      result->blue  = CLAMP (double_transform (start->blue * start->alpha, end->blue * end->alpha, progress), 0,  1) / result->alpha;
+    }
+}
+
+static GskRenderNode *
+render_node_transform (GskRenderNode *start,
+                       GskRenderNode *end,
+                       double         progress)
+{
+  GskRenderNodeType start_type, end_type;
+
+  start_type = gsk_render_node_get_node_type (start);
+  end_type = gsk_render_node_get_node_type (end);
+
+  if (start_type == end_type)
+    {
+      switch (start_type)
+        {
+          case GSK_COLOR_NODE:
+            {
+              GdkRGBA rgba;
+              graphene_rect_t start_bounds, end_bounds, bounds;
+
+              rgba_transform (&rgba, gsk_color_node_get_color (start), gsk_color_node_get_color (end), progress);
+              gsk_render_node_get_bounds (start, &start_bounds);
+              gsk_render_node_get_bounds (end, &end_bounds);
+              graphene_rect_interpolate (&start_bounds, &end_bounds, progress, &bounds);
+              return gsk_color_node_new (&rgba, &bounds);
+            }
+
+          case GSK_CAIRO_NODE:
+          case GSK_TEXT_NODE:
+          case GSK_TEXTURE_NODE:
+          case GSK_TEXTURE_SCALE_NODE:
+          case GSK_LINEAR_GRADIENT_NODE:
+          case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+          case GSK_RADIAL_GRADIENT_NODE:
+          case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+          case GSK_CONIC_GRADIENT_NODE:
+          case GSK_BORDER_NODE:
+          case GSK_INSET_SHADOW_NODE:
+          case GSK_OUTSET_SHADOW_NODE:
+          case GSK_TRANSFORM_NODE:
+          case GSK_OPACITY_NODE:
+          case GSK_COLOR_MATRIX_NODE:
+          case GSK_BLUR_NODE:
+          case GSK_REPEAT_NODE:
+          case GSK_CLIP_NODE:
+          case GSK_ROUNDED_CLIP_NODE:
+          case GSK_SHADOW_NODE:
+          case GSK_BLEND_NODE:
+          case GSK_MASK_NODE:
+          case GSK_CROSS_FADE_NODE:
+          case GSK_GL_SHADER_NODE:
+          case GSK_CONTAINER_NODE:
+          case GSK_DEBUG_NODE:
+            break;
+
+          case GSK_NOT_A_RENDER_NODE:
+          default:
+            g_assert_not_reached ();
+            break;
+        }
+    }
+
+  return gsk_cross_fade_node_new (start, end, progress);
+}
+
+static void
+update_compare (NodeEditorWindow *self)
+{
+  GdkPaintable *from, *to;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node, *node_from, *node_to;
+  GBytes *bytes;
+  guint n;
+
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->saved_nodes));
+
+  from = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes), n - 3);
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (from, snapshot, gdk_paintable_get_intrinsic_width (from), gdk_paintable_get_intrinsic_height (from));
+  node_from = gtk_snapshot_free_to_node (snapshot);
+  g_object_unref (from);
+
+  to = g_list_model_get_item (G_LIST_MODEL (self->saved_nodes), n - 2);
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (to, snapshot, gdk_paintable_get_intrinsic_width (to), gdk_paintable_get_intrinsic_height (to));
+  node_to = gtk_snapshot_free_to_node (snapshot);
+  g_object_unref (to);
+
+  node = render_node_transform (node_from, node_to, gtk_adjustment_get_value (self->compare_progress));
+
+  bytes = gsk_render_node_serialize (node);
+  load_bytes (self, bytes, FALSE);
+
+  gsk_render_node_unref (node);
+  gsk_render_node_unref (node_to);
+  gsk_render_node_unref (node_from);
+}
+
+static void
+compare_toggled_cb (GtkToggleButton  *button,
+                    GParamSpec       *pspec,
+                    NodeEditorWindow *self)
+{
+  if (!gtk_toggle_button_get_active (button))
+    return;
+
+  stash_current_node (self);
+
+  update_compare (self);
+}
+
+static void
+dark_mode_cb (GtkToggleButton  *button,
+              GParamSpec       *pspec,
               NodeEditorWindow *self)
 {
   g_object_set (gtk_widget_get_settings (GTK_WIDGET (self)),
@@ -1231,6 +1373,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, compare_progress);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, renderer_listbox);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_popover);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_error_label);
@@ -1248,9 +1391,11 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_image_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, compare_toggled_cb);
   gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
+  gtk_widget_class_bind_template_callback (widget_class, update_compare);
 }
 
 static GtkWidget *
