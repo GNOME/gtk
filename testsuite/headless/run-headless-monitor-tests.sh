@@ -1,11 +1,14 @@
 #! /bin/sh
 
-builddir=$(pwd)/build
+srcdir=${MESON_CURRENT_SOURCE_DIR:-./testsuite/headless}
 
 dbus-run-session sh <<EOF
 
 # echo DBUS_SESSION_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS
 # echo WAYLAND_DISPLAY=gtk-test
+
+export GTK_A11Y=none
+export GIO_USE_VFS=local
 
 mutter --headless --no-x11 --wayland-display gtk-test >&mutter.log &
 pid=\$!
@@ -13,10 +16,7 @@ pid=\$!
 export WAYLAND_DISPLAY=gtk-test
 export GDK_BACKEND=wayland
 
-export GI_TYPELIB_PATH=$builddir/gtk:/usr/lib64/girepository-1.0
-export LD_PRELOAD=$builddir/gtk/libgtk-4.so
-
-python tests/headless-monitor-tests.py
+python ${srcdir}/headless-monitor-tests.py
 status=\$?
 
 kill \$pid

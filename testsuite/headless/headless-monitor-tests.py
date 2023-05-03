@@ -1,4 +1,5 @@
 import sys
+import os
 import subprocess
 import gi
 
@@ -14,6 +15,7 @@ monitors = {}
 waiting = False
 done = False
 monitor_model = None
+display = None
 
 def terminate():
     for key in monitors:
@@ -99,12 +101,13 @@ def monitors_changed(monitors, position, removed, added):
 
 def launch_observer():
     global monitor_model
+    global display
+
+    if display == None:
+        display = Gdk.Display.open(os.getenv('WAYLAND_DISPLAY'))
 
     if verbose:
         print('launch observer')
-
-    Gdk.set_allowed_backends('wayland')
-    display = Gdk.Display.open('gtk-test')
 
     monitor_model = display.get_monitors()
     assert monitor_model.get_n_items() == 0, "Unexpected initial monitors"

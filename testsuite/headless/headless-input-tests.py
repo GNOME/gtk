@@ -1,4 +1,5 @@
 import sys
+import os
 import subprocess
 import gi
 
@@ -191,11 +192,9 @@ def launch_observer():
         print('launch observer')
 
     if display == None:
-        Gdk.set_allowed_backends('wayland')
-        display = Gdk.Display.open('gtk-test')
+        display = Gdk.Display.open(os.getenv('WAYLAND_DISPLAY'))
 
     window = Gtk.Window.new()
-    window.set_display(display)
 
     controller = Gtk.EventControllerKey.new()
     controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
@@ -341,12 +340,10 @@ def launch_drag_source(value):
         print('launch drag source')
 
     if display == None:
-        Gdk.set_allowed_backends('wayland')
-        display = Gdk.Display.open('gtk-test')
+        display = Gdk.Display.open(os.getenv('WAYLAND_DISPLAY'))
 
     ds_window = Gtk.Window.new()
     ds_window.set_title('Drag Source')
-    ds_window.set_display(display)
 
     ds = Gtk.DragSource.new()
     ds.set_content(Gdk.ContentProvider.new_for_value(value))
@@ -393,14 +390,17 @@ def do_drop(controller, value, x, y):
     loop.quit()
 
 def launch_drop_target():
+    global display
     global dt_window
 
     if verbose:
         print('launch drop target')
 
+    if display == None:
+        display = Gdk.Display.open(os.getenv('WAYLAND_DISPLAY'))
+
     dt_window = Gtk.Window.new()
     dt_window.set_title('Drop Target')
-    dt_window.set_display(display)
 
     controller = Gtk.DropTarget.new(GObject.TYPE_STRING, Gdk.DragAction.COPY)
     dt_window.add_controller(controller)
@@ -448,6 +448,8 @@ def dnd_tests():
         pointer_move(100, 100)
         button_press(1)
         expect_button_press(button=1, x=100, y=100, timeout=300)
+        # need to wait out the MIN_TIME_TO_DND
+        wait(150)
 
         pointer_move(120, 150)
         expect_drag(timeout=1000)
@@ -492,6 +494,11 @@ def mutter_appeared(name):
 
     stream_path = screen_cast_session.RecordMonitor('Meta-0', {})
     session.Start()
+
+    # work around lack of initial devices
+    key_press(Gdk.KEY_Control_L)
+    key_release(Gdk.KEY_Control_L)
+    pointer_move(-100, -100)
 
     basic_keyboard_tests()
     basic_pointer_tests()
