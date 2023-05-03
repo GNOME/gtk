@@ -646,15 +646,15 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
+  if (display_win32->dummy_context_wgl.hglrc != NULL)
+    {
+      wglMakeCurrent (NULL, NULL);
+      wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+      display_win32->dummy_context_wgl.hglrc = NULL;
+    }
+
   if (display_win32->hwnd != NULL)
     {
-      if (display_win32->dummy_context_wgl.hglrc != NULL)
-        {
-          wglMakeCurrent (NULL, NULL);
-          wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-          display_win32->dummy_context_wgl.hglrc = NULL;
-        }
-
       DestroyWindow (display_win32->hwnd);
       display_win32->hwnd = NULL;
     }
@@ -1129,7 +1129,6 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
         {
           if (GDK_WIN32_SURFACE (surface)->hdc == NULL)
             GDK_WIN32_SURFACE (surface)->hdc = GetDC (GDK_SURFACE_HWND (surface));
-
           hdc = GDK_WIN32_SURFACE (surface)->hdc;
         }
       else
@@ -1184,11 +1183,6 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
   HDC init_gl_hdc = NULL;
   GdkGLContext *context;
 
-  if (display_win32->dummy_context_wgl.hdc == NULL)
-    display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-
-  init_gl_hdc = display_win32->dummy_context_wgl.hdc;
-
   /*
    * No env vars set, do the regular GL initialization, first WGL and then EGL,
    * as WGL is the more tried-and-tested configuration.
@@ -1201,6 +1195,8 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
    */
   if (gdk_display_get_debug_flags (display) & (GDK_DEBUG_GL_EGL|GDK_DEBUG_GL_GLES))
     {
+      init_gl_hdc = GetDC (display_win32->hwnd);
+
       if (gdk_display_init_egl (display,
                                 EGL_PLATFORM_ANGLE_ANGLE,
                                 init_gl_hdc,
@@ -1218,12 +1214,14 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
 #endif
 
   context = gdk_win32_display_init_wgl (display, error);
+
   if (context)
     return context;
 
 #ifdef HAVE_EGL
   g_clear_error (error);
 
+  init_gl_hdc = GetDC (display_win32->hwnd);
   if (gdk_display_init_egl (display,
                             EGL_PLATFORM_ANGLE_ANGLE,
                             init_gl_hdc,
