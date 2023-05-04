@@ -446,8 +446,10 @@ def dnd_tests():
         pointer_move(-100, -100)
 
         launch_drag_source('abc')
+        wait(100);
 
         pointer_move(100, 100)
+        wait(100);
         button_press(1)
         expect_button_press(button=1, x=100, y=100, timeout=300)
         # need to wait out the MIN_TIME_TO_DND
@@ -457,6 +459,7 @@ def dnd_tests():
         expect_drag(timeout=1000)
 
         launch_drop_target()
+        wait(100);
         button_release(1)
         expect_drop('abc', timeout=200)
 

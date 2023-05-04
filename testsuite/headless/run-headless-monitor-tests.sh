@@ -11,15 +11,19 @@ export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
 pipewire &
 pipewire_pid=\$!
+sleep 2
+
 wireplumber &
 wireplumber_pid=\$!
-sleep 1
+sleep 2
 
 # echo DBUS_SESSION_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS
 # echo WAYLAND_DISPLAY=gtk-test
 
 mutter --headless --no-x11 --wayland-display gtk-test >&mutter.log &
 mutter_pid=\$!
+
+sleep 2
 
 export WAYLAND_DISPLAY=gtk-test
 export GDK_BACKEND=wayland
