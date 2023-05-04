@@ -26,7 +26,7 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Ddemos=false -Dbuild-examples=false -Dbuild-tests=false -Dbuild-testsuite=true"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v43"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v46"
 
 workflow:
   rules:
@@ -86,7 +86,6 @@ fedora-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson subprojects download
     - meson subprojects update --reset
     - mkdir _install
@@ -116,7 +115,6 @@ release-build:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson subprojects download
     - meson subprojects update --reset
     - meson setup
@@ -147,23 +145,11 @@ fedora-mingw64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
+    - pip3 install --user meson~=1.0
     - meson subprojects download
     - meson subprojects update --reset
-      # Test that mingw64-meson still fails. If it has stopped failing, the CI
-      # will fail and now you should remove the hack that follows this.
-    - FAILED=false
-    - mingw64-meson --version || FAILED=true
-    - test $FAILED = false && echo "mingw64-meson works now, remove the hack" && exit 1
-      # HACK: Running mingw64-meson directly fails on the CI with:
-      #  /usr/bin/mingw64-meson: line 92: fg: no job control
-      # Because rpm is not evaluating %__meson and it gets interpreted as a job
-      # specifier. So we fix that and run it ourselves.
-    - rpm --eval "%{mingw64_meson}" > mingw64-meson.sh
-    - sed -i -e 's/%__meson/meson/' mingw64-meson.sh
-    - chmod +x mingw64-meson.sh
-    - ./mingw64-meson.sh -Dintrospection=disabled -Dgraphene:introspection=disabled _build
-    - ninja -C _build
+    - meson -Dintrospection=disabled -Dgraphene:introspection=disabled _build
+    - meson compile -C _build
 
 .mingw-defaults:
   stage: build
@@ -205,7 +191,7 @@ macos:
   needs: []
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - pip3 install --user meson~=0.64
+    - pip3 install --user meson~=1.0
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
     - export MESON_FORCE_BACKTRACE=1
@@ -363,7 +349,6 @@ static-scan:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -385,7 +370,6 @@ asan-build:
   variables:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled -Df16c=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
@@ -400,7 +384,6 @@ reference:
   needs: []
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson setup
             ${COMMON_MESON_FLAGS}
             --buildtype=release
