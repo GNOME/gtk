@@ -27,6 +27,7 @@ variables:
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Ddemos=false -Dbuild-examples=false -Dbuild-tests=false -Dbuild-testsuite=true"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v46"
+  XDG_RUNTIME_DIR: "${CI_PROJECT_DIR}/xdg-runtime-dir"
 
 workflow:
   rules:
@@ -76,6 +77,8 @@ style-check-diff:
     key: "$CI_JOB_NAME"
     paths:
       - _ccache/
+  before_script:
+    - mkdir -m 700 $XDG_RUNTIME_DIR
 
 fedora-x86_64:
   extends: .build-fedora-default

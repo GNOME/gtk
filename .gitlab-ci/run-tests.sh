@@ -31,8 +31,6 @@ case "${backend}" in
     ;;
 
   wayland*)
-    export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
-
     dbus-run-session sh <<EOF
 
     mutter --headless --no-x11 --wayland-display wayland-5 >&mutter.log &
