@@ -138,7 +138,8 @@ if [ $run == 1 ]; then
         echo -e "\e[1;32mRUNNING\e[0m: ${base} as ${TAG}"
         ${CMD} run \
                 --rm \
-                --volume "$(pwd)/..:/home/user/app" \
+                --userns=keep-id \
+                --volume "$(pwd)/..:/home/user/app:rw,z" \
                 --workdir "/home/user/app" \
                 --tty \
                 --interactive "${TAG}" \

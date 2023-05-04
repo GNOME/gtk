@@ -147,11 +147,11 @@ def run_commands():
         launch_observer()
 
         add_monitor("0", width=100, height=100, scale=1, freq=60)
-        expect_monitors_changed(0, 0, 1, 1000)
+        expect_monitors_changed(0, 0, 1, 5000)
         expect_monitor (position=0, width=100, height=100, scale=1, freq=60000)
 
         add_monitor("1", width=1024, height=768, scale=1, freq=144)
-        expect_monitors_changed(1, 0, 1, 1000)
+        expect_monitors_changed(1, 0, 1, 5000)
         expect_monitor (position=1, width=1024, height=768, scale=1, freq=144000)
 
         remove_monitor("0")
@@ -171,6 +171,9 @@ def mutter_appeared(name):
     screen_cast = bus.get('org.gnome.Mutter.ScreenCast',
                           '/org/gnome/Mutter/ScreenCast')
     run_commands()
+
+    if verbose:
+        print ("Done running commands, exiting...")
     done = True
 
 def mutter_vanished():

@@ -8,7 +8,7 @@ env.prepend('MESON_CURRENT_SOURCE_DIR', meson.current_source_dir())
 
 test('monitor',
   find_program('run-headless-monitor-tests.sh', dirs: meson.current_source_dir()),
-  suite: ['headless', 'failing'],
+  suite: ['headless'],
   env: env,
 )
 
