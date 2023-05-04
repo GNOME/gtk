@@ -20,12 +20,10 @@ setups = [
     'env': ['GDK_DEBUG=gl-gles,default-settings',
             'MESA_GLES_VERSION_OVERRIDE=2.0',
             'MESA_EXTENSION_OVERRIDE=-GL_OES_vertex_array_object',
+            'GSK_MAX_TEXTURE_SIZE=1024',
            ], },
   { 'backend': 'win32', 'if': os_win32 },
   { 'backend': 'broadway', 'if': broadway_enabled, },
-  { 'name': 'wayland_smalltexture',
-    'backend': 'wayland', 'if': wayland_enabled,
-    'env': ['GSK_MAX_TEXTURE_SIZE=1024'] },
   { 'backend': 'win32', 'if': os_win32 },
 ]
 
@@ -39,8 +37,8 @@ foreach setup : setups
       exclude += 'gsk-compare-broadway'
     endif
 
-    if name == 'wayland_smalltexture'
-      exclude += 'wayland_smalltexture_failing'
+    if name == 'wayland_gles'
+      exclude += 'wayland_gles_failing'
     endif
 
     env = common_env + [

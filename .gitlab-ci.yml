@@ -59,7 +59,6 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland_gles.xml"
-        - "${CI_PROJECT_DIR}/_build/report-wayland_smalltexture.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
@@ -103,7 +102,6 @@ fedora-x86_64:
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build wayland_gles
-    - .gitlab-ci/run-tests.sh _build wayland_smalltexture
     - .gitlab-ci/run-tests.sh _build broadway
 
 release-build:
