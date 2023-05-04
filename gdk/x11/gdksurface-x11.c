@@ -208,6 +208,8 @@ gdk_x11_surface_update_size (GdkX11Surface *self,
       cairo_surface_set_device_scale (self->cairo_surface, scale, scale);
     }
 
+  gdk_surface_invalidate_rect (surface, NULL);
+
   return TRUE;
 }
 
