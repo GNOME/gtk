@@ -86,7 +86,6 @@ fedora-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson subprojects download
     - meson subprojects update --reset
     - mkdir _install
@@ -116,7 +115,6 @@ release-build:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson subprojects download
     - meson subprojects update --reset
     - meson setup
@@ -147,7 +145,7 @@ fedora-mingw64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
+    - pip3 install --user meson~=1.0
     - meson subprojects download
     - meson subprojects update --reset
       # Test that mingw64-meson still fails. If it has stopped failing, the CI
@@ -205,7 +203,7 @@ macos:
   needs: []
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - pip3 install --user meson~=0.64
+    - pip3 install --user meson~=1.0
     - pip3 install --user ninja
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
     - export MESON_FORCE_BACKTRACE=1
@@ -363,7 +361,6 @@ static-scan:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -385,7 +382,6 @@ asan-build:
   variables:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled -Df16c=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
@@ -400,7 +396,6 @@ reference:
   needs: []
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson~=0.64
     - meson setup
             ${COMMON_MESON_FLAGS}
             --buildtype=release
