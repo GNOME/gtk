@@ -171,6 +171,9 @@ def mutter_appeared(name):
     screen_cast = bus.get('org.gnome.Mutter.ScreenCast',
                           '/org/gnome/Mutter/ScreenCast')
     run_commands()
+
+    if verbose:
+        print ("Done running commands, exiting...")
     done = True
 
 def mutter_vanished():

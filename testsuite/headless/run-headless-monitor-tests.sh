@@ -20,7 +20,9 @@ sleep 2
 # echo DBUS_SESSION_BUS_ADDRESS=\$DBUS_SESSION_BUS_ADDRESS
 # echo WAYLAND_DISPLAY=gtk-test
 
-mutter --headless --no-x11 --wayland-display gtk-test >&mutter.log &
+export MUTTER_DEBUG=screen-cast
+
+mutter --headless --no-x11 --wayland-display gtk-test &
 mutter_pid=\$!
 
 sleep 2
