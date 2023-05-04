@@ -114,7 +114,8 @@ compare_xfails = [
 
 compare_xfails_small_texture = [
   'big-checkerboard',
-  'big-checkerboard-scaled-down'
+  'big-checkerboard-scaled-down',
+  'big-checkerboard-scaled-down2'
 ]
 
 foreach renderer : renderers
