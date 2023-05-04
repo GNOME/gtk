@@ -430,7 +430,6 @@ ensure_legacy_wgl_context (HDC            hdc,
 
 static HGLRC
 create_wgl_context_with_attribs (HDC           hdc,
-                                 HGLRC         hglrc_base,
                                  GdkGLContext *share,
                                  int           flags,
                                  gboolean      is_legacy,
@@ -484,36 +483,63 @@ create_wgl_context_with_attribs (HDC           hdc,
 }
 
 static HGLRC
-create_wgl_context (GdkGLContext  *context,
-                    HDC            hdc,
-                    gboolean       hasWglARBCreateContext,
-                    GdkGLContext  *share,
-                    int            flags,
-                    gboolean       legacy,
-                    GError       **error)
+create_base_wgl_context (GdkWin32Display *display_win32,
+                         HDC              hdc,
+                         gboolean         force_create_base_context,
+                         gboolean        *remove_base_context)
 {
-  /* We need a legacy context for *all* cases */
+  HGLRC hglrc_base = NULL;
+
+  if (force_create_base_context || display_win32->dummy_context_wgl.hglrc == NULL)
+    {
+      hglrc_base = wglCreateContext (hdc);
+
+      if (hglrc_base == NULL)
+        return NULL;
+
+      *remove_base_context = !force_create_base_context;
+    }
+  else
+    hglrc_base = display_win32->dummy_context_wgl.hglrc;
+
+  return hglrc_base;
+}
+
+static HGLRC
+create_wgl_context (GdkGLContext    *context,
+                    GdkWin32Display *display_win32,
+                    HDC              hdc,
+                    GdkGLContext    *share,
+                    int              flags,
+                    gboolean         legacy,
+                    GError         **error)
+{
+  /* We need a legacy context for *all* cases, if no WGL contexts are created */
   HGLRC hglrc_base, hglrc;
   GdkGLVersion version;
+  gboolean remove_base_context = FALSE;
   /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here  */
   HDC hdc_current = wglGetCurrentDC ();
   HGLRC hglrc_current = wglGetCurrentContext ();
 
-  hglrc_base = wglCreateContext (hdc);
-  if (hglrc_base == NULL ||
-      !wglMakeCurrent (hdc, hglrc_base))
-    {
-      g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Unable to create a GL context"));
-      return 0;
-    }
-
   hglrc = NULL;
 
-  if (hasWglARBCreateContext)
+  if (display_win32->hasWglARBCreateContext)
     {
+      hglrc_base = create_base_wgl_context (display_win32,
+                                            hdc,
+                                            FALSE,
+                                           &remove_base_context);
+
+      if (hglrc_base == NULL || !wglMakeCurrent (hdc, hglrc_base))
+        {
+          g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
+          g_set_error_literal (error, GDK_GL_ERROR,
+                               GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("Unable to create a GL context"));
+          return 0;
+        }
+
       if (!legacy)
         {
           gdk_gl_context_get_matching_version (context,
@@ -521,7 +547,6 @@ create_wgl_context (GdkGLContext  *context,
                                                FALSE,
                                                &version);
           hglrc = create_wgl_context_with_attribs (hdc,
-                                                   hglrc_base,
                                                    share,
                                                    flags,
                                                    FALSE,
@@ -535,7 +560,6 @@ create_wgl_context (GdkGLContext  *context,
                                                TRUE,
                                                &version);
           hglrc = create_wgl_context_with_attribs (hdc,
-                                                   hglrc_base,
                                                    share,
                                                    flags,
                                                    TRUE,
@@ -546,6 +570,20 @@ create_wgl_context (GdkGLContext  *context,
   if (hglrc == NULL)
     {
       legacy = TRUE;
+      hglrc_base = create_base_wgl_context (display_win32,
+                                            hdc,
+                                            TRUE,
+                                           &remove_base_context);
+
+      if (hglrc_base == NULL || !wglMakeCurrent (hdc, hglrc_base))
+        {
+          g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
+          g_set_error_literal (error, GDK_GL_ERROR,
+                               GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("Unable to create a GL context"));
+          return 0;
+        }
+
       gdk_gl_context_get_matching_version (context,
                                            GDK_GL_API_GL,
                                            TRUE,
@@ -560,7 +598,8 @@ create_wgl_context (GdkGLContext  *context,
       gdk_gl_context_set_is_legacy (context, legacy);
     }
 
-  g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
+  if (remove_base_context)
+    g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
 
   wglMakeCurrent (hdc_current, hglrc_current);
 
@@ -591,6 +630,7 @@ set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
        * also use for our new dummy HDC will have the correct pixel format set
        */
       wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+      display_win32->dummy_context_wgl.hglrc = NULL;
       display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
       *hdc = display_win32->dummy_context_wgl.hdc;
       *recreate_dummy_context = TRUE;
@@ -676,8 +716,8 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
     flags |= WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
   hglrc = create_wgl_context (context,
+                              display_win32,
                               hdc,
-                              display_win32->hasWglARBCreateContext,
                               share,
                               flags,
                               legacy_bit,
@@ -687,8 +727,8 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
     {
       display_win32->dummy_context_wgl.hglrc =
         create_wgl_context (context,
+                            display_win32,
                             display_win32->dummy_context_wgl.hdc,
-                            display_win32->hasWglARBCreateContext,
                             NULL,
                             flags,
                             legacy_bit,
