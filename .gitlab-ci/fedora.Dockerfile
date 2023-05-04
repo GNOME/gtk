@@ -72,6 +72,7 @@ RUN dnf -y install \
     mesa-dri-drivers \
     mesa-libEGL-devel \
     mesa-libGLES-devel \
+    meson \
     mutter \
     ninja-build \
     pango-devel \
