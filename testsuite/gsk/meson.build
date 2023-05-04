@@ -114,7 +114,8 @@ compare_xfails = [
 
 compare_xfails_small_texture = [
   'big-checkerboard',
-  'big-checkerboard-scaled-down'
+  'big-checkerboard-scaled-down',
+  'big-checkerboard-scaled-down2'
 ]
 
 foreach renderer : renderers
@@ -135,7 +136,7 @@ foreach renderer : renderers
     endif
 
     if compare_xfails_small_texture.contains(testname)
-      suites += 'wayland_smalltexture_failing'
+      suites += 'wayland_gles_failing'
     endif
 
     if ((exclude_term == '' or not testname.contains(exclude_term)) and
