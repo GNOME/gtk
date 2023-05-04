@@ -443,6 +443,8 @@ def expect_drop(value, timeout):
 
 def dnd_tests():
     try:
+        pointer_move(-100, -100)
+
         launch_drag_source('abc')
 
         pointer_move(100, 100)
