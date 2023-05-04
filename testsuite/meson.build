@@ -70,7 +70,9 @@ subdir('css')
 subdir('a11y')
 subdir('tools')
 subdir('reftests')
-
 if build_gir
   subdir('introspection')
+endif
+if wayland_enabled
+  subdir('headless')
 endif
