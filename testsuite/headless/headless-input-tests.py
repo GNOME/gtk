@@ -255,7 +255,7 @@ def button_press(button):
 
 def button_release(button):
     if verbose:
-        print(f'relase button {button}')
+        print(f'release button {button}')
     session.NotifyPointerButton(buttons[button], False)
 
 def pointer_move(x, y):
