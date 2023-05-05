@@ -298,6 +298,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'address',
     'array-bounds',
     'empty-body',
+    'enum-int-mismatch',
     'implicit',
     'implicit-fallthrough',   # For non-gcc
     'implicit-fallthrough=5', # For GCC, only recognize the attribute and no comments
