@@ -24,6 +24,8 @@ void main() {
 
   gsk_rounded_rect_encode(outside, transformed_outside_outline);
   gsk_rounded_rect_encode(inside, transformed_inside_outline);
+
+  vUv = vec2(aUv.x, aUv.y);
 }
 
 // FRAGMENT_SHADER:

@@ -34,6 +34,8 @@ enum {
   UNIFORM_SHARED_VIEWPORT,
   UNIFORM_SHARED_PROJECTION,
   UNIFORM_SHARED_MODELVIEW,
+  UNIFORM_SHARED_CLIP_MASK,
+  UNIFORM_SHARED_MASK_MODE,
 
   UNIFORM_SHARED_LAST
 };
@@ -113,6 +115,7 @@ struct _GskGLDriver
 #define GSK_GL_NO_UNIFORMS
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)
 #define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms) \
+  GskGLProgram *name ## _mask_clip; \
   GskGLProgram *name ## _no_clip; \
   GskGLProgram *name ## _rect_clip; \
   GskGLProgram *name;

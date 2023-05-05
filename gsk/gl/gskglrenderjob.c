@@ -60,8 +60,11 @@ G_STATIC_ASSERT ((MAX_GRADIENT_STOPS * 5) < (1 << GSK_GL_UNIFORM_ARRAY_BITS));
 typedef struct _GskGLRenderClip
 {
   GskRoundedRect rect;
-  guint          is_rectilinear : 1;
-  guint          is_fully_contained : 1;
+  unsigned int   is_rectilinear     : 1;
+  unsigned int   is_fully_contained : 1;
+  unsigned int   is_mask            : 1;
+  unsigned int   mask_mode          : 3;
+  unsigned int   mask;
 } GskGLRenderClip;
 
 typedef struct _GskGLRenderModelview
@@ -645,6 +648,35 @@ gsk_gl_render_job_push_clip (GskGLRenderJob       *job,
   memcpy (&clip->rect, rect, sizeof *rect);
   clip->is_rectilinear = gsk_rounded_rect_is_rectilinear (rect);
   clip->is_fully_contained = FALSE;
+  clip->is_mask = FALSE;
+  clip->mask_mode = 0;
+  clip->mask = 0;
+
+  job->current_clip = clip;
+}
+
+static void
+gsk_gl_render_job_push_clip_mask (GskGLRenderJob *job,
+                                  unsigned int    mask,
+                                  unsigned int    mode)
+{
+  GskGLRenderClip *clip;
+
+  g_assert (job != NULL);
+  g_assert (job->clip != NULL);
+  g_assert (rect != NULL);
+
+  job->driver->stamps[UNIFORM_SHARED_CLIP_MASK]++;
+
+  g_array_set_size (job->clip, job->clip->len + 1);
+
+  clip = &g_array_index (job->clip, GskGLRenderClip, job->clip->len - 1);
+  memset (&clip->rect, 0, sizeof clip->rect);
+  clip->is_rectilinear = FALSE;
+  clip->is_fully_contained = FALSE;
+  clip->is_mask = TRUE;
+  clip->mask_mode = mode;
+  clip->mask = mask;
 
   job->current_clip = clip;
 }
@@ -670,6 +702,9 @@ gsk_gl_render_job_push_contained_clip (GskGLRenderJob *job)
   memset (clip->rect.corner, 0, sizeof clip->rect.corner);
   clip->is_rectilinear = TRUE;
   clip->is_fully_contained = TRUE;
+  clip->is_mask = FALSE;
+  clip->mask_mode = 0;
+  clip->mask = 0;
 
   job->current_clip = clip;
 }
@@ -931,6 +966,12 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
 
   *pushed_clip = FALSE;
 
+  if (job->current_clip->is_mask)
+    {
+      /* FIXME */
+      return TRUE;
+    }
+
   if (job->current_clip->is_fully_contained)
     {
       /* Already fully contained - no further checks needed */
@@ -1068,7 +1109,7 @@ gsk_gl_render_job_draw_with_color (GskGLRenderJob *job,
   float max_x = min_x + width;
   float max_y = min_y + height;
 
-  gsk_gl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 0, 1, 1, color);
+  gsk_gl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 1, 1, 0, color);
 }
 
 static inline void
@@ -1095,6 +1136,27 @@ gsk_gl_render_job_draw_rect_with_color (GskGLRenderJob        *job,
                                      bounds->size.height,
                                      color);
 }
+
+
+static inline void
+gsk_gl_render_job_draw_subrect_with_color (GskGLRenderJob        *job,
+                                           const graphene_rect_t *bounds,
+                                           const graphene_rect_t *rect,
+                                           guint16                color[4])
+{
+  float min_x = job->offset_x + rect->origin.x;
+  float min_y = job->offset_y + rect->origin.y;
+  float max_x = min_x + rect->size.width;
+  float max_y = min_y + rect->size.height;
+  float min_u = (rect->origin.x - bounds->origin.x) / bounds->size.width;
+  float max_u = (rect->origin.x + rect->size.width - bounds->origin.x) / bounds->size.width;
+  float min_v = 1. - (rect->origin.y - bounds->origin.y) / bounds->size.height;
+  float max_v = 1. - (rect->origin.y + rect->size.height - bounds->origin.y) / bounds->size.height;
+
+  gsk_gl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, min_u, min_v, max_u, max_v, color);
+}
+
+
 static inline void
 gsk_gl_render_job_draw_rect (GskGLRenderJob        *job,
                              const graphene_rect_t *bounds)
@@ -1159,6 +1221,22 @@ gsk_gl_render_job_begin_draw (GskGLRenderJob *job,
                                          job->driver->stamps[UNIFORM_SHARED_CLIP_RECT],
                                          &job->current_clip->rect);
 
+  if (job->current_clip->is_mask)
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_CLIP_MASK,
+                                          job->driver->stamps[UNIFORM_SHARED_CLIP_MASK],
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE4,
+                                          job->current_clip->mask);
+
+      gsk_gl_uniform_state_set1i (program->uniforms,
+                                  program->program_info,
+                                  UNIFORM_SHARED_MASK_MODE,
+                                  job->driver->stamps[UNIFORM_SHARED_CLIP_MASK],
+                                  job->current_clip->mask_mode);
+    }
+
   gsk_gl_uniform_state_set1f (program->uniforms,
                               program->program_info,
                               UNIFORM_SHARED_ALPHA,
@@ -1171,7 +1249,9 @@ gsk_gl_render_job_begin_draw (GskGLRenderJob *job,
       ? job->driver->name ## _no_clip \
       : (job->current_clip->is_rectilinear \
         ? job->driver->name ## _rect_clip \
-        : job->driver->name))
+        : (job->current_clip->is_mask \
+           ? job->driver->name ## _mask_clip \
+           : job->driver->name)))
 
 static inline void
 gsk_gl_render_job_split_draw (GskGLRenderJob *job)
@@ -1802,33 +1882,37 @@ gsk_gl_render_job_visit_rect_border_node (GskGLRenderJob      *job,
   if (widths[0] > 0)
     {
       rgba_to_half (&colors[0], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x, origin->y, size->width - widths[1], widths[0]),
-                                              color);
+      gsk_gl_render_job_draw_subrect_with_color (job,
+                                                 &node->bounds,
+                                                 &GRAPHENE_RECT_INIT (origin->x, origin->y, size->width - widths[1], widths[0]),
+                                                 color);
     }
 
   if (widths[1] > 0)
     {
       rgba_to_half (&colors[1], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1], origin->y, widths[1], size->height - widths[2]),
-                                              color);
+      gsk_gl_render_job_draw_subrect_with_color (job,
+                                                 &node->bounds,
+                                                 &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1], origin->y, widths[1], size->height - widths[2]),
+                                                 color);
     }
 
   if (widths[2] > 0)
     {
       rgba_to_half (&colors[2], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[3], widths[2]),
-                                              color);
+      gsk_gl_render_job_draw_subrect_with_color (job,
+                                                 &node->bounds,
+                                                 &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[3], widths[2]),
+                                                 color);
     }
 
   if (widths[3] > 0)
     {
       rgba_to_half (&colors[3], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x, origin->y + widths[0], widths[3], size->height - widths[0]),
-                                              color);
+      gsk_gl_render_job_draw_subrect_with_color (job,
+                                                 &node->bounds,
+                                                 &GRAPHENE_RECT_INIT (origin->x, origin->y + widths[0], widths[3], size->height - widths[0]),
+                                                 color);
     }
 
   gsk_gl_render_job_end_draw (job);
@@ -1851,6 +1935,7 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
   float max_y = min_y + node->bounds.size.height;
   GskRoundedRect outline;
   guint16 color[4];
+  float u, v;
 
   memset (sizes, 0, sizeof sizes);
 
@@ -1897,11 +1982,19 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
       rgba_to_half (&colors[0], color);
 
       vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = sizes[0].w / (max_x - min_x);
+      v = 1. - sizes[0].h / (max_y - min_y);
+      vertices[1] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
 
-      vertices[3] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+      u = 1. - sizes[1].w / (max_x - min_x);
+      v = 1. - sizes[1].h / (max_y - min_y);
+      vertices[3] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = sizes[0].w / (max_x - min_x);
+      v = 1. - sizes[0].h / (max_y - min_y);
+      vertices[4] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
     }
 
@@ -1911,12 +2004,20 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
 
       rgba_to_half (&colors[1], color);
 
-      vertices[0] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+      u = 1. - sizes[1].w / (max_x - min_x);
+      v = 1. - sizes[1].h / (max_y - min_y);
+      vertices[0] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = 1. - sizes[2].w / (max_x - min_x);
+      v = sizes[2].h / (max_y - min_y);
+      vertices[1] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
 
       vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = 1. - sizes[2].w / (max_x - min_x);
+      v = sizes[2].h / (max_y - min_y);
+      vertices[4] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
     }
 
@@ -1926,13 +2027,21 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
 
       rgba_to_half (&colors[2], color);
 
-      vertices[0] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+      u = sizes[3].w / (max_x - min_x);
+      v = sizes[3].h / (max_y - min_y);
+      vertices[0] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = 1. - sizes[2].w / (max_x - min_x);
+      v = sizes[2].h / (max_y - min_y);
+      vertices[2] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
 
       vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[4] = (GskGLDrawVertex) { .position = { min_x            ,  max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = 1. - sizes[2].w / (max_x - min_x);
+      v = sizes[2].h / (max_y - min_y);
+      vertices[5] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
     }
 
   if (widths[3] > 0)
@@ -1943,11 +2052,19 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
 
       vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
 
-      vertices[3] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+      u = sizes[2].w / (max_x - min_x);
+      v = 1. - sizes[0].h / (max_y - min_y);
+      vertices[2] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = sizes[3].w / (max_x - min_x);
+      v = sizes[3].h / (max_y - min_y);
+      vertices[3] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
       vertices[4] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+      u = sizes[0].w / (max_x - min_x);
+      v = 1. - sizes[0].h / (max_y - min_y);
+      vertices[5] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { u, v }, .color = { color[0], color[1], color[2], color[3] } };
     }
 
   gsk_gl_render_job_end_draw (job);
@@ -1996,12 +2113,12 @@ gsk_gl_render_job_visit_css_background (GskGLRenderJob      *job,
 
   vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
 
-  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
 
   gsk_gl_render_job_end_draw (job);
 }
@@ -3300,58 +3417,22 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
 {
   const GskRenderNode *source = gsk_mask_node_get_source (node);
   const GskRenderNode *mask = gsk_mask_node_get_mask (node);
-  GskGLRenderOffscreen source_offscreen = {0};
+  GskMaskMode mode = gsk_mask_node_get_mask_mode (node);
   GskGLRenderOffscreen mask_offscreen = {0};
-
-  source_offscreen.bounds = &node->bounds;
-  source_offscreen.force_offscreen = TRUE;
-  source_offscreen.reset_clip = TRUE;
 
   mask_offscreen.bounds = &node->bounds;
   mask_offscreen.force_offscreen = TRUE;
-  mask_offscreen.reset_clip = TRUE;
+  mask_offscreen.reset_clip = FALSE;
   mask_offscreen.do_not_cache = TRUE;
 
-  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
-
-  /* TODO: We create 2 textures here as big as the mask node, but both
-   * nodes might be a lot smaller than that.
-   */
-  if (!gsk_gl_render_job_visit_node_with_offscreen (job, source, &source_offscreen))
-    {
-      gsk_gl_render_job_pop_modelview (job);
-      gsk_gl_render_job_visit_node (job, source);
-      return;
-    }
-
-  g_assert (source_offscreen.was_offscreen);
-
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, mask, &mask_offscreen))
-    {
-      gsk_gl_render_job_pop_modelview (job);
-      return;
-    }
+    return;
 
   g_assert (mask_offscreen.was_offscreen);
 
-  gsk_gl_render_job_pop_modelview (job);
-
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, mask));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      source_offscreen.texture_id);
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_MASK_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE1,
-                                      mask_offscreen.texture_id);
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_MASK_MODE, 0,
-                                gsk_mask_node_get_mask_mode (node));
-  gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  gsk_gl_render_job_push_clip_mask (job, mask_offscreen.texture_id, mode);
+  gsk_gl_render_job_visit_node (job, source);
+  gsk_gl_render_job_pop_clip (job);
 }
 
 static inline void
@@ -4011,7 +4092,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_MASK_NODE:
-      gsk_gl_render_job_visit_mask_node (job, node);
+        gsk_gl_render_job_visit_mask_node (job, node);
     break;
 
     case GSK_OPACITY_NODE:

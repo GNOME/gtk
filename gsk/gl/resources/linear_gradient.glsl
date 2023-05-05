@@ -7,6 +7,8 @@ _OUT_ vec4 info;
 void main() {
   gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
 
+  vUv = vec2(aUv.x, aUv.y);
+
   vec2 mv0 = u_modelview[0].xy;
   vec2 mv1 = u_modelview[1].xy;
   vec2 offset = aPosition - u_points.xy;

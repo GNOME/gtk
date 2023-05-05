@@ -6,6 +6,8 @@ _OUT_ vec4 final_color;
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
 
+  vUv = vec2(aUv.x, aUv.y);
+
   final_color = gsk_scaled_premultiply(aColor, u_alpha);
 }
 

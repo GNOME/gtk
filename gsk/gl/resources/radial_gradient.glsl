@@ -15,6 +15,8 @@ void main() {
                   dot(mv1, offset));
 
   coord = dir * u_geometry.zw;
+
+  vUv = vec2(aUv.x, aUv.y);
 }
 
 // FRAGMENT_SHADER:

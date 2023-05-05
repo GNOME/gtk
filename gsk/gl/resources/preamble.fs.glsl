@@ -5,6 +5,11 @@ uniform float u_alpha;
 uniform vec4 u_viewport;
 uniform vec4[3] u_clip_rect;
 
+#if defined(MASK_CLIP)
+uniform int u_mask_mode;
+uniform sampler2D u_clip_mask;
+#endif
+
 #if defined(GSK_LEGACY)
 _OUT_ vec4 outputColor;
 #elif !defined(GSK_GLES)
@@ -124,7 +129,28 @@ vec2 gsk_get_frag_coord() {
 void gskSetOutputColor(vec4 color) {
   vec4 result;
 
-#if defined(NO_CLIP)
+#if defined(MASK_CLIP)
+  vec4 mask = GskTexture(u_clip_mask, vec2(vUv.x, vUv.y));
+  float mask_value;
+  switch (u_mask_mode)
+    {
+    case 0:
+      mask_value = mask.a;
+      break;
+    case 1:
+      mask_value = 1.0 - mask.a;
+      break;
+    case 2:
+      mask_value = (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+      break;
+    case 3:
+      mask_value = 1.0 - (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+      break;
+    default:
+      mask_value = 0.0;
+    }
+  result = color * mask_value;
+#elif defined(NO_CLIP)
   result = color;
 #elif defined(RECT_CLIP)
   float coverage = gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
@@ -146,7 +172,28 @@ void gskSetOutputColor(vec4 color) {
 void gskSetScaledOutputColor(vec4 color, float alpha) {
   vec4 result;
 
-#if defined(NO_CLIP)
+#if defined(MASK_CLIP)
+  vec4 mask = GskTexture(u_clip_mask, vec2(vUv.x, vUv.y));
+  float mask_value;
+  switch (u_mask_mode)
+    {
+    case 0:
+      mask_value = mask.a;
+      break;
+    case 1:
+      mask_value = 1.0 - mask.a;
+      break;
+    case 2:
+      mask_value = (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+      break;
+    case 3:
+      mask_value = 1.0 - (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+      break;
+    default:
+      mask_value = 0.0;
+    }
+  result = color * (alpha * mask_value);
+#elif defined(NO_CLIP)
   result = color * alpha;
 #elif defined(RECT_CLIP)
   float coverage = gsk_rect_coverage(gsk_get_bounds(u_clip_rect),

@@ -373,6 +373,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
   sources                                                                                       \
+  GSK_GL_COMPILE_PROGRAM(name ## _mask_clip, uniforms, "#define MASK_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
@@ -381,6 +382,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
     GskGLProgram *program;                                                                      \
     gboolean have_alpha;                                                                        \
     gboolean have_source;                                                                       \
+    gboolean have_mask;                                                                         \
                                                                                                 \
     if (!(program = gsk_gl_compiler_compile (compiler, #name, clip, error)))                    \
       goto failure;                                                                             \
@@ -391,10 +393,12 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
     gsk_gl_program_add_uniform (program, "u_viewport", UNIFORM_SHARED_VIEWPORT);                \
     gsk_gl_program_add_uniform (program, "u_projection", UNIFORM_SHARED_PROJECTION);            \
     gsk_gl_program_add_uniform (program, "u_modelview", UNIFORM_SHARED_MODELVIEW);              \
+    have_mask = gsk_gl_program_add_uniform (program, "u_clip_mask", UNIFORM_SHARED_CLIP_MASK);  \
+    gsk_gl_program_add_uniform (program, "u_mask_mode", UNIFORM_SHARED_MASK_MODE);              \
                                                                                                 \
     uniforms                                                                                    \
                                                                                                 \
-    gsk_gl_program_uniforms_added (program, have_source);                                       \
+    gsk_gl_program_uniforms_added (program, have_source || have_mask);                          \
     if (have_alpha)                                                                             \
       gsk_gl_program_set_uniform1f (program, UNIFORM_SHARED_ALPHA, 0, 1.0f);                    \
                                                                                                 \
