@@ -104,9 +104,6 @@ tests = [
   { 'name': 'revealer-size' },
   { 'name': 'widgetorder' },
   { 'name': 'widget-refcount' },
-  # This test was disabled for long enough that it no longer compiles
-  #{ 'name': 'window',
-  #  'suites': ['failing'] },
 ]
 
 # Tests that test private apis and therefore are linked against libgtk-4.a

@@ -1750,22 +1750,13 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
 
   if (job->clip->len <= 1)
     need_offscreen = FALSE;
-  else if (rounded_inner_rect_contains_rect (&job->current_clip->rect, &transformed_clip.bounds))
+  else if (gsk_rounded_rect_contains_rect (&job->current_clip->rect, &transformed_clip.bounds))
     need_offscreen = FALSE;
   else
     need_offscreen = TRUE;
 
   if (!need_offscreen)
     {
-      /* If the new clip entirely contains the current clip, the intersection is simply
-       * the current clip, so we can ignore the new one.
-       */
-      if (rounded_inner_rect_contains_rect (&transformed_clip, &job->current_clip->rect.bounds))
-        {
-          gsk_gl_render_job_visit_node (job, child);
-          return;
-        }
-
       gsk_gl_render_job_push_clip (job, &transformed_clip);
       gsk_gl_render_job_visit_node (job, child);
       gsk_gl_render_job_pop_clip (job);
@@ -2833,7 +2824,7 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
   offscreen_end.reset_clip = TRUE;
   offscreen_end.bounds = &node->bounds;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, start_node, &offscreen_start))
     {
@@ -3252,7 +3243,7 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
   bottom_offscreen.force_offscreen = TRUE;
   bottom_offscreen.reset_clip = TRUE;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -3321,7 +3312,7 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
   mask_offscreen.reset_clip = TRUE;
   mask_offscreen.do_not_cache = TRUE;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   /* TODO: We create 2 textures here as big as the mask node, but both
    * nodes might be a lot smaller than that.
