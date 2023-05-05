@@ -2824,7 +2824,7 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
   offscreen_end.reset_clip = TRUE;
   offscreen_end.bounds = &node->bounds;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, start_node, &offscreen_start))
     {
@@ -3243,7 +3243,7 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
   bottom_offscreen.force_offscreen = TRUE;
   bottom_offscreen.reset_clip = TRUE;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -3312,7 +3312,7 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
   mask_offscreen.reset_clip = TRUE;
   mask_offscreen.do_not_cache = TRUE;
 
-  gsk_gl_render_job_set_modelview (job, NULL);
+  gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, fabs (job->scale_x), fabs (job->scale_y)));
 
   /* TODO: We create 2 textures here as big as the mask node, but both
    * nodes might be a lot smaller than that.
