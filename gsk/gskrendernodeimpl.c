@@ -4108,6 +4108,11 @@ gsk_shadow_node_draw (GskRenderNode *node,
   pattern = cairo_pop_group (cr);
   cairo_restore (cr);
 
+  cairo_save (cr);
+  /* clip so the blur area stays small */
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_clip (cr);
+
   for (i = 0; i < self->n_shadows; i++)
     {
       GskShadow *shadow = &self->shadows[i];
@@ -4129,6 +4134,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
 
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
+  cairo_restore (cr);
 
   cairo_pattern_destroy (pattern);
 }
