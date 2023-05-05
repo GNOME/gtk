@@ -4466,6 +4466,11 @@ update_window_style_classes (GtkWindow *window)
 
   if (!priv->edge_constraints)
     {
+      gtk_widget_remove_css_class (widget, "tiled-top");
+      gtk_widget_remove_css_class (widget, "tiled-right");
+      gtk_widget_remove_css_class (widget, "tiled-bottom");
+      gtk_widget_remove_css_class (widget, "tiled-left");
+
       if (priv->tiled)
         gtk_widget_add_css_class (widget, "tiled");
       else
@@ -4473,6 +4478,8 @@ update_window_style_classes (GtkWindow *window)
     }
   else
     {
+      gtk_widget_remove_css_class (widget, "tiled");
+
       if (edge_constraints & GDK_TOPLEVEL_STATE_TOP_TILED)
         gtk_widget_add_css_class (widget, "tiled-top");
       else
