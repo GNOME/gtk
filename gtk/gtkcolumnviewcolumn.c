@@ -119,6 +119,7 @@ gtk_column_view_column_dispose (GObject *object)
   g_clear_object (&self->sorter);
   g_clear_pointer (&self->title, g_free);
   g_clear_object (&self->menu);
+  g_clear_pointer (&self->id, g_free);
 
   G_OBJECT_CLASS (gtk_column_view_column_parent_class)->dispose (object);
 }
