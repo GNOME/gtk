@@ -73,11 +73,13 @@ struct _GskGLBindFramebuffer
 
 G_STATIC_ASSERT (sizeof (GskGLBindFramebuffer) == 4);
 
+/* Increase if shaders add more textures */
+#define GSK_GL_MAX_TEXTURES_PER_PROGRAM 4
+
 struct _GskGLAttachmentState
 {
   GskGLBindFramebuffer fbo;
-  /* Increase if shaders add more textures */
-  GskGLBindTexture textures[4];
+  GskGLBindTexture textures[GSK_GL_MAX_TEXTURES_PER_PROGRAM];
   guint n_changed;
 };
 

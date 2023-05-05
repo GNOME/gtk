@@ -1028,8 +1028,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
   G_GNUC_UNUSED unsigned int n_programs = 0;
   guint vao_id;
   guint vbo_id;
-  int textures[4];
-  int samplers[4];
+  int textures[GSK_GL_MAX_TEXTURES_PER_PROGRAM];
+  int samplers[GSK_GL_MAX_TEXTURES_PER_PROGRAM];
   int framebuffer = -1;
   int next_batch_index;
   int active = -1;
