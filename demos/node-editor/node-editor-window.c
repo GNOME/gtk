@@ -64,6 +64,7 @@ struct _NodeEditorWindow
   GListStore *renderers;
   GskRenderNode *node;
 
+  GFile *file;
   GFileMonitor *file_monitor;
 
   GArray *errors;
@@ -544,12 +545,14 @@ node_editor_window_load (NodeEditorWindow *self,
 {
   GError *error = NULL;
 
+  g_clear_object (&self->file);
   g_clear_object (&self->file_monitor);
 
   if (!load_file_contents (self, file))
     return FALSE;
 
-  self->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+  self->file = g_object_ref (file);
+  self->file_monitor = g_file_monitor_file (self->file, G_FILE_MONITOR_NONE, NULL, &error);
 
   if (error)
     {
@@ -586,13 +589,21 @@ static void
 show_open_filechooser (NodeEditorWindow *self)
 {
   GtkFileDialog *dialog;
-  GFile *cwd;
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "Open node file");
-  cwd = g_file_new_for_path (".");
-  gtk_file_dialog_set_initial_folder (dialog, cwd);
-  g_object_unref (cwd);
+  if (self->file)
+    {
+      gtk_file_dialog_set_initial_file (dialog, self->file);
+    }
+  else
+    {
+      GFile *cwd;
+      cwd = g_file_new_for_path (".");
+      gtk_file_dialog_set_initial_folder (dialog, cwd);
+      g_object_unref (cwd);
+    }
+
   gtk_file_dialog_open (dialog, GTK_WINDOW (self),
                         NULL, open_response_cb, self);
   g_object_unref (dialog);
@@ -650,14 +661,21 @@ save_cb (GtkWidget        *button,
          NodeEditorWindow *self)
 {
   GtkFileDialog *dialog;
-  GFile *cwd;
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "Save node");
-  cwd = g_file_new_for_path (".");
-  gtk_file_dialog_set_initial_folder (dialog, cwd);
-  gtk_file_dialog_set_initial_name (dialog, "demo.node");
-  g_object_unref (cwd);
+  if (self->file)
+    {
+      gtk_file_dialog_set_initial_file (dialog, self->file);
+    }
+  else
+    {
+      GFile *cwd = g_file_new_for_path (".");
+      gtk_file_dialog_set_initial_folder (dialog, cwd);
+      gtk_file_dialog_set_initial_name (dialog, "demo.node");
+      g_object_unref (cwd);
+    }
+
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                         NULL,
@@ -1091,6 +1109,8 @@ node_editor_window_finalize (GObject *object)
 
   g_clear_pointer (&self->node, gsk_render_node_unref);
   g_clear_object (&self->renderers);
+  g_clear_object (&self->file_monitor);
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (node_editor_window_parent_class)->finalize (object);
 }
