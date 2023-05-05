@@ -1121,19 +1121,21 @@ gsk_gl_driver_lookup_shader (GskGLDriver  *self,
 }
 
 #ifdef G_ENABLE_DEBUG
-static void
-write_atlas_to_png (GskGLDriver       *driver,
-                    GskGLTextureAtlas *atlas,
-                    const char        *filename)
+void
+gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
+                                   int                texture_id,
+                                   int                width,
+                                   int                height,
+                                   const char        *filename)
 {
   GdkGLTextureBuilder *builder;
   GdkTexture *texture;
 
   builder = gdk_gl_texture_builder_new ();
   gdk_gl_texture_builder_set_context (builder, gsk_gl_driver_get_context (driver));
-  gdk_gl_texture_builder_set_id (builder, atlas->texture_id);
-  gdk_gl_texture_builder_set_width (builder, atlas->width);
-  gdk_gl_texture_builder_set_height (builder, atlas->height);
+  gdk_gl_texture_builder_set_id (builder, texture_id);
+  gdk_gl_texture_builder_set_width (builder, width);
+  gdk_gl_texture_builder_set_height (builder, height);
 
   texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
   gdk_texture_save_to_png (texture, filename);
@@ -1168,7 +1170,7 @@ gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
                                         G_DIR_SEPARATOR_S,
                                         (int)self->current_frame_id,
                                         atlas->texture_id);
-      write_atlas_to_png (self, atlas, filename);
+      gsk_gl_driver_save_texture_to_png (self, atlas->texture_id, atlas->width, atlas->height, filename);
       g_free (filename);
     }
 
