@@ -227,7 +227,7 @@ gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
    * Without this, we might hold on to a reference of the window
    * preventing it from getting disposed.
    */
-  if (window != NULL && !g_object_get_data (G_OBJECT (window), "quartz-muxer-umap"))
+  if (window != NULL && !g_object_get_data (G_OBJECT (window), "quartz-muxer-unmap"))
     {
       gulong handler_id = g_signal_connect_object (window,
                                                    "unmap",
