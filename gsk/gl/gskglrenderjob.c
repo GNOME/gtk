@@ -1750,22 +1750,13 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
 
   if (job->clip->len <= 1)
     need_offscreen = FALSE;
-  else if (rounded_inner_rect_contains_rect (&job->current_clip->rect, &transformed_clip.bounds))
+  else if (gsk_rounded_rect_contains_rect (&job->current_clip->rect, &transformed_clip.bounds))
     need_offscreen = FALSE;
   else
     need_offscreen = TRUE;
 
   if (!need_offscreen)
     {
-      /* If the new clip entirely contains the current clip, the intersection is simply
-       * the current clip, so we can ignore the new one.
-       */
-      if (rounded_inner_rect_contains_rect (&transformed_clip, &job->current_clip->rect.bounds))
-        {
-          gsk_gl_render_job_visit_node (job, child);
-          return;
-        }
-
       gsk_gl_render_job_push_clip (job, &transformed_clip);
       gsk_gl_render_job_visit_node (job, child);
       gsk_gl_render_job_pop_clip (job);
