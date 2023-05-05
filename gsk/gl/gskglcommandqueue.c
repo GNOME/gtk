@@ -1161,6 +1161,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
           if G_UNLIKELY (batch->draw.bind_count > 0)
             {
               const GskGLCommandBind *bind = &self->batch_binds.items[batch->draw.bind_offset];
+
+              g_assert (bind->texture < G_N_ELEMENTS (textures));
               for (guint i = 0; i < batch->draw.bind_count; i++)
                 {
                   if (textures[bind->texture] != bind->id)
