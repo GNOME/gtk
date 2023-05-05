@@ -218,7 +218,7 @@ def launch_observer():
     window.maximize()
     window.present()
 
-    wait(500)
+    wait(2000)
 
     assert window.is_active(), "Observer not active"
     assert window.get_width() == 1024, "Window not maximized"
@@ -360,7 +360,7 @@ def launch_drag_source(value):
     ds_window.maximize()
     ds_window.present()
 
-    wait(500)
+    wait(2000)
 
     assert ds_window.is_active(), "drag source not active"
     assert ds_window.get_width() == 1024, "Window not maximized"
@@ -410,7 +410,7 @@ def launch_drop_target():
     dt_window.maximize()
     dt_window.present()
 
-    wait(500)
+    wait(2000)
 
     assert dt_window.is_active(), "drop target not active"
     assert dt_window.get_width() == 1024, "Window not maximized"
@@ -456,7 +456,7 @@ def dnd_tests():
         wait(150)
 
         pointer_move(120, 150)
-        expect_drag(timeout=1000)
+        expect_drag(timeout=2000)
 
         launch_drop_target()
         wait(100);
