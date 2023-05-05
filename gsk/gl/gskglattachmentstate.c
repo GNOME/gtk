@@ -78,6 +78,7 @@ gsk_gl_attachment_state_bind_texture (GskGLAttachmentState *self,
             target == GL_TEXTURE_2D ||
             target == GL_TEXTURE_3D);
   g_assert (texture >= GL_TEXTURE0 && texture <= GL_TEXTURE16);
+  g_assert (texture - GL_TEXTURE0 < G_N_ELEMENTS (self->textures));
 
   attach = &self->textures[texture - GL_TEXTURE0];
 

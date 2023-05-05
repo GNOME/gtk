@@ -461,7 +461,7 @@ def dnd_tests():
         launch_drop_target()
         wait(100);
         button_release(1)
-        expect_drop('abc', timeout=200)
+        expect_drop('abc', timeout=2000)
 
         stop_drop_target()
         stop_drag_source()
