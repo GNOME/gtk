@@ -79,6 +79,14 @@ typedef struct _GskGLRenderModelview
   graphene_matrix_t matrix;
 } GskGLRenderModelview;
 
+typedef struct
+{
+  unsigned int texture_id;
+  unsigned int width;
+  unsigned int height;
+  const char *name;
+} TextureToSave;
+
 struct _GskGLRenderJob
 {
   /* The context containing the framebuffer we are drawing to. Generally this
@@ -144,6 +152,10 @@ struct _GskGLRenderJob
   const GskGLRenderModelview *current_modelview;
   GskGLProgram *current_program;
 
+#ifdef G_ENABLE_DEBUG
+  GArray *textures_to_save;
+#endif
+
   /* If we should be rendering red zones over fallback nodes */
   guint debug_fallback : 1;
 
@@ -185,6 +197,9 @@ typedef struct _GskGLRenderOffscreen
   /* Return location for whether we created a texture */
   guint was_offscreen : 1;
   guint has_mipmap : 1;
+
+  int texture_width;
+  int texture_height;
 } GskGLRenderOffscreen;
 
 static void     gsk_gl_render_job_visit_node                (GskGLRenderJob       *job,
@@ -658,13 +673,13 @@ gsk_gl_render_job_push_clip (GskGLRenderJob       *job,
 static void
 gsk_gl_render_job_push_clip_mask (GskGLRenderJob *job,
                                   unsigned int    mask,
-                                  unsigned int    mode)
+                                  GskMaskMode     mode)
 {
   GskGLRenderClip *clip;
 
   g_assert (job != NULL);
   g_assert (job->clip != NULL);
-  g_assert (rect != NULL);
+  g_assert (mask != 0);
 
   job->driver->stamps[UNIFORM_SHARED_CLIP_MASK]++;
 
@@ -3430,6 +3445,15 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
 
   g_assert (mask_offscreen.was_offscreen);
 
+#ifdef G_ENABLE_DEBUG
+  if (mask_offscreen.texture_width > 0 && mask_offscreen.texture_height > 0)
+    g_array_append_vals (job->textures_to_save,
+                         &(TextureToSave) { mask_offscreen.texture_id,
+                                           mask_offscreen.texture_width,
+                                           mask_offscreen.texture_height,
+                                           "mask" }, 1);
+#endif
+
   gsk_gl_render_job_push_clip_mask (job, mask_offscreen.texture_id, mode);
   gsk_gl_render_job_visit_node (job, source);
   gsk_gl_render_job_pop_clip (job);
@@ -3638,6 +3662,9 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
       if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture))
         offscreen->sync = gdk_gl_texture_get_sync (gl_texture);
     }
+
+  offscreen->texture_width = gdk_texture_get_width (texture);
+  offscreen->texture_height = gdk_texture_get_height (texture);
 }
 
 static inline void
@@ -4372,6 +4399,8 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   offscreen->texture_id = gsk_gl_driver_release_render_target (job->driver,
                                                                render_target,
                                                                FALSE);
+  offscreen->texture_width = texture_width;
+  offscreen->texture_height = texture_height;
 
   if (!offscreen->do_not_cache)
     gsk_gl_driver_cache_texture (job->driver, &key, offscreen->texture_id);
@@ -4486,6 +4515,18 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   gsk_gl_command_queue_execute (job->command_queue, surface_height, scale, job->region, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Execute GL command queue", "");
+
+#ifdef G_ENABLE_DEBUG
+  for (unsigned int i = 0; i < job->textures_to_save->len; i++)
+    {
+      TextureToSave *t = &g_array_index (job->textures_to_save, TextureToSave, i);
+
+      char *filename = g_strdup_printf ("%s-%u.png", t->name, i);
+      gsk_gl_driver_save_texture_to_png (job->driver, t->texture_id, t->width, t->height, filename);
+      g_free (filename);
+    }
+  g_array_set_size (job->textures_to_save, 0);
+#endif
 }
 
 void
@@ -4594,6 +4635,10 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
                                                        clip_rect->size.width,
                                                        clip_rect->size.height));
 
+#ifdef G_ENABLE_DEBUG
+  job->textures_to_save = g_array_new (0, 0, sizeof (TextureToSave));
+#endif
+
   return job;
 }
 
@@ -4614,5 +4659,8 @@ gsk_gl_render_job_free (GskGLRenderJob *job)
   g_clear_pointer (&job->region, cairo_region_destroy);
   g_clear_pointer (&job->modelview, g_array_unref);
   g_clear_pointer (&job->clip, g_array_unref);
+#ifdef G_ENABLE_DEBUG
+  g_clear_pointer (&job->textures_to_save, g_array_unref);
+#endif
   g_free (job);
 }
