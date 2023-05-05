@@ -8,6 +8,7 @@ static char *arg_output_dir = NULL;
 static gboolean flip = FALSE;
 static gboolean rotate = FALSE;
 static gboolean repeat = FALSE;
+static gboolean mask = FALSE;
 
 static const char *
 get_output_dir (void)
@@ -156,7 +157,8 @@ static const GOptionEntry options[] = {
   { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
   { "flip", 0, 0, G_OPTION_ARG_NONE, &flip, "Do flipped test", NULL },
   { "rotate", 0, 0, G_OPTION_ARG_NONE, &rotate, "Do rotated test", NULL },
-  { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeat test", NULL },
+  { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeated test", NULL },
+  { "mask", 0, 0, G_OPTION_ARG_NONE, &mask, "Do masked test", NULL },
   { NULL }
 };
 
@@ -184,6 +186,28 @@ load_node_file (const char *node_file)
   g_assert_nonnull (node);
 
   return node;
+}
+
+static GdkPixbuf *
+apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
+{
+  GdkPixbuf *copy;
+
+  copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
+  for (unsigned int j = 0; j < gdk_pixbuf_get_height (copy); j++)
+    {
+      guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);
+      for (unsigned int i = 0; i < gdk_pixbuf_get_width (copy); i++)
+        {
+          guint8 *p = row + i * 4;
+          if ((i < 25 && j >= 25) || (i >= 25 && j < 25))
+            {
+              p[0] = p[1] = p[2] = p[3] = 0;
+            }
+        }
+    }
+
+  return copy;
 }
 
 /*
@@ -399,6 +423,52 @@ main (int argc, char **argv)
         {
           save_node (node2, node_file, "-rotated.node");
           save_image (diff_texture, node_file, "-rotated.diff.png");
+          g_object_unref (diff_texture);
+          success = FALSE;
+        }
+
+      g_clear_object (&rendered_texture);
+      g_clear_object (&reference_texture);
+      gsk_render_node_unref (node2);
+    }
+
+  if (mask)
+    {
+      GskRenderNode *node2;
+      GdkPixbuf *pixbuf, *pixbuf2;
+      graphene_rect_t bounds;
+      GskRenderNode *mask_node;
+      GskRenderNode *nodes[2];
+
+      gsk_render_node_get_bounds (node, &bounds);
+      nodes[0] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
+                                     &GRAPHENE_RECT_INIT (bounds.origin.x, bounds.origin.y, 25, 25));
+      nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
+                                     &GRAPHENE_RECT_INIT (bounds.origin.x + 25, bounds.origin.y + 25, bounds.size.width - 25, bounds.size.height - 25));
+
+      mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
+      node2 = gsk_mask_node_new (node, mask_node, GSK_MASK_MODE_ALPHA);
+      gsk_render_node_unref (mask_node);
+      gsk_render_node_unref (nodes[0]);
+      gsk_render_node_unref (nodes[1]);
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+
+      save_image (rendered_texture, node_file, "-masked.out.png");
+
+      pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
+      pixbuf2 = apply_mask_to_pixbuf (pixbuf);
+      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      g_object_unref (pixbuf2);
+      g_object_unref (pixbuf);
+
+      save_image (reference_texture, node_file, "-masked.ref.png");
+
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+
+      if (diff_texture)
+        {
+          save_node (node2, node_file, "-masked.node");
+          save_image (diff_texture, node_file, "-masked.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
         }

@@ -200,6 +200,21 @@ foreach renderer : renderers
         ],
         suite: suites + [ 'gsk-compare-rotated-' + renderer_name ],
       )
+      test(renderer_name + ' ' + testname + ' masked', compare_render,
+        args: [
+          '--mask',
+          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
+        ],
+        env: [
+          'GSK_RENDERER=' + renderer_name,
+          'GTK_A11Y=test',
+          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+        ],
+        suite: suites + [ 'gsk-compare-masked-' + renderer_name ],
+      )
     endif
   endforeach
 endforeach
