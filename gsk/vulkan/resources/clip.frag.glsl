@@ -1,5 +1,5 @@
 #include "constants.glsl"
-#include "rounded-rect.glsl"
+#include "rounded-rect.frag.glsl"
 
 #ifndef _CLIP_
 #define _CLIP_

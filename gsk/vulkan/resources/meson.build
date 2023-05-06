@@ -6,6 +6,7 @@ gsk_private_vulkan_include_shaders = [
   'rect.frag.glsl',
   'rect.vert.glsl',
   'rounded-rect.glsl',
+  'rounded-rect.frag.glsl',
 ]
 
 gsk_private_vulkan_fragment_shaders = [
