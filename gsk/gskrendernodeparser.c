@@ -1371,7 +1371,10 @@ parse_shader (GtkCssParser *parser,
   GskGLShader *shader;
 
   if (!parse_string (parser, context, &sourcecode))
-    return FALSE;
+    {
+      gtk_css_parser_error_value (parser, "Not a string");
+      return FALSE;
+    }
 
   bytes = g_bytes_new_take (sourcecode, strlen (sourcecode));
   shader = gsk_gl_shader_new_from_bytes (bytes);
@@ -1500,6 +1503,29 @@ parse_shader_args (GtkCssParser *parser,
   return TRUE;
 }
 
+static const char default_glsl[] =
+  "void\n"
+  "mainImage(out vec4 fragColor,\n"
+  "          in vec2 fragCoord,\n"
+  "          in vec2 resolution,\n"
+  "          in vec2 uv)\n"
+  "{\n"
+  "  fragColor = vec4(1.0, 105.0/255.0, 180.0/255.0, 1.0);\n"
+  "}";
+
+static GskGLShader *
+get_default_glshader (void)
+{
+  GBytes *bytes;
+  GskGLShader *shader;
+
+  bytes = g_bytes_new (default_glsl, strlen (default_glsl) + 1);
+  shader = gsk_gl_shader_new_from_bytes (bytes);
+  g_bytes_unref (bytes);
+
+  return shader;
+}
+
 static GskRenderNode *
 parse_glshader_node (GtkCssParser *parser,
                      Context      *context)
@@ -1520,6 +1546,7 @@ parse_glshader_node (GtkCssParser *parser,
     { "child4", parse_node, clear_node, &child[3] },
   };
   GskGLShader *shader;
+  GskShaderArgsBuilder *builder;
   GskRenderNode *node;
   GBytes *args = NULL;
   int len, i;
@@ -1532,8 +1559,17 @@ parse_glshader_node (GtkCssParser *parser,
         break;
     }
 
-  shader = shader_info.shader;
-  args = gsk_shader_args_builder_free_to_args (shader_info.args);
+  if (shader_info.shader)
+    shader = shader_info.shader;
+  else
+    shader = get_default_glshader ();
+
+  if (shader_info.args)
+    builder = shader_info.args;
+  else
+    builder = gsk_shader_args_builder_new (shader, NULL);
+
+  args = gsk_shader_args_builder_free_to_args (builder);
 
   node = gsk_gl_shader_node_new (shader, &bounds, args, child, len);
 
