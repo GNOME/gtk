@@ -130,7 +130,7 @@ void gskSetOutputColor(vec4 color) {
   vec4 result;
 
 #if defined(MASK_CLIP)
-  vec4 mask = GskTexture(u_clip_mask, vec2(vUv.x, vUv.y));
+  vec4 mask = GskTexture(u_clip_mask, vUv);
   float mask_value;
   switch (u_mask_mode)
     {
@@ -173,7 +173,7 @@ void gskSetScaledOutputColor(vec4 color, float alpha) {
   vec4 result;
 
 #if defined(MASK_CLIP)
-  vec4 mask = GskTexture(u_clip_mask, vec2(vUv.x, vUv.y));
+  vec4 mask = GskTexture(u_clip_mask, vUv);
   float mask_value;
   switch (u_mask_mode)
     {

@@ -4119,7 +4119,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_MASK_NODE:
-        gsk_gl_render_job_visit_mask_node (job, node);
+      gsk_gl_render_job_visit_mask_node (job, node);
     break;
 
     case GSK_OPACITY_NODE:
