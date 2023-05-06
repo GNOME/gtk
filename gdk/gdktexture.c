@@ -282,6 +282,8 @@ gdk_texture_dispose (GObject *object)
 {
   GdkTexture *self = GDK_TEXTURE (object);
 
+  g_clear_pointer (&self->diff_to_previous, cairo_region_destroy);
+
   gdk_texture_clear_render_data (self);
 
   G_OBJECT_CLASS (gdk_texture_parent_class)->dispose (object);
@@ -671,7 +673,47 @@ gdk_texture_do_download (GdkTexture      *texture,
                          guchar          *data,
                          gsize            stride)
 {
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data,stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data, stride);
+}
+
+void
+gdk_texture_diff (GdkTexture     *self,
+                  GdkTexture     *other,
+                  cairo_region_t *region)
+{
+  if (self == other)
+    return;
+
+  if (self->previous_texture == other &&
+      g_atomic_pointer_get (&other->next_texture) == self)
+    {
+      cairo_region_union (region, self->diff_to_previous);
+    }
+  else if (other->previous_texture == self &&
+           g_atomic_pointer_get (&self->next_texture) == other)
+    {
+      cairo_region_union (region, other->diff_to_previous);
+    }
+  else
+    {
+      cairo_region_union_rectangle (region,
+                                    &(cairo_rectangle_int_t) {
+                                      0,
+                                      0,
+                                      MAX (self->width, other->width),
+                                      MAX (self->height, other->height)
+                                    });
+    }
+}
+
+void
+gdk_texture_set_diff (GdkTexture     *self,
+                      GdkTexture     *previous,
+                      cairo_region_t *diff)
+{
+  self->previous_texture = previous;
+  self->diff_to_previous = diff;
+  g_atomic_pointer_set (&previous->next_texture, self);
 }
 
 cairo_surface_t *

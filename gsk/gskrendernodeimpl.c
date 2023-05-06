@@ -1650,12 +1650,28 @@ gsk_texture_node_diff (GskRenderNode  *node1,
 {
   GskTextureNode *self1 = (GskTextureNode *) node1;
   GskTextureNode *self2 = (GskTextureNode *) node2;
+  cairo_region_t *sub;
 
-  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
-      self1->texture == self2->texture)
+  if (!graphene_rect_equal (&node1->bounds, &node2->bounds) ||
+      gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
+      gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
+  if (self1->texture == self2->texture)
     return;
 
-  gsk_render_node_diff_impossible (node1, node2, region);
+  sub = cairo_region_create ();
+  gdk_texture_diff (self1->texture, self2->texture, sub);
+  region_union_region_affine (region,
+                              sub,
+                              node1->bounds.size.width / gdk_texture_get_width (self1->texture),
+                              node1->bounds.size.height / gdk_texture_get_height (self1->texture),
+                              node1->bounds.origin.x,
+                              node1->bounds.origin.y);
+  cairo_region_destroy (sub);
 }
 
 static void
@@ -1828,13 +1844,29 @@ gsk_texture_scale_node_diff (GskRenderNode  *node1,
 {
   GskTextureScaleNode *self1 = (GskTextureScaleNode *) node1;
   GskTextureScaleNode *self2 = (GskTextureScaleNode *) node2;
+  cairo_region_t *sub;
 
-  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
-      self1->texture == self2->texture &&
-      self1->filter == self2->filter)
+  if (!graphene_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->filter != self2->filter ||
+      gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
+      gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
+  if (self1->texture == self2->texture)
     return;
 
-  gsk_render_node_diff_impossible (node1, node2, region);
+  sub = cairo_region_create ();
+  gdk_texture_diff (self1->texture, self2->texture, sub);
+  region_union_region_affine (region,
+                              sub,
+                              node1->bounds.size.width / gdk_texture_get_width (self1->texture),
+                              node1->bounds.size.height / gdk_texture_get_height (self1->texture),
+                              node1->bounds.origin.x,
+                              node1->bounds.origin.y);
+  cairo_region_destroy (sub);
 }
 
 static void
