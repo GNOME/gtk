@@ -671,9 +671,10 @@ gsk_gl_render_job_push_clip (GskGLRenderJob       *job,
 }
 
 static void
-gsk_gl_render_job_push_clip_mask (GskGLRenderJob *job,
-                                  unsigned int    mask,
-                                  GskMaskMode     mode)
+gsk_gl_render_job_push_clip_mask (GskGLRenderJob        *job,
+                                  unsigned int           mask,
+                                  GskMaskMode            mode,
+                                  const graphene_rect_t *bounds)
 {
   GskGLRenderClip *clip;
 
@@ -692,6 +693,7 @@ gsk_gl_render_job_push_clip_mask (GskGLRenderJob *job,
   clip->is_mask = TRUE;
   clip->mask_mode = mode;
   clip->mask = mask;
+  clip->rect.bounds = *bounds;
 
   job->current_clip = clip;
 }
@@ -1124,7 +1126,7 @@ gsk_gl_render_job_draw_with_color (GskGLRenderJob *job,
   float max_x = min_x + width;
   float max_y = min_y + height;
 
-  gsk_gl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 1, 1, 0, color);
+  gsk_gl_render_job_draw_coords (job, min_x, min_y, max_x, max_y, 0, 0, 1, 1, color);
 }
 
 static inline void
@@ -1594,6 +1596,7 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
   /* Limit the size, or we end up with a coordinate overflow somewhere. */
   if (node->bounds.size.width < 300 &&
       node->bounds.size.height < 300 &&
+      !job->current_clip->is_mask &&
       batch->any.kind == GSK_GL_COMMAND_KIND_DRAW &&
       batch->any.program == program->id)
     {
@@ -1621,7 +1624,10 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
   else
     {
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-      gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
+      if (job->current_clip->is_mask)
+        gsk_gl_render_job_draw_subrect_with_color (job, &job->current_clip->rect.bounds, &node->bounds, color);
+      else
+        gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
       gsk_gl_render_job_end_draw (job);
     }
 }
@@ -3454,7 +3460,7 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
                                            "mask" }, 1);
 #endif
 
-  gsk_gl_render_job_push_clip_mask (job, mask_offscreen.texture_id, mode);
+  gsk_gl_render_job_push_clip_mask (job, mask_offscreen.texture_id, mode, &node->bounds);
   gsk_gl_render_job_visit_node (job, source);
   gsk_gl_render_job_pop_clip (job);
 }
@@ -4465,6 +4471,19 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
   gsk_gl_command_queue_execute (job->command_queue, surface_height, 1, NULL, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
 
+#ifdef G_ENABLE_DEBUG
+  for (unsigned int i = 0; i < job->textures_to_save->len; i++)
+    {
+      TextureToSave *t = &g_array_index (job->textures_to_save, TextureToSave, i);
+
+      g_print ("save texture\n");
+      char *filename = g_strdup_printf ("%s-%u.png", t->name, i);
+      gsk_gl_driver_save_texture_to_png (job->driver, t->texture_id, t->width, t->height, filename);
+      g_free (filename);
+    }
+  g_array_set_size (job->textures_to_save, 0);
+#endif
+
   glDeleteFramebuffers (1, &framebuffer_id);
   glDeleteTextures (1, &texture_id);
 }
@@ -4521,6 +4540,7 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
     {
       TextureToSave *t = &g_array_index (job->textures_to_save, TextureToSave, i);
 
+      g_print ("save texture\n");
       char *filename = g_strdup_printf ("%s-%u.png", t->name, i);
       gsk_gl_driver_save_texture_to_png (job->driver, t->texture_id, t->width, t->height, filename);
       g_free (filename);
