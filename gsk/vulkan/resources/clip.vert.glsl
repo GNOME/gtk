@@ -1,4 +1,5 @@
 #include "constants.glsl"
+#include "rect.vert.glsl"
 
 #ifndef _CLIP_
 #define _CLIP_
@@ -14,21 +15,47 @@ vec4 intersect(vec4 a, vec4 b)
 }
 
 #ifdef CLIP_ROUNDED_RECT
-vec4 clip(vec4 rect)
+
+vec4
+clip(vec4 rect)
 {
   /* rounded corner clipping is done in fragment shader */
   return intersect(rect, push.clip_bounds);
 }
+
+Rect
+clip_rect (vec4 xywh)
+{
+  /* rounded corner clipping is done in fragment shader */
+  return rect_intersect (rect_from_gsk (xywh), rect_to_int (rect_from_gsk (push.clip_bounds)));
+}
+
 #elif defined(CLIP_RECT)
-vec4 clip(vec4 rect)
+
+vec4
+clip(vec4 rect)
 {
   return intersect(rect, push.clip_bounds);
 }
+
+Rect
+clip_rect (vec4 xywh)
+{
+  return rect_intersect (rect_from_gsk (xywh), rect_to_int (rect_from_gsk (push.clip_bounds)));
+}
+
 #elif defined(CLIP_NONE)
 vec4 clip(vec4 rect)
 {
   return rect;
 }
+
+Rect
+clip_rect (vec4 xywh)
+{
+  return rect_from_gsk (xywh);
+}
+
 #else
 #error "No clipping define given. Need CLIP_NONE, CLIP_RECT or CLIP_ROUNDED_RECT"
 #endif

@@ -2,6 +2,9 @@ gsk_private_vulkan_include_shaders = [
   'clip.frag.glsl',
   'clip.vert.glsl',
   'constants.glsl',
+  'rect.glsl',
+  'rect.frag.glsl',
+  'rect.vert.glsl',
   'rounded-rect.glsl',
 ]
 
