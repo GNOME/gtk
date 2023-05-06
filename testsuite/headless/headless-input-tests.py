@@ -24,12 +24,17 @@ loop = None
 
 def quit_cb(loop):
     loop.quit()
+    print('timed out while waiting')
 
 def wait(millis):
     global loop
+    before = GLib.get_monotonic_time()
     loop = GLib.MainLoop()
     GLib.timeout_add(millis, quit_cb, loop)
     loop.run()
+    if verbose:
+        time = (GLib.get_monotonic_time() - before) / 1000
+        print(f'waited for {time} milliseconds')
 
 display = None
 window = None
@@ -41,10 +46,10 @@ def key_pressed_cb (controller, keyval, keycode, state):
 
     if verbose:
         print(f'got key press: {keyval}, state {state}')
-    assert expected_change != None, "Unexpected key press"
-    assert expected_change['type'] == 'press', "Key press event expected"
-    assert keyval == expected_change['keyval'], "Unexpected keyval in key press event"
-    assert state == expected_change['state'], "Unexpected state in key press event"
+    assert expected_change != None, 'Unexpected key press'
+    assert expected_change['type'] == 'press', 'Key press event expected'
+    assert keyval == expected_change['keyval'], 'Unexpected keyval in key press event'
+    assert state == expected_change['state'], 'Unexpected state in key press event'
 
     expected_change = None
     loop.quit()
@@ -55,10 +60,10 @@ def key_released_cb (controller, keyval, keycode, state):
 
     if verbose:
         print(f'got key release: {keyval}, state {state}')
-    assert expected_change != None, "Unexpected key release"
-    assert expected_change['type'] == 'release', "Key release event expected"
-    assert keyval == expected_change['keyval'], "Unexpected keyval in key release event"
-    assert state == expected_change['state'], "Unexpected state in key release event"
+    assert expected_change != None, 'Unexpected key release'
+    assert expected_change['type'] == 'release', 'Key release event expected'
+    assert keyval == expected_change['keyval'], 'Unexpected keyval in key release event'
+    assert state == expected_change['state'], 'Unexpected state in key release event'
 
     expected_change = None
     loop.quit()
@@ -70,9 +75,9 @@ def motion_cb (controller, x, y):
     if verbose:
         print(f'got motion: {x}, {y}')
     if expected_change != None:
-        assert expected_change['type'] == 'motion', "Motion event expected"
-        assert x == expected_change['x'], "Unexpected x coord in motion event"
-        assert y == expected_change['y'], "Unexpected y coord in motion event"
+        assert expected_change['type'] == 'motion', 'Motion event expected'
+        assert x == expected_change['x'], 'Unexpected x coord in motion event'
+        assert y == expected_change['y'], 'Unexpected y coord in motion event'
         expected_change = None
     loop.quit()
 
@@ -82,10 +87,10 @@ def enter_cb (controller, x, y):
 
     if verbose:
         print(f'got enter: {x}, {y}')
-    assert expected_change != None, "Unexpected enter"
-    assert expected_change['type'] == 'enter', "Enter event expected"
-    assert x == expected_change['x'], "Unexpected x coord in enter event"
-    assert y == expected_change['y'], "Unexpected y coord in enter event"
+    assert expected_change != None, 'Unexpected enter'
+    assert expected_change['type'] == 'enter', 'Enter event expected'
+    assert x == expected_change['x'], 'Unexpected x coord in enter event'
+    assert y == expected_change['y'], 'Unexpected y coord in enter event'
 
     expected_change = None
     loop.quit()
@@ -96,11 +101,11 @@ def pressed_cb(controller, n, x, y):
 
     if verbose:
         print(f'got pressed')
-    assert expected_change != None, "Unexpected event"
-    assert expected_change['type'] == 'press', "Button press expected"
-    assert expected_change['button'] == controller.get_current_button(), "Unexpected button pressed"
-    assert x == expected_change['x'], "Unexpected x coord in motion event"
-    assert y == expected_change['y'], "Unexpected y coord in motion event"
+    assert expected_change != None, 'Unexpected event'
+    assert expected_change['type'] == 'press', 'Button press expected'
+    assert expected_change['button'] == controller.get_current_button(), 'Unexpected button pressed'
+    assert x == expected_change['x'], 'Unexpected x coord in motion event'
+    assert y == expected_change['y'], 'Unexpected y coord in motion event'
 
     expected_change = None
     loop.quit()
@@ -111,8 +116,8 @@ def released_cb(controller, n, x, y):
 
     if verbose:
         print(f'got released')
-    assert expected_change != None, "Unexpected event"
-    assert expected_change['type'] == 'release', "Button release expected"
+    assert expected_change != None, 'Unexpected event'
+    assert expected_change['type'] == 'release', 'Button release expected'
 
     expected_change = None
     loop.quit()
@@ -125,7 +130,7 @@ def expect_key_press(keyval, state, timeout):
       'state' : state
     }
     wait(timeout)
-    assert expected_change == None, "Expected event did not happen"
+    assert expected_change == None, 'Expected event did not happen'
 
 def expect_key_release(keyval, state, timeout):
     global expected_change
@@ -135,7 +140,7 @@ def expect_key_release(keyval, state, timeout):
       'state' : state
     }
     wait(timeout)
-    assert expected_change == None, "Expected event did not happen"
+    assert expected_change == None, 'Expected event did not happen'
 
 def expect_motion(x, y, timeout):
     global expected_change
@@ -145,7 +150,7 @@ def expect_motion(x, y, timeout):
       'y' : y
     }
     wait(timeout)
-    assert expected_change == None, "Expected event did not happen"
+    assert expected_change == None, 'Expected event did not happen'
 
 def expect_enter(x, y, timeout):
     global expected_change
@@ -155,7 +160,7 @@ def expect_enter(x, y, timeout):
       'y' : y
     }
     wait(timeout)
-    assert expected_change == None, "Expected event did not happen"
+    assert expected_change == None, 'Expected event did not happen'
 
 def expect_button_press(button, x, y, timeout):
     global expected_change
@@ -166,7 +171,7 @@ def expect_button_press(button, x, y, timeout):
       'y' : y
     }
     wait(timeout)
-    assert expected_change == None, "Button press did not arrive"
+    assert expected_change == None, 'Button press did not arrive'
 
 def expect_button_release(button, x, y, timeout):
     global expected_change
@@ -177,7 +182,7 @@ def expect_button_release(button, x, y, timeout):
       'y' : y
     }
     wait(timeout)
-    assert expected_change == None, "Button release did not arrive"
+    assert expected_change == None, 'Button release did not arrive'
 
 def got_active(object, pspec):
     global loop
@@ -220,9 +225,9 @@ def launch_observer():
 
     wait(2000)
 
-    assert window.is_active(), "Observer not active"
-    assert window.get_width() == 1024, "Window not maximized"
-    assert window.get_height() == 768, "Window not maximized"
+    assert window.is_active(), 'Observer not active'
+    assert window.get_width() == 1024, 'Window not maximized'
+    assert window.get_height() == 768, 'Window not maximized'
 
     # we need to wait out the map animation, or pointer coords will be off
     wait(1000)
@@ -265,6 +270,9 @@ def pointer_move(x, y):
 
 def basic_keyboard_tests():
     try:
+        if verbose:
+            print('Starting basic keyboard tests')
+
         launch_observer()
 
         key_press(Gdk.KEY_a)
@@ -287,11 +295,14 @@ def basic_keyboard_tests():
 
         stop_observer()
     except AssertionError as e:
-        print("Error in basic_keyboard_tests: {0}".format(e))
+        print(f'Error in basic_keyboard_tests: {e}')
         terminate()
 
 def basic_pointer_tests():
     try:
+        if verbose:
+            print('Starting basic pointer tests')
+
         pointer_move(-100.0, -100.0)
         launch_observer()
 
@@ -313,7 +324,7 @@ def basic_pointer_tests():
 
         stop_observer()
     except AssertionError as e:
-        print("Error in basic_pointer_tests: {0}".format(e))
+        print(f'Error in basic_pointer_tests: {e}')
         terminate()
 
 ds_window = None
@@ -324,9 +335,9 @@ def drag_begin(controller, drag):
     global loop
 
     if verbose:
-        print(f'got drag begin')
-    assert expected_change != None, "Unexpected drag begin"
-    assert expected_change['type'] == 'drag', "Drag begin expected"
+        print('got drag begin')
+    assert expected_change != None, 'Unexpected drag begin'
+    assert expected_change['type'] == 'drag', 'Drag begin expected'
 
     expected_change = None
     loop.quit()
@@ -362,9 +373,9 @@ def launch_drag_source(value):
 
     wait(2000)
 
-    assert ds_window.is_active(), "drag source not active"
-    assert ds_window.get_width() == 1024, "Window not maximized"
-    assert ds_window.get_height() == 768, "Window not maximized"
+    assert ds_window.is_active(), 'drag source not active'
+    assert ds_window.get_width() == 1024, 'Window not maximized'
+    assert ds_window.get_height() == 768, 'Window not maximized'
 
     # we need to wait out the map animation, or pointer coords will be off
     wait(1000)
@@ -382,9 +393,9 @@ def do_drop(controller, value, x, y):
 
     if verbose:
         print(f'got drop {value}')
-    assert expected_change != None, "Unexpected drop begin"
-    assert expected_change['type'] == 'drop', "Drop expected"
-    assert expected_change['value'] == value, "Unexpected value dropped"
+    assert expected_change != None, 'Unexpected drop begin'
+    assert expected_change['type'] == 'drop', 'Drop expected'
+    assert expected_change['value'] == value, 'Unexpected value dropped'
 
     expected_change = None
     loop.quit()
@@ -412,9 +423,9 @@ def launch_drop_target():
 
     wait(2000)
 
-    assert dt_window.is_active(), "drop target not active"
-    assert dt_window.get_width() == 1024, "Window not maximized"
-    assert dt_window.get_height() == 768, "Window not maximized"
+    assert dt_window.is_active(), 'drop target not active'
+    assert dt_window.get_width() == 1024, 'Window not maximized'
+    assert dt_window.get_height() == 768, 'Window not maximized'
 
     # we need to wait out the map animation, or pointer coords will be off
     wait(1000)
@@ -430,7 +441,7 @@ def expect_drag(timeout):
       'type' : 'drag',
     }
     wait(timeout)
-    assert expected_change == None, "DND operation not started"
+    assert expected_change == None, 'DND operation not started'
 
 def expect_drop(value, timeout):
     global expected_change
@@ -439,10 +450,13 @@ def expect_drop(value, timeout):
       'value' : value
     }
     wait(timeout)
-    assert expected_change == None, "Drop has not happened"
+    assert expected_change == None, 'Drop has not happened'
 
 def dnd_tests():
     try:
+        if verbose:
+            print('Starting dnd tests')
+
         pointer_move(-100, -100)
 
         launch_drag_source('abc')
@@ -466,11 +480,16 @@ def dnd_tests():
         stop_drop_target()
         stop_drag_source()
     except AssertionError as e:
-        print("Error in dnd_tests: {0}".format(e))
+        print(f'Error in dnd_tests: {e}')
         terminate()
 
 def session_closed_cb():
     print('Session closed')
+
+def run_commands():
+    basic_keyboard_tests()
+    basic_pointer_tests()
+    dnd_tests()
 
 def mutter_appeared(name):
     global remote_desktop
@@ -479,13 +498,13 @@ def mutter_appeared(name):
     global done
 
     if verbose:
-      print("mutter appeared on the bus")
+        print('mutter appeared on the bus')
 
     remote_desktop = bus.get('org.gnome.Mutter.RemoteDesktop',
                              '/org/gnome/Mutter/RemoteDesktop')
     device_types = remote_desktop.Get('org.gnome.Mutter.RemoteDesktop', 'SupportedDeviceTypes')
-    assert device_types & 1 == 1, "No keyboard"
-    assert device_types & 2 == 2, "No pointer"
+    assert device_types & 1 == 1, 'No keyboard'
+    assert device_types & 2 == 2, 'No pointer'
 
     screen_cast = bus.get('org.gnome.Mutter.ScreenCast',
                           '/org/gnome/Mutter/ScreenCast')
@@ -505,19 +524,19 @@ def mutter_appeared(name):
     key_release(Gdk.KEY_Control_L)
     pointer_move(-100, -100)
 
-    basic_keyboard_tests()
-    basic_pointer_tests()
-    dnd_tests()
+    run_commands()
 
     session.Stop()
 
+    if verbose:
+        print('Done running commands, exiting...')
     done = True
 
 def mutter_vanished():
     global done
     if remote_desktop != None:
         if verbose:
-            print("mutter left the bus")
+            print('mutter left the bus')
         done = True
 
 bus = SessionBus()

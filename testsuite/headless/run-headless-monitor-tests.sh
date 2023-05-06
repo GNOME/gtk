@@ -1,19 +1,24 @@
 #! /bin/sh
 
 srcdir=${MESON_CURRENT_SOURCE_DIR:-./testsuite/headless}
+builddir=${MESON_CURRENT_BUILD_DIR:-.}
+outputdir=${builddir}/monitor
+
+mkdir -p ${outputdir}
+
 
 export GTK_A11Y=none
 export GIO_USE_VFS=local
 
-dbus-run-session sh <<EOF
+dbus-run-session sh 2>${outputdir}/dbus-stderr.log <<EOF
 
 export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
-pipewire &
+pipewire >&${outputdir}/pipewire.log &
 pipewire_pid=\$!
 sleep 2
 
-wireplumber &
+wireplumber >&${outputdir}/wireplumber.log &
 wireplumber_pid=\$!
 sleep 2
 
@@ -22,7 +27,7 @@ sleep 2
 
 export MUTTER_DEBUG=screen-cast
 
-mutter --headless --no-x11 --wayland-display gtk-test &
+mutter --headless --no-x11 --wayland-display gtk-test >&${outputdir}/mutter.log &
 mutter_pid=\$!
 
 sleep 2
