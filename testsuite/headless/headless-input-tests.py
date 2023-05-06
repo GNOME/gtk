@@ -33,6 +33,7 @@ def wait(millis):
 
 display = None
 window = None
+entry = None
 expected_change = None
 
 def key_pressed_cb (controller, keyval, keycode, state):
@@ -227,10 +228,43 @@ def launch_observer():
     # we need to wait out the map animation, or pointer coords will be off
     wait(1000)
 
+def launch_entry():
+    global display
+    global window
+    global entry
+
+    if verbose:
+        print('launch entry')
+
+    if display == None:
+        display = Gdk.Display.open(os.getenv('WAYLAND_DISPLAY'))
+
+    window = Gtk.Window.new()
+
+    entry = Gtk.Entry.new()
+
+    window.set_child(entry)
+
+    window.connect('notify::is-active', got_active)
+    window.maximize()
+    window.present()
+
+    wait(500)
+
+    assert window.is_active(), "Observer not active"
+    assert window.get_width() == 1024, "Window not maximized"
+    assert window.get_height() == 768, "Window not maximized"
+
+    # we need to wait out the map animation, or pointer coords will be off
+    wait(1000)
+
 def stop_observer():
     global window
     window.destroy()
     window = None
+
+def expect_entry_text(text):
+    assert text == entry.get_text(), "Unexpected entry text: " + entry.get_text()
 
 def key_press(keyval):
     if verbose:
@@ -288,6 +322,27 @@ def basic_keyboard_tests():
         stop_observer()
     except AssertionError as e:
         print("Error in basic_keyboard_tests: {0}".format(e))
+        terminate()
+
+def quick_typing_test():
+    try:
+        launch_entry()
+
+        key_press(Gdk.KEY_T)
+        key_release(Gdk.KEY_T)
+        key_press(Gdk.KEY_e)
+        key_release(Gdk.KEY_e)
+        key_press(Gdk.KEY_s)
+        key_release(Gdk.KEY_s)
+        key_press(Gdk.KEY_t)
+        key_release(Gdk.KEY_t)
+
+        wait(100)
+        expect_entry_text("Test")
+
+        stop_observer()
+    except AssertionError as e:
+        print("Error in quick_typing_test: {0}".format(e))
         terminate()
 
 def basic_pointer_tests():
@@ -508,6 +563,7 @@ def mutter_appeared(name):
     basic_keyboard_tests()
     basic_pointer_tests()
     dnd_tests()
+    quick_typing_test()
 
     session.Stop()
 
