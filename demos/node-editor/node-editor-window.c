@@ -1532,11 +1532,6 @@ edit_action_cb (GtkWidget  *widget,
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
 
-#if 0
-  if (gtk_window_get_focus (GTK_WINDOW (self)) != self->text_view)
-    return;
-#endif
-
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->text_view));
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
 
