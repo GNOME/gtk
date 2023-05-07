@@ -193,7 +193,7 @@ Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | source   | `<node>`         | color { }              | always      |
-| mode     | `<blend-mode>`   | alpha                  | non-default |
+| mode     | `<mask-mode>`    | alpha                  | non-default |
 | mask     | `<node>`         | color { }              | always      |
 
 Creates a node like `gsk_mask_node_new()` with the given properties.
