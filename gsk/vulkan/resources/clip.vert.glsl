@@ -24,10 +24,10 @@ clip(vec4 rect)
 }
 
 Rect
-clip_rect (vec4 xywh)
+clip_rect (Rect r)
 {
   /* rounded corner clipping is done in fragment shader */
-  return rect_intersect (rect_from_gsk (xywh), rect_to_int (rect_from_gsk (push.clip_bounds)));
+  return rect_intersect (r, rect_round_larger (rect_from_gsk (push.clip_bounds)));
 }
 
 #elif defined(CLIP_RECT)
@@ -39,9 +39,9 @@ clip(vec4 rect)
 }
 
 Rect
-clip_rect (vec4 xywh)
+clip_rect (Rect r)
 {
-  return rect_intersect (rect_from_gsk (xywh), rect_to_int (rect_from_gsk (push.clip_bounds)));
+  return rect_intersect (r, rect_round_larger (rect_from_gsk (push.clip_bounds)));
 }
 
 #elif defined(CLIP_NONE)
@@ -51,9 +51,9 @@ vec4 clip(vec4 rect)
 }
 
 Rect
-clip_rect (vec4 xywh)
+clip_rect (Rect r)
 {
-  return rect_from_gsk (xywh);
+  return r;
 }
 
 #else

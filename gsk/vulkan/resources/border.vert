@@ -48,46 +48,55 @@ void main() {
   vec4 corner_widths = max (inCornerWidths, inBorderWidths.wyyw);
   vec4 corner_heights = max (inCornerHeights, inBorderWidths.xxzz);
 
-  vec4 rect;
+  Rect rect;
 
   switch (slice_index)
     {
     case SLICE_TOP_LEFT:
-      rect = vec4(inRect.xy, corner_widths[TOP_LEFT], corner_heights[TOP_LEFT]);
+      rect = rect_from_gsk (vec4(inRect.xy, corner_widths[TOP_LEFT], corner_heights[TOP_LEFT]));
+      rect = rect_round_larger (rect);
       vert_index = (vert_index + 3) % 6;
       break;
     case SLICE_TOP:
-      rect = vec4(inRect.x + corner_widths[TOP_LEFT], inRect.y, inRect.z - corner_widths[TOP_LEFT] - corner_widths[TOP_RIGHT], inBorderWidths[TOP]);
+      rect = rect_from_gsk (vec4(inRect.x + corner_widths[TOP_LEFT], inRect.y, inRect.z - corner_widths[TOP_LEFT] - corner_widths[TOP_RIGHT], inBorderWidths[TOP]));
+      rect = rect_round_smaller_larger (rect);
       outColor = inBorderColors[TOP];
       break;
     case SLICE_TOP_RIGHT:
-      rect = vec4(inRect.x + inRect.z - corner_widths[TOP_RIGHT], inRect.y, corner_widths[TOP_RIGHT], corner_heights[TOP_RIGHT]);
+      rect = rect_from_gsk (vec4(inRect.x + inRect.z - corner_widths[TOP_RIGHT], inRect.y, corner_widths[TOP_RIGHT], corner_heights[TOP_RIGHT]));
+      rect = rect_round_larger (rect);
       break;
     case SLICE_RIGHT:
-      rect = vec4(inRect.x + inRect.z - inBorderWidths[RIGHT], inRect.y + corner_heights[TOP_RIGHT], inBorderWidths[RIGHT], inRect.w - corner_heights[TOP_RIGHT] - corner_heights[BOTTOM_RIGHT]);
+      rect = rect_from_gsk (vec4(inRect.x + inRect.z - inBorderWidths[RIGHT], inRect.y + corner_heights[TOP_RIGHT], inBorderWidths[RIGHT], inRect.w - corner_heights[TOP_RIGHT] - corner_heights[BOTTOM_RIGHT]));
+      rect = rect_round_larger_smaller (rect);
       outColor = inBorderColors[RIGHT];
       break;
     case SLICE_BOTTOM_RIGHT:
-      rect = vec4(inRect.x + inRect.z - corner_widths[BOTTOM_RIGHT], inRect.y + inRect.w - corner_heights[BOTTOM_RIGHT], corner_widths[BOTTOM_RIGHT], corner_heights[BOTTOM_RIGHT]);
+      rect = rect_from_gsk (vec4(inRect.x + inRect.z - corner_widths[BOTTOM_RIGHT], inRect.y + inRect.w - corner_heights[BOTTOM_RIGHT], corner_widths[BOTTOM_RIGHT], corner_heights[BOTTOM_RIGHT]));
+      rect = rect_round_larger (rect);
       break;
     case SLICE_BOTTOM:
-      rect = vec4(inRect.x + corner_widths[BOTTOM_LEFT], inRect.y + inRect.w - inBorderWidths[BOTTOM], inRect.z - corner_widths[BOTTOM_LEFT] - corner_widths[BOTTOM_RIGHT], inBorderWidths[BOTTOM]);
+      rect = rect_from_gsk (vec4(inRect.x + corner_widths[BOTTOM_LEFT], inRect.y + inRect.w - inBorderWidths[BOTTOM], inRect.z - corner_widths[BOTTOM_LEFT] - corner_widths[BOTTOM_RIGHT], inBorderWidths[BOTTOM]));
+      rect = rect_round_smaller_larger (rect);
       break;
     case SLICE_BOTTOM_LEFT:
-      rect = vec4(inRect.x, inRect.y + inRect.w - corner_heights[BOTTOM_LEFT], corner_widths[BOTTOM_LEFT], corner_heights[BOTTOM_LEFT]);
+      rect = rect_from_gsk (vec4(inRect.x, inRect.y + inRect.w - corner_heights[BOTTOM_LEFT], corner_widths[BOTTOM_LEFT], corner_heights[BOTTOM_LEFT]));
       vert_index = (vert_index + 3) % 6;
+      rect = rect_round_larger (rect);
       break;
     case SLICE_LEFT:
-      rect = vec4(inRect.x, inRect.y + corner_heights[TOP_LEFT], inBorderWidths[LEFT], inRect.w - corner_heights[TOP_LEFT] - corner_heights[BOTTOM_LEFT]);
+      rect = rect_from_gsk (vec4(inRect.x, inRect.y + corner_heights[TOP_LEFT], inBorderWidths[LEFT], inRect.w - corner_heights[TOP_LEFT] - corner_heights[BOTTOM_LEFT]));
+      rect = rect_round_larger_smaller (rect);
       break;
     }
 
-  rect = clip (rect);
+  rect = clip_rect (rect);
+
   vec2 pos;
   if ((slice_index % 4) != 0 || (vert_index % 3) != 2)
-    pos = rect.xy + rect.zw * offsets[vert_index];
+    pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[vert_index]);
   else
-    pos = rect.xy + rect.zw * vec2(1.0 - offsets[vert_index].x, offsets[vert_index].y);
+    pos = mix (rect.bounds.zy, rect.bounds.xw, offsets[vert_index]);
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outColor = inBorderColors[((gl_VertexIndex / 3 + 15) / 4) % 4];
   outPos = pos;

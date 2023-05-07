@@ -18,7 +18,7 @@ vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 1.0) };
 
 void main() {
-  Rect rect = rect_to_int (clip_rect (inRect));
+  Rect rect = rect_round_larger (clip_rect (rect_from_gsk (inRect)));
 
   vec2 pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[gl_VertexIndex]);
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);

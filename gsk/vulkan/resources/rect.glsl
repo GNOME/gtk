@@ -29,9 +29,21 @@ rect_size (Rect r)
 }
 
 Rect
-rect_to_int (Rect r)
+rect_round_larger (Rect r)
 {
   return Rect (vec4 (floor(r.bounds.xy), ceil (r.bounds.zw)));
+}
+
+Rect
+rect_round_larger_smaller (Rect r)
+{
+  return Rect (mix (floor(r.bounds), ceil (r.bounds), bvec4(0, 1, 1, 0)));
+}
+
+Rect
+rect_round_smaller_larger (Rect r)
+{
+  return Rect (mix (floor(r.bounds), ceil (r.bounds), bvec4(1, 0, 0, 1)));
 }
 
 Rect
