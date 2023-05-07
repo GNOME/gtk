@@ -505,8 +505,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   };
   graphene_matrix_t old_mv;
   GskRenderNode *child;
-  GskTransform *next_transform;
   GskTransform *transform;
+  graphene_matrix_t transform_matrix;
   float new_scale_x = self->scale_x;
   float new_scale_y = self->scale_x;
   float old_scale_x;
@@ -579,8 +579,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   self->scale_x = new_scale_x;
   self->scale_y = new_scale_y;
 
-  next_transform = gsk_transform_matrix (gsk_transform_ref (transform), &self->mv);
-  gsk_transform_to_matrix (next_transform, &self->mv);
+  gsk_transform_to_matrix (transform, &transform_matrix);
+  graphene_matrix_multiply (&transform_matrix, &self->mv, &self->mv);
 
   child = gsk_transform_node_get_child (node);
   if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
