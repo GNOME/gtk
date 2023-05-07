@@ -16,6 +16,14 @@
       </item>
     </section>
   </menu>
+  <menu id="extra_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Assisted _Edit</attribute>
+        <attribute name="action">smart-edit</attribute>
+      </item>
+    </section>
+  </menu>
 
   <object class="GtkPopover" id="testcase_popover">
     <child>
@@ -195,10 +203,17 @@
                 <property name="right-margin">6</property>
                 <property name="bottom-margin">6</property>
                 <property name="has-tooltip">1</property>
+                <property name="extra-menu">extra_menu</property>
                 <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
                 <style>
                   <class name="editor" />
                 </style>
+                <child>
+                  <object class="GtkGestureClick">
+                    <property name="button">1</property>
+                    <signal name="pressed" handler="click_gesture_pressed"/>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
