@@ -46,8 +46,8 @@ RoundedRect
 rounded_rect_shrink (RoundedRect r, vec4 amount)
 {
   vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
-  vec4 new_widths = max (r.corner_widths - amount.wyyw, 0.0);
-  vec4 new_heights = max (r.corner_heights - amount.xxzz, 0.0);
+  vec4 new_widths = max (r.corner_widths - sign (r.corner_widths) * amount.wyyw, 0.0);
+  vec4 new_heights = max (r.corner_heights - sign (r.corner_heights) * amount.xxzz, 0.0);
               
   return RoundedRect (new_bounds, new_widths, new_heights);
 }
