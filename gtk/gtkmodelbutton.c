@@ -877,7 +877,7 @@ update_accel (GtkModelButton *self,
       if (self->controller)
         {
           gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->controller));
-          g_clear_object (&self->controller);
+          self->controller = NULL;
         }
     }
 }
