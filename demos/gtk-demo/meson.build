@@ -57,6 +57,7 @@ demos = files([
   'listview_minesweeper.c',
   'listview_selections.c',
   'listview_settings.c',
+  'listview_settings2.c',
   'listview_ucd.c',
   'listview_weather.c',
   'listview_words.c',
