@@ -221,7 +221,7 @@ baseline_widget_new (int above, int below, int across)
                        "above", above,
                        "below", below,
                        "across", across,
-                       "valign", GTK_ALIGN_BASELINE,
+                       "valign", GTK_ALIGN_BASELINE_CENTER,
                        NULL);
 }
 
@@ -254,13 +254,13 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (box, 20);
   gtk_widget_set_margin_start (box, 20);
   gtk_widget_set_margin_end (box, 20);
-  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE_CENTER);
 
   gtk_stack_add_titled (GTK_STACK (stack), box, "boxes", "Boxes");
 
   box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (box1, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (box1, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box1, GTK_ALIGN_BASELINE_CENTER);
   gtk_widget_set_hexpand (box1, TRUE);
 
   child = baseline_widget_new (20, 10, 20);
@@ -279,7 +279,7 @@ main (int argc, char *argv[])
 
   box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (box1, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (box1, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box1, GTK_ALIGN_BASELINE_CENTER);
   gtk_widget_set_hexpand (box1, TRUE);
 
   child = baseline_widget_new (10, 15, 10);
@@ -301,10 +301,10 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (box, 20);
   gtk_widget_set_margin_start (box, 20);
   gtk_widget_set_margin_end (box, 20);
-  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE_CENTER);
 
   grid = gtk_grid_new ();
-  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE_CENTER);
   gtk_widget_set_hexpand (grid, TRUE);
 
   child = baseline_widget_new (20, 10, 20);
@@ -322,7 +322,7 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box), grid);
 
   grid = gtk_grid_new ();
-  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE_CENTER);
   gtk_widget_set_hexpand (grid, TRUE);
 
   child = baseline_widget_new (10, 15, 10);
@@ -346,44 +346,44 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (box, 20);
   gtk_widget_set_margin_start (box, 20);
   gtk_widget_set_margin_end (box, 20);
-  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE_CENTER);
 
   child = baseline_widget_new (60, 15, 20);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("Label");
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (child), "Entry");
   gtk_editable_set_width_chars (GTK_EDITABLE (child), 10);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_password_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (child), "Password");
   gtk_editable_set_width_chars (GTK_EDITABLE (child), 10);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_spin_button_new_with_range (0, 100, 1);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_spin_button_new_with_range (0, 100, 1);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (child), GTK_ORIENTATION_VERTICAL);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_switch_new ();
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   gtk_widget_set_size_request (child, 100, -1);
   //gtk_scale_add_mark (GTK_SCALE (child), 50, GTK_POS_BOTTOM, "50");
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   gtk_stack_add_titled (GTK_STACK (stack), box, "controls", "Controls");
@@ -393,7 +393,7 @@ main (int argc, char *argv[])
   gtk_widget_set_margin_bottom (box, 20);
   gtk_widget_set_margin_start (box, 20);
   gtk_widget_set_margin_end (box, 20);
-  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (box, GTK_ALIGN_BASELINE_CENTER);
 
   child = baseline_widget_new (60, 15, 20);
   gtk_widget_set_hexpand (child, TRUE);
@@ -401,40 +401,40 @@ main (int argc, char *argv[])
 
   child = gtk_label_new ("Label");
   gtk_widget_set_hexpand (child, TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("Two\nlines");
   gtk_widget_set_hexpand (child, TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("<span size='large'>Large</span>");
   gtk_widget_set_hexpand (child, TRUE);
   gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("<span size='xx-large'>Huge</span>");
   gtk_widget_set_hexpand (child, TRUE);
   gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("<span underline='double'>Underlined</span>");
   gtk_widget_set_hexpand (child, TRUE);
   gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_label_new ("♥️");
   gtk_widget_set_hexpand (child, TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   child = gtk_image_new_from_icon_name ("edit-copy-symbolic");
   gtk_widget_set_hexpand (child, TRUE);
-  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (child, GTK_ALIGN_BASELINE_CENTER);
   gtk_box_append (GTK_BOX (box), child);
 
   gtk_stack_add_titled (GTK_STACK (stack), box, "labels", "Labels");

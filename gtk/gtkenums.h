@@ -42,6 +42,8 @@ G_BEGIN_DECLS
  * @GTK_ALIGN_CENTER: center natural width of widget inside the allocation
  * @GTK_ALIGN_BASELINE: align the widget according to the baseline.
  *   See [class@Gtk.Widget].
+ * @GTK_ALIGN_BASELINE_FILL: a different name for @GTK_ALIGN_BASELINE. Since 4.12
+ * @GTK_ALIGN_BASELINE_CENTER: stretch to fill all space, but align the baseline. Since 4.12
  *
  * Controls how a widget deals with extra space in a single dimension.
  *
@@ -67,7 +69,9 @@ typedef enum
   GTK_ALIGN_START,
   GTK_ALIGN_END,
   GTK_ALIGN_CENTER,
-  GTK_ALIGN_BASELINE
+  GTK_ALIGN_BASELINE,
+  GTK_ALIGN_BASELINE_FILL = GTK_ALIGN_BASELINE,
+  GTK_ALIGN_BASELINE_CENTER,
 } GtkAlign;
 
 /**

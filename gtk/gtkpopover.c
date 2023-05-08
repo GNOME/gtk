@@ -505,7 +505,8 @@ create_popup_layout (GtkPopover *popover)
 
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_CENTER:
-        case GTK_ALIGN_BASELINE:
+        case GTK_ALIGN_BASELINE_FILL:
+        case GTK_ALIGN_BASELINE_CENTER:
         default:
           parent_anchor = GDK_GRAVITY_WEST;
           surface_anchor = GDK_GRAVITY_EAST;
@@ -529,7 +530,8 @@ create_popup_layout (GtkPopover *popover)
 
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_CENTER:
-        case GTK_ALIGN_BASELINE:
+        case GTK_ALIGN_BASELINE_FILL:
+        case GTK_ALIGN_BASELINE_CENTER:
         default:
           parent_anchor = GDK_GRAVITY_EAST;
           surface_anchor = GDK_GRAVITY_WEST;
@@ -553,7 +555,8 @@ create_popup_layout (GtkPopover *popover)
 
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_CENTER:
-        case GTK_ALIGN_BASELINE:
+        case GTK_ALIGN_BASELINE_FILL:
+        case GTK_ALIGN_BASELINE_CENTER:
         default:
           parent_anchor = GDK_GRAVITY_NORTH;
           surface_anchor = GDK_GRAVITY_SOUTH;
@@ -577,7 +580,8 @@ create_popup_layout (GtkPopover *popover)
 
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_CENTER:
-        case GTK_ALIGN_BASELINE:
+        case GTK_ALIGN_BASELINE_FILL:
+        case GTK_ALIGN_BASELINE_CENTER:
         default:
           parent_anchor = GDK_GRAVITY_SOUTH;
           surface_anchor = GDK_GRAVITY_NORTH;
