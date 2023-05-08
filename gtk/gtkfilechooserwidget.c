@@ -495,8 +495,7 @@ static void     search_entry_activate_cb     (GtkFileChooserWidget *impl);
 static void     search_entry_stop_cb         (GtkFileChooserWidget *impl);
 static void     settings_load                (GtkFileChooserWidget *impl);
 
-static void     show_filters                 (GtkFileChooserWidget *impl,
-                                              gboolean               show);
+static void     update_show_filters          (GtkFileChooserWidget *impl);
 
 static gboolean recent_files_setting_is_enabled (GtkFileChooserWidget *impl);
 static void     recent_start_loading         (GtkFileChooserWidget *impl);
@@ -2527,7 +2526,7 @@ set_extra_widget (GtkFileChooserWidget *impl,
     gtk_box_append (GTK_BOX (impl->extra_align), impl->extra_widget);
 
   /* Calls update_extra_and_filters */
-  show_filters (impl, impl->filters != NULL);
+  update_show_filters (impl);
 }
 
 static void
@@ -4811,10 +4810,10 @@ empty:
 
 /* Shows or hides the filter widgets */
 static void
-show_filters (GtkFileChooserWidget *impl,
-              gboolean              show)
+update_show_filters (GtkFileChooserWidget *impl)
 {
-  gtk_widget_set_visible (impl->filter_combo_hbox, show);
+  gtk_widget_set_visible (impl->filter_combo_hbox,
+                          g_list_model_get_n_items (G_LIST_MODEL (impl->filters)) > 0);
   update_extra_and_filters (impl);
 }
 
@@ -4838,7 +4837,7 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
   if (!impl->current_filter)
     set_current_filter (impl, filter);
 
-  show_filters (impl, TRUE);
+  update_show_filters (impl);
 
   g_object_notify (G_OBJECT (chooser), "filters");
 }
@@ -4872,8 +4871,7 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
 
   g_object_unref (filter);
 
-  if (!impl->filters)
-    show_filters (impl, FALSE);
+  update_show_filters (impl);
 
   g_object_notify (G_OBJECT (chooser), "filters");
 }
