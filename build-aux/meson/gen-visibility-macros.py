@@ -106,7 +106,7 @@ def gen_visibility_macros(args, current_major_version, current_minor_version, cu
             #  define _{ns}_EXPORT
             #  define _{ns}_IMPORT
             #endif
-            #ifdef {ns}_COMPILATION
+            #ifdef GTK_COMPILATION
             #  define _{ns}_API _{ns}_EXPORT
             #else
             #  define _{ns}_API _{ns}_IMPORT
