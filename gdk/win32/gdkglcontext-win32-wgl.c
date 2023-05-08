@@ -456,7 +456,7 @@ create_wgl_context (GdkGLContext  *context,
   if (hglrc_base == NULL ||
       !wglMakeCurrent (hdc, hglrc_base))
     {
-      g_clear_pointer (&hglrc_base, wglDeleteContext);
+      g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("Unable to create a GL context"));
@@ -513,7 +513,7 @@ create_wgl_context (GdkGLContext  *context,
       gdk_gl_context_set_is_legacy (context, legacy);
     }
 
-  g_clear_pointer (&hglrc_base, wglDeleteContext);
+  g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
 
   wglMakeCurrent (hdc_current, hglrc_current);
 
