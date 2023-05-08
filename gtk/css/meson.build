@@ -24,6 +24,8 @@ gtk_css_deps = [
   glib_dep,
   gobject_dep,
   platform_gio_dep,
+  gdkversionmacros_h,
+  gdk_visibility_h,
 ]
 
 gtk_css_enums = gnome.mkenums('gtkcssenumtypes',

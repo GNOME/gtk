@@ -42,6 +42,10 @@
  * (or GTK). One such setting is what windowing API backend is in use.
  */
 #include <gdk/gdkconfig.h>
+#include <gdk/gdkversionmacros.h>
+
+/* Visibility macros; must be included after the two headers above */
+#include <gdk/gdk-visibility.h>
 
 G_BEGIN_DECLS
 

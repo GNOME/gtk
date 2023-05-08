@@ -24,120 +24,56 @@
 
 #include <glib.h>
 
-/**
- * GDK_MAJOR_VERSION:
- *
- * The major version component of the library's version, e.g. "1" for "1.2.3".
- */
-#define GDK_MAJOR_VERSION (@GTK_MAJOR_VERSION@)
-
-/**
- * GDK_MINOR_VERSION:
- *
- * The minor version component of the library's version, e.g. "2" for "1.2.3".
- */
-#define GDK_MINOR_VERSION (@GTK_MINOR_VERSION@)
-
-/**
- * GDK_MICRO_VERSION:
- *
- * The micro version component of the library's version, e.g. "3" for "1.2.3".
- */
-#define GDK_MICRO_VERSION (@GTK_MICRO_VERSION@)
-
 #ifndef _GDK_EXTERN
 #define _GDK_EXTERN extern
 #endif
 
-/**
- * GDK_DISABLE_DEPRECATION_WARNINGS:
- *
- * A macro that should be defined before including the `gdk.h` header.
- *
- * If this symbol is defined, no compiler warnings will be produced for
- * uses of deprecated GDK and GTK APIs.
+/* These macros are used to mark deprecated symbols in GLib headers,
+ * and thus have to be exposed in installed headers. But please
+ * do *not* use them in other projects. Instead define your own wrappers
+ * around it.
  */
 
-#ifdef GDK_DISABLE_DEPRECATION_WARNINGS
-#define GDK_DEPRECATED _GDK_EXTERN
-#define GDK_DEPRECATED_FOR(f) _GDK_EXTERN
-#define GDK_UNAVAILABLE(maj,min) _GDK_EXTERN
+#if !defined(GDK_DISABLE_DEPRECATION_WARNINGS) && \
+    (G_GNUC_CHECK_VERSION(4, 6) ||                 \
+     __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 4))
+#define _GDK_GNUC_DO_PRAGMA(x) _Pragma(G_STRINGIFY (x))
+#define GDK_DEPRECATED_MACRO _GDK_GNUC_DO_PRAGMA(GCC warning "Deprecated pre-processor symbol")
+#define GDK_DEPRECATED_MACRO_FOR(f) \
+  _GDK_GNUC_DO_PRAGMA(GCC warning G_STRINGIFY (Deprecated pre-processor symbol: replace with #f))
+#define GDK_UNAVAILABLE_MACRO(maj,min) \
+  _GDK_GNUC_DO_PRAGMA(GCC warning G_STRINGIFY (Not available before maj.min))
 #else
-#define GDK_DEPRECATED G_DEPRECATED _GDK_EXTERN
-#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f) _GDK_EXTERN
-#define GDK_UNAVAILABLE(maj,min) G_UNAVAILABLE(maj,min) _GDK_EXTERN
+#define GDK_DEPRECATED_MACRO
+#define GDK_DEPRECATED_MACRO_FOR(f)
+#define GDK_UNAVAILABLE_MACRO(maj,min)
 #endif
 
-/* XXX: Every new stable minor release bump should add a macro here */
+#if !defined(GDK_DISABLE_DEPRECATION_WARNINGS) && \
+    (G_GNUC_CHECK_VERSION(6, 1) ||                 \
+     (defined (__clang_major__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 0))))
+#define GDK_DEPRECATED_ENUMERATOR G_DEPRECATED
+#define GDK_DEPRECATED_ENUMERATOR_FOR(f) G_DEPRECATED_FOR(f)
+#define GDK_UNAVAILABLE_ENUMERATOR(maj,min) G_UNAVAILABLE(maj,min)
+#else
+#define GDK_DEPRECATED_ENUMERATOR
+#define GDK_DEPRECATED_ENUMERATOR_FOR(f)
+#define GDK_UNAVAILABLE_ENUMERATOR(maj,min)
+#endif
 
-/**
- * GDK_VERSION_4_0:
- *
- * A macro that evaluates to the 4.0 version of GDK, in a format
- * that can be used by the C pre-processor.
- */
-#define GDK_VERSION_4_0        (G_ENCODE_VERSION (4, 0))
+#if !defined(GDK_DISABLE_DEPRECATION_WARNINGS) && \
+    (G_GNUC_CHECK_VERSION(3, 1) ||                 \
+     (defined (__clang_major__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 0))))
+#define GDK_DEPRECATED_TYPE G_DEPRECATED
+#define GDK_DEPRECATED_TYPE_FOR(f) G_DEPRECATED_FOR(f)
+#define GDK_UNAVAILABLE_TYPE(maj,min) G_UNAVAILABLE(maj,min)
+#else
+#define GDK_DEPRECATED_TYPE
+#define GDK_DEPRECATED_TYPE_FOR(f)
+#define GDK_UNAVAILABLE_TYPE(maj,min)
+#endif
 
-/**
- * GDK_VERSION_4_2:
- *
- * A macro that evaluates to the 4.2 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.2
- */
-#define GDK_VERSION_4_2        (G_ENCODE_VERSION (4, 2))
-
-/**
- * GDK_VERSION_4_4:
- *
- * A macro that evaluates to the 4.4 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.4
- */
-#define GDK_VERSION_4_4        (G_ENCODE_VERSION (4, 4))
-
-/**
- * GDK_VERSION_4_6:
- *
- * A macro that evaluates to the 4.6 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.6
- */
-#define GDK_VERSION_4_6        (G_ENCODE_VERSION (4, 6))
-
-/**
- * GDK_VERSION_4_8:
- *
- * A macro that evaluates to the 4.8 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.8
- */
-#define GDK_VERSION_4_8        (G_ENCODE_VERSION (4, 8))
-
-/**
- * GDK_VERSION_4_10:
- *
- * A macro that evaluates to the 4.10 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.10
- */
-#define GDK_VERSION_4_10        (G_ENCODE_VERSION (4, 10))
-
-/**
- * GDK_VERSION_4_12:
- *
- * A macro that evaluates to the 4.12 version of GDK, in a format
- * that can be used by the C pre-processor.
- *
- * Since: 4.12
- */
-#define GDK_VERSION_4_12        (G_ENCODE_VERSION (4, 12))
-
+@GDK_VERSIONS@
 
 /* evaluates to the current stable version; for development cycles,
  * this means the next stable target, with a hard backstop to the
@@ -210,115 +146,6 @@
 #endif
 #if GDK_VERSION_MIN_REQUIRED < GDK_VERSION_4_0
 # error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_4_0"
-#endif
-
-#define GDK_AVAILABLE_IN_ALL                  _GDK_EXTERN
-
-/* XXX: Every new stable minor release should add a set of macros here */
-
-/* This is not really necessary for 4.0, since there can't be an
- * earlier version, and there are no deprecated symbols. We just
- * include it for completeness, and because it's easier to copy
- * this stanza every time a new development cycle starts.
- */
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_0
-# define GDK_AVAILABLE_IN_4_0                   GDK_UNAVAILABLE(4, 0)
-#else
-# define GDK_AVAILABLE_IN_4_0                   _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_0
-# define GDK_DEPRECATED_IN_4_0                  GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_0_FOR(f)           GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_0                  _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_0_FOR(f)           _GDK_EXTERN
-#endif
-
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_2
-# define GDK_AVAILABLE_IN_4_2                   GDK_UNAVAILABLE(4, 2)
-#else
-# define GDK_AVAILABLE_IN_4_2                   _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_2
-# define GDK_DEPRECATED_IN_4_2                  GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_2_FOR(f)           GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_2                  _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_2_FOR(f)           _GDK_EXTERN
-#endif
-
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_4
-# define GDK_AVAILABLE_IN_4_4                   GDK_UNAVAILABLE(4, 4)
-#else
-# define GDK_AVAILABLE_IN_4_4                   _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_4
-# define GDK_DEPRECATED_IN_4_4                  GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_4_FOR(f)           GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_4                  _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_4_FOR(f)           _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_6
-# define GDK_AVAILABLE_IN_4_6                   GDK_UNAVAILABLE(4, 6)
-#else
-# define GDK_AVAILABLE_IN_4_6                   _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_6
-# define GDK_DEPRECATED_IN_4_6                  GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_6_FOR(f)           GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_6                  _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_6_FOR(f)           _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_8
-# define GDK_AVAILABLE_IN_4_8                   GDK_UNAVAILABLE(4, 8)
-#else
-# define GDK_AVAILABLE_IN_4_8                   _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_8
-# define GDK_DEPRECATED_IN_4_8                  GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_8_FOR(f)           GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_8                  _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_8_FOR(f)           _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_10
-# define GDK_AVAILABLE_IN_4_10                  GDK_UNAVAILABLE(4, 10)
-#else
-# define GDK_AVAILABLE_IN_4_10                  _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_10
-# define GDK_DEPRECATED_IN_4_10                 GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_10_FOR(f)          GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_10                 _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_10_FOR(f)          _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_12
-# define GDK_AVAILABLE_IN_4_12                  GDK_UNAVAILABLE(4, 12)
-#else
-# define GDK_AVAILABLE_IN_4_12                  _GDK_EXTERN
-#endif
-
-#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_12
-# define GDK_DEPRECATED_IN_4_12                 GDK_DEPRECATED
-# define GDK_DEPRECATED_IN_4_12_FOR(f)          GDK_DEPRECATED_FOR(f)
-#else
-# define GDK_DEPRECATED_IN_4_12                 _GDK_EXTERN
-# define GDK_DEPRECATED_IN_4_12_FOR(f)          _GDK_EXTERN
 #endif
 
 #endif  /* __GDK_VERSION_MACROS_H__ */

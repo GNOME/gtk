@@ -747,6 +747,8 @@ build_gir = gir.found() and (get_option('introspection').enabled() or
 
 project_build_root = meson.current_build_dir()
 
+gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
+
 subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
