@@ -344,12 +344,10 @@ common_cflags = cc.get_supported_arguments(test_cflags)
 if get_option('default_library') != 'static'
   if os_win32
     cdata.set('DLL_EXPORT', true)
-    cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
     if cc.get_id() != 'msvc'
       common_cflags += ['-fvisibility=hidden']
     endif
   else
-    cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) extern')
     common_cflags += ['-fvisibility=hidden']
   endif
 endif
@@ -749,6 +747,7 @@ project_build_root = meson.current_build_dir()
 
 gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
 
+subdir('gdk/version')
 subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')

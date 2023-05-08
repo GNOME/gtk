@@ -135,7 +135,7 @@ def gen_visibility_macros(args, current_major_version, current_minor_version, cu
             f.write(
                 textwrap.dedent(
                     f"""
-                #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_2_{minor}
+                #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_{minor}
                 #define {ns}_DEPRECATED_IN_{current_major_version}_{minor} {ns}_DEPRECATED
                 #define {ns}_DEPRECATED_IN_{current_major_version}_{minor}_FOR(f) {ns}_DEPRECATED_FOR (f)
                 #define {ns}_DEPRECATED_MACRO_IN_{current_major_version}_{minor} GDK_DEPRECATED_MACRO

@@ -110,6 +110,7 @@ gdk_public_headers = files([
   'gdktoplevelsize.h',
   'gdktoplevel.h',
   'gdkdragsurface.h',
+  'gdkversionmacros.h'
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 
@@ -146,7 +147,7 @@ gdk_enums = gnome.mkenums_simple('gdkenumtypes',
   sources: gdk_public_headers,
   decorator: 'GDK_AVAILABLE_IN_ALL',
   body_prefix: '#include "config.h"',
-  header_prefix: '#include "gdkversionmacros.h"\n#include "gdk-visibility.h"',
+  header_prefix: '#include "version/gdkversionmacros.h"\n#include "version/gdk-visibility.h"',
   install_dir: gtk_includedir / 'gtk-4.0/gdk',
   install_header: true,
 )
@@ -182,25 +183,6 @@ gdkversion_cdata = configuration_data()
 gdkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 gdkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
-
-gdkversionmacros_h = custom_target(
-  input: 'gdkversionmacros.h.in',
-  output: 'gdkversionmacros.h',
-  command: [gen_visibility_macros, meson.project_version(), 'versions-macros', '@INPUT@', '@OUTPUT@'],
-  install: true,
-  install_dir: gtk_includedir / 'gtk-4.0/gdk',
-  # FIXME: Not needed with Meson >= 0.64.0
-  install_tag: 'devel',
-)
-
-gdk_visibility_h = custom_target(
-  output: 'gdk-visibility.h',
-  command: [gen_visibility_macros, meson.project_version(), 'visibility-macros', 'GDK', '@OUTPUT@'],
-  install: true,
-  install_dir: gtk_includedir / 'gtk-4.0/gdk',
-  # FIXME: Not needed with Meson >= 0.64.0
-  install_tag: 'devel',
-)
 
 gdkinc = include_directories('.')
 gdkx11_inc = include_directories('x11')
