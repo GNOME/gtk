@@ -67,7 +67,13 @@ reftest_scope_create_closure (GtkBuilderScope        *scope,
       break;
 
     case 2:
+#ifdef _MSC_VER
+      char *modulefile = g_strconcat (split[0], ".", G_MODULE_SUFFIX, NULL);
+      module = reftest_module_new (self->directory, modulefile);
+      g_free (modulefile);
+#else
       module = reftest_module_new (self->directory, split[0]);
+#endif
       if (module == NULL)
         {
           g_set_error (error,
