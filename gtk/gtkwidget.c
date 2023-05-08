@@ -3749,7 +3749,8 @@ effective_align (GtkAlign         align,
       return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
     case GTK_ALIGN_FILL:
     case GTK_ALIGN_CENTER:
-    case GTK_ALIGN_BASELINE:
+    case GTK_ALIGN_BASELINE_FILL:
+    case GTK_ALIGN_BASELINE_CENTER:
     default:
       return align;
     }
@@ -3765,7 +3766,7 @@ adjust_for_align (GtkAlign  align,
 {
   switch (align)
     {
-    case GTK_ALIGN_BASELINE:
+    case GTK_ALIGN_BASELINE_CENTER:
       if (*allocated_size > natural_size &&
           nat_baseline > -1 &&
           *allocated_baseline > -1)
@@ -3773,8 +3774,18 @@ adjust_for_align (GtkAlign  align,
           *allocated_pos = *allocated_baseline - nat_baseline;
           *allocated_size = MIN (*allocated_size, natural_size);
           *allocated_baseline = nat_baseline;
+          break;
+        }
+      G_GNUC_FALLTHROUGH;
+
+    case GTK_ALIGN_CENTER:
+      if (*allocated_size > natural_size)
+        {
+          *allocated_pos += (*allocated_size - natural_size) / 2;
+          *allocated_size = MIN (*allocated_size, natural_size);
         }
       break;
+    case GTK_ALIGN_BASELINE_FILL:
     case GTK_ALIGN_FILL:
     default:
       /* change nothing */
@@ -3788,13 +3799,6 @@ adjust_for_align (GtkAlign  align,
         {
           *allocated_pos += (*allocated_size - natural_size);
           *allocated_size = natural_size;
-        }
-      break;
-    case GTK_ALIGN_CENTER:
-      if (*allocated_size > natural_size)
-        {
-          *allocated_pos += (*allocated_size - natural_size) / 2;
-          *allocated_size = MIN (*allocated_size, natural_size);
         }
       break;
     }
@@ -3868,7 +3872,8 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
     }
 
 out:
-  if (priv->valign != GTK_ALIGN_BASELINE)
+  if (priv->valign != GTK_ALIGN_BASELINE_FILL &&
+      priv->valign != GTK_ALIGN_BASELINE_CENTER)
     *baseline = -1;
 }
 
@@ -9444,8 +9449,10 @@ gtk_widget_get_halign (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
 
-  if (priv->halign == GTK_ALIGN_BASELINE)
+  if (priv->halign == GTK_ALIGN_BASELINE_FILL)
     return GTK_ALIGN_FILL;
+  else if (priv->halign == GTK_ALIGN_BASELINE_CENTER)
+    return GTK_ALIGN_CENTER;
   return priv->halign;
 }
 

@@ -1530,7 +1530,8 @@ get_offset_pixels (GtkAlign align,
   case GTK_ALIGN_END:
     offset = pixels;
     break;
-  case GTK_ALIGN_BASELINE:
+  case GTK_ALIGN_BASELINE_FILL:
+  case GTK_ALIGN_BASELINE_CENTER:
   default:
     g_assert_not_reached ();
     break;

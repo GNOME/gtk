@@ -89,8 +89,13 @@ check_property (GObject *instance, GParamSpec *pspec)
 
       for (i = first; i < class->n_values; i++)
         {
+          /* skip duplicates */
+          if (i > 0 && class->values[i].value == class->values[i - 1].value)
+            continue;
+
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, class->values[i].value, NULL);
+
           assert_notifies (instance, pspec->name, data.count, current_count);
 
           if (current_count == 10) /* just test a few */

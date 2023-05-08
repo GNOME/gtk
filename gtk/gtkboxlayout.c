@@ -885,7 +885,8 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
       sizes[i].natural_size = child_size;
 
       if (self->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE)
+          (gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_FILL ||
+           gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_CENTER))
         {
           int child_allocation_width;
           int child_minimum_height, child_natural_height;
