@@ -24,10 +24,6 @@
 
 #include <glib.h>
 
-#ifndef _GDK_EXTERN
-#define _GDK_EXTERN extern
-#endif
-
 /* These macros are used to mark deprecated symbols in GLib headers,
  * and thus have to be exposed in installed headers. But please
  * do *not* use them in other projects. Instead define your own wrappers
