@@ -770,20 +770,6 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
 
       texture = priv->texture;
       priv->texture = NULL;
-
-      if (priv->textures)
-        gdk_gl_texture_builder_set_update_texture (texture->builder, ((Texture *) priv->textures->data)->holder);
-      {
-        cairo_region_t *region = cairo_region_create ();
-        cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 0, 0, 300, 300 });
-        cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 0, 600, 300, 300 });
-        cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 300, 300, 300, 300 });
-        cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 600, 0, 300, 300 });
-        cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 600, 600, 300, 300 });
-        gdk_gl_texture_builder_set_update_region (texture->builder, region);
-        cairo_region_destroy (region);
-      }
-
       priv->textures = g_list_prepend (priv->textures, texture);
 
       if (gdk_gl_context_has_sync (priv->context))
@@ -795,7 +781,6 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
                                                       release_texture,
                                                       texture);
 
-      gdk_gl_texture_builder_set_update_texture (texture->builder, NULL);
       /* Our texture is rendered by OpenGL, so it is upside down,
        * compared to what GSK expects, so flip it back.
        */
