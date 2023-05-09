@@ -231,7 +231,7 @@
  * GTK also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports
- * baselines, has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside
+ * baselines, has a vertical alignment using baselines, and is inside
  * a widget that supports baselines and has a natural “row” that it aligns to
  * the baseline, or a baseline assigned to it by the grandparent.
  *
@@ -9436,9 +9436,10 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
  * Gets the horizontal alignment of @widget.
  *
  * For backwards compatibility reasons this method will never return
- * %GTK_ALIGN_BASELINE, but instead it will convert it to
- * %GTK_ALIGN_FILL. Baselines are not supported for horizontal
- * alignment.
+ * one of the baseline alignments, but instead it will convert it to
+ * `GTK_ALIGN_FILL` or `GTK_ALIGN_CENTER`.
+ *
+ * Baselines are not supported for horizontal alignment.
  *
  * Returns: the horizontal alignment of @widget
  */

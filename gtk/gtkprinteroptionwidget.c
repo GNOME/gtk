@@ -904,7 +904,7 @@ alternative_append (GtkWidget              *box,
   else
     *group = button;
 
-  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
   gtk_box_append (GTK_BOX (box), button);
 
   g_object_set_data (G_OBJECT (button), "value", (gpointer)value);
@@ -983,7 +983,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
       group = NULL;
       priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-      gtk_widget_set_valign (priv->box, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (priv->box, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (widget), priv->box);
       for (i = 0; i < source->num_choices; i++)
         {
@@ -1001,7 +1001,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 	{
 	  text = g_strdup_printf ("%s:", source->display_text);
 	  priv->label = gtk_label_new_with_mnemonic (text);
-          gtk_widget_set_valign (priv->label, GTK_ALIGN_BASELINE);
+          gtk_widget_set_valign (priv->label, GTK_ALIGN_BASELINE_FILL);
 	  g_free (text);
 	}
       break;

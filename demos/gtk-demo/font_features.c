@@ -1294,18 +1294,18 @@ add_axis (hb_face_t             *hb_face,
 
   axis_label = gtk_label_new (name);
   gtk_widget_set_halign (axis_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (axis_label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (axis_label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_label, 0, i, 1, 1);
   adjustment = gtk_adjustment_new (value, ax->min_value, ax->max_value,
                                    1.0, 10.0, 0.0);
   axis_scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
   gtk_scale_add_mark (GTK_SCALE (axis_scale), ax->default_value, GTK_POS_TOP, NULL);
-  gtk_widget_set_valign (axis_scale, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (axis_scale, GTK_ALIGN_BASELINE_FILL);
   gtk_widget_set_hexpand (axis_scale, TRUE);
   gtk_widget_set_size_request (axis_scale, 100, -1);
   gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
-  gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE_FILL);
   gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
   gtk_editable_set_max_width_chars (GTK_EDITABLE (axis_entry), 4);
   gtk_widget_set_hexpand (axis_entry, FALSE);
@@ -1562,14 +1562,14 @@ update_font_variations (void)
       label = gtk_label_new ("Instance");
       gtk_label_set_xalign (GTK_LABEL (label), 0);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
       gtk_grid_attach (GTK_GRID (demo->variations_grid), label, 0, -1, 1, 1);
 
       strings = gtk_string_list_new (NULL);
       combo = gtk_drop_down_new (G_LIST_MODEL (strings), NULL);
 
       gtk_widget_set_halign (combo, GTK_ALIGN_START);
-      gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE_FILL);
 
       gtk_string_list_append (strings, "");
 

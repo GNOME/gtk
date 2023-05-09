@@ -196,7 +196,7 @@ add_content_type_row (GtkInspectorClipboard *self,
 
   label = gtk_label_new (type_name);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_box_append (GTK_BOX (hbox), label);
@@ -210,7 +210,7 @@ add_content_type_row (GtkInspectorClipboard *self,
     {
       button = gtk_toggle_button_new_with_label (_("Show"));
       gtk_widget_set_halign (button, GTK_ALIGN_END);
-      gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), button);
 
       g_object_bind_property (G_OBJECT (button), "active",
@@ -230,7 +230,7 @@ add_content_type_row (GtkInspectorClipboard *self,
                               G_OBJECT (label), "visible",
                               G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
       gtk_widget_set_halign (label, GTK_ALIGN_END);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), label);
     }
 

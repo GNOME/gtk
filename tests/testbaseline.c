@@ -118,7 +118,7 @@ main (int    argc,
       gtk_box_append (GTK_BOX (vbox), hbox);
 
       const char *aligns_names[] = { "FILL", "BASELINE" };
-      GtkAlign aligns[] = { GTK_ALIGN_FILL, GTK_ALIGN_BASELINE};
+      GtkAlign aligns[] = { GTK_ALIGN_FILL, GTK_ALIGN_BASELINE_FILL};
 
       label = gtk_label_new (aligns_names[j]);
       gtk_box_append (GTK_BOX (hbox), label);
@@ -185,7 +185,7 @@ main (int    argc,
           set_font_size (button, i);
 
 	  if (j == 0)
-	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_box_append (GTK_BOX (hbox), button);
 	}
@@ -202,7 +202,7 @@ main (int    argc,
           set_font_size (button, i);
 
 	  if (j == 0)
-	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_box_append (GTK_BOX (hbox), button);
 	}
@@ -210,27 +210,27 @@ main (int    argc,
       image = gtk_image_new_from_icon_name ("face-sad");
       gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
       if (j == 0)
-	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
+	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), image);
 
       button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), button);
 
       button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), button);
 
       button = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), button);
 
       button = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), button);
       if (group == NULL)
         {
@@ -251,12 +251,12 @@ main (int    argc,
   gtk_box_append (GTK_BOX (vbox), hbox);
 
   label = gtk_label_new ("Align me:");
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
 
   gtk_box_append (GTK_BOX (hbox), label);
 
   grid = gtk_grid_new ();
-  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 8);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 8);
 
@@ -282,7 +282,7 @@ main (int    argc,
           set_font_size (label, i);
 
 	  if (j != 0)
-	    gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_grid_attach (GTK_GRID (grid),
 			   label,
@@ -302,7 +302,7 @@ main (int    argc,
           set_font_size (button, i);
 
 	  if (j != 0)
-	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_grid_attach (GTK_GRID (grid),
 			   button,
@@ -374,7 +374,7 @@ main (int    argc,
           set_font_size (button, i);
 
 	  if (i != 0)
-	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_box_append (GTK_BOX (hbox), button);
 	}
@@ -395,7 +395,7 @@ main (int    argc,
 
           set_font_size (button, i);
 
-	  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+	  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
 
 	  gtk_box_append (GTK_BOX (hbox), button);
 	}

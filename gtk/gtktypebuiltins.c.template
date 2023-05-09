@@ -3,10 +3,13 @@
 #include "gtk.h"
 #include "gtkprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /*** END file-header ***/
 
 /*** BEGIN file-production ***/
 /* enumerations from "@basename@" */
+
 /*** END file-production ***/
 
 /*** BEGIN value-header ***/

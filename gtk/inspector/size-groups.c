@@ -207,7 +207,7 @@ add_widget (GtkInspectorSizeGroups *sl,
   gtk_widget_set_margin_top (label, 10);
   gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), label);
   gtk_list_box_insert (listbox, row, -1);
 }
@@ -243,13 +243,13 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_widget_set_margin_top (label, 10);
   gtk_widget_set_margin_bottom (label, 10);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_box_append (GTK_BOX (box2), label);
 
   dropdown = gtk_drop_down_new_from_strings (modes);
   g_object_set (dropdown, "margin", 10, NULL);
   gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
-  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE_FILL);
   g_object_bind_property (group, "mode",
                           dropdown, "selected",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);

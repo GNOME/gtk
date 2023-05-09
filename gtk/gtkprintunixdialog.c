@@ -1278,16 +1278,16 @@ add_option_to_extension_point (GtkPrinterOption *option,
     {
       GtkWidget *label, *hbox;
 
-      gtk_widget_set_valign (widget, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (widget, GTK_ALIGN_BASELINE_FILL);
 
       label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
       gtk_widget_set_visible (label, TRUE);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-      gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (hbox, GTK_ALIGN_BASELINE_FILL);
       gtk_box_append (GTK_BOX (hbox), label);
       gtk_box_append (GTK_BOX (hbox), widget);
 

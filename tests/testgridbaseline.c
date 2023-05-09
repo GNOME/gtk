@@ -31,8 +31,8 @@ main (int argc, char *argv[])
   g_message ("label3: %p", label3);
   g_message ("label4: %p", label4);
 
-  gtk_widget_set_valign (label1, GTK_ALIGN_BASELINE);
-  gtk_widget_set_valign (label2, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label1, GTK_ALIGN_BASELINE_FILL);
+  gtk_widget_set_valign (label2, GTK_ALIGN_BASELINE_FILL);
   gtk_widget_set_valign (label3, GTK_ALIGN_START);
   gtk_widget_set_valign (label4, GTK_ALIGN_START);
 

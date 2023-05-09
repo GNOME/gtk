@@ -1706,7 +1706,8 @@ gtk_entry_size_allocate (GtkWidget *widget,
   text_alloc.width = width;
   text_alloc.height = height;
 
-  if (gtk_widget_get_valign (widget)  != GTK_ALIGN_BASELINE)
+  if (gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE_FILL &&
+      gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE_CENTER)
     baseline = -1;
 
   for (i = 0; i < MAX_ICONS; i++)

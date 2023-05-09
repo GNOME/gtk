@@ -455,7 +455,9 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
 
       for (i = 0; i < 3; i++)
         {
-          if (child[i] && gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE)
+          if (child[i] &&
+              (gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE_FILL ||
+               gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE_CENTER))
             {
               int child_min_height, child_nat_height;
               int child_min_baseline, child_nat_baseline;
