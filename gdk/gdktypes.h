@@ -42,6 +42,7 @@
  * (or GTK). One such setting is what windowing API backend is in use.
  */
 #include <gdk/gdkconfig.h>
+#include <gdk/gdkenums.h>
 #include <gdk/version/gdkversionmacros.h>
 
 G_BEGIN_DECLS

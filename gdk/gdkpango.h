@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2000 Red Hat, Inc. 
+ * Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,6 @@
 #endif
 
 #include <gdk/gdktypes.h>
-#include <gdk/version/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 

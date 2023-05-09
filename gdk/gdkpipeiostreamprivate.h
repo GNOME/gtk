@@ -18,14 +18,11 @@
 
 #pragma once
 
-#include <gdk/version/gdkversionmacros.h>
-#include <gio/gio.h>
+#include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 
-
 GIOStream *             gdk_pipe_io_stream_new                          (void);
-
 
 G_END_DECLS
 

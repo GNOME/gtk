@@ -24,9 +24,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkenums.h>
 #include <gdk/gdktypes.h>
-#include <gdk/version/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 

@@ -28,12 +28,8 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <cairo.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdktypes.h>
-#include <gdk/version/gdkversionmacros.h>
-#include <gdk/gdktexture.h>
-
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
 

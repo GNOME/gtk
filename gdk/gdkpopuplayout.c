@@ -20,6 +20,7 @@
 
 #include "gdkpopuplayout.h"
 
+#include "gdkrectangle.h"
 #include "gdksurface.h"
 
 /**

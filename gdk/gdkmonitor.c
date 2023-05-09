@@ -24,6 +24,7 @@
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
+#include "gdkrectangle.h"
 
 /**
  * GdkMonitor:

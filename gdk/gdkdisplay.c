@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * gdkdisplay.c
- * 
- * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Copyright 2001 Sun Microsystems Inc.
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -31,10 +31,11 @@
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
-#include "gdkframeclockidleprivate.h"
 #include "gdkeventsprivate.h"
+#include "gdkframeclockidleprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
+#include "gdkrectangle.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -175,7 +176,7 @@ gdk_display_default_rate_egl_config (GdkDisplay *display,
 
   return distance;
 }
-    
+
 static GdkSeat *
 gdk_display_real_get_default_seat (GdkDisplay *display)
 {
@@ -418,10 +419,10 @@ gdk_display_close (GdkDisplay *display)
   if (!display->closed)
     {
       display->closed = TRUE;
-      
+
       g_signal_emit (display, signals[CLOSED], 0, FALSE);
       g_object_run_dispose (G_OBJECT (display));
-      
+
       g_object_unref (display);
     }
 }
@@ -808,7 +809,7 @@ _gdk_display_end_device_grab (GdkDisplay *display,
       grab->implicit_ungrab = implicit;
       return l->next == NULL;
     }
-  
+
   return FALSE;
 }
 
@@ -1268,7 +1269,7 @@ gdk_display_init_gl (GdkDisplay *self)
  * Note that even if this function succeeds, creating a `GdkGLContext`
  * may still fail.
  *
- * This function is idempotent. Calling it multiple times will just 
+ * This function is idempotent. Calling it multiple times will just
  * return the same value or error.
  *
  * You never need to call this function, GDK will call it automatically
