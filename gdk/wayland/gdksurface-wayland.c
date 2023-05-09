@@ -370,7 +370,8 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
   GdkFrameClock *clock;
 
-  g_assert (self->frame_callback == NULL);
+  if (self->frame_callback != NULL)
+    return;
 
   clock = gdk_surface_get_frame_clock (surface);
 
