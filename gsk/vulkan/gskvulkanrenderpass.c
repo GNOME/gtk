@@ -137,7 +137,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
                             GskVulkanImage    *target,
                             float              scale_x,
                             float              scale_y,
-                            graphene_matrix_t *mv,
                             graphene_rect_t   *viewport,
                             cairo_region_t    *clip,
                             VkSemaphore        signal_semaphore)
@@ -155,7 +154,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->scale_x = scale_x;
   self->scale_y = scale_y;
 
-  self->mv = *mv;
+  graphene_matrix_init_scale (&self->mv, self->scale_x, self->scale_y, 1.0);
   graphene_matrix_init_ortho (&self->p,
                               viewport->origin.x, viewport->origin.x + viewport->size.width,
                               viewport->origin.y, viewport->origin.y + viewport->size.height,
@@ -1025,7 +1024,6 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
   graphene_rect_t view;
   cairo_region_t *clip;
   GskVulkanRenderPass *pass;
-  graphene_matrix_t mv;
   GskVulkanImage *result;
 
   view = GRAPHENE_RECT_INIT (viewport->origin.x,
@@ -1052,13 +1050,10 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                                           gsk_vulkan_image_get_height (result)
                                         });
 
-  graphene_matrix_init_identity (&mv);
-
   pass = gsk_vulkan_render_pass_new (vulkan,
                                      result,
                                      1,
                                      1,
-                                     &mv,
                                      &view,
                                      clip,
                                      semaphore);
