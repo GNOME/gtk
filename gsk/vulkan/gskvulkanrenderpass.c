@@ -1058,9 +1058,9 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         view.size.width = ceil (view.size.width);
         view.size.height = ceil (view.size.height);
 
-        result = gsk_vulkan_image_new_for_texture (self->vulkan,
-                                                   view.size.width,
-                                                   view.size.height);
+        result = gsk_vulkan_image_new_for_offscreen (self->vulkan,
+                                                     view.size.width,
+                                                     view.size.height);
 
 #ifdef G_ENABLE_DEBUG
         {

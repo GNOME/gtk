@@ -606,9 +606,9 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_texture (GdkVulkanContext *context,
-                                  gsize             width,
-                                  gsize             height)
+gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
+                                    gsize             width,
+                                    gsize             height)
 {
   GskVulkanImage *self;
 
@@ -620,7 +620,7 @@ gsk_vulkan_image_new_for_texture (GdkVulkanContext *context,
                                VK_IMAGE_USAGE_SAMPLED_BIT |
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
                                VK_IMAGE_LAYOUT_UNDEFINED,
-                               0,
+                               VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
   gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
