@@ -19,8 +19,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#ifndef __GDK_VERSION_MACROS_H__
-#define __GDK_VERSION_MACROS_H__
+#pragma once
 
 #include <glib.h>
 
@@ -145,5 +144,3 @@
 #endif
 
 #include <gdk/version/gdk-visibility.h>
-
-#endif  /* __GDK_VERSION_MACROS_H__ */
