@@ -24,6 +24,7 @@
 #include "gtk/gtkenums.h"
 
 #include "gtk/gtklistitembaseprivate.h"
+#include "gtk/gtklistheaderbaseprivate.h"
 #include "gtk/gtklistitemfactory.h"
 #include "gtk/gtkrbtreeprivate.h"
 #include "gtk/gtkselectionmodel.h"
@@ -43,8 +44,20 @@ typedef struct _GtkListTile GtkListTile;
 typedef struct _GtkListTileAugment GtkListTileAugment;
 typedef struct _GtkListItemTracker GtkListItemTracker;
 
+typedef enum
+{
+  GTK_LIST_TILE_ITEM,
+  GTK_LIST_TILE_HEADER,
+  GTK_LIST_TILE_FOOTER,
+  GTK_LIST_TILE_UNMATCHED_HEADER,
+  GTK_LIST_TILE_UNMATCHED_FOOTER,
+  GTK_LIST_TILE_FILLER,
+  GTK_LIST_TILE_REMOVED,
+} GtkListTileType;
+
 struct _GtkListTile
 {
+  GtkListTileType type;
   GtkWidget *widget;
   guint n_items;
   /* area occupied by tile. May be empty if tile has no allcoation */
@@ -54,6 +67,10 @@ struct _GtkListTile
 struct _GtkListTileAugment
 {
   guint n_items;
+
+  guint has_header :1;
+  guint has_footer :1;
+
   /* union of all areas of tile and children */
   cairo_rectangle_int_t area;
 };
@@ -63,7 +80,9 @@ GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CO
 
 GtkListItemManager *    gtk_list_item_manager_new               (GtkWidget              *widget,
                                                                  GtkListTile *           (* split_func) (GtkWidget *, GtkListTile *, guint),
-                                                                 GtkListItemBase *       (* create_widget) (GtkWidget *));
+                                                                 GtkListItemBase *       (* create_widget) (GtkWidget *),
+                                                                 void                    (* prepare_section) (GtkWidget *, GtkListTile *, guint),
+                                                                 GtkListHeaderBase *     (* create_header_widget) (GtkWidget *));
 
 void                    gtk_list_item_manager_get_tile_bounds   (GtkListItemManager     *self,
                                                                  GdkRectangle           *out_bounds);
@@ -97,12 +116,17 @@ void                    gtk_list_tile_set_area_size             (GtkListItemMana
 GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
+GtkListTile *           gtk_list_tile_append_filler             (GtkListItemManager     *self,
+                                                                 GtkListTile            *previous);
 GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
 
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
                                                                  GtkSelectionModel      *model);
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);
+void                    gtk_list_item_manager_set_has_sections  (GtkListItemManager     *self,
+                                                                 gboolean                has_sections);
+gboolean                gtk_list_item_manager_get_has_sections  (GtkListItemManager     *self);
 
 GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
 void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,

@@ -126,6 +126,7 @@ internal_tests = [
   { 'name': 'texthistory' },
   { 'name': 'fnmatch' },
   { 'name': 'a11y' },
+  { 'name': 'listitemmanager' },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')

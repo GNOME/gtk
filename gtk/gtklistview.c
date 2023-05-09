@@ -23,6 +23,7 @@
 
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
+#include "gtklistheaderwidgetprivate.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkmultiselection.h"
@@ -145,6 +146,7 @@ enum
   PROP_0,
   PROP_ENABLE_RUBBERBAND,
   PROP_FACTORY,
+  PROP_HEADER_FACTORY,
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
@@ -162,29 +164,6 @@ G_DEFINE_TYPE (GtkListView, gtk_list_view, GTK_TYPE_LIST_BASE)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
-
-static void G_GNUC_UNUSED
-dump (GtkListView *self)
-{
-  GtkListTile *tile;
-  guint n_widgets, n_list_rows;
-
-  n_widgets = 0;
-  n_list_rows = 0;
-  //g_print ("ANCHOR: %u - %u\n", self->anchor_start, self->anchor_end);
-  for (tile = gtk_list_item_manager_get_first (self->item_manager);
-       tile;
-       tile = gtk_rb_tree_node_get_next (tile))
-    {
-      if (tile->widget)
-        n_widgets++;
-      n_list_rows++;
-      g_print ("  %4u%s %d,%d,%d,%d\n", tile->n_items, tile->widget ? " (widget)" : "",
-               tile->area.x, tile->area.y, tile->area.width, tile->area.height);
-    }
-
-  g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
-}
 
 static GtkListTile *
 gtk_list_view_split (GtkListBase *base,
@@ -215,6 +194,13 @@ gtk_list_view_split (GtkListBase *base,
   return new_tile;
 }
 
+static void
+gtk_list_view_prepare_section (GtkListBase *base,
+                               GtkListTile *tile,
+                               guint        position)
+{
+}
+
 /* We define the listview as **inert** when the factory isn't used. */
 static gboolean
 gtk_list_view_is_inert (GtkListView *self)
@@ -222,13 +208,13 @@ gtk_list_view_is_inert (GtkListView *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   return !gtk_widget_get_visible (widget) ||
-         gtk_widget_get_root (widget) == NULL ||
-         self->factory == NULL;
+         gtk_widget_get_root (widget) == NULL;
 }
 
 static void
 gtk_list_view_update_factories_with (GtkListView        *self,
-                                     GtkListItemFactory *factory)
+                                     GtkListItemFactory *factory,
+                                     GtkListItemFactory *header_factory)
 {
   GtkListTile *tile;
 
@@ -236,8 +222,27 @@ gtk_list_view_update_factories_with (GtkListView        *self,
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (tile->widget)
-        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+      switch (tile->type)
+        {
+        case GTK_LIST_TILE_ITEM:
+          if (tile->widget)
+            gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+          break;
+        case GTK_LIST_TILE_HEADER:
+          if (tile->widget)
+            gtk_list_header_widget_set_factory (GTK_LIST_HEADER_WIDGET (tile->widget), header_factory);
+          break;
+        case GTK_LIST_TILE_UNMATCHED_HEADER:
+        case GTK_LIST_TILE_FOOTER:
+        case GTK_LIST_TILE_UNMATCHED_FOOTER:
+        case GTK_LIST_TILE_FILLER:
+        case GTK_LIST_TILE_REMOVED:
+          g_assert (tile->widget == NULL);
+          break;
+        default:
+          g_assert_not_reached();
+          break;
+        }
     }
 }
 
@@ -245,13 +250,14 @@ static void
 gtk_list_view_update_factories (GtkListView *self)
 {
   gtk_list_view_update_factories_with (self,
-                                       gtk_list_view_is_inert (self) ? NULL : self->factory);
+                                       gtk_list_view_is_inert (self) ? NULL : self->factory,
+                                       gtk_list_view_is_inert (self) ? NULL : self->header_factory);
 }
 
 static void
 gtk_list_view_clear_factories (GtkListView *self)
 {
-  gtk_list_view_update_factories_with (self, NULL);
+  gtk_list_view_update_factories_with (self, NULL, NULL);
 }
 
 static GtkListItemBase *
@@ -273,6 +279,20 @@ gtk_list_view_create_list_widget (GtkListBase *base)
   gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
 
   return GTK_LIST_ITEM_BASE (result);
+}
+
+static GtkListHeaderBase *
+gtk_list_view_create_header_widget (GtkListBase *base)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+  GtkListItemFactory *factory;
+
+  if (gtk_list_view_is_inert (self))
+    factory = NULL;
+  else
+    factory = self->header_factory;
+
+  return GTK_LIST_HEADER_BASE (gtk_list_header_widget_new (factory));
 }
 
 static gboolean
@@ -527,8 +547,11 @@ gtk_list_view_measure_list (GtkWidget      *widget,
           gtk_widget_measure (tile->widget,
                               orientation, for_size,
                               &child_min, &child_nat, NULL, NULL);
-          g_array_append_val (min_heights, child_min);
-          g_array_append_val (nat_heights, child_nat);
+          if (tile->type == GTK_LIST_TILE_ITEM)
+            {
+              g_array_append_val (min_heights, child_min);
+              g_array_append_val (nat_heights, child_nat);
+            }
           min += child_min;
           nat += child_nat;
         }
@@ -622,7 +645,8 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       else
         row_height = nat;
       gtk_list_tile_set_area_size (self->item_manager, tile, list_width, row_height);
-      g_array_append_val (heights, row_height);
+      if (tile->type == GTK_LIST_TILE_ITEM)
+        g_array_append_val (heights, row_height);
     }
 
   /* step 3: determine height of unknown items and set the positions */
@@ -723,6 +747,10 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_object (value, self->factory);
       break;
 
+    case PROP_HEADER_FACTORY:
+      g_value_set_object (value, self->header_factory);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, gtk_list_base_get_model (GTK_LIST_BASE (self)));
       break;
@@ -761,6 +789,10 @@ gtk_list_view_set_property (GObject      *object,
 
     case PROP_FACTORY:
       gtk_list_view_set_factory (self, g_value_get_object (value));
+      break;
+
+    case PROP_HEADER_FACTORY:
+      gtk_list_view_set_header_factory (self, g_value_get_object (value));
       break;
 
     case PROP_MODEL:
@@ -812,6 +844,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   list_base_class->split = gtk_list_view_split;
   list_base_class->create_list_widget = gtk_list_view_create_list_widget;
+  list_base_class->prepare_section = gtk_list_view_prepare_section;
+  list_base_class->create_header_widget = gtk_list_view_create_header_widget;
   list_base_class->get_allocation = gtk_list_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_list_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
@@ -846,6 +880,18 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListView:header-factory: (attributes org.gtk.Property.get=gtk_list_view_get_header_factory org.gtk.Property.set=gtk_list_view_set_header_factory)
+   *
+   * Factory for creating header widgets.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HEADER_FACTORY] =
+    g_param_spec_object ("header-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1054,20 +1100,78 @@ void
 gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
-  gboolean was_inert;
-
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
-
-  was_inert = gtk_list_view_is_inert (self);
 
   if (!g_set_object (&self->factory, factory))
     return;
 
-  if (!was_inert || !gtk_list_view_is_inert (self))
-    gtk_list_view_update_factories (self);
+  gtk_list_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+}
+
+/**
+ * gtk_list_view_get_header_factory: (attributes org.gtk.Method.get_property=header-factory)
+ * @self: a `GtkListView`
+ *
+ * Gets the factory that's currently used to populate section headers.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_list_view_get_header_factory (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
+
+  return self->header_factory;
+}
+
+/**
+ * gtk_list_view_set_header_factory: (attributes org.gtk.Method.set_property=header-factory)
+ * @self: a `GtkListView`
+ * @factory: (nullable) (transfer none): the factory to use
+ *
+ * Sets the `GtkListItemFactory` to use for populating the
+ * [class@Gtk.ListHeader] objects used in section headers.
+ *
+ * If this factory is set to %NULL, the list will not show section headers.
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_view_set_header_factory (GtkListView        *self,
+                                  GtkListItemFactory *factory)
+{
+  gboolean had_sections;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
+
+  had_sections = gtk_list_item_manager_get_has_sections (self->item_manager);
+
+  if (!g_set_object (&self->header_factory, factory))
+    return;
+
+  gtk_list_item_manager_set_has_sections (self->item_manager, factory != NULL);
+
+  if (!gtk_list_view_is_inert (self) &&
+      had_sections && gtk_list_item_manager_get_has_sections (self->item_manager))
+    {
+      GtkListTile *tile;
+
+      for (tile = gtk_list_item_manager_get_first (self->item_manager);
+           tile != NULL;
+           tile = gtk_rb_tree_node_get_next (tile))
+        {
+          if (tile->widget && tile->type == GTK_LIST_TILE_HEADER)
+            gtk_list_header_widget_set_factory (GTK_LIST_HEADER_WIDGET (tile->widget), factory);
+        }
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
 }
 
 /**
@@ -1139,7 +1243,7 @@ gtk_list_view_set_single_click_activate (GtkListView *self,
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (tile->widget)
+      if (tile->widget && tile->type == GTK_LIST_TILE_ITEM)
         gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (tile->widget), single_click_activate);
     }
 

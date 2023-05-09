@@ -1,15 +1,12 @@
-/* Lists/Settings
- * #Keywords: GtkListItemFactory, GListModel
+/* Lists/Settings v2
+ * #Keywords: GtkListHeaderFactory, GtkSectionModel
  *
  * This demo shows a settings viewer for GSettings.
  *
- * It demonstrates how to implement support for trees with GtkListView.
- * It also shows how to set up sorting and filtering for columns in a
- * GtkColumnView.
+ * It demonstrates how to implement support for sections with GtkListView.
  *
- * It also demonstrates different styles of list. The tree on the left
- * uses the ­.navigation-sidebar style class, the list on the right uses
- * the ­.data-table style class.
+ * It also shows how to quickly flatten a large tree of items into a list
+ * that can be filtered to find the itmes one is looking for.
  */
 
 #include <gtk/gtk.h>
@@ -74,28 +71,16 @@ strvcmp (gconstpointer p1,
   return strcmp (*s1, *s2);
 }
 
-static GtkFilter *current_filter;
-
-static gboolean
-transform_settings_to_keys (GBinding     *binding,
-                            const GValue *from_value,
-                            GValue       *to_value,
-                            gpointer      data)
+static gpointer
+map_settings_to_keys (gpointer item,
+                      gpointer unused)
 {
-  GtkTreeListRow *treelistrow;
-  GSettings *settings;
+  GSettings *settings = item;
   GSettingsSchema *schema;
   GListStore *store;
-  GtkSortListModel *sort_model;
-  GtkFilterListModel *filter_model;
-  GtkFilter *filter;
   char **keys;
   guint i;
 
-  treelistrow = g_value_get_object (from_value);
-  if (treelistrow == NULL)
-    return TRUE;
-  settings = gtk_tree_list_row_get_item (treelistrow);
   g_object_get (settings, "settings-schema", &schema, NULL);
 
   store = g_list_store_new (SETTINGS_TYPE_KEY);
@@ -115,16 +100,7 @@ transform_settings_to_keys (GBinding     *binding,
   g_settings_schema_unref (schema);
   g_object_unref (settings);
 
-  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                        g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data))));
-
-  filter = GTK_FILTER (gtk_string_filter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name")));
-  g_set_object (&current_filter, filter);
-  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
-
-  g_value_take_object (to_value, gtk_no_selection_new (G_LIST_MODEL (filter_model)));
-
-  return TRUE;
+  return store;
 }
 
 static GListModel *
@@ -182,119 +158,65 @@ search_enabled (GtkSearchEntry *entry)
 }
 
 static void
-search_changed (GtkSearchEntry *entry,
-                gpointer data)
-{
-  const char *text = gtk_editable_get_text (GTK_EDITABLE (entry));
-
-  if (current_filter)
-    gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), text);
-}
-
-static void
 stop_search (GtkSearchEntry *entry,
              gpointer data)
 {
   gtk_editable_set_text (GTK_EDITABLE (entry), "");
-
-  if (current_filter)
-    gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), "");
 }
 
 static GtkWidget *window = NULL;
 
 GtkWidget *
-do_listview_settings (GtkWidget *do_widget)
+do_listview_settings2 (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *listview, *columnview;
+      GtkListView *listview;
       GListModel *model;
       GtkTreeListModel *treemodel;
-      GtkSingleSelection *selection;
+      GtkNoSelection *selection;
       GtkBuilderScope *scope;
       GtkBuilder *builder;
-      GtkColumnViewColumn *name_column;
-      GtkColumnViewColumn *type_column;
-      GtkColumnViewColumn *default_column;
-      GtkColumnViewColumn *summary_column;
-      GtkColumnViewColumn *description_column;
-      GtkSorter *sorter;
-      GActionGroup *actions;
-      GAction *action;
+      GError *error = NULL;
+      GtkFilter *filter;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
       scope = gtk_builder_cscope_new ();
       gtk_builder_cscope_add_callback (scope, search_enabled);
-      gtk_builder_cscope_add_callback (scope, search_changed);
       gtk_builder_cscope_add_callback (scope, stop_search);
+      gtk_builder_cscope_add_callback (scope, settings_key_get_search_string);
       gtk_builder_cscope_add_callback (scope, item_value_changed);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
       g_object_unref (scope);
 
-      gtk_builder_add_from_resource (builder, "/listview_settings/listview_settings.ui", NULL);
+      gtk_builder_add_from_resource (builder, "/listview_settings2/listview_settings2.ui", &error);
+      g_assert_no_error (error);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
 
-      listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
-      columnview = GTK_WIDGET (gtk_builder_get_object (builder, "columnview"));
-      type_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "type_column"));
-      default_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "default_column"));
-      summary_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "summary_column"));
-      description_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "description_column"));
-
-      actions = G_ACTION_GROUP (g_simple_action_group_new ());
-
-      action = G_ACTION (g_property_action_new ("show-type", type_column, "visible"));
-      g_action_map_add_action (G_ACTION_MAP (actions), action);
-      g_object_unref (action);
-
-      action = G_ACTION (g_property_action_new ("show-default", default_column, "visible"));
-      g_action_map_add_action (G_ACTION_MAP (actions), action);
-      g_object_unref (action);
-
-      action = G_ACTION (g_property_action_new ("show-summary", summary_column, "visible"));
-      g_action_map_add_action (G_ACTION_MAP (actions), action);
-      g_object_unref (action);
-
-      action = G_ACTION (g_property_action_new ("show-description", description_column, "visible"));
-      g_action_map_add_action (G_ACTION_MAP (actions), action);
-      g_object_unref (action);
-
-      gtk_widget_insert_action_group (columnview, "columnview", actions);
-      g_object_unref (actions);
+      listview = GTK_LIST_VIEW (gtk_builder_get_object (builder, "listview"));
+      filter = GTK_FILTER (gtk_builder_get_object (builder, "filter"));
 
       model = create_settings_model (NULL, NULL);
       treemodel = gtk_tree_list_model_new (model,
-                                           FALSE,
+                                           TRUE,
                                            TRUE,
                                            create_settings_model,
                                            NULL,
                                            NULL);
-      selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
-      g_object_bind_property_full (selection, "selected-item",
-                                   columnview, "model",
-                                   G_BINDING_SYNC_CREATE,
-                                   transform_settings_to_keys,
-                                   NULL,
-                                   columnview, NULL);
+      model = G_LIST_MODEL (gtk_map_list_model_new (G_LIST_MODEL (treemodel), map_settings_to_keys, NULL, NULL));
+      model = G_LIST_MODEL (gtk_flatten_list_model_new (model));
+      model = G_LIST_MODEL (gtk_filter_list_model_new (model, g_object_ref (filter)));
+      selection = gtk_no_selection_new (model);
+
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), GTK_SELECTION_MODEL (selection));
       g_object_unref (selection);
-
-      name_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "name_column"));
-      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name")));
-      gtk_column_view_column_set_sorter (name_column, sorter);
-      g_object_unref (sorter);
-
-      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "type")));
-      gtk_column_view_column_set_sorter (type_column, sorter);
-      g_object_unref (sorter);
 
       g_object_unref (builder);
     }

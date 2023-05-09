@@ -264,8 +264,7 @@ gtk_grid_view_is_inert (GtkGridView *self)
   GtkWidget *widget = GTK_WIDGET (self);
 
   return !gtk_widget_get_visible (widget) ||
-         gtk_widget_get_root (widget) == NULL ||
-         self->factory == NULL;
+         gtk_widget_get_root (widget) == NULL;
 }
 
 static void
@@ -886,7 +885,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     {
       GtkListTile *filler;
       tile = gtk_list_item_manager_get_last (self->item_manager);
-      filler = gtk_list_tile_split (self->item_manager, tile, tile->n_items);
+      filler = gtk_list_tile_append_filler (self->item_manager, tile);
       gtk_list_tile_set_area_position (self->item_manager,
                                        filler,
                                        column_start (self, xspacing, i),
@@ -1330,18 +1329,11 @@ void
 gtk_grid_view_set_factory (GtkGridView        *self,
                            GtkListItemFactory *factory)
 {
-  gboolean was_inert;
-
   g_return_if_fail (GTK_IS_GRID_VIEW (self));
   g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
-  was_inert = gtk_grid_view_is_inert (self);
-
   if (!g_set_object (&self->factory, factory))
     return;
-
-  if (!was_inert || !gtk_grid_view_is_inert (self))
-    gtk_grid_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }

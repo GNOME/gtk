@@ -57,6 +57,13 @@ GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *
                 gtk_list_view_get_factory                       (GtkListView            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_view_set_header_factory                (GtkListView            *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_4_12
+GtkListItemFactory *
+                gtk_list_view_get_header_factory                (GtkListView            *self);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_show_separators               (GtkListView            *self,
                                                                  gboolean                show_separators);

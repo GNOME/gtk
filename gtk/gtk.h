@@ -174,6 +174,7 @@
 #include <gtk/gtklistbase.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
+#include <gtk/gtklistheader.h>
 #include <gtk/gtklistitem.h>
 #include <gtk/gtklistitemfactory.h>
 #include <gtk/deprecated/gtkliststore.h>
@@ -225,6 +226,7 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtksearchbar.h>
 #include <gtk/gtksearchentry.h>
+#include <gtk/gtksectionmodel.h>
 #include <gtk/gtkselectionfiltermodel.h>
 #include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>

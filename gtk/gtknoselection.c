@@ -22,6 +22,7 @@
 #include "gtknoselection.h"
 
 #include "gtkbitset.h"
+#include "gtksectionmodelprivate.h"
 #include "gtkselectionmodel.h"
 
 /**
@@ -92,6 +93,23 @@ gtk_no_selection_list_model_init (GListModelInterface *iface)
   iface->get_item = gtk_no_selection_get_item;
 }
 
+static void
+gtk_no_selection_get_section (GtkSectionModel *model,
+                              guint            position,
+                              guint           *out_start,
+                              guint           *out_end)
+{
+  GtkNoSelection *self = GTK_NO_SELECTION (model);
+
+  gtk_list_model_get_section (self->model, position, out_start, out_end);
+}
+
+static void
+gtk_no_selection_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_no_selection_get_section;
+}
+
 static gboolean
 gtk_no_selection_is_selected (GtkSelectionModel *model,
                               guint              position)
@@ -117,6 +135,8 @@ gtk_no_selection_selection_model_init (GtkSelectionModelInterface *iface)
 G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
                                                gtk_no_selection_list_model_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL,
+                                               gtk_no_selection_section_model_init)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
                                                gtk_no_selection_selection_model_init))
 
