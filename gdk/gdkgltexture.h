@@ -22,6 +22,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
+#include <gdk/gdktypes.h>
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdktexture.h>
 

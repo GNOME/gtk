@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2005 Red Hat, Inc. 
+ * Copyright (C) 2005 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkversionmacros.h>
-#include <gdk/gdkrgba.h>
+#include <gdk/gdktypes.h>
 #include <gdk/gdkpixbuf.h>
 #include <pango/pangocairo.h>
 

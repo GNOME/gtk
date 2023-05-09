@@ -28,7 +28,7 @@ test('api', test_api,
 
 test_data = executable('data',
   sources: ['data.c'],
-  c_args: common_cflags,
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
   include_directories: [confinc, ],
   dependencies: libgtk_static_dep,
 )
@@ -42,7 +42,7 @@ test('data', test_data,
 
 transition = executable('transition',
   sources: ['transition.c'],
-  c_args: common_cflags,
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
   dependencies: libgtk_static_dep,
 )
 

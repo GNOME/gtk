@@ -1179,6 +1179,7 @@ libgtk = shared_library('gtk-4',
   soversion: gtk_soversion,
   version: gtk_library_version,
   darwin_versions: darwin_versions,
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
 

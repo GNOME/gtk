@@ -146,7 +146,7 @@ gdk_enums = gnome.mkenums_simple('gdkenumtypes',
   sources: gdk_public_headers,
   decorator: 'GDK_AVAILABLE_IN_ALL',
   body_prefix: '#include "config.h"',
-  header_prefix: '#include "gdkversionmacros.h"',
+  header_prefix: '#include "version/gdkversionmacros.h"\n',
   install_dir: gtk_includedir / 'gtk-4.0/gdk',
   install_header: true,
 )
@@ -183,13 +183,6 @@ gdkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 gdkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 
-gdkversionmacros = configure_file(
-  input: 'gdkversionmacros.h.in',
-  output: 'gdkversionmacros.h',
-  configuration: gdkversion_cdata,
-  install_dir: gtk_includedir / 'gtk-4.0/gdk',
-)
-
 gdkinc = include_directories('.')
 gdkx11_inc = include_directories('x11')
 gdkwayland_inc = include_directories('wayland')
@@ -197,7 +190,7 @@ gdkwayland_inc = include_directories('wayland')
 wlinc = include_directories('.')
 win32rcinc = include_directories('win32/rc')
 
-gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
+gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros_h, gdk_visibility_h]
 
 gdk_deps = [
   libm,
@@ -231,7 +224,8 @@ gdk_sources += [
   gdk_enums,
   gdk_marshalers,
   gdkresources,
-  gdkversionmacros,
+  gdkversionmacros_h,
+  gdk_visibility_h,
   gdk_private_h_sources,
   gdk_public_headers
 ]

@@ -149,8 +149,7 @@ endif
 
 foreach flag: common_cflags
   if flag not in ['-Werror=missing-prototypes', '-Wmissing-prototypes',
-                  '-Werror=missing-declarations', '-Wmissing-declarations',
-                  '-fvisibility=hidden']
+                  '-Werror=missing-declarations', '-Wmissing-declarations']
     test_cargs += flag
   endif
 endforeach
@@ -193,7 +192,7 @@ foreach t : internal_tests
 
   test_exe = executable(test_name,
     sources: test_srcs,
-    c_args: test_cargs + test_extra_cargs,
+    c_args: test_cargs + test_extra_cargs + ['-DGTK_COMPILATION'],
     link_args: test_extra_ldflags,
     dependencies: libgtk_static_dep,
   )

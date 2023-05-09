@@ -24,10 +24,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
-
-#include <cairo.h>
 
 G_BEGIN_DECLS
 
