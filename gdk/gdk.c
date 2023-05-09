@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gdkversionmacros.h"
+#include "version/gdkversionmacros.h"
 
 #include "gdkresources.h"
 

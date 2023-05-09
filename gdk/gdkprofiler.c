@@ -29,7 +29,7 @@
 #include <unistd.h>
 #endif
 
-#include "gdkversionmacros.h"
+#include "version/gdkversionmacros.h"
 #include "gdkframeclockprivate.h"
 
 

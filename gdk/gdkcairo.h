@@ -21,7 +21,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
 #include <pango/pangocairo.h>

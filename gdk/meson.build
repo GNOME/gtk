@@ -110,7 +110,6 @@ gdk_public_headers = files([
   'gdktoplevelsize.h',
   'gdktoplevel.h',
   'gdkdragsurface.h',
-  'gdkversionmacros.h'
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 
@@ -147,7 +146,7 @@ gdk_enums = gnome.mkenums_simple('gdkenumtypes',
   sources: gdk_public_headers,
   decorator: 'GDK_AVAILABLE_IN_ALL',
   body_prefix: '#include "config.h"',
-  header_prefix: '#include "version/gdkversionmacros.h"\n#include "version/gdk-visibility.h"',
+  header_prefix: '#include "version/gdkversionmacros.h"\n',
   install_dir: gtk_includedir / 'gtk-4.0/gdk',
   install_header: true,
 )

@@ -24,7 +24,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
 #ifdef GDK_RENDERING_VULKAN

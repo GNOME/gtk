@@ -22,7 +22,7 @@
 #endif
 
 
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS

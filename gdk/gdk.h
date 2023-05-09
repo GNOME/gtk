@@ -75,7 +75,7 @@
 #include <gdk/gdktoplevellayout.h>
 #include <gdk/gdktoplevelsize.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gdk/gdkvulkancontext.h>
 
 #undef __GDK_H_INSIDE__

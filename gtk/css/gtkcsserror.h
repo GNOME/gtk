@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib.h>
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 

@@ -144,4 +144,6 @@
 # error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_4_0"
 #endif
 
+#include <gdk/version/gdk-visibility.h>
+
 #endif  /* __GDK_VERSION_MACROS_H__ */

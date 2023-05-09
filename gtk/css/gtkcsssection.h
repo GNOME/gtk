@@ -22,7 +22,7 @@
 #endif
 
 #include <gio/gio.h>
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gtk/css/gtkcsslocation.h>
 
 G_BEGIN_DECLS

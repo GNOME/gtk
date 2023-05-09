@@ -27,7 +27,7 @@
 #define __GTK_CSS_H_INSIDE__
 
 #include <glib.h>
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 
 #include <gtk/css/gtkcssenums.h>
 #include <gtk/css/gtkcssenumtypes.h>

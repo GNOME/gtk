@@ -22,7 +22,7 @@
 #endif
 
 
-#include <gdk/gdkversionmacros.h>
+#include <gdk/version/gdkversionmacros.h>
 #include <gdk/gdkenums.h>
 #include <gdk/gdktypes.h>
 
