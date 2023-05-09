@@ -234,7 +234,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
                         NULL);
   g_array_unref (self->wait_semaphores);
 
-
   g_free (self);
 }
 
@@ -1008,6 +1007,64 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
 }
 
 static GskVulkanImage *
+gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
+                                         GskVulkanRender       *render,
+                                         GskVulkanUploader     *uploader,
+                                         VkSemaphore            semaphore,
+                                         GskRenderNode         *node,
+                                         const graphene_rect_t *viewport)
+{
+  graphene_rect_t view;
+  cairo_region_t *clip;
+  GskVulkanRenderPass *pass;
+  graphene_matrix_t mv;
+  GskVulkanImage *result;
+
+  view = GRAPHENE_RECT_INIT (viewport->origin.x,
+                             viewport->origin.y,
+                             ceil (viewport->size.width),
+                             ceil (viewport->size.height));
+
+  result = gsk_vulkan_image_new_for_offscreen (vulkan,
+                                               view.size.width,
+                                               view.size.height);
+
+#ifdef G_ENABLE_DEBUG
+  {
+    GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
+    gsk_profiler_counter_add (profiler,
+                              g_quark_from_static_string ("texture-pixels"),
+                              view.size.width * view.size.height);
+  }
+#endif
+
+  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                          0, 0,
+                                          gsk_vulkan_image_get_width (result),
+                                          gsk_vulkan_image_get_height (result)
+                                        });
+
+  graphene_matrix_init_identity (&mv);
+
+  pass = gsk_vulkan_render_pass_new (vulkan,
+                                     result,
+                                     1,
+                                     1,
+                                     &mv,
+                                     &view,
+                                     clip,
+                                     semaphore);
+
+  cairo_region_destroy (clip);
+
+  gsk_vulkan_render_add_render_pass (render, pass);
+  gsk_vulkan_render_pass_add (pass, render, node);
+  gsk_vulkan_render_add_cleanup_image (render, result);
+
+  return result;
+}
+
+static GskVulkanImage *
 gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                             GskVulkanRender       *render,
                                             GskVulkanUploader     *uploader,
@@ -1015,6 +1072,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                             GskVulkanClip         *current_clip,
                                             graphene_rect_t       *tex_bounds)
 {
+  VkSemaphore semaphore;
   GskVulkanImage *result;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -1038,10 +1096,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
     default:
       {
-        VkSemaphore semaphore;
         graphene_rect_t view;
-        cairo_region_t *clip;
-        GskVulkanRenderPass *pass;
         graphene_rect_t clipped;
 
         if (current_clip)
@@ -1053,23 +1108,11 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
           return NULL;
 
         graphene_matrix_transform_bounds (&self->mv, &clipped, &view);
-        view.origin.x = floor (view.origin.x);
-        view.origin.y = floor (view.origin.y);
-        view.size.width = ceil (view.size.width);
-        view.size.height = ceil (view.size.height);
 
-        result = gsk_vulkan_image_new_for_offscreen (self->vulkan,
-                                                     view.size.width,
-                                                     view.size.height);
-
-#ifdef G_ENABLE_DEBUG
-        {
-          GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
-          gsk_profiler_counter_add (profiler,
-                                    self->texture_pixels,
-                                    view.size.width * view.size.height);
-        }
-#endif
+        /* assuming the unclipped bounds should go to texture coordinates 0..1,
+         * calculate the coordinates for the clipped texture size
+         */
+        *tex_bounds = clipped;
 
         vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
                            &(VkSemaphoreCreateInfo) {
@@ -1082,33 +1125,12 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
         g_array_append_val (self->wait_semaphores, semaphore);
 
-        clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                0, 0,
-                                                gsk_vulkan_image_get_width (result),
-                                                gsk_vulkan_image_get_height (result)
-                                              });
-
-        pass = gsk_vulkan_render_pass_new (self->vulkan,
-                                           result,
-                                           self->scale_x,
-                                           self->scale_y,
-                                           &self->mv,
-                                           &view,
-                                           clip,
-                                           semaphore);
-
-        cairo_region_destroy (clip);
-
-        gsk_vulkan_render_add_render_pass (render, pass);
-        gsk_vulkan_render_pass_add (pass, render, node);
-        gsk_vulkan_render_add_cleanup_image (render, result);
-
-        /* assuming the unclipped bounds should go to texture coordinates 0..1,
-         * calculate the coordinates for the clipped texture size
-         */
-        *tex_bounds = clipped;
-
-        return result;
+        return gsk_vulkan_render_pass_render_offscreen (self->vulkan,
+                                                        render,
+                                                        uploader,
+                                                        semaphore,
+                                                        node,
+                                                        &view);
       }
    }
 
