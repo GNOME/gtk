@@ -115,8 +115,6 @@ struct _GskVulkanRenderPass
   GskVulkanImage *target;
   graphene_rect_t viewport;
   cairo_region_t *clip;
-  graphene_matrix_t mv;
-  graphene_matrix_t p;
 
   float scale_x;
   float scale_y;
@@ -153,13 +151,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->viewport = *viewport;
   self->scale_x = scale_x;
   self->scale_y = scale_y;
-
-  graphene_matrix_init_scale (&self->mv, self->scale_x, self->scale_y, 1.0);
-  graphene_matrix_init_ortho (&self->p,
-                              viewport->origin.x, viewport->origin.x + viewport->size.width,
-                              viewport->origin.y, viewport->origin.y + viewport->size.height,
-                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
-                              ORTHO_FAR_PLANE);
 
   if (signal_semaphore != VK_NULL_HANDLE) // this is a dependent pass
     final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -506,10 +497,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   GskVulkanOp op = {
     .render.node = node
   };
-  graphene_matrix_t old_mv;
   GskRenderNode *child;
   GskTransform *transform;
-  graphene_matrix_t transform_matrix;
   float new_scale_x = self->scale_x;
   float new_scale_y = self->scale_x;
   float old_scale_x;
@@ -575,15 +564,11 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
       break;
     }
 
-  old_mv = self->mv;
   old_scale_x = self->scale_x;
   old_scale_y = self->scale_y;
 
   self->scale_x = new_scale_x;
   self->scale_y = new_scale_y;
-
-  gsk_transform_to_matrix (transform, &transform_matrix);
-  graphene_matrix_multiply (&transform_matrix, &self->mv, &self->mv);
 
   child = gsk_transform_node_get_child (node);
   if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
@@ -598,7 +583,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
 
   self->scale_x = old_scale_x;
   self->scale_y = old_scale_y;
-  self->mv = old_mv;
 
   return TRUE;
 }
@@ -1003,9 +987,16 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskRenderNode           *node)
 {
   GskVulkanOp op = { 0, };
-  graphene_matrix_t mvp;
+  graphene_matrix_t projection, mvp;
 
-  graphene_matrix_multiply (&self->mv, &self->p, &mvp);
+  graphene_matrix_init_scale (&mvp, self->scale_x, self->scale_y, 1.0);
+  graphene_matrix_init_ortho (&projection,
+                              self->viewport.origin.x, self->viewport.origin.x + self->viewport.size.width,
+                              self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
+                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  graphene_matrix_multiply (&mvp, &projection, &mvp);
+
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   gsk_vulkan_push_constants_init (&op.constants.constants, &mvp, &self->viewport);
   g_array_append_val (self->render_ops, op);
