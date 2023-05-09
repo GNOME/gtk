@@ -1101,7 +1101,6 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
     default:
       {
-        graphene_rect_t view;
         graphene_rect_t clipped;
 
         if (current_clip)
@@ -1111,8 +1110,6 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
-
-        graphene_matrix_transform_bounds (&self->mv, &clipped, &view);
 
         /* assuming the unclipped bounds should go to texture coordinates 0..1,
          * calculate the coordinates for the clipped texture size
@@ -1135,7 +1132,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                                         uploader,
                                                         semaphore,
                                                         node,
-                                                        &view);
+                                                        &clipped);
       }
    }
 
