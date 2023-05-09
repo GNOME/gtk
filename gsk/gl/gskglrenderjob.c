@@ -506,6 +506,7 @@ extract_matrix_metadata (GskGLRenderModelview *modelview)
     }
 }
 
+/* takes ownership of transform */
 static void
 gsk_gl_render_job_set_modelview (GskGLRenderJob *job,
                                  GskTransform   *transform)
@@ -538,6 +539,7 @@ gsk_gl_render_job_set_modelview (GskGLRenderJob *job,
   job->current_modelview = modelview;
 }
 
+/* doesn't take ownership of transform */
 static void
 gsk_gl_render_job_push_modelview (GskGLRenderJob *job,
                                   GskTransform   *transform)
@@ -2123,7 +2125,6 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
                   scale = gsk_transform_translate (gsk_transform_scale (NULL, sx, sy), &GRAPHENE_POINT_INIT (tx, ty));
                   gsk_gl_render_job_push_modelview (job, scale);
                   transform = gsk_transform_transform (gsk_transform_invert (scale), transform);
-                  gsk_transform_unref (scale);
                 }
             }
 
