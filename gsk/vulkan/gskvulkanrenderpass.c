@@ -1337,13 +1337,42 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
             const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (op->render.node);
             graphene_rect_t tex_bounds;
 
-            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                            render,
-                                                                            uploader,
-                                                                            child,
-                                                                            NULL,
-                                                                            &tex_bounds);
-            get_tex_rect (&op->render.source_rect, child_bounds, &tex_bounds);
+            if (!graphene_rect_equal (child_bounds, &child->bounds))
+              {
+                VkSemaphore semaphore;
+
+                /* We need to create a texture in the right size so that we can repeat it
+                 * properly, so even for texture nodes this step is necessary.
+                 * We also can't use the clip because of that. */
+                vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
+                                   &(VkSemaphoreCreateInfo) {
+                                     VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                     NULL,
+                                     0
+                                   },
+                                   NULL,
+                                   &semaphore);
+
+                g_array_append_val (self->wait_semaphores, semaphore);
+
+                op->render.source = gsk_vulkan_render_pass_render_offscreen (self->vulkan,
+                                                                             render,
+                                                                             uploader,
+                                                                             semaphore,
+                                                                             child,
+                                                                             child_bounds);
+                get_tex_rect (&op->render.source_rect, &op->render.node->bounds, child_bounds);
+              }
+            else
+              {
+                op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
+                                                                                render,
+                                                                                uploader,
+                                                                                child,
+                                                                                NULL,
+                                                                                &tex_bounds);
+                get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+              }
           }
           break;
 
