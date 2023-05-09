@@ -201,6 +201,7 @@ struct _GtkInspectorA11y
 
   GtkWidget *box;
   GtkWidget *role;
+  GtkWidget *bounds;
   GtkWidget *path_label;
   GtkWidget *path;
   GtkWidget *attributes;
@@ -252,6 +253,19 @@ update_path (GtkInspectorA11y *sl)
 
   g_clear_object (&context);
 #endif
+}
+
+static void
+update_bounds (GtkInspectorA11y *sl)
+{
+  int x, y, w, h;
+
+  if (gtk_accessible_get_bounds (GTK_ACCESSIBLE (sl->object), &x, &y, &w, &h))
+    {
+      char *size_label = g_strdup_printf ("%d × %d +%d +%d", w, h, x, y);
+      gtk_label_set_label (GTK_LABEL (sl->bounds), size_label);
+      g_free (size_label);
+    }
 }
 
 extern GType gtk_string_pair_get_type (void);
@@ -449,9 +463,8 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
         }
 
       gtk_stack_page_set_visible (page, TRUE);
-      update_role (sl);
-      update_path (sl);
-      update_attributes (sl);
+      refresh_all (sl);
+      update_bounds (sl);
     }
   else
     {
@@ -505,6 +518,7 @@ gtk_inspector_a11y_class_init (GtkInspectorA11yClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/a11y.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, role);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, bounds);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path_label);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, attributes);
