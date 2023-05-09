@@ -51,15 +51,11 @@ struct _BlurOverlayClass
                                   GtkAllocation *allocation);
 };
 
-GDK_AVAILABLE_IN_ALL
 GType      blur_overlay_get_type    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
 GtkWidget *blur_overlay_new         (void);
-GDK_AVAILABLE_IN_ALL
 void       blur_overlay_add_overlay (BlurOverlay *overlay,
                                      GtkWidget   *widget,
                                      double       blur);
-GDK_AVAILABLE_IN_ALL
 void       blur_overlay_set_child   (BlurOverlay *overlay,
                                      GtkWidget   *widget);
 

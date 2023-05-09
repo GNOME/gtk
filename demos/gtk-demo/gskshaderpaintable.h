@@ -27,24 +27,17 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_SHADER_PAINTABLE (gsk_shader_paintable_get_type ())
 
-GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GskShaderPaintable, gsk_shader_paintable, GSK, SHADER_PAINTABLE, GObject)
 
-GDK_AVAILABLE_IN_ALL
 GdkPaintable *   gsk_shader_paintable_new              (GskGLShader        *shader,
                                                         GBytes             *data);
 
-GDK_AVAILABLE_IN_ALL
 GskGLShader *    gsk_shader_paintable_get_shader       (GskShaderPaintable *self);
-GDK_AVAILABLE_IN_ALL
 void             gsk_shader_paintable_set_shader       (GskShaderPaintable *self,
                                                         GskGLShader        *shader);
-GDK_AVAILABLE_IN_ALL
 GBytes *         gsk_shader_paintable_get_args         (GskShaderPaintable *self);
-GDK_AVAILABLE_IN_ALL
 void             gsk_shader_paintable_set_args         (GskShaderPaintable *self,
                                                         GBytes             *data);
-GDK_AVAILABLE_IN_ALL
 void             gsk_shader_paintable_update_time      (GskShaderPaintable *self,
                                                         int                 time_idx,
                                                         gint64              frame_time);
