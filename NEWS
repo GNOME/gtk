@@ -1,4 +1,4 @@
-Overview of Changes in 4.11.2, xx-xx-xxxx
+Overview of Changes in 4.11.2, 09-05-2023
 =========================================
 
 * GtkGLArea:
@@ -6,6 +6,12 @@ Overview of Changes in 4.11.2, xx-xx-xxxx
 
 * GtkListBox:
  - Fix a problem with gtk_list_box_remove_all
+
+* Add the GtkSectionModel interface, and implement it in most
+  of our list models
+
+* GtkListView:
+ - Support displaying sections
 
 * GtkCenterBox:
  - Add a shrink-center-last property
@@ -23,6 +29,9 @@ Overview of Changes in 4.11.2, xx-xx-xxxx
  - A few memory leak fixes
  - Handle webdav in the pathbar
 
+* GtkBox:
+ - Support baselines in vertical orientation with GtkBox:baseline-child
+
 * Dialogs:
  - Destroy windows promptly when the async callback finishes
  - Detect absence of the OpenURI portal and fall back
@@ -33,12 +42,22 @@ Overview of Changes in 4.11.2, xx-xx-xxxx
 
 * Accessibility:
  - Fix alert dialogs in the a11y tree
+ - Improve accessibility of GtkShortcutsWindow
 
 * Layout:
  - Some fixes to baseline alignment
+ - Separate GTK_ALIGN_BASELINE_CENTER and _FILL
+
+* CSS:
+ - Fix a crash with color transitions
+
+* GSK:
+ - Fix problems with negative scales
+ - Improve scaling of offscreens for (cross-fades, masks, blends)
 
 * GL:
  - Add GdkGLTextureBuilder, a more flexible api for creating textures
+ - Support setting update regions for GL textures
  - Ensure that we work with GLES 2
 
 * Vulkan:
@@ -49,23 +68,37 @@ Overview of Changes in 4.11.2, xx-xx-xxxx
  - Don't destroy wl_surfaces on hide
  - Plug leaks of compositor-side resources
 
+* X11:
+ - Fix artifacts in gnome-shell frame decorations
+
+* Windows:
+ - Fix GL context initialization
+
 * Inspector:
  - Improve the action list
+ - Improve the accessibility pane
  - Fix a crash
 
 * Tools:
  - gtk4-node-editor: Improve scaling
  - gtk4-node-editor: Preserve aspect ratio of textures
+ - gtk4-node-editor: Add some smarter editing
  - gtk4-demo: Make the stylus demo work with mice
+
+* Deprecations:
+ - gtk_widget_get_allocated_width/height/baseline
+ - GTK_ALIGN_BASELINE
 
 * Translation updates
  Bulgarian
  Chinese (China)
+ Friulian
  Galician
  Hebrew
+ Persian
  Polish
  Portuguese
- Russian
+ `Russian
  Turkish
 
 
