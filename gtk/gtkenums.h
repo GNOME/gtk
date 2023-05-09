@@ -42,8 +42,8 @@ G_BEGIN_DECLS
  * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the allocation
  * @GTK_ALIGN_BASELINE: align the widget according to the baseline.
- *   See [class@Gtk.Widget].
- * @GTK_ALIGN_BASELINE_FILL: a different name for @GTK_ALIGN_BASELINE. Since 4.12
+ *   See [class@Gtk.Widget]. Deprecated: 4.12: Use `GTK_ALIGN_BASELINE_FILL` instead
+ * @GTK_ALIGN_BASELINE_FILL: a different name for `GTK_ALIGN_BASELINE`. Since 4.12
  * @GTK_ALIGN_BASELINE_CENTER: stretch to fill all space, but align the baseline. Since 4.12
  *
  * Controls how a widget deals with extra space in a single dimension.
@@ -55,14 +55,13 @@ G_BEGIN_DECLS
  * could be scaled and stretched, it could be centered, or it could be
  * positioned to one side of the space.
  *
- * Note that in horizontal context %GTK_ALIGN_START and %GTK_ALIGN_END
+ * Note that in horizontal context `GTK_ALIGN_START` and `GTK_ALIGN_END`
  * are interpreted relative to text direction.
  *
- * %GTK_ALIGN_BASELINE support is optional for containers and widgets, and
- * it is only supported for vertical alignment.  Where it is supported, it is
- * treated similar to %GTK_ALIGN_CENTER, except that it positions the widget
- * to line up the baselines. When it's not supported by a child or a container,
- * it is treated as %GTK_ALIGN_FILL.
+ * Baseline support is optional for containers and widgets, and is only available
+ * for vertical alignment. `GTK_ALIGN_BASELINE_CENTER and `GTK_ALIGN_BASELINE_FILL`
+ * are treated similar to `GTK_ALIGN_CENTER` and `GTK_ALIGN_FILL`, except that it
+ * positions the widget to line up the baselines, where that is supported.
  */
 typedef enum
 {
