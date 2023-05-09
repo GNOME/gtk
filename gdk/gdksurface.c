@@ -1530,6 +1530,9 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
+  if (GDK_DEBUG_CHECK (NO_VSYNC))
+    return;
+
   surface->update_freeze_count++;
   if (surface->update_freeze_count == 1)
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
@@ -1561,6 +1564,9 @@ void
 gdk_surface_thaw_updates (GdkSurface *surface)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  if (GDK_DEBUG_CHECK (NO_VSYNC))
+    return;
 
   g_return_if_fail (surface->update_freeze_count > 0);
 

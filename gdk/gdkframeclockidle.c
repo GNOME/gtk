@@ -280,6 +280,9 @@ gdk_frame_clock_idle_is_frozen (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = self->priv;
 
+  if (GDK_DEBUG_CHECK (NO_VSYNC))
+    return FALSE;
+
   return priv->freeze_count > 0;
 }
 
@@ -317,7 +320,8 @@ maybe_start_idle (GdkFrameClockIdle *self,
     {
       guint min_interval = 0;
 
-      if (priv->min_next_frame_time != 0)
+      if (priv->min_next_frame_time != 0 &&
+          !GDK_DEBUG_CHECK (NO_VSYNC))
         {
           gint64 now = g_get_monotonic_time ();
           gint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
