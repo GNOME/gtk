@@ -125,10 +125,12 @@ struct _GskVulkanRenderPass
   VkSemaphore signal_semaphore;
   GArray *wait_semaphores;
   GskVulkanBuffer *vertex_data;
-
-  GQuark fallback_pixels;
-  GQuark texture_pixels;
 };
+
+#ifdef G_ENABLE_DEBUG
+static GQuark fallback_pixels_quark;
+static GQuark texture_pixels_quark;
+#endif
 
 GskVulkanRenderPass *
 gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
@@ -209,8 +211,11 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->vertex_data = NULL;
 
 #ifdef G_ENABLE_DEBUG
-  self->fallback_pixels = g_quark_from_static_string ("fallback-pixels");
-  self->texture_pixels = g_quark_from_static_string ("texture-pixels");
+  if (fallback_pixels_quark == 0)
+    {
+      fallback_pixels_quark = g_quark_from_static_string ("fallback-pixels");
+      texture_pixels_quark = g_quark_from_static_string ("texture-pixels");
+    }
 #endif
 
   return self;
@@ -1033,7 +1038,7 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
     gsk_profiler_counter_add (profiler,
-                              g_quark_from_static_string ("texture-pixels"),
+                              texture_pixels_quark,
                               view.size.width * view.size.height);
   }
 #endif
@@ -1141,7 +1146,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
     gsk_profiler_counter_add (profiler,
-                              self->fallback_pixels,
+                              fallback_pixels_quark,
                               ceil (node->bounds.size.width) * ceil (node->bounds.size.height));
   }
 #endif
@@ -1195,7 +1200,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
     gsk_profiler_counter_add (profiler,
-                              self->fallback_pixels,
+                              fallback_pixels_quark,
                               ceil (node->bounds.size.width) * ceil (node->bounds.size.height));
   }
 #endif
