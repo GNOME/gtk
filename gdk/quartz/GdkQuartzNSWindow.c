@@ -245,7 +245,10 @@
   window->height = content_rect.size.height;
 
   if(window->width % align)
-    content_rect.size.width += align - window->width % align;
+    {
+      window->width += align - window->width % align;
+      content_rect.size.width = window->width;
+    }
 
   content_rect.origin.x = 0;
   content_rect.origin.y = 0;
