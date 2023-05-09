@@ -130,7 +130,6 @@ gdk_quartz_display_frame_cb (gpointer data)
   GdkQuartzDisplay *display_quartz = data;
   GSList *iter, **last_next = NULL;
   gint64 presentation_time;
-  gint64 now;
 
   source = (GdkDisplayLinkSource *)display_quartz->frame_source;
 
@@ -144,7 +143,6 @@ gdk_quartz_display_frame_cb (gpointer data)
     }
 
   presentation_time = source->presentation_time;
-  now = g_source_get_time (display_quartz->frame_source);
 
   for (; iter != NULL; iter = iter->next)
     {
