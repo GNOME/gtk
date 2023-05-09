@@ -397,7 +397,7 @@ foreach t : internal_tests
   test_exe = executable(test_name,
     sources: test_srcs,
     dependencies : libgtk_static_dep,
-    c_args : test_cargs + test_extra_cargs + common_cflags,
+    c_args : test_cargs + test_extra_cargs + common_cflags + ['-DGTK_COMPILATION'],
     link_args : test_extra_ldflags,
   )
 
