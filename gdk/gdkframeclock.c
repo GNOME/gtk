@@ -79,7 +79,7 @@ static guint signals[LAST_SIGNAL];
 
 static guint fps_counter;
 
-#define FRAME_HISTORY_MAX_LENGTH 16
+#define FRAME_HISTORY_MAX_LENGTH 128
 
 struct _GdkFrameClockPrivate
 {
