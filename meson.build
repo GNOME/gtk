@@ -344,11 +344,6 @@ common_cflags = cc.get_supported_arguments(test_cflags)
 if get_option('default_library') != 'static'
   if os_win32
     cdata.set('DLL_EXPORT', true)
-    if cc.get_id() != 'msvc'
-      common_cflags += ['-fvisibility=hidden']
-    endif
-  else
-    common_cflags += ['-fvisibility=hidden']
   endif
 endif
 

@@ -3,8 +3,7 @@
 reftest_cflags = []
 foreach flag: common_cflags
   if flag not in ['-Werror=missing-prototypes', '-Wmissing-prototypes',
-                  '-Werror=missing-declarations', '-Wmissing-declarations',
-                  '-fvisibility=hidden']
+                  '-Werror=missing-declarations', '-Wmissing-declarations']
     reftest_cflags += flag
   endif
 endforeach
