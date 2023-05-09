@@ -209,6 +209,8 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
 
+  g_assert (width > 0 && height > 0);
+
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
   self->vulkan = g_object_ref (context);

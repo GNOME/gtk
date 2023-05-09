@@ -725,6 +725,9 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
     .render.node = node
   };
 
+  if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
+    return TRUE;
+
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
   else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
