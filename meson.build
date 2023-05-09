@@ -728,6 +728,11 @@ int main () {
   endif
 endif
 
+if os_unix
+  cpdb_dep = dependency('cpdb-frontend', version : '>=2.0', required: get_option('print-cpdb'))
+  cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
+endif
+
 # Introspection
 gir = find_program('g-ir-scanner', required : get_option('introspection'))
 
@@ -747,10 +752,6 @@ subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
-if os_unix
-  cpdb_dep = dependency('cpdb-frontend', version : '>=2.0', required: get_option('print-cpdb'))
-  cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
-endif
 subdir('modules')
 if get_option('demos')
   subdir('demos')
@@ -866,7 +867,7 @@ else
 endif
 
 if not meson.is_subproject()
-    meson.add_dist_script('build-aux/meson/dist-data.py')
+  meson.add_dist_script('build-aux/meson/dist-data.py')
 endif
 
 if host_machine.system() != 'windows'
