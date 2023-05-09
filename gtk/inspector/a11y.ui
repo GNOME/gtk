@@ -5,18 +5,23 @@
       <object class="GtkBox" id="box">
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkGrid" id="grid">
             <property name="margin-start">10</property>
             <property name="margin-end">10</property>
             <property name="margin-top">10</property>
             <property name="margin-bottom">10</property>
-            <property name="spacing">40</property>
+            <property name="row-spacing">20</property>
+            <property name="column-spacing">40</property>
             <child>
               <object class="GtkLabel" id="role_label">
                 <property name="label" translatable="yes">Role</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
                 <property name="xalign">0.0</property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">0</property>
+                </layout>
               </object>
             </child>
             <child>
@@ -24,26 +29,51 @@
                 <property name="selectable">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">1</property>
+                </layout>
                 <accessibility>
                   <relation name="labelled-by">role_label</relation>
                 </accessibility>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="margin-start">10</property>
-            <property name="margin-end">10</property>
-            <property name="margin-top">10</property>
-            <property name="margin-bottom">10</property>
-            <property name="spacing">40</property>
             <child>
-              <object class="GtkLabel" id="path_label">
-                <property name="label" translatable="yes">Object path</property>
+              <object class="GtkLabel" id="bounds_label">
+                <property name="label" translatable="yes">Bounds</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
                 <property name="xalign">0.0</property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="bounds">
+                <property name="selectable">1</property>
+                <property name="halign">end</property>
+                <property name="valign">baseline</property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">1</property>
+                </layout>
+                <accessibility>
+                  <relation name="labelled-by">bounds_label</relation>
+                </accessibility>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="path_label">
+                <property name="label" translatable="yes">Object Path</property>
+                <property name="halign">start</property>
+                <property name="valign">baseline</property>
+                <property name="xalign">0.0</property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">0</property>
+                </layout>
               </object>
             </child>
             <child>
@@ -51,6 +81,10 @@
                 <property name="selectable">1</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">1</property>
+                </layout>
                 <accessibility>
                   <relation name="labelled-by">path_label</relation>
                 </accessibility>
