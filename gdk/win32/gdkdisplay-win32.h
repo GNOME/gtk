@@ -108,6 +108,7 @@ typedef enum {
 
 typedef struct
 {
+  HWND hwnd;
   HDC hdc;
   HGLRC hglrc;
 } GdkWin32GLDummyContextWGL;
@@ -133,7 +134,6 @@ struct _GdkWin32Display
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
   guint hasWglARBPixelFormat : 1;
-  guint hasWglARBmultisample : 1;
 
 #ifdef HAVE_EGL
   guint hasEglKHRCreateContext : 1;
