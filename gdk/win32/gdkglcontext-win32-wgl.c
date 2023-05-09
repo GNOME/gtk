@@ -171,6 +171,9 @@ get_wgl_pfd (HDC                    hdc,
       pixelAttribs[i++] = WGL_COLOR_BITS_ARB;
       pixelAttribs[i++] = colorbits;
 
+      pixelAttribs[i++] = WGL_ALPHA_BITS_ARB;
+      pixelAttribs[i++] = 8;
+
       /* end of "Update PIXEL_ATTRIBUTES above if any groups are added here!" */
 
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
