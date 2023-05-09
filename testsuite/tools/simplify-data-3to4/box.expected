@@ -281,7 +281,7 @@
                 <property name="label" translatable="1">FB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
               </object>
             </child>
             <child>
@@ -299,7 +299,7 @@
                 <property name="label" translatable="1">FEB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
               </object>
             </child>
           </object>
@@ -465,7 +465,7 @@
                 <property name="label" translatable="1">FB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
@@ -483,7 +483,7 @@
                 <property name="label" translatable="1">FEB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
@@ -650,7 +650,7 @@
                 <property name="label" translatable="1">FB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
@@ -668,7 +668,7 @@
                 <property name="label" translatable="1">FEB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">baseline-fill</property>
                 <property name="vexpand">1</property>
               </object>
             </child>

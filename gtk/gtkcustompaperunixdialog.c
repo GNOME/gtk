@@ -429,7 +429,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   button = gtk_spin_button_new_with_range (0.0, 9999.0, 1);
-  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE_FILL);
   if (unit == GTK_UNIT_INCH)
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (button), 2);
   else
@@ -446,7 +446,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
     label = gtk_label_new (_("inch"));
   else
     label = gtk_label_new (_("mm"));
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
 
   gtk_box_append (GTK_BOX (hbox), label);
   gtk_label_set_mnemonic_widget (GTK_LABEL (mnemonic_label), button);
@@ -913,7 +913,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Width:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
@@ -922,7 +922,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Height:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
@@ -938,7 +938,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Top:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
@@ -947,7 +947,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Bottom:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
@@ -956,7 +956,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Left:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
@@ -965,7 +965,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new_with_mnemonic (_("_Right:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);

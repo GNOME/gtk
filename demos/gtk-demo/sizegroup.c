@@ -28,14 +28,14 @@ add_row (GtkGrid      *table,
 
   label = gtk_label_new_with_mnemonic (label_text);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE_FILL);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_grid_attach (table, label, 0, row, 1, 1);
 
   dropdown = gtk_drop_down_new_from_strings (options);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), dropdown);
   gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
-  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE_FILL);
   gtk_size_group_add_widget (size_group, dropdown);
   gtk_grid_attach (table, dropdown, 1, row, 1, 1);
 }
