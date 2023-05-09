@@ -1807,6 +1807,9 @@ gsk_vulkan_render_pass_get_vertex_data (GskVulkanRenderPass *self,
       guchar *data;
 
       n_bytes = gsk_vulkan_render_pass_count_vertex_data (self);
+      if (n_bytes == 0)
+        return NULL;
+
       self->vertex_data = gsk_vulkan_buffer_new (self->vulkan, n_bytes);
       data = gsk_vulkan_buffer_map (self->vertex_data);
       gsk_vulkan_render_pass_collect_vertex_data (self, render, data, 0, n_bytes);
