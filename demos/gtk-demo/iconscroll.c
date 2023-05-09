@@ -370,7 +370,7 @@ do_iconscroll (GtkWidget *do_widget)
       set_widget_type (0);
 
       label = GTK_WIDGET (gtk_builder_get_object (builder, "fps_label"));
-      id = g_timeout_add (500, update_fps, label);
+      id = g_timeout_add_full (G_PRIORITY_HIGH, 500, update_fps, label, NULL);
       g_object_set_data_full (G_OBJECT (label), "timeout",
                               GUINT_TO_POINTER (id), remove_timeout);
 
