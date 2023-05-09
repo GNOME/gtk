@@ -201,6 +201,7 @@ struct _GtkInspectorA11y
 
   GtkWidget *box;
   GtkWidget *role;
+  GtkWidget *path_label;
   GtkWidget *path;
   GtkWidget *attributes;
 };
@@ -230,8 +231,8 @@ update_role (GtkInspectorA11y *sl)
 static void
 update_path (GtkInspectorA11y *sl)
 {
-  const char *path = "—";
 #ifdef G_OS_UNIX
+  const char *path = NULL;
   GtkATContext *context;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
@@ -242,13 +243,15 @@ update_path (GtkInspectorA11y *sl)
       else
         path = "not realized";
     }
-  else
-    path = "not on bus";
+
+  if (path != NULL)
+      gtk_label_set_label (GTK_LABEL (sl->path), path);
+
+  gtk_widget_set_visible (sl->path, path != NULL);
+  gtk_widget_set_visible (sl->path_label, path != NULL);
 
   g_clear_object (&context);
 #endif
-
-  gtk_label_set_label (GTK_LABEL (sl->path), path);
 }
 
 extern GType gtk_string_pair_get_type (void);
@@ -460,6 +463,11 @@ static void
 gtk_inspector_a11y_init (GtkInspectorA11y *sl)
 {
   gtk_widget_init_template (GTK_WIDGET (sl));
+
+#ifndef G_OS_UNIX
+  gtk_widget_set_visible (sl->path, FALSE);
+  gtk_widget_set_visible (sl->path_label, FALSE);
+#endif
 }
 
 static void
@@ -497,6 +505,7 @@ gtk_inspector_a11y_class_init (GtkInspectorA11yClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/a11y.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, role);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path_label);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, attributes);
 
