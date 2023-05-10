@@ -500,7 +500,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   GskRenderNode *child;
   GskTransform *transform;
   float new_scale_x = self->scale_x;
-  float new_scale_y = self->scale_x;
+  float new_scale_y = self->scale_y;
   float old_scale_x;
   float old_scale_y;
 
