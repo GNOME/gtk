@@ -19,7 +19,6 @@ setups = [
     'backend': 'wayland', 'if': wayland_enabled,
     'env': ['GDK_DEBUG=gl-gles,default-settings',
             'MESA_GLES_VERSION_OVERRIDE=2.0',
-            'MESA_EXTENSION_OVERRIDE=-GL_OES_vertex_array_object',
             'GSK_MAX_TEXTURE_SIZE=1024',
            ], },
   { 'backend': 'win32', 'if': os_win32 },
