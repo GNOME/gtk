@@ -238,24 +238,6 @@ gsk_renderer_get_surface (GskRenderer *renderer)
   return priv->surface;
 }
 
-/*< private >
- * gsk_renderer_get_root_node:
- * @renderer: a `GskRenderer`
- *
- * Retrieves the `GskRenderNode` used by @renderer.
- *
- * Returns: (transfer none) (nullable): a `GskRenderNode`
- */
-GskRenderNode *
-gsk_renderer_get_root_node (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->root_node;
-}
-
 /**
  * gsk_renderer_is_realized: (attributes org.gtk.Method.get_property=realized)
  * @renderer: a `GskRenderer`
