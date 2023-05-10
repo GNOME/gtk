@@ -108,16 +108,21 @@ option('introspection',
 
 # Demos, examples and tests
 
-option('demos',
-       type: 'boolean',
-       value: true,
-       description : 'Build demo programs')
-
 option('profile',
        type: 'combo',
        choices: [ 'default', 'devel' ],
        value: 'default',
        description : 'Profile to use for demos')
+
+option('build-demos',
+       type: 'boolean',
+       value: true,
+       description : 'Build demo programs')
+
+option('demos',
+       type: 'boolean',
+       value: true,
+       deprecated: 'build-demos')
 
 option('build-testsuite',
        type: 'boolean',
