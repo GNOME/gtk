@@ -1,5 +1,5 @@
 project('gtk', 'c',
-        version: '4.11.2',
+        version: '4.11.3',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
