@@ -187,7 +187,7 @@
                 "--libdir=/app/lib",
                 "-Dvulkan=disabled",
                 "-Dbuildtype=debugoptimized",
-                "-Dprofile=devel"
+                "-Ddemo-profile=devel"
             ],
             "sources" : [
                 {

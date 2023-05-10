@@ -108,7 +108,7 @@ option('introspection',
 
 # Demos, examples and tests
 
-option('profile',
+option('demo-profile',
        type: 'combo',
        choices: [ 'default', 'devel' ],
        value: 'default',
@@ -118,6 +118,12 @@ option('build-demos',
        type: 'boolean',
        value: true,
        description : 'Build demo programs')
+
+option('profile',
+       type: 'combo',
+       choices: [ 'default', 'devel' ],
+       value: 'default',
+       deprecated: 'demo-profile')
 
 option('demos',
        type: 'boolean',
