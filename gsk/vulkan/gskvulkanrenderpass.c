@@ -1009,21 +1009,24 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                                          GskVulkanUploader     *uploader,
                                          VkSemaphore            semaphore,
                                          GskRenderNode         *node,
+                                         const graphene_vec2_t *scale,
                                          const graphene_rect_t *viewport)
 {
   graphene_rect_t view;
   cairo_region_t *clip;
   GskVulkanRenderPass *pass;
   GskVulkanImage *result;
+  float scale_x, scale_y;
 
+  scale_x = graphene_vec2_get_x (scale);
+  scale_y = graphene_vec2_get_y (scale);
   view = GRAPHENE_RECT_INIT (viewport->origin.x,
                              viewport->origin.y,
-                             ceil (viewport->size.width),
-                             ceil (viewport->size.height));
+                             ceil (scale_x * viewport->size.width),
+                             ceil (scale_y * viewport->size.height));
 
   result = gsk_vulkan_image_new_for_offscreen (vulkan,
-                                               view.size.width,
-                                               view.size.height);
+                                               view.size.width, view.size.height);
 
 #ifdef G_ENABLE_DEBUG
   {
@@ -1042,7 +1045,7 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
 
   pass = gsk_vulkan_render_pass_new (vulkan,
                                      result,
-                                     graphene_vec2_one (),
+                                     scale,
                                      &view,
                                      clip,
                                      semaphore);
@@ -1119,6 +1122,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                                         uploader,
                                                         semaphore,
                                                         node,
+                                                        &self->scale,
                                                         &clipped);
       }
    }
@@ -1350,6 +1354,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                              uploader,
                                                                              semaphore,
                                                                              child,
+                                                                             &self->scale,
                                                                              child_bounds);
                 get_tex_rect (&op->render.source_rect, &op->render.node->bounds, child_bounds);
               }
