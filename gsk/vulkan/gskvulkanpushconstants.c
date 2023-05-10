@@ -15,6 +15,12 @@ struct _GskVulkanPushConstantsWire
   } common;
 };
 
+/* This is the value we know every conformant GPU must provide.
+ * See value for maxPushConstantsSize in table 55 of
+ * https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#limits-minmax
+ */
+G_STATIC_ASSERT (sizeof (GskVulkanPushConstantsWire) <= 128);
+
 void
 gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
                                 const graphene_matrix_t *mvp,
