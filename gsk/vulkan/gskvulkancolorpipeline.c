@@ -93,13 +93,14 @@ gsk_vulkan_color_pipeline_count_vertex_data (GskVulkanColorPipeline *pipeline)
 void
 gsk_vulkan_color_pipeline_collect_vertex_data (GskVulkanColorPipeline *pipeline,
                                                guchar                 *data,
+                                               const graphene_point_t *offset,
                                                const graphene_rect_t  *rect,
                                                const GdkRGBA          *color)
 {
   GskVulkanColorInstance *instance = (GskVulkanColorInstance *) data;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
+  instance->rect[0] = rect->origin.x + offset->x;
+  instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
   instance->color[0] = color->red;

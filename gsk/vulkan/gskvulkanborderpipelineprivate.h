@@ -21,6 +21,7 @@ GskVulkanPipeline *     gsk_vulkan_border_pipeline_new                  (GdkVulk
 gsize                   gsk_vulkan_border_pipeline_count_vertex_data    (GskVulkanBorderPipeline        *pipeline);
 void                    gsk_vulkan_border_pipeline_collect_vertex_data  (GskVulkanBorderPipeline        *pipeline,
                                                                          guchar                         *data,
+                                                                         const graphene_point_t         *offset,
                                                                          const GskRoundedRect           *rect,
                                                                          const float                     widths[4],
                                                                          const GdkRGBA                   colors[4]);

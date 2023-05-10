@@ -106,16 +106,17 @@ gsk_vulkan_blend_mode_pipeline_count_vertex_data (GskVulkanBlendModePipeline *pi
 
 void
 gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *pipeline,
-                                                    guchar                *data,
-                                                    const graphene_rect_t *bounds,
-                                                    const graphene_rect_t *start_tex_rect,
-                                                    const graphene_rect_t *end_tex_rect,
-                                                    GskBlendMode blend_mode)
+                                                    guchar                     *data,
+                                                    const graphene_point_t     *offset,
+                                                    const graphene_rect_t      *bounds,
+                                                    const graphene_rect_t      *start_tex_rect,
+                                                    const graphene_rect_t      *end_tex_rect,
+                                                    GskBlendMode                blend_mode)
 {
   GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) data;
 
-  instance->rect[0] = bounds->origin.x;
-  instance->rect[1] = bounds->origin.y;
+  instance->rect[0] = bounds->origin.x + offset->x;
+  instance->rect[1] = bounds->origin.y + offset->y;
   instance->rect[2] = bounds->size.width;
   instance->rect[3] = bounds->size.height;
 

@@ -98,16 +98,17 @@ gsk_vulkan_blur_pipeline_count_vertex_data (GskVulkanBlurPipeline *pipeline)
 }
 
 void
-gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline *pipeline,
-                                              guchar                *data,
-                                              const graphene_rect_t *rect,
-                                              const graphene_rect_t *tex_rect,
-                                              double                 blur_radius)
+gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline  *pipeline,
+                                              guchar                 *data,
+                                              const graphene_point_t *offset,
+                                              const graphene_rect_t  *rect,
+                                              const graphene_rect_t  *tex_rect,
+                                              double                  blur_radius)
 {
   GskVulkanBlurInstance *instance = (GskVulkanBlurInstance *) data;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
+  instance->rect[0] = rect->origin.x + offset->x;
+  instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
   instance->tex_rect[0] = tex_rect->origin.x;

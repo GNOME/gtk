@@ -28,6 +28,7 @@ gboolean                 gsk_rounded_rect_is_circular           (const GskRounde
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,
                                                                  cairo_t                  *cr);
 void                     gsk_rounded_rect_to_float              (const GskRoundedRect     *self,
+                                                                 const graphene_point_t   *offset,
                                                                  float                     rect[12]);
 
 gboolean                 gsk_rounded_rect_equal                 (gconstpointer             rect1,

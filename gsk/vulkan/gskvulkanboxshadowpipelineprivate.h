@@ -21,6 +21,7 @@ GskVulkanPipeline *     gsk_vulkan_box_shadow_pipeline_new              (GdkVulk
 gsize                   gsk_vulkan_box_shadow_pipeline_count_vertex_data (GskVulkanBoxShadowPipeline    *pipeline);
 void                    gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GskVulkanBoxShadowPipeline  *pipeline,
                                                                          guchar                         *data,
+                                                                         const graphene_point_t         *offset,
                                                                          const GskRoundedRect           *outline,
                                                                          const GdkRGBA                  *color,
                                                                          float                           dx,

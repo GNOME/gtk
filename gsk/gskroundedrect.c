@@ -766,13 +766,14 @@ gsk_rounded_rect_path (const GskRoundedRect *self,
  * only look at the last vec4 if they have to.
  */
 void
-gsk_rounded_rect_to_float (const GskRoundedRect *self,
-                           float                 rect[12])
+gsk_rounded_rect_to_float (const GskRoundedRect   *self,
+                           const graphene_point_t *offset,
+                           float                   rect[12])
 {
   guint i;
 
-  rect[0] = self->bounds.origin.x;
-  rect[1] = self->bounds.origin.y;
+  rect[0] = self->bounds.origin.x + offset->x;
+  rect[1] = self->bounds.origin.y + offset->y;
   rect[2] = self->bounds.size.width;
   rect[3] = self->bounds.size.height;
 

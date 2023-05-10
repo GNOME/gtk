@@ -176,6 +176,7 @@ gsk_vulkan_linear_gradient_pipeline_count_vertex_data (GskVulkanLinearGradientPi
 void
 gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradientPipeline *pipeline,
                                                          guchar                    *data,
+                                                         const graphene_point_t    *offset,
                                                          const graphene_rect_t     *rect,
                                                          const graphene_point_t    *start,
                                                          const graphene_point_t    *end,
@@ -191,14 +192,14 @@ gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradient
       g_warning ("Only %u color stops supported.", GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
       n_stops = GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS;
     }
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
+  instance->rect[0] = rect->origin.x + offset->x;
+  instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->start[0] = start->x;
-  instance->start[1] = start->y;
-  instance->end[0] = end->x;
-  instance->end[1] = end->y;
+  instance->start[0] = start->x + offset->x;
+  instance->start[1] = start->y + offset->y;
+  instance->end[0] = end->x + offset->x;
+  instance->end[1] = end->y + offset->y;
   instance->repeating = repeating;
   instance->stop_count = n_stops;
   for (i = 0; i < n_stops; i++)

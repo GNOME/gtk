@@ -63,6 +63,7 @@ struct _GskVulkanOpRender
 {
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
+  graphene_point_t     offset; /* offset of the node */
   GskVulkanPipeline   *pipeline; /* pipeline to use */
   GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
   GskVulkanImage      *source; /* source image to render */
@@ -79,6 +80,7 @@ struct _GskVulkanOpText
 {
   GskVulkanOpType      type;
   GskRenderNode       *node; /* node that's the source of this op */
+  graphene_point_t     offset; /* offset of the node */
   GskVulkanPipeline   *pipeline; /* pipeline to use */
   GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
   GskVulkanImage      *source; /* source image to render */
@@ -117,6 +119,7 @@ struct _GskVulkanRenderPass
   cairo_region_t *clip;
 
   graphene_vec2_t scale;
+  graphene_point_t offset;
 
   VkRenderPass render_pass;
   VkSemaphore signal_semaphore;
@@ -247,7 +250,8 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass          *self,
                                           GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   switch (constants->clip.type)
@@ -321,7 +325,8 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass          *self,
                                        GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
   GskVulkanPipelineType pipeline_type;
 
@@ -349,7 +354,8 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_linear_gradient_node_get_n_color_stops (node) > GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS)
@@ -381,7 +387,8 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -408,7 +415,8 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -435,7 +443,8 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass          *self
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
@@ -464,7 +473,8 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass          *sel
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
@@ -492,11 +502,13 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
                                            GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
   GskRenderNode *child;
   GskTransform *transform;
   graphene_vec2_t old_scale;
+  graphene_point_t old_offset;
   float scale_x;
   float scale_y;
   graphene_vec2_t scale;
@@ -506,14 +518,23 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
     FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
+  child = gsk_transform_node_get_child (node);
   transform = gsk_transform_node_get_transform (node);
 
   switch (gsk_transform_get_category (transform))
     {
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      scale_x = scale_y = 1;
-      break;
+      {
+        float dx, dy;
+        gsk_transform_to_translate (transform, &dx, &dy);
+        self->offset.x += dx;
+        self->offset.y += dy;
+        gsk_vulkan_render_pass_add_node (self, render, constants, child);
+        self->offset.x -= dx;
+        self->offset.y -= dy;
+      }
+      return TRUE;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
@@ -562,13 +583,16 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
       break;
     }
 
-  child = gsk_transform_node_get_child (node);
+  transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset),
+                                       transform);
   if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
     FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
 
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   g_array_append_val (self->render_ops, op);
 
+  old_offset = self->offset;
+  self->offset = *graphene_point_zero ();
   graphene_vec2_init_from_vec2 (&old_scale, &self->scale);
   graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
   graphene_vec2_multiply (&self->scale, &scale, &self->scale);
@@ -579,6 +603,9 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   g_array_append_val (self->render_ops, op);
 
   graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
+  self->offset = old_offset;
+
+  gsk_transform_unref (transform);
 
   return TRUE;
 }
@@ -591,7 +618,8 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -618,7 +646,8 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass          *self
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -644,10 +673,16 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass          *self,
                                       GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
+  graphene_rect_t clip;
 
-  if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, gsk_clip_node_get_clip (node)))
+  graphene_rect_offset_r (gsk_clip_node_get_clip (node),
+                          self->offset.x, self->offset.y,
+                          &clip);
+
+  if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, &clip))
     FALLBACK ("Failed to find intersection between clip of type %u and rectangle", constants->clip.type);
 
   if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
@@ -671,12 +706,15 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass          *self
                                               GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
+  GskRoundedRect clip;
 
-  if (!gsk_vulkan_push_constants_intersect_rounded (&op.constants.constants,
-                                                    constants,
-                                                    gsk_rounded_clip_node_get_clip (node)))
+  clip = *gsk_rounded_clip_node_get_clip (node);
+  gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
+
+  if (!gsk_vulkan_push_constants_intersect_rounded (&op.constants.constants, constants, &clip))
     FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", constants->clip.type);
 
   if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
@@ -701,7 +739,8 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
@@ -731,7 +770,8 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -757,7 +797,8 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass          *self,
                                             GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
   GskVulkanPipelineType pipeline_type;
 
@@ -784,7 +825,8 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
                                       GskRenderNode                *node)
 {
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
   GskVulkanPipelineType pipeline_type;
   const PangoGlyphInfo *glyphs;
@@ -877,7 +919,8 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass          *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
-    .render.node = node
+    .render.node = node,
+    .render.offset = self->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -1001,6 +1044,8 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
   g_array_append_val (self->render_ops, op);
 
   gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, node);
+
+  self->offset = GRAPHENE_POINT_INIT (0, 0);
 }
 
 static GskVulkanImage *
@@ -1207,13 +1252,17 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   if (op->type == GSK_VULKAN_OP_FALLBACK_CLIP)
     {
       cairo_rectangle (cr,
-                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
-                       op->clip.bounds.size.width, op->clip.bounds.size.height);
+                       op->clip.bounds.origin.x - op->offset.x,
+                       op->clip.bounds.origin.y - op->offset.y,
+                       op->clip.bounds.size.width,
+                       op->clip.bounds.size.height);
       cairo_clip (cr);
     }
   else if (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP)
     {
+      cairo_translate (cr, - op->offset.x, - op->offset.y);
       gsk_rounded_rect_path (&op->clip, cr);
+      cairo_translate (cr, op->offset.x, op->offset.y);
       cairo_clip (cr);
     }
   else
@@ -1227,8 +1276,10 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   if (GSK_RENDERER_DEBUG_CHECK (gsk_vulkan_render_get_renderer (render), FALLBACK))
     {
       cairo_rectangle (cr,
-                       op->clip.bounds.origin.x, op->clip.bounds.origin.y,
-                       op->clip.bounds.size.width, op->clip.bounds.size.height);
+                       op->clip.bounds.origin.x - op->offset.x,
+                       op->clip.bounds.origin.y - op->offset.y,
+                       op->clip.bounds.size.width,
+                       op->clip.bounds.size.height);
       if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
         cairo_set_source_rgba (cr, 0.3, 0, 1, 0.25);
       else
@@ -1579,6 +1630,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                              data + n_bytes + offset,
+                                                             &op->render.offset,
                                                              &op->render.node->bounds,
                                                              &op->render.source_rect);
             n_bytes += op->render.vertex_count;
@@ -1590,6 +1642,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                              data + n_bytes + offset,
+                                                             &op->render.offset,
                                                              &op->render.node->bounds,
                                                              &op->render.source_rect);
             n_bytes += op->render.vertex_count;
@@ -1607,7 +1660,10 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           gsk_text_node_get_num_glyphs (op->text.node),
                                                           gsk_text_node_get_glyphs (op->text.node, NULL),
                                                           gsk_text_node_get_color (op->text.node),
-                                                          gsk_text_node_get_offset (op->text.node),
+                                                          &GRAPHENE_POINT_INIT (
+                                                            gsk_text_node_get_offset (op->text.node)->x + op->render.offset.x,
+                                                            gsk_text_node_get_offset (op->text.node)->y + op->render.offset.y
+                                                          ),
                                                           op->text.start_glyph,
                                                           op->text.num_glyphs,
                                                           op->text.scale);
@@ -1625,7 +1681,10 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 (PangoFont *)gsk_text_node_get_font (op->text.node),
                                                                 gsk_text_node_get_num_glyphs (op->text.node),
                                                                 gsk_text_node_get_glyphs (op->text.node, NULL),
-                                                                gsk_text_node_get_offset (op->text.node),
+                                                                &GRAPHENE_POINT_INIT (
+                                                                  gsk_text_node_get_offset (op->text.node)->x + op->render.offset.x,
+                                                                  gsk_text_node_get_offset (op->text.node)->y + op->render.offset.y
+                                                                ),
                                                                 op->text.start_glyph,
                                                                 op->text.num_glyphs,
                                                                 op->text.scale);
@@ -1638,6 +1697,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
+                                                           &op->render.offset,
                                                            &op->render.node->bounds,
                                                            gsk_color_node_get_color (op->render.node));
             n_bytes += op->render.vertex_count;
@@ -1649,6 +1709,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline),
                                                                      data + n_bytes + offset,
+                                                                     &op->render.offset,
                                                                      &op->render.node->bounds,
                                                                      gsk_linear_gradient_node_get_start (op->render.node),
                                                                      gsk_linear_gradient_node_get_end (op->render.node),
@@ -1676,6 +1737,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
 
             gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
                                                             data + n_bytes + offset,
+                                                            &op->render.offset,
                                                             &op->render.node->bounds,
                                                             &op->render.source_rect,
                                                             &color_matrix,
@@ -1689,6 +1751,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_blur_pipeline_collect_vertex_data (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline),
                                                           data + n_bytes + offset,
+                                                          &op->render.offset,
                                                           &op->render.node->bounds,
                                                           &op->render.source_rect,
                                                           gsk_blur_node_get_radius (op->render.node));
@@ -1701,6 +1764,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
                                                             data + n_bytes + offset,
+                                                            &op->render.offset,
                                                             &op->render.node->bounds,
                                                             &op->render.source_rect,
                                                             gsk_color_matrix_node_get_color_matrix (op->render.node),
@@ -1714,6 +1778,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
                                                             data + n_bytes + offset,
+                                                            &op->render.offset,
                                                             gsk_border_node_get_outline (op->render.node),
                                                             gsk_border_node_get_widths (op->render.node),
                                                             gsk_border_node_get_colors (op->render.node));
@@ -1726,6 +1791,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
+                                                                &op->render.offset,
                                                                 gsk_inset_shadow_node_get_outline (op->render.node),
                                                                 gsk_inset_shadow_node_get_color (op->render.node),
                                                                 gsk_inset_shadow_node_get_dx (op->render.node),
@@ -1741,6 +1807,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
+                                                                &op->render.offset,
                                                                 gsk_outset_shadow_node_get_outline (op->render.node),
                                                                 gsk_outset_shadow_node_get_color (op->render.node),
                                                                 gsk_outset_shadow_node_get_dx (op->render.node),
@@ -1756,6 +1823,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GSK_VULKAN_CROSS_FADE_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
+                                                                &op->render.offset,
                                                                 &op->render.node->bounds,
                                                                 &op->render.source_rect,
                                                                 &op->render.source2_rect,
@@ -1769,6 +1837,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_MODE_PIPELINE (op->render.pipeline),
                                                                 data + n_bytes + offset,
+                                                                &op->render.offset,
                                                                 &op->render.node->bounds,
                                                                 &op->render.source_rect,
                                                                 &op->render.source2_rect,

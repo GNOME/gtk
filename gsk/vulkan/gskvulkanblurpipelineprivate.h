@@ -20,6 +20,7 @@ GskVulkanPipeline *     gsk_vulkan_blur_pipeline_new                   (GdkVulka
 gsize                   gsk_vulkan_blur_pipeline_count_vertex_data     (GskVulkanBlurPipeline   *pipeline);
 void                    gsk_vulkan_blur_pipeline_collect_vertex_data   (GskVulkanBlurPipeline   *pipeline,
                                                                         guchar                  *data,
+                                                                        const graphene_point_t  *offset,
                                                                         const graphene_rect_t   *rect,
                                                                         const graphene_rect_t   *tex_rect,
                                                                         double                   radius);

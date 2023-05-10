@@ -152,8 +152,15 @@ test_to_float (void)
                          &GRAPHENE_SIZE_INIT (8, 9),
                          &GRAPHENE_SIZE_INIT (10, 11));
 
-  gsk_rounded_rect_to_float (&rect, flt);
+  gsk_rounded_rect_to_float (&rect, &GRAPHENE_POINT_INIT(0, 0), flt);
   g_assert_true (flt[0] == 0. && flt[1] == 11. && flt[2] == 22. && flt[3] == 33.);
+  g_assert_true (flt[4] == 4. && flt[5] == 6.);
+  g_assert_true (flt[6] == 8. && flt[7] == 10.);
+  g_assert_true (flt[8] == 5. && flt[9] == 7.);
+  g_assert_true (flt[10] == 9. && flt[11] == 11.);
+
+  gsk_rounded_rect_to_float (&rect, &GRAPHENE_POINT_INIT(100, 200), flt);
+  g_assert_true (flt[0] == 100. && flt[1] == 211. && flt[2] == 22. && flt[3] == 33.);
   g_assert_true (flt[4] == 4. && flt[5] == 6.);
   g_assert_true (flt[6] == 8. && flt[7] == 10.);
   g_assert_true (flt[8] == 5. && flt[9] == 7.);

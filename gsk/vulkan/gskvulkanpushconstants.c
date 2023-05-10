@@ -78,7 +78,7 @@ gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire   *wire,
                                      const GskVulkanPushConstants *self)
 {
   graphene_matrix_to_float (&self->mvp, wire->common.mvp);
-  gsk_rounded_rect_to_float (&self->clip.rect, wire->common.clip);
+  gsk_rounded_rect_to_float (&self->clip.rect, graphene_point_zero (), wire->common.clip);
 }
 
 void
