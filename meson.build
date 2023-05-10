@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.60.0',
+        meson_version : '>= 0.63.0',
         license: 'LGPL-2.1-or-later')
 
 # keep these numbers in sync with wrap files where there exist
