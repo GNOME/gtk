@@ -1,5 +1,5 @@
 gen_demo_header = find_program('../build-aux/meson/gen-demo-header.py')
-demo_profile = get_option('profile')
+demo_profile = get_option('demo-profile')
 
 demo_conf_h = declare_dependency(
   sources: custom_target('demo-header',

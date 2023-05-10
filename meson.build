@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.60.0',
+        meson_version : '>= 0.63.0',
         license: 'LGPL-2.1-or-later')
 
 # keep these numbers in sync with wrap files where there exist
@@ -753,7 +753,7 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
-if get_option('demos')
+if get_option('build-demos')
   subdir('demos')
 endif
 subdir('tools')
@@ -860,7 +860,7 @@ if not meson.is_cross_build()
   gnome.post_install(
     glib_compile_schemas: true,
     gio_querymodules: gio_module_dirs,
-    gtk_update_icon_cache: get_option('demos'),
+    gtk_update_icon_cache: get_option('build-demos'),
   )
 else
   message('Not executing post-install steps automatically when cross compiling')
@@ -901,7 +901,7 @@ summary('Documentation', get_option('gtk_doc'), section: 'Build')
 summary('Man pages', get_option('man-pages'), section: 'Build')
 summary('Testsuite', get_option('build-testsuite'), section: 'Build')
 summary('Tests', get_option('build-tests'), section: 'Build')
-summary('Demos', get_option('demos'), section: 'Build')
+summary('Demos', get_option('build-demos'), section: 'Build')
 summary('Examples', get_option('build-examples'), section: 'Build')
 
 # Directories
