@@ -264,7 +264,8 @@ gsk_gl_driver_dispose (GObject *object)
       g_clear_object (&self->command_queue);
     }
 
-  if (self->autorelease_framebuffers->len > 0)
+  if (self->autorelease_framebuffers != NULL &&
+      self->autorelease_framebuffers->len > 0)
     {
       glDeleteFramebuffers (self->autorelease_framebuffers->len,
                             (GLuint *)(gpointer)self->autorelease_framebuffers->data);
