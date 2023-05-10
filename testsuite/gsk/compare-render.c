@@ -480,5 +480,7 @@ main (int argc, char **argv)
 
   gsk_render_node_unref (node);
 
+  gdk_display_close (gdk_display_get_default ());
+
   return success ? 0 : 1;
 }
