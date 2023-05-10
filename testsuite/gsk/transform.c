@@ -406,6 +406,10 @@ test_print_parse (void)
             }
         }
     }
+
+  ret = gsk_transform_parse ("rotate(45);", &parsed);
+  g_assert_false (ret);
+  g_assert_null (parsed);
 }
 
 static void
@@ -735,16 +739,37 @@ test_to_2d_components (void)
 
   gsk_transform_unref (transform);
   gsk_transform_unref (transform2);
+
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (2, 3));
+
+  gsk_transform_to_2d_components (transform,
+                                  &skew_x, &skew_y,
+                                  &scale_x, &scale_y,
+                                  &angle,
+                                  &dx, &dy);
+  g_assert_cmpfloat_with_epsilon (skew_x, 0, 0.0001);
+  g_assert_cmpfloat_with_epsilon (skew_y, 0, 0.0001);
+  g_assert_cmpfloat_with_epsilon (scale_x, 1, 0.0001);
+  g_assert_cmpfloat_with_epsilon (scale_y, 1, 0.0001);
+  g_assert_cmpfloat_with_epsilon (angle, 0, 0.0001);
+  g_assert_cmpfloat_with_epsilon (dx, 2, 0.0001);
+  g_assert_cmpfloat_with_epsilon (dy, 3, 0.0001);
+
+  gsk_transform_unref (transform);
 }
 
 static void
 test_transform_point (void)
 {
-  GskTransform *t, *t2;
+  GskTransform *t, *t2, *t3;
   graphene_point_t p;
 
   t = gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (1, 2)), 2, 2);
   t2 = gsk_transform_translate (gsk_transform_scale (NULL, 2, 2), &GRAPHENE_POINT_INIT (1, 2));
+  t3 = gsk_transform_rotate (NULL, 90);
+
+  gsk_transform_transform_point (NULL, &GRAPHENE_POINT_INIT (1,1), &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (1, 1)));
 
   gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (1,1), &p);
   g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (3, 4)));
@@ -752,14 +777,44 @@ test_transform_point (void)
   gsk_transform_transform_point (t2, &GRAPHENE_POINT_INIT (1,1), &p);
   g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (4, 6)));
 
+  gsk_transform_transform_point (t3, &GRAPHENE_POINT_INIT (2,1), &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (-1, 2)));
+
   gsk_transform_unref (t);
   gsk_transform_unref (t2);
+  gsk_transform_unref (t3);
+}
+
+static void
+test_scale_transform (void)
+{
+  GskTransform *t1, *t2;
+  char *string;
+  gboolean res;
+  GskTransform *x;
+
+  t1 = gsk_transform_scale (NULL, 4, 9);
+  t2 = gsk_transform_scale (gsk_transform_scale (NULL, 2, 3), 2, 3);
+
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  g_assert_true (gsk_transform_equal (t1, t2));
+
+  string = gsk_transform_to_string (t1);
+  res = gsk_transform_parse (string, &x);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_equal (t1, x));
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+  g_free (string);
+  gsk_transform_unref (x);
 }
 
 static void
 test_skew_transform (void)
 {
-  GskTransform *t1, *t2, *t3;
+  GskTransform *t1, *t2, *t3, *t4;
   char *string;
   gboolean res;
   GskTransform *x;
@@ -767,6 +822,7 @@ test_skew_transform (void)
   t1 = gsk_transform_skew (NULL, 30, 60);
   t2 = gsk_transform_skew (NULL, 0, 30);
   t3 = gsk_transform_skew (NULL, 0, -30);
+  t4 = gsk_transform_skew (NULL, 30, 0);
 
   g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
   g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
@@ -779,12 +835,30 @@ test_skew_transform (void)
   res = gsk_transform_parse (string, &x);
   g_assert_true (res);
   g_assert_true (gsk_transform_equal (t1, x));
+  g_free (string);
+  gsk_transform_unref (x);
+
+  string = gsk_transform_to_string (t3);
+  res = gsk_transform_parse (string, &x);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_equal (t3, x));
+  g_free (string);
+  gsk_transform_unref (x);
+
+  string = gsk_transform_to_string (t4);
+  res = gsk_transform_parse (string, &x);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_equal (t4, x));
+  g_free (string);
+  gsk_transform_unref (x);
+
+  t3 = gsk_transform_transform (t3, t4);
+  g_assert_true (gsk_transform_get_category (t3) == GSK_TRANSFORM_CATEGORY_2D);
 
   gsk_transform_unref (t1);
   gsk_transform_unref (t2);
   gsk_transform_unref (t3);
-  g_free (string);
-  gsk_transform_unref (x);
+  gsk_transform_unref (t4);
 }
 
 static void
@@ -811,6 +885,7 @@ static void
 test_rotate_transform (void)
 {
   GskTransform *t1, *t2, *t3;
+  graphene_vec3_t vec;
 
   t1 = gsk_transform_rotate (NULL, 60);
   t2 = gsk_transform_rotate (NULL, 20);
@@ -825,6 +900,11 @@ test_rotate_transform (void)
   t1 = gsk_transform_invert (t1);
   t3 = gsk_transform_rotate (NULL, -60);
   g_assert_true (gsk_transform_equal (t1, t3));
+
+  gsk_transform_unref (t2);
+  t2 = gsk_transform_rotate_3d (NULL, -60, graphene_vec3_init (&vec, 0, 0, 1));
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_true (gsk_transform_equal (t1, t2));
 
   gsk_transform_unref (t1);
   gsk_transform_unref (t2);
@@ -851,6 +931,42 @@ test_rotate3d_transform (void)
   gsk_transform_unref (t2);
 }
 
+static void
+test_matrix_transform (void)
+{
+  GskTransform *t1, *t2;
+  float xx, yx, xy, yy, dx, dy;
+  graphene_matrix_t m;
+
+  if (!gsk_transform_parse ("matrix(2, 0, 0, 3, 1, -1)", &t1))
+    g_assert_not_reached ();
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+
+  gsk_transform_to_2d (t1, &xx, &yx, &xy, &yy, &dx, &dy);
+  g_assert_cmpfloat (xx, ==, 2.f);
+  g_assert_cmpfloat (yx, ==, 0.f);
+  g_assert_cmpfloat (xy, ==, 0.f);
+  g_assert_cmpfloat (yy, ==, 3.f);
+  g_assert_cmpfloat (dx, ==, 1.f);
+  g_assert_cmpfloat (dy, ==, -1.f);
+
+  graphene_matrix_init_from_float (&m,
+                                   (const float[]) { 2.f, 0.f, 0.f, 0.f,
+                                                     0.f, 3.f, 0.f, 0.f,
+                                                     0.f, 0.f, 1.f, 0.f,
+                                                     1., -1.f, 0.f, 1.f});
+  t2 = gsk_transform_matrix (NULL, &m);
+
+  g_assert_true (gsk_transform_equal (t1, t2));
+
+  t1 = gsk_transform_invert (t1);
+  t2 = gsk_transform_transform (t2, t1);
+  graphene_assert_fuzzy_transform_equal (t2, NULL, EPSILON);
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -869,10 +985,12 @@ main (int   argc,
   g_test_add_func ("/transform/point", test_transform_point);
   g_test_add_func ("/transform/to-2d", test_to_2d);
   g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
+  g_test_add_func ("/transform/scale", test_scale_transform);
   g_test_add_func ("/transform/skew", test_skew_transform);
   g_test_add_func ("/transform/perspective", test_perspective_transform);
   g_test_add_func ("/transform/rotate", test_rotate_transform);
   g_test_add_func ("/transform/rotate3d", test_rotate3d_transform);
+  g_test_add_func ("/transform/matrix", test_matrix_transform);
 
   return g_test_run ();
 }
