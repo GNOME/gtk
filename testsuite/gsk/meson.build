@@ -31,6 +31,7 @@ compare_render_tests = [
   'clipped-repeat-3d-ngl',
   'clipped_rounded_clip',
   'clip-nested1',
+  'clip-translate-offscreen',
   'color-blur0',
   'color-matrix-identity',
   'color-matrix-parsing',
