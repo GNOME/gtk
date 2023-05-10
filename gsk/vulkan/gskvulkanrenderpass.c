@@ -116,8 +116,7 @@ struct _GskVulkanRenderPass
   graphene_rect_t viewport;
   cairo_region_t *clip;
 
-  float scale_x;
-  float scale_y;
+  graphene_vec2_t scale;
 
   VkRenderPass render_pass;
   VkSemaphore signal_semaphore;
@@ -131,13 +130,12 @@ static GQuark texture_pixels_quark;
 #endif
 
 GskVulkanRenderPass *
-gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
-                            GskVulkanImage    *target,
-                            float              scale_x,
-                            float              scale_y,
-                            graphene_rect_t   *viewport,
-                            cairo_region_t    *clip,
-                            VkSemaphore        signal_semaphore)
+gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
+                            GskVulkanImage        *target,
+                            const graphene_vec2_t *scale,
+                            const graphene_rect_t *viewport,
+                            cairo_region_t        *clip,
+                            VkSemaphore            signal_semaphore)
 {
   GskVulkanRenderPass *self;
   VkImageLayout final_layout;
@@ -149,8 +147,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->target = g_object_ref (target);
   self->clip = cairo_region_copy (clip);
   self->viewport = *viewport;
-  self->scale_x = scale_x;
-  self->scale_y = scale_y;
+  graphene_vec2_init_from_vec2 (&self->scale, scale);
 
   if (signal_semaphore != VK_NULL_HANDLE) // this is a dependent pass
     final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -499,10 +496,10 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   };
   GskRenderNode *child;
   GskTransform *transform;
-  float new_scale_x = self->scale_x;
-  float new_scale_y = self->scale_y;
-  float old_scale_x;
-  float old_scale_y;
+  graphene_vec2_t old_scale;
+  float scale_x;
+  float scale_y;
+  graphene_vec2_t scale;
 
 #if 0
  if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
@@ -515,12 +512,13 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
     {
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      scale_x = scale_y = 1;
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
         float dx, dy;
-        gsk_transform_to_affine (transform, &new_scale_x, &new_scale_y, &dx, &dy);
+        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
       }
       break;
 
@@ -531,8 +529,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
         gsk_transform_to_2d (transform,
                              &xx, &xy, &yx, &yy, &dx, &dy);
 
-        new_scale_x = sqrtf (xx * xx + xy * xy);
-        new_scale_y = sqrtf (yx * yx + yy * yy);
+        scale_x = sqrtf (xx * xx + xy * xy);
+        scale_y = sqrtf (yx * yx + yy * yy);
       }
       break;
 
@@ -544,19 +542,19 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
         graphene_matrix_t matrix;
         graphene_vec4_t perspective;
         graphene_vec3_t translation;
-        graphene_vec3_t scale;
+        graphene_vec3_t matrix_scale;
         graphene_vec3_t shear;
 
         gsk_transform_to_matrix (transform, &matrix);
         graphene_matrix_decompose (&matrix,
                                    &translation,
-                                   &scale,
+                                   &matrix_scale,
                                    &rotation,
                                    &shear,
                                    &perspective);
 
-        new_scale_x = graphene_vec3_get_x (&scale);
-        new_scale_y = graphene_vec3_get_y (&scale);
+        scale_x = graphene_vec3_get_x (&matrix_scale);
+        scale_y = graphene_vec3_get_y (&matrix_scale);
       }
       break;
 
@@ -564,25 +562,23 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
       break;
     }
 
-  old_scale_x = self->scale_x;
-  old_scale_y = self->scale_y;
-
-  self->scale_x = new_scale_x;
-  self->scale_y = new_scale_y;
-
   child = gsk_transform_node_get_child (node);
   if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
     FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
+
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
   g_array_append_val (self->render_ops, op);
+
+  graphene_vec2_init_from_vec2 (&old_scale, &self->scale);
+  graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
+  graphene_vec2_multiply (&self->scale, &scale, &self->scale);
 
   gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, child);
 
   gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
   g_array_append_val (self->render_ops, op);
 
-  self->scale_x = old_scale_x;
-  self->scale_y = old_scale_y;
+  graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
 
   return TRUE;
 }
@@ -833,7 +829,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
 
   op.text.start_glyph = 0;
   op.text.texture_index = G_MAXUINT;
-  op.text.scale = MAX (fabs (self->scale_x), fabs (self->scale_y));
+  op.text.scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
 
   x_position = 0;
   for (i = 0, count = 0; i < num_glyphs; i++)
@@ -989,7 +985,10 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
   GskVulkanOp op = { 0, };
   graphene_matrix_t projection, mvp;
 
-  graphene_matrix_init_scale (&mvp, self->scale_x, self->scale_y, 1.0);
+  graphene_matrix_init_scale (&mvp,
+                              graphene_vec2_get_x (&self->scale),
+                              graphene_vec2_get_y (&self->scale),
+                              1.0);
   graphene_matrix_init_ortho (&projection,
                               self->viewport.origin.x, self->viewport.origin.x + self->viewport.size.width,
                               self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
@@ -1043,8 +1042,7 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
 
   pass = gsk_vulkan_render_pass_new (vulkan,
                                      result,
-                                     1,
-                                     1,
+                                     graphene_vec2_one (),
                                      &view,
                                      clip,
                                      semaphore);
@@ -1172,6 +1170,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   GskRenderNode *node;
   cairo_surface_t *surface;
   cairo_t *cr;
+  float scale_x, scale_y;
 
   node = op->node;
 
@@ -1191,11 +1190,13 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   }
 #endif
 
+  scale_x = graphene_vec2_get_x (&self->scale);
+  scale_y = graphene_vec2_get_y (&self->scale);
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (node->bounds.size.width * self->scale_x),
-                                        ceil (node->bounds.size.height * self->scale_y));
-  cairo_surface_set_device_scale (surface, self->scale_x, self->scale_y);
+                                        ceil (node->bounds.size.width * scale_x),
+                                        ceil (node->bounds.size.height * scale_y));
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 

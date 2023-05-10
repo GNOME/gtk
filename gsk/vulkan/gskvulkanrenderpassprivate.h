@@ -12,9 +12,8 @@ G_BEGIN_DECLS
 
 GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context,
                                                                          GskVulkanImage         *target,
-                                                                         float                   scale_x,
-                                                                         float                   scale_y,
-                                                                         graphene_rect_t        *viewport,
+                                                                         const graphene_vec2_t  *scale,
+                                                                         const graphene_rect_t  *viewport,
                                                                          cairo_region_t         *clip,
                                                                          VkSemaphore             signal_semaphore);
 

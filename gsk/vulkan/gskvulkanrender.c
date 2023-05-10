@@ -338,11 +338,13 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
   GskVulkanRenderPass *pass;
+  graphene_vec2_t scale;
+
+  graphene_vec2_init (&scale, self->scale, self->scale);
 
   pass = gsk_vulkan_render_pass_new (self->vulkan,
                                      self->target,
-                                     self->scale,
-                                     self->scale,
+                                     &scale,
                                      &self->viewport,
                                      self->clip,
                                      VK_NULL_HANDLE);
