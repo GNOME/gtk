@@ -88,19 +88,13 @@ fedora-x86_64:
     - export PATH="$HOME/.local/bin:$PATH"
     - meson subprojects download
     - meson subprojects update --reset
-    - mkdir _install
     - meson setup
-            --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
             ${BACKEND_FLAGS}
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
-    - meson install -C _build
-    - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
-    - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
-    - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build wayland_gles
 
@@ -115,13 +109,18 @@ release-build:
     - export PATH="$HOME/.local/bin:$PATH"
     - meson subprojects download
     - meson subprojects update --reset
+    - mkdir _install
     - meson setup
+            --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
             ${BACKEND_FLAGS}
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
+    - meson install -C _build
+    - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
+    - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
 
 fedora-mingw64:
