@@ -232,6 +232,20 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_free (self);
 }
 
+static void
+gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass          *self,
+                                              GskRenderNode                *node,
+                                              const GskVulkanPushConstants *constants)
+{
+  GskVulkanOp op = {
+    .constants.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
+    .constants.node = node,
+    .constants.constants = *constants
+  };
+
+  g_array_append_val (self->render_ops, op);
+}
+
 #define FALLBACK(...) G_STMT_START { \
   GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK, __VA_ARGS__); \
   return FALSE; \
@@ -501,10 +515,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
                                            const GskVulkanPushConstants *constants,
                                            GskRenderNode                *node)
 {
-  GskVulkanOp op = {
-    .render.node = node,
-    .render.offset = self->offset,
-  };
   GskRenderNode *child;
   GskTransform *transform;
   graphene_vec2_t old_scale;
@@ -512,6 +522,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   float scale_x;
   float scale_y;
   graphene_vec2_t scale;
+  GskVulkanPushConstants new_constants;
 
 #if 0
  if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
@@ -585,11 +596,10 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
 
   transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset),
                                        transform);
-  if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, transform, &child->bounds))
+  if (!gsk_vulkan_push_constants_transform (&new_constants, constants, transform, &child->bounds))
     FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
 
-  op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
 
   old_offset = self->offset;
   self->offset = *graphene_point_zero ();
@@ -597,10 +607,9 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
   graphene_vec2_multiply (&self->scale, &scale, &self->scale);
 
-  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, child);
+  gsk_vulkan_render_pass_add_node (self, render, &new_constants, child);
 
-  gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
 
   graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
   self->offset = old_offset;
@@ -672,29 +681,24 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass          *self,
                                       const GskVulkanPushConstants *constants,
                                       GskRenderNode                *node)
 {
-  GskVulkanOp op = {
-    .render.node = node,
-    .render.offset = self->offset,
-  };
+  GskVulkanPushConstants new_constants;
   graphene_rect_t clip;
 
   graphene_rect_offset_r (gsk_clip_node_get_clip (node),
                           self->offset.x, self->offset.y,
                           &clip);
 
-  if (!gsk_vulkan_push_constants_intersect_rect (&op.constants.constants, constants, &clip))
+  if (!gsk_vulkan_push_constants_intersect_rect (&new_constants, constants, &clip))
     FALLBACK ("Failed to find intersection between clip of type %u and rectangle", constants->clip.type);
 
-  if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+  if (new_constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
-  op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
 
-  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, gsk_clip_node_get_child (node));
+  gsk_vulkan_render_pass_add_node (self, render, &new_constants, gsk_clip_node_get_child (node));
 
-  gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
 
   return TRUE;
 }
@@ -705,28 +709,23 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass          *self
                                               const GskVulkanPushConstants *constants,
                                               GskRenderNode                *node)
 {
-  GskVulkanOp op = {
-    .render.node = node,
-    .render.offset = self->offset,
-  };
+  GskVulkanPushConstants new_constants;
   GskRoundedRect clip;
 
   clip = *gsk_rounded_clip_node_get_clip (node);
   gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
 
-  if (!gsk_vulkan_push_constants_intersect_rounded (&op.constants.constants, constants, &clip))
+  if (!gsk_vulkan_push_constants_intersect_rounded (&new_constants, constants, &clip))
     FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", constants->clip.type);
 
-  if (op.constants.constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+  if (new_constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
-  op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
 
-  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, gsk_rounded_clip_node_get_child (node));
+  gsk_vulkan_render_pass_add_node (self, render, &new_constants, gsk_rounded_clip_node_get_child (node));
 
-  gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
 
   return TRUE;
 }
@@ -1025,7 +1024,7 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskVulkanRender         *render,
                             GskRenderNode           *node)
 {
-  GskVulkanOp op = { 0, };
+  GskVulkanPushConstants constants;
   graphene_matrix_t projection, mvp;
 
   graphene_matrix_init_scale (&mvp,
@@ -1039,11 +1038,10 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                               ORTHO_FAR_PLANE);
   graphene_matrix_multiply (&mvp, &projection, &mvp);
 
-  op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-  gsk_vulkan_push_constants_init (&op.constants.constants, &mvp, &self->viewport);
-  g_array_append_val (self->render_ops, op);
+  gsk_vulkan_push_constants_init (&constants, &mvp, &self->viewport);
+  gsk_vulkan_render_pass_append_push_constants (self, node, &constants);
 
-  gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, node);
+  gsk_vulkan_render_pass_add_node (self, render, &constants, node);
 
   self->offset = GRAPHENE_POINT_INIT (0, 0);
 }
