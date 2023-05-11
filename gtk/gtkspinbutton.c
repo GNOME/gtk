@@ -996,7 +996,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   GtkEventController *controller;
   GtkGesture *gesture;
-  GtkLayoutManager *layout;
 
   spin_button->adjustment = NULL;
   spin_button->timer = 0;
@@ -1011,9 +1010,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->wrap = FALSE;
   spin_button->snap_to_ticks = FALSE;
   spin_button->width_chars = -1;
-
-  layout = gtk_widget_get_layout_manager (GTK_WIDGET (spin_button));
-  gtk_box_layout_set_baseline_child (GTK_BOX_LAYOUT (layout), 1);
 
   gtk_widget_update_orientation (GTK_WIDGET (spin_button), GTK_ORIENTATION_HORIZONTAL);
 
@@ -1217,11 +1213,13 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
     {
       /* Current orientation of the box is vertical! */
       gtk_widget_insert_after (spin->up_button, GTK_WIDGET (spin), spin->down_button);
+      gtk_box_layout_set_baseline_child (layout_manager, 0);
     }
   else
     {
       /* Current orientation of the box is horizontal! */
       gtk_widget_insert_before (spin->up_button, GTK_WIDGET (spin), spin->entry);
+      gtk_box_layout_set_baseline_child (layout_manager, 1);
     }
 
   g_object_notify (G_OBJECT (spin), "orientation");

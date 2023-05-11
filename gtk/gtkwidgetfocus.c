@@ -17,6 +17,8 @@
 
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "gtkboxlayout.h"
+#include "gtkorientable.h"
 
 typedef struct _CompareInfo CompareInfo;
 
@@ -434,7 +436,29 @@ gtk_widget_focus_sort (GtkWidget        *widget,
     {
     case GTK_DIR_TAB_FORWARD:
     case GTK_DIR_TAB_BACKWARD:
-      focus_sort_tab (widget, direction, focus_order);
+      {
+        GtkLayoutManager *layout = gtk_widget_get_layout_manager (widget);
+        if (GTK_IS_BOX_LAYOUT (layout))
+          {
+            GtkOrientation orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (layout));
+            if (orientation == GTK_ORIENTATION_HORIZONTAL)
+              {
+                if (direction == GTK_DIR_TAB_FORWARD)
+                  focus_sort_left_right (widget, GTK_DIR_RIGHT, focus_order);
+                else
+                  focus_sort_left_right (widget, GTK_DIR_LEFT, focus_order);
+              }
+            else
+              {
+                if (direction == GTK_DIR_TAB_FORWARD)
+                  focus_sort_up_down (widget, GTK_DIR_DOWN, focus_order);
+                else
+                  focus_sort_up_down (widget, GTK_DIR_UP, focus_order);
+              }
+          }
+        else
+          focus_sort_tab (widget, direction, focus_order);
+      }
       break;
     case GTK_DIR_UP:
     case GTK_DIR_DOWN:
