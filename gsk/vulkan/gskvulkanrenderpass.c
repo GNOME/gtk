@@ -2253,9 +2253,11 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           for (int j = 0; j < layout_count; j++)
-            gsk_vulkan_push_constants_push (&op->constants.constants,
-                                            command_buffer,
-                                            pipeline_layout[j]);
+            gsk_vulkan_push_constants_push (command_buffer,
+                                            pipeline_layout[j],
+                                            &op->constants.constants.mvp,
+                                            &op->constants.constants.clip.rect);
+
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:

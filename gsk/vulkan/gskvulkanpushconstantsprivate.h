@@ -35,9 +35,10 @@ gboolean                gsk_vulkan_push_constants_intersect_rounded     (GskVulk
                                                                          const GskVulkanPushConstants   *src,
                                                                          const GskRoundedRect           *rect);
 
-void                    gsk_vulkan_push_constants_push                  (const GskVulkanPushConstants   *self,
-                                                                         VkCommandBuffer                 command_buffer,
-                                                                         VkPipelineLayout                pipeline_layout);
+void                    gsk_vulkan_push_constants_push                  (VkCommandBuffer                 command_buffer,
+                                                                         VkPipelineLayout                pipeline_layout,
+                                                                         const graphene_matrix_t        *mvp,
+                                                                         const GskRoundedRect           *clip);
 
 G_END_DECLS
 

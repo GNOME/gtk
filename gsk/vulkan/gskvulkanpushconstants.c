@@ -80,21 +80,23 @@ gsk_vulkan_push_constants_intersect_rounded (GskVulkanPushConstants       *self,
 }
 
 static void
-gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire   *wire,
-                                     const GskVulkanPushConstants *self)
+gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire *wire,
+                                     const graphene_matrix_t    *mvp,
+                                     const GskRoundedRect       *clip)
 {
-  graphene_matrix_to_float (&self->mvp, wire->common.mvp);
-  gsk_rounded_rect_to_float (&self->clip.rect, graphene_point_zero (), wire->common.clip);
+  graphene_matrix_to_float (mvp, wire->common.mvp);
+  gsk_rounded_rect_to_float (clip, graphene_point_zero (), wire->common.clip);
 }
 
 void
-gsk_vulkan_push_constants_push (const GskVulkanPushConstants *self,
-                                VkCommandBuffer               command_buffer,
-                                VkPipelineLayout              pipeline_layout)
+gsk_vulkan_push_constants_push (VkCommandBuffer          command_buffer,
+                                VkPipelineLayout         pipeline_layout,
+                                const graphene_matrix_t *mvp,
+                                const GskRoundedRect    *clip)
 {
   GskVulkanPushConstantsWire wire;
 
-  gsk_vulkan_push_constants_wire_init (&wire, self);
+  gsk_vulkan_push_constants_wire_init (&wire, mvp, clip);
 
   vkCmdPushConstants (command_buffer,
                       pipeline_layout,
