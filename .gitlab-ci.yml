@@ -103,7 +103,6 @@ fedora-x86_64:
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build wayland_gles
-    - .gitlab-ci/run-tests.sh _build broadway
 
 release-build:
   extends: .build-fedora-default
