@@ -172,11 +172,10 @@ const char shader1[] =
 "uniform float dots;// = 20.0;\n"
 "uniform vec2 center; //= vec2(0, 0);\n"
 "\n"
-"uniform int test1 = -2;\n"
-"uniform uint test2 = 2u;   \n"
-"uniform bool test3;\n"
-"uniform vec3 test4;\n"
-"uniform vec4 test5;\n"
+"uniform int test1;\n"
+"uniform bool test2;\n"
+"uniform vec3 test3;\n"
+"uniform vec4 test4;\n"
 "\n"
 "vec4 transition(vec2 uv) {\n"
 "  bool nextImage = distance(fract(uv * dots), vec2(0.5, 0.5)) < ( progress / distance(uv, center));\n"
@@ -228,8 +227,8 @@ test_renderer (GskRenderer *renderer)
   res = gsk_gl_shader_compile (shader, renderer, &error);
   if (GSK_IS_GL_RENDERER (renderer))
     {
-      g_assert_true (res);
       g_assert_no_error (error);
+      g_assert_true (res);
     }
   else
     {
