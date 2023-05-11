@@ -106,7 +106,7 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
       break;
 
     case GSK_VULKAN_CLIP_NONE:
-      dest->type = gsk_rounded_rect_is_circular (&dest->rect) ? GSK_VULKAN_CLIP_ROUNDED_CIRCULAR : GSK_VULKAN_CLIP_ROUNDED;
+      dest->type = gsk_rounded_rect_is_circular (rounded) ? GSK_VULKAN_CLIP_ROUNDED_CIRCULAR : GSK_VULKAN_CLIP_ROUNDED;
       gsk_rounded_rect_init_copy (&dest->rect, rounded);
       break;
 
