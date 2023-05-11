@@ -264,22 +264,19 @@ gsk_gl_driver_dispose (GObject *object)
       g_clear_object (&self->command_queue);
     }
 
-  if (self->autorelease_framebuffers->len > 0)
+  if (self->autorelease_framebuffers != NULL &&
+      self->autorelease_framebuffers->len > 0)
     {
       glDeleteFramebuffers (self->autorelease_framebuffers->len,
                             (GLuint *)(gpointer)self->autorelease_framebuffers->data);
       self->autorelease_framebuffers->len = 0;
     }
 
-  g_clear_pointer (&self->texture_pool, g_array_unref);
-
-  g_assert (!self->textures || g_hash_table_size (self->textures) == 0);
-  g_assert (!self->texture_id_to_key || g_hash_table_size (self->texture_id_to_key) == 0);
-  g_assert (!self->key_to_texture_id|| g_hash_table_size (self->key_to_texture_id) == 0);
-
   g_clear_object (&self->glyphs_library);
   g_clear_object (&self->icons_library);
   g_clear_object (&self->shadows_library);
+
+  g_clear_pointer (&self->texture_pool, g_array_unref);
 
   g_clear_pointer (&self->autorelease_framebuffers, g_array_unref);
   g_clear_pointer (&self->key_to_texture_id, g_hash_table_unref);
@@ -474,6 +471,19 @@ gsk_gl_driver_new (GskGLCommandQueue  *command_queue,
   return g_steal_pointer (&self);
 }
 
+static void
+free_driver (GskGLDriver *driver)
+{
+  g_object_run_dispose (G_OBJECT (driver));
+  g_object_unref (driver);
+}
+
+static void
+display_closed (GdkDisplay *display)
+{
+  g_object_set_data (G_OBJECT (display), "GSK_GL_DRIVER", NULL);
+}
+
 /**
  * gsk_gl_driver_for_display:
  * @display: A #GdkDisplay that is known to support GL
@@ -519,7 +529,8 @@ gsk_gl_driver_for_display (GdkDisplay  *display,
   g_object_set_data_full (G_OBJECT (display),
                           "GSK_GL_DRIVER",
                           g_object_ref (driver),
-                          g_object_unref);
+                          (GDestroyNotify) free_driver);
+  g_signal_connect (display, "closed", G_CALLBACK (display_closed), NULL);
 
 failure:
   g_clear_object (&command_queue);

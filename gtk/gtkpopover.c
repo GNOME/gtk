@@ -1017,8 +1017,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   gdk_surface_set_widget (priv->surface, NULL);
-  gdk_surface_destroy (priv->surface);
-  g_clear_object (&priv->surface);
+  g_clear_pointer (&priv->surface, gdk_surface_destroy);
 }
 
 static gboolean

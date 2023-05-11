@@ -300,8 +300,9 @@ main (int argc, char **argv)
       GdkPixbuf *pixbuf, *pixbuf2;
 
       node2 = gsk_transform_node_new (node, gsk_transform_scale (NULL, -1, 1));
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_node (node2, node_file, "-flipped.node");
 
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, node_file, "-flipped.out.png");
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
@@ -316,7 +317,6 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
-          save_node (node2, node_file, "-flipped.node");
           save_image (diff_texture, node_file, "-flipped.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -357,6 +357,8 @@ main (int argc, char **argv)
         offset_y += node_bounds.size.height;
 
       node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
+      save_node (node2, node_file, "-repeated.node");
+
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, node_file, "-repeated.out.png");
 
@@ -388,7 +390,6 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
-          save_node (node2, node_file, "-repeated.node");
           save_image (diff_texture, node_file, "-repeated.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -405,8 +406,9 @@ main (int argc, char **argv)
       GdkPixbuf *pixbuf, *pixbuf2;
 
       node2 = gsk_transform_node_new (node, gsk_transform_rotate (NULL, 90));
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_node (node2, node_file, "-rotated.node");
 
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, node_file, "-rotated.out.png");
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
@@ -421,7 +423,6 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
-          save_node (node2, node_file, "-rotated.node");
           save_image (diff_texture, node_file, "-rotated.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -451,8 +452,9 @@ main (int argc, char **argv)
       gsk_render_node_unref (mask_node);
       gsk_render_node_unref (nodes[0]);
       gsk_render_node_unref (nodes[1]);
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_node (node2, node_file, "-masked.node");
 
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, node_file, "-masked.out.png");
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
@@ -467,7 +469,6 @@ main (int argc, char **argv)
 
       if (diff_texture)
         {
-          save_node (node2, node_file, "-masked.node");
           save_image (diff_texture, node_file, "-masked.diff.png");
           g_object_unref (diff_texture);
           success = FALSE;
@@ -479,6 +480,8 @@ main (int argc, char **argv)
     }
 
   gsk_render_node_unref (node);
+
+  gdk_display_close (gdk_display_get_default ());
 
   return success ? 0 : 1;
 }

@@ -880,9 +880,9 @@ endif
 
 #### Summary ####
 
-summary('Display backends', display_backends)
-summary('Print backends', print_backends)
-summary('Media backends', media_backends)
+summary('Display backends', display_backends, section: 'Components')
+summary('Print backends', print_backends, section: 'Components')
+summary('Media backends', media_backends, section: 'Components')
 
 summary('Vulkan support', vulkan_dep.found(), section: 'Features')
 summary('Cloud support', cloudproviders_dep.found(), section: 'Features')
@@ -893,7 +893,6 @@ summary('Tracker support', tracker3_dep.found(), section: 'Features')
 summary('Compiler', cc.get_id(), section: 'Toolchain')
 summary('Linker', cc.get_linker_id(), section: 'Toolchain')
 
-# Build
 summary('Debugging', get_option('debug'), section: 'Build')
 summary('Optimization', get_option('optimization'), section: 'Build')
 summary('Introspection', build_gir, section: 'Build')
@@ -904,7 +903,6 @@ summary('Tests', get_option('build-tests'), section: 'Build')
 summary('Demos', get_option('build-demos'), section: 'Build')
 summary('Examples', get_option('build-examples'), section: 'Build')
 
-# Directories
 summary('prefix', gtk_prefix, section: 'Directories')
 summary('includedir', gtk_includedir, section: 'Directories')
 summary('libdir', gtk_libdir, section: 'Directories')

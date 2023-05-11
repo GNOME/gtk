@@ -286,7 +286,7 @@ test_compile (void)
 
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
-  g_object_unref (surface);
+  gdk_surface_destroy (surface);
   g_bytes_unref (bytes);
 }
 
