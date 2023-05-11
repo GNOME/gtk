@@ -69,9 +69,6 @@ case "${backend}" in
                 --no-suite=flaky \
                 --no-suite=gsk-compare-opengl
 
-    # don't let Broadway failures fail the run, for now
-    exit_code=0
-
     kill ${server}
     ;;
 
