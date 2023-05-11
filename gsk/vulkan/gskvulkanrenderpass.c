@@ -97,7 +97,8 @@ struct _GskVulkanOpPushConstants
 {
   GskVulkanOpType         type;
   GskRenderNode          *node; /* node that's the source of this op */
-  GskVulkanPushConstants  constants; /* new constants to push */
+  graphene_matrix_t       mvp;
+  GskRoundedRect          clip;
 };
 
 union _GskVulkanOp
@@ -240,7 +241,8 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass          *self
   GskVulkanOp op = {
     .constants.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
     .constants.node = node,
-    .constants.constants = *constants
+    .constants.mvp = constants->mvp,
+    .constants.clip = constants->clip.rect
   };
 
   g_array_append_val (self->render_ops, op);
@@ -1506,7 +1508,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          clip = &op->constants.constants.clip.rect.bounds;
+          clip = &op->constants.clip.bounds;
           break;
 
         default:
@@ -2253,8 +2255,8 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           for (int j = 0; j < layout_count; j++)
             gsk_vulkan_push_constants_push (command_buffer,
                                             pipeline_layout[j],
-                                            &op->constants.constants.mvp,
-                                            &op->constants.constants.clip.rect);
+                                            &op->constants.mvp,
+                                            &op->constants.clip);
 
           break;
 
