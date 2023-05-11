@@ -6,7 +6,7 @@
  * It demonstrates how to implement support for sections with GtkListView.
  *
  * It also shows how to quickly flatten a large tree of items into a list
- * that can be filtered to find the itmes one is looking for.
+ * that can be filtered to find the items one is looking for.
  */
 
 #include <gtk/gtk.h>
