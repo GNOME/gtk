@@ -240,8 +240,7 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);
-  gdk_surface_destroy (window->surface);
-  g_clear_object (&window->surface);
+  g_clear_pointer (&window->surface, gdk_surface_destroy);
 }
 
 

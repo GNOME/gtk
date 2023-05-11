@@ -280,8 +280,7 @@ gtk_text_handle_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (handle->surface, surface_mapped_changed, widget);
 
   gdk_surface_set_widget (handle->surface, NULL);
-  gdk_surface_destroy (handle->surface);
-  g_clear_object (&handle->surface);
+  g_clear_pointer (&handle->surface, gdk_surface_destroy);
 }
 
 static void

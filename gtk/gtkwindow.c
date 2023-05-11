@@ -4451,8 +4451,7 @@ gtk_window_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
   gdk_surface_set_widget (surface, NULL);
-  gdk_surface_destroy (surface);
-  g_clear_object (&priv->surface);
+  g_clear_pointer (&priv->surface, gdk_surface_destroy);
 }
 
 static void
