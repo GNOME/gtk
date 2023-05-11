@@ -21,64 +21,6 @@ struct _GskVulkanPushConstantsWire
  */
 G_STATIC_ASSERT (sizeof (GskVulkanPushConstantsWire) <= 128);
 
-void
-gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
-                                const graphene_matrix_t *mvp,
-                                const graphene_rect_t   *viewport)
-{
-  graphene_matrix_init_from_matrix (&constants->mvp, mvp);
-  gsk_vulkan_clip_init_empty (&constants->clip, viewport);
-}
-
-void
-gsk_vulkan_push_constants_init_copy (GskVulkanPushConstants       *self,
-                                     const GskVulkanPushConstants *src)
-{
-  *self = *src;
-}
-
-gboolean
-gsk_vulkan_push_constants_transform (GskVulkanPushConstants       *self,
-                                     const GskVulkanPushConstants *src,
-                                     GskTransform                 *transform,
-                                     const graphene_rect_t        *viewport)
-
-{
-  graphene_matrix_t matrix;
-
-  if (!gsk_vulkan_clip_transform (&self->clip, &src->clip, transform, viewport))
-    return FALSE;
-
-  gsk_transform_to_matrix (transform, &matrix);
-  graphene_matrix_multiply (&matrix, &src->mvp, &self->mvp);
-
-  return TRUE;
-}
-
-gboolean
-gsk_vulkan_push_constants_intersect_rect (GskVulkanPushConstants       *self,
-                                          const GskVulkanPushConstants *src,
-                                          const graphene_rect_t        *rect)
-{
-  if (!gsk_vulkan_clip_intersect_rect (&self->clip, &src->clip, rect))
-    return FALSE;
-
-  graphene_matrix_init_from_matrix (&self->mvp, &src->mvp);
-  return TRUE;
-}
-
-gboolean
-gsk_vulkan_push_constants_intersect_rounded (GskVulkanPushConstants       *self,
-                                             const GskVulkanPushConstants *src,
-                                             const GskRoundedRect         *rect)
-{
-  if (!gsk_vulkan_clip_intersect_rounded_rect (&self->clip, &src->clip, rect))
-    return FALSE;
-
-  graphene_matrix_init_from_matrix (&self->mvp, &src->mvp);
-  return TRUE;
-}
-
 static void
 gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire *wire,
                                      const graphene_matrix_t    *mvp,

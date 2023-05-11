@@ -29,6 +29,8 @@
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
+typedef struct _GskVulkanParseState GskVulkanParseState;
+
 typedef union _GskVulkanOp GskVulkanOp;
 typedef struct _GskVulkanOpRender GskVulkanOpRender;
 typedef struct _GskVulkanOpText GskVulkanOpText;
@@ -126,6 +128,12 @@ struct _GskVulkanRenderPass
   VkSemaphore signal_semaphore;
   GArray *wait_semaphores;
   GskVulkanBuffer *vertex_data;
+};
+
+struct _GskVulkanParseState
+{
+  graphene_matrix_t mvp;
+  GskVulkanClip     clip;
 };
 
 #ifdef G_ENABLE_DEBUG
@@ -234,15 +242,15 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 }
 
 static void
-gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass          *self,
-                                              GskRenderNode                *node,
-                                              const GskVulkanPushConstants *constants)
+gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
+                                              GskRenderNode             *node,
+                                              const GskVulkanParseState *state)
 {
   GskVulkanOp op = {
     .constants.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
     .constants.node = node,
-    .constants.mvp = constants->mvp,
-    .constants.clip = constants->clip.rect
+    .constants.mvp = state->mvp,
+    .constants.clip = state->clip.rect,
   };
 
   g_array_append_val (self->render_ops, op);
@@ -254,35 +262,35 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass          *self
 }G_STMT_END
 
 static void
-gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
-                                 GskVulkanRender               *render,
-                                 const GskVulkanPushConstants  *constants,
-                                 GskRenderNode                 *node);
+gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
+                                 GskVulkanRender           *render,
+                                 const GskVulkanParseState *state,
+                                 GskRenderNode             *node);
 
 static inline gboolean
-gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass          *self,
-                                          GskVulkanRender              *render,
-                                          const GskVulkanPushConstants *constants,
-                                          GskRenderNode                *node)
+gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
+                                          GskVulkanRender           *render,
+                                          const GskVulkanParseState *state,
+                                          GskRenderNode             *node)
 {
   GskVulkanOp op = {
     .render.node = node,
     .render.offset = self->offset,
   };
 
-  switch (constants->clip.type)
+  switch (state->clip.type)
     {
       case GSK_VULKAN_CLIP_NONE:
         op.type = GSK_VULKAN_OP_FALLBACK;
         break;
       case GSK_VULKAN_CLIP_RECT:
         op.type = GSK_VULKAN_OP_FALLBACK_CLIP;
-        gsk_rounded_rect_init_copy (&op.render.clip, &constants->clip.rect);
+        gsk_rounded_rect_init_copy (&op.render.clip, &state->clip.rect);
         break;
       case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
       case GSK_VULKAN_CLIP_ROUNDED:
         op.type = GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP;
-        gsk_rounded_rect_init_copy (&op.render.clip, &constants->clip.rect);
+        gsk_rounded_rect_init_copy (&op.render.clip, &state->clip.rect);
         break;
       case GSK_VULKAN_CLIP_ALL_CLIPPED:
       default:
@@ -297,48 +305,48 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_implode (GskVulkanRenderPass          *self,
-                                GskVulkanRender              *render,
-                                const GskVulkanPushConstants *constants,
-                                GskRenderNode                *node)
+gsk_vulkan_render_pass_implode (GskVulkanRenderPass       *self,
+                                GskVulkanRender           *render,
+                                const GskVulkanParseState *state,
+                                GskRenderNode             *node)
 {
   g_assert_not_reached ();
   return TRUE;
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_container_node (GskVulkanRenderPass          *self,
-                                           GskVulkanRender              *render,
-                                           const GskVulkanPushConstants *constants,
-                                           GskRenderNode                *node)
+gsk_vulkan_render_pass_add_container_node (GskVulkanRenderPass       *self,
+                                           GskVulkanRender           *render,
+                                           const GskVulkanParseState *state,
+                                           GskRenderNode             *node)
 {
   for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
-    gsk_vulkan_render_pass_add_node (self, render, constants, gsk_container_node_get_child (node, i));
+    gsk_vulkan_render_pass_add_node (self, render, state, gsk_container_node_get_child (node, i));
 
   return TRUE;
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_cairo_node (GskVulkanRenderPass          *self,
-                                       GskVulkanRender              *render,
-                                       const GskVulkanPushConstants *constants,
-                                       GskRenderNode                *node)
+gsk_vulkan_render_pass_add_cairo_node (GskVulkanRenderPass       *self,
+                                       GskVulkanRender           *render,
+                                       const GskVulkanParseState *state,
+                                       GskRenderNode             *node)
 {
   /* We're using recording surfaces, so drawing them to an image
    * surface and uploading them is the right thing.
    * But that's exactly what the fallback code does.
    */
   if (gsk_cairo_node_get_surface (node) != NULL)
-    return gsk_vulkan_render_pass_add_fallback_node (self, render, constants, node);
+    return gsk_vulkan_render_pass_add_fallback_node (self, render, state, node);
 
   return TRUE;
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass          *self,
-                                       GskVulkanRender              *render,
-                                       const GskVulkanPushConstants *constants,
-                                       GskRenderNode                *node)
+gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
+                                       GskVulkanRender           *render,
+                                       const GskVulkanParseState *state,
+                                       GskRenderNode             *node)
 {
   GskVulkanOp op = {
     .render.node = node,
@@ -346,14 +354,14 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass          *self,
   };
   GskVulkanPipelineType pipeline_type;
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
   else
-    FALLBACK ("Color nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Color nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_COLOR;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -363,10 +371,10 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass          *self,
-                                                           GskVulkanRender              *render,
-                                                           const GskVulkanPushConstants *constants,
-                                                           GskRenderNode                *node)
+gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass       *self,
+                                                           GskVulkanRender           *render,
+                                                           const GskVulkanParseState *state,
+                                                           GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -379,14 +387,14 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
               gsk_linear_gradient_node_get_n_color_stops (node),
               GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED;
   else
-    FALLBACK ("Linear gradient nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Linear gradient nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_LINEAR_GRADIENT;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -396,10 +404,10 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass          *self,
-                                        GskVulkanRender              *render,
-                                        const GskVulkanPushConstants *constants,
-                                        GskRenderNode                *node)
+gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
+                                        GskVulkanRender           *render,
+                                        const GskVulkanParseState *state,
+                                        GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -407,14 +415,14 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass          *self,
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED;
   else
-    FALLBACK ("Border nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Border nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_BORDER;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -424,10 +432,10 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass          *self,
-                                         GskVulkanRender              *render,
-                                         const GskVulkanPushConstants *constants,
-                                         GskRenderNode                *node)
+gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
+                                         GskVulkanRender           *render,
+                                         const GskVulkanParseState *state,
+                                         GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -435,14 +443,14 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass          *self,
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
   else
-    FALLBACK ("Texture nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Texture nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_TEXTURE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -452,10 +460,10 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass          *self,
-                                              GskVulkanRender              *render,
-                                              const GskVulkanPushConstants *constants,
-                                              GskRenderNode                *node)
+gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
+                                              GskVulkanRender           *render,
+                                              const GskVulkanParseState *state,
+                                              GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -465,14 +473,14 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass          *self
 
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for inset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  else if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP_ROUNDED;
   else
-    FALLBACK ("Inset shadow nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Inset shadow nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_INSET_SHADOW;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -482,10 +490,10 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass          *self
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass          *self,
-                                               GskVulkanRender              *render,
-                                               const GskVulkanPushConstants *constants,
-                                               GskRenderNode                *node)
+gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
+                                               GskVulkanRender           *render,
+                                               const GskVulkanParseState *state,
+                                               GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -495,14 +503,14 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass          *sel
 
   if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for outset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  else if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP_ROUNDED;
   else
-    FALLBACK ("Outset shadow nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Outset shadow nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_OUTSET_SHADOW;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -512,10 +520,10 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass          *sel
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
-                                           GskVulkanRender              *render,
-                                           const GskVulkanPushConstants *constants,
-                                           GskRenderNode                *node)
+gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
+                                           GskVulkanRender           *render,
+                                           const GskVulkanParseState *state,
+                                           GskRenderNode             *node)
 {
   GskRenderNode *child;
   GskTransform *transform;
@@ -524,7 +532,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   float scale_x;
   float scale_y;
   graphene_vec2_t scale;
-  GskVulkanPushConstants new_constants;
+  GskVulkanParseState new_state;
+  graphene_matrix_t matrix;
 
 #if 0
  if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
@@ -543,7 +552,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
         gsk_transform_to_translate (transform, &dx, &dy);
         self->offset.x += dx;
         self->offset.y += dy;
-        gsk_vulkan_render_pass_add_node (self, render, constants, child);
+        gsk_vulkan_render_pass_add_node (self, render, state, child);
         self->offset.x -= dx;
         self->offset.y -= dy;
       }
@@ -573,7 +582,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
     case GSK_TRANSFORM_CATEGORY_3D:
       {
         graphene_quaternion_t rotation;
-        graphene_matrix_t matrix;
         graphene_vec4_t perspective;
         graphene_vec3_t translation;
         graphene_vec3_t matrix_scale;
@@ -598,10 +606,14 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
 
   transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset),
                                        transform);
-  if (!gsk_vulkan_push_constants_transform (&new_constants, constants, transform, &child->bounds))
-    FALLBACK ("Transform nodes can't deal with clip type %u", constants->clip.type);
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
+  if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, transform, &child->bounds))
+    FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
+
+  gsk_transform_to_matrix (transform, &matrix);
+  graphene_matrix_multiply (&matrix, &state->mvp, &new_state.mvp);
+
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
   old_offset = self->offset;
   self->offset = *graphene_point_zero ();
@@ -609,9 +621,9 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
   graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
   graphene_vec2_multiply (&self->scale, &scale, &self->scale);
 
-  gsk_vulkan_render_pass_add_node (self, render, &new_constants, child);
+  gsk_vulkan_render_pass_add_node (self, render, &new_state, child);
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
+  gsk_vulkan_render_pass_append_push_constants (self, node, state);
 
   graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
   self->offset = old_offset;
@@ -622,10 +634,10 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass          *self,
-                                         GskVulkanRender              *render,
-                                         const GskVulkanPushConstants *constants,
-                                         GskRenderNode                *node)
+gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
+                                         GskVulkanRender           *render,
+                                         const GskVulkanParseState *state,
+                                         GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -633,14 +645,14 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass          *self,
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
   else
-    FALLBACK ("Opacity nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Opacity nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_OPACITY;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -650,10 +662,10 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass          *self,
-                                              GskVulkanRender              *render,
-                                              const GskVulkanPushConstants *constants,
-                                              GskRenderNode                *node)
+gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
+                                              GskVulkanRender           *render,
+                                              const GskVulkanParseState *state,
+                                              GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -661,14 +673,14 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass          *self
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
   else
-    FALLBACK ("Color matrix nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Color matrix nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_COLOR_MATRIX;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -678,65 +690,69 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass          *self
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass          *self,
-                                      GskVulkanRender              *render,
-                                      const GskVulkanPushConstants *constants,
-                                      GskRenderNode                *node)
+gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
+                                      GskVulkanRender           *render,
+                                      const GskVulkanParseState *state,
+                                      GskRenderNode             *node)
 {
-  GskVulkanPushConstants new_constants;
+  GskVulkanParseState new_state;
   graphene_rect_t clip;
 
   graphene_rect_offset_r (gsk_clip_node_get_clip (node),
                           self->offset.x, self->offset.y,
                           &clip);
 
-  if (!gsk_vulkan_push_constants_intersect_rect (&new_constants, constants, &clip))
-    FALLBACK ("Failed to find intersection between clip of type %u and rectangle", constants->clip.type);
+  if (!gsk_vulkan_clip_intersect_rect (&new_state.clip, &state->clip, &clip))
+    FALLBACK ("Failed to find intersection between clip of type %u and rectangle", state->clip.type);
 
-  if (new_constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+  if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
+  graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
-  gsk_vulkan_render_pass_add_node (self, render, &new_constants, gsk_clip_node_get_child (node));
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
+  gsk_vulkan_render_pass_add_node (self, render, &new_state, gsk_clip_node_get_child (node));
+
+  gsk_vulkan_render_pass_append_push_constants (self, node, state);
 
   return TRUE;
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass          *self,
-                                              GskVulkanRender              *render,
-                                              const GskVulkanPushConstants *constants,
-                                              GskRenderNode                *node)
+gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
+                                              GskVulkanRender           *render,
+                                              const GskVulkanParseState *state,
+                                              GskRenderNode             *node)
 {
-  GskVulkanPushConstants new_constants;
+  GskVulkanParseState new_state;
   GskRoundedRect clip;
 
   clip = *gsk_rounded_clip_node_get_clip (node);
   gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
 
-  if (!gsk_vulkan_push_constants_intersect_rounded (&new_constants, constants, &clip))
-    FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", constants->clip.type);
+  if (!gsk_vulkan_clip_intersect_rounded_rect (&new_state.clip, &state->clip, &clip))
+    FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", state->clip.type);
 
-  if (new_constants.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
+  if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, &new_constants);
+  graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
-  gsk_vulkan_render_pass_add_node (self, render, &new_constants, gsk_rounded_clip_node_get_child (node));
+  gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, constants);
+  gsk_vulkan_render_pass_add_node (self, render, &new_state, gsk_rounded_clip_node_get_child (node));
+
+  gsk_vulkan_render_pass_append_push_constants (self, node, state);
 
   return TRUE;
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
-                                        GskVulkanRender              *render,
-                                        const GskVulkanPushConstants *constants,
-                                        GskRenderNode                *node)
+gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
+                                        GskVulkanRender           *render,
+                                        const GskVulkanParseState *state,
+                                        GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -747,14 +763,14 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
   if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
     return TRUE;
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
   else
-    FALLBACK ("Repeat nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Repeat nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_REPEAT;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -764,10 +780,10 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass          *self,
-                                       GskVulkanRender              *render,
-                                       const GskVulkanPushConstants *constants,
-                                       GskRenderNode                *node)
+gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
+                                       GskVulkanRender           *render,
+                                       const GskVulkanParseState *state,
+                                       GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -775,14 +791,14 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass          *self,
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP_ROUNDED;
   else
-    FALLBACK ("Blend nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Blend nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_BLEND_MODE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -792,10 +808,10 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass          *self,
-                                            GskVulkanRender              *render,
-                                            const GskVulkanPushConstants *constants,
-                                            GskRenderNode                *node)
+gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
+                                            GskVulkanRender           *render,
+                                            const GskVulkanParseState *state,
+                                            GskRenderNode             *node)
 {
   GskVulkanOp op = {
     .render.node = node,
@@ -803,14 +819,14 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass          *self,
   };
   GskVulkanPipelineType pipeline_type;
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP_ROUNDED;
   else
-    FALLBACK ("Cross fade nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Cross fade nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_CROSS_FADE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -820,10 +836,10 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
-                                      GskVulkanRender              *render,
-                                      const GskVulkanPushConstants *constants,
-                                      GskRenderNode                *node)
+gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
+                                      GskVulkanRender           *render,
+                                      const GskVulkanParseState *state,
+                                      GskRenderNode             *node)
 {
   GskVulkanOp op = {
     .render.node = node,
@@ -846,26 +862,26 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
 
   if (gsk_text_node_has_color_glyphs (node))
     {
-      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+      else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+      else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED;
       else
-        FALLBACK ("Text nodes can't deal with clip type %u", constants->clip.type);
+        FALLBACK ("Text nodes can't deal with clip type %u", state->clip.type);
       op.type = GSK_VULKAN_OP_COLOR_TEXT;
     }
   else
     {
-      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+      else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP;
-      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+      else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
       else
-        FALLBACK ("Text nodes can't deal with clip type %u", constants->clip.type);
+        FALLBACK ("Text nodes can't deal with clip type %u", state->clip.type);
       op.type = GSK_VULKAN_OP_TEXT;
     }
   op.text.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -913,10 +929,10 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass          *self,
-                                      GskVulkanRender              *render,
-                                      const GskVulkanPushConstants *constants,
-                                      GskRenderNode                *node)
+gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
+                                      GskVulkanRender           *render,
+                                      const GskVulkanParseState *state,
+                                      GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -924,14 +940,14 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass          *self,
     .render.offset = self->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP;
-  else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED;
   else
-    FALLBACK ("Blur nodes can't deal with clip type %u", constants->clip.type);
+    FALLBACK ("Blur nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_BLUR;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
@@ -941,21 +957,21 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass          *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_debug_node (GskVulkanRenderPass          *self,
-                                       GskVulkanRender              *render,
-                                       const GskVulkanPushConstants *constants,
-                                       GskRenderNode                *node)
+gsk_vulkan_render_pass_add_debug_node (GskVulkanRenderPass       *self,
+                                       GskVulkanRender           *render,
+                                       const GskVulkanParseState *state,
+                                       GskRenderNode             *node)
 {
-  gsk_vulkan_render_pass_add_node (self, render, constants, gsk_debug_node_get_child (node));
+  gsk_vulkan_render_pass_add_node (self, render, state, gsk_debug_node_get_child (node));
   return TRUE;
 }
 
 #undef FALLBACK
 
-typedef gboolean (*GskVulkanRenderPassNodeFunc) (GskVulkanRenderPass          *self,
-                                                 GskVulkanRender              *render,
-                                                 const GskVulkanPushConstants *constants,
-                                                 GskRenderNode                *node);
+typedef gboolean (*GskVulkanRenderPassNodeFunc) (GskVulkanRenderPass       *self,
+                                                 GskVulkanRender           *render,
+                                                 const GskVulkanParseState *state,
+                                                 GskRenderNode             *node);
 
 #define N_RENDER_NODES (GSK_MASK_NODE + 1)
 
@@ -992,10 +1008,10 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[N_RENDER_NODES] = {
 };
 
 static void
-gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
-                                 GskVulkanRender               *render,
-                                 const GskVulkanPushConstants  *constants,
-                                 GskRenderNode                 *node)
+gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
+                                 GskVulkanRender           *render,
+                                 const GskVulkanParseState *state,
+                                 GskRenderNode             *node)
 {
   GskVulkanRenderPassNodeFunc node_func;
   GskRenderNodeType node_type;
@@ -1006,7 +1022,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
   if (node_func)
     {
-      if (!node_func (self, render, constants, node))
+      if (!node_func (self, render, state, node))
         fallback = TRUE;
     }
   else
@@ -1018,7 +1034,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     }
 
   if (fallback)
-    gsk_vulkan_render_pass_add_fallback_node (self, render, constants, node);
+    gsk_vulkan_render_pass_add_fallback_node (self, render, state, node);
 }
 
 void
@@ -1026,7 +1042,7 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskVulkanRender         *render,
                             GskRenderNode           *node)
 {
-  GskVulkanPushConstants constants;
+  GskVulkanParseState state;
   graphene_matrix_t projection, mvp;
 
   graphene_matrix_init_scale (&mvp,
@@ -1038,12 +1054,12 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                               self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_matrix_multiply (&mvp, &projection, &mvp);
+  graphene_matrix_multiply (&mvp, &projection, &state.mvp);
+  gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
 
-  gsk_vulkan_push_constants_init (&constants, &mvp, &self->viewport);
-  gsk_vulkan_render_pass_append_push_constants (self, node, &constants);
+  gsk_vulkan_render_pass_append_push_constants (self, node, &state);
 
-  gsk_vulkan_render_pass_add_node (self, render, &constants, node);
+  gsk_vulkan_render_pass_add_node (self, render, &state, node);
 
   self->offset = GRAPHENE_POINT_INIT (0, 0);
 }
