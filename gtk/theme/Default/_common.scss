@@ -4304,6 +4304,8 @@ shortcuts-section {
 // shortcut window keys
 shortcut {
   border-spacing: 6px;
+  border-radius: 5px;
+  @include focus-ring();
 }
 
 shortcut > .keycap {
