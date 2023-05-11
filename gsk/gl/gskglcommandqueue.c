@@ -41,6 +41,7 @@
 
 G_DEFINE_TYPE (GskGLCommandQueue, gsk_gl_command_queue, G_TYPE_OBJECT)
 
+#if 0
 G_GNUC_UNUSED static inline void
 print_uniform (GskGLUniformFormat format,
                guint              array_count,
@@ -231,6 +232,7 @@ gsk_gl_command_queue_capture_png (GskGLCommandQueue *self,
   gdk_texture_save_to_png (texture, filename);
   g_object_unref (texture);
 }
+#endif
 
 static inline gboolean
 will_ignore_batch (GskGLCommandQueue *self)
