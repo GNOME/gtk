@@ -1105,12 +1105,13 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
 }
 
 static GskVulkanImage *
-gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
-                                            GskVulkanRender       *render,
-                                            GskVulkanUploader     *uploader,
-                                            GskRenderNode         *node,
-                                            GskVulkanClip         *current_clip,
-                                            graphene_rect_t       *tex_bounds)
+gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
+                                            GskVulkanRender        *render,
+                                            GskVulkanUploader      *uploader,
+                                            GskRenderNode          *node,
+                                            const graphene_rect_t  *clip_bounds,
+                                            const graphene_point_t *clip_offset,
+                                            graphene_rect_t        *tex_bounds)
 {
   VkSemaphore semaphore;
   GskVulkanImage *result;
@@ -1138,10 +1139,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
       {
         graphene_rect_t clipped;
 
-        if (current_clip)
-          graphene_rect_intersection (&current_clip->rect.bounds, &node->bounds, &clipped);
-        else
-          clipped = node->bounds;
+        graphene_rect_offset_r (clip_bounds, - clip_offset->x, - clip_offset->y, &clipped);
+        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
 
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
@@ -1327,7 +1326,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
 {
   GskVulkanOp *op;
   guint i;
-  GskVulkanClip *clip = NULL;
+  const graphene_rect_t *clip = NULL;
 
   for (i = 0; i < self->render_ops->len; i++)
     {
@@ -1371,6 +1370,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             uploader,
                                                                             child,
                                                                             clip,
+                                                                            &op->render.offset,
                                                                             &tex_bounds);
             get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
@@ -1415,7 +1415,8 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                                 render,
                                                                                 uploader,
                                                                                 child,
-                                                                                NULL,
+                                                                                &child->bounds,
+                                                                                &GRAPHENE_POINT_INIT (0, 0),
                                                                                 &tex_bounds);
                 get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
               }
@@ -1432,6 +1433,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             uploader,
                                                                             child,
                                                                             clip,
+                                                                            &op->render.offset,
                                                                             &tex_bounds);
             get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
@@ -1447,6 +1449,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             uploader,
                                                                             child,
                                                                             clip,
+                                                                            &op->render.offset,
                                                                             &tex_bounds);
             get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
@@ -1463,6 +1466,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             uploader,
                                                                             start,
                                                                             clip,
+                                                                            &op->render.offset,
                                                                             &tex_bounds);
             get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
@@ -1471,6 +1475,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                              uploader,
                                                                              end,
                                                                              clip,
+                                                                             &op->render.offset,
                                                                              &tex_bounds);
             get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
           }
@@ -1487,6 +1492,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             uploader,
                                                                             top,
                                                                             clip,
+                                                                            &op->render.offset,
                                                                             &tex_bounds);
             get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
@@ -1495,13 +1501,14 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                              uploader,
                                                                              bottom,
                                                                              clip,
+                                                                             &op->render.offset,
                                                                              &tex_bounds);
             get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          clip = &op->constants.constants.clip;
+          clip = &op->constants.constants.clip.rect.bounds;
           break;
 
         default:
