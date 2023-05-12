@@ -134,7 +134,8 @@ struct _GskVulkanParseState
 {
   graphene_point_t  offset;
   graphene_vec2_t   scale;
-  graphene_matrix_t mvp;
+  graphene_matrix_t modelview;
+  graphene_matrix_t projection;
   GskVulkanClip     clip;
 };
 
@@ -252,10 +253,10 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
     .constants.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
     .constants.node = node,
     .constants.scale= state->scale,
-    .constants.mvp = state->mvp,
     .constants.clip = state->clip.rect,
   };
 
+  graphene_matrix_multiply (&state->modelview, &state->projection, &op.constants.mvp);
   g_array_append_val (self->render_ops, op);
 }
 
@@ -611,7 +612,8 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
     FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
 
   gsk_transform_to_matrix (transform, &matrix);
-  graphene_matrix_multiply (&matrix, &state->mvp, &new_state.mvp);
+  graphene_matrix_multiply (&matrix, &state->modelview, &new_state.modelview);
+  graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
@@ -705,7 +707,8 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
 
   new_state.offset = state->offset;
   graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
-  graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
+  graphene_matrix_init_from_matrix (&new_state.modelview, &state->modelview);
+  graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
@@ -736,7 +739,8 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
 
   new_state.offset = state->offset;
   graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
-  graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
+  graphene_matrix_init_from_matrix (&new_state.modelview, &state->modelview);
+  graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
@@ -1042,18 +1046,16 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskRenderNode           *node)
 {
   GskVulkanParseState state;
-  graphene_matrix_t projection, mvp;
 
-  graphene_matrix_init_scale (&mvp,
+  graphene_matrix_init_scale (&state.modelview,
                               graphene_vec2_get_x (&self->scale),
                               graphene_vec2_get_y (&self->scale),
                               1.0);
-  graphene_matrix_init_ortho (&projection,
+  graphene_matrix_init_ortho (&state.projection,
                               self->viewport.origin.x, self->viewport.origin.x + self->viewport.size.width,
                               self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_matrix_multiply (&mvp, &projection, &state.mvp);
   gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
   graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
   state.offset = *graphene_point_zero ();
