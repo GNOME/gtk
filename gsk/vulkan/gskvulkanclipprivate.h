@@ -43,6 +43,10 @@ gboolean                gsk_vulkan_clip_intersect_rect                  (GskVulk
 gboolean                gsk_vulkan_clip_intersect_rounded_rect          (GskVulkanClip          *dest,
                                                                          const GskVulkanClip    *src,
                                                                          const GskRoundedRect   *rounded) G_GNUC_WARN_UNUSED_RESULT;
+void                    gsk_vulkan_clip_scale                           (GskVulkanClip          *dest,
+                                                                         const GskVulkanClip    *src,
+                                                                         float                   scale_x,
+                                                                         float                   scale_y);
 gboolean                gsk_vulkan_clip_transform                       (GskVulkanClip          *dest,
                                                                          const GskVulkanClip    *src,
                                                                          GskTransform           *transform,

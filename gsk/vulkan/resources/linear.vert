@@ -48,7 +48,7 @@ get_gradient_pos (vec2 pos)
 void main() {
   vec4 rect = clip (inRect);
   vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
-  gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
+  gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
   outPos = pos;
   outGradientPos = get_gradient_pos (pos);
   outRepeating = inRepeating;

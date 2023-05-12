@@ -538,9 +538,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 {
   GskRenderNode *child;
   GskTransform *transform;
-  float scale_x;
-  float scale_y;
-  graphene_vec2_t scale;
   GskVulkanParseState new_state;
 
 #if 0
@@ -567,20 +564,47 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
-        float dx, dy;
+        float dx, dy, scale_x, scale_y;
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+        gsk_vulkan_clip_scale (&new_state.clip, &state->clip, scale_x, scale_y);
+        new_state.offset.x = (state->offset.x + dx) / scale_x;
+        new_state.offset.y = (state->offset.y + dy) / scale_y;
+        graphene_vec2_init (&new_state.scale, scale_x, scale_y);
+        graphene_vec2_multiply (&new_state.scale, &state->scale, &new_state.scale);
+        new_state.modelview = gsk_transform_ref (state->modelview);
       }
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D:
       {
-        float xx, xy, yx, yy, dx, dy;
+        float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
+        GskTransform *clip_transform;
 
-        gsk_transform_to_2d (transform,
-                             &xx, &xy, &yx, &yy, &dx, &dy);
+        clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset), transform);
 
-        scale_x = sqrtf (xx * xx + xy * xy);
-        scale_y = sqrtf (yx * yx + yy * yy);
+        if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
+          {
+            gsk_transform_unref (clip_transform);
+            FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
+          }
+
+        new_state.modelview = gsk_transform_ref (state->modelview);
+        new_state.modelview = gsk_transform_scale (state->modelview,
+                                                   graphene_vec2_get_x (&state->scale),
+                                                   graphene_vec2_get_y (&state->scale));
+        new_state.modelview = gsk_transform_transform (new_state.modelview, clip_transform);
+        gsk_transform_unref (clip_transform);
+
+        gsk_transform_to_2d_components (new_state.modelview,
+                                        &skew_x, &skew_y,
+                                        &scale_x, &scale_y,
+                                        &angle,
+                                        &dx, &dy);
+        scale_x = fabs (scale_x);
+        scale_y = fabs (scale_y);
+        new_state.modelview = gsk_transform_scale (new_state.modelview, 1 / scale_x, 1 / scale_y);
+        graphene_vec2_init (&new_state.scale, scale_x, scale_y);
+        new_state.offset = *graphene_point_zero ();
       }
       break;
 
@@ -594,8 +618,25 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
         graphene_vec3_t translation;
         graphene_vec3_t matrix_scale;
         graphene_vec3_t shear;
+        GskTransform *clip_transform;
+        float scale_x, scale_y;
 
-        gsk_transform_to_matrix (transform, &matrix);
+        clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset), transform);
+
+        if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
+          {
+            gsk_transform_unref (clip_transform);
+            FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
+          }
+
+        new_state.modelview = gsk_transform_ref (state->modelview);
+        new_state.modelview = gsk_transform_scale (state->modelview,
+                                                   graphene_vec2_get_x (&state->scale),
+                                                   graphene_vec2_get_y (&state->scale));                                                  
+        new_state.modelview = gsk_transform_transform (new_state.modelview, clip_transform);
+        gsk_transform_unref (clip_transform);
+
+        gsk_transform_to_matrix (new_state.modelview, &matrix);
         graphene_matrix_decompose (&matrix,
                                    &translation,
                                    &matrix_scale,
@@ -603,8 +644,11 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
                                    &shear,
                                    &perspective);
 
-        scale_x = graphene_vec3_get_x (&matrix_scale);
-        scale_y = graphene_vec3_get_y (&matrix_scale);
+        scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
+        scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
+        new_state.modelview = gsk_transform_scale (new_state.modelview, 1 / scale_x, 1 / scale_y);
+        graphene_vec2_init (&new_state.scale, scale_x, scale_y);
+        new_state.offset = *graphene_point_zero ();
       }
       break;
 
@@ -612,23 +656,9 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
       break;
     }
 
-  new_state.modelview = gsk_transform_ref (state->modelview);
-  new_state.modelview = gsk_transform_translate (new_state.modelview, &state->offset);
-  new_state.modelview = gsk_transform_transform (new_state.modelview, transform);
-
-  if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, transform, &child->bounds))
-    {
-      gsk_transform_unref (new_state.modelview);
-      FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
-    }
-
   graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
-
-  new_state.offset = *graphene_point_zero ();
-  graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
-  graphene_vec2_multiply (&state->scale, &scale, &new_state.scale);
 
   gsk_vulkan_render_pass_add_node (self, render, &new_state, child);
 
@@ -1056,9 +1086,7 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
 {
   GskVulkanParseState state;
 
-  state.modelview = gsk_transform_scale (NULL,
-                                         graphene_vec2_get_x (&self->scale),
-                                         graphene_vec2_get_y (&self->scale));
+  state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
                               self->viewport.origin.x, self->viewport.origin.x + self->viewport.size.width,
                               self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
@@ -1071,8 +1099,6 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
   gsk_vulkan_render_pass_append_push_constants (self, node, &state);
 
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
-
-  gsk_transform_unref (state.modelview);
 }
 
 static GskVulkanImage *

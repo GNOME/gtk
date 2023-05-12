@@ -97,7 +97,7 @@ void main() {
     pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[vert_index]);
   else
     pos = mix (rect.bounds.zy, rect.bounds.xw, offsets[vert_index]);
-  gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
+  gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
   outColor = inBorderColors[((gl_VertexIndex / 3 + 15) / 4) % 4];
   outPos = pos;
   outRect = inRect;

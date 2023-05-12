@@ -143,6 +143,19 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
   return TRUE;
 }
 
+void
+gsk_vulkan_clip_scale (GskVulkanClip       *dest,
+                       const GskVulkanClip *src,
+                       float                scale_x,
+                       float                scale_y)
+{
+  dest->type = src->type;
+  gsk_rounded_rect_scale_affine (&dest->rect, 
+                                 &src->rect,
+                                 1.0f / scale_x, 1.0f / scale_y,
+                                 0, 0);
+}
+
 gboolean
 gsk_vulkan_clip_transform (GskVulkanClip         *dest,
                            const GskVulkanClip   *src,
