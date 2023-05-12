@@ -1,4 +1,5 @@
-#version 420 core
+#version 450
+#extension GL_EXT_debug_printf : enable
 
 #include "clip.frag.glsl"
 #include "rect.frag.glsl"
