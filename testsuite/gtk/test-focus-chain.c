@@ -67,6 +67,26 @@ check_focus_states (GtkWidget *focus_widget)
     }
 }
 
+static gboolean
+quit_iteration_loop (gpointer user_data)
+{
+  gboolean *keep_running = user_data;
+
+  *keep_running = FALSE;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+wait (guint millis)
+{
+  gboolean keep_running = TRUE;
+
+  g_timeout_add (millis, quit_iteration_loop, &keep_running);
+  while (keep_running)
+    g_main_context_iteration (NULL, TRUE);
+}
+
 static char *
 generate_focus_chain (GtkWidget        *window,
                       GtkDirectionType  dir)
@@ -125,6 +145,7 @@ generate_focus_chain (GtkWidget        *window,
         }
 
       g_string_append_printf (output, "%s\n", name);
+      wait (100);
       count++;
 
       if (!first)
@@ -168,16 +189,6 @@ get_dir_for_file (const char *path)
   g_error ("Could not find direction for %s", path);
 
   return 0;
-}
-
-static gboolean
-quit_iteration_loop (gpointer user_data)
-{
-  gboolean *keep_running = user_data;
-
-  *keep_running = FALSE;
-
-  return G_SOURCE_REMOVE;
 }
 
 static gboolean
