@@ -122,7 +122,6 @@ struct _GskVulkanRenderPass
   cairo_region_t *clip;
 
   graphene_vec2_t scale;
-  graphene_point_t offset;
 
   VkRenderPass render_pass;
   VkSemaphore signal_semaphore;
@@ -132,6 +131,7 @@ struct _GskVulkanRenderPass
 
 struct _GskVulkanParseState
 {
+  graphene_point_t  offset;
   graphene_matrix_t mvp;
   GskVulkanClip     clip;
 };
@@ -275,7 +275,7 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
 {
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   switch (state->clip.type)
@@ -350,7 +350,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
 {
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
   GskVulkanPipelineType pipeline_type;
 
@@ -379,7 +379,7 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_linear_gradient_node_get_n_color_stops (node) > GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS)
@@ -412,7 +412,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -440,7 +440,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -468,7 +468,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
@@ -498,7 +498,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
@@ -528,7 +528,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
   GskRenderNode *child;
   GskTransform *transform;
   graphene_vec2_t old_scale;
-  graphene_point_t old_offset;
   float scale_x;
   float scale_y;
   graphene_vec2_t scale;
@@ -550,11 +549,10 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
       {
         float dx, dy;
         gsk_transform_to_translate (transform, &dx, &dy);
-        self->offset.x += dx;
-        self->offset.y += dy;
-        gsk_vulkan_render_pass_add_node (self, render, state, child);
-        self->offset.x -= dx;
-        self->offset.y -= dy;
+        new_state = *state;
+        new_state.offset.x += dx;
+        new_state.offset.y += dy;
+        gsk_vulkan_render_pass_add_node (self, render, &new_state, child);
       }
       return TRUE;
 
@@ -604,7 +602,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
       break;
     }
 
-  transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset),
+  transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset),
                                        transform);
 
   if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, transform, &child->bounds))
@@ -615,8 +613,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
-  old_offset = self->offset;
-  self->offset = *graphene_point_zero ();
+  new_state.offset = *graphene_point_zero ();
   graphene_vec2_init_from_vec2 (&old_scale, &self->scale);
   graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
   graphene_vec2_multiply (&self->scale, &scale, &self->scale);
@@ -626,7 +623,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
   gsk_vulkan_render_pass_append_push_constants (self, node, state);
 
   graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
-  self->offset = old_offset;
 
   gsk_transform_unref (transform);
 
@@ -642,7 +638,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -670,7 +666,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -699,7 +695,7 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
   graphene_rect_t clip;
 
   graphene_rect_offset_r (gsk_clip_node_get_clip (node),
-                          self->offset.x, self->offset.y,
+                          state->offset.x, state->offset.y,
                           &clip);
 
   if (!gsk_vulkan_clip_intersect_rect (&new_state.clip, &state->clip, &clip))
@@ -708,6 +704,7 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
   if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
+  new_state.offset = state->offset;
   graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
@@ -729,7 +726,7 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
   GskRoundedRect clip;
 
   clip = *gsk_rounded_clip_node_get_clip (node);
-  gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
+  gsk_rounded_rect_offset (&clip, state->offset.x, state->offset.y);
 
   if (!gsk_vulkan_clip_intersect_rounded_rect (&new_state.clip, &state->clip, &clip))
     FALLBACK ("Failed to find intersection between clip of type %u and rounded rectangle", state->clip.type);
@@ -737,6 +734,7 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
   if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
+  new_state.offset = state->offset;
   graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
@@ -757,7 +755,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
@@ -788,7 +786,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -815,7 +813,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
 {
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
   GskVulkanPipelineType pipeline_type;
 
@@ -843,7 +841,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
 {
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
   GskVulkanPipelineType pipeline_type;
   const PangoGlyphInfo *glyphs;
@@ -937,7 +935,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
     .render.node = node,
-    .render.offset = self->offset,
+    .render.offset = state->offset,
   };
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
@@ -1056,12 +1054,11 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                               ORTHO_FAR_PLANE);
   graphene_matrix_multiply (&mvp, &projection, &state.mvp);
   gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
+  state.offset = *graphene_point_zero ();
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &state);
 
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
-
-  self->offset = GRAPHENE_POINT_INIT (0, 0);
 }
 
 static GskVulkanImage *
