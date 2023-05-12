@@ -500,6 +500,9 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
     }
   
   needed_sets = g_hash_table_size (self->descriptor_set_indexes);
+  if (needed_sets == 0)
+    return;
+
   if (needed_sets > self->n_descriptor_sets)
     {
       if (needed_sets > self->descriptor_pool_maxsets)
