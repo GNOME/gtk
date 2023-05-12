@@ -287,7 +287,8 @@ test_create (void)
 {
   GtkSelectionModel *selection;
   GListStore *store;
-  
+  guint start, end;
+
   if (glib_check_version (2, 59, 0) != NULL)
     {
       g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
@@ -309,6 +310,12 @@ test_create (void)
   assert_changes (selection, "");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (selection)) == G_TYPE_OBJECT);
+  g_assert_true (gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection)) == G_LIST_MODEL (store));
+  gtk_section_model_get_section (GTK_SECTION_MODEL (selection), 0, &start, &end);
+  g_assert_cmpint (start, ==, 0);
+  g_assert_cmpint (end, ==, G_MAXUINT);
 
   g_object_unref (selection);
 }
@@ -701,7 +708,7 @@ test_set_model (void)
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
-  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), 4);
+  g_object_set (selection, "selected", 4, NULL);
   assert_selection (selection, "5");
   assert_selection_changes (selection, "4:1");
 

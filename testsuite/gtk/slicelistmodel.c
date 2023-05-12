@@ -238,6 +238,8 @@ test_create (void)
   assert_model (slice, "1 3 5");
   assert_changes (slice, "");
 
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (slice)) == G_TYPE_OBJECT);
+
   g_object_unref (slice);
 }
 
@@ -286,6 +288,8 @@ test_set_slice (void)
   gtk_slice_list_model_set_size (slice, 10);
   assert_model (slice, "3 5 7");
   assert_changes (slice, "+2*");
+
+  g_assert_cmpuint (gtk_slice_list_model_get_offset (slice), ==, 1);
 
   g_object_unref (store);
   g_object_unref (slice);
