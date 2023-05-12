@@ -1309,6 +1309,13 @@ node_editor_window_init (NodeEditorWindow *self)
          "  }\n"
          "  transform: translate(0, 140);\n"
          "}", -1);
+
+  if (g_getenv ("GSK_RENDERER"))
+    {
+      char *new_title = g_strdup_printf ("GTK Node Editor - %s", g_getenv ("GSK_RENDERER"));
+      gtk_window_set_title (GTK_WINDOW (self), new_title);
+      g_free (new_title);
+    }
 }
 
 NodeEditorWindow *
