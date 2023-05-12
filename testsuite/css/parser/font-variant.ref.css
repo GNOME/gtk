@@ -42,3 +42,9 @@ e {
   font-variant-numeric: initial;
   font-variant-position: initial;
 }
+
+f {
+  font-variant-east-asian: simplified;
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  font-variant-numeric: lining-nums tabular-nums diagonal-fractions;
+}
