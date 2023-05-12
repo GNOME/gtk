@@ -1095,25 +1095,29 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-top-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-bottom-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-bottom-left-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BACKGROUND | GTK_CSS_AFFECTS_BORDER,
                                           border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
 
   gtk_css_style_property_register        ("outline-style",
                                           GTK_CSS_PROPERTY_OUTLINE_STYLE,
@@ -1133,7 +1137,6 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_OUTLINE,
                                           outline_parse,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
-
   gtk_css_style_property_register        ("background-clip",
                                           GTK_CSS_PROPERTY_BACKGROUND_CLIP,
                                           0,
