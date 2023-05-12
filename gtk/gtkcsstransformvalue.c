@@ -142,7 +142,7 @@ gtk_css_transform_init_identity (GtkCssTransform     *transform,
     case GTK_CSS_TRANSFORM_ROTATE:
       transform->rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       transform->rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-      transform->rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+      transform->rotate.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
       transform->rotate.angle = _gtk_css_number_value_new (0, GTK_CSS_DEG);
       break;
     case GTK_CSS_TRANSFORM_SCALE:
