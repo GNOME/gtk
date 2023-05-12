@@ -449,6 +449,8 @@ test_data = [
   'radial-positions.errors',
   'radial-positions.ref.css',
   'radial.ref.css',
+  'resource-url.css',
+  'resource-url.ref.css',
   'rotate3d-crash.css',
   'rotate3d-crash.errors',
   'rotate3d-crash.ref.css',

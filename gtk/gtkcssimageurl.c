@@ -47,21 +47,7 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
       return url->loaded_image;
     }
 
-  /* We special case resources here so we can use gdk_texture_new_from_resource. */
-  if (g_file_has_uri_scheme (url->file, "resource"))
-    {
-      char *uri = g_file_get_uri (url->file);
-      char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
-
-      texture = gdk_texture_new_from_resource (resource_path);
-
-      g_free (resource_path);
-      g_free (uri);
-    }
-  else
-    {
-      texture = gdk_texture_new_from_file (url->file, &local_error);
-    }
+  texture = gdk_texture_new_from_file (url->file, &local_error);
 
   if (texture == NULL)
     {
