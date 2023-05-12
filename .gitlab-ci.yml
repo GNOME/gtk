@@ -349,6 +349,8 @@ static-scan:
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
             _scan_build
     - ninja -C _scan_build scan-build
   artifacts:
