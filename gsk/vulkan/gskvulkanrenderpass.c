@@ -569,9 +569,11 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
         gsk_vulkan_clip_scale (&new_state.clip, &state->clip, scale_x, scale_y);
         new_state.offset.x = (state->offset.x + dx) / scale_x;
         new_state.offset.y = (state->offset.y + dy) / scale_y;
-        graphene_vec2_init (&new_state.scale, scale_x, scale_y);
+        graphene_vec2_init (&new_state.scale, fabs (scale_x), fabs (scale_y));
         graphene_vec2_multiply (&new_state.scale, &state->scale, &new_state.scale);
-        new_state.modelview = gsk_transform_ref (state->modelview);
+        new_state.modelview = gsk_transform_scale (gsk_transform_ref (state->modelview),
+                                                   scale_x / fabs (scale_x),
+                                                   scale_y / fabs (scale_y));
       }
       break;
 
@@ -2028,8 +2030,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 static void
 gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                   GskVulkanRender         *render,
-                                  guint                    layout_count,
-                                  VkPipelineLayout        *pipeline_layout,
+                                  VkPipelineLayout         pipeline_layout,
                                   VkCommandBuffer          command_buffer)
 {
   GskVulkanPipeline *current_pipeline = NULL;
@@ -2072,7 +2073,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -2105,7 +2106,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -2138,7 +2139,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -2174,7 +2175,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -2209,7 +2210,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
@@ -2317,13 +2318,11 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          for (int j = 0; j < layout_count; j++)
-            gsk_vulkan_push_constants_push (command_buffer,
-                                            pipeline_layout[j],
-                                            &op->constants.scale,
-                                            &op->constants.mvp,
-                                            &op->constants.clip);
-
+          gsk_vulkan_push_constants_push (command_buffer,
+                                          pipeline_layout,
+                                          &op->constants.scale,
+                                          &op->constants.mvp,
+                                          &op->constants.clip);
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:
@@ -2347,7 +2346,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    2,
                                    (VkDescriptorSet[2]) {
@@ -2383,7 +2382,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
           vkCmdBindDescriptorSets (command_buffer,
                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                   gsk_vulkan_pipeline_get_pipeline_layout (current_pipeline),
+                                   pipeline_layout,
                                    0,
                                    2,
                                    (VkDescriptorSet[2]) {
@@ -2406,11 +2405,10 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 }
 
 void
-gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
-                             GskVulkanRender         *render,
-                             guint                    layout_count,
-                             VkPipelineLayout        *pipeline_layout,
-                             VkCommandBuffer          command_buffer)
+gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
+                             GskVulkanRender     *render,
+                             VkPipelineLayout     pipeline_layout,
+                             VkCommandBuffer      command_buffer)
 {
   guint i;
 
@@ -2456,7 +2454,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                             },
                             VK_SUBPASS_CONTENTS_INLINE);
 
-      gsk_vulkan_render_pass_draw_rect (self, render, layout_count, pipeline_layout, command_buffer);
+      gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 
       vkCmdEndRenderPass (command_buffer);
     }

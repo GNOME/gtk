@@ -30,8 +30,7 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         guint                   layout_count,
-                                                                         VkPipelineLayout       *pipeline_layout,
+                                                                         VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 gsize                   gsk_vulkan_render_pass_get_wait_semaphores      (GskVulkanRenderPass    *self,
                                                                          VkSemaphore           **semaphores);

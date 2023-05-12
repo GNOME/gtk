@@ -40,7 +40,7 @@ struct _GskVulkanRender
   VkFence fence;
   VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
-  VkPipelineLayout pipeline_layout[3]; /* indexed by number of textures */
+  VkPipelineLayout pipeline_layout;
   GskVulkanUploader *uploader;
 
   GHashTable *descriptor_set_indexes;
@@ -203,25 +203,19 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                              NULL,
                                              &self->descriptor_set_layout);
 
-  for (guint i = 0; i < 3; i++)
-    {
-      VkDescriptorSetLayout layouts[3] = {
-        self->descriptor_set_layout,
-        self->descriptor_set_layout,
-        self->descriptor_set_layout
-      };
-
-      GSK_VK_CHECK (vkCreatePipelineLayout, device,
-                                            &(VkPipelineLayoutCreateInfo) {
-                                                .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                                .setLayoutCount = i,
-                                                .pSetLayouts = layouts,
-                                                .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
-                                                .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
+  GSK_VK_CHECK (vkCreatePipelineLayout, device,
+                                        &(VkPipelineLayoutCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                                            .setLayoutCount = 2,
+                                            .pSetLayouts = (VkDescriptorSetLayout[2]) {
+                                              self->descriptor_set_layout,
+                                              self->descriptor_set_layout
                                             },
-                                            NULL,
-                                            &self->pipeline_layout[i]);
-    }
+                                            .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
+                                            .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
+                                        },
+                                        NULL,
+                                        &self->pipeline_layout);
 
   GSK_VK_CHECK (vkCreateSampler, device,
                                  &(VkSamplerCreateInfo) {
@@ -423,7 +417,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 
   if (self->pipelines[type] == NULL)
     self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
-                                                             self->pipeline_layout[pipeline_info[type].num_textures],
+                                                             self->pipeline_layout,
                                                              pipeline_info[type].name,
                                                              self->render_pass);
 
@@ -612,7 +606,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
-      gsk_vulkan_render_pass_draw (pass, self, 3, self->pipeline_layout, command_buffer);
+      gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
 
       gsk_vulkan_command_pool_submit_buffer (self->command_pool,
                                              command_buffer,
@@ -718,10 +712,9 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
-  for (i = 0; i < 3; i++)
-    vkDestroyPipelineLayout (device,
-                             self->pipeline_layout[i],
-                             NULL);
+  vkDestroyPipelineLayout (device,
+                           self->pipeline_layout,
+                           NULL);
 
   vkDestroyRenderPass (device,
                        self->render_pass,
