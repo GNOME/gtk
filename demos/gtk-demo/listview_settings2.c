@@ -1,7 +1,7 @@
-/* Lists/Settings v2
+/* Lists/Alternative Settings
  * #Keywords: GtkListHeaderFactory, GtkSectionModel
  *
- * This demo shows a settings viewer for GSettings.
+ * This demo shows an alternative settings viewer for GSettings.
  *
  * It demonstrates how to implement support for sections with GtkListView.
  *
