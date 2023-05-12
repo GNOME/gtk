@@ -32,15 +32,10 @@ static gboolean
 color_is_near (const GdkRGBA *color1,
                const GdkRGBA *color2)
 {
-  if (fabs (color1->red - color2->red) > FLT_EPSILON)
-    return FALSE;
-  if (fabs (color1->green - color2->green) > FLT_EPSILON)
-    return FALSE;
-  if (fabs (color1->blue- color2->blue) > FLT_EPSILON)
-    return FALSE;
-  if (fabs (color1->alpha- color2->alpha) > FLT_EPSILON)
-    return FALSE;
-  return TRUE;
+  return (fabs (color1->red - color2->red) <= FLT_EPSILON &&
+          fabs (color1->green - color2->green) <= FLT_EPSILON &&
+          fabs (color1->blue - color2->blue) <= FLT_EPSILON &&
+          fabs (color1->alpha - color2->alpha) <= FLT_EPSILON);
 }
 
 static gboolean
@@ -54,53 +49,22 @@ value_is_near (int          prop,
   switch (prop)
     {
     case GTK_CSS_PROPERTY_COLOR:
-      {
-        const GdkRGBA *c1, *c2;
-        gboolean res;
-
-        c1 = gtk_css_color_value_get_rgba (value1);
-        c2 = gtk_css_color_value_get_rgba (value2);
-
-        res = color_is_near (c1, c2);
-
-        return res;
-      }
+      return color_is_near (gtk_css_color_value_get_rgba (value1),
+                            gtk_css_color_value_get_rgba (value2));
       break;
 
     case GTK_CSS_PROPERTY_ICON_PALETTE:
-      {
-        const GdkRGBA *c1, *c2;
-
-        c1 = gtk_css_palette_value_get_color (value1, "error");
-        c2 = gtk_css_palette_value_get_color (value2, "error");
-
-        if (!color_is_near (c1, c2))
-          return FALSE;
-
-        c1 = gtk_css_palette_value_get_color (value1, "warning");
-        c2 = gtk_css_palette_value_get_color (value2, "warning");
-
-        if (!color_is_near (c1, c2))
-          return FALSE;
-
-        c1 = gtk_css_palette_value_get_color (value1, "test");
-        c2 = gtk_css_palette_value_get_color (value2, "test");
-
-        if (!color_is_near (c1, c2))
-          return FALSE;
-
-        return TRUE;
-      }
+      return color_is_near (gtk_css_palette_value_get_color (value1, "error"),
+                            gtk_css_palette_value_get_color (value2, "error")) &&
+             color_is_near (gtk_css_palette_value_get_color (value1, "warning"),
+                            gtk_css_palette_value_get_color (value2, "warning")) &&
+             color_is_near (gtk_css_palette_value_get_color (value1, "test"),
+                            gtk_css_palette_value_get_color (value2, "test"));
+      break;
 
     case GTK_CSS_PROPERTY_FONT_SIZE:
-      {
-        double n1, n2;
-
-        n1 = _gtk_css_number_value_get (value1, 100);
-        n2 = _gtk_css_number_value_get (value2, 100);
-
-        return fabs (n1 - n2) < FLT_EPSILON;
-      }
+      return fabs (_gtk_css_number_value_get (value1, 100) -
+                   _gtk_css_number_value_get (value2, 100)) < FLT_EPSILON;
       break;
 
     default:
@@ -123,7 +87,7 @@ assert_css_value (int          prop,
     {
       char *r = result ? _gtk_css_value_to_string (result) : g_strdup ("(nil)");
       char *e = expected ? _gtk_css_value_to_string (expected) : g_strdup ("(nil)");
-      g_print ("Expected %s got %s\n", e, r);
+      g_print ("Expected %s\nGot %s\n", e, r);
       g_free (r);
       g_free (e);
 
@@ -214,10 +178,7 @@ error_cb (GtkCssParser         *parser,
           const GError         *error,
           gpointer              user_data)
 {
-  GError **e = (GError **)user_data;
-
-  g_print ("%lu:%lu - %lu:%lu: %s\n", start->lines, start->line_chars, end->lines, end->line_chars, error->message);
-  *e = g_error_copy (error);
+  *(GError **)user_data = g_error_copy (error);
 }
 
 static GtkCssValue *
