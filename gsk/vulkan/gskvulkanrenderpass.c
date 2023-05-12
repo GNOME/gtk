@@ -132,6 +132,7 @@ struct _GskVulkanRenderPass
 struct _GskVulkanParseState
 {
   graphene_point_t  offset;
+  graphene_vec2_t   scale;
   graphene_matrix_t mvp;
   GskVulkanClip     clip;
 };
@@ -527,7 +528,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 {
   GskRenderNode *child;
   GskTransform *transform;
-  graphene_vec2_t old_scale;
   float scale_x;
   float scale_y;
   graphene_vec2_t scale;
@@ -614,15 +614,12 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
   new_state.offset = *graphene_point_zero ();
-  graphene_vec2_init_from_vec2 (&old_scale, &self->scale);
   graphene_vec2_init (&scale, fabs (scale_x), fabs (scale_y));
-  graphene_vec2_multiply (&self->scale, &scale, &self->scale);
+  graphene_vec2_multiply (&state->scale, &scale, &new_state.scale);
 
   gsk_vulkan_render_pass_add_node (self, render, &new_state, child);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, state);
-
-  graphene_vec2_init_from_vec2 (&self->scale, &old_scale);
 
   gsk_transform_unref (transform);
 
@@ -705,6 +702,7 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   new_state.offset = state->offset;
+  graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
   graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
@@ -735,6 +733,7 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   new_state.offset = state->offset;
+  graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
   graphene_matrix_init_from_matrix (&new_state.mvp, &state->mvp);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
@@ -886,7 +885,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
 
   op.text.start_glyph = 0;
   op.text.texture_index = G_MAXUINT;
-  op.text.scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
+  op.text.scale = MAX (graphene_vec2_get_x (&state->scale), graphene_vec2_get_y (&state->scale));
 
   x_position = 0;
   for (i = 0, count = 0; i < num_glyphs; i++)
@@ -1054,6 +1053,7 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                               ORTHO_FAR_PLANE);
   graphene_matrix_multiply (&mvp, &projection, &state.mvp);
   gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
+  graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
   state.offset = *graphene_point_zero ();
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &state);
