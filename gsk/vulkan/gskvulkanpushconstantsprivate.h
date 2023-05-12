@@ -12,6 +12,7 @@ uint32_t                gsk_vulkan_push_constants_get_range_count       (void) G
 
 void                    gsk_vulkan_push_constants_push                  (VkCommandBuffer                 command_buffer,
                                                                          VkPipelineLayout                pipeline_layout,
+                                                                         const graphene_vec2_t          *scale,
                                                                          const graphene_matrix_t        *mvp,
                                                                          const GskRoundedRect           *clip);
 

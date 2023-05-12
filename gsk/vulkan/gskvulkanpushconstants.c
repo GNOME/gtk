@@ -12,6 +12,7 @@ struct _GskVulkanPushConstantsWire
   struct {
     float mvp[16];
     float clip[12];
+    float scale[2];
   } common;
 };
 
@@ -23,22 +24,25 @@ G_STATIC_ASSERT (sizeof (GskVulkanPushConstantsWire) <= 128);
 
 static void
 gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire *wire,
+                                     const graphene_vec2_t      *scale,
                                      const graphene_matrix_t    *mvp,
                                      const GskRoundedRect       *clip)
 {
   graphene_matrix_to_float (mvp, wire->common.mvp);
   gsk_rounded_rect_to_float (clip, graphene_point_zero (), wire->common.clip);
+  graphene_vec2_to_float (scale, wire->common.scale);
 }
 
 void
 gsk_vulkan_push_constants_push (VkCommandBuffer          command_buffer,
                                 VkPipelineLayout         pipeline_layout,
+                                const graphene_vec2_t   *scale,
                                 const graphene_matrix_t *mvp,
                                 const GskRoundedRect    *clip)
 {
   GskVulkanPushConstantsWire wire;
 
-  gsk_vulkan_push_constants_wire_init (&wire, mvp, clip);
+  gsk_vulkan_push_constants_wire_init (&wire, scale, mvp, clip);
 
   vkCmdPushConstants (command_buffer,
                       pipeline_layout,

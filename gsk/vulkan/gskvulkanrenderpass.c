@@ -99,6 +99,7 @@ struct _GskVulkanOpPushConstants
 {
   GskVulkanOpType         type;
   GskRenderNode          *node; /* node that's the source of this op */
+  graphene_vec2_t         scale;
   graphene_matrix_t       mvp;
   GskRoundedRect          clip;
 };
@@ -250,6 +251,7 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
   GskVulkanOp op = {
     .constants.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
     .constants.node = node,
+    .constants.scale= state->scale,
     .constants.mvp = state->mvp,
     .constants.clip = state->clip.rect,
   };
@@ -2268,6 +2270,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           for (int j = 0; j < layout_count; j++)
             gsk_vulkan_push_constants_push (command_buffer,
                                             pipeline_layout[j],
+                                            &op->constants.scale,
                                             &op->constants.mvp,
                                             &op->constants.clip);
 
