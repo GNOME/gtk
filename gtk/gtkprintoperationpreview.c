@@ -73,6 +73,8 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 
   if (!initialized)
     {
+      unsigned int id;
+
       /**
        * GtkPrintOperationPreview::ready:
        * @preview: the object on which the signal is emitted
@@ -104,15 +106,18 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
        * according to @page_setup and set up a suitable cairo
        * context, using [method@Gtk.PrintContext.set_cairo_context].
        */
-      g_signal_new (I_("got-page-size"),
-		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, got_page_size),
-		    NULL, NULL,
-		    _gtk_marshal_VOID__OBJECT_OBJECT,
-		    G_TYPE_NONE, 2,
-		    GTK_TYPE_PRINT_CONTEXT,
-		    GTK_TYPE_PAGE_SETUP);
+      id = g_signal_new (I_("got-page-size"),
+                         GTK_TYPE_PRINT_OPERATION_PREVIEW,
+                         G_SIGNAL_RUN_LAST,
+                         G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, got_page_size),
+                         NULL, NULL,
+                         _gtk_marshal_VOID__OBJECT_OBJECT,
+                         G_TYPE_NONE, 2,
+                         GTK_TYPE_PRINT_CONTEXT,
+                         GTK_TYPE_PAGE_SETUP);
+      g_signal_set_va_marshaller (id,
+                                  GTK_TYPE_PRINT_OPERATION_PREVIEW,
+                                  _gtk_marshal_VOID__OBJECT_OBJECTv);
 
       initialized = TRUE;
     }

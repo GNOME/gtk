@@ -24,7 +24,7 @@
 #include "gtkglarea.h"
 #include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
-#include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtknative.h"
@@ -964,12 +964,12 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGLAreaClass, render),
                   _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__OBJECT,
+                  _gdk_marshal_BOOLEAN__OBJECT,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_GL_CONTEXT);
   g_signal_set_va_marshaller (area_signals[RENDER],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECTv);
+                              _gdk_marshal_BOOLEAN__OBJECTv);
 
   /**
    * GtkGLArea::resize:
@@ -995,11 +995,11 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGLAreaClass, resize),
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
   g_signal_set_va_marshaller (area_signals[RESIZE],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_VOID__INT_INTv);
+                              _gdk_marshal_VOID__INT_INTv);
 
   /**
    * GtkGLArea::create-context:

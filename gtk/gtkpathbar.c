@@ -244,15 +244,16 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 
   path_bar_signals [PATH_CLICKED] =
     g_signal_new (I_("path-clicked"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT_BOOLEAN,
-		  G_TYPE_NONE, 3,
-		  G_TYPE_FILE,
-		  G_TYPE_FILE,
-		  G_TYPE_BOOLEAN);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_OBJECT_BOOLEAN,
+                  G_TYPE_NONE, 3,
+                  G_TYPE_FILE, G_TYPE_FILE, G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (path_bar_signals[PATH_CLICKED],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_OBJECT_BOOLEANv);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "pathbar");

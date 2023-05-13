@@ -29,6 +29,7 @@
 #include "gtkdropprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include "gtknative.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -754,12 +755,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkDropTargetClass, accept),
                     g_signal_accumulator_first_wins, NULL,
-                    _gtk_marshal_BOOLEAN__OBJECT,
+                    _gdk_marshal_BOOLEAN__OBJECT,
                     G_TYPE_BOOLEAN, 1,
                     GDK_TYPE_DROP);
   g_signal_set_va_marshaller (signals[ACCEPT],
                               GTK_TYPE_DROP_TARGET,
-                              _gtk_marshal_BOOLEAN__OBJECTv);
+                              _gdk_marshal_BOOLEAN__OBJECTv);
 
   /**
    * GtkDropTarget::enter:

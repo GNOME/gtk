@@ -2254,6 +2254,9 @@ gtk_label_class_init (GtkLabelClass *class)
                   GTK_TYPE_MOVEMENT_STEP,
                   G_TYPE_INT,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[MOVE_CURSOR],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__ENUM_INT_BOOLEANv);
 
    /**
    * GtkLabel::copy-clipboard:
@@ -2274,48 +2277,51 @@ gtk_label_class_init (GtkLabelClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
-    /**
-     * GtkLabel::activate-current-link:
-     * @self: The label on which the signal was emitted
-     *
-     * Gets emitted when the user activates a link in the label.
-     *
-     * The ::activate-current-link is a [keybinding signal](class.SignalAction.html).
-     *
-     * Applications may also emit the signal with g_signal_emit_by_name()
-     * if they need to control activation of URIs programmatically.
-     *
-     * The default bindings for this signal are all forms of the <kbd>Enter</kbd> key.
-     */
-    signals[ACTIVATE_CURRENT_LINK] =
-      g_signal_new_class_handler (I_("activate-current-link"),
-                                  G_TYPE_FROM_CLASS (gobject_class),
-                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                  G_CALLBACK (gtk_label_activate_current_link),
-                                  NULL, NULL,
-                                  NULL,
-                                  G_TYPE_NONE, 0);
+  /**
+   * GtkLabel::activate-current-link:
+   * @self: The label on which the signal was emitted
+   *
+   * Gets emitted when the user activates a link in the label.
+   *
+   * The ::activate-current-link is a [keybinding signal](class.SignalAction.html).
+   *
+   * Applications may also emit the signal with g_signal_emit_by_name()
+   * if they need to control activation of URIs programmatically.
+   *
+   * The default bindings for this signal are all forms of the <kbd>Enter</kbd> key.
+   */
+  signals[ACTIVATE_CURRENT_LINK] =
+    g_signal_new_class_handler (I_("activate-current-link"),
+                                G_TYPE_FROM_CLASS (gobject_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_label_activate_current_link),
+                                NULL, NULL,
+                                NULL,
+                                G_TYPE_NONE, 0);
 
-    /**
-     * GtkLabel::activate-link:
-     * @self: The label on which the signal was emitted
-     * @uri: the URI that is activated
-     *
-     * Gets emitted to activate a URI.
-     *
-     * Applications may connect to it to override the default behaviour,
-     * which is to call [method@Gtk.FileLauncher.launch].
-     *
-     * Returns: %TRUE if the link has been activated
-     */
-    signals[ACTIVATE_LINK] =
-      g_signal_new (I_("activate-link"),
-                    G_TYPE_FROM_CLASS (gobject_class),
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkLabelClass, activate_link),
-                    _gtk_boolean_handled_accumulator, NULL,
-                    _gtk_marshal_BOOLEAN__STRING,
-                    G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
+  /**
+   * GtkLabel::activate-link:
+   * @self: The label on which the signal was emitted
+   * @uri: the URI that is activated
+   *
+   * Gets emitted to activate a URI.
+   *
+   * Applications may connect to it to override the default behaviour,
+   * which is to call [method@Gtk.FileLauncher.launch].
+   *
+   * Returns: %TRUE if the link has been activated
+   */
+  signals[ACTIVATE_LINK] =
+    g_signal_new (I_("activate-link"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkLabelClass, activate_link),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__STRING,
+                  G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
+  g_signal_set_va_marshaller (signals[ACTIVATE_LINK],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__STRINGv);
 
   /**
    * GtkLabel:label: (attributes org.gtk.Property.get=gtk_label_get_label org.gtk.Property.set=gtk_label_set_label)

@@ -365,6 +365,9 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_SCROLL_TYPE,
                   G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[CHANGE_VALUE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__ENUM_DOUBLEv);
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 

@@ -4141,8 +4141,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         NULL, NULL,
                         _gtk_marshal_VOID__OBJECT_FLAGS,
                         G_TYPE_NONE, 2,
-                        G_TYPE_OBJECT,
-                        GTK_TYPE_PLACES_OPEN_FLAGS);
+                        G_TYPE_OBJECT, GTK_TYPE_PLACES_OPEN_FLAGS);
+  g_signal_set_va_marshaller (places_sidebar_signals[OPEN_LOCATION],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_FLAGSv);
 
   /*
    * GtkPlacesSidebar::show-error-message:
@@ -4163,8 +4165,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         NULL, NULL,
                         _gtk_marshal_VOID__STRING_STRING,
                         G_TYPE_NONE, 2,
-                        G_TYPE_STRING,
-                        G_TYPE_STRING);
+                        G_TYPE_STRING, G_TYPE_STRING);
+  g_signal_set_va_marshaller (places_sidebar_signals[SHOW_ERROR_MESSAGE],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__STRING_STRINGv);
 
   /*
    * GtkPlacesSidebar::show-enter-location:
@@ -4216,6 +4220,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         GDK_TYPE_DRAG_ACTION, 2,
                         G_TYPE_OBJECT,
                         GDK_TYPE_FILE_LIST);
+  g_signal_set_va_marshaller (places_sidebar_signals[DRAG_ACTION_REQUESTED],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_INT__OBJECT_OBJECT_POINTERv);
 
   /*
    * GtkPlacesSidebar::drag-action-ask:
@@ -4237,6 +4244,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         _gtk_marshal_INT__INT,
                         GDK_TYPE_DRAG_ACTION, 1,
                         GDK_TYPE_DRAG_ACTION);
+  g_signal_set_va_marshaller (places_sidebar_signals[DRAG_ACTION_ASK],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_INT__INTv);
 
   /*
    * GtkPlacesSidebar::drag-perform-drop:
@@ -4263,6 +4273,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_TYPE_OBJECT,
                         GDK_TYPE_FILE_LIST,
                         GDK_TYPE_DRAG_ACTION);
+  g_signal_set_va_marshaller (places_sidebar_signals[DRAG_PERFORM_DROP],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_POINTER_INTv);
 
   /*
    * GtkPlacesSidebar::show-other-locations-with-flags:

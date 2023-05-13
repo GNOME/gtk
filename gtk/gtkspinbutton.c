@@ -479,6 +479,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   _gtk_marshal_INT__POINTER,
                   G_TYPE_INT, 1,
                   G_TYPE_POINTER);
+  g_signal_set_va_marshaller (spinbutton_signals[INPUT],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_INT__POINTERv);
 
   /**
    * GtkSpinButton::output:
@@ -516,6 +519,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (spinbutton_signals[OUTPUT],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   /**
    * GtkSpinButton::value-changed:

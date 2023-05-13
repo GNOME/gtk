@@ -2266,6 +2266,9 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                         G_TYPE_NONE, 2,
                         G_TYPE_STRING,
                         G_TYPE_STRING);
+  g_signal_set_va_marshaller (places_view_signals [SHOW_ERROR_MESSAGE],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__STRING_STRINGv);
 
   properties[PROP_LOADING] =
           g_param_spec_boolean ("loading", NULL, NULL,
