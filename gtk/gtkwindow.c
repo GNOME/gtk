@@ -1146,9 +1146,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWindowClass, close_request),
                   _gtk_boolean_handled_accumulator, NULL,
-                  NULL,
+                  _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN,
                   0);
+  g_signal_set_va_marshaller (window_signals[CLOSE_REQUEST],
+                              GTK_TYPE_WINDOW,
+                              _gtk_marshal_BOOLEAN__VOIDv);
+
 
   /*
    * Key bindings

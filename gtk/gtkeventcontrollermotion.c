@@ -241,10 +241,13 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2,
                   G_TYPE_DOUBLE,
                   G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[ENTER],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 
   /**
    * GtkEventControllerMotion::leave:
@@ -276,7 +279,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
   g_signal_set_va_marshaller (signals[MOTION],
-                              G_TYPE_FROM_CLASS (klass),
+                              GTK_TYPE_EVENT_CONTROLLER_MOTION,
                               _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 }
 

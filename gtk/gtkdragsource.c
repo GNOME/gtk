@@ -378,9 +378,12 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkDragSourceClass, prepare),
                     g_signal_accumulator_first_wins, NULL,
-                    NULL,
+                    _gtk_marshal_OBJECT__DOUBLE_DOUBLE,
                     GDK_TYPE_CONTENT_PROVIDER, 2,
                     G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PREPARE],
+                              GTK_TYPE_DRAG_SOURCE,
+                              _gtk_marshal_OBJECT__DOUBLE_DOUBLEv);
 
   /**
    * GtkDragSource::drag-begin:
@@ -421,10 +424,13 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_SIGNAL_RUN_LAST,
                     0,
                     NULL, NULL,
-                    NULL,
+                    _gtk_marshal_OBJECT__BOOLEAN,
                     G_TYPE_NONE, 2,
                     GDK_TYPE_DRAG,
                     G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[DRAG_END],
+                              GTK_TYPE_DRAG_SOURCE,
+                              _gtk_marshal_OBJECT__BOOLEANv);
 
   /**
    * GtkDragSource::drag-cancel:
