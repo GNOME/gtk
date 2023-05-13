@@ -754,9 +754,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkDropTargetClass, accept),
                     g_signal_accumulator_first_wins, NULL,
-                    NULL,
+                    _gtk_marshal_BOOLEAN__OBJECT,
                     G_TYPE_BOOLEAN, 1,
                     GDK_TYPE_DROP);
+  g_signal_set_va_marshaller (signals[ACCEPT],
+                              GTK_TYPE_DROP_TARGET,
+                              _gtk_marshal_BOOLEAN__OBJECTv);
 
   /**
    * GtkDropTarget::enter:
@@ -777,9 +780,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkDropTargetClass, enter),
                     g_signal_accumulator_first_wins, NULL,
-                    NULL,
+                    _gtk_marshal_FLAGS__DOUBLE_DOUBLE,
                     GDK_TYPE_DRAG_ACTION, 2,
                     G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[ENTER],
+                              GTK_TYPE_DROP_TARGET,
+                              _gtk_marshal_FLAGS__DOUBLE_DOUBLEv);
 
   /**
    * GtkDropTarget::motion:
@@ -798,9 +804,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkDropTargetClass, motion),
                     g_signal_accumulator_first_wins, NULL,
-                    NULL,
+                    _gtk_marshal_FLAGS__DOUBLE_DOUBLE,
                     GDK_TYPE_DRAG_ACTION, 2,
                     G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[MOTION],
+                              GTK_TYPE_DROP_TARGET,
+                              _gtk_marshal_FLAGS__DOUBLE_DOUBLEv);
 
   /**
    * GtkDropTarget::leave:
@@ -845,9 +854,12 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_SIGNAL_RUN_LAST,
                     0,
                     g_signal_accumulator_first_wins, NULL,
-                    NULL,
+                    _gtk_marshal_BOOLEAN__BOXED_DOUBLE_DOUBLE,
                     G_TYPE_BOOLEAN, 3,
                     G_TYPE_VALUE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DROP],
+                              GTK_TYPE_DROP_TARGET,
+                              _gtk_marshal_BOOLEAN__BOXED_DOUBLE_DOUBLEv);
 }
 
 static void

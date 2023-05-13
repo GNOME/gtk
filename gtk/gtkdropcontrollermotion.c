@@ -275,7 +275,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
                   GTK_TYPE_DROP_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2,
                   G_TYPE_DOUBLE,
                   G_TYPE_DOUBLE);
