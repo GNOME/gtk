@@ -49,6 +49,14 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                                   const char      *data,
                                                   gssize           length);
+GDK_AVAILABLE_IN_4_12
+void             gtk_css_provider_load_from_string (GtkCssProvider *css_provider,
+                                                    const char     *string);
+
+GDK_AVAILABLE_IN_4_12
+void             gtk_css_provider_load_from_bytes  (GtkCssProvider *css_provider,
+                                                    GBytes         *data);
+
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file);
