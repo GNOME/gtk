@@ -11,7 +11,7 @@ struct Rect
 Rect
 rect_from_gsk (vec4 xywh)
 {
-  return Rect(xywh.xyxy + vec4(0,0,xywh.zw));
+  return Rect((xywh.xyxy + vec4(0,0,xywh.zw)) * push.scale.xyxy);
 }
 
 float

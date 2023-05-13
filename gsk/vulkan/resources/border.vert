@@ -1,6 +1,7 @@
 #version 420 core
 
 #include "clip.vert.glsl"
+#include "rounded-rect.glsl"
 
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inCornerWidths;
@@ -10,9 +11,7 @@ layout(location = 4) in mat4 inBorderColors;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out flat vec4 outColor;
-layout(location = 2) out flat vec4 outRect;
-layout(location = 3) out flat vec4 outCornerWidths;
-layout(location = 4) out flat vec4 outCornerHeights;
+layout(location = 2) out flat RoundedRect outRect;
 layout(location = 5) out flat vec4 outBorderWidths;
 
 vec2 offsets[6] = { vec2(0.0, 0.0),
@@ -97,11 +96,10 @@ void main() {
     pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[vert_index]);
   else
     pos = mix (rect.bounds.zy, rect.bounds.xw, offsets[vert_index]);
-  gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
+  gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outColor = inBorderColors[((gl_VertexIndex / 3 + 15) / 4) % 4];
   outPos = pos;
-  outRect = inRect;
-  outCornerWidths = inCornerWidths;
-  outCornerHeights = inCornerHeights;
-  outBorderWidths = inBorderWidths;
+  outRect = RoundedRect(inRect.xyxy + vec4(0,0,inRect.zw), inCornerWidths, inCornerHeights);
+  outRect = rounded_rect_scale (outRect, push.scale);
+  outBorderWidths = inBorderWidths * push.scale.yxyx;
 }

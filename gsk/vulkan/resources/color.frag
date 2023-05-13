@@ -12,5 +12,5 @@ layout(location = 0) out vec4 color;
 void main()
 {
   float alpha = inColor.a * rect_coverage (inRect, inPos);
-  color = clip (inPos, vec4(inColor.rgb, 1) * alpha);
+  color = clip_scaled (inPos, vec4(inColor.rgb, 1) * alpha);
 }

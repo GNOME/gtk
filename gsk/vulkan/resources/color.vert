@@ -21,7 +21,7 @@ void main() {
   Rect rect = rect_round_larger (clip_rect (rect_from_gsk (inRect)));
 
   vec2 pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[gl_VertexIndex]);
-  gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
+  gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outPos = pos;
   outRect = rect_from_gsk (inRect);
   outColor = inColor;

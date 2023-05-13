@@ -43,6 +43,16 @@ rounded_rect_distance (RoundedRect r, vec2 p)
 }
 
 RoundedRect
+rounded_rect_scale (RoundedRect r, vec2 scale)
+{
+  r.bounds *= scale.xyxy;
+  r.corner_widths *= scale.xxxx;
+  r.corner_heights *= scale.yyyy;
+
+  return r;
+}
+
+RoundedRect
 rounded_rect_shrink (RoundedRect r, vec4 amount)
 {
   vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
