@@ -57,6 +57,7 @@
         <child>
           <object class="GtkVolumeButton" id="volume_button">
             <property name="adjustment">volume_adjustment</property>
+            <property name="valign">center</property>
           </object>
         </child>
       </object>
