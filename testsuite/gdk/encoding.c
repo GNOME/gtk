@@ -31,7 +31,9 @@ test_to_text_list (void)
 
       gdk_x11_free_text_list (list);
     }
+  else
 #endif
+    g_test_skip ("No X11 display");
 }
 
 int

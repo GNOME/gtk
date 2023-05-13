@@ -17,3 +17,9 @@ d {
 e {
   font-variant: small-caps;
 }
+
+f {
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  font-variant-numeric: lining-nums tabular-nums diagonal-fractions;
+  font-variant-east-asian: simplified;
+}

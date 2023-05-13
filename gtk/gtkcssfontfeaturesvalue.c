@@ -75,7 +75,8 @@ gtk_css_value_font_features_equal (const GtkCssValue *value1,
   g_hash_table_iter_init (&iter, value1->features);
   while (g_hash_table_iter_next (&iter, &name, &val1))
     {
-      val2 = g_hash_table_lookup (value2->features, name);
+      if (!g_hash_table_lookup_extended (value2->features, name, NULL, &val2))
+        return FALSE;
 
       if (val1 != val2)
         return FALSE;
@@ -106,11 +107,10 @@ gtk_css_value_font_features_transition (GtkCssValue *start,
   g_hash_table_iter_init (&iter, start->features);
   while (g_hash_table_iter_next (&iter, (gpointer *)&name, (gpointer *)&start_val))
     {
-      end_val = g_hash_table_lookup (end->features, name);
-      if (end_val == NULL)
+      if (!g_hash_table_lookup_extended (end->features, name, NULL, &end_val))
         transition = start_val;
       else
-        transition = progress > 0.5 ? start_val : end_val;
+        transition = progress < 0.5 ? start_val : end_val;
 
       gtk_css_font_features_value_add_feature (result, name, GPOINTER_TO_INT (transition));
     }
@@ -118,8 +118,7 @@ gtk_css_value_font_features_transition (GtkCssValue *start,
   g_hash_table_iter_init (&iter, end->features);
   while (g_hash_table_iter_next (&iter, (gpointer *)&name, (gpointer *)&end_val))
     {
-      start_val = g_hash_table_lookup (start->features, name);
-      if (start_val != NULL)
+      if (g_hash_table_lookup_extended (end->features, name, NULL, &start_val))
         continue;
 
       gtk_css_font_features_value_add_feature (result, name, GPOINTER_TO_INT (end_val));

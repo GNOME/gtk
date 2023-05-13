@@ -296,7 +296,8 @@ test_create (void)
 {
   GtkSelectionModel *selection;
   GListStore *store;
-  
+  guint start, end;
+
   store = new_store (1, 5, 2);
   selection = new_model (store);
 
@@ -310,6 +311,12 @@ test_create (void)
   assert_changes (selection, "");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (selection)) == G_TYPE_OBJECT);
+  g_assert_true (gtk_multi_selection_get_model (GTK_MULTI_SELECTION (selection)) == G_LIST_MODEL (store));
+  gtk_section_model_get_section (GTK_SECTION_MODEL (selection), 0, &start, &end);
+  g_assert_cmpint (start, ==, 0);
+  g_assert_cmpint (end, ==, G_MAXUINT);
 
   g_object_unref (selection);
 }
@@ -633,6 +640,9 @@ test_selection_filter (void)
   assert_selection_changes (selection, "");
   assert_model (filter, "2 3 4");
   assert_changes (filter, "");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (filter)) == G_TYPE_OBJECT);
+  g_assert_true (gtk_selection_filter_model_get_model (filter) == selection);
 
   g_object_unref (store);
   g_object_unref (selection);

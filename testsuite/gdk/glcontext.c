@@ -21,8 +21,7 @@ test_allowed_backends (gconstpointer data)
   display = gdk_display_get_default ();
   if (!gdk_display_prepare_gl (display, &error))
     {
-      g_test_message ("no GL support: %s", error->message);
-      g_test_skip ("no GL support");
+      g_test_skip_printf ("no GL support: %s", error->message);
       g_clear_error (&error);
       return;
     }

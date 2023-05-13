@@ -21,7 +21,7 @@ for t in ${TESTS[*]}; do
 
   cd $TEST_DATA_DIR
 
-  $GTK_BUILDER_TOOL validate $(basename $t) 2>$result
+  $GTK_BUILDER_TOOL validate --deprecations $(basename $t) 2>$result
 
   cd $OLDPWD
 
