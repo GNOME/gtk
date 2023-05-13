@@ -1095,6 +1095,9 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
  * Loads @data into @css_provider.
  *
  * This clears any previously loaded information.
+ *
+ * Deprecated: 4.12: Use [method@Gtk.CssProvider.load_from_string]
+ *   or [method@Gtk.CssProvider.load_from_bytes] instead
  */
 void
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
