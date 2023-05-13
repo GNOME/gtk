@@ -25,6 +25,7 @@
 #include "config.h"
 #include "gtkdrawingarea.h"
 #include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
@@ -320,11 +321,11 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkDrawingAreaClass, resize),
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
   g_signal_set_va_marshaller (signals[RESIZE],
                               G_TYPE_FROM_CLASS (class),
-                              _gtk_marshal_VOID__INT_INTv);
+                              _gdk_marshal_VOID__INT_INTv);
 }
 
 static void

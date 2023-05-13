@@ -27,6 +27,7 @@
 
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "deprecated/gtkmessagedialog.h"
@@ -821,13 +822,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   signals[PAGINATE] =
     g_signal_new (I_("paginate"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkPrintOperationClass, paginate),
-		  paginate_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT,
-		  G_TYPE_BOOLEAN, 1, GTK_TYPE_PRINT_CONTEXT);
-
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkPrintOperationClass, paginate),
+                  paginate_accumulator, NULL,
+                  _gdk_marshal_BOOLEAN__OBJECT,
+                  G_TYPE_BOOLEAN, 1, GTK_TYPE_PRINT_CONTEXT);
+  g_signal_set_va_marshaller (signals[PAGINATE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gdk_marshal_BOOLEAN__OBJECTv);
 
   /**
    * GtkPrintOperation::request-page-setup:
@@ -844,15 +847,15 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   signals[REQUEST_PAGE_SETUP] =
     g_signal_new (I_("request-page-setup"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkPrintOperationClass, request_page_setup),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_INT_OBJECT,
-		  G_TYPE_NONE, 3,
-		  GTK_TYPE_PRINT_CONTEXT,
-		  G_TYPE_INT,
-		  GTK_TYPE_PAGE_SETUP);
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkPrintOperationClass, request_page_setup),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_INT_OBJECT,
+                  G_TYPE_NONE, 3,
+                  GTK_TYPE_PRINT_CONTEXT,
+                  G_TYPE_INT,
+                  GTK_TYPE_PAGE_SETUP);
   g_signal_set_va_marshaller (signals[REQUEST_PAGE_SETUP],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_VOID__OBJECT_INT_OBJECTv);

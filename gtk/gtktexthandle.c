@@ -25,6 +25,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
 #include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include "gtknativeprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkrendericonprivate.h"
@@ -365,12 +366,12 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST, 0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE, 2,
                   G_TYPE_INT, G_TYPE_INT);
   g_signal_set_va_marshaller (signals[HANDLE_DRAGGED],
                               G_OBJECT_CLASS_TYPE (object_class),
-                              _gtk_marshal_VOID__INT_INTv);
+                              _gdk_marshal_VOID__INT_INTv);
 
   signals[DRAG_STARTED] =
     g_signal_new (I_("drag-started"),

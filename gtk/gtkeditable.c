@@ -161,6 +161,7 @@
 #include "gtkeditable.h"
 #include "gtkentrybuffer.h"
 #include "gtkmarshalers.h"
+#include "gdk/gdkmarshalers.h"
 #include "gtkprivate.h"
 
 G_DEFINE_INTERFACE (GtkEditable, gtk_editable, GTK_TYPE_WIDGET)
@@ -342,13 +343,13 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_INT,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE, 2,
                   G_TYPE_INT,
                   G_TYPE_INT);
   g_signal_set_va_marshaller (signals[DELETE_TEXT],
                               G_TYPE_FROM_INTERFACE (iface),
-                              _gtk_marshal_VOID__INT_INTv);
+                              _gdk_marshal_VOID__INT_INTv);
 
   /**
    * GtkEditable::changed:
