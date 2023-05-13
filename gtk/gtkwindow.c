@@ -1131,6 +1131,9 @@ gtk_window_class_init (GtkWindowClass *klass)
                   _gtk_marshal_BOOLEAN__BOOLEAN,
                   G_TYPE_BOOLEAN,
                   1, G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (window_signals[ENABLE_DEBUGGING],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__BOOLEANv);
 
   /**
    * GtkWindow::close-request:

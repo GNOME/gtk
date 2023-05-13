@@ -352,6 +352,9 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                   _gtk_marshal_BOOLEAN__INT,
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[CHANGE_CURRENT_PAGE],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_BOOLEAN__INTv);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Page_Up, 0,

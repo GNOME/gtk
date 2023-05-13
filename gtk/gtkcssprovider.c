@@ -233,6 +233,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED_BOXED,
                   G_TYPE_NONE, 2, GTK_TYPE_CSS_SECTION, G_TYPE_ERROR);
+  g_signal_set_va_marshaller (css_provider_signals[PARSING_ERROR],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__BOXED_BOXEDv);
 
   object_class->finalize = gtk_css_provider_finalize;
 

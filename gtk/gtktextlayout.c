@@ -272,6 +272,8 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_TYPE_OBJECT,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[ALLOCATE_CHILD], G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_INT_INTv);
 }
 
 static void

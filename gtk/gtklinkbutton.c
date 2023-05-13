@@ -216,6 +216,10 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (link_signals[ACTIVATE_LINK],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__VOIDv);
+
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LINK);

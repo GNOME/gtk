@@ -388,6 +388,9 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                                          G_TYPE_UINT,
                                          G_TYPE_STRING,
                                          G_TYPE_UINT);
+  g_signal_set_va_marshaller (signals[INSERTED_TEXT],
+                              GTK_TYPE_ENTRY_BUFFER,
+                              _gtk_marshal_VOID__UINT_STRING_UINTv);
 
   /**
    * GtkEntryBuffer::deleted-text:
@@ -409,6 +412,9 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                                          G_TYPE_NONE, 2,
                                          G_TYPE_UINT,
                                          G_TYPE_UINT);
+  g_signal_set_va_marshaller (signals[DELETED_TEXT],
+                              GTK_TYPE_ENTRY_BUFFER,
+                              _gtk_marshal_VOID__UINT_UINTv);
 }
 
 /* --------------------------------------------------------------------------------

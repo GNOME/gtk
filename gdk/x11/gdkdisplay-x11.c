@@ -3089,12 +3089,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    */
   signals[XEVENT] =
     g_signal_new (g_intern_static_string ("xevent"),
-		  G_OBJECT_CLASS_TYPE (object_class),
+                  G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkX11DisplayClass, xevent),
+                  G_STRUCT_OFFSET (GdkX11DisplayClass, xevent),
                   gdk_boolean_handled_accumulator, NULL,
                   _gdk_marshal_BOOLEAN__POINTER,
                   G_TYPE_BOOLEAN, 1, G_TYPE_POINTER);
+  g_signal_set_va_marshaller (signals[XEVENT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_BOOLEAN__POINTERv);
 
   _gdk_x11_surfaceing_init ();
 }

@@ -853,6 +853,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  GTK_TYPE_PRINT_CONTEXT,
 		  G_TYPE_INT,
 		  GTK_TYPE_PAGE_SETUP);
+  g_signal_set_va_marshaller (signals[REQUEST_PAGE_SETUP],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_INT_OBJECTv);
 
   /**
    * GtkPrintOperation::draw-page:
@@ -922,6 +925,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_PRINT_CONTEXT,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[DRAW_PAGE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_INTv);
 
   /**
    * GtkPrintOperation::end-print:
@@ -989,6 +995,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  custom_widget_accumulator, NULL,
 		  _gtk_marshal_OBJECT__VOID,
 		  G_TYPE_OBJECT, 0);
+  g_signal_set_va_marshaller (signals[CREATE_CUSTOM_WIDGET],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_OBJECT__VOIDv);
 
   /**
    * GtkPrintOperation::update-custom-widget:
@@ -1010,6 +1019,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
 		  G_TYPE_NONE, 3, GTK_TYPE_WIDGET, GTK_TYPE_PAGE_SETUP, GTK_TYPE_PRINT_SETTINGS);
+  g_signal_set_va_marshaller (signals[UPDATE_CUSTOM_WIDGET],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_OBJECT_OBJECTv);
 
   /**
    * GtkPrintOperation::custom-widget-apply:
@@ -1070,6 +1082,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  GTK_TYPE_PRINT_OPERATION_PREVIEW,
 		  GTK_TYPE_PRINT_CONTEXT,
 		  GTK_TYPE_WINDOW);
+  g_signal_set_va_marshaller (signals[PREVIEW],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__OBJECT_OBJECT_OBJECTv);
 
   /**
    * GtkPrintOperation:default-page-setup: (attributes org.gtk.Property.get=gtk_print_operation_get_default_page_setup org.gtk.Property.set=gtk_print_operation_set_default_page_setup)

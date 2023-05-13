@@ -366,6 +366,9 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__STRING,
                   G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
+  g_signal_set_va_marshaller (signals[ACTIVATE_LINK],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_BOOLEAN__STRINGv);
 
   /**
    * GtkAboutDialog:program-name: (attributes org.gtk.Property.get=gtk_about_dialog_get_program_name org.gtk.Property.set=gtk_about_dialog_set_program_name)

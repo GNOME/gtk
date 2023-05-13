@@ -781,6 +781,9 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_SCROLL_TYPE,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[SCROLL_CHILD],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__ENUM_BOOLEANv);
 
   /**
    * GtkScrolledWindow::move-focus-out:

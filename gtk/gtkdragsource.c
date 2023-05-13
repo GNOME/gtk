@@ -456,6 +456,9 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_TYPE_BOOLEAN, 2,
                     GDK_TYPE_DRAG,
                     GDK_TYPE_DRAG_CANCEL_REASON);
+  g_signal_set_va_marshaller (signals[DRAG_CANCEL],
+                              G_TYPE_FROM_CLASS (class),
+                              _gtk_marshal_BOOLEAN__OBJECT_ENUMv);
 }
 
 static GdkContentProvider *
