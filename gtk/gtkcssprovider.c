@@ -1089,7 +1089,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 /**
  * gtk_css_provider_load_from_data:
  * @css_provider: a `GtkCssProvider`
- * @data: CSS data to be parsed
+ * @data: (array length=length) (element-type utf8): CSS data loaded in memory
  * @length: the length of @data in bytes, or -1 for NUL terminated strings
  *
  * Loads @data into @css_provider.
