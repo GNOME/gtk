@@ -129,6 +129,7 @@
 #include "gtkroundedboxprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gtkcssshadowvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
 
@@ -1193,6 +1194,16 @@ gtk_popover_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
 
+static double
+get_border_radius (GtkWidget *widget)
+{
+  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
+  /* FIXME this is a very crude interpretation of border radius */
+  return MAX (_gtk_css_corner_value_get_x (style->border->border_top_left_radius, 100),
+              _gtk_css_corner_value_get_y (style->border->border_top_left_radius, 100));
+}
+
 static void
 gtk_popover_get_gap_coords (GtkPopover *popover,
                             int        *initial_x_out,
@@ -1227,7 +1238,7 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   pos = priv->final_position;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (priv->contents_widget));
-  border_radius = _gtk_css_number_value_get (style->border->border_top_left_radius, 100);
+  border_radius = round (get_border_radius (widget));
   border_top = _gtk_css_number_value_get (style->border->border_top_width, 100);
   border_right = _gtk_css_number_value_get (style->border->border_right_width, 100);
   border_bottom = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
@@ -1425,15 +1436,6 @@ gtk_popover_update_shape (GtkPopover *popover)
 }
 
 static int
-get_border_radius (GtkWidget *widget)
-{
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  return round (_gtk_css_number_value_get (style->border->border_top_left_radius, 100));
-}
-
-static int
 get_minimal_size (GtkPopover     *popover,
                   GtkOrientation  orientation)
 {
@@ -1443,7 +1445,7 @@ get_minimal_size (GtkPopover     *popover,
   int tail_gap_width = priv->has_arrow ? TAIL_GAP_WIDTH : 0;
   int min_width, min_height;
 
-  minimal_size = 2 * get_border_radius (GTK_WIDGET (priv->contents_widget));
+  minimal_size = 2 * round (get_border_radius (GTK_WIDGET (priv->contents_widget)));
   pos = priv->position;
 
   if ((orientation == GTK_ORIENTATION_HORIZONTAL && POS_IS_VERTICAL (pos)) ||
