@@ -2250,6 +2250,11 @@ gdk_wayland_toplevel_set_dbus_properties (GdkToplevel *toplevel,
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
 }
 
+void
+gdk_wayland_toplevel_destroy (GdkToplevel *toplevel)
+{
+}
+
 /* }}} */
 /* {{{ Toplevel API */
 
