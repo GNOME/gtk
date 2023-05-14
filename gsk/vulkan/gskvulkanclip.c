@@ -29,11 +29,32 @@ gsk_vulkan_clip_init_copy (GskVulkanClip *self,
   gsk_rounded_rect_init_copy (&self->rect, &src->rect);
 }
 
+static gboolean
+gsk_vulkan_clip_init_after_intersection (GskVulkanClip              *self,
+                                         GskRoundedRectIntersection  res)
+{
+  if (res == GSK_INTERSECTION_NOT_REPRESENTABLE)
+    return FALSE;
+
+  if (res == GSK_INTERSECTION_EMPTY)
+    self->type = GSK_VULKAN_CLIP_ALL_CLIPPED;
+  else if (gsk_rounded_rect_is_rectilinear (&self->rect))
+    self->type = GSK_VULKAN_CLIP_RECT;
+  else if (gsk_rounded_rect_is_circular (&self->rect))
+    self->type = GSK_VULKAN_CLIP_ROUNDED_CIRCULAR;
+  else
+    self->type = GSK_VULKAN_CLIP_ROUNDED;
+
+  return TRUE;
+}
+
 gboolean
 gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
                                 const GskVulkanClip   *src,
                                 const graphene_rect_t *rect)
 {
+  GskRoundedRectIntersection res;
+
   if (graphene_rect_contains_rect (rect, &src->rect.bounds))
     {
       gsk_vulkan_clip_init_copy (dest, src);
@@ -67,20 +88,9 @@ gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
 
     case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
-      if (gsk_rounded_rect_contains_rect (&src->rect, rect))
-        {
-          dest->type = GSK_VULKAN_CLIP_RECT;
-          gsk_rounded_rect_init_from_rect (&dest->rect, rect, 0);
-        }
-      else
-        {
-          /* some points of rect are inside src's rounded rect,
-           * some are outside. */
-          /* XXX: If the 2 rects don't intersect on rounded corners,
-           * we could actually compute a new clip here.
-           */
-          return FALSE;
-        }
+      res = gsk_rounded_rect_intersect_with_rect (&src->rect, rect, &dest->rect);
+      if (!gsk_vulkan_clip_init_after_intersection (dest, res))
+        return FALSE;
       break;
 
     default:
@@ -96,6 +106,8 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
                                         const GskVulkanClip  *src,
                                         const GskRoundedRect *rounded)
 {
+  GskRoundedRectIntersection res;
+
   if (gsk_rounded_rect_contains_rect (rounded, &src->rect.bounds))
     {
       gsk_vulkan_clip_init_copy (dest, src);
@@ -119,29 +131,17 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
       break;
 
     case GSK_VULKAN_CLIP_RECT:
-      if (graphene_rect_contains_rect (&src->rect.bounds, &rounded->bounds))
-        {
-          dest->type = gsk_rounded_rect_is_circular (rounded) ? GSK_VULKAN_CLIP_ROUNDED_CIRCULAR : GSK_VULKAN_CLIP_ROUNDED;
-          gsk_rounded_rect_init_copy (&dest->rect, rounded);
-          return TRUE;
-        }
-      /* some points of rect are inside src's rounded rect,
-       * some are outside. */
-      /* XXX: If the 2 rects don't intersect on rounded corners,
-       * we could actually compute a new clip here.
-       */
-      return FALSE;
+      res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
+      if (!gsk_vulkan_clip_init_after_intersection (dest, res))
+        return FALSE;
+      break;
 
     case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
-      if (gsk_rounded_rect_contains_rect (&src->rect, &rounded->bounds))
-        {
-          dest->type = gsk_rounded_rect_is_circular (rounded) ? GSK_VULKAN_CLIP_ROUNDED_CIRCULAR : GSK_VULKAN_CLIP_ROUNDED;
-          gsk_rounded_rect_init_copy (&dest->rect, rounded);
-          return TRUE;
-        }
-      /* XXX: Can be improved for the case where one of the rects is a slightly shrunk version of the other */
-      return FALSE;
+      res = gsk_rounded_rect_intersection (&src->rect, rounded, &dest->rect);
+      if (!gsk_vulkan_clip_init_after_intersection (dest, res))
+        return FALSE;
+      break;
 
     default:
       g_assert_not_reached ();
