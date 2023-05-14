@@ -103,12 +103,6 @@ struct _GdkWaylandToplevel
   } next_layout;
 
   struct {
-    GdkWaylandToplevelExported callback;
-    gpointer user_data;
-    GDestroyNotify destroy_func;
-  } exported;
-
-  struct {
     gboolean was_set;
 
     char *application_id;
