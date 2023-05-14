@@ -208,4 +208,4 @@ sequence, so setting the state on one does transfer the state to
 the others. They also are mutually exclusive, within a widget
 where may be only one gesture group claiming a given sequence.
 If another gesture group claims later that same sequence, the
-first group will deny the sequence:
+first group will deny the sequence.
