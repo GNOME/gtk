@@ -1809,7 +1809,8 @@ gdk_wayland_toplevel_real_export_handle_finish (GdkToplevel   *toplevel,
 }
 
 static void
-gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel)
+gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel,
+                                           const char  *handle)
 {
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
@@ -2486,9 +2487,7 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
 void
 gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
 {
-  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
-
-  gdk_toplevel_unexport_handle (toplevel);
+  g_warning ("Use gdk_wayland_toplevel_drop_exported_handle()");
 }
 
 /**
@@ -2507,9 +2506,7 @@ void
 gdk_wayland_toplevel_drop_exported_handle (GdkToplevel *toplevel,
                                            const char  *handle)
 {
-  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
-
-  gdk_toplevel_unexport_handle (toplevel);
+  gdk_toplevel_unexport_handle (toplevel, handle);
 }
 
 static void
