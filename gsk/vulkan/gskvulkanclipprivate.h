@@ -36,6 +36,8 @@ struct _GskVulkanClip
 
 void                    gsk_vulkan_clip_init_empty                      (GskVulkanClip          *clip,
                                                                          const graphene_rect_t  *rect);
+void                    gsk_vulkan_clip_init_rect                       (GskVulkanClip          *clip,
+                                                                         const graphene_rect_t  *rect);
 
 gboolean                gsk_vulkan_clip_intersect_rect                  (GskVulkanClip          *dest,
                                                                          const GskVulkanClip    *src,

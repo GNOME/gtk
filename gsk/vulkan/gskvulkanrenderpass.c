@@ -1087,6 +1087,23 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskRenderNode           *node)
 {
   GskVulkanParseState state;
+  cairo_rectangle_int_t rect;
+  graphene_rect_t clip;
+
+  cairo_region_get_extents (self->clip, &rect);
+  clip = GRAPHENE_RECT_INIT(rect.x + self->viewport.origin.x,
+                            rect.y + self->viewport.origin.y,
+                            rect.width, rect.height);
+  if (graphene_rect_equal (&clip, &self->viewport))
+    {
+      graphene_rect_scale (&clip, 1 / graphene_vec2_get_x (&self->scale), 1 / graphene_vec2_get_y (&self->scale), &clip);
+      gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
+    }
+  else
+    {
+      graphene_rect_scale (&clip, 1 / graphene_vec2_get_x (&self->scale), 1 / graphene_vec2_get_y (&self->scale), &clip);
+      gsk_vulkan_clip_init_rect (&state.clip, &clip);
+    }
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
@@ -1094,7 +1111,6 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                               self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
   graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
   state.offset = *graphene_point_zero ();
 

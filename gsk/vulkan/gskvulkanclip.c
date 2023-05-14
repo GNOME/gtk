@@ -13,6 +13,14 @@ gsk_vulkan_clip_init_empty (GskVulkanClip         *clip,
   gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
 }
 
+void
+gsk_vulkan_clip_init_rect (GskVulkanClip         *clip,
+                           const graphene_rect_t *rect)
+{
+  clip->type = GSK_VULKAN_CLIP_RECT;
+  gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
+}
+
 static void
 gsk_vulkan_clip_init_copy (GskVulkanClip *self,
                            const GskVulkanClip *src)
