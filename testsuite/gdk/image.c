@@ -47,6 +47,7 @@ test_load_image (gconstpointer data)
   bytes = g_file_load_bytes (file, NULL, NULL, &error);
   g_assert_no_error (error);
 
+  /* use the internal api, we want to avoid pixbuf fallback here */
   if (g_str_has_suffix (filename, ".png"))
     texture = gdk_load_png (bytes, &error);
   else if (g_str_has_suffix (filename, ".tiff"))
@@ -72,19 +73,18 @@ test_save_image (gconstpointer test_data)
 {
   const char *filename = test_data;
   char *path;
-  GFile *file;
   GdkTexture *texture;
-  GFile *file2;
+  GFile *file;
   GdkTexture *texture2;
   GError *error = NULL;
   GBytes *bytes = NULL;
   GIOStream *stream;
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", filename, NULL);
-  file = g_file_new_for_path (path);
-  texture = gdk_texture_new_from_file (file, &error);
+  texture = gdk_texture_new_from_filename (path, &error);
   g_assert_no_error (error);
 
+  /* Test the internal apis here */
   if (g_str_has_suffix (filename, ".png"))
     bytes = gdk_save_png (texture);
   else if (g_str_has_suffix (filename, ".tiff"))
@@ -94,16 +94,16 @@ test_save_image (gconstpointer test_data)
   else
     g_assert_not_reached ();
 
-  file2 = g_file_new_tmp ("imageXXXXXX", (GFileIOStream **)&stream, NULL);
+  file = g_file_new_tmp ("imageXXXXXX", (GFileIOStream **)&stream, NULL);
   g_object_unref (stream);
-  g_file_replace_contents (file2,
+  g_file_replace_contents (file,
                            g_bytes_get_data (bytes, NULL),
                            g_bytes_get_size (bytes),
                            NULL, FALSE, 0,
                            NULL, NULL, &error);
   g_assert_no_error (error);
 
-  texture2 = gdk_texture_new_from_file (file2, &error);
+  texture2 = gdk_texture_new_from_file (file, &error);
   g_assert_no_error (error);
 
 
@@ -112,30 +112,66 @@ test_save_image (gconstpointer test_data)
 
   g_bytes_unref (bytes);
   g_object_unref (texture2);
-  g_object_unref (file2);
   g_object_unref (texture);
   g_object_unref (file);
+  g_free (path);
+}
+
+static void
+test_load_image_fail (gconstpointer data)
+{
+  const char *filename = data;
+  char *path;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  path = g_test_build_filename (G_TEST_DIST, "bad-image-data", filename, NULL);
+  texture = gdk_texture_new_from_filename (path, &error);
+  g_assert_nonnull (error);
+  g_assert_null (texture);
+
+  g_error_free (error);
+
   g_free (path);
 }
 
 int
 main (int argc, char *argv[])
 {
+  char *path;
+  GDir *dir;
+  GError *error = NULL;
+  const char *name;
+
   (g_test_init) (&argc, &argv, NULL);
 
-  g_test_add_data_func ("/image/load/png", "image.png", test_load_image);
-  g_test_add_data_func ("/image/load/png2", "image-gray.png", test_load_image);
-  g_test_add_data_func ("/image/load/png3", "image-palette.png", test_load_image);
-  g_test_add_data_func ("/image/load/tiff", "image.tiff", test_load_image);
-  g_test_add_data_func ("/image/load/tiff2", "image-unassoc.tiff", test_load_image);
-  g_test_add_data_func ("/image/load/tiff3", "image-tile.tiff", test_load_image);
-  g_test_add_data_func ("/image/load/tiff4", "image-float.tiff", test_load_image);
-  g_test_add_data_func ("/image/load/jpeg", "image.jpeg", test_load_image);
-  g_test_add_data_func ("/image/load/jpeg2", "image-cmyk.jpeg", test_load_image);
-  g_test_add_data_func ("/image/load/jpeg3", "image-gray.jpeg", test_load_image);
-  g_test_add_data_func ("/image/save/png", "image.png", test_save_image);
-  g_test_add_data_func ("/image/save/tiff", "image.tiff", test_save_image);
-  g_test_add_data_func ("/image/save/jpeg", "image.jpeg", test_save_image);
+  path = g_test_build_filename (G_TEST_DIST, "image-data", NULL);
+  dir = g_dir_open (path, 0, &error);
+  g_assert_no_error (error);
+  g_free (path);
+
+  while ((name = g_dir_read_name (dir)) != NULL)
+   {
+     char *test = g_strconcat ("/image/load/", name, NULL);
+     g_test_add_data_func (test, name, test_load_image);
+     g_free (test);
+   }
+
+  path = g_test_build_filename (G_TEST_DIST, "bad-image-data", NULL);
+  dir = g_dir_open (path, 0, &error);
+  g_assert_no_error (error);
+  g_free (path);
+
+  while ((name = g_dir_read_name (dir)) != NULL)
+   {
+     char *test = g_strconcat ("/image/fail/", name, NULL);
+     g_test_add_data_func (test, name, test_load_image_fail);
+     g_free (test);
+   }
+
+  g_test_add_data_func ("/image/save/image.png", "image.png", test_save_image);
+  g_test_add_data_func ("/image/save/image.tiff", "image.tiff", test_save_image);
+  g_test_add_data_func ("/image/save/image.jpeg", "image.jpeg", test_save_image);
 
   return g_test_run ();
 }
