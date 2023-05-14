@@ -711,6 +711,8 @@ gdk_texture_set_diff (GdkTexture     *self,
                       GdkTexture     *previous,
                       cairo_region_t *diff)
 {
+  g_assert (self->diff_to_previous == NULL);
+
   self->previous_texture = previous;
   self->diff_to_previous = diff;
   g_atomic_pointer_set (&previous->next_texture, self);
