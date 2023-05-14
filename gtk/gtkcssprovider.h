@@ -45,10 +45,18 @@ GtkCssProvider * gtk_css_provider_new (void);
 GDK_AVAILABLE_IN_ALL
 char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_css_provider_load_from_string)
 void             gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                                   const char      *data,
                                                   gssize           length);
+GDK_AVAILABLE_IN_4_12
+void             gtk_css_provider_load_from_string (GtkCssProvider *css_provider,
+                                                    const char     *string);
+
+GDK_AVAILABLE_IN_4_12
+void             gtk_css_provider_load_from_bytes  (GtkCssProvider *css_provider,
+                                                    GBytes         *data);
+
 GDK_AVAILABLE_IN_ALL
 void             gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file);

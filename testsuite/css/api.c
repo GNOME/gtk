@@ -25,10 +25,13 @@ gtk_css_provider_load_data_not_null_terminated (void)
 {
   GtkCssProvider *p;
   const char data[3] = {'*', '{', '}'};
+  GBytes *bytes;
 
-  p = gtk_css_provider_new();
+  p = gtk_css_provider_new ();
 
-  gtk_css_provider_load_from_data(p, data, sizeof (data));
+  bytes = g_bytes_new_static (data, sizeof (data));
+  gtk_css_provider_load_from_bytes (p, bytes);
+  g_bytes_unref (bytes);
 
   g_object_unref (p);
 }

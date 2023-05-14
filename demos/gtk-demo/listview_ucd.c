@@ -367,7 +367,7 @@ do_listview_ucd (GtkWidget *do_widget)
       gtk_label_set_width_chars (GTK_LABEL (label), 2);
       gtk_widget_add_css_class (label, "enormous");
       provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_data (provider, "label.enormous { font-size: 80px; }", -1);
+      gtk_css_provider_load_from_string (provider, "label.enormous { font-size: 80px; }");
       gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
       gtk_widget_set_hexpand (label, TRUE);
       gtk_box_append (GTK_BOX (box), label);

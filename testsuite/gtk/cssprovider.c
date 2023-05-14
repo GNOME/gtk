@@ -17,7 +17,7 @@ test_section_in_load_from_data (void)
   provider = gtk_css_provider_new ();
   g_signal_connect (provider, "parsing-error",
                     G_CALLBACK (assert_section_is_not_null), NULL);
-  gtk_css_provider_load_from_data (provider, "random garbage goes here", -1);
+  gtk_css_provider_load_from_string (provider, "random garbage goes here");
   g_object_unref (provider);
 }
 

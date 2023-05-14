@@ -50,7 +50,7 @@ update_css_for_blend_mode (GtkCssProvider *provider,
                          blend_mode,
                          blend_mode);
 
-  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_css_provider_load_from_string (provider, css);
 
   g_bytes_unref (bytes);
   g_free (css);
