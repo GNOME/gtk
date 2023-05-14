@@ -288,7 +288,7 @@ support.
 If you want to run the testsuite to ensure that your GTK build
 works, you should enable it with this option.
 
-### `build-tests`, `build-examples`, `demos`
+### `build-tests`, `build-examples`, `build-demos`
 
 By default, GTK will build quite a few tests, examples and demos.
 While these are useful on a developer system, they are not

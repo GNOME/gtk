@@ -24,6 +24,8 @@ tests = [
   { 'name': 'rgba' },
   { 'name': 'seat' },
   { 'name': 'texture-threads' },
+  { 'name': 'toplevellayout' },
+  { 'name': 'popuplayout' },
 ]
 
 foreach t : tests
