@@ -2502,6 +2502,12 @@ export_handle_done (GObject      *source,
  * from another surface as transient for this one, see
  * [method@GdkWayland.WaylandToplevel.set_transient_for_exported].
  *
+ * Before 4.12, this API could not safely be used multiple times,
+ * since there was no reference counting for handles. Starting with
+ * 4.12, every call to this function obtains a new handle, and every
+ * call to [method@GdkWayland.WaylandToplevel.drop_exported_handle] drops
+ * just the handle that it is given.
+ *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
  *
@@ -2538,8 +2544,15 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
  * It is an error to call this function on a surface that
  * does not have a handle.
  *
+ * Since 4.12, this function does nothing. Use
+ * [method@GdkWayland.WaylandToplevel.drop_exported_handle] instead to drop a
+ * handle that was obtained with [method@GdkWayland.WaylandToplevel.export_handle].
+ *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
+ *
+ * Deprecated: 4.12: Use [method@GdkWayland.WaylandToplevel.drop_exported_handle]
+ *   instead, this function does nothing
  */
 void
 gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)

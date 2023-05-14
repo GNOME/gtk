@@ -52,7 +52,7 @@ gboolean                 gdk_wayland_toplevel_export_handle (GdkToplevel        
                                                              gpointer                 user_data,
                                                              GDestroyNotify           destroy_func);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gdk_wayland_toplevel_drop_exported_handle)
 void                     gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel);
 
 GDK_AVAILABLE_IN_4_12
