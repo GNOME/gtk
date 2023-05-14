@@ -6336,7 +6336,8 @@ gtk_window_export_handle (GtkWindow               *window,
 }
 
 void
-gtk_window_unexport_handle (GtkWindow *window)
+gtk_window_unexport_handle (GtkWindow  *window,
+                            const char *handle)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
