@@ -689,6 +689,134 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
   return GSK_INTERSECTION_NONEMPTY;
 }
 
+static gboolean
+check_nonintersecting_corner (const GskRoundedRect *out,
+                              const GskRoundedRect *in,
+                              GskCorner             corner,
+                              float                 diff_x,
+                              float                 diff_y,
+                              GskRoundedRect       *result)
+{
+  g_assert (diff_x >= 0);
+  g_assert (diff_y >= 0);
+
+  if (out->corner[corner].width < diff_x ||
+      out->corner[corner].height < diff_y ||
+      (out->corner[corner].width <= in->corner[corner].width + diff_x &&
+       out->corner[corner].height <= in->corner[corner].height + diff_y))
+    {
+      result->corner[corner] = in->corner[corner];
+      return TRUE;
+    }
+
+  if (diff_x > 0 || diff_y > 0)
+    return FALSE;
+
+  if (out->corner[corner].width > in->corner[corner].width &&
+      out->corner[corner].height > in->corner[corner].height)
+    {
+      result->corner[corner] = out->corner[corner];
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* a is outside in x direction, b is outside in y direction */
+static gboolean
+check_intersecting_corner (const GskRoundedRect *a,
+                           const GskRoundedRect *b,
+                           GskCorner             corner,
+                           float                 diff_x,
+                           float                 diff_y,
+                           GskRoundedRect       *result)
+{
+  g_assert (diff_x > 0);
+  g_assert (diff_y > 0);
+
+  if (diff_x < a->corner[corner].width ||
+      diff_x > a->bounds.size.width - a->corner[corner].width - a->corner[OPPOSITE_CORNER_X (corner)].width ||
+      diff_y < b->corner[corner].height ||
+      diff_y > b->bounds.size.height - b->corner[corner].height - b->corner[OPPOSITE_CORNER_Y (corner)].height)
+    return FALSE;
+
+  result->corner[corner] = GRAPHENE_SIZE_INIT (0, 0);
+  return TRUE;
+}
+
+static gboolean
+check_corner (const GskRoundedRect *a,
+              const GskRoundedRect *b,
+              GskCorner             corner,
+              float                 diff_x,
+              float                 diff_y,
+              GskRoundedRect       *result)
+{
+  if (diff_x >= 0)
+    {
+      if (diff_y >= 0)
+        {
+          return check_nonintersecting_corner (a, b, corner, diff_x, diff_y, result);
+        }
+      else if (diff_x == 0)
+        {
+          return check_nonintersecting_corner (b, a, corner, 0, - diff_y, result);
+        }
+      else
+        {
+          return check_intersecting_corner (a, b, corner, diff_x, - diff_y, result);
+        }
+    }
+  else
+    {
+      if (diff_y <= 0)
+        {
+          return check_nonintersecting_corner (b, a, corner, - diff_x, - diff_y, result);
+        }
+      else
+        {
+          return check_intersecting_corner (b, a, corner, - diff_x, diff_y, result);
+        }
+    }
+                    
+}
+
+GskRoundedRectIntersection
+gsk_rounded_rect_intersection (const GskRoundedRect *a,
+                               const GskRoundedRect *b,
+                               GskRoundedRect       *result)
+{
+  float top, left, bottom, right;
+
+  if (!graphene_rect_intersection (&a->bounds, &b->bounds, &result->bounds))
+    return GSK_INTERSECTION_EMPTY;
+
+  left = b->bounds.origin.x - a->bounds.origin.x;
+  top = b->bounds.origin.y - a->bounds.origin.y;
+  right = a->bounds.origin.x + a->bounds.size.width - b->bounds.origin.x - b->bounds.size.width;
+  bottom = a->bounds.origin.y + a->bounds.size.height - b->bounds.origin.y - b->bounds.size.height;
+
+  if (check_corner (a, b,
+                    GSK_CORNER_TOP_LEFT,
+                    left, top,
+                    result) &&
+      check_corner (a, b,
+                    GSK_CORNER_TOP_RIGHT,
+                    right, top,
+                    result) &&
+      check_corner (a, b,
+                    GSK_CORNER_BOTTOM_LEFT,
+                    left, bottom,
+                    result) &&
+      check_corner (a, b,
+                    GSK_CORNER_BOTTOM_RIGHT,
+                    right, bottom,
+                    result))
+    return GSK_INTERSECTION_NONEMPTY;
+
+  return GSK_INTERSECTION_NOT_REPRESENTABLE;
+}
+
 static void
 append_arc (cairo_t *cr, double angle1, double angle2, gboolean negative)
 {

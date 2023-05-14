@@ -6,6 +6,24 @@
 
 G_BEGIN_DECLS
 
+#define OPPOSITE_CORNER(corner) ((corner) ^ 2)
+G_STATIC_ASSERT (OPPOSITE_CORNER (GSK_CORNER_TOP_LEFT) == GSK_CORNER_BOTTOM_RIGHT);
+G_STATIC_ASSERT (OPPOSITE_CORNER (GSK_CORNER_TOP_RIGHT) == GSK_CORNER_BOTTOM_LEFT);
+G_STATIC_ASSERT (OPPOSITE_CORNER (GSK_CORNER_BOTTOM_LEFT) == GSK_CORNER_TOP_RIGHT);
+G_STATIC_ASSERT (OPPOSITE_CORNER (GSK_CORNER_BOTTOM_RIGHT) == GSK_CORNER_TOP_LEFT);
+
+#define OPPOSITE_CORNER_X(corner) ((corner) ^ 1)
+G_STATIC_ASSERT (OPPOSITE_CORNER_X (GSK_CORNER_TOP_LEFT) == GSK_CORNER_TOP_RIGHT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_X (GSK_CORNER_TOP_RIGHT) == GSK_CORNER_TOP_LEFT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_X (GSK_CORNER_BOTTOM_LEFT) == GSK_CORNER_BOTTOM_RIGHT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_X (GSK_CORNER_BOTTOM_RIGHT) == GSK_CORNER_BOTTOM_LEFT);
+
+#define OPPOSITE_CORNER_Y(corner) ((corner) ^ 3)
+G_STATIC_ASSERT (OPPOSITE_CORNER_Y (GSK_CORNER_TOP_LEFT) == GSK_CORNER_BOTTOM_LEFT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_Y (GSK_CORNER_TOP_RIGHT) == GSK_CORNER_BOTTOM_RIGHT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_Y (GSK_CORNER_BOTTOM_LEFT) == GSK_CORNER_TOP_LEFT);
+G_STATIC_ASSERT (OPPOSITE_CORNER_Y (GSK_CORNER_BOTTOM_RIGHT) == GSK_CORNER_TOP_RIGHT);
+
 #define GSK_ROUNDED_RECT_INIT_FROM_RECT(_r)   \
   (GskRoundedRect) { .bounds = _r, \
                      .corner = { \
@@ -44,6 +62,9 @@ typedef enum {
 GskRoundedRectIntersection gsk_rounded_rect_intersect_with_rect   (const GskRoundedRect     *self,
                                                                    const graphene_rect_t    *rect,
                                                                    GskRoundedRect           *result) G_GNUC_PURE;
+GskRoundedRectIntersection gsk_rounded_rect_intersection          (const GskRoundedRect     *a,
+                                                                   const GskRoundedRect     *b,
+                                                                   GskRoundedRect           *result);
 
 
 G_END_DECLS
