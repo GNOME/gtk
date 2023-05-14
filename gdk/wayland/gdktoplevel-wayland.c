@@ -2491,6 +2491,27 @@ gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
   gdk_toplevel_unexport_handle (toplevel);
 }
 
+/**
+ * gdk_wayland_toplevel_drop_exported_handle:
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` that was exported
+ * @handle: the handle to drop
+ *
+ * Destroy a handle that was obtained with gdk_wayland_toplevel_export_handle().
+ *
+ * Note that this API depends on an unstable Wayland protocol,
+ * and thus may require changes in the future.
+ *
+ * Since: 4.12
+ */
+void
+gdk_wayland_toplevel_drop_exported_handle (GdkToplevel *toplevel,
+                                           const char  *handle)
+{
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+
+  gdk_toplevel_unexport_handle (toplevel);
+}
+
 static void
 unset_transient_for_exported (GdkWaylandToplevel *toplevel)
 {

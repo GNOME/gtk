@@ -55,6 +55,10 @@ gboolean                 gdk_wayland_toplevel_export_handle (GdkToplevel        
 GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel);
 
+GDK_AVAILABLE_IN_4_12
+void                     gdk_wayland_toplevel_drop_exported_handle (GdkToplevel *toplevel,
+                                                                    const char  *handle);
+
 GDK_AVAILABLE_IN_ALL
 gboolean                 gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
                                                                          const char   *parent_handle_str);
