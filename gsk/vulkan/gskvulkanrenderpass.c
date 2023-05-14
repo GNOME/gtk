@@ -2410,7 +2410,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                              VkPipelineLayout     pipeline_layout,
                              VkCommandBuffer      command_buffer)
 {
-  guint i;
+  cairo_rectangle_int_t rect;
 
   vkCmdSetViewport (command_buffer,
                     0,
@@ -2424,38 +2424,33 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         .maxDepth = 1
                     });
 
-  for (i = 0; i < cairo_region_num_rectangles (self->clip); i++)
-    {
-      cairo_rectangle_int_t rect;
+  cairo_region_get_extents (self->clip, &rect);
 
-      cairo_region_get_rectangle (self->clip, i, &rect);
+  vkCmdSetScissor (command_buffer,
+                   0,
+                   1,
+                   &(VkRect2D) {
+                      { rect.x, rect.y },
+                      { rect.width, rect.height }
+                   });
 
-      vkCmdSetScissor (command_buffer,
-                       0,
-                       1,
-                       &(VkRect2D) {
-                          { rect.x, rect.y },
-                          { rect.width, rect.height }
-                       });
-
-      vkCmdBeginRenderPass (command_buffer,
-                            &(VkRenderPassBeginInfo) {
-                                .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                                .renderPass = self->render_pass,
-                                .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
-                                .renderArea = { 
-                                    { rect.x, rect.y },
-                                    { rect.width, rect.height }
-                                },
-                                .clearValueCount = 1,
-                                .pClearValues = (VkClearValue [1]) {
-                                    { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
-                                }
+  vkCmdBeginRenderPass (command_buffer,
+                        &(VkRenderPassBeginInfo) {
+                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                            .renderPass = self->render_pass,
+                            .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
+                            .renderArea = { 
+                                { rect.x, rect.y },
+                                { rect.width, rect.height }
                             },
-                            VK_SUBPASS_CONTENTS_INLINE);
+                            .clearValueCount = 1,
+                            .pClearValues = (VkClearValue [1]) {
+                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
+                            }
+                        },
+                        VK_SUBPASS_CONTENTS_INLINE);
 
-      gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
+  gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 
-      vkCmdEndRenderPass (command_buffer);
-    }
+  vkCmdEndRenderPass (command_buffer);
 }
