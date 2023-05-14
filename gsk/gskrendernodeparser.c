@@ -1081,20 +1081,21 @@ parse_declarations (GtkCssParser      *parser,
         {
           if (gtk_css_parser_try_ident (parser, declarations[i].name))
             {
+              if (parsed & (1 << i))
+                {
+                  gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
+                  /* Unset, just to be sure */
+                  parsed &= ~(1 << i);
+                  if (declarations[i].clear_func)
+                    declarations[i].clear_func (declarations[i].result);
+                }
+
               if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
                 {
                   gtk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
                 }
               else
                 {
-                  if (parsed & (1 << i))
-                    {
-                      gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
-                      /* Unset, just to be sure */
-                      parsed &= ~(1 << i);
-                      if (declarations[i].clear_func)
-                        declarations[i].clear_func (declarations[i].result);
-                    }
                   if (!declarations[i].parse_func (parser, context, declarations[i].result))
                     {
                       /* nothing to do */
