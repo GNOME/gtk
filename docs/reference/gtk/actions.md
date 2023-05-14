@@ -220,6 +220,6 @@ clipboard.cut, clipboard.copy, clipboard.paste
 selection.delete, selection.select-all
 : Selection operations on entries, text view and labels
 
-color.select, color.customize:
+color.select, color.customize
 : Operate on colors in a `GtkColorChooserWidget`. These actions are
-  unusual in that they have the non-trivial parameter type (dddd):
+  unusual in that they have the non-trivial parameter type (dddd).
