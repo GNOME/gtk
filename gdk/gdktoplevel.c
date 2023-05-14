@@ -791,7 +791,7 @@ gdk_toplevel_export_handle (GdkToplevel         *toplevel,
  * @result: the `GAsyncResult`
  * @error: return location for an error
  *
- * Finishes the [method@Gdk.Toplevel.export_handle] cal and
+ * Finishes the [method@Gdk.Toplevel.export_handle] call and
  * returns the resulting handle.
  *
  * Returns: (nullable) (transfer full): the exported handle,
