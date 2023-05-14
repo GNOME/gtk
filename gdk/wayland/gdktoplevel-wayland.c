@@ -2557,6 +2557,20 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
 void
 gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
 {
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  if (wayland_toplevel->exported != NULL &&
+      wayland_toplevel->exported->next == NULL)
+    {
+      GdkWaylandExported *exported = wayland_toplevel->exported->data;
+
+      if (exported->handle)
+        {
+          gdk_toplevel_unexport_handle (toplevel, exported->handle);
+          return;
+        }
+    }
+
   g_warning ("Use gdk_wayland_toplevel_drop_exported_handle()");
 }
 
