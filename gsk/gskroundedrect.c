@@ -689,6 +689,230 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
   return GSK_INTERSECTION_NONEMPTY;
 }
 
+static inline void
+rect_corner (const graphene_rect_t *r,
+             unsigned int           i,
+             graphene_point_t      *p)
+{
+  switch (i)
+    {
+    case GSK_CORNER_TOP_LEFT:
+      graphene_rect_get_top_left (r, p);
+      break;
+    case GSK_CORNER_TOP_RIGHT:
+      graphene_rect_get_top_right (r, p);
+      break;
+    case GSK_CORNER_BOTTOM_RIGHT:
+      graphene_rect_get_bottom_right (r, p);
+      break;
+    case GSK_CORNER_BOTTOM_LEFT:
+      graphene_rect_get_bottom_left (r, p);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static inline void
+corner_rect (const GskRoundedRect *s,
+             unsigned int          i,
+             graphene_rect_t      *r)
+{
+  switch (i)
+    {
+    case GSK_CORNER_TOP_LEFT:
+      graphene_rect_init (r,
+                          s->bounds.origin.x,
+                          s->bounds.origin.y,
+                          s->corner[i].width,
+                          s->corner[i].height);
+      break;
+    case GSK_CORNER_TOP_RIGHT:
+      graphene_rect_init (r,
+                          s->bounds.origin.x + s->bounds.size.width - s->corner[i].width,
+                          s->bounds.origin.y,
+                          s->corner[i].width,
+                          s->corner[i].height);
+      break;
+    case GSK_CORNER_BOTTOM_RIGHT:
+      graphene_rect_init (r,
+                          s->bounds.origin.x + s->bounds.size.width - s->corner[i].width,
+                          s->bounds.origin.y + s->bounds.size.height - s->corner[i].height,
+                          s->corner[i].width,
+                          s->corner[i].height);
+      break;
+    case GSK_CORNER_BOTTOM_LEFT:
+      graphene_rect_init (r,
+                          s->bounds.origin.x,
+                          s->bounds.origin.y + s->bounds.size.height - s->corner[i].height,
+                          s->corner[i].width,
+                          s->corner[i].height);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static inline gboolean
+point_in_interior (const graphene_point_t *p,
+                   const graphene_rect_t  *r)
+{
+  if (graphene_rect_contains_point (r, p))
+    {
+      if (p->x > r->origin.x && p->x < r->origin.x + r->size.width)
+        return TRUE;
+
+      if (p->y > r->origin.y && p->y < r->origin.y + r->size.height)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+GskRoundedRectIntersection
+gsk_rounded_rect_intersect (const GskRoundedRect *self,
+                            const GskRoundedRect *other,
+                            GskRoundedRect       *result)
+{
+  if (!graphene_rect_intersection (&self->bounds, &other->bounds, &result->bounds))
+    return GSK_INTERSECTION_EMPTY;
+
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      graphene_point_t p, p1, p2;
+
+      rect_corner (&self->bounds, i, &p1);
+      rect_corner (&other->bounds, i, &p2);
+      rect_corner (&result->bounds, i, &p);
+
+      if (graphene_point_equal (&p, &p1))
+        {
+          if (graphene_point_equal (&p, &p2))
+            {
+              graphene_rect_t c;
+              graphene_rect_t d;
+
+              corner_rect (self, i, &c);
+              corner_rect (other, i, &d);
+
+              /* corners coincide */
+              if (graphene_rect_contains_rect (&c, &d))
+                {
+                  graphene_point_t q1, q2;
+
+                  rect_corner (&c, (i + 1) % 4, &q1);
+                  rect_corner (&c, (i + 3) % 4, &q2);
+
+                  if (gsk_rounded_rect_contains_point (other, &q1) &&
+                      gsk_rounded_rect_contains_point (other, &q2))
+                    result->corner[i] = self->corner[i];
+                  else
+                    return GSK_INTERSECTION_NOT_REPRESENTABLE;
+                }
+              else if (graphene_rect_contains_rect (&d, &c))
+                {
+                  graphene_point_t q1, q2;
+
+                  rect_corner (&d, (i + 1) % 4, &q1);
+                  rect_corner (&d, (i + 3) % 4, &q2);
+
+                  if (gsk_rounded_rect_contains_point (self, &q1) &&
+                      gsk_rounded_rect_contains_point (self, &q2))
+                    result->corner[i] = other->corner[i];
+                  else
+                    return GSK_INTERSECTION_NOT_REPRESENTABLE;
+                }
+              else
+                return GSK_INTERSECTION_NOT_REPRESENTABLE;
+            }
+          else
+            {
+              graphene_rect_t c;
+              graphene_point_t q1, q2;
+
+              corner_rect (self, i, &c);
+
+              rect_corner (&c, (i + 1) % 4, &q1);
+              rect_corner (&c, (i + 3) % 4, &q2);
+
+              if (gsk_rounded_rect_contains_point (other, &q1) &&
+                  gsk_rounded_rect_contains_point (other, &q2))
+                {
+                  if (gsk_rounded_rect_contains_point (other, &p))
+                    result->corner[i] = self->corner[i];
+                  else
+#if 1
+                    return GSK_INTERSECTION_NEEDS_QUARTIC;
+#else
+                  if (/* no intersection for i */)
+                    result->corner[i] = self->corner[i];
+                  else
+                    return GSK_INTERSECTION_NOT_REPRESENTABLE;
+#endif
+                }
+              else
+                return GSK_INTERSECTION_NOT_REPRESENTABLE;
+            }
+        }
+      else if (graphene_point_equal (&p, &p2))
+        {
+          graphene_rect_t d;
+          graphene_point_t q1, q2;
+
+          corner_rect (other, i, &d);
+
+          rect_corner (&d, (i + 1) % 4, &q1);
+          rect_corner (&d, (i + 3) % 4, &q2);
+
+          if (gsk_rounded_rect_contains_point (self, &q1) &&
+              gsk_rounded_rect_contains_point (self, &q2))
+            {
+              if (gsk_rounded_rect_contains_point (self, &p))
+                result->corner[i] = other->corner[i];
+              else
+#if 1
+                return GSK_INTERSECTION_NEEDS_QUARTIC;
+#else
+              if (/* no intersection for i */
+                result->corner[i] = other->corner[i];
+              else
+                return GSK_INTERSECTION_NOT_REPRESENTABLE;
+#endif
+            }
+          else
+            return GSK_INTERSECTION_NOT_REPRESENTABLE;
+        }
+      else
+        {
+          graphene_rect_t c, d;
+
+          corner_rect (self, (i + 2) % 4, &c);
+          if (graphene_rect_contains_point (&c, &p) &&
+              !gsk_rounded_rect_contains_point (self, &p))
+            return GSK_INTERSECTION_EMPTY;
+
+          corner_rect (other, (i + 2) % 4, &d);
+          if (graphene_rect_contains_point (&d, &p) &&
+              !gsk_rounded_rect_contains_point (other, &p))
+            return GSK_INTERSECTION_EMPTY;
+
+          for (unsigned int j = 0; j < 4; j++)
+            {
+              corner_rect (self, j, &c);
+              corner_rect (other, j, &d);
+
+              if (point_in_interior (&p, &c) ||
+                  point_in_interior (&p, &d))
+                return GSK_INTERSECTION_NOT_REPRESENTABLE;
+            }
+
+          result->corner[i] = (graphene_size_t) { 0, 0 };
+        }
+    }
+
+  return GSK_INTERSECTION_NONEMPTY;
+}
+
 static void
 append_arc (cairo_t *cr, double angle1, double angle2, gboolean negative)
 {

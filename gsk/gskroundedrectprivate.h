@@ -37,13 +37,17 @@ char *                   gsk_rounded_rect_to_string             (const GskRounde
 typedef enum {
   GSK_INTERSECTION_EMPTY,
   GSK_INTERSECTION_NONEMPTY,
-  GSK_INTERSECTION_NOT_REPRESENTABLE
+  GSK_INTERSECTION_NOT_REPRESENTABLE,
+  GSK_INTERSECTION_NEEDS_QUARTIC
 } GskRoundedRectIntersection;
 
 GskRoundedRectIntersection gsk_rounded_rect_intersect_with_rect   (const GskRoundedRect     *self,
                                                                    const graphene_rect_t    *rect,
                                                                    GskRoundedRect           *result) G_GNUC_PURE;
 
+GskRoundedRectIntersection gsk_rounded_rect_intersect (const GskRoundedRect *self,
+                                                       const GskRoundedRect *other,
+                                                       GskRoundedRect       *result) G_GNUC_PURE;
 
 G_END_DECLS
 
