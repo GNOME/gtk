@@ -135,7 +135,8 @@ gdk_toplevel_default_export_handle_finish (GdkToplevel   *toplevel,
 }
 
 static void
-gdk_toplevel_default_unexport_handle (GdkToplevel *toplevel)
+gdk_toplevel_default_unexport_handle (GdkToplevel *toplevel,
+                                      const char  *handle)
 {
 }
 
@@ -791,7 +792,7 @@ gdk_toplevel_export_handle (GdkToplevel         *toplevel,
  * @result: the `GAsyncResult`
  * @error: return location for an error
  *
- * Finishes the [method@Gdk.Toplevel.export_handle] cal and
+ * Finishes the [method@Gdk.Toplevel.export_handle] call and
  * returns the resulting handle.
  *
  * Returns: (nullable) (transfer full): the exported handle,
@@ -810,6 +811,7 @@ gdk_toplevel_export_handle_finish (GdkToplevel   *toplevel,
 /*< private >
  * gdk_toplevel_unexport_handle:
  * @toplevel: a `GdkToplevel`
+ * @handle: the handle to unexport
  *
  * Destroys the handle that was obtained with [method@Gdk.Toplevel.export_handle].
  *
@@ -819,7 +821,8 @@ gdk_toplevel_export_handle_finish (GdkToplevel   *toplevel,
  * Since: 4.10
  */
 void
-gdk_toplevel_unexport_handle (GdkToplevel *toplevel)
+gdk_toplevel_unexport_handle (GdkToplevel *toplevel,
+                              const char  *handle)
 {
-  GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel);
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel, handle);
 }

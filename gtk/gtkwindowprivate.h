@@ -79,7 +79,8 @@ typedef void (*GtkWindowHandleExported)  (GtkWindow               *window,
 gboolean      gtk_window_export_handle   (GtkWindow               *window,
                                           GtkWindowHandleExported  callback,
                                           gpointer                 user_data);
-void          gtk_window_unexport_handle (GtkWindow               *window);
+void          gtk_window_unexport_handle (GtkWindow               *window,
+                                          const char              *handle);
 
 GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
                                                          GdkDevice        *device,

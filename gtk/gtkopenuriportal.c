@@ -108,6 +108,7 @@ enum {
 
 typedef struct {
   GtkWindow *parent;
+  char *parent_handle;
   GFile *file;
   char *uri;
   gboolean open_folder;
@@ -128,8 +129,9 @@ open_uri_data_free (OpenUriData *data)
   g_clear_object (&data->connection);
   if (data->cancel_handler)
     g_signal_handler_disconnect (data->cancellable, data->cancel_handler);
-  if (data->parent)
-    gtk_window_unexport_handle (data->parent);
+  if (data->parent && data->parent_handle)
+    gtk_window_unexport_handle (data->parent, data->parent_handle);
+  g_free (data->parent_handle);
   g_clear_object (&data->parent);
   g_clear_object (&data->file);
   g_free (data->uri);
@@ -425,6 +427,8 @@ window_handle_exported (GtkWindow  *window,
   GdkDisplay *display;
   GAppLaunchContext *context;
   char *activation_token = NULL;
+
+  data->parent_handle = g_strdup (handle);
 
   if (window)
     display = gtk_widget_get_display (GTK_WIDGET (window));

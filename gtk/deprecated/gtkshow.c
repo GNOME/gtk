@@ -31,6 +31,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct {
   GtkWindow *parent;
+  char *handle;
   GAppLaunchContext *context;
   char *uri;
   GTask *task;
@@ -39,9 +40,10 @@ typedef struct {
 static void
 gtk_show_uri_data_free (GtkShowUriData *data)
 {
-  if (data->parent)
-    gtk_window_unexport_handle (data->parent);
+  if (data->parent && data->handle)
+    gtk_window_unexport_handle (data->parent, data->handle);
   g_clear_object (&data->parent);
+  g_free (data->handle);
   g_clear_object (&data->context);
   g_free (data->uri);
   g_clear_object (&data->task);
@@ -72,7 +74,10 @@ window_handle_exported (GtkWindow  *window,
   GtkShowUriData *data = user_data;
 
   if (handle)
-    g_app_launch_context_setenv (data->context, "PARENT_WINDOW_ID", handle);
+    {
+      g_app_launch_context_setenv (data->context, "PARENT_WINDOW_ID", handle);
+      data->handle = g_strdup (handle);
+    }
 
   g_app_info_launch_default_for_uri_async (data->uri,
                                            data->context,

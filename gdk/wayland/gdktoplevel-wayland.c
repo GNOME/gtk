@@ -54,10 +54,15 @@ static void gdk_wayland_toplevel_sync_parent             (GdkWaylandToplevel *to
 static void gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *toplevel);
 static void gdk_wayland_surface_create_xdg_toplevel      (GdkWaylandToplevel *toplevel);
 static void gdk_wayland_toplevel_sync_title              (GdkWaylandToplevel *toplevel);
-static gboolean gdk_wayland_toplevel_is_exported         (GdkWaylandToplevel *toplevel);
 static void unset_transient_for_exported                 (GdkWaylandToplevel *toplevel);
 
 /* {{{ GdkWaylandToplevel definition */
+
+typedef struct {
+  struct zxdg_exported_v1 *xdg_exported;
+  struct zxdg_exported_v2 *xdg_exported_v2;
+  char *handle;
+} GdkWaylandExported;
 
 /**
  * GdkWaylandToplevel:
@@ -83,8 +88,7 @@ struct _GdkWaylandToplevel
   GdkWaylandToplevel *transient_for;
 
   struct org_kde_kwin_server_decoration *server_decoration;
-  struct zxdg_exported_v1 *xdg_exported;
-  struct zxdg_exported_v2 *xdg_exported_v2;
+  GList *exported;
 
   struct {
     int width;
@@ -101,12 +105,6 @@ struct _GdkWaylandToplevel
       gboolean should_constrain;
       gboolean size_is_fixed;
   } next_layout;
-
-  struct {
-    GdkWaylandToplevelExported callback;
-    gpointer user_data;
-    GDestroyNotify destroy_func;
-  } exported;
 
   struct {
     gboolean was_set;
@@ -1280,9 +1278,6 @@ gdk_wayland_toplevel_finalize (GObject *object)
 
   display_wayland->toplevels = g_list_remove (display_wayland->toplevels, self);
 
-  if (gdk_wayland_toplevel_is_exported (self))
-    gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (self));
-
   g_free (self->application.application_id);
   g_free (self->application.app_menu_path);
   g_free (self->application.menubar_path);
@@ -1747,8 +1742,12 @@ xdg_exported_handle_v1 (void                    *data,
                         struct zxdg_exported_v1 *zxdg_exported_v1,
                         const char              *handle)
 {
-  g_task_return_pointer (G_TASK (data), g_strdup (handle), g_free);
-  g_object_unref (data);
+  GTask *task = G_TASK (data);
+  GdkWaylandExported *exported = (GdkWaylandExported *)g_task_get_task_data (task);
+
+  exported->handle = g_strdup (handle);
+  g_task_return_pointer (task, g_strdup (handle), g_free);
+  g_object_unref (task);
 }
 
 static const struct zxdg_exported_v1_listener xdg_exported_listener_v1 = {
@@ -1760,8 +1759,12 @@ xdg_exported_handle_v2 (void                    *data,
                         struct zxdg_exported_v2 *zxdg_exported_v2,
                         const char              *handle)
 {
-  g_task_return_pointer (G_TASK (data), g_strdup (handle), g_free);
-  g_object_unref (data);
+  GTask *task = G_TASK (data);
+  GdkWaylandExported *exported = (GdkWaylandExported *)g_task_get_task_data (task);
+
+  exported->handle = g_strdup (handle);
+  g_task_return_pointer (task, g_strdup (handle), g_free);
+  g_object_unref (task);
 }
 
 static const struct zxdg_exported_v2_listener xdg_exported_listener_v2 = {
@@ -1784,19 +1787,27 @@ gdk_wayland_toplevel_real_export_handle (GdkToplevel          *toplevel,
 
   if (display_wayland->xdg_exporter_v2)
     {
-      wayland_toplevel->xdg_exported_v2 =
+      GdkWaylandExported *exported = g_new0 (GdkWaylandExported, 1);
+      exported->xdg_exported_v2 =
         zxdg_exporter_v2_export_toplevel (display_wayland->xdg_exporter_v2,
                                           gdk_wayland_surface_get_wl_surface (surface));
-      zxdg_exported_v2_add_listener (wayland_toplevel->xdg_exported_v2,
+      zxdg_exported_v2_add_listener (exported->xdg_exported_v2,
                                      &xdg_exported_listener_v2, task);
+
+      wayland_toplevel->exported = g_list_prepend (wayland_toplevel->exported, exported);
+      g_task_set_task_data (task, exported, NULL);
     }
   else if (display_wayland->xdg_exporter)
     {
-      wayland_toplevel->xdg_exported =
+      GdkWaylandExported *exported = g_new0 (GdkWaylandExported, 1);
+      exported->xdg_exported =
         zxdg_exporter_v1_export (display_wayland->xdg_exporter,
                                  gdk_wayland_surface_get_wl_surface (surface));
-      zxdg_exported_v1_add_listener (wayland_toplevel->xdg_exported,
+      zxdg_exported_v1_add_listener (exported->xdg_exported,
                                      &xdg_exported_listener_v1, task);
+
+      wayland_toplevel->exported = g_list_prepend (wayland_toplevel->exported, exported);
+      g_task_set_task_data (task, exported, NULL);
     }
   else
     {
@@ -1815,15 +1826,36 @@ gdk_wayland_toplevel_real_export_handle_finish (GdkToplevel   *toplevel,
 }
 
 static void
-gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel)
+destroy_exported (GdkWaylandExported *exported)
+{
+  g_clear_pointer (&exported->handle, g_free);
+  g_clear_pointer (&exported->xdg_exported_v2, zxdg_exported_v2_destroy);
+  g_clear_pointer (&exported->xdg_exported, zxdg_exported_v1_destroy);
+  g_free (exported);
+}
+
+static void
+gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel,
+                                           const char  *handle)
 {
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
-  g_return_if_fail (wayland_toplevel->xdg_exported_v2 || wayland_toplevel->xdg_exported);
+  g_return_if_fail (handle != NULL);
 
-  g_clear_pointer (&wayland_toplevel->xdg_exported_v2, zxdg_exported_v2_destroy);
-  g_clear_pointer (&wayland_toplevel->xdg_exported, zxdg_exported_v1_destroy);
+  for (GList *l = wayland_toplevel->exported; l; l = l->next)
+    {
+      GdkWaylandExported *exported = l->data;
+
+      if (exported->handle && strcmp (exported->handle, handle) == 0)
+        {
+          wayland_toplevel->exported = g_list_delete_link (wayland_toplevel->exported, l);
+          destroy_exported (exported);
+          return;
+        }
+    }
+
+  g_warn_if_reached ();
 }
 
 static gboolean
@@ -2255,6 +2287,32 @@ gdk_wayland_toplevel_set_dbus_properties (GdkToplevel *toplevel,
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
 }
 
+void
+gdk_wayland_toplevel_destroy (GdkToplevel *toplevel)
+{
+  GdkWaylandToplevel *self = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  while (self->exported)
+    {
+      GdkWaylandExported *exported = self->exported->data;
+      self->exported = g_list_delete_link (self->exported, self->exported);
+      if (exported->handle == NULL)
+        {
+          GTask *task;
+
+          if (exported->xdg_exported_v2)
+            task = G_TASK (wl_proxy_get_user_data ((struct wl_proxy *) exported->xdg_exported_v2));
+          else
+            task = G_TASK (wl_proxy_get_user_data ((struct wl_proxy *) exported->xdg_exported));
+
+          g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED, "Surface was destroyed");
+          g_object_unref (task);
+        }
+
+      destroy_exported (exported);
+    }
+}
+
 /* }}} */
 /* {{{ Toplevel API */
 
@@ -2397,12 +2455,6 @@ gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
  * marking surfaces as transient for out-of-process surfaces.
  */
 
-static gboolean
-gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *toplevel)
-{
-  return toplevel->xdg_exported != NULL || toplevel->xdg_exported_v2 != NULL;
-}
-
 typedef struct {
   GdkWaylandToplevelExported callback;
   gpointer user_data;
@@ -2450,6 +2502,12 @@ export_handle_done (GObject      *source,
  * from another surface as transient for this one, see
  * [method@GdkWayland.WaylandToplevel.set_transient_for_exported].
  *
+ * Before 4.12, this API could not safely be used multiple times,
+ * since there was no reference counting for handles. Starting with
+ * 4.12, every call to this function obtains a new handle, and every
+ * call to [method@GdkWayland.WaylandToplevel.drop_exported_handle] drops
+ * just the handle that it is given.
+ *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
  *
@@ -2486,15 +2544,53 @@ gdk_wayland_toplevel_export_handle (GdkToplevel                *toplevel,
  * It is an error to call this function on a surface that
  * does not have a handle.
  *
+ * Since 4.12, this function does nothing. Use
+ * [method@GdkWayland.WaylandToplevel.drop_exported_handle] instead to drop a
+ * handle that was obtained with [method@GdkWayland.WaylandToplevel.export_handle].
+ *
  * Note that this API depends on an unstable Wayland protocol,
  * and thus may require changes in the future.
+ *
+ * Deprecated: 4.12: Use [method@GdkWayland.WaylandToplevel.drop_exported_handle]
+ *   instead, this function does nothing
  */
 void
 gdk_wayland_toplevel_unexport_handle (GdkToplevel *toplevel)
 {
-  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
-  gdk_toplevel_unexport_handle (toplevel);
+  if (wayland_toplevel->exported != NULL &&
+      wayland_toplevel->exported->next == NULL)
+    {
+      GdkWaylandExported *exported = wayland_toplevel->exported->data;
+
+      if (exported->handle)
+        {
+          gdk_toplevel_unexport_handle (toplevel, exported->handle);
+          return;
+        }
+    }
+
+  g_warning ("Use gdk_wayland_toplevel_drop_exported_handle()");
+}
+
+/**
+ * gdk_wayland_toplevel_drop_exported_handle:
+ * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` that was exported
+ * @handle: the handle to drop
+ *
+ * Destroy a handle that was obtained with gdk_wayland_toplevel_export_handle().
+ *
+ * Note that this API depends on an unstable Wayland protocol,
+ * and thus may require changes in the future.
+ *
+ * Since: 4.12
+ */
+void
+gdk_wayland_toplevel_drop_exported_handle (GdkToplevel *toplevel,
+                                           const char  *handle)
+{
+  gdk_toplevel_unexport_handle (toplevel, handle);
 }
 
 static void

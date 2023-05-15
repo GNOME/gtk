@@ -1148,7 +1148,10 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
 
   gdk_wayland_surface_hide_surface (surface);
 
-  gdk_wayland_surface_destroy_wl_surface (GDK_WAYLAND_SURFACE(surface));
+  if (GDK_IS_TOPLEVEL (surface))
+    gdk_wayland_toplevel_destroy (GDK_TOPLEVEL (surface));
+
+  gdk_wayland_surface_destroy_wl_surface (GDK_WAYLAND_SURFACE (surface));
 
   frame_clock = gdk_surface_get_frame_clock (surface);
   g_signal_handlers_disconnect_by_func (frame_clock, on_frame_clock_before_paint, surface);

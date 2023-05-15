@@ -5318,7 +5318,8 @@ gdk_x11_toplevel_export_handle_finish (GdkToplevel   *toplevel,
 }
 
 static void
-gdk_x11_toplevel_unexport_handle (GdkToplevel *toplevel)
+gdk_x11_toplevel_unexport_handle (GdkToplevel *toplevel,
+                                  const char  *handle)
 {
 }
 

@@ -6291,6 +6291,17 @@ prefix_handle (GdkDisplay *display,
     return NULL;
 }
 
+static const char *
+unprefix_handle (const char *handle)
+{
+  if (g_str_has_prefix (handle, "wayland:"))
+    return handle + strlen ("wayland:");
+  else if (g_str_has_prefix (handle, "x11:"))
+    return handle + strlen ("x1!:");
+  else
+    return handle;
+}
+
 static void
 export_handle_done (GObject      *source,
                     GAsyncResult *result,
@@ -6336,11 +6347,12 @@ gtk_window_export_handle (GtkWindow               *window,
 }
 
 void
-gtk_window_unexport_handle (GtkWindow *window)
+gtk_window_unexport_handle (GtkWindow  *window,
+                            const char *handle)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  gdk_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface));
+  gdk_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface), unprefix_handle (handle));
 }
 
 static GtkPointerFocus *

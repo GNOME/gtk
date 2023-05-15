@@ -48,6 +48,7 @@ typedef struct {
   GtkPrintOperationResult result;
   GtkPrintOperationPrintFunc print_cb;
   GtkWindow *parent;
+  char *handle;
   GMainLoop *loop;
   guint32 token;
   GDestroyNotify destroy;
@@ -62,8 +63,9 @@ portal_data_free (gpointer data)
 {
   PortalData *portal = data;
 
-  if (portal->parent)
-    gtk_window_unexport_handle (portal->parent);
+  if (portal->parent && portal->handle)
+    gtk_window_unexport_handle (portal->parent, portal->handle);
+  g_free (portal->handle);
   g_object_unref (portal->op);
   g_object_unref (portal->proxy);
   if (portal->loop)
@@ -546,6 +548,8 @@ window_handle_exported (GtkWindow  *window,
                         gpointer    user_data)
 {
   PortalData *portal = user_data;
+
+  portal->handle = g_strdup (handle_str);
 
   g_dbus_proxy_call (portal->proxy,
                      "PreparePrint",
