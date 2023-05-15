@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <epoxy/gl.h>
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 
 static cairo_surface_t *
 make_surface (void)
@@ -177,7 +178,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   id = make_gl_texture (context, surface);
 
-  sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+  if (gdk_gl_context_has_sync (context))
+    sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+  else
+    sync = NULL;
 
   update_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 10, 10, 32, 32 });
 
@@ -219,7 +223,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_surface_destroy (surface);
 
-  glDeleteSync (sync);
+  if (sync)
+    glDeleteSync (sync);
   cairo_region_destroy (update_region);
   g_object_unref (old_texture);
 
