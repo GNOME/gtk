@@ -33,13 +33,13 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12
 GdkPixbuf *gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
                                         int              src_x,
                                         int              src_y,
                                         int              width,
                                         int              height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12
 GdkPixbuf *gdk_pixbuf_get_from_texture (GdkTexture      *texture);
 
 G_END_DECLS

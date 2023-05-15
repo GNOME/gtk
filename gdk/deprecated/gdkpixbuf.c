@@ -157,6 +157,9 @@ convert_no_alpha (guchar *dest_data,
  *
  * Returns: (nullable) (transfer full): A newly-created pixbuf with a
  *   reference count of 1
+ *
+ * Deprecated: 4.12: Use [class@Gdk.Texture] and subclasses instead
+ *   cairo surfaces and pixbufs
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
@@ -234,6 +237,9 @@ pixbuf_texture_unref_cb (guchar   *pixels,
  * to draw it on screen.
  *
  * Returns: (transfer full) (nullable): a new `GdkPixbuf`
+ *
+ * Deprecated: 4.12: Use [class@Gdk.Texture] and subclasses instead
+ *   cairo surfaces and pixbufs
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_texture (GdkTexture *texture)
