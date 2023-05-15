@@ -578,7 +578,10 @@ gtk_file_chooser_widget_finalize (GObject *object)
   stop_loading_and_clear_list_model (impl, FALSE);
   search_clear_model (impl, FALSE);
   recent_clear_model (impl, FALSE);
+  g_clear_object (&impl->recent_model);
+  g_clear_object (&impl->search_model);
   g_clear_object (&impl->model_for_search);
+  g_clear_object (&impl->browse_files_model);
 
   g_clear_object (&impl->selection_model);
   g_clear_object (&impl->sort_model);
@@ -3981,6 +3984,7 @@ set_list_model (GtkFileChooserWidget  *impl,
 
   set_busy_cursor (impl, TRUE);
 
+  g_clear_object (&impl->browse_files_model);
   impl->browse_files_model =
     _gtk_file_system_model_new_for_directory (impl->current_folder, MODEL_ATTRIBUTES);
 
