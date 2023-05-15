@@ -355,6 +355,45 @@ test_texture_diff (void)
   g_object_unref (texture2);
 }
 
+static void
+test_texture_downloader (void)
+{
+  GdkTexture *texture;
+  GdkTexture *texture2;
+  GdkTextureDownloader *downloader;
+  GdkTextureDownloader *downloader2;
+  gsize stride;
+  GBytes *bytes;
+  guchar *data;
+
+  texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
+  texture2 = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
+
+  downloader = gdk_texture_downloader_new (texture);
+
+  downloader2 = gdk_texture_downloader_copy (downloader);
+  g_assert_true (gdk_texture_downloader_get_texture (downloader2) == texture);
+  gdk_texture_downloader_free (downloader2);
+
+  gdk_texture_downloader_set_texture (downloader, texture2);
+  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R16G16B16A16);
+  g_assert_true (gdk_texture_downloader_get_format (downloader) == GDK_MEMORY_R16G16B16A16);
+
+  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+
+  g_assert_true (stride == 4 * 2 * 16);
+  g_assert_true (g_bytes_get_size (bytes) == stride * 16);
+
+  data = g_malloc (stride * 16);
+  gdk_texture_downloader_download_into (downloader, data, stride);
+
+  g_assert_true (memcmp (data, g_bytes_get_data (bytes, NULL), stride * 16) == 0);
+
+  g_free (data);
+  g_bytes_unref (bytes);
+  gdk_texture_downloader_free (downloader);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -370,6 +409,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/texture/icon/load-async", test_texture_icon_async);
   g_test_add_func ("/texture/icon/serialize", test_texture_icon_serialize);
   g_test_add_func ("/texture/diff", test_texture_diff);
+  g_test_add_func ("/texture/downloader", test_texture_downloader);
 
   return g_test_run ();
 }
