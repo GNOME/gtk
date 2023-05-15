@@ -22,7 +22,7 @@
 #endif
 
 #include <gdk/gdktypes.h>
-#include <gdk/gdkpixbuf.h>
+#include <gdk/deprecated/gdkpixbuf.h>
 #include <pango/pangocairo.h>
 
 G_BEGIN_DECLS

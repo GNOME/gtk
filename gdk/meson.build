@@ -1,3 +1,5 @@
+subdir('deprecated')
+
 gdk_public_sources = files([
   'gdk.c',
   'gdkapplaunchcontext.c',
@@ -38,7 +40,6 @@ gdk_public_sources = files([
   'gdkmonitor.c',
   'gdkpaintable.c',
   'gdkpango.c',
-  'gdkpixbuf.c',
   'gdkpipeiostream.c',
   'gdkrectangle.c',
   'gdkrgba.c',
@@ -94,7 +95,6 @@ gdk_public_headers = files([
   'gdkmonitor.h',
   'gdkpaintable.h',
   'gdkpango.h',
-  'gdkpixbuf.h',
   'gdkrectangle.h',
   'gdkrgba.h',
   'gdkseat.h',
@@ -112,8 +112,9 @@ gdk_public_headers = files([
   'gdkdragsurface.h',
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_deprecated_headers, subdir: 'gtk-4.0/gdk/deprecated')
 
-gdk_sources = gdk_public_sources
+gdk_sources = gdk_public_sources + gdk_deprecated_sources
 
 gdk_private_h_sources = files([
   'gdkeventsprivate.h',

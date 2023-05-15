@@ -61,7 +61,7 @@
 #include <gdk/gdkmonitor.h>
 #include <gdk/gdkpaintable.h>
 #include <gdk/gdkpango.h>
-#include <gdk/gdkpixbuf.h>
+#include <gdk/deprecated/gdkpixbuf.h>
 #include <gdk/gdkpopup.h>
 #include <gdk/gdkpopuplayout.h>
 #include <gdk/gdkrectangle.h>
