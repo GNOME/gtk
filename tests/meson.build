@@ -146,6 +146,13 @@ foreach t: gtk_tests
   )
 endforeach
 
+executable('testroundedrect',
+  sources: [ 'testroundedrect.c' ],
+  include_directories: [confinc, gdkinc],
+  c_args: test_args + common_cflags,
+  dependencies: [libgtk_static_dep, libm],
+)
+
 if libsysprof_dep.found()
   executable('testperf',
     sources: 'testperf.c',
