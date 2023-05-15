@@ -218,6 +218,37 @@ test_parse_fail (void)
   }
 }
 
+static void
+test_match (void)
+{
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats, *formats2;
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_ref (builder);
+
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_RGBA);
+  gdk_content_formats_builder_add_mime_type (builder, "image/png");
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  gdk_content_formats_builder_add_mime_type (builder, "text/plain");
+  formats2 = gdk_content_formats_builder_free_to_formats (builder);
+
+  g_assert_false (gdk_content_formats_match (formats, formats2));
+
+  gdk_content_formats_unref (formats2);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_mime_type (builder, "image/png");
+  formats2 = gdk_content_formats_builder_free_to_formats (builder);
+
+  g_assert_true (gdk_content_formats_match (formats, formats2));
+
+  gdk_content_formats_unref (formats2);
+  gdk_content_formats_unref (formats);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -238,6 +269,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/contentformats/parse_fail", test_parse_fail);
   g_test_add_func ("/contentformats/print_and_parse", test_print_and_parse);
   g_test_add_func ("/contentformats/union", test_union);
+  g_test_add_func ("/contentformats/match", test_match);
 
   return g_test_run ();
 }
