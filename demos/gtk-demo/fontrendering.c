@@ -43,6 +43,7 @@ update_image (void)
   cairo_t *cr;
   GdkPixbuf *pixbuf;
   GdkPixbuf *pixbuf2;
+  GdkTexture *texture;
   cairo_font_options_t *fopt;
   cairo_hint_style_t hintstyle;
   cairo_hint_metrics_t hintmetrics;
@@ -120,8 +121,17 @@ update_image (void)
       cairo_destroy (cr);
       g_object_unref (layout);
 
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
-      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
+      pixbuf = gdk_pixbuf_new_from_data (cairo_image_surface_get_data (surface),
+                                         GDK_COLORSPACE_RGB, TRUE, 8,
+                                         cairo_image_surface_get_width (surface),
+                                         cairo_image_surface_get_height (surface),
+                                         cairo_image_surface_get_stride (surface),
+                                         NULL, NULL);
+
+      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf,
+                                         gdk_pixbuf_get_width (pixbuf) * scale,
+                                         gdk_pixbuf_get_height (pixbuf) * scale,
+                                         GDK_INTERP_NEAREST);
 
       g_object_unref (pixbuf);
       cairo_surface_destroy (surface);
@@ -278,14 +288,24 @@ retry:
       pango_layout_iter_free (iter);
       g_object_unref (layout);
 
-      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
-      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
+      pixbuf = gdk_pixbuf_new_from_data (cairo_image_surface_get_data (surface),
+                                         GDK_COLORSPACE_RGB, TRUE, 8,
+                                         cairo_image_surface_get_width (surface),
+                                         cairo_image_surface_get_height (surface),
+                                         cairo_image_surface_get_stride (surface),
+                                         NULL, NULL);
+
+      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf,
+                                         gdk_pixbuf_get_width (pixbuf) * scale,
+                                         gdk_pixbuf_get_height (pixbuf) * scale,
+                                         GDK_INTERP_NEAREST);
       g_object_unref (pixbuf);
       cairo_surface_destroy (surface);
     }
 
-  gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
-
+  texture = gdk_texture_new_for_pixbuf (pixbuf2);
+  gtk_picture_set_paintable (GTK_PICTURE (image), GDK_PAINTABLE (texture));
+  g_object_unref (pixbuf2);
   g_object_unref (pixbuf2);
 }
 

@@ -30,6 +30,7 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
 {
   GdkPixbuf *pixbuf;
   GtkWidget *picture;
+  GdkTexture *texture;
 
   picture = GTK_WIDGET (data);
 
@@ -40,7 +41,9 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
    */
   gdk_pixbuf_fill (pixbuf, 0xaaaaaaff);
 
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (texture));
+  g_object_unref (texture);
 }
 
 static void
@@ -51,22 +54,18 @@ progressive_updated_callback (GdkPixbufLoader *loader,
                               int                  height,
                               gpointer     data)
 {
-  GtkWidget *picture;
-  GdkPixbuf *pixbuf;
+  GtkWidget *picture = GTK_WIDGET (data);
+  GdkTexture *texture;
 
-  picture = GTK_WIDGET (data);
-
-  pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), NULL);
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
+  gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (texture));
+  g_object_unref (texture);
 }
 
 static int
 progressive_timeout (gpointer data)
 {
-  GtkWidget *picture;
-
-  picture = GTK_WIDGET (data);
+  GtkWidget *picture = GTK_WIDGET (data);
 
   /* This shows off fully-paranoid error handling, so looks scary.
    * You could factor out the error handling code into a nice separate
