@@ -162,10 +162,23 @@ static void
 test_create_empty (void)
 {
   GtkPropertyLookupListModel *model;
+  GType type;
+  guint n_items;
+  char *property;
 
   model = new_model (FALSE);
   assert_model (model, "");
   assert_changes (model, "");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (model)) == GTK_TYPE_WIDGET);
+  g_object_get (model,
+                "item-type", &type,
+                "n-items", &n_items,
+                "property", &property,
+                NULL);
+  g_assert_true (type == GTK_TYPE_WIDGET);
+  g_assert_true (n_items == 0);
+  g_assert_cmpstr (property, ==, "parent");
 
   g_object_unref (model);
 }
@@ -193,6 +206,8 @@ test_set_object (void)
 
   model = new_model (FALSE);
   gtk_property_lookup_list_model_set_object (model, widget);
+  g_assert_true (gtk_property_lookup_list_model_get_object (model) == widget);
+
   assert_model (model, "GtkLabel GtkGrid GtkBox GtkWindow");
   assert_changes (model, "+0*");
   g_object_unref (model);

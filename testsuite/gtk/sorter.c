@@ -30,6 +30,30 @@ get_number (GObject *object)
   return GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
 }
 
+#define GET_NUMBER(type,name) \
+static type \
+get_number_##name (GObject *object) \
+{ \
+  return (type) get_number (object); \
+}
+
+static gboolean
+get_number_boolean (GObject *object)
+{
+  return (gboolean) (get_number (object) - 1);
+}
+
+GET_NUMBER(char, char)
+GET_NUMBER(guchar, uchar)
+GET_NUMBER(int, int)
+GET_NUMBER(guint, uint)
+GET_NUMBER(float, float)
+GET_NUMBER(double, double)
+GET_NUMBER(long, long)
+GET_NUMBER(gulong, ulong)
+GET_NUMBER(gint64, int64)
+GET_NUMBER(guint64, uint64)
+
 static guint
 get (GListModel *model,
      guint       position)
@@ -340,7 +364,7 @@ test_change (void)
 
   gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
   g_assert_cmpint (counter, ==, 1);
-  
+
   gtk_expression_unref (expression);
 
   gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
@@ -358,26 +382,104 @@ test_change (void)
 }
 
 static void
-test_numeric (void)
+check_ascending (GtkSorter  *sorter,
+                 GListModel *model)
 {
+  for (unsigned int i = 0; i + 1 < g_list_model_get_n_items (model); i++)
+    {
+      gpointer item1 = g_list_model_get_item (model, i);
+      gpointer item2 = g_list_model_get_item (model, i + 1);
+
+      g_assert (gtk_sorter_compare (sorter, item1, item2) != GTK_ORDERING_LARGER);
+
+      g_object_unref (item1);
+      g_object_unref (item2);
+    }
+}
+
+#define TEST_NUMERIC(name, gtype)                                                       \
+static void                                                                             \
+test_numeric_##name (void)                                                              \
+{                                                                                       \
+  GtkSortListModel *model;                                                              \
+  GtkSorter *sorter;                                                                    \
+  GtkExpression *expression;                                                            \
+                                                                                        \
+  model = new_model (20, NULL);                                                         \
+  assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");       \
+                                                                                        \
+  expression = gtk_cclosure_expression_new (gtype, NULL, 0, NULL,                       \
+                                            (GCallback) get_number_##name, NULL, NULL); \
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (expression));                            \
+  gtk_sort_list_model_set_sorter (model, sorter);                                       \
+  assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");           \
+  check_ascending (sorter, G_LIST_MODEL (model));                                       \
+                                                                                        \
+  gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING); \
+  assert_model (model, "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1");           \
+                                                                                        \
+  gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_ASCENDING);  \
+  assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");           \
+                                                                                        \
+  gtk_numeric_sorter_set_expression (GTK_NUMERIC_SORTER (sorter), NULL);                \
+  assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");       \
+                                                                                        \
+  g_object_unref (sorter);                                                              \
+  g_object_unref (model);                                                               \
+}
+
+TEST_NUMERIC(char, G_TYPE_CHAR)
+TEST_NUMERIC(uchar, G_TYPE_UCHAR)
+TEST_NUMERIC(int, G_TYPE_INT)
+TEST_NUMERIC(uint, G_TYPE_UINT)
+TEST_NUMERIC(float, G_TYPE_FLOAT)
+TEST_NUMERIC(double, G_TYPE_DOUBLE)
+TEST_NUMERIC(long, G_TYPE_LONG)
+TEST_NUMERIC(ulong, G_TYPE_ULONG)
+TEST_NUMERIC(int64, G_TYPE_INT64)
+TEST_NUMERIC(uint64, G_TYPE_UINT64)
+
+static void
+test_numeric_boolean (void)
+{
+  GListStore *store;
   GtkSortListModel *model;
   GtkSorter *sorter;
+  GtkExpression *expression;
+  GtkExpression *e;
+  GtkSortType order;
 
-  model = new_model (20, NULL);
-  assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+  store = new_empty_store ();
+  add (store, 2);
+  add (store, 1);
+  add (store, 1);
+  add (store, 2);
+  model = gtk_sort_list_model_new (G_LIST_MODEL (store), NULL);
 
-  sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT, NULL, 0, NULL, (GCallback)get_number, NULL, NULL)));
+  expression = gtk_cclosure_expression_new (G_TYPE_BOOLEAN, NULL, 0, NULL,
+                                            (GCallback) get_number_boolean, NULL, NULL);
+  sorter = GTK_SORTER (gtk_numeric_sorter_new (expression));
+
+  g_object_get (sorter,
+                "sort-order", &order,
+                "expression", &e,
+                NULL);
+  g_assert_true (order == GTK_SORT_ASCENDING);
+  g_assert_true (gtk_numeric_sorter_get_expression (GTK_NUMERIC_SORTER (sorter)) == e);
+  gtk_expression_unref (e);
+
   gtk_sort_list_model_set_sorter (model, sorter);
-  assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+  check_ascending (sorter, G_LIST_MODEL (model));                                       \
+  assert_model (model, "1 1 2 2");
 
   gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-  assert_model (model, "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1");
+  assert_model (model, "2 2 1 1");
 
-  gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_ASCENDING);
-  assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+  g_object_set (sorter, "sort-order", GTK_SORT_ASCENDING, NULL);
+  assert_model (model, "1 1 2 2");
 
   gtk_numeric_sorter_set_expression (GTK_NUMERIC_SORTER (sorter), NULL);
-  assert_not_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+  assert_not_model (model, "1 1 2 2");
 
   g_object_unref (sorter);
   g_object_unref (model);
@@ -436,6 +538,8 @@ test_multi (void)
   item = g_list_model_get_item (G_LIST_MODEL (sorter), 1);
   g_assert_true (item == sorter2);
   g_object_unref (item);
+
+  check_ascending (sorter, G_LIST_MODEL (model));
 
   assert_model (model, "2 4 6 8 10 12 14 16 18 20 1 3 5 7 9 11 13 15 17 19");
 
@@ -665,6 +769,39 @@ test_stable (void)
   g_object_unref (model2b);
 }
 
+static void
+test_multi_buildable (void)
+{
+  const char *ui =
+    "<interface>"
+    "  <object class=\"GtkMultiSorter\" id=\"multi\">"
+    "    <child>"
+    "      <object class=\"GtkStringSorter\">"
+    "      </object>"
+    "    </child>"
+    "    <child>"
+    "      <object class=\"GtkNumericSorter\">"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+  GtkBuilder *builder;
+  gboolean res;
+  GError *error = NULL;
+  GtkSorter *sorter;
+
+  builder = gtk_builder_new ();
+  res = gtk_builder_add_from_string (builder, ui, -1, &error);
+  g_assert_no_error (error);
+  g_assert_true (res);
+
+  sorter = GTK_SORTER (gtk_builder_get_object (builder, "multi"));
+  g_assert_true (GTK_IS_MULTI_SORTER (sorter));
+  g_assert_true (g_list_model_get_n_items (G_LIST_MODEL (sorter)) == 2);
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -676,10 +813,21 @@ main (int argc, char *argv[])
   g_test_add_func ("/sorter/simple", test_simple);
   g_test_add_func ("/sorter/string", test_string);
   g_test_add_func ("/sorter/change", test_change);
-  g_test_add_func ("/sorter/numeric", test_numeric);
+  g_test_add_func ("/sorter/numeric/boolean", test_numeric_boolean);
+  g_test_add_func ("/sorter/numeric/char", test_numeric_char);
+  g_test_add_func ("/sorter/numeric/uchar", test_numeric_uchar);
+  g_test_add_func ("/sorter/numeric/int", test_numeric_int);
+  g_test_add_func ("/sorter/numeric/uint", test_numeric_uint);
+  g_test_add_func ("/sorter/numeric/float", test_numeric_float);
+  g_test_add_func ("/sorter/numeric/double", test_numeric_double);
+  g_test_add_func ("/sorter/numeric/long", test_numeric_long);
+  g_test_add_func ("/sorter/numeric/ulong", test_numeric_ulong);
+  g_test_add_func ("/sorter/numeric/int64", test_numeric_int64);
+  g_test_add_func ("/sorter/numeric/uint64", test_numeric_uint64);
   g_test_add_func ("/sorter/multi", test_multi);
-  g_test_add_func ("/sorter/multi-destruct", test_multi_destruct);
-  g_test_add_func ("/sorter/multi-changes", test_multi_changes);
+  g_test_add_func ("/sorter/multi/destruct", test_multi_destruct);
+  g_test_add_func ("/sorter/multi/changes", test_multi_changes);
+  g_test_add_func ("/sorter/multi/buildable", test_multi_buildable);
   g_test_add_func ("/sorter/stable", test_stable);
 
   return g_test_run ();
