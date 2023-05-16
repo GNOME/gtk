@@ -28,7 +28,6 @@
 #include "gtkborder.h"
 #include "gtktypes.h"
 #include "gtkcssvalueprivate.h"
-#include "gtkroundedboxprivate.h"
 #include "gtksnapshot.h"
 
 G_BEGIN_DECLS
