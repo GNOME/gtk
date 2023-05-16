@@ -66,7 +66,7 @@ main(int argc, char **argv)
   gtk_revealer_set_child (GTK_REVEALER (revealer), grid);
 
   cssprovider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
+  gtk_css_provider_load_from_string (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (cssprovider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

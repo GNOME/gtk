@@ -360,15 +360,15 @@ main (int argc, char *argv[])
   gtk_init ();
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider,
+  gtk_css_provider_load_from_string (provider,
     ".black-bg { background-color: black; }"
     ".red-bg { background-color: red; }"
-    ".blue-bg { background-color: blue; }", -1);
+    ".blue-bg { background-color: blue; }");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
-  
+
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 

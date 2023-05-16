@@ -265,7 +265,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider,
+  gtk_css_provider_load_from_string (provider,
       ":hover {"
       "   box-shadow: inset 0px 0px 0px 1px red;"
       " }"
@@ -274,8 +274,7 @@ main (int argc, char *argv[])
       " }"
       " window :not(.title):hover * {"
       "   background: goldenrod;"
-      " }",
-      -1);
+      " }");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
   g_object_unref (provider);
 

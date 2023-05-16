@@ -159,18 +159,18 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
   gtk_editable_set_text (GTK_EDITABLE (entry), "‏Right-to-left");
   gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
-  
+
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_PRIMARY,
                                      "document-save-symbolic");
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
- 
+
   content = gdk_content_provider_new_typed (G_TYPE_STRING, "Amazing");
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
-                                  content, GDK_ACTION_COPY); 
+                                  content, GDK_ACTION_COPY);
   g_object_unref (content);
 
   /*
@@ -298,7 +298,7 @@ main (int argc, char **argv)
 
   GtkCssProvider *provider;
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, cssdata, -1);
+  gtk_css_provider_load_from_string (provider, cssdata);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
   gtk_window_present (GTK_WINDOW (window));
 

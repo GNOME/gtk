@@ -46,6 +46,7 @@
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
+#include "gtkselectionmodel.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -1172,7 +1173,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * A selection model with the pages.
    */
-  properties[PROP_PAGES] = 
+  properties[PROP_PAGES] =
       g_param_spec_object ("pages", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READABLE);
@@ -1358,7 +1359,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   /**
    * GtkNotebook|menu.popup:
    *
-   * Opens the context menu. 
+   * Opens the context menu.
    */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_notebook_popup_menu);
 
@@ -1827,7 +1828,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
     page_num = reorder_tab (notebook, child->next, notebook->focus_tab);
   else
     page_num = reorder_tab (notebook, child, notebook->focus_tab);
-  
+
   gtk_notebook_child_reordered (notebook, notebook->focus_tab->data);
   for (element = notebook->children, i = 0; element; element = element->next, i++)
     {
@@ -7131,7 +7132,7 @@ gtk_notebook_get_page (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   if (list != NULL)
     page = list->data;
-  
+
   return page;
 }
 
@@ -7197,8 +7198,51 @@ gtk_notebook_pages_list_model_init (GListModelInterface *iface)
   iface->get_n_items = gtk_notebook_pages_get_n_items;
   iface->get_item = gtk_notebook_pages_get_item;
 }
+
+static gboolean
+gtk_notebook_pages_is_selected (GtkSelectionModel *model,
+                                guint              position)
+{
+  GtkNotebookPages *pages = GTK_NOTEBOOK_PAGES (model);
+  GtkNotebookPage *page;
+
+  page = g_list_nth_data (pages->notebook->children, position);
+  if (page == NULL)
+    return FALSE;
+
+  return page == pages->notebook->cur_page;
+}
+
+static gboolean
+gtk_notebook_pages_select_item (GtkSelectionModel *model,
+                                guint              position,
+                                gboolean           exclusive)
+{
+  GtkNotebookPages *pages = GTK_NOTEBOOK_PAGES (model);
+  GtkNotebookPage *page;
+
+  page = g_list_nth_data (pages->notebook->children, position);
+  if (page == NULL)
+    return FALSE;
+
+  if (page == pages->notebook->cur_page)
+    return FALSE;
+
+  gtk_notebook_switch_page (pages->notebook, page);
+
+  return TRUE;
+}
+
+static void
+gtk_notebook_pages_selection_model_init (GtkSelectionModelInterface *iface)
+{
+  iface->is_selected = gtk_notebook_pages_is_selected;
+  iface->select_item = gtk_notebook_pages_select_item;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkNotebookPages, gtk_notebook_pages, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_notebook_pages_list_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_notebook_pages_list_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL, gtk_notebook_pages_selection_model_init))
 
 static void
 gtk_notebook_pages_init (GtkNotebookPages *pages)
