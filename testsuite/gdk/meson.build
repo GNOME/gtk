@@ -17,7 +17,6 @@ tests = [
   { 'name': 'displaymanager' },
   { 'name': 'encoding' },
   { 'name': 'glcontext' },
-  { 'name': 'gltexture' },
   { 'name': 'keysyms' },
   { 'name': 'memorytexture' },
   { 'name': 'rectangle' },
@@ -55,6 +54,7 @@ endforeach
 internal_tests = [
   'image',
   'texture',
+  'gltexture',
 ]
 
 foreach t : internal_tests

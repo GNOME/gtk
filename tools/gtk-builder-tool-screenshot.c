@@ -328,7 +328,8 @@ screenshot_file (const char *filename,
                            g_bytes_get_size (bytes),
                            &error))
     {
-      g_print (_("Output written to %s.\n"), save_to);
+      if (save_file == NULL)
+        g_print (_("Output written to %s.\n"), save_to);
     }
   else
     {
@@ -359,7 +360,7 @@ do_screenshot (int          *argc,
     { "css", 0, 0, G_OPTION_ARG_FILENAME, &css, N_("Use style from CSS file"), N_("FILE") },
     { "node", 0, 0, G_OPTION_ARG_NONE, &as_node, N_("Save as node file instead of png"), NULL },
     { "force", 0, 0, G_OPTION_ARG_NONE, &force, N_("Overwrite existing file"), NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
   GError *error = NULL;
