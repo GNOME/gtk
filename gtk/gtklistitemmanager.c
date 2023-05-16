@@ -597,7 +597,7 @@ gtk_list_tile_get_position (GtkListItemManager *self,
     }
   else
     {
-      pos = 0; 
+      pos = 0;
     }
 
   for (parent = gtk_rb_tree_node_get_parent (tile);
@@ -715,6 +715,7 @@ static void
 gtk_list_tile_set_type (GtkListTile     *tile,
                         GtkListTileType  type)
 {
+  g_assert (tile != NULL);
   if (tile->type == type)
     return;
 
@@ -845,7 +846,8 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
   if (offset)
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
   header = gtk_list_tile_get_previous_skip (tile);
-  if (header->type != GTK_LIST_TILE_HEADER && header->type != GTK_LIST_TILE_UNMATCHED_HEADER)
+  if (header != NULL &&
+      (header->type != GTK_LIST_TILE_HEADER && header->type != GTK_LIST_TILE_UNMATCHED_HEADER))
     header = NULL;
 
   while (n_items > 0)
@@ -911,7 +913,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
                                  GtkListItemChange  *change,
                                  guint               position,
                                  guint               n_items)
-{  
+{
   GtkListTile *tile;
   guint offset;
   gboolean has_sections;
@@ -952,7 +954,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     }
   if (offset)
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
-  
+
   tile = gtk_rb_tree_insert_before (self->items, tile);
   tile->type = GTK_LIST_TILE_ITEM;
   tile->n_items = n_items;
@@ -962,7 +964,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     {
       GtkListTile *section = gtk_list_tile_get_previous_skip (tile);
 
-      if (section->type == GTK_LIST_TILE_HEADER)
+      if (section != NULL && section->type == GTK_LIST_TILE_HEADER)
         {
           gtk_list_item_change_clear_header (change, &section->widget);
           gtk_list_tile_set_type (section,
@@ -1207,7 +1209,7 @@ gtk_list_item_manager_insert_section (GtkListItemManager *self,
 {
   GtkListTile *tile, *footer, *header;
   guint offset;
-  
+
   tile = gtk_list_item_manager_get_nth (self, pos, &offset);
   if (tile == NULL)
     {
@@ -1225,7 +1227,8 @@ gtk_list_item_manager_insert_section (GtkListItemManager *self,
     tile = gtk_list_item_manager_ensure_split (self, tile, offset);
 
   header = gtk_list_tile_get_previous_skip (tile);
-  if (header->type == GTK_LIST_TILE_HEADER || header->type == GTK_LIST_TILE_UNMATCHED_HEADER)
+  if (header != NULL &&
+      (header->type == GTK_LIST_TILE_HEADER || header->type == GTK_LIST_TILE_UNMATCHED_HEADER))
     {
       if (header_type == GTK_LIST_TILE_HEADER)
         gtk_list_tile_set_type (header, header_type);
@@ -1257,7 +1260,7 @@ gtk_list_tile_find_widget_before (GtkListTile *tile)
   for (other = gtk_rb_tree_node_get_previous (tile);
        other;
        other = gtk_rb_tree_node_get_previous (other))
-     { 
+     {
        if (other->widget)
          return other->widget;
      }
@@ -1460,7 +1463,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       GtkListTile *tile, *new_tile;
       GtkWidget *insert_after;
       guint i, offset;
-      
+
       tile = gtk_list_item_manager_get_nth (self, position, &offset);
       for (new_tile = tile ? gtk_rb_tree_node_get_previous (tile) : gtk_rb_tree_get_last (self->items);
            new_tile && new_tile->widget == NULL;
@@ -1576,7 +1579,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       GtkListItemTracker *tracker = l->data;
       GtkListTile *tile;
 
-      if (tracker->widget != NULL || 
+      if (tracker->widget != NULL ||
           tracker->position == GTK_INVALID_LIST_POSITION)
         continue;
 
