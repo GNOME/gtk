@@ -30,32 +30,17 @@ GdkPixbuf *_gdk_pixbuf_new_from_stream_at_scale     (GInputStream  *stream,
                                                      gboolean       aspect,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_stream_scaled       (GInputStream  *stream,
-                                                     double         scale,
-                                                     GCancellable  *cancellable,
-                                                     GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_resource            (const char    *resource_path,
-                                                     GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_resource_at_scale   (const char    *resource_path,
                                                      int            width,
                                                      int            height,
                                                      gboolean       preserve_aspect,
                                                      GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled     (const char    *resource_path,
-                                                     double         scale,
-                                                     GError       **error);
-
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_data       (const char    *data,
                                                      gsize          len,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
                                                      const char    *debug_output_to,
-                                                     GError       **error);
-GdkPixbuf *gtk_make_symbolic_pixbuf_from_file       (GFile         *file,
-                                                     int            width,
-                                                     int            height,
-                                                     double         scale,
                                                      GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_path       (const char    *path,
                                                      int            width,
@@ -79,9 +64,6 @@ GdkTexture *gtk_make_symbolic_texture_from_resource (const char    *path,
                                                      int            height,
                                                      double         scale,
                                                      GError       **error);
-
-GdkPaintable *gdk_paintable_new_from_bytes_scaled    (GBytes        *bytes,
-                                                      int            scale_factor);
 GdkPaintable *gdk_paintable_new_from_path_scaled     (const char    *path,
                                                       int            scale_factor);
 GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,

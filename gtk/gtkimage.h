@@ -74,7 +74,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_file      (const char      *filename);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_resource  (const char      *resource_path);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_image_new_from_paintable)
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_paintable (GdkPaintable    *paintable);
@@ -91,7 +91,7 @@ void gtk_image_set_from_file      (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_resource  (GtkImage        *image,
                                    const char      *resource_path);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_image_set_from_paintable)
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL

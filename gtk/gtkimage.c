@@ -475,6 +475,9 @@ gtk_image_new_from_resource (const char *resource_path)
  * want that, you should use [ctor@Gtk.Image.new_from_icon_name].
  *
  * Returns: a new `GtkImage`
+ *
+ * Deprecated: 4.12: Use [ctor@Gtk.Image.new_from_paintable] and
+ *   [ctor@Gdk.Texture.new_for_pixbuf] instead
  */
 GtkWidget*
 gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
@@ -483,7 +486,9 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_image_set_from_pixbuf (image, pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return GTK_WIDGET (image);
 }
@@ -711,6 +716,8 @@ gtk_image_set_from_resource (GtkImage   *image,
  * Note: This is a helper for [method@Gtk.Image.set_from_paintable],
  * and you can't get back the exact pixbuf once this is called,
  * only a paintable.
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Image.set_from_paintable] instead
  */
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,

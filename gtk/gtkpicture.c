@@ -525,6 +525,9 @@ gtk_picture_new_for_paintable (GdkPaintable *paintable)
  * The pixbuf must not be modified after passing it to this function.
  *
  * Returns: a new `GtkPicture`
+ *
+ * Deprecated: 4.12: Use [ctor@Gtk.Picture.new_for_paintable] and
+ *   [ctor@Gdk.Texture.new_for_pixbuf] instead
  */
 GtkWidget*
 gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -779,6 +782,8 @@ gtk_picture_set_resource (GtkPicture *self,
  * See [ctor@Gtk.Picture.new_for_pixbuf] for details.
  *
  * This is a utility function that calls [method@Gtk.Picture.set_paintable].
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Picture.set_paintable] instead
  */
 void
 gtk_picture_set_pixbuf (GtkPicture *self,

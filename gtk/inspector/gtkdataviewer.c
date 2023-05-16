@@ -261,7 +261,9 @@ gtk_data_viewer_load_value (GtkDataViewer *self,
     }
   else if (g_type_is_a (G_VALUE_TYPE (value), GDK_TYPE_PIXBUF))
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       self->contents = gtk_picture_new_for_pixbuf (g_value_get_object (value));
+G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_size_request (self->contents, 256, 256);
       gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
     }

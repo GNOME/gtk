@@ -133,3 +133,9 @@ The function gtk_widget_get_allocation() is also going away. It does not have a 
 replacement, but the previously mentioned alternatives can be used for it too.
 
 The function gtk_widget_get_allocated_baseline() has been renamed to [method@Gtk.Widget.get_baseline].
+
+## Stop using GdkPixbuf
+
+GTK is moving away from GdkPixbuf as the primary API for transporting image data, in favor
+of GdkTexture. APIs that are accepting or returning GdkPixbufs are being replaced by equivalent
+APIs using GdkTexture or GdkPaintable objects.
