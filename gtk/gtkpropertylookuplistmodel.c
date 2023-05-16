@@ -329,7 +329,7 @@ gtk_property_lookup_list_model_get_property (GObject     *object,
       break;
 
     case PROP_PROPERTY:
-      g_value_set_object (value, self->property);
+      g_value_set_string (value, self->property);
       break;
 
     default:
@@ -408,7 +408,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
    */
   properties[PROP_OBJECT] =
       g_param_spec_object ("object", NULL, NULL,
-                           G_TYPE_LIST_MODEL,
+                           G_TYPE_OBJECT,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -417,6 +417,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
 static void
 gtk_property_lookup_list_model_init (GtkPropertyLookupListModel *self)
 {
+  self->item_type = G_TYPE_OBJECT;
   self->items = g_ptr_array_new ();
   /* add sentinel */
   g_ptr_array_add (self->items, NULL);
