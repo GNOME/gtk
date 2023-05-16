@@ -31,9 +31,11 @@ compare_render_tests = [
   'clipped-repeat-3d-ngl',
   'clipped_rounded_clip',
   'clip-nested1',
+  'clip-translate-offscreen',
   'color-blur0',
   'color-matrix-identity',
   'color-matrix-parsing',
+  'crossfade-clip-both-children',
   'cross-fade-in-opacity',
   'cross-fade-in-rotate',
   'css-background',
@@ -88,6 +90,7 @@ compare_render_tests = [
   'texture-url',
   'transform-in-transform',
   'transform-in-transform-in-transform',
+  'z-transform-clipping-bounds-3d',
 ]
 
 # these are too sensitive to differences in the renderers

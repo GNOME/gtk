@@ -1,10 +1,9 @@
-# FIXME: what's up with these?
-#gsk_private_vulkan_include_shaders = [
-#  'clip.frag.glsl',
-#  'clip.vert.glsl',
-#  'constants.glsl',
-#  'rounded-rect.glsl',
-#]
+gsk_private_vulkan_include_shaders = [
+  'clip.frag.glsl',
+  'clip.vert.glsl',
+  'constants.glsl',
+  'rounded-rect.glsl',
+]
 
 gsk_private_vulkan_fragment_shaders = [
   'blendmode.frag',
@@ -51,6 +50,7 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_shader = custom_target(spv_shader,
                                     input: shader,
                                     output: spv_shader,
+                                    depend_files: gsk_private_vulkan_include_shaders,
                                     command: [
                                       glslc,
                                       stage_arg,
@@ -61,6 +61,7 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_clip_shader = custom_target(clip_spv_shader,
                                          input: shader,
                                          output: clip_spv_shader,
+                                         depend_files: gsk_private_vulkan_include_shaders,
                                          command: [
                                            glslc,
                                            stage_arg,
@@ -71,6 +72,7 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_clip_rounded_shader = custom_target(clip_rounded_spv_shader,
                                                  input: shader,
                                                  output: clip_rounded_spv_shader,
+                                                 depend_files: gsk_private_vulkan_include_shaders,
                                                  command: [
                                                    glslc,
                                                    stage_arg,
