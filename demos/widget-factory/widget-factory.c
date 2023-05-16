@@ -1210,12 +1210,12 @@ typedef struct {
 static void
 add_background (GtkWidget  *flowbox,
                 const char *filename,
-                GdkPixbuf  *pixbuf,
+                GdkTexture *texture,
                 gboolean    is_resource)
 {
   GtkWidget *child;
 
-  child = gtk_picture_new_for_pixbuf (pixbuf);
+  child = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
   gtk_widget_set_size_request (child, 110, 70);
   gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
   child = gtk_widget_get_parent (child);
@@ -1231,6 +1231,7 @@ background_loaded_cb (GObject      *source,
 {
   BackgroundData *bd = data;
   GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   GError *error = NULL;
 
   pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
@@ -1241,8 +1242,11 @@ background_loaded_cb (GObject      *source,
       return;
     }
 
-  add_background (bd->flowbox, bd->filename, pixbuf, FALSE);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  add_background (bd->flowbox, bd->filename, texture, FALSE);
 
+  g_object_unref (texture);
+  g_object_unref (pixbuf);
   g_free (bd->filename);
   g_free (bd);
 }
@@ -1259,7 +1263,10 @@ populate_flowbox (GtkWidget *flowbox)
   GInputStream *stream;
   BackgroundData *bd;
   GdkPixbuf *pixbuf;
+  GdkTexture *texture;
   GtkWidget *child;
+  guchar *data;
+  GBytes *bytes;
   int i;
   const char *resources[] = {
     "sunset.jpg", "portland-rose.jpg", "beach.jpg", "nyc.jpg"
@@ -1270,9 +1277,14 @@ populate_flowbox (GtkWidget *flowbox)
 
   g_object_set_data (G_OBJECT (flowbox), "populated", GUINT_TO_POINTER (1));
 
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 110, 70);
-  gdk_pixbuf_fill (pixbuf, 0xffffffff);
-  child = gtk_picture_new_for_pixbuf (pixbuf);
+  data = g_malloc (4 * 110  * 70);
+  memset (data, 0xff, 4 * 110  * 70);
+  bytes = g_bytes_new_take (data, 4 * 110 * 70);
+  texture = gdk_memory_texture_new (110, 70, GDK_MEMORY_DEFAULT, bytes, 4 * 110);
+  child = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
+  g_object_unref (texture);
+  g_bytes_unref (bytes);
+
   gtk_widget_add_css_class (child, "frame");
   gtk_flow_box_insert (GTK_FLOW_BOX (flowbox), child, -1);
 
@@ -1280,7 +1292,10 @@ populate_flowbox (GtkWidget *flowbox)
     {
       filename = g_strconcat ("/org/gtk/WidgetFactory4/", resources[i], NULL);
       pixbuf = gdk_pixbuf_new_from_resource_at_scale (filename, 110, 110, TRUE, NULL);
-      add_background (flowbox, filename, pixbuf, TRUE);
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      add_background (flowbox, filename, texture, TRUE);
+      g_object_unref (texture);
+      g_object_unref (pixbuf);
     }
 
   location = "/usr/share/backgrounds/gnome";
