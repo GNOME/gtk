@@ -157,7 +157,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   graphene_matrix_init_ortho (&self->p,
                               viewport->origin.x, viewport->origin.x + viewport->size.width,
                               viewport->origin.y, viewport->origin.y + viewport->size.height,
-                              ORTHO_NEAR_PLANE,
+                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
 
   if (signal_semaphore != VK_NULL_HANDLE) // this is a dependent pass
