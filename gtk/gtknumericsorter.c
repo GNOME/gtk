@@ -334,8 +334,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static GtkOrdering
 gtk_numeric_sorter_compare (GtkSorter *sorter,
-                           gpointer   item1,
-                           gpointer   item2)
+                            gpointer   item1,
+                            gpointer   item2)
 {
   GtkNumericSorter *self = GTK_NUMERIC_SORTER (sorter);
   GValue value1 = G_VALUE_INIT;
