@@ -88,6 +88,7 @@ compare_render_tests = [
   'texture-url',
   'transform-in-transform',
   'transform-in-transform-in-transform',
+  'z-transform-clipping-bounds-3d',
 ]
 
 # these are too sensitive to differences in the renderers
