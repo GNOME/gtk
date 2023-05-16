@@ -124,7 +124,7 @@ gsk_gl_compiler_new (GskGLDriver *driver,
   self->driver = g_object_ref (driver);
   self->debug_shaders = !!debug_shaders;
 
-  context = gsk_gl_command_queue_get_context (self->driver->shared_command_queue);
+  context = gsk_gl_driver_get_context (self->driver);
 
   if (gdk_gl_context_get_use_es (context))
     {
