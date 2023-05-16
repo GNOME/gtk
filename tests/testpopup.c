@@ -59,7 +59,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_css_provider_load_from_string (provider, css);
 
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),

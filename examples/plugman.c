@@ -57,7 +57,7 @@ window_paste (GSimpleAction *action,
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkTextView *text = g_object_get_data ((GObject*)window, "plugman-text");
-  
+
   gtk_text_buffer_paste_clipboard (gtk_text_view_get_buffer (text),
                                    gtk_widget_get_clipboard (GTK_WIDGET (text)),
                                    NULL,
@@ -221,7 +221,7 @@ plugin_action (GAction  *action,
   g_message ("Color: %s", g_action_get_name (action));
 
   css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (css_provider, css_to_load, -1);
+  gtk_css_provider_load_from_string (css_provider, css_to_load);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (css_provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
