@@ -91,7 +91,7 @@ size_prepared_cb (GdkPixbufLoader *loader,
  * load the image at its original size times the
  * given scale.
  */
-GdkPixbuf *
+static GdkPixbuf *
 _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
                                     double         scale,
                                     GCancellable  *cancellable,
@@ -178,35 +178,6 @@ _gdk_pixbuf_new_from_stream (GInputStream  *stream,
                              GError       **error)
 {
   return _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
-}
-
-/* Like gdk_pixbuf_new_from_resource_at_scale, but
- * load the image at its original size times the
- * given scale.
- */
-GdkPixbuf *
-_gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
-                                      double       scale,
-                                      GError     **error)
-{
-  GInputStream *stream;
-  GdkPixbuf *pixbuf;
-
-  stream = g_resources_open_stream (resource_path, 0, error);
-  if (stream == NULL)
-    return NULL;
-
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, scale, NULL, error);
-  g_object_unref (stream);
-
-  return pixbuf;
-}
-
-GdkPixbuf *
-_gdk_pixbuf_new_from_resource (const char   *resource_path,
-                               GError      **error)
-{
-  return _gdk_pixbuf_new_from_resource_scaled (resource_path, 0, error);
 }
 
 GdkPixbuf *
@@ -464,7 +435,7 @@ gtk_make_symbolic_pixbuf_from_path (const char  *path,
   return pixbuf;
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_file (GFile       *file,
                                     int          width,
                                     int          height,
@@ -576,7 +547,7 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
                               height * loader_data->scale_factor);
 }
 
-GdkPaintable *
+static GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      int     scale_factor)
 {
