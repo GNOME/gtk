@@ -305,6 +305,7 @@ test_string (void)
 
   expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback)get_spelled_out, NULL, NULL);
   gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  g_assert_true (gtk_string_sorter_get_expression (GTK_STRING_SORTER (sorter)) == expression);
   gtk_expression_unref (expression);
 
   assert_model (model, "8 18 11 15 5 4 14 9 19 1 7 17 6 16 10 13 3 12 20 2");
@@ -343,10 +344,15 @@ test_change (void)
   gtk_expression_unref (expression);
 
   gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
+  g_assert_false (gtk_string_sorter_get_ignore_case (GTK_STRING_SORTER (sorter)));
   g_assert_cmpint (counter, ==, 2);
 
   gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
   g_assert_cmpint (counter, ==, 2);
+
+  gtk_string_sorter_set_collation (GTK_STRING_SORTER (sorter), GTK_COLLATION_FILENAME);
+  g_assert_true (gtk_string_sorter_get_collation (GTK_STRING_SORTER (sorter)) == GTK_COLLATION_FILENAME);
+  g_assert_cmpint (counter, ==, 3);
 
   g_object_unref (sorter);
 }
