@@ -354,7 +354,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
   };
   GskVulkanPipelineType pipeline_type;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP;
@@ -387,7 +387,7 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
               gsk_linear_gradient_node_get_n_color_stops (node),
               GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP;
@@ -415,7 +415,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP;
@@ -443,7 +443,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
@@ -473,7 +473,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
 
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for inset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  else if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP;
@@ -503,7 +503,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
 
   if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for outset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  else if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP;
@@ -641,7 +641,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
@@ -669,7 +669,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
@@ -761,7 +761,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
     return TRUE;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
@@ -789,7 +789,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP;
@@ -817,7 +817,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
   };
   GskVulkanPipelineType pipeline_type;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP;
@@ -860,7 +860,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
 
   if (gsk_text_node_has_color_glyphs (node))
     {
-      if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
       else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
         pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP;
@@ -872,7 +872,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
     }
   else
     {
-      if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+      if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT;
       else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP;
@@ -938,7 +938,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
     .render.offset = state->offset,
   };
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &node->bounds))
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR;
   else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP;

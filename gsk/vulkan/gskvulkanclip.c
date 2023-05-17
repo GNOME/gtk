@@ -220,9 +220,14 @@ gsk_vulkan_clip_transform (GskVulkanClip         *dest,
 }
 
 gboolean
-gsk_vulkan_clip_contains_rect (const GskVulkanClip   *self,
-                               const graphene_rect_t *rect)
+gsk_vulkan_clip_contains_rect (const GskVulkanClip    *self,
+                               const graphene_point_t *offset,
+                               const graphene_rect_t  *rect)
 {
+  graphene_rect_t r = *rect;
+  r.origin.x += offset->x;
+  r.origin.y += offset->y;
+
   switch (self->type)
     {
     default:
@@ -234,10 +239,10 @@ gsk_vulkan_clip_contains_rect (const GskVulkanClip   *self,
       return TRUE;
 
     case GSK_VULKAN_CLIP_RECT:
-      return graphene_rect_contains_rect (&self->rect.bounds, rect);
+      return graphene_rect_contains_rect (&self->rect.bounds, &r);
 
     case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
-      return gsk_rounded_rect_contains_rect (&self->rect, rect);
+      return gsk_rounded_rect_contains_rect (&self->rect, &r);
     }
 }
