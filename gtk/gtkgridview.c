@@ -957,6 +957,8 @@ gtk_grid_view_dispose (GObject *object)
 
   self->item_manager = NULL;
 
+  g_clear_object (&self->factory);
+
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
 }
 

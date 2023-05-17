@@ -726,6 +726,9 @@ gtk_list_view_dispose (GObject *object)
 
   self->item_manager = NULL;
 
+  g_clear_object (&self->factory);
+  g_clear_object (&self->header_factory);
+
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
 }
 
