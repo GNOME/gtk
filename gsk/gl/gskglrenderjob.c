@@ -363,36 +363,6 @@ rect_contains_rect (const graphene_rect_t *r1,
          (r2->origin.y + r2->size.height) <= (r1->origin.y + r1->size.height);
 }
 
-static inline gboolean
-rounded_inner_rect_contains_rect (const GskRoundedRect  *rounded,
-                                  const graphene_rect_t *rect)
-{
-  const graphene_rect_t *rounded_bounds = &rounded->bounds;
-  graphene_rect_t inner;
-  float offset_x;
-  float offset_y;
-
-  /* TODO: This is pretty conservative and we could go further,
-   *       more fine-grained checks to avoid offscreen drawing.
-   */
-
-  offset_x = MAX (rounded->corner[GSK_CORNER_TOP_LEFT].width,
-                  rounded->corner[GSK_CORNER_BOTTOM_LEFT].width);
-  offset_y = MAX (rounded->corner[GSK_CORNER_TOP_LEFT].height,
-                  rounded->corner[GSK_CORNER_TOP_RIGHT].height);
-
-  inner.origin.x = rounded_bounds->origin.x + offset_x;
-  inner.origin.y = rounded_bounds->origin.y + offset_y;
-  inner.size.width = rounded_bounds->size.width - offset_x -
-                     MAX (rounded->corner[GSK_CORNER_TOP_RIGHT].width,
-                          rounded->corner[GSK_CORNER_BOTTOM_RIGHT].width);
-  inner.size.height = rounded_bounds->size.height - offset_y -
-                      MAX (rounded->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                           rounded->corner[GSK_CORNER_BOTTOM_RIGHT].height);
-
-  return rect_contains_rect (&inner, rect);
-}
-
 static inline gboolean G_GNUC_PURE
 rect_intersects (const graphene_rect_t *r1,
                  const graphene_rect_t *r2)
