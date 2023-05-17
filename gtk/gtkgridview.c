@@ -553,7 +553,8 @@ static int
 gtk_grid_view_get_unknown_row_size (GtkGridView *self,
                                     GArray      *heights)
 {
-  g_return_val_if_fail (heights->len > 0, 0);
+  if (heights->len == 0)
+    return 0;
 
   /* return the median and hope rows are generally uniform with few outliers */
   g_array_sort (heights, compare_ints);
