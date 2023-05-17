@@ -1131,7 +1131,7 @@ gsk_gl_driver_lookup_shader (GskGLDriver  *self,
   return program;
 }
 
-#ifdef G_ENABLE_DEBUG
+#if 0
 void
 gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
                                    int                texture_id,

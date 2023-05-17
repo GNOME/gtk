@@ -175,7 +175,7 @@ GskGLProgram      * gsk_gl_driver_lookup_shader          (GskGLDriver         *s
                                                           GskGLShader         *shader,
                                                           GError             **error);
 
-#ifdef G_ENABLE_DEBUG
+#if 0
 void                gsk_gl_driver_save_texture_to_png    (GskGLDriver         *self,
                                                           int                  texture_id,
                                                           int                  width,
