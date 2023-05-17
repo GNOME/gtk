@@ -331,7 +331,7 @@ void                gsk_gl_command_queue_delete_program       (GskGLCommandQueue
 void                gsk_gl_command_queue_clear                (GskGLCommandQueue    *self,
                                                                guint                 clear_bits,
                                                                const graphene_rect_t *viewport);
-void                gsk_gl_command_queue_begin_draw           (GskGLCommandQueue    *self,
+gboolean            gsk_gl_command_queue_begin_draw           (GskGLCommandQueue    *self,
                                                                GskGLUniformProgram  *program_info,
                                                                guint                 width,
                                                                guint                 height);

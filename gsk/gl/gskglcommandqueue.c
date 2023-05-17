@@ -579,7 +579,7 @@ discard_batch (GskGLCommandQueue *self)
   self->batches.len--;
 }
 
-void
+gboolean
 gsk_gl_command_queue_begin_draw (GskGLCommandQueue   *self,
                                  GskGLUniformProgram *program,
                                  guint                width,
@@ -596,7 +596,7 @@ gsk_gl_command_queue_begin_draw (GskGLCommandQueue   *self,
    * of batches we can have in one frame.
    */
   if (will_ignore_batch (self))
-    return;
+    return FALSE;
 
   self->program_info = program;
 
@@ -617,6 +617,8 @@ gsk_gl_command_queue_begin_draw (GskGLCommandQueue   *self,
   self->fbo_max = MAX (self->fbo_max, batch->draw.framebuffer);
 
   self->in_draw = TRUE;
+
+  return TRUE;
 }
 
 void
