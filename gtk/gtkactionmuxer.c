@@ -325,6 +325,9 @@ gtk_action_muxer_get_group (GtkActionMuxer *muxer,
 {
   Group *group;
 
+  if (!muxer->groups)
+    return NULL;
+
   group = g_hash_table_lookup (muxer->groups, group_name);
   if (group)
     return group->group;
