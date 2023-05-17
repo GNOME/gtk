@@ -1125,16 +1125,17 @@ gsk_gl_render_job_draw_offscreen_rect (GskGLRenderJob        *job,
                                  color);
 }
 
-static inline void
+static inline gboolean
 gsk_gl_render_job_begin_draw (GskGLRenderJob *job,
                               GskGLProgram   *program)
 {
   job->current_program = program;
 
-  gsk_gl_command_queue_begin_draw (job->command_queue,
-                                   program->program_info,
-                                   job->viewport.size.width,
-                                   job->viewport.size.height);
+  if (!gsk_gl_command_queue_begin_draw (job->command_queue,
+                                        program->program_info,
+                                        job->viewport.size.width,
+                                        job->viewport.size.height))
+    return FALSE;
 
   gsk_gl_uniform_state_set4fv (program->uniforms,
                                program->program_info,
@@ -1166,6 +1167,8 @@ gsk_gl_render_job_begin_draw (GskGLRenderJob *job,
                               UNIFORM_SHARED_ALPHA,
                               job->driver->stamps[UNIFORM_SHARED_ALPHA],
                               job->alpha);
+
+  return TRUE;
 }
 
 #define CHOOSE_PROGRAM(job,name) \
@@ -1297,7 +1300,9 @@ done:
       gsk_transform_unref (transform);
     }
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+  if (!gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+    goto out;
+
   gsk_gl_program_set_uniform_texture (job->current_program,
                                       UNIFORM_SHARED_SOURCE, 0,
                                       GL_TEXTURE_2D,
@@ -1306,6 +1311,7 @@ done:
   gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
   gsk_gl_render_job_end_draw (job);
 
+out:
   if (scale_x < 0 || scale_y < 0)
     gsk_gl_render_job_pop_modelview (job);
 }
@@ -1360,54 +1366,58 @@ blur_offscreen (GskGLRenderJob       *job,
   /* Begin drawing the first horizontal pass, using offscreen as the
    * source texture for the program.
    */
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blur));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      offscreen->texture_id);
-  gsk_gl_program_set_uniform1f (job->current_program,
-                                UNIFORM_BLUR_RADIUS, 0,
-                                blur_radius_x);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_BLUR_SIZE, 0,
-                                texture_to_blur_width,
-                                texture_to_blur_height);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_BLUR_DIR, 0,
-                                1, 0);
-  gsk_gl_render_job_draw_coords (job,
-                                 0, 0, texture_to_blur_width, texture_to_blur_height,
-                                 0, 1, 1, 0,
-                                 (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blur)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen->texture_id);
+      gsk_gl_program_set_uniform1f (job->current_program,
+                                    UNIFORM_BLUR_RADIUS, 0,
+                                    blur_radius_x);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_BLUR_SIZE, 0,
+                                    texture_to_blur_width,
+                                    texture_to_blur_height);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_BLUR_DIR, 0,
+                                    1, 0);
+      gsk_gl_render_job_draw_coords (job,
+                                     0, 0, texture_to_blur_width, texture_to_blur_height,
+                                     0, 1, 1, 0,
+                                     (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
+      gsk_gl_render_job_end_draw (job);
+    }
 
   /* Bind second pass framebuffer and clear it */
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, pass2->framebuffer_id);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
 
   /* Draw using blur program with first pass as source texture */
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blur));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      pass1->texture_id);
-  gsk_gl_program_set_uniform1f (job->current_program,
-                                UNIFORM_BLUR_RADIUS, 0,
-                                blur_radius_y);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_BLUR_SIZE, 0,
-                                texture_to_blur_width,
-                                texture_to_blur_height);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_BLUR_DIR, 0,
-                                0, 1);
-  gsk_gl_render_job_draw_coords (job,
-                                 0, 0, texture_to_blur_width, texture_to_blur_height,
-                                 0, 1, 1, 0,
-                                 (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blur)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          pass1->texture_id);
+      gsk_gl_program_set_uniform1f (job->current_program,
+                                    UNIFORM_BLUR_RADIUS, 0,
+                                    blur_radius_y);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_BLUR_SIZE, 0,
+                                    texture_to_blur_width,
+                                    texture_to_blur_height);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_BLUR_DIR, 0,
+                                    0, 1);
+      gsk_gl_render_job_draw_coords (job,
+                                     0, 0, texture_to_blur_width, texture_to_blur_height,
+                                     0, 1, 1, 0,
+                                     (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
+      gsk_gl_render_job_end_draw (job);
+    }
 
   gsk_gl_render_job_pop_modelview (job);
   gsk_gl_render_job_pop_clip (job);
@@ -1506,30 +1516,33 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
     {
       GskGLRenderOffscreen offscreen = {0};
 
-      gsk_gl_render_job_begin_draw (job, program);
+      if (gsk_gl_render_job_begin_draw (job, program))
+        {
+          /* The top left few pixels in our atlases are always
+           * solid white, so we can use it here, without
+           * having to choose any particular atlas texture.
+           */
+          offscreen.was_offscreen = FALSE;
+          offscreen.area.x = 1.f / ATLAS_SIZE;
+          offscreen.area.y = 1.f / ATLAS_SIZE;
+          offscreen.area.x2 = 2.f / ATLAS_SIZE;
+          offscreen.area.y2 = 2.f / ATLAS_SIZE;
 
-      /* The top left few pixels in our atlases are always
-       * solid white, so we can use it here, without
-       * having to choose any particular atlas texture.
-       */
-      offscreen.was_offscreen = FALSE;
-      offscreen.area.x = 1.f / ATLAS_SIZE;
-      offscreen.area.y = 1.f / ATLAS_SIZE;
-      offscreen.area.x2 = 2.f / ATLAS_SIZE;
-      offscreen.area.y2 = 2.f / ATLAS_SIZE;
+          gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                       &node->bounds,
+                                                       &offscreen,
+                                                       color);
 
-      gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                   &node->bounds,
-                                                   &offscreen,
-                                                   color);
-
-      gsk_gl_render_job_end_draw (job);
+          gsk_gl_render_job_end_draw (job);
+       }
     }
   else
     {
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-      gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+        {
+          gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
+          gsk_gl_render_job_end_draw (job);
+        }
     }
 }
 
@@ -1549,22 +1562,24 @@ gsk_gl_render_job_visit_linear_gradient_node (GskGLRenderJob      *job,
 
   g_assert (n_color_stops < MAX_GRADIENT_STOPS);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, linear_gradient));
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_LINEAR_GRADIENT_NUM_COLOR_STOPS, 0,
-                                n_color_stops);
-  gsk_gl_program_set_uniform1fv (job->current_program,
-                                 UNIFORM_LINEAR_GRADIENT_COLOR_STOPS, 0,
-                                 n_color_stops * 5,
-                                 (const float *)stops);
-  gsk_gl_program_set_uniform4f (job->current_program,
-                                UNIFORM_LINEAR_GRADIENT_POINTS, 0,
-                                x1, y1, x2 - x1, y2 - y1);
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_LINEAR_GRADIENT_REPEAT, 0,
-                                repeat);
-  gsk_gl_render_job_draw_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, linear_gradient)))
+    {
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_LINEAR_GRADIENT_NUM_COLOR_STOPS, 0,
+                                    n_color_stops);
+      gsk_gl_program_set_uniform1fv (job->current_program,
+                                     UNIFORM_LINEAR_GRADIENT_COLOR_STOPS, 0,
+                                     n_color_stops * 5,
+                                     (const float *)stops);
+      gsk_gl_program_set_uniform4f (job->current_program,
+                                    UNIFORM_LINEAR_GRADIENT_POINTS, 0,
+                                    x1, y1, x2 - x1, y2 - y1);
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_LINEAR_GRADIENT_REPEAT, 0,
+                                    repeat);
+      gsk_gl_render_job_draw_rect (job, &node->bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -1581,22 +1596,24 @@ gsk_gl_render_job_visit_conic_gradient_node (GskGLRenderJob      *job,
 
   g_assert (n_color_stops < MAX_GRADIENT_STOPS);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, conic_gradient));
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_CONIC_GRADIENT_NUM_COLOR_STOPS, 0,
-                                n_color_stops);
-  gsk_gl_program_set_uniform1fv (job->current_program,
-                                 UNIFORM_CONIC_GRADIENT_COLOR_STOPS, 0,
-                                 n_color_stops * 5,
-                                 (const float *)stops);
-  gsk_gl_program_set_uniform4f (job->current_program,
-                                UNIFORM_CONIC_GRADIENT_GEOMETRY, 0,
-                                job->offset_x + center->x,
-                                job->offset_y + center->y,
-                                scale,
-                                bias);
-  gsk_gl_render_job_draw_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, conic_gradient)))
+    {
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_CONIC_GRADIENT_NUM_COLOR_STOPS, 0,
+                                    n_color_stops);
+      gsk_gl_program_set_uniform1fv (job->current_program,
+                                     UNIFORM_CONIC_GRADIENT_COLOR_STOPS, 0,
+                                     n_color_stops * 5,
+                                     (const float *)stops);
+      gsk_gl_program_set_uniform4f (job->current_program,
+                                    UNIFORM_CONIC_GRADIENT_GEOMETRY, 0,
+                                    job->offset_x + center->x,
+                                    job->offset_y + center->y,
+                                    scale,
+                                    bias);
+      gsk_gl_render_job_draw_rect (job, &node->bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -1616,28 +1633,30 @@ gsk_gl_render_job_visit_radial_gradient_node (GskGLRenderJob      *job,
 
   g_assert (n_color_stops < MAX_GRADIENT_STOPS);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, radial_gradient));
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_RADIAL_GRADIENT_NUM_COLOR_STOPS, 0,
-                                n_color_stops);
-  gsk_gl_program_set_uniform1fv (job->current_program,
-                                 UNIFORM_RADIAL_GRADIENT_COLOR_STOPS, 0,
-                                 n_color_stops * 5,
-                                 (const float *)stops);
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_RADIAL_GRADIENT_REPEAT, 0,
-                                repeat);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_RADIAL_GRADIENT_RANGE, 0,
-                                scale, bias);
-  gsk_gl_program_set_uniform4f (job->current_program,
-                                UNIFORM_RADIAL_GRADIENT_GEOMETRY, 0,
-                                job->offset_x + center->x,
-                                job->offset_y + center->y,
-                                1.0f / (hradius * job->scale_x),
-                                1.0f / (vradius * job->scale_y));
-  gsk_gl_render_job_draw_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, radial_gradient)))
+    {
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_RADIAL_GRADIENT_NUM_COLOR_STOPS, 0,
+                                    n_color_stops);
+      gsk_gl_program_set_uniform1fv (job->current_program,
+                                     UNIFORM_RADIAL_GRADIENT_COLOR_STOPS, 0,
+                                     n_color_stops * 5,
+                                     (const float *)stops);
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_RADIAL_GRADIENT_REPEAT, 0,
+                                    repeat);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_RADIAL_GRADIENT_RANGE, 0,
+                                    scale, bias);
+      gsk_gl_program_set_uniform4f (job->current_program,
+                                    UNIFORM_RADIAL_GRADIENT_GEOMETRY, 0,
+                                    job->offset_x + center->x,
+                                    job->offset_y + center->y,
+                                    1.0f / (hradius * job->scale_x),
+                                    1.0f / (vradius * job->scale_y));
+      gsk_gl_render_job_draw_rect (job, &node->bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -1690,14 +1709,16 @@ gsk_gl_render_job_visit_clipped_child (GskGLRenderJob        *job,
 
       g_assert (offscreen.texture_id);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
-      gsk_gl_render_job_draw_offscreen_rect (job, clip);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+        {
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              offscreen.texture_id);
+          gsk_gl_render_job_draw_offscreen_rect (job, clip);
+          gsk_gl_render_job_end_draw (job);
+        }
     }
 }
 
@@ -1778,14 +1799,16 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
 
       g_assert (offscreen.texture_id);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
-      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+        {
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              offscreen.texture_id);
+          gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+          gsk_gl_render_job_end_draw (job);
+        }
     }
 }
 
@@ -1799,41 +1822,42 @@ gsk_gl_render_job_visit_rect_border_node (GskGLRenderJob      *job,
   const graphene_size_t *size = &node->bounds.size;
   guint16 color[4];
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-
-  if (widths[0] > 0)
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
     {
-      rgba_to_half (&colors[0], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x, origin->y, size->width - widths[1], widths[0]),
-                                              color);
-    }
+      if (widths[0] > 0)
+        {
+          rgba_to_half (&colors[0], color);
+          gsk_gl_render_job_draw_rect_with_color (job,
+                                                  &GRAPHENE_RECT_INIT (origin->x, origin->y, size->width - widths[1], widths[0]),
+                                                  color);
+        }
 
-  if (widths[1] > 0)
-    {
-      rgba_to_half (&colors[1], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1], origin->y, widths[1], size->height - widths[2]),
-                                              color);
-    }
+      if (widths[1] > 0)
+        {
+          rgba_to_half (&colors[1], color);
+          gsk_gl_render_job_draw_rect_with_color (job,
+                                                  &GRAPHENE_RECT_INIT (origin->x + size->width - widths[1], origin->y, widths[1], size->height - widths[2]),
+                                                  color);
+        }
 
-  if (widths[2] > 0)
-    {
-      rgba_to_half (&colors[2], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[3], widths[2]),
-                                              color);
-    }
+      if (widths[2] > 0)
+        {
+          rgba_to_half (&colors[2], color);
+          gsk_gl_render_job_draw_rect_with_color (job,
+                                                  &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[3], widths[2]),
+                                                  color);
+        }
 
-  if (widths[3] > 0)
-    {
-      rgba_to_half (&colors[3], color);
-      gsk_gl_render_job_draw_rect_with_color (job,
-                                              &GRAPHENE_RECT_INIT (origin->x, origin->y + widths[0], widths[3], size->height - widths[0]),
-                                              color);
-    }
+      if (widths[3] > 0)
+        {
+          rgba_to_half (&colors[3], color);
+          gsk_gl_render_job_draw_rect_with_color (job,
+                                                  &GRAPHENE_RECT_INIT (origin->x, origin->y + widths[0], widths[3], size->height - widths[0]),
+                                                  color);
+        }
 
-  gsk_gl_render_job_end_draw (job);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -1882,77 +1906,78 @@ gsk_gl_render_job_visit_border_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, border));
-
-  gsk_gl_program_set_uniform4fv (job->current_program,
-                                 UNIFORM_BORDER_WIDTHS, 0,
-                                 1,
-                                 widths);
-  gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                           UNIFORM_BORDER_OUTLINE_RECT, 0,
-                                           &outline);
-
-  if (widths[0] > 0)
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, border)))
     {
-      GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
+      gsk_gl_program_set_uniform4fv (job->current_program,
+                                     UNIFORM_BORDER_WIDTHS, 0,
+                                     1,
+                                     widths);
+      gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                               UNIFORM_BORDER_OUTLINE_RECT, 0,
+                                               &outline);
 
-      rgba_to_half (&colors[0], color);
+      if (widths[0] > 0)
+        {
+          GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
 
-      vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          rgba_to_half (&colors[0], color);
 
-      vertices[3] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[1] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+          vertices[3] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[4] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+        }
+
+      if (widths[1] > 0)
+        {
+          GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
+
+          rgba_to_half (&colors[1], color);
+
+          vertices[0] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[1] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+          vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[4] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+        }
+
+      if (widths[2] > 0)
+        {
+          GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
+
+          rgba_to_half (&colors[2], color);
+
+          vertices[0] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[2] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+          vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[4] = (GskGLDrawVertex) { .position = { min_x            ,  max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[5] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+        }
+
+      if (widths[3] > 0)
+        {
+          GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
+
+          rgba_to_half (&colors[3], color);
+
+          vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[2] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+
+          vertices[3] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[4] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
+          vertices[5] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
+        }
+
+      gsk_gl_render_job_end_draw (job);
     }
-
-  if (widths[1] > 0)
-    {
-      GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
-
-      rgba_to_half (&colors[1], color);
-
-      vertices[0] = (GskGLDrawVertex) { .position = { max_x - sizes[1].w, min_y + sizes[1].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-
-      vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { max_x,              min_y              }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-    }
-
-  if (widths[2] > 0)
-    {
-      GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
-
-      rgba_to_half (&colors[2], color);
-
-      vertices[0] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-
-      vertices[3] = (GskGLDrawVertex) { .position = { max_x,              max_y              }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { min_x            ,  max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { max_x - sizes[2].w, max_y - sizes[2].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-    }
-
-  if (widths[3] > 0)
-    {
-      GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
-
-      rgba_to_half (&colors[3], color);
-
-      vertices[0] = (GskGLDrawVertex) { .position = { min_x,              min_y              }, .uv = { 0, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[1] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[2] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-
-      vertices[3] = (GskGLDrawVertex) { .position = { min_x + sizes[3].w, max_y - sizes[3].h }, .uv = { 1, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[4] = (GskGLDrawVertex) { .position = { min_x,              max_y              }, .uv = { 0, 0 }, .color = { color[0], color[1], color[2], color[3] } };
-      vertices[5] = (GskGLDrawVertex) { .position = { min_x + sizes[0].w, min_y + sizes[0].h }, .uv = { 1, 1 }, .color = { color[0], color[1], color[2], color[3] } };
-    }
-
-  gsk_gl_render_job_end_draw (job);
 }
 
 /* A special case for a pattern that occurs frequently with CSS
@@ -1986,26 +2011,27 @@ gsk_gl_render_job_visit_css_background (GskGLRenderJob      *job,
 
   gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, filled_border));
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, filled_border)))
+    {
+      gsk_gl_program_set_uniform4fv (job->current_program,
+                                     UNIFORM_FILLED_BORDER_WIDTHS, 0,
+                                     1,
+                                     widths);
+      gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                               UNIFORM_FILLED_BORDER_OUTLINE_RECT, 0,
+                                               &outline);
 
-  gsk_gl_program_set_uniform4fv (job->current_program,
-                                 UNIFORM_FILLED_BORDER_WIDTHS, 0,
-                                 1,
-                                 widths);
-  gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                           UNIFORM_FILLED_BORDER_OUTLINE_RECT, 0,
-                                           &outline);
+      vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
 
-  vertices = gsk_gl_command_queue_add_vertices (job->command_queue);
+      vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+      vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+      vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+      vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+      vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
+      vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
 
-  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .color = { color[0], color[1], color[2], color[3] }, .color2 = { color2[0], color2[1], color2[2], color2[3] } };
-
-  gsk_gl_render_job_end_draw (job);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 /* Returns TRUE if applying @transform to @bounds
@@ -2136,16 +2162,18 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
               if (transform)
                 gsk_gl_render_job_push_modelview (job, transform);
 
-              gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-              gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
-                                                              UNIFORM_SHARED_SOURCE, 0,
-                                                              GL_TEXTURE_2D,
-                                                              GL_TEXTURE0,
-                                                              offscreen.texture_id,
-                                                              linear_filter ? GL_LINEAR : GL_NEAREST,
-                                                              linear_filter ? GL_LINEAR : GL_NEAREST);
-              gsk_gl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
-              gsk_gl_render_job_end_draw (job);
+              if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+                {
+                  gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                                  UNIFORM_SHARED_SOURCE, 0,
+                                                                  GL_TEXTURE_2D,
+                                                                  GL_TEXTURE0,
+                                                                  offscreen.texture_id,
+                                                                  linear_filter ? GL_LINEAR : GL_NEAREST,
+                                                                  linear_filter ? GL_LINEAR : GL_NEAREST);
+                  gsk_gl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
+                  gsk_gl_render_job_end_draw (job);
+                }
 
               if (transform)
                 gsk_gl_render_job_pop_modelview (job);
@@ -2177,20 +2205,22 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-  gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                           UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
-                                           &transformed_outline);
-  gsk_gl_program_set_uniform1f (job->current_program,
-                                UNIFORM_INSET_SHADOW_SPREAD, 0,
-                                gsk_inset_shadow_node_get_spread (node));
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_INSET_SHADOW_OFFSET, 0,
-                                gsk_inset_shadow_node_get_dx (node),
-                                gsk_inset_shadow_node_get_dy (node));
-  rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
-  gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
+    {
+      gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                               UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
+                                               &transformed_outline);
+      gsk_gl_program_set_uniform1f (job->current_program,
+                                    UNIFORM_INSET_SHADOW_SPREAD, 0,
+                                    gsk_inset_shadow_node_get_spread (node));
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_INSET_SHADOW_OFFSET, 0,
+                                    gsk_inset_shadow_node_get_dx (node),
+                                    gsk_inset_shadow_node_get_dy (node));
+      rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+      gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -2278,22 +2308,24 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       gsk_gl_render_job_translate_rounded_rect (job, &outline_to_blur, &transformed_outline);
 
       /* Actual inset shadow outline drawing */
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow));
-      gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                               UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
-                                               &transformed_outline);
-      gsk_gl_program_set_uniform1f (job->current_program,
-                                    UNIFORM_INSET_SHADOW_SPREAD, 0,
-                                    spread * MAX (scale_x, scale_y));
-      gsk_gl_program_set_uniform2f (job->current_program,
-                                    UNIFORM_INSET_SHADOW_OFFSET, 0,
-                                    offset_x * scale_x,
-                                    offset_y * scale_y);
-      rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
-      gsk_gl_render_job_draw_with_color (job,
-                                         0, 0, texture_width, texture_height,
-                                         color);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
+        {
+          gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                                   UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
+                                                   &transformed_outline);
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_INSET_SHADOW_SPREAD, 0,
+                                        spread * MAX (scale_x, scale_y));
+          gsk_gl_program_set_uniform2f (job->current_program,
+                                        UNIFORM_INSET_SHADOW_OFFSET, 0,
+                                        offset_x * scale_x,
+                                        offset_y * scale_y);
+          rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+          gsk_gl_render_job_draw_with_color (job,
+                                             0, 0, texture_width, texture_height,
+                                             color);
+          gsk_gl_render_job_end_draw (job);
+        }
 
       gsk_gl_render_job_pop_modelview (job);
       gsk_gl_render_job_pop_clip (job);
@@ -2341,14 +2373,16 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
     offscreen.area.x2 = tx2;
     offscreen.area.y2 = ty2;
 
-    gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-    gsk_gl_program_set_uniform_texture (job->current_program,
-                                        UNIFORM_SHARED_SOURCE, 0,
-                                        GL_TEXTURE_2D,
-                                        GL_TEXTURE0,
-                                        blurred_texture_id);
-    gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-    gsk_gl_render_job_end_draw (job);
+    if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+      {
+        gsk_gl_program_set_uniform_texture (job->current_program,
+                                            UNIFORM_SHARED_SOURCE, 0,
+                                            GL_TEXTURE_2D,
+                                            GL_TEXTURE0,
+                                            blurred_texture_id);
+        gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+        gsk_gl_render_job_end_draw (job);
+      }
 
     if (needs_clip)
       gsk_gl_render_job_pop_clip (job);
@@ -2383,60 +2417,62 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, unblurred_outset_shadow));
-  gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                           UNIFORM_UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, 0,
-                                           &transformed_outline);
-  gsk_gl_program_set_uniform1f (job->current_program,
-                                UNIFORM_UNBLURRED_OUTSET_SHADOW_SPREAD, 0,
-                                spread);
-  gsk_gl_program_set_uniform2f (job->current_program,
-                                UNIFORM_UNBLURRED_OUTSET_SHADOW_OFFSET, 0,
-                                dx, dy);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, unblurred_outset_shadow)))
+    {
+      gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                               UNIFORM_UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, 0,
+                                               &transformed_outline);
+      gsk_gl_program_set_uniform1f (job->current_program,
+                                    UNIFORM_UNBLURRED_OUTSET_SHADOW_SPREAD, 0,
+                                    spread);
+      gsk_gl_program_set_uniform2f (job->current_program,
+                                    UNIFORM_UNBLURRED_OUTSET_SHADOW_OFFSET, 0,
+                                    dx, dy);
 
-  /* Corners... */
-  if (corner_sizes[0][0] > 0 && corner_sizes[0][1] > 0) /* Top left */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x, y, corner_sizes[0][0], corner_sizes[0][1],
-                                       color);
-  if (corner_sizes[1][0] > 0 && corner_sizes[1][1] > 0) /* Top right */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x + w - corner_sizes[1][0], y,
-                                       corner_sizes[1][0], corner_sizes[1][1],
-                                       color);
-  if (corner_sizes[2][0] > 0 && corner_sizes[2][1] > 0) /* Bottom right */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x + w - corner_sizes[2][0], y + h - corner_sizes[2][1],
-                                       corner_sizes[2][0], corner_sizes[2][1],
-                                       color);
-  if (corner_sizes[3][0] > 0 && corner_sizes[3][1] > 0) /* Bottom left */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x, y + h - corner_sizes[3][1],
-                                       corner_sizes[3][0], corner_sizes[3][1],
-                                       color);
-  /* Edges... */;
-  if (edge_sizes[0] > 0) /* Top */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x + corner_sizes[0][0], y,
-                                       w - corner_sizes[0][0] - corner_sizes[1][0], edge_sizes[0],
-                                       color);
-  if (edge_sizes[1] > 0) /* Right */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x + w - edge_sizes[1], y + corner_sizes[1][1],
-                                       edge_sizes[1], h - corner_sizes[1][1] - corner_sizes[2][1],
-                                       color);
-  if (edge_sizes[2] > 0) /* Bottom */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x + corner_sizes[3][0], y + h - edge_sizes[2],
-                                       w - corner_sizes[3][0] - corner_sizes[2][0], edge_sizes[2],
-                                       color);
-  if (edge_sizes[3] > 0) /* Left */
-    gsk_gl_render_job_draw_with_color (job,
-                                       x, y + corner_sizes[0][1],
-                                       edge_sizes[3], h - corner_sizes[0][1] - corner_sizes[3][1],
-                                       color);
+      /* Corners... */
+      if (corner_sizes[0][0] > 0 && corner_sizes[0][1] > 0) /* Top left */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x, y, corner_sizes[0][0], corner_sizes[0][1],
+                                           color);
+      if (corner_sizes[1][0] > 0 && corner_sizes[1][1] > 0) /* Top right */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x + w - corner_sizes[1][0], y,
+                                           corner_sizes[1][0], corner_sizes[1][1],
+                                           color);
+      if (corner_sizes[2][0] > 0 && corner_sizes[2][1] > 0) /* Bottom right */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x + w - corner_sizes[2][0], y + h - corner_sizes[2][1],
+                                           corner_sizes[2][0], corner_sizes[2][1],
+                                           color);
+      if (corner_sizes[3][0] > 0 && corner_sizes[3][1] > 0) /* Bottom left */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x, y + h - corner_sizes[3][1],
+                                           corner_sizes[3][0], corner_sizes[3][1],
+                                           color);
+      /* Edges... */;
+      if (edge_sizes[0] > 0) /* Top */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x + corner_sizes[0][0], y,
+                                           w - corner_sizes[0][0] - corner_sizes[1][0], edge_sizes[0],
+                                           color);
+      if (edge_sizes[1] > 0) /* Right */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x + w - edge_sizes[1], y + corner_sizes[1][1],
+                                           edge_sizes[1], h - corner_sizes[1][1] - corner_sizes[2][1],
+                                           color);
+      if (edge_sizes[2] > 0) /* Bottom */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x + corner_sizes[3][0], y + h - edge_sizes[2],
+                                           w - corner_sizes[3][0] - corner_sizes[2][0], edge_sizes[2],
+                                           color);
+      if (edge_sizes[3] > 0) /* Left */
+        gsk_gl_render_job_draw_with_color (job,
+                                           x, y + corner_sizes[0][1],
+                                           edge_sizes[3], h - corner_sizes[0][1] - corner_sizes[3][1],
+                                           color);
 
-  gsk_gl_render_job_end_draw (job);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -2556,10 +2592,12 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
 
       /* Draw the outline using color program */
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-      gsk_gl_render_job_draw_with_color (job, 0, 0, texture_width, texture_height,
-                                         (guint16[]){ FP16_ONE, FP16_ONE, FP16_ONE, FP16_ONE });
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+        {
+          gsk_gl_render_job_draw_with_color (job, 0, 0, texture_width, texture_height,
+                                             (guint16[]){ FP16_ONE, FP16_ONE, FP16_ONE, FP16_ONE });
+          gsk_gl_render_job_end_draw (job);
+        }
 
       /* Reset state from offscreen */
       gsk_gl_render_job_pop_clip (job);
@@ -2600,7 +2638,33 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       offscreen.texture_id = blurred_texture_id;
       init_full_texture_region (&offscreen);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow)))
+        {
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              blurred_texture_id);
+          gsk_gl_program_set_uniform_rounded_rect (job->current_program,
+                                                   UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
+                                                   &transformed_outline);
+          gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                       &GRAPHENE_RECT_INIT (min_x,
+                                                                            min_y,
+                                                                            texture_width / scale_x,
+                                                                            texture_height / scale_y),
+                                                       &offscreen,
+                                                       color);
+          gsk_gl_render_job_end_draw (job);
+        }
+
+      return;
+    }
+
+  /* slicing */
+
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow)))
+    {
       gsk_gl_program_set_uniform_texture (job->current_program,
                                           UNIFORM_SHARED_SOURCE, 0,
                                           GL_TEXTURE_2D,
@@ -2609,184 +2673,162 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
                                                &transformed_outline);
-      gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                   &GRAPHENE_RECT_INIT (min_x,
-                                                                        min_y,
-                                                                        texture_width / scale_x,
-                                                                        texture_height / scale_y),
-                                                   &offscreen,
-                                                   color);
-      gsk_gl_render_job_end_draw (job);
 
-      return;
-    }
-
-  /* slicing */
-
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, outset_shadow));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      blurred_texture_id);
-  gsk_gl_program_set_uniform_rounded_rect (job->current_program,
-                                           UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
-                                           &transformed_outline);
-
-  {
-    float min_x = floorf (outline->bounds.origin.x - spread - half_blur_extra + dx);
-    float min_y = floorf (outline->bounds.origin.y - spread - half_blur_extra + dy);
-    float max_x = ceilf (outline->bounds.origin.x + outline->bounds.size.width +
-                         half_blur_extra + dx + spread);
-    float max_y = ceilf (outline->bounds.origin.y + outline->bounds.size.height +
-                         half_blur_extra + dy + spread);
-    const GskGLTextureNineSlice *slices;
-    float left_width, center_width, right_width;
-    float top_height, center_height, bottom_height;
-    GskGLTexture *texture;
-
-    texture = gsk_gl_driver_get_texture_by_id (job->driver, blurred_texture_id);
-    slices = gsk_gl_texture_get_nine_slice (texture, &scaled_outline, extra_blur_pixels_x, extra_blur_pixels_y);
-
-    offscreen.was_offscreen = TRUE;
-
-    /* Our texture coordinates MUST be scaled, while the actual vertex coords
-     * MUST NOT be scaled.
-     */
-
-    left_width = slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x;
-    right_width = slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x;
-    center_width = (max_x - min_x) - (left_width + right_width);
-
-    top_height = slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y;
-    bottom_height = slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y;
-    center_height = (max_y - min_y) - (top_height + bottom_height);
-
-    /* Top left */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_LEFT]))
       {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_LEFT].area, sizeof offscreen.area);
-        gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                     &GRAPHENE_RECT_INIT (min_x,
-                                                                          min_y,
-                                                                          left_width,
-                                                                          top_height),
-                                                     &offscreen,
-                                                     color);
-      }
+        float min_x = floorf (outline->bounds.origin.x - spread - half_blur_extra + dx);
+        float min_y = floorf (outline->bounds.origin.y - spread - half_blur_extra + dy);
+        float max_x = ceilf (outline->bounds.origin.x + outline->bounds.size.width +
+                             half_blur_extra + dx + spread);
+        float max_y = ceilf (outline->bounds.origin.y + outline->bounds.size.height +
+                             half_blur_extra + dy + spread);
+        const GskGLTextureNineSlice *slices;
+        float left_width, center_width, right_width;
+        float top_height, center_height, bottom_height;
+        GskGLTexture *texture;
 
-    /* Top center */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
-    {
-      memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_CENTER].area, sizeof offscreen.area);
-      gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                   &GRAPHENE_RECT_INIT (min_x + left_width,
-                                                                        min_y,
-                                                                        center_width,
-                                                                        top_height),
-                                                   &offscreen,
-                                                   color);
-    }
+        texture = gsk_gl_driver_get_texture_by_id (job->driver, blurred_texture_id);
+        slices = gsk_gl_texture_get_nine_slice (texture, &scaled_outline, extra_blur_pixels_x, extra_blur_pixels_y);
 
-    /* Top right */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_RIGHT]))
-    {
-      memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_RIGHT].area, sizeof offscreen.area);
-      gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                   &GRAPHENE_RECT_INIT (max_x - right_width,
-                                                                        min_y,
-                                                                        right_width,
-                                                                        top_height),
-                                                   &offscreen,
-                                                   color);
-    }
+        offscreen.was_offscreen = TRUE;
 
-    /* Bottom right */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_RIGHT]))
-    {
-      memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_RIGHT].area, sizeof offscreen.area);
-      gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                   &GRAPHENE_RECT_INIT (max_x - right_width,
-                                                                        max_y - bottom_height,
-                                                                        right_width,
-                                                                        bottom_height),
-                                                   &offscreen,
-                                                   color);
-    }
+        /* Our texture coordinates MUST be scaled, while the actual vertex coords
+         * MUST NOT be scaled.
+         */
 
-    /* Bottom left */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_LEFT]))
-      {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_LEFT].area, sizeof offscreen.area);
-        gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                     &GRAPHENE_RECT_INIT (min_x,
-                                                                          max_y - bottom_height,
-                                                                          left_width,
-                                                                          bottom_height),
-                                                     &offscreen,
-                                                     color);
-      }
+        left_width = slices[NINE_SLICE_TOP_LEFT].rect.width / scale_x;
+        right_width = slices[NINE_SLICE_TOP_RIGHT].rect.width / scale_x;
+        center_width = (max_x - min_x) - (left_width + right_width);
 
-    /* Left side */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_LEFT_CENTER]))
-      {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_LEFT_CENTER].area, sizeof offscreen.area);
-        gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                     &GRAPHENE_RECT_INIT (min_x,
-                                                                          min_y + top_height,
-                                                                          left_width,
-                                                                          center_height),
-                                                     &offscreen,
-                                                     color);
-      }
+        top_height = slices[NINE_SLICE_TOP_LEFT].rect.height / scale_y;
+        bottom_height = slices[NINE_SLICE_BOTTOM_LEFT].rect.height / scale_y;
+        center_height = (max_y - min_y) - (top_height + bottom_height);
 
-    /* Right side */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_RIGHT_CENTER]))
-      {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_RIGHT_CENTER].area, sizeof offscreen.area);
-        gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                     &GRAPHENE_RECT_INIT (max_x - right_width,
-                                                                          min_y + top_height,
-                                                                          right_width,
-                                                                          center_height),
-                                                     &offscreen,
-                                                     color);
-      }
-
-    /* Bottom side */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_CENTER]))
-      {
-        memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_CENTER].area, sizeof offscreen.area);
-        gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                     &GRAPHENE_RECT_INIT (min_x + left_width,
-                                                                          max_y - bottom_height,
-                                                                          center_width,
-                                                                          bottom_height),
-                                                     &offscreen,
-                                                     color);
-      }
-
-    /* Middle */
-    if (nine_slice_is_visible (&slices[NINE_SLICE_CENTER]))
-      {
-        if (!gsk_rounded_rect_contains_rect (outline, &GRAPHENE_RECT_INIT (min_x + left_width,
-                                                                           min_y + top_height,
-                                                                           center_width,
-                                                                           center_height)))
+        /* Top left */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_LEFT]))
           {
-            memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
+            memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_LEFT].area, sizeof offscreen.area);
             gsk_gl_render_job_draw_offscreen_with_color (job,
-                                                         &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                         &GRAPHENE_RECT_INIT (min_x,
+                                                                              min_y,
+                                                                              left_width,
+                                                                              top_height),
+                                                         &offscreen,
+                                                         color);
+          }
+
+        /* Top center */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_CENTER]))
+        {
+          memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_CENTER].area, sizeof offscreen.area);
+          gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                       &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                            min_y,
+                                                                            center_width,
+                                                                            top_height),
+                                                       &offscreen,
+                                                       color);
+        }
+
+        /* Top right */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_TOP_RIGHT]))
+        {
+          memcpy (&offscreen.area, &slices[NINE_SLICE_TOP_RIGHT].area, sizeof offscreen.area);
+          gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                       &GRAPHENE_RECT_INIT (max_x - right_width,
+                                                                            min_y,
+                                                                            right_width,
+                                                                            top_height),
+                                                       &offscreen,
+                                                       color);
+        }
+
+        /* Bottom right */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_RIGHT]))
+        {
+          memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_RIGHT].area, sizeof offscreen.area);
+          gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                       &GRAPHENE_RECT_INIT (max_x - right_width,
+                                                                            max_y - bottom_height,
+                                                                            right_width,
+                                                                            bottom_height),
+                                                       &offscreen,
+                                                       color);
+        }
+
+        /* Bottom left */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_LEFT]))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_LEFT].area, sizeof offscreen.area);
+            gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                         &GRAPHENE_RECT_INIT (min_x,
+                                                                              max_y - bottom_height,
+                                                                              left_width,
+                                                                              bottom_height),
+                                                         &offscreen,
+                                                         color);
+          }
+
+        /* Left side */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_LEFT_CENTER]))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_LEFT_CENTER].area, sizeof offscreen.area);
+            gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                         &GRAPHENE_RECT_INIT (min_x,
                                                                               min_y + top_height,
-                                                                              center_width,
+                                                                              left_width,
                                                                               center_height),
                                                          &offscreen,
                                                          color);
           }
-      }
-  }
 
-  gsk_gl_render_job_end_draw (job);
+        /* Right side */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_RIGHT_CENTER]))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_RIGHT_CENTER].area, sizeof offscreen.area);
+            gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                         &GRAPHENE_RECT_INIT (max_x - right_width,
+                                                                              min_y + top_height,
+                                                                              right_width,
+                                                                              center_height),
+                                                         &offscreen,
+                                                         color);
+          }
+
+        /* Bottom side */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_BOTTOM_CENTER]))
+          {
+            memcpy (&offscreen.area, &slices[NINE_SLICE_BOTTOM_CENTER].area, sizeof offscreen.area);
+            gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                         &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                              max_y - bottom_height,
+                                                                              center_width,
+                                                                              bottom_height),
+                                                         &offscreen,
+                                                         color);
+          }
+
+        /* Middle */
+        if (nine_slice_is_visible (&slices[NINE_SLICE_CENTER]))
+          {
+            if (!gsk_rounded_rect_contains_rect (outline, &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                               min_y + top_height,
+                                                                               center_width,
+                                                                               center_height)))
+              {
+                memcpy (&offscreen.area, &slices[NINE_SLICE_CENTER].area, sizeof offscreen.area);
+                gsk_gl_render_job_draw_offscreen_with_color (job,
+                                                             &GRAPHENE_RECT_INIT (min_x + left_width,
+                                                                                  min_y + top_height,
+                                                                                  center_width,
+                                                                                  center_height),
+                                                             &offscreen,
+                                                             color);
+              }
+          }
+      }
+
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline gboolean G_GNUC_PURE
@@ -2853,22 +2895,24 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
 
   g_assert (offscreen_end.texture_id);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, cross_fade));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      offscreen_start.texture_id);
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_CROSS_FADE_SOURCE2, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE1,
-                                      offscreen_end.texture_id);
-  gsk_gl_program_set_uniform1f (job->current_program,
-                                UNIFORM_CROSS_FADE_PROGRESS, 0,
-                                progress);
-  gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen_end);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, cross_fade)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen_start.texture_id);
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_CROSS_FADE_SOURCE2, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE1,
+                                          offscreen_end.texture_id);
+      gsk_gl_program_set_uniform1f (job->current_program,
+                                    UNIFORM_CROSS_FADE_PROGRESS, 0,
+                                    progress);
+      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen_end);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -2902,14 +2946,16 @@ gsk_gl_render_job_visit_opacity_node (GskGLRenderJob      *job,
 
           g_assert (offscreen.texture_id);
 
-          gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-          gsk_gl_program_set_uniform_texture (job->current_program,
-                                              UNIFORM_SHARED_SOURCE, 0,
-                                              GL_TEXTURE_2D,
-                                              GL_TEXTURE0,
-                                              offscreen.texture_id);
-          gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-          gsk_gl_render_job_end_draw (job);
+          if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+            {
+              gsk_gl_program_set_uniform_texture (job->current_program,
+                                                  UNIFORM_SHARED_SOURCE, 0,
+                                                  GL_TEXTURE_2D,
+                                                  GL_TEXTURE0,
+                                                  offscreen.texture_id);
+              gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+              gsk_gl_render_job_end_draw (job);
+            }
         }
 
       gsk_gl_render_job_set_alpha (job, prev_alpha);
@@ -2982,101 +3028,102 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
 
   yshift = compute_phase_and_pos (y, &ypos);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
-
-  batch = gsk_gl_command_queue_get_batch (job->command_queue);
-  vertices = gsk_gl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
-
-  /* We use one quad per character */
-  for (i = 0, gi = glyphs; i < num_glyphs; i++, gi++)
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring)))
     {
-      const GskGLGlyphValue *glyph;
-      float glyph_x, glyph_y, glyph_x2, glyph_y2;
-      float tx, ty, tx2, ty2;
-      float cx;
-      float cy;
-      guint texture_id;
+      batch = gsk_gl_command_queue_get_batch (job->command_queue);
+      vertices = gsk_gl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
 
-      lookup.glyph = gi->glyph;
-
-      /* If the glyph has color, we don't need to recolor anything.
-       * We tell the shader by setting the color to vec4(-1).
-       */
-      if (!force_color && gi->attr.is_color)
-        c = nc;
-      else
-        c = cc;
-
-      cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-      lookup.xshift = compute_phase_and_pos (x + cx, &cx);
-
-      if G_UNLIKELY (gi->geometry.y_offset != 0)
+      /* We use one quad per character */
+      for (i = 0, gi = glyphs; i < num_glyphs; i++, gi++)
         {
-          cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
-          lookup.yshift = compute_phase_and_pos (y + cy, &cy);
-        }
-      else
-        {
-          lookup.yshift = yshift;
-          cy = ypos;
-        }
+          const GskGLGlyphValue *glyph;
+          float glyph_x, glyph_y, glyph_x2, glyph_y2;
+          float tx, ty, tx2, ty2;
+          float cx;
+          float cy;
+          guint texture_id;
 
-      x_position += gi->geometry.width;
+          lookup.glyph = gi->glyph;
 
-      texture_id = gsk_gl_glyph_library_lookup_or_add (library, &lookup, &glyph);
-      if G_UNLIKELY (texture_id == 0)
-        continue;
+          /* If the glyph has color, we don't need to recolor anything.
+           * We tell the shader by setting the color to vec4(-1).
+           */
+          if (!force_color && gi->attr.is_color)
+            c = nc;
+          else
+            c = cc;
 
-      if G_UNLIKELY (last_texture != texture_id || batch->draw.vbo_count + GSK_GL_N_VERTICES > 0xffff)
-        {
-          if G_LIKELY (last_texture != 0)
+          cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          lookup.xshift = compute_phase_and_pos (x + cx, &cx);
+
+          if G_UNLIKELY (gi->geometry.y_offset != 0)
             {
-              guint vbo_offset = batch->draw.vbo_offset + batch->draw.vbo_count;
-
-              /* Since we have batched added our VBO vertices to avoid repeated
-               * calls to the buffer, we need to manually tweak the vbo offset
-               * of the new batch as otherwise it will point at the end of our
-               * vbo array.
-               */
-              gsk_gl_render_job_split_draw (job);
-              batch = gsk_gl_command_queue_get_batch (job->command_queue);
-              batch->draw.vbo_offset = vbo_offset;
+              cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
+              lookup.yshift = compute_phase_and_pos (y + cy, &cy);
+            }
+          else
+            {
+              lookup.yshift = yshift;
+              cy = ypos;
             }
 
-          gsk_gl_program_set_uniform_texture (job->current_program,
-                                              UNIFORM_SHARED_SOURCE, 0,
-                                              GL_TEXTURE_2D,
-                                              GL_TEXTURE0,
-                                              texture_id);
-          last_texture = texture_id;
+          x_position += gi->geometry.width;
+
+          texture_id = gsk_gl_glyph_library_lookup_or_add (library, &lookup, &glyph);
+          if G_UNLIKELY (texture_id == 0)
+            continue;
+
+          if G_UNLIKELY (last_texture != texture_id || batch->draw.vbo_count + GSK_GL_N_VERTICES > 0xffff)
+            {
+              if G_LIKELY (last_texture != 0)
+                {
+                  guint vbo_offset = batch->draw.vbo_offset + batch->draw.vbo_count;
+
+                  /* Since we have batched added our VBO vertices to avoid repeated
+                   * calls to the buffer, we need to manually tweak the vbo offset
+                   * of the new batch as otherwise it will point at the end of our
+                   * vbo array.
+                   */
+                  gsk_gl_render_job_split_draw (job);
+                  batch = gsk_gl_command_queue_get_batch (job->command_queue);
+                  batch->draw.vbo_offset = vbo_offset;
+                }
+
+              gsk_gl_program_set_uniform_texture (job->current_program,
+                                                  UNIFORM_SHARED_SOURCE, 0,
+                                                  GL_TEXTURE_2D,
+                                                  GL_TEXTURE0,
+                                                  texture_id);
+              last_texture = texture_id;
+            }
+
+          tx = glyph->entry.area.x;
+          ty = glyph->entry.area.y;
+          tx2 = glyph->entry.area.x2;
+          ty2 = glyph->entry.area.y2;
+
+          glyph_x = cx + glyph->ink_rect.x;
+          glyph_y = cy + glyph->ink_rect.y;
+          glyph_x2 = glyph_x + glyph->ink_rect.width;
+          glyph_y2 = glyph_y + glyph->ink_rect.height;
+
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y  }, .uv = { tx,  ty  }, .color = { c[0], c[1], c[2], c[3] } };
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
+
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y2 }, .uv = { tx2, ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
+          *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
+
+          batch->draw.vbo_count += GSK_GL_N_VERTICES;
+          used++;
         }
 
-      tx = glyph->entry.area.x;
-      ty = glyph->entry.area.y;
-      tx2 = glyph->entry.area.x2;
-      ty2 = glyph->entry.area.y2;
+      if (used != num_glyphs)
+        gsk_gl_command_queue_retract_n_vertices (job->command_queue, num_glyphs - used);
 
-      glyph_x = cx + glyph->ink_rect.x;
-      glyph_y = cy + glyph->ink_rect.y;
-      glyph_x2 = glyph_x + glyph->ink_rect.width;
-      glyph_y2 = glyph_y + glyph->ink_rect.height;
-
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y  }, .uv = { tx,  ty  }, .color = { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
-
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y2 }, .uv = { tx2, ty2 }, .color = { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x,  glyph_y2 }, .uv = { tx,  ty2 }, .color = { c[0], c[1], c[2], c[3] } };
-      *(vertices++) = (GskGLDrawVertex) { .position = { glyph_x2, glyph_y  }, .uv = { tx2, ty  }, .color = { c[0], c[1], c[2], c[3] } };
-
-      batch->draw.vbo_count += GSK_GL_N_VERTICES;
-      used++;
+      gsk_gl_render_job_end_draw (job);
     }
-
-  if (used != num_glyphs)
-    gsk_gl_command_queue_retract_n_vertices (job->command_queue, num_glyphs - used);
-
-  gsk_gl_render_job_end_draw (job);
 }
 
 static inline void
@@ -3160,15 +3207,17 @@ gsk_gl_render_job_visit_shadow_node (GskGLRenderJob      *job,
         }
 
       gsk_gl_render_job_offset (job, dx, dy);
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          offscreen.texture_id);
-      rgba_to_half (&shadow->color, color);
-      gsk_gl_render_job_draw_offscreen_with_color (job, &bounds, &offscreen, color);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring)))
+        {
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              offscreen.texture_id);
+          rgba_to_half (&shadow->color, color);
+          gsk_gl_render_job_draw_offscreen_with_color (job, &bounds, &offscreen, color);
+          gsk_gl_render_job_end_draw (job);
+        }
       gsk_gl_render_job_offset (job, -dx, -dy);
     }
 
@@ -3214,17 +3263,19 @@ gsk_gl_render_job_visit_blur_node (GskGLRenderJob      *job,
   if (cache_texture)
     gsk_gl_driver_cache_texture (job->driver, &key, offscreen.texture_id);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      offscreen.texture_id);
-  gsk_gl_render_job_draw_coords (job,
-                                 min_x, min_y, max_x, max_y,
-                                 0, 1, 1, 0,
-                                 (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen.texture_id);
+      gsk_gl_render_job_draw_coords (job,
+                                     min_x, min_y, max_x, max_y,
+                                     0, 1, 1, 0,
+                                     (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3262,14 +3313,16 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
     {
       gsk_gl_render_job_pop_modelview (job);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture (job->current_program,
-                                          UNIFORM_SHARED_SOURCE, 0,
-                                          GL_TEXTURE_2D,
-                                          GL_TEXTURE0,
-                                          bottom_offscreen.texture_id);
-      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &bottom_offscreen);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+        {
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              bottom_offscreen.texture_id);
+          gsk_gl_render_job_draw_offscreen (job, &node->bounds, &bottom_offscreen);
+          gsk_gl_render_job_end_draw (job);
+        }
       return;
     }
 
@@ -3277,22 +3330,24 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_pop_modelview (job);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blend));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      bottom_offscreen.texture_id);
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_BLEND_SOURCE2, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE1,
-                                      top_offscreen.texture_id);
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_BLEND_MODE, 0,
-                                gsk_blend_node_get_blend_mode (node));
-  gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blend)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          bottom_offscreen.texture_id);
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_BLEND_SOURCE2, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE1,
+                                          top_offscreen.texture_id);
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_BLEND_MODE, 0,
+                                    gsk_blend_node_get_blend_mode (node));
+      gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3337,22 +3392,24 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_pop_modelview (job);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, mask));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      source_offscreen.texture_id);
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_MASK_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE1,
-                                      mask_offscreen.texture_id);
-  gsk_gl_program_set_uniform1i (job->current_program,
-                                UNIFORM_MASK_MODE, 0,
-                                gsk_mask_node_get_mask_mode (node));
-  gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, mask)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          source_offscreen.texture_id);
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_MASK_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE1,
+                                          mask_offscreen.texture_id);
+      gsk_gl_program_set_uniform1i (job->current_program,
+                                    UNIFORM_MASK_MODE, 0,
+                                    gsk_mask_node_get_mask_mode (node));
+      gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3376,21 +3433,23 @@ gsk_gl_render_job_visit_color_matrix_node (GskGLRenderJob      *job,
 
   graphene_vec4_to_float (gsk_color_matrix_node_get_color_offset (node), offset);
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color_matrix));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      offscreen.texture_id);
-  gsk_gl_program_set_uniform_matrix (job->current_program,
-                                     UNIFORM_COLOR_MATRIX_COLOR_MATRIX, 0,
-                                     gsk_color_matrix_node_get_color_matrix (node));
-  gsk_gl_program_set_uniform4fv (job->current_program,
-                                 UNIFORM_COLOR_MATRIX_COLOR_OFFSET, 0,
-                                 1,
-                                 offset);
-  gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color_matrix)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen.texture_id);
+      gsk_gl_program_set_uniform_matrix (job->current_program,
+                                         UNIFORM_COLOR_MATRIX_COLOR_MATRIX, 0,
+                                         gsk_color_matrix_node_get_color_matrix (node));
+      gsk_gl_program_set_uniform4fv (job->current_program,
+                                     UNIFORM_COLOR_MATRIX_COLOR_OFFSET, 0,
+                                     1,
+                                     offset);
+      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3399,9 +3458,11 @@ gsk_gl_render_job_visit_gl_shader_node_fallback (GskGLRenderJob      *job,
 {
   guint16 pink[4] = { 15360, 13975, 14758, 15360 }; /* 255 105 180 */
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
-  gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, pink);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+    {
+      gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, pink);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3453,68 +3514,70 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
       base = g_bytes_get_data (args, NULL);
       uniforms = gsk_gl_shader_get_uniforms (shader, &n_uniforms);
 
-      gsk_gl_render_job_begin_draw (job, program);
-      for (guint i = 0; i < n_children; i++)
-        gsk_gl_program_set_uniform_texture (program,
-                                            UNIFORM_CUSTOM_TEXTURE1 + i, 0,
-                                            GL_TEXTURE_2D,
-                                            GL_TEXTURE0 + i,
-                                            offscreens[i].texture_id);
-      gsk_gl_program_set_uniform2f (program,
-                                    UNIFORM_CUSTOM_SIZE, 0,
-                                    node->bounds.size.width,
-                                    node->bounds.size.height);
-      for (guint i = 0; i < n_uniforms; i++)
+      if (gsk_gl_render_job_begin_draw (job, program))
         {
-          const GskGLUniform *u = &uniforms[i];
-          const guint8 *data = base + u->offset;
-
-          switch (u->type)
+          for (guint i = 0; i < n_children; i++)
+            gsk_gl_program_set_uniform_texture (program,
+                                                UNIFORM_CUSTOM_TEXTURE1 + i, 0,
+                                                GL_TEXTURE_2D,
+                                                GL_TEXTURE0 + i,
+                                                offscreens[i].texture_id);
+          gsk_gl_program_set_uniform2f (program,
+                                        UNIFORM_CUSTOM_SIZE, 0,
+                                        node->bounds.size.width,
+                                        node->bounds.size.height);
+          for (guint i = 0; i < n_uniforms; i++)
             {
-            default:
-            case GSK_GL_UNIFORM_TYPE_NONE:
-              break;
-            case GSK_GL_UNIFORM_TYPE_FLOAT:
-              gsk_gl_uniform_state_set1fv (job->command_queue->uniforms,
-                                           program->program_info,
-                                           UNIFORM_CUSTOM_ARG0 + i,
-                                           0, 1, (const float *)data);
-              break;
-            case GSK_GL_UNIFORM_TYPE_INT:
-              gsk_gl_uniform_state_set1i (job->command_queue->uniforms,
-                                          program->program_info,
-                                          UNIFORM_CUSTOM_ARG0 + i,
-                                          0, *(const gint32 *)data);
-              break;
-            case GSK_GL_UNIFORM_TYPE_UINT:
-            case GSK_GL_UNIFORM_TYPE_BOOL:
-              gsk_gl_uniform_state_set1ui (job->command_queue->uniforms,
-                                           program->program_info,
-                                           UNIFORM_CUSTOM_ARG0 + i,
-                                           0, *(const guint32 *)data);
-              break;
-            case GSK_GL_UNIFORM_TYPE_VEC2:
-              gsk_gl_uniform_state_set2fv (job->command_queue->uniforms,
-                                           program->program_info,
-                                           UNIFORM_CUSTOM_ARG0 + i,
-                                           0, 1, (const float *)data);
-              break;
-            case GSK_GL_UNIFORM_TYPE_VEC3:
-              gsk_gl_uniform_state_set3fv (job->command_queue->uniforms,
-                                           program->program_info,
-                                           UNIFORM_CUSTOM_ARG0 + i,
-                                           0, 1, (const float *)data);
-              break;
-            case GSK_GL_UNIFORM_TYPE_VEC4:
-              gsk_gl_uniform_state_set4fv (job->command_queue->uniforms,
-                                           program->program_info,
-                                           UNIFORM_CUSTOM_ARG0 + i,
-                                           0, 1, (const float *)data);
-              break;
+              const GskGLUniform *u = &uniforms[i];
+              const guint8 *data = base + u->offset;
+
+              switch (u->type)
+                {
+                default:
+                case GSK_GL_UNIFORM_TYPE_NONE:
+                  break;
+                case GSK_GL_UNIFORM_TYPE_FLOAT:
+                  gsk_gl_uniform_state_set1fv (job->command_queue->uniforms,
+                                               program->program_info,
+                                               UNIFORM_CUSTOM_ARG0 + i,
+                                               0, 1, (const float *)data);
+                  break;
+                case GSK_GL_UNIFORM_TYPE_INT:
+                  gsk_gl_uniform_state_set1i (job->command_queue->uniforms,
+                                              program->program_info,
+                                              UNIFORM_CUSTOM_ARG0 + i,
+                                              0, *(const gint32 *)data);
+                  break;
+                case GSK_GL_UNIFORM_TYPE_UINT:
+                case GSK_GL_UNIFORM_TYPE_BOOL:
+                  gsk_gl_uniform_state_set1ui (job->command_queue->uniforms,
+                                               program->program_info,
+                                               UNIFORM_CUSTOM_ARG0 + i,
+                                               0, *(const guint32 *)data);
+                  break;
+                case GSK_GL_UNIFORM_TYPE_VEC2:
+                  gsk_gl_uniform_state_set2fv (job->command_queue->uniforms,
+                                               program->program_info,
+                                               UNIFORM_CUSTOM_ARG0 + i,
+                                               0, 1, (const float *)data);
+                  break;
+                case GSK_GL_UNIFORM_TYPE_VEC3:
+                  gsk_gl_uniform_state_set3fv (job->command_queue->uniforms,
+                                               program->program_info,
+                                               UNIFORM_CUSTOM_ARG0 + i,
+                                               0, 1, (const float *)data);
+                  break;
+                case GSK_GL_UNIFORM_TYPE_VEC4:
+                  gsk_gl_uniform_state_set4fv (job->command_queue->uniforms,
+                                               program->program_info,
+                                               UNIFORM_CUSTOM_ARG0 + i,
+                                               0, 1, (const float *)data);
+                  break;
+                }
             }
+          gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
+          gsk_gl_render_job_end_draw (job);
         }
-      gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
-      gsk_gl_render_job_end_draw (job);
     }
 }
 
@@ -3583,18 +3646,19 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       g_assert (offscreen.texture_id);
       g_assert (offscreen.was_offscreen == FALSE);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-
-      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
-                                                    UNIFORM_SHARED_SOURCE, 0,
-                                                    GL_TEXTURE_2D,
-                                                    GL_TEXTURE0,
-                                                    offscreen.texture_id,
-                                                    offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
-                                                    GL_LINEAR,
-                                                    offscreen.sync);
-      gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+        {
+          gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                        UNIFORM_SHARED_SOURCE, 0,
+                                                        GL_TEXTURE_2D,
+                                                        GL_TEXTURE0,
+                                                        offscreen.texture_id,
+                                                        offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                        GL_LINEAR,
+                                                        offscreen.sync);
+          gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
+          gsk_gl_render_job_end_draw (job);
+        }
     }
   else
     {
@@ -3608,36 +3672,37 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
       g_assert (slices != NULL);
       g_assert (n_slices > 0);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-
-      for (unsigned int i = 0; i < n_slices; i++)
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
         {
-          const GskGLTextureSlice *slice = &slices[i];
-          float x1, x2, y1, y2;
+          for (unsigned int i = 0; i < n_slices; i++)
+            {
+              const GskGLTextureSlice *slice = &slices[i];
+              float x1, x2, y1, y2;
 
-          x1 = min_x + (scale_x * slice->rect.x);
-          x2 = x1 + (slice->rect.width * scale_x);
-          y1 = min_y + (scale_y * slice->rect.y);
-          y2 = y1 + (slice->rect.height * scale_y);
+              x1 = min_x + (scale_x * slice->rect.x);
+              x2 = x1 + (slice->rect.width * scale_x);
+              y1 = min_y + (scale_y * slice->rect.y);
+              y2 = y1 + (slice->rect.height * scale_y);
 
-          if (i > 0)
-            gsk_gl_render_job_split_draw (job);
-          gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
-                                                          UNIFORM_SHARED_SOURCE, 0,
-                                                          GL_TEXTURE_2D,
-                                                          GL_TEXTURE0,
-                                                          slice->texture_id,
-                                                          use_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
-                                                          GL_LINEAR);
+              if (i > 0)
+                gsk_gl_render_job_split_draw (job);
+              gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                              UNIFORM_SHARED_SOURCE, 0,
+                                                              GL_TEXTURE_2D,
+                                                              GL_TEXTURE0,
+                                                              slice->texture_id,
+                                                              use_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                              GL_LINEAR);
 
-          gsk_gl_render_job_draw_coords (job,
-                                         x1, y1, x2, y2,
-                                         slice->area.x, slice->area.y,
-                                         slice->area.x2, slice->area.y2,
-                                         (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
+              gsk_gl_render_job_draw_coords (job,
+                                             x1, y1, x2, y2,
+                                             slice->area.x, slice->area.y,
+                                             slice->area.x2, slice->area.y2,
+                                             (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
+            }
+
+          gsk_gl_render_job_end_draw (job);
         }
-
-      gsk_gl_render_job_end_draw (job);
     }
 }
 
@@ -3736,20 +3801,22 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       u1 = (clip_rect.origin.x + clip_rect.size.width - bounds->origin.x) / bounds->size.width;
       v1 = (clip_rect.origin.y + clip_rect.size.height - bounds->origin.y) / bounds->size.height;
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
-                                                    UNIFORM_SHARED_SOURCE, 0,
-                                                    GL_TEXTURE_2D,
-                                                    GL_TEXTURE0,
-                                                    texture_id,
-                                                    min_filter,
-                                                    mag_filter,
-                                                    sync);
-      gsk_gl_render_job_draw_coords (job,
-                                     0, 0, clip_rect.size.width, clip_rect.size.height,
-                                     u0, v0, u1, v1,
-                                     (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
-      gsk_gl_render_job_end_draw (job);
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+        {
+          gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                        UNIFORM_SHARED_SOURCE, 0,
+                                                        GL_TEXTURE_2D,
+                                                        GL_TEXTURE0,
+                                                        texture_id,
+                                                        min_filter,
+                                                        mag_filter,
+                                                        sync);
+          gsk_gl_render_job_draw_coords (job,
+                                         0, 0, clip_rect.size.width, clip_rect.size.height,
+                                         u0, v0, u1, v1,
+                                         (guint16[]) { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO });
+          gsk_gl_render_job_end_draw (job);
+        }
     }
   else
     {
@@ -3760,42 +3827,43 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
 
       gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, &slices, &n_slices);
 
-      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-
-      for (guint i = 0; i < n_slices; i++)
+      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
         {
-          const GskGLTextureSlice *slice = &slices[i];
-          graphene_rect_t slice_bounds;
+          for (guint i = 0; i < n_slices; i++)
+            {
+              const GskGLTextureSlice *slice = &slices[i];
+              graphene_rect_t slice_bounds;
 
-          slice_bounds.origin.x = bounds->origin.x - clip_rect.origin.x + slice->rect.x * scale_x;
-          slice_bounds.origin.y = bounds->origin.y - clip_rect.origin.y + slice->rect.y * scale_y;
-          slice_bounds.size.width = slice->rect.width * scale_x;
-          slice_bounds.size.height = slice->rect.height * scale_y;
+              slice_bounds.origin.x = bounds->origin.x - clip_rect.origin.x + slice->rect.x * scale_x;
+              slice_bounds.origin.y = bounds->origin.y - clip_rect.origin.y + slice->rect.y * scale_y;
+              slice_bounds.size.width = slice->rect.width * scale_x;
+              slice_bounds.size.height = slice->rect.height * scale_y;
 
-          if (!graphene_rect_intersection (&slice_bounds, &viewport, NULL))
-            continue;
+              if (!graphene_rect_intersection (&slice_bounds, &viewport, NULL))
+                continue;
 
-          if (i > 0)
-            gsk_gl_render_job_split_draw (job);
+              if (i > 0)
+                gsk_gl_render_job_split_draw (job);
 
-          gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
-                                                          UNIFORM_SHARED_SOURCE, 0,
-                                                          GL_TEXTURE_2D,
-                                                          GL_TEXTURE0,
-                                                          slice->texture_id,
-                                                          min_filter,
-                                                          mag_filter);
-          gsk_gl_render_job_draw_coords (job,
-                                         slice_bounds.origin.x,
-                                         slice_bounds.origin.y,
-                                         slice_bounds.origin.x + slice_bounds.size.width,
-                                         slice_bounds.origin.y + slice_bounds.size.height,
-                                         slice->area.x, slice->area.y,
-                                         slice->area.x2, slice->area.y2,
-                                         (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
+              gsk_gl_program_set_uniform_texture_with_filter (job->current_program,
+                                                              UNIFORM_SHARED_SOURCE, 0,
+                                                              GL_TEXTURE_2D,
+                                                              GL_TEXTURE0,
+                                                              slice->texture_id,
+                                                              min_filter,
+                                                              mag_filter);
+              gsk_gl_render_job_draw_coords (job,
+                                             slice_bounds.origin.x,
+                                             slice_bounds.origin.y,
+                                             slice_bounds.origin.x + slice_bounds.size.width,
+                                             slice_bounds.origin.y + slice_bounds.size.height,
+                                             slice->area.x, slice->area.y,
+                                             slice->area.x2, slice->area.y2,
+                                             (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
+            }
+
+          gsk_gl_render_job_end_draw (job);
         }
-
-      gsk_gl_render_job_end_draw (job);
     }
 
   gsk_gl_render_job_pop_clip (job);
@@ -3809,21 +3877,23 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   gsk_gl_driver_cache_texture (job->driver, &key, texture_id);
 
 render_texture:
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      texture_id);
-  gsk_gl_render_job_draw_coords (job,
-                                 job->offset_x + clip_rect.origin.x,
-                                 job->offset_y + clip_rect.origin.y,
-                                 job->offset_x + clip_rect.origin.x + clip_rect.size.width,
-                                 job->offset_y + clip_rect.origin.y + clip_rect.size.height,
-                                 0, clip_rect.size.width / ceilf (clip_rect.size.width),
-                                 clip_rect.size.height / ceilf (clip_rect.size.height), 0,
-                                 (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          texture_id);
+      gsk_gl_render_job_draw_coords (job,
+                                     job->offset_x + clip_rect.origin.x,
+                                     job->offset_y + clip_rect.origin.y,
+                                     job->offset_x + clip_rect.origin.x + clip_rect.size.width,
+                                     job->offset_y + clip_rect.origin.y + clip_rect.size.height,
+                                     0, clip_rect.size.width / ceilf (clip_rect.size.width),
+                                     clip_rect.size.height / ceilf (clip_rect.size.height), 0,
+                                     (guint16[]){ FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO } );
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static inline void
@@ -3859,26 +3929,28 @@ gsk_gl_render_job_visit_repeat_node (GskGLRenderJob      *job,
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, child, &offscreen))
     g_assert_not_reached ();
 
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, repeat));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      offscreen.texture_id);
-  gsk_gl_program_set_uniform4f (job->current_program,
-                                UNIFORM_REPEAT_CHILD_BOUNDS, 0,
-                                (node->bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width,
-                                (node->bounds.origin.y - child_bounds->origin.y) / child_bounds->size.height,
-                                node->bounds.size.width / child_bounds->size.width,
-                                node->bounds.size.height / child_bounds->size.height);
-  gsk_gl_program_set_uniform4f (job->current_program,
-                                UNIFORM_REPEAT_TEXTURE_RECT, 0,
-                                offscreen.area.x,
-                                offscreen.was_offscreen ? offscreen.area.y2 : offscreen.area.y,
-                                offscreen.area.x2,
-                                offscreen.was_offscreen ? offscreen.area.y : offscreen.area.y2);
-  gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, repeat)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen.texture_id);
+      gsk_gl_program_set_uniform4f (job->current_program,
+                                    UNIFORM_REPEAT_CHILD_BOUNDS, 0,
+                                    (node->bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width,
+                                    (node->bounds.origin.y - child_bounds->origin.y) / child_bounds->size.height,
+                                    node->bounds.size.width / child_bounds->size.width,
+                                    node->bounds.size.height / child_bounds->size.height);
+      gsk_gl_program_set_uniform4f (job->current_program,
+                                    UNIFORM_REPEAT_TEXTURE_RECT, 0,
+                                    offscreen.area.x,
+                                    offscreen.was_offscreen ? offscreen.area.y2 : offscreen.area.y,
+                                    offscreen.area.x2,
+                                    offscreen.was_offscreen ? offscreen.area.y : offscreen.area.y2);
+      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_gl_render_job_end_draw (job);
+    }
 }
 
 static void
@@ -4343,14 +4415,16 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, job->framebuffer);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
-  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-  gsk_gl_program_set_uniform_texture (job->current_program,
-                                      UNIFORM_SHARED_SOURCE, 0,
-                                      GL_TEXTURE_2D,
-                                      GL_TEXTURE0,
-                                      texture_id);
-  gsk_gl_render_job_draw_rect (job, &job->viewport);
-  gsk_gl_render_job_end_draw (job);
+  if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
+    {
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          texture_id);
+      gsk_gl_render_job_draw_rect (job, &job->viewport);
+      gsk_gl_render_job_end_draw (job);
+    }
 
   gdk_gl_context_push_debug_group (job->command_queue->context, "Executing command queue");
   gsk_gl_command_queue_execute (job->command_queue, surface_height, 1, NULL, job->default_framebuffer);
