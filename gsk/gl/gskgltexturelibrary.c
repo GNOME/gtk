@@ -88,7 +88,7 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
       GskGLTextureAtlasEntry *entry;
       GHashTableIter iter;
       guint dropped = 0;
-      guint atlased = 0;
+      G_GNUC_UNUSED guint atlased = 0;
 
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
