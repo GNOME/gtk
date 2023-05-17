@@ -873,8 +873,18 @@ gtk_path_bar_get_mount_callback (GObject      *source,
 {
   GFile *file = G_FILE (source);
   struct SetFileInfo *file_info = data;
+  GError *error = NULL;
 
-  file_info->mount = g_file_find_enclosing_mount_finish (file, result, NULL);
+  file_info->mount = g_file_find_enclosing_mount_finish (file, result,
+							 &error);
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      gtk_path_bar_set_file_finish (file_info, FALSE);
+      g_clear_error (&error);
+      return;
+    }
+  g_clear_error (&error);
 
   if (file_info->mount)
     file_info->root_file = g_mount_get_root (file_info->mount);
