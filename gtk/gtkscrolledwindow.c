@@ -1747,8 +1747,38 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
   if (priv->child && gtk_widget_get_visible (priv->child))
     {
       int min_child_size, nat_child_size;
+      int child_for_size = -1;
 
-      gtk_widget_measure (priv->child, orientation, -1,
+      /* We can pass on the requested size if we have a scrollbar policy that prevents scrolling in that direction */
+      if ((orientation == GTK_ORIENTATION_VERTICAL && priv->hscrollbar_policy == GTK_POLICY_NEVER)
+          || (orientation == GTK_ORIENTATION_HORIZONTAL && priv->vscrollbar_policy == GTK_POLICY_NEVER))
+        {
+          child_for_size = for_size;
+
+          /* If the other scrollbar is always visible and not an overlay scrollbar we must subtract it from the measure */
+          if (orientation == GTK_ORIENTATION_VERTICAL && !priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
+            {
+              int min_scrollbar_width;
+
+              gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
+                                  &min_scrollbar_width, NULL,
+                                  NULL, NULL);
+
+              child_for_size = MAX (0, child_for_size - min_scrollbar_width);
+            }
+          if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
+            {
+              int min_scrollbar_height;
+
+              gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_VERTICAL, -1,
+                              &min_scrollbar_height, NULL,
+                              NULL, NULL);
+
+              child_for_size = MAX (0, child_for_size - min_scrollbar_height);
+            }
+        }
+
+      gtk_widget_measure (priv->child, orientation, child_for_size,
                           &min_child_size, &nat_child_size,
                           NULL, NULL);
 
