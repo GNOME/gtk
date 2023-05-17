@@ -17,10 +17,12 @@
 #include "config.h"
 
 #include <gdk/gdk.h>
-#include "gdkpixbufutilsprivate.h"
+#include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+
+/* {{{ Pixbuf helpers */
 
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
@@ -145,7 +147,7 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
   gdk_pixbuf_loader_set_size (loader, width, height);
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
@@ -172,15 +174,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
   return pixbuf;
 }
 
-GdkPixbuf *
-_gdk_pixbuf_new_from_stream (GInputStream  *stream,
-                             GCancellable  *cancellable,
-                             GError       **error)
-{
-  return _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
-}
-
-GdkPixbuf *
+static GdkPixbuf *
 _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
                                         int           width,
                                         int           height,
@@ -198,8 +192,10 @@ _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
   g_object_unref (stream);
 
   return pixbuf;
-
 }
+
+/* }}} */
+/* {{{ Symbolic processing */
 
 static GdkPixbuf *
 load_symbolic_svg (const char     *escaped_file_data,
@@ -306,19 +302,17 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   char *escaped_file_data;
 
   /* Fetch size from the original icon */
-  {
-    GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-    GdkPixbuf *reference = gdk_pixbuf_new_from_stream (stream, NULL, error);
+  GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
+  GdkPixbuf *reference = gdk_pixbuf_new_from_stream (stream, NULL, error);
 
-    g_object_unref (stream);
+  g_object_unref (stream);
 
-    if (!reference)
-      return NULL;
+  if (!reference)
+    return NULL;
 
-    icon_width = gdk_pixbuf_get_width (reference);
-    icon_height = gdk_pixbuf_get_height (reference);
-    g_object_unref (reference);
-  }
+  icon_width = gdk_pixbuf_get_width (reference);
+  icon_height = gdk_pixbuf_get_height (reference);
+  g_object_unref (reference);
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
   icon_width_str = g_strdup_printf ("%d", icon_width);
@@ -389,12 +383,12 @@ out:
   return pixbuf;
 }
 
-GdkPixbuf *
-gtk_make_symbolic_pixbuf_from_resource (const char  *path,
-                                        int          width,
-                                        int          height,
-                                        double       scale,
-                                        GError     **error)
+static GdkPixbuf *
+make_symbolic_pixbuf_from_resource (const char  *path,
+                                    int          width,
+                                    int          height,
+                                    double       scale,
+                                    GError     **error)
 {
   GBytes *bytes;
   const char *data;
@@ -414,12 +408,12 @@ gtk_make_symbolic_pixbuf_from_resource (const char  *path,
   return pixbuf;
 }
 
-GdkPixbuf *
-gtk_make_symbolic_pixbuf_from_path (const char  *path,
-                                    int          width,
-                                    int          height,
-                                    double       scale,
-                                    GError     **error)
+static GdkPixbuf *
+make_symbolic_pixbuf_from_path (const char  *path,
+                                int          width,
+                                int          height,
+                                double       scale,
+                                GError     **error)
 {
   char *data;
   gsize size;
@@ -436,11 +430,11 @@ gtk_make_symbolic_pixbuf_from_path (const char  *path,
 }
 
 static GdkPixbuf *
-gtk_make_symbolic_pixbuf_from_file (GFile       *file,
-                                    int          width,
-                                    int          height,
-                                    double       scale,
-                                    GError     **error)
+make_symbolic_pixbuf_from_file (GFile       *file,
+                                int          width,
+                                int          height,
+                                double       scale,
+                                GError     **error)
 {
   char *data;
   gsize size;
@@ -456,6 +450,91 @@ gtk_make_symbolic_pixbuf_from_file (GFile       *file,
   return pixbuf;
 }
 
+/* }}} */
+/* {{{ Texture API */
+
+GdkTexture *
+gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
+                                      int            width,
+                                      int            height,
+                                      gboolean       aspect,
+                                      GCancellable  *cancellable,
+                                      GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, aspect, cancellable, error);
+  if (pixbuf)
+    {
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
+GdkTexture *
+gdk_texture_new_from_stream (GInputStream  *stream,
+                             GCancellable  *cancellable,
+                             GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
+  if (pixbuf)
+    {
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
+GdkTexture *
+gdk_texture_new_from_resource_at_scale (const char    *path,
+                                        int            width,
+                                        int            height,
+                                        gboolean       preserve_aspect,
+                                        GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, preserve_aspect, error);
+  if (pixbuf)
+    {
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
+/* }}} */
+/* {{{ Symbolic texture API */
+
+GdkTexture *
+gdk_texture_new_from_path_symbolic (const char    *path,
+                                    int            width,
+                                    int            height,
+                                    double         scale,
+                                    GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = make_symbolic_pixbuf_from_path (path, width, height, scale, error);
+  if (pixbuf)
+    {
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
 GdkTexture *
 gtk_load_symbolic_texture_from_resource (const char *path)
 {
@@ -463,16 +542,16 @@ gtk_load_symbolic_texture_from_resource (const char *path)
 }
 
 GdkTexture *
-gtk_make_symbolic_texture_from_resource (const char  *path,
-                                         int          width,
-                                         int          height,
-                                         double       scale,
-                                         GError     **error)
+gdk_texture_new_from_resource_symbolic (const char  *path,
+                                        int          width,
+                                        int          height,
+                                        double       scale,
+                                        GError     **error)
 {
   GdkPixbuf *pixbuf;
   GdkTexture *texture = NULL;
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
+  pixbuf = make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
   if (pixbuf)
     {
       texture = gdk_texture_new_for_pixbuf (pixbuf);
@@ -493,7 +572,7 @@ gtk_load_symbolic_texture_from_file (GFile *file)
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream (stream, NULL, NULL);
+  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
   g_object_unref (stream);
   if (pixbuf == NULL)
     return NULL;
@@ -505,21 +584,24 @@ gtk_load_symbolic_texture_from_file (GFile *file)
 }
 
 GdkTexture *
-gtk_make_symbolic_texture_from_file (GFile       *file,
-                                     int          width,
-                                     int          height,
-                                     double       scale,
-                                     GError     **error)
+gdk_texture_new_from_file_symbolic (GFile       *file,
+                                    int          width,
+                                    int          height,
+                                    double       scale,
+                                    GError     **error)
 {
   GdkPixbuf *pixbuf;
   GdkTexture *texture;
 
-  pixbuf = gtk_make_symbolic_pixbuf_from_file (file, width, height, scale, error);
+  pixbuf = make_symbolic_pixbuf_from_file (file, width, height, scale, error);
   texture = gdk_texture_new_for_pixbuf (pixbuf);
   g_object_unref (pixbuf);
 
   return texture;
 }
+
+/* }}} */
+/* {{{ Scaled paintable API */
 
 typedef struct {
   int scale_factor;
@@ -651,3 +733,7 @@ gdk_paintable_new_from_file_scaled (GFile *file,
 
   return paintable;
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */

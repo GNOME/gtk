@@ -23,7 +23,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gdkpixbufutilsprivate.h"
+#include "gdktextureutilsprivate.h"
 
 #include "gtkstyleproviderprivate.h"
 
@@ -110,7 +110,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
       if (g_str_has_suffix (uri, ".symbolic.png"))
         recolor->texture = gtk_load_symbolic_texture_from_resource (resource_path);
       else
-        recolor->texture = gtk_make_symbolic_texture_from_resource (resource_path, 0, 0, 1.0, NULL);
+        recolor->texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, 1.0, NULL);
 
       g_free (resource_path);
     }
@@ -119,7 +119,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
       if (g_str_has_suffix (uri, ".symbolic.png"))
         recolor->texture = gtk_load_symbolic_texture_from_file (recolor->file);
       else
-        recolor->texture = gtk_make_symbolic_texture_from_file (recolor->file, 0, 0, 1.0, NULL);
+        recolor->texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, 1.0, NULL);
     }
 
   g_free (uri);

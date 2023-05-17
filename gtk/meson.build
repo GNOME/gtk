@@ -15,7 +15,7 @@ gtk_cargs = [
 # introspected
 gtk_private_sources = files([
   'fnmatch.c',
-  'gdkpixbufutils.c',
+  'gdktextureutils.c',
   'gsettings-mapping.c',
   'gtkaccessibleattributeset.c',
   'gtkaccessiblevalue.c',
