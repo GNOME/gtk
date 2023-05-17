@@ -21,20 +21,6 @@
 
 G_BEGIN_DECLS
 
-GdkPixbuf *_gdk_pixbuf_new_from_stream              (GInputStream  *stream,
-                                                     GCancellable  *cancellable,
-                                                     GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_stream_at_scale     (GInputStream  *stream,
-                                                     int            width,
-                                                     int            height,
-                                                     gboolean       aspect,
-                                                     GCancellable  *cancellable,
-                                                     GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_resource_at_scale   (const char    *resource_path,
-                                                     int            width,
-                                                     int            height,
-                                                     gboolean       preserve_aspect,
-                                                     GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_data       (const char    *data,
                                                      gsize          len,
                                                      int            width,
@@ -42,28 +28,41 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_data       (const char    *data,
                                                      double         scale,
                                                      const char    *debug_output_to,
                                                      GError       **error);
-GdkPixbuf *gtk_make_symbolic_pixbuf_from_path       (const char    *path,
+
+GdkTexture *gdk_texture_new_from_stream             (GInputStream  *stream,
+                                                     GCancellable  *cancellable,
+                                                     GError       **error);
+GdkTexture *gdk_texture_new_from_stream_at_scale    (GInputStream  *stream,
+                                                     int            width,
+                                                     int            height,
+                                                     gboolean       aspect,
+                                                     GCancellable  *cancellable,
+                                                     GError       **error);
+GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
+                                                     int            width,
+                                                     int            height,
+                                                     gboolean       aspect,
+                                                     GError       **error);
+
+GdkTexture *gdk_texture_new_from_path_symbolic      (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
                                                      GError       **error);
-GdkPixbuf *gtk_make_symbolic_pixbuf_from_resource   (const char    *path,
+GdkTexture *gdk_texture_new_from_file_symbolic      (GFile         *file,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
                                                      GError       **error);
+GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
+                                                     int            width,
+                                                     int            height,
+                                                     double         scale,
+                                                     GError       **error);
+
 GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
-GdkTexture *gtk_make_symbolic_texture_from_file     (GFile         *file,
-                                                     int            width,
-                                                     int            height,
-                                                     double         scale,
-                                                     GError       **error);
 GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *data);
-GdkTexture *gtk_make_symbolic_texture_from_resource (const char    *path,
-                                                     int            width,
-                                                     int            height,
-                                                     double         scale,
-                                                     GError       **error);
+
 GdkPaintable *gdk_paintable_new_from_path_scaled     (const char    *path,
                                                       int            scale_factor);
 GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
@@ -72,4 +71,3 @@ GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
                                                       int            scale_factor);
 
 G_END_DECLS
-

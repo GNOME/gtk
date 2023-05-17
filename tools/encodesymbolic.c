@@ -133,9 +133,9 @@ main (int argc, char **argv)
 
 
   out = g_file_replace (dest,
-			NULL, FALSE,
-			G_FILE_CREATE_REPLACE_DESTINATION,
-			NULL, &error);
+                        NULL, FALSE,
+                        G_FILE_CREATE_REPLACE_DESTINATION,
+                        NULL, &error);
   if (out == NULL)
     {
       g_printerr (_("Can’t save file %s: %s\n"), pngpath, error->message);
