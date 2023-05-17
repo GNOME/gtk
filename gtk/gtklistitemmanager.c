@@ -198,7 +198,6 @@ gtk_list_item_manager_augment_node (GtkRbTree *tree,
       aug->has_footer = TRUE;
       break;
     case GTK_LIST_TILE_ITEM:
-    case GTK_LIST_TILE_FILLER:
     case GTK_LIST_TILE_REMOVED:
       aug->has_header = FALSE;
       aug->has_footer = FALSE;
@@ -633,7 +632,7 @@ static GtkListTile *
 gtk_list_tile_get_next_skip (GtkListTile *tile)
 {
   for (tile = gtk_rb_tree_node_get_next (tile);
-       tile && (tile->type == GTK_LIST_TILE_FILLER || tile->type == GTK_LIST_TILE_REMOVED);
+       tile && tile->type == GTK_LIST_TILE_REMOVED;
        tile = gtk_rb_tree_node_get_next (tile))
     { }
 
@@ -644,7 +643,7 @@ static GtkListTile *
 gtk_list_tile_get_previous_skip (GtkListTile *tile)
 {
   for (tile = gtk_rb_tree_node_get_previous (tile);
-       tile && (tile->type == GTK_LIST_TILE_FILLER || tile->type == GTK_LIST_TILE_REMOVED);
+       tile && tile->type == GTK_LIST_TILE_REMOVED;
        tile = gtk_rb_tree_node_get_previous (tile))
     { }
 
@@ -885,7 +884,6 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
           gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
           break;
 
-        case GTK_LIST_TILE_FILLER:
         case GTK_LIST_TILE_REMOVED:
         default:
           g_assert_not_reached ();
@@ -928,7 +926,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     {
       /* at end of list, pick the footer */
       for (tile = gtk_rb_tree_get_last (self->items);
-           tile && (tile->type == GTK_LIST_TILE_REMOVED || tile->type == GTK_LIST_TILE_FILLER);
+           tile && tile->type == GTK_LIST_TILE_REMOVED;
            tile = gtk_rb_tree_node_get_previous (tile))
         { }
 
@@ -1030,34 +1028,6 @@ gtk_list_tile_split (GtkListItemManager *self,
 }
 
 /*
- * gtk_list_tile_append_filler:
- * @self: the listitemmanager
- * @previous: tile to append to
- *
- * Appends a filler tile.
- *
- * Filler tiles don't refer to any items or header and exist
- * just to take up space, so that finding items by position gets
- * easier.
- *
- * They ave a special garbage-collection behavior, see
- * gtk_list_tile_gc().
- *
- * Returns: The new filler tile
- **/
-GtkListTile *
-gtk_list_tile_append_filler (GtkListItemManager *self,
-                             GtkListTile        *previous)
-{
-  GtkListTile *result;
-
-  result = gtk_rb_tree_insert_after (self->items, previous);
-  result->type = GTK_LIST_TILE_FILLER;
-
-  return result;
-}
-
-/*
  * gtk_list_tile_gc:
  * @self: the listitemmanager
  * @tile: a tile or NULL
@@ -1083,13 +1053,6 @@ gtk_list_tile_gc (GtkListItemManager *self,
   if (tile == NULL)
     return NULL;
 
-  if (tile->type == GTK_LIST_TILE_FILLER)
-    {
-      next = gtk_rb_tree_node_get_next (tile);
-      gtk_rb_tree_remove (self->items, tile);
-      tile = next;
-    }
-
   while (tile)
     {
       next = gtk_rb_tree_node_get_next (tile);
@@ -1113,7 +1076,6 @@ gtk_list_tile_gc (GtkListItemManager *self,
         case GTK_LIST_TILE_FOOTER:
         case GTK_LIST_TILE_UNMATCHED_HEADER:
         case GTK_LIST_TILE_UNMATCHED_FOOTER:
-        case GTK_LIST_TILE_FILLER:
           break;
 
         case GTK_LIST_TILE_REMOVED:
@@ -1180,7 +1142,6 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
               deleted_section = TRUE;
               break;
 
-            case GTK_LIST_TILE_FILLER:
             case GTK_LIST_TILE_REMOVED:
             default:
               g_assert_not_reached ();
@@ -1414,7 +1375,6 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
               break;
 
             case GTK_LIST_TILE_UNMATCHED_FOOTER:
-            case GTK_LIST_TILE_FILLER:
             case GTK_LIST_TILE_REMOVED:
             default:
               g_assert_not_reached ();
@@ -1660,9 +1620,7 @@ gtk_list_item_manager_clear_model (GtkListItemManager *self)
   for (tile = gtk_list_tile_gc (self, gtk_list_item_manager_get_first (self));
        tile;
        tile = gtk_list_tile_gc (self, tile))
-    {
-      g_assert (tile->type == GTK_LIST_TILE_FILLER);
-    }
+    { }
   g_assert (gtk_rb_tree_get_root (self->items) == NULL);
 }
 
@@ -1775,7 +1733,6 @@ gtk_list_item_manager_set_has_sections (GtkListItemManager *self,
               footer = tile;
               break;
             case GTK_LIST_TILE_ITEM:
-            case GTK_LIST_TILE_FILLER:
             case GTK_LIST_TILE_REMOVED:
               break;
             default:

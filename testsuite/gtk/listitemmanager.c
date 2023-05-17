@@ -71,9 +71,6 @@ print_list_item_manager_tiles (GtkListItemManager *items)
             g_string_append_c (string, ')');
             break;
 
-          case GTK_LIST_TILE_FILLER:
-            g_string_append_c (string, '_');
-            break;
           case GTK_LIST_TILE_REMOVED:
             g_string_append_c (string, '.');
             break;
@@ -160,11 +157,6 @@ check_list_item_manager (GtkListItemManager  *items,
               n_items += tile->n_items;
             break;
 
-          case GTK_LIST_TILE_FILLER:
-            /* We don't add fillers */
-            g_assert_not_reached ();
-            break;
-
           case GTK_LIST_TILE_REMOVED:
             g_assert_cmpint (tile->n_items, ==, 0);
             g_assert_null (tile->widget);
@@ -245,7 +237,6 @@ check_list_item_manager (GtkListItemManager  *items,
               n_items += tile->n_items;
             break;
 
-          case GTK_LIST_TILE_FILLER:
           case GTK_LIST_TILE_REMOVED:
           default:
             g_assert_not_reached ();
