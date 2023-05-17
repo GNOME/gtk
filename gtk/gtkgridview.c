@@ -756,8 +756,14 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
 
+  /* before we start: gc tiles */
+  for (tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+     tile != NULL && tile->type == GTK_LIST_TILE_FILLER;
+     tile = gtk_list_tile_gc (self->item_manager, tile))
+    {};
+
   /* step 0: exit early if list is empty */
-  tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+  tile = gtk_list_item_manager_get_first (self->item_manager);
   if (tile == NULL)
     {
       gtk_list_base_allocate (GTK_LIST_BASE (self));
