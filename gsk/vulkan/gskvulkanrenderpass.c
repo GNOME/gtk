@@ -540,11 +540,6 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
   GskTransform *transform;
   GskVulkanParseState new_state;
 
-#if 0
- if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
-    FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
-#endif
-
   child = gsk_transform_node_get_child (node);
   transform = gsk_transform_node_get_transform (node);
 
@@ -584,7 +579,11 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset), transform);
 
-        if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
+        if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
+          {
+            gsk_vulkan_clip_init_empty (&new_state.clip, &child->bounds);
+          }
+        else if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
           {
             gsk_transform_unref (clip_transform);
             FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
@@ -625,7 +624,11 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset), transform);
 
-        if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
+        if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
+          {
+            gsk_vulkan_clip_init_empty (&new_state.clip, &child->bounds);
+          }
+        else if (!gsk_vulkan_clip_transform (&new_state.clip, &state->clip, clip_transform, &child->bounds))
           {
             gsk_transform_unref (clip_transform);
             FALLBACK ("Transform nodes can't deal with clip type %u", state->clip.type);
