@@ -17,7 +17,7 @@
 #include "config.h"
 
 #include <gdk/gdk.h>
-#include "gdkpixbufutilsprivate.h"
+#include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 
 #include "gdk/gdktextureprivate.h"

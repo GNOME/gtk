@@ -51,7 +51,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtksymbolicpaintable.h"
 #include "gtkwidgetprivate.h"
-#include "gdkpixbufutilsprivate.h"
+#include "gdktextureutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 

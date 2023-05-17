@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
-#include "gdkpixbufutilsprivate.h"
+#include "gdktextureutilsprivate.h"
 
 static char *output_dir = NULL;
 
