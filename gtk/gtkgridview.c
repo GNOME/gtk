@@ -23,6 +23,7 @@
 
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
+#include "gtklistheaderwidgetprivate.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtklistitemwidgetprivate.h"
@@ -87,6 +88,7 @@ struct _GtkGridView
 
   GtkListItemManager *item_manager;
   GtkListItemFactory *factory;
+  GtkListItemFactory *header_factory;
   guint min_columns;
   guint max_columns;
   gboolean single_click_activate;
@@ -105,6 +107,7 @@ enum
   PROP_0,
   PROP_ENABLE_RUBBERBAND,
   PROP_FACTORY,
+  PROP_HEADER_FACTORY,
   PROP_MAX_COLUMNS,
   PROP_MIN_COLUMNS,
   PROP_MODEL,
@@ -257,6 +260,13 @@ gtk_grid_view_split (GtkListBase *base,
   return split;
 }
 
+static void
+gtk_grid_view_prepare_section (GtkListBase *base,
+                               GtkListTile *tile,
+                               guint        position)
+{
+}
+
 /* We define the listview as **inert** when the factory isn't used. */
 static gboolean
 gtk_grid_view_is_inert (GtkGridView *self)
@@ -269,7 +279,8 @@ gtk_grid_view_is_inert (GtkGridView *self)
 
 static void
 gtk_grid_view_update_factories_with (GtkGridView        *self,
-                                     GtkListItemFactory *factory)
+                                     GtkListItemFactory *factory,
+                                     GtkListItemFactory *header_factory)
 {
   GtkListTile *tile;
 
@@ -277,8 +288,26 @@ gtk_grid_view_update_factories_with (GtkGridView        *self,
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))
     {
-      if (tile->widget)
-        gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+      switch (tile->type)
+        {
+        case GTK_LIST_TILE_ITEM:
+          if (tile->widget)
+            gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (tile->widget), factory);
+          break;
+        case GTK_LIST_TILE_HEADER:
+          if (tile->widget)
+            gtk_list_header_widget_set_factory (GTK_LIST_HEADER_WIDGET (tile->widget), header_factory);
+          break;
+        case GTK_LIST_TILE_UNMATCHED_HEADER:
+        case GTK_LIST_TILE_FOOTER:
+        case GTK_LIST_TILE_UNMATCHED_FOOTER:
+        case GTK_LIST_TILE_REMOVED:
+          g_assert (tile->widget == NULL);
+          break;
+        default:
+          g_assert_not_reached();
+          break;
+        }
     }
 }
 
@@ -286,13 +315,14 @@ static void
 gtk_grid_view_update_factories (GtkGridView *self)
 {
   gtk_grid_view_update_factories_with (self,
-                                       gtk_grid_view_is_inert (self) ? NULL : self->factory);
+                                       gtk_grid_view_is_inert (self) ? NULL : self->factory,
+                                       gtk_grid_view_is_inert (self) ? NULL : self->header_factory);
 }
 
 static void
 gtk_grid_view_clear_factories (GtkGridView *self)
 {
-  gtk_grid_view_update_factories_with (self, NULL);
+  gtk_grid_view_update_factories_with (self, NULL, NULL);
 }
 
 static GtkListItemBase *
@@ -314,6 +344,20 @@ gtk_grid_view_create_list_widget (GtkListBase *base)
   gtk_list_factory_widget_set_single_click_activate (GTK_LIST_FACTORY_WIDGET (result), self->single_click_activate);
 
   return GTK_LIST_ITEM_BASE (result);
+}
+
+static GtkListHeaderBase *
+gtk_grid_view_create_header_widget (GtkListBase *base)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
+  GtkListItemFactory *factory;
+
+  if (gtk_grid_view_is_inert (self))
+    factory = NULL;
+  else
+    factory = self->header_factory;
+
+  return GTK_LIST_HEADER_BASE (gtk_list_header_widget_new (factory));
 }
 
 static gboolean
@@ -1026,6 +1070,7 @@ gtk_grid_view_dispose (GObject *object)
   self->item_manager = NULL;
 
   g_clear_object (&self->factory);
+  g_clear_object (&self->header_factory);
 
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
 }
@@ -1046,6 +1091,10 @@ gtk_grid_view_get_property (GObject    *object,
 
     case PROP_FACTORY:
       g_value_set_object (value, self->factory);
+      break;
+
+    case PROP_HEADER_FACTORY:
+      g_value_set_object (value, self->header_factory);
       break;
 
     case PROP_MAX_COLUMNS:
@@ -1090,6 +1139,10 @@ gtk_grid_view_set_property (GObject      *object,
 
     case PROP_FACTORY:
       gtk_grid_view_set_factory (self, g_value_get_object (value));
+      break;
+
+    case PROP_HEADER_FACTORY:
+      gtk_grid_view_set_header_factory (self, g_value_get_object (value));
       break;
 
     case PROP_MAX_COLUMNS:
@@ -1145,6 +1198,8 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
   list_base_class->split = gtk_grid_view_split;
   list_base_class->create_list_widget = gtk_grid_view_create_list_widget;
+  list_base_class->prepare_section = gtk_grid_view_prepare_section;
+  list_base_class->create_header_widget = gtk_grid_view_create_header_widget;
   list_base_class->get_allocation = gtk_grid_view_get_allocation;
   list_base_class->get_items_in_rect = gtk_grid_view_get_items_in_rect;
   list_base_class->get_position_from_allocation = gtk_grid_view_get_position_from_allocation;
@@ -1179,6 +1234,19 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+
+  /**
+   * GtkGridView:header-factory: (attributes org.gtk.Property.get=gtk_grid_view_get_header_factory org.gtk.Property.set=gtk_grid_view_set_header_factory)
+   *
+   * Factory for creating header widgets.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HEADER_FACTORY] =
+    g_param_spec_object ("header-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1414,6 +1482,69 @@ gtk_grid_view_set_factory (GtkGridView        *self,
   gtk_grid_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+}
+
+/**
+ * gtk_grid_view_get_header_factory: (attributes org.gtk.Method.get_property=header-factory)
+ * @self: a `GtkGridView`
+ *
+ * Gets the factory that's currently used to populate section headers.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_grid_view_get_header_factory (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
+
+  return self->header_factory;
+}
+
+/**
+ * gtk_grid_view_set_header_factory: (attributes org.gtk.Method.set_property=header-factory)
+ * @self: a `GtkGridView`
+ * @factory: (nullable) (transfer none): the factory to use
+ *
+ * Sets the `GtkListItemFactory` to use for populating the
+ * [class@Gtk.ListHeader] objects used in section headers.
+ *
+ * If this factory is set to %NULL, the list will not show section headers.
+ *
+ * Since: 4.12
+ */
+void
+gtk_grid_view_set_header_factory (GtkGridView        *self,
+                                  GtkListItemFactory *factory)
+{
+  gboolean had_sections;
+
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
+
+  had_sections = gtk_list_item_manager_get_has_sections (self->item_manager);
+
+  if (!g_set_object (&self->header_factory, factory))
+    return;
+
+  gtk_list_item_manager_set_has_sections (self->item_manager, factory != NULL);
+
+  if (!gtk_grid_view_is_inert (self) &&
+      had_sections && gtk_list_item_manager_get_has_sections (self->item_manager))
+    {
+      GtkListTile *tile;
+
+      for (tile = gtk_list_item_manager_get_first (self->item_manager);
+           tile != NULL;
+           tile = gtk_rb_tree_node_get_next (tile))
+        {
+          if (tile->widget && tile->type == GTK_LIST_TILE_HEADER)
+            gtk_list_header_widget_set_factory (GTK_LIST_HEADER_WIDGET (tile->widget), factory);
+        }
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
 }
 
 /**
