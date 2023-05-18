@@ -1621,6 +1621,12 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
     }
 }
 
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
 static gsize
 gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 {
@@ -1651,6 +1657,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
+          n_bytes = round_up (n_bytes, vertex_stride);
           op->render.vertex_offset = n_bytes;
           op->render.vertex_count = vertex_stride;
           n_bytes += op->render.vertex_count;
@@ -1659,6 +1666,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
+          n_bytes = round_up (n_bytes, vertex_stride);
           op->text.vertex_offset = n_bytes;
           op->text.vertex_count = vertex_stride * op->text.num_glyphs;
           n_bytes += op->text.vertex_count;
