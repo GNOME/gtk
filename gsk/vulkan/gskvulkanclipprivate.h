@@ -57,6 +57,9 @@ gboolean                gsk_vulkan_clip_transform                       (GskVulk
 gboolean                gsk_vulkan_clip_contains_rect                   (const GskVulkanClip    *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
+gboolean                gsk_vulkan_clip_intersects_rect                 (const GskVulkanClip    *self,
+                                                                         const graphene_point_t *offset,
+                                                                         const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
 
 G_END_DECLS
 
