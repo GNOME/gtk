@@ -96,6 +96,17 @@ GtkListTile *           gtk_list_item_manager_get_nearest_tile  (GtkListItemMana
                                                                  int                     x,
                                                                  int                     y);
 
+static inline gboolean
+gtk_list_tile_is_header (GtkListTile *tile)
+{
+  return tile->type == GTK_LIST_TILE_HEADER || tile->type == GTK_LIST_TILE_UNMATCHED_HEADER;
+}
+
+static inline gboolean
+gtk_list_tile_is_footer (GtkListTile *tile)
+{
+  return tile->type == GTK_LIST_TILE_FOOTER || tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER;
+}
 
 guint                   gtk_list_tile_get_position              (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
