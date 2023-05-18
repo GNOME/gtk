@@ -971,21 +971,6 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           i = 0;
         }
     }
-  /* Add a filler tile for empty space in the bottom right */
-  if (i > 0)
-    {
-      GtkListTile *footer = gtk_list_item_manager_get_last (self->item_manager);
-      g_assert (gtk_list_tile_is_footer (footer));
-      tile = gtk_rb_tree_node_get_previous (footer);
-      gtk_list_tile_set_area_position (self->item_manager,
-                                       footer,
-                                       column_start (self, xspacing, i),
-                                       y);
-      gtk_list_tile_set_area_size (self->item_manager,
-                                   footer,
-                                   column_end (self, xspacing, self->n_columns - 1) - footer->area.x,
-                                   tile->area.height);
-    }
 
   /* step 4: allocate the rest */
   gtk_list_base_allocate (GTK_LIST_BASE (self));
