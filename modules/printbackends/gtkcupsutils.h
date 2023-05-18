@@ -96,9 +96,9 @@ struct _GtkCupsRequest
   char *password;
   char *username;
 
-  int own_http : 1;
-  int need_password : 1;
-  int need_auth_info : 1;
+  unsigned int own_http : 1;
+  unsigned int need_password : 1;
+  unsigned int need_auth_info : 1;
   char **auth_info_required;
   char **auth_info;
   GtkCupsPasswordState password_state;
