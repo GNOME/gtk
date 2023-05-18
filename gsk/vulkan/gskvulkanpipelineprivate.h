@@ -37,6 +37,7 @@ GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GType  
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline              *self);
+gsize                   gsk_vulkan_pipeline_get_vertex_stride           (GskVulkanPipeline              *self);
 
 G_END_DECLS
 

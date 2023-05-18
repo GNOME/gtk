@@ -17,7 +17,6 @@ GskVulkanPipeline * gsk_vulkan_cross_fade_pipeline_new                 (GdkVulka
                                                                         const char                 *shader_name,
                                                                         VkRenderPass                render_pass);
 
-gsize               gsk_vulkan_cross_fade_pipeline_count_vertex_data   (GskVulkanCrossFadePipeline *pipeline);
 void                gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                                         guchar                     *data,
                                                                         const graphene_point_t     *offset,

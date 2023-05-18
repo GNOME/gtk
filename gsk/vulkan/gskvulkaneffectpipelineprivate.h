@@ -17,7 +17,6 @@ GskVulkanPipeline *     gsk_vulkan_effect_pipeline_new                  (GdkVulk
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 
-gsize                   gsk_vulkan_effect_pipeline_count_vertex_data    (GskVulkanEffectPipeline        *pipeline);
 void                    gsk_vulkan_effect_pipeline_collect_vertex_data  (GskVulkanEffectPipeline        *pipeline,
                                                                          guchar                         *data,
                                                                          const graphene_point_t         *offset,

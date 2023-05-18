@@ -91,13 +91,6 @@ gsk_vulkan_text_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_TEXT_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_text_pipeline_count_vertex_data (GskVulkanTextPipeline *pipeline,
-                                            int                    num_instances)
-{
-  return sizeof (GskVulkanTextInstance) * num_instances;
-}
-
 void
 gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guchar                 *data,

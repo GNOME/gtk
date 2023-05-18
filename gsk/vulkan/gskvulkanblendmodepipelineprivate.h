@@ -18,7 +18,6 @@ GskVulkanPipeline * gsk_vulkan_blend_mode_pipeline_new                 (GdkVulka
                                                                         const char                 *shader_name,
                                                                         VkRenderPass                render_pass);
 
-gsize               gsk_vulkan_blend_mode_pipeline_count_vertex_data   (GskVulkanBlendModePipeline *pipeline);
 void                gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *pipeline,
                                                                         guchar                     *data,
                                                                         const graphene_point_t     *offset,

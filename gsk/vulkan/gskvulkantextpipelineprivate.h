@@ -18,8 +18,6 @@ GskVulkanPipeline *     gsk_vulkan_text_pipeline_new                   (GdkVulka
                                                                         const char                    *shader_name,
                                                                         VkRenderPass                   render_pass);
 
-gsize                   gsk_vulkan_text_pipeline_count_vertex_data     (GskVulkanTextPipeline         *pipeline,
-                                                                        int                            num_instances);
 void                    gsk_vulkan_text_pipeline_collect_vertex_data   (GskVulkanTextPipeline         *pipeline,
                                                                         guchar                        *data,
                                                                         GskVulkanRenderer             *renderer,

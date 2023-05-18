@@ -17,7 +17,6 @@ GskVulkanPipeline *     gsk_vulkan_blur_pipeline_new                   (GdkVulka
                                                                         const char              *shader_name,
                                                                         VkRenderPass             render_pass);
 
-gsize                   gsk_vulkan_blur_pipeline_count_vertex_data     (GskVulkanBlurPipeline   *pipeline);
 void                    gsk_vulkan_blur_pipeline_collect_vertex_data   (GskVulkanBlurPipeline   *pipeline,
                                                                         guchar                  *data,
                                                                         const graphene_point_t  *offset,

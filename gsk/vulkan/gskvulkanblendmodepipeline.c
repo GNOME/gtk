@@ -98,12 +98,6 @@ gsk_vulkan_blend_mode_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BLEND_MODE_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_blend_mode_pipeline_count_vertex_data (GskVulkanBlendModePipeline *pipeline)
-{
-  return sizeof (GskVulkanBlendModeInstance);
-}
-
 void
 gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *pipeline,
                                                     guchar                     *data,

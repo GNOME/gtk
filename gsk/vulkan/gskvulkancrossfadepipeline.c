@@ -98,12 +98,6 @@ gsk_vulkan_cross_fade_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_CROSS_FADE_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_cross_fade_pipeline_count_vertex_data (GskVulkanCrossFadePipeline *pipeline)
-{
-  return sizeof (GskVulkanCrossFadeInstance);
-}
-
 void
 gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                     guchar                     *data,
