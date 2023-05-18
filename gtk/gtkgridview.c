@@ -723,7 +723,10 @@ gtk_grid_view_measure_list (GtkWidget *widget,
           measured = TRUE;
         }
 
-      i += tile->n_items;
+      if (gtk_list_tile_is_header (tile))
+        i += 1;
+      else
+        i += tile->n_items;
 
       if (i >= n_columns)
         {
@@ -858,7 +861,11 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
             }
           if (tile->n_items > self->n_columns - i)
             gtk_list_tile_split (self->item_manager, tile, self->n_columns - i);
-          i += tile->n_items;
+
+          if (gtk_list_tile_is_header (tile))
+            i += 1;
+          else
+            i += tile->n_items;
         }
       if (row_height > 0)
         {
@@ -866,12 +873,18 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                start != tile;
                start = gtk_rb_tree_node_get_next (start))
             {
+              int n_items;
+
+              if (gtk_list_tile_is_header (start))
+                n_items = 1;
+              else
+                n_items = start->n_items;
               gtk_list_tile_set_area_size (self->item_manager,
                                            start,
-                                           column_end (self, xspacing, i + start->n_items - 1)
+                                           column_end (self, xspacing, i + n_items - 1)
                                            - column_start (self, xspacing, i),
                                            row_height);
-              i += start->n_items;
+              i += n_items;
             }
           g_assert (i <= self->n_columns);
         }
@@ -888,19 +901,25 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
        tile != NULL;
        tile = gtk_rb_tree_node_get_next (tile))
     {
+      int n_items;
+
+      if (gtk_list_tile_is_header (tile))
+        n_items = 1;
+      else
+        n_items = tile->n_items;
       gtk_list_tile_set_area_position (self->item_manager,
                                        tile,
                                        column_start (self, xspacing, i),
                                        y);
-      if (tile->n_items >= self->n_columns && tile->widget == NULL)
+      if (n_items >= self->n_columns && tile->widget == NULL)
         {
           g_assert (i == 0);
-          g_assert (tile->n_items % self->n_columns == 0);
+          g_assert (n_items % self->n_columns == 0);
           gtk_list_tile_set_area_size (self->item_manager,
                                        tile,
                                        column_end (self, xspacing, self->n_columns - 1)
                                        - column_start (self, xspacing, 0),
-                                       (unknown_row_height + yspacing) * (tile->n_items / self->n_columns) - yspacing);
+                                       (unknown_row_height + yspacing) * (n_items / self->n_columns) - yspacing);
           y += tile->area.height + yspacing;
         }
       else
@@ -911,10 +930,10 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                * be a multirow tile but it may have no widgets either */
               gtk_list_tile_set_area_size (self->item_manager,
                                            tile,
-                                           column_end (self, xspacing, i + tile->n_items - 1) - tile->area.x,
+                                           column_end (self, xspacing, i + n_items - 1) - tile->area.x,
                                            unknown_row_height);
             }
-          i += tile->n_items;
+          i += n_items;
         }
 
       if (i >= self->n_columns)
