@@ -123,6 +123,26 @@ release-build:
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
 
+fedora-clang:
+  extends: .build-fedora-default
+  stage: build
+  needs: []
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=release"
+  script:
+    - .gitlab-ci/show-info-linux.sh
+    - export PATH="$HOME/.local/bin:$PATH"
+    - export CC=clang
+    - meson subprojects download
+    - meson subprojects update --reset
+    - meson setup
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
+            _build
+    - meson compile -C _build
+
 fedora-mingw64:
   extends: .build-fedora-default
   stage: build

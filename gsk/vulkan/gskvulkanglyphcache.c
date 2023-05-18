@@ -450,7 +450,7 @@ gsk_vulkan_glyph_cache_begin_frame (GskVulkanGlyphCache *cache)
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskVulkanCachedGlyph *value;
-  guint dropped = 0;
+  G_GNUC_UNUSED guint dropped = 0;
 
   cache->timestamp++;
 
