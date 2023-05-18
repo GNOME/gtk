@@ -71,7 +71,6 @@ struct _GskVulkanOpRender
   GskVulkanImage      *source; /* source image to render */
   GskVulkanImage      *source2; /* second source image to render (if relevant) */
   gsize                vertex_offset; /* offset into vertex buffer */
-  gsize                vertex_count; /* number of vertices */
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
   gsize                descriptor_set_index2; /* descriptor index for the second source (if relevant) */
   graphene_rect_t      source_rect; /* area that source maps to */
@@ -87,7 +86,6 @@ struct _GskVulkanOpText
   GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
-  gsize                vertex_count; /* number of vertices */
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
   guint                texture_index; /* index of the texture in the glyph cache */
   guint                start_glyph; /* the first glyph in nodes glyphstring that we render */
@@ -1659,8 +1657,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
           op->render.vertex_offset = n_bytes;
-          op->render.vertex_count = vertex_stride;
-          n_bytes += op->render.vertex_count;
+          n_bytes += vertex_stride;
           break;
 
         case GSK_VULKAN_OP_TEXT:
@@ -1668,8 +1665,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
           op->text.vertex_offset = n_bytes;
-          op->text.vertex_count = vertex_stride * op->text.num_glyphs;
-          n_bytes += op->text.vertex_count;
+          n_bytes += vertex_stride * op->text.num_glyphs;
           break;
 
         default:
