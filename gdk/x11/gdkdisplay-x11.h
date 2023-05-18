@@ -144,7 +144,8 @@ struct _GdkX11Display
   guint server_time_is_monotonic_time : 1;
 
   /* GLX extensions we check */
-  guint has_glx_swap_interval : 1;
+  guint has_glx_sgi_swap_control : 1;
+  guint has_glx_swap_control : 1;
   guint has_glx_create_context : 1;
   guint has_glx_texture_from_pixmap : 1;
   guint has_glx_video_sync : 1;
