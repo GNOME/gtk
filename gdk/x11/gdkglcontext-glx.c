@@ -162,7 +162,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
       if (display_x11->has_glx_video_sync)
         glXGetVideoSyncSGI (&end_frame_counter);
 
-      if (self->do_frame_sync && !display_x11->has_glx_swap_interval)
+      if (self->do_frame_sync && !display_x11->has_glx_sgi_swap_control && !display_x11->has_glx_swap_control)
         {
           glFinish ();
 
@@ -249,7 +249,7 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
   if (!glXMakeContextCurrent (dpy, drawable, drawable, self->glx_context))
     return FALSE;
 
-  if (!surfaceless && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
+  if (!surfaceless)
     {
       /* If the WM is compositing there is no particular need to delay
        * the swap when drawing on the offscreen, rendering to the screen
@@ -257,14 +257,35 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
        * to the vblank. */
       do_frame_sync = ! gdk_display_is_composited (display);
 
-      if (do_frame_sync != self->do_frame_sync)
+      if (GDK_X11_DISPLAY (display)->has_glx_swap_control)
         {
-          self->do_frame_sync = do_frame_sync;
+          if (do_frame_sync != self->do_frame_sync)
+            {
+              self->do_frame_sync = do_frame_sync;
 
-          if (do_frame_sync)
-            glXSwapIntervalSGI (1);
-          else
-            glXSwapIntervalSGI (0);
+              if (do_frame_sync)
+                glXSwapIntervalEXT (dpy, drawable, 1);
+              else
+                glXSwapIntervalEXT (dpy, drawable, 0);
+            }
+        }
+      else if (GDK_X11_DISPLAY (display)->has_glx_sgi_swap_control)
+        {
+          /* If the WM is compositing there is no particular need to delay
+           * the swap when drawing on the offscreen, rendering to the screen
+           * happens later anyway, and its up to the compositor to sync that
+           * to the vblank. */
+          do_frame_sync = ! gdk_display_is_composited (display);
+
+          if (do_frame_sync != self->do_frame_sync)
+            {
+              self->do_frame_sync = do_frame_sync;
+
+              if (do_frame_sync)
+                glXSwapIntervalSGI (1);
+              else
+                glXSwapIntervalSGI (0);
+            }
         }
     }
 
@@ -925,8 +946,10 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_create_context_profile");
   display_x11->has_glx_create_es2_context =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_create_context_es2_profile");
-  display_x11->has_glx_swap_interval =
+  display_x11->has_glx_sgi_swap_control =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_SGI_swap_control");
+  display_x11->has_glx_swap_control =
+    epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_swap_control");
   display_x11->has_glx_texture_from_pixmap =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_texture_from_pixmap");
   display_x11->has_glx_video_sync =
@@ -987,6 +1010,7 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                        "\t* GLX_ARB_create_context_profile: %s\n"
                        "\t* GLX_EXT_create_context_es2_profile: %s\n"
                        "\t* GLX_SGI_swap_control: %s\n"
+                       "\t* GLX_EXT_swap_control: %s\n"
                        "\t* GLX_EXT_texture_from_pixmap: %s\n"
                        "\t* GLX_SGI_video_sync: %s\n"
                        "\t* GLX_EXT_buffer_age: %s\n"
@@ -998,7 +1022,8 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                      glXGetClientString (dpy, GLX_VENDOR),
                      display_x11->has_glx_create_context ? "yes" : "no",
                      display_x11->has_glx_create_es2_context ? "yes" : "no",
-                     display_x11->has_glx_swap_interval ? "yes" : "no",
+                     display_x11->has_glx_sgi_swap_control ? "yes" : "no",
+                     display_x11->has_glx_swap_control ? "yes" : "no",
                      display_x11->has_glx_texture_from_pixmap ? "yes" : "no",
                      display_x11->has_glx_video_sync ? "yes" : "no",
                      display_x11->has_glx_buffer_age ? "yes" : "no",
