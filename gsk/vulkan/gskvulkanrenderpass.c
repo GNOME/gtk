@@ -1640,60 +1640,24 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_REPEAT:
+        case GSK_VULKAN_OP_COLOR:
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
+        case GSK_VULKAN_OP_OPACITY:
+        case GSK_VULKAN_OP_COLOR_MATRIX:
+        case GSK_VULKAN_OP_BLUR:
+        case GSK_VULKAN_OP_BORDER:
+        case GSK_VULKAN_OP_INSET_SHADOW:
+        case GSK_VULKAN_OP_OUTSET_SHADOW:
+        case GSK_VULKAN_OP_CROSS_FADE:
+        case GSK_VULKAN_OP_BLEND_MODE:
           op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes += op->render.vertex_count;
           break;
 
         case GSK_VULKAN_OP_TEXT:
-          op->text.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline) * op->text.num_glyphs;
-          n_bytes += op->text.vertex_count;
-          break;
-
         case GSK_VULKAN_OP_COLOR_TEXT:
           op->text.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline) * op->text.num_glyphs;
           n_bytes += op->text.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_COLOR:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_OPACITY:
-        case GSK_VULKAN_OP_COLOR_MATRIX:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_BLUR:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_BORDER:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_INSET_SHADOW:
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_CROSS_FADE:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
-          break;
-
-        case GSK_VULKAN_OP_BLEND_MODE:
-          op->render.vertex_count = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes += op->render.vertex_count;
           break;
 
         default:
