@@ -550,6 +550,7 @@ test_same_child_model (void)
   GtkTreeListModel *treelist;
   DemoNode *d;
   guint i, j;
+  char str[2] = { 0, };
 
   i = N_MODELS;
   while (i --> 0)
@@ -557,7 +558,8 @@ test_same_child_model (void)
       models[i] = g_list_store_new (demo_node_get_type ());
       for (j = 0; j < N_ITEMS_PER_MODEL; j++)
         {
-          d = demo_node_new ("A" + j, i + 1 < N_MODELS ? models[i + 1] : NULL);
+          str[0] = 'A' + j;
+          d = demo_node_new (str, i + 1 < N_MODELS ? models[i + 1] : NULL);
           g_list_store_append (models[i], d);
         }
     }
@@ -579,7 +581,8 @@ test_same_child_model (void)
           case 0:
             if (n_items < 10)
               {
-                d = demo_node_new ("A" + (i % 26), model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
+                str[0] = 'A' + (i % 26);
+                d = demo_node_new (str, model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
                 g_list_store_insert (model,
                                      g_test_rand_int_range (0, n_items + 1),
                                      d);
@@ -591,7 +594,8 @@ test_same_child_model (void)
               g_list_store_remove (model, g_test_rand_int_range (0, n_items));
             break;
           case 2:
-            d = demo_node_new ("A" + (i % 26), model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
+            str[0] = 'A' + (i % 26);
+            d = demo_node_new (str, model_id + 1 < N_MODELS ? models[model_id + 1] : NULL);
             g_list_store_splice (model,
                                  n_items ? g_test_rand_int_range (0, n_items) : 0,
                                  n_items ? 1 : 0,
