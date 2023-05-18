@@ -43,13 +43,24 @@ bind_header (GtkSignalListItemFactory *self,
   GtkWidget *child = gtk_list_header_get_child (header);
   const char *string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
   char tmp[6] = { 0, };
-  char *title;
+  PangoAttrList *attrs;
 
   g_unichar_to_utf8 (g_utf8_get_char (string), tmp);
 
-  title = g_strconcat ("<big><b>", tmp, "</b></big>", NULL);
-  gtk_label_set_markup (GTK_LABEL (child), title);
-  g_free (title);
+  gtk_label_set_label (GTK_LABEL (child), tmp);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_label_set_attributes (GTK_LABEL (child), attrs);
+  pango_attr_list_unref (attrs);
+}
+
+static char *
+get_first (GObject *this)
+{
+  const char *s = gtk_string_object_get_string (GTK_STRING_OBJECT (this));
+
+  return g_strndup (s, g_utf8_next_char (s) - s);
 }
 
 static const char *strings[] = {
@@ -58,12 +69,97 @@ static const char *strings[] = {
  NULL,
 };
 
-static char *
-get_first (GObject *this)
+static void
+read_lines_cb (GObject      *object,
+               GAsyncResult *result,
+               gpointer      data)
 {
-  const char *s = gtk_string_object_get_string (GTK_STRING_OBJECT (this));
+  GBufferedInputStream *stream = G_BUFFERED_INPUT_STREAM (object);
+  GtkStringList *stringlist = data;
+  GError *error = NULL;
+  gsize size;
+  GPtrArray *lines;
+  gssize n_filled;
+  const char *buffer, *newline;
 
-  return g_strndup (s, g_utf8_next_char (s) - s);
+  n_filled = g_buffered_input_stream_fill_finish (stream, result, &error);
+  if (n_filled < 0)
+    {
+      g_print ("Could not read data: %s\n", error->message);
+      g_clear_error (&error);
+      g_object_unref (stringlist);
+      return;
+    }
+
+  buffer = g_buffered_input_stream_peek_buffer (stream, &size);
+
+  if (n_filled == 0)
+    {
+      if (size)
+        gtk_string_list_take (stringlist, g_utf8_make_valid (buffer, size));
+      g_object_unref (stringlist);
+      return;
+    }
+
+  lines = NULL;
+  while ((newline = memchr (buffer, '\n', size)))
+    {
+      if (newline > buffer)
+        {
+          if (lines == NULL)
+            lines = g_ptr_array_new_with_free_func (g_free);
+          g_ptr_array_add (lines, g_utf8_make_valid (buffer, newline - buffer));
+        }
+      if (g_input_stream_skip (G_INPUT_STREAM (stream), newline - buffer + 1, NULL, &error) < 0)
+        {
+          g_clear_error (&error);
+          break;
+        }
+      buffer = g_buffered_input_stream_peek_buffer (stream, &size);
+    }
+  if (lines == NULL)
+    {
+      g_buffered_input_stream_set_buffer_size (stream, g_buffered_input_stream_get_buffer_size (stream) + 4096);
+    }
+  else
+    {
+      g_ptr_array_add (lines, NULL);
+      gtk_string_list_splice (stringlist, g_list_model_get_n_items (G_LIST_MODEL (stringlist)), 0, (const char **) lines->pdata);
+      g_ptr_array_free (lines, TRUE);
+    }
+
+  g_buffered_input_stream_fill_async (stream, -1, G_PRIORITY_HIGH_IDLE, NULL, read_lines_cb, data);
+}
+
+static void
+file_is_open_cb (GObject      *file,
+                 GAsyncResult *result,
+                 gpointer      data)
+{
+  GError *error = NULL;
+  GFileInputStream *file_stream;
+  GBufferedInputStream *stream;
+
+  file_stream = g_file_read_finish (G_FILE (file), result, &error);
+  if (file_stream == NULL)
+    {
+      g_print ("Could not open file: %s\n", error->message);
+      g_error_free (error);
+      g_object_unref (data);
+      return;
+    }
+
+  stream = G_BUFFERED_INPUT_STREAM (g_buffered_input_stream_new (G_INPUT_STREAM (file_stream)));
+  g_buffered_input_stream_fill_async (stream, -1, G_PRIORITY_HIGH_IDLE, NULL, read_lines_cb, data);
+  g_object_unref (stream);
+}
+
+static void
+load_file (GtkStringList *list,
+           GFile         *file)
+{
+  gtk_string_list_splice (list, 0, g_list_model_get_n_items (G_LIST_MODEL (list)), NULL);
+  g_file_read_async (file, G_PRIORITY_HIGH_IDLE, NULL, file_is_open_cb, g_object_ref (list));
 }
 
 int
@@ -81,6 +177,21 @@ main (int argc, char *argv[])
   GtkExpression *expression;
   GtkSortListModel *sortmodel;
   GtkSelectionModel *selection;
+  GtkStringList *stringlist;
+
+  stringlist = gtk_string_list_new (NULL);
+
+  if (argc > 1)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[1]);
+      load_file (stringlist, file);
+      g_object_unref (file);
+    }
+  else
+    {
+      for (int i = 0; strings[i]; i++)
+        gtk_string_list_append (stringlist, strings[i]);
+    }
 
   gtk_init ();
 
@@ -98,7 +209,7 @@ main (int argc, char *argv[])
   gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
 
   expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string");
-  sortmodel = gtk_sort_list_model_new (G_LIST_MODEL (gtk_string_list_new (strings)),
+  sortmodel = gtk_sort_list_model_new (G_LIST_MODEL (stringlist),
                                        GTK_SORTER (gtk_string_sorter_new (expression)));
   expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_first, NULL, NULL);
   gtk_sort_list_model_set_section_sorter (sortmodel, GTK_SORTER (gtk_string_sorter_new (expression)));
@@ -142,6 +253,7 @@ main (int argc, char *argv[])
     g_main_context_iteration (NULL, FALSE);
 
   g_object_unref (selection);
+  g_object_unref (stringlist);
 
   return 0;
 }
