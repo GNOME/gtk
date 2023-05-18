@@ -1169,7 +1169,9 @@ gtk_list_base_dump_tiles (GtkListBase *self)
       if (tile->widget)
         {
           GdkRGBA color;
-          if (i == focus)
+          if (gtk_list_tile_is_header (tile))
+            color = GDK_RGBA("FF00FF");
+          else if (i == focus)
             color = GDK_RGBA("00FF00");
           else if (i == anchor)
             color = GDK_RGBA("FFFF00");
@@ -1198,6 +1200,8 @@ gtk_list_base_dump_tiles (GtkListBase *self)
         {
           GdkRGBA color;
 
+          if (gtk_list_tile_is_footer (tile))
+            color = GDK_RGBA("800080");
           if (tile->n_items == 0)
             color = GDK_RGBA("A07070");
           else
