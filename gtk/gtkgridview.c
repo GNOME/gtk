@@ -95,6 +95,12 @@ struct _GtkGridView
   /* set in size_allocate */
   guint n_columns;
   double column_width;
+
+  /* for debugging between get_position_from_allocation and size_allocate */
+  unsigned int anchor_position;
+  unsigned int anchor_column;
+  unsigned int anchor_n_columns;
+  gboolean anchor_has_sections;
 };
 
 struct _GtkGridViewClass
@@ -438,6 +444,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
   GtkGridView *self = GTK_GRID_VIEW (base);
   GtkListTile *tile;
   guint pos;
+  guint col;
 
   tile = gtk_list_item_manager_get_nearest_tile (self->item_manager, x, y);
   if (tile == NULL)
@@ -455,6 +462,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     }
 
   pos = gtk_list_tile_get_position (self->item_manager, tile);
+  col = 0;
   if (tile->n_items > 1)
     {
       int xspacing, yspacing;
@@ -463,9 +471,9 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
 
       /* offset in x direction */
       pos += column_index (self, xspacing, MAX (tile->area.width - 1, x - tile->area.x));
+      col = MIN (column_index (self, xspacing, x), self->n_columns - 1);
       if (area)
         {
-          guint col = MIN (column_index (self, xspacing, x), self->n_columns - 1);
           area->x = column_start (self, xspacing, col);
           area->width = column_end (self, xspacing, col) - area->x;
         }
@@ -499,6 +507,11 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
       if (area)
         *area = tile->area;
     }
+
+  self->anchor_position = pos;
+  self->anchor_column = col;
+  self->anchor_n_columns = self->n_columns;
+  self->anchor_has_sections = gtk_list_item_manager_get_has_sections (self->item_manager);
 
   *position = pos;
 
@@ -951,6 +964,16 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
         }
       else
         {
+          if (gtk_list_tile_get_position (self->item_manager, tile) == self->anchor_position &&
+              i != self->anchor_column)
+            {
+              g_print ("BAD: anchor column mismatch (anchor %u, column %u != %u, n_columns %u vs %u, sections %d vs %d)\n",
+                       self->anchor_position,
+                       self->anchor_column, i,
+                       self->anchor_n_columns, self->n_columns,
+                       self->anchor_has_sections, gtk_list_item_manager_get_has_sections (self->item_manager));
+            }
+
           if (tile->n_items >= self->n_columns && tile->widget == NULL)
             {
               g_assert (i == 0);
