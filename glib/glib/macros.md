@@ -226,10 +226,290 @@ by application programmers.
     Since: 2.30
 
 
+## Compiler
+
+
 `G_GNUC_EXTENSION`
 :   Expands to `__extension__` when GCC is used as the compiler. This simply
     tells GCC not to warn about the following non-standard code when compiling
     with the `-pedantic` option.
+
+
+`G_GNUC_CONST`
+
+:   Expands to the GNU C `const` function attribute if the compiler is GCC.
+    Declaring a function as `const` enables better optimization of calls to
+    the function. A `const` function doesn't examine any values except its
+    parameters, and has no effects except its return value.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        gchar g_ascii_tolower (gchar c) G_GNUC_CONST;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-const-function-attribute) for more details.
+
+    A function that has pointer arguments and examines the data pointed to
+    must not be declared `const`. Likewise, a function that calls a non-`const`
+    function usually must not be `const`. It doesn't make sense for a `const`
+    function to return `void`.
+
+
+`G_GNUC_PURE`
+
+:   Expands to the GNU C `pure` function attribute if the compiler is GCC.
+    Declaring a function as `pure` enables better optimization of calls to
+    the function. A `pure` function has no effects except its return value
+    and the return value depends only on the parameters and/or global
+    variables.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        gboolean g_type_check_value (const GValue *value) G_GNUC_PURE;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute) for more details.
+
+
+`G_GNUC_UNUSED`
+
+:   Expands to the GNU C `unused` function attribute if the compiler is gcc.
+    It is used for declaring functions and arguments which may never be used.
+    It avoids possible compiler warnings.
+
+    For functions, place the attribute after the declaration, just before the
+    semicolon. For arguments, place the attribute at the beginning of the
+    argument declaration.
+
+        void my_unused_function (G_GNUC_UNUSED gint unused_argument,
+                                 gint other_argument) G_GNUC_UNUSED;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-unused-function-attribute) for more details.
+
+
+`G_GNUC_MALLOC`
+
+:   Expands to the GNU C `malloc` function attribute if the compiler is GCC.
+
+    Declaring a function as `malloc` enables better optimization of the function,
+    but must only be done if the allocation behaviour of the function is fully
+    understood, otherwise miscompilation can result.
+
+    A function can have the `malloc` attribute if it returns a pointer which is
+    guaranteed to not alias with any other pointer valid when the function
+    returns, and moreover no pointers to valid objects occur in any storage
+    addressed by the returned pointer.
+
+    In practice, this means that `G_GNUC_MALLOC` can be used with any function
+    which returns unallocated or zeroed-out memory, but not with functions which
+    return initialised structures containing other pointers, or with functions
+    that reallocate memory. This definition changed in GLib 2.58 to match the
+    stricter definition introduced around GCC 5.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        gpointer g_malloc (gsize n_bytes) G_GNUC_MALLOC G_GNUC_ALLOC_SIZE(1);
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-behave-like-malloc)
+    for more details.
+
+    Since: 2.6
+
+
+`G_GNUC_DEPRECATED`
+
+:   Expands to the GNU C `deprecated` attribute if the compiler is GCC.
+    It can be used to mark `typedef`s, variables and functions as deprecated.
+    When called with the `-Wdeprecated-declarations` option,
+    gcc will generate warnings when deprecated interfaces are used.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        int my_mistake (void) G_GNUC_DEPRECATED;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute) for more details.
+
+    See also: `G_DEPRECATED` 
+
+    Since: 2.2
+
+
+`G_GNUC_DEPRECATED_FOR(func)`
+
+:   Like `G_GNUC_DEPRECATED`, but names the intended replacement for the
+    deprecated symbol if the version of gcc in use is new enough to support
+    custom deprecation messages.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        int my_mistake (void) G_GNUC_DEPRECATED_FOR(my_replacement);
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-deprecated-function-attribute) for more details.
+
+    Note that if `func` is a macro, it will be expanded in the warning message.
+    You can enclose it in quotes to prevent this. (The quotes will show up
+    in the warning, but it's better than showing the macro expansion.)
+
+    Since: 2.26
+
+
+`G_GNUC_NORETURN`
+
+:   Expands to the GNU C `noreturn` function attribute if the compiler is GCC.
+    It is used for declaring functions which never return. It enables
+    optimization of the function, and avoids possible compiler warnings.
+
+    Since 2.68, it is recommended that code uses `G_NORETURN` instead of
+    `G_GNUC_NORETURN`, as that works on more platforms and compilers (in
+    particular, MSVC and C++11) than `G_GNUC_NORETURN`, which works with GCC and
+    Clang only. `G_GNUC_NORETURN` continues to work, so has not been deprecated
+    yet.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        void g_abort (void) G_GNUC_NORETURN;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noreturn-function-attribute) for more details.
+
+
+`G_GNUC_FALLTHROUGH`
+
+:   Expands to the GNU C `fallthrough` statement attribute if the compiler supports it.
+    This allows declaring case statement to explicitly fall through in switch
+    statements. To enable this feature, use `-Wimplicit-fallthrough` during
+    compilation.
+
+    Put the attribute right before the case statement you want to fall through to.
+
+        switch (foo)
+          {
+          case 1:
+            g_message ("it's 1");
+            G_GNUC_FALLTHROUGH;
+          case 2:
+            g_message ("it's either 1 or 2");
+            break;
+          }
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Statement-Attributes.html#index-fallthrough-statement-attribute) for more details.
+
+    Since: 2.60
+
+
+`G_GNUC_FORMAT(idx)`
+
+:   Expands to the GNU C `format_arg` function attribute if the compiler
+    is GCC. This function attribute specifies that a function takes a
+    format string for a `printf()`, `scanf()`, `strftime()` or `strfmon()`
+    style  function and modifies it, so that the result can be passed to
+    a `printf()`, `scanf()`, `strftime()` or `strfmon()` style function
+    (with the remaining arguments to the format function the same as they
+    would have been for the unmodified string).
+
+    Place the attribute after the function declaration, just before the
+    semicolon.
+
+        gchar *g_dgettext (gchar *domain_name, gchar *msgid) G_GNUC_FORMAT (2);
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-nonliteral-1) for more details.
+
+
+`G_GNUC_NULL_TERMINATED`
+
+:   Expands to the GNU C `sentinel` function attribute if the compiler is GCC.
+    This function attribute only applies to variadic functions and instructs
+    the compiler to check that the argument list is terminated with an
+    explicit `NULL`.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        gchar *g_strconcat (const gchar *string1,
+                            ...) G_GNUC_NULL_TERMINATED;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-sentinel-function-attribute) for more details
+
+    Since: 2.8
+
+
+`G_GNUC_WARN_UNUSED_RESULT`
+
+:   Expands to the GNU C `warn_unused_result` function attribute if the compiler
+    is GCC. This function attribute makes the compiler emit a warning if the
+    result of a function call is ignored.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        GList *g_list_append (GList *list,
+                              gpointer data) G_GNUC_WARN_UNUSED_RESULT;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-warn_005funused_005fresult-function-attribute) for more details.
+
+    Since: 2.10
+
+
+`G_GNUC_NO_INLINE`
+
+:   Expands to the GNU C `noinline` function attribute if the compiler is GCC.
+
+    Declaring a function as `noinline` prevents the function from being
+    considered for inlining.
+
+    This macro is provided for retro-compatibility and will be eventually
+    deprecated; `G_NO_INLINE` should be used instead.
+
+    The attribute may be placed before the declaration or definition,
+    right before the `static` keyword.
+
+        G_GNUC_NO_INLINE
+        static int
+        do_not_inline_this (void)
+        {
+        // ...
+        }
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute)
+    for more details.
+
+    See also: `G_NO_INLINE`, `G_ALWAYS_INLINE`.
+
+    Since: 2.58
+
+
+`G_GNUC_NO_INSTRUMENT`
+
+:   Expands to the GNU C `no_instrument_function` function attribute if the
+    compiler is GCC. Functions with this attribute will not be instrumented
+    for profiling, when the compiler is called with the
+    `-finstrument-functions` option.
+
+    Place the attribute after the declaration, just before the semicolon.
+
+        int do_uninteresting_things (void) G_GNUC_NO_INSTRUMENT;
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005finstrument_005ffunction-function-attribute) for more details.
+
+
+`G_GNUC_MAY_ALIAS`
+
+:   Expands to the GNU C `may_alias` type attribute if the compiler is GCC.
+    Types with this attribute will not be subjected to type-based alias
+    analysis, but are assumed to alias with any other type, just like `char`.
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-may_005falias-type-attribute) for details.
+
+    Since: 2.14
+
+
+`G_GNUC_FUNCTION`
+
+:   Expands to `""` on all modern compilers, and to `__FUNCTION__` on GCC version 2.x. Don't use it.
+
+    Deprecated: 2.16: Use `G_STRFUNC()` instead
+
+
+`G_GNUC_PRETTY_FUNCTION`
+
+:   Expands to `""` on all modern compilers, and to `__PRETTY_FUNCTION__` on GCC version 2.x. Don't use it.
+
+    Deprecated: 2.16: Use `G_STRFUNC()` instead
 
 
 `G_GNUC_CHECK_VERSION(major, minor)`
@@ -314,72 +594,6 @@ by application programmers.
     but must appear on a line by itself.
 
     Since: 2.32
-
-
-`G_DEPRECATED`
-
-:   This macro is similar to `G_GNUC_DEPRECATED`, and can be used to mark
-    functions declarations as deprecated. Unlike `G_GNUC_DEPRECATED`, it is
-    meant to be portable across different compilers and must be placed
-    before the function declaration.
-
-        G_DEPRECATED
-        int my_mistake (void);
-
-    Since: 2.32
-
-
-`G_DEPRECATED_FOR(f)`
-
-:   This macro is similar to `G_GNUC_DEPRECATED_FOR`, and can be used to mark
-    functions declarations as deprecated. Unlike `G_GNUC_DEPRECATED_FOR`, it
-    is meant to be portable across different compilers and must be placed
-    before the function declaration.
-
-        G_DEPRECATED_FOR(my_replacement)
-        int my_mistake (void);
-
-    Since: 2.32
-
-
-`G_UNAVAILABLE(major, minor)`
-
-:   This macro can be used to mark a function declaration as unavailable.
-    It must be placed before the function declaration. Use of a function
-    that has been annotated with this macros will produce a compiler warning.
-
-    Since: 2.32
-
-
-`GLIB_DISABLE_DEPRECATION_WARNINGS`
-:   A macro that should be defined before including the `glib.h` header.
-    If it is defined, no compiler warnings will be produced for uses
-    of deprecated GLib APIs.
-
-
-`G_GNUC_INTERNAL`
-
-:   This attribute can be used for marking library functions as being used
-    internally to the library only, which may allow the compiler to handle
-    function calls more efficiently. Note that static functions do not need
-    to be marked as internal in this way. See the GNU C documentation for
-    details.
-
-    When using a compiler that supports the GNU C hidden visibility attribute,
-    this macro expands to `__attribute__((visibility("hidden")))`.
-    When using the Sun Studio compiler, it expands to `__hidden`.
-
-    Note that for portability, the attribute should be placed before the
-    function declaration. While GCC allows the macro after the declaration,
-    Sun Studio does not.
-
-        G_GNUC_INTERNAL
-        void _g_log_fallback_handler (const gchar    *log_domain,
-                                      GLogLevelFlags  log_level,
-                                      const gchar    *message,
-                                      gpointer        unused_data);
-
-    Since: 2.6
 
 
 `G_C_STD_VERSION`
@@ -473,11 +687,184 @@ by application programmers.
     Since: 2.2
 
 
+`G_ALIGNOF(type)`
+
+:   Evaluates to the minimal alignment required by the platform ABI for values
+    of the given type. The address of a variable or struct member of the given
+    type must always be a multiple of this alignment. For example, most
+    platforms require int variables to be aligned at a 4-byte boundary, so
+    `G_ALIGNOF (int)` is 4 on most platforms.
+
+    Note this is not necessarily the same as the value returned by GCC’s
+    `__alignof__` operator, which returns the preferred alignment for a type.
+    The preferred alignment may be a stricter alignment than the minimal
+    alignment.
+
+    Since: 2.60
+
+
+`G_SIZEOF_MEMBER(struct_type, member_name)`
+
+:   Evaluates to the size in bytes of `member_name` in the struct definition
+    without having a declared instance of `struct_type`.
+
+    Since: 2.64
+
+
+`G_NORETURN`
+
+:   Expands to the GNU C or MSVC `noreturn` function attribute depending on
+    the compiler. It is used for declaring functions which never return.
+    Enables optimization of the function, and avoids possible compiler warnings.
+
+    Note that `G_NORETURN` supersedes the previous `G_GNUC_NORETURN` macro, which
+    will eventually be deprecated. `G_NORETURN` supports more platforms.
+
+    Place the attribute before the function declaration as follows:
+
+        G_NORETURN void g_abort (void);
+
+    Since: 2.68
+
+
+`G_NORETURN_FUNCPTR`
+
+:   Expands to the GNU C or MSVC `noreturn` function attribute depending on
+    the compiler. It is used for declaring function pointers which never return.
+    Enables optimization of the function, and avoids possible compiler warnings.
+
+    Place the attribute before the function declaration as follows:
+
+        G_NORETURN_FUNCPTR void (*funcptr) (void);
+
+    Note that if the function is not a function pointer, you can simply use
+    the `G_NORETURN` macro as follows:
+
+        G_NORETURN void g_abort (void);
+
+    Since: 2.68
+
+
+`G_ALWAYS_INLINE`
+
+:   Expands to the GNU C `always_inline` or MSVC `__forceinline` function
+    attribute depending on the compiler. It is used for declaring functions
+    as always inlined, ignoring the compiler optimization levels.
+
+    The attribute may be placed before the declaration or definition,
+    right before the `static` keyword.
+
+        G_ALWAYS_INLINE
+        static int
+        do_inline_this (void)
+        {
+        // ...
+        }
+
+    See the [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-always_005finline-function-attribute)
+    and the [MSVC documentation](https://docs.microsoft.com/en-us/visualstudio/misc/inline-inline-forceinline)
+    for more details.
+
+    Since: 2.74
+
+
+`G_NO_INLINE`
+
+:   Expands to the GNU C or MSVC `noinline` function attribute
+    depending on the compiler. It is used for declaring functions
+    preventing from being considered for inlining.
+
+    Note that `G_NO_INLINE` supersedes the previous `G_GNUC_NO_INLINE`
+    macro, which will eventually be deprecated. `G_NO_INLINE` supports
+    more platforms.
+
+    The attribute may be placed before the declaration or definition,
+    right before the `static` keyword.
+
+        G_NO_INLINE
+        static int
+        do_not_inline_this (void)
+        {
+        // ...
+        }
+
+    Since: 2.74
+
+
 `G_STRLOC`
 :   Expands to a string identifying the current code position.
 
 `G_STRFUNC`
 :   Expands to a string identifying the current function. Since: 2.4
 
+`G_GNUC_INTERNAL`
+
+:   This attribute can be used for marking library functions as being used
+    internally to the library only, which may allow the compiler to handle
+    function calls more efficiently. Note that static functions do not need
+    to be marked as internal in this way. See the GNU C documentation for
+    details.
+
+    When using a compiler that supports the GNU C hidden visibility attribute,
+    this macro expands to `__attribute__((visibility("hidden")))`.
+    When using the Sun Studio compiler, it expands to `__hidden`.
+
+    Note that for portability, the attribute should be placed before the
+    function declaration. While GCC allows the macro after the declaration,
+    Sun Studio does not.
+
+        G_GNUC_INTERNAL
+        void _g_log_fallback_handler (const gchar    *log_domain,
+                                      GLogLevelFlags  log_level,
+                                      const gchar    *message,
+                                      gpointer        unused_data);
+
+    Since: 2.6
+
+
 `G_HAVE_GNUC_VISIBILITY`
 :   Defined to 1 if GCC-style visibility handling is supported.
+
+
+## Deprecation
+
+
+`G_DEPRECATED`
+
+:   This macro is similar to `G_GNUC_DEPRECATED`, and can be used to mark
+    functions declarations as deprecated. Unlike `G_GNUC_DEPRECATED`, it is
+    meant to be portable across different compilers and must be placed
+    before the function declaration.
+
+        G_DEPRECATED
+        int my_mistake (void);
+
+    Since: 2.32
+
+
+`G_DEPRECATED_FOR(f)`
+
+:   This macro is similar to `G_GNUC_DEPRECATED_FOR`, and can be used to mark
+    functions declarations as deprecated. Unlike `G_GNUC_DEPRECATED_FOR`, it
+    is meant to be portable across different compilers and must be placed
+    before the function declaration.
+
+        G_DEPRECATED_FOR(my_replacement)
+        int my_mistake (void);
+
+    Since: 2.32
+
+
+`G_UNAVAILABLE(major, minor)`
+
+:   This macro can be used to mark a function declaration as unavailable.
+    It must be placed before the function declaration. Use of a function
+    that has been annotated with this macros will produce a compiler warning.
+
+    Since: 2.32
+
+
+`GLIB_DISABLE_DEPRECATION_WARNINGS`
+:   A macro that should be defined before including the `glib.h` header.
+    If it is defined, no compiler warnings will be produced for uses
+    of deprecated GLib APIs.
