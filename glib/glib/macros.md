@@ -69,8 +69,8 @@ language and platform features.
 
     For example,
 
-    - ABS(-10) is 10.
-    -ABS(10) is also 10.
+    - `ABS(-10)` is 10.
+    - `ABS(10)` is also 10.
 
 
 `CLAMP(value, low, high)`
@@ -80,9 +80,9 @@ language and platform features.
 
     For example,
 
-    - CLAMP(5, 10, 15) is 10.
-    - CLAMP(15, 5, 10) is 10.
-    - CLAMP(20, 15, 25) is 20.
+    - `CLAMP(5, 10, 15)` is 10.
+    - `CLAMP(15, 5, 10)` is 10.
+    - `CLAMP(20, 15, 25)` is 20.
 
 
 `G_APPROX_VALUE(a, b, epsilon)`
