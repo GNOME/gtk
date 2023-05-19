@@ -47,6 +47,8 @@ content_files = [
   "character-set.md",
   "i18n.md",
 
+  "conversion-macros.md",
+
   "memory-slices.md",
   "error-reporting.md",
   "logging.md",
