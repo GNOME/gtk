@@ -766,6 +766,45 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   return TRUE;
 }
 
+static gboolean
+clip_can_be_scissored (const graphene_rect_t *rect,
+                       const graphene_vec2_t *scale,
+                       GskTransform          *modelview,
+                       cairo_rectangle_int_t *int_rect)
+{
+  graphene_rect_t transformed_rect;
+  float scale_x = graphene_vec2_get_x (scale);
+  float scale_y = graphene_vec2_get_y (scale);
+
+  switch (gsk_transform_get_category (modelview))
+    {
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+      return FALSE;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      gsk_transform_transform_bounds (modelview, rect, &transformed_rect);
+      rect = &transformed_rect;
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    default:
+      break;
+    } 
+  int_rect->x = rect->origin.x * scale_x;
+  int_rect->y = rect->origin.y * scale_y;
+  int_rect->width = rect->size.width * scale_x;
+  int_rect->height = rect->size.height * scale_y;
+
+  return int_rect->x == rect->origin.x * scale_x
+      && int_rect->y == rect->origin.y * scale_y
+      && int_rect->width == rect->size.width * scale_x
+      && int_rect->height == rect->size.height * scale_y;
+}
+
 static inline gboolean
 gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
                                       GskVulkanRender           *render,
@@ -774,28 +813,63 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
 {
   GskVulkanParseState new_state;
   graphene_rect_t clip;
+  gboolean do_push_constants, do_scissor;
 
   graphene_rect_offset_r (gsk_clip_node_get_clip (node),
                           state->offset.x, state->offset.y,
                           &clip);
 
-  if (!gsk_vulkan_clip_intersect_rect (&new_state.clip, &state->clip, &clip))
-    FALLBACK ("Failed to find intersection between clip of type %u and rectangle", state->clip.type);
+  /* Check if we can use scissoring for the clip */
+  if (clip_can_be_scissored (&clip, &state->scale, state->modelview, &new_state.scissor))
+    {
+      if (!gdk_rectangle_intersect (&new_state.scissor, &state->scissor, &new_state.scissor))
+        return TRUE;
+
+      if (gsk_vulkan_clip_intersect_rect (&new_state.clip, &state->clip, &clip))
+        {
+          if (new_state.clip.type == GSK_VULKAN_CLIP_RECT)
+            new_state.clip.type = GSK_VULKAN_CLIP_NONE;
+
+          do_push_constants = TRUE;
+        }
+      else
+        {
+          gsk_vulkan_clip_init_copy (&new_state.clip, &state->clip);
+          do_push_constants = FALSE;
+        }
+      
+      do_scissor = TRUE;
+    }
+  else
+    {
+      if (!gsk_vulkan_clip_intersect_rect (&new_state.clip, &state->clip, &clip))
+        FALLBACK ("Failed to find intersection between clip of type %u and rectangle", state->clip.type);
+
+      new_state.scissor = state->scissor;
+
+      do_push_constants = TRUE;
+      do_scissor = FALSE;
+    }
 
   if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
-  new_state.scissor = state->scissor;
   new_state.offset = state->offset;
   graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
   new_state.modelview = state->modelview;
   graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
+  if (do_scissor)
+    gsk_vulkan_render_pass_append_scissor (self, node, &new_state);
+  if (do_push_constants)
+    gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
 
   gsk_vulkan_render_pass_add_node (self, render, &new_state, gsk_clip_node_get_child (node));
 
-  gsk_vulkan_render_pass_append_push_constants (self, node, state);
+  if (do_push_constants)
+    gsk_vulkan_render_pass_append_push_constants (self, node, state);
+  if (do_scissor)
+    gsk_vulkan_render_pass_append_scissor (self, node, state);
 
   return TRUE;
 }

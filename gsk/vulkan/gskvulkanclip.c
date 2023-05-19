@@ -21,7 +21,7 @@ gsk_vulkan_clip_init_rect (GskVulkanClip         *clip,
   gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
 }
 
-static void
+void
 gsk_vulkan_clip_init_copy (GskVulkanClip *self,
                            const GskVulkanClip *src)
 {
