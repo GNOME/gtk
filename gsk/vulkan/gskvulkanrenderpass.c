@@ -35,6 +35,7 @@ typedef union _GskVulkanOp GskVulkanOp;
 typedef struct _GskVulkanOpRender GskVulkanOpRender;
 typedef struct _GskVulkanOpText GskVulkanOpText;
 typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
+typedef struct _GskVulkanOpScissor GskVulkanOpScissor;
 
 typedef enum {
   /* GskVulkanOpRender */
@@ -58,6 +59,8 @@ typedef enum {
   GSK_VULKAN_OP_COLOR_TEXT,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
+  /* GskVulkanOpScissor */
+  GSK_VULKAN_OP_SCISSOR,
 } GskVulkanOpType;
 
 /* render ops with 0, 1 or 2 sources */
@@ -102,12 +105,20 @@ struct _GskVulkanOpPushConstants
   GskRoundedRect          clip;
 };
 
+struct _GskVulkanOpScissor
+{
+  GskVulkanOpType         type;
+  GskRenderNode          *node; /* node that's the source of this op */
+  cairo_rectangle_int_t   rect;
+};
+
 union _GskVulkanOp
 {
   GskVulkanOpType          type;
   GskVulkanOpRender        render;
   GskVulkanOpText          text;
   GskVulkanOpPushConstants constants;
+  GskVulkanOpScissor       scissor;
 };
 
 struct _GskVulkanRenderPass
@@ -130,11 +141,12 @@ struct _GskVulkanRenderPass
 
 struct _GskVulkanParseState
 {
-  graphene_point_t   offset;
-  graphene_vec2_t    scale;
-  GskTransform      *modelview;
-  graphene_matrix_t  projection;
-  GskVulkanClip      clip;
+  cairo_rectangle_int_t  scissor;
+  graphene_point_t       offset;
+  graphene_vec2_t        scale;
+  GskTransform          *modelview;
+  graphene_matrix_t      projection;
+  GskVulkanClip          clip;
 };
 
 #ifdef G_ENABLE_DEBUG
@@ -240,6 +252,19 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_array_unref (self->wait_semaphores);
 
   g_free (self);
+}
+
+static void
+gsk_vulkan_render_pass_append_scissor (GskVulkanRenderPass       *self,
+                                       GskRenderNode             *node,
+                                       const GskVulkanParseState *state)
+{
+  GskVulkanOp op = {
+    .scissor.type  = GSK_VULKAN_OP_SCISSOR,
+    .scissor.node  = node,
+    .scissor.rect  = state->scissor
+  };
+  g_array_append_val (self->render_ops, op);
 }
 
 static void
@@ -671,6 +696,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
       break;
     }
 
+  new_state.scissor = state->scissor;
   graphene_matrix_init_from_matrix (&new_state.projection, &state->projection);
 
   gsk_vulkan_render_pass_append_push_constants (self, node, &new_state);
@@ -759,6 +785,7 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
   if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
+  new_state.scissor = state->scissor;
   new_state.offset = state->offset;
   graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
   new_state.modelview = state->modelview;
@@ -791,6 +818,7 @@ gsk_vulkan_render_pass_add_rounded_clip_node (GskVulkanRenderPass       *self,
   if (new_state.clip.type == GSK_VULKAN_CLIP_ALL_CLIPPED)
     return TRUE;
 
+  new_state.scissor = state->scissor;
   new_state.offset = state->offset;
   graphene_vec2_init_from_vec2 (&new_state.scale, &state->scale);
   new_state.modelview = state->modelview;
@@ -1095,38 +1123,33 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
 }
 
 void
-gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
-                            GskVulkanRender         *render,
-                            GskRenderNode           *node)
+gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
+                            GskVulkanRender     *render,
+                            GskRenderNode       *node)
 {
   GskVulkanParseState state;
-  cairo_rectangle_int_t rect;
   graphene_rect_t clip;
+  float scale_x, scale_y;
 
-  cairo_region_get_extents (self->clip, &rect);
-  clip = GRAPHENE_RECT_INIT(rect.x + self->viewport.origin.x,
-                            rect.y + self->viewport.origin.y,
-                            rect.width, rect.height);
-  if (graphene_rect_equal (&clip, &self->viewport))
-    {
-      graphene_rect_scale (&clip, 1 / graphene_vec2_get_x (&self->scale), 1 / graphene_vec2_get_y (&self->scale), &clip);
-      gsk_vulkan_clip_init_empty (&state.clip, &self->viewport);
-    }
-  else
-    {
-      graphene_rect_scale (&clip, 1 / graphene_vec2_get_x (&self->scale), 1 / graphene_vec2_get_y (&self->scale), &clip);
-      gsk_vulkan_clip_init_rect (&state.clip, &clip);
-    }
+  scale_x = 1 / graphene_vec2_get_x (&self->scale);
+  scale_y = 1 / graphene_vec2_get_y (&self->scale);
+  cairo_region_get_extents (self->clip, &state.scissor);
+  clip = GRAPHENE_RECT_INIT(state.scissor.x, state.scissor.y,
+                            state.scissor.width, state.scissor.height);
+  graphene_rect_scale (&clip, scale_x, scale_y, &clip);
+  gsk_vulkan_clip_init_empty (&state.clip, &clip);
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
-                              self->viewport.origin.x, self->viewport.origin.x + self->viewport.size.width,
-                              self->viewport.origin.y, self->viewport.origin.y + self->viewport.size.height,
+                              0, self->viewport.size.width,
+                              0, self->viewport.size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
   graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
-  state.offset = *graphene_point_zero ();
+  state.offset = GRAPHENE_POINT_INIT (-self->viewport.origin.x * scale_x,
+                                      -self->viewport.origin.y * scale_y);
 
+  gsk_vulkan_render_pass_append_scissor (self, node, &state);
   gsk_vulkan_render_pass_append_push_constants (self, node, &state);
 
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
@@ -1614,6 +1637,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
+        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
     }
@@ -1672,6 +1696,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           g_assert_not_reached ();
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_SCISSOR:
           continue;
         }
     }
@@ -1866,6 +1891,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_SCISSOR:
           continue;
         }
     }
@@ -1957,10 +1983,11 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
+        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
+        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
     }
@@ -2209,6 +2236,16 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                           &op->constants.clip);
           break;
 
+        case GSK_VULKAN_OP_SCISSOR:
+          vkCmdSetScissor (command_buffer,
+                           0,
+                           1,
+                           &(VkRect2D) {
+                             { op->scissor.rect.x, op->scissor.rect.y },
+                             { op->scissor.rect.width, op->scissor.rect.height },
+                           });
+          break;
+
         case GSK_VULKAN_OP_CROSS_FADE:
           if (!op->render.source || !op->render.source2)
             continue;
@@ -2295,14 +2332,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                     });
 
   cairo_region_get_extents (self->clip, &rect);
-
-  vkCmdSetScissor (command_buffer,
-                   0,
-                   1,
-                   &(VkRect2D) {
-                      { rect.x, rect.y },
-                      { rect.width, rect.height }
-                   });
 
   vkCmdBeginRenderPass (command_buffer,
                         &(VkRenderPassBeginInfo) {
