@@ -41,6 +41,7 @@ compare_render_tests = [
   'color-matrix-merge',
   'color-matrix-parsing',
   'crossfade-clip-both-children',
+  'cross-fade-clipped-with-huge-children',
   'cross-fade-in-opacity',
   'cross-fade-in-rotate',
   'css-background',
