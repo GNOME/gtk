@@ -127,8 +127,6 @@ void                    gtk_list_tile_set_area_size             (GtkListItemMana
 GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
-GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
-                                                                 GtkListTile            *tile);
 
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
                                                                  GtkSelectionModel      *model);

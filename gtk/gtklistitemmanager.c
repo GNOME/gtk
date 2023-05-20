@@ -1044,7 +1044,7 @@ gtk_list_tile_split (GtkListItemManager *self,
  *
  * Returns: The next tile or NULL if everything was gc'ed
  **/
-GtkListTile *
+static GtkListTile *
 gtk_list_tile_gc (GtkListItemManager *self,
                   GtkListTile        *tile)
 {
