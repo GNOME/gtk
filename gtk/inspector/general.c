@@ -84,6 +84,7 @@ struct _GtkInspectorGeneral
   GtkWidget *gl_box;
   GtkWidget *vulkan_box;
   GtkWidget *device_box;
+  GtkWidget *glib_version;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
@@ -130,6 +131,7 @@ init_version (GtkInspectorGeneral *gen)
   GdkSurface *surface;
   GskRenderer *gsk_renderer;
   const char *renderer;
+  const char *glib_version_check;
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gen->display))
@@ -172,6 +174,16 @@ init_version (GtkInspectorGeneral *gen)
   gsk_renderer_unrealize (gsk_renderer);
   g_object_unref (gsk_renderer);
   gdk_surface_destroy (surface);
+
+  glib_version_check = glib_check_version (GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+  if (glib_version_check)
+    gtk_label_set_text (GTK_LABEL (gen->glib_version), glib_version_check);
+  else
+    {
+      char *version = g_strdup_printf ("%u.%u.%u", GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+      gtk_label_set_text (GTK_LABEL (gen->glib_version), version);
+      g_free (version);
+    }
 
   gtk_label_set_text (GTK_LABEL (gen->gtk_version), GTK_VERSION);
   gtk_label_set_text (GTK_LABEL (gen->gdk_backend), backend);
@@ -1185,6 +1197,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, monitor_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, glib_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsk_renderer);
