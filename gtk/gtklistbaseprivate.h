@@ -95,3 +95,5 @@ GtkListTabBehavior     gtk_list_base_get_tab_behavior           (GtkListBase    
 
 void                   gtk_list_base_allocate                   (GtkListBase            *self);
 
+GskRenderNode         *gtk_list_base_dump_tiles                 (GtkListBase            *self);
+

@@ -1144,7 +1144,7 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   return TRUE;
 }
 
-static GskRenderNode *
+GskRenderNode *
 gtk_list_base_dump_tiles (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
