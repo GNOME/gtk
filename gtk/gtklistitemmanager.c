@@ -1094,6 +1094,18 @@ gtk_list_tile_gc (GtkListItemManager *self,
   return tile;
 }
 
+void
+gtk_list_item_manager_gc_tiles (GtkListItemManager *self)
+{
+  GtkListTile *tile;
+
+  for (tile = gtk_list_tile_gc (self, gtk_list_item_manager_get_first (self));
+       tile != NULL;
+       tile = gtk_list_tile_gc (self, gtk_rb_tree_node_get_next (tile)))
+    {
+    }
+}
+
 static void
 gtk_list_item_manager_release_items (GtkListItemManager *self,
                                      GtkListItemChange  *change)

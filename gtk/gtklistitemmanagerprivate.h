@@ -94,6 +94,7 @@ gpointer                gtk_list_item_manager_get_nth           (GtkListItemMana
 GtkListTile *           gtk_list_item_manager_get_nearest_tile  (GtkListItemManager     *self,
                                                                  int                     x,
                                                                  int                     y);
+void                    gtk_list_item_manager_gc_tiles          (GtkListItemManager     *self);
 
 static inline gboolean
 gtk_list_tile_is_header (GtkListTile *tile)
