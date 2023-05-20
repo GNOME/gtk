@@ -40,7 +40,7 @@
  * expanded widget yourself, such as when you want to actually create
  * the widget at expansion time. In this case, create a `GtkExpander`
  * but do not add a child to it. The expander widget has an
- * [property@Gtk.Expander:expanded[ property which can be used to
+ * [property@Gtk.Expander:expanded] property which can be used to
  * monitor its expansion state. You should watch this property with
  * a signal connection as follows:
  *
