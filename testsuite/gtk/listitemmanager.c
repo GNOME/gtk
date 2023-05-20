@@ -123,7 +123,7 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_UNMATCHED_HEADER:
             g_assert_cmpint (section_state, ==, NO_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = UNMATCHED_SECTION;
             break;
 
@@ -131,14 +131,14 @@ check_list_item_manager (GtkListItemManager  *items,
             g_assert_cmpint (section_state, ==, MATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
             g_assert_true (has_sections);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = NO_SECTION;
             break;
 
           case GTK_LIST_TILE_UNMATCHED_FOOTER:
             g_assert_cmpint (section_state, ==, UNMATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = NO_SECTION;
             break;
 
@@ -167,7 +167,7 @@ check_list_item_manager (GtkListItemManager  *items,
 
           case GTK_LIST_TILE_REMOVED:
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             break;
 
           default:
