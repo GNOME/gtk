@@ -985,6 +985,34 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
         }
     }
 
+#ifdef G_ENABLE_DEBUG
+  /* Verify some invariants:
+   * - there are no removed tiles left
+   * - tiles are either within a single row, or
+   * - start at the first column and end at the last column
+   * - unless they end the section
+   */
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      g_assert (tile->type != GTK_LIST_TILE_REMOVED);
+      if (tile->n_items > 0)
+        {
+          unsigned int pos, col, col2;
+          gboolean at_section_end;
+
+          pos = gtk_list_tile_get_position (self->item_manager, tile);
+          col = get_column_for_position (self, pos);
+          col2 = get_column_for_position (self, pos + tile->n_items - 1);
+          at_section_end = gtk_list_tile_is_footer (gtk_rb_tree_node_get_next (tile));
+
+          g_assert ((col + tile->n_items <= self->n_columns) ||
+                    (col == 0 && (col2 == self->n_columns - 1 || at_section_end)));
+        }
+    }
+#endif
+
   /* step 3: determine height of rows with only unknown items */
   unknown_row_height = gtk_grid_view_get_unknown_row_size (self, heights);
   g_array_free (heights, TRUE);
