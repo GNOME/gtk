@@ -372,6 +372,8 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
       gsk_render_node_get_bounds (root, &real_viewport);
       viewport = &real_viewport;
     }
+  g_return_val_if_fail (viewport->size.width > 0, NULL);
+  g_return_val_if_fail (viewport->size.height > 0, NULL);
 
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
