@@ -508,45 +508,43 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     }
 
   pos = gtk_list_tile_get_position (self->item_manager, tile);
-  col = 0;
+  col = get_column_for_position (self, pos);
+
   if (tile->n_items > 1)
     {
       int xspacing, yspacing;
+      guint row_height;
+      guint row_index;
 
       gtk_list_base_get_border_spacing (base, &xspacing, &yspacing);
 
       /* offset in x direction */
-      pos += column_index (self, xspacing, MAX (tile->area.width - 1, x - tile->area.x));
-      col = MIN (column_index (self, xspacing, x), self->n_columns - 1);
-      if (area)
-        {
-          area->x = column_start (self, xspacing, col);
-          area->width = column_end (self, xspacing, col) - area->x;
-        }
+      pos += column_index (self, xspacing, MAX (tile->area.width - 1, x - tile->area.x)) - col;
 
       /* offset in y direction */
       if (tile->n_items > self->n_columns)
         {
           guint rows_in_tile = tile->n_items / self->n_columns;
-          guint row_height = (tile->area.height + yspacing) / rows_in_tile - yspacing;
-          guint row_index = MIN (tile->area.height - 1, y - tile->area.y) / (row_height + yspacing);
-          pos += self->n_columns * row_index;
 
-          if (area)
-            {
-              area->y = tile->area.y  + row_index * (row_height + yspacing);
-              area->height = row_height;
-            }
+          row_height = (tile->area.height + yspacing) / rows_in_tile - yspacing;
+          row_index = MIN (tile->area.height - 1, y - tile->area.y) / (row_height + yspacing);
+          pos += self->n_columns * row_index;
         }
       else
         {
-          if (area)
-            {
-              area->y = tile->area.y;
-              area->height = tile->area.height;
-            }
+          row_height = tile->area.height;
+          row_index = 0;
         }
 
+      col = get_column_for_position (self, pos);
+
+      if (area)
+        {
+          area->x = column_start (self, xspacing, col);
+          area->width = column_end (self, xspacing, col) - area->x;
+          area->y = tile->area.y  + row_index * (row_height + yspacing);
+          area->height = row_height;
+        }
     }
   else
     {
