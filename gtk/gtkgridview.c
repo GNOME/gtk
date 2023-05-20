@@ -1068,7 +1068,6 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           if (tile->n_items >= self->n_columns && tile->widget == NULL)
             {
               g_assert (i == 0);
-              g_assert (tile->n_items % self->n_columns == 0);
               gtk_list_tile_set_area_size (self->item_manager,
                                            tile,
                                            column_end (self, xspacing, self->n_columns - 1)
