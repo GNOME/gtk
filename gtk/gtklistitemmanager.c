@@ -568,8 +568,7 @@ gtk_list_tile_get_tile_at (GtkListItemManager *self,
  * If multiple tiles have the same distance, the one closest to the start
  * will be returned.
  *
- * Returns: (nullable): The tile nearest to (x, y) or NULL if there are no
- *     tile
+ * Returns: (nullable): The tile nearest to (x, y) or NULL if there are no tiles
  **/
 GtkListTile *
 gtk_list_item_manager_get_nearest_tile (GtkListItemManager *self,
@@ -1000,7 +999,7 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
  * Splits the given tile into two tiles. The original
  * tile will remain with @n_items items, the remaining
  * items will be given to the new tile, which will be
- * nserted after the tile.
+ * inserted after the tile.
  *
  * It is not valid for either tile to have 0 items after
  * the split.

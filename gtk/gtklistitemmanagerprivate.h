@@ -59,7 +59,7 @@ struct _GtkListTile
   GtkListTileType type;
   GtkWidget *widget;
   guint n_items;
-  /* area occupied by tile. May be empty if tile has no allcoation */
+  /* area occupied by tile. May be empty if tile has no allocation */
   cairo_rectangle_int_t area;
 };
 
