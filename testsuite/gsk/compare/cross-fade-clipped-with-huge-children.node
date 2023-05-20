@@ -1,0 +1,14 @@
+clip {
+  clip: -50 -50 100 100;
+  child: cross-fade {
+    progress: 0.333333;
+    start: color {
+      bounds: 0 0 50000 50000;
+      color: red;
+    }
+    end: color {
+      bounds: -50000 -50000 50000 50000;
+      color: blue;
+    }
+  }
+}
