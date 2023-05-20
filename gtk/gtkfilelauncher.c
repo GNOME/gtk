@@ -229,9 +229,9 @@ open_done (GObject      *source,
 #endif
 
 static void
-show_folder_done (GObject      *source,
-                  GAsyncResult *result,
-                  gpointer      data)
+show_item_done (GObject      *source,
+                GAsyncResult *result,
+                gpointer      data)
 {
   GDBusConnection *bus = G_DBUS_CONNECTION (source);
   GTask *task = G_TASK (data);
@@ -261,11 +261,10 @@ show_folder_done (GObject      *source,
 #define FILE_MANAGER_DBUS_PATH "/org/freedesktop/FileManager1"
 
 static void
-show_folder (GtkWindow           *parent,
-             const char          *uri,
-             GCancellable        *cancellable,
-             GAsyncReadyCallback  callback,
-             gpointer             user_data)
+show_item (GtkWindow    *parent,
+           const char   *uri,
+           GCancellable *cancellable,
+           GTask        *task)
 {
   GDBusConnection *bus;
   GVariantBuilder uris_builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE_STRING_ARRAY);
@@ -274,10 +273,10 @@ show_folder (GtkWindow           *parent,
 
   if (!bus)
     {
-      g_task_return_new_error (G_TASK (user_data),
+      g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "Session bus not available");
-      g_object_unref (G_TASK (user_data));
+      g_object_unref (task);
       return;
     }
 
@@ -287,14 +286,14 @@ show_folder (GtkWindow           *parent,
                           FILE_MANAGER_DBUS_NAME,
                           FILE_MANAGER_DBUS_PATH,
                           FILE_MANAGER_DBUS_IFACE,
-                          "ShowFolders",
+                          "ShowItems",
                           g_variant_new ("(ass)", &uris_builder, ""),
                           NULL,   /* ignore returned type */
                           G_DBUS_CALL_FLAGS_NONE,
                           -1,
                           cancellable,
-                          show_folder_done,
-                          user_data);
+                          show_item_done,
+                          task);
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -470,7 +469,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
     {
       char *uri = g_file_get_uri (self->file);
 
-      show_folder (parent, uri, cancellable, show_folder_done, task);
+      show_item (parent, uri, cancellable, task);
 
       g_free (uri);
     }
