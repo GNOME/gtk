@@ -884,13 +884,32 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
 
   while (tile != NULL)
     {
-      /* if it's a multirow tile, handle it here */
-      if (tile->n_items > 1 && tile->n_items >= self->n_columns)
+      /* Handle multirow tiles first */
+      if (tile->n_items > 1)
         {
-          if (tile->n_items % self->n_columns)
-            gtk_list_tile_split (self->item_manager, tile, tile->n_items / self->n_columns * self->n_columns);
-          tile = gtk_rb_tree_node_get_next (tile);
-          continue;
+          guint pos, col;
+
+          pos = gtk_list_tile_get_position (self->item_manager, tile);
+          col = get_column_for_position (self, pos);
+
+          /* Split off an incomplete row at the start */
+          if (col > 0 && col + tile->n_items > self->n_columns)
+            {
+              gtk_list_tile_split (self->item_manager, tile, self->n_columns - col);
+              tile = gtk_rb_tree_node_get_next (tile);
+              continue;
+            }
+
+          pos += tile->n_items - 1;
+          col = get_column_for_position (self, pos);
+
+          /* Split off an incomplete row at the end */
+          if (tile->n_items > col + 1 && col + 1 < self->n_columns)
+            {
+              gtk_list_tile_split (self->item_manager, tile, tile->n_items - (col + 1));
+              tile = gtk_rb_tree_node_get_next (tile);
+              continue;
+            }
         }
 
       /* Not a multirow tile */
