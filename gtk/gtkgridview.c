@@ -905,47 +905,97 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   self->column_width = ((orientation == GTK_ORIENTATION_VERTICAL ? width : height) + xspacing) / self->n_columns - xspacing;
   self->column_width = MAX (self->column_width, col_min);
 
-  /* step 2: determine height of known rows */
-  heights = g_array_new (FALSE, FALSE, sizeof (int));
-
+  /* step 2: split tiles as required */
   while (tile != NULL)
     {
       /* Handle multirow tiles first */
       if (tile->n_items > 1)
         {
           guint pos, col;
+          guint end, remaining;
 
           pos = gtk_list_tile_get_position (self->item_manager, tile);
           col = get_column_for_position (self, pos);
+          get_section_for_position (self, pos, NULL, &end);
 
-          /* Split off an incomplete row at the start */
-          if (col > 0 && col + tile->n_items > self->n_columns)
+          if (col > 0)
             {
-              gtk_list_tile_split (self->item_manager, tile, self->n_columns - col);
-              tile = gtk_rb_tree_node_get_next (tile);
-              continue;
+              /* Determine if the first row needs to be split off */
+              remaining = MIN (self->n_columns - col, end - 1 - pos);
+              if (remaining > 0 && tile->n_items > remaining)
+                {
+                  gtk_list_tile_split (self->item_manager, tile, remaining);
+                  tile = gtk_rb_tree_node_get_next (tile);
+                  continue;
+                }
             }
 
           pos += tile->n_items - 1;
           col = get_column_for_position (self, pos);
+          get_section_for_position (self, pos, NULL, &end);
 
-          /* Split off an incomplete row at the end */
-          if (tile->n_items > col + 1 && col + 1 < self->n_columns)
+          if (col < self->n_columns - 1)
             {
-              gtk_list_tile_split (self->item_manager, tile, tile->n_items - (col + 1));
-              tile = gtk_rb_tree_node_get_next (tile);
-              continue;
+              /* Determine if the last row needs to be split off */
+              remaining = MIN (self->n_columns - (col - 1), end - 1 - pos);
+              if (remaining > 0 && col + 1 < tile->n_items)
+                {
+                  gtk_list_tile_split (self->item_manager, tile, tile->n_items - (col + 1));
+                  tile = gtk_rb_tree_node_get_next (tile);
+                  tile = gtk_rb_tree_node_get_next (tile);
+                  continue;
+                }
             }
         }
 
-      /* Not a multirow tile */
-      i = 0;
+      tile = gtk_rb_tree_node_get_next (tile);
+    }
+
+#ifdef G_ENABLE_DEBUG
+  /* Verify some invariants:
+   * - there are no removed tiles left
+   * - multirow tiles start in column 0
+   * - non-multirow tiles are contained in one row
+   */
+  for (tile = gtk_list_item_manager_get_first (self->item_manager);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      g_assert (tile->type != GTK_LIST_TILE_REMOVED);
+      if (tile->n_items > 1)
+        {
+          unsigned int pos, col;
+
+          pos = gtk_list_tile_get_position (self->item_manager, tile);
+          col = get_column_for_position (self, pos);
+
+          if (is_multirow_tile (self, tile))
+            g_assert (col == 0);
+          else
+            g_assert (col + tile->n_items - 1 <= self->n_columns);
+        }
+    }
+#endif
+
+  /* step 3: determine height of known rows */
+  heights = g_array_new (FALSE, FALSE, sizeof (int));
+
+  tile = gtk_list_item_manager_get_first (self->item_manager);
+  while (tile != NULL)
+    {
+      if (is_multirow_tile (self, tile))
+        {
+          tile = gtk_rb_tree_node_get_next (tile);
+          continue;
+        }
+
       row_height = 0;
 
       for (i = 0, start = tile;
            i < self->n_columns && tile != NULL;
            tile = gtk_rb_tree_node_get_next (tile))
         {
+          g_assert (!is_multirow_tile (self, tile));
           if (tile->widget)
             {
               int min, nat, size;
@@ -961,13 +1011,12 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               g_array_append_val (heights, size);
               row_height = MAX (row_height, size);
             }
-          if (tile->n_items > self->n_columns - i)
-            gtk_list_tile_split (self->item_manager, tile, self->n_columns - i);
           if (gtk_list_tile_is_footer (tile) || gtk_list_tile_is_header (tile))
             i = self->n_columns;
           else
             i += tile->n_items;
         }
+
       if (row_height > 0)
         {
           for (i = 0;
@@ -1007,43 +1056,14 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                                            tile_height);
               i += n_columns;
             }
-          g_assert (i <= self->n_columns);
         }
     }
 
-#ifdef G_ENABLE_DEBUG
-  /* Verify some invariants:
-   * - there are no removed tiles left
-   * - tiles are either within a single row, or
-   * - start at the first column and end at the last column
-   * - unless they end the section
-   */
-  for (tile = gtk_list_item_manager_get_first (self->item_manager);
-       tile != NULL;
-       tile = gtk_rb_tree_node_get_next (tile))
-    {
-      g_assert (tile->type != GTK_LIST_TILE_REMOVED);
-      if (tile->n_items > 0)
-        {
-          unsigned int pos, col, col2;
-          gboolean at_section_end;
-
-          pos = gtk_list_tile_get_position (self->item_manager, tile);
-          col = get_column_for_position (self, pos);
-          col2 = get_column_for_position (self, pos + tile->n_items - 1);
-          at_section_end = gtk_list_tile_is_footer (gtk_rb_tree_node_get_next (tile));
-
-          g_assert ((col + tile->n_items <= self->n_columns) ||
-                    (col == 0 && (col2 == self->n_columns - 1 || at_section_end)));
-        }
-    }
-#endif
-
-  /* step 3: determine height of rows with only unknown items */
+  /* step 4: determine height of rows with only unknown items */
   unknown_row_height = gtk_grid_view_get_unknown_row_size (self, heights);
   g_array_free (heights, TRUE);
 
-  /* step 4: determine height for remaining rows and set each row's position */
+  /* step 5: determine height for remaining rows and set each row's position */
   y = 0;
   i = 0;
   for (tile = gtk_list_item_manager_get_first (self->item_manager);
@@ -1091,7 +1111,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                        self->anchor_has_sections, gtk_list_item_manager_get_has_sections (self->item_manager));
             }
 
-          if (tile->n_items >= self->n_columns && tile->widget == NULL)
+          if (is_multirow_tile (self, tile))
             {
               g_assert (i == 0);
               gtk_list_tile_set_area_size (self->item_manager,
@@ -1103,29 +1123,22 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
             }
           else
             {
-              if (tile->area.height == 0)
-                {
-                  /* this case is for the last row - it may not be a full row so it won't
-                   * be a multirow tile but it may have no widgets either
-                   */
-                  gtk_list_tile_set_area_size (self->item_manager,
-                                               tile,
-                                               column_end (self, xspacing, i + tile->n_items - 1) - tile->area.x,
-                                               unknown_row_height);
-                }
+              gtk_list_tile_set_area_size (self->item_manager,
+                                           tile,
+                                           column_end (self, xspacing, i + tile->n_items - 1) - tile->area.x,
+                                           unknown_row_height);
               i += tile->n_items;
             }
         }
 
       if (i >= self->n_columns)
         {
-          g_assert (i == self->n_columns);
           y += tile->area.height + yspacing;
           i = 0;
         }
     }
 
-  /* step 4: allocate the rest */
+  /* step 6: allocate the widgets */
   gtk_list_base_allocate (GTK_LIST_BASE (self));
 }
 
