@@ -52,26 +52,18 @@ bind_header (GtkSignalListItemFactory *self,
   GtkListHeader *header = GTK_LIST_HEADER (object);
   GObject *item = gtk_list_header_get_item (header);
   GtkWidget *child = gtk_list_header_get_child (header);
-  const char *string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
-  char tmp[6] = { 0, };
   PangoAttrList *attrs;
+  char *string;
 
-  g_unichar_to_utf8 (g_utf8_get_char (string), tmp);
+  string = get_first (item);
 
-  gtk_label_set_label (GTK_LABEL (child), tmp);
+  gtk_label_set_label (GTK_LABEL (child), string);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (child), attrs);
   pango_attr_list_unref (attrs);
-}
-
-static char *
-get_first (GObject *this)
-{
-  const char *s = gtk_string_object_get_string (GTK_STRING_OBJECT (this));
-
-  return g_strndup (s, g_utf8_next_char (s) - s);
+  g_free (string);
 }
 
 static const char *strings[] = {
@@ -171,6 +163,26 @@ load_file (GtkStringList *list,
 {
   gtk_string_list_splice (list, 0, g_list_model_get_n_items (G_LIST_MODEL (list)), NULL);
   g_file_read_async (file, G_PRIORITY_HIGH_IDLE, NULL, file_is_open_cb, g_object_ref (list));
+}
+
+static void
+toggle_cb (GtkCheckButton *check, GtkWidget *list)
+{
+  GtkListItemFactory *header_factory = NULL;
+
+  if (gtk_check_button_get_active (check))
+    {
+      header_factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (header_factory, "setup", G_CALLBACK (setup_header), NULL);
+      g_signal_connect (header_factory, "bind", G_CALLBACK (bind_header), NULL);
+    }
+
+  if (GTK_IS_LIST_VIEW (list))
+    gtk_list_view_set_header_factory (GTK_LIST_VIEW (list), header_factory);
+  else
+    gtk_grid_view_set_header_factory (GTK_GRID_VIEW (list), header_factory);
+
+  g_clear_object (&header_factory);
 }
 
 int
