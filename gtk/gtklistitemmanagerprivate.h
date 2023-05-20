@@ -51,7 +51,6 @@ typedef enum
   GTK_LIST_TILE_FOOTER,
   GTK_LIST_TILE_UNMATCHED_HEADER,
   GTK_LIST_TILE_UNMATCHED_FOOTER,
-  GTK_LIST_TILE_FILLER,
   GTK_LIST_TILE_REMOVED,
 } GtkListTileType;
 
@@ -96,6 +95,17 @@ GtkListTile *           gtk_list_item_manager_get_nearest_tile  (GtkListItemMana
                                                                  int                     x,
                                                                  int                     y);
 
+static inline gboolean
+gtk_list_tile_is_header (GtkListTile *tile)
+{
+  return tile->type == GTK_LIST_TILE_HEADER || tile->type == GTK_LIST_TILE_UNMATCHED_HEADER;
+}
+
+static inline gboolean
+gtk_list_tile_is_footer (GtkListTile *tile)
+{
+  return tile->type == GTK_LIST_TILE_FOOTER || tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER;
+}
 
 guint                   gtk_list_tile_get_position              (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
@@ -116,8 +126,6 @@ void                    gtk_list_tile_set_area_size             (GtkListItemMana
 GtkListTile *           gtk_list_tile_split                     (GtkListItemManager     *self,
                                                                  GtkListTile            *tile,
                                                                  guint                   n_items);
-GtkListTile *           gtk_list_tile_append_filler             (GtkListItemManager     *self,
-                                                                 GtkListTile            *previous);
 GtkListTile *           gtk_list_tile_gc                        (GtkListItemManager     *self,
                                                                  GtkListTile            *tile);
 

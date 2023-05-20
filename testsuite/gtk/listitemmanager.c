@@ -71,9 +71,6 @@ print_list_item_manager_tiles (GtkListItemManager *items)
             g_string_append_c (string, ')');
             break;
 
-          case GTK_LIST_TILE_FILLER:
-            g_string_append_c (string, '_');
-            break;
           case GTK_LIST_TILE_REMOVED:
             g_string_append_c (string, '.');
             break;
@@ -123,7 +120,7 @@ check_list_item_manager (GtkListItemManager  *items,
           case GTK_LIST_TILE_UNMATCHED_HEADER:
             g_assert_cmpint (section_state, ==, NO_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = UNMATCHED_SECTION;
             break;
 
@@ -131,14 +128,14 @@ check_list_item_manager (GtkListItemManager  *items,
             g_assert_cmpint (section_state, ==, MATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
             g_assert_true (has_sections);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = NO_SECTION;
             break;
 
           case GTK_LIST_TILE_UNMATCHED_FOOTER:
             g_assert_cmpint (section_state, ==, UNMATCHED_SECTION);
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             section_state = NO_SECTION;
             break;
 
@@ -160,14 +157,9 @@ check_list_item_manager (GtkListItemManager  *items,
               n_items += tile->n_items;
             break;
 
-          case GTK_LIST_TILE_FILLER:
-            /* We don't add fillers */
-            g_assert_not_reached ();
-            break;
-
           case GTK_LIST_TILE_REMOVED:
             g_assert_cmpint (tile->n_items, ==, 0);
-            g_assert_false (tile->widget);
+            g_assert_null (tile->widget);
             break;
 
           default:
@@ -245,7 +237,6 @@ check_list_item_manager (GtkListItemManager  *items,
               n_items += tile->n_items;
             break;
 
-          case GTK_LIST_TILE_FILLER:
           case GTK_LIST_TILE_REMOVED:
           default:
             g_assert_not_reached ();

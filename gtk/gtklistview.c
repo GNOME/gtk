@@ -235,7 +235,6 @@ gtk_list_view_update_factories_with (GtkListView        *self,
         case GTK_LIST_TILE_UNMATCHED_HEADER:
         case GTK_LIST_TILE_FOOTER:
         case GTK_LIST_TILE_UNMATCHED_FOOTER:
-        case GTK_LIST_TILE_FILLER:
         case GTK_LIST_TILE_REMOVED:
           g_assert (tile->widget == NULL);
           break;

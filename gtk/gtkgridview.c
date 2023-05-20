@@ -756,14 +756,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
 
-  /* before we start: gc tiles */
-  for (tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
-     tile != NULL && tile->type == GTK_LIST_TILE_FILLER;
-     tile = gtk_list_tile_gc (self->item_manager, tile))
-    {};
-
   /* step 0: exit early if list is empty */
-  tile = gtk_list_item_manager_get_first (self->item_manager);
+  tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
   if (tile == NULL)
     {
       gtk_list_base_allocate (GTK_LIST_BASE (self));
@@ -889,16 +883,16 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   /* Add a filler tile for empty space in the bottom right */
   if (i > 0)
     {
-      GtkListTile *filler;
-      tile = gtk_list_item_manager_get_last (self->item_manager);
-      filler = gtk_list_tile_append_filler (self->item_manager, tile);
+      GtkListTile *footer = gtk_list_item_manager_get_last (self->item_manager);
+      g_assert (gtk_list_tile_is_footer (footer));
+      tile = gtk_rb_tree_node_get_previous (footer);
       gtk_list_tile_set_area_position (self->item_manager,
-                                       filler,
+                                       footer,
                                        column_start (self, xspacing, i),
                                        y);
       gtk_list_tile_set_area_size (self->item_manager,
-                                   filler,
-                                   column_end (self, xspacing, self->n_columns - 1) - filler->area.x,
+                                   footer,
+                                   column_end (self, xspacing, self->n_columns - 1) - footer->area.x,
                                    tile->area.height);
     }
 
@@ -1342,6 +1336,8 @@ gtk_grid_view_set_factory (GtkGridView        *self,
 
   if (!g_set_object (&self->factory, factory))
     return;
+
+  gtk_grid_view_update_factories (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
