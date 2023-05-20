@@ -1337,6 +1337,8 @@ gtk_grid_view_set_factory (GtkGridView        *self,
   if (!g_set_object (&self->factory, factory))
     return;
 
+  gtk_grid_view_update_factories (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
 
