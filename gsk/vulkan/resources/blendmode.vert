@@ -5,12 +5,16 @@
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inStartTexRect;
 layout(location = 2) in vec4 inEndTexRect;
-layout(location = 3) in uint inBlendMode;
+layout(location = 3) in uint inStartTexId;
+layout(location = 4) in uint inEndTexId;
+layout(location = 5) in uint inBlendMode;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out vec2 outStartTexCoord;
 layout(location = 2) out vec2 outEndTexCoord;
-layout(location = 3) flat out uint outBlendMode;
+layout(location = 3) flat out uint outStartTexId;
+layout(location = 4) flat out uint outEndTexId;
+layout(location = 5) flat out uint outBlendMode;
 
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
@@ -35,6 +39,7 @@ void main() {
 
   outStartTexCoord = starttexrect.xy + starttexrect.zw * offsets[gl_VertexIndex];
   outEndTexCoord = endtexrect.xy + endtexrect.zw * offsets[gl_VertexIndex];
-
+  outStartTexId = inStartTexId;
+  outEndTexId = inEndTexId;
   outBlendMode = inBlendMode;
 }

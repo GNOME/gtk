@@ -14,6 +14,8 @@ struct _GskVulkanCrossFadeInstance
   float rect[4];
   float start_tex_rect[4];
   float end_tex_rect[4];
+  float start_tex_id;
+  float end_tex_id;
   float progress;
 };
 
@@ -50,6 +52,18 @@ gsk_vulkan_cross_fade_pipeline_get_input_state_create_info (GskVulkanPipeline *s
       },
       {
           .location = 3,
+          .binding = 0,
+          .format = VK_FORMAT_R32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, start_tex_id),
+      },
+      {
+          .location = 4,
+          .binding = 0,
+          .format = VK_FORMAT_R32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, end_tex_id),
+      },
+      {
+          .location = 5,
           .binding = 0,
           .format = VK_FORMAT_R32_SFLOAT,
           .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, progress),
@@ -101,6 +115,8 @@ gsk_vulkan_cross_fade_pipeline_new (GdkVulkanContext        *context,
 void
 gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                     guchar                     *data,
+                                                    guint32                     start_tex_id,
+                                                    guint32                     end_tex_id,
                                                     const graphene_point_t     *offset,
                                                     const graphene_rect_t      *bounds,
                                                     const graphene_rect_t      *start_tex_rect,
@@ -124,6 +140,8 @@ gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *
   instance->end_tex_rect[2] = end_tex_rect->size.width;
   instance->end_tex_rect[3] = end_tex_rect->size.height;
 
+  instance->start_tex_id = start_tex_id;
+  instance->end_tex_id = end_tex_id;
   instance->progress = progress;
 }
 

@@ -1,13 +1,13 @@
 #version 420 core
 
+#include "common.frag.glsl"
 #include "clip.frag.glsl"
 
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inTexCoord;
 layout(location = 2) in flat mat4 inColorMatrix;
 layout(location = 6) in flat vec4 inColorOffset;
-
-layout(set = 0, binding = 0) uniform sampler2D inTexture;
+layout(location = 7) in flat uint inTexId;
 
 layout(location = 0) out vec4 color;
 
@@ -29,5 +29,5 @@ color_matrix (vec4 color, mat4 color_matrix, vec4 color_offset)
 
 void main()
 {
-  color = clip (inPos, color_matrix (texture (inTexture, inTexCoord), inColorMatrix, inColorOffset));
+  color = clip (inPos, color_matrix (texture (textures[inTexId], inTexCoord), inColorMatrix, inColorOffset));
 }

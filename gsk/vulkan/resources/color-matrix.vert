@@ -6,11 +6,13 @@ layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
 layout(location = 2) in mat4 inColorMatrix;
 layout(location = 6) in vec4 inColorOffset;
+layout(location = 7) in uint inTexId;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out vec2 outTexCoord;
 layout(location = 2) out flat mat4 outColorMatrix;
 layout(location = 6) out flat vec4 outColorOffset;
+layout(location = 7) out flat uint outTexId;
 
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
@@ -31,6 +33,7 @@ void main() {
   texrect = vec4(inTexRect.xy + inTexRect.zw * texrect.xy,
                  inTexRect.zw * texrect.zw);
   outTexCoord = texrect.xy + texrect.zw * offsets[gl_VertexIndex];
+  outTexId = inTexId;
   outColorMatrix = inColorMatrix;
   outColorOffset = inColorOffset;
 }

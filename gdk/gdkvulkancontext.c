@@ -1053,26 +1053,30 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+              g_ptr_array_add (device_extensions, (gpointer) VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
+              g_ptr_array_add (device_extensions, (gpointer) VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
               if (has_incremental_present)
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
               GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
               if (GDK_VK_CHECK (vkCreateDevice, devices[i],
                                                 &(VkDeviceCreateInfo) {
-                                                    VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-                                                    NULL,
-                                                    0,
-                                                    1,
-                                                    &(VkDeviceQueueCreateInfo) {
+                                                    .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                                                    .queueCreateInfoCount = 1,
+                                                    .pQueueCreateInfos = &(VkDeviceQueueCreateInfo) {
                                                         .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                                                         .queueFamilyIndex = j,
                                                         .queueCount = 1,
                                                         .pQueuePriorities = (float []) { 1.0f },
                                                     },
-                                                    0,
-                                                    NULL,
-                                                    device_extensions->len,
-                                                    (const char * const *) device_extensions->pdata
+                                                    .enabledExtensionCount = device_extensions->len,
+                                                    .ppEnabledExtensionNames = (const char * const *) device_extensions->pdata,
+                                                    .pNext = &(VkPhysicalDeviceDescriptorIndexingFeatures) {
+                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+                                                      .descriptorBindingPartiallyBound = VK_TRUE,
+                                                      .descriptorBindingVariableDescriptorCount = VK_TRUE,
+                                                      .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
+                                                    }
                                                 },
                                                 NULL,
                                                 &display->vk_device) != VK_SUCCESS)
@@ -1144,6 +1148,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   used_extensions = g_ptr_array_new ();
   g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME);
+  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
   g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name);
 
   for (i = 0; i < n_extensions; i++)
@@ -1215,7 +1220,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                              .enabledLayerCount = used_layers->len,
                                              .ppEnabledLayerNames = (const char * const *) used_layers->pdata,
                                              .enabledExtensionCount = used_extensions->len,
-                                             .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata
+                                             .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
                                          },
                                          NULL,
                                          &display->vk_instance);

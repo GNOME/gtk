@@ -1,14 +1,14 @@
 #version 420 core
 
+#include "common.frag.glsl"
 #include "clip.frag.glsl"
 
 layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inStartTexCoord;
 layout(location = 2) in vec2 inEndTexCoord;
-layout(location = 3) flat in uint inBlendMode;
-
-layout(set = 0, binding = 0) uniform sampler2D startTexture;
-layout(set = 1, binding = 0) uniform sampler2D endTexture;
+layout(location = 3) flat in uint inStartTexId;
+layout(location = 4) flat in uint inEndTexId;
+layout(location = 5) flat in uint inBlendMode;
 
 layout(location = 0) out vec4 outColor;
 
@@ -271,8 +271,8 @@ luminosity (vec4 Cs, vec4 Cb)
 
 void main()
 {
-  vec4 source = texture (startTexture, inStartTexCoord);
-  vec4 backdrop = texture (endTexture, inEndTexCoord);
+  vec4 source = texture (textures[inStartTexId], inStartTexCoord);
+  vec4 backdrop = texture (textures[inEndTexId], inEndTexCoord);
   vec4 result;
 
   if (inBlendMode == 0)

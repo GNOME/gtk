@@ -14,6 +14,7 @@ struct _GskVulkanTextInstance
   float rect[4];
   float tex_rect[4];
   float color[4];
+  guint32 tex_id;
 };
 
 G_DEFINE_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -46,6 +47,12 @@ gsk_vulkan_text_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
           .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, color),
+      },
+      {
+          .location = 3,
+          .binding = 0,
+          .format = VK_FORMAT_R32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, tex_id),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -96,6 +103,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guchar                 *data,
                                               GskVulkanRenderer      *renderer,
                                               const graphene_rect_t  *rect,
+                                              guint                   tex_id,
                                               PangoFont              *font,
                                               guint                   total_glyphs,
                                               const PangoGlyphInfo   *glyphs,
@@ -145,6 +153,8 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
           instance->color[1] = color->green;
           instance->color[2] = color->blue;
           instance->color[3] = color->alpha;
+
+          instance->tex_id = tex_id;
 
           count++;
         }

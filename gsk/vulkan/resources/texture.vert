@@ -5,10 +5,12 @@
 
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
+layout(location = 2) in uint inTexId;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out flat Rect outRect;
 layout(location = 2) out vec2 outTexCoord;
+layout(location = 3) out flat uint outTexId;
 
 void main() {
   Rect r = rect_from_gsk (inRect);
@@ -17,4 +19,5 @@ void main() {
   outPos = pos;
   outRect = r;
   outTexCoord = scale_tex_coord (pos, r, inTexRect);
+  outTexId = inTexId;
 }

@@ -19,6 +19,7 @@ GskVulkanPipeline *     gsk_vulkan_texture_pipeline_new                 (GdkVulk
 
 void                    gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipeline,
                                                                          guchar                   *data,
+                                                                         guint32                   tex_id,
                                                                          const graphene_point_t   *offset,
                                                                          const graphene_rect_t    *rect,
                                                                          const graphene_rect_t    *tex_rect);

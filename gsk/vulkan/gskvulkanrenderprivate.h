@@ -76,11 +76,11 @@ void                    gsk_vulkan_render_upload                        (GskVulk
 
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          GskVulkanPipelineType   pipeline_type);
-VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self,
-                                                                         gsize                   id);
 gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
                                                                          GskVulkanImage         *source,
                                                                          gboolean                repeat);
+VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self);
+
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
