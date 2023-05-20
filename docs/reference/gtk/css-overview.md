@@ -68,7 +68,7 @@ in a selector, widget names must be prefixed with a &num; character.
 | E:focus-within | [CSS Selector Level 4](https://drafts.csswg.org/selectors/#focus-within-pseudo) | Set on all ancestors of the focus widget, unlike CSS |
 | E:focus-visible | [CSS Selector Level 4](https://drafts.csswg.org/selectors/#focus-within-pseudo) | Set on focus widget and all ancestors, unlike CSS |
 | E:disabled | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#UIstates) | Corresponds to GTK_STATE_FLAG_INSENSITIVE |
-| E:disabled | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#UIstates) | Corresponds to GTK_STATE_FLAG_CHECKED |
+| E:checked | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#UIstates) | Corresponds to GTK_STATE_FLAG_CHECKED |
 | E:indeterminate | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#indeterminate) | Corresponds to GTK_STATE_FLAG_INCONSISTENT |
 | E:backdrop, E:selected | | Corresponds to GTK_STATE_FLAG_BACKDROP, GTK_STATE_FLAG_SELECTED |
 | E:not(selector) | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#negation) | |
