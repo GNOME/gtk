@@ -34,6 +34,17 @@ setup_header (GtkSignalListItemFactory *self,
   gtk_list_header_set_child (header, child);
 }
 
+static char *
+get_first (GObject *this)
+{
+  const char *s = gtk_string_object_get_string (GTK_STRING_OBJECT (this));
+  char buffer[6] = { 0, };
+
+  g_unichar_to_utf8 (g_unichar_toupper (g_utf8_get_char (s)), buffer);
+
+  return g_strdup (buffer);
+}
+
 static void
 bind_header (GtkSignalListItemFactory *self,
              GObject                  *object)
@@ -170,10 +181,10 @@ main (int argc, char *argv[])
   GtkWidget *lv;
   GtkWidget *gv;
   GtkWidget *header;
+  GtkWidget *toggle;
   GtkWidget *switcher;
   GtkWidget *stack;
   GtkListItemFactory *factory;
-  GtkListItemFactory *header_factory;
   GtkExpression *expression;
   GtkSortListModel *sortmodel;
   GtkSelectionModel *selection;
@@ -196,9 +207,14 @@ main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new ();
+  gtk_window_set_default_size (GTK_WINDOW (window), 800, 600);
 
   header = gtk_header_bar_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
+
+  toggle = gtk_check_button_new ();
+  gtk_widget_set_valign (toggle, GTK_ALIGN_CENTER);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), toggle);
 
   stack = gtk_stack_new ();
   gtk_window_set_child (GTK_WINDOW (window), stack);
@@ -222,13 +238,10 @@ main (int argc, char *argv[])
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
 
-  header_factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (header_factory, "setup", G_CALLBACK (setup_header), NULL);
-  g_signal_connect (header_factory, "bind", G_CALLBACK (bind_header), NULL);
-
   lv = gtk_list_view_new (g_object_ref (selection), factory);
-  gtk_list_view_set_header_factory (GTK_LIST_VIEW (lv), header_factory);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), lv);
+
+  g_signal_connect (toggle, "toggled", G_CALLBACK (toggle_cb), lv);
 
   sw = gtk_scrolled_window_new ();
   gtk_stack_add_titled (GTK_STACK (stack), sw, "grid", "Grid");
@@ -237,15 +250,12 @@ main (int argc, char *argv[])
   g_signal_connect (factory, "setup", G_CALLBACK (setup_item), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
 
-  header_factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (header_factory, "setup", G_CALLBACK (setup_header), NULL);
-  g_signal_connect (header_factory, "bind", G_CALLBACK (bind_header), NULL);
-
   gv = gtk_grid_view_new (g_object_ref (selection), factory);
-  gtk_grid_view_set_header_factory (GTK_GRID_VIEW (gv), header_factory);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), gv);
 
-  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (gv), 3);
+  g_signal_connect (toggle, "toggled", G_CALLBACK (toggle_cb), gv);
+
+  gtk_grid_view_set_min_columns (GTK_GRID_VIEW (gv), 5);
 
   gtk_window_present (GTK_WINDOW (window));
 
