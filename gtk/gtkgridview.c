@@ -480,6 +480,32 @@ get_column_for_position (GtkGridView  *self,
   return (position - start) % self->n_columns;
 }
 
+/* Determine whether a tile is contained in a single row,
+ * or spans multiple rows.
+ */
+static gboolean
+is_multirow_tile (GtkGridView *self,
+                  GtkListTile *tile)
+{
+  unsigned int position;
+  unsigned int start, start2;
+  unsigned int col;
+
+  if (tile->n_items <= 1)
+    return FALSE;
+
+  position = gtk_list_tile_get_position (self->item_manager, tile);
+  get_section_for_position (self, position, &start, NULL);
+  get_section_for_position (self, position + tile->n_items - 1, &start2, NULL);
+
+  if (start != start2)
+    return TRUE;
+
+  col = (position - start) % self->n_columns;
+
+  return col + tile->n_items - 1 > self->n_columns;
+}
+
 static gboolean
 gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
                                             int                    x,
