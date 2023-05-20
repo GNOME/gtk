@@ -1956,6 +1956,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                               op->render.descriptor_set_index2,
                                                               &op->render.offset,
                                                               &op->render.node->bounds,
+                                                              &gsk_cross_fade_node_get_start_child (op->render.node)->bounds,
+                                                              &gsk_cross_fade_node_get_end_child (op->render.node)->bounds,
                                                               &op->render.source_rect,
                                                               &op->render.source2_rect,
                                                               gsk_cross_fade_node_get_progress (op->render.node));

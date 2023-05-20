@@ -25,6 +25,8 @@ void                gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulka
                                                                         const graphene_rect_t      *bounds,
                                                                         const graphene_rect_t      *start_bounds,
                                                                         const graphene_rect_t      *end_bounds,
+                                                                        const graphene_rect_t      *start_tex_rect,
+                                                                        const graphene_rect_t      *end_tex_rect,
                                                                         double                      progress);
 gsize               gsk_vulkan_cross_fade_pipeline_draw                (GskVulkanCrossFadePipeline *pipeline,
                                                                         VkCommandBuffer             command_buffer,
