@@ -72,6 +72,28 @@ static const char *strings[] = {
  NULL,
 };
 
+gboolean done_reading = FALSE;
+
+static gboolean
+dump_sections (gpointer data)
+{
+  GtkSectionModel *model = data;
+
+  if (!done_reading)
+    return G_SOURCE_CONTINUE;
+
+  for (unsigned int i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
+    {
+      unsigned int s, e;
+      gtk_section_model_get_section (model, i, &s, &e);
+      g_print ("(%u %u)\n", s, e - 1);
+      i = e;
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+
 static void
 read_lines_cb (GObject      *object,
                GAsyncResult *result,
@@ -101,6 +123,7 @@ read_lines_cb (GObject      *object,
       if (size)
         gtk_string_list_take (stringlist, g_utf8_make_valid (buffer, size));
       g_object_unref (stringlist);
+      done_reading = TRUE;
       return;
     }
 
@@ -221,6 +244,7 @@ main (int argc, char *argv[])
     {
       for (int i = 0; strings[i]; i++)
         gtk_string_list_append (stringlist, strings[i]);
+      done_reading = TRUE;
     }
 
   gtk_init ();
@@ -280,6 +304,8 @@ main (int argc, char *argv[])
   g_signal_connect (adj, "value-changed", G_CALLBACK (value_changed_cb), NULL);
 
   gtk_window_present (GTK_WINDOW (window));
+
+  g_timeout_add (500, dump_sections, selection);
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
     g_main_context_iteration (NULL, FALSE);
