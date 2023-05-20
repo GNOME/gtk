@@ -185,6 +185,12 @@ toggle_cb (GtkCheckButton *check, GtkWidget *list)
   g_clear_object (&header_factory);
 }
 
+static void
+value_changed_cb (GtkAdjustment *adj, gpointer data)
+{
+  g_print ("horizontal adjustment changed to %f\n",  gtk_adjustment_get_value (adj));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -201,6 +207,7 @@ main (int argc, char *argv[])
   GtkSortListModel *sortmodel;
   GtkSelectionModel *selection;
   GtkStringList *stringlist;
+  GtkAdjustment *adj;
 
   stringlist = gtk_string_list_new (NULL);
 
@@ -268,6 +275,9 @@ main (int argc, char *argv[])
   g_signal_connect (toggle, "toggled", G_CALLBACK (toggle_cb), gv);
 
   gtk_grid_view_set_min_columns (GTK_GRID_VIEW (gv), 5);
+
+  adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (sw));
+  g_signal_connect (adj, "value-changed", G_CALLBACK (value_changed_cb), NULL);
 
   gtk_window_present (GTK_WINDOW (window));
 
