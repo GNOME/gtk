@@ -607,13 +607,29 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
   if (area.y >= rect->y + rect->height)
     last_row -= self->n_columns;
 
-  if (first_column <= last_column && first_row <= last_row)
+  if (gtk_list_item_manager_get_has_sections (self->item_manager))
     {
-      gtk_bitset_add_rectangle (result,
-                                first_row + first_column,
-                                last_column - first_column + 1,
-                                (last_row - first_row) / self->n_columns + 1,
-                                self->n_columns);
+      for (unsigned int pos = first_row; pos < last_row + self->n_columns; pos++)
+        {
+          unsigned int col;
+
+          col = gtk_grid_view_get_column_for_position (self->item_manager,
+                                                       self->n_columns,
+                                                       pos);
+          if (col >= first_column && col <= last_column)
+            gtk_bitset_add (result, pos);
+        }
+    }
+  else
+    {
+      if (first_column <= last_column && first_row <= last_row)
+        {
+          gtk_bitset_add_rectangle (result,
+                                    first_row + first_column,
+                                    last_column - first_column + 1,
+                                    (last_row - first_row) / self->n_columns + 1,
+                                    self->n_columns);
+        }
     }
 
   return result;
