@@ -458,14 +458,21 @@ gtk_grid_view_get_section_for_position (GtkListItemManager *items,
     *section_end = end;
 }
 
-/* Returns the column that the given item will fall in.
+/* Returns the column that the given item will fall in, taking
+ * sections into account. Note that this depends on whether
+ * we are currently showing sections, and on the number of
+ * columns that the grid is allocating.
  */
 unsigned int
 gtk_grid_view_get_column_for_position (GtkListItemManager *items,
                                        unsigned int        n_columns,
                                        unsigned int        position)
 {
-  return position % n_columns;
+  unsigned int start;
+
+  gtk_grid_view_get_section_for_position (items, position, &start, NULL);
+
+  return (position - start) % n_columns;
 }
 
 /* Determine whether a tile is contained in a single row,
@@ -477,14 +484,19 @@ gtk_grid_view_is_multirow_tile (GtkListItemManager *items,
                                 GtkListTile        *tile)
 {
   unsigned int position;
+  unsigned int start, end;
   unsigned int col;
 
   if (tile->n_items <= 1)
     return FALSE;
 
   position = gtk_list_tile_get_position (items, tile);
+  gtk_grid_view_get_section_for_position (items, position, &start, &end);
 
-  col = position % n_columns;
+  if (end < position + tile->n_items)
+    return TRUE;
+
+  col = (position - start) % n_columns;
 
   return col + tile->n_items > n_columns;
 }
