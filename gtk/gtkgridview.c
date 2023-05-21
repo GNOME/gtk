@@ -30,6 +30,7 @@
 #include "gtkmultiselection.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtksectionmodel.h"
 
 /* Maximum number of list items created by the gridview.
  * For debugging, you can set this to G_MAXUINT to ensure
@@ -426,6 +427,35 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
     }
 
   return TRUE;
+}
+
+/* Returns the section that position falls into
+ */
+void
+gtk_grid_view_get_section_for_position (GtkListItemManager *items,
+                                        unsigned int        position,
+                                        unsigned int       *section_start,
+                                        unsigned int       *section_end)
+{
+  GListModel *model;
+  unsigned int start, end;
+
+  model = G_LIST_MODEL (gtk_list_item_manager_get_model (items));
+
+  if (!gtk_list_item_manager_get_has_sections (items))
+    {
+      start = 0;
+      end = g_list_model_get_n_items (model);
+    }
+  else
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (model), position, &start, &end);
+    }
+
+  if (section_start)
+    *section_start = start;
+  if (section_end)
+    *section_end = end;
 }
 
 /* Returns the column that the given item will fall in.

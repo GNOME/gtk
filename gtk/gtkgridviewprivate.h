@@ -25,6 +25,11 @@
 
 G_BEGIN_DECLS
 
+void         gtk_grid_view_get_section_for_position (GtkListItemManager *items,
+                                                     unsigned int        position,
+                                                     unsigned int       *start,
+                                                     unsigned int       *end);
+
 unsigned int gtk_grid_view_get_column_for_position (GtkListItemManager *items,
                                                     unsigned int        n_columns,
                                                     unsigned int        position);
