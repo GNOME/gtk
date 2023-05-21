@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkgridview.h"
+#include "gtkgridviewprivate.h"
 
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
@@ -469,10 +469,10 @@ get_section_for_position (GtkListItemManager *items,
  * we are currently showing sections, and on the number of
  * columns that the grid is allocating.
  */
-static unsigned int
-get_column_for_position (GtkListItemManager *items,
-                         unsigned int        n_columns,
-                         unsigned int        position)
+unsigned int
+gtk_grid_view_get_column_for_position (GtkListItemManager *items,
+                                       unsigned int        n_columns,
+                                       unsigned int        position)
 {
   unsigned int start;
 
@@ -484,10 +484,10 @@ get_column_for_position (GtkListItemManager *items,
 /* Determine whether a tile is contained in a single row,
  * or spans multiple rows.
  */
-static gboolean
-is_multirow_tile (GtkListItemManager *items,
-                  unsigned int        n_columns,
-                  GtkListTile        *tile)
+gboolean
+gtk_grid_view_is_multirow_tile (GtkListItemManager *items,
+                                unsigned int        n_columns,
+                                GtkListTile        *tile)
 {
   unsigned int position;
   unsigned int start, start2;
@@ -536,7 +536,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     }
 
   pos = gtk_list_tile_get_position (self->item_manager, tile);
-  col = get_column_for_position (self->item_manager, self->n_columns, pos);
+  col = gtk_grid_view_get_column_for_position (self->item_manager, self->n_columns, pos);
 
   if (tile->n_items > 1)
     {
@@ -564,7 +564,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
           row_index = 0;
         }
 
-      col = get_column_for_position (self->item_manager, self->n_columns, pos);
+      col = gtk_grid_view_get_column_for_position (self->item_manager, self->n_columns, pos);
 
       if (area)
         {
@@ -761,7 +761,7 @@ gtk_grid_view_compute_n_columns (GtkGridView *self,
   return n_columns;
 }
 
-static void
+void
 gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
                                       guint               n_columns)
 {
@@ -778,7 +778,7 @@ gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
           guint end, remaining;
 
           pos = gtk_list_tile_get_position (items, tile);
-          col = get_column_for_position (items, n_columns, pos);
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
           get_section_for_position (items, pos, NULL, &end);
 
           if (col > 0)
@@ -794,7 +794,7 @@ gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
             }
 
           pos += tile->n_items - 1;
-          col = get_column_for_position (items, n_columns, pos);
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
           get_section_for_position (items, pos, NULL, &end);
 
           if (col < n_columns - 1)
@@ -830,9 +830,9 @@ gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
           unsigned int pos, col;
 
           pos = gtk_list_tile_get_position (items, tile);
-          col = get_column_for_position (items, n_columns, pos);
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
 
-          if (is_multirow_tile (items, n_columns, tile))
+          if (gtk_grid_view_is_multirow_tile (items, n_columns, tile))
             g_assert (col == 0);
           else
             g_assert (col + tile->n_items - 1 <= n_columns);
@@ -996,7 +996,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   tile = gtk_list_item_manager_get_first (self->item_manager);
   while (tile != NULL)
     {
-      if (is_multirow_tile (self->item_manager, self->n_columns, tile))
+      if (gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile))
         {
           tile = gtk_rb_tree_node_get_next (tile);
           continue;
@@ -1008,7 +1008,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
            i < self->n_columns && tile != NULL;
            tile = gtk_rb_tree_node_get_next (tile))
         {
-          g_assert (!is_multirow_tile (self->item_manager, self->n_columns, tile));
+          g_assert (!gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile));
           if (tile->widget)
             {
               int min, nat, size;
@@ -1124,7 +1124,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                        self->anchor_has_sections, gtk_list_item_manager_get_has_sections (self->item_manager));
             }
 
-          if (is_multirow_tile (self->item_manager, self->n_columns, tile))
+          if (gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile))
             {
               g_assert (i == 0);
               gtk_list_tile_set_area_size (self->item_manager,
