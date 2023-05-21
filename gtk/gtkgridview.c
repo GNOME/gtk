@@ -619,26 +619,76 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
   return result;
 }
 
+static unsigned int
+find_previous_item_in_column (GtkGridView  *self,
+                              unsigned int  position)
+{
+  unsigned int col, pos;
+
+  if (position == 0)
+    return position;
+
+  col = gtk_grid_view_get_column_for_position (self->item_manager,
+                                               self->n_columns,
+                                               position);
+
+  pos = position;
+  do
+    {
+      pos--;
+
+      if (col == gtk_grid_view_get_column_for_position (self->item_manager,
+                                                        self->n_columns,
+                                                        pos))
+        return pos;
+
+    } while (pos > 0);
+
+  return position;
+}
+
+static unsigned int
+find_next_item_in_column (GtkGridView  *self,
+                          unsigned int  position)
+{
+  unsigned int col;
+  unsigned int n_items;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (gtk_list_item_manager_get_model (self->item_manager)));
+
+  col = gtk_grid_view_get_column_for_position (self->item_manager,
+                                               self->n_columns,
+                                               position);
+
+  for (unsigned int p = position + 1; p < n_items; p++)
+    {
+      if (col == gtk_grid_view_get_column_for_position (self->item_manager,
+                                                        self->n_columns,
+                                                        p))
+        return p;
+    }
+
+  return position;
+}
+
 static guint
 gtk_grid_view_move_focus_along (GtkListBase *base,
                                 guint        pos,
                                 int          steps)
 {
   GtkGridView *self = GTK_GRID_VIEW (base);
+  unsigned int prev_pos = pos;
 
-  steps *= self->n_columns;
+  for (unsigned int i = 0; i < abs (steps); i++)
+    {
+      if (steps < 0)
+        pos = find_previous_item_in_column (self, pos);
+      else
+        pos = find_next_item_in_column (self, pos);
+    }
 
-  if (steps < 0)
-    {
-      if (pos >= self->n_columns)
-        pos -= MIN (pos, -steps);
-    }
-  else
-    {
-      guint n_items = gtk_list_base_get_n_items (base);
-      if (n_items / self->n_columns > pos / self->n_columns)
-        pos += MIN (n_items - pos - 1, steps);
-    }
+  if (prev_pos == pos)
+    gtk_widget_keynav_failed (GTK_WIDGET (self), steps < 0 ? GTK_DIR_UP : GTK_DIR_DOWN);
 
   return pos;
 }
@@ -648,13 +698,18 @@ gtk_grid_view_move_focus_across (GtkListBase *base,
                                  guint        pos,
                                  int          steps)
 {
+  unsigned int prev_pos = pos;
+
   if (steps < 0)
-    return pos - MIN (pos, -steps);
+    pos = pos - MIN (pos, -steps);
   else
     {
       guint n_items = gtk_list_base_get_n_items (base);
       pos += MIN (n_items - pos - 1, steps);
     }
+
+  if (prev_pos == pos)
+    gtk_widget_keynav_failed (GTK_WIDGET (base), steps < 0 ? GTK_DIR_LEFT : GTK_DIR_RIGHT);
 
   return pos;
 }
