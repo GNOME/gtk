@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkgridview.h"
+#include "gtkgridviewprivate.h"
 
 #include "gtkbitset.h"
 #include "gtklistbaseprivate.h"
@@ -386,7 +386,7 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
 
 /* Returns the column that the given item will fall in.
  */
-static unsigned int
+unsigned int
 gtk_grid_view_get_column_for_position (GtkListItemManager *items,
                                        unsigned int        n_columns,
                                        unsigned int        position)
@@ -397,7 +397,7 @@ gtk_grid_view_get_column_for_position (GtkListItemManager *items,
 /* Determine whether a tile is contained in a single row,
  * or spans multiple rows.
  */
-static gboolean
+gboolean
 gtk_grid_view_is_multirow_tile (GtkListItemManager *items,
                                 unsigned int        n_columns,
                                 GtkListTile        *tile)
@@ -767,7 +767,7 @@ gtk_grid_view_measure (GtkWidget      *widget,
     gtk_grid_view_measure_across (widget, for_size, minimum, natural);
 }
 
-static void
+void
 gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
                                       guint               n_columns)
 {
