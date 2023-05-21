@@ -1000,11 +1000,25 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
         {
           if (i > 0)
             i = self->n_columns;
+
+          if (!gtk_list_item_manager_get_has_sections (self->item_manager) && i == 0)
+            gtk_list_tile_set_area_size (self->item_manager,
+                                         tile,
+                                         column_end (self, xspacing, self->n_columns - 1)
+                                         - column_start (self, xspacing, 0),
+                                         0);
         }
       else if (gtk_list_tile_is_header (tile))
         {
           g_assert (i == 0);
           i = self->n_columns;
+
+          if (!gtk_list_item_manager_get_has_sections (self->item_manager))
+            gtk_list_tile_set_area_size (self->item_manager,
+                                         tile,
+                                         column_end (self, xspacing, self->n_columns - 1)
+                                         - column_start (self, xspacing, 0),
+                                         0);
         }
       else if (gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile))
         {
