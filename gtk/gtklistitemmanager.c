@@ -1043,7 +1043,7 @@ gtk_list_tile_split (GtkListItemManager *self,
  *
  * Returns: The next tile or NULL if everything was gc'ed
  **/
-GtkListTile *
+static GtkListTile *
 gtk_list_tile_gc (GtkListItemManager *self,
                   GtkListTile        *tile)
 {
@@ -1091,6 +1091,18 @@ gtk_list_tile_gc (GtkListItemManager *self,
     }
 
   return tile;
+}
+
+void
+gtk_list_item_manager_gc_tiles (GtkListItemManager *self)
+{
+  GtkListTile *tile;
+
+  for (tile = gtk_list_tile_gc (self, gtk_list_item_manager_get_first (self));
+       tile != NULL;
+       tile = gtk_list_tile_gc (self, gtk_rb_tree_node_get_next (tile)))
+    {
+    }
 }
 
 static void
@@ -1593,7 +1605,6 @@ static void
 gtk_list_item_manager_clear_model (GtkListItemManager *self)
 {
   GtkListItemChange change;
-  GtkListTile *tile;
   GSList *l;
 
   if (self->model == NULL)
@@ -1615,11 +1626,8 @@ gtk_list_item_manager_clear_model (GtkListItemManager *self)
                                         self);
   g_clear_object (&self->model);
 
-  /* really empty the tiles */
-  for (tile = gtk_list_tile_gc (self, gtk_list_item_manager_get_first (self));
-       tile;
-       tile = gtk_list_tile_gc (self, tile))
-    { }
+  gtk_list_item_manager_gc_tiles (self);
+
   g_assert (gtk_rb_tree_get_root (self->items) == NULL);
 }
 

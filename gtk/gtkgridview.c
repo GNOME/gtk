@@ -756,8 +756,10 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
 
+  gtk_list_item_manager_gc_tiles (self->item_manager);
+
   /* step 0: exit early if list is empty */
-  tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+  tile = gtk_list_item_manager_get_first (self->item_manager);
   if (tile == NULL)
     {
       gtk_list_base_allocate (GTK_LIST_BASE (self));
@@ -776,9 +778,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   /* step 2: determine height of known rows */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
 
-  for (;
-       tile != NULL;
-       tile = gtk_list_tile_gc (self->item_manager, tile))
+  while (tile != NULL)
     {
       /* if it's a multirow tile, handle it here */
       if (tile->n_items > 1 && tile->n_items >= self->n_columns)
@@ -795,7 +795,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
 
       for (i = 0, start = tile;
            i < self->n_columns && tile != NULL;
-           tile = gtk_list_tile_gc (self->item_manager, gtk_rb_tree_node_get_next (tile)))
+           tile = gtk_rb_tree_node_get_next (tile))
         {
           if (tile->widget)
             {

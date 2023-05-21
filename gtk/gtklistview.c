@@ -608,8 +608,10 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   opposite_scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), opposite_orientation);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), NULL, &spacing);
 
+  gtk_list_item_manager_gc_tiles (self->item_manager);
+
   /* step 0: exit early if list is empty */
-  tile = gtk_list_tile_gc (self->item_manager, gtk_list_item_manager_get_first (self->item_manager));
+  tile = gtk_list_item_manager_get_first (self->item_manager);
   if (tile == NULL)
     {
       gtk_list_base_allocate (GTK_LIST_BASE (self));
@@ -631,7 +633,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 
   for (;
        tile != NULL;
-       tile = gtk_list_tile_gc (self->item_manager, gtk_rb_tree_node_get_next (tile)))
+       tile = gtk_rb_tree_node_get_next (tile))
     {
       if (tile->widget == NULL)
         continue;
