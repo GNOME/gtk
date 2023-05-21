@@ -384,6 +384,16 @@ gtk_grid_view_get_allocation (GtkListBase  *base,
   return TRUE;
 }
 
+/* Returns the column that the given item will fall in.
+ */
+static unsigned int
+gtk_grid_view_get_column_for_position (GtkListItemManager *items,
+                                       unsigned int        n_columns,
+                                       unsigned int        position)
+{
+  return position % n_columns;
+}
+
 static gboolean
 gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
                                             int                    x,
