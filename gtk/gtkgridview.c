@@ -745,7 +745,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
         {
           gtk_widget_measure (tile->widget,
                               gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                              column_size,
+                              gtk_list_tile_is_header (tile) ? for_size : column_size,
                               &child_min, &child_nat, NULL, NULL);
           if (scroll_policy == GTK_SCROLL_MINIMUM)
             row_height = MAX (row_height, child_min);
@@ -754,7 +754,10 @@ gtk_grid_view_measure_list (GtkWidget *widget,
           measured = TRUE;
         }
 
-      i += tile->n_items;
+      if (gtk_list_tile_is_header (tile) || gtk_list_tile_is_footer (tile))
+        i = n_columns;
+      else
+        i += tile->n_items;
 
       if (i >= n_columns)
         {
@@ -918,7 +921,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               int min, nat, size;
               gtk_widget_measure (tile->widget,
                                   gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                  self->column_width,
+                                  gtk_list_tile_is_header (tile) ? (self->column_width + xspacing) * self->n_columns : self->column_width,
                                   &min, &nat, NULL, NULL);
               if (scroll_policy == GTK_SCROLL_MINIMUM)
                 size = min;
@@ -928,7 +931,10 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               g_array_append_val (heights, size);
               row_height = MAX (row_height, size);
             }
-          i += tile->n_items;
+          if (gtk_list_tile_is_header (tile) | gtk_list_tile_is_footer (tile))
+            i = self->n_columns;
+          else
+            i += tile->n_items;
         }
 
       if (row_height > 0)
@@ -950,8 +956,12 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                 }
               else if (gtk_list_tile_is_header (start))
                 {
+                  g_assert (i == 0);
                   n_columns = self->n_columns;
-                  tile_height = 0;
+                  if (gtk_list_item_manager_get_has_sections (self->item_manager))
+                    tile_height = row_height;
+                  else
+                    tile_height = 0;
                 }
               else
                 {
@@ -965,7 +975,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                                            - column_start (self, xspacing, i),
                                            tile_height);
 
-              i = (i + start->n_items) % self->n_columns;
+              i = (i + n_columns) % self->n_columns;
             }
         }
     }
@@ -986,10 +996,19 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                                        column_start (self, xspacing, i),
                                        y);
 
-      if (gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile))
+      if (gtk_list_tile_is_footer (tile))
+        {
+          if (i > 0)
+            i = self->n_columns;
+        }
+      else if (gtk_list_tile_is_header (tile))
         {
           g_assert (i == 0);
-          g_assert (tile->n_items % self->n_columns == 0);
+          i = self->n_columns;
+        }
+      else if (gtk_grid_view_is_multirow_tile (self->item_manager, self->n_columns, tile))
+        {
+          g_assert (i == 0);
           gtk_list_tile_set_area_size (self->item_manager,
                                        tile,
                                        column_end (self, xspacing, self->n_columns - 1)
