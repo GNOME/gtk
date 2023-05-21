@@ -1195,7 +1195,7 @@ if build_gir
   gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'PangoCairo-1.0' ]
 
   gdk_gir = gnome.generate_gir(libgtk,
-    sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
+    sources: gdk_public_headers + gdk_deprecated_headers + gdk_public_sources + gdk_deprecated_sources + [ gdkenum_h ],
     namespace: 'Gdk',
     nsversion: gtk_api_version,
     identifier_prefix: 'Gdk',

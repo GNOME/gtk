@@ -1,7 +1,7 @@
-gdk_deprecated_sources = [
-  'deprecated/gdkpixbuf.c',
-]
+gdk_deprecated_sources = files([
+  'gdkpixbuf.c',
+])
 
-gdk_deprecated_headers = [
-  'deprecated/gdkpixbuf.h',
-]
+gdk_deprecated_headers = files([
+  'gdkpixbuf.h',
+])
