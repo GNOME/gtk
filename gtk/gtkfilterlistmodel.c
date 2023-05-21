@@ -34,9 +34,11 @@
  * It hides some elements from the other model according to
  * criteria given by a `GtkFilter`.
  *
- * The model can be set up to do incremental searching, so that
+ * The model can be set up to do incremental filtering, so that
  * filtering long lists doesn't block the UI. See
  * [method@Gtk.FilterListModel.set_incremental] for details.
+ *
+ * `GtkFilterListModel` passes through sections from the underlying model.
  */
 
 enum {
