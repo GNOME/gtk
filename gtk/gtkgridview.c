@@ -768,6 +768,48 @@ gtk_grid_view_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_grid_view_split_tiles_by_columns (GtkListItemManager *items,
+                                      guint               n_columns)
+{
+  GtkListTile *tile;
+
+  for (tile = gtk_list_item_manager_get_first (items);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      if (tile->n_items > 1)
+        {
+          guint pos, col;
+          guint remaining;
+
+          pos = gtk_list_tile_get_position (items, tile);
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
+
+          if (col > 0)
+            {
+              /* Determine if the first row needs to be split off */
+              remaining = n_columns - col;
+              if (remaining > 0 && tile->n_items > remaining)
+                gtk_list_tile_split (items, tile, remaining);
+
+              continue;
+            }
+
+          pos += tile->n_items - 1;
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
+
+          if (col < n_columns - 1)
+            {
+              /* Determine if the last row needs to be split off */
+              remaining = n_columns - (col - 1);
+              if (remaining > 0 && col + 1 < tile->n_items)
+                tile = gtk_list_tile_split (items, tile, tile->n_items - (col + 1));
+            }
+        }
+    }
+}
+
+static void
 gtk_grid_view_size_allocate (GtkWidget *widget,
                              int        width,
                              int        height,
