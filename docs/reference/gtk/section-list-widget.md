@@ -196,6 +196,15 @@ The _data table_ style of list is a high density table, similar in style to a
 traditional treeview. Individual cells can be selectable and editable. Use
 the `.data-table` style class.
 
+## Sections
+
+List models can optionally group their items into **_sections_**, by implementing
+the `GtkSectionModel` interface. Both `GtkListView` and `GtkGridView` can
+display headers for sections, by installing a separate **_header factory_**.
+
+Many GTK list models support section inherently, or they pass through the
+section of a model they are wrapping.
+
 ## Comparison to GtkTreeView
 
 Developers familiar with `GtkTreeView` may wonder how this way of doing lists

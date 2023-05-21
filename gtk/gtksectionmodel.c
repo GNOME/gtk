@@ -26,21 +26,19 @@
 /**
  * GtkSectionModel:
  *
- * `GtkSectionModel` is an interface that adds support for section to list models.
+ * `GtkSectionModel` is an interface that adds support for sections to list models.
  *
- * This support is then used by widgets using list models to be able to group their
- * items into sections.
+ * A `GtkSectionModel` groups successive items into so-called sections. List widgets
+ * like `GtkListView` and `GtkGridView` then allow displaying section headers for
+ * these sections by installing a header factory.
  *
  * Many GTK list models support sections inherently, or they pass through the sections
  * of a model they are wrapping.
  *
- * A `GtkSectionModel` groups successive items into so-called sections. List widgets
- * like `GtkListView` then allow displaying section headers for these sections.
- *
- * When the section groupings of a model changes, the model will emit the
+ * When the section groupings of a model change, the model will emit the
  * [signal@Gtk.SectionModel::sections-changed] signal by calling the
  * [method@Gtk.SectionModel.sections_changed] function. All sections in the given range
- * now need to be queried again.  
+ * then need to be queried again.
  * The [signal@Gio.ListModel::items-changed] signal has the same effect, all sections in
  * that range are invalidated, too.
  *
