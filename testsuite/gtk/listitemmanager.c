@@ -374,16 +374,6 @@ print_changes_cb (GListModel *model,
     g_test_message ("%u/%u: removing %u and adding %u items", position, g_list_model_get_n_items (model), removed, added);
 }
 
-static gboolean
-is_footer (GtkListTile *tile)
-{
-  if (tile == NULL)
-    return FALSE;
-
-  return tile->type == GTK_LIST_TILE_FOOTER ||
-         tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER;
-}
-
 static void
 check_tile_invariants_for_columns (GtkListItemManager *items,
                                    unsigned int        n_columns)
@@ -397,18 +387,17 @@ check_tile_invariants_for_columns (GtkListItemManager *items,
       g_assert (tile->type != GTK_LIST_TILE_REMOVED);
       if (tile->n_items > 1)
         {
-          unsigned int pos, col, col2;
-          gboolean before_footer;
+          unsigned int pos, col, col2, end;
 
           pos = gtk_list_tile_get_position (items, tile);
           col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
           col2 = gtk_grid_view_get_column_for_position (items, n_columns, pos + tile->n_items - 1);
-          before_footer = is_footer (gtk_rb_tree_node_get_next (tile));
+          gtk_grid_view_get_section_for_position (items, pos + tile->n_items - 1, NULL, &end);
 
           if (gtk_grid_view_is_multirow_tile (items, n_columns, tile))
             {
               g_assert_true (col == 0);
-              g_assert_true (col2 == n_columns - 1 || before_footer);
+              g_assert_true (col2 == n_columns - 1 || pos + tile->n_items == end);
             }
           else
             {
