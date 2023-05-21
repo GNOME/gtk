@@ -2,15 +2,18 @@
 
 #include "common.frag.glsl"
 #include "clip.frag.glsl"
+#include "rect.frag.glsl"
 
 layout(location = 0) in vec2 inPos;
-layout(location = 1) in vec2 inStartTexCoord;
-layout(location = 2) in vec2 inEndTexCoord;
-layout(location = 3) flat in uint inStartTexId;
-layout(location = 4) flat in uint inEndTexId;
-layout(location = 5) flat in uint inBlendMode;
+layout(location = 1) in Rect inTopRect;
+layout(location = 2) in Rect inBottomRect;
+layout(location = 3) in vec2 inTopTexCoord;
+layout(location = 4) in vec2 inBottomTexCoord;
+layout(location = 5) flat in uint inTopTexId;
+layout(location = 6) flat in uint inBottomTexId;
+layout(location = 7) flat in uint inBlendMode;
 
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out vec4 color;
 
 float
 combine (float source, float backdrop)
@@ -242,7 +245,7 @@ set_sat (vec3 c, float s)
 }
 
 vec4
-color (vec4 Cs, vec4 Cb)
+colorize (vec4 Cs, vec4 Cb)
 {
   vec3 B = set_lum (Cs.rgb, lum (Cb.rgb));
   return composite (Cs, Cb, B);
@@ -271,8 +274,12 @@ luminosity (vec4 Cs, vec4 Cb)
 
 void main()
 {
-  vec4 source = texture (textures[inStartTexId], inStartTexCoord);
-  vec4 backdrop = texture (textures[inEndTexId], inEndTexCoord);
+  float source_alpha = rect_coverage (inTopRect, inPos);
+  vec4 source = texture (textures[inTopTexId], inTopTexCoord) * source_alpha;
+  //source=vec4(1); //inTopTexCoord * 100 + 100) / 255, 0, 1);
+  float backdrop_alpha = rect_coverage (inBottomRect, inPos);
+  vec4 backdrop = texture (textures[inBottomTexId], inBottomTexCoord) * backdrop_alpha;
+  //backdrop=vec4(1, 0, 0, 1) * backdrop_alpha;
   vec4 result;
 
   if (inBlendMode == 0)
@@ -300,7 +307,7 @@ void main()
   else if (inBlendMode == 11)
     result = exclusion (source, backdrop);
   else if (inBlendMode == 12)
-    result = color (source, backdrop);
+    result = colorize (source, backdrop);
   else if (inBlendMode == 13)
     result = hue (source, backdrop);
   else if (inBlendMode == 14)
@@ -310,5 +317,5 @@ void main()
   else
     discard;
 
-  outColor = clip (inPos, result);
+  color = clip_scaled (inPos, result);
 }

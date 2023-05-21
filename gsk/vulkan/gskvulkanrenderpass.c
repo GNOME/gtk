@@ -1970,6 +1970,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                               op->render.descriptor_set_index2,
                                                               &op->render.offset,
                                                               &op->render.node->bounds,
+                                                              &gsk_blend_node_get_top_child (op->render.node)->bounds,
+                                                              &gsk_blend_node_get_bottom_child (op->render.node)->bounds,
                                                               &op->render.source_rect,
                                                               &op->render.source2_rect,
                                                               gsk_blend_node_get_blend_mode (op->render.node));

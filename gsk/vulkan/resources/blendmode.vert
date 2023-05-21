@@ -1,45 +1,36 @@
 #version 420 core
 
-#include "clip.vert.glsl"
+#include "common.vert.glsl"
+#include "rect.vert.glsl"
 
 layout(location = 0) in vec4 inRect;
-layout(location = 1) in vec4 inStartTexRect;
-layout(location = 2) in vec4 inEndTexRect;
-layout(location = 3) in uint inStartTexId;
-layout(location = 4) in uint inEndTexId;
-layout(location = 5) in uint inBlendMode;
+layout(location = 1) in vec4 inTopRect;
+layout(location = 2) in vec4 inBottomRect;
+layout(location = 3) in vec4 inTopTexRect;
+layout(location = 4) in vec4 inBottomTexRect;
+layout(location = 5) in uint inTopTexId;
+layout(location = 6) in uint inBottomTexId;
+layout(location = 7) in uint inBlendMode;
 
 layout(location = 0) out vec2 outPos;
-layout(location = 1) out vec2 outStartTexCoord;
-layout(location = 2) out vec2 outEndTexCoord;
-layout(location = 3) flat out uint outStartTexId;
-layout(location = 4) flat out uint outEndTexId;
-layout(location = 5) flat out uint outBlendMode;
-
-vec2 offsets[6] = { vec2(0.0, 0.0),
-                    vec2(1.0, 0.0),
-                    vec2(0.0, 1.0),
-                    vec2(0.0, 1.0),
-                    vec2(1.0, 0.0),
-                    vec2(1.0, 1.0) };
+layout(location = 1) flat out Rect outTopRect;
+layout(location = 2) flat out Rect outBottomRect;
+layout(location = 3) out vec2 outTopTexCoord;
+layout(location = 4) out vec2 outBottomTexCoord;
+layout(location = 5) flat out uint outTopTexId;
+layout(location = 6) flat out uint outBottomTexId;
+layout(location = 7) flat out uint outBlendMode;
 
 void main() {
-  vec4 rect = clip (inRect);
-  vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
-  gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
+  Rect r = rect_from_gsk (inRect);
+  vec2 pos = set_position_from_rect (r);
 
   outPos = pos;
-
-  vec4 texrect = vec4((rect.xy - inRect.xy) / inRect.zw,
-                      rect.zw / inRect.zw);
-  vec4 starttexrect = vec4(inStartTexRect.xy + inStartTexRect.zw * texrect.xy,
-                           inStartTexRect.zw * texrect.zw);
-  vec4 endtexrect = vec4(inEndTexRect.xy + inEndTexRect.zw * texrect.xy,
-                         inEndTexRect.zw * texrect.zw);
-
-  outStartTexCoord = starttexrect.xy + starttexrect.zw * offsets[gl_VertexIndex];
-  outEndTexCoord = endtexrect.xy + endtexrect.zw * offsets[gl_VertexIndex];
-  outStartTexId = inStartTexId;
-  outEndTexId = inEndTexId;
+  outTopRect = rect_from_gsk (inTopRect);
+  outBottomRect = rect_from_gsk (inBottomRect);
+  outTopTexCoord = scale_tex_coord (pos, r, inTopTexRect);
+  outBottomTexCoord = scale_tex_coord (pos, r, inBottomTexRect);
+  outTopTexId = inTopTexId;
+  outBottomTexId = inBottomTexId;
   outBlendMode = inBlendMode;
 }

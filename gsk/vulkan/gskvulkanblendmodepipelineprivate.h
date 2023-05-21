@@ -20,12 +20,14 @@ GskVulkanPipeline * gsk_vulkan_blend_mode_pipeline_new                 (GdkVulka
 
 void                gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *pipeline,
                                                                         guchar                     *data,
-                                                                        guint32                     start_tex_id,
-                                                                        guint32                     end_tex_id,
+                                                                        guint32                     top_tex_id,
+                                                                        guint32                     bottom_tex_id,
                                                                         const graphene_point_t     *offset,
                                                                         const graphene_rect_t      *bounds,
-                                                                        const graphene_rect_t      *start_bounds,
-                                                                        const graphene_rect_t      *end_bounds,
+                                                                        const graphene_rect_t      *top_bounds,
+                                                                        const graphene_rect_t      *bottom_bounds,
+                                                                        const graphene_rect_t      *top_tex_rect,
+                                                                        const graphene_rect_t      *bottom_tex_rect,
                                                                         GskBlendMode                blend_mode);
 gsize               gsk_vulkan_blend_mode_pipeline_draw                (GskVulkanBlendModePipeline *pipeline,
                                                                         VkCommandBuffer             command_buffer,
