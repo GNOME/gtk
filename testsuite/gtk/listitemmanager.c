@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include "gtk/gtklistitemmanagerprivate.h"
 #include "gtk/gtklistbaseprivate.h"
+#include "gtk/gtkgridviewprivate.h"
 
 static GListModel *
 create_source_model (guint min_size, guint max_size)
@@ -373,8 +374,78 @@ print_changes_cb (GListModel *model,
     g_test_message ("%u/%u: removing %u and adding %u items", position, g_list_model_get_n_items (model), removed, added);
 }
 
+static gboolean
+is_footer (GtkListTile *tile)
+{
+  if (tile == NULL)
+    return FALSE;
+
+  return tile->type == GTK_LIST_TILE_FOOTER ||
+         tile->type == GTK_LIST_TILE_UNMATCHED_FOOTER;
+}
+
 static void
-test_exhaustive (void)
+check_tile_invariants_for_columns (GtkListItemManager *items,
+                                   unsigned int        n_columns)
+{
+  GtkListTile *tile;
+
+  for (tile = gtk_list_item_manager_get_first (items);
+       tile != NULL;
+       tile = gtk_rb_tree_node_get_next (tile))
+    {
+      g_assert (tile->type != GTK_LIST_TILE_REMOVED);
+      if (tile->n_items > 1)
+        {
+          unsigned int pos, col, col2;
+          gboolean before_footer;
+
+          pos = gtk_list_tile_get_position (items, tile);
+          col = gtk_grid_view_get_column_for_position (items, n_columns, pos);
+          col2 = gtk_grid_view_get_column_for_position (items, n_columns, pos + tile->n_items - 1);
+          before_footer = is_footer (gtk_rb_tree_node_get_next (tile));
+
+          if (gtk_grid_view_is_multirow_tile (items, n_columns, tile))
+            {
+              g_assert_true (col == 0);
+              g_assert_true (col2 == n_columns - 1 || before_footer);
+            }
+          else
+            {
+              g_assert_true (col2 == col + tile->n_items - 1);
+              g_assert_true (col2 <= n_columns);
+            }
+        }
+    }
+}
+
+static void
+check_grid_view (GtkListItemManager *items)
+{
+  for (unsigned int n_columns = 1; n_columns < 10; n_columns++)
+    {
+      if (g_test_verbose ())
+        g_test_message ("GC");
+
+      gtk_list_item_manager_gc_tiles (items);
+
+      if (g_test_verbose ())
+        print_list_item_manager_tiles (items);
+
+      if (g_test_verbose ())
+        g_test_message ("grid split %u columns", n_columns);
+
+      gtk_grid_view_split_tiles_by_columns (items, n_columns);
+
+      if (g_test_verbose ())
+        print_list_item_manager_tiles (items);
+
+      check_tile_invariants_for_columns (items, n_columns);
+    }
+}
+
+static void
+test_exhaustive (gboolean grid)
 {
   GtkListItemTracker *trackers[N_TRACKERS];
   GListStore *store;
@@ -412,9 +483,14 @@ test_exhaustive (void)
       switch (g_test_rand_int_range (0, 6))
       {
         case 0:
-          if (g_test_verbose ())
-            g_test_message ("GC and checking");
-          check_list_item_manager (items, trackers, N_TRACKERS);
+          if (grid)
+            check_grid_view (items);
+          else
+            {
+              if (g_test_verbose ())
+                g_test_message ("GC and checking");
+              check_list_item_manager (items, trackers, N_TRACKERS);
+            }
           break;
 
         case 1:
@@ -484,12 +560,27 @@ test_exhaustive (void)
         }
     }
 
-  check_list_item_manager (items, trackers, N_TRACKERS);
+  if (grid)
+    check_grid_view (items);
+  else
+    check_list_item_manager (items, trackers, N_TRACKERS);
 
   for (i = 0; i < N_TRACKERS; i++)
     gtk_list_item_tracker_free (items, trackers[i]);
   g_object_unref (selection);
   gtk_window_destroy (GTK_WINDOW (widget));
+}
+
+static void
+test_exhaustive_list (void)
+{
+  test_exhaustive (FALSE);
+}
+
+static void
+test_exhaustive_grid (void)
+{
+  test_exhaustive (TRUE);
 }
 
 int
@@ -499,7 +590,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/listitemmanager/create", test_create);
   g_test_add_func ("/listitemmanager/create_with_items", test_create_with_items);
-  g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
+  g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive_list);
+  g_test_add_func ("/gridview/split", test_exhaustive_grid);
 
   return g_test_run ();
 }
