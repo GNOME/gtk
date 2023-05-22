@@ -122,5 +122,13 @@ GDK_AVAILABLE_IN_4_12
 GtkListItemFactory *
                 gtk_column_view_get_row_factory                 (GtkColumnView          *self);
 
+
+GDK_AVAILABLE_IN_4_12
+void            gtk_column_view_set_header_factory              (GtkColumnView          *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_4_12
+GtkListItemFactory *
+                gtk_column_view_get_header_factory              (GtkColumnView          *self);
+
 G_END_DECLS
 
