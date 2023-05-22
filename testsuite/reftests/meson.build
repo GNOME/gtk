@@ -427,6 +427,8 @@ flaky = [
   'quit-mnemonic.ui',
   'symbolic-icon-translucent-color.ui',
   'window-height-for-width.ui',
+  'box-shadow-changes-modify-clip.ui',
+  'sibling-pseudoclasses.ui',
 ]
 xfail = [
 ]
