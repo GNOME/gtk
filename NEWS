@@ -1,5 +1,52 @@
-Overview of Changes in GTK+ 3.24.38, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.38, 21-05-2023
 ===============================================
+
+* GtkFileChooser:
+ - Avoid warnings with GLib 2.76
+
+* Theme:
+ - Set caret color in the dark theme
+
+* Windows:
+ - Fix running under GLES
+
+* Wayland:
+ - Notify on initial setting changes
+ - Don't crash on 0 size cursors
+ - Don't crash if xdg_activation_v1 is missing
+
+* Debugging:
+ - Show more information in the inspector
+
+* Translation updates
+ Abkhazian
+ Basque
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Danish
+ Dutch
+ French
+ Galician
+ Georgian
+ German
+ Hebrew
+ Hungarian
+ Indonesian
+ ITalian
+ Korean
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in GTK+ 3.24.37, 02-03-2023
 ===============================================
