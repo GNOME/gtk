@@ -75,7 +75,7 @@ static GStatBuf cache_dir_stat;
 static gboolean cache_up_to_date;
 
 static int check_dir_mtime (const char        *dir,
-                            const GStatBuf    *sb,
+                            const struct stat *sb,
                             int                tf)
 {
   if (tf != FTW_NS && sb->st_mtime > cache_dir_stat.st_mtime)
