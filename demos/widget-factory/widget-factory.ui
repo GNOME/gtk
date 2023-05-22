@@ -2244,20 +2244,24 @@ microphone-sensitivity-medium-symbolic</property>
                         <child>
                           <object class="GtkBox">
                             <property name="spacing">6</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="GtkBox" id="lockbox">
                                 <property name="hexpand">1</property>
                                 <property name="spacing">6</property>
+                                <property name="valign">center</property>
                                 <child>
                                   <object class="GtkMenuButton" id="open_menubutton">
                                     <property name="halign">3</property>
                                     <property name="popover">open_popover</property>
                                     <property name="label">Open</property>
+                                    <property name="valign">center</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkToggleButton" id="record_button">
                                     <property name="halign">3</property>
+                                    <property name="valign">center</property>
                                     <signal name="toggled" handler="on_record_button_toggled"/>
                                     <style>
                                       <class name="text-button"/>
@@ -2267,16 +2271,19 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="spacing">6</property>
+                                        <property name="valign">center</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="valign">4</property>
                                             <property name="icon-name">media-record-symbolic</property>
+                                            <property name="valign">center</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="valign">4</property>
                                             <property name="label">Record</property>
+                                            <property name="valign">center</property>
                                           </object>
                                         </child>
                                       </object>
@@ -2285,6 +2292,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkBox">
+                                    <property name="valign">center</property>
                                     <style>
                                       <class name="linked"/>
                                     </style>
@@ -2292,12 +2300,14 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkToggleButton" id="grid_button">
                                         <property name="active">1</property>
                                         <property name="icon-name">view-grid-symbolic</property>
+                                        <property name="valign">center</property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkToggleButton" id="list_button">
                                         <property name="group">grid_button</property>
                                         <property name="icon-name">view-list-symbolic</property>
+                                        <property name="valign">center</property>
                                       </object>
                                     </child>
                                   </object>
@@ -2305,6 +2315,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <child>
                                   <object class="GtkButton" id="circular_button">
                                     <property name="icon-name">emblem-system-symbolic</property>
+                                    <property name="valign">center</property>
                                     <style>
                                       <class name="circular"/>
                                     </style>
@@ -2313,12 +2324,15 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLockButton" id="lockbutton"/>
+                              <object class="GtkLockButton" id="lockbutton">
+                                <property name="valign">center</property>
+                              </object>
                             </child>
                             <child>
                               <object class="GtkMenuButton">
                                 <property name="icon-name">view-more-symbolic</property>
                                 <property name="menu-model">new_style_menu_model</property>
+                                <property name="valign">center</property>
                               </object>
                             </child>
                           </object>
