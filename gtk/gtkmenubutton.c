@@ -1526,7 +1526,7 @@ gtk_menu_button_get_child (GtkMenuButton *menu_button)
  * @menu_button: a `GtkMenuButton`
  * @active: whether the menu button is active
  *
- * Sets whether menu button acts is active.
+ * Sets whether the menu button is active.
  *
  * Since: 4.10
  */
