@@ -1668,6 +1668,16 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                              &op->render.offset,
                                                                              &tex_bounds);
             get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
+            if (!op->render.source)
+              {
+                op->render.source = op->render.source2;
+                op->render.source_rect = *graphene_rect_zero();
+              }
+            if (!op->render.source2)
+              {
+                op->render.source2 = op->render.source;
+                op->render.source2_rect = *graphene_rect_zero();
+              }
           }
           break;
 
@@ -1696,6 +1706,16 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                              &op->render.offset,
                                                                              &tex_bounds);
             get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
+            if (!op->render.source)
+              {
+                op->render.source = op->render.source2;
+                op->render.source_rect = *graphene_rect_zero();
+              }
+            if (!op->render.source2)
+              {
+                op->render.source2 = op->render.source;
+                op->render.source2_rect = *graphene_rect_zero();
+              }
           }
           break;
 
