@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -207,7 +207,7 @@ gtk_drag_source_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkDragSource *source = GTK_DRAG_SOURCE (object);
-  
+
   switch (prop_id)
     {
     case PROP_CONTENT:
@@ -424,13 +424,13 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_SIGNAL_RUN_LAST,
                     0,
                     NULL, NULL,
-                    _gtk_marshal_OBJECT__BOOLEAN,
+                    _gtk_marshal_VOID__OBJECT_BOOLEAN,
                     G_TYPE_NONE, 2,
                     GDK_TYPE_DRAG,
                     G_TYPE_BOOLEAN);
   g_signal_set_va_marshaller (signals[DRAG_END],
                               GTK_TYPE_DRAG_SOURCE,
-                              _gtk_marshal_OBJECT__BOOLEANv);
+                              _gtk_marshal_VOID__OBJECT_BOOLEANv);
 
   /**
    * GtkDragSource::drag-cancel:
