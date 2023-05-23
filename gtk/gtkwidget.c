@@ -47,7 +47,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtknative.h"
-#include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
