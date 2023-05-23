@@ -13,7 +13,7 @@ struct _GskVulkanTextureInstance
 {
   float rect[4];
   float tex_rect[4];
-  guint32 tex_id;
+  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanTexturePipeline, gsk_vulkan_texture_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -44,7 +44,7 @@ gsk_vulkan_texture_pipeline_get_input_state_create_info (GskVulkanPipeline *self
       {
           .location = 2,
           .binding = 0,
-          .format = VK_FORMAT_R32_UINT,
+          .format = VK_FORMAT_R32G32_UINT,
           .offset = G_STRUCT_OFFSET (GskVulkanTextureInstance, tex_id),
       }
   };
@@ -94,7 +94,7 @@ gsk_vulkan_texture_pipeline_new (GdkVulkanContext *context,
 void
 gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipeline,
                                                  guchar                   *data,
-                                                 guint32                   tex_id,
+                                                 guint32                   tex_id[2],
                                                  const graphene_point_t   *offset,
                                                  const graphene_rect_t    *rect,
                                                  const graphene_rect_t    *tex_rect)
@@ -109,7 +109,8 @@ gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipel
   instance->tex_rect[1] = tex_rect->origin.y;
   instance->tex_rect[2] = tex_rect->size.width;
   instance->tex_rect[3] = tex_rect->size.height;
-  instance->tex_id = tex_id;
+  instance->tex_id[0] = tex_id[0];
+  instance->tex_id[1] = tex_id[1];
 }
 
 gsize

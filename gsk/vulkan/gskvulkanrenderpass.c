@@ -74,8 +74,8 @@ struct _GskVulkanOpRender
   GskVulkanImage      *source; /* source image to render */
   GskVulkanImage      *source2; /* second source image to render (if relevant) */
   gsize                vertex_offset; /* offset into vertex buffer */
-  gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
-  gsize                descriptor_set_index2; /* descriptor index for the second source (if relevant) */
+  guint32              image_descriptor[2]; /* index into descriptor for the (image, sampler) */
+  guint32              image_descriptor2[2]; /* index into descriptor for the 2nd image (if relevant) */
   graphene_rect_t      source_rect; /* area that source maps to */
   graphene_rect_t      source2_rect; /* area that source2 maps to */
 };
@@ -89,7 +89,7 @@ struct _GskVulkanOpText
   GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
-  gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
+  guint32              image_descriptor[2]; /* index into descriptor for the (image, sampler) */
   guint                texture_index; /* index of the texture in the glyph cache */
   guint                start_glyph; /* the first glyph in nodes glyphstring that we render */
   guint                num_glyphs; /* number of *non-empty* glyphs (== instances) we render */
@@ -1818,7 +1818,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_TEXTURE:
           gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                            data + op->render.vertex_offset,
-                                                           op->render.descriptor_set_index,
+                                                           op->render.image_descriptor,
                                                            &op->render.offset,
                                                            &op->render.node->bounds,
                                                            &op->render.source_rect);
@@ -1827,7 +1827,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_REPEAT:
           gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                            data + op->render.vertex_offset,
-                                                           op->render.descriptor_set_index,
+                                                           op->render.image_descriptor,
                                                            &op->render.offset,
                                                            &op->render.node->bounds,
                                                            &op->render.source_rect);
@@ -1838,7 +1838,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                         data + op->text.vertex_offset,
                                                         GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                         &op->text.node->bounds,
-                                                        op->text.descriptor_set_index,
+                                                        op->text.image_descriptor,
                                                         (PangoFont *)gsk_text_node_get_font (op->text.node),
                                                         gsk_text_node_get_num_glyphs (op->text.node),
                                                         gsk_text_node_get_glyphs (op->text.node, NULL),
@@ -1857,7 +1857,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                               data + op->text.vertex_offset,
                                                               GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                               &op->text.node->bounds,
-                                                              op->text.descriptor_set_index,
+                                                              op->text.image_descriptor,
                                                               (PangoFont *)gsk_text_node_get_font (op->text.node),
                                                               gsk_text_node_get_num_glyphs (op->text.node),
                                                               gsk_text_node_get_glyphs (op->text.node, NULL),
@@ -1906,7 +1906,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
 
             gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
                                                             data + op->render.vertex_offset,
-                                                            op->render.descriptor_set_index,
+                                                            op->render.image_descriptor,
                                                             &op->render.offset,
                                                             &op->render.node->bounds,
                                                             &op->render.source_rect,
@@ -1918,7 +1918,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_BLUR:
           gsk_vulkan_blur_pipeline_collect_vertex_data (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline),
                                                         data + op->render.vertex_offset,
-                                                        op->render.descriptor_set_index,
+                                                        op->render.image_descriptor,
                                                         &op->render.offset,
                                                         &op->render.node->bounds,
                                                         &op->render.source_rect,
@@ -1928,7 +1928,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_COLOR_MATRIX:
           gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
                                                           data + op->render.vertex_offset,
-                                                          op->render.descriptor_set_index,
+                                                          op->render.image_descriptor,
                                                           &op->render.offset,
                                                           &op->render.node->bounds,
                                                           &op->render.source_rect,
@@ -1972,8 +1972,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_CROSS_FADE:
           gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GSK_VULKAN_CROSS_FADE_PIPELINE (op->render.pipeline),
                                                               data + op->render.vertex_offset,
-                                                              op->render.descriptor_set_index,
-                                                              op->render.descriptor_set_index2,
+                                                              op->render.image_descriptor,
+                                                              op->render.image_descriptor2,
                                                               &op->render.offset,
                                                               &op->render.node->bounds,
                                                               &gsk_cross_fade_node_get_start_child (op->render.node)->bounds,
@@ -1986,8 +1986,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_BLEND_MODE:
           gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_MODE_PIPELINE (op->render.pipeline),
                                                               data + op->render.vertex_offset,
-                                                              op->render.descriptor_set_index,
-                                                              op->render.descriptor_set_index2,
+                                                              op->render.image_descriptor,
+                                                              op->render.image_descriptor2,
                                                               &op->render.offset,
                                                               &op->render.node->bounds,
                                                               &gsk_blend_node_get_top_child (op->render.node)->bounds,
@@ -2065,25 +2065,34 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_COLOR_MATRIX:
           if (op->render.source)
-            op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
+            {
+              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
+              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
+            }
           break;
 
         case GSK_VULKAN_OP_REPEAT:
           if (op->render.source)
-            op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, TRUE);
+            {
+              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
+              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_REPEAT);
+            }
           break;
 
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
-          op->text.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->text.source, FALSE);
+          op->text.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->text.source);
+          op->text.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
           if (op->render.source && op->render.source2)
             {
-              op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
-              op->render.descriptor_set_index2 = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source2, FALSE);
+              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
+              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
+              op->render.image_descriptor2[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source2);
+              op->render.image_descriptor2[1] = op->render.image_descriptor2[1];
             }
           break;
 

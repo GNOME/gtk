@@ -7,7 +7,7 @@ layout(location = 0) in vec2 inPos;
 layout(location = 1) in flat vec2 inSize;
 layout(location = 2) in vec2 inTexCoord;
 layout(location = 3) in float inRadius;
-layout(location = 4) in flat uint inTexId;
+layout(location = 4) in flat uvec2 inTexId;
 
 layout(location = 0) out vec4 color;
 
@@ -38,7 +38,7 @@ vec4 blur_pixel (in vec2 uv)
           float fx = Gaussian (inRadius, float(x) - float(half_samples_x));
           float offset_x = float(x - half_samples_x) * pixel_size_x;
           total += fx * fy;
-          ret += texture(textures[inTexId], uv + vec2(offset_x, offset_y)) * fx * fy;
+          ret += texture(get_sampler (inTexId), uv + vec2(offset_x, offset_y)) * fx * fy;
         }
     }
   return ret / total;

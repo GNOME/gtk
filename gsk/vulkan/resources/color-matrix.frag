@@ -7,7 +7,7 @@ layout(location = 0) in vec2 inPos;
 layout(location = 1) in vec2 inTexCoord;
 layout(location = 2) in flat mat4 inColorMatrix;
 layout(location = 6) in flat vec4 inColorOffset;
-layout(location = 7) in flat uint inTexId;
+layout(location = 7) in flat uvec2 inTexId;
 
 layout(location = 0) out vec4 color;
 
@@ -29,5 +29,5 @@ color_matrix (vec4 color, mat4 color_matrix, vec4 color_offset)
 
 void main()
 {
-  color = clip (inPos, color_matrix (texture (textures[inTexId], inTexCoord), inColorMatrix, inColorOffset));
+  color = clip (inPos, color_matrix (texture (get_sampler (inTexId), inTexCoord), inColorMatrix, inColorOffset));
 }

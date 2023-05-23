@@ -19,7 +19,7 @@ GskVulkanPipeline *     gsk_vulkan_effect_pipeline_new                  (GdkVulk
 
 void                    gsk_vulkan_effect_pipeline_collect_vertex_data  (GskVulkanEffectPipeline        *pipeline,
                                                                          guchar                         *data,
-                                                                         guint32                         tex_id,
+                                                                         guint32                         tex_id[2],
                                                                          const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_rect_t          *tex_rect,

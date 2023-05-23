@@ -22,7 +22,7 @@ void                    gsk_vulkan_text_pipeline_collect_vertex_data   (GskVulka
                                                                         guchar                        *data,
                                                                         GskVulkanRenderer             *renderer,
                                                                         const graphene_rect_t         *rect,
-                                                                        guint32                        tex_id,
+                                                                        guint32                        tex_id[2],
                                                                         PangoFont                     *font,
                                                                         guint                          total_glyphs,
                                                                         const PangoGlyphInfo          *glyphs,

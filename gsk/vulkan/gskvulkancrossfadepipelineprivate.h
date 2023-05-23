@@ -19,8 +19,8 @@ GskVulkanPipeline * gsk_vulkan_cross_fade_pipeline_new                 (GdkVulka
 
 void                gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                                         guchar                     *data,
-                                                                        guint32                     start_tex_id,
-                                                                        guint32                     end_tex_id,
+                                                                        guint32                     start_tex_id[2],
+                                                                        guint32                     end_tex_id[2],
                                                                         const graphene_point_t     *offset,
                                                                         const graphene_rect_t      *bounds,
                                                                         const graphene_rect_t      *start_bounds,

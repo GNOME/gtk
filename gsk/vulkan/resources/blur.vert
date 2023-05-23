@@ -6,13 +6,13 @@
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
 layout(location = 2) in float inRadius;
-layout(location = 3) in uint inTexId;
+layout(location = 3) in uvec2 inTexId;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out flat vec2 outSize;
 layout(location = 2) out vec2 outTexCoord;
 layout(location = 3) out flat float outRadius;
-layout(location = 4) out flat uint outTexId;
+layout(location = 4) out flat uvec2 outTexId;
 
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),

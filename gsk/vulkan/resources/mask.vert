@@ -5,12 +5,12 @@
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec4 inTexRect;
 layout(location = 2) in vec4 inColor;
-layout(location = 3) in uint inTexId;
+layout(location = 3) in uvec2 inTexId;
 
 layout(location = 0) out vec2 outPos;
 layout(location = 1) out vec2 outTexCoord;
 layout(location = 2) out flat vec4 outColor;
-layout(location = 3) out flat uint outTexId;
+layout(location = 3) out flat uvec2 outTexId;
 
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),

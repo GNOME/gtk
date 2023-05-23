@@ -9,8 +9,8 @@ layout(location = 1) in Rect inTopRect;
 layout(location = 2) in Rect inBottomRect;
 layout(location = 3) in vec2 inTopTexCoord;
 layout(location = 4) in vec2 inBottomTexCoord;
-layout(location = 5) flat in uint inTopTexId;
-layout(location = 6) flat in uint inBottomTexId;
+layout(location = 5) flat in uvec2 inTopTexId;
+layout(location = 6) flat in uvec2 inBottomTexId;
 layout(location = 7) flat in uint inBlendMode;
 
 layout(location = 0) out vec4 color;
@@ -275,11 +275,9 @@ luminosity (vec4 Cs, vec4 Cb)
 void main()
 {
   float source_alpha = rect_coverage (inTopRect, inPos);
-  vec4 source = texture (textures[inTopTexId], inTopTexCoord) * source_alpha;
-  //source=vec4(1); //inTopTexCoord * 100 + 100) / 255, 0, 1);
+  vec4 source = texture (get_sampler (inTopTexId), inTopTexCoord) * source_alpha;
   float backdrop_alpha = rect_coverage (inBottomRect, inPos);
-  vec4 backdrop = texture (textures[inBottomTexId], inBottomTexCoord) * backdrop_alpha;
-  //backdrop=vec4(1, 0, 0, 1) * backdrop_alpha;
+  vec4 backdrop = texture (get_sampler (inBottomTexId), inBottomTexCoord) * backdrop_alpha;
   vec4 result;
 
   if (inBlendMode == 0)

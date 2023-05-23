@@ -51,6 +51,11 @@ typedef enum {
   GSK_VULKAN_N_PIPELINES
 } GskVulkanPipelineType;
 
+typedef enum {
+  GSK_VULKAN_SAMPLER_DEFAULT,
+  GSK_VULKAN_SAMPLER_REPEAT
+} GskVulkanRenderSampler;
+
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
@@ -76,9 +81,10 @@ void                    gsk_vulkan_render_upload                        (GskVulk
 
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          GskVulkanPipelineType   pipeline_type);
-gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *source,
-                                                                         gboolean                repeat);
+gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulkanRender        *self,
+                                                                         GskVulkanRenderSampler  render_sampler);
+gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
+                                                                         GskVulkanImage         *source);
 VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);

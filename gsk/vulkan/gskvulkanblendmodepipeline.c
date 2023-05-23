@@ -16,8 +16,8 @@ struct _GskVulkanBlendModeInstance
   float bottom_rect[4];
   float top_tex_rect[4];
   float bottom_tex_rect[4];
-  guint32 top_tex_id;
-  guint32 bottom_tex_id;
+  guint32 top_tex_id[2];
+  guint32 bottom_tex_id[2];
   guint32 blend_mode;
 };
 
@@ -73,13 +73,13 @@ gsk_vulkan_blend_mode_pipeline_get_input_state_create_info (GskVulkanPipeline *s
       {
           .location = 6,
           .binding = 0,
-          .format = VK_FORMAT_R32_UINT,
+          .format = VK_FORMAT_R32G32_UINT,
           .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, bottom_tex_id),
       },
       {
           .location = 7,
           .binding = 0,
-          .format = VK_FORMAT_R32_UINT,
+          .format = VK_FORMAT_R32G32_UINT,
           .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, blend_mode),
       }
   };
@@ -129,8 +129,8 @@ gsk_vulkan_blend_mode_pipeline_new (GdkVulkanContext        *context,
 void
 gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *pipeline,
                                                     guchar                     *data,
-                                                    guint32                     top_tex_id,
-                                                    guint32                     bottom_tex_id,
+                                                    guint32                     top_tex_id[2],
+                                                    guint32                     bottom_tex_id[2],
                                                     const graphene_point_t     *offset,
                                                     const graphene_rect_t      *bounds,
                                                     const graphene_rect_t      *top_bounds,
@@ -166,8 +166,10 @@ gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GskVulkanBlendModePipeline *
   instance->bottom_tex_rect[2] = bottom_tex_rect->size.width;
   instance->bottom_tex_rect[3] = bottom_tex_rect->size.height;
 
-  instance->top_tex_id = top_tex_id;
-  instance->bottom_tex_id = bottom_tex_id;
+  instance->top_tex_id[0] = top_tex_id[0];
+  instance->top_tex_id[1] = top_tex_id[1];
+  instance->bottom_tex_id[0] = bottom_tex_id[0];
+  instance->bottom_tex_id[1] = bottom_tex_id[1];
   instance->blend_mode = blend_mode;
 }
 
