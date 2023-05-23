@@ -387,6 +387,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
                                        GskRenderNode             *node)
 {
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_COLOR,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -401,7 +402,6 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Color nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_COLOR;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -416,6 +416,7 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_LINEAR_GRADIENT,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -434,7 +435,6 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
   else
     FALLBACK ("Linear gradient nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_LINEAR_GRADIENT;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -449,6 +449,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_BORDER,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -462,7 +463,6 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Border nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_BORDER;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -477,6 +477,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_TEXTURE,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -490,7 +491,6 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Texture nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_TEXTURE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -533,6 +533,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_INSET_SHADOW,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -548,7 +549,6 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Inset shadow nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_INSET_SHADOW;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -563,6 +563,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_OUTSET_SHADOW,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -578,7 +579,6 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Outset shadow nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_OUTSET_SHADOW;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -747,6 +747,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_OPACITY,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -760,7 +761,6 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Opacity nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_OPACITY;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -775,6 +775,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_COLOR_MATRIX,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -788,7 +789,6 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Color matrix nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_COLOR_MATRIX;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -944,6 +944,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_REPEAT,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -960,7 +961,6 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Repeat nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_REPEAT;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -975,6 +975,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_BLEND_MODE,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -988,7 +989,6 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Blend nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_BLEND_MODE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -1002,6 +1002,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
                                             GskRenderNode             *node)
 {
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_CROSS_FADE,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -1016,7 +1017,6 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Cross fade nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_CROSS_FADE;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -1124,6 +1124,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_BLUR,
     .render.node = node,
     .render.offset = state->offset,
   };
@@ -1137,7 +1138,6 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
   else
     FALLBACK ("Blur nodes can't deal with clip type %u", state->clip.type);
 
-  op.type = GSK_VULKAN_OP_BLUR;
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
