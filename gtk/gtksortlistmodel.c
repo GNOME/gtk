@@ -1246,6 +1246,9 @@ gtk_sort_list_model_set_section_sorter (GtkSortListModel *self,
   g_set_object (&self->section_sorter, sorter);
   gtk_sort_list_model_ensure_real_sorter (self);
 
+  if (self->n_items > 0)
+    gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), 0, self->n_items);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SECTION_SORTER]);
 }
 
