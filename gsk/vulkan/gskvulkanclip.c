@@ -40,8 +40,6 @@ gsk_vulkan_clip_init_after_intersection (GskVulkanClip              *self,
     self->type = GSK_VULKAN_CLIP_ALL_CLIPPED;
   else if (gsk_rounded_rect_is_rectilinear (&self->rect))
     self->type = GSK_VULKAN_CLIP_RECT;
-  else if (gsk_rounded_rect_is_circular (&self->rect))
-    self->type = GSK_VULKAN_CLIP_ROUNDED_CIRCULAR;
   else
     self->type = GSK_VULKAN_CLIP_ROUNDED;
 
@@ -86,7 +84,6 @@ gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
         dest->type = GSK_VULKAN_CLIP_ALL_CLIPPED;
       break;
 
-    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       res = gsk_rounded_rect_intersect_with_rect (&src->rect, rect, &dest->rect);
       if (!gsk_vulkan_clip_init_after_intersection (dest, res))
@@ -126,7 +123,7 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
       break;
 
     case GSK_VULKAN_CLIP_NONE:
-      dest->type = gsk_rounded_rect_is_circular (rounded) ? GSK_VULKAN_CLIP_ROUNDED_CIRCULAR : GSK_VULKAN_CLIP_ROUNDED;
+      dest->type = GSK_VULKAN_CLIP_ROUNDED;
       gsk_rounded_rect_init_copy (&dest->rect, rounded);
       break;
 
@@ -136,7 +133,6 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
         return FALSE;
       break;
 
-    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       res = gsk_rounded_rect_intersection (&src->rect, rounded, &dest->rect);
       if (!gsk_vulkan_clip_init_after_intersection (dest, res))
@@ -185,7 +181,6 @@ gsk_vulkan_clip_transform (GskVulkanClip         *dest,
       return TRUE;
 
     case GSK_VULKAN_CLIP_RECT:
-    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       switch (gsk_transform_get_category (transform))
         {
@@ -262,7 +257,6 @@ gsk_vulkan_clip_intersects_rect (const GskVulkanClip    *self,
     case GSK_VULKAN_CLIP_RECT:
       return graphene_rect_intersection (&self->rect.bounds, &r, NULL);
 
-    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       return gsk_rounded_rect_intersects_rect (&self->rect, &r);
     }
@@ -290,7 +284,6 @@ gsk_vulkan_clip_contains_rect (const GskVulkanClip    *self,
     case GSK_VULKAN_CLIP_RECT:
       return graphene_rect_contains_rect (&self->rect.bounds, &r);
 
-    case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       return gsk_rounded_rect_contains_rect (&self->rect, &r);
     }

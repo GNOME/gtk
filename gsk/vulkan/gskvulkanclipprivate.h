@@ -18,10 +18,6 @@ typedef enum {
   GSK_VULKAN_CLIP_NONE,
   /* The clip is a rectangular area */
   GSK_VULKAN_CLIP_RECT,
-  /* The clip is a rounded rectangle, and for every corner
-   * corner.width == corner.height is true
-   */
-  GSK_VULKAN_CLIP_ROUNDED_CIRCULAR,
   /* The clip is a rounded rectangle */
   GSK_VULKAN_CLIP_ROUNDED
 } GskVulkanClipComplexity;
