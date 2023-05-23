@@ -194,10 +194,11 @@ gtk_list_model_get_section (GListModel *self,
  * @n_items: the number of changed items
  *
  * This function emits the [signal@Gtk.SectionModel::section-changed]
- * signal to notify about changes to sections. It must cover all
- * positions that used to be a section start or that are now a section
- * start. It does not have to cover all positions for which the section
- * has changed.
+ * signal to notify about changes to sections.
+ *
+ * It must cover all positions that used to be a section start or that
+ * are now a section start. It does not have to cover all positions for
+ * which the section has changed.
  *
  * The [signal@Gio.ListModel::items-changed] implies the effect of the
  * [signal@Gtk.SectionModel::section-changed] signal for all the items
