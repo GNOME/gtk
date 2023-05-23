@@ -301,13 +301,27 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
 }
 
 static void
+gtk_single_selection_sections_changed_cb (GtkSectionModel *model,
+                                          unsigned int     position,
+                                          unsigned int     n_items,
+                                          gpointer         user_data)
+{
+  GtkSingleSelection *self = GTK_SINGLE_SELECTION (user_data);
+
+  gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), position, n_items);
+}
+
+static void
 gtk_single_selection_clear_model (GtkSingleSelection *self)
 {
   if (self->model == NULL)
     return;
 
-  g_signal_handlers_disconnect_by_func (self->model, 
+  g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_single_selection_items_changed_cb,
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->model,
+                                        gtk_single_selection_sections_changed_cb,
                                         self);
   g_clear_object (&self->model);
 }
@@ -558,7 +572,7 @@ gtk_single_selection_set_model (GtkSingleSelection *self,
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  
+
   n_items_before = self->model ? g_list_model_get_n_items (self->model) : 0;
   gtk_single_selection_clear_model (self);
 
@@ -567,6 +581,9 @@ gtk_single_selection_set_model (GtkSingleSelection *self,
       self->model = g_object_ref (model);
       g_signal_connect (self->model, "items-changed",
                         G_CALLBACK (gtk_single_selection_items_changed_cb), self);
+      if (GTK_IS_SECTION_MODEL (self->model))
+        g_signal_connect (self->model, "sections-changed",
+                          G_CALLBACK (gtk_single_selection_sections_changed_cb), self);
       gtk_single_selection_items_changed_cb (self->model,
                                              0,
                                              n_items_before,
