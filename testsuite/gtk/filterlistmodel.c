@@ -479,6 +479,17 @@ filter_func (gpointer item,
 }
 
 static void
+sections_changed (GtkSectionModel *model,
+                  unsigned int     start,
+                  unsigned int     end,
+                  gpointer         user_data)
+{
+  gboolean *got_it = user_data;
+
+  *got_it = TRUE;
+}
+
+static void
 test_sections (void)
 {
   GtkStringList *list;
@@ -499,6 +510,7 @@ test_sections (void)
   guint s, e;
   GtkFilterListModel *filtered;
   GtkFilter *filter;
+  gboolean got_it = FALSE;
 
   list = gtk_string_list_new (strings);
   sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
@@ -540,6 +552,10 @@ test_sections (void)
   gtk_section_model_get_section (GTK_SECTION_MODEL (filtered), 3, &s, &e);
   g_assert_cmpint (s, ==, 3);
   g_assert_cmpint (e, ==, 4);
+
+  g_signal_connect (filtered, "sections-changed", G_CALLBACK (sections_changed), &got_it);
+  gtk_sort_list_model_set_section_sorter (GTK_SORT_LIST_MODEL (sorted), NULL);
+  g_assert_true (got_it);
 
   g_object_unref (filtered);
   g_object_unref (sorted);
