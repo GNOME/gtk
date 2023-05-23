@@ -43,6 +43,7 @@ typedef enum {
   GSK_VULKAN_OP_FALLBACK_CLIP,
   GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP,
   GSK_VULKAN_OP_TEXTURE,
+  GSK_VULKAN_OP_TEXTURE_SCALE,
   GSK_VULKAN_OP_COLOR,
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_OPACITY,
@@ -490,6 +491,34 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
     FALLBACK ("Texture nodes can't deal with clip type %u", state->clip.type);
 
   op.type = GSK_VULKAN_OP_TEXTURE;
+  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  g_array_append_val (self->render_ops, op);
+
+  return TRUE;
+}
+
+static inline gboolean
+gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
+                                               GskVulkanRender           *render,
+                                               const GskVulkanParseState *state,
+                                               GskRenderNode             *node)
+{
+  GskVulkanPipelineType pipeline_type;
+  GskVulkanOp op = {
+    .render.type = GSK_VULKAN_OP_TEXTURE_SCALE,
+    .render.node = node,
+    .render.offset = state->offset,
+  };
+
+  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
+    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
+  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
+    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
+  else if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
+  else
+    FALLBACK ("Texture nodes can't deal with clip type %u", state->clip.type);
+
   op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
@@ -1162,7 +1191,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[N_RENDER_NODES] = {
   [GSK_BLUR_NODE] = gsk_vulkan_render_pass_add_blur_node,
   [GSK_DEBUG_NODE] = gsk_vulkan_render_pass_add_debug_node,
   [GSK_GL_SHADER_NODE] = NULL,
-  [GSK_TEXTURE_SCALE_NODE] = NULL,
+  [GSK_TEXTURE_SCALE_NODE] = gsk_vulkan_render_pass_add_texture_scale_node,
   [GSK_MASK_NODE] = NULL,
 };
 
@@ -1544,6 +1573,16 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           }
           break;
 
+        case GSK_VULKAN_OP_TEXTURE_SCALE:
+          {
+            op->render.source = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                                       gsk_texture_scale_node_get_texture (op->render.node),
+                                                                       uploader);
+            op->render.source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
+            gsk_vulkan_render_add_cleanup_image (render, op->render.source);
+          }
+          break;
+
         case GSK_VULKAN_OP_OPACITY:
           {
             GskRenderNode *child = gsk_opacity_node_get_child (op->render.node);
@@ -1761,6 +1800,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_TEXTURE:
+        case GSK_VULKAN_OP_TEXTURE_SCALE:
         case GSK_VULKAN_OP_REPEAT:
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
@@ -1816,6 +1856,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_TEXTURE:
+        case GSK_VULKAN_OP_TEXTURE_SCALE:
           gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                            data + op->render.vertex_offset,
                                                            op->render.image_descriptor,
@@ -2071,6 +2112,25 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
             }
           break;
 
+        case GSK_VULKAN_OP_TEXTURE_SCALE:
+          if (op->render.source)
+            {
+              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
+              switch (gsk_texture_scale_node_get_filter (op->render.node))
+                {
+                default:
+                  g_assert_not_reached ();
+                case GSK_SCALING_FILTER_LINEAR:
+                case GSK_SCALING_FILTER_TRILINEAR:
+                  op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
+                  break;
+                case GSK_SCALING_FILTER_NEAREST:
+                  op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_NEAREST);
+                  break;
+                }
+            }
+          break;
+
         case GSK_VULKAN_OP_REPEAT:
           if (op->render.source)
             {
@@ -2144,6 +2204,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_TEXTURE:
+        case GSK_VULKAN_OP_TEXTURE_SCALE:
         case GSK_VULKAN_OP_REPEAT:
           if (!op->render.source)
             continue;

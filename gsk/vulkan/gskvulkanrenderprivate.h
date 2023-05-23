@@ -53,7 +53,8 @@ typedef enum {
 
 typedef enum {
   GSK_VULKAN_SAMPLER_DEFAULT,
-  GSK_VULKAN_SAMPLER_REPEAT
+  GSK_VULKAN_SAMPLER_REPEAT,
+  GSK_VULKAN_SAMPLER_NEAREST
 } GskVulkanRenderSampler;
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,

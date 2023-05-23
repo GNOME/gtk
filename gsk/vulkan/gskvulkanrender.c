@@ -58,7 +58,7 @@ struct _GskVulkanRender
 
   GskVulkanImage *target;
 
-  VkSampler samplers[2];
+  VkSampler samplers[3];
 
   GList *render_passes;
   GSList *cleanup_images;
@@ -271,6 +271,21 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                  },
                                  NULL,
                                  &self->samplers[GSK_VULKAN_SAMPLER_REPEAT]);
+  
+  GSK_VK_CHECK (vkCreateSampler, device,
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = VK_FILTER_NEAREST,
+                                     .minFilter = VK_FILTER_NEAREST,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &self->samplers[GSK_VULKAN_SAMPLER_NEAREST]);
   
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
