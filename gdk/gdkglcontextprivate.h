@@ -34,6 +34,11 @@ typedef enum {
   GDK_GL_CGL
 } GdkGLBackend;
 
+/* The maximum amount of buffers we track update regions for.
+ * Note that this is equal to the max buffer age value we
+ * can provide a damage region for */
+#define GDK_GL_MAX_TRACKED_BUFFERS 2
+
 #define GDK_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
 #define GDK_IS_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GL_CONTEXT))
 #define GDK_GL_CONTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
@@ -45,7 +50,7 @@ struct _GdkGLContext
   GdkDrawContext parent_instance;
 
   /* We store the old drawn areas to support buffer-age optimizations */
-  cairo_region_t *old_updated_area[2];
+  cairo_region_t *old_updated_area[GDK_GL_MAX_TRACKED_BUFFERS];
 };
 
 struct _GdkGLContextClass

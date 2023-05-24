@@ -287,29 +287,20 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
       glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (self),
                         GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
-      switch (buffer_age)
+      if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
         {
-          case 1:
-            return cairo_region_create ();
-            break;
+          cairo_region_t *damage = cairo_region_create ();
+          int i;
 
-          case 2:
-            if (context->old_updated_area[0])
-              return cairo_region_copy (context->old_updated_area[0]);
-            break;
+          for (i = 0; i < buffer_age - 1; i++)
+            {
+              if (context->old_updated_area[i] == NULL)
+                return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->get_damage (context);
 
-          case 3:
-            if (context->old_updated_area[0] &&
-                context->old_updated_area[1])
-              {
-                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
-                cairo_region_union (damage, context->old_updated_area[1]);
-                return damage;
-              }
-            break;
+              cairo_region_union (damage, context->old_updated_area[i]);
+            }
 
-          default:
-            ;
+          return damage;
         }
     }
 
