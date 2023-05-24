@@ -601,6 +601,8 @@ enum_monitor (HMONITOR hmonitor,
 
               if (w32mon == NULL)
                 continue;
+
+              w32mon->hmonitor = hmonitor;
             }
           else
             {
