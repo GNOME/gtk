@@ -37,7 +37,7 @@ typedef enum {
 /* The maximum amount of buffers we track update regions for.
  * Note that this is equal to the max buffer age value we
  * can provide a damage region for */
-#define GDK_GL_MAX_TRACKED_BUFFERS 2
+#define GDK_GL_MAX_TRACKED_BUFFERS 4
 
 #define GDK_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
 #define GDK_IS_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GL_CONTEXT))
