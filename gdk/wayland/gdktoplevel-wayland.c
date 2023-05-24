@@ -620,6 +620,9 @@ xdg_toplevel_configure (void                *data,
           pending_state |= (GDK_TOPLEVEL_STATE_TILED |
                             GDK_TOPLEVEL_STATE_LEFT_TILED);
           break;
+        case XDG_TOPLEVEL_STATE_SUSPENDED:
+          pending_state |= GDK_TOPLEVEL_STATE_SUSPENDED;
+          break;
         default:
           /* Unknown state */
           break;

@@ -3270,7 +3270,10 @@ gdk_x11_surface_minimize (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface, 0, GDK_TOPLEVEL_STATE_MINIMIZED);
+      gdk_synthesize_surface_state (surface,
+                                    0,
+                                    GDK_TOPLEVEL_STATE_MINIMIZED |
+                                    GDK_TOPLEVEL_STATE_SUSPENDED);
       gdk_wmspec_change_state (TRUE, surface,
                                "_NET_WM_STATE_HIDDEN",
                                NULL);
@@ -3293,7 +3296,10 @@ gdk_x11_surface_unminimize (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MINIMIZED, 0);
+      gdk_synthesize_surface_state (surface,
+                                    GDK_TOPLEVEL_STATE_MINIMIZED |
+                                    GDK_TOPLEVEL_STATE_SUSPENDED,
+                                    0);
       gdk_wmspec_change_state (FALSE, surface,
                                "_NET_WM_STATE_HIDDEN",
                                NULL);

@@ -244,6 +244,9 @@ gboolean gtk_window_is_maximized           (GtkWindow    *window);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_window_is_fullscreen          (GtkWindow    *window);
 
+GDK_AVAILABLE_IN_4_12
+gboolean gtk_window_is_suspended           (GtkWindow    *window);
+
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_destroy                (GtkWindow    *window);
 

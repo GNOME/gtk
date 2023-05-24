@@ -73,7 +73,10 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidMiniaturize:(NSNotification *)aNotification
 {
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MINIMIZED);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface),
+                                0,
+                                GDK_TOPLEVEL_STATE_MINIMIZED |
+                                GDK_TOPLEVEL_STATE_SUSPENDED);
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
@@ -83,7 +86,10 @@ typedef NSString *CALayerContentsGravity;
   else if (GDK_IS_MACOS_POPUP_SURFACE (gdk_surface))
     _gdk_macos_popup_surface_attach_to_parent (GDK_MACOS_POPUP_SURFACE (gdk_surface));
 
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MINIMIZED, 0);
+  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface),
+                                GDK_TOPLEVEL_STATE_MINIMIZED |
+                                GDK_TOPLEVEL_STATE_SUSPENDED,
+                                0);
 }
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification
