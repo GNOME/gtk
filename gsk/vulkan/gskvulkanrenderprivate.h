@@ -95,6 +95,7 @@ void                    gsk_vulkan_render_submit                        (GskVulk
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
                                                                          GskVulkanImage         *image);
+VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);
 
 G_END_DECLS
 

@@ -17,6 +17,8 @@
 
 #include <graphene.h>
 
+#define GSK_VULKAN_MAX_RENDERS 4
+
 typedef struct _GskVulkanTextureData GskVulkanTextureData;
 
 struct _GskVulkanTextureData {
@@ -51,7 +53,7 @@ struct _GskVulkanRenderer
   guint n_targets;
   GskVulkanImage **targets;
 
-  GskVulkanRender *render;
+  GskVulkanRender *renders[GSK_VULKAN_MAX_RENDERS];
 
   GSList *textures;
 
@@ -161,6 +163,38 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
     }
 }
 
+static GskVulkanRender *
+gsk_vulkan_renderer_get_render (GskVulkanRenderer *self)
+{
+  VkFence fences[G_N_ELEMENTS (self->renders)];
+  VkDevice device;
+  guint i;
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
+
+  while (TRUE)
+    {
+      for (i = 0; i < G_N_ELEMENTS (self->renders); i++)
+        {
+          if (self->renders[i] == NULL)
+            {
+              self->renders[i] = gsk_vulkan_render_new (GSK_RENDERER (self), self->vulkan);
+              return self->renders[i];
+            }
+
+          fences[i] = gsk_vulkan_render_get_fence (self->renders[i]);
+          if (vkGetFenceStatus (device, fences[i]) == VK_SUCCESS)
+            return self->renders[i];
+        }
+
+      GSK_VK_CHECK (vkWaitForFences, device,
+                                     G_N_ELEMENTS (fences),
+                                     fences,
+                                     VK_FALSE,
+                                     INT64_MAX);
+    }
+}
+
 static gboolean
 gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                              GdkSurface   *surface,
@@ -185,8 +219,6 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                     self);
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
-  self->render = gsk_vulkan_render_new (renderer, self->vulkan);
-
   self->glyph_cache = gsk_vulkan_glyph_cache_new (renderer, self->vulkan);
 
   return TRUE;
@@ -197,6 +229,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GSList *l;
+  guint i;
 
   g_clear_object (&self->glyph_cache);
 
@@ -209,7 +242,8 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
     }
   g_clear_pointer (&self->textures, g_slist_free);
 
-  g_clear_pointer (&self->render, gsk_vulkan_render_free);
+  for (i = 0; i < G_N_ELEMENTS (self->renders); i++)
+    g_clear_pointer (&self->renders[i], gsk_vulkan_render_free);
 
   gsk_vulkan_renderer_free_targets (self);
   g_signal_handlers_disconnect_by_func(self->vulkan,
@@ -306,7 +340,7 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
 #endif
 
   gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->vulkan), region);
-  render = self->render;
+  render = gsk_vulkan_renderer_get_render (self);
 
   render_region = get_render_region (self);
   draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);

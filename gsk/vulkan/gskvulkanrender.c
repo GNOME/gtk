@@ -350,6 +350,12 @@ gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
   return fb->framebuffer;
 }
 
+VkFence
+gsk_vulkan_render_get_fence (GskVulkanRender *self)
+{
+  return self->fence;
+}
+
 void
 gsk_vulkan_render_add_cleanup_image (GskVulkanRender *self,
                                      GskVulkanImage  *image)
