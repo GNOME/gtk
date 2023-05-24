@@ -466,29 +466,26 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
       eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
 
-      switch (buffer_age)
+      if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
         {
-          case 1:
-            return cairo_region_create ();
-            break;
+          cairo_region_t *damage = cairo_region_create ();
+          int i;
 
-          case 2:
-            if (context->old_updated_area[0])
-              return cairo_region_copy (context->old_updated_area[0]);
-            break;
+          for (i = 0; i < buffer_age - 1; i++)
+            {
+              if (context->old_updated_area[i] == NULL)
+                {
+                  cairo_region_create_rectangle (&(GdkRectangle) {
+                                                     0, 0,
+                                                     gdk_surface_get_width (surface),
+                                                     gdk_surface_get_height (surface)
+                                                 });
+                  break;
+                }
+              cairo_region_union (damage, context->old_updated_area[i]);
+            }
 
-          case 3:
-            if (context->old_updated_area[0] &&
-                context->old_updated_area[1])
-              {
-                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
-                cairo_region_union (damage, context->old_updated_area[1]);
-                return damage;
-              }
-            break;
-
-          default:
-            ;
+          return damage;
         }
     }
 #endif
@@ -597,6 +594,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_t *damage;
   double scale;
   int ww, wh;
+  int i;
 
   surface = gdk_draw_context_get_surface (draw_context);
   scale = gdk_gl_context_get_scale (context);
@@ -608,9 +606,11 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
 
-  if (context->old_updated_area[1])
-    cairo_region_destroy (context->old_updated_area[1]);
-  context->old_updated_area[1] = context->old_updated_area[0];
+  g_clear_pointer (&context->old_updated_area[GDK_GL_MAX_TRACKED_BUFFERS - 1], cairo_region_destroy);
+  for (i = GDK_GL_MAX_TRACKED_BUFFERS - 1; i > 0; i--)
+    {
+      context->old_updated_area[i] = context->old_updated_area[i - 1];
+    }
   context->old_updated_area[0] = cairo_region_copy (region);
 
   cairo_region_union (region, damage);
