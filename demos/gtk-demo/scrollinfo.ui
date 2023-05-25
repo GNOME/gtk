@@ -2,6 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">ScrollInfo</property>
+    <property name="default-width">600</property>
     <child>
       <object class="GtkBox">
         <child>
@@ -10,6 +11,9 @@
             <property name="min-content-height">200</property>
             <property name="child">
               <object class="GtkViewport" id="viewport">
+                <style>
+                  <class name="view"/>
+                </style>
                 <property name="child">
                   <object class="GtkFixed">
                     <property name="hexpand">1</property>
@@ -65,9 +69,14 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
             <child>
               <object class="GtkLabel">
-                <property name="label">viewport X</property>
+                <property name="label">Viewport X</property>
                 <property name="xalign">0</property>
               </object>
             </child>
@@ -88,7 +97,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label">viewport Y</property>
+                <property name="label">Viewport Y</property>
                 <property name="xalign">0</property>
               </object>
             </child>
@@ -109,7 +118,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label">viewport width</property>
+                <property name="label">Viewport Width</property>
                 <property name="xalign">0</property>
               </object>
             </child>
@@ -130,7 +139,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label">viewport height</property>
+                <property name="label">Viewport Height</property>
                 <property name="xalign">0</property>
               </object>
             </child>
@@ -151,14 +160,14 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="enable_horizontal">
-                <property name="label">scroll horizontal</property>
+                <property name="label">Scroll horizontally</property>
                 <property name="active">1</property>
                 <signal name="notify::active" handler="enabled_changed" object="enable_vertical" swapped="no"/>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton" id="enable_vertical">
-                <property name="label">scroll vertical</property>
+                <property name="label">Scroll vertically</property>
                 <property name="active">1</property>
                 <signal name="notify::active" handler="enabled_changed" object="enable_horizontal" swapped="yes"/>
               </object>

@@ -341,6 +341,7 @@
     <file>read_more.c</file>
     <file>rotated_text.c</file>
     <file>scale.c</file>
+    <file>scrollinfo.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
     <file>shadertoy.c</file>

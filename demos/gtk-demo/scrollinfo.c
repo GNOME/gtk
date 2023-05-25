@@ -1,10 +1,8 @@
 /* ScrollInfo
  *
  * GtkScrollInfo allows you to pass scrolling information to many
- * scrollable widgets is a container that shows a single child at a time,
- * with nice transitions when the visible child changes.
- *
- * GtkStackSwitcher adds buttons to control which child is visible.
+ * scrollable widgets. This allows for more detailed control of
+ * scrolling behavior.
  */
 
 #include <gtk/gtk.h>
