@@ -85,6 +85,13 @@ void            gtk_grid_view_set_single_click_activate         (GtkGridView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_grid_view_get_single_click_activate         (GtkGridView            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_grid_view_scroll_to                         (GtkGridView            *self,
+                                                                 guint                   pos,
+                                                                 GtkListScrollFlags      flags,
+                                                                 GtkScrollInfo          *scroll);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGridView, g_object_unref)
 
 G_END_DECLS
