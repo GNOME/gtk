@@ -1,6 +1,56 @@
 Overview of Changes in 4.11.3, xx-xx-xxxx
 =========================================
 
+* GtkGridView:
+ - Respect css border-spacing
+ - Don't leak the factories
+
+* GtkListView:
+ - Don't leak the factories
+
+* GtkNotebook:
+ - Make the pages model implement GtkSelectionModel
+
+* GtkScrolledWindow:
+ - Propagate child measure size whenever possible
+
+* GtkPopoverMenu:
+ - Avoid unnecessary left padding
+
+* Css:
+ - Add new binding-friendly css provider apis
+
+* Theme:
+ - Show focus in the shortcuts window
+
+* Tests:
+ - Improve test coverage
+
+* Wayland:
+ - Make exporting surface handles more flexible
+
+* Build:
+ - Some build options have been renamed:
+     demos -> build-demos
+     profile -> demo-profile
+   The old names still work
+
+* Deprecations:
+ - gtk_css_provider_load_from_data
+ - gdk_wayland_toplevel_unexport_handle
+ - gdk_pixbuf_get_from_surface
+ - gdk_pixbuf_get_from_texture
+ - gtk_image_new_from_pixbuf
+ - gtk_image_set_from_pixbuf
+ - gtk_picture_new_for_pixbuf
+ - gtk_picture_set_pixbuf
+
+* Translation updates:
+ Basque
+ Catalan
+ Russian
+
+
 Overview of Changes in 4.11.2, 09-05-2023
 =========================================
 
