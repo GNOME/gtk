@@ -65,6 +65,13 @@ gsk_vulkan_buffer_new (GdkVulkanContext  *context,
 }
 
 GskVulkanBuffer *
+gsk_vulkan_buffer_new_storage (GdkVulkanContext  *context,
+                               gsize              size)
+{
+  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+}
+
+GskVulkanBuffer *
 gsk_vulkan_buffer_new_staging (GdkVulkanContext  *context,
                                gsize              size)
 {

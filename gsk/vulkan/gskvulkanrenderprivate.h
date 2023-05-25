@@ -86,6 +86,12 @@ gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulk
                                                                          GskVulkanRenderSampler  render_sampler);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
                                                                          GskVulkanImage         *source);
+gsize                   gsk_vulkan_render_get_buffer_descriptor         (GskVulkanRender        *self,
+                                                                         GskVulkanBuffer        *buffer);
+guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulkanRender        *self,
+                                                                         gsize                   size,
+                                                                         gsize                   alignment,
+                                                                         gsize                  *out_offset);
 VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
