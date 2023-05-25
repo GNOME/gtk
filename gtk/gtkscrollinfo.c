@@ -77,6 +77,7 @@ gtk_scroll_info_new (void)
   GtkScrollInfo *self;
 
   self = g_new0 (GtkScrollInfo, 1);
+  self->ref_count = 1;
   self->viewport = GRAPHENE_RECT_INIT (0, 0, 1, 1);
   self->has_position = FALSE;
   self->enabled[GTK_ORIENTATION_HORIZONTAL] = TRUE;
