@@ -21,6 +21,8 @@
 
 #include "gdkenums.h"
 
+#include <epoxy/gl.h>
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -39,7 +41,8 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              guint                       gl_minor,
                                                              guint                      *out_internal_format,
                                                              guint                      *out_format,
-                                                             guint                      *out_type);
+                                                             guint                      *out_type,
+                                                             GLint                     (*out_gizzle)[4]);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
