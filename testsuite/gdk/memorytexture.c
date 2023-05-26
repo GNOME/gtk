@@ -75,6 +75,16 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
   switch (format)
     {
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_A8:
+      return 1;
+
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_A16:
+      return 2;
+
     case GDK_MEMORY_R8G8B8:
     case GDK_MEMORY_B8G8R8:
       return 3;
@@ -86,6 +96,8 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16:
       return 4;
 
     case GDK_MEMORY_R16G16B16:
@@ -175,6 +187,82 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
+      return TRUE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return TRUE;
+    }
+}
+
+static gboolean
+gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      return TRUE;
+
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      return FALSE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
+static gboolean
+gdk_memory_format_has_alpha (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G16:
+      return FALSE;
+
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
       return TRUE;
 
     case GDK_MEMORY_N_FORMATS:
