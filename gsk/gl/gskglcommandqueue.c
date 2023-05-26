@@ -1454,7 +1454,8 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                          guint            minor,
                          guint           *gl_internalformat,
                          guint           *gl_format,
-                         guint           *gl_type)
+                         guint           *gl_type,
+                         GLint          (*gl_swizzle)[4])
 {
   if (gdk_memory_format_gl_format (data_format,
                                    use_es,
@@ -1462,7 +1463,8 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                                    minor,
                                    gl_internalformat,
                                    gl_format,
-                                   gl_type))
+                                   gl_type,
+                                   gl_swizzle))
     return data_format;
 
   if (gdk_memory_format_prefers_high_depth (data_format))
@@ -1474,7 +1476,8 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                                        minor,
                                        gl_internalformat,
                                        gl_format,
-                                       gl_type))
+                                       gl_type,
+                                       gl_swizzle))
         return data_format;
     }
 
@@ -1485,7 +1488,8 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                                     minor,
                                     gl_internalformat,
                                     gl_format,
-                                    gl_type))
+                                    gl_type,
+                                    gl_swizzle))
     {
       g_assert_not_reached ();
     }
@@ -1508,6 +1512,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   GLenum gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
+  GLint gl_swizzle[4];
   gsize bpp;
   gboolean use_es;
   int major, minor;
@@ -1524,7 +1529,8 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                          minor,
                                          &gl_internalformat,
                                          &gl_format,
-                                         &gl_type);
+                                         &gl_type,
+                                         &gl_swizzle);
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, data_format);
@@ -1559,6 +1565,18 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
 
+  /* Only apply swizzle if really needed, might not even be
+   * supported if default values are set
+   */
+  if (gl_swizzle[0] != GL_RED || gl_swizzle[1] != GL_GREEN || gl_swizzle[2] != GL_BLUE)
+    {
+      /* Set each channel independently since GLES 3.0 doesn't support the iv method */
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, gl_swizzle[0]);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, gl_swizzle[1]);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, gl_swizzle[2]);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, gl_swizzle[3]);
+    }
+
   g_bytes_unref (bytes);
 }
 
@@ -1573,6 +1591,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   GLenum gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
+  GLint gl_swizzle[4];
   gboolean use_es;
   int texture_id;
   int major, minor;
@@ -1617,7 +1636,8 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
                            minor,
                            &gl_internalformat,
                            &gl_format,
-                           &gl_type);
+                           &gl_type,
+                           &gl_swizzle);
 
   glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
 
