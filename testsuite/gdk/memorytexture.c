@@ -138,11 +138,19 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8:
       return CHANNEL_UINT_8;
 
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_A16:
       return CHANNEL_UINT_16;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
@@ -162,8 +170,9 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     }
 }
 
-static gboolean
-gdk_memory_format_has_alpha (GdkMemoryFormat format)
+/* return the number of color channels, ignoring alpha */
+static guint
+gdk_memory_format_n_colors (GdkMemoryFormat format)
 {
   switch (format)
     {
@@ -172,8 +181,6 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R32G32B32_FLOAT:
-      return FALSE;
-
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
     case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
@@ -187,46 +194,24 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
-      return TRUE;
+      return 3;
+
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16:
+      return 1;
+
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
+      return 0;
 
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
       return TRUE;
-    }
-}
-
-static gboolean
-gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
-{
-  switch (format)
-    {
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-      return TRUE;
-
-    case GDK_MEMORY_R8G8B8:
-    case GDK_MEMORY_B8G8R8:
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16_FLOAT:
-    case GDK_MEMORY_R32G32B32_FLOAT:
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_R16G16B16A16:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-      return FALSE;
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      return FALSE;
     }
 }
 
@@ -283,6 +268,8 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
       return TRUE;
 
     case GDK_MEMORY_R8G8B8:
@@ -297,6 +284,12 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
       return FALSE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -323,11 +316,19 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8:
       return memcmp (pixel1, pixel2, gdk_memory_format_bytes_per_pixel (format)) == 0;
 
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_A16:
       {
         const guint16 *u1 = (const guint16 *) pixel1;
         const guint16 *u2 = (const guint16 *) pixel2;
@@ -488,6 +489,12 @@ set_pixel_u8 (guchar          *data,
     }
 }
 
+static float
+color_gray (const GdkRGBA *color)
+{
+  return 1/3.f * (color->red + color->green + color->blue);
+}
+
 static void
 texture_builder_set_pixel (TextureBuilder  *builder,
                            int              x,
@@ -629,6 +636,58 @@ texture_builder_set_pixel (TextureBuilder  *builder,
           color->alpha
         };
         memcpy (data, pixels, 4 * sizeof (float));
+      }
+      break;
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+      {
+        data[0] = CLAMP (color_gray (color) * color->alpha * 255.f + 0.5f, 0.f, 255.f);
+        data[1] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      }
+      break;
+    case GDK_MEMORY_G8A8:
+      {
+        data[0] = CLAMP (color_gray (color) * 255.f + 0.5f, 0.f, 255.f);
+        data[1] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      }
+      break;
+    case GDK_MEMORY_G8:
+      {
+        *data = CLAMP (color_gray (color) * color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      }
+      break;
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+      {
+        guint16 pixels[2] = {
+          CLAMP (color_gray (color) * color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
+          CLAMP (color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
+        };
+        memcpy (data, pixels, 2 * sizeof (guint16));
+      }
+      break;
+    case GDK_MEMORY_G16A16:
+      {
+        guint16 pixels[2] = {
+          CLAMP (color_gray (color) * 65535.f + 0.5f, 0.f, 65535.f),
+          CLAMP (color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
+        };
+        memcpy (data, pixels, 2 * sizeof (guint16));
+      }
+      break;
+    case GDK_MEMORY_G16:
+      {
+        guint16 pixel = CLAMP (color_gray (color) * color->alpha * 65535.f + 0.5f, 0.f, 65535.f);
+        memcpy (data, &pixel,  sizeof (guint16));
+      }
+      break;
+    case GDK_MEMORY_A8:
+      {
+        *data = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      }
+      break;
+    case GDK_MEMORY_A16:
+      {
+        guint16 pixel = CLAMP (color->alpha * 65535.f, 0.f, 65535.f);
+        memcpy (data, &pixel,  sizeof (guint16));
       }
       break;
     case GDK_MEMORY_N_FORMATS:
@@ -883,12 +942,41 @@ color_make_opaque (GdkRGBA       *result,
 }
 
 static void
+color_make_gray (GdkRGBA       *result,
+                 const GdkRGBA *color)
+{
+  result->red = (color->red + color->green + color->blue) / 3.0f;
+  result->green = result->red;
+  result->blue = result->red;
+  result->alpha = color->alpha;
+}
+
+static void
+color_make_white (GdkRGBA       *result,
+                  const GdkRGBA *color)
+{
+  result->red = 1.0f;
+  result->green = 1.0f;
+  result->blue = 1.0f;
+  result->alpha = color->alpha;
+}
+
+/* Generate colors so that premultiplying will result in values in steps of 1/15th.
+ * Also make sure that an averaged gray value fits in that range. */
+static void
 create_random_color (GdkRGBA *color)
 {
-  /* Generate colors so that premultiplying will result in values in steps of 1/15th */
-  color->red = g_test_rand_int_range (0, 6) / 5.f;
-  color->green = g_test_rand_int_range (0, 6) / 5.f;
-  color->blue = g_test_rand_int_range (0, 6) / 5.f;
+  int r, g, b;
+  do
+    {
+      r = g_test_rand_int_range (0, 6);
+      g = g_test_rand_int_range (0, 6);
+      b = g_test_rand_int_range (0, 6);
+    }
+  while ((r + g + b) % 3 != 0);
+  color->red = r / 5.f;
+  color->green = g / 5.f;
+  color->blue = b / 5.f;
   color->alpha = g_test_rand_int_range (0, 4) / 3.f;
 }
 
@@ -1031,6 +1119,18 @@ test_conversion (gconstpointer data,
       if (!gdk_memory_format_has_alpha (format1) &&
           gdk_memory_format_has_alpha (format2))
         color_make_opaque (&color2, &color2);
+
+      /* If the source has fewer color channels than the
+       * target, make sure the colors get adjusted.
+       */
+      if (gdk_memory_format_n_colors (format1) <
+          gdk_memory_format_n_colors (format2))
+        {
+          if (gdk_memory_format_n_colors (format1) == 1)
+            color_make_gray (&color2, &color2);
+          else
+            color_make_white (&color2, &color2);
+        }
 
       test1 = create_texture (format1, TEXTURE_METHOD_LOCAL, 1, 1, &color1);
       test2 = create_texture (format2, TEXTURE_METHOD_LOCAL, 1, 1, &color2);
