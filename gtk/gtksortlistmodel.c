@@ -912,6 +912,12 @@ gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
             }
         }
 
+      if (self->section_sorter)
+        {
+          gtk_sort_keys_unref (self->section_sort_keys);
+          self->section_sort_keys = gtk_sorter_get_keys (self->section_sorter);
+        }
+
       if (gtk_sort_list_model_start_sorting (self, NULL))
         pos = n_items = 0;
       else
