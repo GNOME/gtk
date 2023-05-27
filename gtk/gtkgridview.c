@@ -1060,7 +1060,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               else
                 size = nat;
               size = MAX (size, min_row_height);
-              g_array_append_val (heights, size);
+              if (tile->type == GTK_LIST_TILE_ITEM)
+                g_array_append_val (heights, size);
               row_height = MAX (row_height, size);
             }
           if (gtk_list_tile_is_header (tile) | gtk_list_tile_is_footer (tile))
