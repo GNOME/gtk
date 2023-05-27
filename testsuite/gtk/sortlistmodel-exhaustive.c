@@ -18,6 +18,7 @@
 #include <locale.h>
 
 #include <gtk/gtk.h>
+#include "gtklistmodelvalidator.h"
 
 #define MAX_CHARS 4
 
@@ -92,124 +93,6 @@ model_to_string (GListModel *model)
   return g_string_free (string, FALSE);
 }
 
-static void
-assert_items_changed_correctly (GListModel *model,
-                                guint       position,
-                                guint       removed,
-                                guint       added,
-                                GListModel *compare)
-{
-  guint i, n_items;
-
-  //sanity check that we got all notifies
-  g_assert_cmpuint (g_list_model_get_n_items (compare), ==, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
-
-  //g_print ("%s => %u -%u +%u => %s\n", model_to_string (compare), position, removed, added, model_to_string (model));
-
-  g_assert_cmpuint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare) - removed + added);
-  n_items = g_list_model_get_n_items (model);
-
-  if (position != 0 || removed != n_items)
-    {
-      /* Check that all unchanged items are indeed unchanged */
-      for (i = 0; i < position; i++)
-        {
-          gpointer o1 = g_list_model_get_item (model, i);
-          gpointer o2 = g_list_model_get_item (compare, i);
-          g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
-          g_object_unref (o1);
-          g_object_unref (o2);
-        }
-      for (i = position + added; i < n_items; i++)
-        {
-          gpointer o1 = g_list_model_get_item (model, i);
-          gpointer o2 = g_list_model_get_item (compare, i - added + removed);
-          g_assert_cmphex (GPOINTER_TO_SIZE (o1), ==, GPOINTER_TO_SIZE (o2));
-          g_object_unref (o1);
-          g_object_unref (o2);
-        }
-
-      /* Check that the first and last added item are different from
-       * first and last removed item.
-       * Otherwise we could have kept them as-is
-       */
-      if (removed > 0 && added > 0)
-        {
-          gpointer o1 = g_list_model_get_item (model, position);
-          gpointer o2 = g_list_model_get_item (compare, position);
-          g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
-          g_object_unref (o1);
-          g_object_unref (o2);
-
-          o1 = g_list_model_get_item (model, position + added - 1);
-          o2 = g_list_model_get_item (compare, position + removed - 1);
-          g_assert_cmphex (GPOINTER_TO_SIZE (o1), !=, GPOINTER_TO_SIZE (o2));
-          g_object_unref (o1);
-          g_object_unref (o2);
-        }
-    }
-
-  /* Finally, perform the same change as the signal indicates */
-  g_list_store_splice (G_LIST_STORE (compare), position, removed, NULL, 0);
-  for (i = position; i < position + added; i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), i);
-      g_list_store_insert (G_LIST_STORE (compare), i, item);
-      g_object_unref (item);
-    }
-}
-
-static void
-assert_n_items_notified_properly (GListModel *model,
-                                  GParamSpec *pspec,
-                                  GListModel *compare)
-{
-  g_assert_cmpuint (g_list_model_get_n_items (model), !=, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
-
-  /* These should hve been updated in items-changed, which should have been emitted first */
-  g_assert_cmpuint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare));
-
-  g_object_set_data (G_OBJECT (compare),
-                     "last-notified-n-items",
-                     GUINT_TO_POINTER (g_list_model_get_n_items (model)));
-}
-
-static GtkSortListModel *
-sort_list_model_new (GListModel *source,
-                     GtkSorter  *sorter)
-{
-  GtkSortListModel *model;
-  GListStore *check;
-  guint i;
-
-  model = gtk_sort_list_model_new (source, sorter);
-  check = g_list_store_new (G_TYPE_OBJECT);
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), i);
-      g_list_store_append (check, item);
-      g_object_unref (item);
-    }
-  g_signal_connect_data (model,
-                         "items-changed",
-                         G_CALLBACK (assert_items_changed_correctly), 
-                         check,
-                         (GClosureNotify) g_object_unref,
-                         0);
-
-  g_object_set_data (G_OBJECT (check),
-                     "last-notified-n-items",
-                     GUINT_TO_POINTER (g_list_model_get_n_items (G_LIST_MODEL (check))));
-  g_signal_connect_data (model,
-                         "notify::n-items",
-                         G_CALLBACK (assert_n_items_notified_properly), 
-                         g_object_ref (check),
-                         (GClosureNotify) g_object_unref,
-                         0);
-
-  return model;
-}
-
 #define N_MODELS 8
 
 static char *
@@ -244,10 +127,12 @@ create_sort_list_model (gconstpointer  model_id,
   GtkSortListModel *model;
   guint id = GPOINTER_TO_UINT (model_id);
 
+  model = gtk_sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
   if (track_changes)
-    model = sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
-  else
-    model = gtk_sort_list_model_new (((id & 1) || !source) ? NULL : g_object_ref (source), ((id & 2) || !sorter) ? NULL : g_object_ref (sorter));
+    {
+      GtkListModelValidator *validator = gtk_list_model_validator_new (G_LIST_MODEL (model));
+      g_object_unref (validator);
+    }
 
   switch (id >> 2)
   {

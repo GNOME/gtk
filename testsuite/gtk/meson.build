@@ -76,7 +76,12 @@ tests = [
   { 'name': 'slicelistmodel' },
   { 'name': 'sorter' },
   { 'name': 'sortlistmodel' },
-  { 'name': 'sortlistmodel-exhaustive' },
+  { 'name': 'sortlistmodel-exhaustive',
+    'sources': [
+      'sortlistmodel-exhaustive.c',
+      'gtklistmodelvalidator.c',
+    ],
+  },
   { 'name': 'spinbutton' },
   { 'name': 'stringlist' },
   { 'name': 'templates' },
