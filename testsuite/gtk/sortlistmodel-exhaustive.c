@@ -19,6 +19,8 @@
 
 #include <gtk/gtk.h>
 
+#define MAX_CHARS 4
+
 #define ensure_updated() G_STMT_START{ \
   while (g_main_context_pending (NULL)) \
     g_main_context_iteration (NULL, TRUE); \
@@ -272,7 +274,7 @@ create_sort_list_model (gconstpointer  model_id,
 static GListModel *
 create_source_model (guint min_size, guint max_size)
 {
-  const char *strings[] = { "A", "a", "B", "b" };
+  const char chars[] = { 'A', 'a', 'B', 'b' };
   GtkStringList *list;
   guint i, size;
 
@@ -280,7 +282,17 @@ create_source_model (guint min_size, guint max_size)
   list = gtk_string_list_new (NULL);
 
   for (i = 0; i < size; i++)
-    gtk_string_list_append (list, strings[g_test_rand_int_range (0, G_N_ELEMENTS (strings))]);
+    {
+      char string[MAX_CHARS + 1];
+      int j, string_len;
+      string_len = g_test_rand_int_range (1, MAX_CHARS + 1);
+      for (j = 0; j < string_len; j++)
+        {
+          string[j] = chars[g_test_rand_int_range (0, G_N_ELEMENTS (chars))];
+        }
+      string[j] = 0;
+      gtk_string_list_append (list, string);
+    }
 
   return G_LIST_MODEL (list);
 }
