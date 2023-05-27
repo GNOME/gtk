@@ -1195,11 +1195,7 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
     return;
 
   gtk_sort_list_model_clear_real_sorter (self);
-  g_clear_object (&self->sorter);
-
-  if (sorter)
-    self->sorter = g_object_ref (sorter);
-
+  g_set_object (&self->sorter, sorter);
   gtk_sort_list_model_ensure_real_sorter (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
@@ -1241,11 +1237,7 @@ gtk_sort_list_model_set_section_sorter (GtkSortListModel *self,
     return;
 
   gtk_sort_list_model_clear_real_sorter (self);
-  g_clear_object (&self->section_sorter);
-
-  if (sorter)
-    self->section_sorter = g_object_ref (sorter);
-
+  g_set_object (&self->section_sorter, sorter);
   gtk_sort_list_model_ensure_real_sorter (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SECTION_SORTER]);

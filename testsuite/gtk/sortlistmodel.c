@@ -1,4 +1,4 @@
-/* GtkRBTree tests.
+/* sortlistmodel tests
  *
  * Copyright (C) 2011, Red Hat, Inc.
  * Authors: Benjamin Otte <otte@gnome.org>
