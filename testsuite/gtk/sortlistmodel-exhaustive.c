@@ -372,12 +372,12 @@ test_two_sorters (gconstpointer model_id)
 
       for (j = 0; j < N_SORTERS; j++)
         {
-          sorter = create_sorter (i);
+          sorter = create_sorter (j);
           gtk_sort_list_model_set_sorter (model2, sorter);
           gtk_multi_sorter_append (GTK_MULTI_SORTER (every), sorter);
 
           ensure_updated ();
-          assert_model_equal (G_LIST_MODEL (model2), G_LIST_MODEL (compare));
+          assert_model_equal (G_LIST_MODEL (model1), G_LIST_MODEL (compare));
 
           for (k = 0; k < 10; k++)
             {
