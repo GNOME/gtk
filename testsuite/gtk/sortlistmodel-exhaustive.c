@@ -299,6 +299,39 @@ create_source_model (guint min_size, guint max_size)
 
 #define N_SORTERS 3
 
+static char *
+get_substring (GObject *this,
+               guint    offset,
+               guint    len)
+{
+  const char *string;
+
+  if (!GTK_IS_STRING_OBJECT (this))
+    return NULL;
+  string = gtk_string_object_get_string (GTK_STRING_OBJECT (this));
+
+  if (offset >= strlen (string))
+    return NULL;
+  string += offset;
+
+  return g_strndup (string, len);
+}
+
+static GtkExpression *
+create_random_substring_expression (void)
+{
+  return gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      2,
+                                      (GtkExpression *[2]) {
+                                        gtk_constant_expression_new (G_TYPE_UINT, (guint) g_test_rand_int_range (0, MAX_CHARS)),
+                                        gtk_constant_expression_new (G_TYPE_UINT, (guint) g_test_rand_int_range (1, MAX_CHARS + 1)),
+                                      },
+                                      G_CALLBACK (get_substring),
+                                      NULL,
+                                      NULL);
+}
+
 static GtkSorter *
 create_sorter (gsize id)
 {
@@ -312,7 +345,7 @@ create_sorter (gsize id)
     case 1:
     case 2:
       /* match all As, Bs and nothing */
-      sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
+      sorter = GTK_SORTER (gtk_string_sorter_new (create_random_substring_expression ()));
       if (id == 1)
         gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
       return sorter;
