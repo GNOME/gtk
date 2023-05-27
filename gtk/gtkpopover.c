@@ -483,6 +483,7 @@ create_popup_layout (GtkPopover *popover)
   GdkPopupLayout *layout;
   GtkCssStyle *style;
   GtkBorder shadow_width;
+  gboolean ltr = gtk_widget_get_direction (GTK_WIDGET (popover)) != GTK_TEXT_DIR_RTL;
 
   compute_surface_pointing_to (popover, &rect);
 
@@ -545,13 +546,13 @@ create_popup_layout (GtkPopover *popover)
       switch (gtk_widget_get_halign (GTK_WIDGET (popover)))
         {
         case GTK_ALIGN_START:
-          parent_anchor = GDK_GRAVITY_NORTH_WEST;
-          surface_anchor = GDK_GRAVITY_SOUTH_WEST;
+          parent_anchor = ltr ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+          surface_anchor = ltr ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
           break;
 
         case GTK_ALIGN_END:
-          parent_anchor = GDK_GRAVITY_NORTH_EAST;
-          surface_anchor = GDK_GRAVITY_SOUTH_EAST;
+          parent_anchor = ltr ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
+          surface_anchor = ltr ? GDK_GRAVITY_SOUTH_EAST : GDK_GRAVITY_SOUTH_WEST;
           break;
 
         case GTK_ALIGN_FILL:
@@ -570,13 +571,13 @@ create_popup_layout (GtkPopover *popover)
       switch (gtk_widget_get_halign (GTK_WIDGET (popover)))
         {
         case GTK_ALIGN_START:
-          parent_anchor = GDK_GRAVITY_SOUTH_WEST;
-          surface_anchor = GDK_GRAVITY_NORTH_WEST;
+          parent_anchor = ltr ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
+          surface_anchor = ltr ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
           break;
 
         case GTK_ALIGN_END:
-          parent_anchor = GDK_GRAVITY_SOUTH_EAST;
-          surface_anchor = GDK_GRAVITY_NORTH_EAST;
+          parent_anchor = ltr ? GDK_GRAVITY_SOUTH_EAST : GDK_GRAVITY_SOUTH_WEST;
+          surface_anchor = ltr ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
           break;
 
         case GTK_ALIGN_FILL:
