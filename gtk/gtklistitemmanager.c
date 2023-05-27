@@ -1566,6 +1566,67 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
 }
 
 static void
+gtk_list_item_manager_model_sections_changed_cb (GListModel         *model,
+                                                 guint               position,
+                                                 guint               n_items,
+                                                 GtkListItemManager *self)
+{
+  GtkListItemChange change;
+  GtkListTile *tile, *header;
+  guint offset;
+
+  if (!gtk_list_item_manager_has_sections (self))
+    return;
+
+  gtk_list_item_change_init (&change);
+
+  tile = gtk_list_item_manager_get_nth (self, position, &offset);
+  header = gtk_list_tile_get_header (self, tile);
+  gtk_list_item_change_clear_header (&change, &header->widget);
+  gtk_list_tile_set_type (header, GTK_LIST_TILE_UNMATCHED_HEADER);
+
+  n_items -= MIN (n_items, position - offset);
+  while (n_items > 0)
+    {
+      switch (tile->type)
+        {
+        case GTK_LIST_TILE_HEADER:
+        case GTK_LIST_TILE_UNMATCHED_HEADER:
+          gtk_list_item_change_clear_header (&change, &tile->widget);
+          gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
+          break;
+
+        case GTK_LIST_TILE_FOOTER:
+        case GTK_LIST_TILE_UNMATCHED_FOOTER:
+          gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
+          break;
+
+        case GTK_LIST_TILE_ITEM:
+          n_items -= MIN (n_items, tile->n_items);
+          break;
+
+        case GTK_LIST_TILE_REMOVED:
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      tile = gtk_list_tile_get_next_skip (tile);
+    }
+
+  if (!gtk_list_tile_is_footer (tile))
+    tile = gtk_list_tile_get_footer (self, tile);
+
+  gtk_list_tile_set_type (tile, GTK_LIST_TILE_UNMATCHED_FOOTER);
+
+  gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT, 0);
+
+  gtk_list_item_change_finish (&change);
+
+  gtk_widget_queue_resize (GTK_WIDGET (self->widget));
+}
+
+static void
 gtk_list_item_manager_model_selection_changed_cb (GListModel         *model,
                                                   guint               position,
                                                   guint               n_items,
@@ -1623,6 +1684,9 @@ gtk_list_item_manager_clear_model (GtkListItemManager *self)
                                         self);
   g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_list_item_manager_model_items_changed_cb,
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->model,
+                                        gtk_list_item_manager_model_sections_changed_cb,
                                         self);
   g_clear_object (&self->model);
 
@@ -1682,6 +1746,11 @@ gtk_list_item_manager_set_model (GtkListItemManager *self,
                         "selection-changed",
                         G_CALLBACK (gtk_list_item_manager_model_selection_changed_cb),
                         self);
+      if (GTK_IS_SECTION_MODEL (model))
+        g_signal_connect (model,
+                          "sections-changed",
+                          G_CALLBACK (gtk_list_item_manager_model_sections_changed_cb),
+                          self);
 
       gtk_list_item_change_init (&change);
       gtk_list_item_manager_add_items (self, &change, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
