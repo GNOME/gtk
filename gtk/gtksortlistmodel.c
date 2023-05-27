@@ -873,9 +873,10 @@ gtk_sort_list_model_get_property (GObject     *object,
 }
 
 static void
-gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
-                                       int               change,
-                                       GtkSortListModel *self)
+gtk_sort_list_model_sorter_changed (GtkSorter        *sorter,
+                                    int               change,
+                                    GtkSortListModel *self,
+                                    gboolean          sections_changed)
 {
   guint pos, n_items;
 
@@ -928,8 +929,25 @@ gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
       gtk_sort_list_model_clear_items (self, &pos, &n_items);
     }
 
-  if (n_items > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+  if (sections_changed && self->n_items > 0)
+    {
+      if (n_items > 0)
+        g_list_model_items_changed (G_LIST_MODEL (self), 0, self->n_items, self->n_items);
+      else
+        gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), 0, self->n_items);
+    }
+  else if (n_items > 0)
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self), pos, n_items, n_items);
+    }
+}
+
+static void
+gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
+                                       int               change,
+                                       GtkSortListModel *self)
+{
+  gtk_sort_list_model_sorter_changed (sorter, change, self, FALSE);
 }
 
 static void
@@ -955,7 +973,8 @@ gtk_sort_list_model_clear_real_sorter (GtkSortListModel *self)
 }
 
 static void
-gtk_sort_list_model_ensure_real_sorter (GtkSortListModel *self)
+gtk_sort_list_model_ensure_real_sorter (GtkSortListModel *self,
+                                        gboolean          sections_changed)
 {
   if (self->sorter)
     {
@@ -980,7 +999,7 @@ gtk_sort_list_model_ensure_real_sorter (GtkSortListModel *self)
   if (self->real_sorter)
     g_signal_connect (self->real_sorter, "changed", G_CALLBACK (gtk_sort_list_model_sorter_changed_cb), self);
 
-  gtk_sort_list_model_sorter_changed_cb (self->real_sorter, GTK_SORTER_CHANGE_DIFFERENT, self);
+  gtk_sort_list_model_sorter_changed (self->real_sorter, GTK_SORTER_CHANGE_DIFFERENT, self, sections_changed);
 }
 
 static void
@@ -1202,7 +1221,7 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
 
   gtk_sort_list_model_clear_real_sorter (self);
   g_set_object (&self->sorter, sorter);
-  gtk_sort_list_model_ensure_real_sorter (self);
+  gtk_sort_list_model_ensure_real_sorter (self, FALSE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
 }
@@ -1244,10 +1263,7 @@ gtk_sort_list_model_set_section_sorter (GtkSortListModel *self,
 
   gtk_sort_list_model_clear_real_sorter (self);
   g_set_object (&self->section_sorter, sorter);
-  gtk_sort_list_model_ensure_real_sorter (self);
-
-  if (self->n_items > 0)
-    gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), 0, self->n_items);
+  gtk_sort_list_model_ensure_real_sorter (self, TRUE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SECTION_SORTER]);
 }

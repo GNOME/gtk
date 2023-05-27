@@ -648,6 +648,22 @@ by_n (gconstpointer p1,
     return 0;
 }
 
+static int
+weird (gconstpointer p1,
+       gconstpointer p2,
+       gpointer      data)
+{
+  guint n1 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p1), number_quark));
+  guint n2 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p2), number_quark));
+
+  if (n1 == 5 && n2 != 5)
+    return -1;
+  else if (n1 != 5 && n2 == 5)
+    return 1;
+
+  return by_n (p1, p2, data);
+}
+
 static void
 test_sections (void)
 {
@@ -679,6 +695,13 @@ test_sections (void)
 
   assert_changes (model, "s0:10");
   assert_section_model (model, "[1 2 3 4] [5 6 7 8 9] [10]");
+
+  sorter = GTK_SORTER (gtk_custom_sorter_new (weird, GUINT_TO_POINTER (5), NULL));
+  gtk_sort_list_model_set_section_sorter (model, sorter);
+  g_object_unref (sorter);
+
+  assert_changes (model, "0-10+10");
+  assert_section_model (model, "[5] [1 2 3 4] [6 7 8 9] [10]");
 
   g_object_unref (store);
   g_object_unref (model);
