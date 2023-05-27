@@ -31,6 +31,13 @@
 
 #include "gdk/gdkarrayimpl.c"
 
+#define GDK_ARRAY_TYPE_NAME Sections
+#define GDK_ARRAY_NAME sections
+#define GDK_ARRAY_ELEMENT_TYPE guint
+#define GDK_ARRAY_NO_MEMSET 1
+
+#include "gdk/gdkarrayimpl.c"
+
 /*<private>
  * GtkListModelValidator:
  *
@@ -52,9 +59,10 @@ enum {
 typedef enum 
 {
   GTK_LIST_VALIDATION_CHANGES = (1 << 0),
-  GTK_LIST_VALIDATION_MINIMAL_CHANGES = (1 << 1),
-  GTK_LIST_VALIDATION_N_ITEMS = (1 << 2),
-  GTK_LIST_VALIDATION_N_ITEMS_MINIMAL_NOTIFY = (1 << 3),
+  GTK_LIST_VALIDATION_SECTION_CHANGES = (1 << 1),
+  GTK_LIST_VALIDATION_MINIMAL_CHANGES = (1 << 2),
+  GTK_LIST_VALIDATION_N_ITEMS = (1 << 3),
+  GTK_LIST_VALIDATION_N_ITEMS_MINIMAL_NOTIFY = (1 << 4),
 } GtkListValidationFlags;
 
 struct _GtkListModelValidator
@@ -66,6 +74,7 @@ struct _GtkListModelValidator
 
   guint notified_n_items;
   Items items;
+  Sections sections;
 };
 
 struct _GtkListModelValidatorClass
@@ -96,6 +105,21 @@ gtk_list_model_validator_error (GtkListModelValidator  *self,
 }
 
 static void
+gtk_list_model_validator_self_check_sections (GtkListModelValidator *self)
+{
+  guint sum, i;
+
+  sum = 0;
+  for (i = 0; i < sections_get_size (&self->sections); i++)
+    {
+      g_assert (sections_get (&self->sections, i) > 0);
+      sum += sections_get (&self->sections, i);
+    }
+
+  g_assert (sum == items_get_size (&self->items));
+}
+
+static void
 gtk_list_model_validator_validate_different (GtkListModelValidator *self,
                                              guint                  self_position,
                                              guint                  model_position)
@@ -106,6 +130,68 @@ gtk_list_model_validator_validate_different (GtkListModelValidator *self,
                                      "item at position %u did not change but was part of items-changed",
                                      self_position);
   g_object_unref (o);
+}
+
+static gsize
+gtk_list_model_validator_find_section_index (GtkListModelValidator *self,
+                                             guint                  position,
+                                             guint                 *offset)
+{
+  gsize i;
+
+  for (i = 0; i < sections_get_size (&self->sections); i++)
+    {
+      guint items = sections_get (&self->sections, i);
+      if (position < items)
+        {
+          if (offset)
+            *offset = position;
+          return i;
+        }
+      position -= items;
+    }
+
+  if (offset)
+    *offset = position;
+  return i;
+}
+
+static void
+gtk_list_model_validator_validate_section_range (GtkListModelValidator *self,
+                                                 guint                  position,
+                                                 guint                  n_items)
+{
+  guint section, section_items, offset, start, end, i;
+  
+  if (n_items == 0)
+    return;
+
+  section = gtk_list_model_validator_find_section_index (self, position, &offset);
+  section_items = sections_get (&self->sections, section);
+
+  for (i = 0; i < n_items; i++)
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position + i, &start, &end);
+      if (start != position + i - offset ||
+          end != position + i - offset + section_items)
+        {
+          gtk_list_model_validator_error (self, GTK_LIST_VALIDATION_SECTION_CHANGES,
+                                          "item at %u reports wrong section: [%u, %u) but should be [%u, %u)",
+                                          position + i,
+                                          start, end,
+                                          position + i - offset, position + i - offset + section_items);
+        }
+      offset++;
+      if (offset == section_items)
+        {
+          section++;
+          if (section < sections_get_size (&self->sections))
+            section_items = sections_get (&self->sections, section);
+          else
+            section_items = 0;
+          offset = 0;
+        }
+    }
 }
 
 static void
@@ -128,6 +214,111 @@ gtk_list_model_validator_validate_range (GtkListModelValidator *self,
                                         self_position + i);
       g_object_unref (o);
     }
+}
+
+static void
+gtk_list_model_validator_invalidate_sections (GtkListModelValidator *self,
+                                              guint                  position,
+                                              guint                  removed,
+                                              guint                  added)
+{
+  guint section, offset, remaining;
+  
+  section = gtk_list_model_validator_find_section_index (self, position, &offset);
+  
+  /* first, delete all the removed items from the sections */
+  remaining = removed;
+  while (remaining > 0)
+    {
+      guint section_items = sections_get (&self->sections, section);
+      if (remaining >= section_items - offset)
+        {
+          if (offset)
+            {
+              remaining -= section_items - offset;
+              *sections_index (&self->sections, section) = offset;
+              section++;
+              offset = 0;
+            }
+          else
+            {
+              remaining -= section_items;
+              sections_splice (&self->sections, section, 1, FALSE, NULL, 0);
+            }
+        }
+      else
+        {
+          *sections_index (&self->sections, section) -= remaining;
+          remaining = 0;
+        }
+    }
+
+  /* now add all the new items into their sections */
+  if (offset > 0 && sections_get (&self->sections, section) > offset)
+    {
+      *sections_index (&self->sections, section) += added;
+    }
+  else if (added > 0)
+    {
+      guint start, end;
+      guint pos = position;
+
+      remaining = added;
+      if (offset == 0 && section > 0)
+        {
+          section--;
+          offset = sections_get (&self->sections, section);
+        }
+
+      if (offset)
+        g_assert (offset == sections_get (&self->sections, section));
+      else
+        g_assert (section == 0);
+
+      gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), pos, &start, &end);
+      if (start < pos)
+        {
+          g_assert (remaining >= end - start - offset);
+          remaining -= end - start - offset;
+          *sections_index (&self->sections, section) = end - start;
+          section++;
+          pos = end;
+        }
+      else if (offset)
+        section++;
+
+      while (remaining > 0)
+        {
+          gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), pos, &start, &end);
+          if (end - start <= remaining)
+            {
+              sections_splice (&self->sections, section, 0, FALSE, (guint[1]) { end - start }, 1);
+              section++;
+              remaining -= end - start;
+              pos = end;
+            }
+          else
+            {
+              g_assert (end - start == remaining + sections_get (&self->sections, section));
+              *sections_index (&self->sections, section) = end - start;
+              section++;
+              remaining = 0;
+            }
+        }
+    }
+
+  gtk_list_model_validator_self_check_sections (self);
+}
+
+static void
+gtk_list_model_validator_sections_changed_cb (GtkSectionModel       *model,
+                                              guint                  position,
+                                              guint                  n_items,
+                                              GtkListModelValidator *self)
+{
+  gtk_list_model_validator_invalidate_sections (self, position, n_items, n_items);
+
+  gtk_list_model_validator_validate_section_range (self, 0, items_get_size (&self->items));
 }
 
 static void
@@ -159,6 +350,15 @@ gtk_list_model_validator_items_changed_cb (GListModel            *model,
   for (i = 0; i < added; i++)
     {
       *items_index (&self->items, position + i) = g_list_model_get_item (model, position + i);
+    }
+
+  if (GTK_IS_SECTION_MODEL (model))
+    {
+      gtk_list_model_validator_invalidate_sections (self, position, removed, added);
+
+      /* Should we only validate unchanged items here?
+       * Because this also validates the newly added ones */
+      gtk_list_model_validator_validate_section_range (self, 0, items_get_size (&self->items));
     }
 }
 
@@ -245,8 +445,11 @@ gtk_list_model_validator_clear_model (GtkListModelValidator *self)
     return;
 
   items_set_size (&self->items, 0);
+  sections_set_size (&self->sections, 0);
   g_signal_handlers_disconnect_by_func (self->model, gtk_list_model_validator_items_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_list_model_validator_notify_n_items_cb, self);
+  if (GTK_IS_SECTION_MODEL (self->model))
+    g_signal_handlers_disconnect_by_func (self->model, gtk_list_model_validator_sections_changed_cb, self);
   g_object_weak_unref (G_OBJECT (self->model), gtk_list_model_validator_weak_unref_cb, self);
   self->model = NULL;
 }
@@ -286,6 +489,8 @@ gtk_list_model_validator_class_init (GtkListModelValidatorClass *class)
 static void
 gtk_list_model_validator_init (GtkListModelValidator *self)
 {
+  items_init (&self->items);
+  sections_init (&self->sections);
 }
 
 /*<private>
@@ -324,7 +529,7 @@ void
 gtk_list_model_validator_set_model (GtkListModelValidator *self,
                                     GListModel            *model)
 {
-  guint i, added;
+  guint i;
 
   g_return_if_fail (GTK_IS_LIST_MODEL_VALIDATOR (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -342,13 +547,25 @@ gtk_list_model_validator_set_model (GtkListModelValidator *self,
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_list_model_validator_items_changed_cb), self);
       g_signal_connect (model, "notify::n-items", G_CALLBACK (gtk_list_model_validator_notify_n_items_cb), self);
+      if (GTK_IS_SECTION_MODEL (model))
+        g_signal_connect (model, "sections-changed", G_CALLBACK (gtk_list_model_validator_sections_changed_cb), self);
       g_object_weak_ref (G_OBJECT (model), gtk_list_model_validator_weak_unref_cb, self);
 
-      added = g_list_model_get_n_items (G_LIST_MODEL (model));
-      items_set_size (&self->items, added);
-      for (i = 0; i < added; i++)
+      self->notified_n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+      items_set_size (&self->items, self->notified_n_items);
+      for (i = 0; i < self->notified_n_items; i++)
         {
           *items_index (&self->items, i) = g_list_model_get_item (model, i);
+        }
+      if (GTK_IS_SECTION_MODEL (self->model))
+        {
+          guint start, end;
+
+          for (i = 0; i < self->notified_n_items; i = end)
+            {
+              gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), i, &start, &end);
+              sections_append (&self->sections, end - start);
+            }
         }
     }
   else
