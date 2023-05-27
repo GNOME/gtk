@@ -77,6 +77,11 @@ gtk_string_sorter_get_key (GtkExpression *expression,
     return NULL;
 
   string = g_value_get_string (&value);
+  if (string == NULL)
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
 
   if (ignore_case)
     s = g_utf8_casefold (string, -1);
