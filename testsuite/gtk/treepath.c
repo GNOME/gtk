@@ -1,4 +1,4 @@
-/* GtkTrePath tests.
+/* GtkTreePath tests.
  *
  * Copyright (C) 2011, Red Hat, Inc.
  * Authors: Matthias Clasen <mclasen@redhat.com>
