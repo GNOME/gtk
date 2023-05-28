@@ -536,7 +536,7 @@ test_sections (gconstpointer model_id)
 
   store = g_list_store_new (G_TYPE_OBJECT);
   flatten = gtk_flatten_list_model_new (G_LIST_MODEL (store));
-  sort = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (flatten), NULL);
+  sort = create_sort_list_model (model_id, TRUE, G_LIST_MODEL (flatten), NULL);
 
   for (i = 0; i < 500; i++)
     {
