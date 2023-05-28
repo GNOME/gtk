@@ -1422,7 +1422,7 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_TREE_ITEM,
   GTK_ACCESSIBLE_ROLE_WIDGET,
   GTK_ACCESSIBLE_ROLE_WINDOW,
-  GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON
+  GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON GDK_AVAILABLE_ENUMERATOR_IN_4_10
 } GtkAccessibleRole;
 
 /**
@@ -1449,7 +1449,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected. Value type: boolean or undefined
  * @GTK_ACCESSIBLE_STATE_VISITED: Indicates that a widget with the
- * GTK_ACCESSIBLE_ROLE_LINK has been visited. Value type: boolean. Since: 4.12
+ *   GTK_ACCESSIBLE_ROLE_LINK has been visited. Value type: boolean.
+ *   Since: 4.12
  *
  * The possible accessible states of a [iface@Accessible].
  */
@@ -1462,7 +1463,7 @@ typedef enum {
   GTK_ACCESSIBLE_STATE_INVALID,
   GTK_ACCESSIBLE_STATE_PRESSED,
   GTK_ACCESSIBLE_STATE_SELECTED,
-  GTK_ACCESSIBLE_STATE_VISITED
+  GTK_ACCESSIBLE_STATE_VISITED GDK_AVAILABLE_ENUMERATOR_IN_4_12
 } GtkAccessibleState;
 
 /**
