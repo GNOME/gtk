@@ -1004,6 +1004,8 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
  * It is not valid for either tile to have 0 items after
  * the split.
  *
+ * This function does not update the tiles' areas.
+ *
  * Returns: The new tile
  **/
 GtkListTile *
@@ -1036,10 +1038,6 @@ gtk_list_tile_split (GtkListItemManager *self,
  * because they can be merged with the next item(s).
  *
  * Note that this only looks forward, but never backward.
- *
- * A special case here are filler tiles. They only get
- * collected, when they are explicitly passed in, but never
- * otherwise.
  *
  * Returns: The next tile or NULL if everything was gc'ed
  **/
@@ -1093,6 +1091,15 @@ gtk_list_tile_gc (GtkListItemManager *self,
   return tile;
 }
 
+/*
+ * gtk_list_item_manager_gc_tiles:
+ * @self: the listitemmanager
+ *
+ * Removes all tiles of type GTK_LIST_TILE_REMOVED
+ * and merges item tiles as much as possible.
+ *
+ * This function does not update the tiles' areas.
+ */
 void
 gtk_list_item_manager_gc_tiles (GtkListItemManager *self)
 {
