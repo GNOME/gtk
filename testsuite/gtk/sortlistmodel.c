@@ -52,6 +52,41 @@ model_to_string (GListModel *model)
   return g_string_free (string, FALSE);
 }
 
+static char *
+section_model_to_string (GListModel *model)
+{
+  GString *string = g_string_new (NULL);
+  guint i, s, e;
+
+  if (!GTK_IS_SECTION_MODEL (model))
+    return model_to_string (model);
+
+  i = 0;
+  while (i < g_list_model_get_n_items (model))
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (model), i, &s, &e);
+      g_assert (s == i);
+
+      if (i > 0)
+        g_string_append (string, " ");
+
+      g_string_append (string, "[");
+
+      for (; i < e; i++)
+        {
+          if (i > s)
+            g_string_append (string, " ");
+
+          g_string_append_printf (string, "%u", get (model, i));
+        }
+
+      g_string_append (string, "]");
+      i = e;
+    }
+
+  return g_string_free (string, FALSE);
+}
+
 static void
 splice (GListStore *store,
         guint       pos,
@@ -109,6 +144,14 @@ insert (GListStore *store,
 
 #define assert_model(model, expected) G_STMT_START{ \
   char *s = model_to_string (G_LIST_MODEL (model)); \
+  if (!g_str_equal (s, expected)) \
+     g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
+         #model " == " #expected, s, "==", expected); \
+  g_free (s); \
+}G_STMT_END
+
+#define assert_section_model(model, expected) G_STMT_START{ \
+  char *s = section_model_to_string (G_LIST_MODEL (model)); \
   if (!g_str_equal (s, expected)) \
      g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
          #model " == " #expected, s, "==", expected); \
@@ -177,6 +220,20 @@ items_changed (GListModel *model,
 }
 
 static void
+sections_changed (GListModel *model,
+                  guint       position,
+                  guint       n_items,
+                  GString    *changes)
+{
+  g_assert_true (n_items != 0);
+
+  if (changes->len)
+    g_string_append (changes, ", ");
+
+  g_string_append_printf (changes, "s%u:%u", position, n_items);
+}
+
+static void
 notify_n_items (GObject    *object,
                 GParamSpec *pspec,
                 GString    *changes)
@@ -236,6 +293,7 @@ new_model (gpointer model)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "sections-changed", G_CALLBACK (sections_changed), changes);
   g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
@@ -571,55 +629,82 @@ test_add_remove_item (void)
 }
 
 static int
-sort_func (gconstpointer p1,
-           gconstpointer p2,
-           gpointer      data)
+by_n (gconstpointer p1,
+      gconstpointer p2,
+      gpointer      data)
 {
-  const char *s1 = gtk_string_object_get_string ((GtkStringObject *)p1);
-  const char *s2 = gtk_string_object_get_string ((GtkStringObject *)p2);
+  guint n1 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p1), number_quark));
+  guint n2 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p2), number_quark));
+  unsigned int n = GPOINTER_TO_UINT (data);
 
-  /* compare just the first byte */
-  return (int)(s1[0]) - (int)(s2[0]);
+  n1 = n1 / n;
+  n2 = n2 / n;
+
+  if (n1 < n2)
+    return -1;
+  else if (n1 > n2)
+    return 1;
+  else
+    return 0;
+}
+
+static int
+weird (gconstpointer p1,
+       gconstpointer p2,
+       gpointer      data)
+{
+  guint n1 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p1), number_quark));
+  guint n2 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p2), number_quark));
+
+  if (n1 == 5 && n2 != 5)
+    return -1;
+  else if (n1 != 5 && n2 == 5)
+    return 1;
+
+  return by_n (p1, p2, data);
 }
 
 static void
 test_sections (void)
 {
-  GtkStringList *list;
-  const char *strings[] = {
-    "aaa",
-    "aab",
-    "abc",
-    "bbb",
-    "bq1",
-    "bq2",
-    "cc",
-    "cx",
-    NULL
-  };
+  GListStore *store;
+  GtkSortListModel *model;
   GtkSorter *sorter;
-  GtkSortListModel *sorted;
-  GtkSorter *section_sorter;
-  guint s, e;
 
-  list = gtk_string_list_new (strings);
-  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
-  sorted = gtk_sort_list_model_new (G_LIST_MODEL (list), sorter);
-  section_sorter = GTK_SORTER (gtk_custom_sorter_new (sort_func, NULL, NULL));
-  gtk_sort_list_model_set_section_sorter (GTK_SORT_LIST_MODEL (sorted), section_sorter);
-  g_object_unref (section_sorter);
+  store = new_store ((guint[]) { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 });
+  model = new_model (store);
+  assert_model (model, "1 2 3 4 5 6 7 8 9 10");
+  assert_section_model (model, "[1 2 3 4 5 6 7 8 9 10]");
+  assert_changes (model, "");
 
-  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 0, &s, &e);
-  g_assert_cmpint (s, ==, 0);
-  g_assert_cmpint (e, ==, 3);
-  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 3, &s, &e);
-  g_assert_cmpint (s, ==, 3);
-  g_assert_cmpint (e, ==, 6);
-  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 6, &s, &e);
-  g_assert_cmpint (s, ==, 6);
-  g_assert_cmpint (e, ==, 8);
+  g_assert_true (gtk_sort_list_model_get_section_sorter (model) == NULL);
 
-  g_object_unref (sorted);
+  sorter = GTK_SORTER (gtk_custom_sorter_new (by_n, GUINT_TO_POINTER (3), NULL));
+  gtk_sort_list_model_set_section_sorter (model, sorter);
+  g_assert_true (gtk_sort_list_model_get_section_sorter (model) == sorter);
+  g_object_unref (sorter);
+
+  assert_changes (model, "s0:10");
+  assert_section_model (model, "[1 2] [3 4 5] [6 7 8] [9 10]");
+
+  sorter = GTK_SORTER (gtk_custom_sorter_new (by_n, GUINT_TO_POINTER (5), NULL));
+  g_assert_false (gtk_sort_list_model_get_section_sorter (model) == sorter);
+  gtk_sort_list_model_set_section_sorter (model, sorter);
+  g_assert_true (gtk_sort_list_model_get_section_sorter (model) == sorter);
+  g_object_unref (sorter);
+
+  assert_changes (model, "s0:10");
+  assert_section_model (model, "[1 2 3 4] [5 6 7 8 9] [10]");
+
+  sorter = GTK_SORTER (gtk_custom_sorter_new (weird, GUINT_TO_POINTER (5), NULL));
+  gtk_sort_list_model_set_section_sorter (model, sorter);
+  g_object_unref (sorter);
+
+  assert_changes (model, "0-10+10");
+  assert_section_model (model, "[5] [1 2 3 4] [6 7 8 9] [10]");
+
+  g_object_unref (store);
+  g_object_unref (model);
 }
 
 int

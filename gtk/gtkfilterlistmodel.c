@@ -191,6 +191,39 @@ gtk_filter_list_model_get_section (GtkSectionModel *model,
 }
 
 static void
+gtk_filter_list_model_sections_changed_cb (GtkSectionModel *model,
+                                           unsigned int     position,
+                                           unsigned int     n_items,
+                                           gpointer         user_data)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (user_data);
+  unsigned int start, end;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return;
+
+    case GTK_FILTER_MATCH_ALL:
+      gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), position, n_items);
+      break;
+
+    case GTK_FILTER_MATCH_SOME:
+      if (position > 0)
+        start = gtk_bitset_get_size_in_range (self->matches, 0, position - 1);
+      else
+        start = 0;
+      end = gtk_bitset_get_size_in_range (self->matches, 0, position + n_items - 1);
+      if (end - start > 0)
+        gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), start, end - start);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 gtk_filter_list_model_section_model_init (GtkSectionModelInterface *iface)
 {
   iface->get_section = gtk_filter_list_model_get_section;
@@ -465,6 +498,7 @@ gtk_filter_list_model_clear_model (GtkFilterListModel *self)
 
   gtk_filter_list_model_stop_filtering (self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_items_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_sections_changed_cb, self);
   g_clear_object (&self->model);
   if (self->matches)
     gtk_bitset_remove_all (self->matches);
@@ -829,6 +863,8 @@ gtk_filter_list_model_set_model (GtkFilterListModel *self,
     {
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_filter_list_model_items_changed_cb), self);
+      if (GTK_IS_SECTION_MODEL (model))
+        g_signal_connect (model, "sections-changed", G_CALLBACK (gtk_filter_list_model_sections_changed_cb), self);
       if (removed == 0)
         {
           self->strictness = GTK_FILTER_MATCH_NONE;

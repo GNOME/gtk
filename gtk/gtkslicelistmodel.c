@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkslicelistmodel.h"
+#include "gtksectionmodelprivate.h"
 
 #include "gtkprivate.h"
 
@@ -31,6 +32,8 @@
  * This is useful when implementing paging by setting the size to the number
  * of elements per page and updating the offset whenever a different page is
  * opened.
+ *
+ * `GtkSliceListModel` passes through sections from the underlying model.
  */
 
 #define DEFAULT_SIZE 10
@@ -52,8 +55,6 @@ struct _GtkSliceListModel
   GListModel *model;
   guint offset;
   guint size;
-
-  guint n_items;
 };
 
 struct _GtkSliceListModelClass
@@ -111,8 +112,69 @@ gtk_slice_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_slice_list_model_get_item;
 }
 
+static void
+gtk_slice_list_model_get_section (GtkSectionModel *model,
+                                  guint            position,
+                                  guint           *start,
+                                  guint           *end)
+{
+  GtkSliceListModel *self = GTK_SLICE_LIST_MODEL (model);
+  unsigned int n_items;
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+  if (position >= n_items)
+    {
+      *start = n_items;
+      *end = G_MAXUINT;
+    }
+  else
+    {
+      gtk_list_model_get_section (self->model, position + self->offset, start, end);
+
+      *start = MAX (*start, self->offset) - self->offset;
+      *end = MIN (*end - self->offset, n_items);
+    }
+}
+
+static void
+gtk_slice_list_model_sections_changed_cb (GtkSectionModel *model,
+                                          unsigned int     position,
+                                          unsigned int     n_items,
+                                          gpointer         user_data)
+{
+  GtkSliceListModel *self = GTK_SLICE_LIST_MODEL (user_data);
+  unsigned int start = position;
+  unsigned int end = position + n_items;
+  unsigned int size;
+
+  if (end <= self->offset)
+    return;
+
+  size = g_list_model_get_n_items (G_LIST_MODEL (self));
+
+  end = MIN (end - self->offset, size);
+
+  if (start <= self->offset)
+    start = 0;
+  else
+    start = start - self->offset;
+
+  if (start >= size)
+    return;
+
+  gtk_section_model_sections_changed (GTK_SECTION_MODEL (self), start, end - start);
+}
+
+static void
+gtk_slice_list_model_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_slice_list_model_get_section;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkSliceListModel, gtk_slice_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_slice_list_model_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_slice_list_model_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL, gtk_slice_list_model_section_model_init))
+
 
 static void
 gtk_slice_list_model_items_changed_cb (GListModel        *model,
@@ -238,6 +300,7 @@ gtk_slice_list_model_clear_model (GtkSliceListModel *self)
   if (self->model == NULL)
     return;
 
+  g_signal_handlers_disconnect_by_func (self->model, gtk_slice_list_model_sections_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_slice_list_model_items_changed_cb, self);
   g_clear_object (&self->model);
 }
@@ -387,6 +450,9 @@ gtk_slice_list_model_set_model (GtkSliceListModel *self,
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_slice_list_model_items_changed_cb), self);
       added = g_list_model_get_n_items (G_LIST_MODEL (self));
+
+      if (GTK_IS_SECTION_MODEL (model))
+        g_signal_connect (model, "sections-changed", G_CALLBACK (gtk_slice_list_model_sections_changed_cb), self);
     }
   else
     {
