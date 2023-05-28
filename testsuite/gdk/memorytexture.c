@@ -20,6 +20,13 @@ typedef enum {
   N_TEXTURE_METHODS
 } TextureMethod;
 
+typedef enum {
+  CHANNEL_UINT_8,
+  CHANNEL_UINT_16,
+  CHANNEL_FLOAT_16,
+  CHANNEL_FLOAT_32,
+} ChannelType;
+
 struct _TextureBuilder
 {
   GdkMemoryFormat format;
@@ -102,6 +109,44 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     default:
       g_assert_not_reached ();
       return 4;
+    }
+}
+
+static ChannelType
+gdk_memory_format_get_channel_type (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+      return CHANNEL_UINT_8;
+
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
+      return CHANNEL_UINT_16;
+
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      return CHANNEL_FLOAT_16;
+
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      return CHANNEL_FLOAT_32;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return CHANNEL_UINT_8;
     }
 }
 
@@ -270,6 +315,26 @@ decode (gconstpointer     data,
     }
 
   return TRUE;
+}
+
+static gpointer
+encode_two_formats (GdkMemoryFormat format1,
+                    GdkMemoryFormat format2)
+{
+  return GSIZE_TO_POINTER (format1 * GDK_MEMORY_N_FORMATS + format2);
+}
+
+static void
+decode_two_formats (gconstpointer    data,
+                    GdkMemoryFormat *format1,
+                    GdkMemoryFormat *format2)
+{
+  gsize value = GPOINTER_TO_SIZE (data);
+
+  *format2 = value % GDK_MEMORY_N_FORMATS;
+  value /= GDK_MEMORY_N_FORMATS;
+
+  *format1 = value;
 }
 
 static void
@@ -720,6 +785,16 @@ ensure_texture_format (GdkTexture      *texture,
 }
 
 static void
+color_make_opaque (GdkRGBA       *result,
+                   const GdkRGBA *color)
+{
+  result->red *= color->alpha;
+  result->green *= color->alpha;
+  result->blue *= color->alpha;
+  result->alpha = 1.0f;
+}
+
+static void
 create_random_color (GdkRGBA *color)
 {
   /* Generate colors so that premultiplying will result in values in steps of 1/15th */
@@ -831,6 +906,70 @@ test_download_192x192 (gconstpointer data)
 }
 
 static void
+test_conversion (gconstpointer data,
+                 int           size)
+{
+  GdkMemoryFormat format1, format2;
+  GdkTexture *test1, *test2;
+  GdkRGBA color1, color2;
+  gboolean accurate;
+  gsize i;
+
+  decode_two_formats (data, &format1, &format2);
+
+  if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16)
+    accurate = FALSE;
+  else
+    accurate = TRUE;
+
+  for (i = 0; i < N; i++)
+    {
+      /* non-premultiplied can represet GdkRGBA (1, 1, 1, 0)
+       * but premultiplied cannot.
+       * Premultiplied will always represent this as (0, 0, 0, 0)
+       */
+      do
+        {
+          create_random_color (&color1);
+        }
+      while (color1.alpha == 0 &&
+             gdk_memory_format_is_premultiplied (format1) !=
+             gdk_memory_format_is_premultiplied (format2));
+
+      /* If the source can't handle alpha, make sure
+       * the target uses with the opaque version of the color.
+       */
+      color2 = color1;
+      if (!gdk_memory_format_has_alpha (format1) &&
+          gdk_memory_format_has_alpha (format2))
+        color_make_opaque (&color2, &color2);
+
+      test1 = create_texture (format1, TEXTURE_METHOD_LOCAL, 1, 1, &color1);
+      test2 = create_texture (format2, TEXTURE_METHOD_LOCAL, 1, 1, &color2);
+
+      /* Convert the first one to the format of the 2nd */
+      test1 = ensure_texture_format (test1, format2);
+      
+      compare_textures (test1, test2, accurate);
+
+      g_object_unref (test2);
+      g_object_unref (test1);
+    }
+}
+
+static void
+test_conversion_1x1 (gconstpointer data)
+{
+  test_conversion (data, 1);
+}
+
+static void
+test_conversion_4x4 (gconstpointer data)
+{
+  test_conversion (data, 4);
+}
+
+static void
 add_test (const char    *name,
           GTestDataFunc  func)
 {
@@ -855,6 +994,29 @@ add_test (const char    *name,
     }
 }
 
+static void
+add_conversion_test (const char    *name,
+                     GTestDataFunc  func)
+{
+  GdkMemoryFormat format1, format2;
+  GEnumClass *enum_class;
+
+  enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
+
+  for (format1 = 0; format1 < GDK_MEMORY_N_FORMATS; format1++)
+    {
+      for (format2 = 0; format2 < GDK_MEMORY_N_FORMATS; format2++)
+        {
+          char *test_name = g_strdup_printf ("%s/%s/%s",
+                                             name,
+                                             g_enum_get_value (enum_class, format1)->value_nick,
+                                             g_enum_get_value (enum_class, format2)->value_nick);
+          g_test_add_data_func_full (test_name, encode_two_formats (format1, format2), func, NULL);
+          g_free (test_name);
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -865,6 +1027,8 @@ main (int argc, char *argv[])
   add_test ("/memorytexture/download_1x1", test_download_1x1);
   add_test ("/memorytexture/download_4x4", test_download_4x4);
   add_test ("/memorytexture/download_192x192", test_download_192x192);
+  add_conversion_test ("/memorytexture/conversion_1x1", test_conversion_1x1);
+  add_conversion_test ("/memorytexture/conversion_4x4", test_conversion_4x4);
 
   gl_renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
