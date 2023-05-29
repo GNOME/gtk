@@ -373,7 +373,7 @@ _gtk_css_parser_read_char (GtkCssParser *parser,
       parser->data++;
       return TRUE;
     }
-  if (*parser->data >= 127)
+  if ((*(guchar *) parser->data) >= 127)
     {
       gsize len = g_utf8_skip[(guint) *(guchar *) parser->data];
 
