@@ -600,6 +600,11 @@ gdk_memory_convert (guchar              *dest_data,
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
+
+      /* Note: Converting from a premultiplied format to an opaque format is defined
+       * to yield the same result as compositing over black, which works out to
+       * using the premultiplied values, and just dropping alpha.
+       */
       if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
         unpremultiply (tmp, width);
       else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
