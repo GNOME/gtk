@@ -171,13 +171,21 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   Download *download = download_;
   GLenum gl_internal_format, gl_format, gl_type;
   int major, minor;
+  unsigned int internal_texture_format, dummy;
 
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
   gdk_gl_context_get_version (context, &major, &minor);
 
+  gdk_memory_format_gl_format (gdk_texture_get_format (texture),
+                               FALSE,
+                               major, minor,
+                               &internal_texture_format,
+                               &dummy, &dummy);
+
   if (download->stride == expected_stride &&
       !gdk_gl_context_get_use_es (context) &&
-      gdk_memory_format_gl_format (download->format, TRUE, major, minor, &gl_internal_format, &gl_format, &gl_type))
+      gdk_memory_format_gl_format (download->format, FALSE, major, minor, &gl_internal_format, &gl_format, &gl_type) &&
+      gl_internal_format == internal_texture_format)
     {
       glGetTexImage (GL_TEXTURE_2D,
                      0,
