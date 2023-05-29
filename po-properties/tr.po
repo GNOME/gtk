@@ -1,6 +1,6 @@
 # Turkish translation of gtk+-properties to Turkish
 # Copyright (C) 1999-2003, 2004, 2007 Free Software Foundation, Inc.
-# Copyright (C) 2008-2022 gtk+-properties's COPYRIGHT HOLDER
+# Copyright (C) 2008-2023 gtk+-properties's COPYRIGHT HOLDER
 # This file is distributed under the same licence as the gtk+-properties package.
 #
 # Arman Aksoy <armish@linux-sevenler.de, 2003.
@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 00:37+0000\n"
+"POT-Creation-Date: 2023-01-02 15:33+0000\n"
 "PO-Revision-Date: 2021-02-21 21:04+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -2033,7 +2033,7 @@ msgstr "Alan"
 
 #: gtk/gtkcellareacontext.c:116
 msgid "The Cell Area this context was created for"
-msgstr "Hücre alanı içeriği yaratıldı"
+msgstr "Bu bağlamın oluşturulduğu Hücre Alanı"
 
 #: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151
 #: gtk/gtktreeviewcolumn.c:300
@@ -3968,11 +3968,11 @@ msgstr "İptal etiketi"
 msgid "The label on the cancel button"
 msgstr "İptal düğmesi üzerindeki etiket"
 
-#: gtk/gtkfilechooserwidget.c:8669 gtk/gtkfilechooserwidget.c:8670
+#: gtk/gtkfilechooserwidget.c:8672 gtk/gtkfilechooserwidget.c:8673
 msgid "Search mode"
 msgstr "Arama kipi"
 
-#: gtk/gtkfilechooserwidget.c:8676 gtk/gtkfilechooserwidget.c:8677
+#: gtk/gtkfilechooserwidget.c:8679 gtk/gtkfilechooserwidget.c:8680
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "Alt başlık"
