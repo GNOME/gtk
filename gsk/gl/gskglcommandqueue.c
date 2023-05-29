@@ -1447,6 +1447,7 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
   return fbo_id;
 }
 
+
 static GdkMemoryFormat
 memory_format_gl_format (GdkMemoryFormat  data_format,
                          gboolean         use_es,
@@ -1630,14 +1631,14 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   use_es = gdk_gl_context_get_use_es (self->context);
   gdk_gl_context_get_version (self->context, &major, &minor);
   data_format = gdk_texture_get_format (chunks[0].texture);
-  memory_format_gl_format (data_format,
-                           use_es,
-                           major,
-                           minor,
-                           &gl_internalformat,
-                           &gl_format,
-                           &gl_type,
-                           &gl_swizzle);
+  data_format = memory_format_gl_format (data_format,
+                                         use_es,
+                                         major,
+                                         minor,
+                                         &gl_internalformat,
+                                         &gl_format,
+                                         &gl_type,
+                                         &gl_swizzle);
 
   glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
 
