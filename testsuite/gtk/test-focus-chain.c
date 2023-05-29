@@ -78,7 +78,7 @@ quit_iteration_loop (gpointer user_data)
 }
 
 static void
-wait (guint millis)
+timed_loop (guint millis)
 {
   gboolean keep_running = TRUE;
 
@@ -145,7 +145,7 @@ generate_focus_chain (GtkWidget        *window,
         }
 
       g_string_append_printf (output, "%s\n", name);
-      wait (100);
+      timed_loop (100);
       count++;
 
       if (!first)
