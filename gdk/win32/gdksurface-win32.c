@@ -50,6 +50,7 @@
 #include "gdkdisplay-win32.h"
 #include "gdkdevice-win32.h"
 #include "gdkcairocontext-win32.h"
+#include "gdkmonitor-win32.h"
 
 #include <cairo-win32.h>
 #include <dwmapi.h>
@@ -625,7 +626,8 @@ get_outer_rect (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_fullscreen (GdkSurface *window);
+gdk_win32_surface_fullscreen (GdkSurface *window,
+                              GdkMonitor *monitor);
 
 static void
 show_window_internal (GdkSurface *window,
@@ -789,11 +791,7 @@ show_window_internal (GdkSurface *window,
     }
 
 
-  if (window->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
-    {
-      gdk_win32_surface_fullscreen (window);
-    }
-  else if (window->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
+  if (window->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
       GtkShowWindow (window, SW_MAXIMIZE);
     }
@@ -4008,11 +4006,12 @@ gdk_win32_surface_unmaximize (GdkSurface *surface)
 }
 
 static void
-gdk_win32_surface_fullscreen (GdkSurface *window)
+gdk_win32_surface_fullscreen (GdkSurface *window,
+                              GdkMonitor *monitor)
 {
   int x, y, width, height;
   FullscreenInfo *fi;
-  HMONITOR monitor;
+  HMONITOR hmonitor = NULL;
   MONITORINFO mi;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
@@ -4025,9 +4024,14 @@ gdk_win32_surface_fullscreen (GdkSurface *window)
     {
       GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
-      monitor = MonitorFromWindow (GDK_SURFACE_HWND (window), MONITOR_DEFAULTTONEAREST);
+      if (monitor && GDK_IS_WIN32_MONITOR (monitor))
+        hmonitor = GDK_WIN32_MONITOR (monitor)->hmonitor;
+
+      if (!hmonitor)
+        hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (window), MONITOR_DEFAULTTONEAREST);
+
       mi.cbSize = sizeof (mi);
-      if (monitor && GetMonitorInfo (monitor, &mi))
+      if (hmonitor && GetMonitorInfo (hmonitor, &mi))
 	{
 	  x = mi.rcMonitor.left;
 	  y = mi.rcMonitor.top;
@@ -4869,9 +4873,16 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
   if (gdk_toplevel_layout_get_fullscreen (layout, &fullscreen))
     {
       if (fullscreen)
-        gdk_win32_surface_fullscreen (surface);
+        {
+          GdkMonitor *monitor;
+
+          monitor = gdk_toplevel_layout_get_fullscreen_monitor (layout);
+          gdk_win32_surface_fullscreen (surface, monitor);
+        }
       else
-        gdk_win32_surface_unfullscreen (surface);
+        {
+          gdk_win32_surface_unfullscreen (surface);
+        }
     }
 
   gdk_win32_surface_show (surface, FALSE);

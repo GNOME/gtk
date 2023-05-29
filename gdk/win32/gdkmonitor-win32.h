@@ -35,6 +35,9 @@ struct _GdkWin32Monitor
   /* Device instance path (used to match GdkWin32Monitor to monitor device) */
   char *instance_path;
 
+  /* MOnitor handle (used to fullscreen windows on monitors) */
+  HMONITOR hmonitor;
+
   /* TRUE if monitor is made up by us
    * (this happens when system has logical monitors, but no physical ones).
    */

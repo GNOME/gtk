@@ -292,6 +292,7 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       if (!w32_ex_monitor->remove)
         continue;
 
+      w32_ex_monitor->hmonitor = NULL;
       g_list_store_remove (G_LIST_STORE (win32_display->monitors), i);
       gdk_monitor_invalidate (ex_monitor);
     }
