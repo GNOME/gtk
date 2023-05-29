@@ -809,9 +809,12 @@ gtk_stack_accessible_get_first_accessible_child (GtkAccessible *accessible)
 {
   GtkStack *stack = GTK_STACK (accessible);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackPage *page = g_ptr_array_index (priv->children, 0);
+  GtkAccessible *page_accessible = NULL;
 
-  return GTK_ACCESSIBLE (g_object_ref (page));
+  if (priv->children->len > 0)
+    page_accessible = GTK_ACCESSIBLE (g_object_ref (g_ptr_array_index (priv->children, 0)));
+  
+  return page_accessible;
 }
 
 static void
