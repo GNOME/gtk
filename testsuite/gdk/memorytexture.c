@@ -106,6 +106,74 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 }
 
 static gboolean
+gdk_memory_format_has_alpha (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+      return FALSE;
+
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      return TRUE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return TRUE;
+    }
+}
+
+static gboolean
+gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      return TRUE;
+
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      return FALSE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
+static gboolean
 gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
                                gboolean         accurate,
                                const guchar    *pixel1,
@@ -678,6 +746,13 @@ test_download_1x1 (gconstpointer data)
 
       create_random_color (&color);
 
+      /* these methods may premultiply during operation */
+      if (color.alpha == 0.f &&
+          !gdk_memory_format_is_premultiplied (format) &&
+          gdk_memory_format_has_alpha (format) &&
+          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+        color = (GdkRGBA) { 0, 0, 0, 0 };
+
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, 1, 1, &color);
       test = create_texture (format, method, 1, 1, &color);
       test = ensure_texture_format (test, format);
@@ -706,6 +781,13 @@ test_download_4x4 (gconstpointer data)
 
       create_random_color (&color);
 
+      /* these methods may premultiply during operation */
+      if (color.alpha == 0.f &&
+          !gdk_memory_format_is_premultiplied (format) &&
+          gdk_memory_format_has_alpha (format) &&
+          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+        color = (GdkRGBA) { 0, 0, 0, 0 };
+
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, 4, 4, &color);
       test = create_texture (format, method, 4, 4, &color);
       test = ensure_texture_format (test, format);
@@ -730,6 +812,13 @@ test_download_192x192 (gconstpointer data)
     return;
 
   create_random_color (&color);
+
+  /* these methods may premultiply during operation */
+  if (color.alpha == 0.f &&
+      !gdk_memory_format_is_premultiplied (format) &&
+      gdk_memory_format_has_alpha (format) &&
+      (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+    color = (GdkRGBA) { 0, 0, 0, 0 };
 
   expected = create_texture (format, TEXTURE_METHOD_LOCAL, 192, 192, &color);
   test = create_texture (format, method, 192, 192, &color);
