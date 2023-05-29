@@ -596,7 +596,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
   gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
   for_size = MAX (for_size, col_min * (int) self->min_columns);
   n_columns = gtk_grid_view_compute_n_columns (self, for_size, xspacing, col_min, col_nat);
-  column_size = for_size / n_columns;
+  column_size = (for_size + xspacing) / n_columns - xspacing;
 
   i = 0;
   row_height = 0;
@@ -709,7 +709,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                                                      orientation == GTK_ORIENTATION_VERTICAL ? width : height,
                                                      xspacing,
                                                      col_min, col_nat);
-  self->column_width = (orientation == GTK_ORIENTATION_VERTICAL ? width : height) / self->n_columns;
+  self->column_width = ((orientation == GTK_ORIENTATION_VERTICAL ? width : height) + xspacing) / self->n_columns - xspacing;
   self->column_width = MAX (self->column_width, col_min);
 
   /* step 2: determine height of known rows */
