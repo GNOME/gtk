@@ -183,18 +183,18 @@ set_pixel_u8 (guchar          *data,
               const GdkRGBA   *color)
 {
   if (a >= 0)
-    data[a] = CLAMP (color->alpha * 256.f, 0.f, 255.f);
+    data[a] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
   if (premultiply)
     {
-      data[r] = CLAMP (color->red * color->alpha * 256.f, 0.f, 255.f);
-      data[g] = CLAMP (color->green * color->alpha * 256.f, 0.f, 255.f);
-      data[b] = CLAMP (color->blue * color->alpha * 256.f, 0.f, 255.f);
+      data[r] = CLAMP (color->red * color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      data[g] = CLAMP (color->green * color->alpha * 255.f + 0.5f, 0.f, 255.f);
+      data[b] = CLAMP (color->blue * color->alpha * 255.f + 0.5f, 0.f, 255.f);
     }
   else
     {
-      data[r] = CLAMP (color->red * 256.f, 0.f, 255.f);
-      data[g] = CLAMP (color->green * 256.f, 0.f, 255.f);
-      data[b] = CLAMP (color->blue * 256.f, 0.f, 255.f);
+      data[r] = CLAMP (color->red * 255.f + 0.5f, 0.f, 255.f);
+      data[g] = CLAMP (color->green * 255.f + 0.5f, 0.f, 255.f);
+      data[b] = CLAMP (color->blue * 255.f + 0.5f, 0.f, 255.f);
     }
 }
 
@@ -257,9 +257,9 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16:
       {
         guint16 pixels[3] = {
-          CLAMP (color->red * color->alpha * 65536.f, 0, 65535.f),
-          CLAMP (color->green * color->alpha * 65536.f, 0, 65535.f),
-          CLAMP (color->blue * color->alpha * 65536.f, 0, 65535.f),
+          CLAMP (color->red * color->alpha * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->green * color->alpha * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->blue * color->alpha * 65535.f + 0.5f, 0, 65535.f),
         };
         memcpy (data, pixels, 3 * sizeof (guint16));
       }
@@ -267,10 +267,10 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
       {
         guint16 pixels[4] = {
-          CLAMP (color->red * color->alpha * 65536.f, 0, 65535.f),
-          CLAMP (color->green * color->alpha * 65536.f, 0, 65535.f),
-          CLAMP (color->blue * color->alpha * 65536.f, 0, 65535.f),
-          CLAMP (color->alpha * 65536.f, 0, 65535.f),
+          CLAMP (color->red * color->alpha * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->green * color->alpha * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->blue * color->alpha * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->alpha * 65535.f + 0.5f, 0, 65535.f),
         };
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
@@ -278,10 +278,10 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16A16:
       {
         guint16 pixels[4] = {
-          CLAMP (color->red * 65536.f, 0, 65535.f),
-          CLAMP (color->green * 65536.f, 0, 65535.f),
-          CLAMP (color->blue * 65536.f, 0, 65535.f),
-          CLAMP (color->alpha * 65536.f, 0, 65535.f),
+          CLAMP (color->red * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->green * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->blue * 65535.f + 0.5f, 0, 65535.f),
+          CLAMP (color->alpha * 65535.f + 0.5f, 0, 65535.f),
         };
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
