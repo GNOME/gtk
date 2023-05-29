@@ -36,9 +36,9 @@ name ## _to_float (float        *dest, \
   for (gsize i = 0; i < n; i++) \
     { \
       T *src = (T *) (src_data + i * bpp); \
-      if (R >= 0) dest[0] = (float) src[R] / scale; else dest[0] = 1.0; \
-      if (G >= 0) dest[1] = (float) src[G] / scale; else dest[1] = 1.0; \
-      if (B >= 0) dest[2] = (float) src[B] / scale; else dest[2] = 1.0; \
+      dest[0] = (float) src[R] / scale; \
+      dest[1] = (float) src[G] / scale; \
+      dest[2] = (float) src[B] / scale; \
       if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
       dest += 4; \
     } \
@@ -52,9 +52,39 @@ name ## _from_float (guchar      *dest_data, \
   for (gsize i = 0; i < n; i++) \
     { \
       T *dest = (T *) (dest_data + i * bpp); \
-      if (R >= 0) dest[R] = CLAMP (src[0] * scale + 0.5, 0, scale); \
-      if (G >= 0) dest[G] = CLAMP (src[1] * scale + 0.5, 0, scale); \
-      if (B >= 0) dest[B] = CLAMP (src[2] * scale + 0.5, 0, scale); \
+      dest[R] = CLAMP (src[0] * scale + 0.5, 0, scale); \
+      dest[G] = CLAMP (src[1] * scale + 0.5, 0, scale); \
+      dest[B] = CLAMP (src[2] * scale + 0.5, 0, scale); \
+      if (A >= 0) dest[A] = CLAMP (src[3] * scale + 0.5, 0, scale); \
+      src += 4; \
+    } \
+}
+
+#define TYPED_GRAY_FUNCS(name, T, G, A, bpp, scale) \
+static void \
+name ## _to_float (float        *dest, \
+                   const guchar *src_data, \
+                   gsize         n) \
+{ \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      T *src = (T *) (src_data + i * bpp); \
+      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = 1.0; \
+      dest[1] = dest[2] = dest[0]; \
+      if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
+      dest += 4; \
+    } \
+} \
+\
+static void \
+name ## _from_float (guchar      *dest_data, \
+                     const float *src, \
+                     gsize        n) \
+{ \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      T *dest = (T *) (dest_data + i * bpp); \
+      if (G >= 0) dest[G] = CLAMP ((src[0] + src[1] + src[2]) * scale / 3.f + 0.5, 0, scale); \
       if (A >= 0) dest[A] = CLAMP (src[3] * scale + 0.5, 0, scale); \
       src += 4; \
     } \
@@ -71,14 +101,15 @@ TYPED_FUNCS (r8g8b8, guchar, 0, 1, 2, -1, 3, 255)
 TYPED_FUNCS (b8g8r8, guchar, 2, 1, 0, -1, 3, 255)
 TYPED_FUNCS (r16g16b16, guint16, 0, 1, 2, -1, 6, 65535)
 TYPED_FUNCS (r16g16b16a16, guint16, 0, 1, 2, 3, 8, 65535)
-TYPED_FUNCS (g8a8_premultiplied, guchar, 0, 0, 0, 1, 2, 255)
-TYPED_FUNCS (g8a8, guchar, 0, 0, 0, 1, 2, 255)
-TYPED_FUNCS (g8, guchar, 0, 0, 0, -1, 1, 255)
-TYPED_FUNCS (g16a16_premultiplied, guint16, 0, 0, 0, 1, 4, 65535)
-TYPED_FUNCS (g16a16, guint16, 0, 0, 0, 1, 4, 65535)
-TYPED_FUNCS (g16, guint16, 0, 0, 0, -1, 2, 65535)
-TYPED_FUNCS (a8, guchar, -1, -1, -1, 0, 1, 255)
-TYPED_FUNCS (a16, guint16, -1, -1, -1, 0, 2, 65535)
+
+TYPED_GRAY_FUNCS (g8a8_premultiplied, guchar, 0, 1, 2, 255)
+TYPED_GRAY_FUNCS (g8a8, guchar, 0, 1, 2, 255)
+TYPED_GRAY_FUNCS (g8, guchar, 0, -1, 1, 255)
+TYPED_GRAY_FUNCS (a8, guchar, -1, 0, 1, 255)
+TYPED_GRAY_FUNCS (g16a16_premultiplied, guint16, 0, 1, 4, 65535)
+TYPED_GRAY_FUNCS (g16a16, guint16, 0, 1, 4, 65535)
+TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
+TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
 static void
 r16g16b16_float_to_float (float        *dest,
