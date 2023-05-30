@@ -93,50 +93,22 @@ typedef enum
   GDK_DRAG_PROTO_OLE2,
 } GdkDragProtocol;
 
-GType _gdk_gc_win32_get_type (void);
-
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
-
 BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
-
-void _gdk_surface_init_position     (GdkSurface *window);
-void _gdk_surface_move_resize_child (GdkSurface *window,
-                                     int        x,
-                                     int        y,
-                                     int        width,
-                                     int        height);
 
 gboolean _gdk_win32_surface_enable_transparency (GdkSurface *window);
 
-
-/* GdkSurfaceImpl methods */
-void _gdk_win32_surface_scroll (GdkSurface *window,
-                                int        dx,
-                                int        dy);
-void _gdk_win32_surface_move_region (GdkSurface       *window,
-                                     const cairo_region_t *region,
-                                     int              dx,
-                                     int              dy);
-
-
-void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 
 void     gdk_win32_handle_table_insert  (HANDLE   *handle,
                                          gpointer data);
 void     gdk_win32_handle_table_remove  (HANDLE handle);
 
-HRGN      _gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
-                                           int                   x_origin,
-                                           int                   y_origin);
-
 cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
                                               guint scale);
 
 void    _gdk_win32_adjust_client_rect   (GdkSurface *window,
                                          RECT      *RECT);
-
-void    _gdk_selection_property_delete (GdkSurface *);
 
 void       _gdk_push_modal_window   (GdkSurface *window);
 void       _gdk_remove_modal_window (GdkSurface *window);
@@ -163,7 +135,6 @@ char *_gdk_win32_rect_to_string       (const RECT  *rect);
 void   _gdk_win32_print_event            (GdkEvent     *event);
 #endif
 
-char   *_gdk_win32_last_error_string (void);
 void    _gdk_win32_api_failed        (const char *where,
                                       const char *api);
 void    _gdk_other_api_failed        (const char *where,
@@ -212,8 +183,6 @@ extern GdkWin32Clipdrop *_win32_clipdrop;
 /* Used to identify the main thread */
 extern GThread          *_win32_main_thread;
 
-void _gdk_win32_dnd_do_dragdrop (void);
-
 typedef enum {
   GDK_WIN32_MODAL_OP_NONE = 0x0,
   GDK_WIN32_MODAL_OP_SIZE = 0x1 << 0,
@@ -240,8 +209,6 @@ HICON _gdk_win32_texture_to_hicon  (GdkTexture *texture);
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
 void _gdk_win32_display_update_cursors (GdkWin32Display   *display);
-GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay   *display, const char * cursor_name);
-GdkCursor *gdk_win32_display_cursor_from_hcursor (GdkDisplay *display, HCURSOR     hcursor);
 
 typedef struct _Win32CursorTheme Win32CursorTheme;
 
@@ -275,9 +242,6 @@ Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
 void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
-/* GdkDisplay member functions */
-GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
-
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
 
@@ -303,8 +267,6 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *window,
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const char *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
-GdkSurface *gdk_win32_screen_get_root_window (GdkWin32Screen *screen);
-GdkSurface *gdk_win32_display_get_root_window (GdkDisplay *display);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const char *display_name);
@@ -357,7 +319,6 @@ gboolean _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type);
 GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
                                                     double *x_hot,
                                                     double *y_hot);
-HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
 gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
