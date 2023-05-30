@@ -15,14 +15,9 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- */
-
 #pragma once
+
+#include "config.h"
 
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/gdkdebugprivate.h>
@@ -32,10 +27,6 @@
 #include <gdk/win32/gdkwin32keys.h>
 #include <gdk/win32/gdkdevicemanager-win32.h>
 #include <gdk/win32/gdkclipdrop-win32.h>
-//#include <gdk/win32/gdkselection-win32.h>
-
-
-#include "config.h"
 
 
 /* Old debug macros */
@@ -54,62 +45,6 @@
 
 #endif
 
-/* Make up for some minor w32api or MSVC6 header lossage */
-
-#ifndef PS_JOIN_MASK
-#define PS_JOIN_MASK (PS_JOIN_BEVEL|PS_JOIN_MITER|PS_JOIN_ROUND)
-#endif
-
-#ifndef FS_VIETNAMESE
-#define FS_VIETNAMESE 0x100
-#endif
-
-#ifndef WM_GETOBJECT
-#define WM_GETOBJECT 0x3D
-#endif
-#ifndef WM_NCXBUTTONDOWN
-#define WM_NCXBUTTONDOWN 0xAB
-#endif
-#ifndef WM_NCXBUTTONUP
-#define WM_NCXBUTTONUP 0xAC
-#endif
-#ifndef WM_NCXBUTTONDBLCLK
-#define WM_NCXBUTTONDBLCLK 0xAD
-#endif
-#ifndef WM_CHANGEUISTATE
-#define WM_CHANGEUISTATE 0x127
-#endif
-#ifndef WM_UPDATEUISTATE
-#define WM_UPDATEUISTATE 0x128
-#endif
-#ifndef WM_QUERYUISTATE
-#define WM_QUERYUISTATE 0x129
-#endif
-#ifndef WM_XBUTTONDOWN
-#define WM_XBUTTONDOWN 0x20B
-#endif
-#ifndef WM_XBUTTONUP
-#define WM_XBUTTONUP 0x20C
-#endif
-#ifndef WM_XBUTTONDBLCLK
-#define WM_XBUTTONDBLCLK 0x20D
-#endif
-#ifndef WM_NCMOUSEHOVER
-#define WM_NCMOUSEHOVER 0x2A0
-#endif
-#ifndef WM_NCMOUSELEAVE
-#define WM_NCMOUSELEAVE 0x2A2
-#endif
-#ifndef WM_APPCOMMAND
-#define WM_APPCOMMAND 0x319
-#endif
-#ifndef WM_MOUSEHWHEEL
-#define WM_MOUSEHWHEEL 0x20E
-#endif
-#ifndef WM_DPICHANGED
-#define WM_DPICHANGED 0x02E0
-#endif
-
 /* According to
  * http://blog.airesoft.co.uk/2009/11/wm_messages/
  * this is the actual internal name MS uses for this undocumented message.
@@ -121,11 +56,6 @@
 #ifndef WM_SYSMENU
 #define WM_SYSMENU 0x313
 #endif
-
-#ifndef CF_DIBV5
-#define CF_DIBV5 17
-#endif
-
 
 /* Define some combinations of GdkDebugFlags */
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
