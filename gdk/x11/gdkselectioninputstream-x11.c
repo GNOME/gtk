@@ -165,9 +165,7 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
   g_signal_handlers_disconnect_by_func (priv->display,
                                         gdk_x11_selection_input_stream_xevent,
-                                        stream);
-
-  g_object_unref (stream);
+                                        g_steal_pointer (&stream));
 }
 
 static gssize
@@ -541,7 +539,10 @@ gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
   priv->property = g_strdup_printf ("GDK_SELECTION_%p", stream); 
   priv->xproperty = gdk_x11_get_xatom_by_name_for_display (display, priv->property);
 
-  g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_selection_input_stream_xevent), stream);
+  g_signal_connect_data (display, "xevent",
+                         G_CALLBACK (gdk_x11_selection_input_stream_xevent),
+                         g_steal_pointer (&stream),
+                         (GClosureNotify) g_object_unref, 0);
 
   XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
                      priv->xselection,
