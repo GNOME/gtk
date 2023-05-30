@@ -416,7 +416,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                              "%s:%s: got PropertyNotify erroring out of INCR",
                              priv->selection, priv->target);
           /* error, should we signal one? */
-          gdk_x11_selection_input_stream_complete (stream);
+          g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
         }
       else if (g_bytes_get_size (bytes) == 0 || type == None)
         {
@@ -424,7 +424,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                              "%s:%s: got PropertyNotify ending INCR",
                              priv->selection, priv->target);
           g_bytes_unref (bytes);
-          gdk_x11_selection_input_stream_complete (stream);
+          g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
         }
       else
         {
@@ -467,7 +467,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                                      G_IO_ERROR,
                                      G_IO_ERROR_NOT_FOUND,
                                      _("Format %s not supported"), priv->target);
-            gdk_x11_selection_input_stream_complete (stream);
+            g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
           }
         else
           {
@@ -478,7 +478,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
 
             if (bytes == NULL)
               {
-                gdk_x11_selection_input_stream_complete (stream);
+                g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
               }
             else
               {
@@ -500,7 +500,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                                        g_bytes_get_size (bytes));
                     g_async_queue_push (priv->chunks, bytes);
 
-                    gdk_x11_selection_input_stream_complete (stream);
+                    g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
                   }
               }
 
