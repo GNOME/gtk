@@ -89,7 +89,7 @@ gdk_x11_selection_input_stream_fill_buffer (GdkX11SelectionInputStream *stream,
     if (size == 0)
       {
         /* EOF marker, put it back */
-        g_async_queue_push_front_unlocked (priv->chunks, bytes);
+        g_async_queue_push_front_unlocked (priv->chunks, g_steal_pointer (&bytes));
         break;
       }
     else if (size > count)
