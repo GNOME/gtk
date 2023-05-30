@@ -70,22 +70,6 @@ GdkWin32Screen *GDK_SURFACE_SCREEN(GObject *win);
  */
 #define SWP_NOZORDER_SPECIFIED HWND_TOP
 
-typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
-
-struct _GdkWin32SingleFont
-{
-  HFONT hfont;
-  UINT charset;
-  UINT codepage;
-  FONTSIGNATURE fs;
-};
-
-typedef enum {
-  GDK_WIN32_PE_STATIC,
-  GDK_WIN32_PE_AVAILABLE,
-  GDK_WIN32_PE_INUSE
-} GdkWin32PalEntryState;
-
 typedef enum
 {
   GDK_DRAG_PROTO_NONE = 0,
