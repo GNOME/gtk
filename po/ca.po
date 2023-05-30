@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-05-12 13:13+0000\n"
-"PO-Revision-Date: 2023-05-12 11:18+0100\n"
+"PO-Revision-Date: 2023-05-30 11:18+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -3275,44 +3275,52 @@ msgid "Initial state"
 msgstr "Estat inicial"
 
 #: gtk/gtkprintoperation.c:1684
+# N.T.: Usat com a nom de pestanya
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "S'està preparant per a imprimir"
+msgstr "Preparant-se per a imprimir"
 
 #: gtk/gtkprintoperation.c:1685
+# N.T.: Usat com a nom de pestanya
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr "S'estan generant les dades"
+msgstr "Generant les dades"
 
 #: gtk/gtkprintoperation.c:1686
+# N.T.: Usat com a nom de pestanya
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr "S'estan enviant les dades"
+msgstr "Enviant les dades"
 
 #: gtk/gtkprintoperation.c:1687
+# N.T.: Usat com a nom de pestanya
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "S'està esperant"
+msgstr "Esperant"
 
+# N.T.: Usat com a nom de pestanya
 #: gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr "Bloquejat a causa d'un problema"
+msgstr "Bloquejat per un problema"
 
+# N.T.: Usat com a nom de pestanya
 #: gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "S'està imprimint"
+msgstr "Imprimint"
 
+# N.T.: Usat com a nom de pestanya
 #: gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "S'ha finalitzat"
+msgstr "Finalitzat"
 
+# N.T.: Usat com a nom de pestanya
 #: gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
 msgid "Finished with error"
-msgstr "S'ha finalitzat amb error"
+msgstr "Finalitzat amb error"
 
 #: gtk/gtkprintoperation.c:2234
 #, c-format
@@ -6350,7 +6358,7 @@ msgstr "_Ordenació de les pàgines:"
 
 #: gtk/ui/gtkprintunixdialog.ui:474
 msgid "_Only print:"
-msgstr "_Només imprimeix:"
+msgstr "_Imprimeix només:"
 
 #: gtk/ui/gtkprintunixdialog.ui:490
 msgid "All sheets"
@@ -7431,15 +7439,3 @@ msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
 
-#~ msgid "Tab"
-#~ msgstr "Pestanya"
-
-# FIXME
-#~ msgid "Print to LPR"
-#~ msgstr "Imprimeix a LPR"
-
-#~ msgid "Pages Per Sheet"
-#~ msgstr "Pàgines per full"
-
-#~ msgid "Command Line"
-#~ msgstr "Línia d'ordres"
