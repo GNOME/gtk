@@ -45,9 +45,6 @@
 #include <wintab.h>
 #include <imm.h>
 
-/* for CFSTR_SHELLIDLIST */
-#include <shlobj.h>
-
 static gboolean gdk_synchronize = FALSE;
 
 /* Whether GDK initialized COM */
@@ -187,77 +184,6 @@ static_printf (const char *format,
 }
 
 void
-_gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
-				const int           nentries)
-{
-  char buf[20];
-  int i;
-
-  for (i = 0; i < nentries; i++)
-    g_print ("  %3d %02x:  %02x %02x %02x%s\n",
-	     i, i,
-	     pep[i].peRed, pep[i].peGreen, pep[i].peBlue,
-	     (pep[i].peFlags == 0 ? "" :
-	      (pep[i].peFlags == PC_EXPLICIT ? " PC_EXPLICIT" :
-	       (pep[i].peFlags == PC_NOCOLLAPSE ? " PC_NOCOLLAPSE" :
-		(pep[i].peFlags == PC_RESERVED ? " PC_RESERVED" :
-		 (g_sprintf (buf, " %d", pep[i].peFlags), buf))))));
-}
-
-void
-_gdk_win32_print_system_palette (void)
-{
-  PALETTEENTRY *pe;
-  int k;
-
-  k = GetSystemPaletteEntries (_gdk_display_hdc, 0, 0, NULL);
-  pe = g_new (PALETTEENTRY, k);
-  k = GetSystemPaletteEntries (_gdk_display_hdc, 0, k, pe);
-
-  if (!k)
-    g_print ("GetSystemPaletteEntries failed: %s\n",
-	     g_win32_error_message (GetLastError ()));
-  else
-    {
-      g_print ("System palette: %d entries\n", k);
-      _gdk_win32_print_paletteentries (pe, k);
-    }
-  g_free (pe);
-}
-
-static int
-palette_size (HPALETTE hpal)
-{
-  WORD npal = 0;
-
-  if (!GetObject (hpal, sizeof (npal), &npal))
-    WIN32_GDI_FAILED ("GetObject (HPALETTE)");
-
-  return npal;
-}
-
-void
-_gdk_win32_print_hpalette (HPALETTE hpal)
-{
-  PALETTEENTRY *pe;
-  int n, npal;
-
-  npal = palette_size (hpal);
-  pe = g_new (PALETTEENTRY, npal);
-  n = GetPaletteEntries (hpal, 0, npal, pe);
-
-  if (!n)
-    g_print ("HPALETTE %p: GetPaletteEntries failed: %s\n",
-	     hpal, g_win32_error_message (GetLastError ()));
-  else
-    {
-      g_print ("HPALETTE %p: %d (%d) entries\n", hpal, n, npal);
-      _gdk_win32_print_paletteentries (pe, n);
-    }
-  g_free (pe);
-}
-
-void
 _gdk_win32_print_dc (HDC hdc)
 {
   HGDIOBJ obj;
@@ -297,22 +223,6 @@ _gdk_win32_print_dc (HDC hdc)
 	       hrgn, _gdk_win32_rect_to_string (&rect));
     }
   DeleteObject (hrgn);
-}
-
-char *
-_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
-{
-  switch (protocol)
-    {
-#define CASE(x) case GDK_DRAG_PROTO_##x: return #x
-      CASE (NONE);
-      CASE (WIN32_DROPFILES);
-      CASE (OLE2);
-#undef CASE
-    default: return static_printf ("illegal_%d", protocol);
-    }
-  /* NOTREACHED */
-  return NULL;
 }
 
 char *
@@ -893,61 +803,11 @@ _gdk_win32_cf_to_string (UINT format)
 }
 
 char *
-_gdk_win32_data_to_string (const guchar *data,
-			   int           nbytes)
-{
-  GString *s = g_string_new ("");
-  int i;
-  char *retval;
-
-  for (i = 0; i < nbytes; i++)
-    if (data[i] >=' ' && data[i] <= '~')
-      g_string_append_printf (s, "%c  ", data[i]);
-    else
-      g_string_append_printf (s, "%02X ", data[i]);
-
-  retval = static_printf ("%s", s->str);
-  g_string_free (s, TRUE);
-
-  return retval;
-}
-
-char *
 _gdk_win32_rect_to_string (const RECT *rect)
 {
   return static_printf ("%ldx%ld@%+ld%+ld",
 			(rect->right - rect->left), (rect->bottom - rect->top),
 			rect->left, rect->top);
-}
-
-char *
-_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect)
-{
-  return static_printf ("%dx%d@%+d%+d",
-			rect->width, rect->height,
-			rect->x, rect->y);
-}
-
-char *
-_gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
-{
-  cairo_rectangle_int_t extents;
-  cairo_region_get_extents (rgn, &extents);
-  return static_printf ("%dx%d@%+d%+d",
-			extents.width, extents.height,
-			extents.x, extents.y);
-}
-
-char *
-_gdk_win32_surface_description (GdkSurface *d)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (d), NULL);
-
-  return static_printf ("%s:%p:%dx%d",
-			G_OBJECT_TYPE_NAME (d),
-			GDK_SURFACE_HWND (d),
-			gdk_surface_get_width (GDK_SURFACE (d)),
-                        gdk_surface_get_height (GDK_SURFACE (d)));
 }
 
 #endif /* G_ENABLE_DEBUG */

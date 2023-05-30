@@ -217,19 +217,13 @@ gboolean gdk_win32_ensure_com (void);
 gboolean gdk_win32_ensure_ole (void);
 
 #ifdef G_ENABLE_DEBUG
-void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
-                                        const int           nentries);
-void   _gdk_win32_print_system_palette (void);
-void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
-char *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
 char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
 char *_gdk_win32_surface_style_to_string (LONG style);
 char *_gdk_win32_surface_exstyle_to_string (LONG style);
 char *_gdk_win32_surface_pos_bits_to_string (UINT flags);
 char *_gdk_win32_drag_action_to_string (GdkDragAction actions);
-char *_gdk_win32_surface_description (GdkSurface *d);
 
 char *_gdk_win32_rop2_to_string       (int          rop2);
 char *_gdk_win32_lbstyle_to_string    (UINT         brush_style);
@@ -240,12 +234,7 @@ char *_gdk_win32_psjoin_to_string     (DWORD        pen_style);
 char *_gdk_win32_message_to_string    (UINT         msg);
 char *_gdk_win32_key_to_string        (LONG         lParam);
 char *_gdk_win32_cf_to_string         (UINT         format);
-char *_gdk_win32_data_to_string       (const guchar*data,
-                                        int          nbytes);
 char *_gdk_win32_rect_to_string       (const RECT  *rect);
-
-char *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
-char *_gdk_win32_cairo_region_to_string (const cairo_region_t    *box);
 
 void   _gdk_win32_print_event            (GdkEvent     *event);
 
