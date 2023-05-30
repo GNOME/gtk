@@ -600,9 +600,6 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   *out_type = memory_formats[format].gl.type;
   memcpy (out_swizzle, &memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
 
-  if (memory_formats[format].alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-    return FALSE;
-
   if (gles)
     {
       if (memory_formats[format].min_gl_version.gles_major > gl_major ||

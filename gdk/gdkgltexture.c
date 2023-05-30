@@ -149,6 +149,9 @@ gdk_gl_texture_find_format (gboolean         use_es,
       GLenum q_internal_format, q_format, q_type;
       GLint q_swizzle[4];
 
+      if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+        continue;
+
       if (!gdk_memory_format_gl_format (format, use_es, gl_major, gl_minor, &q_internal_format, &q_format, &q_type, &q_swizzle))
         continue;
 

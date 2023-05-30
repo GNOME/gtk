@@ -1465,7 +1465,8 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                                    gl_internalformat,
                                    gl_format,
                                    gl_type,
-                                   gl_swizzle))
+                                   gl_swizzle) &&
+      gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
     return data_format;
 
   if (gdk_memory_format_prefers_high_depth (data_format))
