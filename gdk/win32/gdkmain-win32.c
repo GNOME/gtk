@@ -183,48 +183,6 @@ static_printf (const char *format,
   return retval;
 }
 
-void
-_gdk_win32_print_dc (HDC hdc)
-{
-  HGDIOBJ obj;
-  LOGBRUSH logbrush;
-  EXTLOGPEN extlogpen;
-  HRGN hrgn;
-  RECT rect;
-  int flag;
-
-  g_print ("%p:\n", hdc);
-  obj = GetCurrentObject (hdc, OBJ_BRUSH);
-  GetObject (obj, sizeof (LOGBRUSH), &logbrush);
-  g_print ("brush: %s color=%06lx hatch=%p\n",
-	   _gdk_win32_lbstyle_to_string (logbrush.lbStyle),
-	   logbrush.lbColor, (gpointer) logbrush.lbHatch);
-  obj = GetCurrentObject (hdc, OBJ_PEN);
-  GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
-  g_print ("pen: %s %s %s %s w=%d %s\n",
-	   _gdk_win32_pstype_to_string (extlogpen.elpPenStyle),
-	   _gdk_win32_psstyle_to_string (extlogpen.elpPenStyle),
-	   _gdk_win32_psendcap_to_string (extlogpen.elpPenStyle),
-	   _gdk_win32_psjoin_to_string (extlogpen.elpPenStyle),
-	   (int) extlogpen.elpWidth,
-	   _gdk_win32_lbstyle_to_string (extlogpen.elpBrushStyle));
-  g_print ("rop2: %s textcolor=%06lx\n",
-	   _gdk_win32_rop2_to_string (GetROP2 (hdc)),
-	   GetTextColor (hdc));
-  hrgn = CreateRectRgn (0, 0, 0, 0);
-  if ((flag = GetClipRgn (hdc, hrgn)) == -1)
-    WIN32_API_FAILED ("GetClipRgn");
-  else if (flag == 0)
-    g_print ("no clip region\n");
-  else if (flag == 1)
-    {
-      GetRgnBox (hrgn, &rect);
-      g_print ("clip region: %p bbox: %s\n",
-	       hrgn, _gdk_win32_rect_to_string (&rect));
-    }
-  DeleteObject (hrgn);
-}
-
 char *
 _gdk_win32_surface_state_to_string (GdkToplevelState state)
 {
@@ -387,7 +345,7 @@ _gdk_win32_drag_action_to_string (GdkDragAction actions)
   return static_printf ("%s", buf);
 }
 
-char *
+static char *
 _gdk_win32_rop2_to_string (int rop2)
 {
   switch (rop2)
@@ -416,7 +374,7 @@ _gdk_win32_rop2_to_string (int rop2)
   return NULL;
 }
 
-char *
+static char *
 _gdk_win32_lbstyle_to_string (UINT brush_style)
 {
   switch (brush_style)
@@ -435,7 +393,7 @@ _gdk_win32_lbstyle_to_string (UINT brush_style)
   return NULL;
 }
 
-char *
+static char *
 _gdk_win32_pstype_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_TYPE_MASK)
@@ -448,7 +406,7 @@ _gdk_win32_pstype_to_string (DWORD pen_style)
   return NULL;
 }
 
-char *
+static char *
 _gdk_win32_psstyle_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_STYLE_MASK)
@@ -470,7 +428,7 @@ _gdk_win32_psstyle_to_string (DWORD pen_style)
   return NULL;
 }
 
-char *
+static char *
 _gdk_win32_psendcap_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_ENDCAP_MASK)
@@ -486,7 +444,7 @@ _gdk_win32_psendcap_to_string (DWORD pen_style)
   return NULL;
 }
 
-char *
+static char *
 _gdk_win32_psjoin_to_string (DWORD pen_style)
 {
   switch (pen_style & PS_JOIN_MASK)
@@ -500,6 +458,56 @@ _gdk_win32_psjoin_to_string (DWORD pen_style)
     }
   /* NOTREACHED */
   return NULL;
+}
+
+void
+_gdk_win32_print_dc (HDC hdc)
+{
+  HGDIOBJ obj;
+  LOGBRUSH logbrush;
+  EXTLOGPEN extlogpen;
+  HRGN hrgn;
+  RECT rect;
+  int flag;
+
+  g_print ("%p:\n", hdc);
+
+  obj = GetCurrentObject (hdc, OBJ_BRUSH);
+  GetObject (obj, sizeof (LOGBRUSH), &logbrush);
+
+  g_print ("brush: %s color=%06lx hatch=%p\n",
+           _gdk_win32_lbstyle_to_string (logbrush.lbStyle),
+           logbrush.lbColor, (gpointer) logbrush.lbHatch);
+
+  obj = GetCurrentObject (hdc, OBJ_PEN);
+  GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
+
+  g_print ("pen: %s %s %s %s w=%d %s\n",
+           _gdk_win32_pstype_to_string (extlogpen.elpPenStyle),
+           _gdk_win32_psstyle_to_string (extlogpen.elpPenStyle),
+           _gdk_win32_psendcap_to_string (extlogpen.elpPenStyle),
+           _gdk_win32_psjoin_to_string (extlogpen.elpPenStyle),
+           (int) extlogpen.elpWidth,
+           _gdk_win32_lbstyle_to_string (extlogpen.elpBrushStyle));
+
+  g_print ("rop2: %s textcolor=%06lx\n",
+           _gdk_win32_rop2_to_string (GetROP2 (hdc)),
+           GetTextColor (hdc));
+
+  hrgn = CreateRectRgn (0, 0, 0, 0);
+
+  if ((flag = GetClipRgn (hdc, hrgn)) == -1)
+    WIN32_API_FAILED ("GetClipRgn");
+  else if (flag == 0)
+    g_print ("no clip region\n");
+  else if (flag == 1)
+    {
+      GetRgnBox (hrgn, &rect);
+      g_print ("clip region: %p bbox: %s\n",
+               hrgn, _gdk_win32_rect_to_string (&rect));
+    }
+
+  DeleteObject (hrgn);
 }
 
 char *
