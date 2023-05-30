@@ -113,7 +113,15 @@ _gdk_win32_get_setting (const char *name,
     }
   else if (strcmp ("gtk-font-name", name) == 0)
     {
-      char *font_name = _get_system_font_name (_gdk_display_hdc);
+      char *font_name = NULL;
+      HDC hdc = NULL;
+
+      if ((hdc = GetDC (HWND_DESKTOP)) != NULL)
+        {
+          font_name = _get_system_font_name (hdc);
+          ReleaseDC (HWND_DESKTOP, hdc);
+          hdc = NULL;
+        }
 
       if (font_name)
         {

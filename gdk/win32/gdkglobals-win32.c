@@ -30,8 +30,6 @@
 GdkDisplay	 *_gdk_display = NULL;
 GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
-HDC		  _gdk_display_hdc;
-
 int		  _gdk_input_ignore_core;
 
 HKL		  _gdk_input_locale;
