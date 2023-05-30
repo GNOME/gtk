@@ -107,7 +107,7 @@ gdk_x11_selection_input_stream_fill_buffer (GdkX11SelectionInputStream *stream,
           memcpy (buffer, g_bytes_get_data (bytes, NULL), size);
       }
 
-    g_bytes_unref (bytes);
+    g_bytes_unref (g_steal_pointer (&bytes));
     result += size;
     if (buffer)
       buffer += size;
