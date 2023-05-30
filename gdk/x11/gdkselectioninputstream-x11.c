@@ -577,7 +577,6 @@ gdk_x11_selection_input_stream_new_finish (GAsyncResult  *result,
         *type = priv->type;
       if (format)
         *format = priv->format;
-      g_object_ref (stream);
     }
 
   return G_INPUT_STREAM (stream);
