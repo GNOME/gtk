@@ -2,8 +2,11 @@
 
 #include "gsk/gl/gskglrenderer.h"
 
+#include <epoxy/gl.h>
+
 #define N 20
 
+static GdkGLContext *gl_context = NULL;
 static GskRenderer *gl_renderer = NULL;
 
 typedef struct _TextureBuilder TextureBuilder;
@@ -12,6 +15,7 @@ typedef enum {
   TEXTURE_METHOD_LOCAL,
   TEXTURE_METHOD_GL,
   TEXTURE_METHOD_GL_RELEASED,
+  TEXTURE_METHOD_GL_NATIVE,
   TEXTURE_METHOD_PNG,
   TEXTURE_METHOD_PNG_PIXBUF,
   TEXTURE_METHOD_TIFF,
@@ -316,10 +320,10 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_A8:
     case GDK_MEMORY_G8:
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8:
       return memcmp (pixel1, pixel2, gdk_memory_format_bytes_per_pixel (format)) == 0;
 
     case GDK_MEMORY_R16G16B16:
@@ -780,6 +784,92 @@ upload_to_gl (GdkTexture *texture)
   return result;
 }
 
+static void
+release_texture (gpointer data)
+{
+  unsigned int id = GPOINTER_TO_UINT (data);
+
+  gdk_gl_context_make_current (gl_context);
+
+  glDeleteTextures (1, &id);
+}
+
+static GdkTexture *
+upload_to_gl_native (GdkTexture *texture)
+{
+  struct {
+    GdkMemoryFormat format;
+    unsigned int bpp;
+    int gl_internalformat;
+    int gl_format;
+    int gl_type;
+    int swizzle[4];
+  } formats[] = {
+    { GDK_MEMORY_R8G8B8, 3, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
+    { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, 8, GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
+    { GDK_MEMORY_G8, 1, GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_ONE } },
+    { GDK_MEMORY_G16, 2, GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_ONE } },
+    { GDK_MEMORY_G8A8_PREMULTIPLIED, 2, GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    { GDK_MEMORY_G16A16_PREMULTIPLIED, 4, GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    { GDK_MEMORY_G8A8, 2, GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    { GDK_MEMORY_G16A16, 4, GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    { GDK_MEMORY_A8, 1, GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    { GDK_MEMORY_A16, 2, GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+  };
+
+  if (gl_context == NULL)
+    return texture;
+
+  gdk_gl_context_make_current (gl_context);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (formats); i++)
+    {
+      unsigned int id;
+      guchar *data;
+      int width, height;
+      gsize stride;
+      GdkTextureDownloader *d;
+      GdkGLTextureBuilder *b;
+      GdkTexture *result;
+
+      if (formats[i].format != gdk_texture_get_format (texture))
+        continue;
+
+      width = gdk_texture_get_width (texture);
+      height = gdk_texture_get_height (texture);
+      data = g_malloc (width * height * formats[i].bpp);
+      stride = width * formats[i].bpp;
+
+      d = gdk_texture_downloader_new (texture);
+      gdk_texture_downloader_set_format (d, formats[i].format);
+      gdk_texture_downloader_download_into (d, data, stride);
+      gdk_texture_downloader_free (d);
+
+      glGenTextures (1, &id);
+      glActiveTexture (GL_TEXTURE0);
+      glBindTexture (GL_TEXTURE_2D, id);
+      glTexImage2D (GL_TEXTURE_2D, 0, formats[i].gl_internalformat, width, height, 0, formats[i].gl_format, formats[i].gl_type, data);
+      glTexParameteriv (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, formats[i].swizzle);
+
+      g_free (data);
+
+      b = gdk_gl_texture_builder_new  ();
+      gdk_gl_texture_builder_set_context (b, gl_context);
+      gdk_gl_texture_builder_set_id (b, id);
+      gdk_gl_texture_builder_set_width (b, width);
+      gdk_gl_texture_builder_set_height (b, height);
+      gdk_gl_texture_builder_set_format (b, formats[i].format);
+      result = gdk_gl_texture_builder_build (b, release_texture, GUINT_TO_POINTER (id));
+      g_object_unref (b);
+
+      g_object_unref (texture);
+
+      return result;
+    }
+
+  return upload_to_gl (texture);
+}
+
 static GdkTexture *
 create_texture (GdkMemoryFormat  format,
                 TextureMethod    method,
@@ -808,6 +898,10 @@ create_texture (GdkMemoryFormat  format,
       texture = upload_to_gl (texture);
       if (GDK_IS_GL_TEXTURE (texture))
         gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
+      break;
+
+    case TEXTURE_METHOD_GL_NATIVE:
+      texture = upload_to_gl_native (texture);
       break;
 
     case TEXTURE_METHOD_PNG:
@@ -892,6 +986,7 @@ texture_method_is_accurate (TextureMethod method)
 
     case TEXTURE_METHOD_GL:
     case TEXTURE_METHOD_GL_RELEASED:
+    case TEXTURE_METHOD_GL_NATIVE:
     case TEXTURE_METHOD_PNG:
     case TEXTURE_METHOD_PNG_PIXBUF:
     case TEXTURE_METHOD_TIFF_PIXBUF:
@@ -1001,7 +1096,7 @@ test_download_1x1 (gconstpointer data)
       if (color.alpha == 0.f &&
           !gdk_memory_format_is_premultiplied (format) &&
           gdk_memory_format_has_alpha (format) &&
-          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, 1, 1, &color);
@@ -1036,7 +1131,7 @@ test_download_4x4 (gconstpointer data)
       if (color.alpha == 0.f &&
           !gdk_memory_format_is_premultiplied (format) &&
           gdk_memory_format_has_alpha (format) &&
-          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, 4, 4, &color);
@@ -1068,7 +1163,7 @@ test_download_192x192 (gconstpointer data)
   if (color.alpha == 0.f &&
       !gdk_memory_format_is_premultiplied (format) &&
       gdk_memory_format_has_alpha (format) &&
-      (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
+      (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
     color = (GdkRGBA) { 0, 0, 0, 0 };
 
   expected = create_texture (format, TEXTURE_METHOD_LOCAL, 192, 192, &color);
@@ -1171,7 +1266,7 @@ add_test (const char    *name,
     {
       for (method = 0; method < N_TEXTURE_METHODS; method++)
         {
-          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released", "png", "png-pixbuf", "tiff", "tiff-pixbuf" };
+          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released", "gl-native", "png", "png-pixbuf", "tiff", "tiff-pixbuf" };
           char *test_name = g_strdup_printf ("%s/%s/%s",
                                              name,
                                              g_enum_get_value (enum_class, format)->value_nick,
@@ -1218,6 +1313,12 @@ main (int argc, char *argv[])
   add_conversion_test ("/memorytexture/conversion_1x1", test_conversion_1x1);
   add_conversion_test ("/memorytexture/conversion_4x4", test_conversion_4x4);
 
+  gl_context = gdk_display_create_gl_context (gdk_display_get_default (), NULL);
+  if (!gdk_gl_context_realize (gl_context, NULL))
+    {
+      g_clear_object (&gl_context);
+    }
+
   gl_renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
     {
@@ -1232,6 +1333,8 @@ main (int argc, char *argv[])
       g_clear_object (&gl_renderer);
     }
   gdk_gl_context_clear_current ();
+
+  g_clear_object (&gl_context);
 
   return result;
 }
