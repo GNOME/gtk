@@ -1450,27 +1450,6 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
   return icon;
 }
 
-HICON
-_gdk_win32_texture_to_hicon (GdkTexture *texture)
-{
-  cairo_surface_t *surface;
-  GdkPixbuf *pixbuf;
-  int width, height;
-  HICON icon;
-  
-  surface = gdk_texture_download_surface (texture);
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-  
-  icon = pixbuf_to_hicon (pixbuf, TRUE, 0, 0);
-  
-  g_object_unref (pixbuf);
-  
-  return icon;
-}
-
 /**
  * gdk_win32_display_get_win32hcursor:
  * @display: (type GdkWin32Display): a `GdkDisplay`

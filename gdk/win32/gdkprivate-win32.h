@@ -185,11 +185,6 @@ extern HWND             _modal_move_resize_window;
 void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
 void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
-/* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
- * Windows XP, thresholds alpha otherwise.
- */
-HICON _gdk_win32_texture_to_hicon  (GdkTexture *texture);
-
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
 void _gdk_win32_display_update_cursors (GdkWin32Display   *display);
@@ -255,9 +250,6 @@ void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const char *display_name);
 void _gdk_win32_append_event (GdkEvent *event);
-
-
-guint32 _gdk_win32_keymap_get_decimal_mark (GdkWin32Keymap *keymap);
 
 void     _gdk_win32_surface_handle_aerosnap      (GdkSurface            *window,
                                                   GdkWin32AeroSnapCombo combo);
