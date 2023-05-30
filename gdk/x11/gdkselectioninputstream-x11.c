@@ -89,7 +89,7 @@ gdk_x11_selection_input_stream_fill_buffer (GdkX11SelectionInputStream *stream,
     if (size == 0)
       {
         /* EOF marker, put it back */
-        g_async_queue_push_front_unlocked (priv->chunks, bytes);
+        g_async_queue_push_front_unlocked (priv->chunks, g_steal_pointer (&bytes));
         break;
       }
     else if (size > count)
@@ -107,7 +107,7 @@ gdk_x11_selection_input_stream_fill_buffer (GdkX11SelectionInputStream *stream,
           memcpy (buffer, g_bytes_get_data (bytes, NULL), size);
       }
 
-    g_bytes_unref (bytes);
+    g_bytes_unref (g_steal_pointer (&bytes));
     result += size;
     if (buffer)
       buffer += size;
@@ -165,9 +165,7 @@ gdk_x11_selection_input_stream_complete (GdkX11SelectionInputStream *stream)
   GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
   g_signal_handlers_disconnect_by_func (priv->display,
                                         gdk_x11_selection_input_stream_xevent,
-                                        stream);
-
-  g_object_unref (stream);
+                                        g_steal_pointer (&stream));
 }
 
 static gssize
@@ -416,7 +414,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                              "%s:%s: got PropertyNotify erroring out of INCR",
                              priv->selection, priv->target);
           /* error, should we signal one? */
-          gdk_x11_selection_input_stream_complete (stream);
+          g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
         }
       else if (g_bytes_get_size (bytes) == 0 || type == None)
         {
@@ -424,7 +422,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                              "%s:%s: got PropertyNotify ending INCR",
                              priv->selection, priv->target);
           g_bytes_unref (bytes);
-          gdk_x11_selection_input_stream_complete (stream);
+          g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
         }
       else
         {
@@ -467,7 +465,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                                      G_IO_ERROR,
                                      G_IO_ERROR_NOT_FOUND,
                                      _("Format %s not supported"), priv->target);
-            gdk_x11_selection_input_stream_complete (stream);
+            g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
           }
         else
           {
@@ -478,7 +476,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
 
             if (bytes == NULL)
               {
-                gdk_x11_selection_input_stream_complete (stream);
+                g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
               }
             else
               {
@@ -500,7 +498,7 @@ gdk_x11_selection_input_stream_xevent (GdkDisplay   *display,
                                        g_bytes_get_size (bytes));
                     g_async_queue_push (priv->chunks, bytes);
 
-                    gdk_x11_selection_input_stream_complete (stream);
+                    g_clear_pointer (&stream, gdk_x11_selection_input_stream_complete);
                   }
               }
 
@@ -541,7 +539,10 @@ gdk_x11_selection_input_stream_new_async (GdkDisplay          *display,
   priv->property = g_strdup_printf ("GDK_SELECTION_%p", stream); 
   priv->xproperty = gdk_x11_get_xatom_by_name_for_display (display, priv->property);
 
-  g_signal_connect (display, "xevent", G_CALLBACK (gdk_x11_selection_input_stream_xevent), stream);
+  g_signal_connect_data (display, "xevent",
+                         G_CALLBACK (gdk_x11_selection_input_stream_xevent),
+                         g_steal_pointer (&stream),
+                         (GClosureNotify) g_object_unref, 0);
 
   XConvertSelection (GDK_DISPLAY_XDISPLAY (display),
                      priv->xselection,
@@ -577,7 +578,6 @@ gdk_x11_selection_input_stream_new_finish (GAsyncResult  *result,
         *type = priv->type;
       if (format)
         *format = priv->format;
-      g_object_ref (stream);
     }
 
   return G_INPUT_STREAM (stream);
