@@ -304,6 +304,48 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
 }
 
 static gboolean
+gdk_memory_format_is_deep (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_A8:
+      return FALSE;
+
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_A16:
+      return TRUE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
+static gboolean
 gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
                                gboolean         accurate,
                                const guchar    *pixel1,
@@ -1075,6 +1117,28 @@ create_random_color (GdkRGBA *color)
   color->alpha = g_test_rand_int_range (0, 4) / 3.f;
 }
 
+static gboolean
+should_skip_download_test (GdkMemoryFormat format,
+                           TextureMethod   method)
+{
+  int major, minor;
+
+  gdk_gl_context_get_version (gl_context, &major, &minor);
+
+  if ((method == TEXTURE_METHOD_GL ||
+       method == TEXTURE_METHOD_GL_RELEASED ||
+       method == TEXTURE_METHOD_GL_NATIVE) &&
+      gdk_gl_context_get_use_es (gl_context) &&
+      (major < 3 || (major == 3 && minor < 1)) &&
+      gdk_memory_format_is_deep (format))
+    {
+      g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 test_download_1x1 (gconstpointer data)
 {
@@ -1084,6 +1148,9 @@ test_download_1x1 (gconstpointer data)
   gsize i;
 
   if (!decode (data, &format, &method))
+    return;
+
+  if (should_skip_download_test (format, method))
     return;
 
   for (i = 0; i < N; i++)
@@ -1121,6 +1188,9 @@ test_download_4x4 (gconstpointer data)
   if (!decode (data, &format, &method))
     return;
 
+  if (should_skip_download_test (format, method))
+    return;
+
   for (i = 0; i < N; i++)
     {
       GdkRGBA color;
@@ -1155,6 +1225,9 @@ test_download_192x192 (gconstpointer data)
   GdkRGBA color;
 
   if (!decode (data, &format, &method))
+    return;
+
+  if (should_skip_download_test (format, method))
     return;
 
   create_random_color (&color);
