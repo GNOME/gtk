@@ -1064,6 +1064,7 @@ ensure_texture_format (GdkTexture      *texture,
                                    format,
                                    bytes,
                                    stride);
+  g_bytes_unref (bytes);
   g_object_unref (texture);
 
   return result;
