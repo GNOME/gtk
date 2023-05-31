@@ -8,6 +8,9 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
 * GtkListView:
  - Don't leak the factories
 
+* GtkColumnView:
+ - Support displaying sections
+
 * GtkNotebook:
  - Make the pages model implement GtkSelectionModel
 
@@ -19,6 +22,10 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
 
 * Css:
  - Add new binding-friendly css provider apis
+
+* GDK:
+ - Support grayscale texture and alpha texture formats
+   for loading and saving to png and tiff, and in GL
 
 * Theme:
  - Show focus in the shortcuts window
@@ -49,6 +56,7 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
  Basque
  Catalan
  Russian
+ Turkish
 
 
 Overview of Changes in 4.11.2, 09-05-2023
