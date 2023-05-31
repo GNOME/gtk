@@ -2857,7 +2857,10 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_SYSCOMMAND:
-      switch (msg->wParam)
+      /* From: https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand?redirectedfrom=MSDN
+       * To obtain the correct result when testing the value of wParam,
+       * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
+      switch (msg->wParam & 0xFFF0)
 	{
 	case SC_MINIMIZE:
 	case SC_RESTORE:
@@ -2964,6 +2967,14 @@ gdk_event_translate (MSG *msg,
                   windowpos = (WINDOWPOS *) msg->lParam;
                   windowpos->cx = our_mmi.ptMaxSize.x;
                   windowpos->cy = our_mmi.ptMaxSize.y;
+
+                  if (!_gdk_win32_surface_lacks_wm_decorations (window) &&
+                      !(windowpos->flags & SWP_NOCLIENTSIZE) &&
+                      window->width == impl->next_layout.configured_width &&
+                      window->height == impl->next_layout.configured_height)
+                    {
+                      impl->inhibit_configure = TRUE;
+                    }
                 }
 
               impl->maximizing = FALSE;
