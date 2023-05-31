@@ -20,7 +20,7 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
 * GtkPopoverMenu:
  - Avoid unnecessary left padding
 
-* Css:
+* CSS:
  - Add new binding-friendly css provider apis
 
 * GDK:
