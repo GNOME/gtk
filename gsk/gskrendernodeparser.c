@@ -2892,6 +2892,14 @@ append_texture_param (Printer    *p,
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G8:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_G16:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
       bytes = gdk_texture_save_to_png_bytes (texture);
       g_string_append (p->str, "url(\"data:image/png;base64,");
       break;

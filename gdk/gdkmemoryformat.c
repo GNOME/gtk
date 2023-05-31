@@ -60,6 +60,36 @@ name ## _from_float (guchar      *dest_data, \
     } \
 }
 
+#define TYPED_GRAY_FUNCS(name, T, G, A, bpp, scale) \
+static void \
+name ## _to_float (float        *dest, \
+                   const guchar *src_data, \
+                   gsize         n) \
+{ \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      T *src = (T *) (src_data + i * bpp); \
+      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = 1.0; \
+      dest[1] = dest[2] = dest[0]; \
+      if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
+      dest += 4; \
+    } \
+} \
+\
+static void \
+name ## _from_float (guchar      *dest_data, \
+                     const float *src, \
+                     gsize        n) \
+{ \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      T *dest = (T *) (dest_data + i * bpp); \
+      if (G >= 0) dest[G] = CLAMP ((src[0] + src[1] + src[2]) * scale / 3.f + 0.5, 0, scale); \
+      if (A >= 0) dest[A] = CLAMP (src[3] * scale + 0.5, 0, scale); \
+      src += 4; \
+    } \
+}
+
 TYPED_FUNCS (b8g8r8a8_premultiplied, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8_premultiplied, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8_premultiplied, guchar, 0, 1, 2, 3, 4, 255)
@@ -71,6 +101,15 @@ TYPED_FUNCS (r8g8b8, guchar, 0, 1, 2, -1, 3, 255)
 TYPED_FUNCS (b8g8r8, guchar, 2, 1, 0, -1, 3, 255)
 TYPED_FUNCS (r16g16b16, guint16, 0, 1, 2, -1, 6, 65535)
 TYPED_FUNCS (r16g16b16a16, guint16, 0, 1, 2, 3, 8, 65535)
+
+TYPED_GRAY_FUNCS (g8a8_premultiplied, guchar, 0, 1, 2, 255)
+TYPED_GRAY_FUNCS (g8a8, guchar, 0, 1, 2, 255)
+TYPED_GRAY_FUNCS (g8, guchar, 0, -1, 1, 255)
+TYPED_GRAY_FUNCS (a8, guchar, -1, 0, 1, 255)
+TYPED_GRAY_FUNCS (g16a16_premultiplied, guint16, 0, 1, 4, 65535)
+TYPED_GRAY_FUNCS (g16a16, guint16, 0, 1, 4, 65535)
+TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
+TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
 static void
 r16g16b16_float_to_float (float        *dest,
@@ -230,6 +269,7 @@ struct _GdkMemoryFormatDescription
     guint internal_format;
     guint format;
     guint type;
+    GLint swizzle[4];
   } gl;
   /* no premultiplication going on here */
   void (* to_float) (float *, const guchar*, gsize);
@@ -251,7 +291,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
+    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_premultiplied_to_float,
     b8g8r8a8_premultiplied_from_float,
   },
@@ -261,7 +301,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
+    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8r8g8b8_premultiplied_to_float,
     a8r8g8b8_premultiplied_from_float,
   },
@@ -271,7 +311,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
+    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r8g8b8a8_premultiplied_to_float,
     r8g8b8a8_premultiplied_from_float,
   },
@@ -281,7 +321,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
+    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_to_float,
     b8g8r8a8_from_float,
   },
@@ -291,7 +331,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
+    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8r8g8b8_to_float,
     a8r8g8b8_from_float,
   },
@@ -301,7 +341,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
+    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r8g8b8a8_to_float,
     r8g8b8a8_from_float,
   },
@@ -311,7 +351,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
+    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8b8g8r8_to_float,
     a8b8g8r8_from_float,
   },
@@ -321,7 +361,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, 0, 0 },
-    { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE },
+    { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r8g8b8_to_float,
     r8g8b8_from_float,
   },
@@ -331,7 +371,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE },
+    { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     b8g8r8_to_float,
     b8g8r8_from_float,
   },
@@ -341,7 +381,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT },
+    { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r16g16b16_to_float,
     r16g16b16_from_float,
   },
@@ -351,7 +391,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
+    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_to_float,
     r16g16b16a16_from_float,
   },
@@ -361,7 +401,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
+    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_to_float,
     r16g16b16a16_from_float,
   },
@@ -371,7 +411,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGB16F, GL_RGB, GL_HALF_FLOAT },
+    { GL_RGB16F, GL_RGB, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r16g16b16_float_to_float,
     r16g16b16_float_from_float,
   },
@@ -381,7 +421,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
+    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_float_to_float,
     r16g16b16a16_float_from_float,
   },
@@ -391,7 +431,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guint16),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
+    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_float_to_float,
     r16g16b16a16_float_from_float,
   },
@@ -401,7 +441,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (float),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGB32F, GL_RGB, GL_FLOAT },
+    { GL_RGB32F, GL_RGB, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r32g32b32_float_to_float,
     r32g32b32_float_from_float,
   },
@@ -411,7 +451,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (float),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA32F, GL_RGBA, GL_FLOAT },
+    { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r32g32b32a32_float_to_float,
     r32g32b32a32_float_from_float,
   },
@@ -421,9 +461,89 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (float),
     TRUE,
     { 0, 0, 3, 0 },
-    { GL_RGBA32F, GL_RGBA, GL_FLOAT },
+    { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r32g32b32a32_float_to_float,
     r32g32b32a32_float_from_float,
+  },
+  [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    2,
+    G_ALIGNOF (guchar),
+    FALSE,
+    { 0, 0, 3, 0 },
+    { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    g8a8_premultiplied_to_float,
+    g8a8_premultiplied_from_float,
+  },
+  [GDK_MEMORY_G8A8] = {
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    2,
+    G_ALIGNOF (guchar),
+    FALSE,
+    { 0, 0, 3, 0 },
+    { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    g8a8_to_float,
+    g8a8_from_float,
+  },
+  [GDK_MEMORY_G8] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    1,
+    G_ALIGNOF (guchar),
+    FALSE,
+    { 0, 0, 3, 0 },
+    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_ONE } },
+    g8_to_float,
+    g8_from_float,
+  },
+  [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    4,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { 0, 0, 3, 0 },
+    { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    g16a16_premultiplied_to_float,
+    g16a16_premultiplied_from_float,
+  },
+  [GDK_MEMORY_G16A16] = {
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    4,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { 0, 0, 3, 0 },
+    { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
+    g16a16_to_float,
+    g16a16_from_float,
+  },
+  [GDK_MEMORY_G16] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    2,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { 0, 0, 3, 0 },
+    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_ONE } },
+    g16_to_float,
+    g16_from_float,
+  },
+  [GDK_MEMORY_A8] = {
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    1,
+    G_ALIGNOF (guchar),
+    FALSE,
+    { 0, 0, 3, 0 },
+    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    a8_to_float,
+    a8_from_float,
+  },
+  [GDK_MEMORY_A16] = {
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    2,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { 0, 0, 3, 0 },
+    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    a16_to_float,
+    a16_from_float,
   }
 };
 
@@ -472,14 +592,13 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              guint            gl_minor,
                              guint           *out_internal_format,
                              guint           *out_format,
-                             guint           *out_type)
+                             guint           *out_type,
+                             GLint          (*out_swizzle)[4])
 {
   *out_internal_format = memory_formats[format].gl.internal_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
-
-  if (memory_formats[format].alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-    return FALSE;
+  memcpy (out_swizzle, &memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
 
   if (gles)
     {

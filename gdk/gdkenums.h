@@ -30,6 +30,8 @@
 
 #include <glib.h>
 
+#include <gdk/version/gdkversionmacros.h>
+
 G_BEGIN_DECLS
 
 /**
@@ -306,6 +308,20 @@ typedef enum
  *   the alpha value. Since: 4.6
  * @GDK_MEMORY_R32G32B32A32_FLOAT: 4 float values; for red, green, blue and
  *   alpha. Since: 4.6
+  * @GDK_MEMORY_G8A8_PREMULTIPLIED: 2 bytes; for grayscale, alpha. The color
+ *   values are premultiplied with the alpha value. Since: 4.12
+ * @GDK_MEMORY_G8A8: 2 bytes; for grayscale, alpha. Since: 4.12
+ * @GDK_MEMORY_G8: One byte; for grayscale. The data is opaque.
+ *   Since: 4.12
+ * @GDK_MEMORY_G16A16_PREMULTIPLIED: 2 guint16 values; for grayscale, alpha.
+ *  The color values are premultiplied with the alpha value. Since: 4.12
+ * @GDK_MEMORY_G16A16: 2 guint16 values; for grayscale, alpha. Since: 4.12
+ * @GDK_MEMORY_G16: One guint16 value; for grayscale. The data is opaque.
+ *   Since: 4.12
+ * @GDK_MEMORY_A8: One byte; for alpha.
+ *   Since: 4.12
+ * @GDK_MEMORY_A16: One guint16 value; for alpha.
+ *   Since: 4.12
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
  *   more formats get added, so do not rely on its concrete integer.
  *
@@ -340,6 +356,14 @@ typedef enum {
   GDK_MEMORY_R32G32B32_FLOAT,
   GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
   GDK_MEMORY_R32G32B32A32_FLOAT,
+  GDK_MEMORY_G8A8_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_G8A8 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_G8 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_G16A16_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_G16A16 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_G16 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_A8 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_A16 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
