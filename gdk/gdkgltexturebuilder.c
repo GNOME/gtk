@@ -649,13 +649,12 @@ gdk_gl_texture_builder_get_format (GdkGLTextureBuilder *self)
  * `GDK_MEMORY_R16G16B16A16_PREMULTIPLIED` is expected to be stored as `GL_RGBA16`
  * texture, and `GDK_MEMORY_G8A8` is expected to be stored as `GL_RG8` texture.
  *
- * GDK allows GL textures to have unpremultiplied alpha, but GSK's GL renderer can't
- * currently handle such textures. Non-RGBA textures need to have swizzling parameters
- * set up properly to be usable in GSK's shaders.
- *
  * Setting the right format is particularly useful when using high bit depth textures
  * to preserve the bit depth, to set the correct value for unpremultiplied textures
  * and to make sure opaque textures are treated as such.
+ *
+ * Non-RGBA textures need to have swizzling parameters set up properly to be usable
+ * in GSK's shaders.
  *
  * Since: 4.12
  */
