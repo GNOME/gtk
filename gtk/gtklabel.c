@@ -1970,10 +1970,13 @@ gtk_label_activate_link_open (GtkWidget  *widget,
                               GVariant   *parameter)
 {
   GtkLabel *self = GTK_LABEL (widget);
-  GtkLabelLink *link = self->select_info->context_link;
+  if (self->select_info)
+    {
+      GtkLabelLink *link = self->select_info->context_link;
 
-  if (link)
-    emit_activate_link (self, link);
+      if (link)
+        emit_activate_link (self, link);
+    }
 }
 
 static void
@@ -1982,17 +1985,18 @@ gtk_label_activate_link_copy (GtkWidget  *widget,
                               GVariant   *parameter)
 {
   GtkLabel *self = GTK_LABEL (widget);
-  GtkLabelLink *link = self->select_info->context_link;
-
-  if (link)
+  if (self->select_info)
     {
-      GdkClipboard *clipboard;
+      GtkLabelLink *link = self->select_info->context_link;
 
-      clipboard = gtk_widget_get_clipboard (widget);
-      gdk_clipboard_set_text (clipboard, link->uri);
+      if (link)
+        {
+          GdkClipboard *clipboard;
+
+          clipboard = gtk_widget_get_clipboard (widget);
+          gdk_clipboard_set_text (clipboard, link->uri);
+        }
     }
-  else
-    g_print ("no link ?!\n");
 }
 
 static void
