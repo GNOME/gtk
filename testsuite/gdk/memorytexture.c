@@ -890,6 +890,7 @@ upload_to_gl_native (GdkTexture *texture)
       glGenTextures (1, &id);
       glActiveTexture (GL_TEXTURE0);
       glBindTexture (GL_TEXTURE_2D, id);
+      glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
       glTexImage2D (GL_TEXTURE_2D, 0, formats[i].gl_internalformat, width, height, 0, formats[i].gl_format, formats[i].gl_type, data);
       glTexParameteriv (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, formats[i].swizzle);
 
