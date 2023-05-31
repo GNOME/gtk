@@ -4,7 +4,7 @@
 
 #include <epoxy/gl.h>
 
-#define N 20
+#define N 10
 
 static GdkGLContext *gl_context = NULL;
 static GskRenderer *gl_renderer = NULL;
@@ -1142,7 +1142,9 @@ should_skip_download_test (GdkMemoryFormat format,
 }
 
 static void
-test_download_1x1 (gconstpointer data)
+test_download (gconstpointer data,
+               unsigned int  width,
+               unsigned int  height)
 {
   GdkMemoryFormat format;
   TextureMethod method;
@@ -1168,8 +1170,8 @@ test_download_1x1 (gconstpointer data)
           (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
-      expected = create_texture (format, TEXTURE_METHOD_LOCAL, 1, 1, &color);
-      test = create_texture (format, method, 1, 1, &color);
+      expected = create_texture (format, TEXTURE_METHOD_LOCAL, width, height, &color);
+      test = create_texture (format, method, width, height, &color);
       test = ensure_texture_format (test, format);
       
       compare_textures (expected, test, texture_method_is_accurate (method));
@@ -1177,78 +1179,39 @@ test_download_1x1 (gconstpointer data)
       g_object_unref (expected);
       g_object_unref (test);
     }
+}
+
+static void
+test_download_1x1 (gconstpointer data)
+{
+  test_download (data, 1, 1);
 }
 
 static void
 test_download_4x4 (gconstpointer data)
 {
-  GdkMemoryFormat format;
-  TextureMethod method;
-  GdkTexture *expected, *test;
-  gsize i;
-
-  if (!decode (data, &format, &method))
-    return;
-
-  if (should_skip_download_test (format, method))
-    return;
-
-  for (i = 0; i < N; i++)
-    {
-      GdkRGBA color;
-
-      create_random_color (&color);
-
-      /* these methods may premultiply during operation */
-      if (color.alpha == 0.f &&
-          !gdk_memory_format_is_premultiplied (format) &&
-          gdk_memory_format_has_alpha (format) &&
-          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
-        color = (GdkRGBA) { 0, 0, 0, 0 };
-
-      expected = create_texture (format, TEXTURE_METHOD_LOCAL, 4, 4, &color);
-      test = create_texture (format, method, 4, 4, &color);
-      test = ensure_texture_format (test, format);
-      
-      compare_textures (expected, test, texture_method_is_accurate (method));
-
-      g_object_unref (expected);
-      g_object_unref (test);
-    }
+  test_download (data, 4, 4);
 }
 
-/* larger than what NGL puts into the icon cache */
+/* odd sizes, to trigger alignment issues */
+static void
+test_download_17x7 (gconstpointer data)
+{
+  test_download (data, 17, 7);
+}
+
+/* larger than what GSK puts into the icon cache */
 static void
 test_download_192x192 (gconstpointer data)
 {
-  GdkMemoryFormat format;
-  TextureMethod method;
-  GdkTexture *expected, *test;
-  GdkRGBA color;
+  test_download (data, 192, 192);
+}
 
-  if (!decode (data, &format, &method))
-    return;
-
-  if (should_skip_download_test (format, method))
-    return;
-
-  create_random_color (&color);
-
-  /* these methods may premultiply during operation */
-  if (color.alpha == 0.f &&
-      !gdk_memory_format_is_premultiplied (format) &&
-      gdk_memory_format_has_alpha (format) &&
-      (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
-    color = (GdkRGBA) { 0, 0, 0, 0 };
-
-  expected = create_texture (format, TEXTURE_METHOD_LOCAL, 192, 192, &color);
-  test = create_texture (format, method, 192, 192, &color);
-  test = ensure_texture_format (test, format);
-  
-  compare_textures (expected, test, texture_method_is_accurate (method));
-
-  g_object_unref (expected);
-  g_object_unref (test);
+/* larger than the small max-texture-size we test against */
+static void
+test_download_1065x17 (gconstpointer data)
+{
+  test_download (data, 1065, 17);
 }
 
 static void
@@ -1384,7 +1347,9 @@ main (int argc, char *argv[])
 
   add_test ("/memorytexture/download_1x1", test_download_1x1);
   add_test ("/memorytexture/download_4x4", test_download_4x4);
+  add_test ("/memorytexture/download_17x7", test_download_17x7);
   add_test ("/memorytexture/download_192x192", test_download_192x192);
+  add_test ("/memorytexture/download_1065x17", test_download_1065x17);
   add_conversion_test ("/memorytexture/conversion_1x1", test_conversion_1x1);
   add_conversion_test ("/memorytexture/conversion_4x4", test_conversion_4x4);
 
