@@ -204,6 +204,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gsize stride = texture->width * gdk_memory_format_bytes_per_pixel (format);
           guchar *pixels = g_malloc_n (stride, texture->height);
 
+          glPixelStorei (GL_PACK_ALIGNMENT, 1);
           glGetTexImage (GL_TEXTURE_2D,
                          0,
                          gl_format,
@@ -271,6 +272,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gsize stride = actual_bpp * texture->width;
           guchar *pixels = g_malloc_n (stride, texture->height);
 
+          glPixelStorei (GL_PACK_ALIGNMENT, 1);
           glReadPixels (0, 0,
                         texture->width, texture->height,
                         gl_read_format,

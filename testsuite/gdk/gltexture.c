@@ -2,6 +2,7 @@
 #include <epoxy/gl.h>
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkgltextureprivate.h"
 
 static cairo_surface_t *
 make_surface (void)
@@ -201,6 +202,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert_true (cairo_region_equal (gdk_gl_texture_builder_get_update_region (builder), update_region));
 
   texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
+
+  g_assert_true (gdk_gl_texture_get_context (GDK_GL_TEXTURE (texture)) == context);
+  g_assert_true (gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)) == id);
+  g_assert_false (gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture)));
+  g_assert_true (gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture)) == sync);
 
   data = g_malloc0 (64 * 64 * 4);
   gdk_texture_download (texture, data, 64 * 4);
