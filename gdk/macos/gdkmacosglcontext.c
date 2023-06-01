@@ -396,7 +396,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   gdk_gl_context_get_matching_version (context,
                                        GDK_GL_API_GL,
                                        FALSE,
-                                       &version);
+                                       &min_version);
 
   display = gdk_gl_context_get_display (context);
   shared = gdk_display_get_gl_context (display);
@@ -415,9 +415,9 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
                      "Creating CGLContextObj (version %d.%d)",
-                     gdk_gl_version_get_major (&version), gdk_gl_version_get_minor (&version));
+                     gdk_gl_version_get_major (&min_version), gdk_gl_version_get_minor (&min_version));
 
-  if (!(pixelFormat = create_pixel_format (&version, &legacy, error)))
+  if (!(pixelFormat = create_pixel_format (&min_version, &legacy, error)))
     return 0;
 
   if (!CHECK (error, CGLCreateContext (pixelFormat, shared_gl_context, &cgl_context)))
