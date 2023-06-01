@@ -344,14 +344,14 @@ create_pixel_format (GdkGLVersion  *version,
   if (gdk_gl_version_get_major (version) >= 4)
     {
       attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL4_Core;
-      if (CGLChoosePixelFormat (attrs, &format, &n_format))
+      if (CHECK (error, CGLChoosePixelFormat (attrs, &format, &n_format)))
         return g_steal_pointer (&format);
     }
 
   if (gdk_gl_version_greater_equal (version, &GDK_GL_MIN_GL_VERSION))
     {
       attrs[1] = (CGLPixelFormatAttribute)kCGLOGLPVersion_GL3_Core;
-      if (CGLChoosePixelFormat (attrs, &format, &n_format))
+      if (CHECK (error, CGLChoosePixelFormat (attrs, &format, &n_format)))
         return g_steal_pointer (&format);
     }
 
@@ -396,7 +396,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   gdk_gl_context_get_matching_version (context,
                                        GDK_GL_API_GL,
                                        FALSE,
-                                       &version);
+                                       &min_version);
 
   display = gdk_gl_context_get_display (context);
   shared = gdk_display_get_gl_context (display);
