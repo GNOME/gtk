@@ -6016,7 +6016,7 @@ unset_focus_visible (gpointer data)
 }
 
 /**
- * gtk_window_set_focus_visible: (attributes org.gtk.MEthod.set_property=focus-visible)
+ * gtk_window_set_focus_visible: (attributes org.gtk.Method.set_property=focus-visible)
  * @window: a `GtkWindow`
  * @setting: the new value
  *
