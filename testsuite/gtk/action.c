@@ -717,6 +717,60 @@ test_enabled (void)
   g_object_unref (g_object_ref_sink (text));
 }
 
+#define MY_TYPE_GTK_ACTIONABLE (my_gtk_actionable_get_type ())
+G_DECLARE_FINAL_TYPE          (MyGtkActionable, my_gtk_actionable, MY, GTK_ACTIONABLE, GtkButton)
+
+struct _MyGtkActionable
+{
+  GtkButton parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (MyGtkActionable, my_gtk_actionable, GTK_TYPE_BUTTON);
+
+static void
+test_cb (GtkWidget  *sender,
+         const char *name,
+         GVariant   *param)
+{
+}
+
+static void
+my_gtk_actionable_init (MyGtkActionable *actionable)
+{
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (actionable), "test.test");
+}
+
+static void
+my_gtk_actionable_class_init (MyGtkActionableClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_install_action (widget_class, "test.test", NULL, test_cb);
+}
+
+/* Test that actions are correctly notified after reparenting */
+static void
+test_reparenting (void)
+{
+  GtkWidget *window, *actionable;
+
+  window = gtk_window_new ();
+
+  actionable = g_object_new (MY_TYPE_GTK_ACTIONABLE, NULL);
+  gtk_window_set_child (GTK_WINDOW (window), actionable);
+  g_assert_true (gtk_widget_get_sensitive (actionable));
+
+  g_object_ref (actionable);
+  gtk_window_set_child (GTK_WINDOW (window), NULL);
+  g_assert_false (gtk_widget_get_sensitive (actionable));
+
+  gtk_window_set_child (GTK_WINDOW (window), actionable);
+  g_object_unref (actionable);
+  g_assert_true (gtk_widget_get_sensitive (actionable));
+
+  g_object_unref (window);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -732,6 +786,7 @@ main (int   argc,
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
   g_test_add_func ("/action/enabled", test_enabled);
+  g_test_add_func ("/action/reparenting", test_reparenting);
 
   return g_test_run();
 }
