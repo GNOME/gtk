@@ -794,8 +794,13 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
   for (i = 0; i < resources->noutput; ++i)
     {
       RROutput output = resources->outputs[i];
-      XRROutputInfo *output_info =
-        XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+      XRROutputInfo *output_info;
+
+      gdk_x11_display_error_trap_push (display);
+      output_info = XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+
+      if (gdk_x11_display_error_trap_pop (display))
+        continue;
 
       /* Non RandR1.2+ X driver have output name "default" */
       randr12_compat |= !g_strcmp0 (output_info->name, "default");
@@ -809,12 +814,21 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
       if (output_info->crtc)
 	{
 	  GdkX11Monitor *monitor;
-	  XRRCrtcInfo *crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
+          XRRCrtcInfo *crtc;
           char *name;
           GdkRectangle geometry;
           GdkRectangle newgeo;
           int j;
           int refresh_rate = 0;
+
+          gdk_x11_display_error_trap_push (display);
+          crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
+
+          if (gdk_x11_display_error_trap_pop (display))
+            {
+              XRRFreeOutputInfo (output_info);
+              continue;
+            }
 
           for (j = 0; j < resources->nmode; j++)
             {
@@ -913,8 +927,11 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 
   old_primary = x11_display->primary_monitor;
   x11_display->primary_monitor = 0;
+
+  gdk_x11_display_error_trap_push (display);
   primary_output = XRRGetOutputPrimary (x11_screen->xdisplay,
                                         x11_screen->xroot_window);
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   for (i = 0; i < x11_display->monitors->len; ++i)
     {
