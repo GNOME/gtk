@@ -576,19 +576,6 @@ gdk_mod_mask_to_mod_bits (GdkModifierType mod_mask)
   return result;
 }
 
-
-/* keypad decimal mark depends on active keyboard layout
- * return current decimal mark as unicode character
- */
-guint32
-_gdk_win32_keymap_get_decimal_mark (GdkWin32Keymap *keymap)
-{
-  guint32 c = MapVirtualKeyW (VK_DECIMAL, MAPVK_VK_TO_CHAR);
-  if (!c)
-    c = (guint32) '.';
-  return c;
-}
-
 static void
 update_keymap (GdkWin32Keymap *keymap)
 {

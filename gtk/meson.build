@@ -1014,7 +1014,9 @@ gtkversion_cdata.set('GTK_VERSION', gtk_version)
 gtkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
 
 if host_machine.system() == 'windows'
-  gtkversion_cdata.set('EXE_MANIFEST_ARCHITECTURE', '*')
+  v = gtk_binary_version.split('.')
+  gtk_manifest_version = '.'.join(v.get(0, '0'), v.get(1, '0'), v.get(2, '0'), v.get(3, '0'))
+  gtkversion_cdata.set('GTK_MANIFEST_VERSION', gtk_manifest_version)
 endif
 
 gtkversion = configure_file(input: 'gtkversion.h.in',
@@ -1097,8 +1099,8 @@ if win32_enabled
     configuration: gtkversion_cdata,
   )
 
-  win32_manifest = configure_file(input: 'libgtk4.manifest.in',
-    output: 'libgtk4.manifest',
+  win32_manifest = configure_file(input: 'libgtk.manifest.in',
+    output: 'libgtk.manifest',
     configuration: gtkversion_cdata,
   )
 

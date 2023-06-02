@@ -33,37 +33,18 @@
 #include <commctrl.h>
 #undef STRICT
 
+extern IMAGE_DOS_HEADER __ImageBase;
+
+static inline HMODULE
+this_module ()
+{
+  return (HMODULE) &__ImageBase;
+}
+
 /* In practice, resulting DLL will have manifest resource under index 2.
  * Fall back to that value if we can't find resource index programmatically.
  */
 #define EMPIRIC_MANIFEST_RESOURCE_INDEX 2
-
-
-static HMODULE   gtk_dll;
-extern HINSTANCE _gdk_dll_hinstance;
-
-BOOL WINAPI
-DllMain (HINSTANCE hinstDLL,
-         DWORD     fdwReason,
-         LPVOID    lpvReserved);
-
-BOOL WINAPI
-DllMain (HINSTANCE hinstDLL,
-         DWORD     fdwReason,
-         LPVOID    lpvReserved)
-{
-  switch (fdwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-      gtk_dll = (HMODULE) hinstDLL;
-      _gdk_dll_hinstance = hinstDLL;
-      break;
-    default:
-      break;
-    }
-
-  return TRUE;
-}
 
 static BOOL CALLBACK
 find_first_manifest (HMODULE  module_handle,
@@ -111,7 +92,7 @@ _gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
   DWORD error_code;
 
   resource_name = NULL;
-  EnumResourceNames (gtk_dll, RT_MANIFEST, find_first_manifest,
+  EnumResourceNames (this_module (), RT_MANIFEST, find_first_manifest,
                      (LONG_PTR) &resource_name);
 
   if (resource_name == NULL)
@@ -122,7 +103,7 @@ _gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
   activation_ctx_descriptor.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID |
                                       ACTCTX_FLAG_HMODULE_VALID |
                                       ACTCTX_FLAG_SET_PROCESS_DEFAULT;
-  activation_ctx_descriptor.hModule = gtk_dll;
+  activation_ctx_descriptor.hModule = this_module ();
   activation_ctx_descriptor.lpResourceName = resource_name;
   activation_ctx_handle = CreateActCtx (&activation_ctx_descriptor);
   error_code = GetLastError ();
@@ -130,7 +111,7 @@ _gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
   if (activation_ctx_handle == INVALID_HANDLE_VALUE &&
       error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
     g_warning ("Failed to CreateActCtx for module %p, resource %p: %lu",
-               gtk_dll, resource_name, GetLastError ());
+               this_module (), resource_name, GetLastError ());
   else if (error_code != ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET)
     {
       activation_cookie = 0;
@@ -157,7 +138,7 @@ _gtk_get_libdir (void)
   static char *gtk_libdir = NULL;
   if (gtk_libdir == NULL)
     {
-      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *root = g_win32_get_package_installation_directory_of_module (this_module ());
       char *slash = strrchr (root, '\\');
       if (slash != NULL &&
           g_ascii_strcasecmp (slash + 1, ".libs") == 0)
@@ -188,7 +169,7 @@ _gtk_get_localedir (void)
       while (*--p != '/')
         ;
 
-      root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      root = g_win32_get_package_installation_directory_of_module (this_module ());
       temp = g_build_filename (root, p, NULL);
       g_free (root);
 
@@ -207,7 +188,7 @@ _gtk_get_datadir (void)
   static char *gtk_datadir = NULL;
   if (gtk_datadir == NULL)
     {
-      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *root = g_win32_get_package_installation_directory_of_module (this_module ());
       gtk_datadir = g_build_filename (root, "share", NULL);
       g_free (root);
     }
@@ -221,7 +202,7 @@ _gtk_get_sysconfdir (void)
   static char *gtk_sysconfdir = NULL;
   if (gtk_sysconfdir == NULL)
     {
-      char *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      char *root = g_win32_get_package_installation_directory_of_module (this_module ());
       gtk_sysconfdir = g_build_filename (root, "etc", NULL);
       g_free (root);
     }
@@ -234,7 +215,7 @@ _gtk_get_data_prefix (void)
 {
   static char *gtk_data_prefix = NULL;
   if (gtk_data_prefix == NULL)
-    gtk_data_prefix = g_win32_get_package_installation_directory_of_module (gtk_dll);
+    gtk_data_prefix = g_win32_get_package_installation_directory_of_module (this_module ());
 
   return gtk_data_prefix;
 }
