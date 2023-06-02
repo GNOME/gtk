@@ -548,7 +548,7 @@ gtk_search_entry_changed (GtkEditable    *editable,
 
   if (str == NULL || *str == '\0')
     {
-      gtk_widget_set_child_visible (entry->icon, FALSE);
+      gtk_widget_set_visible (entry->icon, FALSE);
 
       if (entry->delayed_changed_id > 0)
         {
@@ -559,7 +559,7 @@ gtk_search_entry_changed (GtkEditable    *editable,
     }
   else
     {
-      gtk_widget_set_child_visible (entry->icon, TRUE);
+      gtk_widget_set_visible (entry->icon, TRUE);
 
       /* Queue up the timeout */
       reset_timeout (entry);
@@ -625,7 +625,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
                               NULL);
   gtk_widget_set_tooltip_text (entry->icon, _("Clear Entry"));
   gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
-  gtk_widget_set_child_visible (entry->icon, FALSE);
+  gtk_widget_set_visible (entry->icon, FALSE);
 
   press = gtk_gesture_click_new ();
   g_signal_connect (press, "pressed", G_CALLBACK (gtk_search_entry_icon_press), entry);
