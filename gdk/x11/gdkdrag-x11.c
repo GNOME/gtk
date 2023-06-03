@@ -1840,7 +1840,7 @@ drag_grab (GdkDrag *drag)
 
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING | GDK_SEAT_CAPABILITY_KEYBOARD;
+  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
 
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
   g_set_object (&x11_drag->cursor, cursor);
