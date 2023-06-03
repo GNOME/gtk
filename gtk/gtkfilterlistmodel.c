@@ -23,6 +23,7 @@
 
 #include "gtkbitset.h"
 #include "gtkprivate.h"
+#include "gtkselectionmodel.h"
 #include "gtksectionmodelprivate.h"
 
 /**
@@ -39,8 +40,12 @@
  * [method@Gtk.FilterListModel.set_incremental] for details.
  *
  * `GtkFilterListModel` passes through sections from the underlying model.
+ *
+ * Since 4.12, `GtkFilterListModel` also implements `GtkSelectionModel`
+ * and passes through selections from the underlying model. Any changes
+ * to the selection that are done through the filter model will cause
+ * filtered-out items to be unselected.
  */
-
 enum {
   PROP_0,
   PROP_FILTER,
@@ -138,6 +143,240 @@ gtk_filter_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_filter_list_model_get_item;
 }
 
+static gboolean
+gtk_filter_list_model_is_selected (GtkSelectionModel *model,
+                                   guint              position)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+  guint unfiltered;
+
+  if (!GTK_IS_SELECTION_MODEL (self->model))
+    return FALSE;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return FALSE;
+
+    case GTK_FILTER_MATCH_ALL:
+      unfiltered = position;
+      break;
+
+    case GTK_FILTER_MATCH_SOME:
+      unfiltered = gtk_bitset_get_nth (self->matches, position);
+      if (unfiltered == 0 && position >= gtk_bitset_get_size (self->matches))
+        return FALSE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return gtk_selection_model_is_selected (GTK_SELECTION_MODEL (self->model), unfiltered);
+}
+
+static GtkBitset *
+gtk_filter_list_model_get_selection_in_range (GtkSelectionModel *model,
+                                              guint              pos,
+                                              guint              n_items)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+
+  if (!GTK_IS_SELECTION_MODEL (self->model))
+    return gtk_bitset_new_empty ();
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return gtk_bitset_new_empty ();
+
+    case GTK_FILTER_MATCH_ALL:
+      return gtk_selection_model_get_selection_in_range (GTK_SELECTION_MODEL (self->model),
+                                                         pos,
+                                                         n_items);
+
+    case GTK_FILTER_MATCH_SOME:
+      {
+        GtkBitset *result;
+        GtkBitset *selected;
+        unsigned int last;
+        unsigned int start, end;
+
+        if (pos >= gtk_bitset_get_size (self->matches))
+          return gtk_bitset_new_empty ();
+
+        last = MIN (pos + n_items, gtk_bitset_get_size (self->matches));
+
+        start = gtk_bitset_get_nth (self->matches, pos);
+        end = gtk_bitset_get_nth (self->matches, last - 1);
+
+        selected = gtk_selection_model_get_selection_in_range (GTK_SELECTION_MODEL (self->model),
+                                                               start, end - start + 1);
+
+        result = gtk_bitset_new_empty ();
+
+        for (unsigned int i = pos; i < last; i++)
+          {
+            if (gtk_bitset_contains (selected, gtk_bitset_get_nth (self->matches, i)))
+              gtk_bitset_add (result, i);
+          }
+
+        gtk_bitset_unref (selected);
+
+        return result;
+      }
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static gboolean
+gtk_filter_list_model_select_item (GtkSelectionModel *model,
+                                   guint              position,
+                                   gboolean           unselect_rest)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+  unsigned int unfiltered;
+
+  if (!GTK_IS_SELECTION_MODEL (self->model))
+    return TRUE;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return TRUE;
+
+    case GTK_FILTER_MATCH_ALL:
+      unfiltered = position;
+      break;
+
+    case GTK_FILTER_MATCH_SOME:
+      unfiltered = gtk_bitset_get_nth (self->matches, position);
+      if (unfiltered == 0 && position >= gtk_bitset_get_size (self->matches))
+        return TRUE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return gtk_selection_model_select_item (GTK_SELECTION_MODEL (self->model),
+                                          unfiltered,
+                                          unselect_rest);
+}
+
+static gboolean
+gtk_filter_list_model_unselect_item (GtkSelectionModel *model,
+                                     guint             position)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+  unsigned int unfiltered;
+
+  if (!GTK_IS_SELECTION_MODEL (self->model))
+    return TRUE;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return TRUE;
+
+    case GTK_FILTER_MATCH_ALL:
+      unfiltered = position;
+      break;
+
+    case GTK_FILTER_MATCH_SOME:
+      unfiltered = gtk_bitset_get_nth (self->matches, position);
+      if (unfiltered == 0 && position >= gtk_bitset_get_size (self->matches))
+        return TRUE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return gtk_selection_model_unselect_item (GTK_SELECTION_MODEL (self->model),
+                                            unfiltered);
+}
+
+static gboolean
+gtk_filter_list_model_set_selection (GtkSelectionModel *model,
+                                     GtkBitset         *selected,
+                                     GtkBitset         *mask)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+
+  if (!GTK_IS_SELECTION_MODEL (self->model))
+    return TRUE;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return TRUE;
+
+    case GTK_FILTER_MATCH_ALL:
+      return gtk_selection_model_set_selection (GTK_SELECTION_MODEL (self->model),
+                                                selected,
+                                                mask);
+
+    case GTK_FILTER_MATCH_SOME:
+      {
+        GtkBitset *selected2;
+        GtkBitset *mask2;
+        GtkBitset *unmatched;
+        GtkBitsetIter iter;
+        unsigned int unfiltered;
+        gboolean ret;
+
+        selected2 = gtk_bitset_new_empty ();
+        mask2 = gtk_bitset_new_empty ();
+
+        if (gtk_bitset_iter_init_first (&iter, self->matches, &unfiltered))
+          {
+            unsigned int i = 0;
+            do
+              {
+                if (gtk_bitset_contains (selected, i))
+                  gtk_bitset_add (selected2, unfiltered);
+
+                if (gtk_bitset_contains (mask, i))
+                  gtk_bitset_add (mask2, unfiltered);
+
+                i++;
+              }
+            while (gtk_bitset_iter_next (&iter, &unfiltered));
+          }
+
+        unmatched = gtk_bitset_new_range (0, g_list_model_get_n_items (self->model));
+        gtk_bitset_subtract (unmatched, self->matches);
+        gtk_bitset_union (mask2, unmatched);
+
+        ret = gtk_selection_model_set_selection (GTK_SELECTION_MODEL (self->model),
+                                                 selected2,
+                                                 mask2);
+
+        gtk_bitset_unref (unmatched);
+        gtk_bitset_unref (selected2);
+        gtk_bitset_unref (mask2);
+
+        return ret;
+      }
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_filter_list_model_selection_model_init (GtkSelectionModelInterface *iface)
+{
+  iface->is_selected = gtk_filter_list_model_is_selected;
+  iface->select_item = gtk_filter_list_model_select_item;
+  iface->unselect_item = gtk_filter_list_model_unselect_item;
+  iface->get_selection_in_range = gtk_filter_list_model_get_selection_in_range;
+  iface->set_selection = gtk_filter_list_model_set_selection;
+}
+
 static void
 gtk_filter_list_model_get_section (GtkSectionModel *model,
                                    guint            position,
@@ -191,6 +430,39 @@ gtk_filter_list_model_get_section (GtkSectionModel *model,
 }
 
 static void
+gtk_filter_list_model_selection_changed_cb (GtkSelectionModel *model,
+                                            unsigned int       position,
+                                            unsigned int       n_items,
+                                            gpointer           user_data)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (user_data);
+  unsigned int start, end;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return;
+
+    case GTK_FILTER_MATCH_ALL:
+      gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, n_items);
+      break;
+
+    case GTK_FILTER_MATCH_SOME:
+      if (position > 0)
+        start = gtk_bitset_get_size_in_range (self->matches, 0, position - 1);
+      else
+        start = 0;
+      end = gtk_bitset_get_size_in_range (self->matches, 0, position + n_items - 1);
+      if (end - start > 0)
+        gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), start, end - start);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 gtk_filter_list_model_sections_changed_cb (GtkSectionModel *model,
                                            unsigned int     position,
                                            unsigned int     n_items,
@@ -231,6 +503,7 @@ gtk_filter_list_model_section_model_init (GtkSectionModelInterface *iface)
 
 G_DEFINE_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL, gtk_filter_list_model_selection_model_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL, gtk_filter_list_model_section_model_init))
 
 static gboolean
@@ -498,6 +771,7 @@ gtk_filter_list_model_clear_model (GtkFilterListModel *self)
 
   gtk_filter_list_model_stop_filtering (self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_items_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_selection_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_sections_changed_cb, self);
   g_clear_object (&self->model);
   if (self->matches)
@@ -863,6 +1137,8 @@ gtk_filter_list_model_set_model (GtkFilterListModel *self,
     {
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_filter_list_model_items_changed_cb), self);
+      if (GTK_IS_SELECTION_MODEL (model))
+        g_signal_connect (model, "selection-changed", G_CALLBACK (gtk_filter_list_model_selection_changed_cb), self);
       if (GTK_IS_SECTION_MODEL (model))
         g_signal_connect (model, "sections-changed", G_CALLBACK (gtk_filter_list_model_sections_changed_cb), self);
       if (removed == 0)

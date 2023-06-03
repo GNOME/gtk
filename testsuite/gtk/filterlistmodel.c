@@ -23,6 +23,7 @@
 
 static GQuark number_quark;
 static GQuark changes_quark;
+static GQuark selection_quark;
 
 static guint
 get (GListModel *model,
@@ -45,6 +46,25 @@ model_to_string (GListModel *model)
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {
       if (i > 0)
+        g_string_append (string, " ");
+      g_string_append_printf (string, "%u", get (model, i));
+    }
+
+  return g_string_free (string, FALSE);
+}
+
+static char *
+selection_to_string (GListModel *model)
+{
+  GString *string = g_string_new (NULL);
+  guint i;
+
+  for (i = 0; i < g_list_model_get_n_items (model); i++)
+    {
+      if (!gtk_selection_model_is_selected (GTK_SELECTION_MODEL (model), i))
+        continue;
+
+      if (string->len > 0)
         g_string_append (string, " ");
       g_string_append_printf (string, "%u", get (model, i));
     }
@@ -91,6 +111,14 @@ add (GListStore *store,
 #define ignore_changes(model) G_STMT_START{ \
   GString *changes = g_object_get_qdata (G_OBJECT (model), changes_quark); \
   g_string_set_size (changes, 0); \
+}G_STMT_END
+
+#define assert_selection(model, expected) G_STMT_START{ \
+  char *s = selection_to_string (G_LIST_MODEL (model)); \
+  if (!g_str_equal (s, expected)) \
+     g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
+         #model " == " #expected, s, "==", expected); \
+  g_free (s); \
 }G_STMT_END
 
 static GListStore *
@@ -561,6 +589,90 @@ test_sections (void)
   g_object_unref (sorted);
 }
 
+static void
+selection_changed (GListModel *model,
+                   guint       position,
+                   guint       n_items,
+                   GString    *changes)
+{
+  if (changes->len)
+    g_string_append (changes, ", ");
+
+  g_string_append_printf (changes, "%u:%u", position, n_items);
+}
+
+#define assert_selection_changes(model, expected) G_STMT_START{ \
+  GString *chchanges = g_object_get_qdata (G_OBJECT (model), selection_quark); \
+  if (!g_str_equal (chchanges->str, expected)) \
+     g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
+         #model " == " #expected, changes->str, "==", expected); \
+  g_string_set_size (chchanges, 0); \
+}G_STMT_END
+
+
+static void
+test_selections (void)
+{
+  GListStore *store;
+  GtkSelectionModel *selection;
+  GtkFilter *filter;
+  GtkFilterListModel *filtermodel;
+  GString *changes;
+
+  store = new_store (1, 10, 1);
+  selection = GTK_SELECTION_MODEL (gtk_multi_selection_new (G_LIST_MODEL (store)));
+  filter = GTK_FILTER (gtk_custom_filter_new (is_larger_than, GUINT_TO_POINTER (5), NULL));
+  filtermodel = gtk_filter_list_model_new (G_LIST_MODEL (selection), filter);
+
+  changes = g_string_new ("");
+  g_object_set_qdata_full (G_OBJECT (filtermodel), selection_quark, changes, free_changes);
+  g_signal_connect (filtermodel, "selection-changed", G_CALLBACK (selection_changed), changes);
+
+  assert_selection (filtermodel, "");
+  g_assert_false (gtk_selection_model_is_selected (GTK_SELECTION_MODEL (filtermodel), 3));
+
+  gtk_selection_model_select_item (selection, 3, FALSE);
+
+  assert_selection (selection, "4");
+  assert_selection (filtermodel, "");
+  g_assert_false (gtk_selection_model_is_selected (GTK_SELECTION_MODEL (filtermodel), 3));
+  assert_selection_changes (filtermodel, "");
+
+  gtk_selection_model_select_item (selection, 8, FALSE);
+
+  assert_selection (selection, "4 9");
+  assert_selection (filtermodel, "9");
+  g_assert_true (gtk_selection_model_is_selected (GTK_SELECTION_MODEL (filtermodel), 3));
+  assert_selection_changes (filtermodel, "3:1");
+
+  gtk_selection_model_select_item (GTK_SELECTION_MODEL (filtermodel), 0, FALSE);
+  assert_selection (selection, "6 9");
+  assert_selection (filtermodel, "6 9");
+  assert_selection_changes (filtermodel, "0:1");
+
+  gtk_selection_model_select_item (GTK_SELECTION_MODEL (filtermodel), 1, TRUE);
+  assert_selection (selection, "7");
+  assert_selection (filtermodel, "7");
+  assert_selection_changes (filtermodel, "0:4");
+
+  gtk_selection_model_select_all (GTK_SELECTION_MODEL (filtermodel));
+  assert_selection (selection, "6 7 8 9 10");
+  assert_selection (filtermodel, "6 7 8 9 10");
+  assert_selection_changes (filtermodel, "0:5");
+
+  gtk_selection_model_unselect_range (GTK_SELECTION_MODEL (filtermodel), 1, 3);
+  assert_selection (selection, "6 10");
+  assert_selection (filtermodel, "6 10");
+  assert_selection_changes (filtermodel, "1:3");
+
+  gtk_selection_model_select_range (GTK_SELECTION_MODEL (filtermodel), 0, 3, TRUE);
+  assert_selection (selection, "6 7 8");
+  assert_selection (filtermodel, "6 7 8");
+  assert_selection_changes (filtermodel, "1:4");
+
+  g_object_unref (filtermodel);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -569,6 +681,7 @@ main (int argc, char *argv[])
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");
   changes_quark = g_quark_from_static_string ("What did I see? Can I believe what I saw?");
+  selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
   g_test_add_func ("/filterlistmodel/create", test_create);
   g_test_add_func ("/filterlistmodel/empty_set_filter", test_empty_set_filter);
@@ -577,6 +690,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/empty", test_empty);
   g_test_add_func ("/filterlistmodel/add_remove_item", test_add_remove_item);
   g_test_add_func ("/filterlistmodel/sections", test_sections);
+  g_test_add_func ("/filterlistmodel/selections", test_selections);
 
   return g_test_run ();
 }
