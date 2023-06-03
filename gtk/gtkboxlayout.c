@@ -323,6 +323,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   int largest_min_above = -1, largest_min_below = -1;
   int largest_nat_above = -1, largest_nat_below = -1;
   gboolean have_baseline = FALSE;
+  gboolean align_baseline = FALSE;
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -350,6 +351,10 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
           if (child_min_baseline > -1)
             {
               have_baseline = TRUE;
+              if (gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_FILL ||
+                  gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_CENTER)
+                align_baseline = TRUE;
+
               largest_min_above = MAX (largest_min_above, child_min_baseline);
               largest_min_below = MAX (largest_min_below, child_min - child_min_baseline);
               largest_nat_above = MAX (largest_nat_above, child_nat_baseline);
@@ -358,7 +363,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
         }
     }
 
-  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL && align_baseline)
     {
       largest_min = MAX (largest_min, largest_min_above + largest_min_below);
       largest_nat = MAX (largest_nat, largest_nat_above + largest_nat_below);
