@@ -92,6 +92,8 @@ compare_render_tests = [
   'texture-scale-magnify-rotate',
   'texture-scale-stripes',
   'texture-url',
+  'transform-huge-child',
+  'transform-huge-child-3d',
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'z-transform-clipping-bounds-3d',
