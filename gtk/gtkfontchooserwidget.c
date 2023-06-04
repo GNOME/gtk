@@ -1162,7 +1162,7 @@ update_fontlist (GtkFontChooserWidget *self)
   model = G_LIST_MODEL (gtk_slice_list_model_new (model, 0, 20));
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
 
-  gtk_filter_list_model_set_model (self->filter_model, model);
+  gtk_single_selection_set_model (self->selection, model);
   g_object_unref (model);
 }
 

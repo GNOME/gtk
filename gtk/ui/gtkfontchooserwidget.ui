@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkSingleSelection" id="selection">
-    <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0"/>
-    <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
-    <property name="model">
-      <object class="GtkFilterListModel" id="filter_model">
-        <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
-        <property name="incremental">1</property>
-        <property name="filter">
-          <object class="GtkEveryFilter" id="multi_filter">
-            <child>
-              <object class="GtkStringFilter">
-                <binding name="search">
-                  <lookup name="text">search_entry</lookup>
-                </binding>
-                <property name="expression">
-                  <closure type="gchararray" swapped="1" function="get_font_name"/>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCustomFilter" id="custom_filter"/>
-            </child>
-            <child>
-              <object class="GtkCustomFilter" id="user_filter"/>
-            </child>
+  <object class="GtkFilterListModel" id="filter_model">
+    <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
+    <property name="incremental">1</property>
+    <property name="filter">
+      <object class="GtkEveryFilter" id="multi_filter">
+        <child>
+          <object class="GtkStringFilter">
+            <binding name="search">
+              <lookup name="text">search_entry</lookup>
+            </binding>
+            <property name="expression">
+              <closure type="gchararray" swapped="1" function="get_font_name"/>
+            </property>
           </object>
-        </property>
+        </child>
+        <child>
+          <object class="GtkCustomFilter" id="custom_filter"/>
+        </child>
+        <child>
+          <object class="GtkCustomFilter" id="user_filter"/>
+        </child>
+      </object>
+    </property>
+    <property name="model">
+      <object class="GtkSingleSelection" id="selection">
+        <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0"/>
+        <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
       </object>
     </property>
   </object>
@@ -141,7 +141,7 @@
                                 <property name="has-frame">1</property>
                                 <child>
                                   <object class="GtkListView" id="family_face_list">
-                                    <property name="model">selection</property>
+                                    <property name="model">filter_model</property>
                                     <signal name="activate" handler="row_activated_cb" swapped="no"/>
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
