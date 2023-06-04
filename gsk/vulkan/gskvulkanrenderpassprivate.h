@@ -12,10 +12,8 @@ G_BEGIN_DECLS
 
 GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context,
                                                                          GskVulkanImage         *target,
-                                                                         float                   scale_x,
-                                                                         float                   scale_y,
-                                                                         graphene_matrix_t      *mv,
-                                                                         graphene_rect_t        *viewport,
+                                                                         const graphene_vec2_t  *scale,
+                                                                         const graphene_rect_t  *viewport,
                                                                          cairo_region_t         *clip,
                                                                          VkSemaphore             signal_semaphore);
 
@@ -32,8 +30,7 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         guint                   layout_count,
-                                                                         VkPipelineLayout       *pipeline_layout,
+                                                                         VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 gsize                   gsk_vulkan_render_pass_get_wait_semaphores      (GskVulkanRenderPass    *self,
                                                                          VkSemaphore           **semaphores);

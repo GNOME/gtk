@@ -1267,7 +1267,7 @@ populate_render_node_properties (GListStore    *store,
         float radius = gsk_outset_shadow_node_get_blur_radius (node);
         float rect[12];
 
-        gsk_rounded_rect_to_float (outline, rect);
+        gsk_rounded_rect_to_float (outline, graphene_point_zero (), rect);
         tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
                                rect[2], rect[3], rect[0], rect[1]);
         add_text_row (store, "Outline", tmp);

@@ -16,10 +16,11 @@ struct _GskVulkanPipelinePrivate
   GdkVulkanContext *context;
 
   VkPipeline pipeline;
-  VkPipelineLayout layout;
 
   GskVulkanShader *vertex_shader;
   GskVulkanShader *fragment_shader;
+
+  gsize vertex_stride;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskVulkanPipeline, gsk_vulkan_pipeline, G_TYPE_OBJECT)
@@ -54,12 +55,13 @@ gsk_vulkan_pipeline_init (GskVulkanPipeline *self)
 }
 
 GskVulkanPipeline *
-gsk_vulkan_pipeline_new (GType                    pipeline_type,
-                         GdkVulkanContext        *context,
-                         VkPipelineLayout         layout,
-                         const char              *shader_name,
-                         VkRenderPass             render_pass)
+gsk_vulkan_pipeline_new (GType             pipeline_type,
+                         GdkVulkanContext *context,
+                         VkPipelineLayout  layout,
+                         const char       *shader_name,
+                         VkRenderPass      render_pass)
 {
+  const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
   GskVulkanPipelinePrivate *priv;
   GskVulkanPipeline *self;
   VkDevice device;
@@ -76,10 +78,13 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
   device = gdk_vulkan_context_get_device (context);
 
   priv->context = context;
-  priv->layout = layout;
 
   priv->vertex_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_VERTEX, shader_name, NULL);
   priv->fragment_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_FRAGMENT, shader_name, NULL);
+
+  vertex_input_state = GSK_VULKAN_PIPELINE_GET_CLASS (self)->get_input_state_create_info (self);
+  g_assert (vertex_input_state->vertexBindingDescriptionCount == 1);
+  priv->vertex_stride = vertex_input_state->pVertexBindingDescriptions[0].stride;
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, device,
                                            VK_NULL_HANDLE,
@@ -91,7 +96,7 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                                                    GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->vertex_shader),
                                                    GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->fragment_shader)
                                                },
-                                               .pVertexInputState = GSK_VULKAN_PIPELINE_GET_CLASS (self)->get_input_state_create_info (self),
+                                               .pVertexInputState = vertex_input_state,
                                                .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                                                    .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
@@ -108,7 +113,7 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                                                    .depthClampEnable = VK_FALSE,
                                                    .rasterizerDiscardEnable = VK_FALSE,
                                                    .polygonMode = VK_POLYGON_MODE_FILL,
-                                                   .cullMode = VK_CULL_MODE_BACK_BIT,
+                                                   .cullMode = VK_CULL_MODE_NONE,
                                                    .frontFace = VK_FRONT_FACE_CLOCKWISE,
                                                    .lineWidth = 1.0f,
                                                },
@@ -146,7 +151,7 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                                                        VK_DYNAMIC_STATE_SCISSOR
                                                    },
                                                },
-                                               .layout = priv->layout,
+                                               .layout = layout,
                                                .renderPass = render_pass,
                                                .subpass = 0,
                                                .basePipelineHandle = VK_NULL_HANDLE,
@@ -166,10 +171,10 @@ gsk_vulkan_pipeline_get_pipeline (GskVulkanPipeline *self)
   return priv->pipeline;
 }
 
-VkPipelineLayout
-gsk_vulkan_pipeline_get_pipeline_layout (GskVulkanPipeline *self)
+gsize
+gsk_vulkan_pipeline_get_vertex_stride (GskVulkanPipeline *self)
 {
   GskVulkanPipelinePrivate *priv = gsk_vulkan_pipeline_get_instance_private (self);
 
-  return priv->layout;
+  return priv->vertex_stride;
 }

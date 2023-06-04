@@ -123,15 +123,10 @@ gsk_vulkan_border_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BORDER_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_border_pipeline_count_vertex_data (GskVulkanBorderPipeline *pipeline)
-{
-  return sizeof (GskVulkanBorderInstance);
-}
-
 void
 gsk_vulkan_border_pipeline_collect_vertex_data (GskVulkanBorderPipeline *pipeline,
                                                 guchar                  *data,
+                                                const graphene_point_t  *offset,
                                                 const GskRoundedRect    *rect,
                                                 const float              widths[4],
                                                 const GdkRGBA            colors[4])
@@ -139,7 +134,7 @@ gsk_vulkan_border_pipeline_collect_vertex_data (GskVulkanBorderPipeline *pipelin
   GskVulkanBorderInstance *instance = (GskVulkanBorderInstance *) data;
   guint i;
 
-  gsk_rounded_rect_to_float (rect, instance->rect);
+  gsk_rounded_rect_to_float (rect, offset, instance->rect);
   for (i = 0; i < 4; i++)
     {
       instance->widths[i] = widths[i];

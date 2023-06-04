@@ -17,12 +17,16 @@ GskVulkanPipeline * gsk_vulkan_cross_fade_pipeline_new                 (GdkVulka
                                                                         const char                 *shader_name,
                                                                         VkRenderPass                render_pass);
 
-gsize               gsk_vulkan_cross_fade_pipeline_count_vertex_data   (GskVulkanCrossFadePipeline *pipeline);
 void                gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                                         guchar                     *data,
+                                                                        guint32                     start_tex_id[2],
+                                                                        guint32                     end_tex_id[2],
+                                                                        const graphene_point_t     *offset,
                                                                         const graphene_rect_t      *bounds,
                                                                         const graphene_rect_t      *start_bounds,
                                                                         const graphene_rect_t      *end_bounds,
+                                                                        const graphene_rect_t      *start_tex_rect,
+                                                                        const graphene_rect_t      *end_tex_rect,
                                                                         double                      progress);
 gsize               gsk_vulkan_cross_fade_pipeline_draw                (GskVulkanCrossFadePipeline *pipeline,
                                                                         VkCommandBuffer             command_buffer,

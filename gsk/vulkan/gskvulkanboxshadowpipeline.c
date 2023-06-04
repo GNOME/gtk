@@ -119,15 +119,10 @@ gsk_vulkan_box_shadow_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BOX_SHADOW_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_box_shadow_pipeline_count_vertex_data (GskVulkanBoxShadowPipeline *pipeline)
-{
-  return sizeof (GskVulkanBoxShadowInstance);
-}
-
 void
 gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GskVulkanBoxShadowPipeline *pipeline,
                                                     guchar                     *data,
+                                                    const graphene_point_t     *offset,
                                                     const GskRoundedRect       *outline,
                                                     const GdkRGBA              *color,
                                                     float                      dx,
@@ -137,7 +132,7 @@ gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GskVulkanBoxShadowPipeline *
 {
   GskVulkanBoxShadowInstance *instance = (GskVulkanBoxShadowInstance *) data;
 
-  gsk_rounded_rect_to_float (outline, instance->outline);
+  gsk_rounded_rect_to_float (outline, offset, instance->outline);
   instance->color[0] = color->red;
   instance->color[1] = color->green;
   instance->color[2] = color->blue;

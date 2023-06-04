@@ -1,16 +1,19 @@
 #version 420 core
 
+#include "common.frag.glsl"
 #include "clip.frag.glsl"
+#include "rect.frag.glsl"
 
 layout(location = 0) in vec2 inPos;
-layout(location = 1) in vec2 inStartTexCoord;
-layout(location = 2) in vec2 inEndTexCoord;
-layout(location = 3) flat in uint inBlendMode;
+layout(location = 1) in Rect inTopRect;
+layout(location = 2) in Rect inBottomRect;
+layout(location = 3) in vec2 inTopTexCoord;
+layout(location = 4) in vec2 inBottomTexCoord;
+layout(location = 5) flat in uvec2 inTopTexId;
+layout(location = 6) flat in uvec2 inBottomTexId;
+layout(location = 7) flat in uint inBlendMode;
 
-layout(set = 0, binding = 0) uniform sampler2D startTexture;
-layout(set = 1, binding = 0) uniform sampler2D endTexture;
-
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out vec4 color;
 
 float
 combine (float source, float backdrop)
@@ -242,7 +245,7 @@ set_sat (vec3 c, float s)
 }
 
 vec4
-color (vec4 Cs, vec4 Cb)
+colorize (vec4 Cs, vec4 Cb)
 {
   vec3 B = set_lum (Cs.rgb, lum (Cb.rgb));
   return composite (Cs, Cb, B);
@@ -271,8 +274,10 @@ luminosity (vec4 Cs, vec4 Cb)
 
 void main()
 {
-  vec4 source = texture (startTexture, inStartTexCoord);
-  vec4 backdrop = texture (endTexture, inEndTexCoord);
+  float source_alpha = rect_coverage (inTopRect, inPos);
+  vec4 source = texture (get_sampler (inTopTexId), inTopTexCoord) * source_alpha;
+  float backdrop_alpha = rect_coverage (inBottomRect, inPos);
+  vec4 backdrop = texture (get_sampler (inBottomTexId), inBottomTexCoord) * backdrop_alpha;
   vec4 result;
 
   if (inBlendMode == 0)
@@ -300,7 +305,7 @@ void main()
   else if (inBlendMode == 11)
     result = exclusion (source, backdrop);
   else if (inBlendMode == 12)
-    result = color (source, backdrop);
+    result = colorize (source, backdrop);
   else if (inBlendMode == 13)
     result = hue (source, backdrop);
   else if (inBlendMode == 14)
@@ -310,5 +315,5 @@ void main()
   else
     discard;
 
-  outColor = clip (inPos, result);
+  color = clip_scaled (inPos, result);
 }

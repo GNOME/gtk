@@ -77,6 +77,7 @@ compare_render_tests = [
   'outset_shadow_simple',
   'repeat',
   'repeat-no-repeat',
+  'repeat-empty-child-bounds',
   'repeat-negative-coords',
   'repeat-texture',
   'scale-textures-negative-ngl',

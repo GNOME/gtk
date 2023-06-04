@@ -18,12 +18,11 @@ GskVulkanPipeline *     gsk_vulkan_color_text_pipeline_new                   (Gd
                                                                               const char                     *shader_name,
                                                                               VkRenderPass                    render_pass);
 
-gsize                   gsk_vulkan_color_text_pipeline_count_vertex_data     (GskVulkanColorTextPipeline     *pipeline,
-                                                                              int                             num_instances);
 void                    gsk_vulkan_color_text_pipeline_collect_vertex_data   (GskVulkanColorTextPipeline     *pipeline,
                                                                               guchar                         *data,
                                                                               GskVulkanRenderer              *renderer,
                                                                               const graphene_rect_t          *rect,
+                                                                              guint                           tex_id[2],
                                                                               PangoFont                      *font,
                                                                               guint                           total_glyphs,
                                                                               const PangoGlyphInfo           *glyphs,

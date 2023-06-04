@@ -20,11 +20,10 @@ GskVulkanPipeline *     gsk_vulkan_linear_gradient_pipeline_new         (GdkVulk
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 
-gsize                   gsk_vulkan_linear_gradient_pipeline_count_vertex_data
-                                                                        (GskVulkanLinearGradientPipeline*pipeline);
 void                    gsk_vulkan_linear_gradient_pipeline_collect_vertex_data
                                                                         (GskVulkanLinearGradientPipeline*pipeline,
                                                                          guchar                         *data,
+                                                                         const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *start,
                                                                          const graphene_point_t         *end,

@@ -14,6 +14,7 @@ struct _GskVulkanTextInstance
   float rect[4];
   float tex_rect[4];
   float color[4];
+  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -46,6 +47,12 @@ gsk_vulkan_text_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
           .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, color),
+      },
+      {
+          .location = 3,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, tex_id),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -91,18 +98,12 @@ gsk_vulkan_text_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_TEXT_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_text_pipeline_count_vertex_data (GskVulkanTextPipeline *pipeline,
-                                            int                    num_instances)
-{
-  return sizeof (GskVulkanTextInstance) * num_instances;
-}
-
 void
 gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guchar                 *data,
                                               GskVulkanRenderer      *renderer,
                                               const graphene_rect_t  *rect,
+                                              guint                   tex_id[2],
                                               PangoFont              *font,
                                               guint                   total_glyphs,
                                               const PangoGlyphInfo   *glyphs,
@@ -152,6 +153,9 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
           instance->color[1] = color->green;
           instance->color[2] = color->blue;
           instance->color[3] = color->alpha;
+
+          instance->tex_id[0] = tex_id[0];
+          instance->tex_id[1] = tex_id[1];
 
           count++;
         }

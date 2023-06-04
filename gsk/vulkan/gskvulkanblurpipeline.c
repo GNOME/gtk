@@ -14,6 +14,7 @@ struct _GskVulkanBlurInstance
   float rect[4];
   float tex_rect[4];
   float blur_radius;
+  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanBlurPipeline, gsk_vulkan_blur_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -46,6 +47,12 @@ gsk_vulkan_blur_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .binding = 0,
           .format = VK_FORMAT_R32_SFLOAT,
           .offset = G_STRUCT_OFFSET (GskVulkanBlurInstance, blur_radius),
+      },
+      {
+          .location = 3,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanBlurInstance, tex_id),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -91,23 +98,19 @@ gsk_vulkan_blur_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BLUR_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_blur_pipeline_count_vertex_data (GskVulkanBlurPipeline *pipeline)
-{
-  return sizeof (GskVulkanBlurInstance);
-}
-
 void
-gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline *pipeline,
-                                              guchar                *data,
-                                              const graphene_rect_t *rect,
-                                              const graphene_rect_t *tex_rect,
-                                              double                 blur_radius)
+gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline  *pipeline,
+                                              guchar                 *data,
+                                              guint32                 tex_id[2],
+                                              const graphene_point_t *offset,
+                                              const graphene_rect_t  *rect,
+                                              const graphene_rect_t  *tex_rect,
+                                              double                  blur_radius)
 {
   GskVulkanBlurInstance *instance = (GskVulkanBlurInstance *) data;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
+  instance->rect[0] = rect->origin.x + offset->x;
+  instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
   instance->tex_rect[0] = tex_rect->origin.x;
@@ -115,6 +118,8 @@ gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline *pipeline,
   instance->tex_rect[2] = tex_rect->size.width;
   instance->tex_rect[3] = tex_rect->size.height;
   instance->blur_radius = blur_radius;
+  instance->tex_id[0] = tex_id[0];
+  instance->tex_id[1] = tex_id[1];
 }
 
 gsize

@@ -51,6 +51,12 @@ typedef enum {
   GSK_VULKAN_N_PIPELINES
 } GskVulkanPipelineType;
 
+typedef enum {
+  GSK_VULKAN_SAMPLER_DEFAULT,
+  GSK_VULKAN_SAMPLER_REPEAT,
+  GSK_VULKAN_SAMPLER_NEAREST
+} GskVulkanRenderSampler;
+
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
@@ -76,11 +82,12 @@ void                    gsk_vulkan_render_upload                        (GskVulk
 
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          GskVulkanPipelineType   pipeline_type);
-VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self,
-                                                                         gsize                   id);
-gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *source,
-                                                                         gboolean                repeat);
+gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulkanRender        *self,
+                                                                         GskVulkanRenderSampler  render_sampler);
+gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
+                                                                         GskVulkanImage         *source);
+VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self);
+
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
@@ -88,6 +95,7 @@ void                    gsk_vulkan_render_submit                        (GskVulk
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
                                                                          GskVulkanImage         *image);
+VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);
 
 G_END_DECLS
 

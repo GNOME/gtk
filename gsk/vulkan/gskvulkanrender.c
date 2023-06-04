@@ -23,8 +23,15 @@
 #include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 
-#define DESCRIPTOR_POOL_MAXSETS 128
-#define DESCRIPTOR_POOL_MAXSETS_INCREASE 128
+#define DESCRIPTOR_POOL_MAXITEMS 50000
+
+#define GDK_ARRAY_NAME gsk_descriptor_image_infos
+#define GDK_ARRAY_TYPE_NAME GskDescriptorImageInfos
+#define GDK_ARRAY_ELEMENT_TYPE VkDescriptorImageInfo
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 1024
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
 
 struct _GskVulkanRender
 {
@@ -40,20 +47,18 @@ struct _GskVulkanRender
   VkFence fence;
   VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
-  VkPipelineLayout pipeline_layout[3]; /* indexed by number of textures */
+  VkPipelineLayout pipeline_layout;
   GskVulkanUploader *uploader;
 
-  GHashTable *descriptor_set_indexes;
+  GskDescriptorImageInfos descriptor_images;
+  GskDescriptorImageInfos descriptor_samplers;
   VkDescriptorPool descriptor_pool;
-  uint32_t descriptor_pool_maxsets;
-  VkDescriptorSet *descriptor_sets;
-  gsize n_descriptor_sets;
+  VkDescriptorSet descriptor_set;
   GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
 
   GskVulkanImage *target;
 
-  VkSampler sampler;
-  VkSampler repeating_sampler;
+  VkSampler samplers[3];
 
   GList *render_passes;
   GSList *cleanup_images;
@@ -103,9 +108,6 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     }
 }
 
-static guint desc_set_index_hash (gconstpointer v);
-static gboolean desc_set_index_equal (gconstpointer v1, gconstpointer v2);
-
 GskVulkanRender *
 gsk_vulkan_render_new (GskRenderer      *renderer,
                        GdkVulkanContext *context)
@@ -118,7 +120,8 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   self->vulkan = context;
   self->renderer = renderer;
   self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
-  self->descriptor_set_indexes = g_hash_table_new_full (desc_set_index_hash, desc_set_index_equal, NULL, g_free);
+  gsk_descriptor_image_infos_init (&self->descriptor_images);
+  gsk_descriptor_image_infos_init (&self->descriptor_samplers);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -131,16 +134,20 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                NULL,
                                &self->fence);
 
-  self->descriptor_pool_maxsets = DESCRIPTOR_POOL_MAXSETS;
   GSK_VK_CHECK (vkCreateDescriptorPool, device,
                                         &(VkDescriptorPoolCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                            .maxSets = self->descriptor_pool_maxsets,
-                                            .poolSizeCount = 1,
-                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
+                                            .flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
+                                            .maxSets = 1,
+                                            .poolSizeCount = 2,
+                                            .pPoolSizes = (VkDescriptorPoolSize[2]) {
                                                 {
-                                                    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                    .descriptorCount = self->descriptor_pool_maxsets
+                                                    .type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                                    .descriptorCount = DESCRIPTOR_POOL_MAXITEMS
+                                                },
+                                                {
+                                                    .type = VK_DESCRIPTOR_TYPE_SAMPLER,
+                                                    .descriptorCount = DESCRIPTOR_POOL_MAXITEMS
                                                 }
                                             }
                                         },
@@ -190,53 +197,65 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-                                                 .bindingCount = 1,
-                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
+                                                 .bindingCount = 2,
+                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[2]) {
                                                      {
                                                          .binding = 0,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+                                                     },
+                                                     {
+                                                         .binding = 1,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
+                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
                                                      }
+                                                 },
+                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+                                                   .bindingCount = 2,
+                                                   .pBindingFlags = (VkDescriptorBindingFlags[2]) {
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                   },
                                                  }
                                              },
                                              NULL,
                                              &self->descriptor_set_layout);
 
-  for (guint i = 0; i < 3; i++)
-    {
-      VkDescriptorSetLayout layouts[3] = {
-        self->descriptor_set_layout,
-        self->descriptor_set_layout,
-        self->descriptor_set_layout
-      };
-
-      GSK_VK_CHECK (vkCreatePipelineLayout, device,
-                                            &(VkPipelineLayoutCreateInfo) {
-                                                .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                                .setLayoutCount = i,
-                                                .pSetLayouts = layouts,
-                                                .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
-                                                .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
+  GSK_VK_CHECK (vkCreatePipelineLayout, device,
+                                        &(VkPipelineLayoutCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                                            .setLayoutCount = 1,
+                                            .pSetLayouts = (VkDescriptorSetLayout[1]) {
+                                              self->descriptor_set_layout
                                             },
-                                            NULL,
-                                            &self->pipeline_layout[i]);
-    }
+                                            .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
+                                            .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
+                                        },
+                                        NULL,
+                                        &self->pipeline_layout);
 
   GSK_VK_CHECK (vkCreateSampler, device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = VK_FILTER_LINEAR,
                                      .minFilter = VK_FILTER_LINEAR,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                                      .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
                                      .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
                                      .unnormalizedCoordinates = VK_FALSE,
                                      .maxAnisotropy = 1.0,
                                  },
                                  NULL,
-                                 &self->sampler);
+                                 &self->samplers[GSK_VULKAN_SAMPLER_DEFAULT]);
 
   GSK_VK_CHECK (vkCreateSampler, device,
                                  &(VkSamplerCreateInfo) {
@@ -251,7 +270,23 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                      .maxAnisotropy = 1.0,
                                  },
                                  NULL,
-                                 &self->repeating_sampler);
+                                 &self->samplers[GSK_VULKAN_SAMPLER_REPEAT]);
+  
+  GSK_VK_CHECK (vkCreateSampler, device,
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = VK_FILTER_NEAREST,
+                                     .minFilter = VK_FILTER_NEAREST,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &self->samplers[GSK_VULKAN_SAMPLER_NEAREST]);
+  
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
@@ -315,6 +350,12 @@ gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
   return fb->framebuffer;
 }
 
+VkFence
+gsk_vulkan_render_get_fence (GskVulkanRender *self)
+{
+  return self->fence;
+}
+
 void
 gsk_vulkan_render_add_cleanup_image (GskVulkanRender *self,
                                      GskVulkanImage  *image)
@@ -338,15 +379,13 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
   GskVulkanRenderPass *pass;
-  graphene_matrix_t mv;
+  graphene_vec2_t scale;
 
-  graphene_matrix_init_scale (&mv, self->scale, self->scale, 1.0);
+  graphene_vec2_init (&scale, self->scale, self->scale);
 
   pass = gsk_vulkan_render_pass_new (self->vulkan,
                                      self->target,
-                                     self->scale,
-                                     self->scale,
-                                     &mv,
+                                     &scale,
                                      &self->viewport,
                                      self->clip,
                                      VK_NULL_HANDLE);
@@ -425,7 +464,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 
   if (self->pipelines[type] == NULL)
     self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
-                                                             self->pipeline_layout[pipeline_info[type].num_textures],
+                                                             self->pipeline_layout,
                                                              pipeline_info[type].name,
                                                              self->render_pass);
 
@@ -433,71 +472,59 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 }
 
 VkDescriptorSet
-gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self,
-                                      gsize            id)
+gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self)
 {
-  g_assert (id < self->n_descriptor_sets);
-
-  return self->descriptor_sets[id];
-}
-
-typedef struct {
-  gsize index;
-  GskVulkanImage *image;
-  gboolean repeat;
-} HashDescriptorSetIndexEntry;
-
-static guint
-desc_set_index_hash (gconstpointer v)
-{
-  const HashDescriptorSetIndexEntry *e = v;
-
-  return GPOINTER_TO_UINT (e->image) + e->repeat;
-}
-
-static gboolean
-desc_set_index_equal (gconstpointer v1, gconstpointer v2)
-{
-  const HashDescriptorSetIndexEntry *e1 = v1;
-  const HashDescriptorSetIndexEntry *e2 = v2;
-
-  return e1->image == e2->image && e1->repeat == e2->repeat;
+  return self->descriptor_set;
 }
 
 gsize
-gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
-                                          GskVulkanImage  *source,
-                                          gboolean         repeat)
+gsk_vulkan_render_get_sampler_descriptor (GskVulkanRender        *self,
+                                          GskVulkanRenderSampler  render_sampler)
 {
-  HashDescriptorSetIndexEntry lookup;
-  HashDescriptorSetIndexEntry *entry;
+  VkSampler sampler = self->samplers[render_sampler];
+  gsize i;
 
-  g_assert (source != NULL);
+  /* If this ever shows up in profiles, add a hash table */
+  for (i = 0; i < gsk_descriptor_image_infos_get_size (&self->descriptor_samplers); i++)
+    {
+      if (gsk_descriptor_image_infos_get (&self->descriptor_samplers, i)->sampler == sampler)
+        return i;
+    }
 
-  lookup.image = source;
-  lookup.repeat = repeat;
+  g_assert (i < DESCRIPTOR_POOL_MAXITEMS);
 
-  entry = g_hash_table_lookup (self->descriptor_set_indexes, &lookup);
-  if (entry)
-    return entry->index;
+  gsk_descriptor_image_infos_append (&self->descriptor_samplers,
+                                     &(VkDescriptorImageInfo) {
+                                       .sampler = sampler,
+                                     });
 
-  entry = g_new (HashDescriptorSetIndexEntry, 1);
-  entry->image = source;
-  entry->repeat = repeat;
-  entry->index = g_hash_table_size (self->descriptor_set_indexes);
-  g_hash_table_add (self->descriptor_set_indexes, entry);
+  return i;
+}
 
-  return entry->index;
+gsize
+gsk_vulkan_render_get_image_descriptor (GskVulkanRender *self,
+                                        GskVulkanImage  *image)
+{
+  gsize result;
+
+  result = gsk_descriptor_image_infos_get_size (&self->descriptor_images);
+  gsk_descriptor_image_infos_append (&self->descriptor_images,
+                                     &(VkDescriptorImageInfo) {
+                                       .sampler = VK_NULL_HANDLE,
+                                       .imageView = gsk_vulkan_image_get_image_view (image),
+                                       .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                     });
+
+  g_assert (result < DESCRIPTOR_POOL_MAXITEMS);
+
+  return result;
 }
 
 static void
 gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
 {
-  GHashTableIter iter;
-  gpointer key;
   VkDevice device;
   GList *l;
-  guint i, needed_sets;
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -507,85 +534,50 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
       gsk_vulkan_render_pass_reserve_descriptor_sets (pass, self);
     }
   
-  needed_sets = g_hash_table_size (self->descriptor_set_indexes);
-  if (needed_sets > self->n_descriptor_sets)
-    {
-      if (needed_sets > self->descriptor_pool_maxsets)
-        {
-          guint added_sets = needed_sets - self->descriptor_pool_maxsets;
-          added_sets = added_sets + DESCRIPTOR_POOL_MAXSETS_INCREASE - 1;
-          added_sets -= added_sets % DESCRIPTOR_POOL_MAXSETS_INCREASE;
-
-          vkDestroyDescriptorPool (device,
-                                   self->descriptor_pool,
-                                   NULL);
-          self->descriptor_pool_maxsets += added_sets;
-          GSK_VK_CHECK (vkCreateDescriptorPool, device,
-                                                &(VkDescriptorPoolCreateInfo) {
-                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                                    .maxSets = self->descriptor_pool_maxsets,
-                                                    .poolSizeCount = 1,
-                                                    .pPoolSizes = (VkDescriptorPoolSize[1]) {
-                                                        {
-                                                            .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                            .descriptorCount = self->descriptor_pool_maxsets
-                                                        }
-                                                    }
-                                                },
-                                                NULL,
-                                                &self->descriptor_pool);
-        }
-      else
-        {
-          GSK_VK_CHECK (vkResetDescriptorPool, device,
-                                               self->descriptor_pool,
-                                               0);
-        }
-
-      self->n_descriptor_sets = needed_sets;
-      self->descriptor_sets = g_renew (VkDescriptorSet, self->descriptor_sets, needed_sets);
-    }
-
-  VkDescriptorSetLayout *layouts = g_newa (VkDescriptorSetLayout, needed_sets);
-  for (i = 0; i < needed_sets; i++)
-    layouts[i] = self->descriptor_set_layout;
+  if (gsk_descriptor_image_infos_get_size (&self->descriptor_samplers) == 0 &&
+      gsk_descriptor_image_infos_get_size (&self->descriptor_images) == 0)
+    return;
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, device,
                                           &(VkDescriptorSetAllocateInfo) {
                                               .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
                                               .descriptorPool = self->descriptor_pool,
-                                              .descriptorSetCount = needed_sets,
-                                              .pSetLayouts = layouts
+                                              .descriptorSetCount = 1,
+                                              .pSetLayouts = &self->descriptor_set_layout,
+                                              .pNext = &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
+                                                .descriptorSetCount = 1,
+                                                .pDescriptorCounts = (uint32_t[1]) {
+                                                  gsk_descriptor_image_infos_get_size (&self->descriptor_images)
+                                                  + gsk_descriptor_image_infos_get_size (&self->descriptor_samplers)
+                                                }
+                                              }
                                           },
-                                          self->descriptor_sets);
+                                          &self->descriptor_set);
 
-  g_hash_table_iter_init (&iter, self->descriptor_set_indexes);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    {
-      HashDescriptorSetIndexEntry *entry = key;
-      GskVulkanImage *image = entry->image;
-      gsize id = entry->index;
-      gboolean repeat = entry->repeat;
-
-      vkUpdateDescriptorSets (device,
-                              1,
-                              (VkWriteDescriptorSet[1]) {
-                                  {
-                                      .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                      .dstSet = self->descriptor_sets[id],
-                                      .dstBinding = 0,
-                                      .dstArrayElement = 0,
-                                      .descriptorCount = 1,
-                                      .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                      .pImageInfo = &(VkDescriptorImageInfo) {
-                                          .sampler = repeat ? self->repeating_sampler : self->sampler,
-                                          .imageView = gsk_vulkan_image_get_image_view (image),
-                                          .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                                      }
-                                  }
+  vkUpdateDescriptorSets (device,
+                          2,
+                          (VkWriteDescriptorSet[2]) {
+                              {
+                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                  .dstSet = self->descriptor_set,
+                                  .dstBinding = 0,
+                                  .dstArrayElement = 0,
+                                  .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_images),
+                                  .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                  .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_images)
                               },
-                              0, NULL);
-    }
+                              {
+                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                  .dstSet = self->descriptor_set,
+                                  .dstBinding = 1,
+                                  .dstArrayElement = 0,
+                                  .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_samplers),
+                                  .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
+                                  .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_samplers)
+                              }
+                          },
+                          0, NULL);
 }
 
 void
@@ -614,7 +606,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
-      gsk_vulkan_render_pass_draw (pass, self, 3, self->pipeline_layout, command_buffer);
+      gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
 
       gsk_vulkan_command_pool_submit_buffer (self->command_pool,
                                              command_buffer,
@@ -675,10 +667,11 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
 
   gsk_vulkan_command_pool_reset (self->command_pool);
 
-  g_hash_table_remove_all (self->descriptor_set_indexes);
   GSK_VK_CHECK (vkResetDescriptorPool, device,
                                        self->descriptor_pool,
                                        0);
+  gsk_descriptor_image_infos_set_size (&self->descriptor_images, 0);
+  gsk_descriptor_image_infos_set_size (&self->descriptor_samplers, 0);
 
   g_list_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   self->render_passes = NULL;
@@ -720,10 +713,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
-  for (i = 0; i < 3; i++)
-    vkDestroyPipelineLayout (device,
-                             self->pipeline_layout[i],
-                             NULL);
+
+  vkDestroyPipelineLayout (device,
+                           self->pipeline_layout,
+                           NULL);
 
   vkDestroyRenderPass (device,
                        self->render_pass,
@@ -732,8 +725,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyDescriptorPool (device,
                            self->descriptor_pool,
                            NULL);
-  g_free (self->descriptor_sets);
-  g_hash_table_unref (self->descriptor_set_indexes);
+  gsk_descriptor_image_infos_clear (&self->descriptor_images);
+  gsk_descriptor_image_infos_clear (&self->descriptor_samplers);
 
   vkDestroyDescriptorSetLayout (device,
                                 self->descriptor_set_layout,
@@ -743,13 +736,12 @@ gsk_vulkan_render_free (GskVulkanRender *self)
                   self->fence,
                   NULL);
 
-  vkDestroySampler (device,
-                    self->sampler,
-                    NULL);
-
-  vkDestroySampler (device,
-                    self->repeating_sampler,
-                    NULL);
+  for (i = 0; i < G_N_ELEMENTS (self->samplers); i++)
+    {
+      vkDestroySampler (device,
+                        self->samplers[i],
+                        NULL);
+    }
 
   gsk_vulkan_command_pool_free (self->command_pool);
 

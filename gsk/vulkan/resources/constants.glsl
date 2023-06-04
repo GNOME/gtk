@@ -6,6 +6,7 @@ layout(push_constant) uniform PushConstants {
     vec4 clip_bounds;
     vec4 clip_widths;
     vec4 clip_heights;
+    vec2 scale;
 } push;
 
 #endif

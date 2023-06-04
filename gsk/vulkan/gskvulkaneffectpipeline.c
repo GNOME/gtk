@@ -15,6 +15,7 @@ struct _GskVulkanEffectInstance
   float tex_rect[4];
   float color_matrix[16];
   float color_offset[4];
+  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanEffectPipeline, gsk_vulkan_effect_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -71,6 +72,12 @@ gsk_vulkan_effect_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
           .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_offset),
+      },
+      {
+          .location = 7,
+          .binding = 0,
+          .format = VK_FORMAT_R32G32_UINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, tex_id),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -116,15 +123,11 @@ gsk_vulkan_effect_pipeline_new (GdkVulkanContext        *context,
   return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_EFFECT_PIPELINE, context, layout, shader_name, render_pass);
 }
 
-gsize
-gsk_vulkan_effect_pipeline_count_vertex_data (GskVulkanEffectPipeline *pipeline)
-{
-  return sizeof (GskVulkanEffectInstance);
-}
-
 void
 gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipeline,
                                                 guchar                  *data,
+                                                guint32                  tex_id[2],
+                                                const graphene_point_t  *offset,
                                                 const graphene_rect_t   *rect,
                                                 const graphene_rect_t   *tex_rect,
                                                 const graphene_matrix_t *color_matrix,
@@ -132,8 +135,8 @@ gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipelin
 {
   GskVulkanEffectInstance *instance = (GskVulkanEffectInstance *) data;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
+  instance->rect[0] = rect->origin.x + offset->x;
+  instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
   instance->tex_rect[0] = tex_rect->origin.x;
@@ -142,6 +145,8 @@ gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipelin
   instance->tex_rect[3] = tex_rect->size.height;
   graphene_matrix_to_float (color_matrix, instance->color_matrix);
   graphene_vec4_to_float (color_offset, instance->color_offset);
+  instance->tex_id[0] = tex_id[0];
+  instance->tex_id[1] = tex_id[1];
 }
 
 gsize

@@ -12,83 +12,37 @@ struct _GskVulkanPushConstantsWire
   struct {
     float mvp[16];
     float clip[12];
+    float scale[2];
   } common;
 };
 
-void
-gsk_vulkan_push_constants_init (GskVulkanPushConstants  *constants,
-                                const graphene_matrix_t *mvp,
-                                const graphene_rect_t   *viewport)
-{
-  graphene_matrix_init_from_matrix (&constants->mvp, mvp);
-  gsk_vulkan_clip_init_empty (&constants->clip, viewport);
-}
-
-void
-gsk_vulkan_push_constants_init_copy (GskVulkanPushConstants       *self,
-                                     const GskVulkanPushConstants *src)
-{
-  *self = *src;
-}
-
-gboolean
-gsk_vulkan_push_constants_transform (GskVulkanPushConstants       *self,
-                                     const GskVulkanPushConstants *src,
-                                     GskTransform                 *transform,
-                                     const graphene_rect_t        *viewport)
-
-{
-  graphene_matrix_t matrix;
-
-  if (!gsk_vulkan_clip_transform (&self->clip, &src->clip, transform, viewport))
-    return FALSE;
-
-  gsk_transform_to_matrix (transform, &matrix);
-  graphene_matrix_multiply (&matrix, &src->mvp, &self->mvp);
-
-  return TRUE;
-}
-
-gboolean
-gsk_vulkan_push_constants_intersect_rect (GskVulkanPushConstants       *self,
-                                          const GskVulkanPushConstants *src,
-                                          const graphene_rect_t        *rect)
-{
-  if (!gsk_vulkan_clip_intersect_rect (&self->clip, &src->clip, rect))
-    return FALSE;
-
-  graphene_matrix_init_from_matrix (&self->mvp, &src->mvp);
-  return TRUE;
-}
-
-gboolean
-gsk_vulkan_push_constants_intersect_rounded (GskVulkanPushConstants       *self,
-                                             const GskVulkanPushConstants *src,
-                                             const GskRoundedRect         *rect)
-{
-  if (!gsk_vulkan_clip_intersect_rounded_rect (&self->clip, &src->clip, rect))
-    return FALSE;
-
-  graphene_matrix_init_from_matrix (&self->mvp, &src->mvp);
-  return TRUE;
-}
+/* This is the value we know every conformant GPU must provide.
+ * See value for maxPushConstantsSize in table 55 of
+ * https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#limits-minmax
+ */
+G_STATIC_ASSERT (sizeof (GskVulkanPushConstantsWire) <= 128);
 
 static void
-gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire   *wire,
-                                     const GskVulkanPushConstants *self)
+gsk_vulkan_push_constants_wire_init (GskVulkanPushConstantsWire *wire,
+                                     const graphene_vec2_t      *scale,
+                                     const graphene_matrix_t    *mvp,
+                                     const GskRoundedRect       *clip)
 {
-  graphene_matrix_to_float (&self->mvp, wire->common.mvp);
-  gsk_rounded_rect_to_float (&self->clip.rect, wire->common.clip);
+  graphene_matrix_to_float (mvp, wire->common.mvp);
+  gsk_rounded_rect_to_float (clip, graphene_point_zero (), wire->common.clip);
+  graphene_vec2_to_float (scale, wire->common.scale);
 }
 
 void
-gsk_vulkan_push_constants_push (const GskVulkanPushConstants *self,
-                                VkCommandBuffer               command_buffer,
-                                VkPipelineLayout              pipeline_layout)
+gsk_vulkan_push_constants_push (VkCommandBuffer          command_buffer,
+                                VkPipelineLayout         pipeline_layout,
+                                const graphene_vec2_t   *scale,
+                                const graphene_matrix_t *mvp,
+                                const GskRoundedRect    *clip)
 {
   GskVulkanPushConstantsWire wire;
 
-  gsk_vulkan_push_constants_wire_init (&wire, self);
+  gsk_vulkan_push_constants_wire_init (&wire, scale, mvp, clip);
 
   vkCmdPushConstants (command_buffer,
                       pipeline_layout,
