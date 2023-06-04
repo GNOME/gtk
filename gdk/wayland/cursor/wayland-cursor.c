@@ -207,7 +207,7 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 {
         char *path;
         XcursorImages *images;
-	struct cursor *cursor;
+        struct wl_cursor *cursor;
 	struct cursor_image *image;
 	int i, nbytes;
         unsigned int load_size;
@@ -240,17 +240,16 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 		return NULL;
         }
 
-	cursor->cursor.images =
-		malloc(images->nimage * sizeof cursor->cursor.images[0]);
-	if (!cursor->cursor.images) {
+	cursor->images =
+		malloc(images->nimage * sizeof cursor->images[0]);
+	if (!cursor->images) {
 		free(cursor);
 	        xcursor_images_destroy (images);
 		return NULL;
 	}
 
-	cursor->cursor.name = strdup(name);
-        cursor->cursor.size = load_size;
-	cursor->total_delay = 0;
+	cursor->name = strdup(name);
+        cursor->size = load_size;
 
 	for (i = 0; i < images->nimage; i++) {
 		image = malloc(sizeof *image);
@@ -291,14 +290,13 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
                         }
                     }
                 }
-		cursor->total_delay += image->image.delay;
-		cursor->cursor.images[i] = (struct wl_cursor_image *) image;
+		cursor->images[i] = (struct wl_cursor_image *) image;
 	}
-	cursor->cursor.image_count = i;
+	cursor->image_count = i;
 
-	if (cursor->cursor.image_count == 0) {
-		free(cursor->cursor.name);
-		free(cursor->cursor.images);
+	if (cursor->image_count == 0) {
+		free(cursor->name);
+		free(cursor->images);
 		free(cursor);
 	        xcursor_images_destroy (images);
 		return NULL;
@@ -306,7 +304,7 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 
 	xcursor_images_destroy (images);
 
-	return &cursor->cursor;
+	return cursor;
 }
 
 static void
