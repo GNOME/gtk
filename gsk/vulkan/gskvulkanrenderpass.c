@@ -621,7 +621,7 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
         graphene_vec3_t matrix_scale;
         graphene_vec3_t shear;
         GskTransform *clip_transform;
-        float scale_x, scale_y;
+        float scale_x, scale_y, old_pixels, new_pixels;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &state->offset), transform);
 
@@ -648,6 +648,15 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
 
         scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
         scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
+        old_pixels = graphene_vec2_get_x (&state->scale) * graphene_vec2_get_y (&state->scale) *
+                     state->clip.rect.bounds.size.width * state->clip.rect.bounds.size.height;
+        new_pixels = scale_x * scale_y * new_state.clip.rect.bounds.size.width * new_state.clip.rect.bounds.size.height;
+        if (new_pixels > 2 * old_pixels)
+          {
+            float forced_downscale = 2 * old_pixels / new_pixels;
+            scale_x *= forced_downscale;
+            scale_y *= forced_downscale;
+          }
         new_state.modelview = gsk_transform_scale (new_state.modelview, 1 / scale_x, 1 / scale_y);
         graphene_vec2_init (&new_state.scale, scale_x, scale_y);
         new_state.offset = *graphene_point_zero ();
