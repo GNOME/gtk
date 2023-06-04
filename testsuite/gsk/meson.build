@@ -112,6 +112,8 @@ compare_render_tests = [
   'texture-scale-offset',
   'texture-scale-stripes',
   'texture-url',
+  'transform-huge-child',
+  'transform-huge-child-3d-nocairo',
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'z-transform-clipping-bounds-nocairo',
