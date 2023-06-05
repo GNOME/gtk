@@ -173,12 +173,8 @@ static GPrivate thread_current_context = G_PRIVATE_INIT (unref_unmasked);
 static void
 gdk_gl_context_clear_old_updated_area (GdkGLContext *context)
 {
-  int i;
-
-  for (i = 0; i < 2; i++)
-    {
-      g_clear_pointer (&context->old_updated_area[i], cairo_region_destroy);
-    }
+  for (unsigned int i = 0; i < GDK_GL_MAX_TRACKED_BUFFERS; i++)
+    g_clear_pointer (&context->old_updated_area[i], cairo_region_destroy);
 }
 
 static void
