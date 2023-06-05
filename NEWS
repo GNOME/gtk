@@ -1,4 +1,4 @@
-Overview of Changes in 4.11.3, xx-xx-xxxx
+Overview of Changes in 4.11.3, 05-06 2023
 =========================================
 
 * GtkGridView:
@@ -20,21 +20,40 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
 * GtkPopoverMenu:
  - Avoid unnecessary left padding
 
+* GtkSearchEntry:
+ - Improve size allocation for the clear icon
+
+* GtkBoxLayout:
+ - Fix a regression from recent baseline work
+
 * CSS:
  - Add new binding-friendly css provider apis
-
-* GDK:
- - Support grayscale texture and alpha texture formats
-   for loading and saving to png and tiff, and in GL
 
 * Theme:
  - Show focus in the shortcuts window
 
-* Tests:
- - Improve test coverage
+* GDK:
+ - Support grayscale and alpha texture formats for loading
+   and saving to png and tiff, and in GL
+ - Fix some regressions in GL context initialization
+
+* GSK:
+ - Support grayscale and alpha texture formats in the GL renderer
+ - Support straight alpha textures in the GL renderer
+ - Many improvements to the experimental Vulkan renderer
 
 * Wayland:
  - Make exporting surface handles more flexible
+
+* X11:
+ - Trap XRandr errors
+ - Stop using passive grabs during DND
+
+* Windows:
+ - Many cleanups and simplifications
+
+* Tests:
+ - Improve test coverage
 
 * Build:
  - Some build options have been renamed:
@@ -55,6 +74,7 @@ Overview of Changes in 4.11.3, xx-xx-xxxx
 * Translation updates:
  Basque
  Catalan
+ Georgian
  Russian
  Turkish
 
