@@ -34,14 +34,16 @@ diff_with_file (const char  *file1,
                 gssize       len,
                 GError     **error)
 {
-  const char *command[] = { "diff", "-u", file1, NULL, NULL };
-  char *diff, *tmpfile;
+  char *diff_cmd, *diff, *tmpfile;
   int fd;
 
   diff = NULL;
 
-  if (g_find_program_in_path ("diff"))
+  diff_cmd = g_find_program_in_path ("diff");
+  if (diff_cmd)
     {
+      const char *command[] = { diff_cmd, "-u", file1, NULL, NULL };
+
       if (len < 0)
         len = strlen (text);
 
@@ -65,7 +67,7 @@ diff_with_file (const char  *file1,
       g_spawn_sync (NULL,
                     (char **) command,
                     NULL,
-                    G_SPAWN_SEARCH_PATH,
+                    0,
                     NULL, NULL,
                     &diff,
                     NULL, NULL,
@@ -74,6 +76,7 @@ diff_with_file (const char  *file1,
 done:
       g_unlink (tmpfile);
       g_free (tmpfile);
+      g_free (diff_cmd);
     }
   else
     {

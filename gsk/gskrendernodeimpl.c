@@ -3956,27 +3956,29 @@ gsk_repeat_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   cairo_surface_t *surface;
   cairo_t *surface_cr;
+  double scale_x, scale_y, width, height;
+  cairo_matrix_t matrix;
 
+  cairo_get_matrix (cr, &matrix);
+  width = ceil (self->child_bounds.size.width * (ABS (matrix.xx) + ABS (matrix.yx)));
+  height = ceil (self->child_bounds.size.height * (ABS (matrix.xy) + ABS (matrix.yy)));
   surface = cairo_surface_create_similar (cairo_get_target (cr),
                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                          ceilf (self->child_bounds.size.width),
-                                          ceilf (self->child_bounds.size.height));
+                                          width, height);
+  cairo_surface_get_device_scale (surface, &scale_x, &scale_y);
+  scale_x *= width / self->child_bounds.size.width;
+  scale_y *= height / self->child_bounds.size.height;
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
+  cairo_surface_set_device_offset (surface, 
+                                   - self->child_bounds.origin.x * scale_x,
+                                   - self->child_bounds.origin.y * scale_y);
+
   surface_cr = cairo_create (surface);
-  cairo_translate (surface_cr,
-                   - self->child_bounds.origin.x,
-                   - self->child_bounds.origin.y);
   gsk_render_node_draw (self->child, surface_cr);
   cairo_destroy (surface_cr);
 
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_matrix (pattern,
-                            &(cairo_matrix_t) {
-                                .xx = 1.0,
-                                .yy = 1.0,
-                                .x0 = - self->child_bounds.origin.x,
-                                .y0 = - self->child_bounds.origin.y
-                            });
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);

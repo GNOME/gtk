@@ -30,3 +30,22 @@ transform {
  }
  transform: translate(6, 20);
 }
+
+/* cover the rounded corners */
+color {
+  color: red;
+  bounds: 6 20 25 25;
+}
+color {
+  color: red;
+  bounds: 617 20 25 25;
+}
+color {
+  color: red;
+  bounds: 6 131 25 25;
+}
+color {
+  color: red;
+  bounds: 617 131 25 25;
+}
+
