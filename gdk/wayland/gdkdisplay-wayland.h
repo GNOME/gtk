@@ -98,7 +98,6 @@ struct _GdkWaylandDisplay
   struct xdg_wm_base *xdg_wm_base;
   struct zxdg_shell_v6 *zxdg_shell_v6;
   struct gtk_shell1 *gtk_shell;
-  struct wl_input_device *input_device;
   struct wl_data_device_manager *data_device_manager;
   struct wl_subcompositor *subcompositor;
   struct zwp_pointer_gestures_v1 *pointer_gestures;
