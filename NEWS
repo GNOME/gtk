@@ -1,5 +1,48 @@
-Overview of Changes in 4.10.4, xx-xx-xxxx
+Overview of Changes in 4.10.4, 05-06 2023
 =========================================
+
+* GtkFileChooser
+ - Fix some memory leaks
+
+* GtkUriLauncher
+ - Validate the uri
+
+* GtkStack
+ - Fix a crash
+
+* GtkGridView
+ - Respect css border-spacing
+
+* GtkScrolledWindow
+ - Propagate child measure size whenever possible
+
+* GtkPopoverMenu:
+ - Avoid unnecessary left padding
+
+* GtkSearchEntry:
+ - Improve size allocation for the clear icon
+
+* X11
+ - Avoid black flickering with xwayland window decorations
+ - Trap XRandr errors
+
+* CSS
+ - Various fixes to transitions
+
+* Translation updates:
+ Basque
+ Catalan
+ Chinese (China)
+ French
+ Galician
+ Indonesian
+ Lithuanian
+ Persian
+ Russian
+ Swedish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.10.3, 22-04-2023
 =========================================
