@@ -40,7 +40,8 @@
 #include "gtkmarshalers.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkwidgetprivate.h"
-
+#include "gtkcssnodeprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 
 /**
  * GtkSearchEntry:
@@ -124,8 +125,9 @@ struct _GtkSearchEntry
 
   guint search_delay;
 
+  GtkWidget *search_icon;
   GtkWidget *entry;
-  GtkWidget *icon;
+  GtkWidget *clear_icon;
 
   guint delayed_changed_id;
   gboolean content_changed;
@@ -165,10 +167,9 @@ gtk_search_entry_finalize (GObject *object)
 
   gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  gtk_widget_unparent (gtk_widget_get_first_child (GTK_WIDGET (entry)));
-
+  g_clear_pointer (&entry->search_icon, gtk_widget_unparent);
   g_clear_pointer (&entry->entry, gtk_widget_unparent);
-  g_clear_pointer (&entry->icon, gtk_widget_unparent);
+  g_clear_pointer (&entry->clear_icon, gtk_widget_unparent);
 
   if (entry->delayed_changed_id > 0)
     g_source_remove (entry->delayed_changed_id);
@@ -281,6 +282,134 @@ gtk_search_entry_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+static int
+get_spacing (GtkWidget *widget)
+{
+  GtkCssNode *node = gtk_widget_get_css_node (widget);
+  GtkCssStyle *style = gtk_css_node_get_style (node);
+
+  return _gtk_css_position_value_get_x (style->size->border_spacing, 100);
+}
+
+static void
+gtk_search_entry_measure (GtkWidget      *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int             *minimum,
+                          int             *natural,
+                          int             *minimum_baseline,
+                          int             *natural_baseline)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  int icon_min, icon_nat;
+  int spacing;
+
+  spacing = get_spacing (widget);
+
+  gtk_widget_measure (entry->entry,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+
+  gtk_widget_measure (entry->search_icon,
+                      GTK_ORIENTATION_HORIZONTAL,
+                      -1,
+                      &icon_min, &icon_nat,
+                      NULL, NULL);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum += icon_min + spacing;
+      *natural += icon_nat + spacing;
+    }
+  else
+    {
+      *minimum = MAX (*minimum, icon_min);
+      *natural = MAX (*natural, icon_nat);
+    }
+
+  gtk_widget_measure (entry->clear_icon,
+                      GTK_ORIENTATION_HORIZONTAL,
+                      -1,
+                      &icon_min, &icon_nat,
+                      NULL, NULL);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum += icon_min + spacing;
+      *natural += icon_nat + spacing;
+    }
+  else
+    {
+      *minimum = MAX (*minimum, icon_min);
+      *natural = MAX (*natural, icon_nat);
+    }
+}
+
+static void
+gtk_search_entry_size_allocate (GtkWidget *widget,
+                                int        width,
+                                int        height,
+                                int        baseline)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  gboolean is_rtl;
+  GtkAllocation text_alloc;
+  GtkAllocation icon_alloc;
+  int icon_width;
+  int spacing;
+
+  spacing = get_spacing (widget);
+
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+
+  text_alloc.x = 0;
+  text_alloc.y = 0;
+  text_alloc.width = width;
+  text_alloc.height = height;
+
+  if (gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE)
+    baseline = -1;
+
+  gtk_widget_measure (entry->search_icon,
+                      GTK_ORIENTATION_HORIZONTAL,
+                      -1,
+                      NULL, &icon_width,
+                      NULL, NULL);
+
+  icon_alloc.x = is_rtl ? width - icon_width : 0;
+  icon_alloc.y = 0;
+  icon_alloc.width = icon_width;
+  icon_alloc.height = height;
+
+  gtk_widget_size_allocate (entry->search_icon, &icon_alloc, baseline);
+
+  text_alloc.width -= icon_width + spacing;
+  text_alloc.x += is_rtl ? 0 : icon_width + spacing;
+
+  if (gtk_widget_get_child_visible (entry->clear_icon))
+    {
+      gtk_widget_measure (entry->clear_icon,
+                          GTK_ORIENTATION_HORIZONTAL,
+                          -1,
+                          NULL, &icon_width,
+                          NULL, NULL);
+
+      icon_alloc.x = is_rtl ? 0 : width - icon_width;
+      icon_alloc.y = 0;
+      icon_alloc.width = icon_width;
+      icon_alloc.height = height;
+
+      gtk_widget_size_allocate (entry->clear_icon, &icon_alloc, baseline);
+
+      text_alloc.width -= icon_width + spacing;
+      text_alloc.x += is_rtl ? icon_width + spacing : 0;
+    }
+
+  gtk_widget_size_allocate (entry->entry, &text_alloc, baseline);
+}
+
 static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
@@ -294,6 +423,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   widget_class->grab_focus = gtk_search_entry_grab_focus;
   widget_class->focus = gtk_widget_focus_child;
   widget_class->mnemonic_activate = gtk_search_entry_mnemonic_activate;
+  widget_class->measure = gtk_search_entry_measure;
+  widget_class->size_allocate = gtk_search_entry_size_allocate;
 
   klass->stop_search = gtk_search_entry_stop_search;
 
@@ -463,7 +594,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                        "stop-search",
                                        NULL);
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SEARCH_BOX);
 }
@@ -548,7 +678,8 @@ gtk_search_entry_changed (GtkEditable    *editable,
 
   if (str == NULL || *str == '\0')
     {
-      gtk_widget_set_child_visible (entry->icon, FALSE);
+      gtk_widget_set_child_visible (entry->clear_icon, FALSE);
+      gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
       if (entry->delayed_changed_id > 0)
         {
@@ -559,7 +690,8 @@ gtk_search_entry_changed (GtkEditable    *editable,
     }
   else
     {
-      gtk_widget_set_child_visible (entry->icon, TRUE);
+      gtk_widget_set_child_visible (entry->clear_icon, TRUE);
+      gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
       /* Queue up the timeout */
       reset_timeout (entry);
@@ -597,17 +729,16 @@ catchall_click_press (GtkGestureClick *gesture,
 static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
-  GtkWidget *icon;
   GtkGesture *press, *catchall;
 
   entry->search_delay = 150;
 
   /* The search icon is purely presentational */
-  icon = g_object_new (GTK_TYPE_IMAGE,
-                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                       "icon-name", "system-search-symbolic",
-                       NULL);
-  gtk_widget_set_parent (icon, GTK_WIDGET (entry));
+  entry->search_icon = g_object_new (GTK_TYPE_IMAGE,
+                                     "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                     "icon-name", "system-search-symbolic",
+                                     NULL);
+  gtk_widget_set_parent (entry->search_icon, GTK_WIDGET (entry));
 
   entry->entry = gtk_text_new ();
   gtk_widget_set_parent (entry->entry, GTK_WIDGET (entry));
@@ -619,18 +750,18 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (entry->entry, "notify", G_CALLBACK (notify_cb), entry);
   g_signal_connect (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
 
-  entry->icon = g_object_new (GTK_TYPE_IMAGE,
-                              "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                              "icon-name", "edit-clear-symbolic",
-                              NULL);
-  gtk_widget_set_tooltip_text (entry->icon, _("Clear Entry"));
-  gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
-  gtk_widget_set_child_visible (entry->icon, FALSE);
+  entry->clear_icon = g_object_new (GTK_TYPE_IMAGE,
+                                    "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                    "icon-name", "edit-clear-symbolic",
+                                    NULL);
+  gtk_widget_set_tooltip_text (entry->clear_icon, _("Clear Entry"));
+  gtk_widget_set_parent (entry->clear_icon, GTK_WIDGET (entry));
+  gtk_widget_set_child_visible (entry->clear_icon, FALSE);
 
   press = gtk_gesture_click_new ();
   g_signal_connect (press, "pressed", G_CALLBACK (gtk_search_entry_icon_press), entry);
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
-  gtk_widget_add_controller (entry->icon, GTK_EVENT_CONTROLLER (press));
+  gtk_widget_add_controller (entry->clear_icon, GTK_EVENT_CONTROLLER (press));
 
   catchall = gtk_gesture_click_new ();
   g_signal_connect (catchall, "pressed",

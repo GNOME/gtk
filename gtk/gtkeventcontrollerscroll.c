@@ -410,16 +410,22 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
             }
           else
             {
-              if (ABS (scroll->cur_dx) >= 1)
+              if (ABS (scroll->cur_dx) >= 0.5)
                 {
                   steps = trunc (scroll->cur_dx);
+                  if (steps == 0)
+                    steps = (scroll->cur_dx > 0) ? 1 : -1;
+
                   scroll->cur_dx -= steps;
                   dx = steps;
                 }
 
-              if (ABS (scroll->cur_dy) >= 1)
+              if (ABS (scroll->cur_dy) >= 0.5)
                 {
                   steps = trunc (scroll->cur_dy);
+                  if (steps == 0)
+                    steps = (scroll->cur_dy > 0) ? 1 : -1;
+
                   scroll->cur_dy -= steps;
                   dy = steps;
                 }
@@ -459,16 +465,22 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
           scroll->cur_dy += dy;
           dx = dy = 0;
 
-          if (ABS (scroll->cur_dx) >= 1)
+          if (ABS (scroll->cur_dx) >= 0.5)
             {
               steps = trunc (scroll->cur_dx);
+              if (steps == 0)
+                steps = (scroll->cur_dx > 0) ? 1 : -1;
+
               scroll->cur_dx -= steps;
               dx = steps;
             }
 
-          if (ABS (scroll->cur_dy) >= 1)
+          if (ABS (scroll->cur_dy) >= 0.5)
             {
               steps = trunc (scroll->cur_dy);
+              if (steps == 0)
+                steps = (scroll->cur_dy > 0) ? 1 : -1;
+
               scroll->cur_dy -= steps;
               dy = steps;
             }

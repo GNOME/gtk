@@ -748,7 +748,9 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
       case G_FILE_MONITOR_EVENT_CREATED:
       case G_FILE_MONITOR_EVENT_CHANGED:
       case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-        /* We can treat all of these the same way */
+        if (g_file_equal (file, model->dir))
+          return;
+        /* We can treat all children the same way */
         g_file_query_info_async (file,
                                  model->attributes,
                                  G_FILE_QUERY_INFO_NONE,

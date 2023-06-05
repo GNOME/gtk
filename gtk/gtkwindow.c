@@ -5931,6 +5931,9 @@ gtk_window_get_mnemonics_visible (GtkWindow *window)
  * @setting: the new value
  *
  * Sets whether mnemonics are supposed to be visible.
+ *
+ * This property is maintained by GTK based on user input,
+ * and should not be set by applications.
  */
 void
 gtk_window_set_mnemonics_visible (GtkWindow *window,
@@ -6016,11 +6019,14 @@ unset_focus_visible (gpointer data)
 }
 
 /**
- * gtk_window_set_focus_visible: (attributes org.gtk.MEthod.set_property=focus-visible)
+ * gtk_window_set_focus_visible: (attributes org.gtk.Method.set_property=focus-visible)
  * @window: a `GtkWindow`
  * @setting: the new value
  *
  * Sets whether “focus rectangles” are supposed to be visible.
+ *
+ * This property is maintained by GTK based on user input,
+ * and should not be set by applications.
  */
 void
 gtk_window_set_focus_visible (GtkWindow *window,

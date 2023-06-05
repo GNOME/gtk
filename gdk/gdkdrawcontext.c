@@ -371,6 +371,12 @@ gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
   priv->surface->paint_context = g_object_ref (context);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, prefers_high_depth, priv->frame_region);
+
+  cairo_region_intersect_rectangle (priv->frame_region,
+                                    &(cairo_rectangle_int_t) {
+                                      0, 0,
+                                      priv->surface->width, priv->surface->height
+                                    });
 }
 
 #ifdef HAVE_SYSPROF

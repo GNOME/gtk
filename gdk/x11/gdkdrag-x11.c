@@ -134,35 +134,6 @@ struct _GdkX11DragClass
   GdkDragClass parent_class;
 };
 
-typedef struct {
-  int keysym;
-  int modifiers;
-} GrabKey;
-
-static GrabKey grab_keys[] = {
-  { XK_Escape, 0 },
-  { XK_space, 0 },
-  { XK_KP_Space, 0 },
-  { XK_Return, 0 },
-  { XK_KP_Enter, 0 },
-  { XK_Up, 0 },
-  { XK_Up, Mod1Mask },
-  { XK_Down, 0 },
-  { XK_Down, Mod1Mask },
-  { XK_Left, 0 },
-  { XK_Left, Mod1Mask },
-  { XK_Right, 0 },
-  { XK_Right, Mod1Mask },
-  { XK_KP_Up, 0 },
-  { XK_KP_Up, Mod1Mask },
-  { XK_KP_Down, 0 },
-  { XK_KP_Down, Mod1Mask },
-  { XK_KP_Left, 0 },
-  { XK_KP_Left, Mod1Mask },
-  { XK_KP_Right, 0 },
-  { XK_KP_Right, Mod1Mask }
-};
-
 /* Forward declarations */
 
 static GdkSurfaceCache *gdk_surface_cache_ref   (GdkSurfaceCache *cache);
@@ -1899,20 +1870,15 @@ drag_grab (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkSeatCapabilities capabilities;
-  GdkDisplay *display;
-  Window root;
   GdkSeat *seat;
-  int keycode, i;
   GdkCursor *cursor;
 
   if (!x11_drag->ipc_surface)
     return FALSE;
 
-  display = gdk_drag_get_display (drag);
-  root = GDK_DISPLAY_XROOTWIN (display);
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING | GDK_SEAT_CAPABILITY_KEYBOARD;
+  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
 
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
   g_set_object (&x11_drag->cursor, cursor);
@@ -1924,46 +1890,6 @@ drag_grab (GdkDrag *drag)
 
   g_set_object (&x11_drag->grab_seat, seat);
 
-  gdk_x11_display_error_trap_push (display);
-
-  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
-    {
-      int deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
-      unsigned char mask[XIMaskLen(XI_LASTEVENT)];
-      XIGrabModifiers mods;
-      XIEventMask evmask;
-      int num_mods;
-
-      keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
-                                  grab_keys[i].keysym);
-      if (keycode == NoSymbol)
-        continue;
-
-      memset (mask, 0, sizeof (mask));
-      XISetMask (mask, XI_KeyPress);
-      XISetMask (mask, XI_KeyRelease);
-
-      evmask.deviceid = deviceid;
-      evmask.mask_len = sizeof (mask);
-      evmask.mask = mask;
-
-      num_mods = 1;
-      mods.modifiers = grab_keys[i].modifiers;
-
-      XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                     deviceid,
-                     keycode,
-                     root,
-                     GrabModeAsync,
-                     GrabModeAsync,
-                     False,
-                     &evmask,
-                     num_mods,
-                     &mods);
-    }
-
-  gdk_x11_display_error_trap_pop_ignored (display);
-
   return TRUE;
 }
 
@@ -1971,41 +1897,13 @@ static void
 drag_ungrab (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkDisplay *display;
-  GdkDevice *keyboard;
-  Window root;
-  int keycode, i;
 
   if (!x11_drag->grab_seat)
     return;
 
   gdk_seat_ungrab (x11_drag->grab_seat);
 
-  display = gdk_drag_get_display (drag);
-  keyboard = gdk_seat_get_keyboard (x11_drag->grab_seat);
-  root = GDK_DISPLAY_XROOTWIN (display);
   g_clear_object (&x11_drag->grab_seat);
-
-  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
-    {
-      XIGrabModifiers mods;
-      int num_mods;
-
-      keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
-                                  grab_keys[i].keysym);
-      if (keycode == NoSymbol)
-        continue;
-
-      num_mods = 1;
-      mods.modifiers = grab_keys[i].modifiers;
-
-      XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                       gdk_x11_device_get_id (keyboard),
-                       keycode,
-                       root,
-                       num_mods,
-                       &mods);
-    }
 }
 
 GdkDrag *
@@ -2233,103 +2131,6 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
 }
 
 static gboolean
-gdk_dnd_handle_key_event (GdkDrag  *drag,
-                          GdkEvent *event)
-{
-  GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkModifierType state;
-  GdkDevice *pointer;
-  GdkSeat *seat;
-  int dx, dy;
-
-  dx = dy = 0;
-  state = gdk_event_get_modifier_state (event);
-  seat = gdk_event_get_seat (event);
-  pointer = gdk_seat_get_pointer (seat);
-
-  if (event->event_type == GDK_KEY_PRESS)
-    {
-      guint keyval = gdk_key_event_get_keyval (event);
-
-      switch (keyval)
-        {
-        case GDK_KEY_Escape:
-          gdk_drag_cancel (drag, GDK_DRAG_CANCEL_USER_CANCELLED);
-          return TRUE;
-
-        case GDK_KEY_space:
-        case GDK_KEY_Return:
-        case GDK_KEY_ISO_Enter:
-        case GDK_KEY_KP_Enter:
-        case GDK_KEY_KP_Space:
-          if ((gdk_drag_get_selected_action (drag) != 0) &&
-              (x11_drag->proxy_xid != None))
-            {
-              g_signal_emit_by_name (drag, "drop-performed");
-            }
-          else
-            gdk_drag_cancel (drag, GDK_DRAG_CANCEL_NO_TARGET);
-
-          return TRUE;
-
-        case GDK_KEY_Up:
-        case GDK_KEY_KP_Up:
-          dy = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
-          break;
-
-        case GDK_KEY_Down:
-        case GDK_KEY_KP_Down:
-          dy = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-
-        case GDK_KEY_Left:
-        case GDK_KEY_KP_Left:
-          dx = (state & GDK_ALT_MASK) ? -BIG_STEP : -SMALL_STEP;
-          break;
-
-        case GDK_KEY_Right:
-        case GDK_KEY_KP_Right:
-          dx = (state & GDK_ALT_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-
-        default:
-          break;
-        }
-    }
-
-  /* The state is not yet updated in the event, so we need
-   * to query it here. We could use XGetModifierMapping, but
-   * that would be overkill.
-   */
-  gdk_x11_device_xi2_query_state (pointer, NULL, NULL, NULL, &state);
-
-  if (dx != 0 || dy != 0)
-    {
-      GdkDisplay *display;
-      Display *xdisplay;
-      GdkX11Screen *screen;
-      Window dest;
-
-      x11_drag->last_x += dx;
-      x11_drag->last_y += dy;
-
-      display = gdk_event_get_display ((GdkEvent *)event);
-      xdisplay = GDK_DISPLAY_XDISPLAY (display);
-      screen = GDK_X11_DISPLAY (display)->screen;
-      dest = GDK_SCREEN_XROOTWIN (screen);
-
-      XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,
-                   round (x11_drag->last_x * screen->surface_scale),
-                   round (x11_drag->last_y * screen->surface_scale));
-    }
-
-  gdk_drag_update (drag, x11_drag->last_x, x11_drag->last_y, state,
-                   gdk_event_get_time (event));
-
-  return TRUE;
-}
-
-static gboolean
 gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
                                   GdkEvent *event)
 {
@@ -2394,10 +2195,6 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
 
     case GDK_BUTTON_RELEASE:
       return gdk_dnd_handle_button_event (drag, event);
-
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      return gdk_dnd_handle_key_event (drag, event);
 
     case GDK_GRAB_BROKEN:
       return gdk_dnd_handle_grab_broken_event (drag, event);

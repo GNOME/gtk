@@ -443,9 +443,6 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
       char *path, *path_lower;
       DISPLAYCONFIG_RATIONAL *refresh;
 
-      if ((dispconf_paths[path_index].flags & DISPLAYCONFIG_PATH_ACTIVE) == 0)
-        continue;
-
       tdn.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;
       tdn.header.size = sizeof (tdn);
       tdn.header.adapterId = dispconf_paths[path_index].targetInfo.adapterId;
@@ -480,6 +477,12 @@ populate_monitor_devices_from_display_config (GPtrArray *monitors)
 
       if (w32mon == NULL)
         continue;
+
+      if ((dispconf_paths[path_index].flags & DISPLAYCONFIG_PATH_ACTIVE) == 0)
+        {
+          w32mon->remove = TRUE;
+          continue;
+        }
 
       mon = GDK_MONITOR (w32mon);
 

@@ -103,14 +103,15 @@ fields, but e.g. buttons can take the focus too.
 
 Input widgets can be given the focus by clicking on them, but focus
 can also be moved around with certain key events (this is known as
-“keyboard navigation”). GTK reserves the <kbd>Tab</kbd> key to move the focus
-to the next location, and <kbd>Shift</kbd>+<kbd>Tab</kbd> to move it back to the previous
-one. In addition many containers allow “directional navigation” with
-the arrow keys.
+“keyboard navigation”).
+GTK reserves the <kbd>Tab</kbd> key to move the focus to the next location,
+and <kbd>Shift</kbd>+<kbd>Tab</kbd> to move it back to the previous one.
+In addition many containers allow “directional navigation” with the arrow keys.
 
-Many widgets can be “activated” to trigger and action. E.g., you can
-activate a button or switch by clicking on them, but you can also
-activate them with the keyboard, by using the <kbd>Enter</kbd> or <kbd>␣</kbd> keys.
+Many widgets can be “activated” to trigger and action.
+E.g., you can activate a button or switch by clicking on them,
+but you can also activate them with the keyboard,
+by using the <kbd>Enter</kbd> or <kbd>Space</kbd> keys.
 
 Apart from keyboard navigation, activation and directly typing into
 entries or text views, GTK widgets can use key events for activating
@@ -121,15 +122,17 @@ GTK has traditionally supported different kinds of shortcuts:
 
 - Accelerators are any other shortcuts that can be activated regardless
   of where the focus is, and typically trigger global actions, such as
-  Ctrl-Q to quit an application.
-- Mnemonics are usually triggered using Alt as a modifier for a letter.
+  <kbd>Ctrl</kbd>+<kbd>Q</kbd> to quit an application.
+- Mnemonics are usually triggered using <kbd>Alt</kbd>
+  as a modifier for a letter.
   They are used in places where a label is associated with a control,
   and are indicated by underlining the letter in the label. As a special
   case, inside menus (i.e. inside `GtkPopoverMenu`), mnemonics can be
   triggered without the modifier.
-- Key bindings are specific to individual widgets, such as Ctrl-C or
-  Ctrl-V in an entry copy to or paste from the clipboard. They are only
-  triggered when the widget has focus.
+- Key bindings are specific to individual widgets,
+  such as <kbd>Ctrl</kbd>+<kbd>C</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd>
+  in an entry copy to or paste from the clipboard.
+  They are only triggered when the widget has focus.
 
 GTK handles accelerators and mnemonics in a global scope, during the
 capture phase, and key bindings locally, during the target phase.
@@ -208,4 +211,4 @@ sequence, so setting the state on one does transfer the state to
 the others. They also are mutually exclusive, within a widget
 where may be only one gesture group claiming a given sequence.
 If another gesture group claims later that same sequence, the
-first group will deny the sequence:
+first group will deny the sequence.

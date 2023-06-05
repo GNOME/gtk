@@ -277,13 +277,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * Since: 4.10
  */
 void
-gtk_uri_launcher_launch (GtkUriLauncher     *self,
-                          GtkWindow           *parent,
-                          GCancellable        *cancellable,
-                          GAsyncReadyCallback  callback,
-                          gpointer             user_data)
+gtk_uri_launcher_launch (GtkUriLauncher      *self,
+                         GtkWindow           *parent,
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
 {
   GTask *task;
+  GError *error = NULL;
 
   g_return_if_fail (GTK_IS_URI_LAUNCHER (self));
 
@@ -296,6 +297,15 @@ gtk_uri_launcher_launch (GtkUriLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No uri to launch");
+      return;
+    }
+
+  if (!g_uri_is_valid (self->uri, G_URI_FLAGS_NONE, &error))
+    {
+      g_task_return_new_error (task,
+                               GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                               "%s is not a valid uri: %s", self->uri, error->message);
+      g_error_free (error);
       return;
     }
 
@@ -325,8 +335,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  */
 gboolean
 gtk_uri_launcher_launch_finish (GtkUriLauncher  *self,
-                                 GAsyncResult     *result,
-                                 GError          **error)
+                                GAsyncResult    *result,
+                                GError         **error)
 {
   g_return_val_if_fail (GTK_IS_URI_LAUNCHER (self), FALSE);
   g_return_val_if_fail (g_task_is_valid (result, self), FALSE);

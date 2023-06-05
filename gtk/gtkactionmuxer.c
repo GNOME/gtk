@@ -325,6 +325,9 @@ gtk_action_muxer_get_group (GtkActionMuxer *muxer,
 {
   Group *group;
 
+  if (!muxer->groups)
+    return NULL;
+
   group = g_hash_table_lookup (muxer->groups, group_name);
   if (group)
     return group->group;
@@ -452,7 +455,7 @@ notify_observers_added (GtkActionMuxer *muxer,
 
       gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (parent), action_name, GTK_ACTION_OBSERVER (muxer));
 
-      if (!action_muxer_query_action (parent, action_name,
+      if (!action_muxer_query_action (muxer, action_name,
                                       &enabled, &parameter_type,
                                       NULL, NULL, &state,
                                       TRUE))

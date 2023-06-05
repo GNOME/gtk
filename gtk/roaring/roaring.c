@@ -4543,7 +4543,7 @@ void *convert_run_optimize(void *c, uint8_t typecode_original,
 
         int long_ctr = 0;
         uint64_t cur_word = c_qua_bitset->array[0];
-        int run_count = 0;
+        G_GNUC_UNUSED int run_count = 0;
         while (true) {
             while (cur_word == UINT64_C(0) &&
                    long_ctr < BITSET_CONTAINER_SIZE_IN_WORDS - 1)

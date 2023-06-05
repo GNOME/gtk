@@ -6717,6 +6717,7 @@ gtk_text_set_placeholder_text (GtkText    *self,
                                         "css-name", "placeholder",
                                         "xalign", priv->xalign,
                                         "ellipsize", PANGO_ELLIPSIZE_END,
+                                        "max-width-chars", 3,
                                         NULL);
       gtk_label_set_attributes (GTK_LABEL (priv->placeholder), priv->attrs);
       gtk_widget_insert_after (priv->placeholder, GTK_WIDGET (self), NULL);

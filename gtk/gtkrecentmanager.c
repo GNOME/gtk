@@ -1431,6 +1431,7 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
     }
 
   g_strfreev (uris);
+  g_date_time_unref (now);
 }
 
 static void
@@ -2180,13 +2181,16 @@ gtk_recent_info_get_uri_display (GtkRecentInfo *info)
 int
 gtk_recent_info_get_age (GtkRecentInfo *info)
 {
+  int diff;
   GDateTime *now;
 
   g_return_val_if_fail (info != NULL, -1);
 
   now = g_date_time_new_now_utc ();
+  diff = (int) (g_date_time_difference (now, info->modified) / (double)G_TIME_SPAN_DAY);
 
-  return (int) (g_date_time_difference (now, info->modified) / (double)G_TIME_SPAN_DAY);
+  g_date_time_unref (now);
+  return diff;
 }
 
 /**

@@ -1890,7 +1890,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @keyboard_mode: %TRUE if the tooltip was triggered using the keyboard
    * @tooltip: a `GtkTooltip`
    *
-   * Emitted when the widgets tooltip is about to be shown.
+   * Emitted when the widget’s tooltip is about to be shown.
    *
    * This happens when the [property@Gtk.Widget:has-tooltip] property
    * is %TRUE and the hover timeout has expired with the cursor hovering
@@ -10596,7 +10596,7 @@ gtk_widget_set_overflow (GtkWidget   *widget,
  * gtk_widget_get_overflow: (attributes org.gtk.Method.get_property=overflow)
  * @widget: a `GtkWidget`
  *
- * Returns the widgets overflow value.
+ * Returns the widget’s overflow value.
  *
  * Returns: The widget's overflow.
  **/
@@ -10884,7 +10884,7 @@ _gtk_widget_peek_style_context (GtkWidget *widget)
  * The returned object is guaranteed to be the same
  * for the lifetime of @widget.
  *
- * Returns: (transfer none): the widgets `GtkStyleContext`
+ * Returns: (transfer none): the widget’s `GtkStyleContext`
  *
  * Deprecated: 4.10: Style contexts will be removed in GTK 5
  */
@@ -12022,7 +12022,7 @@ gtk_widget_observe_controllers (GtkWidget *widget)
  * gtk_widget_get_first_child:
  * @widget: a `GtkWidget`
  *
- * Returns the widgets first child.
+ * Returns the widget’s first child.
  *
  * This API is primarily meant for widget implementations.
  *
@@ -12042,7 +12042,7 @@ gtk_widget_get_first_child (GtkWidget *widget)
  * gtk_widget_get_last_child:
  * @widget: a `GtkWidget`
  *
- * Returns the widgets last child.
+ * Returns the widget’s last child.
  *
  * This API is primarily meant for widget implementations.
  *
@@ -12062,7 +12062,7 @@ gtk_widget_get_last_child (GtkWidget *widget)
  * gtk_widget_get_next_sibling:
  * @widget: a `GtkWidget`
  *
- * Returns the widgets next sibling.
+ * Returns the widget’s next sibling.
  *
  * This API is primarily meant for widget implementations.
  *
@@ -12082,7 +12082,7 @@ gtk_widget_get_next_sibling (GtkWidget *widget)
  * gtk_widget_get_prev_sibling:
  * @widget: a `GtkWidget`
  *
- * Returns the widgets previous sibling.
+ * Returns the widget’s previous sibling.
  *
  * This API is primarily meant for widget implementations.
  *
@@ -12901,7 +12901,7 @@ gtk_widget_get_css_name (GtkWidget *self)
  *
  * Adds a style class to @widget.
  *
- * After calling this function, the widgets style will match
+ * After calling this function, the widget’s style will match
  * for @css_class, according to CSS matching rules.
  *
  * Use [method@Gtk.Widget.remove_css_class] to remove the
@@ -13040,11 +13040,11 @@ gtk_widget_set_css_classes (GtkWidget   *widget,
  * @widget: a `GtkWidget`
  * @color: (out): return location for the color
  *
- * Gets the current foreground color for the widgets
+ * Gets the current foreground color for the widget’s
  * CSS style.
  *
  * This function should only be used in snapshot
- * implementations that need need to do custom
+ * implementations that need to do custom
  * drawing with the foreground color.
  *
  * Since: 4.10

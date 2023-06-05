@@ -1073,6 +1073,7 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
  * gtk_menu_button_set_always_show_arrow: (attributes org.gtk.Method.set_property=always-show-arrow)
  * @menu_button: a `GtkMenuButton`
  * @always_show_arrow: whether to show a dropdown arrow even when using an icon
+ * or a custom child
  *
  * Sets whether to show a dropdown arrow even when using an icon or a custom
  * child.
@@ -1101,9 +1102,11 @@ gtk_menu_button_set_always_show_arrow (GtkMenuButton *menu_button,
  * gtk_menu_button_get_always_show_arrow: (attributes org.gtk.Method.get_property=always-show-arrow)
  * @menu_button: a `GtkMenuButton`
  *
- * Gets whether to show a dropdown arrow even when using an icon.
+ * Gets whether to show a dropdown arrow even when using an icon or a custom
+ * child.
  *
- * Returns: whether to show a dropdown arrow even when using an icon
+ * Returns: whether to show a dropdown arrow even when using an icon or a custom
+ * child.
  *
  * Since: 4.4
  */
@@ -1526,7 +1529,7 @@ gtk_menu_button_get_child (GtkMenuButton *menu_button)
  * @menu_button: a `GtkMenuButton`
  * @active: whether the menu button is active
  *
- * Sets whether menu button acts is active.
+ * Sets whether the menu button is active.
  *
  * Since: 4.10
  */

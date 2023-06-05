@@ -662,6 +662,10 @@ gsk_gl_command_queue_split_draw (GskGLCommandQueue *self)
 
   g_assert (GSK_IS_GL_COMMAND_QUEUE (self));
   g_assert (self->batches.len > 0);
+
+  if (will_ignore_batch (self))
+    return;
+
   g_assert (self->in_draw == TRUE);
 
   program = self->program_info;
