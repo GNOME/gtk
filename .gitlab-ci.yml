@@ -385,7 +385,6 @@ asan-build:
   tags: [ asan ]
   stage: analysis
   needs: []
-  when: manual
   variables:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
