@@ -3956,13 +3956,19 @@ gsk_repeat_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   cairo_surface_t *surface;
   cairo_t *surface_cr;
-  double scale_x, scale_y;
+  double scale_x, scale_y, width, height;
+  cairo_matrix_t matrix;
 
+  cairo_get_matrix (cr, &matrix);
+  width = ceil (self->child_bounds.size.width * (ABS (matrix.xx) + ABS (matrix.yx)));
+  height = ceil (self->child_bounds.size.height * (ABS (matrix.xy) + ABS (matrix.yy)));
   surface = cairo_surface_create_similar (cairo_get_target (cr),
                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                          ceilf (self->child_bounds.size.width),
-                                          ceilf (self->child_bounds.size.height));
+                                          width, height);
   cairo_surface_get_device_scale (surface, &scale_x, &scale_y);
+  scale_x *= width / self->child_bounds.size.width;
+  scale_y *= height / self->child_bounds.size.height;
+  cairo_surface_set_device_scale (surface, scale_x, scale_y);
   cairo_surface_set_device_offset (surface, 
                                    - self->child_bounds.origin.x * scale_x,
                                    - self->child_bounds.origin.y * scale_y);
