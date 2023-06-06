@@ -549,8 +549,6 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
       context_attribs [major_idx] = gdk_gl_version_get_major (&supported_versions[j]);
       context_attribs [minor_idx] = gdk_gl_version_get_minor (&supported_versions[j]);
 
-      gdk_x11_display_error_trap_push (display);
-
       /* If we don't have access to GLX_ARB_create_context_profile, then
        * we have to fall back to the old GLX 1.3 API.
        */
@@ -568,17 +566,14 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
                                           True,
                                           context_attribs);
 
-      if (ctx == NULL)
-        {
-          gdk_x11_display_error_trap_pop_ignored (display);
-        }
-      else if (gdk_x11_display_error_trap_pop (display))
-        {
-          glXDestroyContext (dpy, ctx);
-          ctx = NULL;
-        }
-      else
+      if (ctx != NULL)
         break;
+    }
+
+  if (ctx == NULL)
+    {
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Failed to create a GLX context");
+      return 0;
     }
 
   GDK_DISPLAY_DEBUG (display, OPENGL,
@@ -661,25 +656,42 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   if (share != NULL && gdk_gl_context_is_legacy (share))
     legacy = TRUE;
 
+  gdk_x11_display_error_trap_push (display);
+
+  /* Increase XNextRequest because GLX may fake errors with the last request
+   * and we want the error trap to catch them */
+  XChangeWindowAttributes (GDK_DISPLAY_XDISPLAY (display),
+                           GDK_X11_DISPLAY (display)->leader_window,
+                           0,
+                           (XSetWindowAttributes[1]) { 0, });
+
   if (preferred_api == GDK_GL_API_GL)
     {
-      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
-        return api;
+      api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE);
     }
   else
     {
-      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, FALSE)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
-        return api;
+      api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, FALSE);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE);
     }
 
-  g_set_error_literal (error, GDK_GL_ERROR,
-                       GDK_GL_ERROR_NOT_AVAILABLE,
-                       _("Unable to create a GL context"));
-  return 0;
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (api == 0)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+    }
+
+  return api;
 }
 
 #undef N_GLX_ATTRS
