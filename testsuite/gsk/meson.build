@@ -83,6 +83,7 @@ compare_render_tests = [
   'repeat-no-repeat',
   'repeat-empty-child-bounds',
   'repeat-negative-coords',
+  'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
   'scale-textures-negative-ngl',
