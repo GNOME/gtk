@@ -658,6 +658,13 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
 
   gdk_x11_display_error_trap_push (display);
 
+  /* Increase XNextRequest because GLX may fake errors with the last request
+   * and we want the error trap to catch them */
+  XChangeWindowAttributes (GDK_DISPLAY_XDISPLAY (display),
+                           GDK_X11_DISPLAY (display)->leader_window,
+                           0,
+                           (XSetWindowAttributes[1]) { 0, });
+
   if (preferred_api == GDK_GL_API_GL)
     {
       api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy);
