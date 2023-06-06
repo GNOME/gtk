@@ -391,6 +391,8 @@ asan-build:
     - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled -Df16c=disabled _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
+    - .gitlab-ci/run-tests.sh _build wayland_gles
+    - .gitlab-ci/run-tests.sh _build x11
   artifacts:
     paths:
       - _build/meson-logs
