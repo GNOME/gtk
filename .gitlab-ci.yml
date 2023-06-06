@@ -222,7 +222,7 @@ macos:
             -Dcpp_std=c++11
             -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
-            -Ddemos=false
+            -Dbuild-demos=false
             -Dbuild-tests=false
             -Dbuild-examples=false
             -Dbuild-testsuite=false
@@ -388,7 +388,16 @@ asan-build:
   variables:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - CC=clang meson setup --buildtype=debugoptimized -Db_sanitize=address -Db_lundef=false -Dintrospection=disabled -Df16c=disabled _build
+    - CC=clang meson setup
+            --buildtype=debugoptimized
+            -Db_sanitize=address
+            -Db_lundef=false
+            -Dbuild-demos=false
+            -Dbuild-tests=false
+            -Dbuild-examples=false
+            -Dintrospection=disabled
+            -Df16c=disabled
+            _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build wayland_gles
