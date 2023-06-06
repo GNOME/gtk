@@ -543,8 +543,6 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   if (share != NULL)
     share_glx = GDK_X11_GL_CONTEXT_GLX (share);
 
-  gdk_x11_display_error_trap_push (display);
-
   supported_versions = gdk_gl_versions_get_for_api (api);
   for (j = 0; gdk_gl_version_greater_equal (&supported_versions[j], &version); j++)
     {
@@ -571,8 +569,6 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
       if (ctx != NULL)
         break;
     }
-
-  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (ctx == NULL)
     {
@@ -660,25 +656,35 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   if (share != NULL && gdk_gl_context_is_legacy (share))
     legacy = TRUE;
 
+  gdk_x11_display_error_trap_push (display);
+
   if (preferred_api == GDK_GL_API_GL)
     {
-      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
-        return api;
+      api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE);
     }
   else
     {
-      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, FALSE)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
-          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
-        return api;
+      api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, FALSE);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy);
+      if (api == 0)
+        api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE);
     }
 
-  g_set_error_literal (error, GDK_GL_ERROR,
-                       GDK_GL_ERROR_NOT_AVAILABLE,
-                       _("Unable to create a GL context"));
-  return 0;
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (api == 0)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+    }
+
+  return api;
 }
 
 #undef N_GLX_ATTRS
