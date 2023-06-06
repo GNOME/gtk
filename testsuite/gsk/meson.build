@@ -96,6 +96,7 @@ compare_render_tests = [
   'repeat-no-repeat',
   'repeat-repeats',
   'repeat-repeats-nested',
+  'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
   'scale-textures-negative-ngl',
