@@ -623,7 +623,6 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->xdg_wm_base);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->zxdg_shell_v6);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->gtk_shell);
-      append_wayland_protocol_row (gen, (struct wl_proxy *)d->input_device);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->data_device_manager);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->subcompositor);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->pointer_gestures);

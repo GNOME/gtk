@@ -698,7 +698,36 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_list_free_full (display_wayland->on_has_globals_closures, g_free);
 
+  g_clear_pointer (&display_wayland->cursor_theme, wl_cursor_theme_destroy);
+  g_clear_pointer (&display_wayland->compositor, wl_compositor_destroy);
+  g_clear_pointer (&display_wayland->xdg_wm_base, xdg_wm_base_destroy);
+  g_clear_pointer (&display_wayland->zxdg_shell_v6, zxdg_shell_v6_destroy);
+  g_clear_pointer (&display_wayland->gtk_shell, gtk_shell1_destroy);
+  g_clear_pointer (&display_wayland->data_device_manager, wl_data_device_manager_destroy);
+  g_clear_pointer (&display_wayland->subcompositor, wl_subcompositor_destroy);
+  g_clear_pointer (&display_wayland->pointer_gestures, zwp_pointer_gestures_v1_destroy);
+  g_clear_pointer (&display_wayland->primary_selection_manager, zwp_primary_selection_device_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->tablet_manager, zwp_tablet_manager_v2_destroy);
+  g_clear_pointer (&display_wayland->xdg_exporter, zxdg_exporter_v1_destroy);
+  g_clear_pointer (&display_wayland->xdg_exporter_v2, zxdg_exporter_v2_destroy);
+  g_clear_pointer (&display_wayland->xdg_importer, zxdg_importer_v1_destroy);
+  g_clear_pointer (&display_wayland->xdg_importer_v2, zxdg_importer_v2_destroy);
+  g_clear_pointer (&display_wayland->keyboard_shortcuts_inhibit, zwp_keyboard_shortcuts_inhibit_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->server_decoration_manager, org_kde_kwin_server_decoration_manager_destroy);
+  g_clear_pointer (&display_wayland->xdg_output_manager, zxdg_output_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->idle_inhibit_manager, zwp_idle_inhibit_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->xdg_activation, xdg_activation_v1_destroy);
+  g_clear_pointer (&display_wayland->fractional_scale, wp_fractional_scale_manager_v1_destroy);
+  g_clear_pointer (&display_wayland->viewporter, wp_viewporter_destroy);
+
+  g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
+  g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);
+
+  g_list_store_remove_all (display_wayland->monitors);
+
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
+
+  g_clear_pointer (&display_wayland->wl_display, wl_display_disconnect);
 }
 
 static void
@@ -708,21 +737,16 @@ gdk_wayland_display_finalize (GObject *object)
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
 
+  g_object_unref (display_wayland->monitors);
+
   g_free (display_wayland->startup_notification_id);
   g_free (display_wayland->cursor_theme_name);
   xkb_context_unref (display_wayland->xkb_context);
-
-  g_clear_pointer (&display_wayland->cursor_theme, wl_cursor_theme_destroy);
-
-  g_list_store_remove_all (display_wayland->monitors);
-  g_object_unref (display_wayland->monitors);
 
   if (display_wayland->settings)
     g_hash_table_destroy (display_wayland->settings);
 
   g_clear_object (&display_wayland->settings_portal);
-
-  wl_display_disconnect (display_wayland->wl_display);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }

@@ -383,6 +383,9 @@ gdk_display_dispose (GObject *object)
 #endif
   g_clear_error (&priv->gl_error);
 
+  for (GList *l = display->seats; l; l = l->next)
+    g_object_run_dispose (G_OBJECT (l->data));
+
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
 }
 

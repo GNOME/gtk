@@ -3876,6 +3876,23 @@ gdk_wayland_pointer_data_finalize (GdkWaylandPointerData *pointer)
 }
 
 static void
+gdk_wayland_seat_dispose (GObject *object)
+{
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (object);
+
+  g_clear_pointer (&seat->wl_seat, wl_seat_destroy);
+  g_clear_pointer (&seat->wl_pointer, wl_pointer_destroy);
+  g_clear_pointer (&seat->wl_keyboard, wl_keyboard_destroy);
+  g_clear_pointer (&seat->wl_touch, wl_touch_destroy);
+  g_clear_pointer (&seat->wp_pointer_gesture_swipe, zwp_pointer_gesture_swipe_v1_destroy);
+  g_clear_pointer (&seat->wp_pointer_gesture_pinch, zwp_pointer_gesture_pinch_v1_destroy);
+  g_clear_pointer (&seat->wp_pointer_gesture_hold, zwp_pointer_gesture_hold_v1_destroy);
+  g_clear_pointer (&seat->wp_tablet_seat, zwp_tablet_seat_v2_destroy);
+
+  G_OBJECT_CLASS (gdk_wayland_seat_parent_class)->dispose (object);
+}
+
+static void
 gdk_wayland_seat_finalize (GObject *object)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (object);
@@ -4189,6 +4206,7 @@ gdk_wayland_seat_class_init (GdkWaylandSeatClass *klass)
   GdkSeatClass *seat_class = GDK_SEAT_CLASS (klass);
 
   object_class->finalize = gdk_wayland_seat_finalize;
+  object_class->dispose = gdk_wayland_seat_dispose;
 
   seat_class->get_capabilities = gdk_wayland_seat_get_capabilities;
   seat_class->grab = gdk_wayland_seat_grab;
