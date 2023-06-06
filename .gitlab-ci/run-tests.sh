@@ -9,7 +9,7 @@ backend=$2
 multiplier=${MESON_TEST_TIMEOUT_MULTIPLIER:-1}
 
 # Ignore memory leaks lower in dependencies
-export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:detect_leaks=0
+export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:detect_leaks=0:allocator_may_return_null=1
 export G_SLICE=always-malloc
 
 case "${backend}" in
