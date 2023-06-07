@@ -1293,7 +1293,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
                                                              start,
                                                              GTK_LIST_TILE_UNMATCHED_FOOTER,
                                                              GTK_LIST_TILE_HEADER);
-              g_assert (header->widget == NULL);
+              g_assert (header != NULL && header->widget == NULL);
               header->widget = GTK_WIDGET (gtk_list_item_change_get_header (change));
               if (header->widget == NULL)
                 header->widget = GTK_WIDGET (self->create_header_widget (self->widget));
