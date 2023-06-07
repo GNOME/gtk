@@ -20,12 +20,12 @@
 #include <string.h>
 
 #include <gmodule.h>
-
 #include <glib/gi18n-lib.h>
-#include "gtkdebug.h"
+
+#include <gtk/gtk.h>
 #include "gtkmodulesprivate.h"
-#include "gtkmarshalers.h"
 #include "gtkprivate.h"
+
 #include "gtkprintbackendprivate.h"
 
 
@@ -272,7 +272,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
                                                      GTK_PARAM_READWRITE)); 
   
   signals[PRINTER_LIST_CHANGED] =
-    g_signal_new (I_("printer-list-changed"),
+    g_signal_new ("printer-list-changed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_changed),
@@ -280,7 +280,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
   signals[PRINTER_LIST_DONE] =
-    g_signal_new (I_("printer-list-done"),
+    g_signal_new ("printer-list-done",
 		    G_TYPE_FROM_CLASS (class),
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_done),
@@ -288,7 +288,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		    NULL,
 		    G_TYPE_NONE, 0);
   signals[PRINTER_ADDED] =
-    g_signal_new (I_("printer-added"),
+    g_signal_new ("printer-added",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_added),
@@ -296,7 +296,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_REMOVED] =
-    g_signal_new (I_("printer-removed"),
+    g_signal_new ("printer-removed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_removed),
@@ -304,7 +304,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_STATUS_CHANGED] =
-    g_signal_new (I_("printer-status-changed"),
+    g_signal_new ("printer-status-changed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_status_changed),
@@ -312,7 +312,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[REQUEST_PASSWORD] =
-    g_signal_new (I_("request-password"),
+    g_signal_new ("request-password",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, request_password),

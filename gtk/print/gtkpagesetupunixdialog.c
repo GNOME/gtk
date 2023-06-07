@@ -22,20 +22,14 @@
 #include <locale.h>
 
 #include <glib/gi18n-lib.h>
-#include "gtkprivate.h"
-
-#include "gtkbutton.h"
-#include "gtkscrolledwindow.h"
-#include "gtkcheckbutton.h"
-#include "gtklabel.h"
-#include "gtkgrid.h"
+#include <gtk/gtk.h>
+#include "deprecated/gtkdialogprivate.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkpapersize.h"
 #include "gtkprintutilsprivate.h"
-#include "deprecated/gtkdialogprivate.h"
 
 /**
  * GtkPageSetupUnixDialog:

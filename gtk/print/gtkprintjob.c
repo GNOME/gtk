@@ -42,7 +42,6 @@
 #include <sys/stat.h>
 
 #include <glib/gstdio.h>
-#include "gtkprivate.h"
 
 #include "gtkprintjob.h"
 #include "gtkprinter.h"
@@ -144,7 +143,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
                                    PROP_TITLE,
                                    g_param_spec_string ("title", NULL, NULL,
 						        NULL,
-							GTK_PARAM_READWRITE |
+							G_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
@@ -156,7 +155,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
                                    PROP_PRINTER,
                                    g_param_spec_object ("printer", NULL, NULL,
 						        GTK_TYPE_PRINTER,
-							GTK_PARAM_READWRITE |
+							G_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
@@ -168,7 +167,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
                                    PROP_SETTINGS,
                                    g_param_spec_object ("settings", NULL, NULL,
 						        GTK_TYPE_PRINT_SETTINGS,
-							GTK_PARAM_READWRITE |
+							G_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
@@ -180,7 +179,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
                                    PROP_PAGE_SETUP,
                                    g_param_spec_object ("page-setup", NULL, NULL,
 						        GTK_TYPE_PAGE_SETUP,
-							GTK_PARAM_READWRITE |
+							G_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
@@ -193,7 +192,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 				   PROP_TRACK_PRINT_STATUS,
 				   g_param_spec_boolean ("track-print-status", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 G_PARAM_READWRITE));
 
   /**
    * GtkPrintJob::status-changed:
@@ -205,7 +204,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    * to obtain the new status.
    */
   signals[STATUS_CHANGED] =
-    g_signal_new (I_("status-changed"),
+    g_signal_new ("status-changed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintJobClass, status_changed),

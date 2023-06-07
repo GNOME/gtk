@@ -29,16 +29,23 @@
 
 #include <gio/gunixfdlist.h>
 
+#include <glib/gi18n-lib.h>
+#include <gtk/gtk.h>
+#include "gtkwindowprivate.h"
+#include "gtkprivate.h"
+
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
 #include "gtkprintsettings.h"
 #include "gtkpagesetup.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkfilelauncher.h"
-#include <glib/gi18n-lib.h>
-#include "gtkwindowprivate.h"
-#include "gtkprivate.h"
 
+#ifndef PORTAL_BUS_NAME
+#define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
+#define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
+#define PORTAL_REQUEST_INTERFACE "org.freedesktop.portal.Request"
+#define PORTAL_PRINT_INTERFACE "org.freedesktop.portal.Print"
+#endif
 
 typedef struct {
   GtkPrintOperation *op;

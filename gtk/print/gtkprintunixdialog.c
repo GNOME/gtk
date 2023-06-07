@@ -25,6 +25,14 @@
 #include <stdio.h>
 #include <math.h>
 
+#include <glib/gi18n-lib.h>
+#include <gtk/gtk.h>
+#include "gtkmarshalers.h"
+#include "deprecated/gtkdialogprivate.h"
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+
 #include "gtkprintunixdialog.h"
 
 #include "gtkcustompaperunixdialog.h"
@@ -32,29 +40,6 @@
 #include "gtkprinterprivate.h"
 #include "gtkprinteroptionwidgetprivate.h"
 #include "gtkprintutilsprivate.h"
-
-#include "gtkspinbutton.h"
-#include "gtkimage.h"
-#include "gtknotebook.h"
-#include "gtkscrolledwindow.h"
-#include "gtktogglebutton.h"
-#include "gtkdrawingarea.h"
-#include "gtkbox.h"
-#include "gtkgrid.h"
-#include "gtkframe.h"
-#include "gtklabel.h"
-#include "gtkbuildable.h"
-#include "deprecated/gtkmessagedialog.h"
-#include "gtkbutton.h"
-#include "gtksnapshot.h"
-#include "gtkrenderbackgroundprivate.h"
-#include "gtkrenderborderprivate.h"
-#include <glib/gi18n-lib.h>
-#include "gtkprivate.h"
-#include "gtktypebuiltins.h"
-#include "deprecated/gtkdialogprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkcsscolorvalueprivate.h"
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -390,7 +375,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_PAGE_SETUP,
                                    g_param_spec_object ("page-setup", NULL, NULL,
                                                         GTK_TYPE_PAGE_SETUP,
-                                                        GTK_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE));
 
   /**
    * GtkPrintUnixDialog:current-page: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_current_page org.gtk.Property.set=gtk_print_unix_dialog_set_current_page)
@@ -403,7 +388,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE));
 
   /**
    * GtkPrintUnixDialog:print-settings: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_settings org.gtk.Property.set=gtk_print_unix_dialog_set_settings)
@@ -414,7 +399,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_PRINT_SETTINGS,
                                    g_param_spec_object ("print-settings", NULL, NULL,
                                                         GTK_TYPE_PRINT_SETTINGS,
-                                                        GTK_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE));
 
   /**
    * GtkPrintUnixDialog:selected-printer: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_selected_printer)
@@ -425,7 +410,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_SELECTED_PRINTER,
                                    g_param_spec_object ("selected-printer", NULL, NULL,
                                                         GTK_TYPE_PRINTER,
-                                                        GTK_PARAM_READABLE));
+                                                        G_PARAM_READABLE));
 
   /**
    * GtkPrintUnixDialog:manual-capabilities: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_manual_capabilities org.gtk.Property.set=gtk_print_unix_dialog_set_manual_capabilities)
@@ -437,7 +422,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    g_param_spec_flags ("manual-capabilities", NULL, NULL,
                                                        GTK_TYPE_PRINT_CAPABILITIES,
                                                        0,
-                                                       GTK_PARAM_READWRITE));
+                                                       G_PARAM_READWRITE));
 
   /**
    * GtkPrintUnixDialog:support-selection: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_support_selection org.gtk.Property.set=gtk_print_unix_dialog_set_support_selection)
@@ -448,7 +433,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_SUPPORT_SELECTION,
                                    g_param_spec_boolean ("support-selection", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE));
 
   /**
    * GtkPrintUnixDialog:has-selection: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_has_selection org.gtk.Property.set=gtk_print_unix_dialog_set_has_selection)
@@ -459,7 +444,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_HAS_SELECTION,
                                    g_param_spec_boolean ("has-selection", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE));
 
    /**
     * GtkPrintUnixDialog:embed-page-setup: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_embed_page_setup org.gtk.Property.set=gtk_print_unix_dialog_set_embed_page_setup)
@@ -470,7 +455,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_EMBED_PAGE_SETUP,
                                    g_param_spec_boolean ("embed-page-setup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE));
 
   /* Bind class to template
    */
@@ -1781,7 +1766,8 @@ schedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
     return;
 
   dialog->mark_conflicts_id = g_idle_add (mark_conflicts_callback, dialog);
-  gdk_source_set_static_name_by_id (dialog->mark_conflicts_id, "[gtk] mark_conflicts_callback");
+  g_source_set_static_name (g_main_context_find_source_by_id (NULL, dialog->mark_conflicts_id),
+                            "[gtk] mark_conflicts_callback");
 }
 
 static void

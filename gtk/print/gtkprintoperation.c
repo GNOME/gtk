@@ -25,14 +25,13 @@
 
 #include <cairo-pdf.h>
 
-#include "gtkprintoperation-private.h"
+#include <glib/gi18n-lib.h>
+#include <gtk/gtk.h>
 #include "gtkmarshalers.h"
 #include "gdk/gdkmarshalers.h"
-#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
-#include "deprecated/gtkmessagedialog.h"
-#include "gtkwindowgroup.h"
-#include "gtktypebuiltins.h"
+
+#include "gtkprintoperation-private.h"
 
 /**
  * GtkPrintOperation:
@@ -632,7 +631,7 @@ preview_ready (GtkPrintOperationPreview *preview,
                         preview_print_idle,
                         pop,
                         preview_print_idle_done);
-  gdk_source_set_static_name_by_id (id, "[gtk] preview_print_idle");
+  g_source_set_static_name (g_main_context_find_source_by_id (NULL, id), "[gtk] preview_print_idle");
 }
 
 
@@ -768,7 +767,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * after the ::done signal was emitted.
    */
   signals[DONE] =
-    g_signal_new (I_("done"),
+    g_signal_new ("done",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, done),
@@ -790,7 +789,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * [method@Gtk.PrintOperation.set_n_pages].
    */
   signals[BEGIN_PRINT] =
-    g_signal_new (I_("begin-print"),
+    g_signal_new ("begin-print",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, begin_print),
@@ -821,7 +820,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Returns: %TRUE if pagination is complete
    */
   signals[PAGINATE] =
-    g_signal_new (I_("paginate"),
+    g_signal_new ("paginate",
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkPrintOperationClass, paginate),
@@ -846,7 +845,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * this page.
    */
   signals[REQUEST_PAGE_SETUP] =
-    g_signal_new (I_("request-page-setup"),
+    g_signal_new ("request-page-setup",
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkPrintOperationClass, request_page_setup),
@@ -919,7 +918,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * according to your needs.
    */
   signals[DRAW_PAGE] =
-    g_signal_new (I_("draw-page"),
+    g_signal_new ("draw-page",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, draw_page),
@@ -943,7 +942,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * been allocated in the [signal@Gtk.PrintOperation::begin-print] handler.
    */
   signals[END_PRINT] =
-    g_signal_new (I_("end-print"),
+    g_signal_new ("end-print",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, end_print),
@@ -962,7 +961,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * status.
    */
   signals[STATUS_CHANGED] =
-    g_signal_new (I_("status-changed"),
+    g_signal_new ("status-changed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, status_changed),
@@ -991,7 +990,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    *   the print dialog
    */
   signals[CREATE_CUSTOM_WIDGET] =
-    g_signal_new (I_("create-custom-widget"),
+    g_signal_new ("create-custom-widget",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, create_custom_widget),
@@ -1015,7 +1014,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * widget, which can actualize itself according to this change.
    */
   signals[UPDATE_CUSTOM_WIDGET] =
-    g_signal_new (I_("update-custom-widget"),
+    g_signal_new ("update-custom-widget",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, update_custom_widget),
@@ -1039,7 +1038,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * later time.
    */
   signals[CUSTOM_WIDGET_APPLY] =
-    g_signal_new (I_("custom-widget-apply"),
+    g_signal_new ("custom-widget-apply",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, custom_widget_apply),
@@ -1075,7 +1074,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Returns: %TRUE if the listener wants to take over control of the preview
    */
   signals[PREVIEW] =
-    g_signal_new (I_("preview"),
+    g_signal_new ("preview",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, preview),
@@ -1102,7 +1101,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_DEFAULT_PAGE_SETUP,
 				   g_param_spec_object ("default-page-setup", NULL, NULL,
 							GTK_TYPE_PAGE_SETUP,
-							GTK_PARAM_READWRITE));
+							G_PARAM_READWRITE));
 
   /**
    * GtkPrintOperation:print-settings: (attributes org.gtk.Property.get=gtk_print_operation_get_print_settings org.gtk.Property.set=gtk_print_operation_set_print_settings)
@@ -1117,7 +1116,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_PRINT_SETTINGS,
 				   g_param_spec_object ("print-settings", NULL, NULL,
 							GTK_TYPE_PRINT_SETTINGS,
-							GTK_PARAM_READWRITE));
+							G_PARAM_READWRITE));
 
   /**
    * GtkPrintOperation:job-name: (attributes org.gtk.Property.set=gtk_print_operation_set_job_name)
@@ -1132,7 +1131,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_JOB_NAME,
 				   g_param_spec_string ("job-name", NULL, NULL,
 							"",
-							GTK_PARAM_READWRITE));
+							G_PARAM_READWRITE));
 
   /**
    * GtkPrintOperation:n-pages: (attributes org.gtk.Property.set=gtk_print_operation_set_n_pages)
@@ -1155,7 +1154,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:current-page: (attributes org.gtk.Property.set=gtk_print_operation_set_current_page)
@@ -1173,7 +1172,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:use-full-page: (attributes org.gtk.Property.set=gtk_print_operation_set_use_full_page)
@@ -1191,7 +1190,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_USE_FULL_PAGE,
 				   g_param_spec_boolean ("use-full-page", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:track-print-status: (attributes org.gtk.Property.set=gtk_print_operation_set_track_print_status)
@@ -1208,7 +1207,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_TRACK_PRINT_STATUS,
 				   g_param_spec_boolean ("track-print-status", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:unit: (attributes org.gtk.Property.set=gtk_print_operation_set_unit)
@@ -1222,7 +1221,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   g_param_spec_enum ("unit", NULL, NULL,
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_NONE,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:show-progress: (attributes org.gtk.Property.set=gtk_print_operation_set_show_progress)
@@ -1234,7 +1233,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_SHOW_PROGRESS,
 				   g_param_spec_boolean ("show-progress", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:allow-async: (attributes org.gtk.Property.set=gtk_print_operation_set_allow_async)
@@ -1254,7 +1253,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_ALLOW_ASYNC,
 				   g_param_spec_boolean ("allow-async", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:export-filename: (attributes org.gtk.Property.set=gtk_print_operation_set_export_filename)
@@ -1274,7 +1273,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_EXPORT_FILENAME,
 				   g_param_spec_string ("export-filename", NULL, NULL,
 							NULL,
-							GTK_PARAM_READWRITE));
+							G_PARAM_READWRITE));
 
   /**
    * GtkPrintOperation:status: (attributes org.gtk.Property.get=gtk_print_operation_get_status)
@@ -1286,7 +1285,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   g_param_spec_enum ("status", NULL, NULL,
 						      GTK_TYPE_PRINT_STATUS,
 						      GTK_PRINT_STATUS_INITIAL,
-						      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+						      G_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:status-string: (attributes org.gtk.Property.get=gtk_print_operation_get_status_string)
@@ -1303,7 +1302,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_STATUS_STRING,
 				   g_param_spec_string ("status-string", NULL, NULL,
 							"",
-							GTK_PARAM_READABLE));
+							G_PARAM_READABLE));
   
 
   /**
@@ -1319,7 +1318,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_CUSTOM_TAB_LABEL,
 				   g_param_spec_string ("custom-tab-label", NULL, NULL,
 							NULL,
-							GTK_PARAM_READWRITE));
+							G_PARAM_READWRITE));
 
   /**
    * GtkPrintOperation:support-selection: (attributes org.gtk.Property.get=gtk_print_operation_get_support_selection org.gtk.Property.set=gtk_print_operation_set_support_selection)
@@ -1332,7 +1331,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_SUPPORT_SELECTION,
 				   g_param_spec_boolean ("support-selection", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:has-selection: (attributes org.gtk.Property.get=gtk_print_operation_get_has_selection org.gtk.Property.set=gtk_print_operation_set_has_selection)
@@ -1346,7 +1345,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_HAS_SELECTION,
 				   g_param_spec_boolean ("has-selection", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1359,7 +1358,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_EMBED_PAGE_SETUP,
 				   g_param_spec_boolean ("embed-page-setup", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkPrintOperation:n-pages-to-print: (attributes org.gtk.Property.get=gtk_print_operation_get_n_pages_to_print)
@@ -1381,7 +1380,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /**
@@ -2879,7 +2878,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         g_timeout_add (SHOW_PROGRESS_TIME,
                        (GSourceFunc) show_progress_timeout,
                        data);
-      gdk_source_set_static_name_by_id (priv->show_progress_timeout_id, "[gtk] show_progress_timeout");
+      g_source_set_static_name (g_main_context_find_source_by_id (NULL, priv->show_progress_timeout_id), "[gtk] show_progress_timeout");
 
       data->progress = progress;
     }
@@ -2950,7 +2949,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                print_pages_idle,
                                                data,
                                                print_pages_idle_done);
-  gdk_source_set_static_name_by_id (priv->print_pages_idle_id, "[gtk] print_pages_idle");
+  g_source_set_static_name (g_main_context_find_source_by_id (NULL, priv->print_pages_idle_id), "[gtk] print_pages_idle");
   
   /* Recursive main loop to make sure we don't exit  on sync operations  */
   if (priv->is_sync)

@@ -22,19 +22,7 @@
 #include <ctype.h>
 
 #include <glib/gi18n-lib.h>
-#include "gtkcheckbutton.h"
-#include "gtkdropdown.h"
-#include "gtklistitem.h"
-#include "gtksignallistitemfactory.h"
-#include "gtkentry.h"
-#include "gtkfiledialog.h"
-#include "gtkimage.h"
-#include "gtklabel.h"
-#include "gtkcheckbutton.h"
-#include "gtkgrid.h"
-#include "gtkorientable.h"
-#include "gtkprivate.h"
-#include "gtkstringlist.h"
+#include <gtk/gtk.h>
 
 #include "gtkprinteroptionwidgetprivate.h"
 
@@ -112,7 +100,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
   signals[CHANGED] =
-    g_signal_new (I_("changed"),
+    g_signal_new ("changed",
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionWidgetClass, changed),
@@ -124,7 +112,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
                                    PROP_SOURCE,
                                    g_param_spec_object ("source", NULL, NULL,
 							GTK_TYPE_PRINTER_OPTION,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
 }
 

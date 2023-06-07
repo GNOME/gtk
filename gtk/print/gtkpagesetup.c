@@ -18,11 +18,13 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
+
+#include <gtk/gtk.h>
+
 #include "gtkpagesetup.h"
 #include "gtkprintutilsprivate.h"
 #include "gtkprintoperation.h" /* for GtkPrintError */
-#include <glib/gi18n-lib.h>
-#include "gtktypebuiltins.h"
 
 /**
  * GtkPageSetup:
