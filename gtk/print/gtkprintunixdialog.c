@@ -26,7 +26,7 @@
 #include <math.h>
 
 #include <glib/gi18n-lib.h>
-#include <gtk/gtk.h>
+
 #include "gtkmarshalers.h"
 #include "deprecated/gtkdialogprivate.h"
 #include "gtkrenderbackgroundprivate.h"

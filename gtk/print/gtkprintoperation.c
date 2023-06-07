@@ -26,7 +26,6 @@
 #include <cairo-pdf.h>
 
 #include <glib/gi18n-lib.h>
-#include <gtk/gtk.h>
 #include "gtkmarshalers.h"
 #include "gdk/gdkmarshalers.h"
 #include "gtkprivate.h"

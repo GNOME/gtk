@@ -22,7 +22,6 @@
 #include <ctype.h>
 
 #include <glib/gi18n-lib.h>
-#include <gtk/gtk.h>
 
 #include "gtkprinteroptionwidgetprivate.h"
 

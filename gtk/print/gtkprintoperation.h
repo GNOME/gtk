@@ -24,8 +24,8 @@
 #endif
 
 #include <cairo.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
+
 #include <gtk/print/gtkpagesetup.h>
 #include <gtk/print/gtkprintsettings.h>
 #include <gtk/print/gtkprintcontext.h>
