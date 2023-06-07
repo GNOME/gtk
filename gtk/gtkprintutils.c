@@ -17,7 +17,7 @@
  */
 
 #include "config.h"
-#include "gtkprintutils.h"
+#include "gtkprintutilsprivate.h"
 
 double
 _gtk_print_convert_to_mm (double len, 

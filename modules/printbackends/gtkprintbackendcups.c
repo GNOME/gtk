@@ -57,7 +57,7 @@
 #include "gtkcupssecretsutils.h"
 #include "gtkprintbackendutils.h"
 
-#include <gtkprintutils.h>
+#include <gtkprintutilsprivate.h>
 #include "gtkprivate.h"
 
 #ifdef HAVE_COLORD

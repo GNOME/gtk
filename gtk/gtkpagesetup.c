@@ -19,7 +19,7 @@
 #include "config.h"
 
 #include "gtkpagesetup.h"
-#include "gtkprintutils.h"
+#include "gtkprintutilsprivate.h"
 #include "gtkprintoperation.h" /* for GtkPrintError */
 #include <glib/gi18n-lib.h>
 #include "gtktypebuiltins.h"

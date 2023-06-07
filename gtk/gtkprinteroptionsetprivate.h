@@ -28,7 +28,7 @@
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
-#include "gtkprinteroption.h"
+#include "gtkprinteroptionprivate.h"
 
 G_BEGIN_DECLS
 

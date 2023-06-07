@@ -34,7 +34,7 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkpapersize.h"
-#include "gtkprintutils.h"
+#include "gtkprintutilsprivate.h"
 #include "deprecated/gtkdialogprivate.h"
 
 /**

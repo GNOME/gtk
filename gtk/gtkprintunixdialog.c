@@ -30,8 +30,8 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkprinterprivate.h"
-#include "gtkprinteroptionwidget.h"
-#include "gtkprintutils.h"
+#include "gtkprinteroptionwidgetprivate.h"
+#include "gtkprintutilsprivate.h"
 
 #include "gtkspinbutton.h"
 #include "gtkimage.h"
