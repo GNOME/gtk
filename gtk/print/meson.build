@@ -26,7 +26,6 @@ if os_unix
     'gtkprintunixdialog.h',
     'gtkprinter.h',
     'gtkprintjob.h',
-    'gtkunixprint.h',
   ])
 
   gtk_unix_print_sources += files([

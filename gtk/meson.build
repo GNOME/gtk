@@ -675,8 +675,13 @@ if os_unix and tracker3_dep.found()
   gtk_sources += 'gtksearchenginetracker3.c'
 endif
 
+gtk_unix_print_main_header = [
+  'gtkunixprint.h'
+]
+
 if os_unix
-  install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')
+  install_headers(gtk_unix_print_main_header, subdir: 'gtk-4.0/unix-print/gtk')
+  install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk/print')
   gtk_sources += gtk_unix_print_sources
 endif
 
@@ -1254,7 +1259,7 @@ if build_gir
   ]
 
   if os_unix
-    gtk_introspection_sources += [ gtk_unix_print_headers, gtk_unix_print_sources ]
+    gtk_introspection_sources += [ gtk_unix_print_headers + gtk_unix_print_main_header, gtk_unix_print_sources ]
   endif
 
   if os_win32
