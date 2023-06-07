@@ -22,8 +22,8 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <gtk/gtkprinter.h>
-#include <gtk/gtkprintjob.h>
+#include <gtk/print/gtkprinter.h>
+#include <gtk/print/gtkprintjob.h>
 
 G_BEGIN_DECLS
 

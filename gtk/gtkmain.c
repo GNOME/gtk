@@ -63,7 +63,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwindowgroup.h"
-#include "gtkprintbackendprivate.h"
+#include "print/gtkprintbackendprivate.h"
 #include "gtkimmoduleprivate.h"
 #include "gtkroot.h"
 #include "gtknative.h"

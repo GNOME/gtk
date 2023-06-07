@@ -27,8 +27,8 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <gtk/gtkunixprint.h>
-#include <gtk/gtkprinteroptionsetprivate.h>
+#include "gtkunixprint.h"
+#include "gtkprinteroptionsetprivate.h"
 
 G_BEGIN_DECLS
 

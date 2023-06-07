@@ -676,50 +676,18 @@ if os_unix and tracker3_dep.found()
 endif
 
 if os_unix
-  gtk_unix_print_headers = [
-    'gtkpagesetupunixdialog.h',
-    'gtkprintunixdialog.h',
-    'gtkprinter.h',
-    'gtkprintjob.h',
-    'gtkunixprint.h',
-  ]
   install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')
-
-  gtk_unix_print_sources = files([
-    'gtkcustompaperunixdialog.c',
-    'gtkpagesetupunixdialog.c',
-    'gtkprintbackend.c',
-    'gtkprinter.c',
-    'gtkprinteroption.c',
-    'gtkprinteroptionset.c',
-    'gtkprinteroptionwidget.c',
-    'gtkprintjob.c',
-    'gtkprintoperation-unix.c',
-    'gtkprintoperation-portal.c',
-    'gtkprintunixdialog.c',
-  ])
-
   gtk_sources += gtk_unix_print_sources
 endif
 
 if os_win32
-  gtk_win32_print_headers = []
-  gtk_win32_print_sources = files([
-    'gtkprint-win32.c',
-    'gtkprintoperation-win32.c',
-    'gtkfilechoosernativewin32.c',
-    'gtkwin32.c',
-  ])
-
   gtk_sources += gtk_win32_print_sources
   gtk_sources += [
     'gtkcolorpickerwin32.c',
-    'gtkimcontextime.c'
+    'gtkimcontextime.c',
+    'gtkfilechoosernativewin32.c',
+    'gtkwin32.c',
   ]
-
-  if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
-    cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
-  endif
 endif
 
 if x11_enabled

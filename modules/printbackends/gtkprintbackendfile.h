@@ -21,7 +21,7 @@
 #define __GTK_PRINT_BACKEND_FILE_H__
 
 #include <glib-object.h>
-#include "gtkprintbackendprivate.h"
+#include "gtk/print/gtkprintbackendprivate.h"
 
 G_BEGIN_DECLS
 
