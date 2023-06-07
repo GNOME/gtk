@@ -57,7 +57,6 @@
       <object class="GtkBox">
         <child>
           <object class="GtkBox">
-            <property name="width-request">220</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkSearchBar" id="searchbar">
@@ -76,9 +75,8 @@
                 <style>
                   <class name="sidebar"/>
                 </style>
-                <property name="width-request">120</property>
                 <property name="hscrollbar-policy">never</property>
-                <property name="min-content-width">150</property>
+                <property name="propagate-natural-width">1</property>
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkListView" id="listview">
