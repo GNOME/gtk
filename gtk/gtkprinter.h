@@ -160,5 +160,7 @@ void                     gtk_enumerate_printers        (GtkPrinterFunc   func,
 							GDestroyNotify   destroy,
 							gboolean         wait);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrinter, g_object_unref)
+
 G_END_DECLS
 

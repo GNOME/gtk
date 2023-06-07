@@ -140,5 +140,7 @@ GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_reverse     (GtkPrintJob       *job,
                                                  gboolean           reverse);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintJob, g_object_unref)
+
 G_END_DECLS
 
