@@ -1,6 +1,7 @@
 subdir('a11y')
 subdir('deprecated')
 subdir('inspector')
+subdir('print')
 
 gtk_cargs = [
   '-DGTK_COMPILATION',
@@ -128,7 +129,6 @@ gtk_private_sources = files([
   'gtkplacesviewrow.c',
   'gtkpointerfocus.c',
   'gtkpopovercontent.c',
-  'gtkprintutils.c',
   'gtkprivate.c',
   'gtkprogresstracker.c',
   'gtkrbtree.c',
@@ -303,19 +303,13 @@ gtk_public_sources = files([
   'gtkoverlay.c',
   'gtkoverlaylayout.c',
   'gtkpadcontroller.c',
-  'gtkpagesetup.c',
   'gtkpaned.c',
-  'gtkpapersize.c',
   'gtkpasswordentry.c',
   'gtkpasswordentrybuffer.c',
   'gtkpicture.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkpopovermenubar.c',
-  'gtkprintcontext.c',
-  'gtkprintoperation.c',
-  'gtkprintoperationpreview.c',
-  'gtkprintsettings.c',
   'gtkprogressbar.c',
   'gtkpropertylookuplistmodel.c',
   'gtkrange.c',
@@ -406,6 +400,8 @@ gtk_public_sources = files([
   'gtkwindowgroup.c',
   'gtkwindowhandle.c',
 ])
+
+gtk_public_sources += gtk_print_sources
 
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
@@ -625,8 +621,6 @@ gtk_public_headers = files([
   'gtkwindowhandle.h',
   'gtk.h',
 ])
-
-subdir('print')
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 install_headers(gtk_deprecated_headers, subdir: 'gtk-4.0/gtk/deprecated')

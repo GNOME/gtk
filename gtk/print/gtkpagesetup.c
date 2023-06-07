@@ -18,9 +18,9 @@
 
 #include "config.h"
 
-#include "print/gtkpagesetup.h"
+#include "gtkpagesetup.h"
 #include "gtkprintutilsprivate.h"
-#include "print/gtkprintoperation.h" /* for GtkPrintError */
+#include "gtkprintoperation.h" /* for GtkPrintError */
 #include <glib/gi18n-lib.h>
 #include "gtktypebuiltins.h"
 

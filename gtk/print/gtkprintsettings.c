@@ -23,7 +23,7 @@
 
 #include <glib/gprintf.h>
 
-#include "print/gtkprintsettings.h"
+#include "gtkprintsettings.h"
 #include "gtkprintutilsprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidget.h"

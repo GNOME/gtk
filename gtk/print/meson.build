@@ -6,3 +6,13 @@ gtk_print_headers = files([
   'gtkprintoperationpreview.h',
   'gtkprintsettings.h',
 ])
+
+gtk_print_sources = files([
+  'gtkpagesetup.c',
+  'gtkpapersize.c',
+  'gtkprintcontext.c',
+  'gtkprintoperation.c',
+  'gtkprintoperationpreview.c',
+  'gtkprintsettings.c',
+  'gtkprintutils.c',
+])
