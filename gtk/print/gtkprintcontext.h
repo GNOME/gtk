@@ -24,7 +24,7 @@
 #endif
 
 #include <pango/pango.h>
-#include <gtk/gtkpagesetup.h>
+#include <gtk/print/gtkpagesetup.h>
 
 
 G_BEGIN_DECLS

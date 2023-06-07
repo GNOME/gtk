@@ -545,19 +545,13 @@ gtk_public_headers = files([
   'gtkoverlay.h',
   'gtkoverlaylayout.h',
   'gtkpadcontroller.h',
-  'gtkpagesetup.h',
   'gtkpaned.h',
-  'gtkpapersize.h',
   'gtkpasswordentry.h',
   'gtkpasswordentrybuffer.h',
   'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkpopovermenubar.h',
-  'gtkprintcontext.h',
-  'gtkprintoperation.h',
-  'gtkprintoperationpreview.h',
-  'gtkprintsettings.h',
   'gtkprogressbar.h',
   'gtkrange.h',
   'gtkrecentmanager.h',
@@ -632,8 +626,11 @@ gtk_public_headers = files([
   'gtk.h',
 ])
 
+subdir('print')
+
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 install_headers(gtk_deprecated_headers, subdir: 'gtk-4.0/gtk/deprecated')
+install_headers(gtk_print_headers, subdir: 'gtk-4.0/gtk/print')
 
 gtk_sources = gtk_public_sources + gtk_private_sources
 
@@ -958,7 +955,7 @@ gtkmarshalers = gnome.genmarshal('gtkmarshalers',
 gtkmarshal_h = gtkmarshalers[1]
 
 gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
-  sources: gtk_public_headers + gtk_deprecated_headers,
+  sources: gtk_public_headers + gtk_deprecated_headers + gtk_print_headers,
   c_template: 'gtktypebuiltins.c.template',
   h_template: 'gtktypebuiltins.h.template',
   install_dir: gtk_includedir / 'gtk-4.0/gtk',

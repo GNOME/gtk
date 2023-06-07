@@ -23,7 +23,7 @@
 #endif
 
 #include <cairo.h>
-#include <gtk/gtkprintcontext.h>
+#include <gtk/print/gtkprintcontext.h>
 
 G_BEGIN_DECLS
 

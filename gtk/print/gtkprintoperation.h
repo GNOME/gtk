@@ -26,10 +26,10 @@
 #include <cairo.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkwindow.h>
-#include <gtk/gtkpagesetup.h>
-#include <gtk/gtkprintsettings.h>
-#include <gtk/gtkprintcontext.h>
-#include <gtk/gtkprintoperationpreview.h>
+#include <gtk/print/gtkpagesetup.h>
+#include <gtk/print/gtkprintsettings.h>
+#include <gtk/print/gtkprintcontext.h>
+#include <gtk/print/gtkprintoperationpreview.h>
 
 
 G_BEGIN_DECLS

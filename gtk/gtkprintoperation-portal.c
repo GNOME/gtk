@@ -31,8 +31,8 @@
 
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
-#include "gtkprintsettings.h"
-#include "gtkpagesetup.h"
+#include "print/gtkprintsettings.h"
+#include "print/gtkpagesetup.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkfilelauncher.h"
 #include <glib/gi18n-lib.h>

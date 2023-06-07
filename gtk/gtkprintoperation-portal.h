@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "gtkprintoperation.h"
+#include "print/gtkprintoperation.h"
 
 G_BEGIN_DECLS
 

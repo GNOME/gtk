@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkpapersize.h>
+#include <gtk/print/gtkpapersize.h>
 
 G_BEGIN_DECLS
 

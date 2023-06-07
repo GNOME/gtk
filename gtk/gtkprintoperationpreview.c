@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkprintoperationpreview.h"
+#include "print/gtkprintoperationpreview.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 

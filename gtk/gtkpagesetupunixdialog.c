@@ -33,7 +33,7 @@
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkpapersize.h"
+#include "print/gtkpapersize.h"
 #include "gtkprintutilsprivate.h"
 #include "deprecated/gtkdialogprivate.h"
 
