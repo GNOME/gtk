@@ -36,7 +36,7 @@
 
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkprintutils.h"
+#include "gtkprintutilsprivate.h"
 #include "deprecated/gtkdialogprivate.h"
 
 #define LEGACY_CUSTOM_PAPER_FILENAME ".gtk-custom-papers"

@@ -21,7 +21,7 @@
 #include <gmodule.h>
 
 #include "gtkprivate.h"
-#include "gtkprinteroption.h"
+#include "gtkprinteroptionprivate.h"
 
 /*****************************************
  *            GtkPrinterOption           *

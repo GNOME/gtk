@@ -20,7 +20,7 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkunixprint.h>
-#include "gtkprinteroptionset.h"
+#include "gtkprinteroptionsetprivate.h"
 
 G_BEGIN_DECLS
 

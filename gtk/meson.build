@@ -690,7 +690,6 @@ if os_unix
     'gtkprintunixdialog.h',
     'gtkprinter.h',
     'gtkprintjob.h',
-    'gtkunixprint-autocleanups.h',
     'gtkunixprint.h',
   ]
   install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')

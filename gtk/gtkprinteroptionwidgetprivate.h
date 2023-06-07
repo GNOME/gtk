@@ -16,7 +16,7 @@
  */
 #pragma once
 
-#include "gtkprinteroption.h"
+#include "gtkprinteroptionprivate.h"
 #include "gtkbox.h"
 
 G_BEGIN_DECLS

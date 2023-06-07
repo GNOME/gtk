@@ -27,7 +27,7 @@
 #include <math.h>
 
 #include "gtkpapersize.h"
-#include "gtkprintutils.h"
+#include "gtkprintutilsprivate.h"
 #include "gtkprintoperation.h"  /* for GtkPrintError */
 #include <glib/gi18n-lib.h>
 

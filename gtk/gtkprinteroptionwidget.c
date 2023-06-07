@@ -36,7 +36,7 @@
 #include "gtkprivate.h"
 #include "gtkstringlist.h"
 
-#include "gtkprinteroptionwidget.h"
+#include "gtkprinteroptionwidgetprivate.h"
 
 /* This defines the max file length that the file chooser
  * button should display. The total length will be
