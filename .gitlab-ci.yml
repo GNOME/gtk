@@ -405,7 +405,6 @@ asan-build:
   artifacts:
     paths:
       - _build/meson-logs
-  allow_failure: true
 
 reference:
   image: $FEDORA_IMAGE
