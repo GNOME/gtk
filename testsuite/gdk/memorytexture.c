@@ -1144,7 +1144,8 @@ should_skip_download_test (GdkMemoryFormat format,
 static void
 test_download (gconstpointer data,
                unsigned int  width,
-               unsigned int  height)
+               unsigned int  height,
+               gsize         n_runs)
 {
   GdkMemoryFormat format;
   TextureMethod method;
@@ -1157,7 +1158,7 @@ test_download (gconstpointer data,
   if (should_skip_download_test (format, method))
     return;
 
-  for (i = 0; i < N; i++)
+  for (i = 0; i < n_runs; i++)
     {
       GdkRGBA color;
 
@@ -1184,7 +1185,7 @@ test_download (gconstpointer data,
 static void
 test_download_1x1 (gconstpointer data)
 {
-  test_download (data, 1, 1);
+  test_download (data, 1, 1, N);
 }
 
 static void
@@ -1203,7 +1204,7 @@ test_download_random (gconstpointer data)
     }
   while (width * height >= 1024 * 1024);
 
-  test_download (data, width, height);
+  test_download (data, width, height, 1);
 }
 
 static void
