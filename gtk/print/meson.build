@@ -31,6 +31,7 @@ if os_unix
   gtk_unix_print_sources += files([
     'gtkcustompaperunixdialog.c',
     'gtkpagesetupunixdialog.c',
+    'gtkpagethumbnail.c',
     'gtkprintbackend.c',
     'gtkprinter.c',
     'gtkprinteroption.c',

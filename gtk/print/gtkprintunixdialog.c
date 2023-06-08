@@ -40,6 +40,7 @@
 #include "gtkprinterprivate.h"
 #include "gtkprinteroptionwidgetprivate.h"
 #include "gtkprintutilsprivate.h"
+#include "gtkpagethumbnailprivate.h"
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -147,11 +148,6 @@ static void     update_print_at_entry_sensitivity  (GtkWidget          *button,
 						    GtkPrintUnixDialog *dialog);
 static void     update_print_at_option             (GtkPrintUnixDialog *dialog);
 static void     update_dialog_from_capabilities    (GtkPrintUnixDialog *dialog);
-static void     draw_collate                       (GtkDrawingArea     *da,
-						    cairo_t            *cr,
-                                                    int                 width,
-                                                    int                 height,
-                                                    gpointer            data);
 static gboolean is_printer_active                  (gpointer            item,
                                                     gpointer            data);
 static  int     default_printer_list_sort_func     (gconstpointer        a,
@@ -258,7 +254,11 @@ struct _GtkPrintUnixDialog
   GtkWidget *copies_spin;
   GtkWidget *collate_check;
   GtkWidget *reverse_check;
-  GtkWidget *collate_image;
+  GtkWidget *page_collate_preview;
+  GtkWidget *page_a1;
+  GtkWidget *page_a2;
+  GtkWidget *page_b1;
+  GtkWidget *page_b2;
   GtkWidget *page_layout_preview;
   GtkWidget *scale_spin;
   GtkWidget *page_set_combo;
@@ -351,11 +351,47 @@ is_default_printer (GtkPrintUnixDialog *dialog,
    return gtk_printer_is_default (printer);
 }
 
+static const char *css_data = ""
+  "page-thumbnail {\n"
+  "  border: 1px solid #e6e5e4;\n"
+  "  background: white;\n"
+  "}\n"
+  "page-thumbnail > label {\n"
+  "  font-family: Sans;\n"
+  "  font-size: 9pt;\n"
+  "  color: #2e3436;\n"
+  "}\n";
+
+static void
+ensure_fallback_style (void)
+{
+  GdkDisplay *display;
+  GtkCssProvider *provider;
+
+  display = gdk_display_get_default ();
+  if (!display)
+    return;
+
+  provider = gtk_css_provider_new ();
+
+  gtk_css_provider_load_from_string (provider, css_data);
+
+  gtk_style_context_add_provider_for_display (display,
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+  g_object_unref (provider);
+}
+
 static void
 gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 {
   GObjectClass *object_class;
   GtkWidgetClass *widget_class;
+
+  ensure_fallback_style ();
+
+  g_type_ensure (GTK_TYPE_PAGE_THUMBNAIL);
 
   object_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
@@ -477,7 +513,11 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, copies_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, collate_check);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, reverse_check);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, collate_image);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_collate_preview);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_a1);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_a2);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_b1);
+  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_b2);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_layout_preview);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, scale_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_set_combo);
@@ -857,20 +897,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   gtk_print_load_custom_papers (dialog->custom_paper_list);
 
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (dialog->collate_image),
-                                  draw_collate,
-                                  dialog, NULL);
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (dialog->page_layout_preview),
                                   draw_page,
                                   dialog, NULL);
-
-  gtk_css_node_set_name (gtk_widget_get_css_node (dialog->collate_image), g_quark_from_static_string ("drawing"));
   gtk_css_node_set_name (gtk_widget_get_css_node (dialog->page_layout_preview), g_quark_from_static_string ("drawing"));
 
   dialog->collate_paper_node = gtk_css_node_new();
   gtk_css_node_set_name (dialog->collate_paper_node, g_quark_from_static_string ("paper"));
-  gtk_css_node_set_parent (dialog->collate_paper_node,
-                           gtk_widget_get_css_node (dialog->collate_image));
   g_object_unref (dialog->collate_paper_node);
 
   dialog->page_layout_paper_node = gtk_css_node_new();
@@ -1914,107 +1947,31 @@ static void
 update_collate_icon (GtkToggleButton    *toggle_button,
                      GtkPrintUnixDialog *dialog)
 {
-  gtk_widget_queue_draw (dialog->collate_image);
-}
-
-static void
-paint_page (GtkPrintUnixDialog *dialog,
-            GtkWidget  *widget,
-            cairo_t    *cr,
-            int         x,
-            int         y,
-            const char *text,
-            int         text_x)
-{
-  GtkCssStyle *style;
-  int width, height;
-  int text_y;
-  GdkRGBA color;
-  GtkSnapshot *snapshot;
-  GskRenderNode *node;
-  GtkCssBoxes boxes;
-
-  width = 20;
-  height = 26;
-  text_y = 21;
-
-  style = gtk_css_node_get_style (dialog->collate_paper_node);
-
-  snapshot = gtk_snapshot_new ();
-  gtk_css_boxes_init_border_box (&boxes, style, x, y, width, height);
-  gtk_css_style_snapshot_background (&boxes, snapshot);
-  gtk_css_style_snapshot_border (&boxes, snapshot);
-
-  node = gtk_snapshot_free_to_node (snapshot);
-  if (node)
-    {
-      gsk_render_node_draw (node, cr);
-      gsk_render_node_unref (node);
-    }
-
-  color = *gtk_css_color_value_get_rgba (style->core->color);
-  gdk_cairo_set_source_rgba (cr, &color);
-
-  cairo_select_font_face (cr, "Sans",
-                          CAIRO_FONT_SLANT_NORMAL,
-                          CAIRO_FONT_WEIGHT_NORMAL);
-  cairo_set_font_size (cr, 9);
-  cairo_move_to (cr, x + text_x, y + text_y);
-  cairo_show_text (cr, text);
-}
-
-static void
-draw_collate (GtkDrawingArea *da,
-              cairo_t        *cr,
-              int             width,
-              int             height,
-              gpointer        data)
-{
-  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
-  GtkWidget *widget = GTK_WIDGET (da);
-  gboolean collate, reverse, rtl;
+  gboolean collate;
+  gboolean reverse;
   int copies;
-  int text_x;
-  int x, y, x1, x2, p1, p2;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
   copies = dialog_get_n_copies (dialog);
 
-  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
-
-  x = (width - 30) / 2;
-  y = (height - 36) / 2;
-  if (rtl)
+  if (collate)
     {
-      x1 = x;
-      x2 = x - 36;
-      p1 = 0;
-      p2 = 10;
-      text_x = 4;
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_a1), reverse ? 1 : 2);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_a2), reverse ? 2 : 1);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_b1), reverse ? 1 : 2);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_b2), reverse ? 2 : 1);
     }
   else
     {
-      x1 = x;
-      x2 = x + 36;
-      p1 = 10;
-      p2 = 0;
-      text_x = 11;
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_a1), reverse ? 2 : 1);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_a2), reverse ? 2 : 1);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_b1), reverse ? 1 : 2);
+      gtk_page_thumbnail_set_page_num (GTK_PAGE_THUMBNAIL (dialog->page_b2), reverse ? 1 : 2);
     }
 
-  if (copies == 1)
-    {
-      paint_page (dialog, widget, cr, x1 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (dialog, widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
-    }
-  else
-    {
-      paint_page (dialog, widget, cr, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
-      paint_page (dialog, widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
-
-      paint_page (dialog, widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (dialog, widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
-    }
+  gtk_widget_set_visible (dialog->page_b1, copies > 1);
+  gtk_widget_set_visible (dialog->page_b2, copies > 1);
 }
 
 static gboolean
@@ -2264,7 +2221,7 @@ dialog_get_collate (GtkPrintUnixDialog *dialog)
 {
   if (gtk_widget_is_sensitive (dialog->collate_check))
     return gtk_check_button_get_active (GTK_CHECK_BUTTON (dialog->collate_check));
-  return FALSE;
+  return TRUE;
 }
 
 static void
