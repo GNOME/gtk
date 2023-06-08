@@ -1,4 +1,4 @@
-#version 420 core
+#version 450
 
 #include "clip.frag.glsl"
 #include "rounded-rect.glsl"

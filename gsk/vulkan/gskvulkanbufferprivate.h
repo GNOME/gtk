@@ -8,6 +8,8 @@ typedef struct _GskVulkanBuffer GskVulkanBuffer;
 
 GskVulkanBuffer *       gsk_vulkan_buffer_new                           (GdkVulkanContext       *context,
                                                                          gsize                   size);
+GskVulkanBuffer *       gsk_vulkan_buffer_new_storage                   (GdkVulkanContext       *context,
+                                                                         gsize                   size);
 GskVulkanBuffer *       gsk_vulkan_buffer_new_staging                   (GdkVulkanContext       *context,
                                                                          gsize                   size);
 GskVulkanBuffer *       gsk_vulkan_buffer_new_download                  (GdkVulkanContext       *context,

@@ -77,6 +77,7 @@ struct _GskVulkanOpRender
   gsize                vertex_offset; /* offset into vertex buffer */
   guint32              image_descriptor[2]; /* index into descriptor for the (image, sampler) */
   guint32              image_descriptor2[2]; /* index into descriptor for the 2nd image (if relevant) */
+  gsize                buffer_offset; /* offset into buffer */
   graphene_rect_t      source_rect; /* area that source maps to */
   graphene_rect_t      source2_rect; /* area that source2 maps to */
 };
@@ -406,10 +407,10 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
 }
 
 static inline gboolean
-gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass       *self,
-                                                           GskVulkanRender           *render,
-                                                           const GskVulkanParseState *state,
-                                                           GskRenderNode             *node)
+gsk_vulkan_render_pass_add_linear_gradient_node (GskVulkanRenderPass       *self,
+                                                 GskVulkanRender           *render,
+                                                 const GskVulkanParseState *state,
+                                                 GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
   GskVulkanOp op = {
@@ -417,11 +418,6 @@ gsk_vulkan_render_pass_add_repeating_linear_gradient_node (GskVulkanRenderPass  
     .render.node = node,
     .render.offset = state->offset,
   };
-
-  if (gsk_linear_gradient_node_get_n_color_stops (node) > GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS)
-    FALLBACK ("Linear gradient with %zu color stops, hardcoded limit is %u",
-              gsk_linear_gradient_node_get_n_color_stops (node),
-              GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT;
@@ -1138,8 +1134,8 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[N_RENDER_NODES] = {
   [GSK_CONTAINER_NODE] = gsk_vulkan_render_pass_add_container_node,
   [GSK_CAIRO_NODE] = gsk_vulkan_render_pass_add_cairo_node,
   [GSK_COLOR_NODE] = gsk_vulkan_render_pass_add_color_node,
-  [GSK_LINEAR_GRADIENT_NODE] = gsk_vulkan_render_pass_add_repeating_linear_gradient_node,
-  [GSK_REPEATING_LINEAR_GRADIENT_NODE] = gsk_vulkan_render_pass_add_repeating_linear_gradient_node,
+  [GSK_LINEAR_GRADIENT_NODE] = gsk_vulkan_render_pass_add_linear_gradient_node,
+  [GSK_REPEATING_LINEAR_GRADIENT_NODE] = gsk_vulkan_render_pass_add_linear_gradient_node,
   [GSK_RADIAL_GRADIENT_NODE] = NULL,
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = NULL,
   [GSK_CONIC_GRADIENT_NODE] = NULL,
@@ -1896,8 +1892,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                    gsk_linear_gradient_node_get_start (op->render.node),
                                                                    gsk_linear_gradient_node_get_end (op->render.node),
                                                                    gsk_render_node_get_node_type (op->render.node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
-                                                                   gsk_linear_gradient_node_get_n_color_stops (op->render.node),
-                                                                   gsk_linear_gradient_node_get_color_stops (op->render.node, NULL));
+                                                                   op->render.buffer_offset,
+                                                                   gsk_linear_gradient_node_get_n_color_stops (op->render.node));
           break;
 
         case GSK_VULKAN_OP_OPACITY:
@@ -2125,11 +2121,25 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
             }
           break;
 
+        case GSK_VULKAN_OP_LINEAR_GRADIENT:
+          {
+            gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (op->render.node);
+            guchar *mem;
+
+            mem = gsk_vulkan_render_get_buffer_memory (render,
+                                                       n_stops * sizeof (GskColorStop),
+                                                       G_ALIGNOF (GskColorStop),
+                                                       &op->render.buffer_offset);
+            memcpy (mem,
+                    gsk_linear_gradient_node_get_color_stops (op->render.node, NULL),
+                    n_stops * sizeof (GskColorStop));
+          }
+          break;
+
         default:
           g_assert_not_reached ();
 
         case GSK_VULKAN_OP_COLOR:
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:

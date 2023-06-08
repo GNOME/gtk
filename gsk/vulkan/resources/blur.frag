@@ -1,4 +1,4 @@
-#version 420 core
+#version 450
 
 #include "common.frag.glsl"
 #include "clip.frag.glsl"
