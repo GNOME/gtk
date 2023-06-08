@@ -401,10 +401,10 @@ gtk/ui/gtkfontchooserwidget.ui
 gtk/ui/gtklockbutton.ui
 gtk/ui/gtkmediacontrols.ui
 gtk/ui/gtkmessagedialog.ui
-gtk/ui/gtkpagesetupunixdialog.ui
+gtk/print/ui/gtkpagesetupunixdialog.ui
 gtk/ui/gtkplacesviewrow.ui
 gtk/ui/gtkplacesview.ui
-gtk/ui/gtkprintunixdialog.ui
+gtk/print/ui/gtkprintunixdialog.ui
 gtk/ui/gtkscalebutton.ui
 gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui

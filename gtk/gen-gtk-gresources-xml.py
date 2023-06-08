@@ -68,6 +68,9 @@ for f in get_files('theme/Default/assets-hc', '.svg'):
 for f in get_files('ui', '.ui'):
   xml += '    <file>ui/{0}</file>\n'.format(f)
 
+for f in get_files('print/ui', '.ui'):
+  xml += '    <file>print/ui/{0}</file>\n'.format(f)
+
 xml += '\n'
 
 xml += '''
