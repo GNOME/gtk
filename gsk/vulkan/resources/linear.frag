@@ -1,6 +1,8 @@
 #version 450
 
+#include "common.frag.glsl"
 #include "clip.frag.glsl"
+#include "rect.frag.glsl"
 
 struct ColorStop {
   float offset;
@@ -8,29 +10,55 @@ struct ColorStop {
 };
 
 layout(location = 0) in vec2 inPos;
-layout(location = 1) in float inGradientPos;
-layout(location = 2) in flat int inRepeating;
-layout(location = 3) in flat int inStopCount;
-layout(location = 4) in flat ColorStop inStops[8];
+layout(location = 1) in flat Rect inRect;
+layout(location = 2) in float inGradientPos;
+layout(location = 3) in flat int inRepeating;
+layout(location = 4) in flat int inStopOffset;
+layout(location = 5) in flat int inStopCount;
 
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out vec4 color;
+
+ColorStop
+get_stop(int i)
+{
+  ColorStop result;
+
+  result.offset = get_float(inStopOffset + i * 5);
+  result.color = vec4(get_float(inStopOffset + i * 5 + 1),
+                      get_float(inStopOffset + i * 5 + 2),
+                      get_float(inStopOffset + i * 5 + 3),
+                      get_float(inStopOffset + i * 5 + 4));
+
+  return result;
+}
 
 void main()
 {
   float pos;
+
   if (inRepeating != 0)
     pos = fract (inGradientPos);
   else
     pos = clamp (inGradientPos, 0, 1);
 
-  vec4 color = inStops[0].color;
-  int n = clamp (inStopCount, 2, 8);
-  for (int i = 1; i < n; i++)
+  ColorStop stop = get_stop (0);
+  float last_offset = stop.offset;
+  color = stop.color;
+  for (int i = 1; i < inStopCount; i++)
     {
-      if (inStops[i].offset > inStops[i-1].offset)
-        color = mix (color, inStops[i].color, clamp((pos - inStops[i-1].offset) / (inStops[i].offset - inStops[i-1].offset), 0, 1));
+      stop = get_stop(i);
+      if (stop.offset < pos)
+        color = stop.color;
+      else
+        color = mix (color, stop.color, clamp((pos - last_offset) / (stop.offset - last_offset), 0, 1));
+      last_offset = stop.offset;
+      if (last_offset >= pos)
+        break;
     }
   
-  //outColor = vec4(pos, pos, pos, 1.0);
-  outColor = clip (inPos, color);
+  if (last_offset < pos)
+    color = mix (color, stop.color, clamp((pos - last_offset) / (1 - last_offset), 0, 1));
+
+  float alpha = color.a * rect_coverage (inRect, inPos);
+  color = clip_scaled (inPos, vec4(color.rgb, 1) * alpha);
 }

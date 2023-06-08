@@ -28,8 +28,8 @@ void                    gsk_vulkan_linear_gradient_pipeline_collect_vertex_data
                                                                          const graphene_point_t         *start,
                                                                          const graphene_point_t         *end,
                                                                          gboolean                        repeating,
-                                                                         gsize                           n_stops,
-                                                                         const GskColorStop             *stops);
+                                                                         gsize                           gradient_offset,
+                                                                         gsize                           n_stops);
 gsize                   gsk_vulkan_linear_gradient_pipeline_draw        (GskVulkanLinearGradientPipeline*pipeline,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          gsize                           offset,

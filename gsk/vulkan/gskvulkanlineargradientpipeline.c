@@ -15,9 +15,8 @@ struct _GskVulkanLinearGradientInstance
   float start[2];
   float end[2];
   gint32 repeating;
+  gint32 offset;
   gint32 stop_count;
-  float offsets[GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS];
-  float colors[GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS][4];
 };
 
 G_DEFINE_TYPE (GskVulkanLinearGradientPipeline, gsk_vulkan_linear_gradient_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -61,67 +60,13 @@ gsk_vulkan_linear_gradient_pipeline_get_input_state_create_info (GskVulkanPipeli
           .location = 4,
           .binding = 0,
           .format = VK_FORMAT_R32_SINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, stop_count),
+          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, offset),
       },
       {
           .location = 5,
           .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, offsets),
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, offsets) + sizeof (float) * 4,
-      },
-      {
-          .location = 7,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[0]),
-      },
-      {
-          .location = 8,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[1]),
-      },
-      {
-          .location = 9,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[2]),
-      },
-      {
-          .location = 10,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[3]),
-      },
-      {
-          .location = 11,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[4]),
-      },
-      {
-          .location = 12,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[5]),
-      },
-      {
-          .location = 13,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[6]),
-      },
-      {
-          .location = 14,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, colors[7]),
+          .format = VK_FORMAT_R32_SINT,
+          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, stop_count),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -169,23 +114,17 @@ gsk_vulkan_linear_gradient_pipeline_new (GdkVulkanContext        *context,
 
 void
 gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradientPipeline *pipeline,
-                                                         guchar                    *data,
-                                                         const graphene_point_t    *offset,
-                                                         const graphene_rect_t     *rect,
-                                                         const graphene_point_t    *start,
-                                                         const graphene_point_t    *end,
-                                                         gboolean                   repeating,
-                                                         gsize                      n_stops,
-                                                         const GskColorStop        *stops)
+                                                         guchar                          *data,
+                                                         const graphene_point_t          *offset,
+                                                         const graphene_rect_t           *rect,
+                                                         const graphene_point_t          *start,
+                                                         const graphene_point_t          *end,
+                                                         gboolean                         repeating,
+                                                         gsize                            gradient_offset,
+                                                         gsize                            n_stops)
 {
   GskVulkanLinearGradientInstance *instance = (GskVulkanLinearGradientInstance *) data;
-  gsize i;
 
-  if (n_stops > GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS)
-    {
-      g_warning ("Only %u color stops supported.", GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS);
-      n_stops = GSK_VULKAN_LINEAR_GRADIENT_PIPELINE_MAX_COLOR_STOPS;
-    }
   instance->rect[0] = rect->origin.x + offset->x;
   instance->rect[1] = rect->origin.y + offset->y;
   instance->rect[2] = rect->size.width;
@@ -195,15 +134,8 @@ gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradient
   instance->end[0] = end->x + offset->x;
   instance->end[1] = end->y + offset->y;
   instance->repeating = repeating;
+  instance->offset = gradient_offset;
   instance->stop_count = n_stops;
-  for (i = 0; i < n_stops; i++)
-    {
-      instance->offsets[i] = stops[i].offset;
-      instance->colors[i][0] = stops[i].color.red;
-      instance->colors[i][1] = stops[i].color.green;
-      instance->colors[i][2] = stops[i].color.blue;
-      instance->colors[i][3] = stops[i].color.alpha;
-    }
 }
 
 gsize
