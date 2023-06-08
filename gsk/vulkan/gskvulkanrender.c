@@ -524,6 +524,8 @@ static void
 gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
 {
   VkDevice device;
+  VkWriteDescriptorSet descriptor_sets[3];
+  gsize n_descriptor_sets;
   GList *l;
 
   device = gdk_vulkan_context_get_device (self->vulkan);
@@ -555,28 +557,36 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
                                           },
                                           &self->descriptor_set);
 
+  n_descriptor_sets = 0;
+  if (gsk_descriptor_image_infos_get_size (&self->descriptor_images) > 0)
+    {
+      descriptor_sets[n_descriptor_sets++] = (VkWriteDescriptorSet) {
+          .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+          .dstSet = self->descriptor_set,
+          .dstBinding = 0,
+          .dstArrayElement = 0,
+          .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_images),
+          .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+          .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_images)
+      };
+    }
+
+  if (gsk_descriptor_image_infos_get_size (&self->descriptor_samplers) > 0)
+    {
+      descriptor_sets[n_descriptor_sets++] = (VkWriteDescriptorSet) {
+          .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+          .dstSet = self->descriptor_set,
+          .dstBinding = 1,
+          .dstArrayElement = 0,
+          .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_samplers),
+          .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
+          .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_samplers)
+      };
+    }
+
   vkUpdateDescriptorSets (device,
-                          2,
-                          (VkWriteDescriptorSet[2]) {
-                              {
-                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                  .dstSet = self->descriptor_set,
-                                  .dstBinding = 0,
-                                  .dstArrayElement = 0,
-                                  .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_images),
-                                  .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-                                  .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_images)
-                              },
-                              {
-                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                  .dstSet = self->descriptor_set,
-                                  .dstBinding = 1,
-                                  .dstArrayElement = 0,
-                                  .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_samplers),
-                                  .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
-                                  .pImageInfo = gsk_descriptor_image_infos_get_data (&self->descriptor_samplers)
-                              }
-                          },
+                          n_descriptor_sets,
+                          descriptor_sets,
                           0, NULL);
 }
 
