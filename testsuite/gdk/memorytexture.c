@@ -1144,7 +1144,8 @@ should_skip_download_test (GdkMemoryFormat format,
 static void
 test_download (gconstpointer data,
                unsigned int  width,
-               unsigned int  height)
+               unsigned int  height,
+               gsize         n_runs)
 {
   GdkMemoryFormat format;
   TextureMethod method;
@@ -1157,7 +1158,7 @@ test_download (gconstpointer data,
   if (should_skip_download_test (format, method))
     return;
 
-  for (i = 0; i < N; i++)
+  for (i = 0; i < n_runs; i++)
     {
       GdkRGBA color;
 
@@ -1184,34 +1185,26 @@ test_download (gconstpointer data,
 static void
 test_download_1x1 (gconstpointer data)
 {
-  test_download (data, 1, 1);
+  test_download (data, 1, 1, N);
 }
 
 static void
-test_download_4x4 (gconstpointer data)
+test_download_random (gconstpointer data)
 {
-  test_download (data, 4, 4);
-}
+  int width, height;
 
-/* odd sizes, to trigger alignment issues */
-static void
-test_download_17x7 (gconstpointer data)
-{
-  test_download (data, 17, 7);
-}
+  /* Make sure the maximum is:
+   * - larger than what GSK puts into the icon cache
+   * - larger than the small max-texture-size we test against
+   */
+  do
+    {
+      width = g_test_rand_int_range (1, 40) * g_test_rand_int_range (1, 40);
+      height = g_test_rand_int_range (1, 40) * g_test_rand_int_range (1, 40);
+    }
+  while (width * height >= 1024 * 1024);
 
-/* larger than what GSK puts into the icon cache */
-static void
-test_download_192x192 (gconstpointer data)
-{
-  test_download (data, 192, 192);
-}
-
-/* larger than the small max-texture-size we test against */
-static void
-test_download_1065x17 (gconstpointer data)
-{
-  test_download (data, 1065, 17);
+  test_download (data, width, height, 1);
 }
 
 static void
@@ -1285,9 +1278,9 @@ test_conversion_1x1 (gconstpointer data)
 }
 
 static void
-test_conversion_4x4 (gconstpointer data)
+test_conversion_random (gconstpointer data)
 {
-  test_conversion (data, 4);
+  test_conversion (data, g_test_rand_int_range (2, 18));
 }
 
 static void
@@ -1346,12 +1339,9 @@ main (int argc, char *argv[])
   gtk_test_init (&argc, &argv, NULL);
 
   add_test ("/memorytexture/download_1x1", test_download_1x1);
-  add_test ("/memorytexture/download_4x4", test_download_4x4);
-  add_test ("/memorytexture/download_17x7", test_download_17x7);
-  add_test ("/memorytexture/download_192x192", test_download_192x192);
-  add_test ("/memorytexture/download_1065x17", test_download_1065x17);
+  add_test ("/memorytexture/download_random", test_download_random);
   add_conversion_test ("/memorytexture/conversion_1x1", test_conversion_1x1);
-  add_conversion_test ("/memorytexture/conversion_4x4", test_conversion_4x4);
+  add_conversion_test ("/memorytexture/conversion_random", test_conversion_random);
 
   gl_context = gdk_display_create_gl_context (gdk_display_get_default (), NULL);
   if (!gdk_gl_context_realize (gl_context, NULL))
