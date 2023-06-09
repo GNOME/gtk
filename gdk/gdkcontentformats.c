@@ -645,6 +645,9 @@ gdk_content_formats_builder_clear (GdkContentFormatsBuilder *builder)
 {
   g_clear_pointer (&builder->gtypes, g_slist_free);
   g_clear_pointer (&builder->mime_types, g_slist_free);
+
+  builder->n_gtypes = 0;
+  builder->n_mime_types = 0;
 }
 
 /**
