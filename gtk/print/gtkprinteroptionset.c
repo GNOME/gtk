@@ -19,10 +19,8 @@
 #include "config.h"
 #include <string.h>
 #include <glib.h>
-#include <gmodule.h>
 
 #include "gtkprinteroptionsetprivate.h"
-#include "gtkprivate.h"
 
 /*****************************************
  *         GtkPrinterOptionSet    *
@@ -67,7 +65,7 @@ gtk_printer_option_set_class_init (GtkPrinterOptionSetClass *class)
   gobject_class->finalize = gtk_printer_option_set_finalize;
 
   signals[CHANGED] =
-    g_signal_new (I_("changed"),
+    g_signal_new ("changed",
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionSetClass, changed),

@@ -22,20 +22,14 @@
 #include <locale.h>
 
 #include <glib/gi18n-lib.h>
-#include "gtkprivate.h"
 
-#include "gtkbutton.h"
-#include "gtkscrolledwindow.h"
-#include "gtkcheckbutton.h"
-#include "gtklabel.h"
-#include "gtkgrid.h"
+#include "deprecated/gtkdialogprivate.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkpapersize.h"
 #include "gtkprintutilsprivate.h"
-#include "deprecated/gtkdialogprivate.h"
 
 /**
  * GtkPageSetupUnixDialog:
@@ -152,7 +146,7 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gtk/libgtk/ui/gtkpagesetupunixdialog.ui");
+                                               "/org/gtk/libgtk/print/ui/gtkpagesetupunixdialog.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkPageSetupUnixDialog, printer_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkPageSetupUnixDialog, paper_size_combo);

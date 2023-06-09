@@ -24,7 +24,7 @@
 #include <cairo.h>
 
 #include <gtk/gtk.h>
-#include <gtk/gtkprinter.h>
+#include <gtk/print/gtkprinter.h>
 
 G_BEGIN_DECLS
 

@@ -20,7 +20,7 @@
 #define __GTK_PRINT_BACKEND_CUPS_H__
 
 #include <glib-object.h>
-#include "gtkprintbackendprivate.h"
+#include "gtk/print/gtkprintbackendprivate.h"
 
 G_BEGIN_DECLS
 

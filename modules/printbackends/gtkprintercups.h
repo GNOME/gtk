@@ -24,7 +24,7 @@
 #include "gtkcupsutils.h"
 
 #include <gtk/gtkunixprint.h>
-#include <gtk/gtkprinterprivate.h>
+#include <gtk/print/gtkprinterprivate.h>
 
 #ifdef HAVE_COLORD
 #include <colord.h>

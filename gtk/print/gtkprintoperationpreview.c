@@ -18,9 +18,11 @@
 
 #include "config.h"
 
-#include "gtkprintoperationpreview.h"
+#include <gtk/gtk.h>
+
 #include "gtkmarshalers.h"
-#include "gtkprivate.h"
+
+#include "gtkprintoperationpreview.h"
 
 
 /**
@@ -57,7 +59,7 @@ gtk_print_operation_preview_get_type (void)
       };
 
       print_operation_preview_type =
-	g_type_register_static (G_TYPE_INTERFACE, I_("GtkPrintOperationPreview"),
+	g_type_register_static (G_TYPE_INTERFACE, "GtkPrintOperationPreview",
 				&print_operation_preview_info, 0);
 
       g_type_interface_add_prerequisite (print_operation_preview_type, G_TYPE_OBJECT);
@@ -85,7 +87,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
        * 
        * A handler for this signal can be used for setup tasks.
        */
-      g_signal_new (I_("ready"),
+      g_signal_new ("ready",
 		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, ready),
@@ -106,7 +108,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
        * according to @page_setup and set up a suitable cairo
        * context, using [method@Gtk.PrintContext.set_cairo_context].
        */
-      id = g_signal_new (I_("got-page-size"),
+      id = g_signal_new ("got-page-size",
                          GTK_TYPE_PRINT_OPERATION_PREVIEW,
                          G_SIGNAL_RUN_LAST,
                          G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, got_page_size),

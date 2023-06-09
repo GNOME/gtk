@@ -16,8 +16,8 @@
  */
 #pragma once
 
+#include <gtk/gtk.h>
 #include "gtkprinteroptionprivate.h"
-#include "gtkbox.h"
 
 G_BEGIN_DECLS
 

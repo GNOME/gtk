@@ -19,7 +19,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include <gtk/gtkunixprint.h>
+#include "gtkunixprint.h"
 #include "gtkprinteroptionsetprivate.h"
 
 G_BEGIN_DECLS

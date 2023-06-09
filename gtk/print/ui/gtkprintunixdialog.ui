@@ -340,9 +340,47 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkDrawingArea" id="collate_image">
-                                        <property name="content-width">70</property>
-                                        <property name="content-height">50</property>
+                                      <object class="GtkFixed" id="page_collate_preview">
+                                        <child>
+                                          <object class="GtkPageThumbnail" id="page_a1">
+                                            <property name="page-num">1</property>
+                                            <property name="width-request">32</property>
+                                            <property name="height-request">40</property>
+                                            <layout>
+                                              <property name="transform">translate(17, 0)</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkPageThumbnail" id="page_a2">
+                                            <property name="page-num">2</property>
+                                            <property name="width-request">32</property>
+                                            <property name="height-request">40</property>
+                                            <layout>
+                                              <property name="transform">translate(0, 17)</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkPageThumbnail" id="page_b1">
+                                            <property name="page-num">1</property>
+                                            <property name="width-request">32</property>
+                                            <property name="height-request">40</property>
+                                            <layout>
+                                              <property name="transform">translate(73, 0)</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkPageThumbnail" id="page_b2">
+                                            <property name="page-num">2</property>
+                                            <property name="width-request">32</property>
+                                            <property name="height-request">40</property>
+                                            <layout>
+                                              <property name="transform">translate(56, 17)</property>
+                                            </layout>
+                                          </object>
+                                        </child>
                                         <layout>
                                           <property name="column">1</property>
                                           <property name="row">1</property>

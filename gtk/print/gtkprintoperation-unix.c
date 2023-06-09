@@ -29,20 +29,20 @@
 #include <fcntl.h>
 
 #include <glib/gstdio.h>
+#include <glib/gi18n-lib.h>
+#include <gtk/gtk.h>
+#include "gtkprivate.h"
+
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
 
 #include <cairo-pdf.h>
 #include <cairo-ps.h>
-#include "gtkprivate.h"
 #include "gtkprintunixdialog.h"
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
-#include "gtklabel.h"
-#include "gtkfilelauncher.h"
-#include <glib/gi18n-lib.h>
 
 
 typedef struct

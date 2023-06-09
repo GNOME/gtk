@@ -29,16 +29,42 @@
 
 #include <gio/gunixfdlist.h>
 
+#include <glib/gi18n-lib.h>
+#include <gtk/gtk.h>
+#include "gtkwindowprivate.h"
+
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
 #include "gtkprintsettings.h"
 #include "gtkpagesetup.h"
 #include "gtkprintbackendprivate.h"
-#include "gtkfilelauncher.h"
-#include <glib/gi18n-lib.h>
-#include "gtkwindowprivate.h"
-#include "gtkprivate.h"
 
+#define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
+#define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
+#define PORTAL_REQUEST_INTERFACE "org.freedesktop.portal.Request"
+#define PORTAL_PRINT_INTERFACE "org.freedesktop.portal.Print"
+
+static char *
+get_portal_request_path (GDBusConnection  *connection,
+                         char            **token)
+{
+  char *sender;
+  int i;
+  char *path;
+
+  *token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
+  /* +1 to skip the leading : */
+  sender = g_strdup (g_dbus_connection_get_unique_name (connection) + 1);
+  for (i = 0; sender[i]; i++)
+    if (sender[i] == '.')
+      sender[i] = '_';
+
+  path = g_strconcat (PORTAL_OBJECT_PATH, "/request/", sender, "/", *token, NULL);
+
+  g_free (sender);
+
+  return path;
+}
 
 typedef struct {
   GtkPrintOperation *op;
@@ -575,7 +601,7 @@ call_prepare_print (GtkPrintOperation *op,
   char *token;
 
   portal->prepare_print_handle =
-      gtk_get_portal_request_path (g_dbus_proxy_get_connection (portal->proxy), &token);
+      get_portal_request_path (g_dbus_proxy_get_connection (portal->proxy), &token);
 
   portal->response_signal_id =
     g_dbus_connection_signal_subscribe (g_dbus_proxy_get_connection (G_DBUS_PROXY (portal->proxy)),

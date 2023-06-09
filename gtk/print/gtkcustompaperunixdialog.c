@@ -26,18 +26,12 @@
 #endif
 
 #include <glib/gi18n-lib.h>
-#include "gtkprivate.h"
 
-#include "deprecated/gtkliststore.h"
-
-#include "gtksignallistitemfactory.h"
-#include "gtklabel.h"
-#include "gtkspinbutton.h"
+#include "deprecated/gtkdialogprivate.h"
 
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkprintutilsprivate.h"
-#include "deprecated/gtkdialogprivate.h"
 
 #define LEGACY_CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
 #define CUSTOM_PAPER_FILENAME "custom-papers"

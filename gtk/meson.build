@@ -1,6 +1,7 @@
 subdir('a11y')
 subdir('deprecated')
 subdir('inspector')
+subdir('print')
 
 gtk_cargs = [
   '-DGTK_COMPILATION',
@@ -128,7 +129,6 @@ gtk_private_sources = files([
   'gtkplacesviewrow.c',
   'gtkpointerfocus.c',
   'gtkpopovercontent.c',
-  'gtkprintutils.c',
   'gtkprivate.c',
   'gtkprogresstracker.c',
   'gtkrbtree.c',
@@ -303,19 +303,13 @@ gtk_public_sources = files([
   'gtkoverlay.c',
   'gtkoverlaylayout.c',
   'gtkpadcontroller.c',
-  'gtkpagesetup.c',
   'gtkpaned.c',
-  'gtkpapersize.c',
   'gtkpasswordentry.c',
   'gtkpasswordentrybuffer.c',
   'gtkpicture.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkpopovermenubar.c',
-  'gtkprintcontext.c',
-  'gtkprintoperation.c',
-  'gtkprintoperationpreview.c',
-  'gtkprintsettings.c',
   'gtkprogressbar.c',
   'gtkpropertylookuplistmodel.c',
   'gtkrange.c',
@@ -406,6 +400,8 @@ gtk_public_sources = files([
   'gtkwindowgroup.c',
   'gtkwindowhandle.c',
 ])
+
+gtk_public_sources += gtk_print_sources
 
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
@@ -545,19 +541,13 @@ gtk_public_headers = files([
   'gtkoverlay.h',
   'gtkoverlaylayout.h',
   'gtkpadcontroller.h',
-  'gtkpagesetup.h',
   'gtkpaned.h',
-  'gtkpapersize.h',
   'gtkpasswordentry.h',
   'gtkpasswordentrybuffer.h',
   'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
   'gtkpopovermenubar.h',
-  'gtkprintcontext.h',
-  'gtkprintoperation.h',
-  'gtkprintoperationpreview.h',
-  'gtkprintsettings.h',
   'gtkprogressbar.h',
   'gtkrange.h',
   'gtkrecentmanager.h',
@@ -634,6 +624,7 @@ gtk_public_headers = files([
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
 install_headers(gtk_deprecated_headers, subdir: 'gtk-4.0/gtk/deprecated')
+install_headers(gtk_print_headers, subdir: 'gtk-4.0/gtk/print')
 
 gtk_sources = gtk_public_sources + gtk_private_sources
 
@@ -684,51 +675,24 @@ if os_unix and tracker3_dep.found()
   gtk_sources += 'gtksearchenginetracker3.c'
 endif
 
+gtk_unix_print_main_header = [
+  'gtkunixprint.h'
+]
+
 if os_unix
-  gtk_unix_print_headers = [
-    'gtkpagesetupunixdialog.h',
-    'gtkprintunixdialog.h',
-    'gtkprinter.h',
-    'gtkprintjob.h',
-    'gtkunixprint.h',
-  ]
-  install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk')
-
-  gtk_unix_print_sources = files([
-    'gtkcustompaperunixdialog.c',
-    'gtkpagesetupunixdialog.c',
-    'gtkprintbackend.c',
-    'gtkprinter.c',
-    'gtkprinteroption.c',
-    'gtkprinteroptionset.c',
-    'gtkprinteroptionwidget.c',
-    'gtkprintjob.c',
-    'gtkprintoperation-unix.c',
-    'gtkprintoperation-portal.c',
-    'gtkprintunixdialog.c',
-  ])
-
+  install_headers(gtk_unix_print_main_header, subdir: 'gtk-4.0/unix-print/gtk')
+  install_headers(gtk_unix_print_headers, subdir: 'gtk-4.0/unix-print/gtk/print')
   gtk_sources += gtk_unix_print_sources
 endif
 
 if os_win32
-  gtk_win32_print_headers = []
-  gtk_win32_print_sources = files([
-    'gtkprint-win32.c',
-    'gtkprintoperation-win32.c',
-    'gtkfilechoosernativewin32.c',
-    'gtkwin32.c',
-  ])
-
   gtk_sources += gtk_win32_print_sources
   gtk_sources += [
     'gtkcolorpickerwin32.c',
-    'gtkimcontextime.c'
+    'gtkimcontextime.c',
+    'gtkfilechoosernativewin32.c',
+    'gtkwin32.c',
   ]
-
-  if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
-    cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
-  endif
 endif
 
 if x11_enabled
@@ -958,7 +922,7 @@ gtkmarshalers = gnome.genmarshal('gtkmarshalers',
 gtkmarshal_h = gtkmarshalers[1]
 
 gtktypebuiltins = gnome.mkenums('gtktypebuiltins',
-  sources: gtk_public_headers + gtk_deprecated_headers,
+  sources: gtk_public_headers + gtk_deprecated_headers + gtk_print_headers,
   c_template: 'gtktypebuiltins.c.template',
   h_template: 'gtktypebuiltins.h.template',
   install_dir: gtk_includedir / 'gtk-4.0/gtk',
@@ -1286,6 +1250,7 @@ if build_gir
   gtk_introspection_sources = [
     gtk_public_headers,
     gtk_public_sources,
+    gtk_print_headers,
     gtk_css_public_headers,
     gtk_css_public_sources,
     gtk_deprecated_headers,
@@ -1295,7 +1260,7 @@ if build_gir
   ]
 
   if os_unix
-    gtk_introspection_sources += [ gtk_unix_print_headers, gtk_unix_print_sources ]
+    gtk_introspection_sources += [ gtk_unix_print_headers + gtk_unix_print_main_header, gtk_unix_print_sources ]
   endif
 
   if os_win32

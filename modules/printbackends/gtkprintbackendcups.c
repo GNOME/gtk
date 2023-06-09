@@ -45,9 +45,9 @@
 #include <gmodule.h>
 
 #include <gtk/gtk.h>
-#include <gtk/gtkprintbackendprivate.h>
 #include <gtk/gtkunixprint.h>
-#include <gtk/gtkprinterprivate.h>
+#include <gtk/print/gtkprintbackendprivate.h>
+#include <gtk/print/gtkprinterprivate.h>
 #include <gtk/gtkprivate.h>
 
 #include "gtkprintbackendcups.h"
@@ -57,7 +57,7 @@
 #include "gtkcupssecretsutils.h"
 #include "gtkprintbackendutils.h"
 
-#include <gtkprintutilsprivate.h>
+#include <gtk/print/gtkprintutilsprivate.h>
 #include "gtkprivate.h"
 
 #ifdef HAVE_COLORD
