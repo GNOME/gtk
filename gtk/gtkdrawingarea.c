@@ -92,17 +92,14 @@ static guint signals[LAST_SIGNAL] = { 0, };
  *                gpointer        data)
  * {
  *   GdkRGBA color;
- *   GtkStyleContext *context;
- *
- *   context = gtk_widget_get_style_context (GTK_WIDGET (area));
  *
  *   cairo_arc (cr,
  *              width / 2.0, height / 2.0,
  *              MIN (width, height) / 2.0,
  *              0, 2 * G_PI);
  *
- *   gtk_style_context_get_color (context,
- *                                &color);
+ *   gtk_widget_get_color (GTK_WIDGET (area),
+ *                         &color);
  *   gdk_cairo_set_source_rgba (cr, &color);
  *
  *   cairo_fill (cr);
