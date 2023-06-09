@@ -4,6 +4,7 @@ installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')
 
 common_env = [
   'GIO_USE_VOLUME_MONITOR=unix',
+  'GIO_USE_VFS=local',
   'GSETTINGS_BACKEND=memory',
   'GTK_CSD=1',
   'G_ENABLE_DIAGNOSTIC=0',

@@ -3,7 +3,6 @@ changetest_env.set('GTK_A11Y', 'test')
 changetest_env.set('GSK_RENDERER', 'cairo')
 changetest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 changetest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-changetest_env.set('GIO_USE_VFS', 'local')
 changetest_env.set('GSETTINGS_BACKEND', 'memory')
 changetest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 

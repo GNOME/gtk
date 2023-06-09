@@ -142,7 +142,6 @@ main (int argc, char **argv)
   const char *display, *x_r_d;
 
   /* These must be set before gtk_test_init */
-  g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* g_test_dbus_up() helpfully clears these, so we have to re-set it */

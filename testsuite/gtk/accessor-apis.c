@@ -322,7 +322,6 @@ main (int argc, char **argv)
   int result;
 
   /* These must be set before before gtk_test_init */
-  g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
