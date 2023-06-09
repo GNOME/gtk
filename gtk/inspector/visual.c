@@ -21,6 +21,7 @@
 #include "visual.h"
 
 #include "fpsoverlay.h"
+#include "a11yoverlay.h"
 #include "updatesoverlay.h"
 #include "layoutoverlay.h"
 #include "focusoverlay.h"
@@ -94,6 +95,7 @@ struct _GtkInspectorVisual
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *focus_switch;
+  GtkWidget *a11y_switch;
 
   GtkWidget *misc_box;
   GtkWidget *touchscreen_switch;
@@ -103,6 +105,7 @@ struct _GtkInspectorVisual
   GtkInspectorOverlay *layout_overlay;
   GtkInspectorOverlay *focus_overlay;
   GtkInspectorOverlay *baseline_overlay;
+  GtkInspectorOverlay *a11y_overlay;
 
   GdkDisplay *display;
 };
@@ -276,6 +279,40 @@ fps_activate (GtkSwitch          *sw,
         {
           gtk_inspector_window_remove_overlay (iw, vis->fps_overlay);
           vis->fps_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
+}
+
+static void
+a11y_activate (GtkSwitch          *sw,
+               GParamSpec         *pspec,
+               GtkInspectorVisual *vis)
+{
+  GtkInspectorWindow *iw;
+  gboolean a11y;
+
+  a11y = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (a11y)
+    {
+      if (vis->a11y_overlay == NULL)
+        {
+          vis->a11y_overlay = gtk_a11y_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, vis->a11y_overlay);
+          g_object_unref (vis->a11y_overlay);
+        }
+    }
+  else
+    {
+      if (vis->a11y_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, vis->a11y_overlay);
+          vis->a11y_overlay = NULL;
         }
     }
 
@@ -1038,6 +1075,11 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->touchscreen_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
+  else if (gtk_widget_is_ancestor (vis->a11y_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->a11y_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
 }
 
 static void
@@ -1102,6 +1144,11 @@ gtk_inspector_visual_unroot (GtkWidget *widget)
       gtk_inspector_window_remove_overlay (iw, vis->focus_overlay);
       vis->focus_overlay = NULL;
     }
+  if (vis->a11y_overlay)
+    {
+      gtk_inspector_window_remove_overlay (iw, vis->a11y_overlay);
+      vis->a11y_overlay = NULL;
+    }
 
   GTK_WIDGET_CLASS (gtk_inspector_visual_parent_class)->unroot (widget);
 }
@@ -1155,6 +1202,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, focus_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, a11y_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
@@ -1163,6 +1211,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
+  gtk_widget_class_bind_template_callback (widget_class, a11y_activate);
   gtk_widget_class_bind_template_callback (widget_class, inspect_inspector);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
