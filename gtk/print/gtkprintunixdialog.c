@@ -2583,8 +2583,7 @@ draw_page (GtkDrawingArea *da,
 
   g_object_unref (layout);
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  color = *gtk_css_color_value_get_rgba (style->core->color);
+  gtk_widget_get_color (widget, &color);
 
   if (page_setup != NULL)
     {
