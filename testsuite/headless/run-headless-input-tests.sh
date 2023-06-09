@@ -8,7 +8,6 @@ mkdir -p ${outputdir}
 
 
 export GTK_A11Y=none
-export GIO_USE_VFS=local
 
 dbus-run-session sh 2>${outputdir}/dbus-stderr.log <<EOF
 

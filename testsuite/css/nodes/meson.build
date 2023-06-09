@@ -3,7 +3,6 @@ nodetest_env.set('GTK_A11Y', 'test')
 nodetest_env.set('GSK_RENDERER', 'cairo')
 nodetest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 nodetest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-nodetest_env.set('GIO_USE_VFS', 'local')
 nodetest_env.set('GSETTINGS_BACKEND', 'memory')
 nodetest_env.set('G_ENABLE_DIAGNOSTIC', '0')
 
