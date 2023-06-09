@@ -31,6 +31,7 @@ demos/gtk-demo/listbox_controls.ui
 demos/gtk-demo/listbox.ui
 demos/gtk-demo/listview_filebrowser.ui
 demos/gtk-demo/listview_minesweeper.ui
+demos/gtk-demo/listview_settings2.ui
 demos/gtk-demo/listview_settings.ui
 demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
@@ -108,7 +109,7 @@ gtk/inspector/signals-list.ui.h
 gtk/inspector/statistics.ui.h
 gtk/inspector/visual.ui.h
 gtk/inspector/window.ui.h
-gtk/paper_names.c
+gtk/print/paper_names.c
 tests/dialog.ui
 tests/popupat.ui
 tests/testfilechooser.c
@@ -336,6 +337,9 @@ testsuite/reftests/window-show-contents-on-map.ref.ui
 testsuite/reftests/window-show-contents-on-map.ui
 testsuite/reftests/wrapping-in-boxes-in-boxes.ref.ui
 testsuite/reftests/wrapping-in-boxes-in-boxes.ui
+testsuite/tools/enumerate-data/widget-factory2.ui
+testsuite/tools/enumerate-data/widget-factory3.ui
+testsuite/tools/enumerate-data/widget-factory.ui
 testsuite/tools/simplify-data-3to4/assistant.ui
 testsuite/tools/simplify-data-3to4/box.ui
 testsuite/tools/simplify-data-3to4/grid.ui

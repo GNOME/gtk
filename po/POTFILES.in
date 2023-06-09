@@ -224,6 +224,8 @@ gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
 gtk/gtklistbase.c
 gtk/gtklistbox.c
+gtk/gtklistfactorywidget.c
+gtk/gtklistheaderwidget.c
 gtk/gtklistitem.c
 gtk/gtklistitemwidget.c
 gtk/gtklistview.c
