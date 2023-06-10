@@ -20,6 +20,7 @@
 
 #include "deprecated/gtkcolorchooserprivate.h"
 #include "deprecated/gtkcolorchooserwidget.h"
+#include "gtkcolorchooserwidgetprivate.h"
 #include "gtkcoloreditorprivate.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkgrid.h"
@@ -305,8 +306,8 @@ scale_round (double value,
   return (guint)value;
 }
 
-static char *
-accessible_color_name (GdkRGBA *color)
+char *
+accessible_color_name (const GdkRGBA *color)
 {
   if (color->alpha < 1.0)
     return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"),
@@ -566,6 +567,9 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   connect_button_signals (button, cc);
   gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
   gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (button), FALSE);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Add Color"),
+                                  -1);
   gtk_box_append (GTK_BOX (box), button);
 
   cc->settings = g_settings_new ("org.gtk.gtk4.Settings.ColorChooser");
