@@ -83,6 +83,7 @@
                     <style>
                       <class name="navigation-sidebar"/>
                     </style>
+                    <property name="tab-behavior">item</property>
                     <property name="factory">
                       <object class="GtkBuilderListItemFactory">
                         <property name="resource">/ui/main-listitem.ui</property>
