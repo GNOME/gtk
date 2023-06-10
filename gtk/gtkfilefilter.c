@@ -723,9 +723,9 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
       mime_types = gdk_pixbuf_format_get_mime_types (l->data);
 
       for (i = 0; mime_types[i] != NULL; i++)
-        {
-          g_ptr_array_add (array, g_content_type_from_mime_type (mime_types[i]));
-        }
+        g_ptr_array_add (array, g_content_type_from_mime_type (mime_types[i]));
+
+      g_strfreev (mime_types);
     }
   g_slist_free (formats);
 
