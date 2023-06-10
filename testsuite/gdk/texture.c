@@ -392,6 +392,9 @@ test_texture_downloader (void)
   g_free (data);
   g_bytes_unref (bytes);
   gdk_texture_downloader_free (downloader);
+
+  g_object_unref (texture2);
+  g_object_unref (texture);
 }
 
 int

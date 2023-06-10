@@ -382,7 +382,7 @@
                             <property name="spacing">40</property>
                             <child>
                               <object class="GtkLabel" id="fps_label">
-                                <property name="label" translatable="yes">Show fps overlay</property>
+                                <property name="label" translatable="yes">Show Framerate</property>
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
