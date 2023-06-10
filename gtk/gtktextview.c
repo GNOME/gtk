@@ -6477,7 +6477,10 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
         count *= -1;
 
       if (count < 0)
-        gtk_text_iter_backward_visible_word_starts (&newplace, -count);
+        {
+          if (!gtk_text_iter_backward_visible_word_starts (&newplace, -count))
+            gtk_text_iter_set_line_offset (&newplace, 0);
+        }
       else if (count > 0)
 	{
 	  if (!gtk_text_iter_forward_visible_word_ends (&newplace, count))
@@ -6909,7 +6912,10 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
       if (count > 0)
         gtk_text_iter_forward_word_ends (&end, count);
       else if (count < 0)
-        gtk_text_iter_backward_word_starts (&start, 0 - count);
+        {
+          if (!gtk_text_iter_backward_word_starts (&start, 0 - count))
+            gtk_text_iter_set_line_offset (&start, 0);
+        }
       break;
 
     case GTK_DELETE_WORDS:
