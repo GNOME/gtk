@@ -201,6 +201,8 @@ struct _GtkInspectorA11y
 
   GtkWidget *box;
   GtkWidget *role;
+  GtkWidget *name;
+  GtkWidget *description;
   GtkWidget *bounds;
   GtkWidget *path_label;
   GtkWidget *path;
@@ -227,6 +229,30 @@ update_role (GtkInspectorA11y *sl)
   value = g_enum_get_value (eclass, role);
   gtk_label_set_label (GTK_LABEL (sl->role), value->value_nick);
   g_type_class_unref (eclass);
+}
+
+static void
+update_name (GtkInspectorA11y *sl)
+{
+  GtkATContext *context;
+  char *name;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+
+  name = gtk_at_context_get_name (context);
+  gtk_label_set_label (GTK_LABEL (sl->name), name);
+}
+
+static void
+update_description (GtkInspectorA11y *sl)
+{
+  GtkATContext *context;
+  char *description;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+
+  description = gtk_at_context_get_description (context);
+  gtk_label_set_label (GTK_LABEL (sl->description), description);
 }
 
 static void
@@ -426,6 +452,8 @@ static void
 refresh_all (GtkInspectorA11y *sl)
 {
   update_role (sl);
+  update_name (sl);
+  update_description (sl);
   update_path (sl);
   update_attributes (sl);
 }
@@ -518,6 +546,8 @@ gtk_inspector_a11y_class_init (GtkInspectorA11yClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/a11y.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, role);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, name);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, description);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, bounds);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path_label);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorA11y, path);
