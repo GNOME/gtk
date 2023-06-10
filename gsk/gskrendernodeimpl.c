@@ -5638,9 +5638,12 @@ static void
 gsk_mask_node_finalize (GskRenderNode *node)
 {
   GskMaskNode *self = (GskMaskNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_MASK_NODE));
 
   gsk_render_node_unref (self->source);
   gsk_render_node_unref (self->mask);
+
+  parent_class->finalize (node);
 }
 
 static void
