@@ -1677,7 +1677,7 @@ subparser_end (GtkBuildableParseContext  *context,
                                 data->subparser->child,
                                 element_name,
                                 data->subparser->data);
-  g_free (data->subparser->parser);
+  g_clear_pointer (&data->subparser->parser, g_free);
 
   if (_gtk_builder_lookup_failed (data->builder, error))
     return;
