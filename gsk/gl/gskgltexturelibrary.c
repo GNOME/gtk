@@ -204,6 +204,7 @@ gsk_gl_texture_library_dispose (GObject *object)
 
   g_clear_pointer (&self->atlases, g_ptr_array_unref);
   g_clear_object (&self->driver);
+  g_clear_pointer (&self->hash_table, g_hash_table_unref);
 
   G_OBJECT_CLASS (gsk_gl_texture_library_parent_class)->dispose (object);
 }
