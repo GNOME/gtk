@@ -1116,13 +1116,12 @@ static void
 gtk_list_item_manager_release_items (GtkListItemManager *self,
                                      GtkListItemChange  *change)
 {
-  GtkListTile *tile;
+  GtkListTile *tile, *header;
   guint position, i, n_items, query_n_items;
   gboolean tracked, deleted_section;
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
   position = 0;
-  deleted_section = FALSE;
 
   while (position < n_items)
     {
@@ -1133,7 +1132,16 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
           continue;
         }
 
+      deleted_section = FALSE;
       tile = gtk_list_item_manager_get_nth (self, position, &i);
+      if (i == 0)
+        {
+          header = gtk_list_tile_get_previous_skip (tile);
+          if (!gtk_list_tile_is_header (header))
+            header = NULL;
+        }
+      else
+        header = NULL;
       i = position - i;
       while (i < position + query_n_items)
         {
@@ -1158,6 +1166,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
             case GTK_LIST_TILE_UNMATCHED_FOOTER:
               gtk_list_tile_set_type (tile, GTK_LIST_TILE_REMOVED);
               deleted_section = TRUE;
+              header = NULL;
               break;
 
             case GTK_LIST_TILE_REMOVED:
@@ -1167,11 +1176,14 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
             }
           tile = gtk_list_tile_get_next_skip (tile);
         }
+      if (header && gtk_list_tile_is_footer (tile))
+        deleted_section = TRUE;
       if (deleted_section)
         {
-          tile = gtk_list_tile_get_header (self, tile);
-          gtk_list_item_change_clear_header (change, &tile->widget);
-          gtk_list_tile_set_type (tile, GTK_LIST_TILE_UNMATCHED_HEADER);
+          if (header == NULL)
+            header = gtk_list_tile_get_header (self, tile);
+          gtk_list_item_change_clear_header (change, &header->widget);
+          gtk_list_tile_set_type (header, GTK_LIST_TILE_UNMATCHED_HEADER);
 
           tile = gtk_list_tile_get_footer (self, tile);
           gtk_list_tile_set_type (tile, GTK_LIST_TILE_UNMATCHED_FOOTER);
