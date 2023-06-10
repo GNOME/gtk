@@ -1170,15 +1170,14 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_hexpand (box, FALSE);
   label_widget = gtk_label_new (label);
-  gtk_label_set_xalign (GTK_LABEL (label_widget), 0);
   gtk_label_set_use_underline (GTK_LABEL (label_widget),
                                gtk_button_get_use_underline (GTK_BUTTON (menu_button->button)));
   gtk_label_set_ellipsize (GTK_LABEL (label_widget),
                            menu_button->can_shrink ? PANGO_ELLIPSIZE_END
                                                    : PANGO_ELLIPSIZE_NONE);
   gtk_widget_set_hexpand (label_widget, TRUE);
-  gtk_widget_set_halign (label_widget, GTK_ALIGN_CENTER);
   arrow = gtk_builtin_icon_new ("arrow");
   menu_button->arrow_widget = arrow;
   gtk_box_append (GTK_BOX (box), label_widget);
