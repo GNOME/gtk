@@ -1594,6 +1594,9 @@ add_axis (GtkFontChooserWidget  *fontchooser,
                                          (double)ax->max_value,
                                          1.0, 10.0, 0.0);
   axis->scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, axis->adjustment);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (axis->scale),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, axis->label, NULL,
+                                  -1);
   gtk_scale_add_mark (GTK_SCALE (axis->scale), (double)ax->default_value, GTK_POS_TOP, NULL);
   gtk_widget_set_valign (axis->scale, GTK_ALIGN_BASELINE_FILL);
   gtk_widget_set_hexpand (axis->scale, TRUE);
@@ -1601,6 +1604,9 @@ add_axis (GtkFontChooserWidget  *fontchooser,
   gtk_scale_set_draw_value (GTK_SCALE (axis->scale), FALSE);
   gtk_grid_attach (GTK_GRID (fontchooser->axis_grid), axis->scale, 1, row, 1, 1);
   axis->spin = gtk_spin_button_new (axis->adjustment, 0, 0);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (axis->spin),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, axis->label, NULL,
+                                  -1);
   g_signal_connect (axis->spin, "output", G_CALLBACK (output_cb), fontchooser);
   gtk_widget_set_valign (axis->spin, GTK_ALIGN_BASELINE_FILL);
   gtk_grid_attach (GTK_GRID (fontchooser->axis_grid), axis->spin, 2, row, 1, 1);
@@ -2345,7 +2351,7 @@ add_enum_group (GtkFontChooserWidget  *fontchooser,
                 const char           **tags,
                 unsigned int           n_tags)
 {
-  GtkWidget *label;
+  GtkWidget *label = NULL;
   GtkWidget *group;
   PangoAttrList *attrs;
   int i;
@@ -2433,6 +2439,9 @@ add_radio_group (GtkFontChooserWidget  *fontchooser,
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
   gtk_box_append (GTK_BOX (group), label);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (group),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
 
   for (i = 0; i < n_tags; i++)
     {
