@@ -513,9 +513,15 @@ test_exhaustive (void)
 
   check_list_item_manager (items, widget, trackers, N_TRACKERS);
 
+  if (g_test_verbose ())
+    g_test_message ("removing trackers");
   for (i = 0; i < N_TRACKERS; i++)
     gtk_list_item_tracker_free (items, trackers[i]);
   g_object_unref (selection);
+  if (g_test_verbose ())
+    print_list_item_manager_tiles (items);
+  check_list_item_manager (items, widget, NULL, 0);
+
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
