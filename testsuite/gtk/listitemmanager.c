@@ -85,14 +85,29 @@ print_list_item_manager_tiles (GtkListItemManager *items)
   g_string_free (string, TRUE);
 }
 
+static gsize
+widget_count_children (GtkWidget *widget)
+{
+  GtkWidget *child;
+  gsize n_children = 0;
+
+  for (child = gtk_widget_get_first_child (widget);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    n_children++;
+
+  return n_children;
+}
+
 static void
 check_list_item_manager (GtkListItemManager  *items,
+                         GtkWidget           *widget,
                          GtkListItemTracker **trackers,
                          gsize                n_trackers)
 {
   GListModel *model = G_LIST_MODEL (gtk_list_item_manager_get_model (items));
   GtkListTile *tile;
-  guint n_items = 0;
+  guint n_items, n_tile_widgets;
   guint i;
   gboolean has_sections;
   enum {
@@ -103,6 +118,9 @@ check_list_item_manager (GtkListItemManager  *items,
   gboolean after_items = FALSE;
 
   has_sections = gtk_list_item_manager_get_has_sections (items);
+
+  n_items = 0;
+  n_tile_widgets = 0;
 
   for (tile = gtk_list_item_manager_get_first (items);
        tile != NULL;
@@ -176,10 +194,14 @@ check_list_item_manager (GtkListItemManager  *items,
             g_assert_not_reached ();
             break;
         }
+
+      if (tile->widget)
+        n_tile_widgets++;
     }
 
   g_assert_cmpint (section_state, ==, NO_SECTION);
   g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
+  g_assert_cmpint (n_tile_widgets, ==, widget_count_children (widget));
 
   for (i = 0; i < n_trackers; i++)
     {
@@ -197,6 +219,7 @@ check_list_item_manager (GtkListItemManager  *items,
   gtk_list_item_manager_gc_tiles (items);
 
   n_items = 0;
+  n_tile_widgets = 0;
 
   for (tile = gtk_list_item_manager_get_first (items);
        tile != NULL;
@@ -259,10 +282,14 @@ check_list_item_manager (GtkListItemManager  *items,
             g_assert_not_reached ();
             break;
         }
+
+      if (tile->widget)
+        n_tile_widgets++;
     }
 
   g_assert_cmpint (section_state, ==, NO_SECTION);
   g_assert_cmpint (n_items, ==, g_list_model_get_n_items (model));
+  g_assert_cmpint (n_tile_widgets, ==, widget_count_children (widget));
 
   for (i = 0; i < n_trackers; i++)
     {
@@ -343,9 +370,9 @@ test_create_with_items (void)
   source = create_source_model (1, 50);
   selection = gtk_no_selection_new (G_LIST_MODEL (source));
   gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
-  check_list_item_manager (items, NULL, 0);
+  check_list_item_manager (items, widget, NULL, 0);
   gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
-  check_list_item_manager (items, NULL, 0);
+  check_list_item_manager (items, widget, NULL, 0);
 
   g_object_unref (selection);
   gtk_window_destroy (GTK_WINDOW (widget));
@@ -414,7 +441,7 @@ test_exhaustive (void)
         case 0:
           if (g_test_verbose ())
             g_test_message ("GC and checking");
-          check_list_item_manager (items, trackers, N_TRACKERS);
+          check_list_item_manager (items, widget, trackers, N_TRACKERS);
           break;
 
         case 1:
@@ -484,7 +511,7 @@ test_exhaustive (void)
         }
     }
 
-  check_list_item_manager (items, trackers, N_TRACKERS);
+  check_list_item_manager (items, widget, trackers, N_TRACKERS);
 
   for (i = 0; i < N_TRACKERS; i++)
     gtk_list_item_tracker_free (items, trackers[i]);
