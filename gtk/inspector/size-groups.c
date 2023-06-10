@@ -247,7 +247,12 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_box_append (GTK_BOX (box2), label);
 
   dropdown = gtk_drop_down_new_from_strings (modes);
-  g_object_set (dropdown, "margin", 10, NULL);
+  g_object_set (dropdown,
+                "margin-start", 10,
+                "margin-end", 10,
+                "margin-top", 10,
+                "margin-bottom", 10,
+                NULL);
   gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
   gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE_FILL);
   g_object_bind_property (group, "mode",
