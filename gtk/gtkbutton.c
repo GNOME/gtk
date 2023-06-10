@@ -842,7 +842,7 @@ gtk_button_finish_activate (GtkButton *button,
  * This will also clear any previously set labels.
  */
 void
-gtk_button_set_label (GtkButton   *button,
+gtk_button_set_label (GtkButton  *button,
                       const char *label)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
@@ -853,13 +853,18 @@ gtk_button_set_label (GtkButton   *button,
   if (priv->child_type != LABEL_CHILD || priv->child == NULL)
     {
       child = gtk_label_new (NULL);
+      gtk_button_set_child (button,  child);
       if (priv->use_underline)
         {
           gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
           gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
         }
-
-      gtk_button_set_child (button,  child);
+      else
+        {
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
+                                          GTK_ACCESSIBLE_RELATION_LABELLED_BY, child, NULL,
+                                          -1);
+        }
     }
 
   gtk_label_set_label (GTK_LABEL (priv->child), label);
@@ -868,10 +873,6 @@ gtk_button_set_label (GtkButton   *button,
                                             : PANGO_ELLIPSIZE_NONE);
 
   gtk_button_set_child_type (button, LABEL_CHILD);
-
-  gtk_accessible_update_property (GTK_ACCESSIBLE (button),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, label,
-                                  -1);
 
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_LABEL]);
 }

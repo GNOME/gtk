@@ -61,6 +61,10 @@
                 <property name="selectable">False</property>
                 <property name="has-menu">False</property>
                 <property name="can-focus">False</property>
+                <property name="accessible-role">img</property>
+                <accessibility>
+                  <property name="description" translatable="1">The current color</property>
+                </accessibility>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>

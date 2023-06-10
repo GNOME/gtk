@@ -19,10 +19,13 @@
 
 #include "gtkcoloreditorprivate.h"
 
+#include <glib/gi18n-lib.h>
+
 #include "deprecated/gtkcolorchooserprivate.h"
 #include "gtkcolorplaneprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkcolorswatchprivate.h"
+#include "gtkcolorchooserwidgetprivate.h"
 #include "gtkcolorutils.h"
 #include "gtkcolorpickerprivate.h"
 #include "gtkgrid.h"
@@ -159,6 +162,24 @@ entry_text_changed (GtkWidget      *entry,
 }
 
 static void
+update_color (GtkColorEditor *editor,
+              const GdkRGBA  *color)
+{
+  char *name;
+  char *text;
+  name = accessible_color_name (color);
+  text = g_strdup_printf (_("Color: %s"), name);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (editor->swatch),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                  -1);
+  g_free (name);
+  g_free (text);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (editor->swatch), color);
+  gtk_color_scale_set_rgba (GTK_COLOR_SCALE (editor->a_slider), color);
+  entry_set_rgba (editor, color);
+}
+
+static void
 hsv_changed (GtkColorEditor *editor)
 {
   GdkRGBA color;
@@ -172,9 +193,7 @@ hsv_changed (GtkColorEditor *editor)
   gtk_hsv_to_rgb (h, s, v, &color.red, &color.green, &color.blue);
   color.alpha = a;
 
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (editor->swatch), &color);
-  gtk_color_scale_set_rgba (GTK_COLOR_SCALE (editor->a_slider), &color);
-  entry_set_rgba (editor, &color);
+  update_color (editor, &color);
 
   g_object_notify (G_OBJECT (editor), "rgba");
 }
@@ -586,9 +605,7 @@ gtk_color_editor_set_rgba (GtkColorChooser *chooser,
   gtk_adjustment_set_value (editor->v_adj, v);
   gtk_adjustment_set_value (editor->a_adj, color->alpha);
 
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (editor->swatch), color);
-  gtk_color_scale_set_rgba (GTK_COLOR_SCALE (editor->a_slider), color);
-  entry_set_rgba (editor, color);
+  update_color (editor, color);
 
   g_object_notify (G_OBJECT (editor), "rgba");
 }

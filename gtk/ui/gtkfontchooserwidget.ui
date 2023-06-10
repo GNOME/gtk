@@ -63,19 +63,29 @@
                         <property name="activates-default">1</property>
                         <property name="placeholder-text" translatable="yes">Search font name</property>
                         <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+                        <accessibility>
+                          <property name="label" translatable="1">Search font name</property>
+                        </accessibility>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuButton">
+                        <accessibility>
+                          <property name="label" translatable="1">Filters</property>
+                        </accessibility>
                         <property name="icon-name">pan-down-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Filters</property>
                         <property name="popover">
                           <object class="GtkPopover">
                             <child>
                               <object class="GtkBox">
                                 <property name="orientation">1</property>
                                 <property name="spacing">6</property>
+                                <accessibility>
+                                  <relation name="labelled-by">filter_by_label</relation>
+                                </accessibility>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="filter_by_label">
                                     <property name="label" translatable="yes">Filter by</property>
                                     <property name="width-chars">20</property>
                                     <property name="margin-bottom">10</property>
@@ -186,6 +196,9 @@
                             <child>
                               <object class="GtkEntry" id="preview">
                                 <property name="tooltip-text" translatable="yes">Preview Font</property>
+                                <accessibility>
+                                  <property name="label" translatable="yes">Preview Font</property>
+                                </accessibility>
                                 <child>
                                   <object class="GtkEventControllerScroll">
                                     <property name="flags">horizontal</property>
@@ -215,6 +228,9 @@
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
                                 <property name="round-digits">0</property>
+                                <accessibility>
+                                  <relation name="labelled-by">size_label</relation>
+                                </accessibility>
                                 <child>
                                   <object class="GtkEventControllerScroll">
                                     <property name="flags">horizontal</property>
@@ -231,6 +247,9 @@
                               <object class="GtkSpinButton" id="size_spin">
                                 <property name="adjustment">spin_adjustment</property>
                                 <property name="valign">3</property>
+                                <accessibility>
+                                  <relation name="labelled-by">size_label</relation>
+                                </accessibility>
                                 <signal name="output" handler="output_cb"/>
                                 <layout>
                                   <property name="column">2</property>
@@ -252,6 +271,10 @@
                             <property name="vexpand">1</property>
                             <property name="halign">3</property>
                             <property name="valign">3</property>
+                            <property name="accessible-role">alert</property>
+                            <accessibility>
+                              <relation name="labelled-by">no_fonts_label</relation>
+                            </accessibility>
                             <style>
                               <class name="dim-label"/>
                             </style>
@@ -266,7 +289,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="no_fonts_label">
                                 <property name="label" translatable="yes">No Fonts Found</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
@@ -307,6 +330,9 @@
                     <property name="margin-end">12</property>
                     <property name="ellipsize">3</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <property name="description" translatable="1">Font Name</property>
+                    </accessibility>
                     <binding name="label" object="GtkFontChooserWidget">
                       <closure type="gchararray" function="get_font_name">
                         <lookup name="selected-item">selection</lookup>
@@ -324,6 +350,9 @@
                     <property name="tooltip-text" translatable="yes">Preview Font</property>
                     <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
                     <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
+                    <accessibility>
+                      <property name="label" translatable="yes">Preview Font</property>
+                    </accessibility>
                   </object>
                 </child>
                 <child>
@@ -346,6 +375,9 @@
                           <object class="GtkGrid" id="axis_grid">
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
+                            <accessibility>
+                              <property name="label" translatable="1">Font Variation Axes</property>
+                            </accessibility>
                             <child>
                               <object class="GtkLabel" id="size_label2">
                                 <property name="label" translatable="yes">Size</property>
@@ -362,6 +394,9 @@
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
                                 <property name="round-digits">0</property>
+                                <accessibility>
+                                  <relation name="labelled-by">size_label2</relation>
+                                </accessibility>
                                 <layout>
                                   <property name="column">1</property>
                                   <property name="row">0</property>
@@ -373,6 +408,9 @@
                                 <property name="adjustment">spin_adjustment</property>
                                 <property name="valign">3</property>
                                 <signal name="output" handler="output_cb"/>
+                                <accessibility>
+                                  <relation name="labelled-by">size_label2</relation>
+                                </accessibility>
                                 <layout>
                                   <property name="column">2</property>
                                   <property name="row">0</property>
@@ -385,6 +423,9 @@
                           <object class="GtkBox" id="feature_box">
                             <property name="orientation">1</property>
                             <property name="spacing">12</property>
+                            <accessibility>
+                              <property name="label" translatable="1">Font Features</property>
+                            </accessibility>
                           </object>
                         </child>
                       </object>
