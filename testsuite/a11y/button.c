@@ -20,7 +20,8 @@ button_label (void)
   GtkWidget *button = gtk_button_new_with_label ("Hello");
   g_object_ref_sink (button);
 
-  gtk_test_accessible_assert_property (button, GTK_ACCESSIBLE_PROPERTY_LABEL, "Hello");
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_RELATION_LABELLED_BY, gtk_widget_get_first_child (button), NULL);
 
   g_object_unref (button);
 }
@@ -58,7 +59,8 @@ linkbutton_label (void)
   GtkWidget *button = gtk_link_button_new ("Hello");
   g_object_ref_sink (button);
 
-  gtk_test_accessible_assert_property (button, GTK_ACCESSIBLE_PROPERTY_LABEL, "Hello");
+  gtk_test_accessible_assert_relation (GTK_ACCESSIBLE (button),
+                                       GTK_ACCESSIBLE_RELATION_LABELLED_BY, gtk_widget_get_first_child (button), NULL);
 
   g_object_unref (button);
 }

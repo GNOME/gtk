@@ -63,19 +63,29 @@
                         <property name="activates-default">1</property>
                         <property name="placeholder-text" translatable="yes">Search font name</property>
                         <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
+                        <accessibility>
+                          <property name="label" translatable="1">Search font name</property>
+                        </accessibility>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuButton">
+                        <accessibility>
+                          <property name="label" translatable="1">Filters</property>
+                        </accessibility>
                         <property name="icon-name">pan-down-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Filters</property>
                         <property name="popover">
                           <object class="GtkPopover">
                             <child>
                               <object class="GtkBox">
                                 <property name="orientation">1</property>
                                 <property name="spacing">6</property>
+                                <accessibility>
+                                  <relation name="labelled-by">filter_by_label</relation>
+                                </accessibility>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="filter_by_label">
                                     <property name="label" translatable="yes">Filter by</property>
                                     <property name="width-chars">20</property>
                                     <property name="margin-bottom">10</property>
