@@ -433,9 +433,6 @@ test_exhaustive (void)
       gboolean add = FALSE, remove = FALSE;
       guint position, n_items;
 
-      if (g_test_verbose ())
-        print_list_item_manager_tiles (items);
-
       switch (g_test_rand_int_range (0, 6))
       {
         case 0:
@@ -509,6 +506,9 @@ test_exhaustive (void)
         {
           g_list_store_remove (store, position);
         }
+
+      if (g_test_verbose ())
+        print_list_item_manager_tiles (items);
     }
 
   check_list_item_manager (items, widget, trackers, N_TRACKERS);
