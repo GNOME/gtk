@@ -18,7 +18,6 @@
 #include <string.h>
 
 #include "config.h"
-
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
@@ -268,9 +267,9 @@ activate_run (GSimpleAction *action,
 }
 
 static GtkWidget *
-display_image (const char  *format,
-               const char  *resource,
-               char       **label)
+display_image (const char *format,
+               const char *resource,
+               GtkWidget  *label)
 {
   GtkWidget *sw, *image;
 
@@ -280,13 +279,17 @@ display_image (const char  *format,
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), image);
 
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (image),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
+
   return sw;
 }
 
 static GtkWidget *
-display_images (const char  *format,
-                const char  *resource_dir,
-                char       **label)
+display_images (const char *format,
+                const char *resource_dir,
+                GtkWidget  *label)
 {
   char **resources;
   GtkWidget *grid;
@@ -325,15 +328,19 @@ display_images (const char  *format,
 
   g_strfreev (resources);
 
-  *label = g_strdup ("Images");
+  gtk_label_set_label (GTK_LABEL (label), "Images");
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (grid),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
 
   return sw;
 }
 
 static GtkWidget *
-display_text (const char  *format,
-              const char  *resource,
-              char       **label)
+display_text (const char *format,
+              const char *resource,
+              GtkWidget  *label)
 {
   GtkTextBuffer *buffer;
   GtkWidget *textview, *sw;
@@ -368,6 +375,10 @@ display_text (const char  *format,
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
 
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (textview),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
+
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
@@ -378,14 +389,18 @@ display_text (const char  *format,
 }
 
 static GtkWidget *
-display_video (const char  *format,
-               const char  *resource,
-               char       **label)
+display_video (const char *format,
+               const char *resource,
+               GtkWidget  *label)
 {
   GtkWidget *video;
 
   video = gtk_video_new_for_resource (resource);
   gtk_video_set_loop (GTK_VIDEO (video), TRUE);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (video),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
 
   return video;
 }
@@ -408,9 +423,9 @@ display_nothing (const char *resource)
 static struct {
   const char *extension;
   const char *format;
-  GtkWidget * (* display_func) (const char  *format,
-                                const char  *resource,
-                                char       **label);
+  GtkWidget * (* display_func) (const char *format,
+                                const char *resource,
+                                GtkWidget  *label);
 } display_funcs[] = {
   { ".gif", NULL, display_image },
   { ".jpg", NULL, display_image },
@@ -433,7 +448,6 @@ add_data_tab (const char *demoname)
   char **resources;
   GtkWidget *widget, *label;
   guint i, j;
-  char *label_string;
 
   resource_dir = g_strconcat ("/", demoname, NULL);
   resources = g_resources_enumerate_children (resource_dir, 0, NULL);
@@ -453,23 +467,21 @@ add_data_tab (const char *demoname)
             break;
         }
 
-      label_string = NULL;
+      label = gtk_label_new (resources[i]);
 
       if (j < G_N_ELEMENTS (display_funcs))
         widget = display_funcs[j].display_func (display_funcs[j].format,
                                                 resource_name,
-                                                &label_string);
+                                                label);
       else
         widget = display_nothing (resource_name);
 
-      label = gtk_label_new (label_string ? label_string : resources[i]);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
       g_object_set (gtk_notebook_get_page (GTK_NOTEBOOK (notebook), widget),
                     "tab-expand", FALSE,
                     NULL);
 
       g_free (resource_name);
-      g_free (label_string);
     }
 
   g_strfreev (resources);

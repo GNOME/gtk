@@ -189,6 +189,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
 
     picker = gtk_color_dialog_button_new (gtk_color_dialog_new ());
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), picker);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
 
     label = gtk_label_new ("Font:");
@@ -198,6 +199,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
     picker = gtk_font_dialog_button_new (gtk_font_dialog_new ());
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), picker);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 1, 1, 1);
 
     label = gtk_label_new ("File:");
@@ -208,6 +210,9 @@ do_pickers (GtkWidget *do_widget)
 
     picker = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
     button = gtk_button_new_from_icon_name ("document-open-symbolic");
+    gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, "Select File",
+                                    -1);
 
     label = gtk_label_new ("None");
 
@@ -223,6 +228,9 @@ do_pickers (GtkWidget *do_widget)
     gtk_box_append (GTK_BOX (picker), button);
     app_picker = gtk_button_new_from_icon_name ("emblem-system-symbolic");
     gtk_widget_set_halign (app_picker, GTK_ALIGN_END);
+    gtk_accessible_update_property (GTK_ACCESSIBLE (app_picker),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, "Open File",
+                                    -1);
     gtk_widget_set_sensitive (app_picker, FALSE);
     g_signal_connect (app_picker, "clicked", G_CALLBACK (open_app), NULL);
     gtk_box_append (GTK_BOX (picker), app_picker);

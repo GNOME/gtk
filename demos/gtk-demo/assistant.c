@@ -162,6 +162,10 @@ create_page4 (GtkWidget *assistant)
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), progress_bar, GTK_ASSISTANT_PAGE_PROGRESS);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), progress_bar, "Applying changes");
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (progress_bar),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, "Applying changes",
+                                  -1);
+
   /* This prevents the assistant window from being
    * closed while we're "busy" applying changes.
    */

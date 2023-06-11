@@ -60,10 +60,14 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkSearchBar" id="searchbar">
+                <accessibility>
+                  <relation name="labelled-by">search-entry</relation>
+                </accessibility>
                 <property name="key-capture-widget">window</property>
                 <child>
                   <object class="GtkSearchEntry" id="search-entry">
                     <accessibility>
+                      <property name="label" translatable="yes">Search</property>
                       <relation name="controls">listview</relation>
                     </accessibility>
                   </object>
