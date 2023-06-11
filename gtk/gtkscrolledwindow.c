@@ -56,9 +56,9 @@
  * @Title: GtkScrolledWindow
  * @See_also: #GtkScrollable, #GtkViewport, #GtkAdjustment
  *
- * GtkScrolledWindow is a container that accepts a single child widget, makes
+ * GtkScrolledWindow is a container that accepts a single child widget and makes
  * that child scrollable using either internally added scrollbars or externally
- * associated adjustments, and optionally draws a frame around the child.
+ * associated adjustments.
  *
  * Widgets with native scrolling support, i.e. those whose classes implement the
  * #GtkScrollable interface, are added directly. For other types of widget, the
