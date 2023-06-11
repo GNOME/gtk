@@ -831,6 +831,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
+  GtkWidget *image;
   PangoAttrList *attributes;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
@@ -847,6 +848,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   search_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                                 "icon-name", "edit-find-symbolic",
                                 NULL);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (search_button),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Search Shortcuts"),
+                                  -1);
+
   gtk_header_bar_pack_start (GTK_HEADER_BAR (self->header_bar), search_button);
 
   self->main_box = g_object_new (GTK_TYPE_BOX,
@@ -914,6 +920,15 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                 "placeholder-text", _("Search Shortcuts"),
                 "width-chars", 40,
                 NULL);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->search_entry),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Search Shortcuts"),
+                                  -1);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self->search_bar),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->search_entry, NULL,
+                                  -1);
+
   g_signal_connect_object (self->search_entry,
                            "search-changed",
                            G_CALLBACK (gtk_shortcuts_window__entry__changed),
@@ -960,12 +975,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
   gtk_widget_add_css_class (empty, "dim-label");
-  gtk_grid_attach (GTK_GRID (empty),
-                   g_object_new (GTK_TYPE_IMAGE,
-                                 "icon-name", "edit-find-symbolic",
-                                 "pixel-size", 72,
-                                 NULL),
-                   0, 0, 1, 1);
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", "edit-find-symbolic",
+                        "pixel-size", 72,
+                        NULL);
+  gtk_grid_attach (GTK_GRID (empty), image, 0, 0, 1, 1);
   attributes = pango_attr_list_new ();
   pango_attr_list_insert (attributes, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   pango_attr_list_insert (attributes, pango_attr_scale_new (1.44));
@@ -975,6 +989,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                         NULL);
   pango_attr_list_unref (attributes);
   gtk_grid_attach (GTK_GRID (empty), label, 0, 1, 1, 1);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (image),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
+
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", _("Try a different search"),
                         NULL);
