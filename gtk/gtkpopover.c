@@ -133,6 +133,8 @@
 
 #include "gdk/gdksurfaceprivate.h"
 
+#include <string.h> /* memset */
+
 #define MNEMONICS_DELAY 300 /* ms */
 
 #define TAIL_GAP_WIDTH  24
@@ -2192,7 +2194,10 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
       GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (popover));
 
       if (!gtk_widget_compute_bounds (parent, parent, &r))
-        return FALSE;
+        {
+          memset (rect, 0, sizeof (GdkRectangle));
+          return FALSE;
+        }
 
       rect->x = floorf (r.origin.x);
       rect->y = floorf (r.origin.y);
