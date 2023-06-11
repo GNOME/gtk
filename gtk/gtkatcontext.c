@@ -1075,6 +1075,15 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
         return;
     }
 
+  if (names->len == 0)
+    {
+      if (GTK_IS_WIDGET (self->accessible))
+        {
+          const char *tooltip = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
+          if (tooltip)
+            g_ptr_array_add (names, (char *) tooltip);
+        }
+    }
 }
 
 static void
@@ -1147,6 +1156,16 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
 
       if (gtk_boolean_accessible_value_get (value))
         return;
+    }
+
+  if (labels->len == 0)
+    {
+      if (GTK_IS_WIDGET (self->accessible))
+        {
+          const char *tooltip = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
+          if (tooltip)
+            g_ptr_array_add (labels, (char *) tooltip);
+        }
     }
 }
 

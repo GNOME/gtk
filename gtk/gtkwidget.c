@@ -9917,10 +9917,6 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
   priv->tooltip_text = tooltip_text;
   priv->tooltip_markup = tooltip_markup;
 
-  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
-                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, priv->tooltip_text,
-                                  -1);
-
   gtk_widget_set_has_tooltip (widget, priv->tooltip_text != NULL);
   if (_gtk_widget_get_visible (widget))
     gtk_widget_trigger_tooltip_query (widget);
