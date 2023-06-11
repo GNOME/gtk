@@ -1123,10 +1123,8 @@ typedef gboolean (*GskVulkanRenderPassNodeFunc) (GskVulkanRenderPass       *self
                                                  const GskVulkanParseState *state,
                                                  GskRenderNode             *node);
 
-#define N_RENDER_NODES (GSK_MASK_NODE + 1)
-
 /* TODO: implement remaining nodes */
-static const GskVulkanRenderPassNodeFunc nodes_vtable[N_RENDER_NODES] = {
+static const GskVulkanRenderPassNodeFunc nodes_vtable[] = {
   [GSK_NOT_A_RENDER_NODE] = gsk_vulkan_render_pass_implode,
   [GSK_CONTAINER_NODE] = gsk_vulkan_render_pass_add_container_node,
   [GSK_CAIRO_NODE] = gsk_vulkan_render_pass_add_cairo_node,
@@ -1173,7 +1171,10 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
     return;
 
   node_type = gsk_render_node_get_node_type (node);
-  node_func = nodes_vtable[node_type];
+  if (node_type < G_N_ELEMENTS (nodes_vtable))
+    node_func = nodes_vtable[node_type];
+  else
+    node_func = NULL;
 
   if (node_func)
     {
