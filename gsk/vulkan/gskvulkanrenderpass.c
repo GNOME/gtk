@@ -355,9 +355,6 @@ gsk_vulkan_render_pass_add_container_node (GskVulkanRenderPass       *self,
                                            const GskVulkanParseState *state,
                                            GskRenderNode             *node)
 {
-  if (!gsk_vulkan_clip_intersects_rect (&state->clip, &state->offset, &node->bounds))
-    return TRUE;
-
   for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
     gsk_vulkan_render_pass_add_node (self, render, state, gsk_container_node_get_child (node, i));
 
@@ -1169,6 +1166,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
   GskVulkanRenderPassNodeFunc node_func;
   GskRenderNodeType node_type;
   gboolean fallback = FALSE;
+
+  /* This catches the corner cases of empty nodes, so after this check
+   * there's quaranteed to be at least 1 pixel that needs to be drawn */
+  if (!gsk_vulkan_clip_intersects_rect (&state->clip, &state->offset, &node->bounds))
+    return;
 
   node_type = gsk_render_node_get_node_type (node);
   node_func = nodes_vtable[node_type];
