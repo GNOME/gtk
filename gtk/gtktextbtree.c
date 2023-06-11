@@ -512,6 +512,7 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
       tree->insert_mark = NULL;
       g_object_unref (tree->selection_bound_mark);
       tree->selection_bound_mark = NULL;
+      tree->chars_changed_stamp = 0;
 
       g_free (tree);
     }
