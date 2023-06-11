@@ -37,35 +37,35 @@ GType                   gsk_path_builder_get_type               (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskPathBuilder *        gsk_path_builder_new                    (void);
 GDK_AVAILABLE_IN_ALL
-GskPathBuilder *        gsk_path_builder_ref                    (GskPathBuilder         *builder);
+GskPathBuilder *        gsk_path_builder_ref                    (GskPathBuilder         *self);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_unref                  (GskPathBuilder         *builder);
+void                    gsk_path_builder_unref                  (GskPathBuilder         *self);
 GDK_AVAILABLE_IN_ALL
-GskPath *               gsk_path_builder_free_to_path           (GskPathBuilder         *builder) G_GNUC_WARN_UNUSED_RESULT;
+GskPath *               gsk_path_builder_free_to_path           (GskPathBuilder         *self) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-GskPath *               gsk_path_builder_to_path                (GskPathBuilder         *builder) G_GNUC_WARN_UNUSED_RESULT;
+GskPath *               gsk_path_builder_to_path                (GskPathBuilder         *self) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_add_path               (GskPathBuilder         *builder,
+void                    gsk_path_builder_add_path               (GskPathBuilder         *self,
                                                                  GskPath                *path);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_add_rect               (GskPathBuilder         *builder,
+void                    gsk_path_builder_add_rect               (GskPathBuilder         *self,
                                                                  const graphene_rect_t  *rect);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_add_circle             (GskPathBuilder         *builder,
+void                    gsk_path_builder_add_circle             (GskPathBuilder         *self,
                                                                  const graphene_point_t *center,
                                                                  float                   radius);
 
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_move_to                (GskPathBuilder         *builder,
+void                    gsk_path_builder_move_to                (GskPathBuilder         *self,
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_line_to                (GskPathBuilder         *builder,
+void                    gsk_path_builder_line_to                (GskPathBuilder         *self,
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_curve_to               (GskPathBuilder         *builder,
+void                    gsk_path_builder_curve_to               (GskPathBuilder         *self,
                                                                  float                   x1,
                                                                  float                   y1,
                                                                  float                   x2,
@@ -73,7 +73,7 @@ void                    gsk_path_builder_curve_to               (GskPathBuilder 
                                                                  float                   x3,
                                                                  float                   y3);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_close                  (GskPathBuilder         *builder);
+void                    gsk_path_builder_close                  (GskPathBuilder         *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathBuilder, gsk_path_builder_unref)
 

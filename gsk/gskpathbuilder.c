@@ -99,21 +99,21 @@ G_DEFINE_BOXED_TYPE (GskPathBuilder,
 GskPathBuilder *
 gsk_path_builder_new (void)
 {
-  GskPathBuilder *builder;
+  GskPathBuilder *self;
 
-  builder = g_slice_new0 (GskPathBuilder);
-  builder->ref_count = 1;
+  self = g_slice_new0 (GskPathBuilder);
+  self->ref_count = 1;
 
-  builder->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
-  builder->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
-  return builder;
+  self->ops = g_array_new (FALSE, FALSE, sizeof (GskStandardOperation));
+  self->points = g_array_new (FALSE, FALSE, sizeof (graphene_point_t));
+  return self;
 }
 
 /**
  * gsk_path_builder_ref:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  *
- * Acquires a reference on the given @builder.
+ * Acquires a reference on the given builder.
  *
  * This function is intended primarily for bindings. #GskPathBuilder objects
  * should not be kept around.
@@ -122,176 +122,176 @@ gsk_path_builder_new (void)
  *   its reference count increased
  */
 GskPathBuilder *
-gsk_path_builder_ref (GskPathBuilder *builder)
+gsk_path_builder_ref (GskPathBuilder *self)
 {
-  g_return_val_if_fail (builder != NULL, NULL);
-  g_return_val_if_fail (builder->ref_count > 0, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  builder->ref_count += 1;
+  self->ref_count += 1;
 
-  return builder;
+  return self;
 }
 
 static void
-gsk_path_builder_append_current (GskPathBuilder         *builder,
+gsk_path_builder_append_current (GskPathBuilder         *self,
                                  GskPathOperation        op,
                                  gsize                   n_points,
                                  const graphene_point_t *points)
 {
-  g_assert (builder->ops->len > 0);
-  g_assert (builder->points->len > 0);
+  g_assert (self->ops->len > 0);
+  g_assert (self->points->len > 0);
   g_assert (n_points > 0);
 
-  g_array_append_vals (builder->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
-  g_array_append_vals (builder->points, points, n_points);
+  g_array_append_vals (self->ops, &(GskStandardOperation) { op, builder->points->len - 1 }, 1);
+  g_array_append_vals (self->points, points, n_points);
 }
 
 static void
-gsk_path_builder_end_current (GskPathBuilder *builder)
+gsk_path_builder_end_current (GskPathBuilder *self)
 {
   GskContour *contour;
 
-  if (builder->ops->len == 0)
+  if (self->ops->len == 0)
    return;
 
-  contour = gsk_standard_contour_new (builder->flags,
-                                      (GskStandardOperation *) builder->ops->data,
-                                      builder->ops->len,
-                                      (graphene_point_t *) builder->points->data,
-                                      builder->points->len);
+  contour = gsk_standard_contour_new (self->flags,
+                                      (GskStandardOperation *) self->ops->data,
+                                      self->ops->len,
+                                      (graphene_point_t *) self->points->data,
+                                      self->points->len);
 
-  g_array_set_size (builder->ops, 0);
-  g_array_set_size (builder->points, 0);
+  g_array_set_size (self->ops, 0);
+  g_array_set_size (self->points, 0);
 
   /* do this at the end to avoid inflooping when add_contour calls back here */
-  gsk_path_builder_add_contour (builder, contour);
+  gsk_path_builder_add_contour (self, contour);
 }
 
 static void
-gsk_path_builder_clear (GskPathBuilder *builder)
+gsk_path_builder_clear (GskPathBuilder *self)
 {
-  gsk_path_builder_end_current (builder);
+  gsk_path_builder_end_current (self);
 
-  g_slist_free_full (builder->contours, g_free);
-  builder->contours = NULL;
+  g_slist_free_full (self->contours, g_free);
+  self->contours = NULL;
 }
 
 /**
  * gsk_path_builder_unref:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  *
- * Releases a reference on the given @builder.
+ * Releases a reference on the given builder.
  */
 void
-gsk_path_builder_unref (GskPathBuilder *builder)
+gsk_path_builder_unref (GskPathBuilder *self)
 {
-  g_return_if_fail (builder != NULL);
-  g_return_if_fail (builder->ref_count > 0);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (self->ref_count > 0);
 
-  builder->ref_count -= 1;
+  self->ref_count -= 1;
 
-  if (builder->ref_count > 0)
+  if (self->ref_count > 0)
     return;
 
-  gsk_path_builder_clear (builder);
-  g_array_unref (builder->ops);
-  g_array_unref (builder->points);
-  g_slice_free (GskPathBuilder, builder);
+  gsk_path_builder_clear (self);
+  g_array_unref (self->ops);
+  g_array_unref (self->points);
+  g_slice_free (GskPathBuilder, self);
 }
 
 /**
  * gsk_path_builder_free_to_path: (skip)
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  *
  * Creates a new #GskPath from the current state of the
- * given @builder, and frees the @builder instance.
+ * given builder, and frees the @builder instance.
  *
  * Returns: (transfer full): the newly created #GskPath
- *   with all the contours added to @builder
+ *   with all the contours added to the builder
  */
 GskPath *
-gsk_path_builder_free_to_path (GskPathBuilder *builder)
+gsk_path_builder_free_to_path (GskPathBuilder *self)
 {
   GskPath *res;
 
-  g_return_val_if_fail (builder != NULL, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
 
-  res = gsk_path_builder_to_path (builder);
+  res = gsk_path_builder_to_path (self);
 
-  gsk_path_builder_unref (builder);
+  gsk_path_builder_unref (self);
 
   return res;
 }
 
 /**
  * gsk_path_builder_to_path:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  *
- * Creates a new #GskPath from the given @builder.
+ * Creates a new #GskPath from the given builder.
  *
  * The given #GskPathBuilder is reset once this function returns;
- * you cannot call this function multiple times on the same @builder instance.
+ * you cannot call this function multiple times on the same builder instance.
  *
  * This function is intended primarily for bindings. C code should use
  * gsk_path_builder_free_to_path().
  *
  * Returns: (transfer full): the newly created #GskPath
- *   with all the contours added to @builder
+ *   with all the contours added to the builder
  */
 GskPath *
-gsk_path_builder_to_path (GskPathBuilder *builder)
+gsk_path_builder_to_path (GskPathBuilder *self)
 {
   GskPath *path;
 
-  g_return_val_if_fail (builder != NULL, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
 
-  gsk_path_builder_end_current (builder);
+  gsk_path_builder_end_current (self);
 
-  builder->contours = g_slist_reverse (builder->contours);
+  self->contours = g_slist_reverse (builder->contours);
 
-  path = gsk_path_new_from_contours (builder->contours);
+  path = gsk_path_new_from_contours (self->contours);
 
-  gsk_path_builder_clear (builder);
+  gsk_path_builder_clear (self);
 
   return path;
 }
 
 void
-gsk_path_builder_add_contour (GskPathBuilder *builder,
+gsk_path_builder_add_contour (GskPathBuilder *self,
                               GskContour     *contour)
 {
-  gsk_path_builder_end_current (builder);
+  gsk_path_builder_end_current (self);
 
-  builder->contours = g_slist_prepend (builder->contours, contour);
+  self->contours = g_slist_prepend (builder->contours, contour);
 }
 
 /**
  * gsk_path_builder_add_path:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  * @path: (transfer none): the path to append
  *
- * Appends all of @path to @builder.
+ * Appends all of @path to the builder.
  **/
 void
-gsk_path_builder_add_path (GskPathBuilder *builder,
+gsk_path_builder_add_path (GskPathBuilder *self,
                            GskPath        *path)
 {
   gsize i;
 
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
 
   for (i = 0; i < gsk_path_get_n_contours (path); i++)
     {
       const GskContour *contour = gsk_path_get_contour (path, i);
 
-      gsk_path_builder_add_contour (builder, gsk_contour_dup (contour));
+      gsk_path_builder_add_contour (self, gsk_contour_dup (contour));
     }
 }
 
 /**
  * gsk_path_builder_add_rect:
- * @builder: A #GskPathBuilder
+ * @self: A #GskPathBuilder
  * @rect: The rectangle to create a path for
  *
  * Adds @rect as a new contour to the path built by the builder.
@@ -303,43 +303,43 @@ gsk_path_builder_add_path (GskPathBuilder *builder,
  * horizontal or vertical line. If both are 0, it'll be a closed dot.
  **/
 void
-gsk_path_builder_add_rect (GskPathBuilder        *builder,
+gsk_path_builder_add_rect (GskPathBuilder        *self,
                            const graphene_rect_t *rect)
 {
   GskContour *contour;
 
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
 
   contour = gsk_rect_contour_new (rect);
-  gsk_path_builder_add_contour (builder, contour);
+  gsk_path_builder_add_contour (self, contour);
 }
 
 /**
  * gsk_path_builder_add_circle:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  * @center: the center of the circle
  * @radius: the radius of the circle
  *
  * Adds a circle with the @center and @radius.
  **/
 void
-gsk_path_builder_add_circle (GskPathBuilder         *builder,
+gsk_path_builder_add_circle (GskPathBuilder         *self,
                              const graphene_point_t *center,
                              float                   radius)
 {
   GskContour *contour;
 
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
   g_return_if_fail (center != NULL);
   g_return_if_fail (radius > 0);
 
   contour = gsk_circle_contour_new (center, radius, 0, 360);
-  gsk_path_builder_add_contour (builder, contour);
+  gsk_path_builder_add_contour (self, contour);
 }
 
 /**
  * gsk_path_builder_move_to:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  * @x: x coordinate
  * @y: y coordinate
  *
@@ -350,22 +350,22 @@ gsk_path_builder_add_circle (GskPathBuilder         *builder,
  * will start a new contour.
  **/
 void
-gsk_path_builder_move_to (GskPathBuilder *builder,
+gsk_path_builder_move_to (GskPathBuilder *self,
                           float           x,
                           float           y)
 {
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
 
-  gsk_path_builder_end_current (builder);
+  gsk_path_builder_end_current (self);
 
-  builder->flags = GSK_PATH_FLAT;
-  g_array_append_vals (builder->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
-  g_array_append_val (builder->points, GRAPHENE_POINT_INIT(x, y));
+  self->flags = GSK_PATH_FLAT;
+  g_array_append_vals (self->ops, &(GskStandardOperation) { GSK_PATH_MOVE, 0 }, 1);
+  g_array_append_val (self->points, GRAPHENE_POINT_INIT(x, y));
 }
 
 /**
  * gsk_path_builder_line_to:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  * @x: x coordinate
  * @y: y coordinate
  *
@@ -373,24 +373,24 @@ gsk_path_builder_move_to (GskPathBuilder *builder,
  * point.
  **/
 void
-gsk_path_builder_line_to (GskPathBuilder *builder,
+gsk_path_builder_line_to (GskPathBuilder *self,
                           float           x,
                           float           y)
 {
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
 
-  if (builder->ops->len == 0)
+  if (self->ops->len == 0)
     {
-      gsk_path_builder_move_to (builder, x, y);
+      gsk_path_builder_move_to (self, x, y);
       return;
     }
 
   /* skip the line if it goes to the same point */
-  if (graphene_point_equal (&g_array_index (builder->points, graphene_point_t, builder->points->len - 1),
+  if (graphene_point_equal (&g_array_index (self->points, graphene_point_t, builder->points->len - 1),
                             &GRAPHENE_POINT_INIT (x, y)))
     return;
 
-  gsk_path_builder_append_current (builder,
+  gsk_path_builder_append_current (self,
                                    GSK_PATH_LINE,
                                    1, (graphene_point_t[1]) {
                                      GRAPHENE_POINT_INIT (x, y)
@@ -399,7 +399,7 @@ gsk_path_builder_line_to (GskPathBuilder *builder,
 
 /**
  * gsk_path_builder_curve_to:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
  * @x2: x coordinate of second control point
@@ -412,7 +412,7 @@ gsk_path_builder_line_to (GskPathBuilder *builder,
  * points.
  **/
 void
-gsk_path_builder_curve_to (GskPathBuilder *builder,
+gsk_path_builder_curve_to (GskPathBuilder *self,
                            float           x1,
                            float           y1,
                            float           x2,
@@ -420,13 +420,13 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
                            float           x3,
                            float           y3)
 {
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
 
-  if (builder->ops->len == 0)
-    gsk_path_builder_move_to (builder, x1, y1);
+  if (self->ops->len == 0)
+    gsk_path_builder_move_to (self, x1, y1);
 
-  builder->flags &= ~GSK_PATH_FLAT;
-  gsk_path_builder_append_current (builder,
+  self->flags &= ~GSK_PATH_FLAT;
+  gsk_path_builder_append_current (self,
                                    GSK_PATH_CURVE,
                                    3, (graphene_point_t[3]) {
                                      GRAPHENE_POINT_INIT (x1, y1),
@@ -437,7 +437,7 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
 
 /**
  * gsk_path_builder_close:
- * @builder: a #GskPathBuilder
+ * @self: a #GskPathBuilder
  *
  * Ends the current contour with a line back to the start point.
  *
@@ -448,20 +448,20 @@ gsk_path_builder_curve_to (GskPathBuilder *builder,
  * via the line join, and not ended with line caps.
  **/
 void
-gsk_path_builder_close (GskPathBuilder *builder)
+gsk_path_builder_close (GskPathBuilder *self)
 {
-  g_return_if_fail (builder != NULL);
+  g_return_if_fail (self != NULL);
 
-  if (builder->ops->len == 0)
+  if (self->ops->len == 0)
     return;
 
-  builder->flags |= GSK_PATH_CLOSED;
-  gsk_path_builder_append_current (builder,
+  self->flags |= GSK_PATH_CLOSED;
+  gsk_path_builder_append_current (self,
                                    GSK_PATH_CLOSE,
                                    1, (graphene_point_t[1]) {
-                                     g_array_index (builder->points, graphene_point_t, 0)
+                                     g_array_index (self->points, graphene_point_t, 0)
                                    });
 
-  gsk_path_builder_end_current (builder);
+  gsk_path_builder_end_current (self);
 }
 
