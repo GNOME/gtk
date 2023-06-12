@@ -23,6 +23,9 @@
 
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
+#include "gskstrokeprivate.h"
+
+#include "gdk/gdkprivate.h"
 
 /**
  * SECTION:gskpath
@@ -37,6 +40,7 @@
  * the types it represents. Instead, new #GskPath have to be created.
  * The #GskPathBuilder structure is meant to help in this endeavor.
  */
+
 
 struct _GskPath
 {
