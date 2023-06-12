@@ -1137,7 +1137,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
       if (i == 0)
         {
           header = gtk_list_tile_get_previous_skip (tile);
-          if (!gtk_list_tile_is_header (header))
+          if (header && !gtk_list_tile_is_header (header))
             header = NULL;
         }
       else

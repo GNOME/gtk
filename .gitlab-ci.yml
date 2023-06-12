@@ -403,8 +403,9 @@ asan-build:
     - .gitlab-ci/run-tests.sh _build wayland_gles
     - .gitlab-ci/run-tests.sh _build x11
   artifacts:
+    when: always
     paths:
-      - _build/meson-logs
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 reference:
   image: $FEDORA_IMAGE
