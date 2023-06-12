@@ -358,6 +358,7 @@ tests = [
   ['dash'],
   ['path'],
   ['path-special-cases'],
+  ['path-stroke'],
   ['transform'],
   ['shader'],
 ]
