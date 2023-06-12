@@ -105,6 +105,9 @@
                                             <property name="width-chars">45</property>
                                             <property name="hexpand">1</property>
                                             <property name="halign">3</property>
+                                            <accessibility>
+                                              <property name="label" translatable="1">Search</property>
+                                            </accessibility>
                                             <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                             <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                           </object>
@@ -283,6 +286,9 @@
                 <child>
                   <object class="GtkDropDown" id="filter_combo">
                     <property name="tooltip-text" translatable="yes">Select which types of files are shown</property>
+                    <accessibility>
+                      <property name="label" translatable="1">Filter</property>
+                    </accessibility>
                     <property name="focus-on-click">0</property>
                     <property name="valign">1</property>
                     <signal name="notify::selected" handler="filter_combo_changed" swapped="no"/>

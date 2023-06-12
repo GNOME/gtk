@@ -798,6 +798,11 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
       GtkWidget *popover;
 
       popover = gtk_popover_menu_new_from_model (menu_model);
+
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (popover),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button, NULL,
+                                      -1);
+
       gtk_menu_button_set_popover (menu_button, popover);
     }
   else

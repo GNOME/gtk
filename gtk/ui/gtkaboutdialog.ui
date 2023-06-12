@@ -11,6 +11,9 @@
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="visible">0</property>
             <property name="stack">stack</property>
+            <accessibility>
+              <property name="label" translatable="1">Pages</property>
+            </accessibility>
           </object>
         </child>
       </object>
@@ -36,6 +39,9 @@
               <object class="GtkImage" id="logo_image">
                 <property name="icon-name">image-missing</property>
                 <property name="icon-size">2</property>
+                <accessibility>
+                  <property name="label" translatable="1">Logo</property>
+                </accessibility>
                 <style>
                   <class name="icon-dropshadow"/>
                 </style>
@@ -146,6 +152,9 @@
                                     <property name="margin-end">5</property>
                                     <property name="margin-top">5</property>
                                     <property name="margin-bottom">5</property>
+                                    <accessibility>
+                                      <property name="label" translatable="1">Credits</property>
+                                    </accessibility>
                                   </object>
                                 </child>
                               </object>
@@ -176,6 +185,9 @@
                                 <property name="left-margin">8</property>
                                 <property name="right-margin">8</property>
                                 <property name="cursor-visible">0</property>
+                                <accessibility>
+                                  <property name="label" translatable="1">License</property>
+                                </accessibility>
                                 <child>
                                   <object class="GtkGestureClick">
                                     <signal name="released" handler="text_view_released" swapped="no"/>
@@ -221,6 +233,9 @@
                                 <property name="top-margin">5</property>
                                 <property name="bottom-margin">5</property>
                                 <property name="cursor-visible">0</property>
+                                <accessibility>
+                                  <property name="label" translatable="1">System Information</property>
+                                </accessibility>
                                 <child>
                                   <object class="GtkGestureClick">
                                     <signal name="released" handler="text_view_released" swapped="no"/>

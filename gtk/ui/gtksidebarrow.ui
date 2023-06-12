@@ -19,6 +19,9 @@
                 <style>
                   <class name="sidebar-icon"/>
                 </style>
+                <accessibility>
+                  <relation name="labelled-by">label_widget</relation>
+                </accessibility>
               </object>
             </child>
             <child>

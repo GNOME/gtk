@@ -68,6 +68,9 @@ do_password_entry (GtkWidget *do_widget)
                     "placeholder-text", "Password",
                     "activates-default", TRUE,
                     NULL);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Password",
+                                      -1);
       g_signal_connect (entry, "notify::text", G_CALLBACK (update_button), NULL);
       gtk_box_append (GTK_BOX (box), entry);
 
@@ -77,6 +80,9 @@ do_password_entry (GtkWidget *do_widget)
                     "placeholder-text", "Confirm",
                     "activates-default", TRUE,
                     NULL);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (entry2),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Confirm",
+                                      -1);
       g_signal_connect (entry2, "notify::text", G_CALLBACK (update_button), NULL);
       gtk_box_append (GTK_BOX (box), entry2);
 

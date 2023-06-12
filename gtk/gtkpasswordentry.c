@@ -208,7 +208,10 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   g_signal_connect_swapped (entry->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
   g_signal_connect_swapped (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
 
-  entry->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
+  entry->icon = g_object_new (GTK_TYPE_IMAGE,
+                              "icon-name", "caps-lock-symbolic",
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_ALERT,
+                              NULL);
   gtk_widget_set_tooltip_text (entry->icon, _("Caps Lock is on"));
   gtk_widget_add_css_class (entry->icon, "caps-lock-indicator");
   gtk_widget_set_cursor (entry->icon, gtk_widget_get_cursor (entry->entry));

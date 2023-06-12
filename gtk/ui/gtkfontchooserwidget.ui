@@ -286,6 +286,9 @@
                                   <property name="column">0</property>
                                   <property name="row">0</property>
                                 </layout>
+                                <accessibility>
+                                  <relation name="labelled-by">no_fonts_label</relation>
+                                </accessibility>
                               </object>
                             </child>
                             <child>

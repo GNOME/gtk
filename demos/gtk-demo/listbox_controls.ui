@@ -49,6 +49,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
                                 <property name="hexpand">1</property>
+                                <property name="mnemonic-widget">switch</property>
                               </object>
                             </child>
                             <child>
@@ -73,6 +74,7 @@
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
                                 <property name="hexpand">1</property>
+                                <property name="mnemonic-widget">check</property>
                               </object>
                             </child>
                             <child>
@@ -110,6 +112,7 @@
                                 <property name="margin-start">10</property>
                                 <property name="margin-end">10</property>
                                 <property name="opacity">0</property>
+                                <property name="accessible-role">status</property>
                               </object>
                             </child>
                           </object>
@@ -150,10 +153,11 @@
                                   <property name="halign">start</property>
                                   <property name="valign">center</property>
                                   <property name="hexpand">1</property>
+                                  <property name="mnemonic-widget">scale</property>
                                 </object>
                               </child>
                               <child>
-                                <object class="GtkScale">
+                                <object class="GtkScale" id="scale">
                                   <property name="halign">end</property>
                                   <property name="valign">center</property>
                                   <property name="draw-value">0</property>
@@ -185,10 +189,11 @@
                                   <property name="halign">start</property>
                                   <property name="valign">center</property>
                                   <property name="hexpand">1</property>
+                                  <property name="mnemonic-widget">spin</property>
                                 </object>
                               </child>
                               <child>
-                                <object class="GtkSpinButton">
+                                <object class="GtkSpinButton" id="spin">
                                   <property name="halign">end</property>
                                   <property name="valign">center</property>
                                   <property name="adjustment">
@@ -217,10 +222,11 @@
                                   <property name="halign">start</property>
                                   <property name="valign">center</property>
                                   <property name="hexpand">1</property>
+                                  <property name="mnemonic-widget">dropdown</property>
                                 </object>
                               </child>
                               <child>
-                                <object class="GtkDropDown">
+                                <object class="GtkDropDown" id="dropdown">
                                   <property name="halign">end</property>
                                   <property name="valign">center</property>
                                   <property name="model">
@@ -252,10 +258,11 @@
                                   <property name="halign">start</property>
                                   <property name="valign">center</property>
                                   <property name="hexpand">1</property>
+                                  <property name="mnemonic-widget">entry</property>
                                 </object>
                               </child>
                               <child>
-                                <object class="GtkEntry">
+                                <object class="GtkEntry" id="entry">
                                   <property name="halign">end</property>
                                   <property name="valign">center</property>
                                   <property name="placeholder-text">Type here…</property>
