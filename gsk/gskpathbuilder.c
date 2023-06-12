@@ -423,60 +423,13 @@ void
 gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                                    const GskRoundedRect *rect)
 {
-  const float weight = sqrt(0.5f);
+  GskContour *contour;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (rect != NULL);
 
-  gsk_path_builder_move_to (self,
-                            rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                            rect->bounds.origin.y);
-  /* top */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width,
-                            rect->bounds.origin.y);
-  /* topright corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height,
-                             weight);
-  /* right */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->bounds.size.width,
-                            rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
-  /* bottomright corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             weight);
-  /* bottom */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                            rect->bounds.origin.y + rect->bounds.size.height);
-  /* bottomleft corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                             weight);
-  /* left */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x,
-                            rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
-  /* topleft corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y,
-                             rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                             rect->bounds.origin.y,
-                             weight);
-  /* done */
-  gsk_path_builder_close (self);
+  contour = gsk_rounded_rect_contour_new (rect);
+  gsk_path_builder_add_contour (self, contour);
 }
 
 /**
