@@ -40,6 +40,7 @@
  * The `GskPathBuilder` structure is meant to help in this endeavor.
  */
 
+
 struct _GskPath
 {
   /*< private >*/
