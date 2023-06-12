@@ -314,13 +314,15 @@ display_images (const char *format,
     {
       char *resource_name;
       GtkWidget *box;
+      GtkWidget *image_label;
 
       resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
 
-      widget = display_image (NULL, resource_name, NULL);
+      image_label = gtk_label_new (resources[i]);
+      widget = display_image (NULL, resource_name, image_label);
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_box_append (GTK_BOX (box), widget);
-      gtk_box_append (GTK_BOX (box), gtk_label_new (resources[i]));
+      gtk_box_append (GTK_BOX (box), image_label);
       gtk_flow_box_insert (GTK_FLOW_BOX (grid), box, -1);
 
       g_free (resource_name);
