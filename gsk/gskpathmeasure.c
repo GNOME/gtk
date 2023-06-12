@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gskpathmeasure.h"
+#include "gskpathbuilder.h"
 
 #include "gskpathbuilder.h"
 #include "gskpathprivate.h"
