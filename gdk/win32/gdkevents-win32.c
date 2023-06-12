@@ -2734,6 +2734,10 @@ gdk_event_translate (MSG *msg,
       if (GDK_IS_DRAG_SURFACE (window) ||
           _gdk_modal_blocked (window))
         {
+          /* Focus the modal window */
+          GdkSurface *modal_window = _gdk_modal_current ();
+          if (modal_window != NULL)
+            SetFocus (GDK_SURFACE_HWND (modal_window));
           *ret_valp = MA_NOACTIVATE;
           return_val = TRUE;
         }
@@ -2744,6 +2748,10 @@ gdk_event_translate (MSG *msg,
       if (GDK_IS_DRAG_SURFACE (window) ||
           _gdk_modal_blocked (window))
         {
+          /* Focus the modal window */
+          GdkSurface *modal_window = _gdk_modal_current ();
+          if (modal_window != NULL)
+            SetFocus (GDK_SURFACE_HWND (modal_window));
           *ret_valp = PA_NOACTIVATE;
           return_val = TRUE;
         }
