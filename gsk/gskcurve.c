@@ -228,7 +228,7 @@ gsk_curve_curve_init_from_points (GskCurveCurve          *self,
   self->has_coefficients = FALSE;
   memcpy (self->points, pts, sizeof (graphene_point_t) * 4);
 }
-                                  
+
 static void
 gsk_curve_curve_init (GskCurve  *curve,
                       gskpathop  op)
@@ -883,6 +883,7 @@ void
 gsk_curve_init (GskCurve  *curve,
                 gskpathop  op)
 {
+  memset (curve, 0, sizeof (GskCurve));
   get_class (gsk_pathop_op (op))->init (curve, op);
 }
 
@@ -893,6 +894,7 @@ gsk_curve_init_foreach (GskCurve               *curve,
                         gsize                   n_pts,
                         float                   weight)
 {
+  memset (curve, 0, sizeof (GskCurve));
   get_class (op)->init_foreach (curve, op, pts, n_pts, weight);
 }
 
