@@ -258,6 +258,8 @@ test_rsvg_parse (void)
               gsk_path_unref (path);
 
               g_assert_cmpstr (string, ==, string2);
+
+              g_free (string2);
             }
 
           path = gsk_path_parse (string);
