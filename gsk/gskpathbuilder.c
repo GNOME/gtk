@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <math.h>
+
 #include "gskpathbuilder.h"
 
 #include "gskpathprivate.h"
@@ -854,16 +856,18 @@ arc_segment (GskPathBuilder *self,
                              cy + sin_phi * x3 + cos_phi * y3);
 }
 
-#ifndef HAVE_SINCOS
 static inline void
-sincos (double angle,
-        double *y,
-        double *x)
+_sincos (double angle,
+         double *y,
+         double *x)
 {
+#ifdef HAVE_SINCOS
+  sincos (angle, y, x);
+#else
   *x = cos (angle);
   *y = sin (angle);
-}
 #endif
+}
 
 void
 gsk_path_builder_svg_arc_to (GskPathBuilder *self,
@@ -912,7 +916,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
   y2 = y;
 
   phi = x_axis_rotation * M_PI / 180.0;
-  sincos (phi, &sin_phi, &cos_phi);
+  _sincos (phi, &sin_phi, &cos_phi);
 
   rx = fabs (rx);
   ry = fabs (ry);
@@ -975,7 +979,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
   n_segs = ceil (fabs (delta_theta / (M_PI_2 + 0.001)));
   d_theta = delta_theta / n_segs;
   theta = theta1;
-  sincos (theta1, &sin_th1, &cos_th1);
+  _sincos (theta1, &sin_th1, &cos_th1);
 
   th_half = d_theta / 2;
   t = (8.0 / 3.0) * sin (th_half / 2) * sin (th_half / 2) / sin (th_half);
@@ -986,7 +990,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
       theta1 = theta + d_theta;
       sin_th0 = sin_th1;
       cos_th0 = cos_th1;
-      sincos (theta1, &sin_th1, &cos_th1);
+      _sincos (theta1, &sin_th1, &cos_th1);
       arc_segment (self,
                    cx, cy, rx, ry,
                    sin_phi, cos_phi,
