@@ -5141,6 +5141,21 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
         }
     }
 
+  /* There is no specific capability for pads, return
+   * them anyways if all devices are requested
+   */
+  if (capabilities == GDK_SEAT_CAPABILITY_ALL)
+    {
+      GList *l;
+
+      for (l = wayland_seat->tablet_pads; l; l = l->next)
+        {
+          GdkWaylandTabletPadData *pad = l->data;
+
+          slaves = g_list_prepend (slaves, pad->device);
+        }
+    }
+
   return slaves;
 }
 
