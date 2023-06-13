@@ -2921,13 +2921,17 @@ _gdk_wayland_seat_remove_tablet_pad (GdkWaylandSeat          *seat,
 
   seat->tablet_pads = g_list_remove (seat->tablet_pads, pad);
 
-  device_manager->devices =
-    g_list_remove (device_manager->devices, pad->device);
-  g_signal_emit_by_name (device_manager, "device-removed", pad->device);
+  if (pad->device)
+    {
+      device_manager->devices =
+        g_list_remove (device_manager->devices, pad->device);
+      g_signal_emit_by_name (device_manager, "device-removed", pad->device);
 
-  _gdk_device_set_associated_device (pad->device, NULL);
+      _gdk_device_set_associated_device (pad->device, NULL);
 
-  g_object_unref (pad->device);
+      g_object_unref (pad->device);
+    }
+
   g_free (pad);
 }
 
@@ -4439,27 +4443,8 @@ static void
 tablet_pad_handle_done (void                     *data,
                         struct zwp_tablet_pad_v2 *wp_tablet_pad)
 {
-  GdkWaylandTabletPadData *pad = data;
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
-  GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
-
   GDK_NOTE (EVENTS,
             g_message ("tablet pad handle done, pad = %p", wp_tablet_pad));
-
-  pad->device =
-    g_object_new (GDK_TYPE_WAYLAND_DEVICE_PAD,
-                  "name", "Pad device",
-                  "type", GDK_DEVICE_TYPE_SLAVE,
-                  "input-source", GDK_SOURCE_TABLET_PAD,
-                  "input-mode", GDK_MODE_SCREEN,
-                  "display", gdk_seat_get_display (pad->seat),
-                  "device-manager", device_manager,
-                  "seat", seat,
-                  NULL);
-
-  _gdk_device_set_associated_device (pad->device, seat->master_keyboard);
-  g_signal_emit_by_name (device_manager, "device-added", pad->device);
 }
 
 static void
@@ -4506,14 +4491,60 @@ tablet_pad_handle_enter (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkWaylandDeviceManager *device_manager =
+    GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
 
   GDK_NOTE (EVENTS,
             g_message ("tablet pad handle enter, pad = %p, tablet = %p surface = %p",
                        wp_tablet_pad, wp_tablet, surface));
 
+  if (pad->device && pad->current_tablet != tablet)
+    {
+      device_manager->devices =
+        g_list_remove (device_manager->devices, pad->device);
+      g_signal_emit_by_name (device_manager, "device-removed", pad->device);
+      _gdk_device_set_associated_device (pad->device, NULL);
+      g_clear_object (&pad->device);
+    }
+
   /* Relate pad and tablet */
-  tablet->pads = g_list_prepend (tablet->pads, pad);
+  tablet->pads = g_list_append (tablet->pads, pad);
   pad->current_tablet = tablet;
+
+  if (!pad->device)
+    {
+      GdkWaylandTabletPadData *pad = data;
+      gchar *name, *vid, *pid;
+
+      name = g_strdup_printf ("%s Pad %d",
+                              tablet->name,
+                              g_list_index (tablet->pads, pad) + 1);
+      vid = g_strdup_printf ("%.4x", tablet->vid);
+      pid = g_strdup_printf ("%.4x", tablet->pid);
+
+      pad->device =
+        g_object_new (GDK_TYPE_WAYLAND_DEVICE_PAD,
+                      "name", name,
+                      "vendor-id", vid,
+                      "product-id", pid,
+                      "type", GDK_DEVICE_TYPE_SLAVE,
+                      "input-source", GDK_SOURCE_TABLET_PAD,
+                      "input-mode", GDK_MODE_SCREEN,
+                      "display", gdk_seat_get_display (pad->seat),
+                      "device-manager", device_manager,
+                      "seat", seat,
+                      NULL);
+
+      _gdk_device_set_associated_device (pad->device, seat->master_keyboard);
+      device_manager->devices =
+        g_list_prepend (device_manager->devices, pad->device);
+      g_signal_emit_by_name (device_manager, "device-added", pad->device);
+
+      g_free (name);
+      g_free (vid);
+      g_free (pid);
+    }
 }
 
 static void
@@ -4529,10 +4560,7 @@ tablet_pad_handle_leave (void                     *data,
                        wp_tablet_pad, surface));
 
   if (pad->current_tablet)
-    {
-      pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
-      pad->current_tablet = NULL;
-    }
+    pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
 }
 
 static void
