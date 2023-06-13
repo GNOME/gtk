@@ -782,7 +782,7 @@ test_get_point (void)
                                       &point,
                                       NULL);
 
-          if (graphene_point_distance (&last_point, &point, NULL, NULL) > offset - last_offset + tolerance)
+          if (graphene_point_distance (&last_point, &point, NULL, NULL) > 2 * (offset - last_offset))
             {
               n_discontinuities++;
               g_assert_cmpint (n_discontinuities, <, max_contours);
