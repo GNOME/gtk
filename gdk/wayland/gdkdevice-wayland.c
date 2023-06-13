@@ -5181,6 +5181,22 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
                            master);
 }
 
+static void
+device_manager_device_added (GdkDeviceManager *device_manager,
+                             GdkDevice        *device,
+                             GdkSeat          *seat)
+{
+  g_signal_emit_by_name (seat, "device-added", device);
+}
+
+static void
+device_manager_device_removed (GdkDeviceManager *device_manager,
+                               GdkDevice        *device,
+                               GdkSeat          *seat)
+{
+  g_signal_emit_by_name (seat, "device-removed", device);
+}
+
 void
 _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
                                       guint32           id,
@@ -5249,6 +5265,11 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
                                        seat);
     }
 
+  g_signal_connect (seat->device_manager, "device-added",
+                    G_CALLBACK (device_manager_device_added), seat);
+  g_signal_connect (seat->device_manager, "device-removed",
+                    G_CALLBACK (device_manager_device_removed), seat);
+
   gdk_display_add_seat (display, GDK_SEAT (seat));
 }
 
@@ -5268,6 +5289,12 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
       if (seat->id != id)
         continue;
 
+      g_signal_handlers_disconnect_by_func (manager,
+                                            device_manager_device_added,
+                                            seat);
+      g_signal_handlers_disconnect_by_func (manager,
+                                            device_manager_device_removed,
+                                            seat);
       gdk_display_remove_seat (display, GDK_SEAT (seat));
       break;
     }
