@@ -25,7 +25,7 @@ GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GskVulkanUploader      *uploader,
-                                                                         guchar                 *data,
+                                                                         const guchar           *data,
                                                                          gsize                   width,
                                                                          gsize                   height,
                                                                          gsize                   stride);

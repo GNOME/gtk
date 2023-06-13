@@ -256,7 +256,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
 
 static void
 gsk_vulkan_image_upload_data (GskVulkanImage *self,
-                              guchar         *data,
+                              const guchar   *data,
                               gsize           width,
                               gsize           height,
                               gsize           data_stride)
@@ -322,7 +322,7 @@ gsk_vulkan_image_ensure_view (GskVulkanImage *self,
 
 static GskVulkanImage *
 gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
-                                                   guchar            *data,
+                                                   const guchar      *data,
                                                    gsize              width,
                                                    gsize              height,
                                                    gsize              stride)
@@ -416,7 +416,7 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
 
 static GskVulkanImage *
 gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
-                                                  guchar            *data,
+                                                  const guchar      *data,
                                                   gsize              width,
                                                   gsize              height,
                                                   gsize              stride)
@@ -500,7 +500,7 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
 
 static GskVulkanImage *
 gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
-                                         guchar            *data,
+                                         const guchar      *data,
                                          gsize              width,
                                          gsize              height,
                                          gsize              stride)
@@ -531,7 +531,7 @@ gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
 
 GskVulkanImage *
 gsk_vulkan_image_new_from_data (GskVulkanUploader *uploader,
-                                guchar            *data,
+                                const guchar      *data,
                                 gsize              width,
                                 gsize              height,
                                 gsize              stride)
