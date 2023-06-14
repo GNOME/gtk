@@ -36,6 +36,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
+#include "gdkvulkancontext.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -1214,6 +1215,49 @@ gdk_display_get_keymap (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
+}
+
+/*<private>
+ * gdk_display_create_vulkan_context:
+ * @self: a `GdkDisplay`
+ * @error: return location for an error
+ *
+ * Creates a new `GdkVulkanContext` for use with @display.
+ *
+ * The context can not be used to draw to surfaces, it can only be
+ * used for custom rendering or compute.
+ *
+ * If the creation of the `GdkVulkanContext` failed, @error will be set.
+ *
+ * Returns: (transfer full): the newly created `GdkVulkanContext`, or
+ *   %NULL on error
+ */
+GdkVulkanContext *
+gdk_display_create_vulkan_context (GdkDisplay  *self,
+                                   GError     **error)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  if (gdk_display_get_debug_flags (self) & GDK_DEBUG_VULKAN_DISABLE)
+    {
+      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                           _("Vulkan support disabled via GDK_DEBUG"));
+      return NULL;
+    }
+
+  if (GDK_DISPLAY_GET_CLASS (self)->vk_extension_name == NULL)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                   "The %s backend has no Vulkan support.", G_OBJECT_TYPE_NAME (self));
+      return FALSE;
+    }
+
+  return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
+                         NULL,
+                         error,
+                         "display", self,
+                         NULL);
 }
 
 static void

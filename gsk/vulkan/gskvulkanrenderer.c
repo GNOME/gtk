@@ -12,6 +12,7 @@
 #include "gskvulkanrenderprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
@@ -139,20 +140,23 @@ static void
 gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
 {
-  GdkSurface *window;
+  GdkSurface *surface;
   double scale;
   gsize width, height;
   guint i;
+
+  surface = gsk_renderer_get_surface (GSK_RENDERER (self));
+  if (surface == NULL)
+    return;
 
   gsk_vulkan_renderer_free_targets (self);
 
   self->n_targets = gdk_vulkan_context_get_n_images (context);
   self->targets = g_new (GskVulkanImage *, self->n_targets);
 
-  window = gsk_renderer_get_surface (GSK_RENDERER (self));
-  scale = gdk_surface_get_scale (window);
-  width = (int) ceil (gdk_surface_get_width (window) * scale);
-  height = (int) ceil (gdk_surface_get_height (window) * scale);
+  scale = gdk_surface_get_scale (surface);
+  width = (int) ceil (gdk_surface_get_width (surface) * scale);
+  height = (int) ceil (gdk_surface_get_height (surface) * scale);
 
   for (i = 0; i < self->n_targets; i++)
     {
@@ -203,13 +207,10 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
 
   if (surface == NULL)
-    {
-      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
-                   "The Vulkan renderer does not support surfaceless rendering yet.");
-      return FALSE;
-    }
+    self->vulkan = gdk_display_create_vulkan_context (gdk_display_get_default (), error);
+  else
+    self->vulkan = gdk_surface_create_vulkan_context (surface, error);
 
-  self->vulkan = gdk_surface_create_vulkan_context (surface, error);
   if (self->vulkan == NULL)
     return FALSE;
 

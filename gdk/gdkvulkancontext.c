@@ -665,6 +665,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   VkResult res;
   VkBool32 supported;
   uint32_t i;
@@ -672,6 +673,13 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   priv->vulkan_ref = gdk_display_ref_vulkan (display, error);
   if (!priv->vulkan_ref)
     return FALSE;
+
+  if (surface == NULL)
+    {
+      priv->image_format.format = VK_FORMAT_B8G8R8A8_UNORM;
+      priv->image_format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+      return TRUE;
+    }
 
   res = GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface);
   if (res != VK_SUCCESS)
