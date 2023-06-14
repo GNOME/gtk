@@ -138,6 +138,15 @@
     <file>gtkgears.c</file>
     <file>gtkgears.h</file>
   </gresource>
+  <gresource prefix="/glyphs">
+    <file>glyphs.css</file>
+    <file>glyphs.ui</file>
+    <file>glyph-demo.c</file>
+    <file>glyph-demo.h</file>
+    <file>glyph-chooser.c</file>
+    <file>glyph-chooser.h</file>
+    <file>glyph-chooser.ui</file>
+  </gresource>
   <gresource prefix="/shadertoy">
     <file>gtkshadertoy.c</file>
     <file>gtkshadertoy.h</file>
@@ -285,6 +294,7 @@
     <file>gears.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
+    <file>glyphs.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
     <file>iconscroll.c</file>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GlyphChooser" parent="GtkWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <style><class name="sidebar"/></style>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="font"/>
+              <class name="linked"/>
+            </style>
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkButton">
+                <property name="label" bind-source="GlyphChooser" bind-property="font-basename" bind-flags="sync-create"/>
+                <signal name="clicked" handler="filechooser_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="width-chars">2</property>
+                <property name="text" bind-source="GlyphChooser" bind-property="text" bind-flags="bidirectional|sync-create"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScale">
+            <property name="tooltip-text">Weight</property>
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="value" bind-source="GlyphChooser" bind-property="weight" bind-flags="bidirectional|sync-create"/>
+                <property name="lower">100</property>
+                <property name="upper">1000</property>
+                <property name="step-increment">10</property>
+                <property name="page-increment">100</property>
+              </object>
+            </property>
+            <marks>
+              <mark value="400" position="bottom"/>
+            </marks>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="child">
+              <object class="GtkTextView">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="buffer">
+                    <signal name="changed" handler="text_changed"/>
+                  </object>
+                </property>
+                <property name="top-margin">10</property>
+                <property name="bottom-margin">10</property>
+                <property name="left-margin">10</property>
+                <property name="right-margin">10</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

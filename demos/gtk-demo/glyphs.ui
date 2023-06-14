@@ -1,0 +1,182 @@
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title">Glyphs</property>
+    <property name="default-width">560</property>
+    <property name="default-height">660</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkStack" id="stack">
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">visual</property>
+                    <property name="icon-name">image-x-generic-symbolic</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow">
+                        <property name="propagate-natural-width">1</property>
+                        <property name="propagate-natural-height">1</property>
+                        <property name="child">
+                          <object class="GlyphDemo" id="demo">
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
+                            <property name="path1" bind-source="chooser" bind-property="path1" bind-flags="sync-create"/>
+                            <property name="path2" bind-source="chooser" bind-property="path2" bind-flags="sync-create"/>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name"></property>
+                    <property name="icon-name">view-list-symbolic</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow">
+                        <property name="child">
+                          <object class="GtkTextView">
+                            <property name="buffer">
+                              <object class="GtkTextBuffer" id="buffer"/>
+                            </property>
+                            <property name="top-margin">10</property>
+                            <property name="bottom-margin">10</property>
+                            <property name="left-margin">10</property>
+                            <property name="right-margin">10</property>
+                          </object>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GlyphChooser" id="chooser"/>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <style><class name="bottombar"/></style>
+            <child>
+              <object class="GtkDropDown">
+                <property name="selected" bind-source="demo" bind-property="operation" bind-flags="bidirectional|sync-create"/>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Original</item>
+                      <item>Reverse</item>
+                      <item>Simplified</item>
+                      <item>Union</item>
+                      <item>Intersection</item>
+                      <item>Difference</item>
+                      <item>Symmetric Difference</item>
+                    </items>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="demo" bind-property="show-outline" bind-flags="bidirectional|sync-create"/>
+                <property name="label">Paths</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="demo" bind-property="show-fill" bind-flags="bidirectional|sync-create"/>
+                <property name="label">Fill</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="demo" bind-property="show-points" bind-flags="bidirectional|sync-create"/>
+                <property name="label">Points</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="demo" bind-property="show-controls" bind-flags="bidirectional|sync-create"/>
+                <property name="label">Controls</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="active" bind-source="demo" bind-property="show-bounds" bind-flags="bidirectional|sync-create"/>
+                <property name="label">Bounds</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown">
+                <property name="selected" bind-source="demo" bind-property="fill-rule" bind-flags="bidirectional|sync-create"/>
+                <property name="model">
+                  <object class="GtkStringList">
+                    <items>
+                      <item>Winding</item>
+                      <item>Even-Odd</item>
+                    </items>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <signal name="clicked" handler="apply_short_path" object="demo"/>
+                <property name="icon-name">edit-redo-symbolic</property>
+                <property name="hexpand">1</property>
+                <property name="halign">end</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <signal name="clicked" handler="short_path_step" object="demo"/>
+                <property name="icon-name">list-add-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <signal name="clicked" handler="reset_short_path" object="demo"/>
+                <property name="icon-name">edit-undo-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkStackSwitcher">
+            <property name="stack">stack</property>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkScale">
+            <property name="adjustment">
+              <object class="GtkAdjustment">
+                <property name="value" bind-source="demo" bind-property="zoom" bind-flags="bidirectional|sync-create"/>
+                <property name="lower">0.3</property>
+                <property name="upper">5</property>
+                <property name="step-increment">0.1</property>
+                <property name="page-increment">0.1</property>
+              </object>
+            </property>
+            <property name="tooltip-text">Zoom</property>
+            <property name="width-request">220</property>
+            <marks>
+              <mark value="1" position="bottom"/>
+              <mark value="2" position="bottom"/>
+              <mark value="3" position="bottom"/>
+              <mark value="4" position="bottom"/>
+            </marks>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>

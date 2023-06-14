@@ -1,0 +1,15 @@
+.bottombar {
+  border-top: 1px solid gray;
+  padding: 10px;
+  background: none;
+  border-spacing: 10px;
+}
+
+.sidebar {
+  border-left: 1px solid gray;
+  background: none;
+}
+
+.font {
+  padding: 10px;
+}
