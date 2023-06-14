@@ -437,7 +437,7 @@ gsk_vulkan_image_map_memory (GskVulkanImage    *self,
   g_assert (self->vk_image_layout == VK_IMAGE_LAYOUT_UNDEFINED ||
             self->vk_image_layout == VK_IMAGE_LAYOUT_PREINITIALIZED);
 
-  if (gsk_vulkan_memory_can_map (self->memory, TRUE))
+  if (!GSK_DEBUG_CHECK (STAGING) && gsk_vulkan_memory_can_map (self->memory, TRUE))
     gsk_vulkan_image_map_memory_direct (self, uploader, map);
   else
     gsk_vulkan_image_map_memory_indirect (self, uploader, map);
