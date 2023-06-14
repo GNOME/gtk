@@ -745,26 +745,6 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
-                                      gsize             width,
-                                      gsize             height)
-{
-  GskVulkanImage *self;
-
-  self = gsk_vulkan_image_new (context,
-                               GDK_MEMORY_DEFAULT,
-                               width,
-                               height,
-                               VK_IMAGE_TILING_OPTIMAL,
-                               VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                               VK_IMAGE_LAYOUT_UNDEFINED,
-                               VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-  return self;
-}
-
-GskVulkanImage *
 gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
                                 gsize             width,
                                 gsize             height)

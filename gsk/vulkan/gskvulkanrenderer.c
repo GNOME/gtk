@@ -284,9 +284,9 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
-  image = gsk_vulkan_image_new_for_framebuffer (self->vulkan,
-                                                rounded_viewport.size.width,
-                                                rounded_viewport.size.height);
+  image = gsk_vulkan_image_new_for_offscreen (self->vulkan,
+                                              rounded_viewport.size.width,
+                                              rounded_viewport.size.height);
 
   gsk_vulkan_render_reset (render, image, &rounded_viewport, NULL);
   gsk_vulkan_render_add_node (render, root);

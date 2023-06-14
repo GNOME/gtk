@@ -40,9 +40,6 @@ void                    gsk_vulkan_image_upload_regions                 (GskVulk
                                                                          GskVulkanUploader      *uploader,
                                                                          guint                   num_regions,
                                                                          GskImageRegion         *regions);
-GskVulkanImage *        gsk_vulkan_image_new_for_framebuffer            (GdkVulkanContext       *context,
-                                                                         gsize                   width,
-                                                                         gsize                   height);
 GskVulkanImage *        gsk_vulkan_image_new_for_atlas                  (GdkVulkanContext       *context,
                                                                          gsize                   width,
                                                                          gsize                   height);
