@@ -30,6 +30,7 @@ struct _GskVulkanImage
 
   GdkVulkanContext *vulkan;
 
+  GdkMemoryFormat format;
   gsize width;
   gsize height;
   VkImageUsageFlags vk_usage;
@@ -196,22 +197,261 @@ gsk_vulkan_uploader_reset (GskVulkanUploader *self)
   self->staging_buffer_free_list = NULL;
 }
 
+typedef struct _GskMemoryFormatInfo GskMemoryFormatInfo;
+
+struct _GskMemoryFormatInfo
+{
+  VkFormat format;
+  VkComponentMapping components;
+};
+
+static const GskMemoryFormatInfo default_format_info = {
+  VK_FORMAT_B8G8R8A8_UNORM,
+  { VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A }
+};
+
+static const GskMemoryFormatInfo *
+gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
+{
+#define SWIZZLE(a, b, c, d) { VK_COMPONENT_SWIZZLE_ ## a, VK_COMPONENT_SWIZZLE_ ## b, VK_COMPONENT_SWIZZLE_ ## c, VK_COMPONENT_SWIZZLE_ ## d }
+#define DEFAULT_SWIZZLE SWIZZLE (R, G, B, A)
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_B8G8R8A8,
+  GDK_MEMORY_A8R8G8B8,
+  GDK_MEMORY_R8G8B8A8,
+  GDK_MEMORY_A8B8G8R8,
+#endif
+
+    case GDK_MEMORY_R8G8B8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_B8G8R8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R16G16B16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_R16G16B16A16,
+#endif
+
+    case GDK_MEMORY_R16G16B16_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_R16G16B16A16_FLOAT,
+#endif
+
+    case GDK_MEMORY_R32G32B32_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_R32G32B32A32_FLOAT,
+#endif
+
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_G8A8,
+#endif
+
+    case GDK_MEMORY_G8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+#if 0
+  GDK_MEMORY_G16A16
+#endif
+
+    case GDK_MEMORY_G16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R) },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R16G16B16A16:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16A16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+    }
+#undef DEFAULT_SWIZZLE
+#undef SWIZZLE
+}
+
+static gboolean
+gsk_vulkan_context_supports_format (GdkVulkanContext *context,
+                                    VkFormat          format)
+{
+  VkFormatProperties properties;
+
+  vkGetPhysicalDeviceFormatProperties (gdk_vulkan_context_get_physical_device (context),
+                                       format,
+                                       &properties);
+
+  if ((properties.linearTilingFeatures & (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)) &&
+      (properties.optimalTilingFeatures & (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
-gsk_vulkan_image_create_view (GskVulkanImage *self,
-                              VkFormat        format)
+gsk_vulkan_image_create_view (GskVulkanImage            *self,
+                              const GskMemoryFormatInfo *format)
 {
   GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
                                  &(VkImageViewCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                      .image = self->vk_image,
                                      .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                     .format = format,
-                                     .components = {
-                                         .r = VK_COMPONENT_SWIZZLE_R,
-                                         .g = VK_COMPONENT_SWIZZLE_G,
-                                         .b = VK_COMPONENT_SWIZZLE_B,
-                                         .a = VK_COMPONENT_SWIZZLE_A,
-                                     },
+                                     .format = format->format,
+                                     .components = format->components,
                                      .subresourceRange = {
                                          .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                          .baseMipLevel = 0,
@@ -226,6 +466,7 @@ gsk_vulkan_image_create_view (GskVulkanImage *self,
 
 static GskVulkanImage *
 gsk_vulkan_image_new (GdkVulkanContext      *context,
+                      GdkMemoryFormat        format,
                       gsize                  width,
                       gsize                  height,
                       VkImageTiling          tiling,
@@ -236,12 +477,28 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
 {
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
+  const GskMemoryFormatInfo *vk_format;
 
   g_assert (width > 0 && height > 0);
+
+  for (vk_format = gsk_memory_format_get_vk_format_infos (format);
+       vk_format->format != VK_FORMAT_UNDEFINED;
+       vk_format++)
+    {
+      if (gsk_vulkan_context_supports_format (context, vk_format->format))
+        break;
+    }
+
+  if (vk_format->format == VK_FORMAT_UNDEFINED)
+    {
+      vk_format = &default_format_info;
+      format = GDK_MEMORY_DEFAULT;
+    }
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
   self->vulkan = g_object_ref (context);
+  self->format = format;
   self->width = width;
   self->height = height;
   self->vk_usage = usage;
@@ -253,7 +510,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                                     .flags = 0,
                                     .imageType = VK_IMAGE_TYPE_2D,
-                                    .format = VK_FORMAT_B8G8R8A8_UNORM,
+                                    .format = vk_format->format,
                                     .extent = { width, height, 1 },
                                     .mipLevels = 1,
                                     .arrayLayers = 1,
@@ -280,7 +537,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
                                    gsk_vulkan_memory_get_device_memory (self->memory),
                                    0);
 
-  gsk_vulkan_image_create_view (self, VK_FORMAT_B8G8R8A8_UNORM);
+  gsk_vulkan_image_create_view (self, vk_format);
 
   return self;
 }
@@ -295,8 +552,10 @@ gsk_vulkan_image_new_from_texture (GskVulkanUploader *uploader,
 
   downloader = gdk_texture_downloader_new (texture);
   result = gsk_vulkan_image_new_for_upload (uploader,
+                                            gdk_texture_get_format (texture),
                                             gdk_texture_get_width (texture),
                                             gdk_texture_get_height (texture));
+  gdk_texture_downloader_set_format (downloader, result->format);
   gsk_vulkan_image_map_memory (result, uploader, &map);
   gdk_texture_downloader_download_into (downloader, map.data, map.stride);
   gsk_vulkan_image_unmap_memory (result, uploader, &map);
@@ -306,12 +565,14 @@ gsk_vulkan_image_new_from_texture (GskVulkanUploader *uploader,
 
 GskVulkanImage *
 gsk_vulkan_image_new_for_upload (GskVulkanUploader *uploader,
+                                 GdkMemoryFormat    format,
                                  gsize              width,
                                  gsize              height)
 {
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (uploader->vulkan,
+                               format,
                                width,
                                height,
                                VK_IMAGE_TILING_LINEAR,
@@ -470,7 +731,15 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->height = height;
   self->vk_image = image;
 
-  gsk_vulkan_image_create_view (self, VK_FORMAT_B8G8R8A8_UNORM);
+  gsk_vulkan_image_create_view (self,
+                                &(GskMemoryFormatInfo) {
+                                  format,
+                                  { VK_COMPONENT_SWIZZLE_R,
+                                    VK_COMPONENT_SWIZZLE_G,
+                                    VK_COMPONENT_SWIZZLE_B,
+                                    VK_COMPONENT_SWIZZLE_A
+                                   }
+                                });
 
   return self;
 }
@@ -483,6 +752,7 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (context,
+                               GDK_MEMORY_DEFAULT,
                                width,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
@@ -502,6 +772,7 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (context,
+                               GDK_MEMORY_DEFAULT,
                                width,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
@@ -521,6 +792,7 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (context,
+                               GDK_MEMORY_DEFAULT,
                                width,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
@@ -581,7 +853,7 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
   mem = gsk_vulkan_buffer_map (buffer);
   bytes = g_bytes_new (mem, self->width * self->height * 4);
   texture = gdk_memory_texture_new (self->width, self->height,
-                                    GDK_MEMORY_DEFAULT,
+                                    self->format,
                                     bytes,
                                     self->width * 4);
   gsk_vulkan_buffer_unmap (buffer);

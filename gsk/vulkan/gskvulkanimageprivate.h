@@ -65,6 +65,7 @@ struct _GskVulkanImageMap
 };
 
 GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulkanUploader      *uploader,
+                                                                         GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 void                    gsk_vulkan_image_map_memory                     (GskVulkanImage         *self,
