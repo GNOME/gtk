@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
 
 #include "gsk/gl/gskglrenderer.h"
+#ifdef GDK_RENDERING_VULKAN
+#include "gsk/vulkan/gskvulkanrenderer.h"
+#endif
 
 #include <epoxy/gl.h>
 
@@ -8,6 +11,7 @@
 
 static GdkGLContext *gl_context = NULL;
 static GskRenderer *gl_renderer = NULL;
+static GskRenderer *vulkan_renderer = NULL;
 
 typedef struct _TextureBuilder TextureBuilder;
 
@@ -16,6 +20,7 @@ typedef enum {
   TEXTURE_METHOD_GL,
   TEXTURE_METHOD_GL_RELEASED,
   TEXTURE_METHOD_GL_NATIVE,
+  TEXTURE_METHOD_VULKAN,
   TEXTURE_METHOD_PNG,
   TEXTURE_METHOD_PNG_PIXBUF,
   TEXTURE_METHOD_TIFF,
@@ -805,12 +810,13 @@ compare_textures (GdkTexture *texture1,
 }
 
 static GdkTexture *
-upload_to_gl (GdkTexture *texture)
+upload_to_renderer (GdkTexture  *texture,
+                    GskRenderer *renderer)
 {
   GskRenderNode *node;
   GdkTexture *result;
 
-  if (gl_renderer == NULL)
+  if (renderer == NULL)
     return texture;
 
   node = gsk_texture_node_new (texture,
@@ -819,7 +825,7 @@ upload_to_gl (GdkTexture *texture)
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture)
                                ));
-  result = gsk_renderer_render_texture (gl_renderer, node, NULL);
+  result = gsk_renderer_render_texture (renderer, node, NULL);
   gsk_render_node_unref (node);
   g_object_unref (texture);
 
@@ -910,7 +916,7 @@ upload_to_gl_native (GdkTexture *texture)
       return result;
     }
 
-  return upload_to_gl (texture);
+  return upload_to_renderer (texture, gl_renderer);
 }
 
 static GdkTexture *
@@ -934,17 +940,21 @@ create_texture (GdkMemoryFormat  format,
       break;
 
     case TEXTURE_METHOD_GL:
-      texture = upload_to_gl (texture);
+      texture = upload_to_renderer (texture, gl_renderer);
       break;
 
     case TEXTURE_METHOD_GL_RELEASED:
-      texture = upload_to_gl (texture);
+      texture = upload_to_renderer (texture, gl_renderer);
       if (GDK_IS_GL_TEXTURE (texture))
         gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
       break;
 
     case TEXTURE_METHOD_GL_NATIVE:
       texture = upload_to_gl_native (texture);
+      break;
+
+    case TEXTURE_METHOD_VULKAN:
+      texture = upload_to_renderer (texture, vulkan_renderer);
       break;
 
     case TEXTURE_METHOD_PNG:
@@ -1030,6 +1040,7 @@ texture_method_is_accurate (TextureMethod method)
     case TEXTURE_METHOD_GL:
     case TEXTURE_METHOD_GL_RELEASED:
     case TEXTURE_METHOD_GL_NATIVE:
+    case TEXTURE_METHOD_VULKAN:
     case TEXTURE_METHOD_PNG:
     case TEXTURE_METHOD_PNG_PIXBUF:
     case TEXTURE_METHOD_TIFF_PIXBUF:
@@ -1168,7 +1179,8 @@ test_download (gconstpointer data,
       if (color.alpha == 0.f &&
           !gdk_memory_format_is_premultiplied (format) &&
           gdk_memory_format_has_alpha (format) &&
-          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED || method == TEXTURE_METHOD_GL_NATIVE))
+          (method ==  TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED ||
+           method == TEXTURE_METHOD_GL_NATIVE || method == TEXTURE_METHOD_VULKAN))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, width, height, &color);
@@ -1297,7 +1309,7 @@ add_test (const char    *name,
     {
       for (method = 0; method < N_TEXTURE_METHODS; method++)
         {
-          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released", "gl-native", "png", "png-pixbuf", "tiff", "tiff-pixbuf" };
+          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released", "gl-native", "vulkan", "png", "png-pixbuf", "tiff", "tiff-pixbuf" };
           char *test_name = g_strdup_printf ("%s/%s/%s",
                                              name,
                                              g_enum_get_value (enum_class, format)->value_nick,
@@ -1355,8 +1367,23 @@ main (int argc, char *argv[])
       g_clear_object (&gl_renderer);
     }
 
+#ifdef GDK_RENDERING_VULKAN
+  vulkan_renderer = gsk_vulkan_renderer_new ();
+  if (!gsk_renderer_realize (vulkan_renderer, NULL, NULL))
+    {
+      g_clear_object (&vulkan_renderer);
+    }
+#endif
+
   result = g_test_run ();
 
+#ifdef GDK_RENDERING_VULKAN
+  if (vulkan_renderer)
+    {
+      gsk_renderer_unrealize (vulkan_renderer);
+      g_clear_object (&vulkan_renderer);
+    }
+#endif
   if (gl_renderer)
     {
       gsk_renderer_unrealize (gl_renderer);
