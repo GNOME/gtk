@@ -50,5 +50,5 @@ GskRenderer *           gsk_vulkan_renderer_new                 (void);
 
 G_END_DECLS
 
-#endif /* GDK_WINDOWING_VULKAN */
+#endif /* GDK_RENDERING_VULKAN */
 
