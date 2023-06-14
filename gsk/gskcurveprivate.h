@@ -59,6 +59,9 @@ struct _GskConicCurve
 
   gboolean has_coefficients;
 
+  /* points[0], points[1], points[3] are the control points,
+   * points[2].x is the weight
+   */
   graphene_point_t points[4];
 
   graphene_point_t num[3];
