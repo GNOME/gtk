@@ -24,11 +24,8 @@ GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulk
                                                                          VkFormat                format,
                                                                          gsize                   width,
                                                                          gsize                   height);
-GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GskVulkanUploader      *uploader,
-                                                                         guchar                 *data,
-                                                                         gsize                   width,
-                                                                         gsize                   height,
-                                                                         gsize                   stride);
+GskVulkanImage *        gsk_vulkan_image_new_from_texture               (GskVulkanUploader      *uploader,
+                                                                         GdkTexture             *texture);
 
 typedef struct {
   guchar *data;
@@ -55,6 +52,27 @@ GskVulkanImage *        gsk_vulkan_image_new_for_offscreen              (GdkVulk
 
 GdkTexture *            gsk_vulkan_image_download                       (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader);
+
+typedef struct _GskVulkanImageMap GskVulkanImageMap;
+
+struct _GskVulkanImageMap
+{
+  guchar *data;
+  gsize   stride;
+
+  /* private */
+  gpointer staging_buffer;
+};
+
+GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulkanUploader      *uploader,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
+void                    gsk_vulkan_image_map_memory                     (GskVulkanImage         *self,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         GskVulkanImageMap      *map);
+void                    gsk_vulkan_image_unmap_memory                   (GskVulkanImage         *self,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         GskVulkanImageMap      *map);
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);

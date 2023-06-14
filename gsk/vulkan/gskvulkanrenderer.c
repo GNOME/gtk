@@ -422,20 +422,13 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
                                        GskVulkanUploader *uploader)
 {
   GskVulkanTextureData *data;
-  cairo_surface_t *surface;
   GskVulkanImage *image;
 
   data = gdk_texture_get_render_data (texture, self);
   if (data)
     return g_object_ref (data->image);
 
-  surface = gdk_texture_download_surface (texture);
-  image = gsk_vulkan_image_new_from_data (uploader,
-                                          cairo_image_surface_get_data (surface),
-                                          cairo_image_surface_get_width (surface),
-                                          cairo_image_surface_get_height (surface),
-                                          cairo_image_surface_get_stride (surface));
-  cairo_surface_destroy (surface);
+  image = gsk_vulkan_image_new_from_texture (uploader, texture);
 
   data = g_new0 (GskVulkanTextureData, 1);
   data->image = image;

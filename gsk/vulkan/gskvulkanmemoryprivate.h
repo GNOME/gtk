@@ -14,6 +14,8 @@ void                    gsk_vulkan_memory_free                          (GskVulk
 
 VkDeviceMemory          gsk_vulkan_memory_get_device_memory             (GskVulkanMemory        *self);
 
+gboolean                gsk_vulkan_memory_can_map                       (GskVulkanMemory        *self,
+                                                                         gboolean                fast);
 guchar *                gsk_vulkan_memory_map                           (GskVulkanMemory        *self);
 void                    gsk_vulkan_memory_unmap                         (GskVulkanMemory        *self);
 
