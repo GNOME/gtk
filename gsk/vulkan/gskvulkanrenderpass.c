@@ -1294,6 +1294,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
 {
   VkSemaphore semaphore;
   GskVulkanImage *result;
+  GskVulkanImageMap map;
+  gsize width, height;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -1363,10 +1365,18 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
 #endif
 
   /* XXX: We could intersect bounds with clip bounds here */
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (node->bounds.size.width * graphene_vec2_get_x (scale)),
-                                        ceil (node->bounds.size.height * graphene_vec2_get_y (scale)));
-  cairo_surface_set_device_scale (surface, graphene_vec2_get_x (scale), graphene_vec2_get_y (scale));
+  width = ceil (node->bounds.size.width * graphene_vec2_get_x (scale));
+  height = ceil (node->bounds.size.height * graphene_vec2_get_y (scale));
+
+  result = gsk_vulkan_image_new_for_upload (uploader, width, height);
+  gsk_vulkan_image_map_memory (result, uploader, &map);
+  surface = cairo_image_surface_create_for_data (map.data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width, height,
+                                                 map.stride);
+  cairo_surface_set_device_scale (surface,
+                                  width / node->bounds.size.width,
+                                  height / node->bounds.size.height);
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
@@ -1374,14 +1384,10 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
 
   cairo_destroy (cr);
 
-  result = gsk_vulkan_image_new_from_data (uploader,
-                                           cairo_image_surface_get_data (surface),
-                                           cairo_image_surface_get_width (surface),
-                                           cairo_image_surface_get_height (surface),
-                                           cairo_image_surface_get_stride (surface));
-
+  cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
 
+  gsk_vulkan_image_unmap_memory (result, uploader, &map);
   gsk_vulkan_render_add_cleanup_image (render, result);
 
   *tex_bounds = node->bounds;
