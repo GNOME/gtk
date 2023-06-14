@@ -573,7 +573,7 @@ gsk_vulkan_image_new_for_upload (GskVulkanUploader *uploader,
   self = gsk_vulkan_image_new (uploader->vulkan,
                                width,
                                height,
-                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_IMAGE_LAYOUT_UNDEFINED,
@@ -585,25 +585,56 @@ gsk_vulkan_image_new_for_upload (GskVulkanUploader *uploader,
   return self;
 }
 
-void
-gsk_vulkan_image_map_memory (GskVulkanImage    *self,
-                             GskVulkanUploader *uploader,
-                             GskVulkanImageMap *map)
+static void
+gsk_vulkan_image_map_memory_direct (GskVulkanImage    *self,
+                                    GskVulkanUploader *uploader,
+                                    GskVulkanImageMap *map)
+{
+  VkImageSubresource image_res;
+  VkSubresourceLayout image_layout;
+
+  image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  image_res.mipLevel = 0;
+  image_res.arrayLayer = 0;
+
+  vkGetImageSubresourceLayout (gdk_vulkan_context_get_device (self->vulkan),
+                               self->vk_image, &image_res, &image_layout);
+
+  map->staging_buffer = NULL;
+  map->data = gsk_vulkan_memory_map (self->memory) + image_layout.offset;
+  map->stride = image_layout.rowPitch;
+}
+
+static void
+gsk_vulkan_image_unmap_memory_direct (GskVulkanImage    *self,
+                                      GskVulkanUploader *uploader,
+                                      GskVulkanImageMap *map)
+{
+  gsk_vulkan_memory_unmap (self->memory);
+
+  gsk_vulkan_uploader_add_image_barrier (uploader,
+                                         TRUE,
+                                         self,
+                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                         VK_ACCESS_SHADER_READ_BIT);
+}
+
+static void
+gsk_vulkan_image_map_memory_indirect (GskVulkanImage    *self,
+                                      GskVulkanUploader *uploader,
+                                      GskVulkanImageMap *map)
 {
   gsize buffer_size = self->width * self->height * 4;
-
-  g_assert (self->vk_image_layout == VK_IMAGE_LAYOUT_UNDEFINED ||
-            self->vk_image_layout == VK_IMAGE_LAYOUT_PREINITIALIZED);
 
   map->staging_buffer = gsk_vulkan_buffer_new_staging (uploader->vulkan, buffer_size);
   map->data = gsk_vulkan_buffer_map (map->staging_buffer);
   map->stride = self->width * 4;
 }
 
-void
-gsk_vulkan_image_unmap_memory (GskVulkanImage    *self,
-                               GskVulkanUploader *uploader,
-                               GskVulkanImageMap *map)
+static void
+gsk_vulkan_image_unmap_memory_indirect (GskVulkanImage    *self,
+                                        GskVulkanUploader *uploader,
+                                        GskVulkanImageMap *map)
 {
   gsk_vulkan_buffer_unmap (map->staging_buffer);
 
@@ -657,6 +688,31 @@ gsk_vulkan_image_unmap_memory (GskVulkanImage    *self,
 
   uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list,
                                                         map->staging_buffer);
+}
+
+void
+gsk_vulkan_image_map_memory (GskVulkanImage    *self,
+                             GskVulkanUploader *uploader,
+                             GskVulkanImageMap *map)
+{
+  g_assert (self->vk_image_layout == VK_IMAGE_LAYOUT_UNDEFINED ||
+            self->vk_image_layout == VK_IMAGE_LAYOUT_PREINITIALIZED);
+
+  if (gsk_vulkan_memory_can_map (self->memory, TRUE))
+    gsk_vulkan_image_map_memory_direct (self, uploader, map);
+  else
+    gsk_vulkan_image_map_memory_indirect (self, uploader, map);
+}
+
+void
+gsk_vulkan_image_unmap_memory (GskVulkanImage    *self,
+                               GskVulkanUploader *uploader,
+                               GskVulkanImageMap *map)
+{
+  if (map->staging_buffer)
+    gsk_vulkan_image_unmap_memory_indirect (self, uploader, map);
+  else
+    gsk_vulkan_image_unmap_memory_direct (self, uploader, map);
 }
 
 GskVulkanImage *
