@@ -187,16 +187,19 @@ typedef enum {
  *   filled.
  *
  * #GskFillRule is used to select how paths are filled, for example in
- * gsk_fill_node_new(). Whether or not a point is included in the fill is
- * determined by taking a ray from that point to infinity and looking
- * at intersections with the path. The ray can be in any direction,
- * as long as it doesn't pass through the end point of a segment
- * or have a tricky intersection such as intersecting tangent to the path.
+ * gsk_fill_node_new().
+ *
+ * Whether or not a point is included in the fill is determined by taking
+ * a ray from that point to infinity and looking at intersections with the
+ * path. The ray can be in any direction, as long as it doesn't pass through
+ * the end point of a segment or have a tricky intersection such as
+ * intersecting tangent to the path.
+ *
  * (Note that filling is not actually implemented in this way. This
  * is just a description of the rule that is applied.)
  *
  * New entries may be added in future versions.
- **/
+ */
 typedef enum {
   GSK_FILL_RULE_WINDING,
   GSK_FILL_RULE_EVEN_ODD
@@ -205,11 +208,11 @@ typedef enum {
 /**
  * GskLineCap:
  * @GSK_LINE_CAP_BUTT: Start and stop the line exactly at the start
- *     and end point
+ *   and end point
  * @GSK_LINE_CAP_ROUND: Use a round ending, the center of the circle
- *     is the start or end point.
+ *   is the start or end point.
  * @GSK_LINE_CAP_SQUARE: use squared ending, the center of the square
- *     is the start or end point.
+ *   is the start or end point.
  *
  * Specifies how to render the start and end points of contours or
  * dashes when stroking.
@@ -227,14 +230,14 @@ typedef enum {
  * @GSK_LINE_JOIN_MITER: Use a sharp, angled corner
  * @GSK_LINE_JOIN_MITER_CLIP: Use a sharp, angled corner, at a distance
  * @GSK_LINE_JOIN_ROUND: Use a round join, the center of the circle is
- *     the joint point
+ *   the joint point
  * @GSK_LINE_JOIN_BEVEL: Use a cut-off join, the join is cut off at half
- *     the line width from the joint point
+ *   the line width from the joint point
  *
  * Specifies how to render the junction of two lines when stroking.
  *
- * See gsk_stroke_set_miter_limit() for details on the difference between
- * @GSK_LINE_JOIN_MITER and @GSK_LINE_JOIN_MITER_CLIP.
+ * See [method@Gsk.Stroke.set_miter_limit] for details on the difference
+ * between @GSK_LINE_JOIN_MITER and @GSK_LINE_JOIN_MITER_CLIP.
  *
  * The default line join style is %GSK_LINE_JOIN_MITER.
  **/
@@ -248,18 +251,23 @@ typedef enum {
 /**
  * GskPathOperation:
  * @GSK_PATH_MOVE: A move-to operation, with 1 point describing the
- *     target point.
+ *   target point.
  * @GSK_PATH_LINE: A line-to operation, with 2 points describing the
- *     start and end point of a straight line.
+ *   start and end point of a straight line.
  * @GSK_PATH_CLOSE: A close operation ending the current contour with
- *     a line back to the starting point. Two points describe the start
- *     and end of the line.
+ *   a line back to the starting point. Two points describe the start
+ *   and end of the line.
+ * @GSK_PATH_CUBIC: A curve-to operation describing a cubic Bézier curve
+ *   with 4 points describing the start point, the two control points
+ *   and the end point of the curve.
+ *   a line back to the starting point. Two points describe the start
+ *   and end of the line.
  * @GSK_PATH_CURVE: A curve-to operation describing a cubic Bézier curve
- *     with 4 points describing the start point, the two control points
- *     and the end point of the curve.
- * @GSK_PATH_CONIC: A weighted quadratic bezier curve with 3 points
- *     describing the start point, control point and end point of the
- *     curve. A weight for the curve will be passed, too.
+ *   with 4 points describing the start point, the two control points
+ *   and the end point of the curve.
+ * @GSK_PATH_CONIC: A weighted quadratic Bézier curve with 3 points
+ *   describing the start point, control point and end point of the
+ *   curve. A weight for the curve will be passed, too.
  *
  * Path operations can be used to approximate a #GskPath.
  *
