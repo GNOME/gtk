@@ -34,6 +34,7 @@ demos = files([
   'gestures.c',
   'glarea.c',
   'gltransition.c',
+  'glyphs.c',
   'headerbar.c',
   'hypertext.c',
   'iconscroll.c',
