@@ -285,6 +285,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
   image = gsk_vulkan_image_new_for_offscreen (self->vulkan,
+                                              GDK_MEMORY_DEFAULT,
                                               rounded_viewport.size.width,
                                               rounded_viewport.size.height);
 

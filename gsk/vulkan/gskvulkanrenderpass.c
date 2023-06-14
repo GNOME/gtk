@@ -1249,6 +1249,7 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                              ceil (scale_y * viewport->size.height));
 
   result = gsk_vulkan_image_new_for_offscreen (vulkan,
+                                               GDK_MEMORY_DEFAULT,
                                                view.size.width, view.size.height);
 
 #ifdef G_ENABLE_DEBUG

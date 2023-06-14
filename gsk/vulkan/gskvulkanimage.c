@@ -766,13 +766,14 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
 
 GskVulkanImage *
 gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
+                                    GdkMemoryFormat   preferred_format,
                                     gsize             width,
                                     gsize             height)
 {
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (context,
-                               GDK_MEMORY_DEFAULT,
+                               preferred_format,
                                width,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,

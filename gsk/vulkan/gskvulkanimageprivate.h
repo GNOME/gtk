@@ -44,6 +44,7 @@ GskVulkanImage *        gsk_vulkan_image_new_for_atlas                  (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskVulkanImage *        gsk_vulkan_image_new_for_offscreen              (GdkVulkanContext       *context,
+                                                                         GdkMemoryFormat         preferred_format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 
