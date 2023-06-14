@@ -1402,9 +1402,10 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
                                         GskVulkanUploader    *uploader)
 {
   GskRenderNode *node;
+  GskVulkanImageMap map;
+  gsize width, height;
   cairo_surface_t *surface;
   cairo_t *cr;
-  float scale_x, scale_y;
 
   node = op->node;
 
@@ -1424,13 +1425,20 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   }
 #endif
 
-  scale_x = graphene_vec2_get_x (&self->scale);
-  scale_y = graphene_vec2_get_y (&self->scale);
   /* XXX: We could intersect bounds with clip bounds here */
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (node->bounds.size.width * scale_x),
-                                        ceil (node->bounds.size.height * scale_y));
-  cairo_surface_set_device_scale (surface, scale_x, scale_y);
+  width = ceil (node->bounds.size.width * graphene_vec2_get_x (&self->scale));
+  height = ceil (node->bounds.size.height * graphene_vec2_get_y (&self->scale));
+
+  op->source = gsk_vulkan_image_new_for_upload (uploader, width, height);
+  gsk_vulkan_image_map_memory (op->source, uploader, &map);
+  surface = cairo_image_surface_create_for_data (map.data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 width, height,
+                                                 map.stride);
+
+  cairo_surface_set_device_scale (surface,
+                                  width / node->bounds.size.width,
+                                  height / node->bounds.size.height);
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
@@ -1480,17 +1488,13 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   cairo_destroy (cr);
 
-  op->source = gsk_vulkan_image_new_from_data (uploader,
-                                               cairo_image_surface_get_data (surface),
-                                               cairo_image_surface_get_width (surface),
-                                               cairo_image_surface_get_height (surface),
-                                               cairo_image_surface_get_stride (surface));
-
-  op->source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
-
+  cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
 
+  gsk_vulkan_image_unmap_memory (op->source, uploader, &map);
   gsk_vulkan_render_add_cleanup_image (render, op->source);
+
+  op->source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
 }
 
 static void
