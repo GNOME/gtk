@@ -535,17 +535,15 @@ gsk_vulkan_image_new_from_texture (GskVulkanUploader *uploader,
 {
   GdkTextureDownloader *downloader;
   GskVulkanImage *result;
-  GBytes *bytes;
-  gsize stride;
+  GskVulkanImageMap map;
 
   downloader = gdk_texture_downloader_new (texture);
-  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
-  result = gsk_vulkan_image_new_from_data (uploader,
-                                           g_bytes_get_data (bytes, NULL),
-                                           gdk_texture_get_width (texture),
-                                           gdk_texture_get_height (texture),
-                                           stride);
-  g_bytes_unref (bytes);
+  result = gsk_vulkan_image_new_for_upload (uploader,
+                                            gdk_texture_get_width (texture),
+                                            gdk_texture_get_height (texture));
+  gsk_vulkan_image_map_memory (result, uploader, &map);
+  gdk_texture_downloader_download_into (downloader, map.data, map.stride);
+  gsk_vulkan_image_unmap_memory (result, uploader, &map);
   gdk_texture_downloader_free (downloader);
   return result;
 }
