@@ -196,6 +196,34 @@ gsk_vulkan_uploader_reset (GskVulkanUploader *self)
   self->staging_buffer_free_list = NULL;
 }
 
+static void
+gsk_vulkan_image_create_view (GskVulkanImage *self,
+                              VkFormat        format)
+{
+  GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
+                                 &(VkImageViewCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                                     .image = self->vk_image,
+                                     .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                                     .format = format,
+                                     .components = {
+                                         .r = VK_COMPONENT_SWIZZLE_R,
+                                         .g = VK_COMPONENT_SWIZZLE_G,
+                                         .b = VK_COMPONENT_SWIZZLE_B,
+                                         .a = VK_COMPONENT_SWIZZLE_A,
+                                     },
+                                     .subresourceRange = {
+                                         .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                         .baseMipLevel = 0,
+                                         .levelCount = 1,
+                                         .baseArrayLayer = 0,
+                                         .layerCount = 1,
+                                     },
+                                 },
+                                 NULL,
+                                 &self->vk_image_view);
+}
+
 static GskVulkanImage *
 gsk_vulkan_image_new (GdkVulkanContext      *context,
                       gsize                  width,
@@ -251,36 +279,10 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
                                    self->vk_image,
                                    gsk_vulkan_memory_get_device_memory (self->memory),
                                    0);
-  return self;
-}
 
-static void
-gsk_vulkan_image_ensure_view (GskVulkanImage *self,
-                              VkFormat        format)
-{
-  if (self->vk_image_view == VK_NULL_HANDLE)
-    GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
-                                   &(VkImageViewCreateInfo) {
-                                       .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                                       .image = self->vk_image,
-                                       .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                       .format = format,
-                                       .components = {
-                                           .r = VK_COMPONENT_SWIZZLE_R,
-                                           .g = VK_COMPONENT_SWIZZLE_G,
-                                           .b = VK_COMPONENT_SWIZZLE_B,
-                                           .a = VK_COMPONENT_SWIZZLE_A,
-                                       },
-                                       .subresourceRange = {
-                                           .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                           .baseMipLevel = 0,
-                                           .levelCount = 1,
-                                           .baseArrayLayer = 0,
-                                           .layerCount = 1,
-                                       },
-                                   },
-                                   NULL,
-                                   &self->vk_image_view);
+  gsk_vulkan_image_create_view (self, VK_FORMAT_B8G8R8A8_UNORM);
+
+  return self;
 }
 
 GskVulkanImage *
@@ -318,8 +320,6 @@ gsk_vulkan_image_new_for_upload (GskVulkanUploader *uploader,
                                VK_IMAGE_LAYOUT_UNDEFINED,
                                VK_ACCESS_TRANSFER_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -470,7 +470,7 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->height = height;
   self->vk_image = image;
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
+  gsk_vulkan_image_create_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -491,8 +491,6 @@ gsk_vulkan_image_new_for_framebuffer (GdkVulkanContext *context,
                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
-
   return self;
 }
 
@@ -511,8 +509,6 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
                                VK_IMAGE_LAYOUT_UNDEFINED,
                                0,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -534,8 +530,6 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
                                VK_IMAGE_LAYOUT_UNDEFINED,
                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 
   return self;
 }
@@ -672,8 +666,6 @@ gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
                                          VK_ACCESS_SHADER_READ_BIT);
 
   uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list, staging);
-
-  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
 }
 
 static void
