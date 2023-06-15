@@ -207,11 +207,6 @@ struct _GskMemoryFormatInfo
   VkComponentMapping components;
 };
 
-static const GskMemoryFormatInfo default_format_info = {
-  VK_FORMAT_B8G8R8A8_UNORM,
-  { VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A }
-};
-
 static const GskMemoryFormatInfo *
 gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
 {
@@ -426,6 +421,70 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
 #undef SWIZZLE
 }
 
+static GdkMemoryFormat
+gsk_memory_format_get_fallback (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_B8G8R8A8:
+      return GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+    case GDK_MEMORY_A8R8G8B8:
+      return GDK_MEMORY_A8R8G8B8_PREMULTIPLIED;
+    case GDK_MEMORY_R8G8B8A8:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_A8B8G8R8:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_R8G8B8:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_B8G8R8:
+      return GDK_MEMORY_R8G8B8;
+    case GDK_MEMORY_R16G16B16:
+      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_R16G16B16A16:
+      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+    case GDK_MEMORY_R16G16B16_FLOAT:
+      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_R32G32B32_FLOAT:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case  GDK_MEMORY_R32G32B32A32_FLOAT:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_G8A8:
+      return GDK_MEMORY_G8A8_PREMULTIPLIED;
+    case GDK_MEMORY_G8:
+      return GDK_MEMORY_R8G8B8;
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+    case GDK_MEMORY_G16A16:
+      return GDK_MEMORY_G16A16_PREMULTIPLIED;
+    case GDK_MEMORY_G16:
+      return GDK_MEMORY_R16G16B16;
+    case GDK_MEMORY_A8:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_A16:
+      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    }
+}
+
 static gboolean
 gsk_vulkan_context_supports_format (GdkVulkanContext *context,
                                     VkFormat          format)
@@ -483,18 +542,19 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
 
   g_assert (width > 0 && height > 0);
 
-  for (vk_format = gsk_memory_format_get_vk_format_infos (format);
-       vk_format->format != VK_FORMAT_UNDEFINED;
-       vk_format++)
+  while (TRUE)
     {
-      if (gsk_vulkan_context_supports_format (context, vk_format->format))
+      for (vk_format = gsk_memory_format_get_vk_format_infos (format);
+           vk_format->format != VK_FORMAT_UNDEFINED;
+           vk_format++)
+        {
+          if (gsk_vulkan_context_supports_format (context, vk_format->format))
+            break;
+        }
+      if (vk_format->format != VK_FORMAT_UNDEFINED)
         break;
-    }
 
-  if (vk_format->format == VK_FORMAT_UNDEFINED)
-    {
-      vk_format = &default_format_info;
-      format = GDK_MEMORY_DEFAULT;
+      format = gsk_memory_format_get_fallback (format);
     }
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
