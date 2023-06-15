@@ -584,6 +584,41 @@ gdk_memory_format_get_depth (GdkMemoryFormat format)
   return memory_formats[format].depth;
 }
 
+/*<private>
+ * gdk_memory_depth_merge:
+ * @depth1: the first depth
+ * @depth2: the second depth
+ *
+ * Returns a depth that can accomodate both given depths
+ * without any loss of precision.
+ *
+ * Returns: The merged depth
+ **/
+GdkMemoryDepth
+gdk_memory_depth_merge (GdkMemoryDepth depth1,
+                        GdkMemoryDepth depth2)
+{
+  switch (depth1)
+    {
+      case GDK_MEMORY_U8:
+        return depth2;
+
+      case GDK_MEMORY_FLOAT32:
+        return GDK_MEMORY_FLOAT32;
+
+      case GDK_MEMORY_U16:
+      case GDK_MEMORY_FLOAT16:
+        if (depth2 == depth1 || depth2 == GDK_MEMORY_U8)
+          return depth1;
+        else
+          return GDK_MEMORY_FLOAT32;
+
+      default:
+        g_assert_not_reached ();
+        return GDK_MEMORY_U8;
+    }
+}
+
 gboolean
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              gboolean         gles,

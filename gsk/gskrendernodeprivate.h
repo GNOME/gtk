@@ -3,6 +3,8 @@
 #include "gskrendernode.h"
 #include <cairo.h>
 
+#include "gdk/gdkmemoryformatprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GskRenderNodeClass GskRenderNodeClass;
@@ -27,7 +29,7 @@ struct _GskRenderNode
 
   graphene_rect_t bounds;
 
-  guint prefers_high_depth : 1;
+  guint preferred_depth : 2;
   guint offscreen_for_opacity : 1;
 };
 
@@ -73,17 +75,17 @@ bool            gsk_border_node_get_uniform_color       (const GskRenderNode    
 void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
                                                          GString                     *str);
 
-GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode *node,
-                                                         guint               *n_children);
+GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode         *node,
+                                                         guint                       *n_children);
 
-void             gsk_transform_node_get_translate       (const GskRenderNode *node,
-                                                         float               *dx,
-                                                         float               *dy);
-gboolean       gsk_render_node_prefers_high_depth       (const GskRenderNode *node);
+void            gsk_transform_node_get_translate        (const GskRenderNode         *node,
+                                                         float                       *dx,
+                                                         float                       *dy);
+GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node);
 
-gboolean       gsk_container_node_is_disjoint           (const GskRenderNode *node);
+gboolean        gsk_container_node_is_disjoint          (const GskRenderNode         *node);
 
-gboolean       gsk_render_node_use_offscreen_for_opacity (const GskRenderNode *node);
+gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node);
 
 
 G_END_DECLS

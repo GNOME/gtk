@@ -1734,7 +1734,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   self->texture = g_object_ref (texture);
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
-  node->prefers_high_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture)) != GDK_MEMORY_U8;
+  node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture));
 
   return node;
 }
@@ -1960,7 +1960,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   graphene_rect_init_from_rect (&node->bounds, bounds);
   self->filter = filter;
 
-  node->prefers_high_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture)) != GDK_MEMORY_U8;
+  node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture));
 
   return node;
 }
@@ -3193,14 +3193,16 @@ gsk_container_node_new (GskRenderNode **children,
 
       self->children[0] = gsk_render_node_ref (children[0]);
       graphene_rect_init_from_rect (&bounds, &(children[0]->bounds));
-      node->prefers_high_depth = gsk_render_node_prefers_high_depth (children[0]);
+      node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
+                                                      gsk_render_node_get_preferred_depth (children[0]));
 
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
           self->disjoint = self->disjoint && !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
-          node->prefers_high_depth = node->prefers_high_depth || gsk_render_node_prefers_high_depth (children[i]);
+          node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
+                                                          gsk_render_node_get_preferred_depth (children[i]));
           node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
         }
 
@@ -3478,7 +3480,7 @@ gsk_transform_node_new (GskRenderNode *child,
                                   &child->bounds,
                                   &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -3630,7 +3632,7 @@ gsk_opacity_node_new (GskRenderNode *child,
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -3868,7 +3870,7 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -4035,7 +4037,7 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   else
     graphene_rect_init_from_rect (&self->child_bounds, &child->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -4183,7 +4185,7 @@ gsk_clip_node_new (GskRenderNode         *child,
 
   graphene_rect_intersection (&self->clip, &child->bounds, &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -4331,7 +4333,7 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
 
   graphene_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -4573,7 +4575,7 @@ gsk_shadow_node_new (GskRenderNode   *child,
 
   gsk_shadow_node_get_bounds (self, &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -4783,7 +4785,8 @@ gsk_blend_node_new (GskRenderNode *bottom,
 
   graphene_rect_union (&bottom->bounds, &top->bounds, &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (bottom) || gsk_render_node_prefers_high_depth (top);
+  node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (bottom),
+                                                  gsk_render_node_get_preferred_depth (top));
 
   return node;
 }
@@ -4948,7 +4951,8 @@ gsk_cross_fade_node_new (GskRenderNode *start,
 
   graphene_rect_union (&start->bounds, &end->bounds, &node->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (start) || gsk_render_node_prefers_high_depth (end);
+  node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (start),
+                                                  gsk_render_node_get_preferred_depth (end));
 
   return node;
 }
@@ -5576,7 +5580,7 @@ gsk_blur_node_new (GskRenderNode *child,
                        - clip_radius,
                        - clip_radius);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -5759,7 +5763,7 @@ gsk_mask_node_new (GskRenderNode *source,
 
   self->render_node.bounds = source->bounds;
 
-  self->render_node.prefers_high_depth = gsk_render_node_prefers_high_depth (source);
+  self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
 
   return &self->render_node;
 }
@@ -5925,7 +5929,7 @@ gsk_debug_node_new (GskRenderNode *child,
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
 
-  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   return node;
 }
@@ -6108,7 +6112,8 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
       for (guint i = 0; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
-          node->prefers_high_depth = node->prefers_high_depth || gsk_render_node_prefers_high_depth (children[i]);
+          node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
+                                                          gsk_render_node_get_preferred_depth (children[i]));
         }
     }
 

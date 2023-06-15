@@ -194,7 +194,7 @@ static inline int
 get_target_format (GskGLRenderJob      *job,
                    const GskRenderNode *node)
 {
-  if (gsk_render_node_prefers_high_depth (node))
+  if (gsk_render_node_get_preferred_depth (node) != GDK_MEMORY_U8)
     return job->target_format;
 
   return GL_RGBA8;
