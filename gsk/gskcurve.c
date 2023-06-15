@@ -459,7 +459,7 @@ gsk_conic_curve_init_from_points (GskConicCurve          *self,
 
   memcpy (self->points, pts, sizeof (graphene_point_t) * 4);
 }
-                                  
+
 static void
 gsk_conic_curve_init (GskCurve  *curve,
                       gskpathop  op)
@@ -540,7 +540,7 @@ gsk_conic_curve_eval_point (const GskConicCurve *self,
 
   *point = GRAPHENE_POINT_INIT (num.x / denom.x, num.y / denom.y);
 }
-                       
+
 static void
 gsk_conic_curve_get_point (const GskCurve   *curve,
                            float             t,
