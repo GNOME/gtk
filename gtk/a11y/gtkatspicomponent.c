@@ -87,6 +87,8 @@ translate_coordinates_from_widget (GtkWidget      *widget,
     {
     case ATSPI_COORD_TYPE_SCREEN:
       g_warning ("Screen coordinates not supported, reported positions will be wrong");
+      *xo = 0;
+      *yo = 0;
       return;
 
     case ATSPI_COORD_TYPE_WINDOW:
