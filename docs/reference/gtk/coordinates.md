@@ -23,7 +23,7 @@ When it comes to rendering, GTK follows the CSS box model as far as practical.
 
 The CSS stylesheet that is in use determines the sizes (and appearance) of the
 margin, border and padding areas for each widget. The size of the content area
-is determined by GTKs layout algorithm using each widgets [vfunc@Gtk.Widget.measure]
+is determined by GTKs layout algorithm using each widget’s [vfunc@Gtk.Widget.measure]
 and [vfunc@Gtk.Widget.size_allocate] vfuncs.
 
 You can learn more about the CSS box model by reading the
@@ -37,11 +37,11 @@ To learn more about where GTK CSS differs from CSS on the web, see the
 
 The content area in the CSS box model is the region that the widget considers its own.
 
-The origin of the widgets coordinate system is the top left corner of the content area,
-and its size is the widgets size. The size can be queried with [method@Gtk.Widget.get_width]
+The origin of the widget’s coordinate system is the top left corner of the content area,
+and its size is the widget’s size. The size can be queried with [method@Gtk.Widget.get_width]
 and [method@Gtk.Widget.get_height]. GTK allows general 3D transformations to position
 widgets (although most of the time, the transformation will be a simple 2D translation).
-The transform to go from one widgets coordinate system to another one can be obtained
+The transform to go from one widget’s coordinate system to another one can be obtained
 with [method@Gtk.Widget.compute_transform].
 
 In addition to a size, widgets can optionally have a **_baseline_** to position text on.
@@ -55,8 +55,8 @@ or [method@Gtk.Widget.compute_bounds]. These methods can fail (either because th
 don't share a common ancestor, or because of a singular transformation), and callers need
 to handle this eventuality.
 
-Another area that is occasionally relevant are the widgets **_bounds_**, which is the area
-that a widgets rendering is typically confined to (technically, widgets can draw outside
+Another area that is occasionally relevant are the widget’s **_bounds_**, which is the area
+that a widget’s rendering is typically confined to (technically, widgets can draw outside
 of this area, unless clipping is enforced via the [property@Gtk.Widget:overflow] property).
 In CSS terms, the bounds of a widget correspond to the border area.
 
