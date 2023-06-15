@@ -61,10 +61,10 @@
  * was emitted on a listitem, the listitem will be destroyed and not be used again.
  *
  * Note that during the signal emissions, changing properties on the
- * `GtkListItem`s passed will not trigger notify signals as the listitem's
+ * listitems passed will not trigger notify signals as the listitem's
  * notifications are frozen. See g_object_freeze_notify() for details.
  *
- * For tracking changes in other properties in the `GtkListItem`, the
+ * For tracking changes in other properties in the listitem, the
  * ::notify signal is recommended. The signal can be connected in the
  * [signal@Gtk.SignalListItemFactory::setup] signal and removed again during
  * [signal@Gtk.SignalListItemFactory::teardown].
@@ -80,13 +80,13 @@ struct _GtkSignalListItemFactoryClass
   GtkListItemFactoryClass parent_class;
 
   void                  (* setup)                               (GtkSignalListItemFactory *self,
-                                                                 GtkListItem              *list_item);
+                                                                 GObject                  *list_item);
   void                  (* teardown)                            (GtkSignalListItemFactory *self,
-                                                                 GtkListItem              *list_item);
+                                                                 GObject                  *list_item);
   void                  (* bind)                                (GtkSignalListItemFactory *self,
-                                                                 GtkListItem              *list_item);
+                                                                 GObject                  *list_item);
   void                  (* unbind)                              (GtkSignalListItemFactory *self,
-                                                                 GtkListItem              *list_item);
+                                                                 GObject                  *list_item);
 };
 
 enum {
@@ -189,7 +189,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    *
    * Emitted when an object has been bound, for example when a
    * new [property@Gtk.ListItem:item] has been set on a
-   * `GtkListItem` and should be bound for use.
+   * listitem and should be bound for use.
    *
    * After this signal was emitted, the object might be shown in
    * a [class@Gtk.ListView] or other widget.
