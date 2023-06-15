@@ -1,9 +1,11 @@
 #pragma once
 
 #include <gdk/gdk.h>
+#include <gsk/gskrendernode.h>
 
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
+
 
 G_BEGIN_DECLS
 
@@ -19,6 +21,8 @@ void                    gsk_vulkan_uploader_free                        (GskVulk
 
 void                    gsk_vulkan_uploader_reset                       (GskVulkanUploader      *self);
 void                    gsk_vulkan_uploader_upload                      (GskVulkanUploader      *self);
+
+GdkMemoryFormat         gsk_render_node_get_preferred_vulkan_format     (GskRenderNode          *node);
 
 GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulkanContext       *context,
                                                                          VkImage                 image,

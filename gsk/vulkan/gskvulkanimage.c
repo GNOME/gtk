@@ -8,6 +8,8 @@
 
 #include "gdk/gdkmemoryformatprivate.h"
 
+#include "gskrendernodeprivate.h"
+
 #include <string.h>
 
 struct _GskVulkanUploader
@@ -483,6 +485,24 @@ gsk_memory_format_get_fallback (GdkMemoryFormat format)
     default:
       return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
     }
+}
+
+GdkMemoryFormat
+gsk_render_node_get_preferred_vulkan_format (GskRenderNode *node)
+{
+  switch (gsk_render_node_get_preferred_depth (node))
+  {
+    case GDK_MEMORY_U8:
+      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    case GDK_MEMORY_U16:
+      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+    case GDK_MEMORY_FLOAT16:
+      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_FLOAT32:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    default:
+      g_return_val_if_reached (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
+  }
 }
 
 static gboolean
