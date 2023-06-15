@@ -220,6 +220,12 @@ add_child (guint            position,
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), item);
 
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (row),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                                  item,
+                                  NULL,
+                                  -1);
+
   page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
   update_row (self, page, row);
 
