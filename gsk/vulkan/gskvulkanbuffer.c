@@ -72,18 +72,16 @@ gsk_vulkan_buffer_new_storage (GdkVulkanContext  *context,
 }
 
 GskVulkanBuffer *
-gsk_vulkan_buffer_new_staging (GdkVulkanContext  *context,
-                               gsize              size)
+gsk_vulkan_buffer_new_map (GdkVulkanContext  *context,
+                           gsize              size,
+                           GskVulkanMapMode   mode)
 {
-  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+  return gsk_vulkan_buffer_new_internal (context,
+                                         size,
+                                         (mode & GSK_VULKAN_READ ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
+                                         (mode & GSK_VULKAN_WRITE ? VK_BUFFER_USAGE_TRANSFER_DST_BIT : 0));
 }
 
-GskVulkanBuffer *
-gsk_vulkan_buffer_new_download (GdkVulkanContext  *context,
-                                gsize              size)
-{
-  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-}
 void
 gsk_vulkan_buffer_free (GskVulkanBuffer *self)
 {

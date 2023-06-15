@@ -6,6 +6,8 @@
 #include "gskvulkanmemoryprivate.h"
 #include "gskvulkanpipelineprivate.h"
 
+#include "gdk/gdkmemoryformatprivate.h"
+
 #include <string.h>
 
 struct _GskVulkanUploader
@@ -556,7 +558,7 @@ gsk_vulkan_image_new_from_texture (GskVulkanUploader *uploader,
                                             gdk_texture_get_width (texture),
                                             gdk_texture_get_height (texture));
   gdk_texture_downloader_set_format (downloader, result->format);
-  gsk_vulkan_image_map_memory (result, uploader, &map);
+  gsk_vulkan_image_map_memory (result, uploader, GSK_VULKAN_WRITE, &map);
   gdk_texture_downloader_download_into (downloader, map.data, map.stride);
   gsk_vulkan_image_unmap_memory (result, uploader, &map);
   gdk_texture_downloader_free (downloader);
@@ -588,10 +590,27 @@ gsk_vulkan_image_new_for_upload (GskVulkanUploader *uploader,
 static void
 gsk_vulkan_image_map_memory_direct (GskVulkanImage    *self,
                                     GskVulkanUploader *uploader,
+                                    GskVulkanMapMode   mode,
                                     GskVulkanImageMap *map)
 {
   VkImageSubresource image_res;
   VkSubresourceLayout image_layout;
+
+  if (self->vk_image_layout != VK_IMAGE_LAYOUT_PREINITIALIZED)
+    {
+      gsk_vulkan_uploader_add_image_barrier (uploader,
+                                             FALSE,
+                                             self,
+                                             VK_IMAGE_LAYOUT_GENERAL,
+                                             (mode & GSK_VULKAN_READ ? VK_ACCESS_MEMORY_READ_BIT : 0) |
+                                             (mode & GSK_VULKAN_WRITE ? VK_ACCESS_MEMORY_WRITE_BIT : 0));
+
+      if (mode & GSK_VULKAN_READ)
+        {
+          gsk_vulkan_uploader_upload (uploader);
+          GSK_VK_CHECK (vkQueueWaitIdle, gdk_vulkan_context_get_queue (self->vulkan));
+        }
+    }
 
   image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
   image_res.mipLevel = 0;
@@ -600,6 +619,7 @@ gsk_vulkan_image_map_memory_direct (GskVulkanImage    *self,
   vkGetImageSubresourceLayout (gdk_vulkan_context_get_device (self->vulkan),
                                self->vk_image, &image_res, &image_layout);
 
+  map->mode = mode;
   map->staging_buffer = NULL;
   map->data = gsk_vulkan_memory_map (self->memory) + image_layout.offset;
   map->stride = image_layout.rowPitch;
@@ -622,13 +642,52 @@ gsk_vulkan_image_unmap_memory_direct (GskVulkanImage    *self,
 static void
 gsk_vulkan_image_map_memory_indirect (GskVulkanImage    *self,
                                       GskVulkanUploader *uploader,
+                                      GskVulkanMapMode   mode,
                                       GskVulkanImageMap *map)
 {
-  gsize buffer_size = self->width * self->height * 4;
+  map->mode = mode;
+  map->stride = self->width * gdk_memory_format_bytes_per_pixel (self->format);
+  map->staging_buffer = gsk_vulkan_buffer_new_map (uploader->vulkan, self->height * map->stride, mode);
 
-  map->staging_buffer = gsk_vulkan_buffer_new_staging (uploader->vulkan, buffer_size);
+  if (self->vk_image_layout != VK_IMAGE_LAYOUT_PREINITIALIZED)
+    {
+      if (mode & GSK_VULKAN_READ)
+        {
+          gsk_vulkan_uploader_add_image_barrier (uploader,
+                                                 FALSE,
+                                                 self,
+                                                 VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                                 VK_ACCESS_TRANSFER_READ_BIT);
+
+          vkCmdCopyImageToBuffer (gsk_vulkan_uploader_get_copy_buffer (uploader),
+                                  self->vk_image,
+                                  VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                  gsk_vulkan_buffer_get_buffer (map->staging_buffer),
+                                  1,
+                                  (VkBufferImageCopy[1]) {
+                                       {
+                                           .bufferOffset = 0,
+                                           .imageSubresource = {
+                                               .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                               .mipLevel = 0,
+                                               .baseArrayLayer = 0,
+                                               .layerCount = 1
+                                           },
+                                           .imageOffset = { 0, 0, 0 },
+                                           .imageExtent = {
+                                               .width = self->width,
+                                               .height = self->height,
+                                               .depth = 1
+                                           }
+                                       }
+                                  });
+
+          gsk_vulkan_uploader_upload (uploader);
+          GSK_VK_CHECK (vkQueueWaitIdle, gdk_vulkan_context_get_queue (self->vulkan));
+        }
+    }
+
   map->data = gsk_vulkan_buffer_map (map->staging_buffer);
-  map->stride = self->width * 4;
 }
 
 static void
@@ -638,70 +697,75 @@ gsk_vulkan_image_unmap_memory_indirect (GskVulkanImage    *self,
 {
   gsk_vulkan_buffer_unmap (map->staging_buffer);
 
-  gsk_vulkan_uploader_add_buffer_barrier (uploader,
-                                          FALSE,
-                                          &(VkBufferMemoryBarrier) {
-                                             .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                                             .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
-                                             .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
-                                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                                             .buffer = gsk_vulkan_buffer_get_buffer (map->staging_buffer),
-                                             .offset = 0,
-                                             .size = VK_WHOLE_SIZE,
-                                         });
+  if (map->mode & GSK_VULKAN_WRITE)
+    {
+      gsk_vulkan_uploader_add_buffer_barrier (uploader,
+                                              FALSE,
+                                              &(VkBufferMemoryBarrier) {
+                                                 .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                                                 .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                                                 .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
+                                                 .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                                 .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                                 .buffer = gsk_vulkan_buffer_get_buffer (map->staging_buffer),
+                                                 .offset = 0,
+                                                 .size = VK_WHOLE_SIZE,
+                                             });
 
-  gsk_vulkan_uploader_add_image_barrier (uploader,
-                                         FALSE,
-                                         self,
-                                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                         VK_ACCESS_TRANSFER_WRITE_BIT);
+      gsk_vulkan_uploader_add_image_barrier (uploader,
+                                             FALSE,
+                                             self,
+                                             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                             VK_ACCESS_TRANSFER_WRITE_BIT);
 
-  vkCmdCopyBufferToImage (gsk_vulkan_uploader_get_copy_buffer (uploader),
-                          gsk_vulkan_buffer_get_buffer (map->staging_buffer),
-                          self->vk_image,
-                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = { 0, 0, 0 },
-                                   .imageExtent = {
-                                       .width = self->width,
-                                       .height = self->height,
-                                       .depth = 1
+      vkCmdCopyBufferToImage (gsk_vulkan_uploader_get_copy_buffer (uploader),
+                              gsk_vulkan_buffer_get_buffer (map->staging_buffer),
+                              self->vk_image,
+                              VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                              1,
+                              (VkBufferImageCopy[1]) {
+                                   {
+                                       .bufferOffset = 0,
+                                       .imageSubresource = {
+                                           .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                           .mipLevel = 0,
+                                           .baseArrayLayer = 0,
+                                           .layerCount = 1
+                                       },
+                                       .imageOffset = { 0, 0, 0 },
+                                       .imageExtent = {
+                                           .width = self->width,
+                                           .height = self->height,
+                                           .depth = 1
+                                       }
                                    }
-                               }
-                          });
+                              });
+
+      uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list,
+                                                            map->staging_buffer);
+    }
+  else
+    {
+      gsk_vulkan_buffer_free (map->staging_buffer);
+    }
 
   gsk_vulkan_uploader_add_image_barrier (uploader,
                                          TRUE,
                                          self,
                                          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                          VK_ACCESS_SHADER_READ_BIT);
-
-  uploader->staging_buffer_free_list = g_slist_prepend (uploader->staging_buffer_free_list,
-                                                        map->staging_buffer);
 }
 
 void
 gsk_vulkan_image_map_memory (GskVulkanImage    *self,
                              GskVulkanUploader *uploader,
+                             GskVulkanMapMode   mode,
                              GskVulkanImageMap *map)
 {
-  g_assert (self->vk_image_layout == VK_IMAGE_LAYOUT_UNDEFINED ||
-            self->vk_image_layout == VK_IMAGE_LAYOUT_PREINITIALIZED);
-
   if (!GSK_DEBUG_CHECK (STAGING) && gsk_vulkan_memory_can_map (self->memory, TRUE))
-    gsk_vulkan_image_map_memory_direct (self, uploader, map);
+    gsk_vulkan_image_map_memory_direct (self, uploader, mode, map);
   else
-    gsk_vulkan_image_map_memory_indirect (self, uploader, map);
+    gsk_vulkan_image_map_memory_indirect (self, uploader, mode, map);
 }
 
 void
@@ -776,7 +840,7 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
                                preferred_format,
                                width,
                                height,
-                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT |
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
@@ -791,54 +855,18 @@ GdkTexture *
 gsk_vulkan_image_download (GskVulkanImage    *self,
                            GskVulkanUploader *uploader)
 {
-  GskVulkanBuffer *buffer;
+  GskVulkanImageMap map;
   GdkTexture *texture;
   GBytes *bytes;
-  guchar *mem;
 
-  gsk_vulkan_uploader_add_image_barrier (uploader,
-                                         FALSE,
-                                         self,
-                                         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                                         VK_ACCESS_TRANSFER_READ_BIT);
-
-  buffer = gsk_vulkan_buffer_new_download (self->vulkan, self->width * self->height * 4);
-
-  vkCmdCopyImageToBuffer (gsk_vulkan_uploader_get_copy_buffer (uploader),
-                          self->vk_image,
-                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                          gsk_vulkan_buffer_get_buffer (buffer),
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = { 0, 0, 0 },
-                                   .imageExtent = {
-                                       .width = self->width,
-                                       .height = self->height,
-                                       .depth = 1
-                                   }
-                               }
-                          });
-
-  gsk_vulkan_uploader_upload (uploader);
-
-  GSK_VK_CHECK (vkQueueWaitIdle, gdk_vulkan_context_get_queue (self->vulkan));
-
-  mem = gsk_vulkan_buffer_map (buffer);
-  bytes = g_bytes_new (mem, self->width * self->height * 4);
+  gsk_vulkan_image_map_memory (self, uploader, GSK_VULKAN_READ, &map);
+  bytes = g_bytes_new (map.data, map.stride * self->height);
   texture = gdk_memory_texture_new (self->width, self->height,
                                     self->format,
                                     bytes,
-                                    self->width * 4);
-  gsk_vulkan_buffer_unmap (buffer);
-  gsk_vulkan_buffer_free (buffer);
+                                    map.stride);
+  g_bytes_unref (bytes);
+  gsk_vulkan_image_unmap_memory (self, uploader, &map);
 
   return texture;
 }
@@ -860,7 +888,7 @@ gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
   for (int i = 0; i < num_regions; i++)
     size += regions[i].width * regions[i].height * 4;
 
-  staging = gsk_vulkan_buffer_new_staging (uploader->vulkan, size);
+  staging = gsk_vulkan_buffer_new_map (uploader->vulkan, size, GSK_VULKAN_WRITE);
   mem = gsk_vulkan_buffer_map (staging);
 
   bufferImageCopy = alloca (sizeof (VkBufferImageCopy) * num_regions);

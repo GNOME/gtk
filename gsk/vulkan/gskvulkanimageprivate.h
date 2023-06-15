@@ -2,6 +2,7 @@
 
 #include <gdk/gdk.h>
 
+#include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
 
 G_BEGIN_DECLS
@@ -56,10 +57,11 @@ typedef struct _GskVulkanImageMap GskVulkanImageMap;
 struct _GskVulkanImageMap
 {
   guchar *data;
-  gsize   stride;
+  gsize stride;
+  GskVulkanMapMode mode;
 
   /* private */
-  gpointer staging_buffer;
+  GskVulkanBuffer *staging_buffer;
 };
 
 GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulkanUploader      *uploader,
@@ -68,6 +70,7 @@ GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulk
                                                                          gsize                   height);
 void                    gsk_vulkan_image_map_memory                     (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader,
+                                                                         GskVulkanMapMode        mode,
                                                                          GskVulkanImageMap      *map);
 void                    gsk_vulkan_image_unmap_memory                   (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader,
