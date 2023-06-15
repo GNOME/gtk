@@ -31,10 +31,17 @@ typedef enum {
   GDK_MEMORY_ALPHA_OPAQUE
 } GdkMemoryAlpha;
 
+typedef enum {
+  GDK_MEMORY_U8,
+  GDK_MEMORY_U16,
+  GDK_MEMORY_FLOAT16,
+  GDK_MEMORY_FLOAT32
+} GdkMemoryDepth;
+
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat             format) G_GNUC_CONST;
-gboolean                gdk_memory_format_prefers_high_depth(GdkMemoryFormat             format) G_GNUC_CONST;
+GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format) G_GNUC_CONST;
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gboolean                    gles,
                                                              guint                       gl_major,

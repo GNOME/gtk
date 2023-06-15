@@ -1734,7 +1734,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   self->texture = g_object_ref (texture);
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
-  node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
+  node->prefers_high_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture)) != GDK_MEMORY_U8;
 
   return node;
 }
@@ -1960,7 +1960,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   graphene_rect_init_from_rect (&node->bounds, bounds);
   self->filter = filter;
 
-  node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
+  node->prefers_high_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture)) != GDK_MEMORY_U8;
 
   return node;
 }

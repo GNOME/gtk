@@ -1458,6 +1458,9 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                          guint           *gl_type,
                          GLint          (*gl_swizzle)[4])
 {
+  GdkMemoryDepth depth;
+
+  /* First, try the format itself */
   if (gdk_memory_format_gl_format (data_format,
                                    use_es,
                                    major,
@@ -1469,7 +1472,48 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
       gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
     return data_format;
 
-  if (gdk_memory_format_prefers_high_depth (data_format))
+  depth = gdk_memory_format_get_depth (data_format);
+
+  /* Next, try the generic format for the given bit depth */
+  switch (depth)
+    {
+      case GDK_MEMORY_FLOAT16:
+        data_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+        if (gdk_memory_format_gl_format (data_format,
+                                         use_es,
+                                         major,
+                                         minor,
+                                         gl_internalformat,
+                                         gl_format,
+                                         gl_type,
+                                         gl_swizzle))
+          return data_format;
+        break;
+
+      case GDK_MEMORY_U16:
+        data_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+        if (gdk_memory_format_gl_format (data_format,
+                                         use_es,
+                                         major,
+                                         minor,
+                                         gl_internalformat,
+                                         gl_format,
+                                         gl_type,
+                                         gl_swizzle))
+          return data_format;
+        break;
+
+      case GDK_MEMORY_FLOAT32:
+      case GDK_MEMORY_U8:
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+
+  /* If the format is high depth, also try float32 */
+  if (depth != GDK_MEMORY_U8)
     {
       data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
       if (gdk_memory_format_gl_format (data_format,
@@ -1483,6 +1527,7 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
         return data_format;
     }
 
+  /* If all else fails, pick the one format that's always supported */
   data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
   if (!gdk_memory_format_gl_format (data_format,
                                     use_es,

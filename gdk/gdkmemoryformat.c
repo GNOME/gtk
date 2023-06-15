@@ -258,7 +258,7 @@ struct _GdkMemoryFormatDescription
   GdkMemoryAlpha alpha;
   gsize bytes_per_pixel;
   gsize alignment;
-  gboolean prefers_high_depth;
+  GdkMemoryDepth depth;
   struct {
     guint gl_major;
     guint gl_minor;
@@ -289,7 +289,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_premultiplied_to_float,
@@ -299,7 +299,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8r8g8b8_premultiplied_to_float,
@@ -309,7 +309,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 0, 0 },
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r8g8b8a8_premultiplied_to_float,
@@ -319,7 +319,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_to_float,
@@ -329,7 +329,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8r8g8b8_to_float,
@@ -339,7 +339,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 0, 0 },
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r8g8b8a8_to_float,
@@ -349,7 +349,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8b8g8r8_to_float,
@@ -359,7 +359,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     3,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 0, 0 },
     { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r8g8b8_to_float,
@@ -369,7 +369,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     3,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, G_MAXUINT, G_MAXUINT },
     { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     b8g8r8_to_float,
@@ -379,7 +379,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r16g16b16_to_float,
@@ -389,7 +389,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     8,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_to_float,
@@ -399,7 +399,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     8,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_to_float,
@@ -409,7 +409,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_FLOAT16,
     { 0, 0, 3, 0 },
     { GL_RGB16F, GL_RGB, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r16g16b16_float_to_float,
@@ -419,7 +419,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     8,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_FLOAT16,
     { 0, 0, 3, 0 },
     { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_float_to_float,
@@ -429,7 +429,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     8,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_FLOAT16,
     { 0, 0, 3, 0 },
     { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r16g16b16a16_float_to_float,
@@ -439,7 +439,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     12,
     G_ALIGNOF (float),
-    TRUE,
+    GDK_MEMORY_FLOAT32,
     { 0, 0, 3, 0 },
     { GL_RGB32F, GL_RGB, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
     r32g32b32_float_to_float,
@@ -459,7 +459,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     16,
     G_ALIGNOF (float),
-    TRUE,
+    GDK_MEMORY_FLOAT32,
     { 0, 0, 3, 0 },
     { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r32g32b32a32_float_to_float,
@@ -469,7 +469,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     2,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
     { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
     g8a8_premultiplied_to_float,
@@ -479,7 +479,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     2,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
     { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
     g8a8_to_float,
@@ -489,7 +489,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     1,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
     { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_ONE } },
     g8_to_float,
@@ -499,7 +499,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
     g16a16_premultiplied_to_float,
@@ -509,7 +509,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
     g16a16_to_float,
@@ -519,7 +519,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     2,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_ONE } },
     g16_to_float,
@@ -529,7 +529,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     1,
     G_ALIGNOF (guchar),
-    FALSE,
+    GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
     { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
     a8_to_float,
@@ -539,7 +539,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     2,
     G_ALIGNOF (guint16),
-    TRUE,
+    GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
     { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
     a16_to_float,
@@ -566,23 +566,22 @@ gdk_memory_format_alignment (GdkMemoryFormat format)
 }
 
 /*<private>
- * gdk_memory_format_prefers_high_depth:
+ * gdk_memory_format_get_depth:
  * @format: a memory format
  *
- * Checks if the given format benefits from being rendered
- * in bit depths higher than 8bits per pixel. See
- * gsk_render_node_prefers_high_depth() for more information
- * on this.
- * Usually this is the case when
- * gdk_memory_format_bytes_per_pixel() is larger than 4.
+ * Gets the depth of the individual channels of the format.
+ * See gsk_render_node_prefers_high_depth() for more
+ * information on this.
  *
- * Returns: %TRUE if the format benefits from being
- *     composited in hgiher bit depths.
+ * Usually renderers want to use higher depth for render
+ * targets to match these formats.
+ *
+ * Returns: The depth of this format
  **/
-gboolean
-gdk_memory_format_prefers_high_depth (GdkMemoryFormat format)
+GdkMemoryDepth
+gdk_memory_format_get_depth (GdkMemoryFormat format)
 {
-  return memory_formats[format].prefers_high_depth;
+  return memory_formats[format].depth;
 }
 
 gboolean
