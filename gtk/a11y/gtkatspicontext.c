@@ -144,7 +144,7 @@ collect_states (GtkAtSpiContext    *self,
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
   set_atspi_state (&states, ATSPI_STATE_SHOWING);
 
-  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_WINDOW)
+  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_APPLICATION)
     {
       if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
         set_atspi_state (&states, ATSPI_STATE_ACTIVE);
@@ -1170,7 +1170,7 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       /* Orca tracks the window:activate and window:deactivate events on top
        * levels to decide whether to track other AT-SPI events
        */
-      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW)
+      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_APPLICATION)
         {
           if (state)
             emit_window_event (self, "activate");

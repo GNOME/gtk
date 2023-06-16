@@ -46,6 +46,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
+| `APPLICATION` | An application window | [class@Gtk.Window] |
 | `BUTTON` | A control that performs an action when pressed | [class@Gtk.Button], [class@Gtk.LinkButton], [class@Gtk.Expander] |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | [class@Gtk.CheckButton] |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | [class@Gtk.ComboBox] |
@@ -78,7 +79,6 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `TAB_PANEL` | A page in a notebook or stack | [class@Gtk.Stack] |
 | `TEXT_BOX` | A type of input that allows free-form text as its value. | [class@Gtk.Entry], [class@Gtk.PasswordEntry], [class@Gtk.TextView] |
 | `TREE_GRID` | A treeview-like columned list | [class@Gtk.ColumnView] |
-| `WINDOW` | An application window | [class@Gtk.Window] |
 | `...` | … |
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
