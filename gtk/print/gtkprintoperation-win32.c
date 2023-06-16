@@ -44,6 +44,8 @@
 
 #include "gtkprintoperation-private.h"
 #include "gtkprint-win32.h"
+#include "gtkprivate.h"
+#include "gdkprivate.h"
 #include "win32/gdkprivate-win32.h"
 
 #define MAX_PAGE_RANGES 20
