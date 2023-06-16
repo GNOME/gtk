@@ -306,6 +306,39 @@ test_serialize_custom_contours (void)
   gsk_path_unref (path1);
 }
 
+static void
+test_bad_split (void)
+{
+  GskPath *path, *path1;
+  GskPathMeasure *measure, *measure1;
+  GskPathBuilder *builder;
+  float split, length, epsilon;
+
+  /* An example that was isolated from the /path/segment test path.c
+   * It shows how uneven parametrization of cubics can lead to bad
+   * lengths reported by the measure.
+   */
+
+  path = gsk_path_parse ("M 0 0 C 2 0 4 0 4 0");
+
+  measure = gsk_path_measure_new (path);
+  split = 2.962588;
+  length = gsk_path_measure_get_length (measure);
+  epsilon = MAX (length / 256, 1.f / 1024);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_segment (builder, measure, 0, split);
+  path1 = gsk_path_builder_free_to_path (builder);
+  measure1 = gsk_path_measure_new (path1);
+
+  g_assert_cmpfloat_with_epsilon (split, gsk_path_measure_get_length (measure1), epsilon);
+
+  gsk_path_measure_unref (measure1);
+  gsk_path_unref (path1);
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -314,6 +347,7 @@ main (int   argc,
 
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
+  g_test_add_func ("/path/bad-split", test_bad_split);
 
   return g_test_run ();
 }
