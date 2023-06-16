@@ -1075,6 +1075,15 @@ gtk_at_context_get_name_accumulate (GtkATContext *self,
         return;
     }
 
+  if (names->len == 0)
+    {
+      if (GTK_IS_WIDGET (self->accessible))
+        {
+          const char *tooltip = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
+          if (tooltip)
+            g_ptr_array_add (names, (char *) tooltip);
+        }
+    }
 }
 
 static void
@@ -1148,7 +1157,24 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
       if (gtk_boolean_accessible_value_get (value))
         return;
     }
+
+  if (labels->len == 0)
+    {
+      if (GTK_IS_WIDGET (self->accessible))
+        {
+          const char *tooltip = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
+          if (tooltip)
+            g_ptr_array_add (labels, (char *) tooltip);
+        }
+    }
 }
+
+static GtkAccessibleRole name_forbidden[] = {
+  GTK_ACCESSIBLE_ROLE_CAPTION,
+  GTK_ACCESSIBLE_ROLE_GENERIC,
+  GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  GTK_ACCESSIBLE_ROLE_NONE,
+};
 
 /*< private >
  * gtk_at_context_get_name:
@@ -1164,6 +1190,12 @@ char *
 gtk_at_context_get_name (GtkATContext *self)
 {
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (name_forbidden); i++)
+    {
+      if (self->accessible_role == name_forbidden[i])
+        return g_strdup ("");
+    }
 
   GPtrArray *names = g_ptr_array_new ();
 
@@ -1203,6 +1235,12 @@ char *
 gtk_at_context_get_description (GtkATContext *self)
 {
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (name_forbidden); i++)
+    {
+      if (self->accessible_role == name_forbidden[i])
+        return g_strdup ("");
+    }
 
   GPtrArray *names = g_ptr_array_new ();
 
