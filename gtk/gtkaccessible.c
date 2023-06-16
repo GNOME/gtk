@@ -881,6 +881,42 @@ gtk_accessible_role_is_range_subclass (GtkAccessibleRole role)
   return FALSE;
 }
 
+/* < private >
+ * gtk_accessible_role_is_abstract:
+ * @role: a `GtkAccessibleRole`
+ *
+ * Checks if @role is considered abstract and should not be used
+ * for concrete widgets.
+ *
+ * Returns: whether the role is abstract
+ */
+gboolean
+gtk_accessible_role_is_abstract (GtkAccessibleRole role)
+{
+  switch ((int) role)
+    {
+    case GTK_ACCESSIBLE_ROLE_COMMAND:
+    case GTK_ACCESSIBLE_ROLE_COMPOSITE:
+    case GTK_ACCESSIBLE_ROLE_INPUT:
+    case GTK_ACCESSIBLE_ROLE_LANDMARK:
+    case GTK_ACCESSIBLE_ROLE_RANGE:
+    case GTK_ACCESSIBLE_ROLE_SECTION:
+    case GTK_ACCESSIBLE_ROLE_SECTION_HEAD:
+    case GTK_ACCESSIBLE_ROLE_SELECT:
+    case GTK_ACCESSIBLE_ROLE_STRUCTURE:
+#if 0
+    /* FIXME: ARIA considers these abstract.
+     * But we are using them for widgets
+     */
+    case GTK_ACCESSIBLE_ROLE_WIDGET:
+    case GTK_ACCESSIBLE_ROLE_WINDOW:
+#endif
+      return TRUE;
+    default:
+      return FALSE;
+    }
+}
+
 /*< private >
  * gtk_accessible_platform_changed:
  * @self: a `GtkAccessible`

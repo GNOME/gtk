@@ -55,7 +55,9 @@ typedef enum {
 const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
                                                  const char        *domain);
 
-gboolean gtk_accessible_role_is_range_subclass (GtkAccessibleRole role);
+gboolean        gtk_accessible_role_is_range_subclass (GtkAccessibleRole role);
+
+gboolean        gtk_accessible_role_is_abstract       (GtkAccessibleRole role);
 
 /* < private >
  * GtkAccessibleNaming:
