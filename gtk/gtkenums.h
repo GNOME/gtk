@@ -1254,13 +1254,14 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_COMMAND: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_COMPOSITE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_DIALOG: A dialog is a window that is designed to interrupt
- *    the current processing of an application in order to prompt the user to enter
- *    information or require a response.
- * @GTK_ACCESSIBLE_ROLE_DOCUMENT: Unused
+ *   the current processing of an application in order to prompt the user to enter
+ *   information or require a response.
+ * @GTK_ACCESSIBLE_ROLE_DOCUMENT: Content that assistive technology users may want to
+ *   browse in a reading mode.
  * @GTK_ACCESSIBLE_ROLE_FEED: Unused
  * @GTK_ACCESSIBLE_ROLE_FORM: Unused
  * @GTK_ACCESSIBLE_ROLE_GENERIC: A nameless container that has no semantic meaning
- *   of its own. This is the role that GTK uses by default for widgets and most containers.
+ *   of its own. This is the role that GTK uses by default for widgets.
  * @GTK_ACCESSIBLE_ROLE_GRID: A grid of items.
  * @GTK_ACCESSIBLE_ROLE_GRID_CELL: An item in a grid or tree grid.
  * @GTK_ACCESSIBLE_ROLE_GROUP: An element that groups multiple related widgets. GTK uses
@@ -1293,9 +1294,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_PRESENTATION: An element that is not represented to accessibility technologies.
  *   This role is synonymous to @GTK_ACCESSIBLE_ROLE_NONE.
  * @GTK_ACCESSIBLE_ROLE_PROGRESS_BAR: An element that displays the progress
- *    status for tasks that take a long time.
+ *   status for tasks that take a long time.
  * @GTK_ACCESSIBLE_ROLE_RADIO: A checkable input in a group of radio roles,
- *    only one of which can be checked at a time.
+ *   only one of which can be checked at a time.
  * @GTK_ACCESSIBLE_ROLE_RADIO_GROUP: Unused
  * @GTK_ACCESSIBLE_ROLE_RANGE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_REGION: Unused
@@ -1303,30 +1304,30 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_ROW_GROUP: Unused
  * @GTK_ACCESSIBLE_ROLE_ROW_HEADER: Unused
  * @GTK_ACCESSIBLE_ROLE_SCROLLBAR: A graphical object that controls the scrolling
- *    of content within a viewing area, regardless of whether the content is fully
- *    displayed within the viewing area.
+ *   of content within a viewing area, regardless of whether the content is fully
+ *   displayed within the viewing area.
  * @GTK_ACCESSIBLE_ROLE_SEARCH: Unused
  * @GTK_ACCESSIBLE_ROLE_SEARCH_BOX: A type of textbox intended for specifying
- *    search criteria.
+ *   search criteria.
  * @GTK_ACCESSIBLE_ROLE_SECTION: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SECTION_HEAD: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SELECT: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SEPARATOR: A divider that separates and distinguishes
- *    sections of content or groups of menuitems.
+ *   sections of content or groups of menuitems.
  * @GTK_ACCESSIBLE_ROLE_SLIDER: A user input where the user selects a value
- *    from within a given range.
+ *   from within a given range.
  * @GTK_ACCESSIBLE_ROLE_SPIN_BUTTON: A form of range that expects the user to
- *    select from among discrete choices.
+ *   select from among discrete choices.
  * @GTK_ACCESSIBLE_ROLE_STATUS: Unused
  * @GTK_ACCESSIBLE_ROLE_STRUCTURE: Abstract role.
  * @GTK_ACCESSIBLE_ROLE_SWITCH: A type of checkbox that represents on/off values,
- *    as opposed to checked/unchecked values.
+ *   as opposed to checked/unchecked values.
  * @GTK_ACCESSIBLE_ROLE_TAB: An item in a list of tab used for switching pages.
  * @GTK_ACCESSIBLE_ROLE_TABLE: Unused
  * @GTK_ACCESSIBLE_ROLE_TAB_LIST: A list of tabs for switching pages.
  * @GTK_ACCESSIBLE_ROLE_TAB_PANEL: A page in a notebook or stack.
  * @GTK_ACCESSIBLE_ROLE_TEXT_BOX: A type of input that allows free-form text
- *    as its value.
+ *   as its value.
  * @GTK_ACCESSIBLE_ROLE_TIME: Unused
  * @GTK_ACCESSIBLE_ROLE_TIMER: Unused
  * @GTK_ACCESSIBLE_ROLE_TOOLBAR: Unused
@@ -1334,12 +1335,12 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_TREE: Unused
  * @GTK_ACCESSIBLE_ROLE_TREE_GRID: A treeview-like, columned list.
  * @GTK_ACCESSIBLE_ROLE_TREE_ITEM: Unused
- * @GTK_ACCESSIBLE_ROLE_WIDGET: An interactive component of a graphical user
- *    interface. This is the role that GTK uses by default for widgets.
- * @GTK_ACCESSIBLE_ROLE_WINDOW: An application window.
+ * @GTK_ACCESSIBLE_ROLE_WIDGET: Abstract role for interactive components of a
+ *   graphical user interface
+ * @GTK_ACCESSIBLE_ROLE_WINDOW: Abstract role for windows.
  * @GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON: A type of push button
- *    which stays pressed until depressed by a second activation.
- *    Since: 4.10
+ *   which stays pressed until depressed by a second activation.
+ *   Since: 4.10
  * @GTK_ACCESSIBLE_ROLE_APPLICATION: A toplevel element of a graphical user interface.
  *   This is the role that GTK uses by default for windows.
  *   Since: 4.12

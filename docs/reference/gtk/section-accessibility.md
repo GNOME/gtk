@@ -31,7 +31,7 @@ described by a set of *attributes*.
 Roles define the taxonomy and semantics of a UI control to any assistive
 technology application; for instance, a button will have a role of
 `GTK_ACCESSIBLE_ROLE_BUTTON`; an entry will have a role of
-`GTK_ACCESSIBLE_ROLE_TEXTBOX`; a toggle button will have a role of
+`GTK_ACCESSIBLE_ROLE_TEXTBOX`; a check button will have a role of
 `GTK_ACCESSIBLE_ROLE_CHECKBOX`; etc.
 
 Each role is part of the widget's instance, and **cannot** be changed over
@@ -215,6 +215,16 @@ Application developers using GTK **should** ensure that their UI controls
 are accessible as part of the development process. The GTK Inspector shows
 the accessible attributes of each widget, and also provides an overlay that
 can highlight accessibility issues.
+
+It is possible to set accessible attributes in UI files as well:
+```xml
+<object class="GtkButton" id="button1">
+  <accessibility>
+    <property name="label">Download</property>
+    <relation name="labelled-by">label1</relation>
+  /accessibility>
+</object>
+```
 
 ## Implementations
 
