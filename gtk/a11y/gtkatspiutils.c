@@ -85,7 +85,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_FORM;
 
     case GTK_ACCESSIBLE_ROLE_GENERIC:
-      break;
+      return ATSPI_ROLE_FILLER;
 
     case GTK_ACCESSIBLE_ROLE_GRID:
       return ATSPI_ROLE_TABLE;
@@ -275,6 +275,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
 
     case GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON:
       return ATSPI_ROLE_TOGGLE_BUTTON;
+
     default:
       break;
     }
