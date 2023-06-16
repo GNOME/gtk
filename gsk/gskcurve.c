@@ -348,11 +348,11 @@ gsk_curve_curve_too_curvy (const GskCurveCurve *self,
   graphene_point_t p;
 
   graphene_point_interpolate (&pts[0], &pts[3], 1.0f / 3, &p);
-  if (ABS (p.x - pts[1].x) + ABS (p.y - pts[1].y)  > tolerance)
+  if (MAX (ABS (p.x - pts[1].x), ABS (p.y - pts[1].y)) > tolerance)
     return TRUE;
 
   graphene_point_interpolate (&pts[0], &pts[3], 2.0f / 3, &p);
-  if (ABS (p.x - pts[2].x) + ABS (p.y - pts[2].y)  > tolerance)
+  if (MAX (ABS (p.x - pts[2].x), ABS (p.y - pts[2].y)) > tolerance)
     return TRUE;
 
   return FALSE;
