@@ -1340,6 +1340,9 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON: A type of push button
  *    which stays pressed until depressed by a second activation.
  *    Since: 4.10
+ * @GTK_ACCESSIBLE_ROLE_APPLICATION: A toplevel element of a graphical user interface.
+ *   This is the role that GTK uses by default for windows.
+ *   Since: 4.12
  *
  * The accessible role for a [iface@Accessible] implementation.
  *
@@ -1425,7 +1428,8 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_TREE_ITEM,
   GTK_ACCESSIBLE_ROLE_WIDGET,
   GTK_ACCESSIBLE_ROLE_WINDOW,
-  GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON GDK_AVAILABLE_ENUMERATOR_IN_4_10
+  GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON GDK_AVAILABLE_ENUMERATOR_IN_4_10,
+  GTK_ACCESSIBLE_ROLE_APPLICATION GDK_AVAILABLE_ENUMERATOR_IN_4_12
 } GtkAccessibleRole;
 
 /**

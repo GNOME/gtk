@@ -45,6 +45,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_ALERT_DIALOG:
       return ATSPI_ROLE_ALERT;
 
+    case GTK_ACCESSIBLE_ROLE_APPLICATION:
+      return ATSPI_ROLE_FRAME;
+
     case GTK_ACCESSIBLE_ROLE_BANNER:
       break;
 

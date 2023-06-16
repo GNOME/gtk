@@ -831,6 +831,7 @@ static const char *role_names[] = {
   [GTK_ACCESSIBLE_ROLE_WIDGET] = NC_("accessibility", "widget"),
   [GTK_ACCESSIBLE_ROLE_WINDOW] = NC_("accessibility", "window"),
   [GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON] = NC_("accessibility", "toggle button"),
+  [GTK_ACCESSIBLE_ROLE_APPLICATION] = NC_("accessibility", "application"),
 };
 
 /*< private >
