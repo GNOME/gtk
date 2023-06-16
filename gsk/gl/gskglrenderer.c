@@ -296,7 +296,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   viewport.size.height = gdk_surface_get_height (surface) * scale;
 
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->context),
-                                     gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8,
+                                     gsk_render_node_get_preferred_depth (root),
                                      update_area);
 
   gdk_gl_context_make_current (self->context);

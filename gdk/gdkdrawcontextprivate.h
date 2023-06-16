@@ -22,6 +22,8 @@
 
 #include "gdkdrawcontext.h"
 
+#include "gdkmemoryformatprivate.h"
+
 G_BEGIN_DECLS
 
 #define GDK_DRAW_CONTEXT_CLASS(klass) 	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAW_CONTEXT, GdkDrawContextClass))
@@ -40,7 +42,7 @@ struct _GdkDrawContextClass
   GObjectClass parent_class;
 
   void                  (* begin_frame)                         (GdkDrawContext         *context,
-                                                                 gboolean                prefers_high_depth,
+                                                                 GdkMemoryDepth          depth,
                                                                  cairo_region_t         *update_area);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted);
@@ -50,7 +52,7 @@ struct _GdkDrawContextClass
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
 void                    gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
-                                                                 gboolean                prefers_high_depth,
+                                                                 GdkMemoryDepth          depth,
                                                                  const cairo_region_t   *region);
 G_END_DECLS
 

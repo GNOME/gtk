@@ -145,7 +145,7 @@ gdk_wayland_cairo_context_create_surface (GdkWaylandCairoContext *self)
 
 static void
 gdk_wayland_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                       gboolean        prefers_high_depth,
+                                       GdkMemoryDepth  depth,
                                        cairo_region_t *region)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
