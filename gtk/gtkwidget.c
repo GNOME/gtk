@@ -877,6 +877,8 @@ gtk_widget_set_accessible_role (GtkWidget         *self,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
 
+  g_return_if_fail (!gtk_accessible_role_is_abstract (role));
+
   if (priv->at_context == NULL || !gtk_at_context_is_realized (priv->at_context))
     {
       priv->accessible_role = role;
@@ -1923,7 +1925,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
   gtk_widget_class_set_css_name (klass, I_("widget"));
-  gtk_widget_class_set_accessible_role (klass, GTK_ACCESSIBLE_ROLE_WIDGET);
+  klass->priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
 }
 
 static void
@@ -13165,6 +13167,7 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass    *widget_class,
   GtkWidgetClassPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (!gtk_accessible_role_is_abstract (accessible_role));
 
   priv = widget_class->priv;
   priv->accessible_role = accessible_role;
