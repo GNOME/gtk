@@ -157,8 +157,8 @@ do_video_player (GtkWidget *do_widget)
       gtk_button_set_child (GTK_BUTTON (button), image);
       g_signal_connect (button, "clicked", G_CALLBACK (logo_clicked_cb), video);
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
-                                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "GTK Logo",
-                                                      -1);
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "GTK Logo",
+                                      -1);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (title), button);
 
       button = gtk_button_new ();
@@ -170,15 +170,15 @@ do_video_player (GtkWidget *do_widget)
       gtk_button_set_child (GTK_BUTTON (button), image);
       g_signal_connect (button, "clicked", G_CALLBACK (bbb_clicked_cb), video);
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
-                                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Big Buck Bunny",
-                                                      -1);
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Big Buck Bunny",
+                                      -1);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (title), button);
 
       fullscreen_button = gtk_button_new_from_icon_name ("view-fullscreen-symbolic");
       g_signal_connect (fullscreen_button, "clicked", G_CALLBACK (fullscreen_clicked_cb), NULL);
       gtk_accessible_update_property (GTK_ACCESSIBLE (fullscreen_button),
-                                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Fullscreen",
-                                                      -1);
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Fullscreen",
+                                      -1);
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (title), fullscreen_button);
 
