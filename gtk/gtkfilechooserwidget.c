@@ -1862,6 +1862,7 @@ file_list_update_popover (GtkFileChooserWidget *impl)
 {
   GAction *action;
   gboolean state;
+  gboolean visit;
 
   file_list_build_popover (impl);
   check_file_list_popover_sensitivity (impl);
@@ -1871,6 +1872,9 @@ file_list_update_popover (GtkFileChooserWidget *impl)
    */
   state = impl->action == GTK_FILE_CHOOSER_ACTION_SAVE &&
           impl->operation_mode == OPERATION_MODE_BROWSE &&
+          impl->browse_files_popover_item != G_MAXUINT;
+
+  visit = impl->operation_mode != OPERATION_MODE_BROWSE &&
           impl->browse_files_popover_item != G_MAXUINT;
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "rename");
@@ -1883,7 +1887,7 @@ file_list_update_popover (GtkFileChooserWidget *impl)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), state);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "visit");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->operation_mode != OPERATION_MODE_BROWSE));
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), visit);
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-hidden");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_hidden));
