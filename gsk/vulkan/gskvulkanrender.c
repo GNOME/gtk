@@ -52,7 +52,6 @@ struct _GskVulkanRender
 
   GskVulkanCommandPool *command_pool;
   VkFence fence;
-  VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
   VkPipelineLayout pipeline_layout;
   GskVulkanUploader *uploader;
@@ -168,46 +167,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                         },
                                         NULL,
                                         &self->descriptor_pool);
-
-  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
-                                    &(VkRenderPassCreateInfo) {
-                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                                        .attachmentCount = 1,
-                                        .pAttachments = (VkAttachmentDescription[]) {
-                                           {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
-                                              .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                                              .finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                           }
-                                        },
-                                        .subpassCount = 1,
-                                        .pSubpasses = (VkSubpassDescription []) {
-                                           {
-                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              .inputAttachmentCount = 0,
-                                              .colorAttachmentCount = 1,
-                                              .pColorAttachments = (VkAttachmentReference []) {
-                                                 {
-                                                    .attachment = 0,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pResolveAttachments = (VkAttachmentReference []) {
-                                                  {
-                                                     .attachment = VK_ATTACHMENT_UNUSED,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pDepthStencilAttachment = NULL,
-                                            }
-                                         },
-                                         .dependencyCount = 0
-                                      },
-                                      NULL,
-                                      &self->render_pass);
 
   GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
@@ -387,7 +346,8 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 
 GskVulkanPipeline *
 gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
-                                GskVulkanPipelineType  type)
+                                GskVulkanPipelineType  type,
+                                VkRenderPass           render_pass)
 {
   static const struct {
     const char *name;
@@ -438,7 +398,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
                                                              self->pipeline_layout,
                                                              pipeline_info[type].name,
-                                                             self->render_pass);
+                                                             render_pass);
 
   return self->pipelines[type];
 }
@@ -773,10 +733,6 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyPipelineLayout (device,
                            self->pipeline_layout,
                            NULL);
-
-  vkDestroyRenderPass (device,
-                       self->render_pass,
-                       NULL);
 
   vkDestroyDescriptorPool (device,
                            self->descriptor_pool,

@@ -313,6 +313,16 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
   return FALSE; \
 }G_STMT_END
 
+static GskVulkanPipeline *
+gsk_vulkan_render_pass_get_pipeline (GskVulkanRenderPass   *self,
+                                     GskVulkanRender       *render,
+                                     GskVulkanPipelineType  pipeline_type)
+{
+  return gsk_vulkan_render_get_pipeline (render,
+                                         pipeline_type,
+                                         self->render_pass);
+}
+
 static void
 gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
                                  GskVulkanRender           *render,
@@ -349,7 +359,7 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
         return FALSE;
     }
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_TEXTURE);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, GSK_VULKAN_PIPELINE_TEXTURE);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -413,7 +423,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -439,7 +449,7 @@ gsk_vulkan_render_pass_add_linear_gradient_node (GskVulkanRenderPass       *self
   else
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -465,7 +475,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -491,7 +501,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -517,7 +527,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -545,7 +555,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -573,7 +583,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -753,7 +763,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -779,7 +789,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -949,7 +959,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -975,7 +985,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -1001,7 +1011,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -1052,7 +1062,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
       op.type = GSK_VULKAN_OP_TEXT;
     }
-  op.text.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.text.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
 
   op.text.start_glyph = 0;
   op.text.texture_index = G_MAXUINT;
@@ -1116,7 +1126,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;

@@ -81,7 +81,8 @@ void                    gsk_vulkan_render_add_render_pass               (GskVulk
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
-                                                                         GskVulkanPipelineType   pipeline_type);
+                                                                         GskVulkanPipelineType   pipeline_type,
+                                                                         VkRenderPass            render_pass);
 gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulkanRender        *self,
                                                                          GskVulkanRenderSampler  render_sampler);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
