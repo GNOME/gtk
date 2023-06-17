@@ -771,6 +771,10 @@ gtk_search_entry_init (GtkSearchEntry *entry)
                              GTK_EVENT_CONTROLLER (catchall));
 
   gtk_widget_add_css_class (GTK_WIDGET (entry), I_("search"));
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                  -1);
 }
 
 /**

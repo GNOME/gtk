@@ -22,11 +22,15 @@ validate_more_details (GtkEntry   *entry,
     {
       gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "Must have details first");
       gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_update_state (GTK_ACCESSIBLE (entry),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
     }
   else
     {
       gtk_widget_set_tooltip_text (GTK_WIDGET (entry), "");
       gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
     }
 }
 
@@ -44,10 +48,18 @@ mode_switch_state_set (GtkSwitch *sw,
     {
       gtk_widget_set_visible (label, FALSE);
       gtk_switch_set_state (sw, state);
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (sw), GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE);
+      gtk_accessible_reset_state (GTK_ACCESSIBLE (sw), GTK_ACCESSIBLE_STATE_INVALID);
     }
   else
     {
       gtk_widget_set_visible (label, TRUE);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (sw),
+                                      GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE, label,
+                                      -1);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (sw),
+                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
+                                   -1);
     }
 
   return TRUE;
@@ -73,6 +85,9 @@ level_scale_value_changed (GtkRange *range,
     {
       gtk_switch_set_state (GTK_SWITCH (sw), FALSE);
     }
+
+  gtk_accessible_reset_relation (GTK_ACCESSIBLE (sw), GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE);
+  gtk_accessible_reset_state (GTK_ACCESSIBLE (sw), GTK_ACCESSIBLE_STATE_INVALID);
 }
 
 GtkWidget *

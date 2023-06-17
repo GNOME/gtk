@@ -2712,6 +2712,10 @@ gtk_text_do_popup (GtkText *self,
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
       gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
 
+      gtk_accessible_update_property (GTK_ACCESSIBLE (priv->popup_menu),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, _("Context menu"),
+                                      -1);
+
       g_object_unref (model);
     }
 

@@ -95,6 +95,13 @@ do_entry_completion (GtkWidget *do_widget)
       entry = gtk_entry_new ();
       gtk_box_append (GTK_BOX (vbox), entry);
 
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                      -1);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE, GTK_ACCESSIBLE_AUTOCOMPLETE_LIST,
+                                      -1);
+
       /* Create the completion object */
       completion = gtk_entry_completion_new ();
 

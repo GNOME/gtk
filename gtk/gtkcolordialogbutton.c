@@ -141,6 +141,8 @@ gtk_color_dialog_button_init (GtkColorDialogButton *self)
                                               GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (self->button, GTK_EVENT_CONTROLLER (source));
   gtk_widget_add_css_class (self->button, "color");
+
+  gtk_color_dialog_button_set_rgba (self, &(GdkRGBA) { 0.75, 0.25, 0.25, 1.0 });
 }
 
 static void
