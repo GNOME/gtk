@@ -4951,6 +4951,10 @@ gtk_label_set_selectable (GtkLabel *self,
       gtk_label_ensure_select_info (self);
       self->select_info->selectable = TRUE;
       gtk_label_update_cursor (self);
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                      -1);
     }
   else
     {
@@ -4962,7 +4966,10 @@ gtk_label_set_selectable (GtkLabel *self,
           self->select_info->selectable = FALSE;
           gtk_label_clear_select_info (self);
         }
+
+      gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
     }
+
   if (setting != old_setting)
     {
       g_object_freeze_notify (G_OBJECT (self));
@@ -5743,6 +5750,10 @@ gtk_label_do_popup (GtkLabel *self,
 
       gtk_popover_set_has_arrow (GTK_POPOVER (self->popup_menu), FALSE);
       gtk_widget_set_halign (self->popup_menu, GTK_ALIGN_START);
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self->popup_menu),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, _("Context menu"),
+                                      -1);
 
       g_object_unref (model);
     }

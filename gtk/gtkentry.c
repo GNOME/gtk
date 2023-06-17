@@ -1396,6 +1396,10 @@ gtk_entry_init (GtkEntry *entry)
                              GTK_EVENT_CONTROLLER (catchall));
 
   priv->editing_canceled = FALSE;
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
+                                  -1);
 }
 
 static void

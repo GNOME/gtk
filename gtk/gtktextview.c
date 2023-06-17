@@ -2024,6 +2024,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
                                   GTK_ACCESSIBLE_PROPERTY_MULTI_LINE, TRUE,
+                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
                                   -1);
 }
 
@@ -9088,6 +9089,10 @@ gtk_text_view_do_popup (GtkTextView *text_view,
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
       gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (priv->popup_menu),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, _("Context menu"),
+                                      -1);
 
       g_object_unref (model);
     }
