@@ -82,6 +82,7 @@ static void gtk_printer_option_widget_get_property (GObject      *object,
 						    GParamSpec   *pspec);
 static gboolean gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
 							     gboolean   group_cycling);
+static void gtk_printer_option_widget_mnemonic_labels_changed (GtkWidget *widget);
 
 static void
 gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
@@ -97,6 +98,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
   object_class->get_property = gtk_printer_option_widget_get_property;
 
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
+  widget_class->mnemonic_labels_changed = gtk_printer_option_widget_mnemonic_labels_changed;
 
   signals[CHANGED] =
     g_signal_new ("changed",
@@ -198,6 +200,47 @@ gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
     return gtk_widget_mnemonic_activate (priv->button, group_cycling);
 
   return FALSE;
+}
+
+static void
+gtk_printer_option_widget_mnemonic_labels_changed (GtkWidget *widget)
+{
+  GtkPrinterOptionWidget *powidget = GTK_PRINTER_OPTION_WIDGET (widget);
+  GtkPrinterOptionWidgetPrivate *priv = powidget->priv;
+  GtkWidget *target;
+  GList *mnemonic_labels;
+
+  if (priv->check)
+    target = priv->check;
+  else if (priv->combo)
+    target = priv->combo;
+  else if (priv->entry)
+    target = priv->entry;
+  else if (priv->button)
+    target = priv->button;
+  else
+    return;
+
+  /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
+   * so we don't need to free it
+   */
+  mnemonic_labels = gtk_widget_list_mnemonic_labels (widget);
+
+  if (mnemonic_labels != NULL)
+    {
+      GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
+      GValue value = G_VALUE_INIT;
+
+      gtk_accessible_relation_init_value (relation, &value);
+      g_value_set_pointer (&value, mnemonic_labels);
+      gtk_accessible_update_relation_value (GTK_ACCESSIBLE (target), 1, &relation, &value);
+      g_value_unset (&value);
+    }
+  else
+    {
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (target),
+                                     GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+    }
 }
 
 static void
