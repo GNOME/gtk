@@ -43,6 +43,10 @@ do_entry_undo (GtkWidget *do_widget)
       entry = gtk_entry_new ();
       gtk_editable_set_enable_undo (GTK_EDITABLE (entry), TRUE);
       gtk_box_append (GTK_BOX (vbox), entry);
+
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                      -1);
     }
 
   if (!gtk_widget_get_visible (window))
