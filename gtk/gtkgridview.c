@@ -1298,7 +1298,8 @@ gtk_grid_view_set_model (GtkGridView       *self,
     return;
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, GTK_IS_MULTI_SELECTION (model),
+                                  GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+                                  model ? GTK_IS_MULTI_SELECTION (model) : FALSE,
                                   -1);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
