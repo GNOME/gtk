@@ -486,6 +486,7 @@ gtk_inspector_a11y_set_object (GtkInspectorA11y *sl,
       context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
       if (context != NULL)
         {
+          gtk_at_context_realize (context);
           g_signal_connect_swapped (context, "state-change", G_CALLBACK (refresh_all), sl);
           g_object_unref (context);
         }
