@@ -136,6 +136,7 @@ struct _GskVulkanRenderPass
   graphene_vec2_t scale;
 
   VkRenderPass render_pass;
+  VkFramebuffer framebuffer;
   VkSemaphore signal_semaphore;
   GArray *wait_semaphores;
   GskVulkanBuffer *vertex_data;
@@ -220,6 +221,21 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                       NULL,
                                       &self->render_pass);
 
+  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
+                                     &(VkFramebufferCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                                         .renderPass = self->render_pass,
+                                         .attachmentCount = 1,
+                                         .pAttachments = (VkImageView[1]) {
+                                             gsk_vulkan_image_get_image_view (target)
+                                         },
+                                         .width = gsk_vulkan_image_get_width (target),
+                                         .height = gsk_vulkan_image_get_height (target),
+                                         .layers = 1
+                                     },
+                                     NULL,
+                                     &self->framebuffer);
+
   self->signal_semaphore = signal_semaphore;
   self->wait_semaphores = g_array_new (FALSE, FALSE, sizeof (VkSemaphore));
   self->vertex_data = NULL;
@@ -238,19 +254,19 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
+  VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
+
   g_array_unref (self->render_ops);
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
-  vkDestroyRenderPass (gdk_vulkan_context_get_device (self->vulkan),
-                       self->render_pass,
-                       NULL);
+  vkDestroyFramebuffer (device, self->framebuffer, NULL);
+  vkDestroyRenderPass (device, self->render_pass, NULL);
+
   if (self->vertex_data)
     gsk_vulkan_buffer_free (self->vertex_data);
   if (self->signal_semaphore != VK_NULL_HANDLE)
-    vkDestroySemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                        self->signal_semaphore,
-                        NULL);
+    vkDestroySemaphore (device, self->signal_semaphore, NULL);
   g_array_unref (self->wait_semaphores);
 
   g_free (self);
@@ -2431,7 +2447,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                             .renderPass = self->render_pass,
-                            .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
+                            .framebuffer = self->framebuffer,
                             .renderArea = { 
                                 { rect.x, rect.y },
                                 { rect.width, rect.height }
