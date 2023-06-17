@@ -404,6 +404,8 @@ setup_cell_cb (GtkSignalListItemFactory *factory,
 
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (GTK_LABEL (label), 50);
   gtk_widget_set_margin_start (label, 6);
   gtk_widget_set_margin_end (label, 6);
   gtk_list_item_set_child (list_item, label);
