@@ -1872,10 +1872,10 @@ file_list_update_popover (GtkFileChooserWidget *impl)
    */
   state = impl->action == GTK_FILE_CHOOSER_ACTION_SAVE &&
           impl->operation_mode == OPERATION_MODE_BROWSE &&
-          impl->browse_files_popover_item != G_MAXUINT;
+          impl->browse_files_popover_item != GTK_INVALID_LIST_POSITION;
 
   visit = impl->operation_mode != OPERATION_MODE_BROWSE &&
-          impl->browse_files_popover_item != G_MAXUINT;
+          impl->browse_files_popover_item != GTK_INVALID_LIST_POSITION;
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "rename");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), state);
@@ -7238,7 +7238,7 @@ popup_menu (GtkWidget *widget,
             double     y)
 {
   gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                              "(udd)", G_MAXUINT, x, y);
+                              "(udd)", GTK_INVALID_LIST_POSITION, x, y);
 }
 
 static void
