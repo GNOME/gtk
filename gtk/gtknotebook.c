@@ -1487,9 +1487,6 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                    (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
   gtk_box_append (GTK_BOX (notebook->header_widget), notebook->tabs_widget);
-  gtk_accessible_update_property (GTK_ACCESSIBLE (notebook->tabs_widget),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Tab list"),
-                                  -1);
 
   notebook->stack_widget = gtk_stack_new ();
   gtk_widget_set_hexpand (notebook->stack_widget, TRUE);
