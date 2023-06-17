@@ -39,7 +39,7 @@
             <property name="row-spacing">10</property>
             <property name="column-spacing">10</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="text_label">
                 <property name="margin-start">10</property>
                 <property name="label">Text</property>
                 <property name="xalign">1</property>
@@ -57,10 +57,13 @@
                 <layout>
                   <property name="column">2</property>
                 </layout>
+                <accessibility>
+                  <relation name="labelled-by">text_label</relation>
+                </accessibility>
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="font_label">
                 <property name="margin-start">10</property>
                 <property name="label">Font</property>
                 <property name="xalign">1</property>
@@ -75,6 +78,9 @@
             </child>
             <child>
               <object class="GtkFontDialogButton" id="font_button">
+                <accessibility>
+                  <relation name="labelled-by">font_label</relation>
+                </accessibility>
                 <property name="dialog">
                   <object class="GtkFontDialog">
                   </object>
@@ -186,6 +192,9 @@
                 <property name="icon-name">list-add-symbolic</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <accessibility>
+                  <property name="label">Zoom in</property>
+                </accessibility>
                 <style>
                   <class name="circular"/>
                 </style>
@@ -211,6 +220,9 @@
                 <property name="icon-name">list-remove-symbolic</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <accessibility>
+                  <property name="label">Zoom out</property>
+                </accessibility>
                 <style>
                   <class name="circular"/>
                 </style>
@@ -251,6 +263,9 @@
             <property name="vexpand">1</property>
             <child>
               <object class="GtkPicture" id="image">
+                <accessibility>
+                  <property name="label">Font rendering example</property>
+                </accessibility>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="can-shrink">0</property>
