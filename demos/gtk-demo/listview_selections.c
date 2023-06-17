@@ -368,6 +368,38 @@ match_func (MatchObject *obj,
   g_free (tmp2);
 }
 
+static void
+setup_header (GtkSignalListItemFactory *factory,
+              GObject                  *list_item,
+              gpointer                  data)
+{
+  GtkListHeader *self = GTK_LIST_HEADER (list_item);
+  GtkWidget *child;
+
+  child = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (child), 0);
+  gtk_label_set_use_markup (GTK_LABEL (child), TRUE);
+  gtk_widget_set_margin_top (child, 10);
+  gtk_widget_set_margin_bottom (child, 10);
+
+  gtk_list_header_set_child (self, child);
+}
+
+static void
+bind_header (GtkSignalListItemFactory *factory,
+             GObject                  *list_item,
+             gpointer                  data)
+{
+  GtkListHeader *self = GTK_LIST_HEADER (list_item);
+  GtkWidget *child = gtk_list_header_get_child (self);
+  GObject *item = gtk_list_header_get_item (self);
+
+  if (strstr (gtk_string_object_get_string (GTK_STRING_OBJECT (item)), "hour"))
+    gtk_label_set_label (GTK_LABEL (child), "<big><b>Hours</b></big>");
+  else
+    gtk_label_set_label (GTK_LABEL (child), "<big><b>Minutes</b></big>");
+}
+
 GtkWidget *
 do_listview_selections (GtkWidget *do_widget)
 {
@@ -377,10 +409,12 @@ do_listview_selections (GtkWidget *do_widget)
   GtkExpression *expression;
   GtkListItemFactory *factory;
   const char * const times[] = { "1 minute", "2 minutes", "5 minutes", "20 minutes", NULL };
-  const char * const many_times[] = {
+  const char * const minutes[] = {
     "1 minute", "2 minutes", "5 minutes", "10 minutes", "15 minutes", "20 minutes",
     "25 minutes", "30 minutes", "35 minutes", "40 minutes", "45 minutes", "50 minutes",
-    "55 minutes", "1 hour", "2 hours", "3 hours", "5 hours", "6 hours", "7 hours",
+    "55 minutes", NULL
+  };
+  const char * const hours[] = { "1 hour", "2 hours", "3 hours", "5 hours", "6 hours", "7 hours",
     "8 hours", "9 hours", "10 hours", "11 hours", "12 hours", NULL
   };
   const char * const device_titles[] = { "Digital Output", "Headphones", "Digital Output", "Analog Output", NULL };
@@ -395,6 +429,10 @@ do_listview_selections (GtkWidget *do_widget)
 
   if (!window)
     {
+      GtkStringList *minutes_model, *hours_model;
+      GListStore *store;
+      GtkFlattenListModel *flat;
+
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
@@ -422,14 +460,25 @@ do_listview_selections (GtkWidget *do_widget)
       gtk_box_append (GTK_BOX (box), button);
 
       /* A dropdown using an expression to obtain strings */
-      button = drop_down_new_from_strings (many_times, NULL, NULL);
-      gtk_drop_down_set_enable_search (GTK_DROP_DOWN (button), TRUE);
+      minutes_model = gtk_string_list_new (minutes);
+      hours_model = gtk_string_list_new (hours);
+      store = g_list_store_new (G_TYPE_LIST_MODEL);
+      g_list_store_append (store, minutes_model);
+      g_list_store_append (store, hours_model);
+      g_object_unref (minutes_model);
+      g_object_unref (hours_model);
+      flat = gtk_flatten_list_model_new (G_LIST_MODEL (store));
       expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
                                                 0, NULL,
                                                 (GCallback)get_title,
                                                 NULL, NULL);
-      gtk_drop_down_set_expression (GTK_DROP_DOWN (button), expression);
-      gtk_expression_unref (expression);
+      button = gtk_drop_down_new (G_LIST_MODEL (flat), expression);
+      gtk_drop_down_set_enable_search (GTK_DROP_DOWN (button), TRUE);
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_header), NULL);
+      g_signal_connect (factory, "bind", G_CALLBACK (bind_header), NULL);
+      gtk_drop_down_set_header_factory (GTK_DROP_DOWN (button), factory);
+      g_object_unref (factory);
       gtk_box_append (GTK_BOX (box), button);
 
       button = gtk_drop_down_new (NULL, NULL);

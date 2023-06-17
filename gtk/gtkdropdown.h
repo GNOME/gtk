@@ -65,6 +65,13 @@ GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *
                 gtk_drop_down_get_list_factory                  (GtkDropDown            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_drop_down_set_header_factory                (GtkDropDown            *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_4_12
+GtkListItemFactory *
+                gtk_drop_down_get_header_factory                (GtkDropDown            *self);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_drop_down_set_expression                    (GtkDropDown            *self,
                                                                  GtkExpression          *expression);

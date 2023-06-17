@@ -106,6 +106,7 @@ struct _GtkDropDown
 
   GtkListItemFactory *factory;
   GtkListItemFactory *list_factory;
+  GtkListItemFactory *header_factory;
   GListModel *model;
   GtkSelectionModel *selection;
   GListModel *filter_model;
@@ -137,6 +138,7 @@ enum
 {
   PROP_0,
   PROP_FACTORY,
+  PROP_HEADER_FACTORY,
   PROP_LIST_FACTORY,
   PROP_MODEL,
   PROP_SELECTED,
@@ -332,6 +334,7 @@ gtk_drop_down_dispose (GObject *object)
   g_clear_object (&self->popup_selection);
   g_clear_object (&self->factory);
   g_clear_object (&self->list_factory);
+  g_clear_object (&self->header_factory);
 
   G_OBJECT_CLASS (gtk_drop_down_parent_class)->dispose (object);
 }
@@ -348,6 +351,10 @@ gtk_drop_down_get_property (GObject    *object,
     {
     case PROP_FACTORY:
       g_value_set_object (value, self->factory);
+      break;
+
+    case PROP_HEADER_FACTORY:
+      g_value_set_object (value, self->header_factory);
       break;
 
     case PROP_LIST_FACTORY:
@@ -396,6 +403,10 @@ gtk_drop_down_set_property (GObject      *object,
     {
     case PROP_FACTORY:
       gtk_drop_down_set_factory (self, g_value_get_object (value));
+      break;
+
+    case PROP_HEADER_FACTORY:
+      gtk_drop_down_set_header_factory (self, g_value_get_object (value));
       break;
 
     case PROP_LIST_FACTORY:
@@ -528,6 +539,18 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkDropDown:header-factory: (attributes org.gtk.Property.get=gtk_drop_down_get_header_factory org.gtk.Property.set=gtk_drop_down_set_header_factory)
+   *
+   * The factory for creating header widgets for the popup.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_HEADER_FACTORY] =
+    g_param_spec_object ("header-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -945,6 +968,48 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+}
+
+/**
+ * gtk_drop_down_get_header_factory: (attributes org.gtk.Method.get_property=header-factory)
+ * @self: a `GtkDropDown`
+ *
+ * Gets the factory that's currently used to create header widgets for the popup.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ *
+ * Since: 4.12
+ */
+GtkListItemFactory *
+gtk_drop_down_get_header_factory (GtkDropDown *self)
+{
+  g_return_val_if_fail (GTK_IS_DROP_DOWN (self), NULL);
+
+  return self->header_factory;
+}
+
+/**
+ * gtk_drop_down_set_header_factory: (attributes org.gtk.Method.set_property=header-factory)
+ * @self: a `GtkDropDown`
+ * @factory: (nullable) (transfer none): the factory to use
+ *
+ * Sets the `GtkListItemFactory` to use for creating header widgets for the popup.
+ *
+ * Since: 4.12
+ */
+void
+gtk_drop_down_set_header_factory (GtkDropDown        *self,
+                                  GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_DROP_DOWN (self));
+  g_return_if_fail (factory == NULL || GTK_LIST_ITEM_FACTORY (factory));
+
+  if (!g_set_object (&self->header_factory, factory))
+    return;
+
+  gtk_list_view_set_header_factory (GTK_LIST_VIEW (self->popup_list), self->header_factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
 }
 
 /**
