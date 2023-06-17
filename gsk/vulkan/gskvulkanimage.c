@@ -35,6 +35,7 @@ struct _GskVulkanImage
   GdkVulkanContext *vulkan;
 
   GdkMemoryFormat format;
+  VkFormat vk_format;
   gsize width;
   gsize height;
   VkImageUsageFlags vk_usage;
@@ -581,6 +582,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
 
   self->vulkan = g_object_ref (context);
   self->format = format;
+  self->vk_format = vk_format->format;
   self->width = width;
   self->height = height;
   self->vk_usage = usage;
@@ -874,6 +876,7 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->width = width;
   self->height = height;
   self->vk_image = image;
+  self->vk_format = format;
 
   gsk_vulkan_image_create_view (self,
                                 &(GskMemoryFormatInfo) {
@@ -1090,4 +1093,10 @@ VkImageView
 gsk_vulkan_image_get_image_view (GskVulkanImage *self)
 {
   return self->vk_image_view;
+}
+
+VkFormat
+gsk_vulkan_image_get_vk_format (GskVulkanImage *self)
+{
+  return self->vk_format;
 }

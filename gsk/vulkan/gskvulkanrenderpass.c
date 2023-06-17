@@ -186,7 +186,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                         .attachmentCount = 1,
                                         .pAttachments = (VkAttachmentDescription[]) {
                                            {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
+                                              .format = gsk_vulkan_image_get_vk_format (target),
                                               .samples = VK_SAMPLE_COUNT_1_BIT,
                                               .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
                                               .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
