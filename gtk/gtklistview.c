@@ -1051,6 +1051,19 @@ gtk_list_view_get_model (GtkListView *self)
   return gtk_list_base_get_model (GTK_LIST_BASE (self));
 }
 
+static void
+gtk_list_view_model_items_changed_cb (GListModel  *model,
+                                      guint        position,
+                                      guint        removed,
+                                      guint        added,
+                                      GtkListView *self)
+{
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+                                  g_list_model_get_n_items (model),
+                                  -1);
+}
+
 /**
  * gtk_list_view_set_model: (attributes org.gtk.Method.set_property=model)
  * @self: a `GtkListView`
@@ -1064,8 +1077,15 @@ void
 gtk_list_view_set_model (GtkListView       *self,
                          GtkSelectionModel *model)
 {
+  GtkSelectionModel *old_model;
+
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (model == NULL || GTK_IS_SELECTION_MODEL (model));
+
+  old_model = gtk_list_base_get_model (GTK_LIST_BASE (self));
+
+  if (old_model != NULL && old_model != model)
+    g_signal_handlers_disconnect_by_func (old_model, gtk_list_view_model_items_changed_cb, self);
 
   if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
@@ -1074,6 +1094,14 @@ gtk_list_view_set_model (GtkListView       *self,
                                   GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
                                   model ? GTK_IS_MULTI_SELECTION (model) : FALSE,
                                   -1);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+                                  model ? g_list_model_get_n_items (G_LIST_MODEL (model)) : 0,
+                                  -1);
+
+  if (model != NULL)
+    g_signal_connect (model, "items-changed",
+                       G_CALLBACK (gtk_list_view_model_items_changed_cb), self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }

@@ -90,6 +90,10 @@ gtk_list_item_base_update (GtkListItemBase *self,
 
   GTK_LIST_ITEM_BASE_GET_CLASS (self)->update (self, position, item, selected);
 
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_ROW_INDEX, position + 1,
+                                  -1);
+
   /* don't look at selected variable, it's not reentrancy safe */
   if (was_selected != priv->selected)
     {
