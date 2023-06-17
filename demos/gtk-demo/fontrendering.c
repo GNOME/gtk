@@ -306,7 +306,7 @@ retry:
   texture = gdk_texture_new_for_pixbuf (pixbuf2);
   gtk_picture_set_paintable (GTK_PICTURE (image), GDK_PAINTABLE (texture));
   g_object_unref (pixbuf2);
-  g_object_unref (pixbuf2);
+  g_object_unref (texture);
 }
 
 static gboolean fading = FALSE;
