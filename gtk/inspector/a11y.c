@@ -238,6 +238,8 @@ update_name (GtkInspectorA11y *sl)
   char *name;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+  if (context == NULL)
+    return;
 
   name = gtk_at_context_get_name (context);
   gtk_label_set_label (GTK_LABEL (sl->name), name);
@@ -250,6 +252,8 @@ update_description (GtkInspectorA11y *sl)
   char *description;
 
   context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (sl->object));
+  if (context == NULL)
+    return;
 
   description = gtk_at_context_get_description (context);
   gtk_label_set_label (GTK_LABEL (sl->description), description);
