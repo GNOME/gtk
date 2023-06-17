@@ -43,6 +43,9 @@
                 <property name="adjustment">time_adjustment</property>
                 <property name="restrict-to-fill-level">0</property>
                 <property name="hexpand">1</property>
+                <accessibility>
+                  <property name="label" translatable="yes" context="media controls">Position</property>
+                </accessibility>
               </object>
             </child>
             <child>
@@ -58,6 +61,9 @@
           <object class="GtkVolumeButton" id="volume_button">
             <property name="adjustment">volume_adjustment</property>
             <property name="valign">center</property>
+            <accessibility>
+              <property name="label" translatable="yes" context="media controls">Volume</property>
+            </accessibility>
           </object>
         </child>
       </object>
