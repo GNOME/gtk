@@ -256,11 +256,12 @@ struct _GtkWidgetClass
                                                 double     x,
                                                 double     y);
 
+  void         (* mnemonic_labels_changed)     (GtkWidget *widget);
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
 
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 

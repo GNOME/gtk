@@ -600,6 +600,7 @@ static void             gtk_widget_propagate_state              (GtkWidget      
                                                                  const GtkStateData *data);
 static gboolean         gtk_widget_real_mnemonic_activate       (GtkWidget          *widget,
                                                                  gboolean            group_cycling);
+static void             gtk_widget_real_mnemonic_labels_changed (GtkWidget          *widget);
 static void             gtk_widget_accessible_interface_init    (GtkAccessibleInterface *iface);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
 static void             gtk_widget_buildable_set_id             (GtkBuildable       *buildable,
@@ -1211,6 +1212,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->css_changed = gtk_widget_real_css_changed;
   klass->system_setting_changed = gtk_widget_real_system_setting_changed;
   klass->contains = gtk_widget_real_contains;
+  klass->mnemonic_labels_changed = gtk_widget_real_mnemonic_labels_changed;
 
   /**
    * GtkWidget:name: (attributes org.gtk.Property.get=gtk_widget_get_name org.gtk.Property.set=gtk_widget_set_name)
@@ -8511,6 +8513,7 @@ create_at_context (GtkWidget *self)
     role = class_priv->accessible_role;
 
   priv->accessible_role = role;
+
   return gtk_at_context_create (role, GTK_ACCESSIBLE (self), gdk_display_get_default ());
 }
 
@@ -9770,6 +9773,39 @@ gtk_widget_list_mnemonic_labels (GtkWidget *widget)
   return list;
 }
 
+static void
+gtk_widget_real_mnemonic_labels_changed (GtkWidget *widget)
+{
+  GList *mnemonic_labels;
+
+  mnemonic_labels = gtk_widget_list_mnemonic_labels (widget);
+  /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
+   * so we don't need to free it
+   */
+
+  if (mnemonic_labels != NULL)
+    {
+      GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
+      GValue value = G_VALUE_INIT;
+
+      gtk_accessible_relation_init_value (relation, &value);
+      g_value_set_pointer (&value, mnemonic_labels);
+      gtk_accessible_update_relation_value (GTK_ACCESSIBLE (widget), 1, &relation, &value);
+      g_value_unset (&value);
+    }
+  else
+    {
+      gtk_accessible_reset_relation (GTK_ACCESSIBLE (widget),
+                                     GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+    }
+}
+
+static void
+gtk_widget_mnemonic_labels_changed (GtkWidget *widget)
+{
+  GTK_WIDGET_GET_CLASS (widget)->mnemonic_labels_changed (widget);
+}
+
 /**
  * gtk_widget_add_mnemonic_label:
  * @widget: a `GtkWidget`
@@ -9787,8 +9823,6 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
                                GtkWidget *label)
 {
   GSList *old_list, *new_list;
-  GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
-  GValue value = G_VALUE_INIT;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_WIDGET (label));
@@ -9799,13 +9833,7 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
   g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
                            new_list, (GDestroyNotify) g_slist_free);
 
-  /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
-   * so we don't need to free it
-   */
-  gtk_accessible_relation_init_value (relation, &value);
-  g_value_set_pointer (&value, gtk_widget_list_mnemonic_labels (widget));
-  gtk_accessible_update_relation_value (GTK_ACCESSIBLE (widget), 1, &relation, &value);
-  g_value_unset (&value);
+  gtk_widget_mnemonic_labels_changed (widget);
 }
 
 /**
@@ -9836,24 +9864,7 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
     g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
                              new_list, (GDestroyNotify) g_slist_free);
 
-  if (new_list != NULL && new_list->data != NULL)
-    {
-      GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
-      GValue value = G_VALUE_INIT;
-
-      /* The ATContext takes ownership of the GList returned by list_mnemonic_labels(),
-       * so we don't need to free it
-       */
-      gtk_accessible_relation_init_value (relation, &value);
-      g_value_set_pointer (&value, gtk_widget_list_mnemonic_labels (widget));
-      gtk_accessible_update_relation_value (GTK_ACCESSIBLE (widget), 1, &relation, &value);
-      g_value_unset (&value);
-    }
-  else
-    {
-      gtk_accessible_reset_relation (GTK_ACCESSIBLE (widget),
-                                     GTK_ACCESSIBLE_RELATION_LABELLED_BY);
-    }
+  gtk_widget_mnemonic_labels_changed (widget);
 }
 
 /**
@@ -13189,6 +13200,7 @@ gtk_widget_class_get_accessible_role (GtkWidgetClass *widget_class)
   g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), GTK_ACCESSIBLE_ROLE_WIDGET);
 
   priv = widget_class->priv;
+
   return priv->accessible_role;
 }
 
