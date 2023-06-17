@@ -116,7 +116,9 @@
  *
  * # Accessibility
  *
- * `GtkGrid` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * Until GTK 4.10, `GtkGrid` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ *
+ * Starting from GTK 4.12, `GtkGrid` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
  */
 
 typedef struct
@@ -477,7 +479,7 @@ gtk_grid_class_init (GtkGridClass *class)
 
   gtk_widget_class_set_css_name (widget_class, I_("grid"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_GRID_LAYOUT);
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
