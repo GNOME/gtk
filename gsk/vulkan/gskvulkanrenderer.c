@@ -13,6 +13,7 @@
 #include "gskvulkanglyphcacheprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
@@ -341,7 +342,9 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->vulkan), region);
+  gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->vulkan),
+                                     gsk_render_node_get_preferred_depth (root),
+                                     region);
   render = gsk_vulkan_renderer_get_render (self);
 
   render_region = get_render_region (self);
