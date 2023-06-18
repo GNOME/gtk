@@ -95,6 +95,7 @@ gsk_path_dash_add_line_segment (const graphene_point_t *start,
                                 const graphene_point_t *end,
                                 float                   t_start,
                                 float                   t_end,
+                                GskCurveLineReason      reason,
                                 gpointer                user_data)
 {
   GskPathDash *self = user_data;

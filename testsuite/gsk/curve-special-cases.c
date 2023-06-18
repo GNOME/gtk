@@ -26,6 +26,7 @@ measure_segment (const graphene_point_t *from,
                  const graphene_point_t *to,
                  float                   from_t,
                  float                   to_t,
+                 GskCurveLineReason      reason,
                  gpointer                data)
 {
   float *length = data;
