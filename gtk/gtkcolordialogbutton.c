@@ -110,9 +110,7 @@ gtk_color_dialog_button_init (GtkColorDialogButton *self)
 
   self->color = GDK_RGBA ("00000000");
 
-  self->button = g_object_new (GTK_TYPE_BUTTON,
-                               "accessible-role", GTK_ACCESSIBLE_ROLE_GENERIC,
-                               NULL);
+  self->button = gtk_button_new ();
   g_signal_connect_swapped (self->button, "clicked", G_CALLBACK (button_clicked), self);
   gtk_widget_set_parent (self->button, GTK_WIDGET (self));
 
@@ -282,7 +280,6 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "colorbutton");
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
 
 /* }}} */

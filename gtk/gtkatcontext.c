@@ -40,6 +40,13 @@
 #include "gtktestatcontextprivate.h"
 #include "gtktypebuiltins.h"
 
+#include "gtkbutton.h"
+#include "gtktogglebutton.h"
+#include "gtkmenubutton.h"
+#include "gtkdropdown.h"
+#include "gtkcolordialogbutton.h"
+#include "gtkfontdialogbutton.h"
+
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
 #include "a11y/gtkatspicontextprivate.h"
 #endif
@@ -1176,6 +1183,47 @@ static GtkAccessibleRole name_forbidden[] = {
   GTK_ACCESSIBLE_ROLE_NONE,
 };
 
+static gboolean
+is_nested_button (GtkATContext *self)
+{
+  GtkAccessible *accessible;
+  GtkWidget *widget, *parent;
+
+  accessible = gtk_at_context_get_accessible (self);
+
+  if (!GTK_IS_WIDGET (accessible))
+    return FALSE;
+
+  widget = GTK_WIDGET (accessible);
+  parent = gtk_widget_get_parent (widget);
+
+  if ((GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_DROP_DOWN (parent)) ||
+      (GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_MENU_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_COLOR_DIALOG_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent)))
+    return TRUE;
+
+  return FALSE;
+}
+
+static GtkATContext *
+get_parent_context (GtkATContext *self)
+{
+  GtkAccessible *accessible, *parent;
+
+  accessible = gtk_at_context_get_accessible (self);
+  parent = gtk_accessible_get_accessible_parent (accessible);
+  if (parent)
+    {
+      GtkATContext *context = gtk_accessible_get_at_context (parent);
+      g_object_unref (parent);
+      return context;
+    }
+
+  return g_object_ref (self);
+}
+
+
 /*< private >
  * gtk_at_context_get_name:
  * @self: a `GtkATContext`
@@ -1189,12 +1237,26 @@ static GtkAccessibleRole name_forbidden[] = {
 char *
 gtk_at_context_get_name (GtkATContext *self)
 {
+  GtkATContext *parent = NULL;
+
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (name_forbidden); i++)
     {
       if (self->accessible_role == name_forbidden[i])
         return g_strdup ("");
+    }
+
+  /* We special case this here since it is a common pattern:
+   * We have a 'wrapper' object, like a GtkDropdown which
+   * contains a toggle button. The dropdown appears in the
+   * ui file and carries all the a11y attributes, but the
+   * focus ends up on the toggle button.
+   */
+  if (is_nested_button (self))
+    {
+      parent = get_parent_context (self);
+      self = parent;
     }
 
   GPtrArray *names = g_ptr_array_new ();
@@ -1204,6 +1266,7 @@ gtk_at_context_get_name (GtkATContext *self)
   if (names->len == 0)
     {
       g_ptr_array_unref (names);
+      g_clear_object (&parent);
       return g_strdup ("");
     }
 
@@ -1217,6 +1280,8 @@ gtk_at_context_get_name (GtkATContext *self)
     }
 
   g_ptr_array_unref (names);
+
+  g_clear_object (&parent);
 
   return g_string_free (res, FALSE);
 }
@@ -1234,12 +1299,26 @@ gtk_at_context_get_name (GtkATContext *self)
 char *
 gtk_at_context_get_description (GtkATContext *self)
 {
+  GtkATContext *parent = NULL;
+
   g_return_val_if_fail (GTK_IS_AT_CONTEXT (self), NULL);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (name_forbidden); i++)
     {
       if (self->accessible_role == name_forbidden[i])
         return g_strdup ("");
+    }
+
+  /* We special case this here since it is a common pattern:
+   * We have a 'wrapper' object, like a GtkDropdown which
+   * contains a toggle button. The dropdown appears in the
+   * ui file and carries all the a11y attributes, but the
+   * focus ends up on the toggle button.
+   */
+  if (is_nested_button (self))
+    {
+      parent = get_parent_context (self);
+      self = parent;
     }
 
   GPtrArray *names = g_ptr_array_new ();
@@ -1249,6 +1328,7 @@ gtk_at_context_get_description (GtkATContext *self)
   if (names->len == 0)
     {
       g_ptr_array_unref (names);
+      g_clear_object (&parent);
       return g_strdup ("");
     }
 
@@ -1263,6 +1343,7 @@ gtk_at_context_get_description (GtkATContext *self)
 
   g_ptr_array_unref (names);
 
+  g_clear_object (&parent);
   return g_string_free (res, FALSE);
 }
 
