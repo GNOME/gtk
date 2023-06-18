@@ -37,6 +37,7 @@
 #include "gtkbox.h"
 #include "gtklabel.h"
 #include "gtkbutton.h"
+#include "gtkimage.h"
 #include "gtkenums.h"
 #include "deprecated/gtkdialog.h"
 #include "gtkrevealer.h"
@@ -45,6 +46,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkbinlayout.h"
 #include "gtkgestureclick.h"
+
+#include <glib/gi18n-lib.h>
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -456,6 +459,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   GtkWidget *widget = GTK_WIDGET (info_bar);
   GtkWidget *main_box;
   GtkGesture *gesture;
+  GtkWidget *image;
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
@@ -478,11 +482,23 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_widget_set_valign (info_bar->action_area, GTK_ALIGN_CENTER);
   gtk_box_append (GTK_BOX (main_box), info_bar->action_area);
 
-  info_bar->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
+  info_bar->close_button = gtk_button_new ();
+  /* The icon is not relevant for accessibility purposes */
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                        "icon-name", "window-close-symbolic",
+                        "use-fallback", TRUE,
+                        NULL);
+  gtk_button_set_child (GTK_BUTTON (info_bar->close_button), image);
   gtk_widget_hide (info_bar->close_button);
   gtk_widget_set_valign (info_bar->close_button, GTK_ALIGN_CENTER);
   gtk_widget_add_css_class (info_bar->close_button, "close");
   gtk_box_append (GTK_BOX (main_box), info_bar->close_button);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (info_bar->close_button),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, _("Close"),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, _("Close the infobar"),
+                                  -1);
+
   g_signal_connect (info_bar->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
 
