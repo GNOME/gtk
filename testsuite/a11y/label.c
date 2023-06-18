@@ -45,11 +45,13 @@ label_properties (void)
 
   g_object_ref_sink (label);
 
-  gtk_test_accessible_assert_property (label, GTK_ACCESSIBLE_PROPERTY_LABEL, "a");
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
 
-  gtk_label_set_label (GTK_LABEL (label), "b");
+  gtk_test_accessible_assert_property (GTK_ACCESSIBLE (label), GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE);
 
-  gtk_test_accessible_assert_property (label, GTK_ACCESSIBLE_PROPERTY_LABEL, "b");
+  gtk_label_set_selectable (GTK_LABEL (label), FALSE);
+
+  g_assert_false (gtk_test_accessible_has_property (GTK_ACCESSIBLE (label), GTK_ACCESSIBLE_PROPERTY_HAS_POPUP));
 
   g_object_unref (label);
 }
