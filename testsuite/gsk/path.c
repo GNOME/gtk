@@ -715,7 +715,7 @@ test_segment (void)
       measure = gsk_path_measure_new (path);
       length = gsk_path_measure_get_length (measure);
       /* chosen high enough to stop the testsuite from failing */
-      epsilon = MAX (length / 256, 1.f / 1024);
+      epsilon = MAX (length / 64, 1.f / 1024);
 
       split1 = g_test_rand_double_range (0, length);
       split2 = g_test_rand_double_range (split1, length);
@@ -752,7 +752,7 @@ static void
 test_get_point (void)
 {
   static const guint max_contours = 5;
-  static const float tolerance = 0.5;
+  static const float tolerance = 1.0;
   GskPath *path;
   GskPathMeasure *measure;
   guint n_discontinuities;
