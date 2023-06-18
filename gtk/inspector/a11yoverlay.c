@@ -52,6 +52,7 @@ typedef enum
   NAMING_REQUIRED,
   NAMING_RECOMMENDED,
   NAMING_CONDITIONAL,
+  NAMING_NOT_RECOMMENDED,
   NAMING_PROHIBITED
 } NamingNecessity;
 
@@ -64,7 +65,7 @@ static NamingNecessity name_for_role[] = {
   NAMING_CONDITIONAL, // CELL
   NAMING_CONDITIONAL, // CHECKBOX
   NAMING_CONDITIONAL, // COLUMN_HEADER
-  NAMING_REQUIRED, // COMBO_BOX
+  NAMING_CONDITIONAL, // COMBO_BOX
   NAMING_DISCRETIONARY, // COMMAND
   NAMING_DISCRETIONARY, // COMPOSITE
   NAMING_REQUIRED, // DIALOG
@@ -84,7 +85,7 @@ static NamingNecessity name_for_role[] = {
   NAMING_CONDITIONAL, // LINK
   NAMING_DISCRETIONARY, // LIST
   NAMING_REQUIRED, // LIST_BOX
-  NAMING_PROHIBITED, // LIST_ITEM
+  NAMING_NOT_RECOMMENDED, // LIST_ITEM
   NAMING_DISCRETIONARY, // LOG
   NAMING_DISCRETIONARY, // MAIN
   NAMING_DISCRETIONARY, // MARQUEE
@@ -106,7 +107,7 @@ static NamingNecessity name_for_role[] = {
   NAMING_DISCRETIONARY, // RANGE
   NAMING_REQUIRED, // REGION
   NAMING_CONDITIONAL, // ROW
-  NAMING_PROHIBITED, // ROW_GROUP
+  NAMING_NOT_RECOMMENDED, // ROW_GROUP
   NAMING_CONDITIONAL, // ROW_HEADER
   NAMING_DISCRETIONARY, // SCROLLBAR
   NAMING_RECOMMENDED, // SEARCH
@@ -269,7 +270,7 @@ check_accessibility_errors (GtkWidget  *widget,
         }
       else
         {
-          *hint = g_strdup_printf ("%s must have label or labelled-by", role_name);
+          *hint = g_strdup_printf ("%s must have label", role_name);
 
           return SEVERITY_ERROR;
         }
@@ -278,7 +279,7 @@ check_accessibility_errors (GtkWidget  *widget,
     case NAMING_PROHIBITED:
       if (label_set)
         {
-          *hint = g_strdup_printf ("%s can't have label or labelled-by", role_name);
+          *hint = g_strdup_printf ("%s can't have label", role_name);
 
           return SEVERITY_ERROR;
         }
@@ -295,7 +296,20 @@ check_accessibility_errors (GtkWidget  *widget,
         }
       else
         {
-          *hint = g_strdup_printf ("label or labelled-by recommended for %s", role_name);
+          *hint = g_strdup_printf ("label recommended for %s", role_name);
+
+          return SEVERITY_RECOMMENDATION;
+        }
+      break;
+
+    case NAMING_NOT_RECOMMENDED:
+      if (!label_set)
+        {
+          return SEVERITY_GOOD;
+        }
+      else
+        {
+          *hint = g_strdup_printf ("label not recommended for %s", role_name);
 
           return SEVERITY_RECOMMENDATION;
         }
@@ -308,8 +322,7 @@ check_accessibility_errors (GtkWidget  *widget,
         if (strcmp (name, "") == 0)
           {
             g_free (name);
-            *hint = g_strdup_printf ("%s must have text content, label or labelled-by",
-                                     role_name);
+            *hint = g_strdup_printf ("%s must have text content or label", role_name);
 
             return SEVERITY_ERROR;
           }
