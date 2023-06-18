@@ -124,6 +124,7 @@ add_line_to_array (const graphene_point_t *from,
                    const graphene_point_t *to,
                    float                   from_progress,
                    float                   to_progress,
+                   GskCurveLineReason      reason,
                    gpointer                user_data)
 {
   GArray *array = user_data;

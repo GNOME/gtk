@@ -398,6 +398,7 @@ gsk_path_foreach_trampoline_add_line (const graphene_point_t *from,
                                       const graphene_point_t *to,
                                       float                   from_progress,
                                       float                   to_progress,
+                                      GskCurveLineReason      reason,
                                       gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;

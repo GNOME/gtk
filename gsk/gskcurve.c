@@ -167,7 +167,7 @@ gsk_line_curve_decompose (const GskCurve      *curve,
 {
   const GskLineCurve *self = &curve->line;
 
-  return add_line_func (&self->points[0], &self->points[1], 0.0f, 1.0f, user_data);
+  return add_line_func (&self->points[0], &self->points[1], 0.0f, 1.0f, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
 }
 
 static gskpathop
@@ -370,8 +370,10 @@ gsk_curce_curve_decompose_step (const GskCurve      *curve,
   GskCurve left, right;
   float mid_progress;
 
-  if (!gsk_curve_curve_too_curvy (self, tolerance) || end_progress - start_progress <= MIN_PROGRESS)
-    return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, user_data);
+  if (!gsk_curve_curve_too_curvy (self, tolerance))
+    return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
+  if (end_progress - start_progress <= MIN_PROGRESS)
+    return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
 
   gsk_curve_curve_split ((const GskCurve *) self, 0.5, &left, &right);
   mid_progress = (start_progress + end_progress) / 2;
@@ -759,11 +761,10 @@ gsk_conic_curve_decompose_subdivide (const GskConicCurve    *self,
   mid_progress = (start_progress + end_progress) / 2;
   gsk_conic_curve_eval_point (self, mid_progress, &mid);
 
-  if (end_progress - start_progress <= MIN_PROGRESS ||
-      !gsk_conic_curve_too_curvy (start, &mid, end, tolerance))
-    {
-      return add_line_func (start, end, start_progress, end_progress, user_data);
-    }
+  if (!gsk_conic_curve_too_curvy (start, &mid, end, tolerance))
+    return add_line_func (start, end, start_progress, end_progress, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
+  if (end_progress - start_progress <= MIN_PROGRESS)
+    return add_line_func (start, end, start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
 
   return gsk_conic_curve_decompose_subdivide (self, tolerance,
                                               start, start_progress, &mid, mid_progress,

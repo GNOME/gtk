@@ -73,10 +73,16 @@ union _GskCurve
   GskConicCurve conic;
 };
 
+typedef enum {
+  GSK_CURVE_LINE_REASON_STRAIGHT,
+  GSK_CURVE_LINE_REASON_SHORT
+} GskCurveLineReason;
+
 typedef gboolean (* GskCurveAddLineFunc) (const graphene_point_t *from,
                                           const graphene_point_t *to,
                                           float                   from_progress,
                                           float                   to_progress,
+                                          GskCurveLineReason      reason,
                                           gpointer                user_data);
 
 void                    gsk_curve_init                          (GskCurve               *curve,
