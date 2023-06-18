@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkDropDown" parent="GtkWidget">
+    <accessibility>
+      <property name="has-popup">1</property>
+      <relation name="labelled-by">button_item</relation>
+      <state name="expanded">0</state>
+    </accessibility>
     <child>
       <object class="GtkToggleButton" id="button">
         <signal name="toggled" handler="button_toggled"/>
@@ -9,6 +14,7 @@
             <property name="can-focus">0</property>
             <child>
               <object class="GtkStack" id="button_stack">
+                <property name="accessible-role">generic</property>
                 <property name="hexpand">1</property>
                 <property name="hhomogeneous">0</property>
                 <child>
@@ -34,6 +40,7 @@
             </child>
             <child>
               <object class="GtkBuiltinIcon" id="arrow">
+                <property name="accessible-role">none</property>
                 <property name="css-name">arrow</property>
               </object>
             </child>
@@ -43,6 +50,7 @@
     </child>
     <child>
       <object class="GtkPopover" id="popup">
+        <property name="accessible-role">list-box</property>
         <signal name="closed" handler="popover_closed"/>
         <property name="halign">1</property>
         <property name="has-arrow">0</property>
