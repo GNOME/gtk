@@ -24,6 +24,9 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkDropDown" id="source_chooser">
+                <accessibility>
+                  <property name="label">Source Type</property>
+                </accessibility>
                 <property name="valign">center</property>
                 <property name="model">
                   <object class="GtkStringList">
@@ -54,6 +57,9 @@
                     <property name="name">Text</property>
                     <property name="child">
                       <object class="GtkEntry" id="source_text">
+                        <accessibility>
+                          <property name="label">Text Drag Source</property>
+                        </accessibility>
                         <property name="valign">center</property>
                         <signal name="notify::text" handler="text_changed_cb" object="copy_button"/>
                         <property name="text">Copy this!</property>
@@ -66,6 +72,9 @@
                     <property name="name">Color</property>
                     <property name="child">
                       <object class="GtkColorDialogButton" id="source_color">
+                        <accessibility>
+                          <property name="label">Color Drag Source</property>
+                        </accessibility>
                         <property name="dialog">
                           <object class="GtkColorDialog">
                           </object>
@@ -87,14 +96,17 @@
                         </style>
                         <child>
                           <object class="GtkToggleButton" id="image_rose">
+                            <accessibility>
+                              <property name="label">Photo Drag Source</property>
+                            </accessibility>
                             <property name="active">1</property>
                             <child>
-                              <object class="GtkDragSource">
-                                <signal name="prepare" handler="drag_prepare"/>
-                              </object>
                             </child>
                             <child>
                               <object class="GtkImage">
+                                <accessibility>
+                                  <property name="label">Portland Rose Photo</property>
+                                </accessibility>
                                 <style>
                                   <class name="large-icons"/>
                                 </style>
@@ -105,6 +117,9 @@
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="image_floppy">
+                            <accessibility>
+                              <property name="label">Icon Drag Source</property>
+                            </accessibility>
                             <property name="group">image_rose</property>
                             <child>
                               <object class="GtkDragSource">
@@ -113,6 +128,9 @@
                             </child>
                             <child>
                               <object class="GtkImage">
+                                <accessibility>
+                                  <property name="label">Floppy Buddy Icon</property>
+                                </accessibility>
                                 <style>
                                   <class name="large-icons"/>
                                 </style>
@@ -123,6 +141,9 @@
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="image_logo">
+                            <accessibility>
+                              <property name="label">SVG Drag Source</property>
+                            </accessibility>
                             <property name="group">image_floppy</property>
                             <child>
                               <object class="GtkDragSource">
@@ -131,6 +152,9 @@
                             </child>
                             <child>
                               <object class="GtkImage">
+                                <accessibility>
+                                  <property name="label">gtk-demo logo</property>
+                                </accessibility>
                                 <style>
                                   <class name="large-icons"/>
                                 </style>
@@ -148,6 +172,9 @@
                     <property name="name">File</property>
                     <property name="child">
                       <object class="GtkButton" id="source_file">
+                        <accessibility>
+                          <property name="label">File Drag Source</property>
+                        </accessibility>
                         <child>
                           <object class="GtkDragSource">
                             <property name="propagation-phase">capture</property>
@@ -172,6 +199,9 @@
                     <property name="name">Folder</property>
                     <property name="child">
                       <object class="GtkButton" id="source_folder">
+                        <accessibility>
+                          <property name="label">Folder Drag Source</property>
+                        </accessibility>
                         <child>
                           <object class="GtkDragSource">
                             <property name="propagation-phase">capture</property>
@@ -225,7 +255,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="paste_label">
                 <property name="xalign">0</property>
                 <binding name="label">
                   <lookup name="visible-child-name" type="GtkStack">
@@ -252,6 +282,9 @@
                     <property name="name">Text</property>
                     <property name="child">
                       <object class="GtkLabel">
+                        <accessibility>
+                          <relation name="labelled-by">paste_label</relation>
+                        </accessibility>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
                         <property name="xalign">0</property>
@@ -265,6 +298,9 @@
                     <property name="name">Image</property>
                     <property name="child">
                       <object class="GtkImage">
+                        <accessibility>
+                          <relation name="labelled-by">paste_label</relation>
+                        </accessibility>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
                         <style>
@@ -283,6 +319,9 @@
                         <property name="valign">center</property>
                         <child>
                           <object class="GtkColorSwatch">
+                            <accessibility>
+                              <relation name="labelled-by">paste_label</relation>
+                            </accessibility>
                             <property name="accessible-role">img</property>
                             <property name="can-focus">0</property>
                             <property name="selectable">0</property>
@@ -298,6 +337,9 @@
                     <property name="name">File</property>
                     <property name="child">
                       <object class="GtkLabel">
+                        <accessibility>
+                          <relation name="labelled-by">paste_label</relation>
+                        </accessibility>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
                         <property name="xalign">0</property>
