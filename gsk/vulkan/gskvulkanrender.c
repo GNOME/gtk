@@ -640,6 +640,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
     {
       gsk_vulkan_buffer_unmap (self->storage_buffer);
       self->storage_buffer_memory = NULL;
+      self->storage_buffer_used = 0;
     }
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, device,
