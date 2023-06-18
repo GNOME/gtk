@@ -3,6 +3,7 @@
   <template class="GtkDropDown" parent="GtkWidget">
     <child>
       <object class="GtkToggleButton" id="button">
+        <property name="accessible-role">generic</property>
         <signal name="toggled" handler="button_toggled"/>
         <child>
           <object class="GtkBox">
