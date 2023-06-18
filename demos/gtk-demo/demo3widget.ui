@@ -19,8 +19,14 @@
     </item>
   </menu>
   <template class="Demo3Widget">
+    <accessibility>
+      <property name="label">Demo image</property>
+    </accessibility>
     <child>
       <object class="GtkPopoverMenu" id="menu">
+        <accessibility>
+          <property name="label">Context menu</property>
+        </accessibility>
         <property name="has-arrow">0</property>
         <property name="menu-model">model</property>
       </object>

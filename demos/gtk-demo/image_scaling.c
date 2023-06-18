@@ -164,12 +164,18 @@ do_image_scaling (GtkWidget *do_widget)
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, -10., 10., 0.1);
       gtk_scale_add_mark (GTK_SCALE (scale), 0., GTK_POS_TOP, NULL);
       gtk_widget_set_tooltip_text (scale, "Zoom");
+      gtk_accessible_update_property (GTK_ACCESSIBLE (scale),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Zoom",
+                                      -1);
       gtk_range_set_value (GTK_RANGE (scale), 0.);
       gtk_widget_set_hexpand (scale, TRUE);
       gtk_box_append (GTK_BOX (box2), scale);
 
       dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", NULL })), NULL);
       gtk_widget_set_tooltip_text (dropdown, "Filter");
+      gtk_accessible_update_property (GTK_ACCESSIBLE (dropdown),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Filter",
+                                      -1);
       gtk_box_append (GTK_BOX (box2), dropdown);
 
       g_object_bind_property (dropdown, "selected", widget, "filter", G_BINDING_DEFAULT);

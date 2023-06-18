@@ -4,6 +4,9 @@
   <object class="GtkWindow" id="window">
     <property name="resizable">1</property>
     <property name="title">Clipboard</property>
+    <accessibility>
+      <relation name="described-by">label</relation>
+    </accessibility>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -13,7 +16,7 @@
         <property name="margin-bottom">12</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="label">
             <property name="label">“Copy” will copy the selected data the clipboard, “Paste” will show the current clipboard contents. You can also drag the data to the bottom.</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">40</property>
