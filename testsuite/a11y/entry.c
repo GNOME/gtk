@@ -25,6 +25,7 @@ entry_properties (void)
 
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER, "Hello");
   gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_READ_ONLY, TRUE);
+  gtk_test_accessible_assert_property (widget, GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE);
 
   g_object_unref (widget);
 }

@@ -695,7 +695,10 @@ setup_item (GtkSignalListItemFactory *factory,
   label = gtk_label_new (NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_box_append (GTK_BOX (box), label);
-  icon = gtk_image_new_from_icon_name ("object-select-symbolic");
+  icon = g_object_new (GTK_TYPE_IMAGE,
+                       "icon-name", "object-select-symbolic",
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                       NULL);
   gtk_box_append (GTK_BOX (box), icon);
   gtk_list_item_set_child (list_item, box);
 }

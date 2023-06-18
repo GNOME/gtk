@@ -28,6 +28,7 @@ tests = [
   { 'name': 'stack' },
   { 'name': 'switch' },
   { 'name': 'textview' },
+  { 'name': 'togglebutton' },
   { 'name': 'window' },
 ]
 
