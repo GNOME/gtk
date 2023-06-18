@@ -31,6 +31,7 @@
 #include "gtkpicture.h"
 #include "gtkrevealer.h"
 #include "gtkwidgetprivate.h"
+#include "gtkgestureclick.h"
 #include "gtkprivate.h"
 
 /**
@@ -126,6 +127,18 @@ static void
 gtk_video_pressed (GtkVideo *self)
 {
   gtk_video_reveal_controls (self);
+}
+
+static void
+overlay_clicked_cb (GtkGestureClick *gesture,
+                    unsigned int     n_press,
+                    double           x,
+                    double           y,
+                    gpointer         data)
+{
+  GtkVideo *self = data;
+
+  gtk_media_stream_set_playing (self->media_stream, !gtk_media_stream_get_playing (self->media_stream));
 }
 
 static void
@@ -360,6 +373,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_pressed);
+  gtk_widget_class_bind_template_callback (widget_class, overlay_clicked_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("video"));

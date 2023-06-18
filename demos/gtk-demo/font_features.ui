@@ -59,6 +59,9 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkFontDialogButton" id="font">
+                        <accessibility>
+                          <property name="label">Font</property>
+                        </accessibility>
                         <property name="dialog">
                           <object class="GtkFontDialog">
                           </object>
@@ -73,7 +76,7 @@
                         <property name="column-spacing">10</property>
                         <property name="row-spacing">10</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="size_label">
                             <property name="label">Size</property>
                             <property name="xalign">0</property>
                             <property name="valign">baseline</property>
@@ -89,6 +92,9 @@
                             <property name="width-request">100</property>
                             <property name="valign">baseline</property>
                             <property name="adjustment">size_adjustment</property>
+                            <accessibility>
+                              <relation name="labelled-by">size_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="column">1</property>
                               <property name="row">0</property>
@@ -101,6 +107,9 @@
                             <property name="max-width-chars">4</property>
                             <property name="hexpand">0</property>
                             <property name="valign">baseline</property>
+                            <accessibility>
+                              <relation name="labelled-by">size_label</relation>
+                            </accessibility>
                             <signal name="activate" handler="basic_entry_activated"
                                     object="size_adjustment" swapped="false"/>
                             <layout>
@@ -110,7 +119,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="letterspacing_label">
                             <property name="label">Letterspacing</property>
                             <property name="xalign">0</property>
                             <property name="valign">baseline</property>
@@ -126,6 +135,9 @@
                             <property name="width-request">100</property>
                             <property name="valign">baseline</property>
                             <property name="adjustment">letterspacing_adjustment</property>
+                            <accessibility>
+                              <relation name="labelled-by">letterspacing_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="column">1</property>
                               <property name="row">1</property>
@@ -138,6 +150,9 @@
                             <property name="max-width-chars">4</property>
                             <property name="hexpand">0</property>
                             <property name="valign">baseline</property>
+                            <accessibility>
+                              <relation name="labelled-by">letterspacing_label</relation>
+                            </accessibility>
                             <signal name="activate" handler="basic_entry_activated"
                                     object="letterspacing_adjustment" swapped="false"/>
                             <layout>
@@ -147,7 +162,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="line_height_label">
                             <property name="label">Line Height</property>
                             <property name="xalign">0</property>
                             <property name="valign">baseline</property>
@@ -163,6 +178,9 @@
                             <property name="width-request">100</property>
                             <property name="valign">baseline</property>
                             <property name="adjustment">line_height_adjustment</property>
+                            <accessibility>
+                              <relation name="labelled-by">line_height_label</relation>
+                            </accessibility>
                             <layout>
                               <property name="column">1</property>
                               <property name="row">2</property>
@@ -175,6 +193,9 @@
                             <property name="max-width-chars">4</property>
                             <property name="hexpand">0</property>
                             <property name="valign">baseline</property>
+                            <accessibility>
+                              <relation name="labelled-by">line_height_label</relation>
+                            </accessibility>
                             <signal name="activate" handler="basic_entry_activated"
                                     object="line_height_adjustment" swapped="false"/>
                             <layout>
@@ -184,7 +205,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="foreground_label">
                             <property name="label">Foreground</property>
                             <property name="xalign">0</property>
                             <property name="valign">baseline</property>
@@ -202,6 +223,9 @@
                             </property>
                             <property name="valign">baseline</property>
                             <property name="rgba">black</property>
+                            <accessibility>
+                              <relation name="labelled-by">foreground_label</relation>
+                            </accessibility>
                             <signal name="notify::rgba" handler="color_set_cb"/>
                             <layout>
                               <property name="column">1</property>
@@ -210,7 +234,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="background_label">
                             <property name="label">Background</property>
                             <property name="xalign">0</property>
                             <property name="valign">baseline</property>
@@ -228,6 +252,9 @@
                             </property>
                             <property name="valign">baseline</property>
                             <property name="rgba">white</property>
+                            <accessibility>
+                              <relation name="labelled-by">background_label</relation>
+                            </accessibility>
                             <signal name="notify::rgba" handler="color_set_cb"/>
                             <layout>
                               <property name="column">1</property>
@@ -240,6 +267,9 @@
                             <property name="icon-name">object-flip-vertical-symbolic</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
+                            <accessibility>
+                              <property name="label">Swap colors</property>
+                            </accessibility>
                             <style>
                               <class name="circular"/>
                             </style>
@@ -341,6 +371,9 @@
                             <property name="yalign">0</property>
                             <property name="valign">start</property>
                             <property name="selectable">1</property>
+                            <accessibility>
+                              <property name="label">Font example</property>
+                            </accessibility>
                           </object>
                         </property>
                       </object>
@@ -350,6 +383,9 @@
                         <property name="name">entry</property>
                         <property name="child">
                           <object class="GtkTextView" id="entry">
+                            <accessibility>
+                              <property name="label">Example text</property>
+                            </accessibility>
                             <property name="buffer">
                               <object class="GtkTextBuffer">
                                 <property name="text">Grumpy wizards make toxic brew for the evil Queen and Jack. A quick movement of the enemy will jeopardize six gunboats. The job of waxing linoleum frequently peeves chintzy kids. My girl wove six dozen plaid jackets before she quit. Twelve ziggurats quickly jumped a finch box.
@@ -446,6 +482,9 @@
                     <property name="icon-name">document-edit-symbolic</property>
                     <property name="halign">end</property>
                     <property name="valign">end</property>
+                    <accessibility>
+                      <property name="label">Edit text</property>
+                    </accessibility>
                     <signal name="clicked" handler="font_features_toggle_edit"/>
                   </object>
                 </child>

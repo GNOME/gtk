@@ -16,6 +16,15 @@
             <property name="valign">3</property>
             <property name="icon-name">media-playback-start-symbolic</property>
             <property name="icon-size">2</property>
+            <property name="accessible-role">button</property>
+            <accessibility>
+              <property name="label" translatable="1">Play</property>
+            </accessibility>
+            <child>
+              <object class="GtkGestureClick">
+                <signal name="pressed" handler="overlay_clicked_cb"/>
+              </object>
+            </child>
             <layout>
               <property name="measure">1</property>
             </layout>
