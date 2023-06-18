@@ -46,6 +46,7 @@
 #include "gtkdropdown.h"
 #include "gtkcolordialogbutton.h"
 #include "gtkfontdialogbutton.h"
+#include "print/gtkprinteroptionwidgetprivate.h"
 
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
 #include "a11y/gtkatspicontextprivate.h"
@@ -1200,7 +1201,17 @@ is_nested_button (GtkATContext *self)
   if ((GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_DROP_DOWN (parent)) ||
       (GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_MENU_BUTTON (parent)) ||
       (GTK_IS_BUTTON (widget) && GTK_IS_COLOR_DIALOG_BUTTON (parent)) ||
-      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent)))
+      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent))
+#ifdef G_OS_UNIX
+      || (GTK_IS_PRINTER_OPTION_WIDGET (parent) &&
+          (GTK_IS_CHECK_BUTTON (widget) ||
+           GTK_IS_DROP_DOWN (widget) ||
+           GTK_IS_ENTRY (widget) ||
+           GTK_IS_IMAGE (widget) ||
+           GTK_IS_LABEL (widget) ||
+           GTK_IS_BUTTON (widget)))
+#endif
+      )
     return TRUE;
 
   return FALSE;
@@ -1257,6 +1268,12 @@ gtk_at_context_get_name (GtkATContext *self)
     {
       parent = get_parent_context (self);
       self = parent;
+      if (is_nested_button (self))
+        {
+          parent = get_parent_context (parent);
+          g_object_unref (self);
+          self = parent;
+        }
     }
 
   GPtrArray *names = g_ptr_array_new ();
