@@ -4043,6 +4043,9 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   if (page->tab_label)
     {
       gtk_widget_set_parent (page->tab_label, page->tab_widget);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (page->tab_widget),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, page->tab_label, NULL,
+                                      -1);
       g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
     }
 
