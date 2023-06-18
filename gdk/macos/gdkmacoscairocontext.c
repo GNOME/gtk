@@ -190,7 +190,7 @@ copy_surface_data (GdkMacosBuffer       *from,
 
 static void
 _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                      gboolean        prefers_high_depth,
+                                      GdkMemoryDepth  depth,
                                       cairo_region_t *region)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;

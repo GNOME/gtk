@@ -109,12 +109,12 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_win32_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
-                                      gboolean        prefers_high_depth,
+                                      GdkMemoryDepth  depth,
                                       cairo_region_t *update_area)
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, prefers_high_depth, update_area);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, depth, update_area);
 }
 
 static void

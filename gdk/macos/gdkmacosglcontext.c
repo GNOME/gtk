@@ -480,7 +480,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
 static void
 gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
-                                  gboolean        prefers_high_depth,
+                                  GdkMemoryDepth  depth,
                                   cairo_region_t *region)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;

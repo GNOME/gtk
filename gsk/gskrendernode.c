@@ -675,10 +675,10 @@ gsk_value_dup_render_node (const GValue *value)
   return gsk_render_node_ref (value->data[0].v_pointer);
 }
 
-gboolean
-gsk_render_node_prefers_high_depth (const GskRenderNode *node)
+GdkMemoryDepth
+gsk_render_node_get_preferred_depth (const GskRenderNode *node)
 {
-  return node->prefers_high_depth;
+  return node->preferred_depth;
 }
 
 /* Whether we need an offscreen to handle opacity correctly for this node.
