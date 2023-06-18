@@ -244,7 +244,12 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="page_range_radio">
-                                        <property name="label" translatable="yes">Pag_es:</property>
+                                        <property name="child">
+                                          <object class="GtkLabel" id="page_range_label">
+                                            <property name="label" translatable="yes">Pag_es:</property>
+                                            <property name="use-underline">1</property>
+                                          </object>
+                                        </property>
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="use-underline">1</property>
@@ -266,6 +271,9 @@
                                           <property name="column">1</property>
                                           <property name="row">3</property>
                                         </layout>
+                                        <accessibility>
+                                          <relation name="labelled-by">page_range_label</relation>
+                                        </accessibility>
                                       </object>
                                     </child>
                                   </object>
