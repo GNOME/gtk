@@ -1177,11 +1177,13 @@ gtk_at_context_get_description_accumulate (GtkATContext *self,
     }
 }
 
+/* See ARIA 5.2.8.6 */
 static GtkAccessibleRole name_forbidden[] = {
   GTK_ACCESSIBLE_ROLE_CAPTION,
   GTK_ACCESSIBLE_ROLE_GENERIC,
-  GTK_ACCESSIBLE_ROLE_PRESENTATION,
   GTK_ACCESSIBLE_ROLE_NONE,
+  GTK_ACCESSIBLE_ROLE_PRESENTATION,
+  GTK_ACCESSIBLE_ROLE_TIME,
 };
 
 static gboolean
