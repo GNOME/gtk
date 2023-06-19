@@ -607,7 +607,8 @@ gtk_sort_list_model_create_keys (GtkSortListModel *self)
   self->sort_keys = gtk_sorter_get_keys (self->real_sorter);
   if (self->section_sorter)
     self->section_sort_keys = gtk_sorter_get_keys (self->section_sorter);
-  self->key_size = gtk_sort_keys_get_key_size (self->sort_keys);
+  self->key_size = GTK_SORT_KEYS_ALIGN (gtk_sort_keys_get_key_size (self->sort_keys),
+                                        gtk_sort_keys_get_key_align (self->sort_keys));
   self->keys = g_malloc_n (self->n_items, self->key_size);
   self->missing_keys = gtk_bitset_new_range (0, self->n_items);
 }
