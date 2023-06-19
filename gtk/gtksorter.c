@@ -304,7 +304,7 @@ gtk_sorter_get_keys (GtkSorter *self)
   if (priv->keys)
     return gtk_sort_keys_ref (priv->keys);
 
-  fallback = gtk_sort_keys_new (GtkDefaultSortKeys, &GTK_DEFAULT_SORT_KEYS_CLASS, sizeof (gpointer), sizeof (gpointer));
+  fallback = gtk_sort_keys_new (GtkDefaultSortKeys, &GTK_DEFAULT_SORT_KEYS_CLASS, sizeof (gpointer), G_ALIGNOF (gpointer));
   fallback->sorter = g_object_ref (self);
 
   return (GtkSortKeys *) fallback;
