@@ -22,6 +22,8 @@
 #include "gtklistitemprivate.h"
 
 #include "gtkcolumnviewcell.h"
+#include "gtkaccessible.h"
+#include "gtkatcontextprivate.h"
 
 /**
  * GtkListItem:
@@ -356,6 +358,78 @@ gtk_list_item_set_child (GtkListItem *self,
     gtk_list_item_widget_set_child (self->owner, child);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHILD]);
+}
+
+static void
+copy_accessible_property (GtkAccessible         *from,
+                          GtkAccessible         *to,
+                          GtkAccessibleProperty  property)
+{
+  GtkATContext *source, *target;
+  GtkAccessibleValue *value;
+
+  source = gtk_accessible_get_at_context (from);
+  target = gtk_accessible_get_at_context (to);
+
+  if (gtk_at_context_has_accessible_property (source, property))
+    value = gtk_at_context_get_accessible_property (source, property);
+  else
+    value = NULL;
+
+  gtk_at_context_set_accessible_property (target, property, value);
+}
+
+static void
+copy_accessible_relation (GtkAccessible         *from,
+                          GtkAccessible         *to,
+                          GtkAccessibleProperty  relation)
+{
+  GtkATContext *source, *target;
+  GtkAccessibleValue *value;
+
+  source = gtk_accessible_get_at_context (from);
+  target = gtk_accessible_get_at_context (to);
+
+  if (gtk_at_context_has_accessible_relation (source, relation))
+    value = gtk_at_context_get_accessible_relation (source, relation);
+  else
+    value = NULL;
+
+  gtk_at_context_set_accessible_relation (target, relation, value);
+}
+
+/**
+ * gtk_list_item_update_accessible_names:
+ * @self: a `GtkListItem`
+ *
+ * Copy the values of `GTK_ACCESSIBLE_PROPERTY_LABEL`,
+ * `GTK_ACCESSIBLE_RELATION_LABELLED_BY`, `GTK_ACCESSIBLE_PROPERTY_DESCIPTION`
+ * and `GTK_ACCESSIBLE_RELATION_DESCRIBED_BY` from the
+ * child to the widget with the `GTK_ACCESSIBLE_ROLE_LIST_ITEM` role.
+ *
+ * This function should be called on a bound `GtkListItem`
+ * when any of these accessible attributes change. Typically,
+ * this happens in the `bind` callback.
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_item_update_accessible_names (GtkListItem *self)
+{
+  GtkAccessible *child, *owner;
+
+  g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  if (self->child == NULL || self->owner == NULL)
+    return;
+
+  child = GTK_ACCESSIBLE (self->child);
+  owner = GTK_ACCESSIBLE (self->owner);
+
+  copy_accessible_property (child, owner, GTK_ACCESSIBLE_PROPERTY_LABEL);
+  copy_accessible_relation (child, owner, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+  copy_accessible_property (child, owner, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION);
+  copy_accessible_relation (child, owner, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY);
 }
 
 /**
