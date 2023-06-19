@@ -1259,11 +1259,12 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_DOCUMENT: Unused
  * @GTK_ACCESSIBLE_ROLE_FEED: Unused
  * @GTK_ACCESSIBLE_ROLE_FORM: Unused
- * @GTK_ACCESSIBLE_ROLE_GENERIC: Unused
+ * @GTK_ACCESSIBLE_ROLE_GENERIC: A nameless container that has no semantic meaning
+ *   of its own. This is the role that GTK uses by default for widgets and most containers.
  * @GTK_ACCESSIBLE_ROLE_GRID: A grid of items.
  * @GTK_ACCESSIBLE_ROLE_GRID_CELL: An item in a grid or tree grid.
- * @GTK_ACCESSIBLE_ROLE_GROUP: An element that groups multiple widgets. GTK uses
- *   this role for various containers, like [class@Box], [class@Viewport], and [class@HeaderBar].
+ * @GTK_ACCESSIBLE_ROLE_GROUP: An element that groups multiple related widgets. GTK uses
+ *   this role for various containers, like [class@Gtk.HeaderBar] or [class@Gtk.Notebook].
  * @GTK_ACCESSIBLE_ROLE_HEADING: Unused
  * @GTK_ACCESSIBLE_ROLE_IMG: An image.
  * @GTK_ACCESSIBLE_ROLE_INPUT: Abstract role.

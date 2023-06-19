@@ -257,6 +257,13 @@ turn automatically any widget into a `GtkButton`; but if your widget behaves
 like a button, using the %GTK_ACCESSIBLE_ROLE_BUTTON will allow any
 assistive technology to handle it like they would a `GtkButton`.
 
+For widgets that act as containers of other widgets, you should use
+%GTK_ACCESSIBLE_ROLE_GROUP if the grouping of the children is semantic
+in nature; for instance, the children of a [class@Gtk.HeaderBar] are
+grouped together on the header of a window. For generic containers that
+only impose a layout on their children, you should use
+%GTK_ACCESSIBLE_ROLE_GENERIC instead.
+
 ### Attributes can both hide and enhance
 
 Accessible attributes can be used to override the content of a UI element,

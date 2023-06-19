@@ -46,97 +46,6 @@ struct _GtkA11yOverlayClass
 
 G_DEFINE_TYPE (GtkA11yOverlay, gtk_a11y_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
-typedef enum
-{
-  NAMING_DISCRETIONARY,
-  NAMING_REQUIRED,
-  NAMING_RECOMMENDED,
-  NAMING_CONDITIONAL,
-  NAMING_PROHIBITED
-} NamingNecessity;
-
-static NamingNecessity name_for_role[] = {
-  NAMING_DISCRETIONARY, // ALERT
-  NAMING_REQUIRED, // ALERT_DIALOG
-  NAMING_DISCRETIONARY, // BANNER
-  NAMING_CONDITIONAL, // BUTTON
-  NAMING_PROHIBITED, // CAPTION
-  NAMING_CONDITIONAL, // CELL
-  NAMING_CONDITIONAL, // CHECKBOX
-  NAMING_CONDITIONAL, // COLUMN_HEADER
-  NAMING_REQUIRED, // COMBO_BOX
-  NAMING_DISCRETIONARY, // COMMAND
-  NAMING_DISCRETIONARY, // COMPOSITE
-  NAMING_REQUIRED, // DIALOG
-  NAMING_DISCRETIONARY, // DOCUMENT
-  NAMING_RECOMMENDED, // FEED
-  NAMING_RECOMMENDED, // FORM
-  NAMING_PROHIBITED, // GENERIC
-  NAMING_REQUIRED, // GRID
-  NAMING_CONDITIONAL, // GRID_CELL
-  NAMING_DISCRETIONARY, // GROUP
-  NAMING_CONDITIONAL, // HEADING
-  NAMING_REQUIRED, // IMG
-  NAMING_DISCRETIONARY, // INPUT
-  NAMING_DISCRETIONARY, // LABEL
-  NAMING_DISCRETIONARY, // LANDMARK
-  NAMING_DISCRETIONARY, // LEGEND
-  NAMING_CONDITIONAL, // LINK
-  NAMING_DISCRETIONARY, // LIST
-  NAMING_REQUIRED, // LIST_BOX
-  NAMING_PROHIBITED, // LIST_ITEM
-  NAMING_DISCRETIONARY, // LOG
-  NAMING_DISCRETIONARY, // MAIN
-  NAMING_DISCRETIONARY, // MARQUEE
-  NAMING_RECOMMENDED, // MATH
-  NAMING_REQUIRED, // METER
-  NAMING_RECOMMENDED, // MENU
-  NAMING_RECOMMENDED, // MENU_BAR
-  NAMING_CONDITIONAL, // MENU_ITEM
-  NAMING_CONDITIONAL, // MENU_ITEM_CHECKBOX
-  NAMING_CONDITIONAL, // MENU_ITEM_RADIO
-  NAMING_RECOMMENDED, // NAVIGATION
-  NAMING_PROHIBITED, // NONE
-  NAMING_DISCRETIONARY, // NOTE
-  NAMING_CONDITIONAL, // OPTION
-  NAMING_PROHIBITED, // PRESENTATION
-  NAMING_REQUIRED, // PROGRESS_BAR
-  NAMING_CONDITIONAL, // RADIO
-  NAMING_REQUIRED, // RADIO_GROUP
-  NAMING_DISCRETIONARY, // RANGE
-  NAMING_REQUIRED, // REGION
-  NAMING_CONDITIONAL, // ROW
-  NAMING_PROHIBITED, // ROW_GROUP
-  NAMING_CONDITIONAL, // ROW_HEADER
-  NAMING_DISCRETIONARY, // SCROLLBAR
-  NAMING_RECOMMENDED, // SEARCH
-  NAMING_REQUIRED, // SEARCH_BOX
-  NAMING_DISCRETIONARY, // SECTION
-  NAMING_DISCRETIONARY, // SECTION_HEAD
-  NAMING_DISCRETIONARY, // SELECT
-  NAMING_DISCRETIONARY, // SEPARATOR
-  NAMING_REQUIRED, // SLIDER
-  NAMING_REQUIRED, // SPIN_BUTTON
-  NAMING_DISCRETIONARY, // STATUS
-  NAMING_DISCRETIONARY, // STRUCTURE
-  NAMING_CONDITIONAL, // SWITCH
-  NAMING_CONDITIONAL, // TAB
-  NAMING_REQUIRED, // TABLE
-  NAMING_RECOMMENDED, // TAB_LIST
-  NAMING_REQUIRED, // TAB_PANEL
-  NAMING_REQUIRED, // TEXT_BOX
-  NAMING_PROHIBITED, // TIME
-  NAMING_DISCRETIONARY, // TIMER
-  NAMING_RECOMMENDED, // TOOLBAR
-  NAMING_CONDITIONAL, // TOOLTIP
-  NAMING_REQUIRED, // TREE
-  NAMING_REQUIRED, // TREE_GRID
-  NAMING_CONDITIONAL, // TREE_ITEM
-  NAMING_DISCRETIONARY, // WIDGET
-  NAMING_DISCRETIONARY, // WINDOW
-  NAMING_CONDITIONAL, // TOGGLE_BUTTON
-};
-
 static GtkAccessibleRole abstract_roles[] = {
   GTK_ACCESSIBLE_ROLE_COMMAND,
   GTK_ACCESSIBLE_ROLE_COMPOSITE,
@@ -257,28 +166,47 @@ check_accessibility_errors (GtkWidget  *widget,
   label_set = gtk_at_context_has_accessible_property (context, GTK_ACCESSIBLE_PROPERTY_LABEL) ||
               gtk_at_context_has_accessible_relation (context, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
 
-  switch (name_for_role[role])
+  switch (gtk_accessible_role_get_naming (role))
     {
-    case NAMING_DISCRETIONARY:
+    case GTK_ACCESSIBLE_NAME_ALLOWED:
       return SEVERITY_GOOD;
 
-    case NAMING_REQUIRED:
+    case GTK_ACCESSIBLE_NAME_REQUIRED:
       if (label_set)
         {
           return SEVERITY_GOOD;
         }
       else
         {
-          *hint = g_strdup_printf ("%s must have label or labelled-by", role_name);
+          if (gtk_accessible_role_supports_name_from_author (role))
+            {
+              char *name = gtk_at_context_get_name (context);
 
-          return SEVERITY_ERROR;
+              if (strcmp (name, "") == 0)
+                {
+                  g_free (name);
+                  *hint = g_strdup_printf ("%s must have text content or label", role_name);
+
+                  return SEVERITY_ERROR;
+                }
+              else
+                {
+                  return SEVERITY_GOOD;
+                }
+            }
+          else
+            {
+              *hint = g_strdup_printf ("%s must have label", role_name);
+
+              return SEVERITY_ERROR;
+            }
         }
       break;
 
-    case NAMING_PROHIBITED:
+    case GTK_ACCESSIBLE_NAME_PROHIBITED:
       if (label_set)
         {
-          *hint = g_strdup_printf ("%s can't have label or labelled-by", role_name);
+          *hint = g_strdup_printf ("%s can't have label", role_name);
 
           return SEVERITY_ERROR;
         }
@@ -288,36 +216,30 @@ check_accessibility_errors (GtkWidget  *widget,
         }
       break;
 
-    case NAMING_RECOMMENDED:
+    case GTK_ACCESSIBLE_NAME_RECOMMENDED:
       if (label_set)
         {
           return SEVERITY_GOOD;
         }
       else
         {
-          *hint = g_strdup_printf ("label or labelled-by recommended for %s", role_name);
+          *hint = g_strdup_printf ("label recommended for %s", role_name);
 
           return SEVERITY_RECOMMENDATION;
         }
       break;
 
-    case NAMING_CONDITIONAL:
-      {
-        char *name = gtk_at_context_get_name (context);
+    case GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED:
+      if (!label_set)
+        {
+          return SEVERITY_GOOD;
+        }
+      else
+        {
+          *hint = g_strdup_printf ("label not recommended for %s", role_name);
 
-        if (strcmp (name, "") == 0)
-          {
-            g_free (name);
-            *hint = g_strdup_printf ("%s must have text content, label or labelled-by",
-                                     role_name);
-
-            return SEVERITY_ERROR;
-          }
-        else
-          {
-            return SEVERITY_GOOD;
-          }
-      }
+          return SEVERITY_RECOMMENDATION;
+        }
       break;
 
     default:

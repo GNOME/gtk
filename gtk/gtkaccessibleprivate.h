@@ -57,6 +57,35 @@ const char *    gtk_accessible_role_to_name     (GtkAccessibleRole  role,
 
 gboolean gtk_accessible_role_is_range_subclass (GtkAccessibleRole role);
 
+/* < private >
+ * GtkAccessibleNaming:
+ * @GTK_ACCESSIBLE_NAME_ALLOWED:
+ *   The role allows an accessible name and description
+ * @GTK_ACCESSIBLE_NAME_PROHIBITED:
+ *   The role does not allow an accessible name and descirption
+ * @GTK_ACCESSIBLE_NAME_REQUIRED:
+ *   The role requires an accessible name and description
+ * @GTK_ACCESSIBLE_NAME_RECOMMENDED:
+ *   It is recommended to set the label property or labelled-by relation
+ *   for this role
+ * @GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED:
+ *   It is recommended not to set the label property or labelled-by relation
+ *   for this role
+ *
+ * Information about naming requirements for accessible roles.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_NAME_ALLOWED,
+  GTK_ACCESSIBLE_NAME_PROHIBITED,
+  GTK_ACCESSIBLE_NAME_REQUIRED,
+  GTK_ACCESSIBLE_NAME_RECOMMENDED,
+  GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED,
+} GtkAccessibleNaming;
+
+gboolean gtk_accessible_role_supports_name_from_author  (GtkAccessibleRole role);
+gboolean gtk_accessible_role_supports_name_from_content (GtkAccessibleRole role);
+GtkAccessibleNaming gtk_accessible_role_get_naming      (GtkAccessibleRole role);
+
 gboolean        gtk_accessible_should_present   (GtkAccessible     *self);
 
 void            gtk_accessible_update_children  (GtkAccessible           *self,
