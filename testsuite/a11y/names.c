@@ -119,6 +119,30 @@ test_name_prohibited (void)
   g_object_unref (widget);
 }
 
+static void
+test_name_range (void)
+{
+  GtkWidget *scale;
+  char *name;
+
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 10);
+
+  g_object_ref_sink (scale);
+  gtk_widget_realize_at_context (scale);
+
+  g_assert_true (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (scale)) == GTK_ACCESSIBLE_ROLE_SLIDER);
+  g_assert_true (gtk_at_context_get_accessible_role (gtk_accessible_get_at_context (GTK_ACCESSIBLE (scale))) == GTK_ACCESSIBLE_ROLE_SLIDER);
+
+  gtk_range_set_value (GTK_RANGE (scale), 50);
+
+  name = gtk_at_context_get_name (gtk_accessible_get_at_context (GTK_ACCESSIBLE (scale)));
+  g_assert_cmpstr (name, ==, "50");
+
+  g_free (name);
+
+  g_object_unref (scale);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -128,6 +152,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/name/tooltip", test_name_tooltip);
   g_test_add_func ("/a11y/name/label", test_name_label);
   g_test_add_func ("/a11y/name/prohibited", test_name_prohibited);
+  g_test_add_func ("/a11y/name/range", test_name_range);
 
   return g_test_run ();
 }
