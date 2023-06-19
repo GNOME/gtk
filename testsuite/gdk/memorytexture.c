@@ -436,7 +436,7 @@ encode (GdkMemoryFormat format,
   return GSIZE_TO_POINTER (method * GDK_MEMORY_N_FORMATS + format);
 }
 
-static gboolean
+static void
 decode (gconstpointer     data,
         GdkMemoryFormat *format,
         TextureMethod   *method)
@@ -447,14 +447,6 @@ decode (gconstpointer     data,
   value /= GDK_MEMORY_N_FORMATS;
 
   *method = value;
-
-  if (*method == TEXTURE_METHOD_TIFF_PIXBUF)
-    {
-      g_test_skip ("the pixbuf tiff loader is broken (gdk-pixbuf#100)");
-      return FALSE;
-    }
-
-  return TRUE;
 }
 
 static gpointer
@@ -817,7 +809,10 @@ upload_to_renderer (GdkTexture  *texture,
   GdkTexture *result;
 
   if (renderer == NULL)
-    return texture;
+    {
+      g_test_skip ("renderer not supported");
+      return texture;
+    }
 
   node = gsk_texture_node_new (texture,
                                &GRAPHENE_RECT_INIT(
@@ -1134,22 +1129,66 @@ static gboolean
 should_skip_download_test (GdkMemoryFormat format,
                            TextureMethod   method)
 {
-  int major, minor;
+  switch (method)
+  {
+    case TEXTURE_METHOD_LOCAL:
+    case TEXTURE_METHOD_PNG:
+    case TEXTURE_METHOD_PNG_PIXBUF:
+    case TEXTURE_METHOD_TIFF:
+      return FALSE;
 
-  gdk_gl_context_get_version (gl_context, &major, &minor);
+    case TEXTURE_METHOD_GL:
+    case TEXTURE_METHOD_GL_RELEASED:
+      if (gl_renderer == NULL)
+        {
+          g_test_skip ("OpenGL renderer is not supported");
+          return TRUE;
+        }
+      G_GNUC_FALLTHROUGH;
 
-  if ((method == TEXTURE_METHOD_GL ||
-       method == TEXTURE_METHOD_GL_RELEASED ||
-       method == TEXTURE_METHOD_GL_NATIVE) &&
-      gdk_gl_context_get_use_es (gl_context) &&
-      (major < 3 || (major == 3 && minor < 1)) &&
-      gdk_memory_format_is_deep (format))
-    {
-      g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
+    case TEXTURE_METHOD_GL_NATIVE:
+      {
+        int major, minor;
+
+        if (gl_context == NULL)
+          {
+            g_test_skip ("OpenGL is not supported");
+            return TRUE;
+          }
+
+        gdk_gl_context_get_version (gl_context, &major, &minor);
+
+        if ((method == TEXTURE_METHOD_GL ||
+             method == TEXTURE_METHOD_GL_RELEASED ||
+             method == TEXTURE_METHOD_GL_NATIVE) &&
+            gdk_gl_context_get_use_es (gl_context) &&
+            (major < 3 || (major == 3 && minor < 1)) &&
+            gdk_memory_format_is_deep (format))
+          {
+            g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
+            return TRUE;
+          }
+
+        return FALSE;
+      }
+
+    case TEXTURE_METHOD_VULKAN:
+      if (vulkan_renderer == NULL)
+        {
+          g_test_skip ("Vulkan is not supported");
+          return TRUE;
+        }
+      return FALSE;
+
+    case TEXTURE_METHOD_TIFF_PIXBUF:
+      g_test_skip ("the pixbuf tiff loader is broken (gdk-pixbuf#100)");
       return TRUE;
-    }
 
-  return FALSE;
+    case N_TEXTURE_METHODS:
+    default:
+      g_assert_not_reached ();
+      return TRUE;
+  }
 }
 
 static void
@@ -1163,8 +1202,7 @@ test_download (gconstpointer data,
   GdkTexture *expected, *test;
   gsize i;
 
-  if (!decode (data, &format, &method))
-    return;
+  decode (data, &format, &method);
 
   if (should_skip_download_test (format, method))
     return;
@@ -1356,7 +1394,7 @@ main (int argc, char *argv[])
   add_conversion_test ("/memorytexture/conversion_random", test_conversion_random);
 
   gl_context = gdk_display_create_gl_context (gdk_display_get_default (), NULL);
-  if (!gdk_gl_context_realize (gl_context, NULL))
+  if (gl_context == NULL || !gdk_gl_context_realize (gl_context, NULL))
     {
       g_clear_object (&gl_context);
     }
