@@ -1126,6 +1126,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   for (i = first; i < last; i++)
     {
       uint32_t n_queue_props;
+
+      if (!physical_device_supports_extension (devices[i], VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+        continue;
+
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
       VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, queue_props);
