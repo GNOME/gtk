@@ -136,6 +136,7 @@ struct _GskVulkanRenderPass
   graphene_vec2_t scale;
 
   VkRenderPass render_pass;
+  VkFramebuffer framebuffer;
   VkSemaphore signal_semaphore;
   GArray *wait_semaphores;
   GskVulkanBuffer *vertex_data;
@@ -186,7 +187,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                         .attachmentCount = 1,
                                         .pAttachments = (VkAttachmentDescription[]) {
                                            {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
+                                              .format = gsk_vulkan_image_get_vk_format (target),
                                               .samples = VK_SAMPLE_COUNT_1_BIT,
                                               .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
                                               .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
@@ -220,6 +221,21 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                       NULL,
                                       &self->render_pass);
 
+  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
+                                     &(VkFramebufferCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                                         .renderPass = self->render_pass,
+                                         .attachmentCount = 1,
+                                         .pAttachments = (VkImageView[1]) {
+                                             gsk_vulkan_image_get_image_view (target)
+                                         },
+                                         .width = gsk_vulkan_image_get_width (target),
+                                         .height = gsk_vulkan_image_get_height (target),
+                                         .layers = 1
+                                     },
+                                     NULL,
+                                     &self->framebuffer);
+
   self->signal_semaphore = signal_semaphore;
   self->wait_semaphores = g_array_new (FALSE, FALSE, sizeof (VkSemaphore));
   self->vertex_data = NULL;
@@ -238,19 +254,19 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
+  VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
+
   g_array_unref (self->render_ops);
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
-  vkDestroyRenderPass (gdk_vulkan_context_get_device (self->vulkan),
-                       self->render_pass,
-                       NULL);
+  vkDestroyFramebuffer (device, self->framebuffer, NULL);
+  vkDestroyRenderPass (device, self->render_pass, NULL);
+
   if (self->vertex_data)
     gsk_vulkan_buffer_free (self->vertex_data);
   if (self->signal_semaphore != VK_NULL_HANDLE)
-    vkDestroySemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                        self->signal_semaphore,
-                        NULL);
+    vkDestroySemaphore (device, self->signal_semaphore, NULL);
   g_array_unref (self->wait_semaphores);
 
   g_free (self);
@@ -297,6 +313,16 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
   return FALSE; \
 }G_STMT_END
 
+static GskVulkanPipeline *
+gsk_vulkan_render_pass_get_pipeline (GskVulkanRenderPass   *self,
+                                     GskVulkanRender       *render,
+                                     GskVulkanPipelineType  pipeline_type)
+{
+  return gsk_vulkan_render_get_pipeline (render,
+                                         pipeline_type,
+                                         self->render_pass);
+}
+
 static void
 gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
                                  GskVulkanRender           *render,
@@ -333,7 +359,7 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
         return FALSE;
     }
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_TEXTURE);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, GSK_VULKAN_PIPELINE_TEXTURE);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -397,7 +423,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -423,7 +449,7 @@ gsk_vulkan_render_pass_add_linear_gradient_node (GskVulkanRenderPass       *self
   else
     pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -449,7 +475,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -475,7 +501,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -501,7 +527,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -529,7 +555,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -557,7 +583,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -737,7 +763,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -763,7 +789,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -933,7 +959,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -959,7 +985,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -985,7 +1011,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -1036,7 +1062,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
         pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
       op.type = GSK_VULKAN_OP_TEXT;
     }
-  op.text.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.text.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
 
   op.text.start_glyph = 0;
   op.text.texture_index = G_MAXUINT;
@@ -1100,7 +1126,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED;
 
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+  op.render.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
   g_array_append_val (self->render_ops, op);
 
   return TRUE;
@@ -1249,6 +1275,7 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                              ceil (scale_y * viewport->size.height));
 
   result = gsk_vulkan_image_new_for_offscreen (vulkan,
+                                               gsk_render_node_get_preferred_vulkan_format (node),
                                                view.size.width, view.size.height);
 
 #ifdef G_ENABLE_DEBUG
@@ -1368,8 +1395,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
   width = ceil (node->bounds.size.width * graphene_vec2_get_x (scale));
   height = ceil (node->bounds.size.height * graphene_vec2_get_y (scale));
 
-  result = gsk_vulkan_image_new_for_upload (uploader, width, height);
-  gsk_vulkan_image_map_memory (result, uploader, &map);
+  result = gsk_vulkan_image_new_for_upload (uploader, GDK_MEMORY_DEFAULT, width, height);
+  gsk_vulkan_image_map_memory (result, uploader, GSK_VULKAN_WRITE, &map);
   surface = cairo_image_surface_create_for_data (map.data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width, height,
@@ -1429,8 +1456,8 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   width = ceil (node->bounds.size.width * graphene_vec2_get_x (&self->scale));
   height = ceil (node->bounds.size.height * graphene_vec2_get_y (&self->scale));
 
-  op->source = gsk_vulkan_image_new_for_upload (uploader, width, height);
-  gsk_vulkan_image_map_memory (op->source, uploader, &map);
+  op->source = gsk_vulkan_image_new_for_upload (uploader, GDK_MEMORY_DEFAULT, width, height);
+  gsk_vulkan_image_map_memory (op->source, uploader, GSK_VULKAN_WRITE, &map);
   surface = cairo_image_surface_create_for_data (map.data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width, height,
@@ -2430,7 +2457,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                             .renderPass = self->render_pass,
-                            .framebuffer = gsk_vulkan_render_get_framebuffer (render, self->target),
+                            .framebuffer = self->framebuffer,
                             .renderArea = { 
                                 { rect.x, rect.y },
                                 { rect.width, rect.height }

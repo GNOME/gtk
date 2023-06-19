@@ -47,7 +47,11 @@ typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
 struct _GdkVulkanContextPrivate {
 #ifdef GDK_RENDERING_VULKAN
   VkSurfaceKHR surface;
-  VkSurfaceFormatKHR image_format;
+  struct {
+    VkSurfaceFormatKHR vk_format;
+    GdkMemoryFormat gdk_format;
+  } formats[4];
+  GdkMemoryDepth current_format;
 
   VkSwapchainKHR swapchain;
   VkSemaphore draw_semaphore;
@@ -429,8 +433,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 .minImageCount = CLAMP (4,
                                                                         capabilities.minImageCount,
                                                                         capabilities.maxImageCount ? capabilities.maxImageCount : G_MAXUINT32),
-                                                .imageFormat = priv->image_format.format,
-                                                .imageColorSpace = priv->image_format.colorSpace,
+                                                .imageFormat = priv->formats[priv->current_format].vk_format.format,
+                                                .imageColorSpace = priv->formats[priv->current_format].vk_format.colorSpace,
                                                 .imageExtent = capabilities.currentExtent,
                                                 .imageArrayLayers = 1,
                                                 .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -499,19 +503,20 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 }
 
 static gboolean
-device_supports_incremental_present (VkPhysicalDevice device)
+physical_device_supports_extension (VkPhysicalDevice  device,
+                                    const char       *extension_name)
 {
   VkExtensionProperties *extensions;
   uint32_t n_device_extensions;
 
-  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, NULL);
+  GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, NULL);
 
   extensions = g_newa (VkExtensionProperties, n_device_extensions);
-  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, extensions);
+  GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, extensions);
 
   for (uint32_t i = 0; i < n_device_extensions; i++)
     {
-      if (g_str_equal (extensions[i].extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+      if (g_str_equal (extensions[i].extensionName, extension_name))
         return TRUE;
     }
 
@@ -527,6 +532,20 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   guint i;
 
+  if (depth != priv->current_format)
+    {
+      if (priv->formats[depth].gdk_format != priv->formats[priv->current_format].gdk_format)
+        {
+          GError *error = NULL;
+          if (!gdk_vulkan_context_check_swapchain (context, &error))
+            {
+              g_warning ("%s", error->message);
+              g_error_free (error);
+              return;
+            }
+        }
+      priv->current_format = depth;
+    }
   for (i = 0; i < priv->n_images; i++)
     {
       cairo_region_union (priv->regions[i], region);
@@ -665,6 +684,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   VkResult res;
   VkBool32 supported;
   uint32_t i;
@@ -672,6 +692,17 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   priv->vulkan_ref = gdk_display_ref_vulkan (display, error);
   if (!priv->vulkan_ref)
     return FALSE;
+
+  if (surface == NULL)
+    {
+      for (i = 0; i < G_N_ELEMENTS (priv->formats); i++)
+        {
+          priv->formats[i].vk_format.format = VK_FORMAT_B8G8R8A8_UNORM;
+          priv->formats[i].vk_format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+          priv->formats[i].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+        }
+      return TRUE;
+    }
 
   res = GDK_VULKAN_CONTEXT_GET_CLASS (context)->create_surface (context, &priv->surface);
   if (res != VK_SUCCESS)
@@ -707,17 +738,73 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                                                           &n_formats, formats);
       for (i = 0; i < n_formats; i++)
         {
-          if (formats[i].format == VK_FORMAT_B8G8R8A8_UNORM)
-            break;
+          if (formats[i].colorSpace != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+            continue;
+
+          switch ((int) formats[i].format)
+            {
+              case VK_FORMAT_B8G8R8A8_UNORM:
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+                  };
+                break;
+
+              case VK_FORMAT_R8G8B8A8_UNORM:
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+                  }
+                break;
+
+              case VK_FORMAT_R16G16B16A16_UNORM:
+                priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
+                priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+                break;
+
+              case VK_FORMAT_R16G16B16A16_SFLOAT:
+                priv->formats[GDK_MEMORY_FLOAT16].vk_format = formats[i];
+                priv->formats[GDK_MEMORY_FLOAT16].gdk_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+                break;
+
+              case VK_FORMAT_R32G32B32A32_SFLOAT:
+                priv->formats[GDK_MEMORY_FLOAT32].vk_format = formats[i];
+                priv->formats[GDK_MEMORY_FLOAT32].gdk_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+                break;
+
+              default:
+                break;
+            }
         }
-      if (i == n_formats)
+      if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
         {
           g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                                "No supported image format found.");
           goto out_surface;
         }
-      priv->image_format = formats[i];
-      priv->has_present_region = device_supports_incremental_present (display->vk_physical_device);
+      /* Ensure all the formats exist:
+       * - If a format was found, keep that one.
+       * - FLOAT32 chooses the best format we have.
+       * - FLOAT16 and U16 pick the format FLOAT32 uses
+       */
+      if (priv->formats[GDK_MEMORY_FLOAT32].vk_format.format == VK_FORMAT_UNDEFINED)
+        {
+          if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.format != VK_FORMAT_UNDEFINED)
+            priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_FLOAT16];
+          else if (priv->formats[GDK_MEMORY_U16].vk_format.format != VK_FORMAT_UNDEFINED)
+            priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_U16];
+          else
+            priv->formats[GDK_MEMORY_FLOAT32] = priv->formats[GDK_MEMORY_U8];
+        }
+      if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.format == VK_FORMAT_UNDEFINED)
+        priv->formats[GDK_MEMORY_FLOAT16] = priv->formats[GDK_MEMORY_FLOAT32];
+      if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
+        priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
+
+      priv->has_present_region = physical_device_supports_extension (display->vk_physical_device,
+                                                                     VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
@@ -843,7 +930,7 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_FORMAT_UNDEFINED);
 
-  return priv->image_format.format;
+  return priv->formats[priv->current_format].vk_format.format;
 }
 
 /**
@@ -1039,6 +1126,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   for (i = first; i < last; i++)
     {
       uint32_t n_queue_props;
+
+      if (!physical_device_supports_extension (devices[i], VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+        continue;
+
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
       VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, queue_props);
@@ -1049,7 +1140,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               GPtrArray *device_extensions;
               gboolean has_incremental_present;
 
-              has_incremental_present = device_supports_incremental_present (devices[i]);
+              has_incremental_present = physical_device_supports_extension (devices[i],
+                                                                            VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);

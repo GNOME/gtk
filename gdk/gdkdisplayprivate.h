@@ -202,6 +202,9 @@ gulong              _gdk_display_get_next_serial      (GdkDisplay       *display
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
 
+GdkVulkanContext *  gdk_display_create_vulkan_context (GdkDisplay       *self,
+                                                       GError          **error);
+
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
 
 gboolean            gdk_display_init_egl              (GdkDisplay       *display,

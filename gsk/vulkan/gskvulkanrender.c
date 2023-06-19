@@ -50,10 +50,8 @@ struct _GskVulkanRender
   graphene_rect_t viewport;
   cairo_region_t *clip;
 
-  GHashTable *framebuffers;
   GskVulkanCommandPool *command_pool;
   VkFence fence;
-  VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
   VkPipelineLayout pipeline_layout;
   GskVulkanUploader *uploader;
@@ -131,7 +129,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->vulkan = context;
   self->renderer = renderer;
-  self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
   gsk_descriptor_image_infos_init (&self->descriptor_images);
   gsk_descriptor_image_infos_init (&self->descriptor_samplers);
   gsk_descriptor_buffer_infos_init (&self->descriptor_buffers);
@@ -170,46 +167,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                         },
                                         NULL,
                                         &self->descriptor_pool);
-
-  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
-                                    &(VkRenderPassCreateInfo) {
-                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                                        .attachmentCount = 1,
-                                        .pAttachments = (VkAttachmentDescription[]) {
-                                           {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
-                                              .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                                              .finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                           }
-                                        },
-                                        .subpassCount = 1,
-                                        .pSubpasses = (VkSubpassDescription []) {
-                                           {
-                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              .inputAttachmentCount = 0,
-                                              .colorAttachmentCount = 1,
-                                              .pColorAttachments = (VkAttachmentReference []) {
-                                                 {
-                                                    .attachment = 0,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pResolveAttachments = (VkAttachmentReference []) {
-                                                  {
-                                                     .attachment = VK_ATTACHMENT_UNUSED,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pDepthStencilAttachment = NULL,
-                                            }
-                                         },
-                                         .dependencyCount = 0
-                                      },
-                                      NULL,
-                                      &self->render_pass);
 
   GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
@@ -324,58 +281,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   return self;
 }
 
-typedef struct {
-  VkFramebuffer framebuffer;
-} HashFramebufferEntry;
-
-static void
-gsk_vulkan_render_remove_framebuffer_from_image (gpointer  data,
-                                                 GObject  *image)
-{
-  GskVulkanRender *self = data;
-  HashFramebufferEntry *fb;
-
-  fb = g_hash_table_lookup (self->framebuffers, image);
-  g_hash_table_remove (self->framebuffers, image);
-
-  vkDestroyFramebuffer (gdk_vulkan_context_get_device (self->vulkan),
-                        fb->framebuffer,
-                        NULL);
-
-  g_free (fb);
-}
-
-VkFramebuffer
-gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
-                                   GskVulkanImage  *image)
-{
-  HashFramebufferEntry *fb;
-
-  fb = g_hash_table_lookup (self->framebuffers, image);
-  if (fb)
-    return fb->framebuffer;
-
-  fb = g_new0 (HashFramebufferEntry, 1);
-  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
-                                     &(VkFramebufferCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                                         .renderPass = self->render_pass,
-                                         .attachmentCount = 1,
-                                         .pAttachments = (VkImageView[1]) {
-                                             gsk_vulkan_image_get_image_view (image)
-                                         },
-                                         .width = gsk_vulkan_image_get_width (image),
-                                         .height = gsk_vulkan_image_get_height (image),
-                                         .layers = 1
-                                     },
-                                     NULL,
-                                     &fb->framebuffer);
-  g_hash_table_insert (self->framebuffers, image, fb);
-  g_object_weak_ref (G_OBJECT (image), gsk_vulkan_render_remove_framebuffer_from_image, self);
-
-  return fb->framebuffer;
-}
-
 VkFence
 gsk_vulkan_render_get_fence (GskVulkanRender *self)
 {
@@ -441,7 +346,8 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 
 GskVulkanPipeline *
 gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
-                                GskVulkanPipelineType  type)
+                                GskVulkanPipelineType  type,
+                                VkRenderPass           render_pass)
 {
   static const struct {
     const char *name;
@@ -492,7 +398,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
                                                              self->pipeline_layout,
                                                              pipeline_info[type].name,
-                                                             self->render_pass);
+                                                             render_pass);
 
   return self->pipelines[type];
 }
@@ -640,6 +546,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
     {
       gsk_vulkan_buffer_unmap (self->storage_buffer);
       self->storage_buffer_memory = NULL;
+      self->storage_buffer_used = 0;
     }
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, device,
@@ -810,28 +717,12 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
 void
 gsk_vulkan_render_free (GskVulkanRender *self)
 {
-  GHashTableIter iter;
-  gpointer key, value;
   VkDevice device;
   guint i;
   
   gsk_vulkan_render_cleanup (self);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
-
-  g_hash_table_iter_init (&iter, self->framebuffers);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      HashFramebufferEntry *fb = value;
-
-      vkDestroyFramebuffer (gdk_vulkan_context_get_device (self->vulkan),
-                            fb->framebuffer,
-                            NULL);
-      g_free (fb);
-      g_object_weak_unref (G_OBJECT (key), gsk_vulkan_render_remove_framebuffer_from_image, self);
-      g_hash_table_iter_remove (&iter);
-    }
-  g_hash_table_unref (self->framebuffers);
 
   for (i = 0; i < GSK_VULKAN_N_PIPELINES; i++)
     g_clear_object (&self->pipelines[i]);
@@ -842,10 +733,6 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyPipelineLayout (device,
                            self->pipeline_layout,
                            NULL);
-
-  vkDestroyRenderPass (device,
-                       self->render_pass,
-                       NULL);
 
   vkDestroyDescriptorPool (device,
                            self->descriptor_pool,
