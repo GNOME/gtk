@@ -1229,6 +1229,8 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
 {
   GtkAccessibleValue *value = NULL;
 
+  g_warn_if_fail (self->realized);
+
   /* Step 2.A */
   if (!is_ref)
     {
@@ -1376,6 +1378,8 @@ gtk_at_context_get_text (GtkATContext          *self,
                          GtkAccessibleRelation  relation)
 {
   GtkATContext *parent = NULL;
+
+  g_warn_if_fail (self->realized);
 
   /* Step 1 */
   if (gtk_accessible_role_get_naming (self->accessible_role) == GTK_ACCESSIBLE_NAME_PROHIBITED)
