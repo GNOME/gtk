@@ -121,7 +121,15 @@ gtk_accessible_attribute_set_add (GtkAccessibleAttributeSet *self,
   if (value != NULL)
     {
       if (gtk_accessible_value_equal (value, self->attribute_values[attribute]))
-        return FALSE;
+        {
+          if (!_gtk_bitmask_get (self->attributes_set, attribute))
+            {
+              self->attributes_set = _gtk_bitmask_set (self->attributes_set, attribute, TRUE);
+              return TRUE;
+            }
+          else
+            return FALSE;
+        }
     }
   else
     {
