@@ -350,7 +350,7 @@ gtk_tree_list_row_sort_keys_new (GtkTreeListRowSorter *self)
   result = gtk_sort_keys_new (GtkTreeListRowSortKeys,
                               &GTK_TREE_LIST_ROW_SORT_KEYS_CLASS,
                               sizeof (gpointer[MAX_KEY_DEPTH]),
-                              sizeof (gpointer[MAX_KEY_DEPTH]));
+                              G_ALIGNOF (gpointer));
 
   if (self->sorter)
     result->sort_keys = gtk_sorter_get_keys (self->sorter);
