@@ -10102,7 +10102,8 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  * the assigned bounds, but not that they have exactly the bounds the
  * container assigned.
  *
- * Deprecated: 4.12: Use [method@Gtk.Widget.compute_bounds] or [method@Gtk.Widget.get_width] instead
+ * Deprecated: 4.12: Use [method@Gtk.Widget.compute_bounds],
+ * [method@Gtk.Widget.get_width] or [method@Gtk.Widget.get_height] instead.
  */
 void
 gtk_widget_get_allocation (GtkWidget     *widget,
