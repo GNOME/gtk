@@ -503,19 +503,20 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 }
 
 static gboolean
-device_supports_incremental_present (VkPhysicalDevice device)
+physical_device_supports_extension (VkPhysicalDevice  device,
+                                    const char       *extension_name)
 {
   VkExtensionProperties *extensions;
   uint32_t n_device_extensions;
 
-  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, NULL);
+  GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, NULL);
 
   extensions = g_newa (VkExtensionProperties, n_device_extensions);
-  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, extensions);
+  GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, extensions);
 
   for (uint32_t i = 0; i < n_device_extensions; i++)
     {
-      if (g_str_equal (extensions[i].extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+      if (g_str_equal (extensions[i].extensionName, extension_name))
         return TRUE;
     }
 
@@ -802,7 +803,8 @@ gdk_vulkan_context_real_init (GInitable     *initable,
       if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
         priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
 
-      priv->has_present_region = device_supports_incremental_present (display->vk_physical_device);
+      priv->has_present_region = physical_device_supports_extension (display->vk_physical_device,
+                                                                     VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
@@ -1134,7 +1136,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               GPtrArray *device_extensions;
               gboolean has_incremental_present;
 
-              has_incremental_present = device_supports_incremental_present (devices[i]);
+              has_incremental_present = physical_device_supports_extension (devices[i],
+                                                                            VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
