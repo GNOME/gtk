@@ -2397,7 +2397,8 @@ gtk_widget_root_at_context (GtkWidget *self)
     }
 
   gtk_at_context_set_accessible_role (priv->at_context, role);
-  gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
+  if (priv->root)
+    gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
 }
 
 static void
