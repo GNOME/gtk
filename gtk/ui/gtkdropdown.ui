@@ -40,7 +40,7 @@
             </child>
             <child>
               <object class="GtkBuiltinIcon" id="arrow">
-                <property name="accessible-role">none</property>
+                <property name="accessible-role">presentation</property>
                 <property name="css-name">arrow</property>
               </object>
             </child>

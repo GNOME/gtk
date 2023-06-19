@@ -701,7 +701,7 @@ setup_item (GtkSignalListItemFactory *factory,
   gtk_box_append (GTK_BOX (box), label);
   icon = g_object_new (GTK_TYPE_IMAGE,
                        "icon-name", "object-select-symbolic",
-                       "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                        NULL);
   gtk_box_append (GTK_BOX (box), icon);
   gtk_list_item_set_child (list_item, box);
