@@ -249,10 +249,8 @@ endif
 
 # Compiler flags
 if cc.get_id() == 'msvc'
-  # Compiler options taken from msvc_recommended_pragmas.h
-  # in GLib, based on _Win32_Programming_ by Rector and Newcomer
   test_cflags = [
-    '-FImsvc_recommended_pragmas.h',
+    '-FI@0@/build-aux/msvc/msvc_recommended_pragmas.h'.format(meson.project_source_root()),
     '-D_USE_MATH_DEFINES',
     '-utf-8',
     '-Zc:preprocessor'
