@@ -252,7 +252,6 @@ if cc.get_id() == 'msvc'
   test_cflags = [
     '-FI@0@/build-aux/msvc/msvc_recommended_pragmas.h'.format(meson.project_source_root()),
     '-D_USE_MATH_DEFINES',
-    '-utf-8',
     '-Zc:preprocessor'
   ]
   add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
