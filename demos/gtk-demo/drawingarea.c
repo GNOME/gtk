@@ -334,11 +334,17 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_widget_set_vexpand (frame, TRUE);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      da = gtk_drawing_area_new ();
+      da = g_object_new (GTK_TYPE_DRAWING_AREA,
+                         "accessible-role", GTK_ACCESSIBLE_ROLE_IMG,
+                         NULL);
+      gtk_frame_set_child (GTK_FRAME (frame), da);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (da),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                      -1);
+
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), groups_draw, NULL, NULL);
-      gtk_frame_set_child (GTK_FRAME (frame), da);
 
       /*
        * Create the scribble area
@@ -352,11 +358,17 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_widget_set_vexpand (frame, TRUE);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      da = gtk_drawing_area_new ();
+      da = g_object_new (GTK_TYPE_DRAWING_AREA,
+                         "accessible-role", GTK_ACCESSIBLE_ROLE_IMG,
+                         NULL);
+      gtk_frame_set_child (GTK_FRAME (frame), da);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (da),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                      -1);
+
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 100);
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), scribble_draw, NULL, NULL);
-      gtk_frame_set_child (GTK_FRAME (frame), da);
 
       g_signal_connect (da, "resize",
                         G_CALLBACK (scribble_resize), NULL);
@@ -372,7 +384,7 @@ do_drawingarea (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-      gtk_widget_set_visible (window, TRUE);
+      gtk_window_present (GTK_WINDOW (window));
   else
       gtk_window_destroy (GTK_WINDOW (window));
 

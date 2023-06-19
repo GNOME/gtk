@@ -201,11 +201,16 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="range_table">
+                                    <accessibility>
+                                      <relation name="labelled-by">label_widget1</relation>
+                                    </accessibility>
+                                    <property name="accessible-role">radio-group</property>
                                     <property name="margin-start">12</property>
                                     <property name="row-spacing">6</property>
                                     <property name="column-spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="all_pages_radio">
+                                        <property name="accessible-role">radio</property>
                                         <property name="label" translatable="yes">_All Pages</property>
                                         <property name="use-underline">1</property>
                                         <property name="active">1</property>
@@ -218,6 +223,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="current_page_radio">
+                                        <property name="accessible-role">radio</property>
                                         <property name="label" translatable="yes">C_urrent Page</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
@@ -231,6 +237,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="selection_radio">
+                                        <property name="accessible-role">radio</property>
                                         <property name="label" translatable="yes">Se_lection</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
@@ -244,7 +251,12 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="page_range_radio">
-                                        <property name="label" translatable="yes">Pag_es:</property>
+                                        <property name="child">
+                                          <object class="GtkLabel" id="page_range_label">
+                                            <property name="label" translatable="yes">Pag_es:</property>
+                                            <property name="use-underline">1</property>
+                                          </object>
+                                        </property>
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="use-underline">1</property>
@@ -266,6 +278,9 @@
                                           <property name="column">1</property>
                                           <property name="row">3</property>
                                         </layout>
+                                        <accessibility>
+                                          <relation name="labelled-by">page_range_label</relation>
+                                        </accessibility>
                                       </object>
                                     </child>
                                   </object>
@@ -289,6 +304,9 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="grid1">
+                                    <accessibility>
+                                      <relation name="labelled-by">label_widget2</relation>
+                                    </accessibility>
                                     <property name="margin-start">12</property>
                                     <property name="row-spacing">6</property>
                                     <property name="column-spacing">12</property>
@@ -341,6 +359,11 @@
                                     </child>
                                     <child>
                                       <object class="GtkFixed" id="page_collate_preview">
+                                        <property name="accessible-role">img</property>
+                                        <accessibility>
+                                          <property name="label" translatable="1">Page ordering preview</property>
+                                          <property name="description" translatable="1">A visualization of the effect of the collate and reverse options on the page ordering</property>
+                                        </accessibility>
                                         <child>
                                           <object class="GtkPageThumbnail" id="page_a1">
                                             <property name="page-num">1</property>
@@ -433,6 +456,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="grid2">
+                                    <property name="accessible-role">group</property>
+                                    <accessibility>
+                                      <relation name="labelled-by">label_widget3</relation>
+                                    </accessibility>
                                     <property name="margin-start">12</property>
                                     <property name="row-spacing">6</property>
                                     <property name="column-spacing">12</property>
@@ -556,6 +583,9 @@
                                         <property name="valign">4</property>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_spin">
+                                            <accessibility>
+                                              <property name="label" translatable="1">Scale in percent</property>
+                                            </accessibility>
                                             <property name="valign">4</property>
                                             <property name="adjustment">scale_spin_adjustment</property>
                                             <property name="digits">1</property>
@@ -594,6 +624,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkGrid" id="grid3">
+                                    <property name="accessible-role">group</property>
+                                    <accessibility>
+                                      <relation name="labelled-by">label_widget4</relation>
+                                    </accessibility>
                                     <property name="margin-start">12</property>
                                     <property name="row-spacing">6</property>
                                     <property name="column-spacing">12</property>
@@ -730,6 +764,10 @@
                           <object class="GtkBox" id="box6">
                             <child>
                               <object class="GtkDrawingArea" id="page_layout_preview">
+                                <property name="accessible-role">img</property>
+                                <accessibility>
+                                  <property name="label" translatable="1">Page layout preview</property>
+                                </accessibility>
                                 <property name="content-width">320</property>
                                 <property name="content-height">160</property>
                                 <property name="hexpand">1</property>

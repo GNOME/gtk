@@ -346,9 +346,9 @@ update_window_buttons (GtkWindowControls *self)
           image = g_object_new (GTK_TYPE_IMAGE,
                                 "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                 "icon-name", "window-close-symbolic",
+                                "use-fallback", TRUE,
                                 NULL);
           gtk_widget_add_css_class (button, "close");
-          g_object_set (image, "use-fallback", TRUE, NULL);
           gtk_button_set_child (GTK_BUTTON (button), image);
           gtk_widget_set_can_focus (button, FALSE);
           gtk_actionable_set_action_name (GTK_ACTIONABLE (button),

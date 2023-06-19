@@ -587,6 +587,17 @@ update_accessible_properties (GtkModelButton *button)
   gtk_accessible_update_relation (GTK_ACCESSIBLE (button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, button->label, NULL,
                                   -1);
+
+  if (button->accel_label)
+    {
+      const char *text = gtk_label_get_label (GTK_LABEL (button->accel_label));
+      gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                      GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, text,
+                                      -1);
+    }
+  else
+    gtk_accessible_reset_property (GTK_ACCESSIBLE (button),
+                                   GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
 }
 
 static void
@@ -831,6 +842,7 @@ update_accel (GtkModelButton *self,
       if (!self->accel_label)
         {
           self->accel_label = g_object_new (GTK_TYPE_LABEL,
+                                            "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                             "css-name", "accelerator",
                                             NULL);
           gtk_widget_insert_before (self->accel_label, GTK_WIDGET (self), NULL);
@@ -880,6 +892,8 @@ update_accel (GtkModelButton *self,
           self->controller = NULL;
         }
     }
+
+  update_accessible_properties (self);
 }
 
 static void
@@ -1481,7 +1495,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   self->role = GTK_BUTTON_ROLE_NORMAL;
-  self->label = gtk_label_new ("");
+  self->label = g_object_new (GTK_TYPE_LABEL, "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION, NULL);
   gtk_widget_set_halign (self->label, GTK_ALIGN_START);
   gtk_widget_set_parent (self->label, GTK_WIDGET (self));
 
