@@ -227,7 +227,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_BOOLEAN_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_BOOLEAN_SORT_KEYS_CLASS,
                                   sizeof (char),
-                                  sizeof (char));
+                                  G_ALIGNOF (char));
       break;
 
     case G_TYPE_CHAR:
@@ -236,7 +236,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_CHAR_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_CHAR_SORT_KEYS_CLASS,
                                   sizeof (char),
-                                  sizeof (char));
+                                  G_ALIGNOF (char));
       break;
 
     case G_TYPE_UCHAR:
@@ -245,7 +245,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_UCHAR_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_UCHAR_SORT_KEYS_CLASS,
                                   sizeof (guchar),
-                                  sizeof (guchar));
+                                  G_ALIGNOF (guchar));
       break;
 
     case G_TYPE_INT:
@@ -254,7 +254,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_INT_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_INT_SORT_KEYS_CLASS,
                                   sizeof (int),
-                                  sizeof (int));
+                                  G_ALIGNOF (int));
       break;
 
     case G_TYPE_UINT:
@@ -263,7 +263,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_UINT_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_UINT_SORT_KEYS_CLASS,
                                   sizeof (guint),
-                                  sizeof (guint));
+                                  G_ALIGNOF (guint));
       break;
 
     case G_TYPE_FLOAT:
@@ -272,7 +272,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_FLOAT_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_FLOAT_SORT_KEYS_CLASS,
                                   sizeof (float),
-                                  sizeof (float));
+                                  G_ALIGNOF (float));
       break;
 
     case G_TYPE_DOUBLE:
@@ -281,7 +281,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_DOUBLE_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_DOUBLE_SORT_KEYS_CLASS,
                                   sizeof (double),
-                                  sizeof (double));
+                                  G_ALIGNOF (double));
       break;
 
     case G_TYPE_LONG:
@@ -290,7 +290,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_LONG_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_LONG_SORT_KEYS_CLASS,
                                   sizeof (long),
-                                  sizeof (long));
+                                  G_ALIGNOF (long));
       break;
 
     case G_TYPE_ULONG:
@@ -299,7 +299,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_ULONG_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_ULONG_SORT_KEYS_CLASS,
                                   sizeof (gulong),
-                                  sizeof (gulong));
+                                  G_ALIGNOF (gulong));
       break;
 
     case G_TYPE_INT64:
@@ -308,7 +308,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_INT64_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_INT64_SORT_KEYS_CLASS,
                                   sizeof (gint64),
-                                  sizeof (gint64));
+                                  G_ALIGNOF (gint64));
       break;
 
     case G_TYPE_UINT64:
@@ -317,7 +317,7 @@ gtk_numeric_sort_keys_new (GtkNumericSorter *self)
                                                       ? &GTK_ASCENDING_UINT64_SORT_KEYS_CLASS
                                                       : &GTK_DESCENDING_UINT64_SORT_KEYS_CLASS,
                                   sizeof (guint64),
-                                  sizeof (guint64));
+                                  G_ALIGNOF (guint64));
       break;
 
     default:
