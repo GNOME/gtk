@@ -69,16 +69,23 @@ static void
 bind_listitem_cb (GtkListItemFactory *factory,
                   GtkListItem        *list_item)
 {
+  GtkWidget *child;
   GtkWidget *image;
   GtkWidget *label;
   GAppInfo *app_info;
 
-  image = gtk_widget_get_first_child (gtk_list_item_get_child (list_item));
+  child = gtk_list_item_get_child (list_item);
+  image = gtk_widget_get_first_child (child);
   label = gtk_widget_get_next_sibling (image);
   app_info = gtk_list_item_get_item (list_item);
 
   gtk_image_set_from_gicon (GTK_IMAGE (image), g_app_info_get_icon (app_info));
   gtk_label_set_label (GTK_LABEL (label), g_app_info_get_display_name (app_info));
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (child),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, label, NULL,
+                                  -1);
+  gtk_list_item_update_accessible_names (list_item);
 }
 
 /* In more complex code, we would also need functions to unbind and teardown
