@@ -3,11 +3,6 @@
 #include "common.vert.glsl"
 #include "rect.vert.glsl"
 
-struct ColorStop {
-  float offset;
-  vec4 color;
-};
-
 layout(location = 0) in vec4 inRect;
 layout(location = 1) in vec2 inStart;
 layout(location = 2) in vec2 inEnd;
