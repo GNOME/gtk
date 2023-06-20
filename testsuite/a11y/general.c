@@ -8,18 +8,20 @@
 static void
 test_hidden (void)
 {
+  GtkWidget *window;
   GtkWidget *widget;
 
+  window = gtk_window_new ();
   widget = gtk_button_new ();
-  g_object_ref_sink (widget);
-
-  gtk_test_accessible_assert_state (widget, GTK_ACCESSIBLE_STATE_HIDDEN, FALSE);
-
-  gtk_widget_set_visible (widget, FALSE);
+  gtk_window_set_child (GTK_WINDOW (window), widget);
 
   gtk_test_accessible_assert_state (widget, GTK_ACCESSIBLE_STATE_HIDDEN, TRUE);
 
-  g_object_unref (widget);
+  gtk_window_present (GTK_WINDOW (window));
+
+  gtk_test_accessible_assert_state (widget, GTK_ACCESSIBLE_STATE_HIDDEN, FALSE);
+
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
