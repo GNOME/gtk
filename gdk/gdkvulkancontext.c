@@ -1168,6 +1168,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                       .descriptorBindingPartiallyBound = VK_TRUE,
                                                       .descriptorBindingVariableDescriptorCount = VK_TRUE,
                                                       .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
+                                                      .descriptorBindingStorageBufferUpdateAfterBind = VK_TRUE,
                                                     }
                                                 },
                                                 NULL,
