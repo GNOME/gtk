@@ -41,6 +41,8 @@
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
+#define N_DESCRIPTOR_SETS 3
+
 struct _GskVulkanRender
 {
   GskRenderer *renderer;
@@ -52,7 +54,7 @@ struct _GskVulkanRender
 
   GskVulkanCommandPool *command_pool;
   VkFence fence;
-  VkDescriptorSetLayout descriptor_set_layout;
+  VkDescriptorSetLayout descriptor_set_layouts[N_DESCRIPTOR_SETS];
   VkPipelineLayout pipeline_layout;
   GskVulkanUploader *uploader;
 
@@ -60,7 +62,7 @@ struct _GskVulkanRender
   GskDescriptorImageInfos descriptor_samplers;
   GskDescriptorBufferInfos descriptor_buffers;
   VkDescriptorPool descriptor_pool;
-  VkDescriptorSet descriptor_set;
+  VkDescriptorSet descriptor_sets[N_DESCRIPTOR_SETS];
   GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
 
   GskVulkanImage *target;
@@ -148,9 +150,9 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                         &(VkDescriptorPoolCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                                             .flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
-                                            .maxSets = 1,
-                                            .poolSizeCount = 3,
-                                            .pPoolSizes = (VkDescriptorPoolSize[3]) {
+                                            .maxSets = N_DESCRIPTOR_SETS,
+                                            .poolSizeCount = N_DESCRIPTOR_SETS,
+                                            .pPoolSizes = (VkDescriptorPoolSize[N_DESCRIPTOR_SETS]) {
                                                 {
                                                     .type = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
                                                     .descriptorCount = DESCRIPTOR_POOL_MAXITEMS
@@ -171,7 +173,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-                                                 .bindingCount = 3,
+                                                 .bindingCount = 1,
                                                  .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
                                                  .pBindings = (VkDescriptorSetLayoutBinding[3]) {
                                                      {
@@ -179,30 +181,12 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                                          .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
                                                          .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-                                                     },
-                                                     {
-                                                         .binding = 1,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
-                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
-                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-                                                     },
-                                                     {
-                                                         .binding = 2,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
-                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-                                                     },
+                                                     }
                                                  },
                                                  .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
-                                                   .bindingCount = 3,
-                                                   .pBindingFlags = (VkDescriptorBindingFlags[3]) {
-                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
-                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                   .bindingCount = 1,
+                                                   .pBindingFlags = (VkDescriptorBindingFlags[1]) {
                                                      VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
                                                      | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
                                                      | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
@@ -210,15 +194,65 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                                  }
                                              },
                                              NULL,
-                                             &self->descriptor_set_layout);
+                                             &self->descriptor_set_layouts[0]);
+
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
+                                             &(VkDescriptorSetLayoutCreateInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                                                 .bindingCount = 1,
+                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
+                                                     {
+                                                         .binding = 0,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
+                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+                                                     }
+                                                 },
+                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+                                                   .bindingCount = 1,
+                                                   .pBindingFlags = (VkDescriptorBindingFlags[1]) {
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                   },
+                                                 }
+                                             },
+                                             NULL,
+                                             &self->descriptor_set_layouts[1]);
+
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
+                                             &(VkDescriptorSetLayoutCreateInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                                                 .bindingCount = 1,
+                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
+                                                     {
+                                                         .binding = 0,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+                                                     },
+                                                 },
+                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+                                                   .bindingCount = 1,
+                                                   .pBindingFlags = (VkDescriptorBindingFlags[1]) {
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                   },
+                                                 }
+                                             },
+                                             NULL,
+                                             &self->descriptor_set_layouts[2]);
 
   GSK_VK_CHECK (vkCreatePipelineLayout, device,
                                         &(VkPipelineLayoutCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                            .setLayoutCount = 1,
-                                            .pSetLayouts = (VkDescriptorSetLayout[1]) {
-                                              self->descriptor_set_layout
-                                            },
+                                            .setLayoutCount = G_N_ELEMENTS (self->descriptor_set_layouts),
+                                            .pSetLayouts = self->descriptor_set_layouts,
                                             .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
                                             .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
                                         },
@@ -403,10 +437,18 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
   return self->pipelines[type];
 }
 
-VkDescriptorSet
-gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self)
+void
+gsk_vulkan_render_bind_descriptor_sets (GskVulkanRender *self,
+                                        VkCommandBuffer  command_buffer)
 {
-  return self->descriptor_set;
+  vkCmdBindDescriptorSets (command_buffer,
+                           VK_PIPELINE_BIND_POINT_GRAPHICS,
+                           self->pipeline_layout,
+                           0,
+                           3,
+                           self->descriptor_sets,
+                           0,
+                           NULL);
 }
 
 gsize
@@ -537,11 +579,6 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
       gsk_vulkan_render_pass_reserve_descriptor_sets (pass, self);
     }
   
-  if (gsk_descriptor_image_infos_get_size (&self->descriptor_samplers) == 0 &&
-      gsk_descriptor_image_infos_get_size (&self->descriptor_images) == 0 &&
-      gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) == 0)
-    return;
-
   if (self->storage_buffer_memory)
     {
       gsk_vulkan_buffer_unmap (self->storage_buffer);
@@ -553,26 +590,26 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
                                           &(VkDescriptorSetAllocateInfo) {
                                               .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
                                               .descriptorPool = self->descriptor_pool,
-                                              .descriptorSetCount = 1,
-                                              .pSetLayouts = &self->descriptor_set_layout,
+                                              .descriptorSetCount = N_DESCRIPTOR_SETS,
+                                              .pSetLayouts = self->descriptor_set_layouts,
                                               .pNext = &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
-                                                .descriptorSetCount = 1,
-                                                .pDescriptorCounts = (uint32_t[1]) {
-                                                  gsk_descriptor_image_infos_get_size (&self->descriptor_images)
-                                                  + gsk_descriptor_image_infos_get_size (&self->descriptor_samplers)
-                                                  + gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers)
+                                                .descriptorSetCount = N_DESCRIPTOR_SETS,
+                                                .pDescriptorCounts = (uint32_t[N_DESCRIPTOR_SETS]) {
+                                                  MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_images)),
+                                                  MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_samplers)),
+                                                  MAX (1, gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers))
                                                 }
                                               }
                                           },
-                                          &self->descriptor_set);
+                                          self->descriptor_sets);
 
   n_descriptor_sets = 0;
   if (gsk_descriptor_image_infos_get_size (&self->descriptor_images) > 0)
     {
       descriptor_sets[n_descriptor_sets++] = (VkWriteDescriptorSet) {
           .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-          .dstSet = self->descriptor_set,
+          .dstSet = self->descriptor_sets[0],
           .dstBinding = 0,
           .dstArrayElement = 0,
           .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_images),
@@ -584,8 +621,8 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
     {
       descriptor_sets[n_descriptor_sets++] = (VkWriteDescriptorSet) {
           .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-          .dstSet = self->descriptor_set,
-          .dstBinding = 1,
+          .dstSet = self->descriptor_sets[1],
+          .dstBinding = 0,
           .dstArrayElement = 0,
           .descriptorCount = gsk_descriptor_image_infos_get_size (&self->descriptor_samplers),
           .descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER,
@@ -596,8 +633,8 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
     {
       descriptor_sets[n_descriptor_sets++] = (VkWriteDescriptorSet) {
           .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-          .dstSet = self->descriptor_set,
-          .dstBinding = 2,
+          .dstSet = self->descriptor_sets[2],
+          .dstBinding = 0,
           .dstArrayElement = 0,
           .descriptorCount = gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers),
           .descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
@@ -741,9 +778,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   gsk_descriptor_image_infos_clear (&self->descriptor_samplers);
   gsk_descriptor_buffer_infos_clear (&self->descriptor_buffers);
 
-  vkDestroyDescriptorSetLayout (device,
-                                self->descriptor_set_layout,
-                                NULL);
+  for (i = 0; i < N_DESCRIPTOR_SETS; i++)
+    vkDestroyDescriptorSetLayout (device,
+                                  self->descriptor_set_layouts[i],
+                                  NULL);
 
   vkDestroyFence (device,
                   self->fence,

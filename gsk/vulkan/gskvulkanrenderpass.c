@@ -2436,7 +2436,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                              VkPipelineLayout     pipeline_layout,
                              VkCommandBuffer      command_buffer)
 {
-  VkDescriptorSet descriptor_set;
   cairo_rectangle_int_t rect;
 
   vkCmdSetViewport (command_buffer,
@@ -2469,16 +2468,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  descriptor_set = gsk_vulkan_render_get_descriptor_set (render);
-  if (descriptor_set)
-    vkCmdBindDescriptorSets (command_buffer,
-                             VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             pipeline_layout,
-                             0,
-                             1,
-                             &descriptor_set,
-                             0,
-                             NULL);
+  gsk_vulkan_render_bind_descriptor_sets (render, command_buffer);
 
   gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 
