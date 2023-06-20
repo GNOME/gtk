@@ -78,8 +78,8 @@ gsk_vulkan_buffer_new_map (GdkVulkanContext  *context,
 {
   return gsk_vulkan_buffer_new_internal (context,
                                          size,
-                                         (mode & GSK_VULKAN_READ ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0) |
-                                         (mode & GSK_VULKAN_WRITE ? VK_BUFFER_USAGE_TRANSFER_DST_BIT : 0));
+                                         (mode & GSK_VULKAN_READ ? VK_BUFFER_USAGE_TRANSFER_DST_BIT : 0) |
+                                         (mode & GSK_VULKAN_WRITE ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0));
 }
 
 void
