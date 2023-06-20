@@ -1,6 +1,62 @@
 Overview of Changes in 4.11.4, xx-xx-xxxx
 =========================================
 
+* GtkFileChooser:
+ - Default to sorting folders first
+ - Fix a crash when visiting recent files
+
+* GtkTextView:
+ - Fix corner cases in word navigation
+
+* GtkMenuButton:
+ - Normalize label layout
+
+* GtkDropDown:
+ - Add support for sections
+
+* GtkVideo:
+ - Make the overlay icon clickable
+
+* GtkWindow:
+ - Clear the resize cursors to avoid artifacts
+
+* Accessibility:
+ - Improvements all over the place: GtkButton, GtkPasswordEntry,
+   GtkFontChooserDialog, GtkColorChooserDialog, GtkShortcutsWindow,
+   GtkMenuButton, GtkAboutDialog, GtkFileChooserDialog, GtkStackSidebar,
+   GtkMediaControls, GtkColorDialogButton, GtkDropDown, GtkInfoBar,
+   GtkNotebook, GtkPrintUnixDialog, GtkModelButton
+ - Make name computation follow the ARIA spec more closely
+ - Change many containers to use `generic` instead of `group`
+ - Use `generic` as the default role
+ - Use `application` instead of `window` for windows
+
+* X11:
+ - Fix regressions in GLX setup
+
+* Windows:
+ - Center newly created transient windows
+
+* Vulkan:
+ - Add antialising for gradients
+ - Do less work on clipped away nodes
+ - Redo image uploading
+ - Support different image depths and formats
+
+* Demos:
+ - gtk4-demo: Improve window sizing
+ - gtk4-demo: Improve focus behavior
+ - gtk4-demo: Add many missing a11y properties
+`
+* Inspector:
+ - Show more information in the a11y tab
+ - Add an accessibility overlay
+ - Limit the width of the a11y tab
+
+* Translation updates:
+ Czech
+
+
 Overview of Changes in 4.11.3, 05-06-2023
 =========================================
 

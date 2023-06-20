@@ -1010,7 +1010,12 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
 /* See ARIA 5.2.8.4, 5.2.8.5 and 5.2.8.6 for the prohibited, from author
  * and from content parts, and the table in
  * https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/
- * for the recommended / not recommended parts.
+ * for the recommended / not recommended parts. We've made a few changes
+ * to the recommendations:
+ * - We don't recommend against labelling listitems, sincd GtkListView
+ *   will put the focus on listitems sometimes.
+ * - We don't recommend tab lists being labelled, since GtkNotebook does
+ *   not have a practical way of doing that.
  */
 
 #define NAME_FROM_AUTHOR  (1 << 6)
@@ -1316,7 +1321,7 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
     {
       if (GTK_IS_WIDGET (self->accessible))
         {
-          gboolean has_child = FALSE;
+          GString *s = g_string_new ("");
 
           for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->accessible));
                child != NULL;
@@ -1325,13 +1330,17 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
               GtkAccessible *rel = GTK_ACCESSIBLE (child);
               GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
-              gtk_at_context_get_text_accumulate (rel_context, nodes, res, property, relation, FALSE, TRUE);
-
-              has_child = TRUE;
+              gtk_at_context_get_text_accumulate (rel_context, nodes, s, property, relation, FALSE, TRUE);
             }
 
-           if (has_child)
-             return;
+           if (s->len > 0)
+             {
+               g_string_append (res, s->str);
+               g_string_free (s, TRUE);
+               return;
+             }
+
+           g_string_free (s, TRUE);
         }
     }
 

@@ -5,7 +5,7 @@
 static void
 test_name_content (void)
 {
-  GtkWidget *label1, *label2, *box, *button;
+  GtkWidget *window, *label1, *label2, *box, *button;
   char *name;
 
   label1 = gtk_label_new ("a");
@@ -16,13 +16,10 @@ test_name_content (void)
   gtk_box_append (GTK_BOX (box), label1);
   gtk_box_append (GTK_BOX (box), label2);
   gtk_button_set_child (GTK_BUTTON (button), box);
-  g_object_ref_sink (button);
 
-  /* gtk_at_context_get_name only works on realized contexts */
-  gtk_widget_realize_at_context (label1);
-  gtk_widget_realize_at_context (label2);
-  gtk_widget_realize_at_context (box);
-  gtk_widget_realize_at_context (button);
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), button);
+  gtk_window_present (GTK_WINDOW (window));
 
   name = gtk_at_context_get_name (gtk_accessible_get_at_context (GTK_ACCESSIBLE (label1)));
   g_assert_cmpstr (name, ==, "a");
@@ -43,17 +40,20 @@ test_name_content (void)
   g_assert_cmpstr (name, ==, "a");
   g_free (name);
 
-  g_object_unref (button);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
 test_name_tooltip (void)
 {
-  GtkWidget *image = gtk_image_new ();
+  GtkWidget *window, *image;
   char *name;
 
-  g_object_ref_sink (image);
-  gtk_widget_realize_at_context (image);
+  image = gtk_image_new ();
+
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), image);
+  gtk_window_present (GTK_WINDOW (window));
 
   gtk_widget_set_tooltip_text (image, "tooltip");
 
@@ -61,15 +61,43 @@ test_name_tooltip (void)
   g_assert_cmpstr (name, ==, "tooltip");
   g_free (name);
 
-  g_object_unref (image);
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
+static void
+test_name_menubutton (void)
+{
+  GtkWidget *window, *widget;
+  char *name;
+
+  widget = gtk_menu_button_new ();
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), gtk_popover_new ());
+
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), widget);
+  gtk_window_present (GTK_WINDOW (window));
+
+  gtk_widget_set_tooltip_text (widget, "tooltip");
+
+  name = gtk_at_context_get_name (gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget)));
+  g_assert_cmpstr (name, ==, "tooltip");
+  g_free (name);
+
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
 test_name_label (void)
 {
-  GtkWidget *image = gtk_image_new ();
+  GtkWidget *window, *image;
   char *name;
   char *desc;
+
+  image = gtk_image_new ();
+
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), image);
+  gtk_window_present (GTK_WINDOW (window));
 
   g_object_ref_sink (image);
   gtk_widget_realize_at_context (image);
@@ -89,13 +117,13 @@ test_name_label (void)
   g_free (name);
   g_free (desc);
 
-  g_object_unref (image);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
 test_name_prohibited (void)
 {
-  GtkWidget *widget;
+  GtkWidget *window, *widget;
   char *name;
   char *desc;
 
@@ -104,8 +132,9 @@ test_name_prohibited (void)
                          "label", "too late",
                          NULL);
 
-  g_object_ref_sink (widget);
-  gtk_widget_realize_at_context (widget);
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), widget);
+  gtk_window_present (GTK_WINDOW (window));
 
   name = gtk_at_context_get_name (gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget)));
   desc = gtk_at_context_get_description (gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget)));
@@ -116,19 +145,20 @@ test_name_prohibited (void)
   g_free (name);
   g_free (desc);
 
-  g_object_unref (widget);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
 test_name_range (void)
 {
-  GtkWidget *scale;
+  GtkWidget *window, *scale;
   char *name;
 
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 10);
 
-  g_object_ref_sink (scale);
-  gtk_widget_realize_at_context (scale);
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), scale);
+  gtk_window_present (GTK_WINDOW (window));
 
   g_assert_true (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (scale)) == GTK_ACCESSIBLE_ROLE_SLIDER);
   g_assert_true (gtk_at_context_get_accessible_role (gtk_accessible_get_at_context (GTK_ACCESSIBLE (scale))) == GTK_ACCESSIBLE_ROLE_SLIDER);
@@ -140,7 +170,7 @@ test_name_range (void)
 
   g_free (name);
 
-  g_object_unref (scale);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 int
@@ -150,6 +180,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/a11y/name/content", test_name_content);
   g_test_add_func ("/a11y/name/tooltip", test_name_tooltip);
+  g_test_add_func ("/a11y/name/menubutton", test_name_menubutton);
   g_test_add_func ("/a11y/name/label", test_name_label);
   g_test_add_func ("/a11y/name/prohibited", test_name_prohibited);
   g_test_add_func ("/a11y/name/range", test_name_range);
