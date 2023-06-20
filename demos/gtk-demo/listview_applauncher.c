@@ -52,6 +52,10 @@ setup_listitem_cb (GtkListItemFactory *factory,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   image = gtk_image_new ();
+  gtk_accessible_update_property (GTK_ACCESSIBLE (image),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                  "App icon",
+                                  -1);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_box_append (GTK_BOX (box), image);
   label = gtk_label_new ("");

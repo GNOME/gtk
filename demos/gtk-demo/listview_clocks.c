@@ -431,6 +431,9 @@ setup_listitem_cb (GtkListItemFactory *factory,
   picture = gtk_picture_new ();
   gtk_expression_bind (expression, picture, "paintable", picture);
   gtk_box_append (GTK_BOX (box), picture);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (picture),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, location_label, NULL,
+                                  -1);
 
 
   /* And finally, everything comes together.
@@ -487,6 +490,9 @@ do_listview_clocks (GtkWidget *do_widget)
 
       model = GTK_SELECTION_MODEL (gtk_no_selection_new (create_clocks_model ()));
       gridview = gtk_grid_view_new (model, factory);
+      gtk_accessible_update_property (GTK_ACCESSIBLE (gridview),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Clocks",
+                                      -1);
       gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
