@@ -8,6 +8,7 @@
 #  - 'suites': (array): additional test suites
 tests = [
   { 'name': 'accessible' },
+  { 'name': 'box' },
   { 'name': 'button' },
   { 'name': 'checkbutton' },
   { 'name': 'dialog' },

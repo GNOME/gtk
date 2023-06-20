@@ -709,7 +709,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /* It is semantically a label, but the label role has such specific meaning in Orca
    * as to be unusable in this context.
    */
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_WIDGET);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);
 }
 
 static void

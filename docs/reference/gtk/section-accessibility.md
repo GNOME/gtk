@@ -31,7 +31,7 @@ described by a set of *attributes*.
 Roles define the taxonomy and semantics of a UI control to any assistive
 technology application; for instance, a button will have a role of
 `GTK_ACCESSIBLE_ROLE_BUTTON`; an entry will have a role of
-`GTK_ACCESSIBLE_ROLE_TEXTBOX`; a toggle button will have a role of
+`GTK_ACCESSIBLE_ROLE_TEXTBOX`; a check button will have a role of
 `GTK_ACCESSIBLE_ROLE_CHECKBOX`; etc.
 
 Each role is part of the widget's instance, and **cannot** be changed over
@@ -46,6 +46,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
+| `APPLICATION` | An application window | [class@Gtk.Window] |
 | `BUTTON` | A control that performs an action when pressed | [class@Gtk.Button], [class@Gtk.LinkButton], [class@Gtk.Expander] |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | [class@Gtk.CheckButton] |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | [class@Gtk.ComboBox] |
@@ -78,7 +79,6 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 | `TAB_PANEL` | A page in a notebook or stack | [class@Gtk.Stack] |
 | `TEXT_BOX` | A type of input that allows free-form text as its value. | [class@Gtk.Entry], [class@Gtk.PasswordEntry], [class@Gtk.TextView] |
 | `TREE_GRID` | A treeview-like columned list | [class@Gtk.ColumnView] |
-| `WINDOW` | An application window | [class@Gtk.Window] |
 | `...` | … |
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
@@ -215,6 +215,16 @@ Application developers using GTK **should** ensure that their UI controls
 are accessible as part of the development process. The GTK Inspector shows
 the accessible attributes of each widget, and also provides an overlay that
 can highlight accessibility issues.
+
+It is possible to set accessible attributes in UI files as well:
+```xml
+<object class="GtkButton" id="button1">
+  <accessibility>
+    <property name="label">Download</property>
+    <relation name="labelled-by">label1</relation>
+  /accessibility>
+</object>
+```
 
 ## Implementations
 

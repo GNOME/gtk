@@ -5,7 +5,7 @@ window_role (void)
 {
   GtkWidget *window = gtk_window_new ();
 
-  gtk_test_accessible_assert_role (window, GTK_ACCESSIBLE_ROLE_WINDOW);
+  gtk_test_accessible_assert_role (window, GTK_ACCESSIBLE_ROLE_APPLICATION);
 
   gtk_window_destroy (GTK_WINDOW (window));
 }

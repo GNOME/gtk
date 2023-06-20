@@ -46,25 +46,6 @@ struct _GtkA11yOverlayClass
 
 G_DEFINE_TYPE (GtkA11yOverlay, gtk_a11y_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
-static GtkAccessibleRole abstract_roles[] = {
-  GTK_ACCESSIBLE_ROLE_COMMAND,
-  GTK_ACCESSIBLE_ROLE_COMPOSITE,
-  GTK_ACCESSIBLE_ROLE_INPUT,
-  GTK_ACCESSIBLE_ROLE_LANDMARK,
-  GTK_ACCESSIBLE_ROLE_RANGE,
-  GTK_ACCESSIBLE_ROLE_SECTION,
-  GTK_ACCESSIBLE_ROLE_SECTION_HEAD,
-  GTK_ACCESSIBLE_ROLE_SELECT,
-  GTK_ACCESSIBLE_ROLE_STRUCTURE,
-#if 0
-  /* FIXME: ARIA considers these abstract.
-   * But we are using them for widgets
-   */
-  GTK_ACCESSIBLE_ROLE_WIDGET,
-  GTK_ACCESSIBLE_ROLE_WINDOW
-#endif
-};
-
 typedef enum
 {
   SEVERITY_GOOD,
@@ -152,14 +133,10 @@ check_accessibility_errors (GtkWidget  *widget,
     gtk_at_context_realize (context);
 
   /* Check for abstract roles */
-  for (unsigned int i = 0; i < G_N_ELEMENTS (abstract_roles); i++)
+  if (gtk_accessible_role_is_abstract (role))
     {
-      if (role == abstract_roles[i])
-        {
-          *hint = g_strdup_printf ("%s is an abstract role", role_name);
-
-          return SEVERITY_ERROR;
-        }
+      *hint = g_strdup_printf ("%s is an abstract role", role_name);
+      return SEVERITY_ERROR;
     }
 
   /* Check for name and description */
