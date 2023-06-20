@@ -120,6 +120,11 @@ gtk_list_item_widget_setup_object (GtkListFactoryWidget *fw,
   gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
   gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, list_item->accessible_label,
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, list_item->accessible_description,
+                                  -1);
+
   gtk_list_item_do_notify (list_item,
                            gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
                            gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
@@ -142,6 +147,9 @@ gtk_list_item_widget_teardown_object (GtkListFactoryWidget *fw,
   gtk_list_factory_widget_set_activatable (fw, FALSE);
   gtk_list_factory_widget_set_selectable (fw, FALSE);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_LABEL);
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION);
 
   gtk_list_item_do_notify (list_item,
                            gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,

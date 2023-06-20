@@ -35,6 +35,9 @@ struct _GtkListItem
 
   GtkWidget *child;
 
+  char *accessible_label;
+  char *accessible_description;
+
   guint activatable : 1;
   guint selectable : 1;
   guint focusable : 1;

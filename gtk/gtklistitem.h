@@ -59,5 +59,17 @@ void            gtk_list_item_set_child                         (GtkListItem    
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_list_item_get_child                         (GtkListItem            *self);
 
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_item_set_accessible_description        (GtkListItem            *self,
+                                                                 const char             *description);
+GDK_AVAILABLE_IN_4_12
+const char *    gtk_list_item_get_accessible_description        (GtkListItem            *self);
+
+GDK_AVAILABLE_IN_4_12
+void            gtk_list_item_set_accessible_label              (GtkListItem            *self,
+                                                                 const char             *label);
+GDK_AVAILABLE_IN_4_12
+const char *    gtk_list_item_get_accessible_label              (GtkListItem            *self);
+
 G_END_DECLS
 

@@ -52,6 +52,10 @@ setup_listitem_cb (GtkListItemFactory *factory,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   image = gtk_image_new ();
+  gtk_accessible_update_property (GTK_ACCESSIBLE (image),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                  "App icon",
+                                  -1);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_box_append (GTK_BOX (box), image);
   label = gtk_label_new ("");
@@ -79,6 +83,7 @@ bind_listitem_cb (GtkListItemFactory *factory,
 
   gtk_image_set_from_gicon (GTK_IMAGE (image), g_app_info_get_icon (app_info));
   gtk_label_set_label (GTK_LABEL (label), g_app_info_get_display_name (app_info));
+  gtk_list_item_set_accessible_label (list_item, g_app_info_get_display_name (app_info));
 }
 
 /* In more complex code, we would also need functions to unbind and teardown
