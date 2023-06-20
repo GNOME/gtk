@@ -1010,7 +1010,12 @@ gtk_at_context_get_accessible_relation (GtkATContext          *self,
 /* See ARIA 5.2.8.4, 5.2.8.5 and 5.2.8.6 for the prohibited, from author
  * and from content parts, and the table in
  * https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/
- * for the recommended / not recommended parts.
+ * for the recommended / not recommended parts. We've made a few changes
+ * to the recommendations:
+ * - We don't recommend against labelling listitems, sincd GtkListView
+ *   will put the focus on listitems sometimes.
+ * - We don't recommend tab lists being labelled, since GtkNotebook does
+ *   not have a practical way of doing that.
  */
 
 #define NAME_FROM_AUTHOR  (1 << 6)
