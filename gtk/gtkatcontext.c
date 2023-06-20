@@ -1321,7 +1321,7 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
     {
       if (GTK_IS_WIDGET (self->accessible))
         {
-          gboolean has_child = FALSE;
+          GString *s = g_string_new ("");
 
           for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->accessible));
                child != NULL;
@@ -1330,13 +1330,17 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
               GtkAccessible *rel = GTK_ACCESSIBLE (child);
               GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
-              gtk_at_context_get_text_accumulate (rel_context, nodes, res, property, relation, FALSE, TRUE);
-
-              has_child = TRUE;
+              gtk_at_context_get_text_accumulate (rel_context, nodes, s, property, relation, FALSE, TRUE);
             }
 
-           if (has_child)
-             return;
+           if (s->len > 0)
+             {
+               g_string_append (res, s->str);
+               g_string_free (s, TRUE);
+               return;
+             }
+
+           g_string_free (s, TRUE);
         }
     }
 
