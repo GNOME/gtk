@@ -26,6 +26,8 @@
 #include "gskvulkanrendererprivate.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkvulkancontextprivate.h"
+
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
@@ -1275,7 +1277,8 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                              ceil (scale_y * viewport->size.height));
 
   result = gsk_vulkan_image_new_for_offscreen (vulkan,
-                                               gsk_render_node_get_preferred_vulkan_format (node),
+                                               gdk_vulkan_context_get_offscreen_format (vulkan,
+                                                   gsk_render_node_get_preferred_depth (node)),
                                                view.size.width, view.size.height);
 
 #ifdef G_ENABLE_DEBUG

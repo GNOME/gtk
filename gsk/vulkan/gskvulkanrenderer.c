@@ -14,8 +14,9 @@
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
-#include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdktextureprivate.h"
+#include "gdk/gdkvulkancontextprivate.h"
 
 #include <graphene.h>
 
@@ -286,7 +287,8 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
   image = gsk_vulkan_image_new_for_offscreen (self->vulkan,
-                                              gsk_render_node_get_preferred_vulkan_format (root),
+                                              gdk_vulkan_context_get_offscreen_format (self->vulkan,
+                                                  gsk_render_node_get_preferred_depth (root)),
                                               rounded_viewport.size.width,
                                               rounded_viewport.size.height);
 
