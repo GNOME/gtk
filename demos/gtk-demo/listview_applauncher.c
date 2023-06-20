@@ -79,6 +79,7 @@ bind_listitem_cb (GtkListItemFactory *factory,
 
   gtk_image_set_from_gicon (GTK_IMAGE (image), g_app_info_get_icon (app_info));
   gtk_label_set_label (GTK_LABEL (label), g_app_info_get_display_name (app_info));
+  gtk_list_item_set_accessible_label (list_item, g_app_info_get_display_name (app_info));
 }
 
 /* In more complex code, we would also need functions to unbind and teardown
