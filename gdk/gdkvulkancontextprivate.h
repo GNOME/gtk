@@ -69,9 +69,12 @@ gdk_vulkan_handle_result (VkResult    res,
 
 #define GDK_VK_CHECK(func, ...) gdk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
-gboolean        gdk_display_ref_vulkan                          (GdkDisplay      *display,
-                                                                 GError         **error);
-void            gdk_display_unref_vulkan                        (GdkDisplay      *display);
+gboolean                gdk_display_ref_vulkan                          (GdkDisplay            *display,
+                                                                         GError               **error);
+void                    gdk_display_unref_vulkan                        (GdkDisplay            *display);
+
+GdkMemoryFormat         gdk_vulkan_context_get_offscreen_format         (GdkVulkanContext      *context,
+                                                                         GdkMemoryDepth         depth);
 
 #else /* !GDK_RENDERING_VULKAN */
 

@@ -26,6 +26,8 @@
 #include "gskvulkanrendererprivate.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkvulkancontextprivate.h"
+
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
@@ -1275,7 +1277,8 @@ gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
                              ceil (scale_y * viewport->size.height));
 
   result = gsk_vulkan_image_new_for_offscreen (vulkan,
-                                               gsk_render_node_get_preferred_vulkan_format (node),
+                                               gdk_vulkan_context_get_offscreen_format (vulkan,
+                                                   gsk_render_node_get_preferred_depth (node)),
                                                view.size.width, view.size.height);
 
 #ifdef G_ENABLE_DEBUG
@@ -2436,7 +2439,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                              VkPipelineLayout     pipeline_layout,
                              VkCommandBuffer      command_buffer)
 {
-  VkDescriptorSet descriptor_set;
   cairo_rectangle_int_t rect;
 
   vkCmdSetViewport (command_buffer,
@@ -2469,16 +2471,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  descriptor_set = gsk_vulkan_render_get_descriptor_set (render);
-  if (descriptor_set)
-    vkCmdBindDescriptorSets (command_buffer,
-                             VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             pipeline_layout,
-                             0,
-                             1,
-                             &descriptor_set,
-                             0,
-                             NULL);
+  gsk_vulkan_render_bind_descriptor_sets (render, command_buffer);
 
   gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 

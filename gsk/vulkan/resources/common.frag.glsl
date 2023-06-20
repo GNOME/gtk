@@ -1,6 +1,6 @@
 layout(set = 0, binding = 0) uniform texture2D textures[50000];
-layout(set = 0, binding = 1) uniform sampler samplers[50000];
-layout(set = 0, binding = 2) readonly buffer FloatBuffers {
+layout(set = 1, binding = 0) uniform sampler samplers[50000];
+layout(set = 2, binding = 0) readonly buffer FloatBuffers {
   float floats[];
 } buffers[50000];
 

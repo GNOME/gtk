@@ -52,6 +52,7 @@ struct _GdkVulkanContextPrivate {
     GdkMemoryFormat gdk_format;
   } formats[4];
   GdkMemoryDepth current_format;
+  GdkMemoryFormat offscreen_formats[4];
 
   VkSwapchainKHR swapchain;
   VkSemaphore draw_semaphore;
@@ -693,6 +694,11 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (!priv->vulkan_ref)
     return FALSE;
 
+  priv->offscreen_formats[GDK_MEMORY_U8] = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+  priv->offscreen_formats[GDK_MEMORY_U16] = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+  priv->offscreen_formats[GDK_MEMORY_FLOAT16] = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+  priv->offscreen_formats[GDK_MEMORY_FLOAT32] = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+
   if (surface == NULL)
     {
       for (i = 0; i < G_N_ELEMENTS (priv->formats); i++)
@@ -748,6 +754,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+                    priv->offscreen_formats[GDK_MEMORY_U8] = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
                   };
                 break;
 
@@ -825,6 +832,15 @@ out_surface:
                        NULL);
   priv->surface = VK_NULL_HANDLE;
   return FALSE;
+}
+
+GdkMemoryFormat
+gdk_vulkan_context_get_offscreen_format (GdkVulkanContext *context,
+                                         GdkMemoryDepth    depth)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  return priv->offscreen_formats[depth];
 }
 
 static void
@@ -1168,6 +1184,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                       .descriptorBindingPartiallyBound = VK_TRUE,
                                                       .descriptorBindingVariableDescriptorCount = VK_TRUE,
                                                       .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
+                                                      .descriptorBindingStorageBufferUpdateAfterBind = VK_TRUE,
                                                     }
                                                 },
                                                 NULL,
