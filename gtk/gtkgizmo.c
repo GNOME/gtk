@@ -132,7 +132,7 @@ gtk_gizmo_new (const char            *css_name,
                GtkGizmoGrabFocusFunc  grab_focus_func)
 {
   return gtk_gizmo_new_with_role (css_name,
-                                  GTK_ACCESSIBLE_ROLE_WIDGET,
+                                  GTK_ACCESSIBLE_ROLE_GENERIC,
                                   measure_func,
                                   allocate_func,
                                   snapshot_func,
