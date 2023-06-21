@@ -738,7 +738,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                      GTK_PARAM_READWRITE);
 
   /**
-   * GtkSettings:gkt-entry-select-on-focus:
+   * GtkSettings:gtk-entry-select-on-focus:
    *
    * Whether to select the contents of an entry when it is focused.
    */
