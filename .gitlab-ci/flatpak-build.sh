@@ -23,8 +23,8 @@ flatpak build ${builddir} meson \
                 -Dbuild-testsuite=false \
                 -Dbuild-examples=false \
                 -Dintrospection=disabled \
-                -Ddemos=true \
-                -Dprofile=devel \
+                -Dbuild-demos=true \
+                -Ddemo-profile=devel \
                 _flatpak_build
 
 flatpak build ${builddir} ninja -C _flatpak_build install
