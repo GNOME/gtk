@@ -123,6 +123,9 @@ void gtk_popover_set_default_widget (GtkPopover *popover,
 GDK_AVAILABLE_IN_ALL
 void gtk_popover_present (GtkPopover *popover);
 
+GDK_AVAILABLE_IN_4_12
+void gtk_popover_update_allocation (GtkPopover *popover);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPopover, g_object_unref)
 
 G_END_DECLS

@@ -648,6 +648,26 @@ present_popup (GtkPopover *popover)
 void
 gtk_popover_present (GtkPopover *popover)
 {
+  gtk_popover_update_allocation (popover);
+}
+
+/**
+ * gtk_popover_update_allocation:
+ * @popover: a `GtkPopover`
+ *
+ * Allocate a size for the `GtkPopover`.
+ *
+ * This function needs to be called in size-allocate by widgets
+ * who have a `GtkPopover` as child. When using a layout manager,
+ * this is happening automatically.
+ *
+ * To make a popover appear on screen, use [method@Gtk.Popover.popup].
+ *
+ * Since: 4.12
+ */
+void
+gtk_popover_update_allocation (GtkPopover *popover)
+{
   GtkWidget *widget = GTK_WIDGET (popover);
 
   if (!_gtk_widget_get_alloc_needed (widget))
