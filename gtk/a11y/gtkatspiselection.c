@@ -1003,12 +1003,12 @@ gtk_atspi_get_selection_vtable (GtkAccessible     *accessible,
   return NULL;
 }
 
-/* {{{ GtkListView notification */
-
 typedef struct {
   GtkAtspiSelectionCallback *changed;
   gpointer data;
 } SelectionChanged;
+
+/* {{{ GtkListView notification */
 
 typedef struct {
   GtkSelectionModel *model;
@@ -1049,6 +1049,47 @@ model_changed (GtkListBase  *list,
 }
 
 /* }}} */
+/* {{{ Stackswitcher notification */
+
+typedef struct {
+  GtkStack *stack;
+  GtkAtspiSelectionCallback *changed;
+  gpointer data;
+} StackSwitcherData;
+
+static void
+update_stack (StackSwitcherData *data,
+              GtkStack          *stack)
+{
+  if (data->stack)
+    g_signal_handlers_disconnect_by_func (data->stack, data->changed, data->data);
+
+  g_set_object (&data->stack, stack);
+
+  if (data->stack)
+    g_signal_connect_swapped (data->stack, "notify::visible-child", G_CALLBACK (data->changed), data->data);
+}
+
+static void
+stack_switcher_data_free (gpointer user_data)
+{
+  StackSwitcherData *data = user_data;
+  update_stack (data, NULL);
+  g_free (data);
+}
+
+static void
+stack_changed (GtkStackSwitcher *self,
+               GParamSpec       *pspec,
+               gpointer          unused)
+{
+  StackSwitcherData *data;
+
+  data = (StackSwitcherData *) g_object_get_data (G_OBJECT (self), "accessible-selection-data");
+  update_stack (data, gtk_stack_switcher_get_stack (self));
+}
+
+/* }}} */
 
 void
 gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
@@ -1059,7 +1100,7 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
     {
       SelectionChanged *changed;
 
-      changed = g_new (SelectionChanged, 1);
+      changed = g_new0 (SelectionChanged, 1);
       changed->changed = selection_changed;
       changed->data = data;
 
@@ -1071,7 +1112,7 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
     {
       SelectionChanged *changed;
 
-      changed = g_new (SelectionChanged, 1);
+      changed = g_new0 (SelectionChanged, 1);
       changed->changed = selection_changed;
       changed->data = data;
 
@@ -1083,7 +1124,7 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
     {
       SelectionChanged *changed;
 
-      changed = g_new (SelectionChanged, 1);
+      changed = g_new0 (SelectionChanged, 1);
       changed->changed = selection_changed;
       changed->data = data;
 
@@ -1093,22 +1134,23 @@ gtk_atspi_connect_selection_signals (GtkAccessible *accessible,
     }
   else if (GTK_IS_STACK_SWITCHER (accessible))
     {
-      SelectionChanged *changed;
+      StackSwitcherData *changed;
 
-      changed = g_new (SelectionChanged, 1);
+      changed = g_new0 (StackSwitcherData, 1);
       changed->changed = selection_changed;
       changed->data = data;
 
-      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, g_free);
+      g_object_set_data_full (G_OBJECT (accessible), "accessible-selection-data", changed, stack_switcher_data_free);
 
-      g_signal_connect_swapped (accessible, "notify::visible-child", G_CALLBACK (selection_changed), data);
+      g_signal_connect (accessible, "notify::stack", G_CALLBACK (stack_changed), NULL);
+      stack_changed (GTK_STACK_SWITCHER (accessible), NULL, NULL);
     }
   else if (IS_NOTEBOOK_TAB_LIST (accessible, GTK_AT_CONTEXT (data)->accessible_role))
     {
       GtkWidget *notebook = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (accessible)));
       SelectionChanged *changed;
 
-      changed = g_new (SelectionChanged, 1);
+      changed = g_new0 (SelectionChanged, 1);
       changed->changed = selection_changed;
       changed->data = data;
 
@@ -1137,8 +1179,7 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
 {
   if (GTK_IS_LIST_BOX (accessible) ||
       GTK_IS_FLOW_BOX (accessible) ||
-      GTK_IS_COMBO_BOX (accessible) ||
-      GTK_IS_STACK_SWITCHER (accessible))
+      GTK_IS_COMBO_BOX (accessible))
     {
       SelectionChanged *changed;
 
@@ -1147,6 +1188,12 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
         return;
 
       g_signal_handlers_disconnect_by_func (accessible, changed->changed, changed->data);
+
+      g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
+    }
+  else if (GTK_IS_STACK_SWITCHER (accessible))
+    {
+      g_signal_handlers_disconnect_by_func (accessible, stack_changed, NULL);
 
       g_object_set_data (G_OBJECT (accessible), "accessible-selection-data", NULL);
     }
