@@ -2350,12 +2350,12 @@ gdk_event_translate (MSG *msg,
        * sends WM_MOUSEMOVE messages after a new window is shown under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if (msg->pt.x / impl->surface_scale == current_root_x &&
-          msg->pt.y / impl->surface_scale == current_root_y)
+      if (msg->pt.x == current_root_x &&
+          msg->pt.y == current_root_y)
         break;
 
-      current_root_x = msg->pt.x / impl->surface_scale;
-      current_root_y = msg->pt.y / impl->surface_scale;
+      current_root_x = msg->pt.x;
+      current_root_y = msg->pt.y;
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);

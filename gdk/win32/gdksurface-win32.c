@@ -3652,6 +3652,9 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
   if (!_gdk_win32_get_window_rect (window, &rect))
     return;
 
+  x /= impl->surface_scale;
+  y /= impl->surface_scale;
+
   if (context->current_root_x == x &&
       context->current_root_y == y)
     return;
