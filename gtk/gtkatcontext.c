@@ -1335,7 +1335,7 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
 
            if (s->len > 0)
              {
-               g_string_append (res, s->str);
+               append_with_space (res, s->str);
                g_string_free (s, TRUE);
                return;
              }
