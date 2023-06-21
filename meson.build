@@ -11,8 +11,8 @@ project('gtk', 'c',
         license: 'LGPL-2.1-or-later')
 
 # keep these numbers in sync with wrap files where there exist
-glib_req           = '>= 2.72.0'
-introspection_req  = '>= 1.72.0' # keep this in sync with glib
+glib_req           = '>= 2.76.0'
+introspection_req  = '>= 1.76.0' # keep this in sync with glib
 pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
 harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 1.0.6'
