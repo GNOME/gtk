@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcolumnviewrowprivate.h"
+#include "gtkaccessible.h"
 
 
 /**
@@ -42,6 +43,8 @@ struct _GtkColumnViewRowClass
 enum
 {
   PROP_0,
+  PROP_ACCESSIBLE_DESCRIPTION,
+  PROP_ACCESSIBLE_LABEL,
   PROP_ACTIVATABLE,
   PROP_FOCUSABLE,
   PROP_ITEM,
@@ -57,6 +60,17 @@ G_DEFINE_TYPE (GtkColumnViewRow, gtk_column_view_row, G_TYPE_OBJECT)
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
+gtk_column_view_row_dispose (GObject *object)
+{
+  GtkColumnViewRow *self = GTK_COLUMN_VIEW_ROW (object);
+
+  g_clear_pointer (&self->accessible_description, g_free);
+  g_clear_pointer (&self->accessible_label, g_free);
+
+  G_OBJECT_CLASS (gtk_column_view_row_parent_class)->dispose (object);
+}
+
+static void
 gtk_column_view_row_get_property (GObject    *object,
                                   guint       property_id,
                                   GValue     *value,
@@ -66,6 +80,14 @@ gtk_column_view_row_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_ACCESSIBLE_DESCRIPTION:
+      g_value_set_string (value, self->accessible_description);
+      break;
+
+    case PROP_ACCESSIBLE_LABEL:
+      g_value_set_string (value, self->accessible_label);
+      break;
+
     case PROP_ACTIVATABLE:
       g_value_set_boolean (value, self->activatable);
       break;
@@ -113,6 +135,14 @@ gtk_column_view_row_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ACCESSIBLE_DESCRIPTION:
+      gtk_column_view_row_set_accessible_description (self, g_value_get_string (value));
+      break;
+
+    case PROP_ACCESSIBLE_LABEL:
+      gtk_column_view_row_set_accessible_label (self, g_value_get_string (value));
+      break;
+
     case PROP_ACTIVATABLE:
       gtk_column_view_row_set_activatable (self, g_value_get_boolean (value));
       break;
@@ -136,8 +166,33 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->dispose = gtk_column_view_row_dispose;
   gobject_class->get_property = gtk_column_view_row_get_property;
   gobject_class->set_property = gtk_column_view_row_set_property;
+
+  /**
+   * GtkColumnViewRow:accessible-description: (attributes org.gtk.Property.get=gtk_column_view_row_get_accessible_description org.gtk.Property.set=gtk_column_view_row_set_accessible_description)
+   *
+   * The accessible description to set on the row.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_ACCESSIBLE_DESCRIPTION] =
+    g_param_spec_string ("accessible-description", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewRow:accessible-label: (attributes org.gtk.Property.get=gtk_column_view_row_get_accessible_label org.gtk.Property.set=gtk_column_view_row_set_accessible_label)
+   *
+   * The accessible label to set on the row.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_ACCESSIBLE_LABEL] =
+    g_param_spec_string ("accessible-label", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkColumnViewRow:activatable: (attributes org.gtk.Property.get=gtk_column_view_row_get_activatable org.gtk.Property.set=gtk_column_view_row_set_activatable)
@@ -474,4 +529,94 @@ gtk_column_view_row_set_focusable (GtkColumnViewRow *self,
     gtk_widget_set_focusable (GTK_WIDGET (self->owner), focusable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOCUSABLE]);
+}
+
+/**
+ * gtk_column_view_row_get_accessible_description:
+ * @self: a `GtkColumnViewRow`
+ *
+ * Gets the accessible description of @self.
+ *
+ * Returns: the accessible description
+ *
+ * Since: 4.12
+ */
+const char *
+gtk_column_view_row_get_accessible_description (GtkColumnViewRow *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_ROW (self), NULL);
+
+  return self->accessible_description;
+}
+
+/**
+ * gtk_column_view_row_set_accessible_description:
+ * @self: a `GtkColumnViewRow`
+ * @description: the description
+ *
+ * Sets the accessible description for the row,
+ * which may be used by e.g. screen readers.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_row_set_accessible_description (GtkColumnViewRow *self,
+                                                const char       *description)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_ROW (self));
+
+  if (!g_set_str (&self->accessible_description, description))
+    return;
+
+  if (self->owner)
+    gtk_accessible_update_property (GTK_ACCESSIBLE (self->owner),
+                                    GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, self->accessible_description,
+                                    -1);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCESSIBLE_DESCRIPTION]);
+}
+
+/**
+ * gtk_column_view_row_get_accessible_label:
+ * @self: a `GtkColumnViewRow`
+ *
+ * Gets the accessible label of @self.
+ *
+ * Returns: the accessible label
+ *
+ * Since: 4.12
+ */
+const char *
+gtk_column_view_row_get_accessible_label (GtkColumnViewRow *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_ROW (self), NULL);
+
+  return self->accessible_label;
+}
+
+/**
+ * gtk_column_view_row_set_accessible_label:
+ * @self: a `GtkColumnViewRow`
+ * @label: the label
+ *
+ * Sets the accessible label for the row,
+ * which may be used by e.g. screen readers.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_row_set_accessible_label (GtkColumnViewRow *self,
+                                    const char  *label)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_ROW (self));
+
+  if (!g_set_str (&self->accessible_label, label))
+    return;
+
+  if (self->owner)
+    gtk_accessible_update_property (GTK_ACCESSIBLE (self->owner),
+                                    GTK_ACCESSIBLE_PROPERTY_LABEL, self->accessible_label,
+                                    -1);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCESSIBLE_LABEL]);
 }

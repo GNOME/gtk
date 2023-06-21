@@ -52,6 +52,16 @@ gboolean        gtk_column_view_row_get_focusable               (GtkColumnViewRo
 GDK_AVAILABLE_IN_4_12
 void            gtk_column_view_row_set_focusable               (GtkColumnViewRow       *self,
                                                                  gboolean                focusable);
+GDK_AVAILABLE_IN_4_12
+const char *    gtk_column_view_row_get_accessible_description  (GtkColumnViewRow       *self);
+GDK_AVAILABLE_IN_4_12
+void            gtk_column_view_row_set_accessible_description  (GtkColumnViewRow       *self,
+                                                                 const char             *description);
+GDK_AVAILABLE_IN_4_12
+const char *    gtk_column_view_row_get_accessible_label        (GtkColumnViewRow       *self);
+GDK_AVAILABLE_IN_4_12
+void            gtk_column_view_row_set_accessible_label        (GtkColumnViewRow       *self,
+                                                                 const char             *label);
 
 G_END_DECLS
 
