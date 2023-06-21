@@ -2,7 +2,7 @@
 directory = gobject-introspection
 url = https://gitlab.gnome.org/GNOME/gobject-introspection.git
 push-url = ssh://git@ssh.gitlab.gnome.org:GNOME/gobject-introspection.git
-revision = 1.74.0
+revision = 1.76.0
 depth = 1
 
 [provide]

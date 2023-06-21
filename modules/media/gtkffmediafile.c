@@ -19,15 +19,6 @@
 
 #include "config.h"
 
-/*
- * Sadly, we need this to build on Visual Studio against glib-2.74.x or earlier,
- * otherwise the build will fail when building the g_io_module_*() bits with error C2375
- * (redefinition; different linkage).  This must be before including the Gio headers.
- */
-#if defined (_MSC_VER) && defined (MODULES_OVERRIDE_GLIB_EXTERN)
-# define _GLIB_EXTERN __declspec(dllexport) extern
-#endif
-
 #include "gtkffmediafileprivate.h"
 
 #include <glib/gi18n-lib.h>
