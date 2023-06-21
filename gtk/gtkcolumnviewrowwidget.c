@@ -155,6 +155,9 @@ gtk_column_view_row_widget_teardown_object (GtkListFactoryWidget *fw,
   gtk_list_factory_widget_set_selectable (fw, FALSE);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_LABEL);
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION);
+
   gtk_column_view_row_do_notify (row,
                                  gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
                                  gtk_list_item_base_get_position (GTK_LIST_ITEM_BASE (self)) != GTK_INVALID_LIST_POSITION,
