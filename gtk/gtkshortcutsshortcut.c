@@ -709,7 +709,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   /* It is semantically a label, but the label role has such specific meaning in Orca
    * as to be unusable in this context.
    */
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LABEL);
 }
 
 static void
@@ -761,8 +761,13 @@ gtk_shortcuts_shortcut_init (GtkShortcutsShortcut *self)
   gtk_widget_add_css_class (GTK_WIDGET (self->subtitle), "dim-label");
   gtk_box_append (GTK_BOX (self->title_box), GTK_WIDGET (self->subtitle));
 
+#if 0
   gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->title, NULL,
-                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, self->accelerator, NULL,
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->accelerator, self->title, NULL,
+                                  -1);
+#endif
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, "",
                                   -1);
 }

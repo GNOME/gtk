@@ -821,6 +821,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
 
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);
 }
 
 static void
