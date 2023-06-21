@@ -32,7 +32,9 @@
                   <object class="GtkStackPage">
                     <property name="name">item</property>
                     <property name="child">
-                      <object class="GtkListItemWidget" id="button_item"/>
+                      <object class="GtkListItemWidget" id="button_item">
+                        <property name="accessible-role">generic</property>
+                      </object>
                     </property>
                   </object>
                 </child>
