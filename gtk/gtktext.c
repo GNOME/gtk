@@ -3385,7 +3385,7 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
       priv->mouse_cursor_obscured = FALSE;
     }
 
-  if (!gtk_widget_is_sensitive (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       /* Clear any selection */
       gtk_text_set_selection_bounds (self, priv->current_pos, priv->current_pos);
