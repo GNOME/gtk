@@ -27,6 +27,7 @@
 #include "gtkprivate.h"
 #include "gtkshortcutsshortcut.h"
 #include "gtksizegroup.h"
+#include "gtkaccessible.h"
 
 /**
  * GtkShortcutsGroup:
@@ -333,6 +334,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("shortcuts-group"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void
@@ -346,6 +348,7 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
   self->title = g_object_new (GTK_TYPE_LABEL,
+                              "accessible-role", GTK_ACCESSIBLE_ROLE_CAPTION,
                               "attributes", attrs,
                               "visible", TRUE,
                               "xalign", 0.0f,
@@ -353,4 +356,8 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
   pango_attr_list_unref (attrs);
 
   gtk_box_append (GTK_BOX (self), GTK_WIDGET (self->title));
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->title, NULL,
+                                  -1);
 }

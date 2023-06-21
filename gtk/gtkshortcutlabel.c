@@ -420,7 +420,7 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
       child = gtk_widget_get_prev_sibling (child))
     {
       parts = g_list_prepend (parts, child);
-        }
+    }
   gtk_accessible_relation_init_value (relation, &value);
   g_value_set_pointer (&value, parts);
   gtk_accessible_update_relation_value (GTK_ACCESSIBLE (self),
@@ -524,6 +524,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("shortcut"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static void
