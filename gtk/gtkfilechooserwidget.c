@@ -4573,7 +4573,7 @@ gtk_file_chooser_widget_unselect_all (GtkFileChooser *chooser)
 
 /* Checks whether the filename entry for Save modes contains a well-formed filename.
  *
- * is_well_formed_ret - whether what the user typed passes gkt_file_system_make_path()
+ * is_well_formed_ret - whether what the user typed passes gtk_file_system_make_path()
  *
  * is_empty_ret - whether the file entry is totally empty
  *
