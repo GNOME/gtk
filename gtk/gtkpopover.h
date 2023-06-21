@@ -120,7 +120,7 @@ GDK_AVAILABLE_IN_ALL
 void gtk_popover_set_default_widget (GtkPopover *popover,
                                      GtkWidget  *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_12_FOR(gtk_popover_update_allocation)
 void gtk_popover_present (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_4_12

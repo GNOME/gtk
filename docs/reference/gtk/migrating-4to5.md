@@ -134,6 +134,11 @@ replacement, but the previously mentioned alternatives can be used for it too.
 
 The function gtk_widget_get_allocated_baseline() has been renamed to [method@Gtk.Widget.get_baseline].
 
+## Popover api changes
+
+gtk_popover_present() has been renamed to [method@Gtk.Popover.allocate] to reflect
+the fact that is called during size allocation.
+
 ## Stop using GdkPixbuf
 
 GTK is moving away from GdkPixbuf as the primary API for transporting image data, in favor

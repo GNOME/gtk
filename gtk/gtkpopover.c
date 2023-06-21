@@ -644,6 +644,8 @@ present_popup (GtkPopover *popover)
  * this is happening automatically.
  *
  * To make a popover appear on screen, use [method@Gtk.Popover.popup].
+ *
+ * Deprecated: 4.12: Use [method@Gtk.Popover.update_allocation] instead
  */
 void
 gtk_popover_present (GtkPopover *popover)
