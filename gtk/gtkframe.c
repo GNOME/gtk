@@ -77,6 +77,10 @@
  * `GtkFrame` has a main CSS node with name “frame”, which is used to draw the
  * visible border. You can set the appearance of the border using CSS properties
  * like “border-style” on this node.
+ *
+ * # Accessibility
+ *
+ * `GtkFrame` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
  */
 
 typedef struct
@@ -203,6 +207,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
   gtk_widget_class_set_css_name (widget_class, I_("frame"));
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

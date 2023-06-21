@@ -921,7 +921,10 @@ gtk_widget_get_accessible_role (GtkWidget *self)
   if (priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
     return priv->accessible_role;
 
-  return GTK_WIDGET_GET_CLASS (self)->priv->accessible_role;
+  if (GTK_WIDGET_GET_CLASS (self)->priv->accessible_role != GTK_ACCESSIBLE_ROLE_WIDGET)
+    return GTK_WIDGET_GET_CLASS (self)->priv->accessible_role;
+
+  return GTK_ACCESSIBLE_ROLE_GENERIC;
 }
 
 static void
