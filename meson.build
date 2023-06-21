@@ -365,13 +365,6 @@ glib_dep       = dependency('glib-2.0', version: glib_req)
 gobject_dep    = dependency('gobject-2.0', version: glib_req)
 if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled)
-  if giowin32_dep.version().version_compare('<2.75.0')
-    if cc.get_id() == 'msvc' and get_option('default_library') != 'static'
-      # Override _GLIB_EXTERN on Visual Studio for media modules for glib <= 2.74.x, so that we
-      # avoid error C2375 (redefinition; different linkage) when building the g_io_module_*() bits
-      cdata.set('MODULES_OVERRIDE_GLIB_EXTERN', true)
-    endif
-  endif
 endif
 if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false)
