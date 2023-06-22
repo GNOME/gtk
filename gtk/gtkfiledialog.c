@@ -703,7 +703,7 @@ gtk_file_dialog_set_initial_file (GtkFileDialog *self,
       if (folder == NULL)
         goto invalid_file;
 
-      if (g_set_object (&self->initial_folder, NULL))
+      if (g_set_object (&self->initial_folder, folder))
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_FOLDER]);
 
       info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, 0, NULL, NULL);
