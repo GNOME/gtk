@@ -382,3 +382,6 @@ To allow changing the value via accessible technologies, you can export
 actions.  Since the accessibility interfaces only support actions
 without parameters, you should provide actions such as `increase-value`
 and `decrease-value`.
+
+Since GTK 4.10, the best way to suppose changing the value is by implementing
+the [iface@Gtk.AccessibleRange] interface.
