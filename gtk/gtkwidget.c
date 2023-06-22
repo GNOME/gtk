@@ -2401,6 +2401,8 @@ gtk_widget_root_at_context (GtkWidget *self)
   /* Reset the accessible role to its current value */
   if (role == GTK_ACCESSIBLE_ROLE_WIDGET)
     role = GTK_WIDGET_GET_CLASS (self)->priv->accessible_role;
+  if (role == GTK_ACCESSIBLE_ROLE_WIDGET)
+    role = GTK_ACCESSIBLE_ROLE_GENERIC;
 
   gtk_at_context_set_accessible_role (priv->at_context, role);
   if (priv->root)

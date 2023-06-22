@@ -280,6 +280,7 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "colorbutton");
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 }
 
 /* }}} */
