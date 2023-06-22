@@ -46,6 +46,7 @@
 #include "gtkdropdown.h"
 #include "gtkcolordialogbutton.h"
 #include "gtkfontdialogbutton.h"
+#include "gtkscalebutton.h"
 #include "print/gtkprinteroptionwidgetprivate.h"
 
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
@@ -1166,7 +1167,8 @@ is_nested_button (GtkATContext *self)
   if ((GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_DROP_DOWN (parent)) ||
       (GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_MENU_BUTTON (parent)) ||
       (GTK_IS_BUTTON (widget) && GTK_IS_COLOR_DIALOG_BUTTON (parent)) ||
-      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent))
+      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_SCALE_BUTTON (parent))
 #ifdef G_OS_UNIX
       || (GTK_IS_PRINTER_OPTION_WIDGET (parent) &&
           (GTK_IS_CHECK_BUTTON (widget) ||
