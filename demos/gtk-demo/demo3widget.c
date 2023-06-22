@@ -204,9 +204,9 @@ demo3_widget_size_allocate (GtkWidget *widget,
 
   /* Since we are not using a layout manager (who would do this
    * for us), we need to allocate a size for our menu by calling
-   * gtk_popover_present().
+   * gtk_popover_update_allocation().
    */
-  gtk_popover_present (GTK_POPOVER (self->menu));
+  gtk_popover_update_allocation (GTK_POPOVER (self->menu));
 }
 
 static void update_actions (Demo3Widget *self);

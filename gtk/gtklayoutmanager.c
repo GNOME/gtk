@@ -366,7 +366,7 @@ allocate_native_children (GtkWidget *widget)
        child = _gtk_widget_get_next_sibling (child))
     {
       if (GTK_IS_POPOVER (child))
-        gtk_popover_present (GTK_POPOVER (child));
+        gtk_popover_update_allocation (GTK_POPOVER (child));
       else if (GTK_IS_TEXT_HANDLE (child))
         gtk_text_handle_present (GTK_TEXT_HANDLE (child));
       else if (GTK_IS_TOOLTIP_WINDOW (child))

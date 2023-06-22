@@ -322,7 +322,7 @@ swatch_size_allocate (GtkWidget *widget,
                             }, -1);
 
   if (swatch->popover)
-    gtk_popover_present (GTK_POPOVER (swatch->popover));
+    gtk_popover_update_allocation (GTK_POPOVER (swatch->popover));
 }
 
 static void

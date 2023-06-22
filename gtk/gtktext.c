@@ -2524,21 +2524,21 @@ gtk_text_size_allocate (GtkWidget *widget,
 
   chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
   if (chooser)
-    gtk_popover_present (GTK_POPOVER (chooser));
+    gtk_popover_update_allocation (GTK_POPOVER (chooser));
 
   gtk_text_update_handles (self);
 
   if (priv->emoji_completion)
-    gtk_popover_present (GTK_POPOVER (priv->emoji_completion));
+    gtk_popover_update_allocation (GTK_POPOVER (priv->emoji_completion));
 
   if (priv->magnifier_popover)
-    gtk_popover_present (GTK_POPOVER (priv->magnifier_popover));
+    gtk_popover_update_allocation (GTK_POPOVER (priv->magnifier_popover));
 
   if (priv->popup_menu)
-    gtk_popover_present (GTK_POPOVER (priv->popup_menu));
+    gtk_popover_update_allocation (GTK_POPOVER (priv->popup_menu));
 
   if (priv->selection_bubble)
-    gtk_popover_present (GTK_POPOVER (priv->selection_bubble));
+    gtk_popover_update_allocation (GTK_POPOVER (priv->selection_bubble));
 
   if (priv->text_handles[TEXT_HANDLE_CURSOR])
     gtk_text_handle_present (priv->text_handles[TEXT_HANDLE_CURSOR]);

@@ -1368,7 +1368,7 @@ gtk_label_size_allocate (GtkWidget *widget,
     }
 
   if (self->popup_menu)
-    gtk_popover_present (GTK_POPOVER (self->popup_menu));
+    gtk_popover_update_allocation (GTK_POPOVER (self->popup_menu));
 }
 
 

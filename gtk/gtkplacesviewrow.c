@@ -320,7 +320,7 @@ gtk_places_view_row_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_places_view_row_parent_class)->size_allocate (widget, width, height, baseline);
   if (menu)
-    gtk_popover_present (GTK_POPOVER (menu));
+    gtk_popover_update_allocation (GTK_POPOVER (menu));
 }
 
 static void

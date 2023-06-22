@@ -6347,9 +6347,9 @@ gtk_file_chooser_widget_size_allocate (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget, width, height, baseline);
 
   if (impl->browse_files_popover)
-    gtk_popover_present (GTK_POPOVER (impl->browse_files_popover));
+    gtk_popover_update_allocation (GTK_POPOVER (impl->browse_files_popover));
   if (impl->rename_file_popover)
-    gtk_popover_present (GTK_POPOVER (impl->rename_file_popover));
+    gtk_popover_update_allocation (GTK_POPOVER (impl->rename_file_popover));
 }
 
 static void

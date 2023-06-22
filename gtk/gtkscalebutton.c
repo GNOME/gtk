@@ -1109,5 +1109,5 @@ gtk_scale_button_size_allocate (GtkWidget *widget,
                             &(GtkAllocation) { 0, 0, width, height },
                             baseline);
 
-  gtk_popover_present (GTK_POPOVER (priv->dock));
+  gtk_popover_update_allocation (GTK_POPOVER (priv->dock));
 }
