@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-05-12 13:13+0000\n"
-"PO-Revision-Date: 2023-05-30 11:18+0100\n"
+"PO-Revision-Date: 2023-06-22 11:18+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -3595,7 +3595,7 @@ msgstr "Resultats de cerca"
 #. window
 #: gtk/gtkshortcutswindow.c:909
 msgid "Search Shortcuts"
-msgstr "Dreceres de cerca"
+msgstr "Cerca les dreceres"
 
 #: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:502
