@@ -268,7 +268,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   /**
    * GtkFileDialog:initial-file: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_file org.gtk.Property.set=gtk_file_dialog_set_initial_file)
    *
-   * The inital file, that is, the file that is initially selected
+   * The initial file, that is, the file that is initially selected
    * in the file chooser dialog
    *
    * This is a utility property that sets both [property@Gtk.FileDialog:initial-folder] and
@@ -284,7 +284,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   /**
    * GtkFileDialog:initial-folder: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_folder org.gtk.Property.set=gtk_file_dialog_set_initial_folder)
    *
-   * The inital folder, that is, the directory that is initially
+   * The initial folder, that is, the directory that is initially
    * opened in the file chooser dialog
    *
    * Since: 4.10
@@ -297,7 +297,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   /**
    * GtkFileDialog:initial-name: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_name org.gtk.Property.set=gtk_file_dialog_set_initial_name)
    *
-   * The inital name, that is, the filename that is initially
+   * The initial name, that is, the filename that is initially
    * selected in the file chooser dialog.
    *
    * Since: 4.10
