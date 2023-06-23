@@ -211,6 +211,9 @@ A number of options affect behavior instead of logging:
 `portals`
 : Force the use of [portals](https://docs.flatpak.org/en/latest/portals.html)
 
+`no-portals`
+: Disable use of [portals](https://docs.flatpak.org/en/latest/portals.html)
+
 `gl-disable`
 : Disable OpenGL support
 
