@@ -107,6 +107,12 @@ void                    gsk_contour_default_add_stroke          (const GskContou
                                                                  GskPathBuilder         *builder,
                                                                  GskStroke              *stroke);
 
+void                    gsk_contour_offset                      (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 float                   distance,
+                                                                 GskLineJoin             line_join,
+                                                                 float                   miter_limit);
+
 G_END_DECLS
 
 #endif /* __GSK_CONTOUR_PRIVATE_H__ */

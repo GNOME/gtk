@@ -121,6 +121,12 @@ GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_stroke                         (GskPath                *self,
                                                                  GskStroke              *stroke);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_offset                         (GskPath                *self,
+                                                                 float                   distance,
+                                                                 GskLineJoin             line_join,
+                                                                 float                   miter_limit);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPath, gsk_path_unref)
 
 G_END_DECLS
