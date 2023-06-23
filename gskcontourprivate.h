@@ -50,7 +50,6 @@ GskContour *            gsk_standard_contour_new                (GskPathFlags   
 void                    gsk_contour_copy                        (GskContour *            dest,
                                                                  const GskContour       *src);
 GskContour *            gsk_contour_dup                         (const GskContour       *src);
-GskContour *            gsk_contour_reverse                     (const GskContour       *src);
 
 gsize                   gsk_contour_get_size                    (const GskContour       *self);
 GskPathFlags            gsk_contour_get_flags                   (const GskContour       *self);
@@ -97,32 +96,11 @@ void                    gsk_contour_add_segment                 (const GskContou
                                                                  gboolean                emit_move_to,
                                                                  float                   start,
                                                                  float                   end);
-float                   gsk_contour_get_curvature               (const GskContour       *self,
-                                                                 gpointer                measure_data,
-                                                                 float                   distance,
-                                                                 graphene_point_t       *center);
 gboolean                gsk_contour_dash                        (const GskContour       *contour,
                                                                  GskStroke              *stroke,
                                                                  float                   tolerance,
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 
-void                    gsk_contour_add_stroke                  (const GskContour       *contour,
-                                                                 GskPathBuilder         *builder,
-                                                                 GskStroke              *stroke);
-
-void                    gsk_contour_default_add_stroke          (const GskContour       *contour,
-                                                                 GskPathBuilder         *builder,
-                                                                 GskStroke              *stroke);
-
-void                    gsk_contour_offset                      (const GskContour       *contour,
-                                                                 GskPathBuilder         *builder,
-                                                                 float                   distance,
-                                                                 GskStroke              *stroke);
-
-void                    gsk_contour_default_offset              (const GskContour       *contour,
-                                                                 GskPathBuilder         *builder,
-                                                                 float                   distance,
-                                                                 GskStroke              *stroke);
 
 G_END_DECLS
