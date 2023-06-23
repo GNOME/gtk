@@ -28,6 +28,12 @@
 
 #include "gdk/gdkvulkancontextprivate.h"
 
+#define GDK_ARRAY_NAME gsk_vulkan_render_ops
+#define GDK_ARRAY_TYPE_NAME GskVulkanRenderOps
+#define GDK_ARRAY_ELEMENT_TYPE guchar
+#define GDK_ARRAY_BY_VALUE 1
+#include "gdk/gdkarrayimpl.c"
+
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
@@ -129,7 +135,7 @@ struct _GskVulkanRenderPass
 {
   GdkVulkanContext *vulkan;
 
-  GArray *render_ops;
+  GskVulkanRenderOps render_ops;
 
   GskVulkanImage *target;
   graphene_rect_t viewport;
@@ -172,7 +178,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 
   self = g_new0 (GskVulkanRenderPass, 1);
   self->vulkan = g_object_ref (context);
-  self->render_ops = g_array_new (FALSE, FALSE, sizeof (GskVulkanOp));
+  gsk_vulkan_render_ops_init (&self->render_ops);
 
   self->target = g_object_ref (target);
   self->clip = cairo_region_copy (clip);
@@ -258,7 +264,7 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
   VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
 
-  g_array_unref (self->render_ops);
+  gsk_vulkan_render_ops_clear (&self->render_ops);
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
@@ -278,7 +284,11 @@ static void
 gsk_vulkan_render_pass_add_op (GskVulkanRenderPass *self,
                                GskVulkanOp         *op)
 {
-  g_array_append_val (self->render_ops, *op);
+  gsk_vulkan_render_ops_splice (&self->render_ops,
+                                gsk_vulkan_render_ops_get_size (&self->render_ops),
+                                0, FALSE,
+                                (guchar *) op,
+                                sizeof (GskVulkanOp));
 }
 
 static void
@@ -1557,9 +1567,9 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
   const graphene_rect_t *clip = NULL;
   const graphene_vec2_t *scale = NULL;
 
-  for (i = 0; i < self->render_ops->len; i++)
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += sizeof (GskVulkanOp))
     {
-      op = &g_array_index (self->render_ops, GskVulkanOp, i);
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
       switch (op->type)
         {
@@ -1806,9 +1816,9 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
   guint i;
 
   n_bytes = 0;
-  for (i = 0; i < self->render_ops->len; i++)
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += sizeof (GskVulkanOp))
     {
-      op = &g_array_index (self->render_ops, GskVulkanOp, i);
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
       switch (op->type)
         {
@@ -1862,9 +1872,9 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
   GskVulkanOp *op;
   guint i;
 
-  for (i = 0; i < self->render_ops->len; i++)
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += sizeof (GskVulkanOp))
     {
-      op = &g_array_index (self->render_ops, GskVulkanOp, i);
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
       switch (op->type)
         {
@@ -2108,9 +2118,9 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
   GskVulkanOp *op;
   guint i;
 
-  for (i = 0; i < self->render_ops->len; i++)
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += sizeof (GskVulkanOp))
     {
-      op = &g_array_index (self->render_ops, GskVulkanOp, i);
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
       switch (op->type)
         {
@@ -2209,7 +2219,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 {
   GskVulkanPipeline *current_pipeline = NULL;
   GskVulkanOp *op;
-  guint i, step;
+  guint i;
   GskVulkanBuffer *vertex_buffer;
 
   vertex_buffer = gsk_vulkan_render_pass_get_vertex_data (self, render);
@@ -2223,10 +2233,9 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                             },
                             (VkDeviceSize[1]) { 0 });
 
-  for (i = 0; i < self->render_ops->len; i += step)
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += sizeof (GskVulkanOp))
     {
-      op = &g_array_index (self->render_ops, GskVulkanOp, i);
-      step = 1;
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
       switch (op->type)
         {
@@ -2326,17 +2335,10 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                  gsk_vulkan_pipeline_get_pipeline (current_pipeline));
             }
 
-          for (step = 1; step + i < self->render_ops->len; step++)
-            {
-              GskVulkanOp *cmp = &g_array_index (self->render_ops, GskVulkanOp, i + step);
-              if (cmp->type != GSK_VULKAN_OP_COLOR || 
-                  cmp->render.pipeline != current_pipeline)
-                break;
-            }
           gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (current_pipeline),
                                           command_buffer,
                                           op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (current_pipeline),
-                                          step);
+                                          1);
           break;
 
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
