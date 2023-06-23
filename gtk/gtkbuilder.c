@@ -2362,6 +2362,24 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
+      else if (G_VALUE_HOLDS (value, G_TYPE_DATE_TIME))
+        {
+          GDateTime *date_time;
+
+          date_time = g_date_time_new_from_iso8601 (string, NULL);
+
+          if (date_time)
+            g_value_take_boxed (value, date_time);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse GDateTime '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else
         {
           g_set_error (error,
