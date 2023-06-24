@@ -566,6 +566,7 @@ gsk_rect_contour_offset (const GskContour *contour,
                          GskLineJoin       line_join,
                          float             miter_limit)
 {
+  gsk_contour_default_offset (contour, builder, distance, line_join, miter_limit);
 }
 
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
@@ -999,6 +1000,7 @@ gsk_circle_contour_offset (const GskContour *contour,
                            GskLineJoin       line_join,
                            float             miter_limit)
 {
+  gsk_contour_default_offset (contour, builder, distance, line_join, miter_limit);
 }
 
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
@@ -1875,6 +1877,7 @@ gsk_standard_contour_offset (const GskContour *contour,
                              GskLineJoin       line_join,
                              float             miter_limit)
 {
+  gsk_contour_default_offset (contour, builder, distance, line_join, miter_limit);
 }
 
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
