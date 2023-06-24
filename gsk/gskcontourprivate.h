@@ -112,6 +112,12 @@ void                    gsk_contour_offset                      (const GskContou
                                                                  GskLineJoin             line_join,
                                                                  float                   miter_limit);
 
+void                    gsk_contour_default_offset              (const GskContour       *contour,
+                                                                 GskPathBuilder         *builder,
+                                                                 float                   distance,
+                                                                 GskLineJoin             line_join,
+                                                                 float                   miter_limit);
+
 G_END_DECLS
 
 #endif /* __GSK_CONTOUR_PRIVATE_H__ */
