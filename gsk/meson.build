@@ -132,6 +132,8 @@ if have_vulkan
     'vulkan/gskvulkanshader.c',
     'vulkan/gskvulkantextpipeline.c',
     'vulkan/gskvulkantexturepipeline.c',
+    'vulkan/gskvulkantextureop.c',
+    'vulkan/gskvulkanuploadop.c',
   ])
 
   subdir('vulkan/resources')

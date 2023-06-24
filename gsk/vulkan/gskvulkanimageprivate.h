@@ -82,6 +82,7 @@ gsize                   gsk_vulkan_image_get_height                     (GskVulk
 VkImage                 gsk_vulkan_image_get_image                      (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
+GdkMemoryFormat         gsk_vulkan_image_get_format                     (GskVulkanImage         *self);
 
 G_END_DECLS
 

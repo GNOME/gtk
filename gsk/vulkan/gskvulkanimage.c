@@ -1082,3 +1082,10 @@ gsk_vulkan_image_get_vk_format (GskVulkanImage *self)
 {
   return self->vk_format;
 }
+
+GdkMemoryFormat
+gsk_vulkan_image_get_format (GskVulkanImage *self)
+{
+  return self->format;
+}
+
