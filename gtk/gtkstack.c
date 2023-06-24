@@ -617,8 +617,7 @@ gtk_stack_pages_get_item (GListModel *model,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (pages->stack);
   GtkStackPage *page;
 
-
-  if (position > priv->children->len - 1)
+  if (position >= priv->children->len)
     return NULL;
 
   page = g_ptr_array_index (priv->children, position);
@@ -642,7 +641,7 @@ gtk_stack_pages_is_selected (GtkSelectionModel *model,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (pages->stack);
   GtkStackPage *page;
 
-  if (position > priv->children->len - 1)
+  if (position >= priv->children->len)
     return FALSE;
 
   page = g_ptr_array_index (priv->children, position);
@@ -663,6 +662,9 @@ gtk_stack_pages_select_item (GtkSelectionModel *model,
   GtkStackPages *pages = GTK_STACK_PAGES (model);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (pages->stack);
   GtkStackPage *page;
+
+  if (position >= priv->children->len)
+    return FALSE;
 
   page = g_ptr_array_index (priv->children, position);
 
@@ -813,7 +815,7 @@ gtk_stack_accessible_get_first_accessible_child (GtkAccessible *accessible)
 
   if (priv->children->len > 0)
     page_accessible = GTK_ACCESSIBLE (g_object_ref (g_ptr_array_index (priv->children, 0)));
-  
+
   return page_accessible;
 }
 
