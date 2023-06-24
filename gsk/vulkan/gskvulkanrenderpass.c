@@ -293,6 +293,23 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_free (self);
 }
 
+static gpointer
+gsk_vulkan_render_pass_alloc_op (GskVulkanRenderPass *self,
+                                 gsize                size)
+{
+  gsize pos;
+
+  pos = gsk_vulkan_render_ops_get_size (&self->render_ops);
+
+  gsk_vulkan_render_ops_splice (&self->render_ops,
+                                pos,
+                                0, FALSE,
+                                NULL,
+                                size);
+
+  return gsk_vulkan_render_ops_index (&self->render_ops, pos);
+}
+
 static void
 gsk_vulkan_render_pass_add_op (GskVulkanRenderPass *self,
                                GskVulkanOp         *op);
@@ -2536,12 +2553,11 @@ static void
 gsk_vulkan_render_pass_add_op (GskVulkanRenderPass *self,
                                GskVulkanOp         *op)
 {
-  op->op_class = &GSK_VULKAN_OP_ALL_CLASS;
+  GskVulkanOpAll *alloc;
 
-  gsk_vulkan_render_ops_splice (&self->render_ops,
-                                gsk_vulkan_render_ops_get_size (&self->render_ops),
-                                0, FALSE,
-                                (guchar *) op,
-                                sizeof (GskVulkanOpAll));
+  alloc = gsk_vulkan_render_pass_alloc_op (self, GSK_VULKAN_OP_ALL_CLASS.size);
+
+  op->op_class = &GSK_VULKAN_OP_ALL_CLASS;
+  *alloc = *(GskVulkanOpAll *) op;
 }
 
