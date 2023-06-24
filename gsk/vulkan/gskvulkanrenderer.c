@@ -424,18 +424,24 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 }
 
 GskVulkanImage *
-gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
-                                       GdkTexture        *texture,
-                                       GskVulkanUploader *uploader)
+gsk_vulkan_renderer_get_texture_image (GskVulkanRenderer *self,
+                                       GdkTexture        *texture)
 {
   GskVulkanTextureData *data;
-  GskVulkanImage *image;
 
   data = gdk_texture_get_render_data (texture, self);
   if (data)
-    return g_object_ref (data->image);
+    return data->image;
 
-  image = gsk_vulkan_image_new_from_texture (uploader, texture);
+  return NULL;
+}
+
+void
+gsk_vulkan_renderer_add_texture_image (GskVulkanRenderer *self,
+                                       GdkTexture        *texture,
+                                       GskVulkanImage    *image)
+{
+  GskVulkanTextureData *data;
 
   data = g_new0 (GskVulkanTextureData, 1);
   data->image = image;
@@ -451,7 +457,23 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
     {
       g_free (data);
     }
+}
 
+GskVulkanImage *
+gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
+                                       GdkTexture        *texture,
+                                       GskVulkanUploader *uploader)
+{
+  GskVulkanImage *image;
+
+  image = gsk_vulkan_renderer_get_texture_image (self, texture);
+  if (image)
+    return g_object_ref (image);
+
+  image = gsk_vulkan_image_new_from_texture (uploader, texture);
+
+  gsk_vulkan_renderer_add_texture_image (self, texture, image);
+                                         
   return image;
 }
 
