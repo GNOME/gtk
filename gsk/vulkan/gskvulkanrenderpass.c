@@ -24,6 +24,7 @@
 #include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
+#include "gskvulkanscissoropprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskprivate.h"
 
@@ -45,7 +46,6 @@ typedef union  _GskVulkanOpAll GskVulkanOpAll;
 typedef struct _GskVulkanOpRender GskVulkanOpRender;
 typedef struct _GskVulkanOpText GskVulkanOpText;
 typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
-typedef struct _GskVulkanOpScissor GskVulkanOpScissor;
 
 typedef enum {
   /* GskVulkanOpRender */
@@ -70,8 +70,6 @@ typedef enum {
   GSK_VULKAN_OP_COLOR_TEXT,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
-  /* GskVulkanOpScissor */
-  GSK_VULKAN_OP_SCISSOR,
 } GskVulkanOpType;
 
 /* render ops with 0, 1 or 2 sources */
@@ -120,14 +118,6 @@ struct _GskVulkanOpPushConstants
   GskRoundedRect          clip;
 };
 
-struct _GskVulkanOpScissor
-{
-  GskVulkanOp             base;
-  GskVulkanOpType         type;
-  GskRenderNode          *node; /* node that's the source of this op */
-  cairo_rectangle_int_t   rect;
-};
-
 struct _GskVulkanOpAny
 {
   GskVulkanOp             base;
@@ -141,7 +131,6 @@ union _GskVulkanOpAll
   GskVulkanOpRender        render;
   GskVulkanOpText          text;
   GskVulkanOpPushConstants constants;
-  GskVulkanOpScissor       scissor;
 };
 
 struct _GskVulkanRenderPass
@@ -293,6 +282,12 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_free (self);
 }
 
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
 static gpointer
 gsk_vulkan_render_pass_alloc_op (GskVulkanRenderPass *self,
                                  gsize                size)
@@ -319,13 +314,8 @@ gsk_vulkan_render_pass_append_scissor (GskVulkanRenderPass       *self,
                                        GskRenderNode             *node,
                                        const GskVulkanParseState *state)
 {
-  GskVulkanOpScissor op = {
-    .type  = GSK_VULKAN_OP_SCISSOR,
-    .node  = node,
-    .rect  = state->scissor
-  };
-
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_scissor_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_scissor_op_size ()),
+                              &state->scissor);
 }
 
 static void
@@ -1836,15 +1826,8 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
-        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
 }
 
 static gsize
@@ -1908,7 +1891,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
           g_assert_not_reached ();
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
 
@@ -2130,7 +2112,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
 }
@@ -2277,7 +2258,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_SCISSOR:
           break;
         }
 }
@@ -2352,7 +2332,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
       return op->text.pipeline;
 
     case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-    case GSK_VULKAN_OP_SCISSOR:
       return NULL;
 
     default:
@@ -2452,16 +2431,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                           &op->constants.scale,
                                           &op->constants.mvp,
                                           &op->constants.clip);
-          break;
-
-        case GSK_VULKAN_OP_SCISSOR:
-          vkCmdSetScissor (command_buffer,
-                           0,
-                           1,
-                           &(VkRect2D) {
-                             { op->scissor.rect.x, op->scissor.rect.y },
-                             { op->scissor.rect.width, op->scissor.rect.height },
-                           });
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:

@@ -3,6 +3,13 @@
 #include "gskvulkanopprivate.h"
 
 void
+gsk_vulkan_op_init (GskVulkanOp            *op,
+                    const GskVulkanOpClass *op_class)
+{
+  op->op_class = op_class;
+}
+
+void
 gsk_vulkan_op_finish (GskVulkanOp *op)
 {
   op->op_class->finish (op);

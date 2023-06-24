@@ -40,6 +40,11 @@ struct _GskVulkanOpClass
                                                                          VkCommandBuffer         command_buffer);
 };
 
+/* ensures alignment of ops to multipes of 16 bytes - and that makes graphene happy */
+#define GSK_VULKAN_OP_SIZE(struct_name) ((sizeof(struct_name) + 15) & ~15)
+
+void                    gsk_vulkan_op_init                              (GskVulkanOp            *op,
+                                                                         const GskVulkanOpClass *op_class);
 void                    gsk_vulkan_op_finish                            (GskVulkanOp            *op);
 
 void                    gsk_vulkan_op_upload                            (GskVulkanOp            *op,

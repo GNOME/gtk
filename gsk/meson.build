@@ -128,6 +128,7 @@ if have_vulkan
     'vulkan/gskvulkanrender.c',
     'vulkan/gskvulkanrenderer.c',
     'vulkan/gskvulkanrenderpass.c',
+    'vulkan/gskvulkanscissorop.c',
     'vulkan/gskvulkanshader.c',
     'vulkan/gskvulkantextpipeline.c',
     'vulkan/gskvulkantexturepipeline.c',
