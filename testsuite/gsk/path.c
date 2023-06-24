@@ -317,7 +317,7 @@ create_random_path (guint max_contours)
   guint i, n;
 
   /* 5% chance for a weird shape */
-  if (g_test_rand_int_range (0, 20))
+  if (!g_test_rand_int_range (0, 20))
     return create_random_degenerate_path (max_contours);
 
   builder = gsk_path_builder_new ();
