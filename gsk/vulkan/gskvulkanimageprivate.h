@@ -65,7 +65,7 @@ struct _GskVulkanImageMap
   GskVulkanBuffer *staging_buffer;
 };
 
-GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulkanUploader      *uploader,
+GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GdkVulkanContext       *context,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);

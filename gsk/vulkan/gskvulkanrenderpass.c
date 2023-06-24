@@ -1429,7 +1429,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
   width = ceil (node->bounds.size.width * graphene_vec2_get_x (scale));
   height = ceil (node->bounds.size.height * graphene_vec2_get_y (scale));
 
-  result = gsk_vulkan_image_new_for_upload (uploader, GDK_MEMORY_DEFAULT, width, height);
+  result = gsk_vulkan_image_new_for_upload (self->vulkan, GDK_MEMORY_DEFAULT, width, height);
   gsk_vulkan_image_map_memory (result, uploader, GSK_VULKAN_WRITE, &map);
   surface = cairo_image_surface_create_for_data (map.data,
                                                  CAIRO_FORMAT_ARGB32,
@@ -1490,7 +1490,7 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   width = ceil (node->bounds.size.width * graphene_vec2_get_x (&self->scale));
   height = ceil (node->bounds.size.height * graphene_vec2_get_y (&self->scale));
 
-  op->source = gsk_vulkan_image_new_for_upload (uploader, GDK_MEMORY_DEFAULT, width, height);
+  op->source = gsk_vulkan_image_new_for_upload (self->vulkan, GDK_MEMORY_DEFAULT, width, height);
   gsk_vulkan_image_map_memory (op->source, uploader, GSK_VULKAN_WRITE, &map);
   surface = cairo_image_surface_create_for_data (map.data,
                                                  CAIRO_FORMAT_ARGB32,
