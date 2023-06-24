@@ -265,8 +265,17 @@ void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
   VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
+  GskVulkanOp *op;
+  gsize i;
 
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+    {
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
+
+      gsk_vulkan_op_finish (op);
+    }
   gsk_vulkan_render_ops_clear (&self->render_ops);
+
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
