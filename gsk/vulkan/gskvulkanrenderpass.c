@@ -2304,7 +2304,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                              gsk_vulkan_pipeline_get_pipeline (current_pipeline));
         }
 
-      gsk_vulkan_op_command (op, pipeline_layout, command_buffer);
+      gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
     }
 }
 
@@ -2346,6 +2346,7 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
 
 static void
 gsk_vulkan_render_op_command (GskVulkanOp      *op_,
+                              GskVulkanRender  *render,
                               VkPipelineLayout  pipeline_layout,
                               VkCommandBuffer   command_buffer)
 {

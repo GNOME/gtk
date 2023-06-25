@@ -55,6 +55,7 @@ gsk_vulkan_scissor_op_get_pipeline (GskVulkanOp *op)
 
 static void
 gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
+                               GskVulkanRender  *render,
                                VkPipelineLayout  pipeline_layout,
                                VkCommandBuffer   command_buffer)
 {

@@ -57,9 +57,10 @@ gsk_vulkan_op_get_pipeline (GskVulkanOp *op)
 
 void
 gsk_vulkan_op_command (GskVulkanOp      *op,
+                       GskVulkanRender  *render,
                        VkPipelineLayout  pipeline_layout,
                        VkCommandBuffer   command_buffer)
 {
-  op->op_class->command (op, pipeline_layout, command_buffer);
+  op->op_class->command (op, render, pipeline_layout, command_buffer);
 }
 

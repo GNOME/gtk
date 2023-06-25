@@ -36,6 +36,7 @@ struct _GskVulkanOpClass
                                                                          GskVulkanRender        *render);
   GskVulkanPipeline *   (* get_pipeline)                                (GskVulkanOp            *op);
   void                  (* command)                                     (GskVulkanOp            *op,
+                                                                         GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 };
@@ -63,6 +64,7 @@ void                    gsk_vulkan_op_reserve_descriptor_sets           (GskVulk
                                                                          GskVulkanRender        *render);
 GskVulkanPipeline *     gsk_vulkan_op_get_pipeline                      (GskVulkanOp            *op);
 void                    gsk_vulkan_op_command                           (GskVulkanOp            *op,
+                                                                         GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 
