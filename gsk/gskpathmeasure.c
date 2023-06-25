@@ -506,18 +506,12 @@ gsk_path_measure_in_fill (GskPathMeasure         *self,
                           GskFillRule             fill_rule)
 {
   int winding = 0;
-  gboolean on_edge = FALSE;
   int i;
 
   for (i = self->first; i < self->last; i++)
-    {
-      winding += gsk_contour_get_winding (gsk_path_get_contour (self->path, i),
-                                          self->measures[i].contour_data,
-                                          point,
-                                          &on_edge);
-      if (on_edge)
-        return TRUE;
-    }
+    winding += gsk_contour_get_winding (gsk_path_get_contour (self->path, i),
+                                        self->measures[i].contour_data,
+                                        point);
 
   switch (fill_rule)
     {

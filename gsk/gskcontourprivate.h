@@ -85,8 +85,7 @@ gboolean                gsk_contour_get_closest_point           (const GskContou
                                                                  graphene_vec2_t        *out_tangent);
 int                     gsk_contour_get_winding                 (const GskContour       *self,
                                                                  gpointer                measure_data,
-                                                                 const graphene_point_t *point,
-                                                                 gboolean               *on_edge);
+                                                                 const graphene_point_t *point);
 void                    gsk_contour_add_segment                 (const GskContour       *self,
                                                                  GskPathBuilder         *builder,
                                                                  gpointer                measure_data,

@@ -339,6 +339,27 @@ test_bad_split (void)
   gsk_path_unref (path);
 }
 
+static void
+test_bad_in_fill (void)
+{
+  GskPath *path;
+  GskPathMeasure *measure;
+  gboolean inside;
+
+  /* A fat Cantarell W */
+  path = gsk_path_parse ("M -2 694 M 206.1748046875 704 L 390.9371337890625 704 L 551.1888427734375 99.5035400390625 L 473.0489501953125 99.5035400390625 L 649.1048583984375 704 L 828.965087890625 704 L 1028.3077392578125 10 L 857.8111572265625 10 L 710.0489501953125 621.251708984375 L 775.9720458984375 598.426513671875 L 614.5245361328125 14.0489501953125 L 430.2237548828125 14.0489501953125 L 278.6783447265625 602.230712890625 L 330.0909423828125 602.230712890625 L 195.88818359375 10 L 5.7342529296875 10 L 206.1748046875 704 Z");
+
+  measure = gsk_path_measure_new (path);
+
+  /* The midpoint of the right foot of a fat Cantarell X */
+  inside = gsk_path_measure_in_fill (measure, &GRAPHENE_POINT_INIT (552.360107, 704.000000), GSK_FILL_RULE_WINDING);
+
+  g_assert_false (inside);
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -348,6 +369,7 @@ main (int   argc,
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/serialize-custom-contours", test_serialize_custom_contours);
   g_test_add_func ("/path/bad-split", test_bad_split);
+  g_test_add_func ("/path/bad-in-fill", test_bad_in_fill);
 
   return g_test_run ();
 }
