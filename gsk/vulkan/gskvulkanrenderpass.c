@@ -1608,18 +1608,6 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
   op->source_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
 }
 
-static void
-get_tex_rect (graphene_rect_t       *tex_coords,
-              const graphene_rect_t *rect,
-              const graphene_rect_t *tex)
-{
-  graphene_rect_init (tex_coords,
-                      (rect->origin.x - tex->origin.x) / tex->size.width,
-                      (rect->origin.y - tex->origin.y) / tex->size.height,
-                      rect->size.width / tex->size.width,
-                      rect->size.height / tex->size.height);
-}
-
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                GskVulkanRender      *render,
@@ -1686,7 +1674,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                             clip,
                                                                             &op->render.offset,
                                                                             &tex_bounds);
-            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
@@ -1721,7 +1709,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                              child,
                                                                              scale,
                                                                              child_bounds);
-                get_tex_rect (&op->render.source_rect, &op->render.node->bounds, child_bounds);
+                gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, child_bounds);
               }
             else
               {
@@ -1733,7 +1721,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                                 &child->bounds,
                                                                                 &GRAPHENE_POINT_INIT (0, 0),
                                                                                 &tex_bounds);
-                get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+                gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
               }
           }
           break;
@@ -1751,7 +1739,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                             clip,
                                                                             &op->render.offset,
                                                                             &tex_bounds);
-            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
@@ -1768,7 +1756,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                             clip,
                                                                             &op->render.offset,
                                                                             &tex_bounds);
-            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
           }
           break;
 
@@ -1786,7 +1774,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                             clip,
                                                                             &op->render.offset,
                                                                             &tex_bounds);
-            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
@@ -1796,7 +1784,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                              clip,
                                                                              &op->render.offset,
                                                                              &tex_bounds);
-            get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
             if (!op->render.source)
               {
                 op->render.source = op->render.source2;
@@ -1824,7 +1812,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                             clip,
                                                                             &op->render.offset,
                                                                             &tex_bounds);
-            get_tex_rect (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
 
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
@@ -1834,7 +1822,7 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                                                                              clip,
                                                                              &op->render.offset,
                                                                              &tex_bounds);
-            get_tex_rect (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
+            gsk_vulkan_normalize_tex_coords (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
             if (!op->render.source)
               {
                 op->render.source = op->render.source2;

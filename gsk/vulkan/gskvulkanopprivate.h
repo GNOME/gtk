@@ -68,5 +68,17 @@ void                    gsk_vulkan_op_command                           (GskVulk
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 
+static inline void
+gsk_vulkan_normalize_tex_coords (graphene_rect_t       *tex_coords,
+                                 const graphene_rect_t *rect,
+                                 const graphene_rect_t *tex)
+{
+  graphene_rect_init (tex_coords,
+                      (rect->origin.x - tex->origin.x) / tex->size.width,
+                      (rect->origin.y - tex->origin.y) / tex->size.height,
+                      rect->size.width / tex->size.width,
+                      rect->size.height / tex->size.height);
+}
+
 G_END_DECLS
 
