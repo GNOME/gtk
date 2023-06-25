@@ -14,6 +14,7 @@
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
+#include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadepipelineprivate.h"
@@ -24,6 +25,7 @@
 #include "gskvulkantextpipelineprivate.h"
 #include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanimageprivate.h"
+#include "gskvulkanoffscreenopprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanscissoropprivate.h"
 #include "gskvulkantextureopprivate.h"
@@ -58,7 +60,6 @@ typedef enum {
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_OPACITY,
   GSK_VULKAN_OP_BLUR,
-  GSK_VULKAN_OP_COLOR_MATRIX,
   GSK_VULKAN_OP_BORDER,
   GSK_VULKAN_OP_INSET_SHADOW,
   GSK_VULKAN_OP_OUTSET_SHADOW,
@@ -363,6 +364,73 @@ gsk_vulkan_render_pass_get_pipeline (GskVulkanRenderPass   *self,
   return gsk_vulkan_render_get_pipeline (render,
                                          pipeline_type,
                                          self->render_pass);
+}
+
+static GskVulkanImage *
+gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
+                                          GskVulkanRender           *render,
+                                          const GskVulkanParseState *state,
+                                          GskRenderNode             *node,
+                                          graphene_rect_t           *tex_bounds)
+{
+  VkSemaphore semaphore;
+  GskVulkanImage *result;
+
+  switch ((guint) gsk_render_node_get_node_type (node))
+    {
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
+        result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
+        if (result == NULL)
+          {
+            result = gsk_vulkan_upload_op_init_texture (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_op_size ()),
+                                                        self->vulkan,
+                                                        texture);
+            gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
+          }
+
+        *tex_bounds = node->bounds;
+        return result;
+      }
+
+    default:
+      {
+        graphene_rect_t clipped;
+
+        graphene_rect_offset_r (&state->clip.rect.bounds, - state->offset.x, - state->offset.y, &clipped);
+        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
+
+        if (clipped.size.width == 0 || clipped.size.height == 0)
+          return NULL;
+
+        /* assuming the unclipped bounds should go to texture coordinates 0..1,
+         * calculate the coordinates for the clipped texture size
+         */
+        *tex_bounds = clipped;
+
+        vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
+                           &(VkSemaphoreCreateInfo) {
+                             VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                             NULL,
+                             0
+                           },
+                           NULL,
+                           &semaphore);
+        g_array_append_val (self->wait_semaphores, semaphore);
+
+        result = gsk_vulkan_offscreen_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_offscreen_op_size ()),
+                                               self->vulkan,
+                                               render,
+                                               &state->scale,
+                                               &clipped,
+                                               semaphore,
+                                               node);
+
+        return result;
+      }
+   }
 }
 
 static void
@@ -859,11 +927,16 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
                                               GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_COLOR_MATRIX,
-    .node = node,
-    .offset = state->offset,
-  };
+  GskVulkanImage *image;
+  graphene_rect_t tex_rect;
+
+  image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                    render,
+                                                    state,
+                                                    gsk_color_matrix_node_get_child (node),
+                                                    &tex_rect);
+  if (image == NULL)
+    return TRUE;
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
@@ -872,8 +945,14 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_color_matrix_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_color_matrix_op_size ()),
+                                   gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                                   image,
+                                   &node->bounds,
+                                   &state->offset,
+                                   &tex_rect,
+                                   gsk_color_matrix_node_get_color_matrix (node),
+                                   gsk_color_matrix_node_get_color_offset (node));
 
   return TRUE;
 }
@@ -1743,23 +1822,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
           }
           break;
 
-        case GSK_VULKAN_OP_COLOR_MATRIX:
-          {
-            GskRenderNode *child = gsk_color_matrix_node_get_child (op->render.node);
-            graphene_rect_t tex_bounds;
-
-            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                            render,
-                                                                            uploader,
-                                                                            child,
-                                                                            scale,
-                                                                            clip,
-                                                                            &op->render.offset,
-                                                                            &tex_bounds);
-            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
-          }
-          break;
-
         case GSK_VULKAN_OP_CROSS_FADE:
           {
             GskRenderNode *start = gsk_cross_fade_node_get_start_child (op->render.node);
@@ -1882,7 +1944,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_OPACITY:
-        case GSK_VULKAN_OP_COLOR_MATRIX:
         case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
@@ -2051,17 +2112,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                         gsk_blur_node_get_radius (op->render.node));
           break;
 
-        case GSK_VULKAN_OP_COLOR_MATRIX:
-          gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
-                                                          data + op->render.vertex_offset,
-                                                          op->render.image_descriptor,
-                                                          &op->render.offset,
-                                                          &op->render.node->bounds,
-                                                          &op->render.source_rect,
-                                                          gsk_color_matrix_node_get_color_matrix (op->render.node),
-                                                          gsk_color_matrix_node_get_color_offset (op->render.node));
-          break;
-
         case GSK_VULKAN_OP_BORDER:
           gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
                                                           data + op->render.vertex_offset,
@@ -2196,7 +2246,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_BLUR:
-        case GSK_VULKAN_OP_COLOR_MATRIX:
           if (op->render.source)
             {
               op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
@@ -2310,7 +2359,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
     case GSK_VULKAN_OP_COLOR:
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
     case GSK_VULKAN_OP_OPACITY:
-    case GSK_VULKAN_OP_COLOR_MATRIX:
     case GSK_VULKAN_OP_BLUR:
     case GSK_VULKAN_OP_BORDER:
     case GSK_VULKAN_OP_INSET_SHADOW:
@@ -2369,7 +2417,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
           break;
 
         case GSK_VULKAN_OP_OPACITY:
-        case GSK_VULKAN_OP_COLOR_MATRIX:
           if (!op->render.source)
             break;
           gsk_vulkan_effect_pipeline_draw (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline),
