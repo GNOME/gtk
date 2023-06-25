@@ -649,6 +649,33 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
 }
 
 void
+gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
+                             GskVulkanRenderPass *pass,
+                             VkFence              fence)
+{
+  VkCommandBuffer command_buffer;
+  gsize wait_semaphore_count;
+  gsize signal_semaphore_count;
+  VkSemaphore *wait_semaphores;
+  VkSemaphore *signal_semaphores;
+
+  wait_semaphore_count = gsk_vulkan_render_pass_get_wait_semaphores (pass, &wait_semaphores);
+  signal_semaphore_count = gsk_vulkan_render_pass_get_signal_semaphores (pass, &signal_semaphores);
+
+  command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
+
+  gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
+
+  gsk_vulkan_command_pool_submit_buffer (self->command_pool,
+                                         command_buffer,
+                                         wait_semaphore_count,
+                                         wait_semaphores,
+                                         signal_semaphore_count,
+                                         signal_semaphores,
+                                         fence);
+}
+
+void
 gsk_vulkan_render_draw (GskVulkanRender *self)
 {
   GList *l;
@@ -662,27 +689,9 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      GskVulkanRenderPass *pass = l->data;
-      VkCommandBuffer command_buffer;
-      gsize wait_semaphore_count;
-      gsize signal_semaphore_count;
-      VkSemaphore *wait_semaphores;
-      VkSemaphore *signal_semaphores;
-
-      wait_semaphore_count = gsk_vulkan_render_pass_get_wait_semaphores (pass, &wait_semaphores);
-      signal_semaphore_count = gsk_vulkan_render_pass_get_signal_semaphores (pass, &signal_semaphores);
-
-      command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
-
-      gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
-
-      gsk_vulkan_command_pool_submit_buffer (self->command_pool,
-                                             command_buffer,
-                                             wait_semaphore_count,
-                                             wait_semaphores,
-                                             signal_semaphore_count,
-                                             signal_semaphores,
-                                             l->next != NULL ? VK_NULL_HANDLE : self->fence);
+      gsk_vulkan_render_draw_pass (self,
+                                   l->data,
+                                   l->next != NULL ? VK_NULL_HANDLE : self->fence);
     }
 
 #ifdef G_ENABLE_DEBUG

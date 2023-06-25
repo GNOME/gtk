@@ -97,8 +97,9 @@ void                    gsk_vulkan_render_bind_descriptor_sets          (GskVulk
                                                                          VkCommandBuffer         command_buffer);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
-
-void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
+void                    gsk_vulkan_render_draw_pass                     (GskVulkanRender        *self,
+                                                                         GskVulkanRenderPass    *pass,
+                                                                         VkFence                 fence);
 
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
