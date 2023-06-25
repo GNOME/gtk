@@ -645,7 +645,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
                               GSK_VULKAN_SAMPLER_DEFAULT,
                               &node->bounds,
                               &state->offset,
-                              &GRAPHENE_RECT_INIT(0, 0, 1, 1));
+                              &node->bounds);
 
   return TRUE;
 }
@@ -698,7 +698,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
                               sampler,
                               &node->bounds,
                               &state->offset,
-                              &GRAPHENE_RECT_INIT(0, 0, 1, 1));
+                              &node->bounds);
 
   return TRUE;
 }

@@ -144,5 +144,5 @@ gsk_vulkan_texture_op_init (GskVulkanOp            *op,
   self->image = g_object_ref (image);
   self->sampler = sampler;
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
-  self->tex_rect = *tex_rect;
+  gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);
 }
