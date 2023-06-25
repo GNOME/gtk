@@ -1570,6 +1570,15 @@ gtk_window_capture_motion (GtkWidget *widget,
 }
 
 static void
+gtk_window_capture_leave (GtkWidget *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_clear_object (&priv->resize_cursor);
+}
+
+static void
 gtk_window_activate_default_activate (GtkWidget  *widget,
                                       const char *name,
                                       GVariant   *parameter)
@@ -1673,6 +1682,8 @@ gtk_window_init (GtkWindow *window)
                                               GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (controller, "motion",
                             G_CALLBACK (gtk_window_capture_motion), window);
+  g_signal_connect_swapped (controller, "leave",
+                            G_CALLBACK (gtk_window_capture_leave), window);
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_key_new ();
