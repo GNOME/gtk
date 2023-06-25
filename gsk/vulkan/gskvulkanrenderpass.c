@@ -28,6 +28,7 @@
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanscissoropprivate.h"
 #include "gskvulkantextureopprivate.h"
+#include "gskvulkanuploadcairoopprivate.h"
 #include "gskvulkanuploadopprivate.h"
 #include "gskprivate.h"
 
@@ -390,6 +391,26 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
           }
 
         *tex_bounds = node->bounds;
+        return result;
+      }
+
+    case GSK_CAIRO_NODE:
+      {
+        graphene_rect_t clipped;
+
+        graphene_rect_offset_r (&state->clip.rect.bounds, - state->offset.x, - state->offset.y, &clipped);
+        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
+
+        if (clipped.size.width == 0 || clipped.size.height == 0)
+          return NULL;
+
+        result = gsk_vulkan_upload_cairo_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_cairo_op_size ()),
+                                                  self->vulkan,
+                                                  node,
+                                                  &state->scale,
+                                                  &clipped);
+
+        *tex_bounds = clipped;
         return result;
       }
 

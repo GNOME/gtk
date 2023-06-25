@@ -135,6 +135,7 @@ if have_vulkan
     'vulkan/gskvulkantextpipeline.c',
     'vulkan/gskvulkantexturepipeline.c',
     'vulkan/gskvulkantextureop.c',
+    'vulkan/gskvulkanuploadcairoop.c',
     'vulkan/gskvulkanuploadop.c',
   ])
 
