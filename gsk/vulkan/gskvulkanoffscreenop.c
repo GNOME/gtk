@@ -62,7 +62,7 @@ gsk_vulkan_offscreen_op_reserve_descriptor_sets (GskVulkanOp     *op,
   gsk_vulkan_render_pass_reserve_descriptor_sets (self->render_pass, render);
 }
 
-static GskVulkanPipeline *
+static VkPipeline
 gsk_vulkan_offscreen_op_get_pipeline (GskVulkanOp *op)
 {
   return NULL;

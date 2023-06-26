@@ -49,7 +49,7 @@ gsk_vulkan_op_reserve_descriptor_sets (GskVulkanOp     *op,
   op->op_class->reserve_descriptor_sets (op, render);
 }
 
-GskVulkanPipeline *
+VkPipeline
 gsk_vulkan_op_get_pipeline (GskVulkanOp *op)
 {
   return op->op_class->get_pipeline (op);

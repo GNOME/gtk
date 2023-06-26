@@ -2141,8 +2141,8 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                   VkPipelineLayout         pipeline_layout,
                                   VkCommandBuffer          command_buffer)
 {
-  GskVulkanPipeline *current_pipeline = NULL;
-  GskVulkanPipeline *op_pipeline;
+  VkPipeline current_pipeline = VK_NULL_HANDLE;
+  VkPipeline op_pipeline;
   GskVulkanOp *op;
   guint i;
   GskVulkanBuffer *vertex_buffer;
@@ -2168,14 +2168,14 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           current_pipeline = op_pipeline;
           vkCmdBindPipeline (command_buffer,
                              VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+                             current_pipeline);
         }
 
       gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
     }
 }
 
-static GskVulkanPipeline *
+static VkPipeline
 gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
 {
   GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
@@ -2190,11 +2190,11 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
     case GSK_VULKAN_OP_OUTSET_SHADOW:
     case GSK_VULKAN_OP_CROSS_FADE:
     case GSK_VULKAN_OP_BLEND_MODE:
-      return op->render.pipeline;
+      return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
 
     case GSK_VULKAN_OP_TEXT:
     case GSK_VULKAN_OP_COLOR_TEXT:
-      return op->text.pipeline;
+      return gsk_vulkan_pipeline_get_pipeline (op->text.pipeline);
 
     case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
       return NULL;

@@ -81,7 +81,7 @@ gsk_vulkan_upload_cairo_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static GskVulkanPipeline *
+static VkPipeline
 gsk_vulkan_upload_cairo_op_get_pipeline (GskVulkanOp *op)
 {
   return NULL;

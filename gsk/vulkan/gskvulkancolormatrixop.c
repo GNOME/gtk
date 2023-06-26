@@ -91,12 +91,12 @@ gsk_vulkan_color_matrix_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->sampler_descriptor = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static GskVulkanPipeline *
+static VkPipeline
 gsk_vulkan_color_matrix_op_get_pipeline (GskVulkanOp *op)
 {
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
 
-  return self->pipeline;
+  return gsk_vulkan_pipeline_get_pipeline (self->pipeline);
 }
 
 static void

@@ -88,12 +88,12 @@ gsk_vulkan_texture_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->sampler_descriptor = gsk_vulkan_render_get_sampler_descriptor (render, self->sampler);
 }
 
-static GskVulkanPipeline *
+static VkPipeline
 gsk_vulkan_texture_op_get_pipeline (GskVulkanOp *op)
 {
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
 
-  return self->pipeline;
+  return gsk_vulkan_pipeline_get_pipeline (self->pipeline);
 }
 
 static void
