@@ -1572,6 +1572,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="valign">3</property>
                                     <child>
                                       <object class="GtkVolumeButton">
+                                        <accessibility>
+                                          <property name="label" translatable="1">Volume</property>
+                                        </accessibility>
                                         <property name="orientation">1</property>
                                         <property name="valign">3</property>
                                         <property name="value">.5</property>
@@ -1584,6 +1587,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     </child>
                                     <child>
                                       <object class="GtkScaleButton" id="mic-button">
+                                        <accessibility>
+                                          <property name="label" translatable="1">Microphone gain</property>
+                                        </accessibility>
                                         <property name="has-tooltip">1</property>
                                         <property name="icons">microphone-sensitivity-muted-symbolic
 microphone-sensitivity-high-symbolic
