@@ -22,7 +22,6 @@
 #include "gskvulkanopprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkantextpipelineprivate.h"
-#include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanoffscreenopprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
@@ -59,7 +58,6 @@ typedef enum {
   GSK_VULKAN_OP_BORDER,
   GSK_VULKAN_OP_INSET_SHADOW,
   GSK_VULKAN_OP_OUTSET_SHADOW,
-  GSK_VULKAN_OP_REPEAT,
   GSK_VULKAN_OP_CROSS_FADE,
   GSK_VULKAN_OP_BLEND_MODE,
   /* GskVulkanOpText */
@@ -1145,14 +1143,36 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
                                         GskRenderNode             *node)
 {
   GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_REPEAT,
-    .node = node,
-    .offset = state->offset,
-  };
+  const graphene_rect_t *child_bounds;
+  VkSemaphore semaphore;
+  GskVulkanImage *image;
 
-  if (graphene_rect_get_area (gsk_repeat_node_get_child_bounds (node)) == 0)
+  child_bounds = gsk_repeat_node_get_child_bounds (node);
+
+  if (graphene_rect_get_area (child_bounds) == 0)
     return TRUE;
+
+  /* We need to create a texture in the right size so that we can repeat it
+   * properly, so even for texture nodes this step is necessary.
+   * We also can't use the clip because of that. */
+  vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
+                     &(VkSemaphoreCreateInfo) {
+                       VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                       NULL,
+                       0
+                     },
+                     NULL,
+                     &semaphore);
+
+  g_array_append_val (self->wait_semaphores, semaphore);
+
+  image = gsk_vulkan_offscreen_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_offscreen_op_size ()),
+                                        self->vulkan,
+                                        render,
+                                        &state->scale,
+                                        child_bounds,
+                                        semaphore,
+                                        gsk_repeat_node_get_child (node));
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
@@ -1161,8 +1181,13 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_texture_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_texture_op_size ()),
+                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                              image,
+                              GSK_VULKAN_SAMPLER_REPEAT,
+                              &node->bounds,
+                              &state->offset,
+                              child_bounds);
 
   return TRUE;
 }
@@ -1672,54 +1697,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
           }
           break;
 
-        case GSK_VULKAN_OP_REPEAT:
-          {
-            GskRenderNode *child = gsk_repeat_node_get_child (op->render.node);
-            const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (op->render.node);
-            graphene_rect_t tex_bounds;
-
-            if (!graphene_rect_equal (child_bounds, &child->bounds))
-              {
-                VkSemaphore semaphore;
-
-                /* We need to create a texture in the right size so that we can repeat it
-                 * properly, so even for texture nodes this step is necessary.
-                 * We also can't use the clip because of that. */
-                vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                                   &(VkSemaphoreCreateInfo) {
-                                     VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                                     NULL,
-                                     0
-                                   },
-                                   NULL,
-                                   &semaphore);
-
-                g_array_append_val (self->wait_semaphores, semaphore);
-
-                op->render.source = gsk_vulkan_render_pass_render_offscreen (self->vulkan,
-                                                                             render,
-                                                                             uploader,
-                                                                             semaphore,
-                                                                             child,
-                                                                             scale,
-                                                                             child_bounds);
-                gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, child_bounds);
-              }
-            else
-              {
-                op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                                render,
-                                                                                uploader,
-                                                                                child,
-                                                                                scale,
-                                                                                &child->bounds,
-                                                                                &GRAPHENE_POINT_INIT (0, 0),
-                                                                                &tex_bounds);
-                gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
-              }
-          }
-          break;
-
         case GSK_VULKAN_OP_BLUR:
           {
             GskRenderNode *child = gsk_blur_node_get_child (op->render.node);
@@ -1852,7 +1829,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_REPEAT:
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BLUR:
@@ -1911,15 +1887,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_REPEAT:
-          gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
-                                                           data + op->render.vertex_offset,
-                                                           op->render.image_descriptor,
-                                                           &op->render.offset,
-                                                           &op->render.node->bounds,
-                                                           &op->render.source_rect);
-          break;
-
         case GSK_VULKAN_OP_TEXT:
           gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->text.pipeline),
                                                         data + op->text.vertex_offset,
@@ -2124,14 +2091,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
             }
           break;
 
-        case GSK_VULKAN_OP_REPEAT:
-          if (op->render.source)
-            {
-              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
-              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_REPEAT);
-            }
-          break;
-
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
           op->text.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->text.source);
@@ -2223,7 +2182,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
 
   switch (op->any.type)
     {
-    case GSK_VULKAN_OP_REPEAT:
     case GSK_VULKAN_OP_COLOR:
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
     case GSK_VULKAN_OP_BLUR:
@@ -2257,15 +2215,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_REPEAT:
-          if (!op->render.source)
-            break;
-          gsk_vulkan_texture_pipeline_draw (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
-                                            command_buffer,
-                                            op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                            1);
-          break;
-
         case GSK_VULKAN_OP_TEXT:
           gsk_vulkan_text_pipeline_draw (GSK_VULKAN_TEXT_PIPELINE (op->text.pipeline),
                                          command_buffer,
