@@ -21,6 +21,7 @@
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkexpression.h>
+#include "gtk/gtkstringfilter.h"
 
 G_BEGIN_DECLS
 
@@ -83,11 +84,19 @@ void            gtk_drop_down_set_enable_search                 (GtkDropDown    
                                                                  gboolean                enable_search);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_drop_down_get_enable_search                 (GtkDropDown            *self);
+
 GDK_AVAILABLE_IN_4_6
 void            gtk_drop_down_set_show_arrow                    (GtkDropDown            *self,
                                                                  gboolean                show_arrow);
 GDK_AVAILABLE_IN_4_6
 gboolean        gtk_drop_down_get_show_arrow                    (GtkDropDown            *self);
+
+GDK_AVAILABLE_IN_4_12
+void            gtk_drop_down_set_search_match_mode             (GtkDropDown            *self,
+                                                                 GtkStringFilterMatchMode search_match_mode);
+GDK_AVAILABLE_IN_4_12
+GtkStringFilterMatchMode
+                gtk_drop_down_get_search_match_mode             (GtkDropDown            *self);
 
 G_END_DECLS
 

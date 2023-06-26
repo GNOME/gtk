@@ -44,6 +44,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkstringlist.h"
 #include "gtkbox.h"
+#include "gtktypebuiltins.h"
 
 /**
  * GtkDropDown:
@@ -124,6 +125,8 @@ struct _GtkDropDown
   GtkWidget *search_entry;
 
   GtkExpression *expression;
+  
+  GtkStringFilterMatchMode search_match_mode;
 
   guint enable_search : 1;
   guint show_arrow : 1;
@@ -146,6 +149,7 @@ enum
   PROP_ENABLE_SEARCH,
   PROP_EXPRESSION,
   PROP_SHOW_ARROW,
+  PROP_SEARCH_MATCH_MODE,
 
   N_PROPS
 };
@@ -279,7 +283,7 @@ update_filter (GtkDropDown *self)
       if (self->expression)
         {
           filter = GTK_FILTER (gtk_string_filter_new (gtk_expression_ref (self->expression)));
-          gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+          gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), self->search_match_mode);
         }
       else
         filter = GTK_FILTER (gtk_every_filter_new ());
@@ -388,6 +392,10 @@ gtk_drop_down_get_property (GObject    *object,
     case PROP_SHOW_ARROW:
       g_value_set_boolean (value, gtk_drop_down_get_show_arrow (self));
       break;
+      
+    case PROP_SEARCH_MATCH_MODE:
+      g_value_set_enum (value, gtk_drop_down_get_search_match_mode (self));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -436,6 +444,11 @@ gtk_drop_down_set_property (GObject      *object,
     case PROP_SHOW_ARROW:
       gtk_drop_down_set_show_arrow (self, g_value_get_boolean (value));
       break;
+      
+    case PROP_SEARCH_MATCH_MODE:
+      gtk_drop_down_set_search_match_mode (self, g_value_get_enum (value));
+      break;
+
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -641,7 +654,20 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
     g_param_spec_boolean  ("show-arrow", NULL, NULL,
                            TRUE,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
+                           
+  /**
+   * GtkDropDown:search-match-mode: (attributes org.gtk.Property.get=gtk_drop_down_get_search_match_mode org.gtk.Property.set=gtk_drop_down_set_search_match_mode)
+   *
+   * The match mode for the search filter.
+   *
+   * Since: 4.12
+   */
+  properties[PROP_SEARCH_MATCH_MODE] =
+    g_param_spec_enum  ("search-match-mode", NULL, NULL,
+                           GTK_TYPE_STRING_FILTER_MATCH_MODE,
+                           GTK_STRING_FILTER_MATCH_MODE_PREFIX,
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                           
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /**
@@ -809,6 +835,8 @@ gtk_drop_down_init (GtkDropDown *self)
   self->show_arrow = gtk_widget_get_visible (self->arrow);
 
   set_default_factory (self);
+ 
+  self->search_match_mode = GTK_STRING_FILTER_MATCH_MODE_PREFIX;
 }
 
 /**
@@ -1259,4 +1287,47 @@ gtk_drop_down_get_show_arrow (GtkDropDown *self)
   g_return_val_if_fail (GTK_IS_DROP_DOWN (self), FALSE);
 
   return self->show_arrow;
+}
+
+/**
+ * gtk_drop_down_set_search_match_mode: (attributes org.gtk.Method.set_property=search-match-mode)
+ * @self: a `GtkDropDown`
+ * @search_match_mode: the new match mode
+ *
+ * Sets the match mode for the search filter.
+ * 
+ * Since: 4.12
+ */
+void
+gtk_drop_down_set_search_match_mode (GtkDropDown *self,
+                                     GtkStringFilterMatchMode search_match_mode)
+{
+  g_return_if_fail (GTK_IS_DROP_DOWN (self));
+
+  if (self->search_match_mode == search_match_mode)
+    return;
+
+  self->search_match_mode = search_match_mode;
+
+  update_filter (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH_MATCH_MODE]);
+}
+
+/**
+ * gtk_drop_down_get_search_match_mode: (attributes org.gtk.Method.get_property=search-match-mode)
+ * @self: a `GtkDropDown`
+ *
+ * Returns the match mode that the search filter is using.
+ *
+ * Returns: the match mode of the search filter
+ * 
+ * Since: 4.12
+ */
+GtkStringFilterMatchMode
+gtk_drop_down_get_search_match_mode (GtkDropDown *self)
+{
+  g_return_val_if_fail (GTK_IS_DROP_DOWN (self), GTK_STRING_FILTER_MATCH_MODE_PREFIX);
+
+  return self->search_match_mode;
 }
