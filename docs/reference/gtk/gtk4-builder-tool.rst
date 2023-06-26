@@ -16,6 +16,7 @@ SYNOPSIS
 |   **gtk4-builder-tool** enumerate [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** simplify [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** preview [OPTIONS...] <FILE>
+|   **gtk4-builder-tool** render [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** screenshot [OPTIONS...] <FILE>
 
 DESCRIPTION
@@ -69,12 +70,11 @@ file to use.
 
   Load style information from the given CSS file.
 
-Screenshot
-^^^^^^^^^^
+Render
+^^^^^^
 
-The ``screenshot`` command saves a rendering of the UI definition file
-as a png image or node file. The name of the file to write can be specified as
-a second FILE argument.
+The ``render`` command saves a rendering of the UI definition file as a png image
+or node file. The name of the file to write can be specified as a second FILE argument.
 
 This command accepts options to specify the ID of the toplevel object and a CSS
 file to use.
@@ -95,6 +95,11 @@ file to use.
 ``--force``
 
   Overwrite an existing file.
+
+Screenshot
+^^^^^^^^^^
+
+The ``screenshot`` command is an alias for ``render``.
 
 Simplification
 ^^^^^^^^^^^^^^
