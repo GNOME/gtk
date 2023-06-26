@@ -371,11 +371,11 @@ do_screenshot (int          *argc,
       exit (1);
     }
 
-  g_set_prgname ("gtk4-builder-tool screenshot");
+  g_set_prgname ("gtk4-builder-tool render");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Take a screenshot of the file."));
+  g_option_context_set_summary (context, _("Render a .ui file to an image."));
 
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
@@ -394,7 +394,7 @@ do_screenshot (int          *argc,
 
   if (g_strv_length (filenames) > 2)
     {
-      g_printerr (_("Can only screenshot a single .ui file and a single output file\n"));
+      g_printerr (_("Can only render a single .ui file to a single output file\n"));
       exit (1);
     }
 
