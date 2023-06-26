@@ -686,17 +686,21 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
                              const GskTextureKey *key,
                              guint                texture_id)
 {
-  GskTextureKey *k;
-
   g_assert (GSK_IS_GL_DRIVER (self));
   g_assert (key != NULL);
   g_assert (texture_id > 0);
   g_assert (g_hash_table_contains (self->textures, GUINT_TO_POINTER (texture_id)));
 
-  k = g_memdup (key, sizeof *key);
+  if (!g_hash_table_contains (self->key_to_texture_id, key))
+    {
+      GskTextureKey *k;
 
-  g_hash_table_insert (self->key_to_texture_id, k, GUINT_TO_POINTER (texture_id));
-  g_hash_table_insert (self->texture_id_to_key, GUINT_TO_POINTER (texture_id), k);
+      k = g_memdup (key, sizeof *key);
+
+      g_assert (!g_hash_table_contains (self->texture_id_to_key, GUINT_TO_POINTER (texture_id)));
+      g_hash_table_insert (self->key_to_texture_id, k, GUINT_TO_POINTER (texture_id));
+      g_hash_table_insert (self->texture_id_to_key, GUINT_TO_POINTER (texture_id), k);
+    }
 }
 
 /**
