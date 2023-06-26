@@ -73,6 +73,9 @@ gboolean                gdk_display_ref_vulkan                          (GdkDisp
                                                                          GError               **error);
 void                    gdk_display_unref_vulkan                        (GdkDisplay            *display);
 
+VkPipelineCache         gdk_vulkan_context_get_pipeline_cache           (GdkVulkanContext      *self);
+void                    gdk_vulkan_context_pipeline_cache_updated       (GdkVulkanContext      *self);
+
 GdkMemoryFormat         gdk_vulkan_context_get_offscreen_format         (GdkVulkanContext      *context,
                                                                          GdkMemoryDepth         depth);
 

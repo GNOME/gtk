@@ -931,6 +931,216 @@ gdk_vulkan_context_get_queue_family_index (GdkVulkanContext *context)
   return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context))->vk_queue_family_index;
 }
 
+static char *
+gdk_vulkan_get_pipeline_cache_dirname (void)
+{
+  return g_build_filename (g_get_user_cache_dir (), "gtk-4.0", "vulkan-pipeline-cache", NULL);
+}
+
+static GFile *
+gdk_vulkan_get_pipeline_cache_file (GdkDisplay *display)
+{
+  VkPhysicalDeviceProperties props;
+  char *dirname, *basename, *path;
+  GFile *result;
+
+  vkGetPhysicalDeviceProperties (display->vk_physical_device, &props);
+
+  dirname = gdk_vulkan_get_pipeline_cache_dirname ();
+  basename = g_strdup_printf ("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x"
+                              "-%02x%02x%02x%02x%02x%02x.%u",
+                              props.pipelineCacheUUID[0], props.pipelineCacheUUID[1],
+                              props.pipelineCacheUUID[2], props.pipelineCacheUUID[3],
+                              props.pipelineCacheUUID[4], props.pipelineCacheUUID[5],
+                              props.pipelineCacheUUID[6], props.pipelineCacheUUID[7],
+                              props.pipelineCacheUUID[8], props.pipelineCacheUUID[9],
+                              props.pipelineCacheUUID[10], props.pipelineCacheUUID[11],
+                              props.pipelineCacheUUID[12], props.pipelineCacheUUID[13],
+                              props.pipelineCacheUUID[14], props.pipelineCacheUUID[15],
+                              props.driverVersion);
+
+  path = g_build_filename (dirname, basename, NULL);
+  result = g_file_new_for_path (path);
+
+  g_free (path);
+  g_free (basename);
+  g_free (dirname);
+
+  return result;
+}
+
+static VkPipelineCache
+gdk_display_load_pipeline_cache (GdkDisplay *display)
+{
+  GError *error = NULL;
+  VkPipelineCache result;
+  GFile *cache_file;
+  char *etag, *data;
+  gsize size;
+
+  cache_file = gdk_vulkan_get_pipeline_cache_file (display);
+  if (!g_file_load_contents (cache_file, NULL, &data, &size, &etag, &error))
+    {
+      GDK_DEBUG (VULKAN, "failed to load Vulkan pipeline cache file '%s': %s\n",
+                 g_file_peek_path (cache_file), error->message);
+      g_object_unref (cache_file);
+      g_clear_error (&error);
+      return VK_NULL_HANDLE;
+    }
+
+  if (GDK_VK_CHECK (vkCreatePipelineCache, display->vk_device,
+                                           &(VkPipelineCacheCreateInfo) {
+                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+                                             .initialDataSize = size,
+                                             .pInitialData = data,
+                                           },
+                                           NULL,
+                                           &result) != VK_SUCCESS)
+    result = VK_NULL_HANDLE;
+
+  g_free (data);
+  g_free (display->vk_pipeline_cache_etag);
+  display->vk_pipeline_cache_etag = etag;
+  display->vk_pipeline_cache_size = size;
+
+  return result;
+}
+
+static gboolean
+gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
+{
+  GError *error = NULL;
+  VkDevice device;
+  VkPipelineCache cache;
+  GFile *file;
+  char *path;
+  size_t size;
+  char *data, *etag;
+
+  device = display->vk_device;
+  cache = display->vk_pipeline_cache;
+
+  GDK_VK_CHECK (vkGetPipelineCacheData, device, cache, &size, NULL);
+  if (size == 0)
+    return TRUE;
+  
+  if (size == display->vk_pipeline_cache_size)
+    {
+      GDK_DEBUG (VULKAN, "pipeline cache size (%zu bytes) unchanged, skipping save", size);
+      return TRUE;
+    }
+
+
+  data = g_malloc (size);
+  if (GDK_VK_CHECK (vkGetPipelineCacheData, device, cache, &size, data) != VK_SUCCESS)
+    {
+      g_free (data);
+      return FALSE;
+    }
+
+  path = gdk_vulkan_get_pipeline_cache_dirname ();
+  if (g_mkdir_with_parents (path, 0755) != 0)
+    {
+      g_warning_once ("Failed to create pipeline cache directory");
+      g_free (path);
+      return FALSE;
+    }
+  g_free (path);
+
+  file = gdk_vulkan_get_pipeline_cache_file (display);
+
+  GDK_DEBUG (VULKAN, "Saving pipeline cache to %s", g_file_peek_path (file));
+
+  if (!g_file_replace_contents (file,
+                                data,
+                                size,
+                                display->vk_pipeline_cache_etag,
+                                FALSE,
+                                0,
+                                &etag,
+                                NULL,
+                                &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_WRONG_ETAG))
+        {
+          VkPipelineCache new_cache;
+          
+          GDK_DEBUG (VULKAN, "Pipeline cache file modified, merging into current");
+          new_cache = gdk_display_load_pipeline_cache (display);
+          if (new_cache)
+            {
+              GDK_VK_CHECK (vkMergePipelineCaches, device, cache, 1, &new_cache);
+              vkDestroyPipelineCache (device, new_cache, NULL);
+            }
+          else
+            {
+              g_clear_pointer (&display->vk_pipeline_cache_etag, g_free);
+            }
+          g_clear_error (&error);
+          g_object_unref (file);
+
+          /* try again */
+          return gdk_vulkan_save_pipeline_cache (display);
+        }
+
+      g_warning ("Failed to save pipeline cache: %s", error->message);
+      g_clear_error (&error);
+      g_object_unref (file);
+      return FALSE;
+    }
+
+  g_object_unref (file);
+  g_free (display->vk_pipeline_cache_etag);
+  display->vk_pipeline_cache_etag = etag;
+
+  return TRUE;
+}
+
+static gboolean
+gdk_vulkan_save_pipeline_cache_cb (gpointer data)
+{
+  GdkDisplay *display = data;
+
+  gdk_vulkan_save_pipeline_cache (display);
+
+  display->vk_save_pipeline_cache_source = 0;
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_vulkan_context_pipeline_cache_updated (GdkVulkanContext *self)
+{
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+
+  g_clear_handle_id (&display->vk_save_pipeline_cache_source, g_source_remove);
+  display->vk_save_pipeline_cache_source = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE - 10,
+                                                                       10, /* random choice that is not now */
+                                                                       gdk_vulkan_save_pipeline_cache_cb,
+                                                                       display,
+                                                                       NULL);
+}
+
+static void
+gdk_display_create_pipeline_cache (GdkDisplay *display)
+{
+  display->vk_pipeline_cache = gdk_display_load_pipeline_cache (display);
+
+  GDK_VK_CHECK (vkCreatePipelineCache, display->vk_device,
+                                       &(VkPipelineCacheCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+                                       },
+                                       NULL,
+                                       &display->vk_pipeline_cache);
+}
+
+VkPipelineCache
+gdk_vulkan_context_get_pipeline_cache (GdkVulkanContext *self)
+{
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (self), NULL);
+
+  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self))->vk_pipeline_cache;
+}
+
 /**
  * gdk_vulkan_context_get_image_format:
  * @context: a `GdkVulkanContext`
@@ -1381,6 +1591,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
       return FALSE;
     }
 
+  gdk_display_create_pipeline_cache (display);
+
   return TRUE;
 }
 
@@ -1408,6 +1620,16 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vulkan_refcount--;
   if (display->vulkan_refcount > 0)
     return;
+
+  if (display->vk_save_pipeline_cache_source)
+    {
+      gdk_vulkan_save_pipeline_cache_cb (display);
+      g_assert (display->vk_save_pipeline_cache_source == 0);
+    }
+  vkDestroyPipelineCache (display->vk_device, display->vk_pipeline_cache, NULL);
+  display->vk_device = VK_NULL_HANDLE;
+  g_clear_pointer (&display->vk_pipeline_cache_etag, g_free);
+  display->vk_pipeline_cache_size = 0;
 
   vkDestroyDevice (display->vk_device, NULL);
   display->vk_device = VK_NULL_HANDLE;
