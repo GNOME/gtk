@@ -79,9 +79,9 @@
  * The `GtkText` widget is a single-line text entry widget.
  *
  * `GtkText` is the common implementation of single-line text editing
- * that is shared between `GtkEntry`, `GtkPasswordEntry`, `GtkSpinButton`
- * and other widgets. In all of these, `GtkText` is used as the delegate
- * for the [iface@Gtk.Editable] implementation.
+ * that is shared between [class@Gtk.Entry], [class@Gtk.PasswordEntry],
+ * [class@Gtk.SpinButton], and other widgets. In all of these, `GtkText` is
+ * used as the delegate for the [iface@Gtk.Editable] implementation.
  *
  * A fairly large set of key bindings are supported by default. If the
  * entered text is longer than the allocation of the widget, the widget
@@ -95,10 +95,10 @@
  * [method@Gtk.Text.set_invisible_char].
  *
  * If you are looking to add icons or progress display in an entry, look
- * at `GtkEntry`. There other alternatives for more specialized use cases,
- * such as `GtkSearchEntry`.
+ * at [class@Gtk.Entry]. There other alternatives for more specialized use
+ * cases, such as [class@Gtk.SearchEntry].
  *
- * If you need multi-line editable text, look at `GtkTextView`.
+ * If you need multi-line editable text, look at [class@Gtk.TextView].
  *
  * # CSS nodes
  *
@@ -112,25 +112,25 @@
  * ╰── [window.popup]
  * ```
  *
- * `GtkText` has a main node with the name text. Depending on the properties
- * of the widget, the .read-only style class may appear.
+ * `GtkText` has a main node with the name `text`. Depending on the properties
+ * of the widget, the `.read-only` style class may appear.
  *
- * When the entry has a selection, it adds a subnode with the name selection.
+ * When the entry has a selection, it adds a subnode with the name `selection`.
  *
  * When the entry is in overwrite mode, it adds a subnode with the name
- * block-cursor that determines how the block cursor is drawn.
+ * `block-cursor` that determines how the block cursor is drawn.
  *
- * The CSS node for a context menu is added as a subnode below text as well.
+ * The CSS node for a context menu is added as a subnode with the name `popup`.
  *
- * The undershoot nodes are used to draw the underflow indication when content
- * is scrolled out of view. These nodes get the .left and .right style classes
+ * The `undershoot` nodes are used to draw the underflow indication when content
+ * is scrolled out of view. These nodes get the `.left` or `.right` style class
  * added depending on where the indication is drawn.
  *
  * When touch is used and touch selection handles are shown, they are using
- * CSS nodes with name cursor-handle. They get the .top or .bottom style class
- * depending on where they are shown in relation to the selection. If there is
- * just a single handle for the text cursor, it gets the style class
- * .insertion-cursor.
+ * CSS nodes with name `cursor-handle`. They get the `.top` or `.bottom` style
+ * class depending on where they are shown in relation to the selection. If
+ * there is just a single handle for the text cursor, it gets the style class
+ * `.insertion-cursor`.
  *
  * # Accessibility
  *
