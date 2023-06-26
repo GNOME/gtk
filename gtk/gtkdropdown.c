@@ -104,6 +104,8 @@ struct _GtkDropDown
 {
   GtkWidget parent_instance;
 
+  gboolean uses_default_factory;
+  gboolean uses_default_list_factory;
   GtkListItemFactory *factory;
   GtkListItemFactory *list_factory;
   GtkListItemFactory *header_factory;
@@ -794,6 +796,10 @@ set_default_factory (GtkDropDown *self)
   g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), self);
 
   gtk_drop_down_set_factory (self, factory);
+  self->uses_default_factory = TRUE;
+
+  if (self->uses_default_list_factory)
+    gtk_drop_down_set_list_factory (self, NULL);
 
   g_object_unref (factory);
 }
@@ -972,7 +978,12 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
     gtk_list_factory_widget_set_factory (GTK_LIST_FACTORY_WIDGET (self->button_item), factory);
 
   if (self->list_factory == NULL)
-    gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
+    {
+      gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), factory);
+      self->uses_default_list_factory = TRUE;
+    }
+
+  self->uses_default_factory = factory != NULL;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
@@ -1056,6 +1067,8 @@ gtk_drop_down_set_list_factory (GtkDropDown        *self,
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), self->list_factory);
   else
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), self->factory);
+
+  self->uses_default_list_factory = factory != NULL;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LIST_FACTORY]);
 }
@@ -1193,6 +1206,9 @@ gtk_drop_down_set_expression (GtkDropDown   *self,
   self->expression = expression;
   if (self->expression)
     gtk_expression_ref (self->expression);
+
+  if (self->uses_default_factory)
+    set_default_factory (self);
 
   update_filter (self);
 
