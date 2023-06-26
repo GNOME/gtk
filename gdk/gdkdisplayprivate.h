@@ -100,6 +100,10 @@ struct _GdkDisplay
   VkDevice vk_device;
   VkQueue vk_queue;
   uint32_t vk_queue_family_index;
+  VkPipelineCache vk_pipeline_cache;
+  gsize vk_pipeline_cache_size;
+  char *vk_pipeline_cache_etag;
+  guint vk_save_pipeline_cache_source;
 
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */

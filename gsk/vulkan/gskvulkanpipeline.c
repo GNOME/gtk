@@ -5,6 +5,8 @@
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanshaderprivate.h"
 
+#include "gdk/gdkvulkancontextprivate.h"
+
 #include <graphene.h>
 
 typedef struct _GskVulkanPipelinePrivate GskVulkanPipelinePrivate;
@@ -87,7 +89,7 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
   priv->vertex_stride = vertex_input_state->pVertexBindingDescriptions[0].stride;
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, device,
-                                           VK_NULL_HANDLE,
+                                           gdk_vulkan_context_get_pipeline_cache (context),
                                            1,
                                            &(VkGraphicsPipelineCreateInfo) {
                                                .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
@@ -159,6 +161,8 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
                                            },
                                            NULL,
                                            &priv->pipeline);
+
+  gdk_vulkan_context_pipeline_cache_updated (context);
 
   return self;
 }
