@@ -355,8 +355,6 @@ foreach test : node_parser_tests
 endforeach
 
 tests = [
-  ['curve', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
-  ['curve-special-cases', ['../../gsk/gskcurve.c'], ['-DGTK_COMPILATION']],
   ['dash'],
   ['path'],
   ['path-special-cases'],
@@ -392,6 +390,8 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'curve' ],
+  [ 'curve-special-cases' ],
   [ 'diff' ],
   [ 'half-float' ],
   ['rounded-rect'],
