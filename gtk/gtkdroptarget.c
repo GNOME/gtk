@@ -507,7 +507,12 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
       graphene_point_init (&self->coords, x, y);
       gtk_drop_target_start_drop (self, crossing->drop);
 
-      g_signal_emit (self, signals[ENTER], 0, x, y, &preferred);
+      /* start_drop ends w/ thaw_notify, where handler may reject, so recheck */
+      if (self->drop != NULL)
+        g_signal_emit (self, signals[ENTER], 0, x, y, &preferred);
+      else
+        preferred = 0;
+
       if (!gdk_drag_action_is_unique (preferred))
         {
           g_critical ("Handler for GtkDropTarget::enter on %s %p did not return a unique preferred action",
