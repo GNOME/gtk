@@ -204,60 +204,6 @@ gsk_path_measure_get_tolerance (GskPathMeasure *self)
 }
 
 /**
- * gsk_path_measure_get_n_contours:
- * @self: a #GskPathMeasure
- *
- * Returns the number of contours in the path being measured.
- *
- * The returned value is independent of whether @self if restricted
- * or not.
- *
- * Returns: The number of contours
- **/
-gsize
-gsk_path_measure_get_n_contours (GskPathMeasure *self)
-{
-  g_return_val_if_fail (self != NULL, 0);
-
-  return self->n_contours;
-}
-
-/**
- * gsk_path_measure_restrict_to_contour:
- * @self: a #GskPathMeasure
- * @contour: contour to restrict to or (gsize) -1 for using the
- *     whole path
- *
- * Restricts all functions on the path to just the given @contour.
- *
- * If @contour >= gsk_path_measure_get_n_contours() - so in
- * particular when it is set to -1 - the whole path will be used.
- **/
-void
-gsk_path_measure_restrict_to_contour (GskPathMeasure *self,
-                                      gsize           contour)
-{
-  if (contour >= self->n_contours)
-    {
-      /* use the whole path */
-      self->first = 0;
-      self->last = self->n_contours;
-    }
-  else
-    {
-      /* use just one contour */
-      self->first = contour;
-      self->last = contour + 1;
-    }
-
-  self->length = 0;
-  for (gsize i = self->first; i < self->last; i++)
-    {
-      self->length += self->measures[i].length;
-    }
-}
-
-/**
  * gsk_path_measure_get_length:
  * @self: a #GskPathMeasure
  *
