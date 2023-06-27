@@ -508,12 +508,13 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
       gtk_drop_target_start_drop (self, crossing->drop);
 
       g_signal_emit (self, signals[ENTER], 0, x, y, &preferred);
-        if (!gdk_drag_action_is_unique (preferred))
-          {
-            g_critical ("Handler for GtkDropTarget::enter on %s %p did not return a unique preferred action",
-                        G_OBJECT_TYPE_NAME (widget), widget);
-            preferred = make_action_unique (preferred);
-          }
+      if (!gdk_drag_action_is_unique (preferred))
+        {
+          g_critical ("Handler for GtkDropTarget::enter on %s %p did not return a unique preferred action",
+                      G_OBJECT_TYPE_NAME (widget), widget);
+          preferred = make_action_unique (preferred);
+        }
+
       if (preferred &&
           gtk_drop_status (self->drop, self->actions, preferred))
         {
@@ -533,6 +534,7 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
       g_signal_emit (self, signals[LEAVE], 0);
       if (!self->dropping)
         gtk_drop_target_end_drop (self);
+
       gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
     }
 }
