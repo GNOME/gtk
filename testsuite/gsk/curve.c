@@ -130,7 +130,7 @@ add_line_to_array (const graphene_point_t *from,
   GArray *array = user_data;
   PointOnLine *last = &g_array_index (array, PointOnLine, array->len - 1);
 
-  g_assert (array->len > 0);
+  g_assert_true (array->len > 0);
   g_assert_cmpfloat (from_progress, >=, 0.0f);
   g_assert_cmpfloat (from_progress, <, to_progress);
   g_assert_cmpfloat (to_progress, <=, 1.0f);
@@ -195,7 +195,7 @@ test_curve_decompose (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
