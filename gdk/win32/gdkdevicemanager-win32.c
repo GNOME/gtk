@@ -520,9 +520,11 @@ winpointer_enumerate_devices (GdkDeviceManagerWin32 *device_manager)
       if (!winpointer_match_device_in_system_list (device, infos, infos_count))
         {
           GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (device));
+          GdkDeviceTool *tool = (GDK_DEVICE (device))->last_tool;
 
           gdk_device_update_tool (GDK_DEVICE (device), NULL);
-          gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), (GDK_DEVICE (device))->last_tool);
+          gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), tool);
+          g_clear_pointer (&tool, g_object_unref);
 
           gdk_seat_default_remove_slave (GDK_SEAT_DEFAULT (seat), GDK_DEVICE (device));
           device_manager->winpointer_devices = g_list_delete_link (device_manager->winpointer_devices,
