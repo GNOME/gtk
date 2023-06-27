@@ -2,20 +2,11 @@
 
 #include "gskvulkaneffectpipelineprivate.h"
 
+#include "vulkan/resources/color-matrix.vert.h"
+
 struct _GskVulkanEffectPipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanEffectInstance GskVulkanEffectInstance;
-
-struct _GskVulkanEffectInstance
-{
-  float rect[4];
-  float tex_rect[4];
-  float color_matrix[16];
-  float color_offset[4];
-  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanEffectPipeline, gsk_vulkan_effect_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -23,72 +14,7 @@ G_DEFINE_TYPE (GskVulkanEffectPipeline, gsk_vulkan_effect_pipeline, GSK_TYPE_VUL
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_effect_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanEffectInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, tex_rect),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 4,
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 8,
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_matrix) + sizeof (float) * 12,
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, color_offset),
-      },
-      {
-          .location = 7,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanEffectInstance, tex_id),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_color_matrix_info;
 }
 
 static void
@@ -133,7 +59,7 @@ gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipelin
                                                 const graphene_matrix_t *color_matrix,
                                                 const graphene_vec4_t   *color_offset)
 {
-  GskVulkanEffectInstance *instance = (GskVulkanEffectInstance *) data;
+  GskVulkanColorMatrixInstance *instance = (GskVulkanColorMatrixInstance *) data;
 
   instance->rect[0] = rect->origin.x + offset->x;
   instance->rect[1] = rect->origin.y + offset->y;

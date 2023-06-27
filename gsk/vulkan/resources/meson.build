@@ -12,12 +12,12 @@ gsk_private_vulkan_include_shaders = [
 ]
 
 gsk_private_vulkan_fragment_shaders = [
-  'blendmode.frag',
+  'blend-mode.frag',
   'blur.frag',
   'border.frag',
   'color.frag',
   'color-matrix.frag',
-  'crossfade.frag',
+  'cross-fade.frag',
   'inset-shadow.frag',
   'linear.frag',
   'mask.frag',
@@ -26,12 +26,12 @@ gsk_private_vulkan_fragment_shaders = [
 ]
 
 gsk_private_vulkan_vertex_shaders = [
-  'blendmode.vert',
+  'blend-mode.vert',
   'blur.vert',
   'border.vert',
   'color.vert',
   'color-matrix.vert',
-  'crossfade.vert',
+  'cross-fade.vert',
   'inset-shadow.vert',
   'linear.vert',
   'mask.vert',
@@ -89,4 +89,15 @@ foreach shader: gsk_private_vulkan_shaders
     gsk_private_vulkan_compiled_shaders_deps += [compiled_shader, compiled_clip_shader, compiled_clip_rounded_shader]
   endif
   gsk_private_vulkan_compiled_shaders += files(spv_shader, clip_spv_shader, clip_rounded_spv_shader)
+endforeach
+
+foreach shader: gsk_private_vulkan_vertex_shaders
+  shader_header = configure_file(output: '@0@.h'.format(shader),
+                                 input: shader,
+                                 command: [
+                                   find_program('generate-header.py'),
+                                   '@INPUT@',
+                                 ],
+                                 capture: true)
+  gsk_private_vulkan_shader_headers += shader_header
 endforeach

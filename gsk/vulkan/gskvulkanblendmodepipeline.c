@@ -2,6 +2,8 @@
 
 #include "gskvulkanblendmodepipelineprivate.h"
 
+#include "vulkan/resources/blend-mode.vert.h"
+
 struct _GskVulkanBlendModePipeline
 {
   GObject parent_instance;
@@ -9,89 +11,12 @@ struct _GskVulkanBlendModePipeline
 
 typedef struct _GskVulkanBlendModeInstance GskVulkanBlendModeInstance;
 
-struct _GskVulkanBlendModeInstance
-{
-  float rect[4];
-  float top_rect[4];
-  float bottom_rect[4];
-  float top_tex_rect[4];
-  float bottom_tex_rect[4];
-  guint32 top_tex_id[2];
-  guint32 bottom_tex_id[2];
-  guint32 blend_mode;
-};
-
 G_DEFINE_TYPE (GskVulkanBlendModePipeline, gsk_vulkan_blend_mode_pipeline, GSK_TYPE_VULKAN_PIPELINE)
 
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_blend_mode_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanBlendModeInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, top_rect),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, bottom_rect),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, top_tex_rect),
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, bottom_tex_rect),
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, top_tex_id),
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, bottom_tex_id),
-      },
-      {
-          .location = 7,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBlendModeInstance, blend_mode),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_blend_mode_info;
 }
 
 static void

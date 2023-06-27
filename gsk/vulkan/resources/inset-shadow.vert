@@ -2,9 +2,7 @@
 
 #include "clip.vert.glsl"
 
-layout(location = 0) in vec4 inOutline;
-layout(location = 1) in vec4 inOutlineCornerWidths;
-layout(location = 2) in vec4 inOutlineCornerHeights;
+layout(location = 0) in mat3x4 inOutline;
 layout(location = 3) in vec4 inColor;
 layout(location = 4) in vec2 inOffset;
 layout(location = 5) in float inSpread;
@@ -26,15 +24,15 @@ vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 1.0) };
 
 void main() {
-  vec4 rect = clip (inOutline);
+  vec4 rect = clip (inOutline[0]);
 
   vec2 pos = rect.xy + rect.zw * offsets[gl_VertexIndex];
   gl_Position = push.mvp * vec4 (push.scale * pos, 0.0, 1.0);
   outPos = pos;
 
-  outOutline = inOutline;
-  outOutlineCornerWidths = inOutlineCornerWidths;
-  outOutlineCornerHeights = inOutlineCornerHeights;
+  outOutline = inOutline[0];
+  outOutlineCornerWidths = inOutline[1];
+  outOutlineCornerHeights = inOutline[2];
   outColor = inColor;
   outOffset = inOffset;
   outSpread = inSpread;

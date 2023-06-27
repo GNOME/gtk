@@ -2,6 +2,8 @@
 
 #include "gskvulkanboxshadowpipelineprivate.h"
 
+#include "vulkan/resources/inset-shadow.vert.h"
+
 #include "gskroundedrectprivate.h"
 
 struct _GskVulkanBoxShadowPipeline
@@ -9,82 +11,12 @@ struct _GskVulkanBoxShadowPipeline
   GObject parent_instance;
 };
 
-typedef struct _GskVulkanBoxShadowInstance GskVulkanBoxShadowInstance;
-
-struct _GskVulkanBoxShadowInstance
-{
-  float outline[12];
-  float color[4];
-  float offset[2];
-  float spread;
-  float blur_radius;
-};
-
 G_DEFINE_TYPE (GskVulkanBoxShadowPipeline, gsk_vulkan_box_shadow_pipeline, GSK_TYPE_VULKAN_PIPELINE)
 
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_box_shadow_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanBoxShadowInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, outline),
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, outline) + 4 * sizeof (float),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, outline) + 8 * sizeof (float),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, color),
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, offset),
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, spread),
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBoxShadowInstance, blur_radius),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_inset_shadow_info;
 }
 
 static void
@@ -130,7 +62,7 @@ gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GskVulkanBoxShadowPipeline *
                                                     float                      spread,
                                                     float                      blur_radius)
 {
-  GskVulkanBoxShadowInstance *instance = (GskVulkanBoxShadowInstance *) data;
+  GskVulkanInsetShadowInstance *instance = (GskVulkanInsetShadowInstance *) data;
 
   gsk_rounded_rect_to_float (outline, offset, instance->outline);
   instance->color[0] = color->red;

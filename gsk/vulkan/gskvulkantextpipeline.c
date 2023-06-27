@@ -2,19 +2,11 @@
 
 #include "gskvulkantextpipelineprivate.h"
 
+#include "vulkan/resources/mask.vert.h"
+
 struct _GskVulkanTextPipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanTextInstance GskVulkanTextInstance;
-
-struct _GskVulkanTextInstance
-{
-  float rect[4];
-  float tex_rect[4];
-  float color[4];
-  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -22,48 +14,7 @@ G_DEFINE_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK_TYPE_VULKAN_
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_text_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanTextInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, rect),
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, tex_rect),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, color),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, tex_id),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_mask_info;
 }
 
 static void
@@ -113,7 +64,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guint                   num_glyphs,
                                               float                   scale)
 {
-  GskVulkanTextInstance *instances = (GskVulkanTextInstance *) data;
+  GskVulkanMaskInstance *instances = (GskVulkanMaskInstance *) data;
   int i;
   int count = 0;
   int x_position = 0;
@@ -129,7 +80,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
         {
           double cx = (x_position + gi->geometry.x_offset) / PANGO_SCALE;
           double cy = gi->geometry.y_offset / PANGO_SCALE;
-          GskVulkanTextInstance *instance = &instances[count];
+          GskVulkanMaskInstance *instance = &instances[count];
           GskVulkanCachedGlyph *glyph;
 
           glyph = gsk_vulkan_renderer_get_cached_glyph (renderer,

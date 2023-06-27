@@ -3,9 +3,7 @@
 #include "clip.vert.glsl"
 #include "rounded-rect.glsl"
 
-layout(location = 0) in vec4 inRect;
-layout(location = 1) in vec4 inCornerWidths;
-layout(location = 2) in vec4 inCornerHeights;
+layout(location = 0) in mat3x4 inRect;
 layout(location = 3) in vec4 inBorderWidths;
 layout(location = 4) in mat4 inBorderColors;
 
@@ -44,47 +42,47 @@ void main() {
   int slice_index = gl_VertexIndex / 6;
   int vert_index = gl_VertexIndex % 6;
 
-  vec4 corner_widths = max (inCornerWidths, inBorderWidths.wyyw);
-  vec4 corner_heights = max (inCornerHeights, inBorderWidths.xxzz);
+  vec4 corner_widths = max (inRect[1], inBorderWidths.wyyw);
+  vec4 corner_heights = max (inRect[2], inBorderWidths.xxzz);
 
   Rect rect;
 
   switch (slice_index)
     {
     case SLICE_TOP_LEFT:
-      rect = rect_from_gsk (vec4(inRect.xy, corner_widths[TOP_LEFT], corner_heights[TOP_LEFT]));
+      rect = rect_from_gsk (vec4(inRect[0].xy, corner_widths[TOP_LEFT], corner_heights[TOP_LEFT]));
       rect = rect_round_larger (rect);
       vert_index = (vert_index + 3) % 6;
       break;
     case SLICE_TOP:
-      rect = rect_from_gsk (vec4(inRect.x + corner_widths[TOP_LEFT], inRect.y, inRect.z - corner_widths[TOP_LEFT] - corner_widths[TOP_RIGHT], inBorderWidths[TOP]));
+      rect = rect_from_gsk (vec4(inRect[0].x + corner_widths[TOP_LEFT], inRect[0].y, inRect[0].z - corner_widths[TOP_LEFT] - corner_widths[TOP_RIGHT], inBorderWidths[TOP]));
       rect = rect_round_smaller_larger (rect);
       outColor = inBorderColors[TOP];
       break;
     case SLICE_TOP_RIGHT:
-      rect = rect_from_gsk (vec4(inRect.x + inRect.z - corner_widths[TOP_RIGHT], inRect.y, corner_widths[TOP_RIGHT], corner_heights[TOP_RIGHT]));
+      rect = rect_from_gsk (vec4(inRect[0].x + inRect[0].z - corner_widths[TOP_RIGHT], inRect[0].y, corner_widths[TOP_RIGHT], corner_heights[TOP_RIGHT]));
       rect = rect_round_larger (rect);
       break;
     case SLICE_RIGHT:
-      rect = rect_from_gsk (vec4(inRect.x + inRect.z - inBorderWidths[RIGHT], inRect.y + corner_heights[TOP_RIGHT], inBorderWidths[RIGHT], inRect.w - corner_heights[TOP_RIGHT] - corner_heights[BOTTOM_RIGHT]));
+      rect = rect_from_gsk (vec4(inRect[0].x + inRect[0].z - inBorderWidths[RIGHT], inRect[0].y + corner_heights[TOP_RIGHT], inBorderWidths[RIGHT], inRect[0].w - corner_heights[TOP_RIGHT] - corner_heights[BOTTOM_RIGHT]));
       rect = rect_round_larger_smaller (rect);
       outColor = inBorderColors[RIGHT];
       break;
     case SLICE_BOTTOM_RIGHT:
-      rect = rect_from_gsk (vec4(inRect.x + inRect.z - corner_widths[BOTTOM_RIGHT], inRect.y + inRect.w - corner_heights[BOTTOM_RIGHT], corner_widths[BOTTOM_RIGHT], corner_heights[BOTTOM_RIGHT]));
+      rect = rect_from_gsk (vec4(inRect[0].x + inRect[0].z - corner_widths[BOTTOM_RIGHT], inRect[0].y + inRect[0].w - corner_heights[BOTTOM_RIGHT], corner_widths[BOTTOM_RIGHT], corner_heights[BOTTOM_RIGHT]));
       rect = rect_round_larger (rect);
       break;
     case SLICE_BOTTOM:
-      rect = rect_from_gsk (vec4(inRect.x + corner_widths[BOTTOM_LEFT], inRect.y + inRect.w - inBorderWidths[BOTTOM], inRect.z - corner_widths[BOTTOM_LEFT] - corner_widths[BOTTOM_RIGHT], inBorderWidths[BOTTOM]));
+      rect = rect_from_gsk (vec4(inRect[0].x + corner_widths[BOTTOM_LEFT], inRect[0].y + inRect[0].w - inBorderWidths[BOTTOM], inRect[0].z - corner_widths[BOTTOM_LEFT] - corner_widths[BOTTOM_RIGHT], inBorderWidths[BOTTOM]));
       rect = rect_round_smaller_larger (rect);
       break;
     case SLICE_BOTTOM_LEFT:
-      rect = rect_from_gsk (vec4(inRect.x, inRect.y + inRect.w - corner_heights[BOTTOM_LEFT], corner_widths[BOTTOM_LEFT], corner_heights[BOTTOM_LEFT]));
+      rect = rect_from_gsk (vec4(inRect[0].x, inRect[0].y + inRect[0].w - corner_heights[BOTTOM_LEFT], corner_widths[BOTTOM_LEFT], corner_heights[BOTTOM_LEFT]));
       vert_index = (vert_index + 3) % 6;
       rect = rect_round_larger (rect);
       break;
     case SLICE_LEFT:
-      rect = rect_from_gsk (vec4(inRect.x, inRect.y + corner_heights[TOP_LEFT], inBorderWidths[LEFT], inRect.w - corner_heights[TOP_LEFT] - corner_heights[BOTTOM_LEFT]));
+      rect = rect_from_gsk (vec4(inRect[0].x, inRect[0].y + corner_heights[TOP_LEFT], inBorderWidths[LEFT], inRect[0].w - corner_heights[TOP_LEFT] - corner_heights[BOTTOM_LEFT]));
       rect = rect_round_larger_smaller (rect);
       break;
     }
@@ -99,7 +97,7 @@ void main() {
   gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
   outColor = inBorderColors[((gl_VertexIndex / 3 + 15) / 4) % 4];
   outPos = pos;
-  outRect = RoundedRect(inRect.xyxy + vec4(0,0,inRect.zw), inCornerWidths, inCornerHeights);
+  outRect = RoundedRect(inRect[0].xyxy + vec4(0,0,inRect[0].zw), inRect[1], inRect[2]);
   outRect = rounded_rect_scale (outRect, push.scale);
   outBorderWidths = inBorderWidths * push.scale.yxyx;
 }

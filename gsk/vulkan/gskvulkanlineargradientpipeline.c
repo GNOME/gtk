@@ -2,21 +2,11 @@
 
 #include "gskvulkanlineargradientpipelineprivate.h"
 
+#include "vulkan/resources/linear.vert.h"
+
 struct _GskVulkanLinearGradientPipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanLinearGradientInstance GskVulkanLinearGradientInstance;
-
-struct _GskVulkanLinearGradientInstance
-{
-  float rect[4];
-  float start[2];
-  float end[2];
-  gint32 repeating;
-  gint32 offset;
-  gint32 stop_count;
 };
 
 G_DEFINE_TYPE (GskVulkanLinearGradientPipeline, gsk_vulkan_linear_gradient_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -24,60 +14,7 @@ G_DEFINE_TYPE (GskVulkanLinearGradientPipeline, gsk_vulkan_linear_gradient_pipel
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_linear_gradient_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanLinearGradientInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, start),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, end),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, repeating),
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, offset),
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanLinearGradientInstance, stop_count),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_linear_info;
 }
 
 static void
@@ -123,7 +60,7 @@ gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradient
                                                          gsize                            gradient_offset,
                                                          gsize                            n_stops)
 {
-  GskVulkanLinearGradientInstance *instance = (GskVulkanLinearGradientInstance *) data;
+  GskVulkanLinearInstance *instance = (GskVulkanLinearInstance *) data;
 
   instance->rect[0] = rect->origin.x + offset->x;
   instance->rect[1] = rect->origin.y + offset->y;
@@ -134,7 +71,7 @@ gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GskVulkanLinearGradient
   instance->end[0] = end->x + offset->x;
   instance->end[1] = end->y + offset->y;
   instance->repeating = repeating;
-  instance->offset = gradient_offset;
+  instance->stop_offset = gradient_offset;
   instance->stop_count = n_stops;
 }
 

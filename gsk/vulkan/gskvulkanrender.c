@@ -418,12 +418,12 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "texture",                    1, gsk_vulkan_color_text_pipeline_new },
     { "texture-clip",               1, gsk_vulkan_color_text_pipeline_new },
     { "texture-clip-rounded",       1, gsk_vulkan_color_text_pipeline_new },
-    { "crossfade",                  2, gsk_vulkan_cross_fade_pipeline_new },
-    { "crossfade-clip",             2, gsk_vulkan_cross_fade_pipeline_new },
-    { "crossfade-clip-rounded",     2, gsk_vulkan_cross_fade_pipeline_new },
-    { "blendmode",                  2, gsk_vulkan_blend_mode_pipeline_new },
-    { "blendmode-clip",             2, gsk_vulkan_blend_mode_pipeline_new },
-    { "blendmode-clip-rounded",     2, gsk_vulkan_blend_mode_pipeline_new },
+    { "cross-fade",                 2, gsk_vulkan_cross_fade_pipeline_new },
+    { "cross-fade-clip",            2, gsk_vulkan_cross_fade_pipeline_new },
+    { "cross-fade-clip-rounded",    2, gsk_vulkan_cross_fade_pipeline_new },
+    { "blend-mode",                 2, gsk_vulkan_blend_mode_pipeline_new },
+    { "blend-mode-clip",            2, gsk_vulkan_blend_mode_pipeline_new },
+    { "blend-mode-clip-rounded",    2, gsk_vulkan_blend_mode_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);

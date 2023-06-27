@@ -2,23 +2,11 @@
 
 #include "gskvulkancrossfadepipelineprivate.h"
 
+#include "vulkan/resources/cross-fade.vert.h"
+
 struct _GskVulkanCrossFadePipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanCrossFadeInstance GskVulkanCrossFadeInstance;
-
-struct _GskVulkanCrossFadeInstance
-{
-  float rect[4];
-  float start_rect[4];
-  float end_rect[4];
-  float start_tex_rect[4];
-  float end_tex_rect[4];
-  guint32 start_tex_id[2];
-  guint32 end_tex_id[2];
-  float progress;
 };
 
 G_DEFINE_TYPE (GskVulkanCrossFadePipeline, gsk_vulkan_cross_fade_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -26,72 +14,7 @@ G_DEFINE_TYPE (GskVulkanCrossFadePipeline, gsk_vulkan_cross_fade_pipeline, GSK_T
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_cross_fade_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanCrossFadeInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, start_rect),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, end_rect),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, start_tex_rect),
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, end_tex_rect),
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, start_tex_id),
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, end_tex_id),
-      },
-      {
-          .location = 7,
-          .binding = 0,
-          .format = VK_FORMAT_R32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanCrossFadeInstance, progress),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_cross_fade_info;
 }
 
 static void
