@@ -1069,8 +1069,8 @@ rotate_path_cb (GskPathOperation        op,
       break;
 
     case GSK_PATH_CONIC:
-      gsk_path_builder_conic_to (builders[0], pts[2].x, pts[2].y, pts[3].x, pts[3].y, weight);
-      gsk_path_builder_conic_to (builders[1], pts[2].y, -pts[2].x, pts[3].y, -pts[3].x, weight);
+      gsk_path_builder_conic_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      gsk_path_builder_conic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, weight);
       break;
 
     default:
