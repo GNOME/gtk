@@ -34,7 +34,7 @@ static void G_GNUC_NORETURN
 usage (void)
 {
   g_print (_("Usage:\n"
-             "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
+             "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
              "\n"
              "Perform various tasks on GtkBuilder .ui files.\n"
              "\n"
