@@ -90,3 +90,14 @@ foreach shader: gsk_private_vulkan_shaders
   endif
   gsk_private_vulkan_compiled_shaders += files(spv_shader, clip_spv_shader, clip_rounded_spv_shader)
 endforeach
+
+foreach shader: gsk_private_vulkan_vertex_shaders
+  shader_header = configure_file(output: '@0@.h'.format(shader),
+                                 input: shader,
+                                 command: [
+                                   find_program('generate-header.py'),
+                                   '@INPUT@',
+                                 ],
+                                 capture: true)
+  gsk_private_vulkan_shader_headers += shader_header
+endforeach

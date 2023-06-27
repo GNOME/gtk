@@ -2,18 +2,11 @@
 
 #include "gskvulkantexturepipelineprivate.h"
 
+#include "vulkan/resources/texture.vert.h"
+
 struct _GskVulkanTexturePipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanTextureInstance GskVulkanTextureInstance;
-
-struct _GskVulkanTextureInstance
-{
-  float rect[4];
-  float tex_rect[4];
-  guint32 tex_id[2];
 };
 
 G_DEFINE_TYPE (GskVulkanTexturePipeline, gsk_vulkan_texture_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -21,42 +14,7 @@ G_DEFINE_TYPE (GskVulkanTexturePipeline, gsk_vulkan_texture_pipeline, GSK_TYPE_V
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_texture_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanTextureInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextureInstance, rect),
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextureInstance, tex_rect),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32_UINT,
-          .offset = G_STRUCT_OFFSET (GskVulkanTextureInstance, tex_id),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_texture_info;
 }
 
 static void

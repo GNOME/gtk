@@ -2,17 +2,11 @@
 
 #include "gskvulkancolorpipelineprivate.h"
 
+#include "vulkan/resources/color.vert.h"
+
 struct _GskVulkanColorPipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanColorInstance GskVulkanColorInstance;
-
-struct _GskVulkanColorInstance
-{
-  float rect[4];
-  float color[4];
 };
 
 G_DEFINE_TYPE (GskVulkanColorPipeline, gsk_vulkan_color_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -20,36 +14,7 @@ G_DEFINE_TYPE (GskVulkanColorPipeline, gsk_vulkan_color_pipeline, GSK_TYPE_VULKA
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_color_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanColorInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = 0,
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanColorInstance, color),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_color_info;
 }
 
 static void

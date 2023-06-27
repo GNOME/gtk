@@ -4,18 +4,11 @@
 
 #include "gskroundedrectprivate.h"
 
+#include "vulkan/resources/border.vert.h"
+
 struct _GskVulkanBorderPipeline
 {
   GObject parent_instance;
-};
-
-typedef struct _GskVulkanBorderInstance GskVulkanBorderInstance;
-
-struct _GskVulkanBorderInstance
-{
-  float rect[12];
-  float widths[4];
-  float colors[16];
 };
 
 G_DEFINE_TYPE (GskVulkanBorderPipeline, gsk_vulkan_border_pipeline, GSK_TYPE_VULKAN_PIPELINE)
@@ -23,72 +16,7 @@ G_DEFINE_TYPE (GskVulkanBorderPipeline, gsk_vulkan_border_pipeline, GSK_TYPE_VUL
 static const VkPipelineVertexInputStateCreateInfo *
 gsk_vulkan_border_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
-  static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
-      {
-          .binding = 0,
-          .stride = sizeof (GskVulkanBorderInstance),
-          .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
-      }
-  };
-  static const VkVertexInputAttributeDescription vertexInputAttributeDescription[] = {
-      {
-          .location = 0,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, rect),
-      },
-      {
-          .location = 1,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, rect) + 4 * sizeof (float),
-      },
-      {
-          .location = 2,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, rect) + 8 * sizeof (float),
-      },
-      {
-          .location = 3,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, widths),
-      },
-      {
-          .location = 4,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, colors),
-      },
-      {
-          .location = 5,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, colors) + 4 * sizeof (float),
-      },
-      {
-          .location = 6,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, colors) + 8 * sizeof (float),
-      },
-      {
-          .location = 7,
-          .binding = 0,
-          .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanBorderInstance, colors) + 12 * sizeof (float),
-      }
-  };
-  static const VkPipelineVertexInputStateCreateInfo info = {
-      .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-      .vertexBindingDescriptionCount = G_N_ELEMENTS (vertexBindingDescriptions),
-      .pVertexBindingDescriptions = vertexBindingDescriptions,
-      .vertexAttributeDescriptionCount = G_N_ELEMENTS (vertexInputAttributeDescription),
-      .pVertexAttributeDescriptions = vertexInputAttributeDescription
-  };
-
-  return &info;
+  return &gsk_vulkan_border_info;
 }
 
 static void
@@ -137,11 +65,11 @@ gsk_vulkan_border_pipeline_collect_vertex_data (GskVulkanBorderPipeline *pipelin
   gsk_rounded_rect_to_float (rect, offset, instance->rect);
   for (i = 0; i < 4; i++)
     {
-      instance->widths[i] = widths[i];
-      instance->colors[4 * i + 0] = colors[i].red;
-      instance->colors[4 * i + 1] = colors[i].green;
-      instance->colors[4 * i + 2] = colors[i].blue;
-      instance->colors[4 * i + 3] = colors[i].alpha;
+      instance->border_widths[i] = widths[i];
+      instance->border_colors[4 * i + 0] = colors[i].red;
+      instance->border_colors[4 * i + 1] = colors[i].green;
+      instance->border_colors[4 * i + 2] = colors[i].blue;
+      instance->border_colors[4 * i + 3] = colors[i].alpha;
     }
 }
 

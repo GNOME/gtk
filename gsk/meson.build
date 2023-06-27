@@ -103,6 +103,7 @@ gsk_private_vulkan_shaders = []
 # on constantly regenerated files.
 gsk_private_vulkan_compiled_shaders = []
 gsk_private_vulkan_compiled_shaders_deps = []
+gsk_private_vulkan_shader_headers = []
 
 if have_vulkan
   gsk_private_sources += files([
@@ -197,6 +198,7 @@ libgsk = static_library('gsk',
     gsk_private_sources,
     gsk_enums,
     gskresources,
+    gsk_private_vulkan_shader_headers,
   ],
   dependencies: gsk_deps,
   include_directories: [ confinc, ],
