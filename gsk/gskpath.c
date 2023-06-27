@@ -572,12 +572,32 @@ parse_nonnegative_number (const char **p,
   return TRUE;
 }
 
+/* This fixes a flaw in our use of strchr() below:
+ *
+ * If p already points at the end of the string,
+ * we misinterpret strchr ("xyz", *p) returning
+ * non-NULL to mean that we can increment p.
+ *
+ * But strchr() will return a pointer to the
+ * final NUL byte in this case, and we walk off
+ * the end of the string. Oops
+ */
+static inline char *
+_strchr (const char *str,
+           int         c)
+{
+  if (c == 0)
+    return NULL;
+  else
+    return strchr (str, c);
+}
+
 static gboolean
 parse_flag (const char **p,
             gboolean    *f)
 {
   skip_whitespace (p);
-  if (strchr ("01", **p))
+  if (_strchr ("01", **p))
     {
       *f = **p == '1';
       (*p)++;
@@ -601,7 +621,7 @@ parse_command (const char **p,
     allowed = "mMhHvVzZlLcCsStTqQoOaA";
 
   skip_whitespace (p);
-  s = strchr (allowed, **p);
+  s = _strchr (allowed, **p);
   if (s)
     {
       *cmd = *s;
@@ -752,7 +772,7 @@ gsk_path_parse (const char *string)
             if (parse_rectangle (&p, &x1, &y1, &w, &h))
               {
                 gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
-                if (strchr ("zZX", prev_cmd))
+                if (_strchr ("zZX", prev_cmd))
                   {
                     path_x = x1;
                     path_y = y1;
@@ -763,7 +783,7 @@ gsk_path_parse (const char *string)
             else if (parse_circle (&p, &x1, &y1, &r))
               {
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1 - r, y1), r);
-                if (strchr ("zZX", prev_cmd))
+                if (_strchr ("zZX", prev_cmd))
                   {
                     path_x = x1;
                     path_y = y1;
@@ -783,7 +803,7 @@ gsk_path_parse (const char *string)
                 else
                   {
                     gsk_path_builder_move_to (builder, x1, y1);
-                    if (strchr ("zZX", prev_cmd))
+                    if (_strchr ("zZX", prev_cmd))
                       {
                         path_x = x1;
                         path_y = y1;
@@ -810,7 +830,7 @@ gsk_path_parse (const char *string)
                     y1 += y;
                   }
 
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -834,7 +854,7 @@ gsk_path_parse (const char *string)
               {
                 if (cmd == 'h')
                   x1 += x;
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -857,7 +877,7 @@ gsk_path_parse (const char *string)
               {
                 if (cmd == 'v')
                   y1 += y;
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -889,7 +909,7 @@ gsk_path_parse (const char *string)
                     x2 += x;
                     y2 += y;
                   }
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -921,7 +941,7 @@ gsk_path_parse (const char *string)
                     x2 += x;
                     y2 += y;
                   }
-                if (strchr ("CcSs", prev_cmd))
+                if (_strchr ("CcSs", prev_cmd))
                   {
                     x0 = 2 * x - prev_x1;
                     y0 = 2 * y - prev_y1;
@@ -931,7 +951,7 @@ gsk_path_parse (const char *string)
                     x0 = x;
                     y0 = y;
                   }
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -967,7 +987,7 @@ gsk_path_parse (const char *string)
                 yy1 = (y + 2.0 * y1) / 3.0;
                 xx2 = (x2 + 2.0 * x1) / 3.0;
                 yy2 = (y2 + 2.0 * y1) / 3.0;
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -996,7 +1016,7 @@ gsk_path_parse (const char *string)
                     x2 += x;
                     y2 += y;
                   }
-                if (strchr ("QqTt", prev_cmd))
+                if (_strchr ("QqTt", prev_cmd))
                   {
                     x1 = 2 * x - prev_x1;
                     y1 = 2 * y - prev_y1;
@@ -1010,7 +1030,7 @@ gsk_path_parse (const char *string)
                 yy1 = (y + 2.0 * y1) / 3.0;
                 xx2 = (x2 + 2.0 * x1) / 3.0;
                 yy2 = (y2 + 2.0 * y1) / 3.0;
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -1043,7 +1063,7 @@ gsk_path_parse (const char *string)
                     x2 += x;
                     y2 += y;
                   }
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
@@ -1079,7 +1099,7 @@ gsk_path_parse (const char *string)
                     y1 += y;
                   }
 
-                if (strchr ("zZ", prev_cmd))
+                if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
