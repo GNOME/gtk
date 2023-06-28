@@ -197,9 +197,8 @@ struct _GtkAboutDialog
 
   GtkLicense license_type;
 
-  guint hovering_over_link : 1;
-  guint wrap_license : 1;
-  guint in_child_changed : 1;
+  bool hovering_over_link;
+  bool wrap_license;
 };
 
 struct _GtkAboutDialogClass
@@ -724,8 +723,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   about->documenters = NULL;
   about->artists = NULL;
 
-  about->hovering_over_link = FALSE;
-  about->wrap_license = FALSE;
+  about->hovering_over_link = false;
+  about->wrap_license = false;
 
   about->license_type = GTK_LICENSE_UNKNOWN;
 
@@ -1305,11 +1304,11 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
 {
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
-  wrap_license = wrap_license != FALSE;
+  bool wrap = !!wrap_license;
 
-  if (about->wrap_license != wrap_license)
+  if (about->wrap_license != wrap)
     {
-       about->wrap_license = wrap_license;
+       about->wrap_license = wrap;
 
        g_object_notify_by_pspec (G_OBJECT (about), props[PROP_WRAP_LICENSE]);
     }
@@ -1780,7 +1779,7 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
 {
   GSList *tags = NULL, *tagp = NULL;
   GtkTextIter iter;
-  gboolean hovering_over_link = FALSE;
+  bool hovering_over_link = false;
 
   gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
 
@@ -1792,7 +1791,7 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
 
       if (uri != NULL)
         {
-          hovering_over_link = TRUE;
+          hovering_over_link = true;
           break;
         }
     }
@@ -2273,7 +2272,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
           g_free (about->license);
           about->license = g_string_free (str, FALSE);
-          about->wrap_license = TRUE;
+          about->wrap_license = true;
 
           license_string = g_strdup_printf ("<span size=\"small\">%s</span>",
                                             about->license);
