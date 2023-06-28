@@ -2477,6 +2477,15 @@ printer_init (Printer       *self,
   printer_init_duplicates_for_node (self, node);
 }
 
+static void
+printer_clear (Printer *self)
+{
+  if (self->str)
+    g_string_free (self->str, TRUE);
+  g_hash_table_unref (self->named_nodes);
+  g_hash_table_unref (self->named_textures);
+}
+
 #define IDENT_LEVEL 2 /* Spaces per level */
 static void
 _indent (Printer *self)
@@ -3686,6 +3695,7 @@ GBytes *
 gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
+  GBytes *res;
 
   printer_init (&p, node);
 
@@ -3705,5 +3715,9 @@ gsk_render_node_serialize (GskRenderNode *node)
       render_node_print (&p, node);
     }
 
-  return g_string_free_to_bytes (p.str);
+  res = g_string_free_to_bytes (g_steal_pointer (&p.str));
+
+  printer_clear (&p);
+
+  return res;
 }
