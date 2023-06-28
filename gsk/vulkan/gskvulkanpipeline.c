@@ -3,7 +3,6 @@
 #include "gskvulkanpipelineprivate.h"
 
 #include "gskvulkanpushconstantsprivate.h"
-#include "gskvulkanshaderprivate.h"
 
 #include "gdk/gdkvulkancontextprivate.h"
 
@@ -18,9 +17,6 @@ struct _GskVulkanPipelinePrivate
   GdkVulkanContext *context;
 
   VkPipeline pipeline;
-
-  GskVulkanShader *vertex_shader;
-  GskVulkanShader *fragment_shader;
 
   gsize vertex_stride;
 };
@@ -38,9 +34,6 @@ gsk_vulkan_pipeline_finalize (GObject *gobject)
   vkDestroyPipeline (device,
                      priv->pipeline,
                      NULL);
-
-  g_clear_pointer (&priv->fragment_shader, gsk_vulkan_shader_free);
-  g_clear_pointer (&priv->vertex_shader, gsk_vulkan_shader_free);
 
   G_OBJECT_CLASS (gsk_vulkan_pipeline_parent_class)->finalize (gobject);
 }
@@ -66,7 +59,9 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
   GskVulkanPipelinePrivate *priv;
   GskVulkanPipeline *self;
+  GdkDisplay *display;
   VkDevice device;
+  char *vertex_shader_name, *fragment_shader_name;
 
   g_return_val_if_fail (g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
   g_return_val_if_fail (layout != VK_NULL_HANDLE, NULL);
@@ -77,12 +72,13 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
 
   priv = gsk_vulkan_pipeline_get_instance_private (self);
 
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   device = gdk_vulkan_context_get_device (context);
 
   priv->context = context;
 
-  priv->vertex_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_VERTEX, shader_name, NULL);
-  priv->fragment_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_FRAGMENT, shader_name, NULL);
+  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_name, ".vert.spv", NULL);
+  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_name, ".frag.spv", NULL);
 
   vertex_input_state = GSK_VULKAN_PIPELINE_GET_CLASS (self)->get_input_state_create_info (self);
   g_assert (vertex_input_state->vertexBindingDescriptionCount == 1);
@@ -95,8 +91,18 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
                                                .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
                                                .stageCount = 2,
                                                .pStages = (VkPipelineShaderStageCreateInfo[2]) {
-                                                   GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->vertex_shader),
-                                                   GST_VULKAN_SHADER_STAGE_CREATE_INFO (priv->fragment_shader)
+                                                   {
+                                                       .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                                                       .stage = VK_SHADER_STAGE_VERTEX_BIT,
+                                                       .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
+                                                       .pName = "main",
+                                                   },
+                                                   {
+                                                       .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                                                       .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                       .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
+                                                       .pName = "main",
+                                                   },
                                                },
                                                .pVertexInputState = vertex_input_state,
                                                .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
@@ -161,6 +167,9 @@ gsk_vulkan_pipeline_new (GType             pipeline_type,
                                            },
                                            NULL,
                                            &priv->pipeline);
+
+  g_free (fragment_shader_name);
+  g_free (vertex_shader_name);
 
   gdk_vulkan_context_pipeline_cache_updated (context);
 

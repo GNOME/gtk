@@ -104,6 +104,7 @@ struct _GdkDisplay
   gsize vk_pipeline_cache_size;
   char *vk_pipeline_cache_etag;
   guint vk_save_pipeline_cache_source;
+  GHashTable *vk_shader_modules;
 
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */
