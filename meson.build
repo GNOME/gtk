@@ -737,6 +737,23 @@ endif
 build_gir = gir.found() and (get_option('introspection').enabled() or
                              (get_option('introspection').allowed() and get_option('gtk_doc')))
 
+# Resource building
+glib_compile_resources = find_program('glib-compile-resources')
+
+objcopy_supports_add_symbol = false
+objcopy = find_program('objcopy', required : false)
+if objcopy.found()
+  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
+endif
+
+ld = find_program('ld.bfd', 'ld', required : false)
+
+if not meson.is_cross_build() and build_machine.cpu_family() == 'x86_64' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
+  can_use_objcopy_for_resources = true
+else
+  can_use_objcopy_for_resources = false
+endif
+
 project_build_root = meson.current_build_dir()
 
 gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
