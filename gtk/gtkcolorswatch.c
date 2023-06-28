@@ -55,10 +55,11 @@ struct _GtkColorSwatch
 
   GdkRGBA color;
   char *icon;
-  guint    has_color        : 1;
-  guint    use_alpha        : 1;
-  guint    selectable       : 1;
-  guint    has_menu         : 1;
+
+  bool has_color;
+  bool use_alpha;
+  bool has_menu;
+  bool selectable;
 
   GtkWidget *overlay_widget;
 
@@ -549,9 +550,9 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  swatch->use_alpha = TRUE;
-  swatch->selectable = TRUE;
-  swatch->has_menu = TRUE;
+  swatch->use_alpha = true;
+  swatch->selectable = true;
+  swatch->has_menu = true;
   swatch->color.red = 0.75;
   swatch->color.green = 0.25;
   swatch->color.blue = 0.25;
@@ -610,7 +611,7 @@ void
 gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
                            const GdkRGBA  *color)
 {
-  swatch->has_color = TRUE;
+  swatch->has_color = true;
   swatch->color = *color;
   if (swatch->source)
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->source), GTK_PHASE_CAPTURE);
@@ -711,21 +712,27 @@ gtk_color_swatch_set_can_drag (GtkColorSwatch *swatch,
 
 void
 gtk_color_swatch_set_use_alpha (GtkColorSwatch *swatch,
-                                gboolean        use_alpha)
+                                gboolean        value)
 {
+  bool use_alpha = !!value;
+
+  if (use_alpha == swatch->use_alpha)
+    return;
+
   swatch->use_alpha = use_alpha;
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
 }
 
 void
 gtk_color_swatch_set_selectable (GtkColorSwatch *swatch,
-                                 gboolean selectable)
+                                 gboolean        value)
 {
+  bool selectable = !!value;
+
   if (selectable == swatch->selectable)
     return;
 
   swatch->selectable = selectable;
-
   update_accessible_properties (swatch);
   g_object_notify (G_OBJECT (swatch), "selectable");
 }
