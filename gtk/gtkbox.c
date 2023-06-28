@@ -86,10 +86,12 @@ enum {
 
 typedef struct
 {
-  gint16          spacing;
+  gint16 spacing;
 
-  guint           homogeneous    : 1;
-  guint           baseline_pos   : 2;
+  bool homogeneous;
+
+  /* GtkBaselinePosition */
+  guint baseline_pos : 2;
 } GtkBoxPrivate;
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
@@ -369,14 +371,13 @@ void
 gtk_box_set_homogeneous (GtkBox  *box,
                          gboolean homogeneous)
 {
+  bool is_homogeneous = !!homogeneous;
   GtkBoxLayout *box_layout;
 
   g_return_if_fail (GTK_IS_BOX (box));
 
-  homogeneous = !!homogeneous;
-
   box_layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (box)));
-  if (homogeneous == gtk_box_layout_get_homogeneous (box_layout))
+  if (is_homogeneous == gtk_box_layout_get_homogeneous (box_layout))
     return;
 
   gtk_box_layout_set_homogeneous (box_layout, homogeneous);
