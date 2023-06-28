@@ -83,18 +83,19 @@
 
 struct _GtkButtonPrivate
 {
-  GtkWidget             *child;
+  GtkWidget *child;
 
-  GtkActionHelper       *action_helper;
+  GtkActionHelper *action_helper;
 
-  GtkGesture            *gesture;
+  GtkGesture *gesture;
 
-  guint                  activate_timeout;
+  guint activate_timeout;
 
-  guint          button_down           : 1;
-  guint          use_underline         : 1;
-  guint          child_type            : 2;
-  guint          can_shrink            : 1;
+  bool button_down;
+  bool use_underline;
+  bool can_shrink;
+
+  guint child_type : 2;
 };
 
 enum {
@@ -353,7 +354,7 @@ click_pressed_cb (GtkGestureClick *gesture,
     gtk_widget_grab_focus (widget);
 
   if (!priv->activate_timeout)
-    priv->button_down = TRUE;
+    priv->button_down = true;
 }
 
 static void
@@ -444,8 +445,8 @@ gtk_button_init (GtkButton *button)
   gtk_widget_set_focusable (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
 
-  priv->button_down = FALSE;
-  priv->use_underline = FALSE;
+  priv->button_down = false;
+  priv->use_underline = false;
   priv->child_type = WIDGET_CHILD;
 
   priv->gesture = gtk_gesture_click_new ();
@@ -772,7 +773,7 @@ gtk_button_do_release (GtkButton *button,
 
   if (priv->button_down)
     {
-      priv->button_down = FALSE;
+      priv->button_down = false;
 
       if (priv->activate_timeout)
         return;
@@ -811,7 +812,7 @@ gtk_real_button_activate (GtkButton *button)
       gdk_source_set_static_name_by_id (priv->activate_timeout, "[gtk] button_activate_timeout");
 
       gtk_widget_add_css_class (GTK_WIDGET (button), "keyboard-activating");
-      priv->button_down = TRUE;
+      priv->button_down = true;
     }
 }
 
@@ -826,7 +827,7 @@ gtk_button_finish_activate (GtkButton *button,
   g_source_remove (priv->activate_timeout);
   priv->activate_timeout = 0;
 
-  priv->button_down = FALSE;
+  priv->button_down = false;
 
   if (do_it)
     g_signal_emit (button, button_signals[CLICKED], 0);
@@ -918,20 +919,19 @@ gtk_button_set_use_underline (GtkButton *button,
                               gboolean   use_underline)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+  bool underline = !!use_underline;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  use_underline = use_underline != FALSE;
-
-  if (use_underline != priv->use_underline)
+  if (underline != priv->use_underline)
     {
       if (priv->child_type == LABEL_CHILD)
         {
-          gtk_label_set_use_underline (GTK_LABEL (priv->child), use_underline);
+          gtk_label_set_use_underline (GTK_LABEL (priv->child), underline);
           gtk_label_set_mnemonic_widget (GTK_LABEL (priv->child), GTK_WIDGET (button));
         }
 
-      priv->use_underline = use_underline;
+      priv->use_underline = underline;
       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_UNDERLINE]);
     }
 }
@@ -1118,14 +1118,13 @@ gtk_button_set_can_shrink (GtkButton *button,
                            gboolean   can_shrink)
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
+  bool shrink = !!can_shrink;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
 
-  can_shrink = !!can_shrink;
-
-  if (priv->can_shrink != can_shrink)
+  if (priv->can_shrink != shrink)
     {
-      priv->can_shrink = can_shrink;
+      priv->can_shrink = shrink;
 
       switch (priv->child_type)
         {
