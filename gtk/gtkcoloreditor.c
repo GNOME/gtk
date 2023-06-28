@@ -76,8 +76,8 @@ struct _GtkColorEditor
 
   int popup_position;
 
-  guint text_changed : 1;
-  guint use_alpha    : 1;
+  bool text_changed;
+  bool use_alpha;
 };
 
 struct _GtkColorEditorClass
@@ -118,7 +118,7 @@ entry_set_rgba (GtkColorEditor *editor,
                           scale_round (color->green, 255),
                           scale_round (color->blue, 255));
   gtk_editable_set_text (GTK_EDITABLE (editor->entry), text);
-  editor->text_changed = FALSE;
+  editor->text_changed = false;
   g_free (text);
 }
 
@@ -139,7 +139,7 @@ entry_apply (GtkWidget      *entry,
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (editor), &color);
     }
 
-  editor->text_changed = FALSE;
+  editor->text_changed = false;
 
   g_free (text);
 }
@@ -158,7 +158,7 @@ entry_text_changed (GtkWidget      *entry,
                     GParamSpec     *pspec,
                     GtkColorEditor *editor)
 {
-  editor->text_changed = TRUE;
+  editor->text_changed = true;
 }
 
 static void
@@ -409,7 +409,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
 {
   GtkEventController *controller;
 
-  editor->use_alpha = TRUE;
+  editor->use_alpha = true;
 
   g_type_ensure (GTK_TYPE_COLOR_SCALE);
   g_type_ensure (GTK_TYPE_COLOR_PLANE);
@@ -489,7 +489,7 @@ gtk_color_editor_get_property (GObject    *object,
 
 static void
 gtk_color_editor_set_use_alpha (GtkColorEditor *editor,
-                                gboolean        use_alpha)
+                                bool            use_alpha)
 {
   if (editor->use_alpha != use_alpha)
     {
@@ -573,7 +573,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
    * @component: the component to edit, "h", "sv" or "a"
    *
    * Opens the edit popup for one of the color components.
-   */ 
+   */
   gtk_widget_class_install_action (widget_class, "color.edit", "s", popup_edit);
 }
 
