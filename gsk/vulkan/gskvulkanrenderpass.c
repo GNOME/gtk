@@ -290,7 +290,7 @@ round_up (gsize number, gsize divisor)
   return (number + divisor - 1) / divisor * divisor;
 }
 
-static gpointer
+gpointer
 gsk_vulkan_render_pass_alloc_op (GskVulkanRenderPass *self,
                                  gsize                size)
 {
@@ -316,8 +316,7 @@ gsk_vulkan_render_pass_append_scissor (GskVulkanRenderPass       *self,
                                        GskRenderNode             *node,
                                        const GskVulkanParseState *state)
 {
-  gsk_vulkan_scissor_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_scissor_op_size ()),
-                              &state->scissor);
+  gsk_vulkan_scissor_op (self, &state->scissor);
 }
 
 static void
@@ -377,9 +376,7 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
         if (result == NULL)
           {
-            result = gsk_vulkan_upload_op_init_texture (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_op_size ()),
-                                                        self->vulkan,
-                                                        texture);
+            result = gsk_vulkan_upload_op (self, self->vulkan, texture);
             gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
           }
 
@@ -397,11 +394,11 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
 
-        result = gsk_vulkan_upload_cairo_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_cairo_op_size ()),
-                                                  self->vulkan,
-                                                  node,
-                                                  &state->scale,
-                                                  &clipped);
+        result = gsk_vulkan_upload_cairo_op (self,
+                                             self->vulkan,
+                                             node,
+                                             &state->scale,
+                                             &clipped);
 
         *tex_bounds = clipped;
         return result;
@@ -432,13 +429,13 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
                            &semaphore);
         g_array_append_val (self->wait_semaphores, semaphore);
 
-        result = gsk_vulkan_offscreen_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_offscreen_op_size ()),
-                                               self->vulkan,
-                                               render,
-                                               &state->scale,
-                                               &clipped,
-                                               semaphore,
-                                               node);
+        result = gsk_vulkan_offscreen_op (self,
+                                          self->vulkan,
+                                          render,
+                                          &state->scale,
+                                          &clipped,
+                                          semaphore,
+                                          node);
 
         return result;
       }
@@ -467,11 +464,11 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
   if (clipped.size.width == 0 || clipped.size.height == 0)
     return TRUE;
 
-  image = gsk_vulkan_upload_cairo_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_cairo_op_size ()),
-                                           self->vulkan,
-                                           node,
-                                           &state->scale,
-                                           &clipped);
+  image = gsk_vulkan_upload_cairo_op (self,
+                                      self->vulkan,
+                                      node,
+                                      &state->scale,
+                                      &clipped);
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
@@ -480,13 +477,13 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  gsk_vulkan_texture_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_texture_op_size ()),
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                              image,
-                              GSK_VULKAN_SAMPLER_DEFAULT,
-                              &node->bounds,
-                              &state->offset,
-                              &clipped);
+  gsk_vulkan_texture_op (self,
+                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         image,
+                         GSK_VULKAN_SAMPLER_DEFAULT,
+                         &node->bounds,
+                         &state->offset,
+                         &clipped);
 
   return TRUE;
 }
@@ -630,19 +627,17 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_op_init_texture (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_op_size ()),
-                                                 self->vulkan,
-                                                 texture);
+      image = gsk_vulkan_upload_op (self, self->vulkan, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
-  gsk_vulkan_texture_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_texture_op_size ()),
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                              image,
-                              GSK_VULKAN_SAMPLER_DEFAULT,
-                              &node->bounds,
-                              &state->offset,
-                              &node->bounds);
+  gsk_vulkan_texture_op (self,
+                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         image,
+                         GSK_VULKAN_SAMPLER_DEFAULT,
+                         &node->bounds,
+                         &state->offset,
+                         &node->bounds);
 
   return TRUE;
 }
@@ -683,19 +678,17 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_op_init_texture (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_upload_op_size ()),
-                                                 self->vulkan,
-                                                 texture);
+      image = gsk_vulkan_upload_op (self, self->vulkan, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
-  gsk_vulkan_texture_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_texture_op_size ()),
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                              image,
-                              sampler,
-                              &node->bounds,
-                              &state->offset,
-                              &node->bounds);
+  gsk_vulkan_texture_op (self,
+                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         image,
+                         sampler,
+                         &node->bounds,
+                         &state->offset,
+                         &node->bounds);
 
   return TRUE;
 }
@@ -946,14 +939,14 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
                                    });
   graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
 
-  gsk_vulkan_color_matrix_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_color_matrix_op_size ()),
-                                   gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                                   image,
-                                   &node->bounds,
-                                   &state->offset,
-                                   &tex_rect,
-                                   &color_matrix,
-                                   &color_offset);
+  gsk_vulkan_color_matrix_op (self,
+                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                              image,
+                              &node->bounds,
+                              &state->offset,
+                              &tex_rect,
+                              &color_matrix,
+                              &color_offset);
 
   return TRUE;
 }
@@ -983,14 +976,14 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
 
-  gsk_vulkan_color_matrix_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_color_matrix_op_size ()),
-                                   gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                                   image,
-                                   &node->bounds,
-                                   &state->offset,
-                                   &tex_rect,
-                                   gsk_color_matrix_node_get_color_matrix (node),
-                                   gsk_color_matrix_node_get_color_offset (node));
+  gsk_vulkan_color_matrix_op (self,
+                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                              image,
+                              &node->bounds,
+                              &state->offset,
+                              &tex_rect,
+                              gsk_color_matrix_node_get_color_matrix (node),
+                              gsk_color_matrix_node_get_color_offset (node));
 
   return TRUE;
 }
@@ -1166,13 +1159,13 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
 
   g_array_append_val (self->wait_semaphores, semaphore);
 
-  image = gsk_vulkan_offscreen_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_offscreen_op_size ()),
-                                        self->vulkan,
-                                        render,
-                                        &state->scale,
-                                        child_bounds,
-                                        semaphore,
-                                        gsk_repeat_node_get_child (node));
+  image = gsk_vulkan_offscreen_op (self,
+                                   self->vulkan,
+                                   render,
+                                   &state->scale,
+                                   child_bounds,
+                                   semaphore,
+                                   gsk_repeat_node_get_child (node));
 
   if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
@@ -1181,13 +1174,13 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   else
     pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
-  gsk_vulkan_texture_op_init (gsk_vulkan_render_pass_alloc_op (self, gsk_vulkan_texture_op_size ()),
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
-                              image,
-                              GSK_VULKAN_SAMPLER_REPEAT,
-                              &node->bounds,
-                              &state->offset,
-                              child_bounds);
+  gsk_vulkan_texture_op (self,
+                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         image,
+                         GSK_VULKAN_SAMPLER_REPEAT,
+                         &node->bounds,
+                         &state->offset,
+                         child_bounds);
 
   return TRUE;
 }

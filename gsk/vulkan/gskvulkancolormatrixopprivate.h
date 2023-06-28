@@ -4,9 +4,7 @@
 
 G_BEGIN_DECLS
 
-gsize                   gsk_vulkan_color_matrix_op_size                 (void) G_GNUC_CONST;
-
-void                    gsk_vulkan_color_matrix_op_init                 (GskVulkanOp                    *op,
+void                    gsk_vulkan_color_matrix_op                      (GskVulkanRenderPass            *render_pass,
                                                                          GskVulkanPipeline              *pipeline,
                                                                          GskVulkanImage                 *image,
                                                                          const graphene_rect_t          *rect,

@@ -81,19 +81,13 @@ static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   gsk_vulkan_scissor_op_command
 };
 
-gsize
-gsk_vulkan_scissor_op_size (void)
-{
-  return GSK_VULKAN_SCISSOR_OP_CLASS.size;
-}
-
 void
-gsk_vulkan_scissor_op_init (GskVulkanOp                 *op,
-                            const cairo_rectangle_int_t *rect)
+gsk_vulkan_scissor_op (GskVulkanRenderPass         *render_pass,
+                       const cairo_rectangle_int_t *rect)
 {
-  GskVulkanScissorOp *self = (GskVulkanScissorOp *) op;
+  GskVulkanScissorOp *self;
 
-  gsk_vulkan_op_init (op, &GSK_VULKAN_SCISSOR_OP_CLASS);
+  self = (GskVulkanScissorOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_SCISSOR_OP_CLASS);
 
   self->rect = *rect;
 }

@@ -90,22 +90,16 @@ static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
   gsk_vulkan_offscreen_op_command
 };
 
-gsize
-gsk_vulkan_offscreen_op_size (void)
-{
-  return GSK_VULKAN_OFFSCREEN_OP_CLASS.size;
-}
-
 GskVulkanImage *
-gsk_vulkan_offscreen_op_init (GskVulkanOp           *op,
-                              GdkVulkanContext      *context,
-                              GskVulkanRender       *render,
-                              const graphene_vec2_t *scale,
-                              const graphene_rect_t *viewport,
-                              VkSemaphore            signal_semaphore,
-                              GskRenderNode         *node)
+gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
+                         GdkVulkanContext      *context,
+                         GskVulkanRender       *render,
+                         const graphene_vec2_t *scale,
+                         const graphene_rect_t *viewport,
+                         VkSemaphore            signal_semaphore,
+                         GskRenderNode         *node)
 {
-  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
+  GskVulkanOffscreenOp *self;
   graphene_rect_t view;
   cairo_region_t *clip;
   float scale_x, scale_y;
@@ -117,7 +111,7 @@ gsk_vulkan_offscreen_op_init (GskVulkanOp           *op,
                              ceil (scale_x * viewport->size.width),
                              ceil (scale_y * viewport->size.height));
 
-  gsk_vulkan_op_init (op, &GSK_VULKAN_OFFSCREEN_OP_CLASS);
+  self = (GskVulkanOffscreenOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_OFFSCREEN_OP_CLASS);
 
   self->image = gsk_vulkan_image_new_for_offscreen (context,
                                                     gdk_vulkan_context_get_offscreen_format (context,

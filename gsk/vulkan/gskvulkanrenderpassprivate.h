@@ -23,6 +23,9 @@ void                    gsk_vulkan_render_pass_add                      (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          GskRenderNode          *node);
 
+gpointer                gsk_vulkan_render_pass_alloc_op                 (GskVulkanRenderPass    *self,
+                                                                         gsize                   size);
+
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);

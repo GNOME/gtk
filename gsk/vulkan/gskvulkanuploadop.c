@@ -87,20 +87,14 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_OP_CLASS = {
   gsk_vulkan_upload_op_command
 };
 
-gsize
-gsk_vulkan_upload_op_size (void)
-{
-  return GSK_VULKAN_UPLOAD_OP_CLASS.size;
-}
-
 GskVulkanImage *
-gsk_vulkan_upload_op_init_texture (GskVulkanOp      *op,
-                                   GdkVulkanContext *context,
-                                   GdkTexture       *texture)
+gsk_vulkan_upload_op (GskVulkanRenderPass *render_pass,
+                      GdkVulkanContext    *context,
+                      GdkTexture          *texture)
 {
-  GskVulkanUploadOp *self = (GskVulkanUploadOp *) op;
+  GskVulkanUploadOp *self;
 
-  gsk_vulkan_op_init (op, &GSK_VULKAN_UPLOAD_OP_CLASS);
+  self = (GskVulkanUploadOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_UPLOAD_OP_CLASS);
 
   self->texture = g_object_ref (texture);
   self->image = gsk_vulkan_image_new_for_upload (context,

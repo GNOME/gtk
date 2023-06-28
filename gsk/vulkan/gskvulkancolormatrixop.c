@@ -124,25 +124,19 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   gsk_vulkan_color_matrix_op_command
 };
 
-gsize
-gsk_vulkan_color_matrix_op_size (void)
-{
-  return GSK_VULKAN_COLOR_MATRIX_OP_CLASS.size;
-}
-
 void
-gsk_vulkan_color_matrix_op_init (GskVulkanOp             *op,
-                                 GskVulkanPipeline       *pipeline,
-                                 GskVulkanImage          *image,
-                                 const graphene_rect_t   *rect,
-                                 const graphene_point_t  *offset,
-                                 const graphene_rect_t   *tex_rect,
-                                 const graphene_matrix_t *color_matrix,
-                                 const graphene_vec4_t   *color_offset)
+gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
+                            GskVulkanPipeline       *pipeline,
+                            GskVulkanImage          *image,
+                            const graphene_rect_t   *rect,
+                            const graphene_point_t  *offset,
+                            const graphene_rect_t   *tex_rect,
+                            const graphene_matrix_t *color_matrix,
+                            const graphene_vec4_t   *color_offset)
 {
-  GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
+  GskVulkanColorMatrixOp *self;
 
-  gsk_vulkan_op_init (op, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
+  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
 
   self->pipeline = pipeline;
   self->image = g_object_ref (image);

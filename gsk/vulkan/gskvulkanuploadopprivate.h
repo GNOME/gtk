@@ -4,9 +4,7 @@
 
 G_BEGIN_DECLS
 
-gsize                   gsk_vulkan_upload_op_size                       (void) G_GNUC_CONST;
-
-GskVulkanImage *        gsk_vulkan_upload_op_init_texture               (GskVulkanOp                    *op,
+GskVulkanImage *        gsk_vulkan_upload_op                            (GskVulkanRenderPass            *render_pass,
                                                                          GdkVulkanContext               *context,
                                                                          GdkTexture                     *texture);
 
