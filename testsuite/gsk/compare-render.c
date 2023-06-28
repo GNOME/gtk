@@ -298,8 +298,12 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GskTransform *transform;
 
-      node2 = gsk_transform_node_new (node, gsk_transform_scale (NULL, -1, 1));
+      transform = gsk_transform_scale (NULL, -1, 1);
+      node2 = gsk_transform_node_new (node, transform);
+      gsk_transform_unref (transform);
+
       save_node (node2, node_file, "-flipped.node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
@@ -404,8 +408,12 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GskTransform *transform;
 
-      node2 = gsk_transform_node_new (node, gsk_transform_rotate (NULL, 90));
+      transform = gsk_transform_rotate (NULL, 90);
+      node2 = gsk_transform_node_new (node, transform);
+      gsk_transform_unref (transform);
+
       save_node (node2, node_file, "-rotated.node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
