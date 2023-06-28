@@ -746,7 +746,7 @@ if objcopy.found()
   objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
 endif
 
-ld = find_program('ld', required : false)
+ld = find_program('ld.bfd', 'ld', required : false)
 
 if not meson.is_cross_build() and build_machine.cpu_family() == 'x86_64' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
   can_use_objcopy_for_resources = true
