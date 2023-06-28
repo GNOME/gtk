@@ -20,16 +20,28 @@ Overview of Changes in 4.11.4, xx-xx-xxxx
 * GtkWindow:
  - Clear the resize cursors to avoid artifacts
 
+* GtkFileDialog:
+ - Always set initial-folder
+
+* GtkDropDown:
+ - Update on expression changes
+
 * Accessibility:
  - Improvements all over the place: GtkButton, GtkPasswordEntry,
    GtkFontChooserDialog, GtkColorChooserDialog, GtkShortcutsWindow,
    GtkMenuButton, GtkAboutDialog, GtkFileChooserDialog, GtkStackSidebar,
-   GtkMediaControls, GtkColorDialogButton, GtkDropDown, GtkInfoBar,
-   GtkNotebook, GtkPrintUnixDialog, GtkModelButton
+   GtkStackSwitcher, GtkMediaControls, GtkColorDialogButton, GtkDropDown,
+   GtkInfoBar, GtkNotebook, GtkPrintUnixDialog, GtkModelButton
  - Make name computation follow the ARIA spec more closely
+ - Adapt name computation for the common 'nested button' scenario
  - Change many containers to use `generic` instead of `group`
  - Use `generic` as the default role
  - Use `application` instead of `window` for windows
+ - Add properties for accessible names of not directly exposed
+   widgets in GtkListView, GtkGridView and GtkColumnView
+
+* DND:
+ - Fix criticals when drops are rejected
 
 * X11:
  - Fix regressions in GLX setup
@@ -42,19 +54,30 @@ Overview of Changes in 4.11.4, xx-xx-xxxx
  - Do less work on clipped away nodes
  - Redo image uploading
  - Support different image depths and formats
+ - Add a pipeline cache
 
 * Demos:
  - gtk4-demo: Improve window sizing
  - gtk4-demo: Improve focus behavior
  - gtk4-demo: Add many missing a11y properties
-`
+
+* Tools:
+ - gtk4-builder-tool: Make render an alias screenshot
+
 * Inspector:
  - Show more information in the a11y tab
  - Add an accessibility overlay with warnings and recommendations
  - Limit the width of the a11y tab
 
+* Build:
+ - Require GLib 2.76
+ - Make asan builds work again
+
 * Translation updates:
+ Brazilian Portuguese
+ Catalan
  Czech
+ Georgian
 
 
 Overview of Changes in 4.11.3, 05-06-2023
