@@ -1,16 +1,6 @@
 # demos/widget-factory
 
-objcopy_supports_add_symbol = false
-objcopy = find_program('objcopy', required : false)
-if objcopy.found()
-  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
-endif
-
-ld = find_program('ld', required : false)
-
-if not meson.is_cross_build() and build_machine.cpu_family() != 'arm' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
-  glib_compile_resources = find_program('glib-compile-resources')
-
+if can_use_objcopy_for_resources
   # Create the resource blob
   widgetfactory_gresource = custom_target('widgetfactory.gresource',
       input : 'widget-factory.gresource.xml',

@@ -758,17 +758,7 @@ if not fs.exists('theme/Default/Default-light.css')
 endif
 
 
-objcopy_supports_add_symbol = false
-objcopy = find_program('objcopy', required : false)
-if objcopy.found()
-  objcopy_supports_add_symbol = run_command(objcopy, '--help', check: false).stdout().contains('--add-symbol')
-endif
-
-ld = find_program('ld', required : false)
-
-if not meson.is_cross_build() and build_machine.cpu_family() == 'x86_64' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
-  glib_compile_resources = find_program('glib-compile-resources')
-
+if can_use_objcopy_for_resources
   # Create the resource blob
   gtk_gresource = custom_target('gtk.gresource',
       input : gtk_gresources_xml,
