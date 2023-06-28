@@ -103,10 +103,11 @@ typedef struct {
   GtkWidget *indicator_widget;
   GtkWidget *child;
 
-  guint inconsistent:  1;
-  guint active:        1;
-  guint use_underline: 1;
-  guint child_type:    1;
+  bool inconsistent;
+  bool active;
+  bool use_underline;
+
+  guint child_type : 1;
 
   GtkCheckButton *group_next;
   GtkCheckButton *group_prev;
@@ -790,13 +791,13 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
                                    gboolean        inconsistent)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+  bool is_inconsistent = !!inconsistent;
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
 
-  inconsistent = !!inconsistent;
-  if (priv->inconsistent != inconsistent)
+  if (priv->inconsistent != is_inconsistent)
     {
-      priv->inconsistent = inconsistent;
+      priv->inconsistent = is_inconsistent;
 
       if (inconsistent)
         {
@@ -863,15 +864,14 @@ gtk_check_button_set_active (GtkCheckButton *self,
                              gboolean       setting)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+  bool is_active = !!setting;
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
 
-  setting = !!setting;
-
-  if (setting == priv->active)
+  if (is_active == priv->active)
     return;
 
-  if (setting)
+  if (is_active)
     {
       gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_CHECKED, FALSE);
       gtk_widget_set_state_flags (priv->indicator_widget, GTK_STATE_FLAG_CHECKED, FALSE);
@@ -882,7 +882,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
       gtk_widget_unset_state_flags (priv->indicator_widget, GTK_STATE_FLAG_CHECKED);
     }
 
-  if (setting && (priv->group_prev || priv->group_next))
+  if (is_active && (priv->group_prev || priv->group_next))
     {
       GtkCheckButton *group_first = NULL;
       GtkCheckButton *iter;
@@ -897,7 +897,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
       /* ... and the next code block will set this one to active */
     }
 
-  priv->active = setting;
+  priv->active = is_active;
   update_accessible_state (self);
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ACTIVE]);
   g_signal_emit (self, signals[TOGGLED], 0);
@@ -1095,15 +1095,14 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
                                     gboolean       setting)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+  bool use_underline = !!setting;
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
 
-  setting = !!setting;
-
-  if (setting == priv->use_underline)
+  if (use_underline == priv->use_underline)
     return;
 
-  priv->use_underline = setting;
+  priv->use_underline = use_underline;
   if (priv->child_type == LABEL_CHILD && priv->child != NULL)
     gtk_label_set_use_underline (GTK_LABEL (priv->child), priv->use_underline);
 
