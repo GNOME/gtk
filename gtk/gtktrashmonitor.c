@@ -33,10 +33,10 @@ struct _GtkTrashMonitor
   GFileMonitor *file_monitor;
   gulong file_monitor_changed_id;
 
-  gboolean pending;
+  bool pending;
   int timeout_id;
 
-  guint has_trash : 1;
+  bool has_trash;
 };
 
 struct _GtkTrashMonitorClass
@@ -104,14 +104,14 @@ _gtk_trash_monitor_class_init (GtkTrashMonitorClass *class)
 /* Updates the internal has_trash flag and emits the "trash-state-changed" signal */
 static void
 update_has_trash_and_notify (GtkTrashMonitor *monitor,
-                             gboolean has_trash)
+                             bool has_trash)
 {
-  if (monitor->has_trash == !!has_trash)
+  if (monitor->has_trash == has_trash)
     return;
 
-  monitor->has_trash = !!has_trash;
+  monitor->has_trash = has_trash;
 
-  g_signal_emit (monitor, signals[TRASH_STATE_CHANGED], 0); 
+  g_signal_emit (monitor, signals[TRASH_STATE_CHANGED], 0);
 }
 
 /* Use G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT since we only want to know whether the
@@ -127,7 +127,7 @@ trash_query_info_cb (GObject *source,
   GtkTrashMonitor *monitor = GTK_TRASH_MONITOR (user_data);
   GFileInfo *info;
   guint32 item_count;
-  gboolean has_trash = FALSE;
+  bool has_trash = false;
 
   info = g_file_query_info_finish (G_FILE (source), result, NULL);
 
@@ -155,7 +155,7 @@ recompute_trash_state_cb (gpointer data)
   monitor->timeout_id = 0;
   if (monitor->pending)
     {
-      monitor->pending = FALSE;
+      monitor->pending = false;
       recompute_trash_state (monitor);
     }
 
@@ -173,7 +173,7 @@ recompute_trash_state (GtkTrashMonitor *monitor)
   */
   if (monitor->timeout_id > 0)
     {
-      monitor->pending = TRUE;
+      monitor->pending = true;
       return;
     }
 
@@ -213,7 +213,7 @@ _gtk_trash_monitor_init (GtkTrashMonitor *monitor)
   file = g_file_new_for_uri ("trash:///");
 
   monitor->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, NULL);
-  monitor->pending = FALSE;
+  monitor->pending = false;
   monitor->timeout_id = 0;
 
   g_object_unref (file);
