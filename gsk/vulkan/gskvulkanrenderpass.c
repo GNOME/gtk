@@ -78,8 +78,8 @@ struct _GskVulkanOpRender
   GskVulkanImage      *source; /* source image to render */
   GskVulkanImage      *source2; /* second source image to render (if relevant) */
   gsize                vertex_offset; /* offset into vertex buffer */
-  guint32              image_descriptor[2]; /* index into descriptor for the (image, sampler) */
-  guint32              image_descriptor2[2]; /* index into descriptor for the 2nd image (if relevant) */
+  guint32              image_descriptor; /* index into descriptor for the image */
+  guint32              image_descriptor2; /* index into descriptor for the 2nd image (if relevant) */
   gsize                buffer_offset; /* offset into buffer */
   graphene_rect_t      source_rect; /* area that source maps to */
   graphene_rect_t      source2_rect; /* area that source2 maps to */
@@ -94,7 +94,7 @@ struct _GskVulkanOpText
   GskVulkanPipeline   *pipeline; /* pipeline to use */
   GskVulkanImage      *source; /* source image to render */
   gsize                vertex_offset; /* offset into vertex buffer */
-  guint32              image_descriptor[2]; /* index into descriptor for the (image, sampler) */
+  guint32              image_descriptor; /* index into descriptor for the (image, sampler) */
   guint                texture_index; /* index of the texture in the glyph cache */
   guint                start_glyph; /* the first glyph in nodes glyphstring that we render */
   guint                num_glyphs; /* number of *non-empty* glyphs (== instances) we render */
@@ -2079,25 +2079,29 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
         case GSK_VULKAN_OP_BLUR:
           if (op->render.source)
             {
-              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
-              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
+              op->render.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
+                                                                                    op->render.source,
+                                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
             }
           break;
 
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
-          op->text.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->text.source);
-          op->text.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
+          op->text.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
+                                                                              op->text.source,
+                                                                              GSK_VULKAN_SAMPLER_DEFAULT);
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
           if (op->render.source && op->render.source2)
             {
-              op->render.image_descriptor[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source);
-              op->render.image_descriptor[1] = gsk_vulkan_render_get_sampler_descriptor (render, GSK_VULKAN_SAMPLER_DEFAULT);
-              op->render.image_descriptor2[0] = gsk_vulkan_render_get_image_descriptor (render, op->render.source2);
-              op->render.image_descriptor2[1] = op->render.image_descriptor2[1];
+              op->render.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
+                                                                                    op->render.source,
+                                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
+              op->render.image_descriptor2 = gsk_vulkan_render_get_image_descriptor (render,
+                                                                                     op->render.source2,
+                                                                                     GSK_VULKAN_SAMPLER_DEFAULT);
             }
           break;
 

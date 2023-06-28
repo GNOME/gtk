@@ -54,7 +54,7 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
                                                     guchar                     *data,
                                                     GskVulkanRenderer          *renderer,
                                                     const graphene_rect_t      *rect,
-                                                    guint                       tex_id[2],
+                                                    guint                       tex_id,
                                                     PangoFont                  *font,
                                                     guint                       total_glyphs,
                                                     const PangoGlyphInfo       *glyphs,
@@ -99,8 +99,7 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
           instance->tex_rect[2] = glyph->tw;
           instance->tex_rect[3] = glyph->th;
 
-          instance->tex_id[0] = tex_id[0];
-          instance->tex_id[1] = tex_id[1];
+          instance->tex_id = tex_id;
 
           count++;
        }

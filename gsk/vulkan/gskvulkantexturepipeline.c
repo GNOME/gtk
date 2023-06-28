@@ -52,7 +52,7 @@ gsk_vulkan_texture_pipeline_new (GdkVulkanContext *context,
 void
 gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipeline,
                                                  guchar                   *data,
-                                                 guint32                   tex_id[2],
+                                                 guint32                   tex_id,
                                                  const graphene_point_t   *offset,
                                                  const graphene_rect_t    *rect,
                                                  const graphene_rect_t    *tex_rect)
@@ -67,8 +67,7 @@ gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipel
   instance->tex_rect[1] = tex_rect->origin.y;
   instance->tex_rect[2] = tex_rect->size.width;
   instance->tex_rect[3] = tex_rect->size.height;
-  instance->tex_id[0] = tex_id[0];
-  instance->tex_id[1] = tex_id[1];
+  instance->tex_id = tex_id;
 }
 
 gsize

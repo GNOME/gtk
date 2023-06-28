@@ -83,10 +83,9 @@ void                    gsk_vulkan_render_upload                        (GskVulk
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          GskVulkanPipelineType   pipeline_type,
                                                                          VkRenderPass            render_pass);
-gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulkanRender        *self,
-                                                                         GskVulkanRenderSampler  render_sampler);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *source);
+                                                                         GskVulkanImage         *source,
+                                                                         GskVulkanRenderSampler  render_sampler);
 gsize                   gsk_vulkan_render_get_buffer_descriptor         (GskVulkanRender        *self,
                                                                          GskVulkanBuffer        *buffer);
 guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulkanRender        *self,

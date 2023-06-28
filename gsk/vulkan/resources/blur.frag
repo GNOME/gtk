@@ -7,7 +7,7 @@ layout(location = 0) in vec2 inPos;
 layout(location = 1) in flat vec2 inSize;
 layout(location = 2) in vec2 inTexCoord;
 layout(location = 3) in float inRadius;
-layout(location = 4) in flat uvec2 inTexId;
+layout(location = 4) in flat uint inTexId;
 
 layout(location = 0) out vec4 color;
 

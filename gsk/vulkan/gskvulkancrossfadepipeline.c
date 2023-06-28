@@ -52,8 +52,8 @@ gsk_vulkan_cross_fade_pipeline_new (GdkVulkanContext        *context,
 void
 gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                     guchar                     *data,
-                                                    guint32                     start_tex_id[2],
-                                                    guint32                     end_tex_id[2],
+                                                    guint32                     start_tex_id,
+                                                    guint32                     end_tex_id,
                                                     const graphene_point_t     *offset,
                                                     const graphene_rect_t      *bounds,
                                                     const graphene_rect_t      *start_bounds,
@@ -89,10 +89,8 @@ gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *
   instance->end_tex_rect[2] = end_tex_rect->size.width;
   instance->end_tex_rect[3] = end_tex_rect->size.height;
 
-  instance->start_tex_id[0] = start_tex_id[0];
-  instance->start_tex_id[1] = start_tex_id[1];
-  instance->end_tex_id[0] = end_tex_id[0];
-  instance->end_tex_id[1] = end_tex_id[1];
+  instance->start_tex_id = start_tex_id;
+  instance->end_tex_id = end_tex_id;
   instance->progress = progress;
 }
 

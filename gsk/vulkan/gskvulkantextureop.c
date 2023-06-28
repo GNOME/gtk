@@ -16,7 +16,6 @@ struct _GskVulkanTextureOp
   graphene_rect_t tex_rect;
 
   guint32 image_descriptor;
-  guint32 sampler_descriptor;
   GskVulkanPipeline *pipeline;
   gsize vertex_offset;
 };
@@ -69,10 +68,7 @@ gsk_vulkan_texture_op_collect_vertex_data (GskVulkanOp         *op,
 
   gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (self->pipeline),
                                                    data + self->vertex_offset,
-                                                   (guint32[2]) {
-                                                    self->image_descriptor,
-                                                    self->sampler_descriptor,
-                                                   },
+                                                   self->image_descriptor,
                                                    graphene_point_zero (),
                                                    &self->rect,
                                                    &self->tex_rect);
@@ -84,8 +80,7 @@ gsk_vulkan_texture_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
 
-  self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->image);
-  self->sampler_descriptor = gsk_vulkan_render_get_sampler_descriptor (render, self->sampler);
+  self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->image, self->sampler);
 }
 
 static VkPipeline
