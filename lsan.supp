@@ -8,3 +8,4 @@ leak:libgio-2.0.so
 leak:libcairo.so
 leak:libpixman-1.so
 leak:librsvg-2.so
+leak:libxkbcommon.so
