@@ -803,6 +803,8 @@ gsk_gl_render_job_untransform_bounds (GskGLRenderJob        *job,
 
   out_rect->origin.x -= job->offset_x;
   out_rect->origin.y -= job->offset_y;
+
+  gsk_transform_unref (transform);
 }
 
 static inline void
