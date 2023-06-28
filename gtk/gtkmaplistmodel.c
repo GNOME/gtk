@@ -207,8 +207,33 @@ gtk_map_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_map_list_model_get_item;
 }
 
+static void
+gtk_map_list_model_get_section (GtkSectionModel *model,
+                                guint            position,
+                                guint           *out_start,
+                                guint           *out_end)
+{
+  GtkMapListModel *self = GTK_MAP_LIST_MODEL (model);
+
+  if (GTK_IS_SECTION_MODEL (self->model))
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position, out_start, out_end);
+      return;
+    }
+
+  *out_start = 0;
+  *out_end = self->model ? g_list_model_get_n_items (self->model) : 0;
+}
+
+static void
+gtk_map_list_model_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_map_list_model_get_section;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkMapListModel, gtk_map_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_map_list_model_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_map_list_model_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL, gtk_map_list_model_section_model_init))
 
 static void
 gtk_map_list_model_items_changed_cb (GListModel      *model,
