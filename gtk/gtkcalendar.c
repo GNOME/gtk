@@ -547,7 +547,6 @@ gtk_calendar_init (GtkCalendar *calendar)
   char buffer[255];
   time_t tmp_time;
 #endif
-  char *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   union { unsigned int word; char *string; } langinfo;
   int week_1stday = 0;
@@ -790,24 +789,6 @@ gtk_calendar_init (GtkCalendar *calendar)
   g_signal_connect (target, "notify::value", G_CALLBACK (gtk_calendar_drag_notify_value), calendar);
   g_signal_connect (target, "drop", G_CALLBACK (gtk_calendar_drag_drop), calendar);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (target));
-
-  calendar->year_before = 0;
-
-  /* Translate to calendar:YM if you want years to be displayed
-   * before months; otherwise translate to calendar:MY.
-   * Do *not* translate it to anything else, if it
-   * it isn't calendar:YM or calendar:MY it will not work.
-   *
-   * Note that the ordering described here is logical order, which is
-   * further influenced by BIDI ordering. Thus, if you have a default
-   * text direction of RTL and specify "calendar:YM", then the year
-   * will appear to the right of the month.
-   */
-  year_before = _("calendar:MY");
-  if (strcmp (year_before, "calendar:YM") == 0)
-    calendar->year_before = 1;
-  else if (strcmp (year_before, "calendar:MY") != 0)
-    g_warning ("Whoever translated calendar:MY did so wrongly.");
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (calendar))),
                                   GTK_ORIENTATION_VERTICAL);
