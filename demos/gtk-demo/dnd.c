@@ -162,27 +162,39 @@ click_done (GtkGesture *gesture)
     gtk_widget_insert_after (item, canvas, last_child);
 }
 
+/* GtkSettings treats `GTK_THEME=foo:dark` as theme name `foo`, variant `dark`,
+ * and our embedded CSS files let `foo-dark` work as an alias for `foo:dark`. */
+static gboolean
+has_dark_suffix (const char *theme)
+{
+  return g_str_has_suffix (theme, ":dark") ||
+         g_str_has_suffix (theme, "-dark");
+}
+
+/* So we can make a good guess whether the current theme is dark by checking for
+ * either: it is suffixed `[:-]dark`, or Settings:…prefer-dark-theme is TRUE. */
 static gboolean
 theme_is_dark (void)
 {
+  const char *env_theme;
   GtkSettings *settings;
   char *theme;
   gboolean prefer_dark;
   gboolean dark;
 
+  /* Like GtkSettings, 1st see if theme is overridden by environment variable */
+  env_theme = g_getenv ("GTK_THEME");
+  if (env_theme != NULL)
+    return has_dark_suffix (env_theme);
+
+  /* If not, test Settings:…theme-name in the same way OR :…prefer-dark-theme */
   settings = gtk_settings_get_default ();
   g_object_get (settings,
                 "gtk-theme-name", &theme,
                 "gtk-application-prefer-dark-theme", &prefer_dark,
                 NULL);
-
-  if ((strcmp (theme, "Adwaita") == 0 && prefer_dark) || strcmp (theme, "HighContrastInverse") == 0)
-    dark = TRUE;
-  else
-    dark = FALSE;
-
+  dark = prefer_dark || has_dark_suffix (theme);
   g_free (theme);
-
   return dark;
 }
 
