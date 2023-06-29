@@ -15,7 +15,7 @@
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
-#include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkancoloropprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadepipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
@@ -52,7 +52,6 @@ typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 
 typedef enum {
   /* GskVulkanOpRender */
-  GSK_VULKAN_OP_COLOR,
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_BLUR,
   GSK_VULKAN_OP_BORDER,
@@ -524,22 +523,11 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
                                        const GskVulkanParseState *state,
                                        GskRenderNode             *node)
 {
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_COLOR,
-    .node = node,
-    .offset = state->offset,
-  };
-  GskVulkanPipelineType pipeline_type;
-
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED;
-
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_color_op (self,
+                       gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                       &node->bounds,
+                       &state->offset,
+                       gsk_color_node_get_color (node));
 
   return TRUE;
 }
@@ -1738,7 +1726,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
@@ -1774,7 +1761,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_BORDER:
@@ -1867,14 +1853,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                               op->text.start_glyph,
                                                               op->text.num_glyphs,
                                                               op->text.scale);
-          break;
-
-        case GSK_VULKAN_OP_COLOR:
-          gsk_vulkan_color_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
-                                                         data + op->render.vertex_offset,
-                                                         &op->render.offset,
-                                                         &op->render.node->bounds,
-                                                         gsk_color_node_get_color (op->render.node));
           break;
 
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
@@ -2075,7 +2053,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
         default:
           g_assert_not_reached ();
 
-        case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
@@ -2142,7 +2119,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
 
   switch (op->any.type)
     {
-    case GSK_VULKAN_OP_COLOR:
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
     case GSK_VULKAN_OP_BLUR:
     case GSK_VULKAN_OP_BORDER:
@@ -2196,13 +2172,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                          command_buffer,
                                          op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
                                          1);
-          break;
-
-        case GSK_VULKAN_OP_COLOR:
-          gsk_vulkan_color_pipeline_draw (GSK_VULKAN_COLOR_PIPELINE (op->render.pipeline),
-                                          command_buffer,
-                                          op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                          1);
           break;
 
         case GSK_VULKAN_OP_LINEAR_GRADIENT:

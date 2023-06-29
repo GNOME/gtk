@@ -14,7 +14,6 @@
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
-#include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadepipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
@@ -503,9 +502,6 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     guint num_textures;
     GskVulkanPipeline * (* create_func) (GdkVulkanContext *context, VkPipelineLayout layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "color",                      0, gsk_vulkan_color_pipeline_new },
-    { "color-clip",                 0, gsk_vulkan_color_pipeline_new },
-    { "color-clip-rounded",         0, gsk_vulkan_color_pipeline_new },
     { "linear",                     0, gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip",                0, gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip-rounded",        0, gsk_vulkan_linear_gradient_pipeline_new },
