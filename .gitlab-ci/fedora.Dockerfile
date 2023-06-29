@@ -28,10 +28,12 @@ RUN dnf -y install \
     gdk-pixbuf2-modules \
     gettext \
     git \
+    glew-devel \
     glib2-devel \
     glib2-static \
     glibc-devel \
     glibc-headers \
+    glut-devel \
     gnupg2 \
     gobject-introspection-devel \
     graphene-devel \
