@@ -85,5 +85,15 @@ gsk_vulkan_normalize_tex_coords (graphene_rect_t       *tex_coords,
                       rect->size.height / tex->size.height);
 }
 
+static inline void
+gsk_vulkan_rect_to_float (const graphene_rect_t *rect,
+                          float                  values[4])
+{
+  values[0] = rect->origin.x;
+  values[1] = rect->origin.y;
+  values[2] = rect->size.width;
+  values[3] = rect->size.height;
+}
+
 G_END_DECLS
 

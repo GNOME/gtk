@@ -17,7 +17,7 @@
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
-#include "gskvulkancrossfadepipelineprivate.h"
+#include "gskvulkancrossfadeopprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkanopprivate.h"
 #include "gskvulkanrendererprivate.h"
@@ -57,7 +57,6 @@ typedef enum {
   GSK_VULKAN_OP_BORDER,
   GSK_VULKAN_OP_INSET_SHADOW,
   GSK_VULKAN_OP_OUTSET_SHADOW,
-  GSK_VULKAN_OP_CROSS_FADE,
   GSK_VULKAN_OP_BLEND_MODE,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
@@ -867,14 +866,12 @@ gsk_vulkan_render_pass_add_transform_node (GskVulkanRenderPass       *self,
   return TRUE;
 }
 
-static inline gboolean
+static gboolean
 gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
                                          GskVulkanRender           *render,
                                          const GskVulkanParseState *state,
                                          GskRenderNode             *node)
 {
-  graphene_matrix_t color_matrix;
-  graphene_vec4_t color_offset;
   GskVulkanImage *image;
   graphene_rect_t tex_rect;
 
@@ -1147,22 +1144,62 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
                                             const GskVulkanParseState *state,
                                             GskRenderNode             *node)
 {
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_CROSS_FADE,
-    .node = node,
-    .offset = state->offset,
-  };
-  GskVulkanPipelineType pipeline_type;
+  GskRenderNode *start_child, *end_child;
+  GskVulkanImage *start_image, *end_image;
+  graphene_rect_t start_tex_rect, end_tex_rect;
+  float progress;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP_ROUNDED;
+  progress = gsk_cross_fade_node_get_progress (node);
+  start_child = gsk_cross_fade_node_get_start_child (node);
+  start_image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                          render,
+                                                          state,
+                                                          start_child,
+                                                          &start_tex_rect);
+  end_child = gsk_cross_fade_node_get_end_child (node);
+  end_image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                        render,
+                                                        state,
+                                                        end_child,
+                                                        &end_tex_rect);
+  if (start_image == NULL)
+    {
+      if (end_image == NULL)
+        return TRUE;
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+      gsk_vulkan_color_matrix_op_opacity (self,
+                                          gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &end_child->bounds),
+                                          end_image,
+                                          &node->bounds,
+                                          &state->offset,
+                                          &end_tex_rect,
+                                          progress);
+
+      return TRUE;
+    }
+  else if (end_image == NULL)
+    {
+      gsk_vulkan_color_matrix_op_opacity (self,
+                                          gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &start_child->bounds),
+                                          start_image,
+                                          &node->bounds,
+                                          &state->offset,
+                                          &start_tex_rect,
+                                          1.0f - progress);
+      return TRUE;
+    }
+
+  gsk_vulkan_cross_fade_op (self,
+                            gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                            &node->bounds,
+                            &state->offset,
+                            progress,
+                            start_image,
+                            &start_child->bounds,
+                            &start_tex_rect,
+                            end_image,
+                            &end_child->bounds,
+                            &end_tex_rect);
 
   return TRUE;
 }
@@ -1637,44 +1674,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
           }
           break;
 
-        case GSK_VULKAN_OP_CROSS_FADE:
-          {
-            GskRenderNode *start = gsk_cross_fade_node_get_start_child (op->render.node);
-            GskRenderNode *end = gsk_cross_fade_node_get_end_child (op->render.node);
-            graphene_rect_t tex_bounds;
-
-            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                            render,
-                                                                            uploader,
-                                                                            start,
-                                                                            scale,
-                                                                            clip,
-                                                                            &op->render.offset,
-                                                                            &tex_bounds);
-            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
-
-            op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                             render,
-                                                                             uploader,
-                                                                             end,
-                                                                             scale,
-                                                                             clip,
-                                                                             &op->render.offset,
-                                                                             &tex_bounds);
-            gsk_vulkan_normalize_tex_coords (&op->render.source2_rect, &op->render.node->bounds, &tex_bounds);
-            if (!op->render.source)
-              {
-                op->render.source = op->render.source2;
-                op->render.source_rect = *graphene_rect_zero();
-              }
-            if (!op->render.source2)
-              {
-                op->render.source2 = op->render.source;
-                op->render.source2_rect = *graphene_rect_zero();
-              }
-          }
-          break;
-
         case GSK_VULKAN_OP_BLEND_MODE:
           {
             GskRenderNode *top = gsk_blend_node_get_top_child (op->render.node);
@@ -1756,7 +1755,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
         case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_INSET_SHADOW:
         case GSK_VULKAN_OP_OUTSET_SHADOW:
-        case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
@@ -1900,20 +1898,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                               gsk_outset_shadow_node_get_blur_radius (op->render.node));
           break;
 
-        case GSK_VULKAN_OP_CROSS_FADE:
-          gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GSK_VULKAN_CROSS_FADE_PIPELINE (op->render.pipeline),
-                                                              data + op->render.vertex_offset,
-                                                              op->render.image_descriptor,
-                                                              op->render.image_descriptor2,
-                                                              &op->render.offset,
-                                                              &op->render.node->bounds,
-                                                              &gsk_cross_fade_node_get_start_child (op->render.node)->bounds,
-                                                              &gsk_cross_fade_node_get_end_child (op->render.node)->bounds,
-                                                              &op->render.source_rect,
-                                                              &op->render.source2_rect,
-                                                              gsk_cross_fade_node_get_progress (op->render.node));
-          break;
-
         case GSK_VULKAN_OP_BLEND_MODE:
           gsk_vulkan_blend_mode_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_MODE_PIPELINE (op->render.pipeline),
                                                               data + op->render.vertex_offset,
@@ -2012,7 +1996,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
                                                                               GSK_VULKAN_SAMPLER_DEFAULT);
           break;
 
-        case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
           if (op->render.source && op->render.source2)
             {
@@ -2114,7 +2097,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
     case GSK_VULKAN_OP_BORDER:
     case GSK_VULKAN_OP_INSET_SHADOW:
     case GSK_VULKAN_OP_OUTSET_SHADOW:
-    case GSK_VULKAN_OP_CROSS_FADE:
     case GSK_VULKAN_OP_BLEND_MODE:
       return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
 
@@ -2192,15 +2174,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                           &op->constants.scale,
                                           &op->constants.mvp,
                                           &op->constants.clip);
-          break;
-
-        case GSK_VULKAN_OP_CROSS_FADE:
-          if (!op->render.source || !op->render.source2)
-            break;
-          gsk_vulkan_cross_fade_pipeline_draw (GSK_VULKAN_CROSS_FADE_PIPELINE (op->render.pipeline),
-                                               command_buffer,
-                                               op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                               1);
           break;
 
         case GSK_VULKAN_OP_BLEND_MODE:
