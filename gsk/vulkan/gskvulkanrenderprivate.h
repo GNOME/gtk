@@ -11,18 +11,12 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GSK_VULKAN_PIPELINE_TEXTURE,
-  GSK_VULKAN_PIPELINE_TEXTURE_CLIP,
-  GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED,
   GSK_VULKAN_PIPELINE_COLOR,
   GSK_VULKAN_PIPELINE_COLOR_CLIP,
   GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED,
   GSK_VULKAN_PIPELINE_LINEAR_GRADIENT,
   GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP,
   GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED,
   GSK_VULKAN_PIPELINE_BORDER,
   GSK_VULKAN_PIPELINE_BORDER_CLIP,
   GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED,
@@ -80,6 +74,12 @@ void                    gsk_vulkan_render_add_render_pass               (GskVulk
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
+VkPipeline              gsk_vulkan_render_create_pipeline               (GskVulkanRender        *self,
+                                                                         const char             *shader_name,
+                                                                         const char             *clip_type,
+                                                                         const VkPipelineVertexInputStateCreateInfo *vertex_input_state,
+                                                                         VkFormat                format,
+                                                                         VkRenderPass            render_pass);
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          GskVulkanPipelineType   pipeline_type,
                                                                          VkRenderPass            render_pass);

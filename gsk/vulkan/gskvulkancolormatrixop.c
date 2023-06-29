@@ -2,7 +2,7 @@
 
 #include "gskvulkancolormatrixopprivate.h"
 
-#include "gskvulkaneffectpipelineprivate.h"
+#include "vulkan/resources/color-matrix.vert.h"
 
 typedef struct _GskVulkanColorMatrixOp GskVulkanColorMatrixOp;
 
@@ -17,7 +17,6 @@ struct _GskVulkanColorMatrixOp
   graphene_rect_t tex_rect;
 
   guint32 image_descriptor;
-  GskVulkanPipeline *pipeline;
   gsize vertex_offset;
 };
 
@@ -52,7 +51,7 @@ gsk_vulkan_color_matrix_op_count_vertex_data (GskVulkanOp *op,
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
   gsize vertex_stride;
 
-  vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (self->pipeline);
+  vertex_stride = gsk_vulkan_color_matrix_info.pVertexBindingDescriptions[0].stride;
   n_bytes = round_up (n_bytes, vertex_stride);
   self->vertex_offset = n_bytes;
   n_bytes += vertex_stride;
@@ -61,20 +60,24 @@ gsk_vulkan_color_matrix_op_count_vertex_data (GskVulkanOp *op,
 
 static void
 gsk_vulkan_color_matrix_op_collect_vertex_data (GskVulkanOp         *op,
-                                           GskVulkanRenderPass *pass,
-                                           GskVulkanRender     *render,
-                                           guchar              *data)
+                                                GskVulkanRenderPass *pass,
+                                                GskVulkanRender     *render,
+                                                guchar              *data)
 {
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
+  GskVulkanColorMatrixInstance *instance = (GskVulkanColorMatrixInstance *) (data + self->vertex_offset);
 
-  gsk_vulkan_effect_pipeline_collect_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (self->pipeline),
-                                                  data + self->vertex_offset,
-                                                  self->image_descriptor,
-                                                  graphene_point_zero (),
-                                                  &self->rect,
-                                                  &self->tex_rect,
-                                                  &self->color_matrix,
-                                                  &self->color_offset);
+  instance->rect[0] = self->rect.origin.x;
+  instance->rect[1] = self->rect.origin.y;
+  instance->rect[2] = self->rect.size.width;
+  instance->rect[3] = self->rect.size.height;
+  instance->tex_rect[0] = self->tex_rect.origin.x;
+  instance->tex_rect[1] = self->tex_rect.origin.y;
+  instance->tex_rect[2] = self->tex_rect.size.width;
+  instance->tex_rect[3] = self->tex_rect.size.height;
+  graphene_matrix_to_float (&self->color_matrix, instance->color_matrix);
+  graphene_vec4_to_float (&self->color_offset, instance->color_offset);
+  instance->tex_id = self->image_descriptor;
 }
 
 static void
@@ -91,9 +94,7 @@ gsk_vulkan_color_matrix_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static VkPipeline
 gsk_vulkan_color_matrix_op_get_pipeline (GskVulkanOp *op)
 {
-  GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
-
-  return gsk_vulkan_pipeline_get_pipeline (self->pipeline);
+  return VK_NULL_HANDLE;
 }
 
 static void
@@ -104,14 +105,15 @@ gsk_vulkan_color_matrix_op_command (GskVulkanOp      *op,
 {
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
 
-  gsk_vulkan_effect_pipeline_draw (GSK_VULKAN_EFFECT_PIPELINE (self->pipeline),
-                                   command_buffer,
-                                   self->vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (self->pipeline),
-                                   1);
+  vkCmdDraw (command_buffer,
+             6, 1,
+             0, self->vertex_offset / gsk_vulkan_color_matrix_info.pVertexBindingDescriptions[0].stride);
 }
 
 static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanColorMatrixOp),
+  "color-matrix",
+  &gsk_vulkan_color_matrix_info,
   gsk_vulkan_color_matrix_op_finish,
   gsk_vulkan_color_matrix_op_upload,
   gsk_vulkan_color_matrix_op_count_vertex_data,
@@ -123,7 +125,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
 
 void
 gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
-                            GskVulkanPipeline       *pipeline,
+                            const char              *clip_type,
                             GskVulkanImage          *image,
                             const graphene_rect_t   *rect,
                             const graphene_point_t  *offset,
@@ -135,7 +137,7 @@ gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
 
   self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
 
-  self->pipeline = pipeline;
+  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);

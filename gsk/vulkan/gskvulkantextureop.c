@@ -2,7 +2,7 @@
 
 #include "gskvulkantextureopprivate.h"
 
-#include "gskvulkantexturepipelineprivate.h"
+#include "vulkan/resources/texture.vert.h"
 
 typedef struct _GskVulkanTextureOp GskVulkanTextureOp;
 
@@ -16,7 +16,6 @@ struct _GskVulkanTextureOp
   graphene_rect_t tex_rect;
 
   guint32 image_descriptor;
-  GskVulkanPipeline *pipeline;
   gsize vertex_offset;
 };
 
@@ -51,7 +50,7 @@ gsk_vulkan_texture_op_count_vertex_data (GskVulkanOp *op,
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
   gsize vertex_stride;
 
-  vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (self->pipeline);
+  vertex_stride = gsk_vulkan_texture_info.pVertexBindingDescriptions[0].stride;
   n_bytes = round_up (n_bytes, vertex_stride);
   self->vertex_offset = n_bytes;
   n_bytes += vertex_stride;
@@ -65,13 +64,17 @@ gsk_vulkan_texture_op_collect_vertex_data (GskVulkanOp         *op,
                                            guchar              *data)
 {
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
+  GskVulkanTextureInstance *instance = (GskVulkanTextureInstance *) (data + self->vertex_offset);
 
-  gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (self->pipeline),
-                                                   data + self->vertex_offset,
-                                                   self->image_descriptor,
-                                                   graphene_point_zero (),
-                                                   &self->rect,
-                                                   &self->tex_rect);
+  instance->rect[0] = self->rect.origin.x;
+  instance->rect[1] = self->rect.origin.y;
+  instance->rect[2] = self->rect.size.width;
+  instance->rect[3] = self->rect.size.height;
+  instance->tex_rect[0] = self->tex_rect.origin.x;
+  instance->tex_rect[1] = self->tex_rect.origin.y;
+  instance->tex_rect[2] = self->tex_rect.size.width;
+  instance->tex_rect[3] = self->tex_rect.size.height;
+  instance->tex_id = self->image_descriptor;
 }
 
 static void
@@ -86,9 +89,7 @@ gsk_vulkan_texture_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static VkPipeline
 gsk_vulkan_texture_op_get_pipeline (GskVulkanOp *op)
 {
-  GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
-
-  return gsk_vulkan_pipeline_get_pipeline (self->pipeline);
+  return VK_NULL_HANDLE;
 }
 
 static void
@@ -99,14 +100,15 @@ gsk_vulkan_texture_op_command (GskVulkanOp      *op,
 {
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
 
-  gsk_vulkan_texture_pipeline_draw (GSK_VULKAN_TEXTURE_PIPELINE (self->pipeline),
-                                    command_buffer,
-                                    self->vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (self->pipeline),
-                                    1);
+  vkCmdDraw (command_buffer,
+             6, 1,
+             0, self->vertex_offset / gsk_vulkan_texture_info.pVertexBindingDescriptions[0].stride);
 }
 
 static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanTextureOp),
+  "texture",
+  &gsk_vulkan_texture_info,
   gsk_vulkan_texture_op_finish,
   gsk_vulkan_texture_op_upload,
   gsk_vulkan_texture_op_count_vertex_data,
@@ -118,7 +120,7 @@ static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
 
 void
 gsk_vulkan_texture_op (GskVulkanRenderPass    *render_pass,
-                       GskVulkanPipeline      *pipeline,
+                       const char             *clip_type,
                        GskVulkanImage         *image,
                        GskVulkanRenderSampler  sampler,
                        const graphene_rect_t  *rect,
@@ -129,7 +131,7 @@ gsk_vulkan_texture_op (GskVulkanRenderPass    *render_pass,
 
   self = (GskVulkanTextureOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_TEXTURE_OP_CLASS);
 
-  self->pipeline = pipeline;
+  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   self->sampler = sampler;
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);

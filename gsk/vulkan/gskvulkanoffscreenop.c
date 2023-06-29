@@ -81,6 +81,8 @@ gsk_vulkan_offscreen_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanOffscreenOp),
+  NULL,
+  NULL,
   gsk_vulkan_offscreen_op_finish,
   gsk_vulkan_offscreen_op_upload,
   gsk_vulkan_offscreen_op_count_vertex_data,

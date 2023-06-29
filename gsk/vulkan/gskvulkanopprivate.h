@@ -13,12 +13,15 @@ struct _GskVulkanOp
 {
   const GskVulkanOpClass *op_class;
 
-  VkPipeline            pipeline;
+  const /* interned */ char *clip_type;
 };
 
 struct _GskVulkanOpClass
 {
   gsize                 size;
+
+  const char *          shader_name;
+  const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 
   void                  (* finish)                                      (GskVulkanOp            *op);
 

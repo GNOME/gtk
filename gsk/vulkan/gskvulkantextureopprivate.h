@@ -5,7 +5,7 @@
 G_BEGIN_DECLS
 
 void                    gsk_vulkan_texture_op                           (GskVulkanRenderPass            *render_pass,
-                                                                         GskVulkanPipeline              *pipeline,
+                                                                         const char                     *clip_type,
                                                                          GskVulkanImage                 *image,
                                                                          GskVulkanRenderSampler          sampler,
                                                                          const graphene_rect_t          *rect,

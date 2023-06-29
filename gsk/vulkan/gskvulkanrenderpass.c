@@ -454,7 +454,6 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
                                           const GskVulkanParseState *state,
                                           GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
   GskVulkanImage *image;
   graphene_rect_t clipped;
 
@@ -470,15 +469,8 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
                                       &state->scale,
                                       &clipped);
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
-
   gsk_vulkan_texture_op (self,
-                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_DEFAULT,
                          &node->bounds,
@@ -610,17 +602,9 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
                                          const GskVulkanParseState *state,
                                          GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
   GskVulkanImage *image;
   GskVulkanRenderer *renderer;
   GdkTexture *texture;
-
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
   renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
   texture = gsk_texture_node_get_texture (node);
@@ -632,7 +616,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_texture_op (self,
-                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_DEFAULT,
                          &node->bounds,
@@ -648,18 +632,10 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
                                                const GskVulkanParseState *state,
                                                GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
   GskVulkanImage *image;
   GskVulkanRenderer *renderer;
   GskVulkanRenderSampler sampler;
   GdkTexture *texture;
-
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
 
   renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
   texture = gsk_texture_scale_node_get_texture (node);
@@ -683,7 +659,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_texture_op (self,
-                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                          image,
                          sampler,
                          &node->bounds,
@@ -911,7 +887,6 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
 {
   graphene_matrix_t color_matrix;
   graphene_vec4_t color_offset;
-  GskVulkanPipelineType pipeline_type;
   GskVulkanImage *image;
   graphene_rect_t tex_rect;
 
@@ -923,13 +898,6 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   if (image == NULL)
     return TRUE;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
-
   graphene_matrix_init_from_float (&color_matrix,
                                    (float[16]) {
                                        1.0, 0.0, 0.0, 0.0,
@@ -940,7 +908,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
 
   gsk_vulkan_color_matrix_op (self,
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                               image,
                               &node->bounds,
                               &state->offset,
@@ -957,7 +925,6 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
                                               const GskVulkanParseState *state,
                                               GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
   GskVulkanImage *image;
   graphene_rect_t tex_rect;
 
@@ -969,15 +936,8 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   if (image == NULL)
     return TRUE;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED;
-
   gsk_vulkan_color_matrix_op (self,
-                              gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                               image,
                               &node->bounds,
                               &state->offset,
@@ -1135,7 +1095,6 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
                                         const GskVulkanParseState *state,
                                         GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
   const graphene_rect_t *child_bounds;
   VkSemaphore semaphore;
   GskVulkanImage *image;
@@ -1167,15 +1126,8 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
                                    semaphore,
                                    gsk_repeat_node_get_child (node));
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
-
   gsk_vulkan_texture_op (self,
-                         gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type),
+                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_REPEAT,
                          &node->bounds,
@@ -2159,7 +2111,18 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
     {
       op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
-      op_pipeline = gsk_vulkan_op_get_pipeline (op);
+      if (op->op_class->shader_name)
+        {
+          op_pipeline = gsk_vulkan_render_create_pipeline (render,
+                                                           op->op_class->shader_name,
+                                                           op->clip_type,
+                                                           op->op_class->vertex_input_state,
+                                                           gsk_vulkan_image_get_vk_format (self->target),
+                                                           self->render_pass);
+        }
+      else
+        op_pipeline = gsk_vulkan_op_get_pipeline (op);
+
       if (op_pipeline && op_pipeline != current_pipeline)
         {
           current_pipeline = op_pipeline;
@@ -2348,6 +2311,8 @@ gsk_vulkan_render_op_finish (GskVulkanOp *op)
 
 static const GskVulkanOpClass GSK_VULKAN_OP_ALL_CLASS = {
   sizeof (GskVulkanOpAll),
+  NULL,
+  NULL,
   gsk_vulkan_render_op_finish,
   gsk_vulkan_render_op_upload,
   gsk_vulkan_render_op_count_vertex_data,

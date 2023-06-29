@@ -72,6 +72,8 @@ gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanScissorOp),
+  NULL,
+  NULL,
   gsk_vulkan_scissor_op_finish,
   gsk_vulkan_scissor_op_upload,
   gsk_vulkan_scissor_op_count_vertex_data,
