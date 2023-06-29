@@ -144,3 +144,35 @@ gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
   self->color_matrix = *color_matrix;
   self->color_offset = *color_offset;
 }
+
+void
+gsk_vulkan_color_matrix_op_opacity (GskVulkanRenderPass    *render_pass,
+                                    const char             *clip_type,
+                                    GskVulkanImage         *image,
+                                    const graphene_rect_t  *rect,
+                                    const graphene_point_t *offset,
+                                    const graphene_rect_t  *tex_rect,
+                                    float                   opacity)
+{
+  graphene_matrix_t color_matrix;
+  graphene_vec4_t color_offset;
+
+  graphene_matrix_init_from_float (&color_matrix,
+                                   (float[16]) {
+                                       1.0, 0.0, 0.0, 0.0,
+                                       0.0, 1.0, 0.0, 0.0,
+                                       0.0, 0.0, 1.0, 0.0,
+                                       0.0, 0.0, 0.0, opacity
+                                   });
+  graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
+
+  gsk_vulkan_color_matrix_op (render_pass,
+                              clip_type,
+                              image,
+                              rect,
+                              offset,
+                              tex_rect,
+                              &color_matrix,
+                              &color_offset);
+}
+

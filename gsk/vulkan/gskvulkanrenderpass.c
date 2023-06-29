@@ -886,23 +886,13 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
   if (image == NULL)
     return TRUE;
 
-  graphene_matrix_init_from_float (&color_matrix,
-                                   (float[16]) {
-                                       1.0, 0.0, 0.0, 0.0,
-                                       0.0, 1.0, 0.0, 0.0,
-                                       0.0, 0.0, 1.0, 0.0,
-                                       0.0, 0.0, 0.0, gsk_opacity_node_get_opacity (node)
-                                   });
-  graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
-
-  gsk_vulkan_color_matrix_op (self,
-                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
-                              image,
-                              &node->bounds,
-                              &state->offset,
-                              &tex_rect,
-                              &color_matrix,
-                              &color_offset);
+  gsk_vulkan_color_matrix_op_opacity (self,
+                                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                                      image,
+                                      &node->bounds,
+                                      &state->offset,
+                                      &tex_rect,
+                                      gsk_opacity_node_get_opacity (node));
 
   return TRUE;
 }
