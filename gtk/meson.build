@@ -1017,6 +1017,7 @@ gtk_deps = [
   epoxy_dep,
   libm,
   graphene_dep,
+  libglyphy_dep,
 ]
 
 if x11_enabled
