@@ -36,7 +36,7 @@
 extern IMAGE_DOS_HEADER __ImageBase;
 
 static inline HMODULE
-this_module ()
+this_module (void)
 {
   return (HMODULE) &__ImageBase;
 }

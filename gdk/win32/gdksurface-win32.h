@@ -137,6 +137,12 @@ struct _GdkW32DragMoveResizeContext
   int                start_root_x;
   int                start_root_y;
 
+  /* Last processed cursor position. Values are divided by the window
+   * scale.
+   */
+  int                current_root_x;
+  int                current_root_y;
+
   /* Initial window rectangle (position and size).
    * The window is resized/moved relative to this (see start_root_*).
    */

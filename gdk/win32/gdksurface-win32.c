@@ -3535,6 +3535,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
   context->button = button;
   context->start_root_x = root_x;
   context->start_root_y = root_y;
+  context->current_root_x = root_x;
+  context->current_root_y = root_y;
   context->timestamp = timestamp;
   context->start_rect = rect;
 
@@ -3649,6 +3651,16 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *window,
 
   if (!_gdk_win32_get_window_rect (window, &rect))
     return;
+
+  x /= impl->surface_scale;
+  y /= impl->surface_scale;
+
+  if (context->current_root_x == x &&
+      context->current_root_y == y)
+    return;
+
+  context->current_root_x = x;
+  context->current_root_y = y;
 
   new_rect = context->start_rect;
   diffx = (x - context->start_root_x) * impl->surface_scale;

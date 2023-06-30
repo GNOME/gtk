@@ -139,7 +139,6 @@ static GSourceFuncs event_funcs = {
 
 static GdkSurface *mouse_window = NULL;
 static GdkSurface *mouse_window_ignored_leave = NULL;
-static int current_x, current_y;
 static int current_root_x, current_root_y;
 
 static UINT got_gdk_events_message;
@@ -1522,14 +1521,15 @@ generate_button_event (GdkEventType      type,
   GdkEvent *event;
   GdkDeviceManagerWin32 *device_manager;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
+  double x, y;
 
   if (_gdk_input_ignore_core > 0)
     return;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
-  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
-  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+  x = (double) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+  y = (double) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 
   _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
                                   _gdk_device_manager->system_pointer);
@@ -1541,10 +1541,10 @@ generate_button_event (GdkEventType      type,
                                 _gdk_win32_get_next_tick (msg->time),
                                 build_pointer_event_state (msg),
                                 button,
-                                current_x,
-                                current_y,
+                                x,
+                                y,
                                 NULL);
-                                
+
   _gdk_win32_append_event (event);
 }
 
@@ -2350,19 +2350,19 @@ gdk_event_translate (MSG *msg,
        * sends WM_MOUSEMOVE messages after a new window is shown under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if (msg->pt.x / impl->surface_scale == current_root_x &&
-          msg->pt.y / impl->surface_scale == current_root_y)
+      if (msg->pt.x == current_root_x &&
+          msg->pt.y == current_root_y)
         break;
 
-      current_root_x = msg->pt.x / impl->surface_scale;
-      current_root_y = msg->pt.y / impl->surface_scale;
+      current_root_x = msg->pt.x;
+      current_root_y = msg->pt.y;
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
-        gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);
+        gdk_win32_surface_do_move_resize_drag (window, msg->pt.x, msg->pt.y);
       else if (_gdk_input_ignore_core == 0)
 	{
-	  current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
-	  current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+          double x = (double) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+          double y = (double) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
 
           _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
                                           _gdk_device_manager->system_pointer);
@@ -2372,8 +2372,8 @@ gdk_event_translate (MSG *msg,
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
 	                                build_pointer_event_state (msg),
-                                        current_x,
-                                        current_y,
+                                        x,
+                                        y,
                                         NULL);
 
 	  _gdk_win32_append_event (event);

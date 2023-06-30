@@ -271,9 +271,10 @@ winpointer_make_event (GdkDeviceWinpointer *device,
   y /= impl->surface_scale;
 
   state = 0;
-  if (info->dwKeyStates & POINTER_MOD_CTRL)
+  /* Note that info->dwKeyStates is not reliable, use GetKeyState() */
+  if (GetKeyState (VK_CONTROL) < 0)
     state |= GDK_CONTROL_MASK;
-  if (info->dwKeyStates & POINTER_MOD_SHIFT)
+  if (GetKeyState (VK_SHIFT) < 0)
     state |= GDK_SHIFT_MASK;
   if (GetKeyState (VK_MENU) < 0)
     state |= GDK_ALT_MASK;
