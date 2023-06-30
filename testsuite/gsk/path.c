@@ -156,7 +156,7 @@ create_random_degenerate_path (guint max_contours)
         graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
                                                       g_test_rand_double_range (-1000, 1000));
         gsk_path_builder_move_to (builder, point.x, point.y);
-        gsk_path_builder_curve_to (builder,
+        gsk_path_builder_cubic_to (builder,
                                    g_test_rand_double_range (-1000, 1000),
                                    g_test_rand_double_range (-1000, 1000),
                                    g_test_rand_double_range (-1000, 1000),
@@ -263,7 +263,7 @@ add_standard_contour (GskPathBuilder *builder)
           break;
 
         case 2:
-          gsk_path_builder_curve_to (builder,
+          gsk_path_builder_cubic_to (builder,
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
@@ -273,7 +273,7 @@ add_standard_contour (GskPathBuilder *builder)
           break;
 
         case 3:
-          gsk_path_builder_rel_curve_to (builder,
+          gsk_path_builder_rel_cubic_to (builder,
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
@@ -1064,8 +1064,8 @@ rotate_path_cb (GskPathOperation        op,
       break;
 
     case GSK_PATH_CUBIC:
-      gsk_path_builder_curve_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-      gsk_path_builder_curve_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
+      gsk_path_builder_cubic_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      gsk_path_builder_cubic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
       break;
 
     case GSK_PATH_CONIC:

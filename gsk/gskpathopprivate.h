@@ -125,7 +125,7 @@ gsk_path_builder_pathop_to (GskPathBuilder *builder,
       break;
 
     case GSK_PATH_CUBIC:
-      gsk_path_builder_curve_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
     case GSK_PATH_CONIC:
@@ -159,7 +159,7 @@ gsk_path_builder_pathop_reverse_to (GskPathBuilder *builder,
       break;
 
     case GSK_PATH_CUBIC:
-      gsk_path_builder_curve_to (builder, pts[2].x, pts[2].y, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
+      gsk_path_builder_cubic_to (builder, pts[2].x, pts[2].y, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
       break;
 
     case GSK_PATH_CONIC:

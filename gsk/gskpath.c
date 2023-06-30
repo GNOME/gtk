@@ -915,7 +915,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                gsk_path_builder_cubic_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -957,7 +957,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                gsk_path_builder_cubic_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -993,7 +993,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -1036,7 +1036,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
