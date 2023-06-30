@@ -97,7 +97,7 @@ void                    gsk_path_builder_rel_line_to            (GskPathBuilder 
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_curve_to               (GskPathBuilder         *self,
+void                    gsk_path_builder_cubic_to               (GskPathBuilder         *self,
                                                                  float                   x1,
                                                                  float                   y1,
                                                                  float                   x2,
@@ -105,7 +105,7 @@ void                    gsk_path_builder_curve_to               (GskPathBuilder 
                                                                  float                   x3,
                                                                  float                   y3);
 GDK_AVAILABLE_IN_ALL
-void                    gsk_path_builder_rel_curve_to           (GskPathBuilder         *self,
+void                    gsk_path_builder_rel_cubic_to           (GskPathBuilder         *self,
                                                                  float                   x1,
                                                                  float                   y1,
                                                                  float                   x2,

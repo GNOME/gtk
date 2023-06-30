@@ -229,7 +229,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       cairo_line_to (cr, pts[1].x, pts[1].y);
       break;
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
@@ -264,7 +264,7 @@ gsk_path_to_cairo (GskPath *self,
   g_return_if_fail (cr != NULL);
 
   gsk_path_foreach_with_tolerance (self,
-                                   GSK_PATH_FOREACH_ALLOW_CURVE,
+                                   GSK_PATH_FOREACH_ALLOW_CUBIC,
                                    cairo_get_tolerance (cr),
                                    gsk_path_to_cairo_add_op,
                                    cr);
@@ -426,14 +426,14 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     case GSK_PATH_LINE:
       return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       {
         GskCurve curve;
 
-        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVE)
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
         
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CURVE, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
         return gsk_curve_decompose (&curve, 
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,
@@ -473,7 +473,7 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
   gsize i;
 
   /* If we need to massage the data, set up a trampoline here */
-  if (flags != (GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC))
+  if (flags != (GSK_PATH_FOREACH_ALLOW_CUBIC | GSK_PATH_FOREACH_ALLOW_CONIC))
     {
       trampoline = (GskPathForeachTrampoline) { flags, tolerance, func, user_data };
       func = gsk_path_foreach_trampoline;
@@ -915,7 +915,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                gsk_path_builder_cubic_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -957,7 +957,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, x0, y0, x1, y1, x2, y2);
+                gsk_path_builder_cubic_to (builder, x0, y0, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -993,7 +993,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -1036,7 +1036,7 @@ gsk_path_parse (const char *string)
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_curve_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
