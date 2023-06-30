@@ -89,6 +89,9 @@ gsk_pathop_foreach (gskpathop          pop,
     case GSK_PATH_LINE:
       return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 2, 0, user_data);
 
+    case GSK_PATH_QUAD:
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, 0, user_data);
+
     case GSK_PATH_CUBIC:
       return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 4, 0, user_data);
 
@@ -124,6 +127,10 @@ gsk_path_builder_pathop_to (GskPathBuilder *builder,
       gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
       break;
 
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
     case GSK_PATH_CUBIC:
       gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
@@ -156,6 +163,10 @@ gsk_path_builder_pathop_reverse_to (GskPathBuilder *builder,
 
     case GSK_PATH_LINE:
       gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
       break;
 
     case GSK_PATH_CUBIC:

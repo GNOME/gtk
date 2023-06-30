@@ -229,6 +229,17 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       cairo_line_to (cr, pts[1].x, pts[1].y);
       break;
 
+    case GSK_PATH_QUAD:
+      {
+        double x, y;
+        cairo_get_current_point (cr, &x, &y);
+        cairo_curve_to (cr,
+                        1/3.f * x + 2/3.f * pts[1].x, 1/3.f * y + 2/3.f * pts[1].y,
+                        2/3.f * pts[1].x + 1/3.f * pts[2].x, 2/3.f * pts[1].y + 1/3.f * pts[2].y,
+                        pts[2].x, pts[2].y);
+      }
+      break;
+
     case GSK_PATH_CUBIC:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
@@ -445,6 +456,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     case GSK_PATH_LINE:
       return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
+    case GSK_PATH_QUAD:
     case GSK_PATH_CUBIC:
       {
         GskCurve curve;
@@ -990,7 +1002,7 @@ gsk_path_parse (const char *string)
         case 'Q':
         case 'q':
           {
-            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+            double x1, y1, x2, y2;
 
             if (parse_coordinate_pair (&p, &x1, &y1) &&
                 parse_coordinate_pair (&p, &x2, &y2))
@@ -1002,17 +1014,13 @@ gsk_path_parse (const char *string)
                     x2 += x;
                     y2 += y;
                   }
-                xx1 = (x + 2.0 * x1) / 3.0;
-                yy1 = (y + 2.0 * y1) / 3.0;
-                xx2 = (x2 + 2.0 * x1) / 3.0;
-                yy2 = (y2 + 2.0 * y1) / 3.0;
                 if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_quad_to (builder, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;
@@ -1026,7 +1034,7 @@ gsk_path_parse (const char *string)
         case 'T':
         case 't':
           {
-            double x1, y1, x2, y2, xx1, yy1, xx2, yy2;
+            double x1, y1, x2, y2;
 
             if (parse_coordinate_pair (&p, &x2, &y2))
               {
@@ -1045,17 +1053,13 @@ gsk_path_parse (const char *string)
                     x1 = x;
                     y1 = y;
                   }
-                xx1 = (x + 2.0 * x1) / 3.0;
-                yy1 = (y + 2.0 * y1) / 3.0;
-                xx2 = (x2 + 2.0 * x1) / 3.0;
-                yy2 = (y2 + 2.0 * y1) / 3.0;
                 if (_strchr ("zZ", prev_cmd))
                   {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
                     path_y = y;
                   }
-                gsk_path_builder_cubic_to (builder, xx1, yy1, xx2, yy2, x2, y2);
+                gsk_path_builder_quad_to (builder, x1, y1, x2, y2);
                 prev_x1 = x1;
                 prev_y1 = y1;
                 x = x2;

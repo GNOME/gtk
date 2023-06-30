@@ -248,7 +248,7 @@ add_standard_contour (GskPathBuilder *builder)
   n = g_test_rand_int_range (1, 20);
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 6))
+      switch (g_test_rand_int_range (0, 8))
       {
         case 0:
           gsk_path_builder_line_to (builder,
@@ -263,6 +263,22 @@ add_standard_contour (GskPathBuilder *builder)
           break;
 
         case 2:
+          gsk_path_builder_quad_to (builder,
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 3:
+          gsk_path_builder_rel_quad_to (builder,
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 4:
           gsk_path_builder_cubic_to (builder,
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
@@ -272,7 +288,7 @@ add_standard_contour (GskPathBuilder *builder)
                                      g_test_rand_double_range (-1000, 1000));
           break;
 
-        case 3:
+        case 5:
           gsk_path_builder_rel_cubic_to (builder,
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
@@ -282,7 +298,7 @@ add_standard_contour (GskPathBuilder *builder)
                                          g_test_rand_double_range (-1000, 1000));
           break;
 
-        case 4:
+        case 6:
           gsk_path_builder_conic_to (builder,
                                      g_test_rand_double_range (-1000, 1000),
                                      g_test_rand_double_range (-1000, 1000),
@@ -291,7 +307,7 @@ add_standard_contour (GskPathBuilder *builder)
                                      random_weight ());
           break;
 
-        case 5:
+        case 7:
           gsk_path_builder_rel_conic_to (builder,
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
@@ -381,6 +397,13 @@ path_operation_print (const PathOperation *p,
       _g_string_append_point (string, &p->pts[1]);
       break;
 
+    case GSK_PATH_QUAD:
+      g_string_append (string, " Q ");
+      _g_string_append_point (string, &p->pts[1]);
+      g_string_append (string, ", ");
+      _g_string_append_point (string, &p->pts[2]);
+      break;
+
     case GSK_PATH_CUBIC:
       g_string_append (string, " C ");
       _g_string_append_point (string, &p->pts[1]);
@@ -424,6 +447,10 @@ path_operation_equal (const PathOperation *p1,
       case GSK_PATH_LINE:
       case GSK_PATH_CLOSE:
         return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon);
+
+      case GSK_PATH_QUAD:
+        return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
+            && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon);
 
       case GSK_PATH_CUBIC:
         return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
@@ -1061,6 +1088,11 @@ rotate_path_cb (GskPathOperation        op,
     case GSK_PATH_LINE:
       gsk_path_builder_line_to (builders[0], pts[1].x, pts[1].y);
       gsk_path_builder_line_to (builders[1], pts[1].y, -pts[1].x);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      gsk_path_builder_quad_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
       break;
 
     case GSK_PATH_CUBIC:
