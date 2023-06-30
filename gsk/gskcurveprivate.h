@@ -135,8 +135,8 @@ void                    gsk_curve_get_start_tangent             (const GskCurve 
                                                                  graphene_vec2_t        *tangent);
 void                    gsk_curve_get_end_tangent               (const GskCurve         *curve,
                                                                  graphene_vec2_t        *tangent);
-
-
+void                    gsk_curve_reverse                       (const GskCurve         *curve,
+                                                                 GskCurve               *reverse);
 
 
 G_END_DECLS
