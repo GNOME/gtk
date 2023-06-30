@@ -619,7 +619,7 @@ gsk_circle_contour_curve (const graphene_point_t curve[4],
 {
   ForeachWrapper *wrapper = data;
 
-  return wrapper->func (GSK_PATH_CURVE, curve, 4, 0, wrapper->user_data);
+  return wrapper->func (GSK_PATH_CUBIC, curve, 4, 0, wrapper->user_data);
 }
 
 static gboolean
@@ -1012,7 +1012,7 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[1]);
           break;
 
-        case GSK_PATH_CURVE:
+        case GSK_PATH_CUBIC:
           g_string_append (string, " C ");
           _g_string_append_point (string, &pt[1]);
           g_string_append (string, ", ");

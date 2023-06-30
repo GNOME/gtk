@@ -215,7 +215,7 @@ gsk_path_dash_foreach (GskPathOperation        op,
       G_GNUC_FALLTHROUGH;
 
     case GSK_PATH_LINE:
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
     case GSK_PATH_CONIC:
       gsk_curve_init_foreach (&self->curve, op, pts, n_pts, weight);
       if (!gsk_curve_decompose (&self->curve, self->tolerance, gsk_path_dash_add_line_segment, self))

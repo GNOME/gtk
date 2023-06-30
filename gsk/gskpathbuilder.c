@@ -368,7 +368,7 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
           break;
 
         case CAIRO_PATH_CURVE_TO:
-          gsk_path_builder_curve_to (self,
+          gsk_path_builder_cubic_to (self,
                                      data[1].point.x, data[1].point.y,
                                      data[2].point.x, data[2].point.y,
                                      data[3].point.x, data[3].point.y);
@@ -649,7 +649,7 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
 }
 
 /**
- * gsk_path_builder_curve_to:
+ * gsk_path_builder_cubic_to:
  * @self: a `GskPathBuilder`
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
@@ -665,7 +665,7 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
  * After this, @x3, @y3 will be the new current point.
  **/
 void
-gsk_path_builder_curve_to (GskPathBuilder *self,
+gsk_path_builder_cubic_to (GskPathBuilder *self,
                            float           x1,
                            float           y1,
                            float           x2,
@@ -677,7 +677,7 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
-                                   GSK_PATH_CURVE,
+                                   GSK_PATH_CUBIC,
                                    3, (graphene_point_t[3]) {
                                      GRAPHENE_POINT_INIT (x1, y1),
                                      GRAPHENE_POINT_INIT (x2, y2),
@@ -686,7 +686,7 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
 }
 
 /**
- * gsk_path_builder_rel_curve_to:
+ * gsk_path_builder_rel_cubic_to:
  * @self: a `GskPathBuilder`
  * @x1: x offset of first control point
  * @y1: y offset of first control point
@@ -699,10 +699,10 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
  * points. All coordinates are given relative to the current point.
  *
- * This is the relative version of [method@Gsk.PathBuilder.curve_to].
+ * This is the relative version of [method@Gsk.PathBuilder.cubic_to].
  */
 void
-gsk_path_builder_rel_curve_to (GskPathBuilder *self,
+gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
                                float           x1,
                                float           y1,
                                float           x2,
@@ -712,7 +712,7 @@ gsk_path_builder_rel_curve_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
 
-  gsk_path_builder_curve_to (self,
+  gsk_path_builder_cubic_to (self,
                              self->current_point.x + x1,
                              self->current_point.y + y1,
                              self->current_point.x + x2,
@@ -847,7 +847,7 @@ arc_segment (GskPathBuilder *self,
   x2 = x3 + rx * (t * sin_th1);
   y2 = y3 + ry * (-t * cos_th1);
 
-  gsk_path_builder_curve_to (self,
+  gsk_path_builder_cubic_to (self,
                              cx + cos_phi * x1 - sin_phi * y1,
                              cy + sin_phi * x1 + cos_phi * y1,
                              cx + cos_phi * x2 - sin_phi * y2,
