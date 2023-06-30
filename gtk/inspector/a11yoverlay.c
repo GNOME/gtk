@@ -110,12 +110,11 @@ static struct {
 };
 
 static FixSeverity
-check_accessibility_errors (GtkWidget  *widget,
-                            GArray     *context_elements,
-                            char      **hint)
+check_accessibility_errors (GtkATContext       *context,
+                            GtkAccessibleRole   role,
+                            GArray             *context_elements,
+                            char              **hint)
 {
-  GtkAccessibleRole role;
-  GtkATContext *context;
   gboolean label_set;
   const char *role_name;
   GEnumClass *states;
@@ -124,11 +123,8 @@ check_accessibility_errors (GtkWidget  *widget,
   gboolean has_context;
 
   *hint = NULL;
-
-  role = gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (widget));
   role_name = gtk_accessible_role_to_name (role, NULL);
 
-  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
   if (!gtk_at_context_is_realized (context))
     gtk_at_context_realize (context);
 
@@ -314,6 +310,23 @@ check_accessibility_errors (GtkWidget  *widget,
   return SEVERITY_GOOD;
 }
 
+static FixSeverity
+check_widget_accessibility_errors (GtkWidget  *widget,
+                                   GArray     *context_elements,
+                                   char      **hint)
+{
+  GtkAccessibleRole role;
+  GtkATContext *context;
+  FixSeverity ret;
+
+  role = gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (widget));
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  ret = check_accessibility_errors (context, role, context_elements, hint);
+  g_object_unref (context);
+
+  return ret;
+}
+
 static void
 recurse_child_widgets (GtkA11yOverlay *self,
                        GtkWidget      *widget,
@@ -327,7 +340,7 @@ recurse_child_widgets (GtkA11yOverlay *self,
   if (!gtk_widget_get_mapped (widget))
     return;
 
-  severity = check_accessibility_errors (widget, self->context, &hint);
+  severity = check_widget_accessibility_errors (widget, self->context, &hint);
 
   if (severity != SEVERITY_GOOD)
     {

@@ -1333,6 +1333,8 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
               GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
               gtk_at_context_get_text_accumulate (rel_context, nodes, s, property, relation, FALSE, TRUE);
+
+              g_object_unref (rel_context);
             }
 
            if (s->len > 0)

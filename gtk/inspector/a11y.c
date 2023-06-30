@@ -243,6 +243,8 @@ update_name (GtkInspectorA11y *sl)
 
   name = gtk_at_context_get_name (context);
   gtk_label_set_label (GTK_LABEL (sl->name), name);
+
+  g_object_unref (context);
 }
 
 static void
@@ -257,6 +259,8 @@ update_description (GtkInspectorA11y *sl)
 
   description = gtk_at_context_get_description (context);
   gtk_label_set_label (GTK_LABEL (sl->description), description);
+
+  g_object_unref (context);
 }
 
 static void
