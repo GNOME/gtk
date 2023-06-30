@@ -257,6 +257,9 @@ typedef enum {
  * @GSK_PATH_CLOSE: A close operation ending the current contour with
  *   a line back to the starting point. Two points describe the start
  *   and end of the line.
+ * @GSK_PATH_QUAD: A curve-to operation describing a quadratic Bézier curve
+ *   with 3 points describing the start point, the control point
+ *   and the end point of the curve.
  * @GSK_PATH_CUBIC: A curve-to operation describing a cubic Bézier curve
  *   with 4 points describing the start point, the two control points
  *   and the end point of the curve.
@@ -272,6 +275,7 @@ typedef enum {
   GSK_PATH_MOVE,
   GSK_PATH_CLOSE,
   GSK_PATH_LINE,
+  GSK_PATH_QUAD,
   GSK_PATH_CUBIC,
   GSK_PATH_CONIC,
 } GskPathOperation;

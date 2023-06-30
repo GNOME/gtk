@@ -122,6 +122,14 @@ gtk_path_transform_op (GskPathOperation        op,
       }
       break;
 
+    case GSK_PATH_QUAD:
+      {
+        graphene_point_t res[2];
+        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
+        gsk_path_builder_quad_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y);
+      }
+      break;
     case GSK_PATH_CUBIC:
       {
         graphene_point_t res[3];

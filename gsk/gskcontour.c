@@ -982,6 +982,13 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[1]);
           break;
 
+        case GSK_PATH_QUAD:
+          g_string_append (string, " Q ");
+          _g_string_append_point (string, &pt[1]);
+          g_string_append (string, ", ");
+          _g_string_append_point (string, &pt[2]);
+          break;
+
         case GSK_PATH_CUBIC:
           g_string_append (string, " C ");
           _g_string_append_point (string, &pt[1]);

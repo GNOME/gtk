@@ -653,6 +653,67 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
 }
 
 /**
+ * gsk_path_builder_quad_to:
+ * @self: a #GskPathBuilder
+ * @x1: x coordinate of control point
+ * @y1: y coordinate of control point
+ * @x2: x coordinate of the end of the curve
+ * @y2: y coordinate of the end of the curve
+ *
+ * Adds a [quadratic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+ * from the current point to @x2, @y2 with @x1, @y1 as the control point.
+ *
+ * After this, @x2, @y2 will be the new current point.
+ **/
+void
+gsk_path_builder_quad_to (GskPathBuilder *self,
+                          float           x1,
+                          float           y1,
+                          float           x2,
+                          float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  self->flags &= ~GSK_PATH_FLAT;
+  gsk_path_builder_append_current (self,
+                                   GSK_PATH_QUAD,
+                                   2, (graphene_point_t[2]) {
+                                     GRAPHENE_POINT_INIT (x1, y1),
+                                     GRAPHENE_POINT_INIT (x2, y2)
+                                   });
+}
+
+/**
+ * gsk_path_builder_rel_quad_to:
+ * @self: a #GskPathBuilder
+ * @x1: x offset of control point
+ * @y1: y offset of control point
+ * @x2: x offset of the end of the curve
+ * @y2: y offset of the end of the curve
+ *
+ * Adds a [quadratic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+ * from the current point to @x2, @y2 with @x1, @y1 as the control point.
+ * All coordinates are given relative to the current point.
+ *
+ * This is the relative version of gsk_path_builder_quad_to().
+ **/
+void
+gsk_path_builder_rel_quad_to (GskPathBuilder *self,
+                              float           x1,
+                              float           y1,
+                              float           x2,
+                              float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_quad_to (self,
+                            self->current_point.x + x1,
+                            self->current_point.y + y1,
+                            self->current_point.x + x2,
+                            self->current_point.y + y2);
+}
+
+/**
  * gsk_path_builder_cubic_to:
  * @self: a #GskPathBuilder
  * @x1: x coordinate of first control point
