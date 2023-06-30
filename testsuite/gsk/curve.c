@@ -32,6 +32,17 @@ init_random_curve (GskCurve *curve)
       }
       break;
 
+    case GSK_PATH_QUAD:
+      {
+        graphene_point_t p[3];
+
+        init_random_point (&p[0]);
+        init_random_point (&p[1]);
+        init_random_point (&p[2]);
+        gsk_curve_init (curve, gsk_pathop_encode (GSK_PATH_QUAD, p));
+      }
+    break;
+
     case GSK_PATH_CUBIC:
       {
         graphene_point_t p[4];
