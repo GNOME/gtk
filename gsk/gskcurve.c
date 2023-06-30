@@ -59,6 +59,8 @@ struct _GskCurveClass
                                                          graphene_vec2_t        *tangent);
   void                          (* get_end_tangent)     (const GskCurve         *curve,
                                                          graphene_vec2_t        *tangent);
+  void                          (* reverse)             (const GskCurve         *curve,
+                                                         GskCurve               *reverse);
 };
 
 static void
@@ -203,6 +205,17 @@ gsk_line_curve_get_start_end_tangent (const GskCurve  *curve,
   get_tangent (&self->points[0], &self->points[1], tangent);
 }
 
+static void
+gsk_line_curve_reverse (const GskCurve *curve,
+                        GskCurve       *reverse)
+{
+  const GskLineCurve *self = &curve->line;
+
+  reverse->op = GSK_PATH_LINE;
+  reverse->line.points[0] = self->points[1];
+  reverse->line.points[1] = self->points[0];
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -215,7 +228,8 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_start_point,
   gsk_line_curve_get_end_point,
   gsk_line_curve_get_start_end_tangent,
-  gsk_line_curve_get_start_end_tangent
+  gsk_line_curve_get_start_end_tangent,
+  gsk_line_curve_reverse,
 };
 
 /** QUADRATIC **/
@@ -422,6 +436,19 @@ gsk_quad_curve_get_end_tangent (const GskCurve  *curve,
   get_tangent (&self->points[1], &self->points[2], tangent);
 }
 
+static void
+gsk_quad_curve_reverse (const GskCurve *curve,
+                        GskCurve       *reverse)
+{
+  const GskCubicCurve *self = &curve->cubic;
+
+  reverse->op = GSK_PATH_QUAD;
+  reverse->cubic.points[0] = self->points[2];
+  reverse->cubic.points[1] = self->points[1];
+  reverse->cubic.points[2] = self->points[0];
+  reverse->cubic.has_coefficients = FALSE;
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -434,7 +461,8 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_start_point,
   gsk_quad_curve_get_end_point,
   gsk_quad_curve_get_start_tangent,
-  gsk_quad_curve_get_end_tangent
+  gsk_quad_curve_get_end_tangent,
+  gsk_quad_curve_reverse,
 };
 
 /** CUBIC **/
@@ -652,6 +680,20 @@ gsk_cubic_curve_get_end_tangent (const GskCurve  *curve,
   get_tangent (&self->points[2], &self->points[3], tangent);
 }
 
+static void
+gsk_cubic_curve_reverse (const GskCurve *curve,
+                         GskCurve       *reverse)
+{
+  const GskCubicCurve *self = &curve->cubic;
+
+  reverse->op = GSK_PATH_CUBIC;
+  reverse->cubic.points[0] = self->points[3];
+  reverse->cubic.points[1] = self->points[2];
+  reverse->cubic.points[2] = self->points[1];
+  reverse->cubic.points[3] = self->points[0];
+  reverse->cubic.has_coefficients = FALSE;
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -664,7 +706,8 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_start_point,
   gsk_cubic_curve_get_end_point,
   gsk_cubic_curve_get_start_tangent,
-  gsk_cubic_curve_get_end_tangent
+  gsk_cubic_curve_get_end_tangent,
+  gsk_cubic_curve_reverse,
 };
 
 /** CONIC **/
@@ -1066,6 +1109,20 @@ gsk_conic_curve_get_end_tangent (const GskCurve  *curve,
   get_tangent (&self->points[1], &self->points[3], tangent);
 }
 
+static void
+gsk_conic_curve_reverse (const GskCurve *curve,
+                         GskCurve       *reverse)
+{
+  const GskConicCurve *self = &curve->conic;
+
+  reverse->op = GSK_PATH_CONIC;
+  reverse->conic.points[0] = self->points[3];
+  reverse->conic.points[1] = self->points[1];
+  reverse->conic.points[2] = self->points[2];
+  reverse->conic.points[3] = self->points[0];
+  reverse->conic.has_coefficients = FALSE;
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -1078,7 +1135,8 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_start_point,
   gsk_conic_curve_get_end_point,
   gsk_conic_curve_get_start_tangent,
-  gsk_conic_curve_get_end_tangent
+  gsk_conic_curve_get_end_tangent,
+  gsk_conic_curve_reverse,
 };
 
 /** API **/
@@ -1199,3 +1257,9 @@ gsk_curve_get_end_tangent (const GskCurve  *curve,
   get_class (curve->op)->get_end_tangent (curve, tangent);
 }
 
+void
+gsk_curve_reverse (const GskCurve *curve,
+                   GskCurve       *reverse)
+{
+  get_class (curve->op)->reverse (curve, reverse);
+}
