@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 /**
  * GskPathForeachFlags:
- * @GSK_PATH_FOREACH_ALLOW_CURVE: Allow emission of %GSK_PATH_CURVE
+ * @GSK_PATH_FOREACH_ALLOW_CUBIC: Allow emission of %GSK_PATH_CUBIC
  *     operations.
  * @GSK_PATH_FOREACH_ALLOW_CONIC: Allow emission of %GSK_PATH_CONIC
  *     operations.
@@ -45,7 +45,7 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GSK_PATH_FOREACH_ALLOW_CURVE = (1 << 0),
+  GSK_PATH_FOREACH_ALLOW_CUBIC = (1 << 0),
   GSK_PATH_FOREACH_ALLOW_CONIC = (1 << 1)
 } GskPathForeachFlags;
 

@@ -122,13 +122,13 @@ gtk_path_transform_op (GskPathOperation        op,
       }
       break;
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       {
         graphene_point_t res[3];
         gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
         gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
         gtk_path_transform_point (transform->measure, &pts[3], &transform->offset, transform->scale, &res[2]);
-        gsk_path_builder_curve_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, res[2].x, res[2].y);
+        gsk_path_builder_cubic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, res[2].x, res[2].y);
       }
       break;
 
@@ -219,7 +219,7 @@ gtk_path_widget_create_paths (GtkPathWidget *self)
   builder = gsk_path_builder_new ();
   gsk_path_builder_move_to (builder,
                             self->points[0].x * width, self->points[0].y * height);
-  gsk_path_builder_curve_to (builder,
+  gsk_path_builder_cubic_to (builder,
                              self->points[1].x * width, self->points[1].y * height,
                              self->points[2].x * width, self->points[2].y * height,
                              self->points[3].x * width, self->points[3].y * height);
