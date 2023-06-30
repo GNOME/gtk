@@ -22,6 +22,7 @@
 #include "gtkmaplistmodel.h"
 
 #include "gtkrbtreeprivate.h"
+#include "gtksectionmodel.h"
 #include "gtkprivate.h"
 
 /**
@@ -54,6 +55,8 @@
  *
  * `GtkMapListModel` will attempt to discard the mapped objects as soon as
  * they are no longer needed and recreate them if necessary.
+ *
+ * `GtkMapListModel` passes through sections from the underlying model.
  */
 
 enum {
@@ -226,6 +229,16 @@ gtk_map_list_model_get_section (GtkSectionModel *model,
 }
 
 static void
+gtk_map_list_model_sections_changed_cb (GtkSectionModel *model,
+                                        unsigned int     position,
+                                        unsigned int     n_items,
+                                        gpointer         user_data)
+{
+  gtk_section_model_sections_changed (GTK_SECTION_MODEL (user_data), position, n_items);
+}
+
+
+static void
 gtk_map_list_model_section_model_init (GtkSectionModelInterface *iface)
 {
   iface->get_section = gtk_map_list_model_get_section;
@@ -362,6 +375,7 @@ gtk_map_list_model_clear_model (GtkMapListModel *self)
   if (self->model == NULL)
     return;
 
+  g_signal_handlers_disconnect_by_func (self->model, gtk_map_list_model_sections_changed_cb, self);
   g_signal_handlers_disconnect_by_func (self->model, gtk_map_list_model_items_changed_cb, self);
   g_clear_object (&self->model);
 }
@@ -633,6 +647,9 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_map_list_model_items_changed_cb), self);
       added = g_list_model_get_n_items (model);
+
+      if (GTK_IS_SECTION_MODEL (model))
+        g_signal_connect (model, "sections-changed", G_CALLBACK (gtk_map_list_model_sections_changed_cb), self);
     }
   else
     {
