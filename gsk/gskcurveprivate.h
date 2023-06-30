@@ -160,6 +160,9 @@ void                    gsk_curve_get_bounds                    (const GskCurve 
                                                                  GskBoundingBox         *bounds);
 void                    gsk_curve_get_tight_bounds              (const GskCurve         *curve,
                                                                  GskBoundingBox         *bounds);
+void                    gsk_curve_offset                        (const GskCurve         *curve,
+                                                                 float                   distance,
+                                                                 GskCurve               *offset_curve);
 
 int                     gsk_curve_intersect                     (const GskCurve         *curve1,
                                                                  const GskCurve         *curve2,
