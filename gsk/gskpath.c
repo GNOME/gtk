@@ -264,7 +264,7 @@ gsk_path_to_cairo (GskPath *self,
   g_return_if_fail (cr != NULL);
 
   gsk_path_foreach_with_tolerance (self,
-                                   GSK_PATH_FOREACH_ALLOW_CURVE,
+                                   GSK_PATH_FOREACH_ALLOW_CUBIC,
                                    cairo_get_tolerance (cr),
                                    gsk_path_to_cairo_add_op,
                                    cr);
@@ -430,7 +430,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
       {
         GskCurve curve;
 
-        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVE)
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
         
         gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
@@ -473,7 +473,7 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
   gsize i;
 
   /* If we need to massage the data, set up a trampoline here */
-  if (flags != (GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC))
+  if (flags != (GSK_PATH_FOREACH_ALLOW_CUBIC | GSK_PATH_FOREACH_ALLOW_CONIC))
     {
       trampoline = (GskPathForeachTrampoline) { flags, tolerance, func, user_data };
       func = gsk_path_foreach_trampoline;
