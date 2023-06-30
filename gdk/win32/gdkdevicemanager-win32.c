@@ -498,17 +498,30 @@ winpointer_enumerate_devices (GdkDeviceManagerWin32 *device_manager)
   UINT32 i = 0;
   GList *current = NULL;
 
-  do
+  if (!getPointerDevices (&infos_count, NULL))
     {
-      infos = g_new0 (POINTER_DEVICE_INFO, infos_count);
-      if (!getPointerDevices (&infos_count, infos))
-        {
-          WIN32_API_FAILED ("GetPointerDevices");
-          g_free (infos);
-          return;
-        }
+      WIN32_API_FAILED ("GetPointerDevices");
+      return;
     }
-  while (infos_count > 0 && !infos);
+
+  infos = g_new0 (POINTER_DEVICE_INFO, infos_count);
+
+  /* Note: the device count may increase between the two
+   * calls. In such case, the second call will fail with
+   * ERROR_INSUFFICIENT_BUFFER.
+   * However we'll also get a new WM_POINTERDEVICECHANGE
+   * notification, which will start the enumeration again.
+   * So do not treat ERROR_INSUFFICIENT_BUFFER as an
+   * error, rather return and do the necessary work later
+   */
+
+  if (!getPointerDevices (&infos_count, infos))
+    {
+      if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+        WIN32_API_FAILED ("GetPointerDevices");
+      g_free (infos);
+      return;
+    }
 
   /* remove any gdk device not present anymore or update info */
   current = device_manager->winpointer_devices;
@@ -520,9 +533,11 @@ winpointer_enumerate_devices (GdkDeviceManagerWin32 *device_manager)
       if (!winpointer_match_device_in_system_list (device, infos, infos_count))
         {
           GdkSeat *seat = gdk_device_get_seat (GDK_DEVICE (device));
+          GdkDeviceTool *tool = (GDK_DEVICE (device))->last_tool;
 
           gdk_device_update_tool (GDK_DEVICE (device), NULL);
-          gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), (GDK_DEVICE (device))->last_tool);
+          gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), tool);
+          g_clear_pointer (&tool, g_object_unref);
 
           gdk_seat_default_remove_slave (GDK_SEAT_DEFAULT (seat), GDK_DEVICE (device));
           device_manager->winpointer_devices = g_list_delete_link (device_manager->winpointer_devices,

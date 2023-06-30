@@ -2879,10 +2879,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2909,10 +2913,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2924,7 +2932,6 @@ gdk_event_translate (MSG  *msg,
 
       gdk_winpointer_input_events (display, window, NULL, msg);
 
-      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         {
           gdk_win32_window_end_move_resize_drag (window);
@@ -2942,10 +2949,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2957,8 +2968,6 @@ gdk_event_translate (MSG  *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_window != window)
         crossing_cb = make_crossing_event;
-
-      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         {
@@ -2981,10 +2990,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -3017,10 +3030,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -3047,10 +3064,14 @@ gdk_event_translate (MSG  *msg,
           break;
         }
 
+      impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          current_root_x = pen_touch_cursor_position.x / impl->window_scale;
+          current_root_y = pen_touch_cursor_position.y / impl->window_scale;
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
