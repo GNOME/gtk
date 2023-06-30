@@ -30,7 +30,7 @@ typedef gpointer gskpathop;
 typedef union _GskCurve GskCurve;
 
 typedef struct _GskLineCurve GskLineCurve;
-typedef struct _GskCurveCurve GskCurveCurve;
+typedef struct _GskCubicCurve GskCubicCurve;
 typedef struct _GskConicCurve GskConicCurve;
 
 struct _GskLineCurve
@@ -42,7 +42,7 @@ struct _GskLineCurve
   graphene_point_t points[2];
 };
 
-struct _GskCurveCurve
+struct _GskCubicCurve
 {
   GskPathOperation op;
 
@@ -72,7 +72,7 @@ union _GskCurve
 {
   GskPathOperation op;
   GskLineCurve line;
-  GskCurveCurve curve;
+  GskCubicCurve cubic;
   GskConicCurve conic;
 };
 

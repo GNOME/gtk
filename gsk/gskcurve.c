@@ -218,10 +218,10 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_start_end_tangent
 };
 
-/** CURVE **/
+/** CUBIC **/
 
 static void
-gsk_curve_curve_init_from_points (GskCurveCurve          *self,
+gsk_cubic_curve_init_from_points (GskCubicCurve          *self,
                                   const graphene_point_t  pts[4])
 {
   self->op = GSK_PATH_CUBIC;
@@ -230,32 +230,32 @@ gsk_curve_curve_init_from_points (GskCurveCurve          *self,
 }
 
 static void
-gsk_curve_curve_init (GskCurve  *curve,
+gsk_cubic_curve_init (GskCurve  *curve,
                       gskpathop  op)
 {
-  GskCurveCurve *self = &curve->curve;
+  GskCubicCurve *self = &curve->cubic;
 
-  gsk_curve_curve_init_from_points (self, gsk_pathop_points (op));
+  gsk_cubic_curve_init_from_points (self, gsk_pathop_points (op));
 }
 
 static void
-gsk_curve_curve_init_foreach (GskCurve               *curve,
+gsk_cubic_curve_init_foreach (GskCurve               *curve,
                               GskPathOperation        op,
                               const graphene_point_t *pts,
                               gsize                   n_pts,
                               float                   weight)
 {
-  GskCurveCurve *self = &curve->curve;
+  GskCubicCurve *self = &curve->cubic;
 
   g_assert (n_pts == 4);
 
-  gsk_curve_curve_init_from_points (self, pts);
+  gsk_cubic_curve_init_from_points (self, pts);
 }
 
 static void
-gsk_curve_curve_ensure_coefficients (const GskCurveCurve *curve)
+gsk_cubic_curve_ensure_coefficients (const GskCubicCurve *curve)
 {
-  GskCurveCurve *self = (GskCurveCurve *) curve;
+  GskCubicCurve *self = (GskCubicCurve *) curve;
   const graphene_point_t *pts = &self->points[0];
 
   if (self->has_coefficients)
@@ -273,28 +273,28 @@ gsk_curve_curve_ensure_coefficients (const GskCurveCurve *curve)
 }
 
 static void
-gsk_curve_curve_get_point (const GskCurve   *curve,
+gsk_cubic_curve_get_point (const GskCurve   *curve,
                            float             t,
                            graphene_point_t *pos)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
   const graphene_point_t *c = self->coeffs;
 
-  gsk_curve_curve_ensure_coefficients (self);
+  gsk_cubic_curve_ensure_coefficients (self);
 
   *pos = GRAPHENE_POINT_INIT (((c[0].x * t + c[1].x) * t +c[2].x) * t + c[3].x,
                               ((c[0].y * t + c[1].y) * t +c[2].y) * t + c[3].y);
 }
 
 static void
-gsk_curve_curve_get_tangent (const GskCurve   *curve,
+gsk_cubic_curve_get_tangent (const GskCurve   *curve,
                              float             t,
                              graphene_vec2_t  *tangent)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
   const graphene_point_t *c = self->coeffs;
 
-  gsk_curve_curve_ensure_coefficients (self);
+  gsk_cubic_curve_ensure_coefficients (self);
 
   graphene_vec2_init (tangent,
                       (3.0f * c[0].x * t + 2.0f * c[1].x) * t + c[2].x,
@@ -303,12 +303,12 @@ gsk_curve_curve_get_tangent (const GskCurve   *curve,
 }
 
 static void
-gsk_curve_curve_split (const GskCurve   *curve,
+gsk_cubic_curve_split (const GskCurve   *curve,
                        float             progress,
                        GskCurve         *start,
                        GskCurve         *end)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
   const graphene_point_t *pts = self->points;
   graphene_point_t ab, bc, cd;
   graphene_point_t abbc, bccd;
@@ -322,26 +322,26 @@ gsk_curve_curve_split (const GskCurve   *curve,
   graphene_point_interpolate (&abbc, &bccd, progress, &final);
 
   if (start)
-    gsk_curve_curve_init_from_points (&start->curve, (graphene_point_t[4]) { pts[0], ab, abbc, final });
+    gsk_cubic_curve_init_from_points (&start->cubic, (graphene_point_t[4]) { pts[0], ab, abbc, final });
   if (end)
-    gsk_curve_curve_init_from_points (&end->curve, (graphene_point_t[4]) { final, bccd, cd, pts[3] });
+    gsk_cubic_curve_init_from_points (&end->cubic, (graphene_point_t[4]) { final, bccd, cd, pts[3] });
 }
 
 static void
-gsk_curve_curve_segment (const GskCurve *curve,
+gsk_cubic_curve_segment (const GskCurve *curve,
                          float           start,
                          float           end,
                          GskCurve       *segment)
 {
   GskCurve tmp;
 
-  gsk_curve_curve_split (curve, start, NULL, &tmp);
-  gsk_curve_curve_split (&tmp, (end - start) / (1.0f - start), segment, NULL);
+  gsk_cubic_curve_split (curve, start, NULL, &tmp);
+  gsk_cubic_curve_split (&tmp, (end - start) / (1.0f - start), segment, NULL);
 }
 
 /* taken from Skia, including the very descriptive name */
 static gboolean
-gsk_curve_curve_too_curvy (const GskCurveCurve *self,
+gsk_cubic_curve_too_curvy (const GskCubicCurve *self,
                            float                tolerance)
 {
   const graphene_point_t *pts = self->points;
@@ -366,16 +366,16 @@ gsk_curce_curve_decompose_step (const GskCurve      *curve,
                                 GskCurveAddLineFunc  add_line_func,
                                 gpointer             user_data)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
   GskCurve left, right;
   float mid_progress;
 
-  if (!gsk_curve_curve_too_curvy (self, tolerance))
+  if (!gsk_cubic_curve_too_curvy (self, tolerance))
     return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
   if (end_progress - start_progress <= MIN_PROGRESS)
     return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
 
-  gsk_curve_curve_split ((const GskCurve *) self, 0.5, &left, &right);
+  gsk_cubic_curve_split ((const GskCurve *) self, 0.5, &left, &right);
   mid_progress = (start_progress + end_progress) / 2;
 
   return gsk_curce_curve_decompose_step (&left, start_progress, mid_progress, tolerance, add_line_func, user_data)
@@ -383,7 +383,7 @@ gsk_curce_curve_decompose_step (const GskCurve      *curve,
 }
 
 static gboolean
-gsk_curve_curve_decompose (const GskCurve      *curve,
+gsk_cubic_curve_decompose (const GskCurve      *curve,
                            float                tolerance,
                            GskCurveAddLineFunc  add_line_func,
                            gpointer             user_data)
@@ -392,60 +392,60 @@ gsk_curve_curve_decompose (const GskCurve      *curve,
 }
 
 static gskpathop
-gsk_curve_curve_pathop (const GskCurve *curve)
+gsk_cubic_curve_pathop (const GskCurve *curve)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
 
   return gsk_pathop_encode (self->op, self->points);
 }
 
 static const graphene_point_t *
-gsk_curve_curve_get_start_point (const GskCurve *curve)
+gsk_cubic_curve_get_start_point (const GskCurve *curve)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
 
   return &self->points[0];
 }
 
 static const graphene_point_t *
-gsk_curve_curve_get_end_point (const GskCurve *curve)
+gsk_cubic_curve_get_end_point (const GskCurve *curve)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
 
   return &self->points[3];
 }
 
 static void
-gsk_curve_curve_get_start_tangent (const GskCurve  *curve,
+gsk_cubic_curve_get_start_tangent (const GskCurve  *curve,
                                    graphene_vec2_t *tangent)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
 
   get_tangent (&self->points[0], &self->points[1], tangent);
 }
 
 static void
-gsk_curve_curve_get_end_tangent (const GskCurve  *curve,
+gsk_cubic_curve_get_end_tangent (const GskCurve  *curve,
                                  graphene_vec2_t *tangent)
 {
-  const GskCurveCurve *self = &curve->curve;
+  const GskCubicCurve *self = &curve->cubic;
 
   get_tangent (&self->points[2], &self->points[3], tangent);
 }
 
-static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
-  gsk_curve_curve_init,
-  gsk_curve_curve_init_foreach,
-  gsk_curve_curve_get_point,
-  gsk_curve_curve_get_tangent,
-  gsk_curve_curve_split,
-  gsk_curve_curve_segment,
-  gsk_curve_curve_decompose,
-  gsk_curve_curve_pathop,
-  gsk_curve_curve_get_start_point,
-  gsk_curve_curve_get_end_point,
-  gsk_curve_curve_get_start_tangent,
-  gsk_curve_curve_get_end_tangent
+static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
+  gsk_cubic_curve_init,
+  gsk_cubic_curve_init_foreach,
+  gsk_cubic_curve_get_point,
+  gsk_cubic_curve_get_tangent,
+  gsk_cubic_curve_split,
+  gsk_cubic_curve_segment,
+  gsk_cubic_curve_decompose,
+  gsk_cubic_curve_pathop,
+  gsk_cubic_curve_get_start_point,
+  gsk_cubic_curve_get_end_point,
+  gsk_cubic_curve_get_start_tangent,
+  gsk_cubic_curve_get_end_tangent
 };
 
 /** CONIC **/
@@ -870,7 +870,7 @@ get_class (GskPathOperation op)
   const GskCurveClass *klasses[] = {
     [GSK_PATH_CLOSE] = &GSK_LINE_CURVE_CLASS,
     [GSK_PATH_LINE] = &GSK_LINE_CURVE_CLASS,
-    [GSK_PATH_CUBIC] = &GSK_CURVE_CURVE_CLASS,
+    [GSK_PATH_CUBIC] = &GSK_CUBIC_CURVE_CLASS,
     [GSK_PATH_CONIC] = &GSK_CONIC_CURVE_CLASS,
   };
 
