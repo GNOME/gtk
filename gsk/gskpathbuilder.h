@@ -97,6 +97,18 @@ void                    gsk_path_builder_rel_line_to            (GskPathBuilder 
                                                                  float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_quad_to                (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_rel_quad_to            (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_cubic_to               (GskPathBuilder         *self,
                                                                  float                   x1,
                                                                  float                   y1,
