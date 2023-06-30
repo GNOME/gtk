@@ -681,7 +681,7 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
-                                   GSK_PATH_CURVE,
+                                   GSK_PATH_CUBIC,
                                    3, (graphene_point_t[3]) {
                                      GRAPHENE_POINT_INIT (x1, y1),
                                      GRAPHENE_POINT_INIT (x2, y2),

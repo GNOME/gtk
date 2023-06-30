@@ -122,7 +122,7 @@ gtk_path_transform_op (GskPathOperation        op,
       }
       break;
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       {
         graphene_point_t res[3];
         gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);

@@ -229,7 +229,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       cairo_line_to (cr, pts[1].x, pts[1].y);
       break;
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
@@ -426,14 +426,14 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     case GSK_PATH_LINE:
       return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-    case GSK_PATH_CURVE:
+    case GSK_PATH_CUBIC:
       {
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CURVE)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
         
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CURVE, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
         return gsk_curve_decompose (&curve, 
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,

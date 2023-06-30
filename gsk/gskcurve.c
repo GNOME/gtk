@@ -224,7 +224,7 @@ static void
 gsk_curve_curve_init_from_points (GskCurveCurve          *self,
                                   const graphene_point_t  pts[4])
 {
-  self->op = GSK_PATH_CURVE;
+  self->op = GSK_PATH_CUBIC;
   self->has_coefficients = FALSE;
   memcpy (self->points, pts, sizeof (graphene_point_t) * 4);
 }
@@ -870,7 +870,7 @@ get_class (GskPathOperation op)
   const GskCurveClass *klasses[] = {
     [GSK_PATH_CLOSE] = &GSK_LINE_CURVE_CLASS,
     [GSK_PATH_LINE] = &GSK_LINE_CURVE_CLASS,
-    [GSK_PATH_CURVE] = &GSK_CURVE_CURVE_CLASS,
+    [GSK_PATH_CUBIC] = &GSK_CURVE_CURVE_CLASS,
     [GSK_PATH_CONIC] = &GSK_CONIC_CURVE_CLASS,
   };
 

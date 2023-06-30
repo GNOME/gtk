@@ -113,7 +113,7 @@ test_curve_tangents (void)
   graphene_point_init (&p[1], 50, 0);
   graphene_point_init (&p[2], 100, 50);
   graphene_point_init (&p[3], 100, 100);
-  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CUBIC, p));
 
   gsk_curve_get_start_tangent (&c, &t);
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
