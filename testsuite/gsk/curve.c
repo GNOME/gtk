@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <math.h>
 #include "gsk/gskcurveprivate.h"
 
 static void
@@ -432,6 +433,129 @@ static void
 test_curve_decompose_into_cubic (void)
 {
   test_curve_decompose_into (GSK_PATH_FOREACH_ALLOW_CUBIC);
+}
+
+static float
+angle_between (const graphene_vec2_t *t1,
+               const graphene_vec2_t *t2)
+{
+  float angle = atan2 (graphene_vec2_get_y (t2), graphene_vec2_get_x (t2))
+                - atan2 (graphene_vec2_get_y (t1), graphene_vec2_get_x (t1));
+
+  if (angle > M_PI)
+    angle -= 2 * M_PI;
+  if (angle < - M_PI)
+    angle += 2 * M_PI;
+
+  return angle;
+}
+
+static float
+angle_between_points (const graphene_point_t *c,
+                      const graphene_point_t *a,
+                      const graphene_point_t *b)
+{
+  graphene_vec2_t t1, t2;
+
+  graphene_vec2_init (&t1, a->x - c->x, a->y - c->y);
+  graphene_vec2_init (&t2, b->x - c->x, b->y - c->y);
+
+  return angle_between (&t1, &t2);
+}
+
+#define RAD_TO_DEG(r) ((r)*180.0/M_PI)
+
+static void
+test_curve_match (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve c0, c1, c2;
+      graphene_point_t p0, p1, p2;
+      graphene_vec2_t t0, t1, t2;
+      float k0, k1, k2;
+
+      init_random_curve_with_op (&c0, GSK_PATH_QUAD, GSK_PATH_QUAD);
+      gsk_curve_raise (&c0, &c1);
+      gsk_curve_init_foreach (&c2, GSK_PATH_CONIC, c0.quad.points, 3, 1);
+
+      if (g_test_verbose ())
+        {
+          g_print ("c0: %s\n", gsk_curve_to_string (&c0));
+          g_print ("c1: %s\n", gsk_curve_to_string (&c1));
+          g_print ("c2: %s\n", gsk_curve_to_string (&c2));
+        }
+
+      p0 = *gsk_curve_get_start_point (&c0);
+      p1 = *gsk_curve_get_start_point (&c1);
+      p2 = *gsk_curve_get_start_point (&c2);
+
+      g_assert_true (graphene_point_near (&p0, &p1, 0.01));
+      g_assert_true (graphene_point_near (&p0, &p2, 0.01));
+
+      p0 = *gsk_curve_get_end_point (&c0);
+      p1 = *gsk_curve_get_end_point (&c1);
+      p2 = *gsk_curve_get_end_point (&c2);
+
+      g_assert_true (graphene_point_near (&p0, &p1, 0.01));
+      g_assert_true (graphene_point_near (&p0, &p2, 0.01));
+
+      gsk_curve_get_start_tangent (&c0, &t0);
+      gsk_curve_get_start_tangent (&c1, &t1);
+      gsk_curve_get_start_tangent (&c2, &t2);
+
+      g_assert_true (graphene_vec2_near (&t0, &t1, 0.01));
+      g_assert_true (graphene_vec2_near (&t0, &t2, 0.01));
+
+      gsk_curve_get_end_tangent (&c0, &t0);
+      gsk_curve_get_end_tangent (&c1, &t1);
+      gsk_curve_get_end_tangent (&c2, &t2);
+
+      g_assert_true (graphene_vec2_near (&t0, &t1, 0.01));
+      g_assert_true (graphene_vec2_near (&t0, &t2, 0.01));
+
+      for (int j = 0; j < 20; j++)
+        {
+          float t = g_test_rand_double_range (0, 1);
+
+          gsk_curve_get_point (&c0, t, &p0);
+          gsk_curve_get_point (&c1, t, &p1);
+          gsk_curve_get_point (&c2, t, &p2);
+
+          g_assert_true (graphene_point_near (&p0, &p1, 0.01));
+          g_assert_true (graphene_point_near (&p0, &p2, 0.01));
+
+          gsk_curve_get_tangent (&c0, t, &t0);
+          gsk_curve_get_tangent (&c1, t, &t1);
+          gsk_curve_get_tangent (&c2, t, &t2);
+
+          g_assert_true (graphene_vec2_near (&t0, &t1, 0.01));
+          g_assert_true (graphene_vec2_near (&t0, &t2, 0.01));
+
+          if (RAD_TO_DEG (angle_between_points (&c0.quad.points[1], &c0.quad.points[0], &c0.quad.points[2])) < 1)
+            {
+              /* Skip curvature comparisons for curves that have very sharp turns,
+               * since we don't have good absolute error margins there. We should
+               * look at relative errors instead.
+               */
+              continue;
+            }
+
+          k0 = gsk_curve_get_curvature (&c0, t, NULL);
+          k1 = gsk_curve_get_curvature (&c1, t, NULL);
+          k2 = gsk_curve_get_curvature (&c2, t, NULL);
+
+          if (g_test_verbose ())
+            {
+              g_print ("c0 curvature at %f: %f\n", t, k0);
+              g_print ("c1 curvature at %f: %f\n", t, k1);
+              g_print ("c2 curvature at %f: %f\n", t, k2);
+            }
+
+          g_assert_true (fabs (k0 - k1) < 0.001);
+          g_assert_true (fabs (k0 - k2) < 0.001);
+        }
+    }
 }
 
 static void
@@ -894,6 +1018,42 @@ test_curve_intersection_horizontal_line (void)
   g_assert_true (n == 1);
 }
 
+static void
+test_curve_intersection_match (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve c0, c1;
+      GskCurve d;
+      float t10[9], t20[9], t11[9], t21[9];
+      graphene_point_t p0[9], p1[9];
+      int m0, m1;
+
+      /* We don't compare to the equivalent conic here since our conic
+       * intersection code is not up to par.
+       */
+      init_random_curve_with_op (&c0, GSK_PATH_QUAD, GSK_PATH_QUAD);
+      gsk_curve_raise (&c0, &c1);
+
+      init_random_curve_with_op (&d, GSK_PATH_LINE, GSK_PATH_CUBIC);
+
+      if (g_test_verbose ())
+        {
+          g_print ("q: %s\n", gsk_curve_to_string (&c0));
+          g_print ("c: %s\n", gsk_curve_to_string (&c1));
+          g_print ("d: %s\n", gsk_curve_to_string (&d));
+        }
+
+      m0 = gsk_curve_intersect (&c0, &d, t10, t20, p0, 9);
+      m1 = gsk_curve_intersect (&c1, &d, t11, t21, p1, 9);
+
+      g_assert_true (m0 == m1);
+
+      for (int j = 0; j < m0; j++)
+        g_assert_true (graphene_point_near (&p0[j], &p1[j], 0.001));
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -902,6 +1062,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/bounds", test_curve_bounds);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
+  g_test_add_func ("/curve/match", test_curve_match);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
   g_test_add_func ("/curve/reverse", test_curve_reverse);
   g_test_add_func ("/curve/decompose/conic", test_curve_decompose_conic);
@@ -920,6 +1081,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/curve-curve-end2", test_curve_curve_end_intersection2);
   g_test_add_func ("/curve/intersection/curve-curve-max", test_curve_curve_max_intersection);
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);
+  g_test_add_func ("/curve/intersection/match", test_curve_intersection_match);
 
   return g_test_run ();
 }
