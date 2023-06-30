@@ -73,6 +73,9 @@ struct _GskCurveClass
 
   void                          (* print)               (const GskCurve         *curve,
                                                          GString                *string);
+  void                          (* offset)              (const GskCurve         *curve,
+                                                         float                   distance,
+                                                         GskCurve               *offset_curve);
 };
 
 static void
@@ -85,6 +88,60 @@ get_tangent (const graphene_point_t *p0,
 }
 
 /** LINE **/
+
+static void
+get_normal (const graphene_point_t *p0,
+            const graphene_point_t *p1,
+            graphene_vec2_t        *n)
+{
+  graphene_vec2_init (n, p0->y - p1->y, p1->x - p0->x);
+  graphene_vec2_normalize (n, n);
+}
+
+/* Compute q = p + d * n */
+static void
+scale_point (const graphene_point_t *p,
+             const graphene_vec2_t  *n,
+             float                   d,
+             graphene_point_t       *q)
+{
+  q->x = p->x + d * graphene_vec2_get_x (n);
+  q->y = p->y + d * graphene_vec2_get_y (n);
+}
+
+/* Set p to the intersection of the lines through a, b and c, d.
+ * Return the number of intersections found (0 or 1)
+ */
+static int
+line_intersection (const graphene_point_t *a,
+                   const graphene_point_t *b,
+                   const graphene_point_t *c,
+                   const graphene_point_t *d,
+                   graphene_point_t       *p)
+{
+  float a1 = b->y - a->y;
+  float b1 = a->x - b->x;
+  float c1 = a1*a->x + b1*a->y;
+
+  float a2 = d->y - c->y;
+  float b2 = c->x - d->x;
+  float c2 = a2*c->x+ b2*c->y;
+
+  float det = a1*b2 - a2*b1;
+
+  if (fabs (det) < 0.001)
+    {
+      p->x = NAN;
+      p->y = NAN;
+      return 0;
+    }
+  else
+    {
+      p->x = (b2*c1 - b1*c2) / det;
+      p->y = (a1*c2 - a2*c1) / det;
+      return 1;
+    }
+}
 
 static void
 gsk_line_curve_init_from_points (GskLineCurve           *self,
@@ -256,6 +313,23 @@ gsk_line_curve_print (const GskCurve *curve,
                           curve->line.points[1].x, curve->line.points[1].y);
 }
 
+static void
+gsk_line_curve_offset (const GskCurve *curve,
+                       float           distance,
+                       GskCurve       *offset_curve)
+{
+  const GskLineCurve *self = &curve->line;
+  const graphene_point_t *pts = self->points;
+  graphene_vec2_t n;
+  graphene_point_t p[4];
+
+  get_normal (&pts[0], &pts[1], &n);
+  scale_point (&pts[0], &n, distance, &p[0]);
+  scale_point (&pts[1], &n, distance, &p[1]);
+
+  gsk_curve_init (offset_curve, gsk_pathop_encode (GSK_PATH_LINE, p));
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -274,6 +348,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_curvature,
   gsk_line_curve_print,
+  gsk_line_curve_offset,
 };
 
 /** QUADRATIC **/
@@ -607,6 +682,32 @@ gsk_quad_curve_print (const GskCurve *curve,
                           curve->quad.points[2].x, curve->cubic.points[2].y);
 }
 
+static void
+gsk_quad_curve_offset (const GskCurve *curve,
+                       float           distance,
+                       GskCurve       *offset)
+{
+  const GskCubicCurve *self = &curve->cubic;
+  const graphene_point_t *pts = self->points;
+  graphene_vec2_t n;
+  graphene_point_t p[4];
+  graphene_point_t m1, m2;
+
+  /* Simply scale control points, a la Tiller and Hanson */
+  get_normal (&pts[0], &pts[1], &n);
+  scale_point (&pts[0], &n, distance, &p[0]);
+  scale_point (&pts[1], &n, distance, &m1);
+
+  get_normal (&pts[1], &pts[2], &n);
+  scale_point (&pts[1], &n, distance, &m2);
+  scale_point (&pts[2], &n, distance, &p[2]);
+
+  if (!line_intersection (&p[0], &m1, &m2, &p[2], &p[1]))
+    gsk_curve_get_point (curve, 0.5, &p[1]);
+
+  gsk_quad_curve_init_from_points (&offset->quad, p);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -625,6 +726,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_tight_bounds,
   gsk_quad_curve_get_curvature,
   gsk_quad_curve_print,
+  gsk_quad_curve_offset,
 };
 
 /** CUBIC **/
@@ -1057,6 +1159,39 @@ gsk_cubic_curve_print (const GskCurve *curve,
                           curve->cubic.points[3].x, curve->cubic.points[3].y);
 }
 
+static void
+gsk_cubic_curve_offset (const GskCurve *curve,
+                        float           distance,
+                        GskCurve       *offset)
+{
+  const GskCubicCurve *self = &curve->cubic;
+  const graphene_point_t *pts = self->points;
+  graphene_vec2_t n;
+  graphene_point_t p[4];
+  graphene_point_t m1, m2, m3, m4;
+
+  /* Simply scale control points, a la Tiller and Hanson */
+  get_normal (&pts[0], &pts[1], &n);
+  scale_point (&pts[0], &n, distance, &p[0]);
+  scale_point (&pts[1], &n, distance, &m1);
+
+  get_normal (&pts[1], &pts[2], &n);
+  scale_point (&pts[1], &n, distance, &m2);
+  scale_point (&pts[2], &n, distance, &m3);
+
+  get_normal (&pts[2], &pts[3], &n);
+  scale_point (&pts[2], &n, distance, &m4);
+  scale_point (&pts[3], &n, distance, &p[3]);
+
+  if (!line_intersection (&p[0], &m1, &m2, &m3, &p[1]))
+    p[1] = m1;
+
+  if (!line_intersection (&m2, &m3, &m4, &p[3], &p[2]))
+    p[2] = m4;
+
+  gsk_cubic_curve_init_from_points (&offset->cubic, p);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -1075,6 +1210,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_tight_bounds,
   gsk_cubic_curve_get_curvature,
   gsk_cubic_curve_print,
+  gsk_cubic_curve_offset,
 };
 
 /** CONIC **/
@@ -1700,6 +1836,34 @@ gsk_conic_curve_print (const GskCurve *curve,
                           curve->conic.points[2].x);
 }
 
+static void
+gsk_conic_curve_offset (const GskCurve *curve,
+                        float           distance,
+                        GskCurve       *offset)
+{
+  const GskConicCurve *self = &curve->conic;
+  const graphene_point_t *pts = self->points;
+  graphene_vec2_t n;
+  graphene_point_t p[4];
+  graphene_point_t m1, m2;
+
+  /* Simply scale control points, a la Tiller and Hanson */
+  get_normal (&pts[0], &pts[1], &n);
+  scale_point (&pts[0], &n, distance, &p[0]);
+  scale_point (&pts[1], &n, distance, &m1);
+
+  get_normal (&pts[1], &pts[3], &n);
+  scale_point (&pts[1], &n, distance, &m2);
+  scale_point (&pts[3], &n, distance, &p[3]);
+
+  if (!line_intersection (&p[0], &m1, &m2, &p[3], &p[1]))
+    p[1] = m1;
+
+  p[2] = pts[2];
+
+  gsk_conic_curve_init_from_points (&offset->conic, p);
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -1718,6 +1882,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_tight_bounds,
   gsk_conic_curve_get_curvature,
   gsk_conic_curve_print,
+  gsk_conic_curve_offset,
 };
 
 /** API **/
@@ -1913,6 +2078,14 @@ gsk_curve_to_string (const GskCurve *curve)
   GString *s = g_string_new ("");
   gsk_curve_print (curve, s);
   return g_string_free (s, FALSE);
+}
+
+void
+gsk_curve_offset (const GskCurve *curve,
+                  float           distance,
+                  GskCurve       *offset_curve)
+{
+  get_class (curve->op)->offset (curve, distance, offset_curve);
 }
 
 static inline void
