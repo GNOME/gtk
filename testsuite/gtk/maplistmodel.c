@@ -52,6 +52,41 @@ model_to_string (GListModel *model)
   return g_string_free (string, FALSE);
 }
 
+static char *
+section_model_to_string (GListModel *model)
+{
+  GString *string = g_string_new (NULL);
+  guint i, s, e;
+
+  if (!GTK_IS_SECTION_MODEL (model))
+    return model_to_string (model);
+
+  i = 0;
+  while (i < g_list_model_get_n_items (model))
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (model), i, &s, &e);
+      g_assert (s == i);
+
+      if (i > 0)
+        g_string_append (string, " ");
+
+      g_string_append (string, "[");
+
+      for (; i < e; i++)
+        {
+          if (i > s)
+            g_string_append (string, " ");
+
+          g_string_append_printf (string, "%u", get (model, i));
+        }
+
+      g_string_append (string, "]");
+      i = e;
+    }
+
+  return g_string_free (string, FALSE);
+}
+
 static GListStore *
 new_store (guint start,
            guint end,
@@ -100,6 +135,14 @@ add (GListStore *store,
 
 #define assert_model(model, expected) G_STMT_START{ \
   char *s = model_to_string (G_LIST_MODEL (model)); \
+  if (!g_str_equal (s, expected)) \
+     g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
+         #model " == " #expected, s, "==", expected); \
+  g_free (s); \
+}G_STMT_END
+
+#define assert_section_model(model, expected) G_STMT_START{ \
+  char *s = section_model_to_string (G_LIST_MODEL (model)); \
   if (!g_str_equal (s, expected)) \
      g_assertion_message_cmpstr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
          #model " == " #expected, s, "==", expected); \
@@ -164,6 +207,21 @@ items_changed (GListModel *model,
     }
 }
 
+
+static void
+sections_changed (GListModel *model,
+                  guint       position,
+                  guint       n_items,
+                  GString    *changes)
+{
+  g_assert_true (n_items != 0);
+
+  if (changes->len)
+    g_string_append (changes, ", ");
+
+  g_string_append_printf (changes, "s%u:%u", position, n_items);
+}
+
 static void
 notify_n_items (GObject    *object,
                 GParamSpec *pspec,
@@ -199,17 +257,18 @@ map_multiply (gpointer item,
 }
 
 static GtkMapListModel *
-new_model (GListStore *store)
+new_model (GListModel *store)
 {
   GtkMapListModel *result;
   GString *changes;
 
   if (store)
     g_object_ref (store);
-  result = gtk_map_list_model_new (G_LIST_MODEL (store), map_multiply, GUINT_TO_POINTER (2), NULL);
+  result = gtk_map_list_model_new (store, map_multiply, GUINT_TO_POINTER (2), NULL);
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "sections-changed", G_CALLBACK (sections_changed), changes);
   g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
@@ -234,7 +293,7 @@ test_create (void)
   GListStore *store;
   
   store = new_store (1, 5, 1);
-  map = new_model (store);
+  map = new_model (G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "");
 
@@ -275,7 +334,7 @@ test_set_map_func (void)
   GListStore *store;
   
   store = new_store (1, 5, 1);
-  map = new_model (store);
+  map = new_model (G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "");
 
@@ -302,7 +361,7 @@ test_add_items (void)
   GListStore *store;
 
   store = new_store (1, 5, 1);
-  map = new_model (store);
+  map = new_model (G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "");
 
@@ -318,7 +377,7 @@ test_remove_items (void)
   GListStore *store;
 
   store = new_store (1, 5, 1);
-  map = new_model (store);
+  map = new_model (G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "");
 
@@ -334,13 +393,68 @@ test_splice (void)
   GListStore *store;
 
   store = new_store (1, 5, 1);
-  map = new_model (store);
+  map = new_model (G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "");
 
   splice (store, 2, 2, (guint[]){ 4, 3 }, 2);
   assert_model (map, "2 4 8 6 10");
   assert_changes (map, "2-2+2");
+}
+
+static int
+by_n (gconstpointer p1,
+      gconstpointer p2,
+      gpointer      data)
+{
+  guint n1 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p1), number_quark));
+  guint n2 = GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (p2), number_quark));
+  unsigned int n = GPOINTER_TO_UINT (data);
+
+  n1 = n1 / n;
+  n2 = n2 / n;
+
+  if (n1 < n2)
+    return -1;
+  else if (n1 > n2)
+    return 1;
+  else
+    return 0;
+}
+
+static int
+compare (gconstpointer first,
+         gconstpointer second,
+         gpointer      unused)
+{
+  return GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (first), number_quark))
+      -  GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (second), number_quark));
+}
+
+static void
+test_sections (void)
+{
+  GtkMapListModel *map;
+  GListStore *store;
+  GtkSortListModel *sorted;
+  GtkSorter *sorter;
+
+  store = new_store (1, 10, 1);
+  sorted = gtk_sort_list_model_new (G_LIST_MODEL (store),
+                                    GTK_SORTER (gtk_custom_sorter_new (compare, NULL, NULL)));
+  map = new_model (G_LIST_MODEL (sorted));
+  assert_model (map, "2 4 6 8 10 12 14 16 18 20");
+  assert_section_model (map, "[2 4 6 8 10 12 14 16 18 20]");
+  assert_changes (map, "");
+
+  sorter = GTK_SORTER (gtk_custom_sorter_new (by_n, GUINT_TO_POINTER (3), NULL));
+  gtk_sort_list_model_set_section_sorter (sorted, sorter);
+  g_object_unref (sorter);
+
+  assert_section_model (map, "[2 4] [6 8 10] [12 14 16] [18 20]");
+  assert_changes (map, "s0:10");
+
+  g_object_unref (map);
 }
 
 int
@@ -359,6 +473,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/maplistmodel/add_items", test_add_items);
   g_test_add_func ("/maplistmodel/remove_items", test_remove_items);
   g_test_add_func ("/maplistmodel/splice", test_splice);
+  g_test_add_func ("/maplistmodel/sections", test_sections);
 
   return g_test_run ();
 }
