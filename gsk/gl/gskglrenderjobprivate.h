@@ -35,4 +35,5 @@ void            gsk_gl_render_job_render_flipped     (GskGLRenderJob        *job
                                                       GskRenderNode         *root);
 void            gsk_gl_render_job_set_debug_fallback (GskGLRenderJob        *job,
                                                       gboolean               debug_fallback);
-
+void            gsk_gl_render_job_set_use_glyphy     (GskGLRenderJob        *job,
+                                                      gboolean               use_glyphy);

@@ -19,7 +19,8 @@ typedef enum {
   GSK_DEBUG_GEOMETRY              = 1 <<  9,
   GSK_DEBUG_FULL_REDRAW           = 1 << 10,
   GSK_DEBUG_SYNC                  = 1 << 11,
-  GSK_DEBUG_STAGING               = 1 << 12
+  GSK_DEBUG_STAGING               = 1 << 12,
+  GSK_DEBUG_NO_GLYPHY             = 1 << 13
 } GskDebugFlags;
 
 #define GSK_DEBUG_ANY ((1 << 13) - 1)

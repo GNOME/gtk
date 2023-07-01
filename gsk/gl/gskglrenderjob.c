@@ -153,6 +153,9 @@ struct _GskGLRenderJob
    */
   guint clear_framebuffer : 1;
 
+  /* Allow experimental glyph rendering with glyphy */
+  guint use_glyphy : 1;
+
   /* Format we want to use for intermediate textures, determined by
    * looking at the format of the framebuffer we are rendering on.
    */
@@ -3353,7 +3356,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
                                    const GdkRGBA       *color,
                                    gboolean             force_color)
 {
-  if (!gsk_text_node_has_color_glyphs (node))
+  if (job->use_glyphy && !gsk_text_node_has_color_glyphs (node))
     gsk_gl_render_job_visit_text_node_glyphy (job, node, color);
   else
     gsk_gl_render_job_visit_text_node_legacy (job, node, color, force_color);
@@ -4722,6 +4725,15 @@ gsk_gl_render_job_set_debug_fallback (GskGLRenderJob *job,
   g_return_if_fail (job != NULL);
 
   job->debug_fallback = !!debug_fallback;
+}
+
+void
+gsk_gl_render_job_set_use_glyphy (GskGLRenderJob *job,
+                                  gboolean        use_glyphy)
+{
+  g_return_if_fail (job != NULL);
+
+  job->use_glyphy = !!use_glyphy;
 }
 
 static int
