@@ -10,7 +10,6 @@
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 
-#include "gskvulkanblendmodepipelineprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
@@ -522,9 +521,6 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "texture",                    1, gsk_vulkan_color_text_pipeline_new },
     { "texture-clip",               1, gsk_vulkan_color_text_pipeline_new },
     { "texture-clip-rounded",       1, gsk_vulkan_color_text_pipeline_new },
-    { "blend-mode",                 2, gsk_vulkan_blend_mode_pipeline_new },
-    { "blend-mode-clip",            2, gsk_vulkan_blend_mode_pipeline_new },
-    { "blend-mode-clip-rounded",    2, gsk_vulkan_blend_mode_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
