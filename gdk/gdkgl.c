@@ -341,7 +341,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                         int                   width,
                         int                   height)
 {
-  GdkGLContext *paint_context;
+  GdkGLContext *paint_context, *current_context;
   cairo_surface_t *image;
   cairo_matrix_t matrix;
   int dx, dy, window_scale;
@@ -352,7 +352,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   int alpha_size = 0;
   cairo_region_t *clip_region;
   GdkGLContextPaintData *paint_data;
-  GLsync sync = NULL;
+  GLsync sync;
 
   impl_window = window->impl_window;
 
@@ -366,9 +366,13 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     }
 
   clip_region = gdk_cairo_region_from_clip (cr);
+  current_context = gdk_gl_context_get_current ();
 
-  if ((gdk_gl_context_get_current () != NULL) && (gdk_gl_context_get_current () != paint_context))
+  if ((current_context != NULL) && (current_context != paint_context) &&
+      gdk_gl_context_has_sync (current_context))
     sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+  else
+    sync = NULL;
 
   gdk_gl_context_make_current (paint_context);
 
