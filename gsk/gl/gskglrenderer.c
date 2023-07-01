@@ -310,6 +310,8 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), GLYPHY))
+    gsk_gl_render_job_set_use_glyphy (job, TRUE);
 #endif
   gsk_gl_render_job_render (job, root);
   gsk_gl_driver_end_frame (self->driver);
