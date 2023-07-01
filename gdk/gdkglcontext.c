@@ -1552,7 +1552,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   priv->has_sync = gdk_gl_context_check_version (context, "3.2", "3.0") ||
                    epoxy_has_gl_extension ("GL_ARB_sync") ||
-                   epoxy_has_gl_extension ("GK_APPLE_sync");
+                   epoxy_has_gl_extension ("GL_APPLE_sync");
 
 #ifdef G_ENABLE_DEBUG
   {
