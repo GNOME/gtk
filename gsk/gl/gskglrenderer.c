@@ -150,6 +150,13 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   gsk_gl_command_queue_set_profiler (self->command_queue,
                                      gsk_renderer_get_profiler (renderer));
 
+#ifdef G_ENABLE_DEBUG
+  if (gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_NO_GLYPHY)
+    GSK_RENDERER_DEBUG (renderer, RENDERER, "GL Renderer will use cairo for glyph rendering");
+  else
+    GSK_RENDERER_DEBUG (renderer, RENDERER, "GL Renderer will use glyphy for glyph rendering");
+#endif
+
   ret = TRUE;
 
 failure:
@@ -307,10 +314,15 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
   job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
+
+  if ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_NO_GLYPHY) == 0)
+    gsk_gl_render_job_set_use_glyphy (job, TRUE);
+
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
 #endif
+
   gsk_gl_render_job_render (job, root);
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);

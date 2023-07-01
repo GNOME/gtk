@@ -17,6 +17,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "full-redraw", GSK_DEBUG_FULL_REDRAW, "Force full redraws" },
   { "sync", GSK_DEBUG_SYNC, "Sync after each frame" },
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
+  { "no-glyphy", GSK_DEBUG_NO_GLYPHY, "Don't use GPU for glyph rendering (OpenGL only)", TRUE },
 };
 
 static guint gsk_debug_flags;
