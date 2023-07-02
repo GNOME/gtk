@@ -307,6 +307,55 @@ test_curve_intersections (void)
     }
 }
 
+static void
+test_curve_distance (void)
+{
+  struct {
+    const char *c;
+    float t;
+    graphene_point_t p;
+  } tests[] = {
+    { "M 110 150 C 25 190 210 250 210 30", 0.5, { 128.125, 187.5 } },
+    { "M -291.141 -307.096 L 0 0", 0.212942, { -229.145, -241.702 } },
+    { "M 107.677 983.6 Q 892.913 692.96 451.926 991.845", 0.819444, { 571.197, 903.133 } },
+    { "M 776.881 447.714 Q 950.93 910.517 706.488 270.744", 0.0741601, { 800.394, 510.293 } },
+    { "M 776.881 447.714 Q 950.93 910.517 706.488 270.744", 0.147432, { 819.105, 560.212 } },
+    { "M 552.801 760.349 C 802.437 934.739 413.833 356.694 177.926 550.79", 0.0471055, { 583.913, 780.144 } },
+    { "M 552.801 760.349 C 802.437 934.739 413.833 356.694 177.926 550.79", 0.602107, { 482.224, 589.797 } },
+    { "M 962.87 385.748 C 416.651 862.587 322.192 387.847 703.939 750.249", 0.702329, { 488.976, 601.972 } },
+    { "M 594.483 180.141 C 81.8284 915.647 912.726 65.0875 426.235 540.242", 0.553, { 526.602, 437.664 } },
+    { "M 433.694 78.9669 C 86.0895 750.725 337.458 248.121 896.717 958.176", 0.84211, { 655.985, 703.141 } },
+    { "M 823.276 153.754 C 234.993 852.46 691.369 829.303 146.38 913.602", 0.994448, { 155.364, 912.207 } },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      GskCurve curve;
+
+      graphene_point_t p, p2;
+      float t;
+      float distance;
+
+      parse_curve (&curve, tests[i].c);
+
+      g_print ("t going in %g\n", tests[i].t);
+      gsk_curve_get_point (&curve, tests[i].t, &p);
+      g_print ("point %g %g\n", p.x, p.y);
+      g_assert_true (graphene_point_near (&p, &tests[i].p, 0.01));
+
+      t = tests[i].t;
+      gsk_curve_get_closest_point (&curve, &tests[i].p, &distance, &p2, &t);
+
+      g_print ("t coming out: %g\n", t);
+      g_print ("point %g %g\n", p2.x, p2.y);
+      g_print ("distance %g\n", distance);
+
+      g_assert_true (fabs (t - tests[i].t) < 0.001);
+      g_assert_true (distance < 0.05);
+    }
+}
+
+
 int
 main (int   argc,
       char *argv[])
@@ -317,6 +366,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
   g_test_add_func ("/curve/special/intersections", test_curve_intersections);
+  g_test_add_func ("/curve/special/distance", test_curve_distance);
 
   return g_test_run ();
 }
