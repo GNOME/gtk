@@ -59,6 +59,8 @@ void            gtk_tooltip_window_position                     (GtkTooltipWindo
                                                                  GdkAnchorHints    anchor_hints,
                                                                  int               dx,
                                                                  int               dy);
+void            gtk_tooltip_window_set_css_class                (GtkTooltipWindow *window,
+                                                                 const char       *css_class);
 
 G_END_DECLS
 

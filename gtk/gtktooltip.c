@@ -1065,3 +1065,26 @@ gtk_tooltip_unset_surface (GtkNative *native)
   gtk_tooltip_set_surface (tooltip, NULL);
 }
 
+/**
+ * gtk_tooltip_set_css_class:
+ * @tooltip: a #GtkTooltip
+ * @css_class: (allow-none): a css class name, or %NULL
+ *
+ * This function allows to add a single css class
+ * to @tooltip window, that means it will remove any
+ * css class previously added by this function before
+ * adding @css_class as the currently active one.
+ *
+ * if %NULL is passed then any active css class (which
+ * was added by this function) will be cleared.
+ *
+ * Since: 4.12
+ */
+void
+gtk_tooltip_set_css_class (GtkTooltip *tooltip,
+                           const char *css_class)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_tooltip_window_set_css_class (GTK_TOOLTIP_WINDOW (tooltip->window), css_class);
+}

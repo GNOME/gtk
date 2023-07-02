@@ -56,6 +56,9 @@ void gtk_tooltip_set_custom	         (GtkTooltip         *tooltip,
 GDK_AVAILABLE_IN_ALL
 void gtk_tooltip_set_tip_area            (GtkTooltip         *tooltip,
                                           const GdkRectangle *rect);
+GDK_AVAILABLE_IN_4_12
+void gtk_tooltip_set_css_class           (GtkTooltip *tooltip,
+                                          const char *css_class);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTooltip, g_object_unref)
 

@@ -59,6 +59,7 @@ struct _GtkTooltipWindow
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *custom_widget;
+  char      *css_class;
 };
 
 struct _GtkTooltipWindowClass
@@ -392,6 +393,7 @@ static void
 gtk_tooltip_window_init (GtkTooltipWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+  self->css_class = NULL;
 }
 
 GtkWidget *
@@ -519,4 +521,31 @@ gtk_tooltip_window_position (GtkTooltipWindow *window,
   window->dy = dy;
 
   gtk_tooltip_window_relayout (window);
+}
+
+/* See gtk_tooltip_set_css_class() description */
+void
+gtk_tooltip_window_set_css_class (GtkTooltipWindow *window,
+                                  const char       *css_class)
+{
+  GtkWidget *wid = GTK_WIDGET (window);
+
+  if (g_strcmp0 (window->css_class, css_class) == 0)
+    return;
+
+  if (css_class)
+    {
+      if (window->css_class)
+        {
+          gtk_widget_remove_css_class (wid, window->css_class);
+          g_free (window->css_class);
+        }
+      window->css_class = g_strdup (css_class);
+      gtk_widget_add_css_class (wid, css_class);
+    }
+  else
+    {
+      gtk_widget_remove_css_class (wid, window->css_class);
+      g_clear_pointer (&window->css_class, g_free);
+    }
 }
