@@ -773,6 +773,22 @@ gsk_circle_contour_copy (const GskContour *contour,
   *target = *self;
 }
 
+static gboolean
+add_curve_to_segment (GskPathOperation        op,
+                      const graphene_point_t *pts,
+                      gsize                   n_pts,
+                      float                   weight,
+                      gpointer                data)
+{
+  GskPathBuilder *builder = data;
+  GskCurve curve;
+
+  gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+  gsk_curve_builder_to (&curve, builder);
+
+  return TRUE;
+}
+
 static void
 gsk_circle_contour_add_segment (const GskContour *contour,
                                 GskPathBuilder   *builder,
@@ -784,14 +800,28 @@ gsk_circle_contour_add_segment (const GskContour *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float delta = self->end_angle - self->start_angle;
   float length = self->radius * DEG_TO_RAD (delta);
-  GskContour *segment;
+  float start_angle = self->start_angle + start/length * delta;
+  float end_angle = self->start_angle + end/length * delta;
 
-  if (!emit_move_to)
-    g_warning ("FIXME: somebody needs to decompose contours into segments differently");
-  segment = gsk_circle_contour_new (&self->center, self->radius,
-                                    self->start_angle + start/length * delta,
-                                    self->start_angle + end/length * delta);
-  gsk_path_builder_add_contour (builder, segment);
+  if (emit_move_to)
+    {
+      GskContour *segment;
+
+      segment = gsk_circle_contour_new (&self->center, self->radius,
+                                        start_angle, end_angle);
+      gsk_path_builder_add_contour (builder, segment);
+    }
+  else
+    {
+      /* convert to a standard contour */
+      gsk_spline_decompose_arc (&self->center,
+                                self->radius,
+                                GSK_PATH_TOLERANCE_DEFAULT,
+                                DEG_TO_RAD (start_angle),
+                                DEG_TO_RAD (end_angle),
+                                gsk_circle_contour_curve,
+                                &(ForeachWrapper) { add_curve_to_segment, builder });
+    }
 }
 
 static int
