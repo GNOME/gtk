@@ -97,6 +97,8 @@ gboolean                gsk_contour_get_stroke_bounds           (const GskContou
                                                                  const GskStroke        *stroke,
                                                                  graphene_rect_t        *bounds);
 
+gboolean                gsk_contour_is_convex                   (const GskContour       *contour);
+
 G_END_DECLS
 
 #endif /* __GSK_CONTOUR_PRIVATE_H__ */

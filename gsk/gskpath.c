@@ -1351,3 +1351,25 @@ gsk_path_transform (GskPath      *self,
 
   return gsk_path_builder_free_to_path (data.builder);
 }
+
+/**
+ * gsk_path_is_convex:
+ * @self: a `GskPath`
+ *
+ * Returns information about whether this path is convex.
+ *
+ * A path with more than one contour is never convex.
+ *
+ * Returns: `TRUE` if @self is convex
+ */
+gboolean
+gsk_path_is_convex (GskPath *self)
+{
+  if (self->n_contours == 0)
+    return TRUE;
+
+  if (self->n_contours > 1)
+    return FALSE;
+
+  return gsk_contour_is_convex (gsk_path_get_contour (self, 0));
+}
