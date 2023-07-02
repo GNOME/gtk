@@ -38,6 +38,8 @@ usage (void)
              "Perform various tasks on paths.\n"
              "\n"
              "Commands:\n"
+             "  stroke       Stroke the path\n"
+             "  offset       Offset the path\n"
              "  decompose    Decompose the path\n"
              "  transform    Transform the path\n"
              "  reverse      Reverse the path\n"
@@ -131,6 +133,8 @@ main (int argc, const char *argv[])
     do_decompose (&argc, &argv);
   else if (strcmp (argv[0], "info") == 0)
     do_info (&argc, &argv);
+  else if (strcmp (argv[0], "offset") == 0)
+    do_offset (&argc, &argv);
   else if (strcmp (argv[0], "render") == 0)
     do_render (&argc, &argv);
   else if (strcmp (argv[0], "restrict") == 0)
@@ -139,6 +143,8 @@ main (int argc, const char *argv[])
     do_reverse (&argc, &argv);
   else if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
+  else if (strcmp (argv[0], "stroke") == 0)
+    do_stroke (&argc, &argv);
   else if (strcmp (argv[0], "transform") == 0)
     do_transform (&argc, &argv);
   else
