@@ -6,6 +6,7 @@ void do_restrict  (int *argc, const char ***argv);
 void do_reverse   (int *argc, const char ***argv);
 void do_render    (int *argc, const char ***argv);
 void do_show      (int *argc, const char ***argv);
+void do_pathop    (const char *op, int *argc, const char ***argv);
 
 GskPath *get_path       (const char *arg);
 int      get_enum_value (GType       type,
