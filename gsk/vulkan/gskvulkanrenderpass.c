@@ -11,7 +11,7 @@
 #include "gsktransform.h"
 #include "gskvulkanblendmodeopprivate.h"
 #include "gskvulkanbluropprivate.h"
-#include "gskvulkanborderpipelineprivate.h"
+#include "gskvulkanborderopprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
@@ -54,7 +54,6 @@ typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 typedef enum {
   /* GskVulkanOpRender */
   GSK_VULKAN_OP_LINEAR_GRADIENT,
-  GSK_VULKAN_OP_BORDER,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
   GSK_VULKAN_OP_COLOR_TEXT,
@@ -554,23 +553,12 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
                                         const GskVulkanParseState *state,
                                         GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_BORDER,
-    .node = node,
-    .offset = state->offset,
-  };
-
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_BORDER;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED;
-
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
-
+  gsk_vulkan_border_op (self,
+                        gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                        gsk_border_node_get_outline (node),
+                        &state->offset,
+                        gsk_border_node_get_widths (node),
+                        gsk_border_node_get_colors (node));
   return TRUE;
 }
 
@@ -1504,7 +1492,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
-        case GSK_VULKAN_OP_BORDER:
           break;
         }
 }
@@ -1537,7 +1524,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
       switch (op->any.type)
         {
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
-        case GSK_VULKAN_OP_BORDER:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
           op->render.vertex_offset = n_bytes;
@@ -1637,15 +1623,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                                    gsk_linear_gradient_node_get_n_color_stops (op->render.node));
           break;
 
-        case GSK_VULKAN_OP_BORDER:
-          gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
-                                                          data + op->render.vertex_offset,
-                                                          &op->render.offset,
-                                                          gsk_border_node_get_outline (op->render.node),
-                                                          gsk_border_node_get_widths (op->render.node),
-                                                          gsk_border_node_get_colors (op->render.node));
-          break;
-
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
@@ -1739,7 +1716,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
         default:
           g_assert_not_reached ();
 
-        case GSK_VULKAN_OP_BORDER:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           break;
         }
@@ -1804,7 +1780,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
   switch (op->any.type)
     {
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
-    case GSK_VULKAN_OP_BORDER:
       return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
 
     case GSK_VULKAN_OP_TEXT:
@@ -1849,13 +1824,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                                     command_buffer,
                                                     op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
                                                     1);
-          break;
-
-        case GSK_VULKAN_OP_BORDER:
-          gsk_vulkan_border_pipeline_draw (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
-                                           command_buffer,
-                                           op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                           1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:

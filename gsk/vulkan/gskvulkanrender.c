@@ -10,7 +10,6 @@
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 
-#include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
@@ -501,9 +500,6 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "linear",                     0, gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip",                0, gsk_vulkan_linear_gradient_pipeline_new },
     { "linear-clip-rounded",        0, gsk_vulkan_linear_gradient_pipeline_new },
-    { "border",                     0, gsk_vulkan_border_pipeline_new },
-    { "border-clip",                0, gsk_vulkan_border_pipeline_new },
-    { "border-clip-rounded",        0, gsk_vulkan_border_pipeline_new },
     { "mask",                       1, gsk_vulkan_text_pipeline_new },
     { "mask-clip",                  1, gsk_vulkan_text_pipeline_new },
     { "mask-clip-rounded",          1, gsk_vulkan_text_pipeline_new },

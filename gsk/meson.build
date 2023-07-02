@@ -109,7 +109,7 @@ if have_vulkan
   gsk_private_sources += files([
     'vulkan/gskvulkanblendmodeop.c',
     'vulkan/gskvulkanblurop.c',
-    'vulkan/gskvulkanborderpipeline.c',
+    'vulkan/gskvulkanborderop.c',
     'vulkan/gskvulkanbuffer.c',
     'vulkan/gskvulkanclip.c',
     'vulkan/gskvulkancolormatrixop.c',
