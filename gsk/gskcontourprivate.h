@@ -21,13 +21,12 @@
 #ifndef __GSK_CONTOUR_PRIVATE_H__
 #define __GSK_CONTOUR_PRIVATE_H__
 
-#include <gskpath.h>
-
+#include "gskpath.h"
 #include "gskpathopprivate.h"
 
 G_BEGIN_DECLS
 
-typedef enum 
+typedef enum
 {
   GSK_PATH_FLAT,
   GSK_PATH_CLOSED
