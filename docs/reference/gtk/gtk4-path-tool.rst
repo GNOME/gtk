@@ -12,6 +12,11 @@ SYNOPSIS
 --------
 |   **gtk4-path-tool** <COMMAND> [OPTIONS...] <PATH>
 |
+|   **gtk4-path-tool** simplify [OPTIONS...] <PATH>
+|   **gtk4-path-tool** intersection [OPTIONS...] <PATH> <PATH>
+|   **gtk4-path-tool** union [OPTIONS...] <PATH> <PATH>
+|   **gtk4-path-tool** difference [OPTIONS...] <PATH> <PATH>
+|   **gtk4-path-tool** symmetric-difference [OPTIONS...] <PATH> <PATH>
 |   **gtk4-path-tool** decompose [OPTIONS...] <PATH>
 |   **gtk4-path-tool** transform [OPTIONS...] <PATH>
 |   **gtk4-path-tool** reverse [OPTIONS...] <PATH>
@@ -31,6 +36,22 @@ To read a path from stdin, use '-'.
 
 COMMANDS
 --------
+
+=======
+Boolean Operations
+^^^^^^^^^^^^^^^^^^
+
+The ``intersection``, ``union``, ``difference`` and ``symmetric-difference`` commands
+perform boolean operations on paths. Given two paths, they create a new path which
+encircles the area that is the intersection, union, difference or symmetric difference
+of the areas encircled by the paths.
+
+Simplification
+^^^^^^^^^^^^^^
+
+The ``simplify`` command removes areas of overlap from a path such that the resulting
+path encircles the same area, but every edge in the resulting path is a boundary between
+the inside and the outside.
 
 Decomposing
 ^^^^^^^^^^^
