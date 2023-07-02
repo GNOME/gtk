@@ -2421,6 +2421,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
 
   g_return_val_if_fail (outline != NULL, NULL);
   g_return_val_if_fail (color != NULL, NULL);
+  g_return_val_if_fail (blur_radius >= 0, NULL);
 
   self = gsk_render_node_alloc (GSK_INSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
@@ -2696,7 +2697,7 @@ gsk_outset_shadow_node_diff (GskRenderNode  *node1,
 
 static void
 gsk_outset_shadow_node_class_init (gpointer g_class,
-                          gpointer class_data)
+                                   gpointer class_data)
 {
   GskRenderNodeClass *node_class = g_class;
 
@@ -2734,6 +2735,7 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
 
   g_return_val_if_fail (outline != NULL, NULL);
   g_return_val_if_fail (color != NULL, NULL);
+  g_return_val_if_fail (blur_radius >= 0, NULL);
 
   self = gsk_render_node_alloc (GSK_OUTSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
