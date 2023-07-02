@@ -10,7 +10,7 @@
 #include "gskroundedrectprivate.h"
 #include "gsktransform.h"
 #include "gskvulkanblendmodeopprivate.h"
-#include "gskvulkanblurpipelineprivate.h"
+#include "gskvulkanbluropprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
@@ -54,7 +54,6 @@ typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 typedef enum {
   /* GskVulkanOpRender */
   GSK_VULKAN_OP_LINEAR_GRADIENT,
-  GSK_VULKAN_OP_BLUR,
   GSK_VULKAN_OP_BORDER,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
@@ -71,14 +70,8 @@ struct _GskVulkanOpRender
   GskRenderNode       *node; /* node that's the source of this op */
   graphene_point_t     offset; /* offset of the node */
   GskVulkanPipeline   *pipeline; /* pipeline to use */
-  GskVulkanImage      *source; /* source image to render */
-  GskVulkanImage      *source2; /* second source image to render (if relevant) */
   gsize                vertex_offset; /* offset into vertex buffer */
-  guint32              image_descriptor; /* index into descriptor for the image */
-  guint32              image_descriptor2; /* index into descriptor for the 2nd image (if relevant) */
   gsize                buffer_offset; /* offset into buffer */
-  graphene_rect_t      source_rect; /* area that source maps to */
-  graphene_rect_t      source2_rect; /* area that source2 maps to */
 };
 
 struct _GskVulkanOpText
@@ -1310,22 +1303,32 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
                                       const GskVulkanParseState *state,
                                       GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_BLUR,
-    .node = node,
-    .offset = state->offset,
-  };
+  GskVulkanImage *image;
+  graphene_rect_t tex_rect;
+  float radius;
 
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_BLUR;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED;
+  radius = gsk_blur_node_get_radius (node);
+  if (radius == 0)
+    {
+      gsk_vulkan_render_pass_add_node (self, render, state, gsk_blur_node_get_child (node));
+      return TRUE;
+    }
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                    render,
+                                                    state,
+                                                    gsk_blur_node_get_child (node),
+                                                    &tex_rect);
+  if (image == NULL)
+    return TRUE;
+
+  gsk_vulkan_blur_op (self,
+                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                      image,
+                      &node->bounds,
+                      &state->offset,
+                      &tex_rect,
+                      radius);
 
   return TRUE;
 }
@@ -1450,177 +1453,6 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
 }
 
-static GskVulkanImage *
-gsk_vulkan_render_pass_render_offscreen (GdkVulkanContext      *vulkan,
-                                         GskVulkanRender       *render,
-                                         GskVulkanUploader     *uploader,
-                                         VkSemaphore            semaphore,
-                                         GskRenderNode         *node,
-                                         const graphene_vec2_t *scale,
-                                         const graphene_rect_t *viewport)
-{
-  graphene_rect_t view;
-  cairo_region_t *clip;
-  GskVulkanRenderPass *pass;
-  GskVulkanImage *result;
-  float scale_x, scale_y;
-
-  scale_x = graphene_vec2_get_x (scale);
-  scale_y = graphene_vec2_get_y (scale);
-  view = GRAPHENE_RECT_INIT (scale_x * viewport->origin.x,
-                             scale_y * viewport->origin.y,
-                             ceil (scale_x * viewport->size.width),
-                             ceil (scale_y * viewport->size.height));
-
-  result = gsk_vulkan_image_new_for_offscreen (vulkan,
-                                               gdk_vulkan_context_get_offscreen_format (vulkan,
-                                                   gsk_render_node_get_preferred_depth (node)),
-                                               view.size.width, view.size.height);
-
-#ifdef G_ENABLE_DEBUG
-  {
-    GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
-    gsk_profiler_counter_add (profiler,
-                              texture_pixels_quark,
-                              view.size.width * view.size.height);
-  }
-#endif
-
-  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                          0, 0,
-                                          gsk_vulkan_image_get_width (result),
-                                          gsk_vulkan_image_get_height (result)
-                                        });
-
-  pass = gsk_vulkan_render_pass_new (vulkan,
-                                     result,
-                                     scale,
-                                     &view,
-                                     clip,
-                                     semaphore);
-
-  cairo_region_destroy (clip);
-
-  gsk_vulkan_render_add_render_pass (render, pass);
-  gsk_vulkan_render_pass_add (pass, render, node);
-  gsk_vulkan_render_add_cleanup_image (render, result);
-
-  return result;
-}
-
-static GskVulkanImage *
-gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass    *self,
-                                            GskVulkanRender        *render,
-                                            GskVulkanUploader      *uploader,
-                                            GskRenderNode          *node,
-                                            const graphene_vec2_t  *scale,
-                                            const graphene_rect_t  *clip_bounds,
-                                            const graphene_point_t *clip_offset,
-                                            graphene_rect_t        *tex_bounds)
-{
-  VkSemaphore semaphore;
-  GskVulkanImage *result;
-  GskVulkanImageMap map;
-  gsize width, height;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  switch ((guint) gsk_render_node_get_node_type (node))
-    {
-    case GSK_TEXTURE_NODE:
-      result = gsk_vulkan_renderer_ref_texture_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                      gsk_texture_node_get_texture (node),
-                                                      uploader);
-      gsk_vulkan_render_add_cleanup_image (render, result);
-      *tex_bounds = node->bounds;
-      return result;
-
-    case GSK_CAIRO_NODE:
-      /* We're using recording surfaces, so drawing them to an image
-       * surface and uploading them is the right thing.
-       * But that's exactly what the fallback code does.
-       */
-      break;
-
-    default:
-      {
-        graphene_rect_t clipped;
-
-        graphene_rect_offset_r (clip_bounds, - clip_offset->x, - clip_offset->y, &clipped);
-        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
-
-        if (clipped.size.width == 0 || clipped.size.height == 0)
-          return NULL;
-
-        /* assuming the unclipped bounds should go to texture coordinates 0..1,
-         * calculate the coordinates for the clipped texture size
-         */
-        *tex_bounds = clipped;
-
-        vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                           &(VkSemaphoreCreateInfo) {
-                             VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                             NULL,
-                             0
-                           },
-                           NULL,
-                           &semaphore);
-
-        g_array_append_val (self->wait_semaphores, semaphore);
-
-        return gsk_vulkan_render_pass_render_offscreen (self->vulkan,
-                                                        render,
-                                                        uploader,
-                                                        semaphore,
-                                                        node,
-                                                        scale,
-                                                        &clipped);
-      }
-   }
-
-  GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK, "Node as texture not implemented for this case. Using %gx%g fallback surface",
-                      ceil (node->bounds.size.width),
-                      ceil (node->bounds.size.height));
-#ifdef G_ENABLE_DEBUG
-  {
-    GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
-    gsk_profiler_counter_add (profiler,
-                              fallback_pixels_quark,
-                              ceil (node->bounds.size.width) * ceil (node->bounds.size.height));
-  }
-#endif
-
-  /* XXX: We could intersect bounds with clip bounds here */
-  width = ceil (node->bounds.size.width * graphene_vec2_get_x (scale));
-  height = ceil (node->bounds.size.height * graphene_vec2_get_y (scale));
-
-  result = gsk_vulkan_image_new_for_upload (self->vulkan, GDK_MEMORY_DEFAULT, width, height);
-  gsk_vulkan_image_map_memory (result, uploader, GSK_VULKAN_WRITE, &map);
-  surface = cairo_image_surface_create_for_data (map.data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width, height,
-                                                 map.stride);
-  cairo_surface_set_device_scale (surface,
-                                  width / node->bounds.size.width,
-                                  height / node->bounds.size.height);
-  cr = cairo_create (surface);
-  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
-
-  gsk_render_node_draw (node, cr);
-
-  cairo_destroy (cr);
-
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
-
-  gsk_vulkan_image_unmap_memory (result, uploader, &map);
-  gsk_vulkan_render_add_cleanup_image (render, result);
-
-  *tex_bounds = node->bounds;
-
-  return result;
-}
-
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                GskVulkanRender      *render,
@@ -1668,23 +1500,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
           }
           break;
 
-        case GSK_VULKAN_OP_BLUR:
-          {
-            GskRenderNode *child = gsk_blur_node_get_child (op->render.node);
-            graphene_rect_t tex_bounds;
-
-            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
-                                                                            render,
-                                                                            uploader,
-                                                                            child,
-                                                                            scale,
-                                                                            clip,
-                                                                            &op->render.offset,
-                                                                            &tex_bounds);
-            gsk_vulkan_normalize_tex_coords (&op->render.source_rect, &op->render.node->bounds, &tex_bounds);
-          }
-          break;
-
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
@@ -1722,7 +1537,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
       switch (op->any.type)
         {
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
-        case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_BORDER:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
@@ -1823,16 +1637,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                                    gsk_linear_gradient_node_get_n_color_stops (op->render.node));
           break;
 
-        case GSK_VULKAN_OP_BLUR:
-          gsk_vulkan_blur_pipeline_collect_vertex_data (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline),
-                                                        data + op->render.vertex_offset,
-                                                        op->render.image_descriptor,
-                                                        &op->render.offset,
-                                                        &op->render.node->bounds,
-                                                        &op->render.source_rect,
-                                                        gsk_blur_node_get_radius (op->render.node));
-          break;
-
         case GSK_VULKAN_OP_BORDER:
           gsk_vulkan_border_pipeline_collect_vertex_data (GSK_VULKAN_BORDER_PIPELINE (op->render.pipeline),
                                                           data + op->render.vertex_offset,
@@ -1910,15 +1714,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_BLUR:
-          if (op->render.source)
-            {
-              op->render.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                                    op->render.source,
-                                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
-            }
-          break;
-
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
           op->text.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
@@ -2009,7 +1804,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
   switch (op->any.type)
     {
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
-    case GSK_VULKAN_OP_BLUR:
     case GSK_VULKAN_OP_BORDER:
       return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
 
@@ -2048,15 +1842,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                                command_buffer,
                                                op->text.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->text.pipeline),
                                                op->text.num_glyphs);
-          break;
-
-        case GSK_VULKAN_OP_BLUR:
-          if (!op->render.source)
-            break;
-          gsk_vulkan_blur_pipeline_draw (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline),
-                                         command_buffer,
-                                         op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                         1);
           break;
 
         case GSK_VULKAN_OP_LINEAR_GRADIENT:

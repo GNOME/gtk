@@ -108,7 +108,7 @@ gsk_private_vulkan_shader_headers = []
 if have_vulkan
   gsk_private_sources += files([
     'vulkan/gskvulkanblendmodeop.c',
-    'vulkan/gskvulkanblurpipeline.c',
+    'vulkan/gskvulkanblurop.c',
     'vulkan/gskvulkanborderpipeline.c',
     'vulkan/gskvulkanbuffer.c',
     'vulkan/gskvulkanclip.c',
