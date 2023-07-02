@@ -70,6 +70,9 @@ do_info (int *argc, const char ***argv)
       if (gsk_path_measure_is_closed (measure))
         g_print ("%s\n", _("Path is closed"));
 
+      if (gsk_path_is_convex (path))
+        g_print ("%s\n", _("Path is convex"));
+
       g_print ("%s %g\n", _("Path length"), gsk_path_measure_get_length (measure));
 
       if (gsk_path_get_bounds (path, &bounds))
