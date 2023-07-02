@@ -185,6 +185,11 @@ void                    gsk_curve_print                         (const GskCurve 
 
 char *                  gsk_curve_to_string                     (const GskCurve         *curve);
 
+void                    gsk_curve_get_closest_point             (const GskCurve         *curve,
+                                                                 const graphene_point_t *point,
+                                                                 float                  *out_distance,
+                                                                 graphene_point_t       *out_point,
+                                                                 float                  *out_t);
 
 G_END_DECLS
 

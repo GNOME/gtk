@@ -2368,3 +2368,132 @@ gsk_curve_raise (const GskCurve *curve,
   else
     g_assert_not_reached ();
 }
+
+static void
+project_point_onto_line (const GskCurve         *curve,
+                         const graphene_point_t *point,
+                         float                  *out_distance,
+                         graphene_point_t       *out_point,
+                         float                  *out_t)
+{
+  const graphene_point_t *a = gsk_curve_get_start_point (curve);
+  const graphene_point_t *b = gsk_curve_get_end_point (curve);
+  graphene_vec2_t n, ap;
+
+  graphene_vec2_init (&n, b->x - a->x, b->y - a->y);
+  graphene_vec2_init (&ap, point->x - a->x, point->y - a->y);
+
+  *out_t = graphene_vec2_dot (&n, &ap) / graphene_vec2_dot (&n, &n);
+  *out_t = CLAMP (*out_t, 0, 1);
+
+  graphene_point_interpolate (a, b, *out_t, out_point);
+  *out_distance = graphene_point_distance (point, out_point, NULL, NULL);
+}
+
+static void
+find_closest_point_by_bisection (const GskCurve         *curve,
+                                 const graphene_point_t *point,
+                                 float                  *out_distance,
+                                 graphene_point_t       *out_point,
+                                 float                  *out_t)
+{
+  float t[20];
+  float d[20];
+  graphene_point_t p[20];
+  float dist = INFINITY;
+  int lower, pos, upper;
+  int count;
+
+  pos = 0;
+
+  for (int i = 0; i < 20; i++)
+    {
+      t[i] = i / 19.f;
+      gsk_curve_get_point (curve, t[i], &p[i]);
+      d[i] = graphene_point_distance (&p[i], point, NULL, NULL);
+      if (d[i] < dist)
+        {
+          dist = d[i];
+          pos = i;
+        }
+    }
+
+  lower = MAX (pos - 1, 0);
+  upper = MIN (pos + 1, 19);
+
+  count = 0;
+
+  do
+    {
+      float step = (t[upper] - t[lower]) / 4;
+      if (step < 0.0001 || dist < 0.001)
+        {
+          *out_distance = d[pos];
+          *out_point = p[pos];
+          *out_t = t[pos];
+          return;
+        }
+
+      t[0] = t[lower];
+      t[4] = t[upper];
+
+      p[0] = p[lower];
+      p[4] = p[upper];
+
+      d[0] = d[lower];
+      d[4] = d[upper];
+
+      t[1] = t[0] + step;
+      t[2] = t[0] + 2 * step;
+      t[3] = t[0] + 3 * step;
+
+      gsk_curve_get_point (curve, t[1], &p[1]);
+      gsk_curve_get_point (curve, t[2], &p[2]);
+      gsk_curve_get_point (curve, t[3], &p[3]);
+
+      d[1] = graphene_point_distance (&p[1], point, NULL, NULL);
+      d[2] = graphene_point_distance (&p[2], point, NULL, NULL);
+      d[3] = graphene_point_distance (&p[3], point, NULL, NULL);
+
+      pos = 2;
+
+      for (int i = 0; i < 5; i++)
+        {
+          if (d[i] < dist)
+            {
+              dist = d[i];
+              pos = i;
+            }
+        }
+
+      lower = MAX (pos - 1, 0);
+      upper = MIN (pos + 1, 4);
+
+    } while (count++ < 50);
+}
+
+void
+gsk_curve_get_closest_point (const GskCurve         *curve,
+                             const graphene_point_t *point,
+                             float                  *out_distance,
+                             graphene_point_t       *out_point,
+                             float                  *out_t)
+{
+  switch (curve->op)
+    {
+    case GSK_PATH_LINE:
+    case GSK_PATH_CLOSE:
+      project_point_onto_line (curve, point, out_distance, out_point, out_t);
+      break;
+
+    case GSK_PATH_QUAD:
+    case GSK_PATH_CUBIC:
+    case GSK_PATH_CONIC:
+      find_closest_point_by_bisection (curve, point, out_distance, out_point, out_t);
+      break;
+
+    case GSK_PATH_MOVE:
+    default:
+      g_assert_not_reached ();
+    }
+}
