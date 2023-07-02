@@ -40,6 +40,12 @@ usage (void)
              "Commands:\n"
              "  stroke       Stroke the path\n"
              "  offset       Offset the path\n"
+             "  simplify     Simplify the path\n"
+             "  intersection Intersect two paths\n"
+             "  union        Create the union of two paths\n"
+             "  difference   Create the difference of two paths\n"
+             "  symmetric-difference\n"
+             "               Create the symmetric difference of two paths\n"
              "  decompose    Decompose the path\n"
              "  restrict     Restrict the path to a segment\n"
              "  show         Display the path in a window\n"
@@ -129,8 +135,12 @@ main (int argc, const char *argv[])
 
   if (strcmp (argv[0], "decompose") == 0)
     do_decompose (&argc, &argv);
+  else if (strcmp (argv[0], "difference") == 0)
+    do_pathop (argv[0], &argc, &argv);
   else if (strcmp (argv[0], "info") == 0)
     do_info (&argc, &argv);
+  else if (strcmp (argv[0], "intersection") == 0)
+    do_pathop (argv[0], &argc, &argv);
   else if (strcmp (argv[0], "offset") == 0)
     do_offset (&argc, &argv);
   else if (strcmp (argv[0], "render") == 0)
@@ -139,8 +149,14 @@ main (int argc, const char *argv[])
     do_restrict (&argc, &argv);
   else if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
+  else if (strcmp (argv[0], "simplify") == 0)
+    do_pathop (argv[0], &argc, &argv);
   else if (strcmp (argv[0], "stroke") == 0)
     do_stroke (&argc, &argv);
+  else if (strcmp (argv[0], "symmetric-difference") == 0)
+    do_pathop (argv[0], &argc, &argv);
+  else if (strcmp (argv[0], "union") == 0)
+    do_pathop (argv[0], &argc, &argv);
   else
     usage ();
 
