@@ -95,5 +95,23 @@ gsk_vulkan_rect_to_float (const graphene_rect_t *rect,
   values[3] = rect->size.height;
 }
 
+static inline void
+gsk_vulkan_rgba_to_float (const GdkRGBA *rgba,
+                          float          values[4])
+{
+  values[0] = rgba->red;
+  values[1] = rgba->green;
+  values[2] = rgba->blue;
+  values[3] = rgba->alpha;
+}
+
+static inline void
+gsk_vulkan_point_to_float (const graphene_point_t *point,
+                           float                   values[2])
+{
+  values[0] = point->x;
+  values[1] = point->y;
+}
+
 G_END_DECLS
 

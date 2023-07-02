@@ -12,18 +12,19 @@
 #include "gskvulkanblendmodeopprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
-#include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
+#include "gskvulkaninsetshadowopprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkanopprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkantextpipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanoffscreenopprivate.h"
+#include "gskvulkanoutsetshadowopprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanscissoropprivate.h"
 #include "gskvulkantextureopprivate.h"
@@ -55,8 +56,6 @@ typedef enum {
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_BLUR,
   GSK_VULKAN_OP_BORDER,
-  GSK_VULKAN_OP_INSET_SHADOW,
-  GSK_VULKAN_OP_OUTSET_SHADOW,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
   GSK_VULKAN_OP_COLOR_TEXT,
@@ -661,24 +660,18 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
                                               const GskVulkanParseState *state,
                                               GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_INSET_SHADOW,
-    .node = node,
-    .offset = state->offset,
-  };
-
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for inset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP_ROUNDED;
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_inset_shadow_op (self,
+                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                              gsk_inset_shadow_node_get_outline (node),
+                              &state->offset,
+                              gsk_inset_shadow_node_get_color (node),
+                              &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
+                                                    gsk_inset_shadow_node_get_dy (node)),
+                              gsk_inset_shadow_node_get_spread (node),
+                              gsk_inset_shadow_node_get_blur_radius (node));
 
   return TRUE;
 }
@@ -689,24 +682,18 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
                                                const GskVulkanParseState *state,
                                                GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_OUTSET_SHADOW,
-    .node = node,
-    .offset = state->offset,
-  };
-
   if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
     FALLBACK ("Blur support not implemented for outset shadows");
-  else if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP_ROUNDED;
 
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_outset_shadow_op (self,
+                               gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                               gsk_outset_shadow_node_get_outline (node),
+                               &state->offset,
+                               gsk_outset_shadow_node_get_color (node),
+                               &GRAPHENE_POINT_INIT (gsk_outset_shadow_node_get_dx (node),
+                                                     gsk_outset_shadow_node_get_dy (node)),
+                               gsk_outset_shadow_node_get_spread (node),
+                               gsk_outset_shadow_node_get_blur_radius (node));
 
   return TRUE;
 }
@@ -1703,8 +1690,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BORDER:
-        case GSK_VULKAN_OP_INSET_SHADOW:
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
           break;
         }
 }
@@ -1739,8 +1724,6 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_BORDER:
-        case GSK_VULKAN_OP_INSET_SHADOW:
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
           vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
           op->render.vertex_offset = n_bytes;
@@ -1859,30 +1842,6 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                           gsk_border_node_get_colors (op->render.node));
           break;
 
-        case GSK_VULKAN_OP_INSET_SHADOW:
-          gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
-                                                              data + op->render.vertex_offset,
-                                                              &op->render.offset,
-                                                              gsk_inset_shadow_node_get_outline (op->render.node),
-                                                              gsk_inset_shadow_node_get_color (op->render.node),
-                                                              gsk_inset_shadow_node_get_dx (op->render.node),
-                                                              gsk_inset_shadow_node_get_dy (op->render.node),
-                                                              gsk_inset_shadow_node_get_spread (op->render.node),
-                                                              gsk_inset_shadow_node_get_blur_radius (op->render.node));
-          break;
-
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
-          gsk_vulkan_box_shadow_pipeline_collect_vertex_data (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
-                                                              data + op->render.vertex_offset,
-                                                              &op->render.offset,
-                                                              gsk_outset_shadow_node_get_outline (op->render.node),
-                                                              gsk_outset_shadow_node_get_color (op->render.node),
-                                                              gsk_outset_shadow_node_get_dx (op->render.node),
-                                                              gsk_outset_shadow_node_get_dy (op->render.node),
-                                                              gsk_outset_shadow_node_get_spread (op->render.node),
-                                                              gsk_outset_shadow_node_get_blur_radius (op->render.node));
-          break;
-
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
@@ -1986,8 +1945,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
           g_assert_not_reached ();
 
         case GSK_VULKAN_OP_BORDER:
-        case GSK_VULKAN_OP_INSET_SHADOW:
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           break;
         }
@@ -2054,8 +2011,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
     case GSK_VULKAN_OP_LINEAR_GRADIENT:
     case GSK_VULKAN_OP_BLUR:
     case GSK_VULKAN_OP_BORDER:
-    case GSK_VULKAN_OP_INSET_SHADOW:
-    case GSK_VULKAN_OP_OUTSET_SHADOW:
       return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
 
     case GSK_VULKAN_OP_TEXT:
@@ -2116,14 +2071,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                            command_buffer,
                                            op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
                                            1);
-          break;
-
-        case GSK_VULKAN_OP_INSET_SHADOW:
-        case GSK_VULKAN_OP_OUTSET_SHADOW:
-          gsk_vulkan_box_shadow_pipeline_draw (GSK_VULKAN_BOX_SHADOW_PIPELINE (op->render.pipeline),
-                                               command_buffer,
-                                               op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                               1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
