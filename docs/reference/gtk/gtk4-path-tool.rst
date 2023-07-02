@@ -12,6 +12,8 @@ SYNOPSIS
 --------
 |   **gtk4-path-tool** <COMMAND> [OPTIONS...] <PATH>
 |
+|   **gtk4-path-tool** stroke [OPTIONS...] <PATH>
+|   **gtk4-path-tool** offset [OPTIONS...] <PATH>
 |   **gtk4-path-tool** decompose [OPTIONS...] <PATH>
 |   **gtk4-path-tool** restrict [OPTIONS...] <PATH>
 |   **gtk4-path-tool** show [OPTIONS...] <PATH>
@@ -29,6 +31,70 @@ To read a path from stdin, use '-'.
 
 COMMANDS
 --------
+
+Stroking
+^^^^^^^^
+
+The ``stroke`` command performs a stroke operation along the path according to
+the parameters specified via options.
+
+``--line-width=VALUE``
+
+  The line width to use for the stroke. ``VALUE`` must be a positive number.
+  The default line width is 1.
+
+``--line-cap=VALUE``
+
+  The cap style to use at line ends. The possible values are ``butt``, ``round``
+  or ``square``. See the SVG specification for details on these styles.
+  The default cap style is ``butt``.
+
+``--line-join=VALUE``
+
+  The join style to use at line joins. The possible values are ``miter``,
+  ``miter-clip``, ``round``, ``bevel`` or ``arcs``. See the SVG specification
+  for details on these styles.
+  The default join style is ``miter``.
+
+``--miter-limit=VALUE``
+
+  The limit at which to clip miters at line joins. The default value is 4.
+
+``--dashes=VALUE``
+
+  The dash pattern to use for this stroke. A dash pattern is specified by
+  a comma-separated list of alternating non-negative numbers. Each number
+  provides the length of alternate "on" and "off" portions of the stroke.
+  If the dash pattern is empty, dashing is disabled, which is the default.
+  See the SVG specification for details on dashing.
+
+``--dash-offset=VALUE``
+
+  The offset into the dash pattern where dashing should begin.
+  The default value is 0.
+
+Offsetting
+^^^^^^^^^^
+
+The ``offset`` command applies a lateral offset to the path. Note that this
+is different from applying a translation transformation.
+
+``--distance=VALUE``
+
+  The distance by which to offset the path. Positive values offset to the right,
+  negative values to the left (wrt to the direction of the path). The default
+  value is 0.
+
+``--line-join=VALUE``
+
+  The join style to use at line joins. The possible values are ``miter``,
+  ``miter-clip``, ``round``, ``bevel`` or ``arcs``. See the SVG specification
+  for details on these styles.
+  The default join style is ``miter``.
+
+``--miter-limit=VALUE``
+
+  The limit at which to clip miters at line joins. The default value is 4.
 
 Decomposing
 ^^^^^^^^^^^
@@ -113,7 +179,7 @@ Info
 ^^^^
 
 The ``info`` command shows various information about the given path,
-such as its bounding box and and its length.
+such as the number of contours, its bounding box and and its length.
 
 REFERENCES
 ----------

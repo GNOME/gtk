@@ -38,6 +38,8 @@ usage (void)
              "Perform various tasks on paths.\n"
              "\n"
              "Commands:\n"
+             "  stroke       Stroke the path\n"
+             "  offset       Offset the path\n"
              "  decompose    Decompose the path\n"
              "  restrict     Restrict the path to a segment\n"
              "  show         Display the path in a window\n"
@@ -129,12 +131,16 @@ main (int argc, const char *argv[])
     do_decompose (&argc, &argv);
   else if (strcmp (argv[0], "info") == 0)
     do_info (&argc, &argv);
+  else if (strcmp (argv[0], "offset") == 0)
+    do_offset (&argc, &argv);
   else if (strcmp (argv[0], "render") == 0)
     do_render (&argc, &argv);
   else if (strcmp (argv[0], "restrict") == 0)
     do_restrict (&argc, &argv);
   else if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
+  else if (strcmp (argv[0], "stroke") == 0)
+    do_stroke (&argc, &argv);
   else
     usage ();
 
