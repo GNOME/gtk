@@ -3107,6 +3107,7 @@ gsk_gl_render_job_visit_text_node_legacy (GskGLRenderJob      *job,
     }
 }
 
+/* Keep this in sync with glyph_vertex_transcode in glyphy.vs.glsl */
 typedef struct
 {
   float x;

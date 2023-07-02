@@ -59,6 +59,15 @@
 #define GRID_SIZE 20 /* Per EM */
 #define ENLIGHTEN_MAX .01 /* Per EM */
 #define EMBOLDEN_MAX .024 /* Per EM */
+
+/* We split the atlas into cells of size 64x8, so the minimum number of
+ * bytes we store per glyph is 2048, and an atlas of size 2048x1024 can
+ * hold at most 4096 glyphs. We need 5 and 7 bits to store the position
+ * of a glyph in the atlas.
+ *
+ * We allocate each glyph a column of as many vertically adjacent cells
+ * as it needs.
+ */
 #define ITEM_W 64
 #define ITEM_H_QUANTUM 8
 

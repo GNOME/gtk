@@ -4,6 +4,7 @@
 _OUT_ vec4 v_glyph;
 _OUT_ vec4 final_color;
 
+// Keep this in sync with glyph_encode in gskglrenderjob.c
 vec4
 glyph_vertex_transcode (vec2 v)
 {
