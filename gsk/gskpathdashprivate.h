@@ -21,7 +21,7 @@
 #ifndef __GSK_PATH_DASH_PRIVATE_H__
 #define __GSK_PATH_DASH_PRIVATE_H__
 
-#include <gsk/gskpath.h>
+#include "gskpath.h"
 
 G_BEGIN_DECLS
 
