@@ -470,11 +470,11 @@ GskRenderNode *         gsk_fill_node_new                       (GskRenderNode  
                                                                  GskPath                  *path,
                                                                  GskFillRule               fill_rule);
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_fill_node_get_child                 (GskRenderNode            *node);
+GskRenderNode *         gsk_fill_node_get_child                 (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_ALL
-GskPath *               gsk_fill_node_get_path                  (GskRenderNode            *node);
+GskPath *               gsk_fill_node_get_path                  (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_ALL
-GskFillRule             gsk_fill_node_get_fill_rule             (GskRenderNode            *node);
+GskFillRule             gsk_fill_node_get_fill_rule             (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_stroke_node_get_type                (void) G_GNUC_CONST;
@@ -483,11 +483,11 @@ GskRenderNode *         gsk_stroke_node_new                     (GskRenderNode  
                                                                  GskPath                  *path,
                                                                  const GskStroke          *stroke);
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_stroke_node_get_child               (GskRenderNode            *node);
+GskRenderNode *         gsk_stroke_node_get_child               (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_ALL
-GskPath *               gsk_stroke_node_get_path                (GskRenderNode            *node);
+GskPath *               gsk_stroke_node_get_path                (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_ALL
-const GskStroke *       gsk_stroke_node_get_stroke              (GskRenderNode            *node);
+const GskStroke *       gsk_stroke_node_get_stroke              (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_shadow_node_get_type                (void) G_GNUC_CONST;

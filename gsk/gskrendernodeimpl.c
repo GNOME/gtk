@@ -4512,9 +4512,9 @@ gsk_fill_node_new (GskRenderNode *child,
  * Returns: (transfer none): The child that is getting drawn
  **/
 GskRenderNode *
-gsk_fill_node_get_child (GskRenderNode *node)
+gsk_fill_node_get_child (const GskRenderNode *node)
 {
-  GskFillNode *self = (GskFillNode *) node;
+  const GskFillNode *self = (const GskFillNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_FILL_NODE), NULL);
 
@@ -4525,15 +4525,15 @@ gsk_fill_node_get_child (GskRenderNode *node)
  * gsk_fill_node_get_path:
  * @node: (type GskFillNode): a fill #GskRenderNode
  *
- * Retrievs the path used to describe the area filled with the contents of
+ * Retrieves the path used to describe the area filled with the contents of
  * the @node.
  *
  * Returns: (transfer none): a #GskPath
  */
 GskPath *
-gsk_fill_node_get_path (GskRenderNode *node)
+gsk_fill_node_get_path (const GskRenderNode *node)
 {
-  GskFillNode *self = (GskFillNode *) node;
+  const GskFillNode *self = (const GskFillNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_FILL_NODE), NULL);
 
@@ -4544,14 +4544,14 @@ gsk_fill_node_get_path (GskRenderNode *node)
  * gsk_fill_node_get_fill_rule:
  * @node: (type GskFillNode): a fill #GskRenderNode
  *
- * Retrievs the fill rule used to determine how the path is filled.
+ * Retrieves the fill rule used to determine how the path is filled.
  *
  * Returns: a #GskFillRule
  */
 GskFillRule
-gsk_fill_node_get_fill_rule (GskRenderNode *node)
+gsk_fill_node_get_fill_rule (const GskRenderNode *node)
 {
-  GskFillNode *self = (GskFillNode *) node;
+  const GskFillNode *self = (const GskFillNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_FILL_NODE), GSK_FILL_RULE_WINDING);
 
@@ -4608,8 +4608,8 @@ gsk_stroke_node_draw (GskRenderNode *node,
 
 static void
 gsk_stroke_node_diff (GskRenderNode  *node1,
-                    GskRenderNode  *node2,
-                    cairo_region_t *region)
+                      GskRenderNode  *node2,
+                      cairo_region_t *region)
 {
   GskStrokeNode *self1 = (GskStrokeNode *) node1;
   GskStrokeNode *self2 = (GskStrokeNode *) node2;
@@ -4632,7 +4632,7 @@ gsk_stroke_node_diff (GskRenderNode  *node1,
 
 static void
 gsk_stroke_node_class_init (gpointer g_class,
-                          gpointer class_data)
+                            gpointer class_data)
 {
   GskRenderNodeClass *node_class = g_class;
 
@@ -4691,9 +4691,9 @@ gsk_stroke_node_new (GskRenderNode   *child,
  * Returns: (transfer none): The child that is getting drawn
  **/
 GskRenderNode *
-gsk_stroke_node_get_child (GskRenderNode *node)
+gsk_stroke_node_get_child (const GskRenderNode *node)
 {
-  GskStrokeNode *self = (GskStrokeNode *) node;
+  const GskStrokeNode *self = (const GskStrokeNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_STROKE_NODE), NULL);
 
@@ -4710,9 +4710,9 @@ gsk_stroke_node_get_child (GskRenderNode *node)
  * Returns: (transfer none): a #GskPath
  */
 GskPath *
-gsk_stroke_node_get_path (GskRenderNode *node)
+gsk_stroke_node_get_path (const GskRenderNode *node)
 {
-  GskStrokeNode *self = (GskStrokeNode *) node;
+  const GskStrokeNode *self = (const GskStrokeNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_STROKE_NODE), NULL);
 
@@ -4723,14 +4723,14 @@ gsk_stroke_node_get_path (GskRenderNode *node)
  * gsk_stroke_node_get_stroke:
  * @node: (type GskStrokeNode): a stroke #GskRenderNode
  *
- * Retrievs the stroke attributes used in this @node.
+ * Retrieves the stroke attributes used in this @node.
  *
  * Returns: a #GskStroke
  */
 const GskStroke *
-gsk_stroke_node_get_stroke (GskRenderNode *node)
+gsk_stroke_node_get_stroke (const GskRenderNode *node)
 {
-  GskStrokeNode *self = (GskStrokeNode *) node;
+  const GskStrokeNode *self = (const GskStrokeNode *) node;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_STROKE_NODE), NULL);
 
