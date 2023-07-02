@@ -194,6 +194,30 @@ gboolean                gsk_path_foreach_intersection           (GskPath        
                                                                  GskPathIntersectionFunc func,
                                                                  gpointer                user_data);
 
+GDK_AVAILABLE_IN_4_20
+GskPath *               gsk_path_union                          (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_4_20
+GskPath *               gsk_path_intersection                   (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_4_20
+GskPath *               gsk_path_difference                     (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_4_20
+GskPath *               gsk_path_symmetric_difference           (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_4_20
+GskPath *               gsk_path_simplify                       (GskPath                *self,
+                                                                 GskFillRule             fill_rule);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPath, gsk_path_unref)
 
 G_END_DECLS
