@@ -27,6 +27,7 @@ gtk_tools = [
                       'gtk-path-tool-decompose.c',
                       'gtk-path-tool-info.c',
                       'gtk-path-tool-offset.c',
+                      'gtk-path-tool-pathops.c',
                       'gtk-path-tool-render.c',
                       'gtk-path-tool-restrict.c',
                       'gtk-path-tool-show.c',
