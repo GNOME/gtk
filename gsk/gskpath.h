@@ -133,6 +133,30 @@ GskPath *               gsk_path_offset                         (GskPath        
                                                                  float                   distance,
                                                                  GskStroke              *stroke);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_union                          (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_intersection                   (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_difference                     (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_symmetric_difference           (GskPath                *first,
+                                                                 GskPath                *second,
+                                                                 GskFillRule             fill_rule);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_simplify                       (GskPath                *self,
+                                                                 GskFillRule             fill_rule);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPath, gsk_path_unref)
 
 G_END_DECLS
