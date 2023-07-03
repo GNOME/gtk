@@ -87,8 +87,10 @@ foreach shader: gsk_private_vulkan_shaders
                                                    '-o', '@OUTPUT@'
                                                  ])
     gsk_private_vulkan_compiled_shaders_deps += [compiled_shader, compiled_clip_shader, compiled_clip_rounded_shader]
+    gsk_private_vulkan_compiled_shaders += [spv_shader, clip_spv_shader, clip_rounded_spv_shader]
+  else
+    gsk_private_vulkan_compiled_shaders += files(spv_shader, clip_spv_shader, clip_rounded_spv_shader)
   endif
-  gsk_private_vulkan_compiled_shaders += files(spv_shader, clip_spv_shader, clip_rounded_spv_shader)
 endforeach
 
 foreach shader: gsk_private_vulkan_vertex_shaders
