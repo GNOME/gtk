@@ -7,11 +7,11 @@
 #include "gskrendererprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
+#include "gskvulkanglyphcacheprivate.h"
 #include "gskvulkanpipelineprivate.h"
+#include "gskvulkanrendererprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 
-#include "gskvulkancolortextpipelineprivate.h"
-#include "gskvulkantextpipelineprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 
 #include "gdk/gdkvulkancontextprivate.h"
@@ -55,7 +55,6 @@ struct _GskVulkanRender
   GskDescriptorBufferInfos descriptor_buffers;
   VkDescriptorPool descriptor_pool;
   VkDescriptorSet descriptor_sets[N_DESCRIPTOR_SETS];
-  GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
   GHashTable *pipeline_cache;
 
   GskVulkanImage *target;
@@ -354,6 +353,9 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 {
   GList *l;
 
+  gsk_vulkan_glyph_cache_upload (gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (self->renderer)),
+                                 self->uploader);
+
   /* gsk_vulkan_render_pass_upload may call gsk_vulkan_render_add_node_for_texture,
    * prepending new render passes to the list. Therefore, we walk the list from
    * the end.
@@ -484,35 +486,6 @@ gsk_vulkan_render_create_pipeline (GskVulkanRender                            *s
   gdk_vulkan_context_pipeline_cache_updated (self->vulkan);
 
   return pipeline;
-}
-
-GskVulkanPipeline *
-gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
-                                GskVulkanPipelineType  type,
-                                VkRenderPass           render_pass)
-{
-  static const struct {
-    const char *name;
-    guint num_textures;
-    GskVulkanPipeline * (* create_func) (GdkVulkanContext *context, VkPipelineLayout layout, const char *name, VkRenderPass render_pass);
-  } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "mask",                       1, gsk_vulkan_text_pipeline_new },
-    { "mask-clip",                  1, gsk_vulkan_text_pipeline_new },
-    { "mask-clip-rounded",          1, gsk_vulkan_text_pipeline_new },
-    { "texture",                    1, gsk_vulkan_color_text_pipeline_new },
-    { "texture-clip",               1, gsk_vulkan_color_text_pipeline_new },
-    { "texture-clip-rounded",       1, gsk_vulkan_color_text_pipeline_new },
-  };
-
-  g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
-
-  if (self->pipelines[type] == NULL)
-    self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
-                                                             self->pipeline_layout,
-                                                             pipeline_info[type].name,
-                                                             render_pass);
-
-  return self->pipelines[type];
 }
 
 void
@@ -820,9 +793,6 @@ gsk_vulkan_render_free (GskVulkanRender *self)
       vkDestroyPipeline (device, value, NULL);
     }
   g_hash_table_unref (self->pipeline_cache);
-
-  for (i = 0; i < GSK_VULKAN_N_PIPELINES; i++)
-    g_clear_object (&self->pipelines[i]);
 
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 

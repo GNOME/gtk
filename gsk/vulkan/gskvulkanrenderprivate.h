@@ -11,17 +11,6 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GSK_VULKAN_PIPELINE_TEXT,
-  GSK_VULKAN_PIPELINE_TEXT_CLIP,
-  GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED,
-  /* add more */
-  GSK_VULKAN_N_PIPELINES
-} GskVulkanPipelineType;
-
-typedef enum {
   GSK_VULKAN_SAMPLER_DEFAULT,
   GSK_VULKAN_SAMPLER_REPEAT,
   GSK_VULKAN_SAMPLER_NEAREST
@@ -55,9 +44,6 @@ VkPipeline              gsk_vulkan_render_create_pipeline               (GskVulk
                                                                          const char             *clip_type,
                                                                          const VkPipelineVertexInputStateCreateInfo *vertex_input_state,
                                                                          VkFormat                format,
-                                                                         VkRenderPass            render_pass);
-GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
-                                                                         GskVulkanPipelineType   pipeline_type,
                                                                          VkRenderPass            render_pass);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
                                                                          GskVulkanImage         *source,
