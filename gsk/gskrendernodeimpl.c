@@ -5717,6 +5717,12 @@ gsk_mask_node_diff (GskRenderNode  *node1,
   GskMaskNode *self1 = (GskMaskNode *) node1;
   GskMaskNode *self2 = (GskMaskNode *) node2;
 
+  if (self1->mask_mode != self2->mask_mode)
+    {
+      gsk_render_node_diff_impossible (node1, node2, region);
+      return;
+    }
+
   gsk_render_node_diff (self1->source, self2->source, region);
   gsk_render_node_diff (self1->mask, self2->mask, region);
 }
