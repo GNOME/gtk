@@ -66,6 +66,7 @@ compare_render_tests = [
   'issue-3615',
   'mask',
   'mask-modes',
+  'mask-modes-with-alpha',
   'nested-rounded-clips',
   'opacity_clip',
   'opacity-overdraw',

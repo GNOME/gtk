@@ -13,6 +13,12 @@ void main() {
 uniform int u_mode;
 uniform sampler2D u_mask;
 
+float
+luminance (vec3 color)
+{
+  return dot (vec3 (0.2126, 0.7152, 0.0722), color);
+}
+
 void main() {
   vec4 source = GskTexture(u_source, vUv);
   vec4 mask = GskTexture(u_mask, vUv);
@@ -23,9 +29,9 @@ void main() {
   else if (u_mode == 1)
     mask_value = 1.0 - mask.a;
   else if (u_mode == 2)
-    mask_value = (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+    mask_value = luminance (mask.rgb);
   else if (u_mode == 3)
-    mask_value = 1.0 - (0.2126 * mask.r + 0.7152 * mask.g + 0.0722 * mask.b) * mask.a;
+    mask_value = mask.a - luminance (mask.rgb);
   else
     mask_value = 0.0;
 

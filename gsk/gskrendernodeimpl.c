@@ -3702,8 +3702,7 @@ gsk_color_matrix_node_finalize (GskRenderNode *node)
 static void
 apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
                                const graphene_matrix_t *color_matrix,
-                               const graphene_vec4_t   *color_offset,
-                               gboolean                 multiply_alpha)
+                               const graphene_vec4_t   *color_offset)
 {
   cairo_surface_t *surface, *image_surface;
   guchar *data;
@@ -3740,13 +3739,6 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
                                   alpha);
               graphene_matrix_transform_vec4 (color_matrix, &pixel, &pixel);
             }
-
-          if (multiply_alpha)
-            graphene_vec4_init (&pixel,
-                                graphene_vec4_get_x (&pixel),
-                                graphene_vec4_get_y (&pixel),
-                                graphene_vec4_get_z (&pixel),
-                                alpha * graphene_vec4_get_w (&pixel));
 
           graphene_vec4_add (&pixel, color_offset, &pixel);
 
@@ -3793,7 +3785,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
 
   pattern = cairo_pop_group (cr);
 
-  apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset, FALSE);
+  apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset);
 
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
@@ -5655,6 +5647,50 @@ gsk_mask_node_finalize (GskRenderNode *node)
 }
 
 static void
+apply_luminance_to_pattern (cairo_pattern_t *pattern,
+                            gboolean         invert_luminance)
+{
+  cairo_surface_t *surface, *image_surface;
+  guchar *data;
+  gsize x, y, width, height, stride;
+  int red, green, blue, alpha, luminance;
+  guint32* pixel_data;
+
+  cairo_pattern_get_surface (pattern, &surface);
+  image_surface = cairo_surface_map_to_image (surface, NULL);
+
+  data = cairo_image_surface_get_data (image_surface);
+  width = cairo_image_surface_get_width (image_surface);
+  height = cairo_image_surface_get_height (image_surface);
+  stride = cairo_image_surface_get_stride (image_surface);
+
+  for (y = 0; y < height; y++)
+    {
+      pixel_data = (guint32 *) data;
+      for (x = 0; x < width; x++)
+        {
+          alpha = (pixel_data[x] >> 24) & 0xFF;
+          red   = (pixel_data[x] >> 16) & 0xFF;
+          green = (pixel_data[x] >>  8) & 0xFF;
+          blue  = (pixel_data[x] >>  0) & 0xFF;
+
+          luminance = 2126 * red + 7152 * green + 722 * blue;
+          if (invert_luminance)
+            luminance = 10000 * alpha - luminance;
+          luminance = (luminance + 5000) / 10000;
+
+          pixel_data[x] = luminance * 0x1010101;
+        }
+      data += stride;
+    }
+
+  cairo_surface_mark_dirty (image_surface);
+  cairo_surface_unmap_image (surface, image_surface);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (surface);
+}
+
+static void
 gsk_mask_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
@@ -5676,28 +5712,18 @@ gsk_mask_node_draw (GskRenderNode *node,
     case GSK_MASK_MODE_ALPHA:
       break;
     case GSK_MASK_MODE_INVERTED_ALPHA:
-      graphene_matrix_init_from_float (&color_matrix, (float[]){ 1, 0, 0, 0,
-                                                                 0, 1, 0, 0,
-                                                                 0, 0, 1, 0,
-                                                                 0, 0, 0, -1 });
-      graphene_vec4_init (&color_offset, 0, 0, 0, 1);
-      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset, FALSE);
+      graphene_matrix_init_from_float (&color_matrix, (float[]){  0,  0,  0,  0,
+                                                                  0,  0,  0,  0,
+                                                                  0,  0,  0,  0,
+                                                                 -1, -1, -1, -1 });
+      graphene_vec4_init (&color_offset, 1, 1, 1, 1);
+      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset);
       break;
     case GSK_MASK_MODE_LUMINANCE:
-      graphene_matrix_init_from_float (&color_matrix, (float[]){ 1, 0, 0, 0.2126,
-                                                                 0, 1, 0, 0.7152,
-                                                                 0, 0, 1, 0.0722,
-                                                                 0, 0, 0, 0 });
-      graphene_vec4_init (&color_offset, 0, 0, 0, 0);
-      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset, TRUE);
+      apply_luminance_to_pattern (mask_pattern, FALSE);
       break;
     case GSK_MASK_MODE_INVERTED_LUMINANCE:
-      graphene_matrix_init_from_float (&color_matrix, (float[]){ 1, 0, 0, -0.2126,
-                                                                 0, 1, 0, -0.7152,
-                                                                 0, 0, 1, -0.0722,
-                                                                 0, 0, 0,  0 });
-      graphene_vec4_init (&color_offset, 0, 0, 0, 1);
-      apply_color_matrix_to_pattern (mask_pattern, &color_matrix, &color_offset, TRUE);
+      apply_luminance_to_pattern (mask_pattern, TRUE);
       break;
     default:
       g_assert_not_reached ();
