@@ -11,7 +11,6 @@
 #include "gskvulkanrenderpassprivate.h"
 
 #include "gskvulkancolortextpipelineprivate.h"
-#include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 
@@ -497,9 +496,6 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     guint num_textures;
     GskVulkanPipeline * (* create_func) (GdkVulkanContext *context, VkPipelineLayout layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "linear",                     0, gsk_vulkan_linear_gradient_pipeline_new },
-    { "linear-clip",                0, gsk_vulkan_linear_gradient_pipeline_new },
-    { "linear-clip-rounded",        0, gsk_vulkan_linear_gradient_pipeline_new },
     { "mask",                       1, gsk_vulkan_text_pipeline_new },
     { "mask-clip",                  1, gsk_vulkan_text_pipeline_new },
     { "mask-clip-rounded",          1, gsk_vulkan_text_pipeline_new },

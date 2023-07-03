@@ -120,7 +120,7 @@ if have_vulkan
     'vulkan/gskvulkanglyphcache.c',
     'vulkan/gskvulkanimage.c',
     'vulkan/gskvulkaninsetshadowop.c',
-    'vulkan/gskvulkanlineargradientpipeline.c',
+    'vulkan/gskvulkanlineargradientop.c',
     'vulkan/gskvulkanmemory.c',
     'vulkan/gskvulkanoffscreenop.c',
     'vulkan/gskvulkanop.c',

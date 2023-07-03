@@ -18,7 +18,7 @@
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
-#include "gskvulkanlineargradientpipelineprivate.h"
+#include "gskvulkanlineargradientopprivate.h"
 #include "gskvulkanopprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkantextpipelineprivate.h"
@@ -47,31 +47,16 @@ typedef struct _GskVulkanParseState GskVulkanParseState;
 
 typedef struct _GskVulkanOpAny GskVulkanOpAny;
 typedef union  _GskVulkanOpAll GskVulkanOpAll;
-typedef struct _GskVulkanOpRender GskVulkanOpRender;
 typedef struct _GskVulkanOpText GskVulkanOpText;
 typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 
 typedef enum {
-  /* GskVulkanOpRender */
-  GSK_VULKAN_OP_LINEAR_GRADIENT,
   /* GskVulkanOpText */
   GSK_VULKAN_OP_TEXT,
   GSK_VULKAN_OP_COLOR_TEXT,
   /* GskVulkanOpPushConstants */
   GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
 } GskVulkanOpType;
-
-/* render ops with 0, 1 or 2 sources */
-struct _GskVulkanOpRender
-{
-  GskVulkanOp          base;
-  GskVulkanOpType      type;
-  GskRenderNode       *node; /* node that's the source of this op */
-  graphene_point_t     offset; /* offset of the node */
-  GskVulkanPipeline   *pipeline; /* pipeline to use */
-  gsize                vertex_offset; /* offset into vertex buffer */
-  gsize                buffer_offset; /* offset into buffer */
-};
 
 struct _GskVulkanOpText
 {
@@ -109,7 +94,6 @@ struct _GskVulkanOpAny
 union _GskVulkanOpAll
 {
   GskVulkanOpAny          any;
-  GskVulkanOpRender        render;
   GskVulkanOpText          text;
   GskVulkanOpPushConstants constants;
 };
@@ -527,23 +511,15 @@ gsk_vulkan_render_pass_add_linear_gradient_node (GskVulkanRenderPass       *self
                                                  const GskVulkanParseState *state,
                                                  GskRenderNode             *node)
 {
-  GskVulkanPipelineType pipeline_type;
-  GskVulkanOpRender op = {
-    .type = GSK_VULKAN_OP_LINEAR_GRADIENT,
-    .node = node,
-    .offset = state->offset,
-  };
-
-  if (gsk_vulkan_clip_contains_rect (&state->clip, &state->offset, &node->bounds))
-    pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT;
-  else if (state->clip.type == GSK_VULKAN_CLIP_RECT)
-    pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP;
-  else
-    pipeline_type = GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED;
-
-  op.pipeline = gsk_vulkan_render_pass_get_pipeline (self, render, pipeline_type);
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
-
+  gsk_vulkan_linear_gradient_op (self,
+                                 gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                                 &node->bounds,
+                                 &state->offset,
+                                 gsk_linear_gradient_node_get_start (node),
+                                 gsk_linear_gradient_node_get_end (node),
+                                 gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
+                                 gsk_linear_gradient_node_get_color_stops (node, NULL),
+                                 gsk_linear_gradient_node_get_n_color_stops (node));
   return TRUE;
 }
 
@@ -1491,7 +1467,6 @@ gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
           break;
         }
 }
@@ -1523,16 +1498,9 @@ gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
 
       switch (op->any.type)
         {
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
-          vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
-          n_bytes = round_up (n_bytes, vertex_stride);
-          op->render.vertex_offset = n_bytes;
-          n_bytes += vertex_stride;
-          break;
-
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
-          vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline);
+          vertex_stride = gsk_vulkan_pipeline_get_vertex_stride (op->text.pipeline);
           n_bytes = round_up (n_bytes, vertex_stride);
           op->text.vertex_offset = n_bytes;
           n_bytes += vertex_stride * op->text.num_glyphs;
@@ -1585,8 +1553,8 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                         gsk_text_node_get_glyphs (op->text.node, NULL),
                                                         gsk_text_node_get_color (op->text.node),
                                                         &GRAPHENE_POINT_INIT (
-                                                          gsk_text_node_get_offset (op->text.node)->x + op->render.offset.x,
-                                                          gsk_text_node_get_offset (op->text.node)->y + op->render.offset.y
+                                                          gsk_text_node_get_offset (op->text.node)->x + op->text.offset.x,
+                                                          gsk_text_node_get_offset (op->text.node)->y + op->text.offset.y
                                                         ),
                                                         op->text.start_glyph,
                                                         op->text.num_glyphs,
@@ -1603,24 +1571,12 @@ gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
                                                               gsk_text_node_get_num_glyphs (op->text.node),
                                                               gsk_text_node_get_glyphs (op->text.node, NULL),
                                                               &GRAPHENE_POINT_INIT (
-                                                                gsk_text_node_get_offset (op->text.node)->x + op->render.offset.x,
-                                                                gsk_text_node_get_offset (op->text.node)->y + op->render.offset.y
+                                                                gsk_text_node_get_offset (op->text.node)->x + op->text.offset.x,
+                                                                gsk_text_node_get_offset (op->text.node)->y + op->text.offset.y
                                                               ),
                                                               op->text.start_glyph,
                                                               op->text.num_glyphs,
                                                               op->text.scale);
-          break;
-
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
-          gsk_vulkan_linear_gradient_pipeline_collect_vertex_data (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline),
-                                                                   data + op->render.vertex_offset,
-                                                                   &op->render.offset,
-                                                                   &op->render.node->bounds,
-                                                                   gsk_linear_gradient_node_get_start (op->render.node),
-                                                                   gsk_linear_gradient_node_get_end (op->render.node),
-                                                                   gsk_render_node_get_node_type (op->render.node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
-                                                                   op->render.buffer_offset,
-                                                                   gsk_linear_gradient_node_get_n_color_stops (op->render.node));
           break;
 
         default:
@@ -1698,21 +1654,6 @@ gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
                                                                               GSK_VULKAN_SAMPLER_DEFAULT);
           break;
 
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
-          {
-            gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (op->render.node);
-            guchar *mem;
-
-            mem = gsk_vulkan_render_get_buffer_memory (render,
-                                                       n_stops * sizeof (GskColorStop),
-                                                       G_ALIGNOF (GskColorStop),
-                                                       &op->render.buffer_offset);
-            memcpy (mem,
-                    gsk_linear_gradient_node_get_color_stops (op->render.node, NULL),
-                    n_stops * sizeof (GskColorStop));
-          }
-          break;
-
         default:
           g_assert_not_reached ();
 
@@ -1779,9 +1720,6 @@ gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
 
   switch (op->any.type)
     {
-    case GSK_VULKAN_OP_LINEAR_GRADIENT:
-      return gsk_vulkan_pipeline_get_pipeline (op->render.pipeline);
-
     case GSK_VULKAN_OP_TEXT:
     case GSK_VULKAN_OP_COLOR_TEXT:
       return gsk_vulkan_pipeline_get_pipeline (op->text.pipeline);
@@ -1817,13 +1755,6 @@ gsk_vulkan_render_op_command (GskVulkanOp      *op_,
                                                command_buffer,
                                                op->text.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->text.pipeline),
                                                op->text.num_glyphs);
-          break;
-
-        case GSK_VULKAN_OP_LINEAR_GRADIENT:
-          gsk_vulkan_linear_gradient_pipeline_draw (GSK_VULKAN_LINEAR_GRADIENT_PIPELINE (op->render.pipeline),
-                                                    command_buffer,
-                                                    op->render.vertex_offset / gsk_vulkan_pipeline_get_vertex_stride (op->render.pipeline),
-                                                    1);
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
