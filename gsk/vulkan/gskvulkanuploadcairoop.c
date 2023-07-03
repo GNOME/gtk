@@ -26,9 +26,7 @@ static void
 gsk_vulkan_upload_cairo_op_upload (GskVulkanOp           *op,
                                    GskVulkanRenderPass   *pass,
                                    GskVulkanRender       *render,
-                                   GskVulkanUploader     *uploader,
-                                   const graphene_rect_t *clip,
-                                   const graphene_vec2_t *scale)
+                                   GskVulkanUploader     *uploader)
 {
   GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
   GskVulkanImageMap map;

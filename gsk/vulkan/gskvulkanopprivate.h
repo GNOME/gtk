@@ -28,9 +28,7 @@ struct _GskVulkanOpClass
   void                  (* upload)                                      (GskVulkanOp            *op,
                                                                          GskVulkanRenderPass    *pass,
                                                                          GskVulkanRender        *render,
-                                                                         GskVulkanUploader      *uploader,
-                                                                         const graphene_rect_t  *clip,
-                                                                         const graphene_vec2_t  *scale);
+                                                                         GskVulkanUploader      *uploader);
   gsize                 (* count_vertex_data)                           (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
   void                  (* collect_vertex_data)                         (GskVulkanOp            *op,
@@ -56,9 +54,7 @@ void                    gsk_vulkan_op_finish                            (GskVulk
 void                    gsk_vulkan_op_upload                            (GskVulkanOp            *op,
                                                                          GskVulkanRenderPass    *pass,
                                                                          GskVulkanRender        *render,
-                                                                         GskVulkanUploader      *uploader,
-                                                                         const graphene_rect_t  *clip,
-                                                                         const graphene_vec2_t  *scale);
+                                                                         GskVulkanUploader      *uploader);
 gsize                   gsk_vulkan_op_count_vertex_data                 (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
 void                    gsk_vulkan_op_collect_vertex_data               (GskVulkanOp            *op,

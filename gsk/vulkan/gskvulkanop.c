@@ -22,14 +22,12 @@ gsk_vulkan_op_finish (GskVulkanOp *op)
 }
 
 void
-gsk_vulkan_op_upload (GskVulkanOp           *op,
-                      GskVulkanRenderPass   *pass,
-                      GskVulkanRender       *render,
-                      GskVulkanUploader     *uploader,
-                      const graphene_rect_t *clip,
-                      const graphene_vec2_t *scale)
+gsk_vulkan_op_upload (GskVulkanOp         *op,
+                      GskVulkanRenderPass *pass,
+                      GskVulkanRender     *render,
+                      GskVulkanUploader   *uploader)
 {
-  op->op_class->upload (op, pass, render, uploader, clip, scale);
+  op->op_class->upload (op, pass, render, uploader);
 }
 
 gsize

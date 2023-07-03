@@ -31,9 +31,7 @@ static void
 gsk_vulkan_blur_op_upload (GskVulkanOp           *op,
                            GskVulkanRenderPass   *pass,
                            GskVulkanRender       *render,
-                           GskVulkanUploader     *uploader,
-                           const graphene_rect_t *clip,
-                           const graphene_vec2_t *scale)
+                           GskVulkanUploader     *uploader)
 {
 }
 

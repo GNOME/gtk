@@ -1424,21 +1424,12 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
 {
   GskVulkanOp *op;
   guint i;
-  const graphene_rect_t *clip = NULL;
-  const graphene_vec2_t *scale = NULL;
 
   for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
     {
       op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
 
-      gsk_vulkan_op_upload (op, self, render, uploader, clip, scale);
-
-      if (((GskVulkanOpAny *) op)->type == GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS)
-        {
-          GskVulkanOpPushConstants *constants = (GskVulkanOpPushConstants *) op;
-          clip = &constants->clip.bounds;
-          scale = &constants->scale;
-        }
+      gsk_vulkan_op_upload (op, self, render, uploader);
     }
 }
 
@@ -1446,9 +1437,7 @@ static void
 gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
                              GskVulkanRenderPass   *self,
                              GskVulkanRender       *render,
-                             GskVulkanUploader     *uploader,
-                             const graphene_rect_t *clip,
-                             const graphene_vec2_t *scale)
+                             GskVulkanUploader     *uploader)
 {
   GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
 
