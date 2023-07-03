@@ -3770,6 +3770,8 @@ apply_color_matrix_to_pattern (cairo_pattern_t         *pattern,
 
   cairo_surface_mark_dirty (image_surface);
   cairo_surface_unmap_image (surface, image_surface);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (surface);
 }
 
 static void
