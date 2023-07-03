@@ -2,9 +2,10 @@
 
 #include "gskvulkaninsetshadowopprivate.h"
 
-#include "vulkan/resources/inset-shadow.vert.h"
-
+#include "gskvulkanprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+
+#include "vulkan/resources/inset-shadow.vert.h"
 
 typedef struct _GskVulkanInsetShadowOp GskVulkanInsetShadowOp;
 

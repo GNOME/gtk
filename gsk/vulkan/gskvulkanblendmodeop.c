@@ -2,6 +2,8 @@
 
 #include "gskvulkanblendmodeopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/blend-mode.vert.h"
 
 typedef struct _GskVulkanBlendModeOp GskVulkanBlendModeOp;

@@ -8,7 +8,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanrenderprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 

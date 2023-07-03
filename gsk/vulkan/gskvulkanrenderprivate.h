@@ -4,7 +4,6 @@
 #include <gsk/gskrendernode.h>
 
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 #include "gsk/gskprivate.h"
 

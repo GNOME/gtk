@@ -20,6 +20,7 @@
 #include "gskvulkaninsetshadowopprivate.h"
 #include "gskvulkanlineargradientopprivate.h"
 #include "gskvulkanopprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanoffscreenopprivate.h"

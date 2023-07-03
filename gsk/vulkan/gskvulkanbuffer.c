@@ -1,8 +1,9 @@
 #include "config.h"
 
 #include "gskvulkanbufferprivate.h"
+
 #include "gskvulkanmemoryprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 
 struct _GskVulkanBuffer
 {

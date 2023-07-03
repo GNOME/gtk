@@ -2,6 +2,8 @@
 
 #include "gskvulkantextureopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/texture.vert.h"
 
 typedef struct _GskVulkanTextureOp GskVulkanTextureOp;

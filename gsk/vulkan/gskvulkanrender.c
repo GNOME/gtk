@@ -9,6 +9,7 @@
 #include "gskvulkancommandpoolprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 #include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanpushconstantsopprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkanrenderpassprivate.h"

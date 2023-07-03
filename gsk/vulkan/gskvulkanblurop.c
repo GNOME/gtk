@@ -2,6 +2,8 @@
 
 #include "gskvulkanbluropprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/blur.vert.h"
 
 typedef struct _GskVulkanBlurOp GskVulkanBlurOp;

@@ -2,9 +2,10 @@
 
 #include "gskvulkanoutsetshadowopprivate.h"
 
-#include "vulkan/resources/outset-shadow.vert.h"
-
+#include "gskvulkanprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+
+#include "vulkan/resources/outset-shadow.vert.h"
 
 typedef struct _GskVulkanOutsetShadowOp GskVulkanOutsetShadowOp;
 

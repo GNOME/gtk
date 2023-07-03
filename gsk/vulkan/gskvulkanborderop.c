@@ -2,9 +2,10 @@
 
 #include "gskvulkanborderopprivate.h"
 
-#include "vulkan/resources/border.vert.h"
-
+#include "gskvulkanprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+
+#include "vulkan/resources/border.vert.h"
 
 typedef struct _GskVulkanBorderOp GskVulkanBorderOp;
 

@@ -2,6 +2,8 @@
 
 #include "gskvulkancolormatrixopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/color-matrix.vert.h"
 
 typedef struct _GskVulkanColorMatrixOp GskVulkanColorMatrixOp;

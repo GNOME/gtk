@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include "gskvulkancommandpoolprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 
 struct _GskVulkanCommandPool
 {

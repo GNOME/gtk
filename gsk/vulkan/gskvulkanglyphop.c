@@ -2,6 +2,8 @@
 
 #include "gskvulkanglyphopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/glyph.vert.h"
 
 typedef struct _GskVulkanGlyphOp GskVulkanGlyphOp;

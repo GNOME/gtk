@@ -2,6 +2,8 @@
 
 #include "gskvulkanlineargradientopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/linear.vert.h"
 
 typedef struct _GskVulkanLinearGradientOp GskVulkanLinearGradientOp;

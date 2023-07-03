@@ -2,6 +2,8 @@
 
 #include "gskvulkancrossfadeopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/cross-fade.vert.h"
 
 typedef struct _GskVulkanCrossFadeOp GskVulkanCrossFadeOp;

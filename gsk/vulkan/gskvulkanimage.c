@@ -4,7 +4,7 @@
 
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanmemoryprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 
 #include "gdk/gdkmemoryformatprivate.h"
 
