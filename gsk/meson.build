@@ -118,6 +118,7 @@ if have_vulkan
     'vulkan/gskvulkancommandpool.c',
     'vulkan/gskvulkancrossfadeop.c',
     'vulkan/gskvulkanglyphcache.c',
+    'vulkan/gskvulkanglyphop.c',
     'vulkan/gskvulkanimage.c',
     'vulkan/gskvulkaninsetshadowop.c',
     'vulkan/gskvulkanlineargradientop.c',

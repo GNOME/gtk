@@ -17,6 +17,7 @@
 #include "gskvulkancoloropprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
+#include "gskvulkanglyphopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
 #include "gskvulkanlineargradientopprivate.h"
 #include "gskvulkanopprivate.h"
@@ -1298,6 +1299,52 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
 }
 
 static inline gboolean
+gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
+                                      GskVulkanRender           *render,
+                                      const GskVulkanParseState *state,
+                                      GskRenderNode             *node)
+{
+  GskVulkanImage *mask_image;
+  graphene_rect_t mask_tex_rect;
+  GskRenderNode *source, *mask;
+  GskMaskMode mode;
+
+  mode = gsk_mask_node_get_mask_mode (node);
+  source = gsk_mask_node_get_source (node);
+  mask = gsk_mask_node_get_mask (node);
+  mask_image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                         render,
+                                                         state,
+                                                         mask,
+                                                         &mask_tex_rect);
+  if (mask_image == NULL)
+    {
+      if (mode == GSK_MASK_MODE_INVERTED_ALPHA)
+        gsk_vulkan_render_pass_add_node (self, render, state, source);
+
+      return TRUE;
+    }
+
+  /* Use the glyph shader as an optimization */
+  if (mode == GSK_MASK_MODE_ALPHA &&
+      gsk_render_node_get_node_type (source) == GSK_COLOR_NODE)
+    {
+      graphene_rect_t bounds;
+      if (graphene_rect_intersection (&source->bounds, &mask->bounds, &bounds))
+        gsk_vulkan_glyph_op (self,
+                             gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &bounds),
+                             mask_image,
+                             &bounds,
+                             &state->offset,
+                             &mask_tex_rect,
+                             gsk_color_node_get_color (source));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static inline gboolean
 gsk_vulkan_render_pass_add_debug_node (GskVulkanRenderPass       *self,
                                        GskVulkanRender           *render,
                                        const GskVulkanParseState *state,
@@ -1343,7 +1390,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[] = {
   [GSK_DEBUG_NODE] = gsk_vulkan_render_pass_add_debug_node,
   [GSK_GL_SHADER_NODE] = NULL,
   [GSK_TEXTURE_SCALE_NODE] = gsk_vulkan_render_pass_add_texture_scale_node,
-  [GSK_MASK_NODE] = NULL,
+  [GSK_MASK_NODE] = gsk_vulkan_render_pass_add_mask_node,
 };
 
 static void
