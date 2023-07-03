@@ -19,6 +19,7 @@
 #include "gskvulkanglyphopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
 #include "gskvulkanlineargradientopprivate.h"
+#include "gskvulkanmaskopprivate.h"
 #include "gskvulkanopprivate.h"
 #include "gskvulkanprivate.h"
 #include "gskvulkanrendererprivate.h"
@@ -1212,8 +1213,8 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
                                       const GskVulkanParseState *state,
                                       GskRenderNode             *node)
 {
-  GskVulkanImage *mask_image;
-  graphene_rect_t mask_tex_rect;
+  GskVulkanImage *source_image, *mask_image;
+  graphene_rect_t source_tex_rect, mask_tex_rect;
   GskRenderNode *source, *mask;
   GskMaskMode mode;
 
@@ -1249,7 +1250,25 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
       return TRUE;
     }
 
-  return FALSE;
+  source_image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                           render,
+                                                           state,
+                                                           source,
+                                                           &source_tex_rect);
+  if (source_image == NULL)
+    return TRUE;
+
+  gsk_vulkan_mask_op (self,
+                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                      &state->offset,
+                      source_image,
+                      &source->bounds,
+                      &source_tex_rect,
+                      mask_image,
+                      &mask->bounds,
+                      &mask_tex_rect,
+                      mode);
+  return TRUE;
 }
 
 static inline gboolean

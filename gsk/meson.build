@@ -121,6 +121,7 @@ if have_vulkan
     'vulkan/gskvulkanimage.c',
     'vulkan/gskvulkaninsetshadowop.c',
     'vulkan/gskvulkanlineargradientop.c',
+    'vulkan/gskvulkanmaskop.c',
     'vulkan/gskvulkanmemory.c',
     'vulkan/gskvulkanoffscreenop.c',
     'vulkan/gskvulkanop.c',
