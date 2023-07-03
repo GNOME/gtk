@@ -24,7 +24,7 @@
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanoffscreenopprivate.h"
 #include "gskvulkanoutsetshadowopprivate.h"
-#include "gskvulkanpushconstantsprivate.h"
+#include "gskvulkanpushconstantsopprivate.h"
 #include "gskvulkanscissoropprivate.h"
 #include "gskvulkantextureopprivate.h"
 #include "gskvulkanuploadcairoopprivate.h"
@@ -43,38 +43,6 @@
 #define ORTHO_FAR_PLANE          10000
 
 typedef struct _GskVulkanParseState GskVulkanParseState;
-
-typedef struct _GskVulkanOpAny GskVulkanOpAny;
-typedef union  _GskVulkanOpAll GskVulkanOpAll;
-typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
-
-typedef enum {
-  /* GskVulkanOpPushConstants */
-  GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
-} GskVulkanOpType;
-
-struct _GskVulkanOpPushConstants
-{
-  GskVulkanOp             base;
-  GskVulkanOpType         type;
-  GskRenderNode          *node; /* node that's the source of this op */
-  graphene_vec2_t         scale;
-  graphene_matrix_t       mvp;
-  GskRoundedRect          clip;
-};
-
-struct _GskVulkanOpAny
-{
-  GskVulkanOp             base;
-  GskVulkanOpType         type;
-  GskRenderNode          *node; /* node that's the source of this op */
-};
-
-union _GskVulkanOpAll
-{
-  GskVulkanOpAny          any;
-  GskVulkanOpPushConstants constants;
-};
 
 struct _GskVulkanRenderPass
 {
@@ -258,10 +226,6 @@ gsk_vulkan_render_pass_alloc_op (GskVulkanRenderPass *self,
 }
 
 static void
-gsk_vulkan_render_pass_add_op (GskVulkanRenderPass *self,
-                               GskVulkanOp         *op);
-
-static void
 gsk_vulkan_render_pass_append_scissor (GskVulkanRenderPass       *self,
                                        GskRenderNode             *node,
                                        const GskVulkanParseState *state)
@@ -274,22 +238,17 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRenderPass       *self,
                                               GskRenderNode             *node,
                                               const GskVulkanParseState *state)
 {
-  GskVulkanOpPushConstants op = {
-    .type  = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS,
-    .node  = node,
-    .scale = state->scale,
-    .clip  = state->clip.rect,
-  };
+  graphene_matrix_t mvp;
 
   if (state->modelview)
     {
-      gsk_transform_to_matrix (state->modelview, &op.mvp);
-      graphene_matrix_multiply (&op.mvp, &state->projection, &op.mvp);
+      gsk_transform_to_matrix (state->modelview, &mvp);
+      graphene_matrix_multiply (&mvp, &state->projection, &mvp);
     }
   else
-    graphene_matrix_init_from_matrix (&op.mvp, &state->projection);
+    graphene_matrix_init_from_matrix (&mvp, &state->projection);
 
-  gsk_vulkan_render_pass_add_op (self, (GskVulkanOp *) &op);
+  gsk_vulkan_push_constants_op (self, &state->scale, &mvp, &state->clip.rect);
 }
 
 #define FALLBACK(...) G_STMT_START { \
@@ -1428,23 +1387,6 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
     }
 }
 
-static void
-gsk_vulkan_render_op_upload (GskVulkanOp           *op_,
-                             GskVulkanRenderPass   *self,
-                             GskVulkanRender       *render,
-                             GskVulkanUploader     *uploader)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-      switch (op->any.type)
-        {
-        default:
-          g_assert_not_reached ();
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          break;
-        }
-}
-
 static gsize
 gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 {
@@ -1463,24 +1405,6 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
   return n_bytes;
 }
 
-static gsize
-gsk_vulkan_render_op_count_vertex_data (GskVulkanOp *op_,
-                                        gsize        n_bytes)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-      switch (op->any.type)
-        {
-        default:
-          g_assert_not_reached ();
-
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          break;
-        }
-
-  return n_bytes;
-}
-
 static void
 gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                             GskVulkanRender     *render,
@@ -1495,23 +1419,6 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
 
       gsk_vulkan_op_collect_vertex_data (op, self, render, data);
     }
-}
-
-static void
-gsk_vulkan_render_op_collect_vertex_data (GskVulkanOp         *op_,
-                                          GskVulkanRenderPass *pass,
-                                          GskVulkanRender     *render,
-                                          guchar              *data)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-      switch (op->any.type)
-        {
-        default:
-          g_assert_not_reached ();
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          break;
-        }
 }
 
 static GskVulkanBuffer *
@@ -1568,22 +1475,6 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 }
 
 static void
-gsk_vulkan_render_op_reserve_descriptor_sets (GskVulkanOp     *op_,
-                                              GskVulkanRender *render)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-      switch (op->any.type)
-        {
-        default:
-          g_assert_not_reached ();
-
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          break;
-        }
-}
-
-static void
 gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                   GskVulkanRender         *render,
                                   VkPipelineLayout         pipeline_layout,
@@ -1634,46 +1525,6 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
     }
 }
 
-static VkPipeline
-gsk_vulkan_render_op_get_pipeline (GskVulkanOp *op_)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-  switch (op->any.type)
-    {
-    case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-      return NULL;
-
-    default:
-      g_assert_not_reached ();
-      return NULL;
-    }
-}
-
-static void
-gsk_vulkan_render_op_command (GskVulkanOp      *op_,
-                              GskVulkanRender  *render,
-                              VkPipelineLayout  pipeline_layout,
-                              VkCommandBuffer   command_buffer)
-{
-  GskVulkanOpAll *op = (GskVulkanOpAll *) op_;
-
-      switch (op->any.type)
-        {
-        case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          gsk_vulkan_push_constants_push (command_buffer,
-                                          pipeline_layout,
-                                          &op->constants.scale,
-                                          &op->constants.mvp,
-                                          &op->constants.clip);
-          break;
-
-        default:
-          g_assert_not_reached ();
-          break;
-        }
-}
-
 void
 gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                              GskVulkanRender     *render,
@@ -1717,35 +1568,5 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
   gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 
   vkCmdEndRenderPass (command_buffer);
-}
-
-static void
-gsk_vulkan_render_op_finish (GskVulkanOp *op)
-{
-}
-
-static const GskVulkanOpClass GSK_VULKAN_OP_ALL_CLASS = {
-  sizeof (GskVulkanOpAll),
-  NULL,
-  NULL,
-  gsk_vulkan_render_op_finish,
-  gsk_vulkan_render_op_upload,
-  gsk_vulkan_render_op_count_vertex_data,
-  gsk_vulkan_render_op_collect_vertex_data,
-  gsk_vulkan_render_op_reserve_descriptor_sets,
-  gsk_vulkan_render_op_get_pipeline,
-  gsk_vulkan_render_op_command
-};
-
-static void
-gsk_vulkan_render_pass_add_op (GskVulkanRenderPass *self,
-                               GskVulkanOp         *op)
-{
-  GskVulkanOpAll *alloc;
-
-  alloc = gsk_vulkan_render_pass_alloc_op (self, GSK_VULKAN_OP_ALL_CLASS.size);
-
-  op->op_class = &GSK_VULKAN_OP_ALL_CLASS;
-  *alloc = *(GskVulkanOpAll *) op;
 }
 

@@ -126,7 +126,7 @@ if have_vulkan
     'vulkan/gskvulkanop.c',
     'vulkan/gskvulkanoutsetshadowop.c',
     'vulkan/gskvulkanpipeline.c',
-    'vulkan/gskvulkanpushconstants.c',
+    'vulkan/gskvulkanpushconstantsop.c',
     'vulkan/gskvulkanrender.c',
     'vulkan/gskvulkanrenderer.c',
     'vulkan/gskvulkanrenderpass.c',
