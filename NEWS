@@ -1,4 +1,4 @@
-Overview of Changes in 4.11.4, xx-xx-xxxx
+Overview of Changes in 4.11.4, 03-07-2023
 =========================================
 
 * GtkFileChooser:
@@ -25,6 +25,9 @@ Overview of Changes in 4.11.4, xx-xx-xxxx
 
 * GtkDropDown:
  - Update on expression changes
+
+* GtkMapListModel:
+ - Implement GtkSectionModel
 
 * Accessibility:
  - Improvements all over the place: GtkButton, GtkPasswordEntry,
@@ -72,6 +75,7 @@ Overview of Changes in 4.11.4, xx-xx-xxxx
 * Build:
  - Require GLib 2.76
  - Make asan builds work again
+ - Fix the build if ld is not ld.bdf
 
 * Translation updates:
  Brazilian Portuguese
