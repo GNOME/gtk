@@ -96,12 +96,6 @@ gsk_vulkan_cross_fade_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                                        GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static VkPipeline
-gsk_vulkan_cross_fade_op_get_pipeline (GskVulkanOp *op)
-{
-  return VK_NULL_HANDLE;
-}
-
 static void
 gsk_vulkan_cross_fade_op_command (GskVulkanOp      *op,
                                   GskVulkanRender  *render,
@@ -124,7 +118,6 @@ static const GskVulkanOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
   gsk_vulkan_cross_fade_op_count_vertex_data,
   gsk_vulkan_cross_fade_op_collect_vertex_data,
   gsk_vulkan_cross_fade_op_reserve_descriptor_sets,
-  gsk_vulkan_cross_fade_op_get_pipeline,
   gsk_vulkan_cross_fade_op_command
 };
 

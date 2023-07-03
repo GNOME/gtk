@@ -90,12 +90,6 @@ gsk_vulkan_linear_gradient_op_reserve_descriptor_sets (GskVulkanOp     *op,
   memcpy (mem, self->stops, self->n_stops * sizeof (GskColorStop));
 }
 
-static VkPipeline
-gsk_vulkan_linear_gradient_op_get_pipeline (GskVulkanOp *op)
-{
-  return VK_NULL_HANDLE;
-}
-
 static void
 gsk_vulkan_linear_gradient_op_command (GskVulkanOp      *op,
                                        GskVulkanRender  *render,
@@ -118,7 +112,6 @@ static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   gsk_vulkan_linear_gradient_op_count_vertex_data,
   gsk_vulkan_linear_gradient_op_collect_vertex_data,
   gsk_vulkan_linear_gradient_op_reserve_descriptor_sets,
-  gsk_vulkan_linear_gradient_op_get_pipeline,
   gsk_vulkan_linear_gradient_op_command
 };
 

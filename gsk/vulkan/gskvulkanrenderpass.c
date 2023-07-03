@@ -1510,16 +1510,14 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                                            op->op_class->vertex_input_state,
                                                            gsk_vulkan_image_get_vk_format (self->target),
                                                            self->render_pass);
-        }
-      else
-        op_pipeline = gsk_vulkan_op_get_pipeline (op);
 
-      if (op_pipeline && op_pipeline != current_pipeline)
-        {
-          current_pipeline = op_pipeline;
-          vkCmdBindPipeline (command_buffer,
-                             VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             current_pipeline);
+          if (op_pipeline != current_pipeline)
+            {
+              current_pipeline = op_pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 current_pipeline);
+            }
         }
 
       gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
