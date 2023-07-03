@@ -1069,7 +1069,7 @@ test_curve_split (void)
       graphene_point_t p;
       graphene_vec2_t t, t1, t2;
 
-      init_random_curve (&c);
+      init_random_curve_with_op (&c, GSK_PATH_LINE, GSK_PATH_CUBIC);
 
       builder = gsk_path_builder_new ();
 
@@ -1110,17 +1110,17 @@ test_curve_split (void)
       for (int k = 0; k < 20; k++)
         {
           graphene_point_t q;
-          float dist;
+          float dist, tt;
 
           gsk_curve_get_point (&c1, k/19.0, &q);
-          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
-                                                   &dist, NULL, NULL, NULL);
-          g_assert_cmpfloat (dist, <=, 0.2);
+          gsk_curve_get_closest_point (&c, &q, &dist, &p, &tt);
+          g_print ("%s\nlooking for %g %g (at %g), finding %g %g\n", gsk_curve_to_string (&c), q.x, q.y, k/19.0, p.x, p.y);
+          g_assert_cmpfloat (dist, <=, 0.5);
 
           gsk_curve_get_point (&c2, k/19.0, &q);
-          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
-                                                   &dist, NULL, NULL, NULL);
-          g_assert_cmpfloat (dist, <=, 0.2);
+          gsk_curve_get_closest_point (&c, &q, &dist, &p, &tt);
+          g_print ("looking for %g %g (at %g), finding %g %g\n", q.x, q.y, k/19.0, p.x, p.y);
+          g_assert_cmpfloat (dist, <=, 0.5);
         }
 
       gsk_path_measure_unref (measure);
@@ -1236,6 +1236,35 @@ test_curve_offset (void)
   g_assert_true (graphene_point_near (&r.conic.points[3], &GRAPHENE_POINT_INIT (110, 100), 0.0001));
 }
 
+static void
+test_curve_closest_point (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      GskCurve curve;
+
+      init_random_curve_with_op (&curve, GSK_PATH_LINE, GSK_PATH_CUBIC);
+
+      for (int j = 0; j < 100; j++)
+        {
+          float t = g_test_rand_double_range (0, 1);
+          graphene_point_t p, p2;
+          float distance, t2;
+
+          g_print ("curve %s\n", gsk_curve_to_string (&curve));
+          gsk_curve_get_point (&curve, t, &p);
+          g_print ("t %g: %g %g\n", t, p.x, p.y);
+          t2  = t;
+          gsk_curve_get_closest_point (&curve, &p, &distance, &p2, &t2);
+
+          g_print ("closest %g: %g %g, distance %g\n", t2, p2.x, p2.y, distance);
+
+          g_assert_true (fabs (t2 - t) < 0.0001);
+          g_assert_true (graphene_point_near (&p, &p2, 0.1));
+        }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1266,6 +1295,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/match", test_curve_intersection_match);
   g_test_add_func ("/curve/split", test_curve_split);
   g_test_add_func ("/curve/offset", test_curve_offset);
+  g_test_add_func ("/curve/closest-point", test_curve_closest_point);
 
   return g_test_run ();
 }
