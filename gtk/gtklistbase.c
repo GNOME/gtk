@@ -2249,7 +2249,7 @@ gtk_list_base_set_anchor (GtkListBase *self,
  * in front of it.
  *
  * Addditionally, there will be @above_below widgets allocated both
- * before and after the sencter widgets, so the total number of
+ * before and after the center widgets, so the total number of
  * widgets kept alive is 2 * above_below + center + 1.
  **/
 void
