@@ -25,7 +25,8 @@
  * multiple frames, and will be used for a long time.
  *
  * There are various ways to create `GdkTexture` objects from a
- * [class@GdkPixbuf.Pixbuf], or a Cairo surface, or other pixel data.
+ * [class@GdkPixbuf.Pixbuf], or from bytes stored in memory, a file, or a
+ * [struct@Gio.Resource].
  *
  * The ownership of the pixel data is transferred to the `GdkTexture`
  * instance; you can only make a copy of it, via [method@Gdk.Texture.download].
