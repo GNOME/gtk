@@ -842,6 +842,47 @@ gsk_circle_contour_copy (const GskContour *contour,
   *target = *self;
 }
 
+static gboolean
+add_segment (GskPathOperation        op,
+             const graphene_point_t *pts,
+             gsize                   n_pts,
+             float                   weight,
+             gpointer                data)
+{
+  GskPathBuilder *builder = data;
+
+  switch (op)
+    {
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y,
+                                         pts[2].x, pts[2].y);
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y,
+                                          pts[2].x, pts[2].y,
+                                          pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y,
+                                          pts[2].x, pts[2].y,
+                                          weight);
+      break;
+
+    case GSK_PATH_MOVE:
+    case GSK_PATH_CLOSE:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
 static void
 gsk_circle_contour_add_segment (const GskContour *contour,
                                 GskPathBuilder   *builder,
@@ -851,16 +892,28 @@ gsk_circle_contour_add_segment (const GskContour *contour,
                                 float             end)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
-  float delta = self->end_angle - self->start_angle;
-  float length = self->radius * DEG_TO_RAD (delta);
-  GskContour *segment;
 
-  if (!emit_move_to)
-    g_warning ("FIXME: somebody needs to decompose contours into segments differently");
-  segment = gsk_circle_contour_new (&self->center, self->radius,
-                                    self->start_angle + start/length * delta,
-                                    self->start_angle + end/length * delta);
-  gsk_path_builder_add_contour (builder, segment);
+  if (emit_move_to)
+    {
+      float delta = self->end_angle - self->start_angle;
+      float length = self->radius * DEG_TO_RAD (delta);
+      GskContour *segment;
+
+      segment = gsk_circle_contour_new (&self->center, self->radius,
+                                        self->start_angle + start/length * delta,
+                                        self->start_angle + end/length * delta);
+      gsk_path_builder_add_contour (builder, segment);
+    }
+  else
+   {
+     gsk_spline_decompose_arc (&self->center,
+                               self->radius,
+                               GSK_PATH_TOLERANCE_DEFAULT,
+                               DEG_TO_RAD (self->end_angle),
+                               DEG_TO_RAD (self->start_angle),
+                               gsk_circle_contour_curve,
+                               &(ForeachWrapper) { add_segment, builder });
+   }
 }
 
 static int
