@@ -50,6 +50,7 @@ gsk_private_sources = files([
   'gskprivate.c',
   'gskprofiler.c',
   'gskspline.c',
+  'poly.c',
   'gl/gskglattachmentstate.c',
   'gl/gskglbuffer.c',
   'gl/gskglcommandqueue.c',
