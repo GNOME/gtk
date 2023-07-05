@@ -3064,9 +3064,9 @@ tablet_tool_handle_button (void                      *data,
   tablet->pointer_info.press_serial = serial;
 
   if (button == BTN_STYLUS)
-    n_button = GDK_BUTTON_SECONDARY;
-  else if (button == BTN_STYLUS2)
     n_button = GDK_BUTTON_MIDDLE;
+  else if (button == BTN_STYLUS2)
+    n_button = GDK_BUTTON_SECONDARY;
   else if (button == BTN_STYLUS3)
     n_button = 8; /* Back */
   else
