@@ -60,8 +60,6 @@ struct _GskVulkanRenderPass
 
   VkRenderPass render_pass;
   VkFramebuffer framebuffer;
-  VkSemaphore signal_semaphore;
-  GArray *wait_semaphores;
   GskVulkanBuffer *vertex_data;
 };
 
@@ -93,7 +91,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                             const graphene_rect_t *viewport,
                             cairo_region_t        *clip,
                             GskRenderNode         *node,
-                            VkSemaphore            signal_semaphore)
+                            gboolean               is_root)
 {
   GskVulkanRenderPass *self;
   VkImageLayout final_layout;
@@ -107,7 +105,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
   self->viewport = *viewport;
   graphene_vec2_init_from_vec2 (&self->scale, scale);
 
-  if (signal_semaphore != VK_NULL_HANDLE) // this is a dependent pass
+  if (!is_root) // this is a dependent pass
     final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
   else
     final_layout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
@@ -166,8 +164,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                      NULL,
                                      &self->framebuffer);
 
-  self->signal_semaphore = signal_semaphore;
-  self->wait_semaphores = g_array_new (FALSE, FALSE, sizeof (VkSemaphore));
   self->vertex_data = NULL;
 
 #ifdef G_ENABLE_DEBUG
@@ -206,9 +202,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 
   if (self->vertex_data)
     gsk_vulkan_buffer_free (self->vertex_data);
-  if (self->signal_semaphore != VK_NULL_HANDLE)
-    vkDestroySemaphore (device, self->signal_semaphore, NULL);
-  g_array_unref (self->wait_semaphores);
 
   g_free (self);
 }
@@ -290,7 +283,6 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
                                           GskRenderNode             *node,
                                           graphene_rect_t           *tex_bounds)
 {
-  VkSemaphore semaphore;
   GskVulkanImage *result;
 
   switch ((guint) gsk_render_node_get_node_type (node))
@@ -345,22 +337,11 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
          */
         *tex_bounds = clipped;
 
-        vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                           &(VkSemaphoreCreateInfo) {
-                             VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                             NULL,
-                             0
-                           },
-                           NULL,
-                           &semaphore);
-        g_array_append_val (self->wait_semaphores, semaphore);
-
         result = gsk_vulkan_offscreen_op (self,
                                           self->vulkan,
                                           render,
                                           &state->scale,
                                           &clipped,
-                                          semaphore,
                                           node);
 
         return result;
@@ -968,7 +949,6 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
                                         GskRenderNode             *node)
 {
   const graphene_rect_t *child_bounds;
-  VkSemaphore semaphore;
   GskVulkanImage *image;
 
   child_bounds = gsk_repeat_node_get_child_bounds (node);
@@ -976,26 +956,11 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   if (graphene_rect_get_area (child_bounds) == 0)
     return TRUE;
 
-  /* We need to create a texture in the right size so that we can repeat it
-   * properly, so even for texture nodes this step is necessary.
-   * We also can't use the clip because of that. */
-  vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                     &(VkSemaphoreCreateInfo) {
-                       VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                       NULL,
-                       0
-                     },
-                     NULL,
-                     &semaphore);
-
-  g_array_append_val (self->wait_semaphores, semaphore);
-
   image = gsk_vulkan_offscreen_op (self,
                                    self->vulkan,
                                    render,
                                    &state->scale,
                                    child_bounds,
-                                   semaphore,
                                    gsk_repeat_node_get_child (node));
 
   gsk_vulkan_texture_op (self,
@@ -1486,22 +1451,6 @@ gsk_vulkan_render_pass_get_vertex_data (GskVulkanRenderPass *self,
     }
 
   return self->vertex_data;
-}
-
-gsize
-gsk_vulkan_render_pass_get_wait_semaphores (GskVulkanRenderPass  *self,
-                                            VkSemaphore         **semaphores)
-{
-  *semaphores = (VkSemaphore *)self->wait_semaphores->data;
-  return self->wait_semaphores->len;
-}
-
-gsize
-gsk_vulkan_render_pass_get_signal_semaphores (GskVulkanRenderPass  *self,
-                                              VkSemaphore         **semaphores)
-{
-  *semaphores = (VkSemaphore *)&self->signal_semaphore;
-  return self->signal_semaphore != VK_NULL_HANDLE ? 1 : 0;
 }
 
 void

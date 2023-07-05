@@ -338,7 +338,7 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                                                   &self->viewport,
                                                   self->clip,
                                                   node,
-                                                  VK_NULL_HANDLE);
+                                                  TRUE);
 
   gsk_vulkan_render_verbose_print (self, "start of frame");
 }
@@ -649,13 +649,6 @@ gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
                              VkFence              fence)
 {
   VkCommandBuffer command_buffer;
-  gsize wait_semaphore_count;
-  gsize signal_semaphore_count;
-  VkSemaphore *wait_semaphores;
-  VkSemaphore *signal_semaphores;
-
-  wait_semaphore_count = gsk_vulkan_render_pass_get_wait_semaphores (pass, &wait_semaphores);
-  signal_semaphore_count = gsk_vulkan_render_pass_get_signal_semaphores (pass, &signal_semaphores);
 
   command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
@@ -663,10 +656,10 @@ gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
 
   gsk_vulkan_command_pool_submit_buffer (self->command_pool,
                                          command_buffer,
-                                         wait_semaphore_count,
-                                         wait_semaphores,
-                                         signal_semaphore_count,
-                                         signal_semaphores,
+                                         0,
+                                         NULL,
+                                         0,
+                                         NULL,
                                          fence);
 }
 

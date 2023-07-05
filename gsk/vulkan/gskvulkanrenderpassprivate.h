@@ -17,7 +17,7 @@ GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulk
                                                                          const graphene_rect_t  *viewport,
                                                                          cairo_region_t         *clip,
                                                                          GskRenderNode          *node,
-                                                                         VkSemaphore             signal_semaphore);
+                                                                         gboolean                is_root);
 
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 
@@ -37,10 +37,6 @@ void                    gsk_vulkan_render_pass_draw                     (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
-gsize                   gsk_vulkan_render_pass_get_wait_semaphores      (GskVulkanRenderPass    *self,
-                                                                         VkSemaphore           **semaphores);
-gsize                   gsk_vulkan_render_pass_get_signal_semaphores    (GskVulkanRenderPass    *self,
-                                                                         VkSemaphore           **semaphores);
 
 G_END_DECLS
 

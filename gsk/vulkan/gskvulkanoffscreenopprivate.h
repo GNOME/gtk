@@ -9,7 +9,6 @@ GskVulkanImage *        gsk_vulkan_offscreen_op                         (GskVulk
                                                                          GskVulkanRender                *render,
                                                                          const graphene_vec2_t          *scale,
                                                                          const graphene_rect_t          *viewport,
-                                                                         VkSemaphore                     signal_semaphore,
                                                                          GskRenderNode                  *node);
 
 G_END_DECLS

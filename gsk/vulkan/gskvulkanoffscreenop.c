@@ -107,7 +107,6 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                          GskVulkanRender       *render,
                          const graphene_vec2_t *scale,
                          const graphene_rect_t *viewport,
-                         VkSemaphore            signal_semaphore,
                          GskRenderNode         *node)
 {
   GskVulkanOffscreenOp *self;
@@ -142,7 +141,7 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                                                   &view,
                                                   clip,
                                                   node,
-                                                  signal_semaphore);
+                                                  FALSE);
 
   cairo_region_destroy (clip);
 
