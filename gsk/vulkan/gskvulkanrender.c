@@ -342,7 +342,7 @@ gsk_vulkan_render_add_render_pass (GskVulkanRender     *self,
 #endif
 }
 
-void
+static void
 gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
@@ -352,15 +352,15 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   graphene_vec2_init (&scale, self->scale, self->scale);
 
   pass = gsk_vulkan_render_pass_new (self->vulkan,
+                                     self,
                                      self->target,
                                      &scale,
                                      &self->viewport,
                                      self->clip,
+                                     node,
                                      VK_NULL_HANDLE);
 
   gsk_vulkan_render_add_render_pass (self, pass);
-
-  gsk_vulkan_render_pass_add (pass, self, node);
 
   gsk_vulkan_render_verbose_print (self, "start of frame");
 }
@@ -855,11 +855,14 @@ void
 gsk_vulkan_render_reset (GskVulkanRender       *self,
                          GskVulkanImage        *target,
                          const graphene_rect_t *rect,
-                         const cairo_region_t  *clip)
+                         const cairo_region_t  *clip,
+                         GskRenderNode         *node)
 {
   gsk_vulkan_render_cleanup (self);
 
   gsk_vulkan_render_setup (self, target, rect, clip);
+
+  gsk_vulkan_render_add_node (self, node);
 }
 
 GskRenderer *

@@ -136,15 +136,15 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                                         });
 
   self->render_pass = gsk_vulkan_render_pass_new (context,
+                                                  render,
                                                   self->image,
                                                   scale,
                                                   &view,
                                                   clip,
+                                                  node,
                                                   signal_semaphore);
 
   cairo_region_destroy (clip);
-
-  gsk_vulkan_render_pass_add (self->render_pass, render, node);
 
   return self->image;
 }

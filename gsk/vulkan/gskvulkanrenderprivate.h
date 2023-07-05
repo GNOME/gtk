@@ -23,15 +23,13 @@ gboolean                gsk_vulkan_render_is_busy                       (GskVulk
 void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
                                                                          GskVulkanImage         *target,
                                                                          const graphene_rect_t  *rect,
-                                                                         const cairo_region_t   *clip);
+                                                                         const cairo_region_t   *clip,
+                                                                         GskRenderNode          *node);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_add_cleanup_image             (GskVulkanRender        *self,
                                                                          GskVulkanImage         *image);
-
-void                    gsk_vulkan_render_add_node                      (GskVulkanRender        *self,
-                                                                         GskRenderNode          *node);
 
 void                    gsk_vulkan_render_add_render_pass               (GskVulkanRender        *self,
                                                                          GskVulkanRenderPass    *pass);

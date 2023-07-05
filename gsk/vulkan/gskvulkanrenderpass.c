@@ -80,12 +80,19 @@ static GQuark fallback_pixels_quark;
 static GQuark texture_pixels_quark;
 #endif
 
+static void
+gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
+                            GskVulkanRender     *render,
+                            GskRenderNode       *node);
+
 GskVulkanRenderPass *
 gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
+                            GskVulkanRender       *render,
                             GskVulkanImage        *target,
                             const graphene_vec2_t *scale,
                             const graphene_rect_t *viewport,
                             cairo_region_t        *clip,
+                            GskRenderNode         *node,
                             VkSemaphore            signal_semaphore)
 {
   GskVulkanRenderPass *self;
@@ -170,6 +177,8 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
       texture_pixels_quark = g_quark_from_static_string ("texture-pixels");
     }
 #endif
+
+  gsk_vulkan_render_pass_add (self, render, node);
 
   return self;
 }
@@ -1374,7 +1383,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
     gsk_vulkan_render_pass_add_fallback_node (self, render, state, node);
 }
 
-void
+static void
 gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
                             GskVulkanRender     *render,
                             GskRenderNode       *node)
