@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gskcurveprivate.h"
+#include "poly.h"
 
 #define MIN_PROGRESS (1/1024.f)
 
@@ -2472,6 +2473,36 @@ find_closest_point_by_bisection (const GskCurve         *curve,
     } while (count++ < 50);
 }
 
+static void
+find_closest_point_by_roots (const GskCurve         *curve,
+                             const graphene_point_t *point,
+                             float                  *out_distance,
+                             graphene_point_t       *out_point,
+                             float                  *out_t)
+{
+  Poly *qx, *qy;
+
+  if (curve->op == GSK_PATH_QUAD)
+    {
+      const graphene_point_t *p = curve->quad.points;
+      qx = poly_bezier (3, (double[]) { p[0].x, p[1].x, p[2].x });
+      qy = poly_bezier (3, (double[]) { p[0].y, p[1].y, p[2].y });
+    }
+  else
+    {
+      const graphene_point_t *p = curve->cubic.points;
+      qx = poly_bezier (4, (double[]) { p[0].x, p[1].x, p[2].x, p[3].x });
+      qy = poly_bezier (4, (double[]) { p[0].y, p[1].y, p[2].y, p[3].y });
+    }
+
+  *out_t = poly_curve_find_closest_point (qx, qy, point->x, point->y);
+  gsk_curve_get_point (curve, *out_t, out_point);
+  *out_distance = graphene_point_distance (point, out_point, NULL, NULL);
+
+  poly_free (qx);
+  poly_free (qy);
+}
+
 void
 gsk_curve_get_closest_point (const GskCurve         *curve,
                              const graphene_point_t *point,
@@ -2481,6 +2512,10 @@ gsk_curve_get_closest_point (const GskCurve         *curve,
 {
   switch (curve->op)
     {
+    case GSK_PATH_MOVE:
+    default:
+      g_assert_not_reached ();
+
     case GSK_PATH_LINE:
     case GSK_PATH_CLOSE:
       project_point_onto_line (curve, point, out_distance, out_point, out_t);
@@ -2488,12 +2523,14 @@ gsk_curve_get_closest_point (const GskCurve         *curve,
 
     case GSK_PATH_QUAD:
     case GSK_PATH_CUBIC:
+      if (g_getenv ("USE_POLY_SOLVER"))
+        find_closest_point_by_roots (curve, point, out_distance, out_point, out_t);
+      else
+        find_closest_point_by_bisection (curve, point, out_distance, out_point, out_t);
+      break;
+
     case GSK_PATH_CONIC:
       find_closest_point_by_bisection (curve, point, out_distance, out_point, out_t);
       break;
-
-    case GSK_PATH_MOVE:
-    default:
-      g_assert_not_reached ();
     }
 }
