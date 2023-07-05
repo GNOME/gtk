@@ -215,30 +215,6 @@ gsk_path_measure_get_length (GskPathMeasure *self)
   return self->length;
 }
 
-/**
- * gsk_path_measure_is_closed:
- * @self: a `GskPathMeasure`
- *
- * Returns if the path being measured represents a single closed
- * contour.
- *
- * Returns: `TRUE` if the current path is closed
- */
-gboolean
-gsk_path_measure_is_closed (GskPathMeasure *self)
-{
-  const GskContour *contour;
-
-  g_return_val_if_fail (self != NULL, FALSE);
-
-  /* XXX: is the empty path closed? Currently it's not */
-  if (self->n_contours != 1)
-    return FALSE;
-
-  contour = gsk_path_get_contour (self->path, 0);
-  return gsk_contour_get_flags (contour) & GSK_PATH_CLOSED ? TRUE : FALSE;
-}
-
 static float
 gsk_path_measure_clamp_distance (GskPathMeasure *self,
                                  float           distance)
@@ -542,7 +518,7 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
   else
     {
       /* If the path is closed, we can connect the 2 subpaths. */
-      gboolean closed = gsk_path_measure_is_closed (measure);
+      gboolean closed = gsk_path_is_closed (measure->path);
       gboolean need_move_to = !closed;
 
       if (start < measure->length)
