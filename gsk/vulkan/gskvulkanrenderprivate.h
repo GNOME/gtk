@@ -28,12 +28,6 @@ void                    gsk_vulkan_render_reset                         (GskVulk
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 
-void                    gsk_vulkan_render_add_cleanup_image             (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *image);
-
-void                    gsk_vulkan_render_add_render_pass               (GskVulkanRender        *self,
-                                                                         GskVulkanRenderPass    *pass);
-
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
 VkPipeline              gsk_vulkan_render_create_pipeline               (GskVulkanRender        *self,

@@ -48,7 +48,9 @@ struct _GskVulkanRender
   VkFence fence;
   VkDescriptorSetLayout descriptor_set_layouts[N_DESCRIPTOR_SETS];
   VkPipelineLayout pipeline_layout;
+
   GskVulkanUploader *uploader;
+  GskVulkanRenderPass *render_pass;
 
   GskDescriptorImageInfos descriptor_images;
   GskDescriptorBufferInfos descriptor_buffers;
@@ -62,9 +64,6 @@ struct _GskVulkanRender
   GskVulkanBuffer *storage_buffer;
   guchar *storage_buffer_memory;
   gsize storage_buffer_used;
-
-  GList *render_passes;
-  GSList *cleanup_images;
 
   GQuark render_pass_counter;
   GQuark gpu_time_timer;
@@ -110,7 +109,7 @@ gsk_vulkan_render_verbose_print (GskVulkanRender *self,
     {
       GString *string = g_string_new (heading);
       g_string_append (string, ":\n");
-      gsk_vulkan_render_pass_print (g_list_last (self->render_passes)->data, string, 1);
+      gsk_vulkan_render_pass_print (self->render_pass, string, 1);
       g_print ("%s\n", string->str);
       g_string_free (string, TRUE);
     }
@@ -324,43 +323,22 @@ gsk_vulkan_render_get_fence (GskVulkanRender *self)
   return self->fence;
 }
 
-void
-gsk_vulkan_render_add_cleanup_image (GskVulkanRender *self,
-                                     GskVulkanImage  *image)
-{
-  self->cleanup_images = g_slist_prepend (self->cleanup_images, image);
-}
-
-void
-gsk_vulkan_render_add_render_pass (GskVulkanRender     *self,
-                                   GskVulkanRenderPass *pass)
-{
-  self->render_passes = g_list_prepend (self->render_passes, pass);
-
-#ifdef G_ENABLE_DEBUG
-  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
-#endif
-}
-
 static void
 gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
-  GskVulkanRenderPass *pass;
   graphene_vec2_t scale;
 
   graphene_vec2_init (&scale, self->scale, self->scale);
 
-  pass = gsk_vulkan_render_pass_new (self->vulkan,
-                                     self,
-                                     self->target,
-                                     &scale,
-                                     &self->viewport,
-                                     self->clip,
-                                     node,
-                                     VK_NULL_HANDLE);
-
-  gsk_vulkan_render_add_render_pass (self, pass);
+  self->render_pass = gsk_vulkan_render_pass_new (self->vulkan,
+                                                  self,
+                                                  self->target,
+                                                  &scale,
+                                                  &self->viewport,
+                                                  self->clip,
+                                                  node,
+                                                  VK_NULL_HANDLE);
 
   gsk_vulkan_render_verbose_print (self, "start of frame");
 }
@@ -368,20 +346,10 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
 void
 gsk_vulkan_render_upload (GskVulkanRender *self)
 {
-  GList *l;
-
   gsk_vulkan_glyph_cache_upload (gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (self->renderer)),
                                  self->uploader);
 
-  /* gsk_vulkan_render_pass_upload may call gsk_vulkan_render_add_node_for_texture,
-   * prepending new render passes to the list. Therefore, we walk the list from
-   * the end.
-   */
-  for (l = g_list_last (self->render_passes); l; l = l->prev)
-    {
-      GskVulkanRenderPass *pass = l->data;
-      gsk_vulkan_render_pass_upload (pass, self, self->uploader);
-    }
+  gsk_vulkan_render_pass_upload (self->render_pass, self, self->uploader);
 
   gsk_vulkan_uploader_upload (self->uploader);
 }
@@ -614,15 +582,10 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
   VkDevice device;
   VkWriteDescriptorSet descriptor_sets[N_DESCRIPTOR_SETS];
   gsize n_descriptor_sets;
-  GList *l;
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
-  for (l = self->render_passes; l; l = l->next)
-    {
-      GskVulkanRenderPass *pass = l->data;
-      gsk_vulkan_render_pass_reserve_descriptor_sets (pass, self);
-    }
+  gsk_vulkan_render_pass_reserve_descriptor_sets (self->render_pass, self);
   
   if (self->storage_buffer_memory)
     {
@@ -710,8 +673,6 @@ gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
 void
 gsk_vulkan_render_draw (GskVulkanRender *self)
 {
-  GList *l;
-
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (self->renderer, SYNC))
     gsk_profiler_timer_begin (gsk_renderer_get_profiler (self->renderer), self->gpu_time_timer);
@@ -719,12 +680,9 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 
   gsk_vulkan_render_prepare_descriptor_sets (self);
 
-  for (l = self->render_passes; l; l = l->next)
-    {
-      gsk_vulkan_render_draw_pass (self,
-                                   l->data,
-                                   l->next != NULL ? VK_NULL_HANDLE : self->fence);
-    }
+  gsk_vulkan_render_draw_pass (self,
+                               self->render_pass,
+                               self->fence);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (self->renderer, SYNC))
@@ -782,11 +740,7 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
   gsk_descriptor_image_infos_set_size (&self->descriptor_images, 0);
   gsk_descriptor_buffer_infos_set_size (&self->descriptor_buffers, 0);
 
-  g_list_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
-  self->render_passes = NULL;
-  g_slist_free_full (self->cleanup_images, g_object_unref);
-  self->cleanup_images = NULL;
-
+  g_clear_pointer (&self->render_pass, gsk_vulkan_render_pass_free);
   g_clear_pointer (&self->clip, cairo_region_destroy);
   g_clear_object (&self->target);
 }
