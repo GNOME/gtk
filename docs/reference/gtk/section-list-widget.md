@@ -30,12 +30,12 @@ Views display data from a **_model_**. Models implement the [`iface@Gio.ListMode
 interface and can be provided in a variety of ways:
 
  * List model implementations for many specific types of data already exist, for
-   example `GtkDirectoryList` or `GtkStringList`.
+   example [`class@Gtk.DirectoryList`] or [`class@Gtk.StringList`].
 
- * There are generic list model implementations like`GListStore` that allow building
+ * There are generic list model implementations like [`class@Gio.ListStore`] that allow building
    lists of arbitrary objects.
 
- * Wrapping list models like `GtkFilterListModel` or `GtkSortListModel`
+ * Wrapping list models like [`class@Gtk.FilterListModel`] or [`class@Gtk.SortListModel`]
    modify, adapt or combine other models.
 
  * Last but not least, developers are encouraged to create their own `GListModel`
@@ -133,8 +133,8 @@ tradeoffs of those and experiment with them.
 
 GTK offers a wide variety of wrapping models which change or supplement an
 existing model (or models) in some way. But when it comes to storing your
-actual data, there are only a few ready-made choices available: [`class@Gio.ListStore`]
-and [`class@Gtk.StringList`].
+actual data, there are only a few ready-made choices available:
+[`class@Gio.ListStore`], [`class@Gtk.StringList`], and [`class@Gtk.DirectoryList`].
 
 `GListStore` is backed by a balanced tree and has performance characteristics
 that are expected for that data structure. It works reasonably well for dataset
@@ -146,6 +146,10 @@ backed by an dynamically allocated array and has performance characteristics
 that are expected for that data structure. `GtkStringList` is a good fit for any
 place where you would otherwise use `char*[]` and works best if the dataset
 is not very dynamic.
+
+`GtkDirectoryList` is a list model that wraps [`method@Gio.File.enumerate_children_async`].
+It presents a `GListModel` and fills it asynchronously with the [`iface@Gio.File`]s
+returned from that function.
 
 If these models don't fit your use case or scalability requirements, you
 should make a custom `GListModel` implementation. It is a small interface and
@@ -199,7 +203,7 @@ the `.data-table` style class.
 ## Sections
 
 List models can optionally group their items into **_sections_**, by implementing
-the `GtkSectionModel` interface. Both `GtkListView` and `GtkGridView` can
+the `GtkSectionModel` interface. `GtkListView` can
 display headers for sections, by installing a separate **_header factory_**.
 
 Many GTK list models support section inherently, or they pass through the
