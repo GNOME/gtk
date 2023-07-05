@@ -95,6 +95,8 @@ void                    gsk_path_to_cairo                       (GskPath        
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_is_empty                       (GskPath                *self);
 GDK_AVAILABLE_IN_ALL
+gboolean                gsk_path_is_closed                      (GskPath                *self);
+GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
                                                                  graphene_rect_t        *bounds);
 GDK_AVAILABLE_IN_ALL

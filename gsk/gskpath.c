@@ -301,6 +301,25 @@ gsk_path_is_empty (GskPath *self)
 }
 
 /**
+ * gsk_path_is_closed:
+ * @self: a #GskPath
+ *
+ * Checks if the path represents a single closed contour.
+ *
+ * Returns: %TRUE if the path is closed
+ **/
+gboolean
+gsk_path_is_closed (GskPath *self)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (self->n_contours != 1)
+    return FALSE;
+
+ return (gsk_contour_get_flags (self->contours[0]) & GSK_PATH_CLOSED) != 0;
+}
+
+/**
  * gsk_path_get_bounds:
  * @self: a #GskPath
  * @bounds: (out caller-allocates): the bounds of the given path
