@@ -2,6 +2,8 @@
 
 #include "gskvulkanscissoropprivate.h"
 
+#include "gskvulkanprivate.h"
+
 typedef struct _GskVulkanScissorOp GskVulkanScissorOp;
 
 struct _GskVulkanScissorOp
@@ -14,6 +16,19 @@ struct _GskVulkanScissorOp
 static void
 gsk_vulkan_scissor_op_finish (GskVulkanOp *op)
 {
+}
+
+static void
+gsk_vulkan_scissor_op_print (GskVulkanOp *op,
+                             GString     *string,
+                             guint        indent)
+{
+  GskVulkanScissorOp *self = (GskVulkanScissorOp *) op;
+
+  print_indent (string, indent);
+  print_int_rect (string, &self->rect);
+  g_string_append_printf (string, "scissor ");
+  print_newline (string);
 }
 
 static void
@@ -67,6 +82,7 @@ static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   NULL,
   NULL,
   gsk_vulkan_scissor_op_finish,
+  gsk_vulkan_scissor_op_print,
   gsk_vulkan_scissor_op_upload,
   gsk_vulkan_scissor_op_count_vertex_data,
   gsk_vulkan_scissor_op_collect_vertex_data,

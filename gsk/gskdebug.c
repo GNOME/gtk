@@ -12,6 +12,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "surface", GSK_DEBUG_SURFACE, "Information about surfaces" },
   { "fallback", GSK_DEBUG_FALLBACK, "Information about fallbacks" },
   { "glyphcache", GSK_DEBUG_GLYPH_CACHE, "Information about glyph caching" },
+  { "verbose", GSK_DEBUG_VERBOSE, "Print verbose output while rendering" },
   { "geometry", GSK_DEBUG_GEOMETRY, "Show borders (when using cairo)" },
   { "full-redraw", GSK_DEBUG_FULL_REDRAW, "Force full redraws" },
   { "sync", GSK_DEBUG_SYNC, "Sync after each frame" },

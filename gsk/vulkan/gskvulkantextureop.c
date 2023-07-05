@@ -30,6 +30,20 @@ gsk_vulkan_texture_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_texture_op_print (GskVulkanOp *op,
+                             GString     *string,
+                             guint        indent)
+{
+  GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->rect);
+  g_string_append (string, "texture ");
+  print_image (string, self->image);
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_texture_op_upload (GskVulkanOp           *op,
                               GskVulkanRenderPass   *pass,
                               GskVulkanRender       *render,
@@ -104,6 +118,7 @@ static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
   "texture",
   &gsk_vulkan_texture_info,
   gsk_vulkan_texture_op_finish,
+  gsk_vulkan_texture_op_print,
   gsk_vulkan_texture_op_upload,
   gsk_vulkan_texture_op_count_vertex_data,
   gsk_vulkan_texture_op_collect_vertex_data,

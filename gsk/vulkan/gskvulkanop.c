@@ -22,6 +22,14 @@ gsk_vulkan_op_finish (GskVulkanOp *op)
 }
 
 void
+gsk_vulkan_op_print (GskVulkanOp *op,
+                     GString     *string,
+                     guint        indent)
+{
+  op->op_class->print (op, string, indent);
+}
+
+void
 gsk_vulkan_op_upload (GskVulkanOp         *op,
                       GskVulkanRenderPass *pass,
                       GskVulkanRender     *render,

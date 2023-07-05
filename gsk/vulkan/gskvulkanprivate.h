@@ -2,6 +2,8 @@
 
 #include "gskdebugprivate.h"
 
+#include "gskroundedrectprivate.h"
+
 #include <gdk/gdk.h>
 #include <graphene.h>
 
@@ -58,3 +60,78 @@ gsk_vulkan_point_to_float (const graphene_point_t *point,
   values[1] = point->y;
 }
 
+
+static inline void
+print_indent (GString *string,
+              guint    indent)
+{
+  g_string_append_printf (string, "%*s", 2 * indent, "");
+}
+
+static inline void
+print_rect (GString               *string,
+            const graphene_rect_t *rect)
+{
+  g_string_append_printf (string, "%g %g %g %g ",
+                          rect->origin.x, rect->origin.y,
+                          rect->size.width, rect->size.height);
+}
+
+static inline void
+print_int_rect (GString                     *string,
+                const cairo_rectangle_int_t *rect)
+{
+  g_string_append_printf (string, "%d %d %d %d ",
+                          rect->x, rect->y,
+                          rect->width, rect->height);
+}
+
+static inline void
+print_rounded_rect (GString              *string,
+                    const GskRoundedRect *rect)
+{
+  print_rect (string, &rect->bounds);
+
+  if (gsk_rounded_rect_is_rectilinear (rect))
+    return;
+
+  g_string_append (string, "/ ");
+
+  if (rect->corner[0].width != rect->corner[0].height ||
+      rect->corner[1].width != rect->corner[1].height ||
+      rect->corner[2].width != rect->corner[2].height ||
+      rect->corner[3].width != rect->corner[3].height)
+    {
+      g_string_append (string, "variable ");
+    }
+  else if (rect->corner[0].width != rect->corner[1].width ||
+           rect->corner[0].width != rect->corner[2].width ||
+           rect->corner[0].width != rect->corner[3].width)
+    {
+      g_string_append_printf (string, "%g %g %g %g ",
+                              rect->corner[0].width, rect->corner[1].width,
+                              rect->corner[2].width, rect->corner[3].width);
+    }
+  else
+    {
+      g_string_append_printf (string, "%g ", rect->corner[0].width);
+    }
+}
+static inline void
+print_rgba (GString       *string,
+            const GdkRGBA *rgba)
+{
+  char *s = gdk_rgba_to_string (rgba);
+  g_string_append (string, s);
+  g_string_append_c (string, ' ');
+  g_free (s);
+}
+
+static inline void
+print_newline (GString *string)
+{
+  if (string->len && string->str[string->len - 1] == ' ')
+    string->str[string->len - 1] = '\n';
+  else
+    g_string_append_c (string, '\n');
+}

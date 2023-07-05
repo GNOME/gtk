@@ -2,6 +2,8 @@
 
 #include "gskvulkancoloropprivate.h"
 
+#include "gskvulkanprivate.h"
+
 #include "vulkan/resources/color.vert.h"
 
 typedef struct _GskVulkanColorOp GskVulkanColorOp;
@@ -50,6 +52,20 @@ gsk_vulkan_color_op_count_vertex_data (GskVulkanOp *op,
 }
 
 static void
+gsk_vulkan_color_op_print (GskVulkanOp *op,
+                           GString     *string,
+                           guint        indent)
+{
+  GskVulkanColorOp *self = (GskVulkanColorOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->rect);
+  g_string_append (string, "color ");
+  print_rgba (string, &self->color);
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_color_op_collect_vertex_data (GskVulkanOp         *op,
                                          GskVulkanRenderPass *pass,
                                          GskVulkanRender     *render,
@@ -92,6 +108,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_OP_CLASS = {
   "color",
   &gsk_vulkan_color_info,
   gsk_vulkan_color_op_finish,
+  gsk_vulkan_color_op_print,
   gsk_vulkan_color_op_upload,
   gsk_vulkan_color_op_count_vertex_data,
   gsk_vulkan_color_op_collect_vertex_data,

@@ -2,6 +2,8 @@
 
 #include "gskvulkanuploadcairoopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 typedef struct _GskVulkanUploadCairoOp GskVulkanUploadCairoOp;
 
 struct _GskVulkanUploadCairoOp
@@ -20,6 +22,19 @@ gsk_vulkan_upload_cairo_op_finish (GskVulkanOp *op)
 
   g_object_unref (self->image);
   gsk_render_node_unref (self->node);
+}
+
+static void
+gsk_vulkan_upload_cairo_op_print (GskVulkanOp *op,
+                                  GString     *string,
+                                  guint        indent)
+{
+  GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
+
+  print_indent (string, indent);
+  g_string_append (string, "upload-cairo ");
+  print_image (string, self->image);
+  print_newline (string);
 }
 
 static void
@@ -92,6 +107,7 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS = {
   NULL,
   NULL,
   gsk_vulkan_upload_cairo_op_finish,
+  gsk_vulkan_upload_cairo_op_print,
   gsk_vulkan_upload_cairo_op_upload,
   gsk_vulkan_upload_cairo_op_count_vertex_data,
   gsk_vulkan_upload_cairo_op_collect_vertex_data,

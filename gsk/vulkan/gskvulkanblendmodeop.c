@@ -35,6 +35,19 @@ gsk_vulkan_blend_mode_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_blend_mode_op_print (GskVulkanOp *op,
+                                GString     *string,
+                                guint        indent)
+{
+  GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->bounds);
+  g_string_append_printf (string, "blend-mode %d%% ", self->blend_mode);
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_blend_mode_op_upload (GskVulkanOp           *op,
                                  GskVulkanRenderPass   *pass,
                                  GskVulkanRender       *render,
@@ -114,6 +127,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
   "blend-mode",
   &gsk_vulkan_blend_mode_info,
   gsk_vulkan_blend_mode_op_finish,
+  gsk_vulkan_blend_mode_op_print,
   gsk_vulkan_blend_mode_op_upload,
   gsk_vulkan_blend_mode_op_count_vertex_data,
   gsk_vulkan_blend_mode_op_collect_vertex_data,

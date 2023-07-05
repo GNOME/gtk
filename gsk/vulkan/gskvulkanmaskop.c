@@ -33,6 +33,38 @@ gsk_vulkan_mask_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_mask_op_print (GskVulkanOp *op,
+                          GString     *string,
+                          guint        indent)
+{
+  GskVulkanMaskOp *self = (GskVulkanMaskOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->source.rect);
+  g_string_append (string, "mask ");
+  print_rect (string, &self->mask.rect);
+  switch (self->mask_mode)
+  {
+    case GSK_MASK_MODE_ALPHA:
+      g_string_append (string, "alpha ");
+      break;
+    case GSK_MASK_MODE_INVERTED_ALPHA:
+      g_string_append (string, "inverted-alpha ");
+      break;
+    case GSK_MASK_MODE_LUMINANCE:
+      g_string_append (string, "luminance ");
+      break;
+    case GSK_MASK_MODE_INVERTED_LUMINANCE:
+      g_string_append (string, "inverted-luminance ");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_mask_op_upload (GskVulkanOp         *op,
                            GskVulkanRenderPass *pass,
                            GskVulkanRender     *render,
@@ -106,6 +138,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
   "mask",
   &gsk_vulkan_mask_info,
   gsk_vulkan_mask_op_finish,
+  gsk_vulkan_mask_op_print,
   gsk_vulkan_mask_op_upload,
   gsk_vulkan_mask_op_count_vertex_data,
   gsk_vulkan_mask_op_collect_vertex_data,

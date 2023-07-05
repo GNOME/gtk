@@ -102,6 +102,22 @@ pipeline_cache_key_equal (gconstpointer a,
 }
 
 static void
+gsk_vulkan_render_verbose_print (GskVulkanRender *self,
+                                 const char      *heading)
+{
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (self->renderer, VERBOSE))
+    {
+      GString *string = g_string_new (heading);
+      g_string_append (string, ":\n");
+      gsk_vulkan_render_pass_print (g_list_last (self->render_passes)->data, string, 1);
+      g_print ("%s\n", string->str);
+      g_string_free (string, TRUE);
+    }
+#endif
+}
+
+static void
 gsk_vulkan_render_setup (GskVulkanRender       *self,
                          GskVulkanImage        *target,
                          const graphene_rect_t *rect,
@@ -345,6 +361,8 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   gsk_vulkan_render_add_render_pass (self, pass);
 
   gsk_vulkan_render_pass_add (pass, self, node);
+
+  gsk_vulkan_render_verbose_print (self, "start of frame");
 }
 
 void

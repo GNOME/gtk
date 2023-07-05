@@ -204,6 +204,22 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_free (self);
 }
 
+void
+gsk_vulkan_render_pass_print (GskVulkanRenderPass *self,
+                              GString             *string,
+                              guint                indent)
+{
+  GskVulkanOp *op;
+  gsize i;
+
+  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+    {
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
+
+      gsk_vulkan_op_print (op, string, indent);
+    }
+}
+
 static inline gsize
 round_up (gsize number, gsize divisor)
 {

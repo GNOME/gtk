@@ -31,6 +31,19 @@ gsk_vulkan_color_matrix_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_color_matrix_op_print (GskVulkanOp *op,
+                                  GString     *string,
+                                  guint        indent)
+{
+  GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->rect);
+  g_string_append (string, "color-matrix ");
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_color_matrix_op_upload (GskVulkanOp           *op,
                                    GskVulkanRenderPass   *pass,
                                    GskVulkanRender       *render,
@@ -109,6 +122,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   "color-matrix",
   &gsk_vulkan_color_matrix_info,
   gsk_vulkan_color_matrix_op_finish,
+  gsk_vulkan_color_matrix_op_print,
   gsk_vulkan_color_matrix_op_upload,
   gsk_vulkan_color_matrix_op_count_vertex_data,
   gsk_vulkan_color_matrix_op_collect_vertex_data,

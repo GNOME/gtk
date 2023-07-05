@@ -25,6 +25,10 @@ struct _GskVulkanOpClass
 
   void                  (* finish)                                      (GskVulkanOp            *op);
 
+  void                  (* print)                                       (GskVulkanOp            *op,
+                                                                         GString                *string,
+                                                                         guint                   indent);
+
   void                  (* upload)                                      (GskVulkanOp            *op,
                                                                          GskVulkanRenderPass    *pass,
                                                                          GskVulkanRender        *render,
@@ -49,6 +53,10 @@ struct _GskVulkanOpClass
 GskVulkanOp *           gsk_vulkan_op_alloc                             (GskVulkanRenderPass    *render_pass,
                                                                          const GskVulkanOpClass *op_class);
 void                    gsk_vulkan_op_finish                            (GskVulkanOp            *op);
+
+void                    gsk_vulkan_op_print                             (GskVulkanOp            *op,
+                                                                         GString                *string,
+                                                                         guint                   indent);
 
 void                    gsk_vulkan_op_upload                            (GskVulkanOp            *op,
                                                                          GskVulkanRenderPass    *pass,

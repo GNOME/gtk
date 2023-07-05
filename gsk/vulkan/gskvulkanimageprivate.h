@@ -84,5 +84,14 @@ VkImageView             gsk_vulkan_image_get_image_view                 (GskVulk
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
 GdkMemoryFormat         gsk_vulkan_image_get_format                     (GskVulkanImage         *self);
 
+static inline void
+print_image (GString        *string,
+             GskVulkanImage *image)
+{
+  g_string_append_printf (string, "%zux%zu ",
+                          gsk_vulkan_image_get_width (image),
+                          gsk_vulkan_image_get_height (image));
+}
+
 G_END_DECLS
 

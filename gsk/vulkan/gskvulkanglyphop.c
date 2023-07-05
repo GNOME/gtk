@@ -37,6 +37,20 @@ gsk_vulkan_glyph_op_upload (GskVulkanOp         *op,
 {
 }
 
+static void
+gsk_vulkan_glyph_op_print (GskVulkanOp *op,
+                           GString     *string,
+                           guint        indent)
+{
+  GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->rect);
+  g_string_append (string, "glyph ");
+  print_rgba (string, &self->color);
+  print_newline (string);
+}
+
 static inline gsize
 round_up (gsize number, gsize divisor)
 {
@@ -99,6 +113,7 @@ static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
   "glyph",
   &gsk_vulkan_glyph_info,
   gsk_vulkan_glyph_op_finish,
+  gsk_vulkan_glyph_op_print,
   gsk_vulkan_glyph_op_upload,
   gsk_vulkan_glyph_op_count_vertex_data,
   gsk_vulkan_glyph_op_collect_vertex_data,

@@ -28,6 +28,21 @@ gsk_vulkan_outset_shadow_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_outset_shadow_op_print (GskVulkanOp *op,
+                                   GString     *string,
+                                   guint        indent)
+{
+  GskVulkanOutsetShadowOp *self = (GskVulkanOutsetShadowOp *) op;
+
+  print_indent (string, indent);
+  print_rounded_rect (string, &self->outline);
+  g_string_append (string, "outset-shadow ");
+  if (self->blur_radius > 0)
+    g_string_append_printf (string, "blur %gpx ", self->blur_radius);
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_outset_shadow_op_upload (GskVulkanOp           *op,
                                     GskVulkanRenderPass   *pass,
                                     GskVulkanRender       *render,
@@ -95,6 +110,7 @@ static const GskVulkanOpClass GSK_VULKAN_OUTSET_SHADOW_OP_CLASS = {
   "outset-shadow",
   &gsk_vulkan_outset_shadow_info,
   gsk_vulkan_outset_shadow_op_finish,
+  gsk_vulkan_outset_shadow_op_print,
   gsk_vulkan_outset_shadow_op_upload,
   gsk_vulkan_outset_shadow_op_count_vertex_data,
   gsk_vulkan_outset_shadow_op_collect_vertex_data,

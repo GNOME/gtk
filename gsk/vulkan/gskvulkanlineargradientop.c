@@ -32,6 +32,19 @@ gsk_vulkan_linear_gradient_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_linear_gradient_op_print (GskVulkanOp *op,
+                                     GString     *string,
+                                     guint        indent)
+{
+  GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;
+
+  print_indent (string, indent);
+  print_rect (string, &self->rect);
+  g_string_append_printf (string, "linear-gradient (%zu stops)", self->n_stops);
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_linear_gradient_op_upload (GskVulkanOp           *op,
                                       GskVulkanRenderPass   *pass,
                                       GskVulkanRender       *render,
@@ -108,6 +121,7 @@ static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   "linear",
   &gsk_vulkan_linear_info,
   gsk_vulkan_linear_gradient_op_finish,
+  gsk_vulkan_linear_gradient_op_print,
   gsk_vulkan_linear_gradient_op_upload,
   gsk_vulkan_linear_gradient_op_count_vertex_data,
   gsk_vulkan_linear_gradient_op_collect_vertex_data,

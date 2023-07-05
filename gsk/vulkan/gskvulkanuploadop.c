@@ -2,6 +2,8 @@
 
 #include "gskvulkanuploadopprivate.h"
 
+#include "gskvulkanprivate.h"
+
 typedef struct _GskVulkanUploadOp GskVulkanUploadOp;
 
 struct _GskVulkanUploadOp
@@ -19,6 +21,19 @@ gsk_vulkan_upload_op_finish (GskVulkanOp *op)
 
   g_object_unref (self->image);
   g_object_unref (self->texture);
+}
+
+static void
+gsk_vulkan_upload_op_print (GskVulkanOp *op,
+                            GString     *string,
+                            guint        indent)
+{
+  GskVulkanUploadOp *self = (GskVulkanUploadOp *) op;
+
+  print_indent (string, indent);
+  g_string_append (string, "upload ");
+  print_image (string, self->image);
+  print_newline (string);
 }
 
 static void
@@ -73,6 +88,7 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_OP_CLASS = {
   NULL,
   NULL,
   gsk_vulkan_upload_op_finish,
+  gsk_vulkan_upload_op_print,
   gsk_vulkan_upload_op_upload,
   gsk_vulkan_upload_op_count_vertex_data,
   gsk_vulkan_upload_op_collect_vertex_data,

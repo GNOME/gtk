@@ -23,6 +23,10 @@ void                    gsk_vulkan_render_pass_add                      (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          GskRenderNode          *node);
 
+void                    gsk_vulkan_render_pass_print                    (GskVulkanRenderPass    *self,
+                                                                         GString                *string,
+                                                                         guint                   indent);
+
 gpointer                gsk_vulkan_render_pass_alloc_op                 (GskVulkanRenderPass    *self,
                                                                          gsize                   size);
 

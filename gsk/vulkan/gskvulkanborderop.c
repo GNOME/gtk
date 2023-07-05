@@ -26,6 +26,34 @@ gsk_vulkan_border_op_finish (GskVulkanOp *op)
 }
 
 static void
+gsk_vulkan_border_op_print (GskVulkanOp *op,
+                            GString     *string,
+                            guint        indent)
+{
+  GskVulkanBorderOp *self = (GskVulkanBorderOp *) op;
+
+  print_indent (string, indent);
+  print_rounded_rect (string, &self->outline);
+  g_string_append (string, "border ");
+  print_rgba (string, &self->colors[0]);
+  if (!gdk_rgba_equal (&self->colors[3], &self->colors[0]) ||
+      !gdk_rgba_equal (&self->colors[2], &self->colors[0]) ||
+      !gdk_rgba_equal (&self->colors[1], &self->colors[0]))
+    {
+      print_rgba (string, &self->colors[1]);
+      print_rgba (string, &self->colors[2]);
+      print_rgba (string, &self->colors[3]);
+    }
+  g_string_append_printf (string, "%g ", self->widths[0]);
+  if (self->widths[0] != self->widths[1] ||
+      self->widths[0] != self->widths[2] ||
+      self->widths[0] != self->widths[3])
+    g_string_append_printf (string, "%g %g %g ", self->widths[1], self->widths[2], self->widths[3]);
+
+  print_newline (string);
+}
+
+static void
 gsk_vulkan_border_op_upload (GskVulkanOp           *op,
                              GskVulkanRenderPass   *pass,
                              GskVulkanRender       *render,
@@ -95,6 +123,7 @@ static const GskVulkanOpClass GSK_VULKAN_BORDER_OP_CLASS = {
   "border",
   &gsk_vulkan_border_info,
   gsk_vulkan_border_op_finish,
+  gsk_vulkan_border_op_print,
   gsk_vulkan_border_op_upload,
   gsk_vulkan_border_op_count_vertex_data,
   gsk_vulkan_border_op_collect_vertex_data,
