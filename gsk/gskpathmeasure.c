@@ -51,9 +51,6 @@ struct _GskPathMeasure
   GskPath *path;
   float tolerance;
 
-  gsize first;
-  gsize last;
-
   float length;
   gsize n_contours;
   GskContourMeasure measures[];
@@ -107,8 +104,7 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
   self->path = gsk_path_ref (path);
   self->tolerance = tolerance;
   self->n_contours = n_contours;
-  self->first = 0;
-  self->last = n_contours;
+  self->n_contours = n_contours;
 
   for (i = 0; i < n_contours; i++)
     {
@@ -236,10 +232,10 @@ gsk_path_measure_is_closed (GskPathMeasure *self)
   g_return_val_if_fail (self != NULL, FALSE);
 
   /* XXX: is the empty path closed? Currently it's not */
-  if (self->last - self->first != 1)
+  if (self->n_contours != 1)
     return FALSE;
 
-  contour = gsk_path_get_contour (self->path, self->first);
+  contour = gsk_path_get_contour (self->path, 0);
   return gsk_contour_get_flags (contour) & GSK_PATH_CLOSED ? TRUE : FALSE;
 }
 
@@ -288,7 +284,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
 
   distance = gsk_path_measure_clamp_distance (self, distance);
 
-  for (i = self->first; i < self->last; i++)
+  for (i = 0; i < self->n_contours; i++)
     {
       if (distance < self->measures[i].length)
         break;
@@ -297,10 +293,10 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
     }
 
   /* weird corner cases */
-  if (i == self->last)
+  if (i == self->n_contours)
     {
       /* the empty path goes here */
-      if (self->first == self->last)
+      if (0 == self->n_contours)
         {
           if (pos)
             graphene_point_init (pos, 0.f, 0.f);
@@ -309,7 +305,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
           return;
         }
       /* rounding errors can make this happen */
-      i = self->last - 1;
+      i = self->n_contours - 1;
       distance = self->measures[i].length;
     }
 
@@ -405,7 +401,7 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
   result = FALSE;
   length = 0;
 
-  for (i = self->first; i < self->last; i++)
+  for (i = 0; i < self->n_contours; i++)
     {
       if (gsk_contour_get_closest_point (gsk_path_get_contour (self->path, i),
                                          self->measures[i].contour_data,
@@ -454,7 +450,7 @@ gsk_path_measure_in_fill (GskPathMeasure         *self,
   int winding = 0;
   int i;
 
-  for (i = self->first; i < self->last; i++)
+  for (i = 0; i < self->n_contours; i++)
     winding += gsk_contour_get_winding (gsk_path_get_contour (self->path, i),
                                         self->measures[i].contour_data,
                                         point);
@@ -479,7 +475,7 @@ gsk_path_builder_add_segment_chunk (GskPathBuilder *self,
 {
   g_assert (start < end);
 
-  for (gsize i = measure->first; i < measure->last; i++)
+  for (gsize i = 0; i < measure->n_contours; i++)
     {
       if (measure->measures[i].length < start)
         {
