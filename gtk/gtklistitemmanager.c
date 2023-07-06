@@ -1356,6 +1356,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
                                              position + i,
                                              item,
                                              gtk_selection_model_is_selected (self->model, position + i));
+                  g_object_unref (item);
                   gtk_widget_insert_after (tile->widget, self->widget, insert_after);
                 }
               else
