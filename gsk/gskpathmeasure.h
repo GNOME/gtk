@@ -26,6 +26,7 @@
 
 
 #include <gsk/gskpath.h>
+#include <gsk/gskpathpoint.h>
 
 G_BEGIN_DECLS
 
@@ -78,7 +79,23 @@ gboolean                gsk_path_measure_in_fill                (GskPathMeasure 
                                                                  const graphene_point_t *point,
                                                                  GskFillRule             fill_rule);
 
+GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_start_point        (GskPathMeasure         *self);
+
+GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_end_point          (GskPathMeasure         *self);
+
+GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_path_point         (GskPathMeasure         *self,
+                                                                 float                   distance);
+
+GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_closest_path_point (GskPathMeasure         *self,
+                                                                 const graphene_point_t *point,
+                                                                 float                   threshold);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathMeasure, gsk_path_measure_unref)
+
 G_END_DECLS
 
 #endif /* __GSK_PATH_MEASURE_H__ */

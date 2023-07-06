@@ -23,6 +23,7 @@
 #include "gskpathbuilder.h"
 
 #include "gskpathbuilder.h"
+#include "gskpathpointprivate.h"
 #include "gskpathprivate.h"
 
 /**
@@ -593,3 +594,176 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
     }
 }
 
+/**
+ * gsk_path_measure_get_path_point:
+ * @self: a `GskPathMeasure`
+ * @distance: the distance
+ *
+ * Returns a `GskPathPoint` representing the point
+ * at the given offset of the path.
+ *
+ * An empty path has no points, so `NULL` is returned
+ * in this case.
+ *
+ * Returns: (transfer full) (nullable): a newly allocated `GskPathPoint`
+ */
+GskPathPoint *
+gsk_path_measure_get_path_point (GskPathMeasure   *self,
+                                 float             distance)
+{
+  gsize i;
+  float contour_offset;
+  float offset;
+  const GskContour *contour;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  if (self->first == self->last)
+    return NULL;
+
+  contour_offset = 0;
+  offset = gsk_path_measure_clamp_distance (self, distance);
+
+  for (i = self->first; i < self->last; i++)
+    {
+      if (offset < self->measures[i].length || i == self->last - 1)
+        break;
+
+      contour_offset += self->measures[i].length;
+      offset -= self->measures[i].length;
+    }
+
+  offset = CLAMP (offset, 0, self->measures[i].length);
+
+  contour = gsk_path_get_contour (self->path, i);
+
+  return gsk_path_point_new (self,
+                             contour, self->measures[i].contour_data,
+                             contour_offset, offset);
+}
+
+/**
+ * gsk_path_measure_get_closest_path_point:
+ * @self: a `GskPathMeasure`
+ * @point: the point to fond the closest point to
+ * @threshold: The maximum allowed distance between the path and @point.
+ *   Use INFINITY to look for any point.
+ *
+ * Returns a `GskPathPoint` representing the point
+ * on path that is closest to the given point.
+ *
+ * If no point on the path is closer than @threshold,
+ * `NULL` is returned.
+ *
+ * An empty path has no points, so `NULL` is returned
+ * in this case.
+ *
+ * Returns: (transfer full) (nullable): a newly allocated `GskPathPoint`
+ */
+GskPathPoint *
+gsk_path_measure_get_closest_path_point (GskPathMeasure         *self,
+                                         const graphene_point_t *point,
+                                         float                   threshold)
+{
+  gssize best_idx;
+  float best_offset;
+  float best_contour_offset;
+  float contour_offset;
+
+  if (self->first == self->last)
+    return NULL;
+
+  contour_offset = 0;
+
+  best_idx = -1;
+
+  for (gsize i = self->first; i < self->last; i++)
+    {
+      float distance, offset;
+
+      if (gsk_contour_get_closest_point (gsk_path_get_contour (self->path, i),
+                                         self->measures[i].contour_data,
+                                         self->tolerance,
+                                         point,
+                                         threshold,
+                                         &distance,
+                                         NULL,
+                                         &offset,
+                                         NULL))
+        {
+          best_idx = i;
+          best_offset = offset;
+          best_contour_offset = contour_offset;
+
+          if (distance < self->tolerance)
+            break;
+
+          threshold = distance - self->tolerance;
+        }
+
+      contour_offset += self->measures[i].length;
+    }
+
+  if (best_idx != -1)
+    return gsk_path_point_new (self,
+                               gsk_path_get_contour (self->path, best_idx),
+                               self->measures[best_idx].contour_data,
+                               best_contour_offset, best_offset);
+
+  return NULL;
+}
+
+/**
+ * gsk_path_measure_get_start_point:
+ * @self: a `GskPathMeasure`
+ *
+ * Returns a `GskPathPoint` representing the start point
+ * of the path.
+ *
+ * An empty path has no points, so `NULL` is returned
+ * in this case.
+ *
+ * Returns: (transfer full) (nullable): the start point
+ */
+GskPathPoint *
+gsk_path_measure_get_start_point (GskPathMeasure *self)
+{
+  if (self->first == self->last)
+    return NULL;
+
+  return gsk_path_point_new (self,
+                             gsk_path_get_contour (self->path, 0),
+                             self->measures[0].contour_data,
+                             0, 0);
+}
+
+/**
+ * gsk_path_measure_get_end_point:
+ * @self: a `GskPathMeasure`
+ *
+ * Returns a `GskPathPoint` representing the end point
+ * of the path.
+ *
+ * An empty path has no points, so `NULL` is returned
+ * in this case.
+ *
+ * Returns: (transfer full) (nullable): the end point
+ */
+GskPathPoint *
+gsk_path_measure_get_end_point (GskPathMeasure *self)
+{
+  float contour_offset;
+
+  if (self->first == self->last)
+    return NULL;
+
+  contour_offset = 0;
+
+  for (gsize i = self->first; i < self->last - 1; i++)
+    contour_offset += self->measures[i].length;
+
+  return gsk_path_point_new (self,
+                             gsk_path_get_contour (self->path, self->last - 1),
+                             self->measures[self->last - 1].contour_data,
+                             contour_offset, self->measures[self->last - 1].length);
+}
