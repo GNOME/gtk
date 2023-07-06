@@ -26,6 +26,9 @@ GDK_AVAILABLE_IN_ALL
 float                   gsk_path_point_get_offset      (GskPathPoint     *self);
 
 GDK_AVAILABLE_IN_ALL
+bool                    gsk_path_point_is_exact        (GskPathPoint     *self);
+
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_point_get_point       (GskPathPoint     *self,
                                                         graphene_point_t *point);
 

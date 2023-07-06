@@ -86,6 +86,15 @@ GDK_AVAILABLE_IN_ALL
 GskPathPoint *          gsk_path_measure_get_end_point          (GskPathMeasure         *self);
 
 GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_next_exact_point   (GskPathMeasure       *self,
+                                                                 GskPathPoint         *point);
+
+GDK_AVAILABLE_IN_ALL
+GskPathPoint *          gsk_path_measure_get_previous_exact_point
+                                                                (GskPathMeasure       *self,
+                                                                 GskPathPoint         *point);
+
+GDK_AVAILABLE_IN_ALL
 GskPathPoint *          gsk_path_measure_get_path_point         (GskPathMeasure         *self,
                                                                  float                   distance);
 
