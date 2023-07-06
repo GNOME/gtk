@@ -79,6 +79,23 @@ static GQuark texture_pixels_quark;
 #endif
 
 static void
+gsk_vulkan_render_pass_seal (GskVulkanRenderPass *self)
+{
+  GskVulkanOp *last, *op;
+  guint i;
+
+  last = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, 0);
+
+  for (i = last->op_class->size; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+    {
+      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
+
+      last->next = op;
+      last = op;
+    }
+}
+
+static void
 gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
                             GskVulkanRender     *render,
                             GskRenderNode       *node);
@@ -175,6 +192,8 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 #endif
 
   gsk_vulkan_render_pass_add (self, render, node);
+
+  gsk_vulkan_render_pass_seal (self);
 
   return self;
 }
@@ -1381,18 +1400,24 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
 }
 
+static GskVulkanOp *
+gsk_vulkan_render_pass_get_first_op (GskVulkanRenderPass *self)
+{
+  if (gsk_vulkan_render_ops_get_size (&self->render_ops) == 0)
+    return NULL;
+
+  return (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, 0);
+}
+
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                GskVulkanRender      *render,
                                GskVulkanUploader    *uploader)
 {
   GskVulkanOp *op;
-  guint i;
 
-  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
-
       gsk_vulkan_op_upload (op, self, render, uploader);
     }
 }
@@ -1402,13 +1427,10 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 {
   GskVulkanOp *op;
   gsize n_bytes;
-  guint i;
 
   n_bytes = 0;
-  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
-
       n_bytes = gsk_vulkan_op_count_vertex_data (op, n_bytes);
     }
 
@@ -1421,12 +1443,9 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                             guchar              *data)
 {
   GskVulkanOp *op;
-  guint i;
 
-  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
-
       gsk_vulkan_op_collect_vertex_data (op, self, render, data);
     }
 }
@@ -1458,12 +1477,9 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
                                                 GskVulkanRender     *render)
 {
   GskVulkanOp *op;
-  guint i;
 
-  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
-
       gsk_vulkan_op_reserve_descriptor_sets (op, render);
     }
 }
@@ -1477,7 +1493,6 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
   VkPipeline current_pipeline = VK_NULL_HANDLE;
   VkPipeline op_pipeline;
   GskVulkanOp *op;
-  guint i;
   GskVulkanBuffer *vertex_buffer;
 
   vertex_buffer = gsk_vulkan_render_pass_get_vertex_data (self, render);
@@ -1491,10 +1506,8 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                             },
                             (VkDeviceSize[1]) { 0 });
 
-  for (i = 0; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
+  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
-
       if (op->op_class->shader_name)
         {
           op_pipeline = gsk_vulkan_render_create_pipeline (render,

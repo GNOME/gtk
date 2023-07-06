@@ -7,13 +7,13 @@
 G_BEGIN_DECLS
 
 typedef struct _GskVulkanOp GskVulkanOp;
-typedef struct _GskVulkanOpClass GskVulkanOpClass;
 
 struct _GskVulkanOp
 {
   const GskVulkanOpClass *op_class;
 
   const /* interned */ char *clip_type;
+  GskVulkanOp *next;
 };
 
 struct _GskVulkanOpClass

@@ -7,6 +7,10 @@
 #include <gdk/gdk.h>
 #include <graphene.h>
 
+typedef struct _GskVulkanOpClass GskVulkanOpClass;
+typedef struct _GskVulkanRender GskVulkanRender;
+typedef struct _GskVulkanRenderPass GskVulkanRenderPass;
+
 static inline VkResult
 gsk_vulkan_handle_result (VkResult    res,
                           const char *called_function)

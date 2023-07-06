@@ -4,8 +4,8 @@
 #include <gsk/gskrendernode.h>
 
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanrenderprivate.h"
-#include "gsk/gskprivate.h"
 
 G_BEGIN_DECLS
 
