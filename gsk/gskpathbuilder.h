@@ -79,6 +79,10 @@ void                    gsk_path_builder_add_segment            (GskPathBuilder 
                                                                  float                   start,
                                                                  float                   end);
 
+GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_between            (GskPathBuilder         *self,
+                                                                 GskPathPoint           *start,
+                                                                 GskPathPoint           *end);
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_move_to                (GskPathBuilder         *self,

@@ -767,3 +767,26 @@ gsk_path_measure_get_end_point (GskPathMeasure *self)
                              self->measures[self->last - 1].contour_data,
                              contour_offset, self->measures[self->last - 1].length);
 }
+
+/**
+ * gsk_path_builder_add_between:
+ * @self: a `GskPathBuilder`
+ * @from: the point to start at
+ * @to: the point to end at
+ *
+ * Adds to @self the segment of the path from @start to @end.
+ *
+ * @from and @to must be points on the same path.
+ */
+void
+gsk_path_builder_add_between (GskPathBuilder *self,
+                              GskPathPoint   *from,
+                              GskPathPoint   *to)
+{
+  g_return_if_fail (gsk_path_point_get_measure (from) == gsk_path_point_get_measure (to));
+
+  gsk_path_builder_add_segment (self,
+                                gsk_path_point_get_measure (from),
+                                gsk_path_point_get_offset (from),
+                                gsk_path_point_get_offset (to));
+}
