@@ -25,13 +25,14 @@
 #include "gskpathprivate.h"
 
 /**
- * SECTION:gskpathmeasure
- * @Title: PathMeasure
- * @Short_description: Measuring operations on paths
- * @See_also: #GskPath
+ * GskPathMeasure:
  *
- * #GskPathMeasure is an object that allows measuring operations on #GskPaths.
- * These operations are useful when implementing animations.
+ * A `GskPathMeasure` struct is a reference-counted struct
+ * and should be treated as opaque.
+ *
+ * `GskPathMeasure` is an object that allows measuring operations
+ * on `GskPath`. These operations are useful when implementing
+ * animations.
  */
 
 typedef struct _GskContourMeasure GskContourMeasure;
@@ -59,10 +60,6 @@ struct _GskPathMeasure
 };
 
 /**
- * GskPathMeasure:
- *
- * A #GskPathMeasure struct is a reference counted struct
- * and should be treated as opaque.
  */
 
 G_DEFINE_BOXED_TYPE (GskPathMeasure, gsk_path_measure,
@@ -75,8 +72,8 @@ G_DEFINE_BOXED_TYPE (GskPathMeasure, gsk_path_measure,
  *
  * Creates a measure object for the given @path.
  *
- * Returns: a new #GskPathMeasure representing @path
- **/
+ * Returns: a new `GskPathMeasure` representing @path
+ */
 GskPathMeasure *
 gsk_path_measure_new (GskPath *path)
 {
@@ -90,8 +87,8 @@ gsk_path_measure_new (GskPath *path)
  *
  * Creates a measure object for the given @path and @tolerance.
  *
- * Returns: a new #GskPathMeasure representing @path
- **/
+ * Returns: a new `GskPathMeasure` representing @path
+ */
 GskPathMeasure *
 gsk_path_measure_new_with_tolerance (GskPath *path,
                                      float    tolerance)
@@ -126,12 +123,12 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
 
 /**
  * gsk_path_measure_ref:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
- * Increases the reference count of a #GskPathMeasure by one.
+ * Increases the reference count of a `GskPathMeasure` by one.
  *
- * Returns: the passed in #GskPathMeasure.
- **/
+ * Returns: the passed in `GskPathMeasure`.
+ */
 GskPathMeasure *
 gsk_path_measure_ref (GskPathMeasure *self)
 {
@@ -144,11 +141,12 @@ gsk_path_measure_ref (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_unref:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
- * Decreases the reference count of a #GskPathMeasure by one.
+ * Decreases the reference count of a `GskPathMeasure` by one.
+ *
  * If the resulting reference count is zero, frees the path_measure.
- **/
+ */
 void
 gsk_path_measure_unref (GskPathMeasure *self)
 {
@@ -173,7 +171,7 @@ gsk_path_measure_unref (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_path:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
  * Returns the path that the measure was created for.
  *
@@ -189,7 +187,7 @@ gsk_path_measure_get_path (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_tolerance:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
  * Returns the tolerance that the measure was created with.
  *
@@ -205,7 +203,7 @@ gsk_path_measure_get_tolerance (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_n_contours:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
  * Returns the number of contours in the path being measured.
  *
@@ -213,7 +211,7 @@ gsk_path_measure_get_tolerance (GskPathMeasure *self)
  * or not.
  *
  * Returns: The number of contours
- **/
+ */
 gsize
 gsk_path_measure_get_n_contours (GskPathMeasure *self)
 {
@@ -224,7 +222,7 @@ gsk_path_measure_get_n_contours (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_restrict_to_contour:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  * @contour: contour to restrict to or (gsize) -1 for using the
  *     whole path
  *
@@ -232,7 +230,7 @@ gsk_path_measure_get_n_contours (GskPathMeasure *self)
  *
  * If @contour >= gsk_path_measure_get_n_contours() - so in
  * particular when it is set to -1 - the whole path will be used.
- **/
+ */
 void
 gsk_path_measure_restrict_to_contour (GskPathMeasure *self,
                                       gsize           contour)
@@ -259,14 +257,14 @@ gsk_path_measure_restrict_to_contour (GskPathMeasure *self,
 
 /**
  * gsk_path_measure_get_length:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
  * Gets the length of the path being measured.
  *
  * The length is cached, so this function does not do any work.
  *
  * Returns: The length of the path measured by @self
- **/
+ */
 float
 gsk_path_measure_get_length (GskPathMeasure *self)
 {
@@ -277,13 +275,13 @@ gsk_path_measure_get_length (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_is_closed:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  *
  * Returns if the path being measured represents a single closed
  * contour.
  *
- * Returns: %TRUE if the current path is closed
- **/
+ * Returns: `TRUE` if the current path is closed
+ */
 gboolean
 gsk_path_measure_is_closed (GskPathMeasure *self)
 {
@@ -311,12 +309,12 @@ gsk_path_measure_clamp_distance (GskPathMeasure *self,
 
 /**
  * gsk_path_measure_get_point:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  * @distance: distance into the path
  * @pos: (out caller-allocates) (optional): The coordinates
- *    of the position at @distance
+ *  of the position at @distance
  * @tangent: (out caller-allocates) (optional): The tangent
- *    to the position at @distance
+ *  to the position at @distance
  *
  * Calculates the coordinates and tangent of the point @distance
  * units into the path. The value will be clamped to the length
@@ -326,9 +324,9 @@ gsk_path_measure_clamp_distance (GskPathMeasure *self,
  * point and tangent will describe the line starting at that point
  * going forward.
  *
- * If @self describes an empty path, the returned point will be 
+ * If @self describes an empty path, the returned point will be
  * set to `(0, 0)` and the tangent will be the x axis or `(1, 0)`.
- **/
+ */
 void
 gsk_path_measure_get_point (GskPathMeasure   *self,
                             float             distance,
@@ -378,7 +376,7 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
 
 /**
  * gsk_path_measure_get_closest_point:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  * @point: the point to fond the closest point to
  * @out_pos: (out caller-allocates) (optional): return location
  *    for the closest point
@@ -388,12 +386,12 @@ gsk_path_measure_get_point (GskPathMeasure   *self,
  * If the path being measured is empty, return 0 and set
  * @out_pos to (0, 0).
  *
- * This is a simpler and slower version of
- * gsk_path_measure_get_closest_point_full(). Use that one if you
- * need more control.
+ * This is a simpler version of
+ * [method@Gsk.PathMeasure.get_closest_point_full].
+ * Use that one if you need more control.
  *
  * Returns: The offset into the path of the closest point
- **/
+ */
 float
 gsk_path_measure_get_closest_point (GskPathMeasure         *self,
                                     const graphene_point_t *point,
@@ -421,25 +419,27 @@ gsk_path_measure_get_closest_point (GskPathMeasure         *self,
 
 /**
  * gsk_path_measure_get_closest_point_full:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  * @point: the point to fond the closest point to
  * @threshold: The maximum allowed distance between the path and @point.
- *     Use INFINITY to look for any point.
+ *   Use `INFINITY` to look for any point.
  * @out_distance: (out caller-allocates) (optional): The 
- *     distance between the found closest point on the path and the given
- *     @point.
+ *   distance between the found closest point on the path and the given
+ *   @point.
  * @out_pos: (out caller-allocates) (optional): return location
- *     for the closest point
+ *   for the closest point
  * @out_offset: (out caller-allocates) (optional): The offset into
- *     the path of the found point
+ *   the path of the found point
  * @out_tangent: (out caller-allocates) (optional): return location for
- *     the tangent at the closest point
+ *   the tangent at the closest point
  *
- * Gets the point on the path that is closest to @point. If no point on
- * path is closer to @point than @threshold, return %FALSE.
+ * Gets the point on the path that is closest to @point.
  *
- * Returns: %TRUE if a point was found, %FALSE otherwise.
- **/
+ * If no point on path is closer to @point than @threshold,
+ * return `FALSE`.
+ *
+ * Returns: `TRUE` if a point was found, `FALSE` otherwise.
+ */
 gboolean
 gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
                                          const graphene_point_t *point,
@@ -491,14 +491,14 @@ gsk_path_measure_get_closest_point_full (GskPathMeasure         *self,
 
 /**
  * gsk_path_measure_in_fill:
- * @self: a #GskPathMeasure
+ * @self: a `GskPathMeasure`
  * @point: the point to test
  * @fill_rule: the fill rule to follow
  *
  * Returns whether the given point is inside the area that would be
  * affected if the path of @self was filled according to @fill_rule.
  *
- * Returns: %TRUE if @point is inside
+ * Returns: `TRUE` if @point is inside
  */
 gboolean
 gsk_path_measure_in_fill (GskPathMeasure         *self,
@@ -571,23 +571,22 @@ gsk_path_builder_add_segment_chunk (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_segment:
- * @self: a #GskPathBuilder 
- * @measure: the #GskPathMeasure to take the segment to
+ * @self: a `GskPathBuilder`
+ * @measure: the `GskPathMeasure` to take the segment to
  * @start: start distance into the path
  * @end: end distance into the path
  *
  * Adds to @self the segment of @measure from @start to @end.
  *
  * The distances are given relative to the length of @measure's path,
- * from 0 for the beginning of the path to
- * gsk_path_measure_get_length() for the end of the path. The values
- * will be clamped to that range.
+ * from 0 for the beginning of the path to [method@Gsk.PathMeasure.get_length]
+ * for the end of the path. The values will be clamped to that range.
  *
  * If @start >= @end after clamping, the path will first add the segment
  * from @start to the end of the path, and then add the segment from
  * the beginning to @end. If the path is closed, these segments will
  * be connected.
- **/
+ */
 void
 gsk_path_builder_add_segment (GskPathBuilder *self,
                               GskPathMeasure *measure,

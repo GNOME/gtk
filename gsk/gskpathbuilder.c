@@ -24,10 +24,11 @@
 #include "gskpathprivate.h"
 
 /**
- * SECTION:gskpathbuilder
- * @Title: Building paths
- * @Short_description: Building paths of lines and curves
- * @See_also: #GskPath, #GskPathMeasure
+ * GskPathBuilder:
+ *
+ * A #GskPathBuilder struct is an opaque struct. It is meant to
+ * not be kept around and only be used to create new #GskPath
+ * objects.
  *
  * This section describes how to construct #GskPath structures.
  *
@@ -46,28 +47,20 @@
  *   return gsk_path_builder_free_to_path (builder);
  * ]|
  *
- * Adding contours to the path can be done in two ways.  
+ * Adding contours to the path can be done in two ways.
  * The easiest option is to use the `gsk_path_builder_add_*` group
  * of functions that add predefined contours to the current path,
- * either common shapes like gsk_path_builder_add_circle()
- * or by adding from other paths like gsk_path_builder_add_path().
+ * either common shapes like [method@Gsk.PathBuilder.add_circle]
+ * or by adding from other paths like [method@Gsk.PathBuilder.add_path].
  *
  * The other option is to define each line and curve manually with
  * the `gsk_path_builder_*_to` group of functions. You start with
- * a call to gsk_path_builder_move_to() to set the starting point
+ * a call to [method@Gsk.PathBuilder.move_to] to set the starting point
  * and then use multiple calls to any of the drawing functions to
  * move the pen along the plane. Once you are done, you can call
- * gsk_path_builder_close() to close the path by connecting it
+ * [method@Gsk.PathBuilder.close] to close the path by connecting it
  * back with a line to the starting point.
  * This is similar for how paths are drawn in Cairo.
- */
-
-/**
- * GskPathBuilder:
- *
- * A #GskPathBuilder struct is an opaque struct. It is meant to
- * not be kept around and only be used to create new #GskPath
- * objects.
  */
 
 struct _GskPathBuilder
@@ -91,11 +84,12 @@ G_DEFINE_BOXED_TYPE (GskPathBuilder,
 /**
  * gsk_path_builder_new:
  *
- * Create a new #GskPathBuilder object. The resulting builder
- * would create an empty #GskPath. Use addition functions to add
- * types to it.
+ * Create a new `GskPathBuilder` object.
  *
- * Returns: a new #GskPathBuilder
+ * The resulting builder would create an empty `GskPath`.
+ * Use addition functions to add types to it.
+ *
+ * Returns: a new `GskPathBuilder`
  **/
 GskPathBuilder *
 gsk_path_builder_new (void)
@@ -116,15 +110,15 @@ gsk_path_builder_new (void)
 
 /**
  * gsk_path_builder_ref:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Acquires a reference on the given builder.
  *
- * This function is intended primarily for bindings. #GskPathBuilder objects
- * should not be kept around.
+ * This function is intended primarily for bindings.
+ * `GskPathBuilder` objects should not be kept around.
  *
- * Returns: (transfer none): the given #GskPathBuilder with
- *   its reference count increased
+ * Returns: (transfer none): the given `GskPathBuilder`
+ *   with its reference count increased
  */
 GskPathBuilder *
 gsk_path_builder_ref (GskPathBuilder *self)
@@ -208,7 +202,7 @@ gsk_path_builder_clear (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_unref:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Releases a reference on the given builder.
  */
@@ -231,12 +225,12 @@ gsk_path_builder_unref (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_free_to_path: (skip)
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
- * Creates a new #GskPath from the current state of the
+ * Creates a new `GskPath` from the current state of the
  * given builder, and frees the @builder instance.
  *
- * Returns: (transfer full): the newly created #GskPath
+ * Returns: (transfer full): the newly created `GskPath`
  *   with all the contours added to the builder
  */
 GskPath *
@@ -255,17 +249,18 @@ gsk_path_builder_free_to_path (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_to_path:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Creates a new #GskPath from the given builder.
  *
- * The given #GskPathBuilder is reset once this function returns;
- * you cannot call this function multiple times on the same builder instance.
+ * The given `GskPathBuilder` is reset once this function returns;
+ * you cannot call this function multiple times on the same builder
+ * instance.
  *
- * This function is intended primarily for bindings. C code should use
- * gsk_path_builder_free_to_path().
+ * This function is intended primarily for bindings. C code should
+ * use [method@Gsk.PathBuilder.free_to_path].
  *
- * Returns: (transfer full): the newly created #GskPath
+ * Returns: (transfer full): the newly created `GskPath`
  *   with all the contours added to the builder
  */
 GskPath *
@@ -297,7 +292,7 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_get_current_point:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Gets the current point. The current point is used for relative
  * drawing commands and updated after every operation.
@@ -316,7 +311,7 @@ gsk_path_builder_get_current_point (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_add_path:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @path: (transfer none): the path to append
  *
  * Appends all of @path to the builder.
@@ -340,11 +335,12 @@ gsk_path_builder_add_path (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_cairo_path:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Adds a Cairo path to the builder.
  *
- * You can use cairo_copy_path() to access the path from a Cairo context.
+ * You can use cairo_copy_path() to access the path
+ * from a Cairo context.
  **/
 void
 gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
@@ -389,7 +385,7 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
 
 /**
  * gsk_path_builder_add_rect:
- * @self: A #GskPathBuilder
+ * @self: A `GskPathBuilder`
  * @rect: The rectangle to create a path for
  *
  * Adds @rect as a new contour to the path built by the builder.
@@ -416,7 +412,7 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
 
 /**
  * gsk_path_builder_add_rounded_rect:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @rect: the rounded rect
  *
  * Adds @rect as a new contour to the path built in @self.
@@ -483,7 +479,7 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
 
 /**
  * gsk_path_builder_add_circle:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @center: the center of the circle
  * @radius: the radius of the circle
  *
@@ -506,7 +502,7 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
 
 /**
  * gsk_path_builder_add_ellipse:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @center: the center point of the ellipse
  * @radius: the radius of the ellipse in x/y direction
  *
@@ -552,16 +548,16 @@ gsk_path_builder_add_ellipse (GskPathBuilder         *self,
 
 /**
  * gsk_path_builder_move_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x: x coordinate
  * @y: y coordinate
  *
  * Starts a new contour by placing the pen at @x, @y.
  *
- * If gsk_path_builder_move_to() is called twice in succession, the first
- * call will result in a contour made up of a single point. The second call
- * will start a new contour.
- **/
+ * If gsk_path_builder_move_to() is called twice in succession,
+ * the first call will result in a contour made up of a single point.
+ * The second call will start a new contour.
+ */
 void
 gsk_path_builder_move_to (GskPathBuilder *self,
                           float           x,
@@ -578,15 +574,15 @@ gsk_path_builder_move_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_move_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x: x offset
  * @y: y offset
  *
- * Starts a new contour by placing the pen at @x, @y relative to the current
- * point.
+ * Starts a new contour by placing the pen at @x, @y relative
+ * to the current point.
  *
- * This is the relative version of gsk_path_builder_move_to().
- **/
+ * This is the relative version of [method@Gsk.PathBuilder.move_to].
+ */
 void
 gsk_path_builder_rel_move_to (GskPathBuilder *self,
                               float           x,
@@ -601,13 +597,13 @@ gsk_path_builder_rel_move_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_line_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x: x coordinate
  * @y: y coordinate
  *
- * Draws a line from the current point to @x, @y and makes it the new current
- * point.
- **/
+ * Draws a line from the current point to @x, @y and
+ * makes it the new current point.
+ */
 void
 gsk_path_builder_line_to (GskPathBuilder *self,
                           float           x,
@@ -629,15 +625,15 @@ gsk_path_builder_line_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_line_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x: x offset
  * @y: y offset
  *
- * Draws a line from the current point to a point offset to it by @x, @y
- * and makes it the new current point.
+ * Draws a line from the current point to a point offset to
+ * it by @x, @y and makes it the new current point.
  *
- * This is the relative version of gsk_path_builder_line_to().
- **/
+ * This is the relative version of [method@Gsk.PathBuilder.line_to].
+ */
 void
 gsk_path_builder_rel_line_to (GskPathBuilder *self,
                               float           x,
@@ -652,7 +648,7 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_curve_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
  * @x2: x coordinate of second control point
@@ -689,7 +685,7 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_curve_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x1: x offset of first control point
  * @y1: y offset of first control point
  * @x2: x offset of second control point
@@ -701,8 +697,8 @@ gsk_path_builder_curve_to (GskPathBuilder *self,
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
  * points. All coordinates are given relative to the current point.
  *
- * This is the relative version of gsk_path_builder_curve_to().
- **/
+ * This is the relative version of [method@Gsk.PathBuilder.curve_to].
+ */
 void
 gsk_path_builder_rel_curve_to (GskPathBuilder *self,
                                float           x1,
@@ -725,7 +721,7 @@ gsk_path_builder_rel_curve_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_conic_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x1: x coordinate of control point
  * @y1: y coordinate of control point
  * @x2: x coordinate of the end of the curve
@@ -739,7 +735,7 @@ gsk_path_builder_rel_curve_to (GskPathBuilder *self,
  * Conic curves can be used to draw ellipses and circles.
  *
  * After this, @x2, @y2 will be the new current point.
- **/
+ */
 void
 gsk_path_builder_conic_to (GskPathBuilder *self,
                            float           x1,
@@ -763,7 +759,7 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_conic_to:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @x1: x offset of control point
  * @y1: y offset of control point
  * @x2: x offset of the end of the curve
@@ -774,8 +770,8 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
  * from the current point to @x2, @y2 with the given
  * @weight and @x1, @y1 as the single control point.
  *
- * This is the relative version of gsk_path_builder_conic_to().
- **/
+ * This is the relative version of [Gsk.PathBuilder.conic_to].
+ */
 void
 gsk_path_builder_rel_conic_to (GskPathBuilder *self,
                                float           x1,
@@ -797,16 +793,16 @@ gsk_path_builder_rel_conic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_close:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  *
  * Ends the current contour with a line back to the start point.
  *
- * Note that this is different from calling gsk_path_builder_line_to()
+ * Note that this is different from calling [method@Gsk.PathBuilder.line_to]
  * with the start point in that the contour will be closed. A closed
  * contour behaves different from an open one when stroking its start
  * and end point are considered connected, so they will be joined
  * via the line join, and not ended with line caps.
- **/
+ */
 void
 gsk_path_builder_close (GskPathBuilder *self)
 {
@@ -1002,7 +998,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_layout:
- * @self: a #GskPathBuilder
+ * @self: a `GskPathBuilder`
  * @layout: the pango layout to add
  *
  * Adds the outlines for the glyphs in @layout to

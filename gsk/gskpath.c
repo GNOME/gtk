@@ -25,17 +25,16 @@
 #include "gskpathbuilder.h"
 
 /**
- * SECTION:gskpath
- * @Title: Path
- * @Short_description: Lines and Curves
- * @See_also: #GskRenderNode, #GskPathBuilder
+ * GskPath:
  *
- * This section describes the #GskPath structure that is used to
- * describe lines and curves that are more complex than simple rectangles.
+ * A `GskPath` describes lines and curves that are more complex
+ * than simple rectangles.
  *
- * #GskPath is an immutable struct. After creation, you cannot change
- * the types it represents. Instead, new #GskPath have to be created.
- * The #GskPathBuilder structure is meant to help in this endeavor.
+ * `GskPath` is an immutable, opaque, reference-counted struct.
+ * After creation, you cannot change the types it represents.
+ * Instead, new `GskPath` objects have to be created.
+ *
+ * The `GskPathBuilder` structure is meant to help in this endeavor.
  */
 
 struct _GskPath
@@ -49,13 +48,6 @@ struct _GskPath
   GskContour *contours[];
   /* followed by the contours data */
 };
-
-/**
- * GskPath:
- *
- * A #GskPath struct is a reference counted struct
- * and should be treated as opaque.
- */
 
 G_DEFINE_BOXED_TYPE (GskPath, gsk_path,
                      gsk_path_ref,
@@ -107,12 +99,12 @@ gsk_path_new_from_contours (const GSList *contours)
 
 /**
  * gsk_path_ref:
- * @self: a #GskPath
+ * @self: a `GskPath`
  *
- * Increases the reference count of a #GskPath by one.
+ * Increases the reference count of a `GskPath` by one.
  *
- * Returns: the passed in #GskPath.
- **/
+ * Returns: the passed in `GskPath`
+ */
 GskPath *
 gsk_path_ref (GskPath *self)
 {
@@ -125,11 +117,12 @@ gsk_path_ref (GskPath *self)
 
 /**
  * gsk_path_unref:
- * @self: a #GskPath
+ * @self: a `GskPath`
  *
- * Decreases the reference count of a #GskPath by one.
+ * Decreases the reference count of a `GskPath` by one.
+ *
  * If the resulting reference count is zero, frees the path.
- **/
+ */
 void
 gsk_path_unref (GskPath *self)
 {
@@ -152,7 +145,7 @@ gsk_path_get_contour (GskPath *path,
 
 /**
  * gsk_path_print:
- * @self: a #GskPath
+ * @self: a `GskPath`
  * @string:  The string to print into
  *
  * Converts @self into a human-readable string representation suitable
@@ -163,7 +156,7 @@ gsk_path_get_contour (GskPath *path,
  * with the exception that conic curves will generate a string of the
  * form "O x1 y1, x2 y2, w" where x1, y1 is the control point, x2, y2
  * is the end point, and w is the weight.
- **/
+ */
 void
 gsk_path_print (GskPath *self,
                 GString *string)
@@ -183,17 +176,18 @@ gsk_path_print (GskPath *self,
 
 /**
  * gsk_path_to_string:
- * @self: a #GskPath
+ * @self: a `GskPath`
  *
- * Converts the path into a string that is suitable for
- * printing. You can use this function in a debugger to get a quick overview
+ * Converts the path into a string that is suitable for printing.
+ *
+ * You can use this function in a debugger to get a quick overview
  * of the path.
  *
- * This is a wrapper around gsk_path_print(), see that function
- * for details.
+ * This is a wrapper around [method@Gsk.Path.print], see that
+ * function for details.
  *
  * Returns: A new string for @self
- **/
+ */
 char *
 gsk_path_to_string (GskPath *self)
 {
@@ -244,18 +238,18 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
 
 /**
  * gsk_path_to_cairo:
- * @self: a #GskPath
+ * @self: a `GskPath`
  * @cr: a cairo context
  *
  * Appends the given @path to the given cairo context for drawing
  * with Cairo.
  *
- * This may cause some suboptimal conversions to be performed as Cairo
- * may not support all features of #GskPath.
+ * This may cause some suboptimal conversions to be performed as
+ * Cairo does not support all features of `GskPath`.
  *
  * This function does not clear the existing Cairo path. Call
  * cairo_new_path() if you want this.
- **/
+ */
 void
 gsk_path_to_cairo (GskPath *self,
                    cairo_t *cr)
@@ -270,14 +264,14 @@ gsk_path_to_cairo (GskPath *self,
                                    cr);
 }
 
-/*
+/*< private >*
  * gsk_path_get_n_contours:
- * @path: a #GskPath
+ * @path: a `GskPath`
  *
  * Gets the number of contours @path is composed out of.
  *
  * Returns: the number of contours in @path
- **/
+ */
 gsize
 gsk_path_get_n_contours (GskPath *path)
 {
@@ -286,12 +280,12 @@ gsk_path_get_n_contours (GskPath *path)
 
 /**
  * gsk_path_is_empty:
- * @self: a #GskPath
+ * @self: a `GskPath`
  *
  * Checks if the path is empty, i.e. contains no lines or curves.
  *
- * Returns: %TRUE if the path is empty
- **/
+ * Returns: `TRUE` if the path is empty
+ */
 gboolean
 gsk_path_is_empty (GskPath *self)
 {
@@ -302,7 +296,7 @@ gsk_path_is_empty (GskPath *self)
 
 /**
  * gsk_path_get_bounds:
- * @self: a #GskPath
+ * @self: a `GskPath`
  * @bounds: (out caller-allocates): the bounds of the given path
  *
  * Computes the bounds of the given path.
@@ -320,9 +314,9 @@ gsk_path_is_empty (GskPath *self)
  * is a single point at the origin, where the @bounds will also be set to
  * the zero rectangle but 0 will be returned.
  *
- * Returns: %TRUE if the path has bounds, %FALSE if the path is known
- *     to be empty and have no bounds.
- **/
+ * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
+ *   to be empty and have no bounds.
+ */
 gboolean
 gsk_path_get_bounds (GskPath         *self,
                      graphene_rect_t *bounds)
@@ -357,17 +351,19 @@ gsk_path_get_bounds (GskPath         *self,
 
 /**
  * gsk_path_foreach:
- * @self: a #GskPath
- * @flags: flags to pass to the foreach function. See #GskPathForeachFlags for
- *     details about flags.
+ * @self: a `GskPath`
+ * @flags: flags to pass to the foreach function. See `GskPathForeachFlags`
+ *   for details about flags
  * @func: (scope call) (closure user_data): the function to call for operations
  * @user_data: (nullable): user data passed to @func
  *
- * Calls @func for every operation of the path. Note that this only approximates
- * @self, because paths can contain optimizations for various specialized contours.
+ * Calls @func for every operation of the path.
  *
- * Returns: %FALSE if @func returned %FALSE, %TRUE otherwise.
- **/
+ * Note that this only approximates @self, because paths can contain
+ * optimizations for various specialized contours.
+ *
+ * Returns: `FALSE` if @func returned FALSE`, `TRUE` otherwise.
+ */
 gboolean
 gsk_path_foreach (GskPath             *self,
                   GskPathForeachFlags  flags,
@@ -690,13 +686,16 @@ parse_circle (const char **p,
  * gsk_path_parse:
  * @string: a string
  *
- * This is a convenience function that constructs a #GskPath
- * from a serialized form. The string is expected to be in
- * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
- * as e.g. produced by gsk_path_to_string().
+ * This is a convenience function that constructs a `GskPath`
+ * from a serialized form.
  *
- * Returns: (nullable): a new #GskPath, or %NULL if @string could not be parsed
- **/
+ * The string is expected to be in
+ * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
+ * as e.g. produced by [method@Gsk.Path.to_string].
+ *
+ * Returns: (nullable): a new `GskPath`, or `NULL`
+ *   if @string could not be parsed
+ */
 GskPath *
 gsk_path_parse (const char *string)
 {
@@ -1118,7 +1117,7 @@ error:
 
 /**
  * gsk_path_get_stroke_bounds:
- * @self: a #GtkPath
+ * @self: a `GtkPath`
  * @stroke: stroke parameters
  * @bounds: (out caller-allocates): the bounds to fill in
  *
@@ -1130,8 +1129,8 @@ error:
  * to contain the area affected by the stroke, including protrusions
  * like miters.
  *
- * Returns: %TRUE if the path has bounds, %FALSE if the path is known
- *     to be empty and have no bounds.
+ * Returns: `TRUE` if the path has bounds, `FALSE`
+ *   if the path is known to be empty and have no bounds.
  */
 gboolean
 gsk_path_get_stroke_bounds (GskPath         *self,

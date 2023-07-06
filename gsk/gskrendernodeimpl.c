@@ -4701,7 +4701,7 @@ gsk_stroke_node_get_child (GskRenderNode *node)
  * gsk_stroke_node_get_path:
  * @node: (type GskStrokeNode): a stroke #GskRenderNode
  *
- * Retrievs the path that will be stroked with the contents of
+ * Retrieves the path that will be stroked with the contents of
  * the @node.
  *
  * Returns: (transfer none): a #GskPath
