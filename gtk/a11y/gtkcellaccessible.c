@@ -401,7 +401,7 @@ gtk_cell_accessible_get_position (AtkTableCell *table_cell,
   gtk_cell_accessible_parent_get_cell_position (GTK_CELL_ACCESSIBLE_PARENT (parent),
                                                 cell,
                                                 row, column);
-  return ((row && *row > 0) || (column && *column > 0));
+  return ((row && *row >= 0) || (column && *column >= 0));
 }
 
 static int
