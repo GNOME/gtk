@@ -762,6 +762,7 @@ gtk_image_set_from_icon_name  (GtkImage    *image,
     _gtk_icon_helper_set_icon_name (image->icon_helper, icon_name);
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -795,6 +796,7 @@ gtk_image_set_from_gicon  (GtkImage       *image,
     }
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -857,6 +859,7 @@ gtk_image_set_from_paintable (GtkImage     *image,
     }
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PAINTABLE]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1078,6 +1081,8 @@ gtk_image_set_from_definition (GtkImage           *image,
 
       gtk_image_notify_for_storage_type (image, gtk_image_definition_get_storage_type (def));
     }
+
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
