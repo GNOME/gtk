@@ -101,6 +101,86 @@ static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
   gsk_vulkan_offscreen_op_command
 };
 
+typedef struct _GskVulkanOffscreenEndOp GskVulkanOffscreenEndOp;
+
+struct _GskVulkanOffscreenEndOp
+{
+  GskVulkanOp op;
+
+  GskVulkanImage *image;
+};
+
+static void
+gsk_vulkan_offscreen_end_op_finish (GskVulkanOp *op)
+{
+  GskVulkanOffscreenEndOp *self = (GskVulkanOffscreenEndOp *) op;
+
+  g_object_unref (self->image);
+}
+
+static void
+gsk_vulkan_offscreen_end_op_print (GskVulkanOp *op,
+                                   GString     *string,
+                                   guint        indent)
+{
+  GskVulkanOffscreenEndOp *self = (GskVulkanOffscreenEndOp *) op;
+
+  print_indent (string, indent);
+  g_string_append_printf (string, "end offscreen ");
+  print_image (string, self->image);
+  print_newline (string);
+}
+
+static void
+gsk_vulkan_offscreen_end_op_upload (GskVulkanOp           *op,
+                                    GskVulkanRenderPass   *pass,
+                                    GskVulkanRender       *render,
+                                    GskVulkanUploader     *uploader)
+{
+}
+
+static gsize
+gsk_vulkan_offscreen_end_op_count_vertex_data (GskVulkanOp *op,
+                                               gsize        n_bytes)
+{
+  return n_bytes;
+}
+
+static void
+gsk_vulkan_offscreen_end_op_collect_vertex_data (GskVulkanOp         *op,
+                                                 GskVulkanRenderPass *pass,
+                                                 GskVulkanRender     *render,
+                                                 guchar              *data)
+{
+}
+
+static void
+gsk_vulkan_offscreen_end_op_reserve_descriptor_sets (GskVulkanOp     *op,
+                                                     GskVulkanRender *render)
+{
+}
+
+static void
+gsk_vulkan_offscreen_end_op_command (GskVulkanOp      *op,
+                                     GskVulkanRender  *render,
+                                     VkPipelineLayout  pipeline_layout,
+                                     VkCommandBuffer   command_buffer)
+{
+}
+
+static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_END_OP_CLASS = {
+  GSK_VULKAN_OP_SIZE (GskVulkanOffscreenEndOp),
+  NULL,
+  NULL,
+  gsk_vulkan_offscreen_end_op_finish,
+  gsk_vulkan_offscreen_end_op_print,
+  gsk_vulkan_offscreen_end_op_upload,
+  gsk_vulkan_offscreen_end_op_count_vertex_data,
+  gsk_vulkan_offscreen_end_op_collect_vertex_data,
+  gsk_vulkan_offscreen_end_op_reserve_descriptor_sets,
+  gsk_vulkan_offscreen_end_op_command
+};
+
 GskVulkanImage *
 gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                          GdkVulkanContext      *context,
@@ -110,6 +190,7 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                          GskRenderNode         *node)
 {
   GskVulkanOffscreenOp *self;
+  GskVulkanOffscreenEndOp *end;
   graphene_rect_t view;
   cairo_region_t *clip;
   float scale_x, scale_y;
@@ -144,6 +225,10 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                                                   FALSE);
 
   cairo_region_destroy (clip);
+
+  end = (GskVulkanOffscreenEndOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_OFFSCREEN_END_OP_CLASS);
+
+  end->image = g_object_ref (self->image);
 
   return self->image;
 }
