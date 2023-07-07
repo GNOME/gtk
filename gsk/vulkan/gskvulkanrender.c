@@ -73,7 +73,7 @@ typedef struct _PipelineCacheKey PipelineCacheKey;
 
 struct _PipelineCacheKey
 {
-  const /* interned */ char *shader_name;
+  const GskVulkanOpClass *op_class;
   const /* interned */ char *clip_type;
   VkFormat format;
 };
@@ -83,7 +83,7 @@ pipeline_cache_key_hash (gconstpointer data)
 {
   const PipelineCacheKey *key = data;
 
-  return GPOINTER_TO_UINT (key->shader_name) ^
+  return GPOINTER_TO_UINT (key->op_class) ^
          GPOINTER_TO_UINT (key->clip_type) ^
          key->format;
 }
@@ -95,7 +95,7 @@ pipeline_cache_key_equal (gconstpointer a,
   const PipelineCacheKey *keya = a;
   const PipelineCacheKey *keyb = b;
 
-  return keya->shader_name == keyb->shader_name &&
+  return keya->op_class == keyb->op_class &&
          keya->clip_type == keyb->clip_type &&
          keya->format == keyb->format;
 }
@@ -355,12 +355,11 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 }
 
 VkPipeline
-gsk_vulkan_render_create_pipeline (GskVulkanRender                            *self,
-                                   const char                                 *shader_name,
-                                   const char                                 *clip_type,
-                                   const VkPipelineVertexInputStateCreateInfo *vertex_input_state,
-                                   VkFormat                                    format,
-                                   VkRenderPass                                render_pass)
+gsk_vulkan_render_create_pipeline (GskVulkanRender        *self,
+                                   const GskVulkanOpClass *op_class,
+                                   const char             *clip_type,
+                                   VkFormat                format,
+                                   VkRenderPass            render_pass)
 {
   PipelineCacheKey cache_key;
   VkPipeline pipeline;
@@ -368,8 +367,8 @@ gsk_vulkan_render_create_pipeline (GskVulkanRender                            *s
   char *vertex_shader_name, *fragment_shader_name;
 
   cache_key = (PipelineCacheKey) {
-    .shader_name = g_intern_string (shader_name),
-    .clip_type = g_intern_string (clip_type),
+    .op_class = op_class,
+    .clip_type = clip_type,
     .format = format,
   };
   pipeline = g_hash_table_lookup (self->pipeline_cache, &cache_key);
@@ -377,8 +376,8 @@ gsk_vulkan_render_create_pipeline (GskVulkanRender                            *s
     return pipeline;
 
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self->vulkan));
-  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_name, clip_type, ".vert.spv", NULL);
-  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_name, clip_type, ".frag.spv", NULL);
+  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", op_class->shader_name, clip_type, ".vert.spv", NULL);
+  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", op_class->shader_name, clip_type, ".frag.spv", NULL);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, gdk_vulkan_context_get_device (self->vulkan),
                                            gdk_vulkan_context_get_pipeline_cache (self->vulkan),
@@ -400,7 +399,7 @@ gsk_vulkan_render_create_pipeline (GskVulkanRender                            *s
                                                        .pName = "main",
                                                    },
                                                },
-                                               .pVertexInputState = vertex_input_state,
+                                               .pVertexInputState = op_class->vertex_input_state,
                                                .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                                                    .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,

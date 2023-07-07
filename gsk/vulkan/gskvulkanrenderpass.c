@@ -1491,9 +1491,10 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                   VkCommandBuffer          command_buffer)
 {
   VkPipeline current_pipeline = VK_NULL_HANDLE;
-  VkPipeline op_pipeline;
-  GskVulkanOp *op;
+  const GskVulkanOpClass *current_pipeline_class = NULL;
+  const char *current_pipeline_clip_type = NULL;
   GskVulkanBuffer *vertex_buffer;
+  GskVulkanOp *op;
 
   vertex_buffer = gsk_vulkan_render_pass_get_vertex_data (self, render);
 
@@ -1508,22 +1509,20 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
 
   for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      if (op->op_class->shader_name)
+      if (op->op_class->shader_name &&
+          (op->op_class != current_pipeline_class ||
+           current_pipeline_clip_type != op->clip_type))
         {
-          op_pipeline = gsk_vulkan_render_create_pipeline (render,
-                                                           op->op_class->shader_name,
-                                                           op->clip_type,
-                                                           op->op_class->vertex_input_state,
-                                                           gsk_vulkan_image_get_vk_format (self->target),
-                                                           self->render_pass);
-
-          if (op_pipeline != current_pipeline)
-            {
-              current_pipeline = op_pipeline;
-              vkCmdBindPipeline (command_buffer,
-                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                 current_pipeline);
-            }
+          current_pipeline = gsk_vulkan_render_create_pipeline (render,
+                                                                op->op_class,
+                                                                op->clip_type,
+                                                                gsk_vulkan_image_get_vk_format (self->target),
+                                                                self->render_pass);
+          vkCmdBindPipeline (command_buffer,
+                             VK_PIPELINE_BIND_POINT_GRAPHICS,
+                             current_pipeline);
+          current_pipeline_class = op->op_class;
+          current_pipeline_clip_type = op->clip_type;
         }
 
       gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);

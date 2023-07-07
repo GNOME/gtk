@@ -31,9 +31,8 @@ GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulk
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
 VkPipeline              gsk_vulkan_render_create_pipeline               (GskVulkanRender        *self,
-                                                                         const char             *shader_name,
+                                                                         const GskVulkanOpClass *op_class,
                                                                          const char             *clip_type,
-                                                                         const VkPipelineVertexInputStateCreateInfo *vertex_input_state,
                                                                          VkFormat                format,
                                                                          VkRenderPass            render_pass);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
