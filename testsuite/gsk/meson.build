@@ -359,6 +359,8 @@ endforeach
 tests = [
   ['transform'],
   ['shader'],
+  ['path'],
+  ['path-special-cases'],
 ]
 
 test_cargs = []
