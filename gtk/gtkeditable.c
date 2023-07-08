@@ -482,6 +482,7 @@ gtk_editable_insert_text (GtkEditable *editable,
                           int         *position)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+  g_return_if_fail (text != NULL);
   g_return_if_fail (position != NULL);
 
   if (length < 0)
@@ -594,6 +595,7 @@ gtk_editable_set_text (GtkEditable *editable,
   int pos;
 
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+  g_return_if_fail (text != NULL);
 
   g_object_freeze_notify (G_OBJECT (editable));
   gtk_editable_delete_text (editable, 0, -1);
