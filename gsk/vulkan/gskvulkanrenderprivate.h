@@ -35,6 +35,10 @@ VkPipeline              gsk_vulkan_render_get_pipeline                  (GskVulk
                                                                          const char             *clip_type,
                                                                          VkFormat                format,
                                                                          VkRenderPass            render_pass);
+VkRenderPass            gsk_vulkan_render_get_render_pass               (GskVulkanRender        *self,
+                                                                         VkFormat                format,
+                                                                         VkImageLayout           from_layout,
+                                                                         VkImageLayout           to_layout);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
                                                                          GskVulkanImage         *source,
                                                                          GskVulkanRenderSampler  render_sampler);

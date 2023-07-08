@@ -109,7 +109,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                             gboolean               is_root)
 {
   GskVulkanRenderPass *self;
-  VkImageLayout final_layout;
 
   self = g_new0 (GskVulkanRenderPass, 1);
   self->vulkan = g_object_ref (context);
@@ -120,49 +119,22 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
   self->viewport = *viewport;
   graphene_vec2_init_from_vec2 (&self->scale, scale);
 
-  if (!is_root) // this is a dependent pass
-    final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+  if (is_root)
+    {
+      /* this is a swapchain target */
+      self->render_pass = gsk_vulkan_render_get_render_pass (render,
+                                                             gsk_vulkan_image_get_vk_format (target),
+                                                             VK_IMAGE_LAYOUT_UNDEFINED,
+                                                             VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    }
   else
-    final_layout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
-                                    &(VkRenderPassCreateInfo) {
-                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                                        .attachmentCount = 1,
-                                        .pAttachments = (VkAttachmentDescription[]) {
-                                           {
-                                              .format = gsk_vulkan_image_get_vk_format (target),
-                                              .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                                              .finalLayout = final_layout
-                                           }
-                                        },
-                                        .subpassCount = 1,
-                                        .pSubpasses = (VkSubpassDescription []) {
-                                           {
-                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              .inputAttachmentCount = 0,
-                                              .colorAttachmentCount = 1,
-                                              .pColorAttachments = (VkAttachmentReference []) {
-                                                 {
-                                                    .attachment = 0,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pResolveAttachments = (VkAttachmentReference []) {
-                                                  {
-                                                     .attachment = VK_ATTACHMENT_UNUSED,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pDepthStencilAttachment = NULL,
-                                            }
-                                         },
-                                         .dependencyCount = 0
-                                      },
-                                      NULL,
-                                      &self->render_pass);
+    {
+      /* this is an offscreen */
+      self->render_pass = gsk_vulkan_render_get_render_pass (render,
+                                                             gsk_vulkan_image_get_vk_format (target),
+                                                             VK_IMAGE_LAYOUT_UNDEFINED,
+                                                             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    }
 
 #ifdef G_ENABLE_DEBUG
   if (fallback_pixels_quark == 0)
@@ -182,7 +154,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
-  VkDevice device = gdk_vulkan_context_get_device (self->vulkan);
   GskVulkanOp *op;
   gsize i;
 
@@ -197,7 +168,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
-  vkDestroyRenderPass (device, self->render_pass, NULL);
 
   g_free (self);
 }

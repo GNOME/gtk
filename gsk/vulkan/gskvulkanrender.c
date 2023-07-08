@@ -58,6 +58,7 @@ struct _GskVulkanRender
   VkDescriptorPool descriptor_pool;
   VkDescriptorSet descriptor_sets[N_DESCRIPTOR_SETS];
   GHashTable *pipeline_cache;
+  GHashTable *render_pass_cache;
 
   GskVulkanImage *target;
 
@@ -72,12 +73,20 @@ struct _GskVulkanRender
 };
 
 typedef struct _PipelineCacheKey PipelineCacheKey;
+typedef struct _RenderPassCacheKey RenderPassCacheKey;
 
 struct _PipelineCacheKey
 {
   const GskVulkanOpClass *op_class;
   const /* interned */ char *clip_type;
   VkFormat format;
+};
+
+struct _RenderPassCacheKey
+{
+  VkFormat format;
+  VkImageLayout from_layout;
+  VkImageLayout to_layout;
 };
 
 static guint
@@ -99,6 +108,28 @@ pipeline_cache_key_equal (gconstpointer a,
 
   return keya->op_class == keyb->op_class &&
          keya->clip_type == keyb->clip_type &&
+         keya->format == keyb->format;
+}
+
+static guint
+render_pass_cache_key_hash (gconstpointer data)
+{
+  const RenderPassCacheKey *key = data;
+
+  return (key->from_layout << 20) ^
+         (key->to_layout << 16) ^
+         (key->format);
+}
+
+static gboolean
+render_pass_cache_key_equal (gconstpointer a,
+                             gconstpointer b)
+{
+  const RenderPassCacheKey *keya = a;
+  const RenderPassCacheKey *keyb = b;
+
+  return keya->from_layout == keyb->from_layout &&
+         keya->to_layout == keyb->to_layout &&
          keya->format == keyb->format;
 }
 
@@ -310,6 +341,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
+  self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
 
 #ifdef G_ENABLE_DEBUG
   self->render_pass_counter = g_quark_from_static_string ("render-passes");
@@ -472,6 +504,69 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
   gdk_vulkan_context_pipeline_cache_updated (self->vulkan);
 
   return pipeline;
+}
+
+VkRenderPass
+gsk_vulkan_render_get_render_pass (GskVulkanRender *self,
+                                   VkFormat         format,
+                                   VkImageLayout    from_layout,
+                                   VkImageLayout    to_layout)
+{
+  RenderPassCacheKey cache_key;
+  VkRenderPass render_pass;
+
+  cache_key = (RenderPassCacheKey) {
+    .format = format,
+    .from_layout = from_layout,
+    .to_layout = to_layout,
+  };
+  render_pass = g_hash_table_lookup (self->render_pass_cache, &cache_key);
+  if (render_pass)
+    return render_pass;
+
+  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
+                                    &(VkRenderPassCreateInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+                                        .attachmentCount = 1,
+                                        .pAttachments = (VkAttachmentDescription[]) {
+                                           {
+                                              .format = format,
+                                              .samples = VK_SAMPLE_COUNT_1_BIT,
+                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                                              .initialLayout = from_layout,
+                                              .finalLayout = to_layout
+                                           }
+                                        },
+                                        .subpassCount = 1,
+                                        .pSubpasses = (VkSubpassDescription []) {
+                                           {
+                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              .inputAttachmentCount = 0,
+                                              .colorAttachmentCount = 1,
+                                              .pColorAttachments = (VkAttachmentReference []) {
+                                                 {
+                                                    .attachment = 0,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pResolveAttachments = (VkAttachmentReference []) {
+                                                  {
+                                                     .attachment = VK_ATTACHMENT_UNUSED,
+                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+                                                  }
+                                               },
+                                               .pDepthStencilAttachment = NULL,
+                                            }
+                                         },
+                                         .dependencyCount = 0
+                                      },
+                                      NULL,
+                                      &render_pass);
+
+  g_hash_table_insert (self->render_pass_cache, g_memdup (&cache_key, sizeof (RenderPassCacheKey)), render_pass);
+
+  return render_pass;
 }
 
 void
@@ -792,6 +887,14 @@ gsk_vulkan_render_free (GskVulkanRender *self)
       vkDestroyPipeline (device, value, NULL);
     }
   g_hash_table_unref (self->pipeline_cache);
+
+  g_hash_table_iter_init (&iter, self->render_pass_cache);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      g_free (key);
+      vkDestroyRenderPass (device, value, NULL);
+    }
+  g_hash_table_unref (self->render_pass_cache);
 
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
