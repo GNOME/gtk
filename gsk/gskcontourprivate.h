@@ -58,6 +58,11 @@ void                    gsk_contour_print                       (const GskContou
                                                                  GString                *string);
 gboolean                gsk_contour_get_bounds                  (const GskContour       *self,
                                                                  graphene_rect_t        *bounds);
+gpointer                gsk_contour_init_measure                (const GskContour       *self,
+                                                                 float                   tolerance,
+                                                                 float                  *out_length);
+void                    gsk_contour_free_measure                (const GskContour       *self,
+                                                                 gpointer                data);
 gboolean                gsk_contour_foreach                     (const GskContour       *self,
                                                                  float                   tolerance,
                                                                  GskPathForeachFunc      func,
@@ -65,5 +70,34 @@ gboolean                gsk_contour_foreach                     (const GskContou
 void                    gsk_contour_get_start_end               (const GskContour       *self,
                                                                  graphene_point_t       *start,
                                                                  graphene_point_t       *end);
+void                    gsk_contour_get_point                   (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 float                   distance,
+                                                                 GskPathDirection        direction,
+                                                                 graphene_point_t       *pos,
+                                                                 graphene_vec2_t        *tangent);
+gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 float                   tolerance,
+                                                                 const graphene_point_t *point,
+                                                                 float                   threshold,
+                                                                 float                  *out_distance,
+                                                                 graphene_point_t       *out_pos,
+                                                                 float                  *out_offset,
+                                                                 graphene_vec2_t        *out_tangent);
+int                     gsk_contour_get_winding                 (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 const graphene_point_t *point);
+void                    gsk_contour_add_segment                 (const GskContour       *self,
+                                                                 GskPathBuilder         *builder,
+                                                                 gpointer                measure_data,
+                                                                 gboolean                emit_move_to,
+                                                                 float                   start,
+                                                                 float                   end);
+float                   gsk_contour_get_curvature               (const GskContour       *self,
+                                                                 gpointer                measure_data,
+                                                                 float                   distance,
+                                                                 graphene_point_t       *center);
+
 
 G_END_DECLS

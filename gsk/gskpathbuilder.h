@@ -76,6 +76,12 @@ void                    gsk_path_builder_add_ellipse            (GskPathBuilder 
                                                                  const graphene_size_t  *radius);
 
 GDK_AVAILABLE_IN_ALL
+void                    gsk_path_builder_add_segment            (GskPathBuilder         *self,
+                                                                 GskPathMeasure         *measure,
+                                                                 float                   start,
+                                                                 float                   end);
+
+GDK_AVAILABLE_IN_ALL
 void                    gsk_path_builder_move_to                (GskPathBuilder         *self,
                                                                  float                   x,
                                                                  float                   y);

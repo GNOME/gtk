@@ -155,5 +155,9 @@ gboolean                gsk_curve_decompose_curve               (const GskCurve 
 
 #define gsk_curve_builder_to(curve, builder) gsk_path_builder_pathop_to ((builder), gsk_curve_pathop (curve))
 
+float                   gsk_curve_get_curvature                 (const GskCurve         *curve,
+                                                                 float                   t,
+                                                                 graphene_point_t       *center);
+
 G_END_DECLS
 
