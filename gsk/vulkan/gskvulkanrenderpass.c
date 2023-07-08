@@ -60,7 +60,6 @@ struct _GskVulkanRenderPass
 
   VkRenderPass render_pass;
   VkFramebuffer framebuffer;
-  GskVulkanBuffer *vertex_data;
 };
 
 struct _GskVulkanParseState
@@ -181,8 +180,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                      NULL,
                                      &self->framebuffer);
 
-  self->vertex_data = NULL;
-
 #ifdef G_ENABLE_DEBUG
   if (fallback_pixels_quark == 0)
     {
@@ -219,9 +216,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   vkDestroyFramebuffer (device, self->framebuffer, NULL);
   vkDestroyRenderPass (device, self->render_pass, NULL);
 
-  if (self->vertex_data)
-    gsk_vulkan_buffer_free (self->vertex_data);
-
   g_free (self);
 }
 
@@ -239,12 +233,6 @@ gsk_vulkan_render_pass_print (GskVulkanRenderPass *self,
 
       gsk_vulkan_op_print (op, string, indent);
     }
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
 }
 
 gpointer
@@ -1422,13 +1410,12 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
     }
 }
 
-static gsize
-gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
+gsize
+gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self,
+                                          gsize                n_bytes)
 {
   GskVulkanOp *op;
-  gsize n_bytes;
 
-  n_bytes = 0;
   for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
       n_bytes = gsk_vulkan_op_count_vertex_data (op, n_bytes);
@@ -1437,7 +1424,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
   return n_bytes;
 }
 
-static void
+void
 gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                             GskVulkanRender     *render,
                                             guchar              *data)
@@ -1448,28 +1435,6 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
     {
       gsk_vulkan_op_collect_vertex_data (op, self, render, data);
     }
-}
-
-static GskVulkanBuffer *
-gsk_vulkan_render_pass_get_vertex_data (GskVulkanRenderPass *self,
-                                        GskVulkanRender     *render)
-{
-  if (self->vertex_data == NULL)
-    {
-      gsize n_bytes;
-      guchar *data;
-
-      n_bytes = gsk_vulkan_render_pass_count_vertex_data (self);
-      if (n_bytes == 0)
-        return NULL;
-
-      self->vertex_data = gsk_vulkan_buffer_new (self->vulkan, n_bytes);
-      data = gsk_vulkan_buffer_map (self->vertex_data);
-      gsk_vulkan_render_pass_collect_vertex_data (self, render, data);
-      gsk_vulkan_buffer_unmap (self->vertex_data);
-    }
-
-  return self->vertex_data;
 }
 
 void
@@ -1493,19 +1458,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
   VkPipeline current_pipeline = VK_NULL_HANDLE;
   const GskVulkanOpClass *current_pipeline_class = NULL;
   const char *current_pipeline_clip_type = NULL;
-  GskVulkanBuffer *vertex_buffer;
   GskVulkanOp *op;
-
-  vertex_buffer = gsk_vulkan_render_pass_get_vertex_data (self, render);
-
-  if (vertex_buffer)
-    vkCmdBindVertexBuffers (command_buffer,
-                            0,
-                            1,
-                            (VkBuffer[1]) {
-                                gsk_vulkan_buffer_get_buffer (vertex_buffer)
-                            },
-                            (VkDeviceSize[1]) { 0 });
 
   for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {

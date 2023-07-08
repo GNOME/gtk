@@ -57,7 +57,9 @@ static gsize
 gsk_vulkan_offscreen_op_count_vertex_data (GskVulkanOp *op,
                                            gsize        n_bytes)
 {
-  return n_bytes;
+  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
+
+  return gsk_vulkan_render_pass_count_vertex_data (self->render_pass, n_bytes);
 }
 
 static void
@@ -66,6 +68,9 @@ gsk_vulkan_offscreen_op_collect_vertex_data (GskVulkanOp         *op,
                                              GskVulkanRender     *render,
                                              guchar              *data)
 {
+  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
+
+  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, render, data);
 }
 
 static void

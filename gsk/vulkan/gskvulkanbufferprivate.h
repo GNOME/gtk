@@ -23,6 +23,7 @@ GskVulkanBuffer *       gsk_vulkan_buffer_new_map                       (GdkVulk
 void                    gsk_vulkan_buffer_free                          (GskVulkanBuffer        *buffer);
 
 VkBuffer                gsk_vulkan_buffer_get_buffer                    (GskVulkanBuffer        *self);
+gsize                   gsk_vulkan_buffer_get_size                      (GskVulkanBuffer        *self);
 
 guchar *                gsk_vulkan_buffer_map                           (GskVulkanBuffer        *self);
 void                    gsk_vulkan_buffer_unmap                         (GskVulkanBuffer        *self);

@@ -103,6 +103,12 @@ gsk_vulkan_buffer_get_buffer (GskVulkanBuffer *self)
   return self->vk_buffer;
 }
 
+gsize
+gsk_vulkan_buffer_get_size (GskVulkanBuffer *self)
+{
+  return self->size;
+}
+
 guchar *
 gsk_vulkan_buffer_map (GskVulkanBuffer *self)
 {

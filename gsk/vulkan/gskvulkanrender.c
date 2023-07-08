@@ -16,6 +16,7 @@
 #include "gdk/gdkvulkancontextprivate.h"
 
 #define DESCRIPTOR_POOL_MAXITEMS 50000
+#define VERTEX_BUFFER_SIZE_STEP 128 * 1024 /* 128kB */
 
 #define GDK_ARRAY_NAME gsk_descriptor_image_infos
 #define GDK_ARRAY_TYPE_NAME GskDescriptorImageInfos
@@ -60,6 +61,7 @@ struct _GskVulkanRender
 
   GskVulkanImage *target;
 
+  GskVulkanBuffer *vertex_buffer;
   VkSampler samplers[3];
   GskVulkanBuffer *storage_buffer;
   guchar *storage_buffer_memory;
@@ -642,6 +644,27 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
                           0, NULL);
 }
 
+static void
+gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
+{
+  gsize n_bytes;
+  guchar *data;
+
+  n_bytes = gsk_vulkan_render_pass_count_vertex_data (self->render_pass, 0);
+  if (n_bytes == 0)
+    return;
+
+  if (self->vertex_buffer && gsk_vulkan_buffer_get_size (self->vertex_buffer) < n_bytes)
+    g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
+
+  if (self->vertex_buffer == NULL)
+    self->vertex_buffer = gsk_vulkan_buffer_new (self->vulkan, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
+
+  data = gsk_vulkan_buffer_map (self->vertex_buffer);
+  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, self, data);
+  gsk_vulkan_buffer_unmap (self->vertex_buffer);
+}
+
 void
 gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
                              GskVulkanRenderPass *pass,
@@ -650,6 +673,15 @@ gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
   VkCommandBuffer command_buffer;
 
   command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
+
+  if (self->vertex_buffer)
+    vkCmdBindVertexBuffers (command_buffer,
+                            0,
+                            1,
+                            (VkBuffer[1]) {
+                                gsk_vulkan_buffer_get_buffer (self->vertex_buffer)
+                            },
+                            (VkDeviceSize[1]) { 0 });
 
   gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
 
@@ -671,6 +703,8 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 #endif
 
   gsk_vulkan_render_prepare_descriptor_sets (self);
+
+  gsk_vulkan_render_collect_vertex_buffer (self);
 
   gsk_vulkan_render_draw_pass (self,
                                self->render_pass,
@@ -746,6 +780,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   guint i;
   
   gsk_vulkan_render_cleanup (self);
+
+  g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 

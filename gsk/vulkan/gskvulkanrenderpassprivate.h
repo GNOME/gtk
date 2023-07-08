@@ -33,6 +33,11 @@ void                    gsk_vulkan_render_pass_upload                   (GskVulk
                                                                          GskVulkanUploader      *uploader);
 void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render);
+gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self,
+                                                                         gsize                   n_bytes);
+void                    gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render,
+                                                                         guchar                 *data);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
