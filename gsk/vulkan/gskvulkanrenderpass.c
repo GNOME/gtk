@@ -1352,14 +1352,13 @@ gsk_vulkan_render_pass_get_first_op (GskVulkanRenderPass *self)
 
 void
 gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
-                               GskVulkanRender      *render,
                                GskVulkanUploader    *uploader)
 {
   GskVulkanOp *op;
 
   for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      gsk_vulkan_op_upload (op, self, render, uploader);
+      gsk_vulkan_op_upload (op, uploader);
     }
 }
 
@@ -1379,14 +1378,13 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self,
 
 void
 gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
-                                            GskVulkanRender     *render,
                                             guchar              *data)
 {
   GskVulkanOp *op;
 
   for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
     {
-      gsk_vulkan_op_collect_vertex_data (op, self, render, data);
+      gsk_vulkan_op_collect_vertex_data (op, data);
     }
 }
 

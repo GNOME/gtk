@@ -24,10 +24,8 @@ gsk_vulkan_color_op_finish (GskVulkanOp *op)
 }
 
 static void
-gsk_vulkan_color_op_upload (GskVulkanOp           *op,
-                            GskVulkanRenderPass   *pass,
-                            GskVulkanRender       *render,
-                            GskVulkanUploader     *uploader)
+gsk_vulkan_color_op_upload (GskVulkanOp       *op,
+                            GskVulkanUploader *uploader)
 {
 }
 
@@ -66,10 +64,8 @@ gsk_vulkan_color_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_color_op_collect_vertex_data (GskVulkanOp         *op,
-                                         GskVulkanRenderPass *pass,
-                                         GskVulkanRender     *render,
-                                         guchar              *data)
+gsk_vulkan_color_op_collect_vertex_data (GskVulkanOp *op,
+                                         guchar      *data)
 {
   GskVulkanColorOp *self = (GskVulkanColorOp *) op;
   GskVulkanColorInstance *instance = (GskVulkanColorInstance *) (data + self->vertex_offset);

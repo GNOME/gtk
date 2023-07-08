@@ -383,7 +383,7 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
   gsk_vulkan_glyph_cache_upload (gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (self->renderer)),
                                  self->uploader);
 
-  gsk_vulkan_render_pass_upload (self->render_pass, self, self->uploader);
+  gsk_vulkan_render_pass_upload (self->render_pass, self->uploader);
 
   gsk_vulkan_uploader_upload (self->uploader);
 }
@@ -756,7 +756,7 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
     self->vertex_buffer = gsk_vulkan_buffer_new (self->vulkan, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
 
   data = gsk_vulkan_buffer_map (self->vertex_buffer);
-  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, self, data);
+  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, data);
   gsk_vulkan_buffer_unmap (self->vertex_buffer);
 }
 

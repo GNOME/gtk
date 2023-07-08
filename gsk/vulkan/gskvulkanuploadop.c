@@ -38,8 +38,6 @@ gsk_vulkan_upload_op_print (GskVulkanOp *op,
 
 static void
 gsk_vulkan_upload_op_upload (GskVulkanOp           *op,
-                             GskVulkanRenderPass   *pass,
-                             GskVulkanRender       *render,
                              GskVulkanUploader     *uploader)
 {
   GskVulkanUploadOp *self = (GskVulkanUploadOp *) op;
@@ -63,8 +61,6 @@ gsk_vulkan_upload_op_count_vertex_data (GskVulkanOp *op,
 
 static void
 gsk_vulkan_upload_op_collect_vertex_data (GskVulkanOp         *op,
-                                          GskVulkanRenderPass *pass,
-                                          GskVulkanRender     *render,
                                           guchar              *data)
 {
 }

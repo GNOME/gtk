@@ -30,14 +30,10 @@ struct _GskVulkanOpClass
                                                                          guint                   indent);
 
   void                  (* upload)                                      (GskVulkanOp            *op,
-                                                                         GskVulkanRenderPass    *pass,
-                                                                         GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);
   gsize                 (* count_vertex_data)                           (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
   void                  (* collect_vertex_data)                         (GskVulkanOp            *op,
-                                                                         GskVulkanRenderPass    *pass,
-                                                                         GskVulkanRender        *render,
                                                                          guchar                 *data);
   void                  (* reserve_descriptor_sets)                     (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render);
@@ -59,14 +55,10 @@ void                    gsk_vulkan_op_print                             (GskVulk
                                                                          guint                   indent);
 
 void                    gsk_vulkan_op_upload                            (GskVulkanOp            *op,
-                                                                         GskVulkanRenderPass    *pass,
-                                                                         GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);
 gsize                   gsk_vulkan_op_count_vertex_data                 (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
 void                    gsk_vulkan_op_collect_vertex_data               (GskVulkanOp            *op,
-                                                                         GskVulkanRenderPass    *pass,
-                                                                         GskVulkanRender        *render,
                                                                          guchar                 *data);
 void                    gsk_vulkan_op_reserve_descriptor_sets           (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render);

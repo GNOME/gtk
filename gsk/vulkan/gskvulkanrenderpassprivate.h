@@ -29,14 +29,12 @@ gpointer                gsk_vulkan_render_pass_alloc_op                 (GskVulk
                                                                          gsize                   size);
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);
 void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render);
 gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self,
                                                                          gsize                   n_bytes);
 void                    gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render,
                                                                          guchar                 *data);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,

@@ -43,14 +43,12 @@ gsk_vulkan_offscreen_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_offscreen_op_upload (GskVulkanOp           *op,
-                                GskVulkanRenderPass   *pass,
-                                GskVulkanRender       *render,
-                                GskVulkanUploader     *uploader)
+gsk_vulkan_offscreen_op_upload (GskVulkanOp       *op,
+                                GskVulkanUploader *uploader)
 {
   GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
 
-  gsk_vulkan_render_pass_upload (self->render_pass, render, uploader);
+  gsk_vulkan_render_pass_upload (self->render_pass, uploader);
 }
 
 static gsize
@@ -63,14 +61,12 @@ gsk_vulkan_offscreen_op_count_vertex_data (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_offscreen_op_collect_vertex_data (GskVulkanOp         *op,
-                                             GskVulkanRenderPass *pass,
-                                             GskVulkanRender     *render,
-                                             guchar              *data)
+gsk_vulkan_offscreen_op_collect_vertex_data (GskVulkanOp *op,
+                                             guchar      *data)
 {
   GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
 
-  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, render, data);
+  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, data);
 }
 
 static void
@@ -137,10 +133,8 @@ gsk_vulkan_offscreen_end_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_offscreen_end_op_upload (GskVulkanOp           *op,
-                                    GskVulkanRenderPass   *pass,
-                                    GskVulkanRender       *render,
-                                    GskVulkanUploader     *uploader)
+gsk_vulkan_offscreen_end_op_upload (GskVulkanOp       *op,
+                                    GskVulkanUploader *uploader)
 {
 }
 
@@ -152,10 +146,8 @@ gsk_vulkan_offscreen_end_op_count_vertex_data (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_offscreen_end_op_collect_vertex_data (GskVulkanOp         *op,
-                                                 GskVulkanRenderPass *pass,
-                                                 GskVulkanRender     *render,
-                                                 guchar              *data)
+gsk_vulkan_offscreen_end_op_collect_vertex_data (GskVulkanOp *op,
+                                                 guchar      *data)
 {
 }
 

@@ -38,10 +38,8 @@ gsk_vulkan_upload_cairo_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_upload_cairo_op_upload (GskVulkanOp           *op,
-                                   GskVulkanRenderPass   *pass,
-                                   GskVulkanRender       *render,
-                                   GskVulkanUploader     *uploader)
+gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
+                                   GskVulkanUploader *uploader)
 {
   GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
   GskVulkanImageMap map;
@@ -81,10 +79,8 @@ gsk_vulkan_upload_cairo_op_count_vertex_data (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_upload_cairo_op_collect_vertex_data (GskVulkanOp         *op,
-                                                GskVulkanRenderPass *pass,
-                                                GskVulkanRender     *render,
-                                                guchar              *data)
+gsk_vulkan_upload_cairo_op_collect_vertex_data (GskVulkanOp *op,
+                                                guchar      *data)
 {
 }
 

@@ -31,11 +31,9 @@ gsk_vulkan_op_print (GskVulkanOp *op,
 
 void
 gsk_vulkan_op_upload (GskVulkanOp         *op,
-                      GskVulkanRenderPass *pass,
-                      GskVulkanRender     *render,
                       GskVulkanUploader   *uploader)
 {
-  op->op_class->upload (op, pass, render, uploader);
+  op->op_class->upload (op, uploader);
 }
 
 gsize
@@ -46,12 +44,10 @@ gsk_vulkan_op_count_vertex_data (GskVulkanOp *op,
 }
 
 void
-gsk_vulkan_op_collect_vertex_data (GskVulkanOp         *op,
-                                   GskVulkanRenderPass *pass,
-                                   GskVulkanRender     *render,
-                                   guchar              *data)
+gsk_vulkan_op_collect_vertex_data (GskVulkanOp *op,
+                                   guchar      *data)
 {
-  op->op_class->collect_vertex_data (op, pass, render, data);
+  op->op_class->collect_vertex_data (op, data);
 }
 
 void

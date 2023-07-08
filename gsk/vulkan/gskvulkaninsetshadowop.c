@@ -43,10 +43,8 @@ gsk_vulkan_inset_shadow_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_inset_shadow_op_upload (GskVulkanOp           *op,
-                                   GskVulkanRenderPass   *pass,
-                                   GskVulkanRender       *render,
-                                   GskVulkanUploader     *uploader)
+gsk_vulkan_inset_shadow_op_upload (GskVulkanOp       *op,
+                                   GskVulkanUploader *uploader)
 {
 }
 
@@ -71,10 +69,8 @@ gsk_vulkan_inset_shadow_op_count_vertex_data (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_inset_shadow_op_collect_vertex_data (GskVulkanOp         *op,
-                                                GskVulkanRenderPass *pass,
-                                                GskVulkanRender     *render,
-                                                guchar              *data)
+gsk_vulkan_inset_shadow_op_collect_vertex_data (GskVulkanOp *op,
+                                                guchar      *data)
 {
   GskVulkanInsetShadowOp *self = (GskVulkanInsetShadowOp *) op;
   GskVulkanInsetShadowInstance *instance = (GskVulkanInsetShadowInstance *) (data + self->vertex_offset);

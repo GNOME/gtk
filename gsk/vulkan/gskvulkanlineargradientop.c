@@ -46,8 +46,6 @@ gsk_vulkan_linear_gradient_op_print (GskVulkanOp *op,
 
 static void
 gsk_vulkan_linear_gradient_op_upload (GskVulkanOp           *op,
-                                      GskVulkanRenderPass   *pass,
-                                      GskVulkanRender       *render,
                                       GskVulkanUploader     *uploader)
 {
 }
@@ -74,8 +72,6 @@ gsk_vulkan_linear_gradient_op_count_vertex_data (GskVulkanOp *op,
 
 static void
 gsk_vulkan_linear_gradient_op_collect_vertex_data (GskVulkanOp         *op,
-                                                   GskVulkanRenderPass *pass,
-                                                   GskVulkanRender     *render,
                                                    guchar              *data)
 {
   GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;

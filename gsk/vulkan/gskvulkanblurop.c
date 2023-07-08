@@ -45,8 +45,6 @@ gsk_vulkan_blur_op_print (GskVulkanOp *op,
 
 static void
 gsk_vulkan_blur_op_upload (GskVulkanOp           *op,
-                           GskVulkanRenderPass   *pass,
-                           GskVulkanRender       *render,
                            GskVulkanUploader     *uploader)
 {
 }
@@ -73,8 +71,6 @@ gsk_vulkan_blur_op_count_vertex_data (GskVulkanOp *op,
 
 static void
 gsk_vulkan_blur_op_collect_vertex_data (GskVulkanOp         *op,
-                                        GskVulkanRenderPass *pass,
-                                        GskVulkanRender     *render,
                                         guchar              *data)
 {
   GskVulkanBlurOp *self = (GskVulkanBlurOp *) op;

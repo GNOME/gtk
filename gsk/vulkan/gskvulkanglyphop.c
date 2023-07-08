@@ -31,8 +31,6 @@ gsk_vulkan_glyph_op_finish (GskVulkanOp *op)
 
 static void
 gsk_vulkan_glyph_op_upload (GskVulkanOp         *op,
-                            GskVulkanRenderPass *pass,
-                            GskVulkanRender     *render,
                             GskVulkanUploader   *uploader)
 {
 }
@@ -73,8 +71,6 @@ gsk_vulkan_glyph_op_count_vertex_data (GskVulkanOp *op,
 
 static void
 gsk_vulkan_glyph_op_collect_vertex_data (GskVulkanOp         *op,
-                                         GskVulkanRenderPass *pass,
-                                         GskVulkanRender     *render,
                                          guchar              *data)
 {
   GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
