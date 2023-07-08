@@ -25,6 +25,8 @@
 #include <gdk/gdk.h>
 #include <gsk/gskenums.h>
 
+typedef struct _GskPath                 GskPath;
+typedef struct _GskPathBuilder          GskPathBuilder;
 typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskTransform            GskTransform;
 

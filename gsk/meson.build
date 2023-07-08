@@ -23,9 +23,11 @@ gsk_private_gl_shaders = [
 ]
 
 gsk_public_sources = files([
-  'gskdiff.c',
   'gskcairorenderer.c',
+  'gskdiff.c',
   'gskglshader.c',
+  'gskpath.c',
+  'gskpathbuilder.c',
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
@@ -37,9 +39,12 @@ gsk_public_sources = files([
 
 gsk_private_sources = files([
   'gskcairoblur.c',
+  'gskcontour.c',
+  'gskcurve.c',
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
+  'gskspline.c',
   'gl/gskglattachmentstate.c',
   'gl/gskglbuffer.c',
   'gl/gskglcommandqueue.c',
@@ -66,6 +71,8 @@ gsk_public_headers = files([
   'gskcairorenderer.h',
   'gskenums.h',
   'gskglshader.h',
+  'gskpath.h',
+  'gskpathbuilder.h',
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
