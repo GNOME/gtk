@@ -569,20 +569,6 @@ gsk_vulkan_render_get_render_pass (GskVulkanRender *self,
   return render_pass;
 }
 
-void
-gsk_vulkan_render_bind_descriptor_sets (GskVulkanRender *self,
-                                        VkCommandBuffer  command_buffer)
-{
-  vkCmdBindDescriptorSets (command_buffer,
-                           VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           self->pipeline_layout,
-                           0,
-                           N_DESCRIPTOR_SETS,
-                           self->descriptor_sets,
-                           0,
-                           NULL);
-}
-
 gsize
 gsk_vulkan_render_get_image_descriptor (GskVulkanRender        *self,
                                         GskVulkanImage         *image,
@@ -777,6 +763,15 @@ gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
                                 gsk_vulkan_buffer_get_buffer (self->vertex_buffer)
                             },
                             (VkDeviceSize[1]) { 0 });
+
+  vkCmdBindDescriptorSets (command_buffer,
+                           VK_PIPELINE_BIND_POINT_GRAPHICS,
+                           self->pipeline_layout,
+                           0,
+                           N_DESCRIPTOR_SETS,
+                           self->descriptor_sets,
+                           0,
+                           NULL);
 
   gsk_vulkan_render_pass_draw (pass, self, self->pipeline_layout, command_buffer);
 

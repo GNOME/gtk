@@ -1472,8 +1472,6 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
 
-  gsk_vulkan_render_bind_descriptor_sets (render, command_buffer);
-
   gsk_vulkan_render_pass_draw_rect (self, render, pipeline_layout, command_buffer);
 
   vkCmdEndRenderPass (command_buffer);

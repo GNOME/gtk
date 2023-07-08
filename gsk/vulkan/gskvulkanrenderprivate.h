@@ -48,8 +48,6 @@ guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulk
                                                                          gsize                   size,
                                                                          gsize                   alignment,
                                                                          gsize                  *out_offset);
-void                    gsk_vulkan_render_bind_descriptor_sets          (GskVulkanRender        *self,
-                                                                         VkCommandBuffer         command_buffer);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 void                    gsk_vulkan_render_draw_pass                     (GskVulkanRender        *self,
