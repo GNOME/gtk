@@ -101,6 +101,11 @@ float                   gsk_contour_get_curvature               (const GskContou
                                                                  gpointer                measure_data,
                                                                  float                   distance,
                                                                  graphene_point_t       *center);
+gboolean                gsk_contour_dash                        (const GskContour       *contour,
+                                                                 GskStroke              *stroke,
+                                                                 float                   tolerance,
+                                                                 GskPathForeachFunc      func,
+                                                                 gpointer                user_data);
 
 
 G_END_DECLS
