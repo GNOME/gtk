@@ -373,6 +373,7 @@ tests = [
   ['path-special-cases'],
   ['measure'],
   ['measure-special-cases'],
+  ['dash'],
 ]
 
 test_cargs = []
