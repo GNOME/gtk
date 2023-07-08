@@ -252,8 +252,6 @@ gsk_vulkan_clip_intersects_rect (const GskVulkanClip    *self,
       return FALSE;
 
     case GSK_VULKAN_CLIP_NONE:
-      return r.size.width > 0 && r.size.height > 0;
-
     case GSK_VULKAN_CLIP_RECT:
       return graphene_rect_intersection (&self->rect.bounds, &r, NULL);
 
