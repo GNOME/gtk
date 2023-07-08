@@ -355,7 +355,9 @@ foreach test : node_parser_tests
 endforeach
 
 tests = [
-  ['path'], 
+  ['measure'],
+  ['measure-special-cases'],
+  ['path'],
   ['path-special-cases'],
   ['transform'],
   ['shader'],
