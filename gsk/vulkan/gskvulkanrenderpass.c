@@ -59,7 +59,6 @@ struct _GskVulkanRenderPass
   graphene_vec2_t scale;
 
   VkRenderPass render_pass;
-  VkFramebuffer framebuffer;
 };
 
 struct _GskVulkanParseState
@@ -165,21 +164,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                                       NULL,
                                       &self->render_pass);
 
-  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
-                                     &(VkFramebufferCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                                         .renderPass = self->render_pass,
-                                         .attachmentCount = 1,
-                                         .pAttachments = (VkImageView[1]) {
-                                             gsk_vulkan_image_get_image_view (target)
-                                         },
-                                         .width = gsk_vulkan_image_get_width (target),
-                                         .height = gsk_vulkan_image_get_height (target),
-                                         .layers = 1
-                                     },
-                                     NULL,
-                                     &self->framebuffer);
-
 #ifdef G_ENABLE_DEBUG
   if (fallback_pixels_quark == 0)
     {
@@ -213,7 +197,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_object_unref (self->vulkan);
   g_object_unref (self->target);
   cairo_region_destroy (self->clip);
-  vkDestroyFramebuffer (device, self->framebuffer, NULL);
   vkDestroyRenderPass (device, self->render_pass, NULL);
 
   g_free (self);
@@ -1508,7 +1491,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass *self,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                             .renderPass = self->render_pass,
-                            .framebuffer = self->framebuffer,
+                            .framebuffer = gsk_vulkan_image_get_framebuffer (self->target,
+                                                                             self->render_pass),
                             .renderArea = { 
                                 { rect.x, rect.y },
                                 { rect.width, rect.height }

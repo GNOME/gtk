@@ -41,6 +41,8 @@ struct _GskVulkanImage
   VkImageUsageFlags vk_usage;
   VkImage vk_image;
   VkImageView vk_image_view;
+  VkFramebuffer vk_framebuffer;
+
   VkImageLayout vk_image_layout;
   VkAccessFlags vk_access;
 
@@ -1018,24 +1020,22 @@ static void
 gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
+  VkDevice device;
+
+  device = gdk_vulkan_context_get_device (self->vulkan);
+
+  if (self->vk_framebuffer != VK_NULL_HANDLE)
+    vkDestroyFramebuffer (device, self->vk_framebuffer, NULL);
 
   if (self->vk_image_view != VK_NULL_HANDLE)
-    {
-      vkDestroyImageView (gdk_vulkan_context_get_device (self->vulkan),
-                          self->vk_image_view,
-                          NULL);
-    }
+    vkDestroyImageView (device, self->vk_image_view, NULL);
 
   /* memory is NULL for for_swapchain() images, where we don't own
    * the VkImage */
   if (self->memory)
-    {
-      vkDestroyImage (gdk_vulkan_context_get_device (self->vulkan),
-                      self->vk_image,
-                      NULL);
+    vkDestroyImage (device, self->vk_image, NULL);
 
-      gsk_vulkan_memory_free (self->memory);
-    }
+  g_clear_pointer (&self->memory, gsk_vulkan_memory_free);
 
   g_object_unref (self->vulkan);
 
@@ -1051,6 +1051,31 @@ gsk_vulkan_image_class_init (GskVulkanImageClass *klass)
 static void
 gsk_vulkan_image_init (GskVulkanImage *self)
 {
+}
+
+VkFramebuffer
+gsk_vulkan_image_get_framebuffer (GskVulkanImage *self,
+                                  VkRenderPass    render_pass)
+{
+  if (self->vk_framebuffer)
+    return self->vk_framebuffer;
+
+  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
+                                     &(VkFramebufferCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                                         .renderPass = render_pass,
+                                         .attachmentCount = 1,
+                                         .pAttachments = (VkImageView[1]) {
+                                             self->vk_image_view,
+                                         },
+                                         .width = self->width,
+                                         .height = self->height,
+                                         .layers = 1
+                                     },
+                                     NULL,
+                                     &self->vk_framebuffer);
+
+  return self->vk_framebuffer;
 }
 
 gsize

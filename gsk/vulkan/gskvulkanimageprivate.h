@@ -83,6 +83,8 @@ VkImage                 gsk_vulkan_image_get_image                      (GskVulk
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
 GdkMemoryFormat         gsk_vulkan_image_get_format                     (GskVulkanImage         *self);
+VkFramebuffer           gsk_vulkan_image_get_framebuffer                (GskVulkanImage         *self,
+                                                                         VkRenderPass            pass);
 
 static inline void
 print_image (GString        *string,
