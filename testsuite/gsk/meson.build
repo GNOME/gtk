@@ -366,6 +366,7 @@ tests = [
   ['shader'],
   ['path'],
   ['path-special-cases'],
+  ['dash'],
 ]
 
 test_cargs = []
