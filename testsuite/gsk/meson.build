@@ -387,6 +387,8 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'curve' ],
+  [ 'curve-special-cases' ],
   [ 'diff' ],
   [ 'half-float' ],
   ['rounded-rect'],
