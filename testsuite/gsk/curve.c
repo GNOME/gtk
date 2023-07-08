@@ -230,6 +230,64 @@ add_curve_to_array (GskPathOperation        op,
 }
 
 static void
+test_curve_decompose_conic (void)
+{
+  g_test_skip ("No good error bounds for decomposing conics");
+  return;
+
+  for (int i = 0; i < 100; i++)
+    {
+      GArray *array;
+      GskCurve c;
+      GskPathBuilder *builder;
+      GskPath *path;
+      GskPathMeasure *measure;
+      const graphene_point_t *s;
+
+      init_random_curve_with_op (&c, GSK_PATH_CONIC, GSK_PATH_CONIC);
+
+      builder = gsk_path_builder_new ();
+
+      s = gsk_curve_get_start_point (&c);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      gsk_curve_builder_to (&c, builder);
+      path = gsk_path_builder_free_to_path (builder);
+      measure = gsk_path_measure_new_with_tolerance (path, 0.1);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GskCurve));
+
+      g_assert_true (gsk_curve_decompose_curve (&c, GSK_PATH_FOREACH_ALLOW_CUBIC, 0.1, add_curve_to_array, array));
+
+      g_assert_cmpint (array->len, >=, 1);
+
+      for (int j = 0; j < array->len; j++)
+        {
+          GskCurve *c2 = &g_array_index (array, GskCurve, j);
+
+          g_assert_true (c2->op == GSK_PATH_CUBIC);
+
+          /* Check that the curves we got are approximating the conic */
+          for (int k = 0; k < 11; k++)
+            {
+              GskPathPoint *point;
+              graphene_point_t p, q;
+
+              gsk_curve_get_point (c2, k/10.0, &p);
+              point = gsk_path_get_closest_point (path, &p, INFINITY);
+              gsk_path_point_get_position (point, &q);
+              g_assert_true (graphene_point_near (&p, &q, 0.5));
+              gsk_path_point_unref (point);
+            }
+        }
+
+      g_array_unref (array);
+
+      gsk_path_measure_unref (measure);
+      gsk_path_unref (path);
+    }
+}
+
+static void
 test_curve_decompose_into (GskPathForeachFlags flags)
 {
   for (int i = 0; i < 100; i++)
@@ -353,6 +411,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
+  g_test_add_func ("/curve/decompose/conic", test_curve_decompose_conic);
   g_test_add_func ("/curve/decompose/into/line", test_curve_decompose_into_line);
   g_test_add_func ("/curve/decompose/into/quad", test_curve_decompose_into_quad);
   g_test_add_func ("/curve/decompose/into/cubic", test_curve_decompose_into_cubic);
