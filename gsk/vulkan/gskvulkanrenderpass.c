@@ -1449,11 +1449,11 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           (op->op_class != current_pipeline_class ||
            current_pipeline_clip_type != op->clip_type))
         {
-          current_pipeline = gsk_vulkan_render_create_pipeline (render,
-                                                                op->op_class,
-                                                                op->clip_type,
-                                                                gsk_vulkan_image_get_vk_format (self->target),
-                                                                self->render_pass);
+          current_pipeline = gsk_vulkan_render_get_pipeline (render,
+                                                             op->op_class,
+                                                             op->clip_type,
+                                                             gsk_vulkan_image_get_vk_format (self->target),
+                                                             self->render_pass);
           vkCmdBindPipeline (command_buffer,
                              VK_PIPELINE_BIND_POINT_GRAPHICS,
                              current_pipeline);
