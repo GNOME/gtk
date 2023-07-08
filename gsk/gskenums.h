@@ -205,6 +205,52 @@ typedef enum {
 } GskFillRule;
 
 /**
+ * GskLineCap:
+ * @GSK_LINE_CAP_BUTT: Start and stop the line exactly at the start
+ *   and end point
+ * @GSK_LINE_CAP_ROUND: Use a round ending, the center of the circle
+ *   is the start or end point
+ * @GSK_LINE_CAP_SQUARE: use squared ending, the center of the square
+ *   is the start or end point
+ *
+ * Specifies how to render the start and end points of contours or
+ * dashes when stroking.
+ *
+ * The default line cap style is `GSK_LINE_CAP_BUTT`.
+ *
+ * New entries may be added in future versions.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GSK_LINE_CAP_BUTT,
+  GSK_LINE_CAP_ROUND,
+  GSK_LINE_CAP_SQUARE
+} GskLineCap;
+
+/**
+ * GskLineJoin:
+ * @GSK_LINE_JOIN_MITER: Use a sharp angled corner
+ * @GSK_LINE_JOIN_ROUND: Use a round join, the center of the circle is
+ *   the join point
+ * @GSK_LINE_JOIN_BEVEL: use a cut-off join, the join is cut off at half
+ *   the line width from the joint point
+ *
+ * Specifies how to render the junction of two lines when stroking.
+ *
+ * The default line join style is `GSK_LINE_JOIN_MITER`.
+ *
+ * New entries may be added in future versions.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GSK_LINE_JOIN_MITER,
+  GSK_LINE_JOIN_ROUND,
+  GSK_LINE_JOIN_BEVEL,
+} GskLineJoin;
+
+/**
  * GskPathOperation:
  * @GSK_PATH_MOVE: A move-to operation, with 1 point describing the target point.
  * @GSK_PATH_CLOSE: A close operation ending the current contour with a line back
