@@ -22,6 +22,7 @@
 
 #include "gskpathopprivate.h"
 #include "gskpath.h"
+#include "gskpathprivate.h"
 #include "gskboundingboxprivate.h"
 
 G_BEGIN_DECLS
@@ -186,6 +187,20 @@ int                    gsk_curve_get_curvature_points           (const GskCurve 
 
 int                    gsk_curve_get_cusps                      (const GskCurve         *curve,
                                                                  float                   t[2]);
+
+int                    gsk_curve_intersect                      (const GskCurve         *curve1,
+                                                                 const GskCurve         *curve2,
+                                                                 float                  *t1,
+                                                                 float                  *t2,
+                                                                 graphene_point_t       *p,
+                                                                 GskPathIntersection    *kind,
+                                                                 int                     n);
+
+int                    gsk_curve_self_intersect                 (const GskCurve         *curve,
+                                                                 float                  *t1,
+                                                                 graphene_point_t       *p,
+                                                                 int                     n);
+
 
 G_END_DECLS
 

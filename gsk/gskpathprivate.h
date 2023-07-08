@@ -56,5 +56,13 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
+typedef enum
+{
+  GSK_PATH_INTERSECTION_NONE,
+  GSK_PATH_INTERSECTION_NORMAL,
+  GSK_PATH_INTERSECTION_START,
+  GSK_PATH_INTERSECTION_END,
+} GskPathIntersection;
+
 G_END_DECLS
 
