@@ -51,6 +51,8 @@ struct _GskCurveClass
                                                          graphene_vec2_t        *tangent);
   void                          (* reverse)             (const GskCurve         *curve,
                                                          GskCurve               *reverse);
+  float                         (* get_curvature)       (const GskCurve         *curve,
+                                                         float                   t);
   void                          (* split)               (const GskCurve         *curve,
                                                          float                   progress,
                                                          GskCurve               *result1,
@@ -221,6 +223,13 @@ gsk_line_curve_get_tangent (const GskCurve  *curve,
   get_tangent (&self->points[0], &self->points[1], tangent);
 }
 
+static float
+gsk_line_curve_get_curvature (const GskCurve *curve,
+                              float           t)
+{
+  return 0;
+}
+
 static void
 gsk_line_curve_reverse (const GskCurve *curve,
                         GskCurve       *reverse)
@@ -299,6 +308,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_point,
   gsk_line_curve_get_tangent,
   gsk_line_curve_reverse,
+  gsk_line_curve_get_curvature,
   gsk_line_curve_split,
   gsk_line_curve_segment,
   gsk_line_curve_decompose,
@@ -439,6 +449,17 @@ gsk_quad_curve_get_tangent (const GskCurve   *curve,
                       2.0f * c[0].x * t + c[1].x,
                       2.0f * c[0].y * t + c[1].y);
   graphene_vec2_normalize (tangent, tangent);
+}
+
+
+static float gsk_cubic_curve_get_curvature (const GskCurve *curve,
+                                            float           t);
+
+static float
+gsk_quad_curve_get_curvature (const GskCurve *curve,
+                              float           t)
+{
+  return gsk_cubic_curve_get_curvature (curve, t);
 }
 
 static void
@@ -600,6 +621,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_point,
   gsk_quad_curve_get_tangent,
   gsk_quad_curve_reverse,
+  gsk_quad_curve_get_curvature,
   gsk_quad_curve_split,
   gsk_quad_curve_segment,
   gsk_quad_curve_decompose,
@@ -776,6 +798,105 @@ gsk_cubic_curve_reverse (const GskCurve *curve,
 }
 
 static void
+gsk_curve_get_derivative (const GskCurve *curve,
+                          GskCurve       *deriv)
+{
+  switch (curve->op)
+    {
+    case GSK_PATH_LINE:
+      {
+        const GskLineCurve *self = &curve->line;
+        graphene_point_t p;
+
+        p.x = self->points[1].x - self->points[0].x;
+        p.y = self->points[1].y - self->points[0].y;
+
+        gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p, &p);
+      }
+      break;
+
+    case GSK_PATH_QUAD:
+      {
+        const GskQuadCurve *self = &curve->quad;
+        graphene_point_t p[2];
+
+        p[0].x = 2.f * (self->points[1].x - self->points[0].x);
+        p[0].y = 2.f * (self->points[1].y - self->points[0].y);
+        p[1].x = 2.f * (self->points[2].x - self->points[1].x);
+        p[1].y = 2.f * (self->points[2].y - self->points[1].y);
+
+        gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p[0], &p[1]);
+      }
+      break;
+
+    case GSK_PATH_CUBIC:
+      {
+        const GskCubicCurve *self = &curve->cubic;
+        graphene_point_t p[3];
+
+        p[0].x = 3.f * (self->points[1].x - self->points[0].x);
+        p[0].y = 3.f * (self->points[1].y - self->points[0].y);
+        p[1].x = 3.f * (self->points[2].x - self->points[1].x);
+        p[1].y = 3.f * (self->points[2].y - self->points[1].y);
+        p[2].x = 3.f * (self->points[3].x - self->points[2].x);
+        p[2].y = 3.f * (self->points[3].y - self->points[2].y);
+
+        gsk_quad_curve_init_from_points (&deriv->quad, p);
+      }
+      break;
+
+    case GSK_PATH_MOVE:
+    case GSK_PATH_CLOSE:
+    case GSK_PATH_CONIC:
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static inline float
+cross (const graphene_vec2_t *v1,
+       const graphene_vec2_t *v2)
+{
+  return graphene_vec2_get_x (v1) * graphene_vec2_get_y (v2)
+         - graphene_vec2_get_y (v1) * graphene_vec2_get_x (v2);
+}
+
+static inline float
+pow3 (float w)
+{
+  return w * w * w;
+}
+
+static float
+gsk_cubic_curve_get_curvature (const GskCurve *curve,
+                               float           t)
+{
+  GskCurve c1, c2;
+  graphene_point_t p, pp;
+  graphene_vec2_t d, dd;
+  float num, denom;
+
+  gsk_curve_get_derivative (curve, &c1);
+  gsk_curve_get_derivative (&c1, &c2);
+
+  gsk_curve_get_point (&c1, t, &p);
+  gsk_curve_get_point (&c2, t, &pp);
+
+  graphene_vec2_init (&d, p.x, p.y);
+  graphene_vec2_init (&dd, pp.x, pp.y);
+
+  num = cross (&d, &dd);
+  if (num == 0)
+    return 0;
+
+  denom = pow3 (graphene_vec2_length (&d));
+  if (denom == 0)
+    return 0;
+
+  return num / denom;
+}
+
+static void
 gsk_cubic_curve_split (const GskCurve   *curve,
                        float             progress,
                        GskCurve         *start,
@@ -895,6 +1016,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_point,
   gsk_cubic_curve_get_tangent,
   gsk_cubic_curve_reverse,
+  gsk_cubic_curve_get_curvature,
   gsk_cubic_curve_split,
   gsk_cubic_curve_segment,
   gsk_cubic_curve_decompose,
@@ -1092,6 +1214,38 @@ gsk_conic_curve_get_tangent (const GskCurve   *curve,
                        &tmp);
   graphene_vec2_init (tangent, tmp.x, tmp.y);
   graphene_vec2_normalize (tangent, tangent);
+}
+
+/* See M. Floater, Derivatives of rational Bezier curves */
+static float
+gsk_conic_curve_get_curvature (const GskCurve *curve,
+                               float           t)
+{
+  graphene_point_t p[3], p1[2];
+  float w, w1[2], w2;
+  graphene_vec2_t t1, t2, t3;
+
+  w = curve->conic.points[2].x;
+
+  p[0] = curve->conic.points[0];
+  p[1] = curve->conic.points[1];
+  p[2] = curve->conic.points[3];
+
+  w1[0] = (1 - t) + t*w;
+  w1[1] = (1 - t)*w + t;
+
+  w2 = (1 - t)*w1[0] + t*w1[1];
+
+  p1[0].x = ((1 - t)*p[0].x + t*w*p[1].x)/w1[0];
+  p1[0].y = ((1 - t)*p[0].y + t*w*p[1].y)/w1[0];
+  p1[1].x = ((1 - t)*w*p[1].x + t*p[2].x)/w1[1];
+  p1[1].y = ((1 - t)*w*p[1].y + t*p[2].y)/w1[1];
+
+  graphene_vec2_init (&t1, p[1].x - p[0].x, p[1].y - p[0].y);
+  graphene_vec2_init (&t2, p[2].x - p[1].x, p[2].y - p[1].y);
+  graphene_vec2_init (&t3, p1[1].x - p1[0].x, p1[1].y - p1[0].y);
+
+  return 0.5 * ((w*pow3 (w2))/(pow3 (w1[0])*pow3 (w1[1]))) * (cross (&t1, &t2) / pow3 (graphene_vec2_length (&t3)));
 }
 
 static void
@@ -1443,6 +1597,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_point,
   gsk_conic_curve_get_tangent,
   gsk_conic_curve_reverse,
+  gsk_conic_curve_get_curvature,
   gsk_conic_curve_split,
   gsk_conic_curve_segment,
   gsk_conic_curve_decompose,
@@ -1548,6 +1703,31 @@ gsk_curve_get_tangent (const GskCurve   *curve,
                        graphene_vec2_t  *tangent)
 {
   get_class (curve->op)->get_tangent (curve, progress, tangent);
+}
+
+float
+gsk_curve_get_curvature (const GskCurve   *curve,
+                         float             t,
+                         graphene_point_t *center)
+{
+  float k;
+
+  k = get_class (curve->op)->get_curvature (curve, t);
+
+  if (center != NULL && k != 0)
+    {
+      graphene_point_t p;
+      graphene_vec2_t tangent;
+      float r;
+
+      r = 1/k;
+      gsk_curve_get_point (curve, t, &p);
+      gsk_curve_get_tangent (curve, t, &tangent);
+      center->x = p.x - r * graphene_vec2_get_y (&tangent);
+      center->y = p.y + r * graphene_vec2_get_x (&tangent);
+    }
+
+  return k;
 }
 
 void
