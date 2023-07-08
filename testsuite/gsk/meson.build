@@ -371,6 +371,8 @@ tests = [
   ['shader'],
   ['path'],
   ['path-special-cases'],
+  ['measure'],
+  ['measure-special-cases'],
 ]
 
 test_cargs = []
