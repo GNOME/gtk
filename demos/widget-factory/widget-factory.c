@@ -153,6 +153,35 @@ get_busy (GSimpleAction *action,
   gtk_widget_set_sensitive (window, FALSE);
 }
 
+static void
+search_button_tooltip_show (GtkWidget  *self,
+                            GtkTooltip *tooltip)
+{
+  static int style = 0;
+
+  if (style == 0)
+    {
+       gtk_tooltip_set_css_class (tooltip, "red-tooltip");
+       style++;
+    }
+  else if (style == 1)
+    {
+       gtk_tooltip_set_css_class (tooltip, "yellow-tooltip");
+       style++;
+    }
+  else
+    {
+       style = 0;
+    }
+}
+
+static void
+search_button_tooltip_hide (GtkWidget  *self,
+                            GtkTooltip *tooltip)
+{
+  gtk_tooltip_set_css_class (tooltip, NULL);
+}
+
 static int current_page = 0;
 static gboolean
 on_page (int i)
@@ -2221,6 +2250,8 @@ activate (GApplication *app)
   gtk_builder_cscope_add_callback (scope, level_scale_value_changed);
   gtk_builder_cscope_add_callback (scope, transition_speed_changed);
   gtk_builder_cscope_add_callback (scope, reset_icon_size);
+  gtk_builder_cscope_add_callback (scope, search_button_tooltip_show);
+  gtk_builder_cscope_add_callback (scope, search_button_tooltip_hide);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
   if (!gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", &error))

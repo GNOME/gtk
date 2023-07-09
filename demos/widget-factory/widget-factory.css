@@ -6,3 +6,12 @@
 .toolbar {
   -gtk-icon-style: symbolic;
 }
+
+.red-tooltip {
+  background-color: red;
+}
+
+.yellow-tooltip {
+  background-color: yellow;
+  color: black;
+}

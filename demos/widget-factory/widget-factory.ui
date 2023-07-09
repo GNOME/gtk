@@ -257,7 +257,9 @@
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="tag-table">tags</property>
-    <property name="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    <property name="text">Search button above will display its tooltip in an alternating red, yellow and default style.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
 Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
 Morbi vel elit erat. Maecenas dignissim, dui et pharetra rutrum, tellus lectus rutrum mi, a convallis libero nisi quis tellus.
@@ -1921,6 +1923,8 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="icon-name">edit-find</property>
                                             <property name="action-name">win.search</property>
                                             <property name="tooltip-text" translatable="1">Search for it</property>
+                                            <signal name="tooltip-show" handler="search_button_tooltip_show"/>
+                                            <signal name="tooltip-hide" handler="search_button_tooltip_hide"/>
                                           </object>
                                         </child>
                                         <child>
