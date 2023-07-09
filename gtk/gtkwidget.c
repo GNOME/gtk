@@ -502,6 +502,8 @@ enum {
   MOVE_FOCUS,
   KEYNAV_FAILED,
   QUERY_TOOLTIP,
+  TOOLTIP_SHOW,
+  TOOLTIP_HIDE,
   LAST_SIGNAL
 };
 
@@ -1926,6 +1928,38 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   gtk_widget_class_set_css_name (klass, I_("widget"));
   klass->priv->accessible_role = GTK_ACCESSIBLE_ROLE_WIDGET;
+
+  /**
+   * GtkWidget::tooltip-show:
+   * @widget: the object which received the signal.
+   *
+   * Emitted when a tooltip is about to be shown on @widget.
+   */
+  widget_signals[TOOLTIP_SHOW] =
+    g_signal_new (I_("tooltip-show"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_TOOLTIP);
+
+  /**
+   * GtkWidget::tooltip-hide:
+   * @widget: the object which received the signal.
+   *
+   * Emitted when a tooltip on @widget has just been hidden.
+   */
+  widget_signals[TOOLTIP_HIDE] =
+    g_signal_new (I_("tooltip-hide"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_TOOLTIP);
 }
 
 static void

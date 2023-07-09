@@ -755,6 +755,8 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   gtk_tooltip_position (tooltip, display, tooltip_widget, device);
 
+  g_signal_emit_by_name (tooltip_widget, "tooltip-show", tooltip);
+
   gtk_widget_set_visible (GTK_WIDGET (tooltip->window), TRUE);
 
   /* Now a tooltip is visible again on the display, make sure browse
@@ -771,6 +773,8 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 static void
 gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
 {
+  GtkWidget *tooltip_widget;
+
   guint timeout = BROWSE_DISABLE_TIMEOUT;
 
   if (!tooltip)
@@ -785,6 +789,7 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
   if (!GTK_TOOLTIP_VISIBLE (tooltip))
     return;
 
+  tooltip_widget = tooltip->tooltip_widget;
   tooltip->tooltip_widget = NULL;
 
   /* The tooltip is gone, after (by default, should be configurable) 500ms
@@ -801,7 +806,10 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
     }
 
   if (tooltip->window)
-    gtk_widget_set_visible (tooltip->window, FALSE);
+    {
+      gtk_widget_set_visible (tooltip->window, FALSE);
+      g_signal_emit_by_name (tooltip_widget, "tooltip-hide", tooltip);
+    }
 }
 
 static int
