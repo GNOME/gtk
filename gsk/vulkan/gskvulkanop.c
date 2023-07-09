@@ -57,12 +57,12 @@ gsk_vulkan_op_reserve_descriptor_sets (GskVulkanOp     *op,
   op->op_class->reserve_descriptor_sets (op, render);
 }
 
-void
+GskVulkanOp *
 gsk_vulkan_op_command (GskVulkanOp      *op,
                        GskVulkanRender  *render,
                        VkPipelineLayout  pipeline_layout,
                        VkCommandBuffer   command_buffer)
 {
-  op->op_class->command (op, render, pipeline_layout, command_buffer);
+  return op->op_class->command (op, render, pipeline_layout, command_buffer);
 }
 

@@ -100,7 +100,7 @@ gsk_vulkan_color_matrix_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_color_matrix_op_command (GskVulkanOp      *op,
                                     GskVulkanRender *render,
                                     VkPipelineLayout  pipeline_layout,
@@ -111,6 +111,8 @@ gsk_vulkan_color_matrix_op_command (GskVulkanOp      *op,
   vkCmdDraw (command_buffer,
              6, 1,
              0, self->vertex_offset / gsk_vulkan_color_matrix_info.pVertexBindingDescriptions[0].stride);
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {

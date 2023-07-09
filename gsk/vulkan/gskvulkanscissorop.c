@@ -56,7 +56,7 @@ gsk_vulkan_scissor_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
                                GskVulkanRender  *render,
                                VkPipelineLayout  pipeline_layout,
@@ -71,6 +71,8 @@ gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
                      { self->rect.x, self->rect.y },
                      { self->rect.width, self->rect.height },
                    });
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {

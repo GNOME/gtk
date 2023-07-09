@@ -99,7 +99,7 @@ gsk_vulkan_linear_gradient_op_reserve_descriptor_sets (GskVulkanOp     *op,
   memcpy (mem, self->stops, self->n_stops * sizeof (GskColorStop));
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_linear_gradient_op_command (GskVulkanOp      *op,
                                        GskVulkanRender  *render,
                                        VkPipelineLayout  pipeline_layout,
@@ -110,6 +110,8 @@ gsk_vulkan_linear_gradient_op_command (GskVulkanOp      *op,
   vkCmdDraw (command_buffer,
              6, 1,
              0, self->vertex_offset / gsk_vulkan_linear_info.pVertexBindingDescriptions[0].stride);
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {

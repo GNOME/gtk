@@ -47,7 +47,7 @@ struct _GskVulkanOpClass
                                                                          guchar                 *data);
   void                  (* reserve_descriptor_sets)                     (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render);
-  void                  (* command)                                     (GskVulkanOp            *op,
+  GskVulkanOp *         (* command)                                     (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
@@ -72,7 +72,7 @@ void                    gsk_vulkan_op_collect_vertex_data               (GskVulk
                                                                          guchar                 *data);
 void                    gsk_vulkan_op_reserve_descriptor_sets           (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render);
-void                    gsk_vulkan_op_command                           (GskVulkanOp            *op,
+GskVulkanOp *           gsk_vulkan_op_command                           (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);

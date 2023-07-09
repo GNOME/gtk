@@ -78,7 +78,7 @@ gsk_vulkan_offscreen_op_reserve_descriptor_sets (GskVulkanOp     *op,
   gsk_vulkan_render_pass_reserve_descriptor_sets (self->render_pass, render);
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_offscreen_op_command (GskVulkanOp      *op,
                                  GskVulkanRender  *render,
                                  VkPipelineLayout  pipeline_layout,
@@ -87,6 +87,8 @@ gsk_vulkan_offscreen_op_command (GskVulkanOp      *op,
   GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
 
   gsk_vulkan_render_draw_pass (render, self->render_pass, VK_NULL_HANDLE);
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
@@ -158,12 +160,13 @@ gsk_vulkan_offscreen_end_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_offscreen_end_op_command (GskVulkanOp      *op,
                                      GskVulkanRender  *render,
                                      VkPipelineLayout  pipeline_layout,
                                      VkCommandBuffer   command_buffer)
 {
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_END_OP_CLASS = {

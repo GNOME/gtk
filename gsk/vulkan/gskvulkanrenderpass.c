@@ -1411,7 +1411,8 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
   const char *current_pipeline_clip_type = NULL;
   GskVulkanOp *op;
 
-  for (op = gsk_vulkan_render_pass_get_first_op (self); op; op = op->next)
+  op = gsk_vulkan_render_pass_get_first_op (self);
+  while (op)
     {
       if (op->op_class->shader_name &&
           (op->op_class != current_pipeline_class ||
@@ -1429,7 +1430,7 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           current_pipeline_clip_type = op->clip_type;
         }
 
-      gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
+      op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
     }
 }
 

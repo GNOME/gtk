@@ -71,12 +71,13 @@ gsk_vulkan_upload_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_upload_op_command (GskVulkanOp      *op,
                               GskVulkanRender  *render,
                               VkPipelineLayout  pipeline_layout,
                               VkCommandBuffer   command_buffer)
 {
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_OP_CLASS = {

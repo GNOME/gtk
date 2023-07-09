@@ -88,7 +88,7 @@ gsk_vulkan_inset_shadow_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_inset_shadow_op_command (GskVulkanOp      *op,
                                     GskVulkanRender *render,
                                     VkPipelineLayout  pipeline_layout,
@@ -99,6 +99,8 @@ gsk_vulkan_inset_shadow_op_command (GskVulkanOp      *op,
   vkCmdDraw (command_buffer,
              6, 1,
              0, self->vertex_offset / gsk_vulkan_inset_shadow_info.pVertexBindingDescriptions[0].stride);
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_INSET_SHADOW_OP_CLASS = {

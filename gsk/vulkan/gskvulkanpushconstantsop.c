@@ -82,7 +82,7 @@ gsk_vulkan_push_constants_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static void
+static GskVulkanOp *
 gsk_vulkan_push_constants_op_command (GskVulkanOp      *op,
                                       GskVulkanRender  *render,
                                       VkPipelineLayout  pipeline_layout,
@@ -96,6 +96,8 @@ gsk_vulkan_push_constants_op_command (GskVulkanOp      *op,
                       0,
                       sizeof (self->instance),
                       &self->instance);
+
+  return op->next;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_PUSH_CONSTANTS_OP_CLASS = {
