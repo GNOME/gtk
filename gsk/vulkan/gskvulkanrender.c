@@ -395,6 +395,95 @@ gsk_vulkan_render_seal_ops (GskVulkanRender *self)
     }
 }
 
+typedef struct 
+{
+  struct {
+    GskVulkanOp *first;
+    GskVulkanOp *last;
+  } upload, command;
+} SortData;
+
+static GskVulkanOp *
+gsk_vulkan_render_sort_render_pass (GskVulkanRender *self,
+                                    GskVulkanOp     *op,
+                                    SortData        *sort_data)
+{
+  while (op)
+    {
+      switch (op->op_class->stage)
+      {
+        case GSK_VULKAN_STAGE_UPLOAD:
+          if (sort_data->upload.first == NULL)
+            sort_data->upload.first = op;
+          else
+            sort_data->upload.last->next = op;
+          sort_data->upload.last = op;
+          op = op->next;
+          break;
+
+        case GSK_VULKAN_STAGE_COMMAND:
+          if (sort_data->command.first == NULL)
+            sort_data->command.first = op;
+          else
+            sort_data->command.last->next = op;
+          sort_data->command.last = op;
+          op = op->next;
+          break;
+
+        case GSK_VULKAN_STAGE_BEGIN_PASS:
+          {
+            SortData pass_data = { { NULL, NULL }, { op, op } };
+
+            op = gsk_vulkan_render_sort_render_pass (self, op->next, &pass_data);
+
+            if (pass_data.upload.first)
+              {
+                if (sort_data->upload.last == NULL)
+                  sort_data->upload.last = pass_data.upload.last;
+                else
+                  pass_data.upload.last->next = sort_data->upload.first;
+                sort_data->upload.first = pass_data.upload.first;
+              }
+            if (sort_data->command.last == NULL)
+              sort_data->command.last = pass_data.command.last;
+            else
+              pass_data.command.last->next = sort_data->command.first;
+            sort_data->command.first = pass_data.command.first;
+          }
+          break;
+
+        case GSK_VULKAN_STAGE_END_PASS:
+          sort_data->command.last->next = op;
+          sort_data->command.last = op;
+          return op->next;
+
+        default:
+          g_assert_not_reached ();
+          break;
+      }
+    }
+
+  return op;
+}
+
+static void
+gsk_vulkan_render_sort_ops (GskVulkanRender *self)
+{
+  SortData sort_data = { { NULL, }, };
+  
+  gsk_vulkan_render_sort_render_pass (self, self->first_op, &sort_data);
+
+  if (sort_data.upload.first)
+    {
+      sort_data.upload.last->next = sort_data.command.first;
+      self->first_op = sort_data.upload.first;
+    }
+  else
+    self->first_op = sort_data.command.first;
+  if (sort_data.command.last)
+    sort_data.command.last->next = NULL;
+}
+
 static void
 gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
@@ -415,8 +504,9 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   gsk_vulkan_render_pass_add (self->render_pass, self, node);
 
   gsk_vulkan_render_seal_ops (self);
-
   gsk_vulkan_render_verbose_print (self, "start of frame");
+  gsk_vulkan_render_sort_ops (self);
+  gsk_vulkan_render_verbose_print (self, "after sort");
 }
 
 void
