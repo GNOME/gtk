@@ -98,11 +98,25 @@ gsk_vulkan_op_draw_command_n (GskVulkanOp      *op,
                               VkCommandBuffer   command_buffer,
                               gsize             instance_scale)
 {
-  vkCmdDraw (command_buffer,
-             6 * instance_scale, 1,
-             0, op->vertex_offset / op->op_class->vertex_input_state->pVertexBindingDescriptions[0].stride);
+  GskVulkanOp *next;
+  gsize stride = op->op_class->vertex_input_state->pVertexBindingDescriptions[0].stride;
+  gsize i;
 
-  return op->next;
+  i = 1;
+  for (next = op->next; next; next = next->next)
+    {
+      if (next->op_class != op->op_class ||
+          next->vertex_offset != op->vertex_offset + i * stride)
+        break;
+
+      i++;
+    }
+
+  vkCmdDraw (command_buffer,
+             6 * instance_scale, i,
+             0, op->vertex_offset / stride);
+
+  return next;
 }
 
 GskVulkanOp *
