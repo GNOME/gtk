@@ -57,6 +57,7 @@ struct _GskVulkanRender
   VkPipelineLayout pipeline_layout;
 
   GskVulkanRenderOps render_ops;
+  GskVulkanOp *first_op;
   GskVulkanUploader *uploader;
   GskVulkanRenderPass *render_pass;
 
@@ -140,15 +141,6 @@ render_pass_cache_key_equal (gconstpointer a,
          keya->format == keyb->format;
 }
 
-static GskVulkanOp *
-gsk_vulkan_render_get_first_op (GskVulkanRender *self)
-{
-  if (gsk_vulkan_render_ops_get_size (&self->render_ops) == 0)
-    return NULL;
-
-  return (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, 0);
-}
-
 static void
 gsk_vulkan_render_verbose_print (GskVulkanRender *self,
                                  const char      *heading)
@@ -161,7 +153,7 @@ gsk_vulkan_render_verbose_print (GskVulkanRender *self,
       GString *string = g_string_new (heading);
       g_string_append (string, ":\n");
 
-      for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
+      for (op = self->first_op; op; op = op->next)
         {
           if (op->op_class->stage == GSK_VULKAN_STAGE_END_PASS)
             indent--;
@@ -391,8 +383,9 @@ gsk_vulkan_render_seal_ops (GskVulkanRender *self)
   GskVulkanOp *last, *op;
   guint i;
 
-  last = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, 0);
+  self->first_op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, 0);
 
+  last = self->first_op;
   for (i = last->op_class->size; i < gsk_vulkan_render_ops_get_size (&self->render_ops); i += op->op_class->size)
     {
       op = (GskVulkanOp *) gsk_vulkan_render_ops_index (&self->render_ops, i);
@@ -434,7 +427,7 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
   gsk_vulkan_glyph_cache_upload (gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (self->renderer)),
                                  self->uploader);
 
-  for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
+  for (op = self->first_op; op; op = op->next)
     {
       gsk_vulkan_op_upload (op, self->uploader);
     }
@@ -722,7 +715,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
-  for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
+  for (op = self->first_op; op; op = op->next)
     {
       gsk_vulkan_op_reserve_descriptor_sets (op, self);
     }
@@ -791,7 +784,7 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
   guchar *data;
 
   n_bytes = 0;
-  for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
+  for (op = self->first_op; op; op = op->next)
     {
       n_bytes = gsk_vulkan_op_count_vertex_data (op, n_bytes);
     }
@@ -805,7 +798,7 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
     self->vertex_buffer = gsk_vulkan_buffer_new (self->vulkan, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
 
   data = gsk_vulkan_buffer_map (self->vertex_buffer);
-  for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
+  for (op = self->first_op; op; op = op->next)
     {
       gsk_vulkan_op_collect_vertex_data (op, data);
     }
@@ -894,7 +887,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
 
   gsk_vulkan_render_collect_vertex_buffer (self);
 
-  gsk_vulkan_render_draw_pass (self, self->render_pass, gsk_vulkan_render_get_first_op (self));
+  gsk_vulkan_render_draw_pass (self, self->render_pass, self->first_op);
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (self->renderer, SYNC))
