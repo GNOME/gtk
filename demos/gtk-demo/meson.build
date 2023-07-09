@@ -144,6 +144,7 @@ extra_demo_sources = files([
   'nodewidget.c',
   'graphwidget.c',
   'curve-editor.c',
+  'cepath.c',
 ])
 
 if os_unix

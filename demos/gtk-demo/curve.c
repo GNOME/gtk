@@ -33,10 +33,12 @@ make_circle_path (void)
   gsk_path_builder_cubic_to (builder, cx - kr, h - pad,
                                       pad, cy + kr,
                                       pad, cy);
+#if 0
   gsk_path_builder_cubic_to (builder, pad, cy - kr,
                                       cx - kr, pad,
                                       cx, pad);
   gsk_path_builder_close (builder);
+#endif
 
   return gsk_path_builder_free_to_path (builder);
 }
