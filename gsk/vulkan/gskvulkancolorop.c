@@ -79,7 +79,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_OP_CLASS = {
 };
 
 void
-gsk_vulkan_color_op (GskVulkanRenderPass    *render_pass,
+gsk_vulkan_color_op (GskVulkanRender        *render,
                      const char             *clip_type,
                      const graphene_rect_t  *rect,
                      const graphene_point_t *offset,
@@ -87,7 +87,7 @@ gsk_vulkan_color_op (GskVulkanRenderPass    *render_pass,
 {
   GskVulkanColorOp *self;
 
-  self = (GskVulkanColorOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_COLOR_OP_CLASS);
+  self = (GskVulkanColorOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_OP_CLASS);
 
   ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);

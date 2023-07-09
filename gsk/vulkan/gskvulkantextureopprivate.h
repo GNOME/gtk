@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_texture_op                           (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_texture_op                           (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          GskVulkanImage                 *image,
                                                                          GskVulkanRenderSampler          sampler,

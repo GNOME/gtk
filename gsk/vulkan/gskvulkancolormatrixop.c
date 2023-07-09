@@ -88,7 +88,7 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
 };
 
 void
-gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
+gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
                             const char              *clip_type,
                             GskVulkanImage          *image,
                             const graphene_rect_t   *rect,
@@ -99,7 +99,7 @@ gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
 {
   GskVulkanColorMatrixOp *self;
 
-  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
+  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
 
   ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
@@ -110,7 +110,7 @@ gsk_vulkan_color_matrix_op (GskVulkanRenderPass     *render_pass,
 }
 
 void
-gsk_vulkan_color_matrix_op_opacity (GskVulkanRenderPass    *render_pass,
+gsk_vulkan_color_matrix_op_opacity (GskVulkanRender        *render,
                                     const char             *clip_type,
                                     GskVulkanImage         *image,
                                     const graphene_rect_t  *rect,
@@ -130,7 +130,7 @@ gsk_vulkan_color_matrix_op_opacity (GskVulkanRenderPass    *render_pass,
                                    });
   graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
 
-  gsk_vulkan_color_matrix_op (render_pass,
+  gsk_vulkan_color_matrix_op (render,
                               clip_type,
                               image,
                               rect,

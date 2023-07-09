@@ -75,7 +75,7 @@ static const GskVulkanOpClass GSK_VULKAN_INSET_SHADOW_OP_CLASS = {
 };
 
 void
-gsk_vulkan_inset_shadow_op (GskVulkanRenderPass     *render_pass,
+gsk_vulkan_inset_shadow_op (GskVulkanRender         *render,
                             const char              *clip_type,
                             const GskRoundedRect    *outline,
                             const graphene_point_t  *offset,
@@ -86,7 +86,7 @@ gsk_vulkan_inset_shadow_op (GskVulkanRenderPass     *render_pass,
 {
   GskVulkanInsetShadowOp *self;
 
-  self = (GskVulkanInsetShadowOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_INSET_SHADOW_OP_CLASS);
+  self = (GskVulkanInsetShadowOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_INSET_SHADOW_OP_CLASS);
 
   ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->outline = *outline;

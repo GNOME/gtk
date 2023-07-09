@@ -79,7 +79,7 @@ static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
 };
 
 void
-gsk_vulkan_glyph_op (GskVulkanRenderPass    *render_pass,
+gsk_vulkan_glyph_op (GskVulkanRender        *render,
                      const char             *clip_type,
                      GskVulkanImage         *image,
                      const graphene_rect_t  *rect,
@@ -89,7 +89,7 @@ gsk_vulkan_glyph_op (GskVulkanRenderPass    *render_pass,
 {
   GskVulkanGlyphOp *self;
 
-  self = (GskVulkanGlyphOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_GLYPH_OP_CLASS);
+  self = (GskVulkanGlyphOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_GLYPH_OP_CLASS);
 
   ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);

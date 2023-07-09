@@ -114,7 +114,7 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS = {
 };
 
 GskVulkanImage *
-gsk_vulkan_upload_cairo_op (GskVulkanRenderPass   *render_pass,
+gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
                             GdkVulkanContext      *context,
                             GskRenderNode         *node,
                             const graphene_vec2_t *scale,
@@ -122,7 +122,7 @@ gsk_vulkan_upload_cairo_op (GskVulkanRenderPass   *render_pass,
 {
   GskVulkanUploadCairoOp *self;
 
-  self = (GskVulkanUploadCairoOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS);
+  self = (GskVulkanUploadCairoOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS);
 
   self->node = gsk_render_node_ref (node);
   self->image = gsk_vulkan_image_new_for_upload (context,

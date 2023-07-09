@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_cross_fade_op                        (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_cross_fade_op                        (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          const graphene_rect_t          *bounds,
                                                                          const graphene_point_t         *offset,

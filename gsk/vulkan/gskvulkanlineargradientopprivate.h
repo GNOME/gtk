@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_linear_gradient_op                   (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_linear_gradient_op                   (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,

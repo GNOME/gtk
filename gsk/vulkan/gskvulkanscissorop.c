@@ -90,12 +90,12 @@ static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
 };
 
 void
-gsk_vulkan_scissor_op (GskVulkanRenderPass         *render_pass,
+gsk_vulkan_scissor_op (GskVulkanRender             *render,
                        const cairo_rectangle_int_t *rect)
 {
   GskVulkanScissorOp *self;
 
-  self = (GskVulkanScissorOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_SCISSOR_OP_CLASS);
+  self = (GskVulkanScissorOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_SCISSOR_OP_CLASS);
 
   self->rect = *rect;
 }

@@ -6,8 +6,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskVulkanOp GskVulkanOp;
-
 typedef enum
 {
   GSK_VULKAN_STAGE_UPLOAD,
@@ -57,7 +55,7 @@ struct _GskVulkanOpClass
 /* ensures alignment of ops to multipes of 16 bytes - and that makes graphene happy */
 #define GSK_VULKAN_OP_SIZE(struct_name) ((sizeof(struct_name) + 15) & ~15)
 
-GskVulkanOp *           gsk_vulkan_op_alloc                             (GskVulkanRenderPass    *render_pass,
+GskVulkanOp *           gsk_vulkan_op_alloc                             (GskVulkanRender        *render,
                                                                          const GskVulkanOpClass *op_class);
 void                    gsk_vulkan_op_finish                            (GskVulkanOp            *op);
 

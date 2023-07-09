@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-GskVulkanImage *        gsk_vulkan_upload_op                            (GskVulkanRenderPass            *render_pass,
+GskVulkanImage *        gsk_vulkan_upload_op                            (GskVulkanRender                *render,
                                                                          GdkVulkanContext               *context,
                                                                          GdkTexture                     *texture);
 

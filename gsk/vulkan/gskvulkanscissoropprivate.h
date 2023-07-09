@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_scissor_op                           (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_scissor_op                           (GskVulkanRender                *render,
                                                                          const cairo_rectangle_int_t    *rect);
 
 

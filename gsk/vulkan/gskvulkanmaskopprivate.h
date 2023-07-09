@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_mask_op                              (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_mask_op                              (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          const graphene_point_t         *offset,
                                                                          GskVulkanImage                 *source,

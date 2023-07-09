@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-GskVulkanImage *        gsk_vulkan_upload_cairo_op                      (GskVulkanRenderPass            *render_pass,
+GskVulkanImage *        gsk_vulkan_upload_cairo_op                      (GskVulkanRender                *render,
                                                                          GdkVulkanContext               *context,
                                                                          GskRenderNode                  *node,
                                                                          const graphene_vec2_t          *scale,

@@ -3,13 +3,12 @@
 #include "gskvulkanopprivate.h"
 
 GskVulkanOp *
-gsk_vulkan_op_alloc (GskVulkanRenderPass    *render_pass,
+gsk_vulkan_op_alloc (GskVulkanRender        *render,
                      const GskVulkanOpClass *op_class)
 {
   GskVulkanOp *op;
 
-  op = gsk_vulkan_render_pass_alloc_op (render_pass,
-                                        op_class->size);
+  op = gsk_vulkan_render_alloc_op (render, op_class->size);
   op->op_class = op_class;
 
   return op;

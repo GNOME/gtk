@@ -38,44 +38,31 @@ gsk_vulkan_offscreen_op_print (GskVulkanOp *op,
                           gsk_vulkan_image_get_width (self->image),
                           gsk_vulkan_image_get_height (self->image));
   print_newline (string);
-
-  gsk_vulkan_render_pass_print (self->render_pass, string, indent + 1);
 }
 
 static void
 gsk_vulkan_offscreen_op_upload (GskVulkanOp       *op,
                                 GskVulkanUploader *uploader)
 {
-  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
-
-  gsk_vulkan_render_pass_upload (self->render_pass, uploader);
 }
 
 static gsize
 gsk_vulkan_offscreen_op_count_vertex_data (GskVulkanOp *op,
                                            gsize        n_bytes)
 {
-  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
-
-  return gsk_vulkan_render_pass_count_vertex_data (self->render_pass, n_bytes);
+  return n_bytes;
 }
 
 static void
 gsk_vulkan_offscreen_op_collect_vertex_data (GskVulkanOp *op,
                                              guchar      *data)
 {
-  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
-
-  gsk_vulkan_render_pass_collect_vertex_data (self->render_pass, data);
 }
 
 static void
 gsk_vulkan_offscreen_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                  GskVulkanRender *render)
 {
-  GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
-
-  gsk_vulkan_render_pass_reserve_descriptor_sets (self->render_pass, render);
 }
 
 static GskVulkanOp *
@@ -86,9 +73,7 @@ gsk_vulkan_offscreen_op_command (GskVulkanOp      *op,
 {
   GskVulkanOffscreenOp *self = (GskVulkanOffscreenOp *) op;
 
-  gsk_vulkan_render_draw_pass (render, self->render_pass, VK_NULL_HANDLE);
-
-  return op->next;
+  return gsk_vulkan_render_draw_pass (render, self->render_pass, op->next);
 }
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
@@ -166,6 +151,8 @@ gsk_vulkan_offscreen_end_op_command (GskVulkanOp      *op,
                                      VkPipelineLayout  pipeline_layout,
                                      VkCommandBuffer   command_buffer)
 {
+  vkCmdEndRenderPass (command_buffer);
+
   return op->next;
 }
 
@@ -184,15 +171,15 @@ static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_END_OP_CLASS = {
 };
 
 GskVulkanImage *
-gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
+gsk_vulkan_offscreen_op (GskVulkanRender       *render,
                          GdkVulkanContext      *context,
-                         GskVulkanRender       *render,
                          const graphene_vec2_t *scale,
                          const graphene_rect_t *viewport,
                          GskRenderNode         *node)
 {
   GskVulkanOffscreenOp *self;
   GskVulkanOffscreenEndOp *end;
+  GskVulkanImage *image;
   graphene_rect_t view;
   cairo_region_t *clip;
   float scale_x, scale_y;
@@ -204,12 +191,14 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
                              ceil (scale_x * viewport->size.width),
                              ceil (scale_y * viewport->size.height));
 
-  self = (GskVulkanOffscreenOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_OFFSCREEN_OP_CLASS);
+  image = gsk_vulkan_image_new_for_offscreen (context,
+                                              gdk_vulkan_context_get_offscreen_format (context,
+                                                  gsk_render_node_get_preferred_depth (node)),
+                                              view.size.width, view.size.height);
 
-  self->image = gsk_vulkan_image_new_for_offscreen (context,
-                                                    gdk_vulkan_context_get_offscreen_format (context,
-                                                        gsk_render_node_get_preferred_depth (node)),
-                                                    view.size.width, view.size.height);
+  self = (GskVulkanOffscreenOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_OFFSCREEN_OP_CLASS);
+
+  self->image = image;
 
   clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                           0, 0,
@@ -228,9 +217,12 @@ gsk_vulkan_offscreen_op (GskVulkanRenderPass   *render_pass,
 
   cairo_region_destroy (clip);
 
-  end = (GskVulkanOffscreenEndOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_OFFSCREEN_END_OP_CLASS);
+  /* This invalidates the self pointer */
+  gsk_vulkan_render_pass_add (self->render_pass, render, node);
 
-  end->image = g_object_ref (self->image);
+  end = (GskVulkanOffscreenEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_OFFSCREEN_END_OP_CLASS);
+
+  end->image = g_object_ref (image);
 
   return self->image;
 }

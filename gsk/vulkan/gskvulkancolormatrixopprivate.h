@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_color_matrix_op                      (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_color_matrix_op                      (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          GskVulkanImage                 *image,
                                                                          const graphene_rect_t          *rect,
@@ -13,7 +13,7 @@ void                    gsk_vulkan_color_matrix_op                      (GskVulk
                                                                          const graphene_matrix_t        *color_matrix,
                                                                          const graphene_vec4_t          *color_offset);
 
-void                    gsk_vulkan_color_matrix_op_opacity              (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_color_matrix_op_opacity              (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          GskVulkanImage                 *image,
                                                                          const graphene_rect_t          *rect,

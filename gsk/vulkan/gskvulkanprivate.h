@@ -7,6 +7,7 @@
 #include <gdk/gdk.h>
 #include <graphene.h>
 
+typedef struct _GskVulkanOp GskVulkanOp;
 typedef struct _GskVulkanOpClass GskVulkanOpClass;
 typedef struct _GskVulkanRender GskVulkanRender;
 typedef struct _GskVulkanRenderPass GskVulkanRenderPass;

@@ -30,6 +30,9 @@ GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulk
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
+gpointer                gsk_vulkan_render_alloc_op                      (GskVulkanRender        *self,
+                                                                         gsize                   size);
+
 VkPipeline              gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          const GskVulkanOpClass *op_class,
                                                                          const char             *clip_type,
@@ -50,9 +53,9 @@ guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulk
                                                                          gsize                  *out_offset);
 
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
-void                    gsk_vulkan_render_draw_pass                     (GskVulkanRender        *self,
-                                                                         GskVulkanRenderPass    *pass,
-                                                                         VkFence                 fence);
+GskVulkanOp *           gsk_vulkan_render_draw_pass                     (GskVulkanRender        *self,
+                                                                         GskVulkanRenderPass    *render_pass,
+                                                                         GskVulkanOp            *op);
 
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);

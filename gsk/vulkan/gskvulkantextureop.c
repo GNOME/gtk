@@ -84,7 +84,7 @@ static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
 };
 
 void
-gsk_vulkan_texture_op (GskVulkanRenderPass    *render_pass,
+gsk_vulkan_texture_op (GskVulkanRender        *render,
                        const char             *clip_type,
                        GskVulkanImage         *image,
                        GskVulkanRenderSampler  sampler,
@@ -94,7 +94,7 @@ gsk_vulkan_texture_op (GskVulkanRenderPass    *render_pass,
 {
   GskVulkanTextureOp *self;
 
-  self = (GskVulkanTextureOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_TEXTURE_OP_CLASS);
+  self = (GskVulkanTextureOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_TEXTURE_OP_CLASS);
 
   ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);

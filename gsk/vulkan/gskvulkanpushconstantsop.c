@@ -115,14 +115,14 @@ static const GskVulkanOpClass GSK_VULKAN_PUSH_CONSTANTS_OP_CLASS = {
 };
 
 void
-gsk_vulkan_push_constants_op (GskVulkanRenderPass     *render_pass,
+gsk_vulkan_push_constants_op (GskVulkanRender         *render,
                               const graphene_vec2_t   *scale,
                               const graphene_matrix_t *mvp,
                               const GskRoundedRect    *clip)
 {
   GskVulkanPushConstantsOp *self;
 
-  self = (GskVulkanPushConstantsOp *) gsk_vulkan_op_alloc (render_pass, &GSK_VULKAN_PUSH_CONSTANTS_OP_CLASS);
+  self = (GskVulkanPushConstantsOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_PUSH_CONSTANTS_OP_CLASS);
 
   graphene_matrix_to_float (mvp, self->instance.mvp);
   gsk_rounded_rect_to_float (clip, graphene_point_zero (), self->instance.clip);

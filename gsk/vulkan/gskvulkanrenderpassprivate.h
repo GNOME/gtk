@@ -21,22 +21,15 @@ GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulk
 
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 
-void                    gsk_vulkan_render_pass_print                    (GskVulkanRenderPass    *self,
-                                                                         GString                *string,
-                                                                         guint                   indent);
+void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render,
+                                                                         GskRenderNode          *node);
 
-gpointer                gsk_vulkan_render_pass_alloc_op                 (GskVulkanRenderPass    *self,
-                                                                         gsize                   size);
-
-void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
-                                                                         GskVulkanUploader      *uploader);
-void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render);
-gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self,
-                                                                         gsize                   n_bytes);
-void                    gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
-                                                                         guchar                 *data);
-void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
+VkRenderPass            gsk_vulkan_render_pass_begin_draw               (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render,
+                                                                         VkPipelineLayout        pipeline_layout,
+                                                                         VkCommandBuffer         command_buffer);
+void                    gsk_vulkan_render_pass_end_draw                 (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);

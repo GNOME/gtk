@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-void                    gsk_vulkan_blur_op                              (GskVulkanRenderPass            *render_pass,
+void                    gsk_vulkan_blur_op                              (GskVulkanRender                *render,
                                                                          const char                     *clip_type,
                                                                          GskVulkanImage                 *image,
                                                                          const graphene_rect_t          *rect,
