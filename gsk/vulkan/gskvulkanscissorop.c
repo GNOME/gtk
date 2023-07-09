@@ -75,6 +75,7 @@ gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanScissorOp),
+  GSK_VULKAN_STAGE_COMMAND,
   NULL,
   NULL,
   gsk_vulkan_scissor_op_finish,

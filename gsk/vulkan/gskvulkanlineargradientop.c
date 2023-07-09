@@ -114,6 +114,7 @@ gsk_vulkan_linear_gradient_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanLinearGradientOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "linear",
   &gsk_vulkan_linear_info,
   gsk_vulkan_linear_gradient_op_finish,

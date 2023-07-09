@@ -101,6 +101,7 @@ gsk_vulkan_color_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_COLOR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanColorOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "color",
   &gsk_vulkan_color_info,
   gsk_vulkan_color_op_finish,

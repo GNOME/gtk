@@ -108,6 +108,7 @@ gsk_vulkan_blur_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_BLUR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanBlurOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "blur",
   &gsk_vulkan_blur_info,
   gsk_vulkan_blur_op_finish,

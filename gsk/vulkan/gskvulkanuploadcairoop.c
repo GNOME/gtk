@@ -100,6 +100,7 @@ gsk_vulkan_upload_cairo_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanUploadCairoOp),
+  GSK_VULKAN_STAGE_UPLOAD,
   NULL,
   NULL,
   gsk_vulkan_upload_cairo_op_finish,

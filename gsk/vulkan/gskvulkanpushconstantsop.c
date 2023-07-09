@@ -100,6 +100,7 @@ gsk_vulkan_push_constants_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_PUSH_CONSTANTS_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanPushConstantsOp),
+  GSK_VULKAN_STAGE_COMMAND,
   NULL,
   NULL,
   gsk_vulkan_push_constants_op_finish,

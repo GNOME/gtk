@@ -103,6 +103,7 @@ gsk_vulkan_inset_shadow_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_INSET_SHADOW_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanInsetShadowOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "inset-shadow",
   &gsk_vulkan_inset_shadow_info,
   gsk_vulkan_inset_shadow_op_finish,

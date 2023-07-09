@@ -8,6 +8,15 @@ G_BEGIN_DECLS
 
 typedef struct _GskVulkanOp GskVulkanOp;
 
+typedef enum
+{
+  GSK_VULKAN_STAGE_UPLOAD,
+  GSK_VULKAN_STAGE_COMMAND,
+  /* magic ones */
+  GSK_VULKAN_STAGE_BEGIN_PASS,
+  GSK_VULKAN_STAGE_END_PASS
+} GskVulkanStage;
+
 struct _GskVulkanOp
 {
   const GskVulkanOpClass *op_class;
@@ -19,6 +28,7 @@ struct _GskVulkanOp
 struct _GskVulkanOpClass
 {
   gsize                 size;
+  GskVulkanStage        stage;
 
   const char *          shader_name;
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;

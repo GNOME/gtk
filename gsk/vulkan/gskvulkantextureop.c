@@ -111,6 +111,7 @@ gsk_vulkan_texture_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanTextureOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "texture",
   &gsk_vulkan_texture_info,
   gsk_vulkan_texture_op_finish,

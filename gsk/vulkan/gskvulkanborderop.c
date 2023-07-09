@@ -116,6 +116,7 @@ gsk_vulkan_border_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_BORDER_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanBorderOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "border",
   &gsk_vulkan_border_info,
   gsk_vulkan_border_op_finish,

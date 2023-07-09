@@ -91,6 +91,7 @@ gsk_vulkan_offscreen_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanOffscreenOp),
+  GSK_VULKAN_STAGE_BEGIN_PASS,
   NULL,
   NULL,
   gsk_vulkan_offscreen_op_finish,
@@ -167,6 +168,7 @@ gsk_vulkan_offscreen_end_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_OFFSCREEN_END_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanOffscreenEndOp),
+  GSK_VULKAN_STAGE_END_PASS,
   NULL,
   NULL,
   gsk_vulkan_offscreen_end_op_finish,

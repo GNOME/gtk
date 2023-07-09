@@ -106,6 +106,7 @@ gsk_vulkan_glyph_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanGlyphOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "glyph",
   &gsk_vulkan_glyph_info,
   gsk_vulkan_glyph_op_finish,

@@ -120,6 +120,7 @@ gsk_vulkan_blend_mode_op_command (GskVulkanOp      *op,
 
 static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanBlendModeOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "blend-mode",
   &gsk_vulkan_blend_mode_info,
   gsk_vulkan_blend_mode_op_finish,

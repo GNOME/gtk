@@ -115,6 +115,7 @@ gsk_vulkan_color_matrix_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanColorMatrixOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "color-matrix",
   &gsk_vulkan_color_matrix_info,
   gsk_vulkan_color_matrix_op_finish,

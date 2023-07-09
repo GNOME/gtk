@@ -131,6 +131,7 @@ gsk_vulkan_mask_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanMaskOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "mask",
   &gsk_vulkan_mask_info,
   gsk_vulkan_mask_op_finish,

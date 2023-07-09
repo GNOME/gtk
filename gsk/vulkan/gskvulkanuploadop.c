@@ -81,6 +81,7 @@ gsk_vulkan_upload_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanUploadOp),
+  GSK_VULKAN_STAGE_UPLOAD,
   NULL,
   NULL,
   gsk_vulkan_upload_op_finish,

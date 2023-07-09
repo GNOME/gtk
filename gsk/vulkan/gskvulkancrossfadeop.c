@@ -120,6 +120,7 @@ gsk_vulkan_cross_fade_op_command (GskVulkanOp      *op,
 
 static const GskVulkanOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanCrossFadeOp),
+  GSK_VULKAN_STAGE_COMMAND,
   "cross-fade",
   &gsk_vulkan_cross_fade_info,
   gsk_vulkan_cross_fade_op_finish,
