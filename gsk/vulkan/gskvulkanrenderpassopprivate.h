@@ -4,7 +4,7 @@
 
 G_BEGIN_DECLS
 
-GskVulkanImage *        gsk_vulkan_offscreen_op                         (GskVulkanRender                *render,
+GskVulkanImage *        gsk_vulkan_render_pass_op_offscreen             (GskVulkanRender                *render,
                                                                          GdkVulkanContext               *context,
                                                                          const graphene_vec2_t          *scale,
                                                                          const graphene_rect_t          *viewport,

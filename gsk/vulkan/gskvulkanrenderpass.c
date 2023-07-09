@@ -24,7 +24,7 @@
 #include "gskvulkanprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanoffscreenopprivate.h"
+#include "gskvulkanrenderpassopprivate.h"
 #include "gskvulkanoutsetshadowopprivate.h"
 #include "gskvulkanpushconstantsopprivate.h"
 #include "gskvulkanscissoropprivate.h"
@@ -218,11 +218,11 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
          */
         *tex_bounds = clipped;
 
-        result = gsk_vulkan_offscreen_op (render,
-                                          self->vulkan,
-                                          &state->scale,
-                                          &clipped,
-                                          node);
+        result = gsk_vulkan_render_pass_op_offscreen (render,
+                                                      self->vulkan,
+                                                      &state->scale,
+                                                      &clipped,
+                                                      node);
 
         return result;
       }
@@ -836,11 +836,11 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
   if (graphene_rect_get_area (child_bounds) == 0)
     return TRUE;
 
-  image = gsk_vulkan_offscreen_op (render,
-                                   self->vulkan,
-                                   &state->scale,
-                                   child_bounds,
-                                   gsk_repeat_node_get_child (node));
+  image = gsk_vulkan_render_pass_op_offscreen (render,
+                                               self->vulkan,
+                                               &state->scale,
+                                               child_bounds,
+                                               gsk_repeat_node_get_child (node));
 
   gsk_vulkan_texture_op (render,
                          gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
