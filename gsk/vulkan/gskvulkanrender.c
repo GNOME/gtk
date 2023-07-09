@@ -157,12 +157,17 @@ gsk_vulkan_render_verbose_print (GskVulkanRender *self,
   if (GSK_RENDERER_DEBUG_CHECK (self->renderer, VERBOSE))
     {
       GskVulkanOp *op;
+      guint indent = 1;
       GString *string = g_string_new (heading);
       g_string_append (string, ":\n");
 
       for (op = gsk_vulkan_render_get_first_op (self); op; op = op->next)
         {
-          gsk_vulkan_op_print (op, string, 0);
+          if (op->op_class->stage == GSK_VULKAN_STAGE_END_PASS)
+            indent--;
+          gsk_vulkan_op_print (op, string, indent);
+          if (op->op_class->stage == GSK_VULKAN_STAGE_BEGIN_PASS)
+            indent++;
         }
 
       g_print ("%s\n", string->str);
