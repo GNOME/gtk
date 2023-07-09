@@ -21,8 +21,6 @@ struct _GskVulkanBlendModeOp
     graphene_rect_t tex_rect;
     guint32 image_descriptor;
   } top, bottom;
-
-  gsize vertex_offset;
 };
 
 static void
@@ -48,37 +46,11 @@ gsk_vulkan_blend_mode_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_blend_mode_op_upload (GskVulkanOp       *op,
-                                 GskVulkanUploader *uploader)
-{
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static gsize
-gsk_vulkan_blend_mode_op_count_vertex_data (GskVulkanOp *op,
-                                            gsize        n_bytes)
-{
-  GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
-  gsize vertex_stride;
-
-  vertex_stride = gsk_vulkan_blend_mode_info.pVertexBindingDescriptions[0].stride;
-  n_bytes = round_up (n_bytes, vertex_stride);
-  self->vertex_offset = n_bytes;
-  n_bytes += vertex_stride;
-  return n_bytes;
-}
-
-static void
 gsk_vulkan_blend_mode_op_collect_vertex_data (GskVulkanOp *op,
                                               guchar      *data)
 {
   GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
-  GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) (data + self->vertex_offset);
+  GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) (data + op->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->bounds, instance->rect);
   gsk_vulkan_rect_to_float (&self->top.rect, instance->top_rect);
@@ -127,11 +99,11 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
   &gsk_vulkan_blend_mode_info,
   gsk_vulkan_blend_mode_op_finish,
   gsk_vulkan_blend_mode_op_print,
-  gsk_vulkan_blend_mode_op_upload,
-  gsk_vulkan_blend_mode_op_count_vertex_data,
+  gsk_vulkan_op_draw_upload,
+  gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_blend_mode_op_collect_vertex_data,
   gsk_vulkan_blend_mode_op_reserve_descriptor_sets,
-  gsk_vulkan_blend_mode_op_command
+  gsk_vulkan_op_draw_command
 };
 
 void

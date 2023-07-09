@@ -18,8 +18,6 @@ struct _GskVulkanInsetShadowOp
   graphene_point_t offset;
   float spread;
   float blur_radius;
-
-  gsize vertex_offset;
 };
 
 static void
@@ -43,37 +41,11 @@ gsk_vulkan_inset_shadow_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_inset_shadow_op_upload (GskVulkanOp       *op,
-                                   GskVulkanUploader *uploader)
-{
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static gsize
-gsk_vulkan_inset_shadow_op_count_vertex_data (GskVulkanOp *op,
-                                              gsize        n_bytes)
-{
-  GskVulkanInsetShadowOp *self = (GskVulkanInsetShadowOp *) op;
-  gsize vertex_stride;
-
-  vertex_stride = gsk_vulkan_inset_shadow_info.pVertexBindingDescriptions[0].stride;
-  n_bytes = round_up (n_bytes, vertex_stride);
-  self->vertex_offset = n_bytes;
-  n_bytes += vertex_stride;
-  return n_bytes;
-}
-
-static void
 gsk_vulkan_inset_shadow_op_collect_vertex_data (GskVulkanOp *op,
                                                 guchar      *data)
 {
   GskVulkanInsetShadowOp *self = (GskVulkanInsetShadowOp *) op;
-  GskVulkanInsetShadowInstance *instance = (GskVulkanInsetShadowInstance *) (data + self->vertex_offset);
+  GskVulkanInsetShadowInstance *instance = (GskVulkanInsetShadowInstance *) (data + op->vertex_offset);
 
   gsk_rounded_rect_to_float (&self->outline, graphene_point_zero (), instance->outline);
   gsk_vulkan_rgba_to_float (&self->color, instance->color);
@@ -88,21 +60,6 @@ gsk_vulkan_inset_shadow_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static GskVulkanOp *
-gsk_vulkan_inset_shadow_op_command (GskVulkanOp      *op,
-                                    GskVulkanRender *render,
-                                    VkPipelineLayout  pipeline_layout,
-                                    VkCommandBuffer   command_buffer)
-{
-  GskVulkanInsetShadowOp *self = (GskVulkanInsetShadowOp *) op;
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, self->vertex_offset / gsk_vulkan_inset_shadow_info.pVertexBindingDescriptions[0].stride);
-
-  return op->next;
-}
-
 static const GskVulkanOpClass GSK_VULKAN_INSET_SHADOW_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanInsetShadowOp),
   GSK_VULKAN_STAGE_COMMAND,
@@ -110,11 +67,11 @@ static const GskVulkanOpClass GSK_VULKAN_INSET_SHADOW_OP_CLASS = {
   &gsk_vulkan_inset_shadow_info,
   gsk_vulkan_inset_shadow_op_finish,
   gsk_vulkan_inset_shadow_op_print,
-  gsk_vulkan_inset_shadow_op_upload,
-  gsk_vulkan_inset_shadow_op_count_vertex_data,
+  gsk_vulkan_op_draw_upload,
+  gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_inset_shadow_op_collect_vertex_data,
   gsk_vulkan_inset_shadow_op_reserve_descriptor_sets,
-  gsk_vulkan_inset_shadow_op_command
+  gsk_vulkan_op_draw_command
 };
 
 void

@@ -23,6 +23,7 @@ struct _GskVulkanOp
 
   const /* interned */ char *clip_type;
   GskVulkanOp *next;
+  gsize vertex_offset;
 };
 
 struct _GskVulkanOpClass
@@ -73,6 +74,20 @@ void                    gsk_vulkan_op_collect_vertex_data               (GskVulk
 void                    gsk_vulkan_op_reserve_descriptor_sets           (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render);
 GskVulkanOp *           gsk_vulkan_op_command                           (GskVulkanOp            *op,
+                                                                         GskVulkanRender        *render,
+                                                                         VkPipelineLayout        pipeline_layout,
+                                                                         VkCommandBuffer         command_buffer);
+
+void                    gsk_vulkan_op_draw_upload                       (GskVulkanOp            *op,
+                                                                         GskVulkanUploader      *uploader);
+gsize                   gsk_vulkan_op_draw_count_vertex_data            (GskVulkanOp            *op,
+                                                                         gsize                   n_bytes);
+GskVulkanOp *           gsk_vulkan_op_draw_command_n                    (GskVulkanOp            *op,
+                                                                         GskVulkanRender        *render,
+                                                                         VkPipelineLayout        pipeline_layout,
+                                                                         VkCommandBuffer         command_buffer,
+                                                                         gsize                   instance_scale);
+GskVulkanOp *           gsk_vulkan_op_draw_command                      (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render,
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);

@@ -20,7 +20,6 @@ struct _GskVulkanLinearGradientOp
   gsize n_stops;
 
   gsize buffer_offset;
-  gsize vertex_offset;
 };
 
 static void
@@ -45,37 +44,11 @@ gsk_vulkan_linear_gradient_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_linear_gradient_op_upload (GskVulkanOp           *op,
-                                      GskVulkanUploader     *uploader)
-{
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static gsize
-gsk_vulkan_linear_gradient_op_count_vertex_data (GskVulkanOp *op,
-                                                 gsize        n_bytes)
+gsk_vulkan_linear_gradient_op_collect_vertex_data (GskVulkanOp *op,
+                                                   guchar      *data)
 {
   GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;
-  gsize vertex_stride;
-
-  vertex_stride = gsk_vulkan_linear_info.pVertexBindingDescriptions[0].stride;
-  n_bytes = round_up (n_bytes, vertex_stride);
-  self->vertex_offset = n_bytes;
-  n_bytes += vertex_stride;
-  return n_bytes;
-}
-
-static void
-gsk_vulkan_linear_gradient_op_collect_vertex_data (GskVulkanOp         *op,
-                                                   guchar              *data)
-{
-  GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;
-  GskVulkanLinearInstance *instance = (GskVulkanLinearInstance *) (data + self->vertex_offset);
+  GskVulkanLinearInstance *instance = (GskVulkanLinearInstance *) (data + op->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->rect, instance->rect);
   gsk_vulkan_point_to_float (&self->start, instance->start);
@@ -99,21 +72,6 @@ gsk_vulkan_linear_gradient_op_reserve_descriptor_sets (GskVulkanOp     *op,
   memcpy (mem, self->stops, self->n_stops * sizeof (GskColorStop));
 }
 
-static GskVulkanOp *
-gsk_vulkan_linear_gradient_op_command (GskVulkanOp      *op,
-                                       GskVulkanRender  *render,
-                                       VkPipelineLayout  pipeline_layout,
-                                       VkCommandBuffer   command_buffer)
-{
-  GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, self->vertex_offset / gsk_vulkan_linear_info.pVertexBindingDescriptions[0].stride);
-
-  return op->next;
-}
-
 static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanLinearGradientOp),
   GSK_VULKAN_STAGE_COMMAND,
@@ -121,11 +79,11 @@ static const GskVulkanOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   &gsk_vulkan_linear_info,
   gsk_vulkan_linear_gradient_op_finish,
   gsk_vulkan_linear_gradient_op_print,
-  gsk_vulkan_linear_gradient_op_upload,
-  gsk_vulkan_linear_gradient_op_count_vertex_data,
+  gsk_vulkan_op_draw_upload,
+  gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_linear_gradient_op_collect_vertex_data,
   gsk_vulkan_linear_gradient_op_reserve_descriptor_sets,
-  gsk_vulkan_linear_gradient_op_command
+  gsk_vulkan_op_draw_command
 };
 
 void

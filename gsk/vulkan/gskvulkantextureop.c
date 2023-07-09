@@ -18,7 +18,6 @@ struct _GskVulkanTextureOp
   graphene_rect_t tex_rect;
 
   guint32 image_descriptor;
-  gsize vertex_offset;
 };
 
 static void
@@ -44,37 +43,11 @@ gsk_vulkan_texture_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_texture_op_upload (GskVulkanOp       *op,
-                              GskVulkanUploader *uploader)
-{
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static gsize
-gsk_vulkan_texture_op_count_vertex_data (GskVulkanOp *op,
-                                         gsize        n_bytes)
-{
-  GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
-  gsize vertex_stride;
-
-  vertex_stride = gsk_vulkan_texture_info.pVertexBindingDescriptions[0].stride;
-  n_bytes = round_up (n_bytes, vertex_stride);
-  self->vertex_offset = n_bytes;
-  n_bytes += vertex_stride;
-  return n_bytes;
-}
-
-static void
 gsk_vulkan_texture_op_collect_vertex_data (GskVulkanOp *op,
                                            guchar      *data)
 {
   GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
-  GskVulkanTextureInstance *instance = (GskVulkanTextureInstance *) (data + self->vertex_offset);
+  GskVulkanTextureInstance *instance = (GskVulkanTextureInstance *) (data + op->vertex_offset);
 
   instance->rect[0] = self->rect.origin.x;
   instance->rect[1] = self->rect.origin.y;
@@ -96,21 +69,6 @@ gsk_vulkan_texture_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->image, self->sampler);
 }
 
-static GskVulkanOp *
-gsk_vulkan_texture_op_command (GskVulkanOp      *op,
-                               GskVulkanRender  *render,
-                               VkPipelineLayout  pipeline_layout,
-                               VkCommandBuffer   command_buffer)
-{
-  GskVulkanTextureOp *self = (GskVulkanTextureOp *) op;
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, self->vertex_offset / gsk_vulkan_texture_info.pVertexBindingDescriptions[0].stride);
-
-  return op->next;
-}
-
 static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanTextureOp),
   GSK_VULKAN_STAGE_COMMAND,
@@ -118,11 +76,11 @@ static const GskVulkanOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
   &gsk_vulkan_texture_info,
   gsk_vulkan_texture_op_finish,
   gsk_vulkan_texture_op_print,
-  gsk_vulkan_texture_op_upload,
-  gsk_vulkan_texture_op_count_vertex_data,
+  gsk_vulkan_op_draw_upload,
+  gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_texture_op_collect_vertex_data,
   gsk_vulkan_texture_op_reserve_descriptor_sets,
-  gsk_vulkan_texture_op_command
+  gsk_vulkan_op_draw_command
 };
 
 void

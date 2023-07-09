@@ -66,3 +66,51 @@ gsk_vulkan_op_command (GskVulkanOp      *op,
   return op->op_class->command (op, render, pipeline_layout, command_buffer);
 }
 
+void
+gsk_vulkan_op_draw_upload (GskVulkanOp       *op,
+                           GskVulkanUploader *uploader)
+{
+}
+
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
+gsize
+gsk_vulkan_op_draw_count_vertex_data (GskVulkanOp *op,
+                                      gsize        n_bytes)
+{
+  gsize vertex_stride;
+
+  vertex_stride = op->op_class->vertex_input_state->pVertexBindingDescriptions[0].stride;
+  n_bytes = round_up (n_bytes, vertex_stride);
+  op->vertex_offset = n_bytes;
+  n_bytes += vertex_stride;
+  return n_bytes;
+}
+
+GskVulkanOp *
+gsk_vulkan_op_draw_command_n (GskVulkanOp      *op,
+                              GskVulkanRender *render,
+                              VkPipelineLayout  pipeline_layout,
+                              VkCommandBuffer   command_buffer,
+                              gsize             instance_scale)
+{
+  vkCmdDraw (command_buffer,
+             6 * instance_scale, 1,
+             0, op->vertex_offset / op->op_class->vertex_input_state->pVertexBindingDescriptions[0].stride);
+
+  return op->next;
+}
+
+GskVulkanOp *
+gsk_vulkan_op_draw_command (GskVulkanOp      *op,
+                            GskVulkanRender *render,
+                            VkPipelineLayout  pipeline_layout,
+                            VkCommandBuffer   command_buffer)
+{
+  return gsk_vulkan_op_draw_command_n (op, render, pipeline_layout, command_buffer, 1);
+}
+

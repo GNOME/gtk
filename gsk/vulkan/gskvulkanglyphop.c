@@ -18,7 +18,6 @@ struct _GskVulkanGlyphOp
   GdkRGBA color;
 
   guint32 image_descriptor;
-  gsize vertex_offset;
 };
 
 static void
@@ -27,12 +26,6 @@ gsk_vulkan_glyph_op_finish (GskVulkanOp *op)
   GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
 
   g_object_unref (self->image);
-}
-
-static void
-gsk_vulkan_glyph_op_upload (GskVulkanOp         *op,
-                            GskVulkanUploader   *uploader)
-{
 }
 
 static void
@@ -49,32 +42,12 @@ gsk_vulkan_glyph_op_print (GskVulkanOp *op,
   print_newline (string);
 }
 
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static gsize
-gsk_vulkan_glyph_op_count_vertex_data (GskVulkanOp *op,
-                                       gsize        n_bytes)
-{
-  GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
-  gsize vertex_stride;
-
-  vertex_stride = gsk_vulkan_glyph_info.pVertexBindingDescriptions[0].stride;
-  n_bytes = round_up (n_bytes, vertex_stride);
-  self->vertex_offset = n_bytes;
-  n_bytes += vertex_stride;
-  return n_bytes;
-}
-
 static void
 gsk_vulkan_glyph_op_collect_vertex_data (GskVulkanOp         *op,
                                          guchar              *data)
 {
   GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
-  GskVulkanGlyphInstance *instance = (GskVulkanGlyphInstance *) (data + self->vertex_offset);
+  GskVulkanGlyphInstance *instance = (GskVulkanGlyphInstance *) (data + op->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->rect, instance->rect);
   gsk_vulkan_rect_to_float (&self->tex_rect, instance->tex_rect);
@@ -91,21 +64,6 @@ gsk_vulkan_glyph_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->image, GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static GskVulkanOp *
-gsk_vulkan_glyph_op_command (GskVulkanOp      *op,
-                             GskVulkanRender  *render,
-                             VkPipelineLayout  pipeline_layout,
-                             VkCommandBuffer   command_buffer)
-{
-  GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, self->vertex_offset / gsk_vulkan_glyph_info.pVertexBindingDescriptions[0].stride);
-
-  return op->next;
-}
-
 static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanGlyphOp),
   GSK_VULKAN_STAGE_COMMAND,
@@ -113,11 +71,11 @@ static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
   &gsk_vulkan_glyph_info,
   gsk_vulkan_glyph_op_finish,
   gsk_vulkan_glyph_op_print,
-  gsk_vulkan_glyph_op_upload,
-  gsk_vulkan_glyph_op_count_vertex_data,
+  gsk_vulkan_op_draw_upload,
+  gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_glyph_op_collect_vertex_data,
   gsk_vulkan_glyph_op_reserve_descriptor_sets,
-  gsk_vulkan_glyph_op_command
+  gsk_vulkan_op_draw_command
 };
 
 void
