@@ -55,7 +55,8 @@ guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulk
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 GskVulkanOp *           gsk_vulkan_render_draw_pass                     (GskVulkanRender        *self,
                                                                          GskVulkanRenderPass    *render_pass,
-                                                                         GskVulkanOp            *op);
+                                                                         GskVulkanOp            *op,
+                                                                         VkCommandBuffer         command_buffer);
 
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);

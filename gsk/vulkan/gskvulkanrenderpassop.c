@@ -73,7 +73,7 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
 {
   GskVulkanRenderPassOp *self = (GskVulkanRenderPassOp *) op;
 
-  return gsk_vulkan_render_draw_pass (render, self->render_pass, op->next);
+  return gsk_vulkan_render_draw_pass (render, self->render_pass, op->next, command_buffer);
 }
 
 static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_OP_CLASS = {
@@ -170,6 +170,40 @@ static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_END_OP_CLASS = {
   gsk_vulkan_render_pass_end_op_command
 };
 
+void
+gsk_vulkan_render_pass_op (GskVulkanRender       *render,
+                           GdkVulkanContext      *context,
+                           GskVulkanImage        *image,
+                           cairo_region_t        *clip,
+                           const graphene_vec2_t *scale,
+                           const graphene_rect_t *viewport,
+                           GskRenderNode         *node,
+                           gboolean               is_root)
+{
+  GskVulkanRenderPassOp *self;
+  GskVulkanRenderPassEndOp *end;
+
+  self = (GskVulkanRenderPassOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_OP_CLASS);
+
+  self->image = image;
+
+  self->render_pass = gsk_vulkan_render_pass_new (context,
+                                                  render,
+                                                  self->image,
+                                                  scale,
+                                                  viewport,
+                                                  clip,
+                                                  node,
+                                                  is_root);
+
+  /* This invalidates the self pointer */
+  gsk_vulkan_render_pass_add (self->render_pass, render, node);
+
+  end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
+
+  end->image = g_object_ref (image);
+}
+
 GskVulkanImage *
 gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                      GdkVulkanContext      *context,
@@ -177,10 +211,8 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                      const graphene_rect_t *viewport,
                                      GskRenderNode         *node)
 {
-  GskVulkanRenderPassOp *self;
-  GskVulkanRenderPassEndOp *end;
-  GskVulkanImage *image;
   graphene_rect_t view;
+  GskVulkanImage *image;
   cairo_region_t *clip;
   float scale_x, scale_y;
 
@@ -196,33 +228,22 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                                   gsk_render_node_get_preferred_depth (node)),
                                               view.size.width, view.size.height);
 
-  self = (GskVulkanRenderPassOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_OP_CLASS);
-
-  self->image = image;
-
   clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                           0, 0,
-                                          gsk_vulkan_image_get_width (self->image),
-                                          gsk_vulkan_image_get_height (self->image)
+                                          gsk_vulkan_image_get_width (image),
+                                          gsk_vulkan_image_get_height (image)
                                         });
 
-  self->render_pass = gsk_vulkan_render_pass_new (context,
-                                                  render,
-                                                  self->image,
-                                                  scale,
-                                                  &view,
-                                                  clip,
-                                                  node,
-                                                  FALSE);
+  gsk_vulkan_render_pass_op (render,
+                             context,
+                             image,
+                             clip,
+                             scale,
+                             &view,
+                             node,
+                             FALSE);
 
   cairo_region_destroy (clip);
 
-  /* This invalidates the self pointer */
-  gsk_vulkan_render_pass_add (self->render_pass, render, node);
-
-  end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
-
-  end->image = g_object_ref (image);
-
-  return self->image;
+  return image;
 }
