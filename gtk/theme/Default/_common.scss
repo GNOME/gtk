@@ -23,7 +23,6 @@ $popover_radius: $button_radius + 4;
 
   &:backdrop {
     text-shadow: none;
-    -gtk-icon-shadow: none;
   }
 }
 
@@ -37,14 +36,6 @@ dnd {
 
 .large-icons {
   -gtk-icon-size: 32px;
-}
-
-image:disabled {
-  -gtk-icon-filter: opacity(0.5);
-}
-
-picture:disabled {
-  opacity: 0.5;
 }
 
 .view,
@@ -95,13 +86,11 @@ iconview {
 
   @if $contrast == 'high' {
     &:selected {
-      box-shadow: inset 0 0 0 1px $borders_color;
     }
   }
 
 
   &:drop(active) {
-    box-shadow: none;
   }
 
   > dndtarget:drop(active) {
@@ -148,7 +137,6 @@ gridview {
       @extend %selected_items;
 
       @if $contrast == 'high' {
-        box-shadow: inset 0 0 0 1px $borders_color;
       }
 
     }
@@ -198,7 +186,6 @@ label {
 }
 
 .dim-label {
-  opacity: $dim_label_opacity;
   text-shadow: none;
 }
 
@@ -228,7 +215,6 @@ window.aboutdialog image.large-icons {
   border: none;
   background-color: $osd_bg_color;
   background-clip: padding-box;
-  -gtk-icon-shadow: 0 1px black;
 
 }
 
@@ -248,8 +234,6 @@ spinner {
   &:checked {
     opacity: 1;
     animation: spin 1s linear infinite;
-
-    &:disabled { opacity: 0.5; }
   }
 }
 
@@ -385,7 +369,6 @@ entry {
     &:drop(active) {
       &:focus-within, & {
         border-color: $drop_target_color;
-        box-shadow: inset 0 0 0 1px $drop_target_color;
       }
     }
 
@@ -409,7 +392,6 @@ entry {
     border-width: 0 0 2px;
     border-color: $selected_bg_color;
     border-style: solid;
-    box-shadow: none;
 
   }
 
@@ -560,7 +542,6 @@ button {
 
     &:disabled {
       @include button(insensitive);
-      -gtk-icon-filter: opacity(0.5);
 
       &:active,
       &:checked { @include button(insensitive-active); }
@@ -623,7 +604,6 @@ button {
     &:drop(active) {
       color: $drop_target_color;
       border-color: $drop_target_color;
-      box-shadow: inset 0 0 0 1px $drop_target_color;
     }
   }
 
@@ -655,7 +635,6 @@ button {
       &:only-child {
         margin: 4px;
         border-radius: 50%; // completely round when it is a single button
-        box-shadow: 0 1px 2px transparentize(black, 0.8); // drop shadow for the only child
       };
     }
 
@@ -665,13 +644,11 @@ button {
     @include button(osd);
 
     border: none;
-    box-shadow: none;
 
     &:hover {
       @include button(osd-hover);
 
       border: none;
-      box-shadow: none;
     }
 
     &:active,
@@ -679,7 +656,6 @@ button {
       @include button(osd-active);
 
       border: none;
-      box-shadow: none;
     }
   }
 
@@ -698,16 +674,12 @@ button {
     &.flat {
       @include button(undecorated);
 
-      box-shadow: none;
-      -gtk-icon-shadow: 0 1px black;
-
       &:hover { @include button(osd-hover); }
 
       &:disabled {
         @include button(osd-insensitive);
         background-image: none;
         border-color: transparent;
-        box-shadow: none;
       }
 
       &:active,
@@ -873,10 +845,7 @@ button {
   background-color: transparent;
   background-image: none;
   border-color: transparent;
-  box-shadow: inset 0 1px transparentize(white, 1),
-              0 1px transparentize(white, 1);
   text-shadow: none;
-  -gtk-icon-shadow: none;
 }
 
 .linked:not(.vertical) > menubutton,
@@ -928,7 +897,6 @@ modelbutton.flat arrow {
   background: none;
   min-width: 16px;
   min-height: 16px;
-  opacity: 0.3; //dim icon
 
   &:hover { background: none; }
 
@@ -963,19 +931,6 @@ button.color {
   > colorswatch:only-child {
     &, > overlay { border-radius: 0; }
 
-    @if $variant == 'light' {
-      box-shadow: 0 1px $shadow_color;
-
-      .osd & { box-shadow: none; }
-    }
-  }
-
-  @if $variant == 'light' {
-    .osd &, & {
-      &:disabled,
-      &:active,
-      &:checked { colorswatch:only-child { box-shadow: none; }}
-    }
   }
 }
 
@@ -1076,7 +1031,6 @@ spinbutton {
       background-color: transparent;
       border: none;
       border-radius: 0;
-      box-shadow: none;
       padding: 6px;
 
       &:backdrop:disabled { background-color: transparent; }
@@ -1098,7 +1052,6 @@ spinbutton {
       border-style: none none none solid;
       border-color: transparentize($borders_color, 0.7);
       border-radius: 0;
-      box-shadow: none;
 
       &:dir(rtl) { border-style: none solid none none; }
 
@@ -1114,7 +1067,6 @@ spinbutton {
 
       &:active {
         background-color: transparentize(black, 0.9);
-        box-shadow: inset 0 2px 3px -1px transparentize(black, 0.8);
       }
 
       &:dir(ltr):last-child { border-radius: 0 $button_radius $button_radius 0; }
@@ -1137,8 +1089,6 @@ spinbutton {
       border-style: none none none solid;
       border-color: transparentize($osd_borders_color, 0.3);
       border-radius: 0;
-      box-shadow: none;
-      -gtk-icon-shadow: 0 1px black;
 
       &:dir(rtl) { border-style: none solid none none; }
 
@@ -1148,8 +1098,6 @@ spinbutton {
         color: $osd_fg_color;
         border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
         background-color: darken($osd_bg_color,10%);
-        -gtk-icon-shadow: 0 1px black;
-        box-shadow: none;
       }
 
       &:disabled {
@@ -1157,8 +1105,6 @@ spinbutton {
 
         color: $osd_insensitive_fg_color;
         border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
-        -gtk-icon-shadow: none;
-        box-shadow: none;
       }
 
       &:dir(ltr):last-child { border-radius: 0 $button_radius $button_radius 0; }
@@ -1179,7 +1125,6 @@ spinbutton {
 
     &:drop(active) {
       border-color: transparent;
-      box-shadow: none;
     }
 
     > text {
@@ -1261,7 +1206,6 @@ dropdown > button > box {
 
   > stack > row.activatable:hover {
     background: none;
-    box-shadow: none;
   }
 }
 
@@ -1287,7 +1231,6 @@ combobox {
   }
 
   &:drop(active) { // FIXME: untested
-    box-shadow: none;
 
     button.combo { @extend %button_basic_drop_active; }
   }
@@ -1308,7 +1251,6 @@ combobox {
              outline-color: $alt_focus_border_color;
              color: $text-color;
              background-color: $menu_selected_color;
-             box-shadow: none;
              border-radius: $button_radius;
            }
          }
@@ -1403,7 +1345,6 @@ searchbar > revealer > box {
   &:backdrop {
     border-color: $backdrop_borders_color;
     background-color: $backdrop_dark_fill;
-    box-shadow: none;
     transition: $backdrop_transition;
   }
 }
@@ -1508,8 +1449,6 @@ headerbar {
     background-image: none;
 
     transition: $backdrop_transition;
-
-    .title { filter: opacity(.5); }
   }
 
   .title {
@@ -1580,7 +1519,6 @@ headerbar {
         margin-right: -1px;
         margin-top: -1px;
         border-radius: 0;
-        box-shadow: none;
       }
     }
   }
@@ -1740,7 +1678,6 @@ treeview.view {
   }
 
   &:drop(active) {
-    box-shadow: none;
   }
 
   > dndtarget:drop(active) {
@@ -1779,7 +1716,6 @@ treeview.view {
 
     background-color: $selected_bg_color;
     background-image: image($selected_bg_color);
-    box-shadow: none;
 
     &:selected {
       &:focus, & {
@@ -1788,8 +1724,6 @@ treeview.view {
           color: $selected_bg_color;
 
         }
-
-        @else { box-shadow: inset 0 1px transparentize(white, 0.95); }
 
         background-image: image($base_color);
 
@@ -1826,13 +1760,11 @@ treeview.view {
       background-color: $base_color;
       font-weight: bold;
       text-shadow: none;
-      box-shadow: none;
 
       &:hover {
         @extend %column_header_button;
 
         color: mix($_column_header_color, $fg_color, 50%);
-        box-shadow: none;
         transition: none; //I shouldn't need this
       }
 
@@ -1865,7 +1797,6 @@ treeview.view {
       background-color: $selected_bg_color;
       border-style: none;
       border-radius: 0;
-      box-shadow: inset 0 0 0 1px $base_color;
       text-shadow: none;
       transition: none;
     }
@@ -1905,7 +1836,6 @@ popover.background {
     background-color: $menu_color;
     background-clip: padding-box;
     border: 1px solid $_popover_border;
-    box-shadow: 0 1px 2px transparentize(black, 0.7);
   }
 
   &:backdrop {
@@ -1941,7 +1871,6 @@ popover.background {
       @extend %osd;
 
       border: 1px solid transparentize(white, 0.9);
-      box-shadow: none;
     }
   }
 
@@ -1982,7 +1911,6 @@ popover.menu {
         background: image($menu_selected_color);
 
         @if $contrast == 'high' {
-          box-shadow: inset 0 0 0 1px $borders_color;
         }
       }
     }
@@ -2072,20 +2000,17 @@ popover.menu {
 // initial styling for popover menu and bar
 menubar {
   padding: 0px;
-  box-shadow: inset 0 -1px transparentize(black, 0.9);
 
   > item {
     min-height: 16px;
     padding: 4px 8px;
 
     &:selected { //Seems like it :hover even with keyboard focus
-      box-shadow: inset 0 -3px $selected_bg_color;
       color: $link_color;
     }
 
     &:disabled {
       color: $insensitive_fg_color;
-      box-shadow: none;
     }
   }
 
@@ -2122,10 +2047,6 @@ notebook {
       > tabs {
         margin-bottom: -2px;
         > tab {
-          &:hover { box-shadow: inset 0 -4px $borders_color; }
-
-
-          &:checked { box-shadow: inset 0 -4px $selected_bg_color; }
         }
       }
     }
@@ -2135,9 +2056,6 @@ notebook {
       > tabs {
         margin-top: -2px;
         > tab {
-          &:hover { box-shadow: inset 0 4px $borders_color; }
-
-          &:checked { box-shadow: inset 0 4px $selected_bg_color; }
         }
       }
     }
@@ -2147,9 +2065,6 @@ notebook {
       > tabs {
         margin-right: -2px;
         > tab {
-          &:hover { box-shadow: inset -4px 0 $borders_color; }
-
-          &:checked { box-shadow: inset -4px 0 $selected_bg_color; }
         }
       }
     }
@@ -2159,9 +2074,6 @@ notebook {
       > tabs {
         margin-left: -2px;
         > tab {
-          &:hover { box-shadow: inset 4px 0 $borders_color; }
-
-          &:checked { box-shadow: inset 4px 0 $selected_bg_color; }
         }
       }
     }
@@ -2226,7 +2138,6 @@ notebook {
         background-image: none;
         background-color: transparentize(white, 0.7);
         border-color: transparent;
-        box-shadow: none;
       }
 
       &:disabled { @include button(undecorated); }
@@ -2499,7 +2410,6 @@ switch {
     outline-color: $alt_focus_border_color;
 
     @if $variant == 'light' {
-      box-shadow: none;
       border-color: $switch_borders_color;
 
       > slider { &:checked, & { border-color: $switch_borders_color; } }
@@ -2536,10 +2446,8 @@ switch {
     border-radius: 5px;
     background-image: none;
     transition: 200ms;
-    box-shadow: none;
     border-width: 0;
     -gtk-icon-source: #{$check_icon};
-    -gtk-icon-shadow: none;
   }
 }
 
@@ -2786,7 +2694,6 @@ scale {
     border-style: solid;
     border-radius: 100%;
     transition: $button_transition;
-    transition-property: background, border, box-shadow;
 
     &:hover { @include button(hover); }
 
@@ -2934,7 +2841,6 @@ scale {
 
               background-position: $_scale_slider_bg_pos;
               background-repeat: no-repeat;
-              box-shadow: none;
             }
           }
 
@@ -2972,7 +2878,6 @@ scale {
 
       > slider {
         margin: 0;
-        opacity: .8;
       }
     }
 
@@ -3071,7 +2976,6 @@ progressbar {
       border-style: none;
       border-radius: 0;
       background-color: transparent;
-      box-shadow: none;
 
       > progress {
         border-style: none;
@@ -3297,11 +3201,7 @@ row {
 
     &:hover { background-color: if(variant == light, transparentize($fg_color, 0.9), transparentize($fg_color, 0.95)); }
 
-    &:active { box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8); }
-
     &:selected {
-      &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
-
       &.has-open-popup,
       &:hover { background-color: mix($fg_color, $selected_bg_color, 10%); }
     }
@@ -3497,17 +3397,6 @@ expander-widget {
   }
 }
 
-.navigation-sidebar,
-placessidebar,
-stackswitcher,
-expander-widget {
-  &:not(decoration):not(window):drop(active):focus,
-  &:not(decoration):not(window):drop(active) {
-    box-shadow: none;
-  }
-}
-
-
 /************
  * Calendar *
  ***********/
@@ -3521,7 +3410,6 @@ calendar {
 
     > button {
       border: none;
-      box-shadow: none;
       background: none;
       border-radius: 0;
     }
@@ -3538,10 +3426,7 @@ calendar {
     }
 
     > label.today {
-      box-shadow: inset 0px -2px $borders_color;
-
       &:selected {
-        box-shadow: none;
       }
     }
 
@@ -3664,7 +3549,6 @@ filechooserbutton>button>box {
   border-spacing: 6px;
 }
 filechooserbutton:drop(active) {
-  box-shadow: none;
   border-color: transparent;
 }
 
@@ -3725,7 +3609,6 @@ stacksidebar {
       background-color: darken($menu_selected_color,5%);
     }
     &.activatable:active, &.activatable:selected:active {
-      box-shadow: none; // #3413
     }
   }
 }
@@ -3761,7 +3644,6 @@ separator.sidebar {
       color: inherit;
 
       @if $contrast == 'high' {
-        box-shadow: inset 0 0 0 1px $borders_color;
       }
 
 
@@ -3779,12 +3661,6 @@ separator.sidebar {
 /****************
  * File chooser *
  ****************/
-
-$_placesidebar_icons_opacity: 0.7;
-
-row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sidebar icons
-                                                                  // see bug #786613 for details
-                                                                  // on this oddity
 
 /* this should be more generic, only using .navigation-sidebar
    https://gitlab.gnome.org/GNOME/gtk/-/issues/2929
@@ -3822,7 +3698,6 @@ placessidebar {
     }
 
     // in the sidebar case it makes no sense to click the selected row
-    &:selected:active { box-shadow: none; }
 
     &.sidebar-placeholder-row {
       padding: 0 8px;
@@ -3835,9 +3710,6 @@ placessidebar {
 
     &:drop(active):not(:disabled) {
       color: $drop_target_color;
-      box-shadow: inset 0 1px $drop_target_color,
-                  inset 0 -1px $drop_target_color;
-
       &:selected {
         color: $selected_fg_color;
         background-color: $drop_target_color;
@@ -3958,7 +3830,6 @@ tooltip {
 
   padding: 6px 10px;
   border-radius: $window_radius;
-  box-shadow: none; // otherwise it gets inherited by windowframe.csd
 
   > box {
     border-spacing: 6px;
@@ -4050,18 +3921,13 @@ colorswatch {
   }
 
   &:drop(active) {
-    box-shadow: none;
 
     &.light > overlay {
       border-color: $drop_target_color;
-      box-shadow: inset 0 0 0 2px if($variant == 'light', darken($drop_target_color, 7%), $borders_color),
-                  inset 0 0 0 1px $drop_target_color;
     }
 
     &.dark > overlay {
       border-color: $drop_target_color;
-      box-shadow: inset 0 0 0 2px if($variant == 'light', transparentize(black, 0.7), $borders_color),
-                  inset 0 0 0 1px $drop_target_color;
     }
   }
 
@@ -4070,8 +3936,6 @@ colorswatch {
   }
 
   &.activatable:hover > overlay {
-    box-shadow: inset 0 1px transparentize(white, 0.6),
-                inset 0 -1px transparentize(black, 0.8);
   }
 
   &#add-color-button {
@@ -4089,15 +3953,11 @@ colorswatch {
   }
 
   &:disabled {
-    opacity: 0.5;
 
     > overlay {
       border-color: transparentize(black, 0.4);
-      box-shadow: none;
     }
   }
-
-  row:selected & { box-shadow: 0 0 0 2px $selected_fg_color; }
 
   &#editor-color-sample {
     border-radius: 4px;
@@ -4168,8 +4028,6 @@ window {
   $_wm_border_backdrop: if($variant=='light', transparentize(black, 0.82), transparentize(black, 0.25));
 
   &.csd {
-    box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
-                0 0 0 1px $_wm_border; //doing borders with box-shadow
     margin: 0px;
     border-radius: $window_radius $window_radius 0 0;
     &:backdrop {
@@ -4177,22 +4035,15 @@ window {
       // change when we go to backdrop, to prevent jumping windows.
       // The biggest shadow should be in the same order then in the active state
       // or the jumping will happen during the transition.
-      box-shadow: 0 3px 9px 1px transparent,
-                  0 2px 6px 2px transparentize(black, 0.8),
-                  0 0 0 1px $_wm_border_backdrop;
       transition: $backdrop_transition;
     }
 
     &.popup {
       border-radius: $menu_radius;
-      box-shadow: 0 1px 2px transparentize(black, 0.8),
-                  0 0 0 1px transparentize($_wm_border, 0.1);
     }
 
     &.dialog.message {
       border-radius: $window_radius;
-      box-shadow: 0 1px 2px transparentize(black, 0.8),
-                  0 0 0 1px transparentize($_wm_border, 0.1);
     }
   }
 
@@ -4201,13 +4052,9 @@ window {
     padding: 4px;
     border: solid 1px $borders_color;
     border-radius: 0;
-    box-shadow: inset 0 0 0 4px $borders_color, inset 0 0 0 3px $headerbar_bg_color, inset 0 1px $top_hilight;
-
-    &:backdrop { box-shadow: inset 0 0 0 4px $borders_color, inset 0 0 0 3px $backdrop_bg_color, inset 0 1px $top_hilight; }
   }
 
   &.maximized,
-  &.fullscreen { border-radius: 0; box-shadow: none; }
 
   &.tiled,
   &.tiled-top,
@@ -4215,24 +4062,15 @@ window {
   &.tiled-right,
   &.tiled-bottom {
     border-radius: 0;
-    box-shadow: 0 0 0 1px $_wm_border,
-                0 0 0 20px transparent; //transparent control workaround -- #3670
 
-    &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop,
-                             0 0 0 20px transparent; // #3670
-    }
   }
 
-  &.popup { box-shadow: none; }
-
   // server-side decorations as used by mutter
-  &.ssd { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
 
 }
 
 tooltip.csd {
   border-radius: 5px;
-  box-shadow: none;
 }
 
 // catch all extend :)
@@ -4259,7 +4097,6 @@ tooltip.csd {
 cursor-handle {
   background-color: transparent;
   background-image: none;
-  box-shadow: none;
   border-style: none;
   min-width: 20px;
   min-height: 24px;
@@ -4320,7 +4157,6 @@ shortcut > .keycap {
   border: 1px solid;
   border-color: if($variant == 'light', mix($borders_color, $bg_color, 50%), $borders_color);
   border-radius: 5px;
-  box-shadow: if($variant == 'light', inset 0 -3px mix($base_color, $bg_color, 20%), inset 0 -3px mix($borders_color, $base_color, 60%));
   font-size: smaller;
 
 }
@@ -4328,7 +4164,6 @@ shortcut > .keycap {
 :not(decoration):not(window):drop(active):focus,
 :not(decoration):not(window):drop(active) { // FIXME needs to be done widget by widget, this wildcard should really die
   border-color: $drop_target_color;
-  box-shadow: inset 0 0 0 1px $drop_target_color;
   caret-color: $drop_target_color;
 }
 
@@ -4344,25 +4179,6 @@ stackswitcher.circular {
     min-height: 32px;
     padding: 0;
   }
-}
-/*************
- * App Icons *
- *************/
-/* Outline for low res icons */
-.lowres-icon {
-    -gtk-icon-shadow: 0 -1px rgba(0,0,0,0.05),
-      1px 0 rgba(0,0,0,0.1),
-      0 1px rgba(0,0,0,0.3),
-      -1px 0 rgba(0,0,0,0.1);
-}
-
-/* Drapshadow for large icons */
-.icon-dropshadow {
-  -gtk-icon-shadow: 0 1px 12px rgba(0,0,0,0.05),
-      0 -1px rgba(0,0,0,0.05),
-      1px 0 rgba(0,0,0,0.1),
-      0 1px rgba(0,0,0,0.3),
-      -1px 0 rgba(0,0,0,0.1);
 }
 
 /*********
@@ -4397,7 +4213,6 @@ button.emoji-section {
 
   /* reset props inherited from the button style */
   background: none;
-  box-shadow: none;
   text-shadow: none;
 
   &:hover { border-color: if($variant == 'light', $borders_color, transparentize($fg_color, .9)); }
@@ -4414,7 +4229,6 @@ popover.emoji-picker emoji {
     background: $selected_bg_color;
 
     @if $contrast == 'high' {
-      box-shadow: inset 0 0 0 1px $borders_color;
     }
   }
 }

@@ -193,6 +193,7 @@ gsk_vulkan_renderer_get_render (GskVulkanRenderer *self)
             return self->renders[i];
         }
 
+      g_print ("gotta wait, oh no!\n");
       GSK_VK_CHECK (vkWaitForFences, device,
                                      G_N_ELEMENTS (fences),
                                      fences,

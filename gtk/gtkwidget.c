@@ -11952,6 +11952,18 @@ gtk_widget_render (GtkWidget            *widget,
 
       gdk_profiler_end_mark (before_render, "widget render", "");
     }
+
+  {
+    static gint64 last_print = 0;
+    gint64 t = g_get_monotonic_time ();
+
+    if (t - last_print > 5 * G_USEC_PER_SEC)
+      {
+        double fps = gdk_frame_clock_get_fps (gtk_widget_get_frame_clock (widget));
+        g_print ("%.2f fps\n", fps);
+        last_print = t;
+      }
+  }
 }
 
 static void
