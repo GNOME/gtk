@@ -1195,7 +1195,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
 
   /* This catches the corner cases of empty nodes, so after this check
    * there's quaranteed to be at least 1 pixel that needs to be drawn */
-  if (!gsk_vulkan_clip_intersects_rect (&state->clip, &state->offset, &node->bounds))
+  if (!gsk_vulkan_clip_may_intersect_rect (&state->clip, &state->offset, &node->bounds))
     return;
 
   node_type = gsk_render_node_get_node_type (node);
