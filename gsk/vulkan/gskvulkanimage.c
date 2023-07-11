@@ -1091,7 +1091,7 @@ gsk_vulkan_image_get_height (GskVulkanImage *self)
 }
 
 VkImage
-gsk_vulkan_image_get_image (GskVulkanImage *self)
+gsk_vulkan_image_get_vk_image (GskVulkanImage *self)
 {
   return self->vk_image;
 }
@@ -1100,6 +1100,27 @@ VkImageView
 gsk_vulkan_image_get_image_view (GskVulkanImage *self)
 {
   return self->vk_image_view;
+}
+
+VkImageLayout
+gsk_vulkan_image_get_vk_image_layout (GskVulkanImage *self)
+{
+  return self->vk_image_layout;
+}
+
+VkAccessFlags
+gsk_vulkan_image_get_vk_access (GskVulkanImage *self)
+{
+  return self->vk_access;
+}
+
+void
+gsk_vulkan_image_set_vk_image_layout (GskVulkanImage *self,
+                                      VkImageLayout   image_layout,
+                                      VkAccessFlags   access)
+{
+  self->vk_image_layout = image_layout;
+  self->vk_access = access;
 }
 
 VkFormat

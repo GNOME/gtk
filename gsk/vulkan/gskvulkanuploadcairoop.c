@@ -4,6 +4,8 @@
 
 #include "gskvulkanprivate.h"
 
+#include "gdk/gdkmemoryformatprivate.h"
+
 typedef struct _GskVulkanUploadCairoOp GskVulkanUploadCairoOp;
 
 struct _GskVulkanUploadCairoOp
@@ -13,6 +15,8 @@ struct _GskVulkanUploadCairoOp
   GskVulkanImage *image;
   GskRenderNode *node;
   graphene_rect_t viewport;
+
+  GskVulkanBuffer *buffer;
 };
 
 static void
@@ -22,6 +26,8 @@ gsk_vulkan_upload_cairo_op_finish (GskVulkanOp *op)
 
   g_object_unref (self->image);
   gsk_render_node_unref (self->node);
+
+  g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);
 }
 
 static void
@@ -71,14 +77,6 @@ static void
 gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
                                    GskVulkanUploader *uploader)
 {
-  GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
-  GskVulkanImageMap map;
-
-  gsk_vulkan_image_map_memory (self->image, uploader, GSK_VULKAN_WRITE, &map);
-
-  gsk_vulkan_upload_cairo_op_draw (self, map.data, map.stride);
-
-  gsk_vulkan_image_unmap_memory (self->image, uploader, &map);
 }
 
 static gsize
@@ -106,6 +104,105 @@ gsk_vulkan_upload_cairo_op_command (GskVulkanOp      *op,
                                     VkPipelineLayout  pipeline_layout,
                                     VkCommandBuffer   command_buffer)
 {
+  GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
+  gsize stride;
+  guchar *data;
+
+  stride = gsk_vulkan_image_get_width (self->image) * 
+    gdk_memory_format_bytes_per_pixel (gsk_vulkan_image_get_format (self->image));
+  self->buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_context (render),
+                                            gsk_vulkan_image_get_height (self->image) * stride,
+                                            GSK_VULKAN_WRITE);
+  data = gsk_vulkan_buffer_map (self->buffer);
+
+  gsk_vulkan_upload_cairo_op_draw (self, data, stride);
+
+  gsk_vulkan_buffer_unmap (self->buffer);
+
+  vkCmdPipelineBarrier (command_buffer,
+                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                        0,
+                        0, NULL,
+                        1, &(VkBufferMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                            .srcAccessMask = VK_ACCESS_HOST_WRITE_BIT,
+                            .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .buffer = gsk_vulkan_buffer_get_buffer (self->buffer),
+                            .offset = 0,
+                            .size = VK_WHOLE_SIZE,
+                        },
+                        1, &(VkImageMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                            .srcAccessMask = gsk_vulkan_image_get_vk_access (self->image),
+                            .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                            .oldLayout = gsk_vulkan_image_get_vk_image_layout (self->image),
+                            .newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .image = gsk_vulkan_image_get_vk_image (self->image),
+                            .subresourceRange = {
+                              .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                              .baseMipLevel = 0,
+                              .levelCount = 1,
+                              .baseArrayLayer = 0,
+                              .layerCount = 1
+                            },
+                        });
+
+  vkCmdCopyBufferToImage (command_buffer,
+                          gsk_vulkan_buffer_get_buffer (self->buffer),
+                          gsk_vulkan_image_get_vk_image (self->image),
+                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          1,
+                          (VkBufferImageCopy[1]) {
+                               {
+                                   .bufferOffset = 0,
+                                   .imageSubresource = {
+                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                       .mipLevel = 0,
+                                       .baseArrayLayer = 0,
+                                       .layerCount = 1
+                                   },
+                                   .imageOffset = { 0, 0, 0 },
+                                   .imageExtent = {
+                                       .width = gsk_vulkan_image_get_width (self->image),
+                                       .height = gsk_vulkan_image_get_height (self->image),
+                                       .depth = 1
+                                   }
+                               }
+                          });
+
+  vkCmdPipelineBarrier (command_buffer,
+                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                        0,
+                        0, NULL,
+                        0, NULL,
+                        1, &(VkImageMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                            .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                            .dstAccessMask = VK_ACCESS_SHADER_READ_BIT,
+                            .oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                            .newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .image = gsk_vulkan_image_get_vk_image (self->image),
+                            .subresourceRange = {
+                              .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                              .baseMipLevel = 0,
+                              .levelCount = 1,
+                              .baseArrayLayer = 0,
+                              .layerCount = 1
+                            },
+                        });
+
+  gsk_vulkan_image_set_vk_image_layout (self->image,
+                                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                        VK_ACCESS_SHADER_READ_BIT);
+
   return op->next;
 }
 

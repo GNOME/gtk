@@ -1144,6 +1144,12 @@ gsk_vulkan_render_get_renderer (GskVulkanRender *self)
   return self->renderer;
 }
 
+GdkVulkanContext *
+gsk_vulkan_render_get_context (GskVulkanRender *self)
+{
+  return self->vulkan;
+}
+
 gpointer
 gsk_vulkan_render_alloc_op (GskVulkanRender *self,
                             gsize            size)

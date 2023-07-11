@@ -27,6 +27,7 @@ void                    gsk_vulkan_render_reset                         (GskVulk
                                                                          GskRenderNode          *node);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
+GdkVulkanContext *      gsk_vulkan_render_get_context                   (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 

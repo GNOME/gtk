@@ -79,7 +79,12 @@ void                    gsk_vulkan_image_unmap_memory                   (GskVulk
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);
-VkImage                 gsk_vulkan_image_get_image                      (GskVulkanImage         *self);
+VkImageLayout           gsk_vulkan_image_get_vk_image_layout            (GskVulkanImage         *self);
+VkAccessFlags           gsk_vulkan_image_get_vk_access                  (GskVulkanImage         *self);
+void                    gsk_vulkan_image_set_vk_image_layout            (GskVulkanImage         *self,
+                                                                         VkImageLayout           image_layout,
+                                                                         VkAccessFlags           access);
+VkImage                 gsk_vulkan_image_get_vk_image                   (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
 GdkMemoryFormat         gsk_vulkan_image_get_format                     (GskVulkanImage         *self);
