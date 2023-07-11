@@ -152,6 +152,7 @@ gtk_private_sources = files([
 
 # List of files that contain public API, and should be introspected
 gtk_public_sources = files([
+  'gtkcontour.c',
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
   'gtkaccessible.c',
