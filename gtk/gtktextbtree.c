@@ -3769,8 +3769,7 @@ _gtk_text_line_char_index (GtkTextLine *target_line)
   tos--;
 
   /* Check that we have the root node on top of the stack. */
-  g_assert (node_stack != NULL &&
-            node_stack[tos] != NULL &&
+  g_assert (node_stack[tos] != NULL &&
             node_stack[tos]->parent == NULL);
 
   /* Add up chars in all nodes before the nodes in our stack.

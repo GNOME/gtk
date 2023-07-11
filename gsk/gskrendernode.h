@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_RENDER_NODE (gsk_render_node_get_type ())
 
-#define GSK_IS_RENDER_NODE(obj) ((obj) != NULL)
+#define GSK_IS_RENDER_NODE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSK_TYPE_RENDER_NODE))
 
 #define GSK_SERIALIZATION_ERROR       (gsk_serialization_error_quark ())
 
