@@ -38,11 +38,10 @@ gsk_vulkan_upload_cairo_op_print (GskVulkanOp *op,
 }
 
 static void
-gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
-                                   GskVulkanUploader *uploader)
+gsk_vulkan_upload_cairo_op_draw (GskVulkanUploadCairoOp *self,
+                                 guchar                 *data,
+                                 gsize                   stride)
 {
-  GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
-  GskVulkanImageMap map;
   cairo_surface_t *surface;
   cairo_t *cr;
   int width, height;
@@ -50,11 +49,10 @@ gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
   width = gsk_vulkan_image_get_width (self->image);
   height = gsk_vulkan_image_get_height (self->image);
 
-  gsk_vulkan_image_map_memory (self->image, uploader, GSK_VULKAN_WRITE, &map);
-  surface = cairo_image_surface_create_for_data (map.data,
+  surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width, height,
-                                                 map.stride);
+                                                 stride);
   cairo_surface_set_device_scale (surface,
                                   width / self->viewport.size.width,
                                   height / self->viewport.size.height);
@@ -67,6 +65,18 @@ gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
 
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
+}
+
+static void
+gsk_vulkan_upload_cairo_op_upload (GskVulkanOp       *op,
+                                   GskVulkanUploader *uploader)
+{
+  GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
+  GskVulkanImageMap map;
+
+  gsk_vulkan_image_map_memory (self->image, uploader, GSK_VULKAN_WRITE, &map);
+
+  gsk_vulkan_upload_cairo_op_draw (self, map.data, map.stride);
 
   gsk_vulkan_image_unmap_memory (self->image, uploader, &map);
 }
