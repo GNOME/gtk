@@ -822,13 +822,22 @@ gsk_vulkan_image_unmap_memory_indirect (GskVulkanImage    *self,
                                          VK_ACCESS_SHADER_READ_BIT);
 }
 
+static gboolean
+gsk_vulkan_image_can_map (GskVulkanImage *self)
+{
+  if (GSK_DEBUG_CHECK (STAGING))
+    return FALSE;
+
+  return gsk_vulkan_memory_can_map (self->memory, TRUE);
+}
+
 void
 gsk_vulkan_image_map_memory (GskVulkanImage    *self,
                              GskVulkanUploader *uploader,
                              GskVulkanMapMode   mode,
                              GskVulkanImageMap *map)
 {
-  if (!GSK_DEBUG_CHECK (STAGING) && gsk_vulkan_memory_can_map (self->memory, TRUE))
+  if (gsk_vulkan_image_can_map (self))
     gsk_vulkan_image_map_memory_direct (self, uploader, mode, map);
   else
     gsk_vulkan_image_map_memory_indirect (self, uploader, mode, map);
@@ -843,6 +852,39 @@ gsk_vulkan_image_unmap_memory (GskVulkanImage    *self,
     gsk_vulkan_image_unmap_memory_indirect (self, uploader, map);
   else
     gsk_vulkan_image_unmap_memory_direct (self, uploader, map);
+}
+
+guchar *
+gsk_vulkan_image_try_map (GskVulkanImage *self,
+                          gsize          *out_stride)
+{
+  VkImageSubresource image_res;
+  VkSubresourceLayout image_layout;
+  guchar *result;
+
+  if (!gsk_vulkan_image_can_map (self))
+    return NULL;
+
+  result = gsk_vulkan_memory_map (self->memory);
+  if (result == NULL)
+    return NULL;
+
+  image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  image_res.mipLevel = 0;
+  image_res.arrayLayer = 0;
+
+  vkGetImageSubresourceLayout (gdk_vulkan_context_get_device (self->vulkan),
+                               self->vk_image, &image_res, &image_layout);
+
+  *out_stride = image_layout.rowPitch;
+
+  return result + image_layout.offset;
+}
+
+void
+gsk_vulkan_image_unmap (GskVulkanImage *self)
+{
+  gsk_vulkan_memory_unmap (self->memory);
 }
 
 GskVulkanImage *

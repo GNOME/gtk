@@ -76,6 +76,9 @@ void                    gsk_vulkan_image_map_memory                     (GskVulk
 void                    gsk_vulkan_image_unmap_memory                   (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader,
                                                                          GskVulkanImageMap      *map);
+guchar *                gsk_vulkan_image_try_map                        (GskVulkanImage         *self,
+                                                                         gsize                  *out_stride);
+void                    gsk_vulkan_image_unmap                          (GskVulkanImage         *self);
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);
