@@ -157,6 +157,44 @@ gsk_vulkan_render_pass_append_push_constants (GskVulkanRender           *render,
   return FALSE; \
 }G_STMT_END
 
+static gboolean
+gsk_vulkan_parse_rect_is_integer (const GskVulkanParseState *state,
+                                  const graphene_rect_t     *rect,
+                                  cairo_rectangle_int_t     *int_rect)
+{
+  graphene_rect_t transformed_rect;
+  float scale_x = graphene_vec2_get_x (&state->scale);
+  float scale_y = graphene_vec2_get_y (&state->scale);
+
+  switch (gsk_transform_get_category (state->modelview))
+    {
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+      return FALSE;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      gsk_transform_transform_bounds (state->modelview, rect, &transformed_rect);
+      rect = &transformed_rect;
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    default:
+      break;
+    } 
+  int_rect->x = rect->origin.x * scale_x;
+  int_rect->y = rect->origin.y * scale_y;
+  int_rect->width = rect->size.width * scale_x;
+  int_rect->height = rect->size.height * scale_y;
+
+  return int_rect->x == rect->origin.x * scale_x
+      && int_rect->y == rect->origin.y * scale_y
+      && int_rect->width == rect->size.width * scale_x
+      && int_rect->height == rect->size.height * scale_y;
+}
+
 static GskVulkanImage *
 gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
                                           GskVulkanRender           *render,
@@ -681,45 +719,6 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
   return TRUE;
 }
 
-static gboolean
-clip_can_be_scissored (const graphene_rect_t *rect,
-                       const graphene_vec2_t *scale,
-                       GskTransform          *modelview,
-                       cairo_rectangle_int_t *int_rect)
-{
-  graphene_rect_t transformed_rect;
-  float scale_x = graphene_vec2_get_x (scale);
-  float scale_y = graphene_vec2_get_y (scale);
-
-  switch (gsk_transform_get_category (modelview))
-    {
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
-      return FALSE;
-
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      gsk_transform_transform_bounds (modelview, rect, &transformed_rect);
-      rect = &transformed_rect;
-      break;
-
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
-    default:
-      break;
-    } 
-  int_rect->x = rect->origin.x * scale_x;
-  int_rect->y = rect->origin.y * scale_y;
-  int_rect->width = rect->size.width * scale_x;
-  int_rect->height = rect->size.height * scale_y;
-
-  return int_rect->x == rect->origin.x * scale_x
-      && int_rect->y == rect->origin.y * scale_y
-      && int_rect->width == rect->size.width * scale_x
-      && int_rect->height == rect->size.height * scale_y;
-}
-
 static inline gboolean
 gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
                                       GskVulkanRender           *render,
@@ -735,7 +734,7 @@ gsk_vulkan_render_pass_add_clip_node (GskVulkanRenderPass       *self,
                           &clip);
 
   /* Check if we can use scissoring for the clip */
-  if (clip_can_be_scissored (&clip, &state->scale, state->modelview, &new_state.scissor))
+  if (gsk_vulkan_parse_rect_is_integer (state, &clip, &new_state.scissor))
     {
       if (!gdk_rectangle_intersect (&new_state.scissor, &state->scissor, &new_state.scissor))
         return TRUE;
