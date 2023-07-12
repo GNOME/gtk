@@ -368,21 +368,70 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
         return TRUE;
 
       /* we have handled the bounds, now do the corners */
-      if (state->clip.type != GSK_VULKAN_CLIP_ROUNDED ||
-          gsk_vulkan_clip_contains_rect (&state->clip, 
-                                         graphene_point_zero (),
-                                         &GRAPHENE_RECT_INIT (
-                                           int_clipped.x / graphene_vec2_get_x (&state->scale),
-                                           int_clipped.y / graphene_vec2_get_y (&state->scale),
-                                           int_clipped.width / graphene_vec2_get_x (&state->scale),
-                                           int_clipped.height / graphene_vec2_get_y (&state->scale)
-                                         )))
+      if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED)
         {
-          gsk_vulkan_clear_op (render,
-                               &int_clipped,
-                               color);
-          return TRUE;
+          graphene_rect_t cover;
+          const char *clip_type;
+          float scale_x = graphene_vec2_get_x (&state->scale);
+          float scale_y = graphene_vec2_get_y (&state->scale);
+          clipped = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
+                                        int_clipped.width / scale_x, int_clipped.height / scale_y);
+          clip_type = gsk_vulkan_clip_get_clip_type (&state->clip, graphene_point_zero(), &clipped);
+          if (clip_type[0] != '\0')
+            {
+              gsk_rounded_rect_get_largest_cover (&state->clip.rect, &clipped, &cover);
+              int_clipped.x = ceil (cover.origin.x * scale_x);
+              int_clipped.y = ceil (cover.origin.y * scale_y);
+              int_clipped.width = floor ((cover.origin.x + cover.size.width) * scale_x) - int_clipped.x;
+              int_clipped.height = floor ((cover.origin.y + cover.size.height) * scale_y) - int_clipped.y;
+              if (int_clipped.width == 0 || int_clipped.height == 0)
+                {
+                  gsk_vulkan_color_op (render,
+                                       clip_type,
+                                       &clipped,
+                                       graphene_point_zero (),
+                                       color);
+                  return TRUE;
+                }
+              cover = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
+                                          int_clipped.width / scale_x, int_clipped.height / scale_y);
+              if (clipped.origin.x != cover.origin.x)
+                gsk_vulkan_color_op (render,
+                                     clip_type,
+                                     &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
+                                     graphene_point_zero (),
+                                     color);
+              if (clipped.origin.y != cover.origin.y)
+                gsk_vulkan_color_op (render,
+                                     clip_type,
+                                     &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
+                                     graphene_point_zero (),
+                                     color);
+              if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
+                gsk_vulkan_color_op (render,
+                                     clip_type,
+                                     &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
+                                                          clipped.origin.y,
+                                                          clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
+                                                          clipped.size.height),
+                                     graphene_point_zero (),
+                                     color);
+              if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
+                gsk_vulkan_color_op (render,
+                                     clip_type,
+                                     &GRAPHENE_RECT_INIT (clipped.origin.x,
+                                                          cover.origin.y + cover.size.height,
+                                                          clipped.size.width,
+                                                          clipped.origin.y + clipped.size.height - cover.origin.y - cover.size.height),
+                                     graphene_point_zero (),
+                                     color);
+            }
         }
+
+      gsk_vulkan_clear_op (render,
+                           &int_clipped,
+                           color);
+      return TRUE;
     }
 
   gsk_vulkan_color_op (render,
