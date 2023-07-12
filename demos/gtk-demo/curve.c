@@ -43,6 +43,23 @@ make_circle_path (void)
   return gsk_path_builder_free_to_path (builder);
 }
 
+static GskPath *
+make_fancy_path (void)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (150, 150), 100);
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (100, 100, 100, 100));
+  gsk_path_builder_move_to (builder, 300, 150);
+  gsk_path_builder_cubic_to (builder, 300, 50, 400, 50, 400, 150);
+  gsk_path_builder_cubic_to (builder, 400, 250, 500, 250, 500, 150);
+  gsk_path_builder_line_to (builder, 600, 150);
+  gsk_path_builder_line_to (builder, 530, 190);
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
 static void
 edit_changed (GtkToggleButton *button,
               GParamSpec      *pspec,
@@ -57,7 +74,7 @@ reset (GtkButton   *button,
 {
   GskPath *path;
 
-  path = make_circle_path ();
+  path = make_fancy_path ();
   curve_editor_set_path (editor, path);
   gsk_path_unref (path);
 }
@@ -257,7 +274,7 @@ do_curve (GtkWidget *do_widget)
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (line_width_spin), 6);
       gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (color_button), &(GdkRGBA) { 1, 0, 0, 1 });
       gtk_drop_down_set_selected (GTK_DROP_DOWN (cap_combo), GSK_LINE_CAP_ROUND);
-      gtk_editable_set_text (GTK_EDITABLE (dash_entry), "0 8");
+      //gtk_editable_set_text (GTK_EDITABLE (dash_entry), "0 8");
 
       gtk_window_set_child (GTK_WINDOW (window), demo);
     }
