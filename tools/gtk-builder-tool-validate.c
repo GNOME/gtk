@@ -263,6 +263,12 @@ do_validate (int *argc, const char ***argv)
   };
   int i;
 
+  if (gdk_display_get_default () == NULL)
+    {
+      g_printerr (_("Could not initialize windowing system\n"));
+      exit (1);
+    }
+
   g_set_prgname ("gtk4-builder-tool validate");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
