@@ -12,6 +12,7 @@
 #include "gskvulkanblendmodeopprivate.h"
 #include "gskvulkanbluropprivate.h"
 #include "gskvulkanborderopprivate.h"
+#include "gskvulkanclearopprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
@@ -349,11 +350,46 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
                                        const GskVulkanParseState *state,
                                        GskRenderNode             *node)
 {
+  cairo_rectangle_int_t int_clipped;
+  graphene_rect_t rect, clipped;
+  const GdkRGBA *color;
+
+  color = gsk_color_node_get_color (node);
+  graphene_rect_offset_r (&node->bounds,
+                          state->offset.x, state->offset.y,
+                          &rect);
+  graphene_rect_intersection (&state->clip.rect.bounds, &rect, &clipped);
+
+  if (gdk_rgba_is_opaque (color) &&
+      gsk_vulkan_parse_rect_is_integer (state, &clipped, &int_clipped))
+    {
+      /* now handle all the clip */
+      if (!gdk_rectangle_intersect (&int_clipped, &state->scissor, &int_clipped))
+        return TRUE;
+
+      /* we have handled the bounds, now do the corners */
+      if (state->clip.type != GSK_VULKAN_CLIP_ROUNDED ||
+          gsk_vulkan_clip_contains_rect (&state->clip, 
+                                         graphene_point_zero (),
+                                         &GRAPHENE_RECT_INIT (
+                                           int_clipped.x / graphene_vec2_get_x (&state->scale),
+                                           int_clipped.y / graphene_vec2_get_y (&state->scale),
+                                           int_clipped.width / graphene_vec2_get_x (&state->scale),
+                                           int_clipped.height / graphene_vec2_get_y (&state->scale)
+                                         )))
+        {
+          gsk_vulkan_clear_op (render,
+                               &int_clipped,
+                               color);
+          return TRUE;
+        }
+    }
+
   gsk_vulkan_color_op (render,
                        gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
-                       &node->bounds,
-                       &state->offset,
-                       gsk_color_node_get_color (node));
+                       &rect,
+                       graphene_point_zero (),
+                       color);
 
   return TRUE;
 }

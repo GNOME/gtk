@@ -111,6 +111,7 @@ if have_vulkan
     'vulkan/gskvulkanblurop.c',
     'vulkan/gskvulkanborderop.c',
     'vulkan/gskvulkanbuffer.c',
+    'vulkan/gskvulkanclearop.c',
     'vulkan/gskvulkanclip.c',
     'vulkan/gskvulkancolormatrixop.c',
     'vulkan/gskvulkancolorop.c',
