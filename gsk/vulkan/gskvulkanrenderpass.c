@@ -361,6 +361,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
   graphene_rect_intersection (&state->clip.rect.bounds, &rect, &clipped);
 
   if (gdk_rgba_is_opaque (color) &&
+      node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
       gsk_vulkan_parse_rect_is_integer (state, &clipped, &int_clipped))
     {
       /* now handle all the clip */
