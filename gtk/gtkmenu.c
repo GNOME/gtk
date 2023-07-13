@@ -5263,6 +5263,24 @@ gtk_menu_position (GtkMenu  *menu,
         }
     }
 
+  if (rect_window != NULL &&
+      GDK_WINDOW_TYPE (rect_window) == GDK_WINDOW_OFFSCREEN)
+    {
+      GdkWindow *effective = gdk_offscreen_window_get_embedder (rect_window);
+
+      if (effective)
+        {
+          double x = rect.x, y = rect.y;
+
+          gdk_window_coords_to_parent (rect_window, x, y, &x, &y);
+
+          rect.x = x;
+          rect.y = y;
+        }
+
+      rect_window = effective;
+    }
+
   if (!rect_window)
     {
       gtk_window_set_unlimited_guessed_size (GTK_WINDOW (priv->toplevel),
