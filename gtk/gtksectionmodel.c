@@ -78,7 +78,7 @@ gtk_section_model_default_init (GtkSectionModelInterface *iface)
   iface->get_section = gtk_section_model_default_get_section;
 
   /**
-   * GtkSectionModel::sections-changed
+   * GtkSectionModel::sections-changed:
    * @model: a `GtkSectionModel`
    * @position: The first item that may have changed
    * @n_items: number of items with changes
