@@ -16,23 +16,13 @@ GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulk
                                                                          const graphene_vec2_t  *scale,
                                                                          const graphene_rect_t  *viewport,
                                                                          cairo_region_t         *clip,
-                                                                         GskRenderNode          *node,
-                                                                         gboolean                is_root);
+                                                                         GskRenderNode          *node);
 
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 
 void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          GskRenderNode          *node);
-
-VkRenderPass            gsk_vulkan_render_pass_begin_draw               (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
-                                                                         VkCommandBuffer         command_buffer);
-void                    gsk_vulkan_render_pass_end_draw                 (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
-                                                                         VkCommandBuffer         command_buffer);
 
 G_END_DECLS
 

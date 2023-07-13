@@ -15,6 +15,11 @@ struct _GskVulkanRenderPassOp
 
   GskVulkanImage *image;
   GskVulkanRenderPass *render_pass;
+  cairo_rectangle_int_t area;
+  graphene_size_t viewport_size;
+
+  VkImageLayout initial_layout;
+  VkImageLayout final_layout;
 };
 
 static void
@@ -77,7 +82,40 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
   const char *current_pipeline_clip_type = NULL;
   VkRenderPass vk_render_pass;
 
-  vk_render_pass = gsk_vulkan_render_pass_begin_draw (self->render_pass, render, pipeline_layout, command_buffer);
+  vk_render_pass = gsk_vulkan_render_get_render_pass (render,
+                                                      gsk_vulkan_image_get_vk_format (self->image),
+                                                      self->initial_layout,
+                                                      self->final_layout);
+
+
+  vkCmdSetViewport (command_buffer,
+                    0,
+                    1,
+                    &(VkViewport) {
+                        .x = 0,
+                        .y = 0,
+                        .width = self->viewport_size.width,
+                        .height = self->viewport_size.height,
+                        .minDepth = 0,
+                        .maxDepth = 1
+                    });
+
+  vkCmdBeginRenderPass (command_buffer,
+                        &(VkRenderPassBeginInfo) {
+                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                            .renderPass = vk_render_pass,
+                            .framebuffer = gsk_vulkan_image_get_framebuffer (self->image,
+                                                                             vk_render_pass),
+                            .renderArea = { 
+                                { self->area.x, self->area.y },
+                                { self->area.width, self->area.height }
+                            },
+                            .clearValueCount = 1,
+                            .pClearValues = (VkClearValue [1]) {
+                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
+                            }
+                        },
+                        VK_SUBPASS_CONTENTS_INLINE);
 
   op = op->next;
   while (op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
@@ -216,6 +254,11 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   self = (GskVulkanRenderPassOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_OP_CLASS);
 
   self->image = image;
+  self->initial_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->final_layout = is_root ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
+                               :VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+  cairo_region_get_extents (clip, &self->area);
+  self->viewport_size = viewport->size;
 
   self->render_pass = gsk_vulkan_render_pass_new (context,
                                                   render,
@@ -223,8 +266,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
                                                   scale,
                                                   viewport,
                                                   clip,
-                                                  node,
-                                                  is_root);
+                                                  node);
 
   /* This invalidates the self pointer */
   gsk_vulkan_render_pass_add (self->render_pass, render, node);

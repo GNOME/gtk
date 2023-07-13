@@ -50,8 +50,6 @@ struct _GskVulkanRenderPass
   cairo_region_t *clip;
 
   graphene_vec2_t scale;
-
-  VkRenderPass render_pass;
 };
 
 struct _GskVulkanParseState
@@ -76,8 +74,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
                             const graphene_vec2_t *scale,
                             const graphene_rect_t *viewport,
                             cairo_region_t        *clip,
-                            GskRenderNode         *node,
-                            gboolean               is_root)
+                            GskRenderNode         *node)
 {
   GskVulkanRenderPass *self;
 
@@ -88,23 +85,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
   self->clip = cairo_region_copy (clip);
   self->viewport = *viewport;
   graphene_vec2_init_from_vec2 (&self->scale, scale);
-
-  if (is_root)
-    {
-      /* this is a swapchain target */
-      self->render_pass = gsk_vulkan_render_get_render_pass (render,
-                                                             gsk_vulkan_image_get_vk_format (target),
-                                                             VK_IMAGE_LAYOUT_UNDEFINED,
-                                                             VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-    }
-  else
-    {
-      /* this is an offscreen */
-      self->render_pass = gsk_vulkan_render_get_render_pass (render,
-                                                             gsk_vulkan_image_get_vk_format (target),
-                                                             VK_IMAGE_LAYOUT_UNDEFINED,
-                                                             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    }
 
 #ifdef G_ENABLE_DEBUG
   if (fallback_pixels_quark == 0)
@@ -1344,55 +1324,3 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
 
   gsk_vulkan_render_pass_add_node (self, render, &state, node);
 }
-
-VkRenderPass
-gsk_vulkan_render_pass_begin_draw (GskVulkanRenderPass *self,
-                                   GskVulkanRender     *render,
-                                   VkPipelineLayout     pipeline_layout,
-                                   VkCommandBuffer      command_buffer)
-{
-  cairo_rectangle_int_t rect;
-
-  vkCmdSetViewport (command_buffer,
-                    0,
-                    1,
-                    &(VkViewport) {
-                        .x = 0,
-                        .y = 0,
-                        .width = self->viewport.size.width,
-                        .height = self->viewport.size.height,
-                        .minDepth = 0,
-                        .maxDepth = 1
-                    });
-
-  cairo_region_get_extents (self->clip, &rect);
-
-  vkCmdBeginRenderPass (command_buffer,
-                        &(VkRenderPassBeginInfo) {
-                            .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = self->render_pass,
-                            .framebuffer = gsk_vulkan_image_get_framebuffer (self->target,
-                                                                             self->render_pass),
-                            .renderArea = { 
-                                { rect.x, rect.y },
-                                { rect.width, rect.height }
-                            },
-                            .clearValueCount = 1,
-                            .pClearValues = (VkClearValue [1]) {
-                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
-                            }
-                        },
-                        VK_SUBPASS_CONTENTS_INLINE);
-
-  return self->render_pass;
-}
-
-void
-gsk_vulkan_render_pass_end_draw (GskVulkanRenderPass *self,
-                                 GskVulkanRender     *render,
-                                 VkPipelineLayout     pipeline_layout,
-                                 VkCommandBuffer      command_buffer)
-{
-  vkCmdEndRenderPass (command_buffer);
-}
-
