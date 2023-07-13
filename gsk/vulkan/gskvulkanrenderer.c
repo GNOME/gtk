@@ -457,24 +457,6 @@ gsk_vulkan_renderer_add_texture_image (GskVulkanRenderer *self,
     }
 }
 
-GskVulkanImage *
-gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
-                                       GdkTexture        *texture,
-                                       GskVulkanUploader *uploader)
-{
-  GskVulkanImage *image;
-
-  image = gsk_vulkan_renderer_get_texture_image (self, texture);
-  if (image)
-    return g_object_ref (image);
-
-  image = gsk_vulkan_image_new_from_texture (uploader, texture);
-
-  gsk_vulkan_renderer_add_texture_image (self, texture, image);
-                                         
-  return image;
-}
-
 GskVulkanGlyphCache *
 gsk_vulkan_renderer_get_glyph_cache (GskVulkanRenderer  *self)
 {

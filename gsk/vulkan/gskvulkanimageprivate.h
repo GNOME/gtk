@@ -26,8 +26,6 @@ GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulk
                                                                          VkFormat                format,
                                                                          gsize                   width,
                                                                          gsize                   height);
-GskVulkanImage *        gsk_vulkan_image_new_from_texture               (GskVulkanUploader      *uploader,
-                                                                         GdkTexture             *texture);
 
 typedef struct {
   guchar *data;
