@@ -102,7 +102,7 @@ gsk_vulkan_op_draw_command_n (GskVulkanOp      *op,
   gsize i;
 
   i = 1;
-  for (next = op->next; next; next = next->next)
+  for (next = op->next; next && i < 10 * 1000; next = next->next)
     {
       if (next->op_class != op->op_class ||
           next->vertex_offset != op->vertex_offset + i * stride)
