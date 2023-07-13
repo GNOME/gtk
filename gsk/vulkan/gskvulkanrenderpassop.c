@@ -80,7 +80,7 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
   vk_render_pass = gsk_vulkan_render_pass_begin_draw (self->render_pass, render, pipeline_layout, command_buffer);
 
   op = op->next;
-  while (op && op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
+  while (op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
     {
       if (op->op_class->shader_name &&
           (op->op_class != current_pipeline_class ||
@@ -101,10 +101,7 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
       op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
     }
 
-  if (op && op->op_class->stage == GSK_VULKAN_STAGE_END_PASS)
-    op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
-  else
-    gsk_vulkan_render_pass_end_draw (self->render_pass, render, pipeline_layout, command_buffer);
+  op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
 
   return op;
 }
