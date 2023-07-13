@@ -133,7 +133,6 @@ if have_vulkan
     'vulkan/gskvulkanrenderpassop.c',
     'vulkan/gskvulkanscissorop.c',
     'vulkan/gskvulkantextureop.c',
-    'vulkan/gskvulkanuploadcairoop.c',
     'vulkan/gskvulkanuploadop.c',
   ])
 

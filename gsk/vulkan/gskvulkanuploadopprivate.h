@@ -8,6 +8,12 @@ GskVulkanImage *        gsk_vulkan_upload_op                            (GskVulk
                                                                          GdkVulkanContext               *context,
                                                                          GdkTexture                     *texture);
 
+GskVulkanImage *        gsk_vulkan_upload_cairo_op                      (GskVulkanRender                *render,
+                                                                         GdkVulkanContext               *context,
+                                                                         GskRenderNode                  *node,
+                                                                         const graphene_vec2_t          *scale,
+                                                                         const graphene_rect_t          *viewport);
+
 
 G_END_DECLS
 

@@ -30,7 +30,6 @@
 #include "gskvulkanpushconstantsopprivate.h"
 #include "gskvulkanscissoropprivate.h"
 #include "gskvulkantextureopprivate.h"
-#include "gskvulkanuploadcairoopprivate.h"
 #include "gskvulkanuploadopprivate.h"
 #include "gskprivate.h"
 
