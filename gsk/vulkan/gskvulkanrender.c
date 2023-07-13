@@ -892,48 +892,6 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
   gsk_vulkan_buffer_unmap (self->vertex_buffer);
 }
 
-GskVulkanOp *
-gsk_vulkan_render_draw_pass (GskVulkanRender     *self,
-                             GskVulkanRenderPass *render_pass,
-                             GskVulkanOp         *op,
-                             VkCommandBuffer      command_buffer)
-{
-  VkPipeline current_pipeline = VK_NULL_HANDLE;
-  const GskVulkanOpClass *current_pipeline_class = NULL;
-  const char *current_pipeline_clip_type = NULL;
-  VkRenderPass vk_render_pass;
-
-  vk_render_pass = gsk_vulkan_render_pass_begin_draw (render_pass, self, self->pipeline_layout, command_buffer);
-
-  while (op && op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
-    {
-      if (op->op_class->shader_name &&
-          (op->op_class != current_pipeline_class ||
-           current_pipeline_clip_type != op->clip_type))
-        {
-          current_pipeline = gsk_vulkan_render_get_pipeline (self,
-                                                             op->op_class,
-                                                             op->clip_type,
-                                                             gsk_vulkan_image_get_vk_format (self->target),
-                                                             vk_render_pass);
-          vkCmdBindPipeline (command_buffer,
-                             VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             current_pipeline);
-          current_pipeline_class = op->op_class;
-          current_pipeline_clip_type = op->clip_type;
-        }
-
-      op = gsk_vulkan_op_command (op, self, self->pipeline_layout, command_buffer);
-    }
-
-  if (op && op->op_class->stage == GSK_VULKAN_STAGE_END_PASS)
-    op = gsk_vulkan_op_command (op, self, self->pipeline_layout, command_buffer);
-  else
-    gsk_vulkan_render_pass_end_draw (render_pass, self, self->pipeline_layout, command_buffer);
-
-  return op;
-}
-
 void
 gsk_vulkan_render_draw (GskVulkanRender *self)
 {

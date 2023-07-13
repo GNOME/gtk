@@ -72,8 +72,41 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
                                    VkCommandBuffer   command_buffer)
 {
   GskVulkanRenderPassOp *self = (GskVulkanRenderPassOp *) op;
+  VkPipeline current_pipeline = VK_NULL_HANDLE;
+  const GskVulkanOpClass *current_pipeline_class = NULL;
+  const char *current_pipeline_clip_type = NULL;
+  VkRenderPass vk_render_pass;
 
-  return gsk_vulkan_render_draw_pass (render, self->render_pass, op->next, command_buffer);
+  vk_render_pass = gsk_vulkan_render_pass_begin_draw (self->render_pass, render, pipeline_layout, command_buffer);
+
+  op = op->next;
+  while (op && op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
+    {
+      if (op->op_class->shader_name &&
+          (op->op_class != current_pipeline_class ||
+           current_pipeline_clip_type != op->clip_type))
+        {
+          current_pipeline = gsk_vulkan_render_get_pipeline (render,
+                                                             op->op_class,
+                                                             op->clip_type,
+                                                             gsk_vulkan_image_get_vk_format (self->image),
+                                                             vk_render_pass);
+          vkCmdBindPipeline (command_buffer,
+                             VK_PIPELINE_BIND_POINT_GRAPHICS,
+                             current_pipeline);
+          current_pipeline_class = op->op_class;
+          current_pipeline_clip_type = op->clip_type;
+        }
+
+      op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
+    }
+
+  if (op && op->op_class->stage == GSK_VULKAN_STAGE_END_PASS)
+    op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
+  else
+    gsk_vulkan_render_pass_end_draw (self->render_pass, render, pipeline_layout, command_buffer);
+
+  return op;
 }
 
 static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_OP_CLASS = {
