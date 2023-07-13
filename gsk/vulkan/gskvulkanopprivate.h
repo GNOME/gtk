@@ -38,8 +38,6 @@ struct _GskVulkanOpClass
                                                                          GString                *string,
                                                                          guint                   indent);
 
-  void                  (* upload)                                      (GskVulkanOp            *op,
-                                                                         GskVulkanUploader      *uploader);
   gsize                 (* count_vertex_data)                           (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
   void                  (* collect_vertex_data)                         (GskVulkanOp            *op,
@@ -63,8 +61,6 @@ void                    gsk_vulkan_op_print                             (GskVulk
                                                                          GString                *string,
                                                                          guint                   indent);
 
-void                    gsk_vulkan_op_upload                            (GskVulkanOp            *op,
-                                                                         GskVulkanUploader      *uploader);
 gsize                   gsk_vulkan_op_count_vertex_data                 (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
 void                    gsk_vulkan_op_collect_vertex_data               (GskVulkanOp            *op,
@@ -76,8 +72,6 @@ GskVulkanOp *           gsk_vulkan_op_command                           (GskVulk
                                                                          VkPipelineLayout        pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 
-void                    gsk_vulkan_op_draw_upload                       (GskVulkanOp            *op,
-                                                                         GskVulkanUploader      *uploader);
 gsize                   gsk_vulkan_op_draw_count_vertex_data            (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
 GskVulkanOp *           gsk_vulkan_op_draw_command_n                    (GskVulkanOp            *op,

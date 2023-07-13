@@ -506,19 +506,6 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   gsk_vulkan_render_verbose_print (self, "after sort");
 }
 
-void
-gsk_vulkan_render_upload (GskVulkanRender *self)
-{
-  GskVulkanOp *op;
-
-  for (op = self->first_op; op; op = op->next)
-    {
-      gsk_vulkan_op_upload (op, self->uploader);
-    }
-
-  gsk_vulkan_uploader_upload (self->uploader);
-}
-
 VkPipeline
 gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
                                 const GskVulkanOpClass *op_class,

@@ -80,7 +80,6 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   &gsk_vulkan_color_matrix_info,
   gsk_vulkan_color_matrix_op_finish,
   gsk_vulkan_color_matrix_op_print,
-  gsk_vulkan_op_draw_upload,
   gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_color_matrix_op_collect_vertex_data,
   gsk_vulkan_color_matrix_op_reserve_descriptor_sets,

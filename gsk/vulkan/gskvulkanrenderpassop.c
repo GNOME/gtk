@@ -45,12 +45,6 @@ gsk_vulkan_render_pass_op_print (GskVulkanOp *op,
   print_newline (string);
 }
 
-static void
-gsk_vulkan_render_pass_op_upload (GskVulkanOp       *op,
-                                  GskVulkanUploader *uploader)
-{
-}
-
 static gsize
 gsk_vulkan_render_pass_op_count_vertex_data (GskVulkanOp *op,
                                              gsize        n_bytes)
@@ -151,7 +145,6 @@ static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_OP_CLASS = {
   NULL,
   gsk_vulkan_render_pass_op_finish,
   gsk_vulkan_render_pass_op_print,
-  gsk_vulkan_render_pass_op_upload,
   gsk_vulkan_render_pass_op_count_vertex_data,
   gsk_vulkan_render_pass_op_collect_vertex_data,
   gsk_vulkan_render_pass_op_reserve_descriptor_sets,
@@ -186,12 +179,6 @@ gsk_vulkan_render_pass_end_op_print (GskVulkanOp *op,
   g_string_append_printf (string, "end-render-pass ");
   print_image (string, self->image);
   print_newline (string);
-}
-
-static void
-gsk_vulkan_render_pass_end_op_upload (GskVulkanOp       *op,
-                                      GskVulkanUploader *uploader)
-{
 }
 
 static gsize
@@ -231,7 +218,6 @@ static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_END_OP_CLASS = {
   NULL,
   gsk_vulkan_render_pass_end_op_finish,
   gsk_vulkan_render_pass_end_op_print,
-  gsk_vulkan_render_pass_end_op_upload,
   gsk_vulkan_render_pass_end_op_count_vertex_data,
   gsk_vulkan_render_pass_end_op_collect_vertex_data,
   gsk_vulkan_render_pass_end_op_reserve_descriptor_sets,

@@ -28,13 +28,6 @@ gsk_vulkan_op_print (GskVulkanOp *op,
   op->op_class->print (op, string, indent);
 }
 
-void
-gsk_vulkan_op_upload (GskVulkanOp         *op,
-                      GskVulkanUploader   *uploader)
-{
-  op->op_class->upload (op, uploader);
-}
-
 gsize
 gsk_vulkan_op_count_vertex_data (GskVulkanOp *op,
                                  gsize        n_bytes)
@@ -63,12 +56,6 @@ gsk_vulkan_op_command (GskVulkanOp      *op,
                        VkCommandBuffer   command_buffer)
 {
   return op->op_class->command (op, render, pipeline_layout, command_buffer);
-}
-
-void
-gsk_vulkan_op_draw_upload (GskVulkanOp       *op,
-                           GskVulkanUploader *uploader)
-{
 }
 
 static inline gsize

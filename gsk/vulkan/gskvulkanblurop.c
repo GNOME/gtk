@@ -73,7 +73,6 @@ static const GskVulkanOpClass GSK_VULKAN_BLUR_OP_CLASS = {
   &gsk_vulkan_blur_info,
   gsk_vulkan_blur_op_finish,
   gsk_vulkan_blur_op_print,
-  gsk_vulkan_op_draw_upload,
   gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_blur_op_collect_vertex_data,
   gsk_vulkan_blur_op_reserve_descriptor_sets,

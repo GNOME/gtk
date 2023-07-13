@@ -84,7 +84,6 @@ static const GskVulkanOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
   &gsk_vulkan_cross_fade_info,
   gsk_vulkan_cross_fade_op_finish,
   gsk_vulkan_cross_fade_op_print,
-  gsk_vulkan_op_draw_upload,
   gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_cross_fade_op_collect_vertex_data,
   gsk_vulkan_cross_fade_op_reserve_descriptor_sets,

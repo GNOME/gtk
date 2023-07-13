@@ -22,12 +22,6 @@ gsk_vulkan_color_op_finish (GskVulkanOp *op)
 }
 
 static void
-gsk_vulkan_color_op_upload (GskVulkanOp       *op,
-                            GskVulkanUploader *uploader)
-{
-}
-
-static void
 gsk_vulkan_color_op_print (GskVulkanOp *op,
                            GString     *string,
                            guint        indent)
@@ -71,7 +65,6 @@ static const GskVulkanOpClass GSK_VULKAN_COLOR_OP_CLASS = {
   &gsk_vulkan_color_info,
   gsk_vulkan_color_op_finish,
   gsk_vulkan_color_op_print,
-  gsk_vulkan_color_op_upload,
   gsk_vulkan_op_draw_count_vertex_data,
   gsk_vulkan_color_op_collect_vertex_data,
   gsk_vulkan_color_op_reserve_descriptor_sets,

@@ -293,7 +293,6 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                               rounded_viewport.size.height);
 
   gsk_vulkan_render_reset (render, image, &rounded_viewport, NULL, root);
-  gsk_vulkan_render_upload (render);
   gsk_vulkan_render_draw (render);
 
   texture = gsk_vulkan_render_download_target (render);
@@ -352,7 +351,6 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);
 
   gsk_vulkan_render_reset (render, self->targets[draw_index], NULL, render_region, root);
-  gsk_vulkan_render_upload (render);
   gsk_vulkan_render_draw (render);
 
 #ifdef G_ENABLE_DEBUG
