@@ -193,7 +193,7 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
         if (result == NULL)
           {
-            result = gsk_vulkan_upload_op (render, self->vulkan, texture);
+            result = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
             gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
           }
 
@@ -471,7 +471,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_op (render, self->vulkan, texture);
+      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -514,7 +514,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_op (render, self->vulkan, texture);
+      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
