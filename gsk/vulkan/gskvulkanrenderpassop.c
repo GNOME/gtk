@@ -158,6 +158,7 @@ struct _GskVulkanRenderPassEndOp
   GskVulkanOp op;
 
   GskVulkanImage *image;
+  VkImageLayout final_layout;
 };
 
 static void
@@ -206,8 +207,13 @@ gsk_vulkan_render_pass_end_op_command (GskVulkanOp      *op,
                                        VkPipelineLayout  pipeline_layout,
                                        VkCommandBuffer   command_buffer)
 {
+  GskVulkanRenderPassEndOp *self = (GskVulkanRenderPassEndOp *) op;
+
   vkCmdEndRenderPass (command_buffer);
 
+  gsk_vulkan_image_set_vk_image_layout (self->image,
+                                        self->final_layout,
+                                        gsk_vulkan_image_get_vk_access (self->image));
   return op->next;
 }
 
@@ -232,7 +238,8 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
                            const graphene_vec2_t *scale,
                            const graphene_rect_t *viewport,
                            GskRenderNode         *node,
-                           gboolean               is_root)
+                           VkImageLayout          initial_layout,
+                           VkImageLayout          final_layout)
 {
   GskVulkanRenderPassOp *self;
   GskVulkanRenderPassEndOp *end;
@@ -240,9 +247,8 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   self = (GskVulkanRenderPassOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_OP_CLASS);
 
   self->image = image;
-  self->initial_layout = VK_IMAGE_LAYOUT_UNDEFINED;
-  self->final_layout = is_root ? VK_IMAGE_LAYOUT_PRESENT_SRC_KHR
-                               :VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+  self->initial_layout = initial_layout;
+  self->final_layout = final_layout;
   cairo_region_get_extents (clip, &self->area);
   self->viewport_size = viewport->size;
 
@@ -260,6 +266,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
 
   end->image = g_object_ref (image);
+  end->final_layout = final_layout;
 }
 
 GskVulkanImage *
@@ -299,7 +306,8 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                              scale,
                              &view,
                              node,
-                             FALSE);
+                             VK_IMAGE_LAYOUT_UNDEFINED,
+                             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
   cairo_region_destroy (clip);
 

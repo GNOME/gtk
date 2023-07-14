@@ -11,7 +11,8 @@ void                    gsk_vulkan_render_pass_op                       (GskVulk
                                                                          const graphene_vec2_t          *scale,
                                                                          const graphene_rect_t          *viewport,
                                                                          GskRenderNode                  *node,
-                                                                         gboolean                        is_root);
+                                                                         VkImageLayout                   initial_layout,
+                                                                         VkImageLayout                   final_layout);
 GskVulkanImage *        gsk_vulkan_render_pass_op_offscreen             (GskVulkanRender                *render,
                                                                          GdkVulkanContext               *context,
                                                                          const graphene_vec2_t          *scale,

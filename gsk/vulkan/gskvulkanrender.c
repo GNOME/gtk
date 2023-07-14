@@ -498,7 +498,9 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                              self->clip,
                              &scale,
                              &self->viewport,
-                             node, TRUE);
+                             node,
+                             VK_IMAGE_LAYOUT_UNDEFINED,
+                             VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
   gsk_vulkan_render_seal_ops (self);
   gsk_vulkan_render_verbose_print (self, "start of frame");
