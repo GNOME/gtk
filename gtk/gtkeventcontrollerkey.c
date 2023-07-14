@@ -233,7 +233,6 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   /**
    * GtkEventControllerKey::modifiers:
    * @controller: the object which received the signal.
-   * @keyval: the released key.
    * @state: the bitmask, representing the new state of modifier keys and
    *   pointer buttons. See `GdkModifierType`.
    *
