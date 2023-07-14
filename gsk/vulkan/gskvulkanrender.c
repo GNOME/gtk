@@ -876,8 +876,8 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
   gsk_vulkan_buffer_unmap (self->vertex_buffer);
 }
 
-void
-gsk_vulkan_render_draw (GskVulkanRender *self)
+static void
+gsk_vulkan_render_submit (GskVulkanRender *self)
 {
   VkCommandBuffer command_buffer;
   GskVulkanOp *op;
@@ -1067,17 +1067,19 @@ gsk_vulkan_render_is_busy (GskVulkanRender *self)
 }
 
 void
-gsk_vulkan_render_reset (GskVulkanRender       *self,
-                         GskVulkanImage        *target,
-                         const graphene_rect_t *rect,
-                         const cairo_region_t  *clip,
-                         GskRenderNode         *node)
+gsk_vulkan_render_render (GskVulkanRender       *self,
+                          GskVulkanImage        *target,
+                          const graphene_rect_t *rect,
+                          const cairo_region_t  *clip,
+                          GskRenderNode         *node)
 {
   gsk_vulkan_render_cleanup (self);
 
   gsk_vulkan_render_setup (self, target, rect, clip);
 
   gsk_vulkan_render_add_node (self, node);
+
+  gsk_vulkan_render_submit (self);
 }
 
 GskRenderer *

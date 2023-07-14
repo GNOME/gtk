@@ -20,7 +20,7 @@ GskVulkanRender *       gsk_vulkan_render_new                           (GskRend
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
-void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
+void                    gsk_vulkan_render_render                        (GskVulkanRender        *self,
                                                                          GskVulkanImage         *target,
                                                                          const graphene_rect_t  *rect,
                                                                          const cairo_region_t   *clip,
@@ -50,8 +50,6 @@ guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulk
                                                                          gsize                   size,
                                                                          gsize                   alignment,
                                                                          gsize                  *out_offset);
-
-void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 
 GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);
