@@ -2,6 +2,7 @@
 
 #include <pango/pango.h>
 #include "gskvulkanimageprivate.h"
+#include "gskvulkanprivate.h"
 
 G_BEGIN_DECLS
 
@@ -32,11 +33,8 @@ typedef struct
 
 GskVulkanGlyphCache  *gsk_vulkan_glyph_cache_new            (GdkVulkanContext    *vulkan);
 
-void                  gsk_vulkan_glyph_cache_upload         (GskVulkanGlyphCache *cache,
-                                                             GskVulkanUploader   *uploader);
-
 GskVulkanCachedGlyph *gsk_vulkan_glyph_cache_lookup         (GskVulkanGlyphCache *cache,
-                                                             gboolean             create,
+                                                             GskVulkanRender     *render,
                                                              PangoFont           *font,
                                                              PangoGlyph           glyph,
                                                              int                  x,

@@ -408,3 +408,133 @@ gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
 
   return self->image;
 }
+
+typedef struct _GskVulkanUploadGlyphOp GskVulkanUploadGlyphOp;
+
+struct _GskVulkanUploadGlyphOp
+{
+  GskVulkanOp op;
+
+  GskVulkanImage *image;
+  cairo_rectangle_int_t area;
+  PangoFont *font;
+  PangoGlyphInfo glyph_info;
+  float scale;
+
+  GskVulkanBuffer *buffer;
+};
+
+static void
+gsk_vulkan_upload_glyph_op_finish (GskVulkanOp *op)
+{
+  GskVulkanUploadGlyphOp *self = (GskVulkanUploadGlyphOp *) op;
+
+  g_object_unref (self->image);
+  g_object_unref (self->font);
+
+  g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);
+}
+
+static void
+gsk_vulkan_upload_glyph_op_print (GskVulkanOp *op,
+                                  GString     *string,
+                                  guint        indent)
+{
+  GskVulkanUploadGlyphOp *self = (GskVulkanUploadGlyphOp *) op;
+
+  print_indent (string, indent);
+  g_string_append (string, "upload-glyph ");
+  print_int_rect (string, &self->area);
+  g_string_append_printf (string, "glyph %u @ %g ", self->glyph_info.glyph, self->scale);
+  print_newline (string);
+}
+
+static void
+gsk_vulkan_upload_glyph_op_draw (GskVulkanOp *op,
+                                 guchar      *data,
+                                 gsize        stride)
+{
+  GskVulkanUploadGlyphOp *self = (GskVulkanUploadGlyphOp *) op;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 self->area.width,
+                                                 self->area.height,
+                                                 stride);
+  cairo_surface_set_device_scale (surface, self->scale, self->scale);
+
+  cr = cairo_create (surface);
+
+  /* Make sure the entire surface is initialized to black */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_rectangle (cr, 0.0, 0.0, self->area.width, self->area.height);
+  cairo_fill (cr);
+
+  /* Draw glyph */
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+
+  pango_cairo_show_glyph_string (cr,
+                                 self->font,
+                                 &(PangoGlyphString) {
+                                   .num_glyphs = 1,
+                                   .glyphs = &self->glyph_info
+                                 });
+
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
+static GskVulkanOp *
+gsk_vulkan_upload_glyph_op_command (GskVulkanOp      *op,
+                                    GskVulkanRender  *render,
+                                    VkPipelineLayout  pipeline_layout,
+                                    VkCommandBuffer   command_buffer)
+{
+  GskVulkanUploadGlyphOp *self = (GskVulkanUploadGlyphOp *) op;
+
+  return gsk_vulkan_upload_op_command_with_area (op,
+                                                 render,
+                                                 pipeline_layout,
+                                                 command_buffer,
+                                                 self->image,
+                                                 &self->area,
+                                                 gsk_vulkan_upload_glyph_op_draw,
+                                                 &self->buffer);
+}
+
+static const GskVulkanOpClass GSK_VULKAN_UPLOAD_GLYPH_OP_CLASS = {
+  GSK_VULKAN_OP_SIZE (GskVulkanUploadGlyphOp),
+  GSK_VULKAN_STAGE_UPLOAD,
+  NULL,
+  NULL,
+  gsk_vulkan_upload_glyph_op_finish,
+  gsk_vulkan_upload_glyph_op_print,
+  gsk_vulkan_upload_op_upload,
+  gsk_vulkan_upload_op_count_vertex_data,
+  gsk_vulkan_upload_op_collect_vertex_data,
+  gsk_vulkan_upload_op_reserve_descriptor_sets,
+  gsk_vulkan_upload_glyph_op_command
+};
+
+void
+gsk_vulkan_upload_glyph_op (GskVulkanRender       *render,
+                            GskVulkanImage        *image,
+                            cairo_rectangle_int_t *area,
+                            PangoFont             *font,
+                            PangoGlyphInfo        *glyph_info,
+                            float                  scale)
+{
+  GskVulkanUploadGlyphOp *self;
+
+  self = (GskVulkanUploadGlyphOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_GLYPH_OP_CLASS);
+
+  self->image = g_object_ref (image);
+  self->area = *area;
+  self->font = g_object_ref (font);
+  self->glyph_info = *glyph_info;
+  self->scale = scale;
+}

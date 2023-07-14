@@ -511,9 +511,6 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
 {
   GskVulkanOp *op;
 
-  gsk_vulkan_glyph_cache_upload (gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (self->renderer)),
-                                 self->uploader);
-
   for (op = self->first_op; op; op = op->next)
     {
       gsk_vulkan_op_upload (op, self->uploader);

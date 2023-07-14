@@ -463,17 +463,6 @@ gsk_vulkan_renderer_get_glyph_cache (GskVulkanRenderer  *self)
   return self->glyph_cache;
 }
 
-GskVulkanCachedGlyph *
-gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
-                                 PangoFont         *font,
-                                 PangoGlyph         glyph,
-                                 int                x,
-                                 int                y,
-                                 float              scale)
-{
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, x, y, scale);
-}
-
 /**
  * gsk_vulkan_renderer_new:
  *

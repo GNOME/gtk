@@ -14,6 +14,12 @@ GskVulkanImage *        gsk_vulkan_upload_cairo_op                      (GskVulk
                                                                          const graphene_vec2_t          *scale,
                                                                          const graphene_rect_t          *viewport);
 
+void                    gsk_vulkan_upload_glyph_op                      (GskVulkanRender                *render,
+                                                                         GskVulkanImage                 *image,
+                                                                         cairo_rectangle_int_t          *area,
+                                                                         PangoFont                      *font,
+                                                                         PangoGlyphInfo                 *glyph_info,
+                                                                         float                           scale);
 
 G_END_DECLS
 

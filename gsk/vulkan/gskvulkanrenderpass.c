@@ -1041,7 +1041,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
                                       GskRenderNode             *node)
 {
   const PangoGlyphInfo *glyphs;
-  GskVulkanRenderer *renderer;
+  GskVulkanGlyphCache *cache;
   const graphene_point_t *node_offset;
   const PangoFont *font;
   guint num_glyphs;
@@ -1049,11 +1049,10 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
   int i;
   float scale;
 
-  renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
+  cache = gsk_vulkan_renderer_get_glyph_cache (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)));
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
-
 
   scale = MAX (graphene_vec2_get_x (&state->scale), graphene_vec2_get_y (&state->scale));
   node_offset = gsk_text_node_get_offset (node);
@@ -1065,12 +1064,13 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
       const PangoGlyphInfo *gi = &glyphs[i];
       graphene_rect_t glyph_bounds, glyph_tex_rect;
 
-      glyph = gsk_vulkan_renderer_cache_glyph (renderer,
-                                               (PangoFont *)font,
-                                               gi->glyph,
-                                               x_position + gi->geometry.x_offset,
-                                               gi->geometry.y_offset,
-                                               scale);
+      glyph = gsk_vulkan_glyph_cache_lookup (cache,
+                                             render,
+                                             (PangoFont *)font,
+                                             gi->glyph,
+                                             x_position + gi->geometry.x_offset,
+                                             gi->geometry.y_offset,
+                                             scale);
 
       glyph_bounds = GRAPHENE_RECT_INIT (glyph->draw_x + node_offset->x + (float) (x_position + gi->geometry.x_offset) / PANGO_SCALE,
                                          glyph->draw_y + node_offset->y + (float) (gi->geometry.y_offset) / PANGO_SCALE,

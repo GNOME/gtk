@@ -12,13 +12,6 @@ void                    gsk_vulkan_renderer_add_texture_image           (GskVulk
                                                                          GdkTexture             *texture,
                                                                          GskVulkanImage         *image);
 
-GskVulkanCachedGlyph  *gsk_vulkan_renderer_cache_glyph      (GskVulkanRenderer *renderer,
-                                                             PangoFont         *font,
-                                                             PangoGlyph         glyph,
-                                                             int                x,
-                                                             int                y,
-                                                             float              scale);
-
 GskVulkanGlyphCache *   gsk_vulkan_renderer_get_glyph_cache             (GskVulkanRenderer      *self);
 
 
