@@ -117,6 +117,7 @@ if have_vulkan
     'vulkan/gskvulkancolorop.c',
     'vulkan/gskvulkancommandpool.c',
     'vulkan/gskvulkancrossfadeop.c',
+    'vulkan/gskvulkandownloadop.c',
     'vulkan/gskvulkanglyphcache.c',
     'vulkan/gskvulkanglyphop.c',
     'vulkan/gskvulkanimage.c',

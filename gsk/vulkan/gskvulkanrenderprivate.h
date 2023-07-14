@@ -15,6 +15,13 @@ typedef enum {
   GSK_VULKAN_SAMPLER_NEAREST
 } GskVulkanRenderSampler;
 
+typedef void            (* GskVulkanDownloadFunc)                       (gpointer                user_data,
+                                                                         GdkMemoryFormat         format,
+                                                                         const guchar           *data,
+                                                                         int                     width,
+                                                                         int                     height,
+                                                                         gsize                   stride);
+
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
@@ -24,7 +31,9 @@ void                    gsk_vulkan_render_render                        (GskVulk
                                                                          GskVulkanImage         *target,
                                                                          const graphene_rect_t  *rect,
                                                                          const cairo_region_t   *clip,
-                                                                         GskRenderNode          *node);
+                                                                         GskRenderNode          *node,
+                                                                         GskVulkanDownloadFunc   download_func,
+                                                                         gpointer                download_data);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 GdkVulkanContext *      gsk_vulkan_render_get_context                   (GskVulkanRender        *self);

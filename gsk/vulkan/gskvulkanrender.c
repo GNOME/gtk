@@ -7,6 +7,7 @@
 #include "gskrendererprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
+#include "gskvulkandownloadopprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 #include "gskvulkanprivate.h"
 #include "gskvulkanpushconstantsopprivate.h"
@@ -485,8 +486,10 @@ gsk_vulkan_render_sort_ops (GskVulkanRender *self)
 }
 
 static void
-gsk_vulkan_render_add_node (GskVulkanRender *self,
-                            GskRenderNode   *node)
+gsk_vulkan_render_add_node (GskVulkanRender       *self,
+                            GskRenderNode         *node,
+                            GskVulkanDownloadFunc  download_func,
+                            gpointer               download_data)
 {
   graphene_vec2_t scale;
 
@@ -501,6 +504,9 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                              node,
                              VK_IMAGE_LAYOUT_UNDEFINED,
                              VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
+  if (download_func)
+    gsk_vulkan_download_op (self, self->target, download_func, download_data);
 
   gsk_vulkan_render_seal_ops (self);
   gsk_vulkan_render_verbose_print (self, "start of frame");
@@ -1073,13 +1079,15 @@ gsk_vulkan_render_render (GskVulkanRender       *self,
                           GskVulkanImage        *target,
                           const graphene_rect_t *rect,
                           const cairo_region_t  *clip,
-                          GskRenderNode         *node)
+                          GskRenderNode         *node,
+                          GskVulkanDownloadFunc  download_func,
+                          gpointer               download_data)
 {
   gsk_vulkan_render_cleanup (self);
 
   gsk_vulkan_render_setup (self, target, rect, clip);
 
-  gsk_vulkan_render_add_node (self, node);
+  gsk_vulkan_render_add_node (self, node, download_func, download_data);
 
   gsk_vulkan_render_submit (self);
 }

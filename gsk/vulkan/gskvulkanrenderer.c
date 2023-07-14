@@ -256,6 +256,25 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->vulkan);
 }
 
+static void
+gsk_vulkan_renderer_download_texture_cb (gpointer         user_data,
+                                         GdkMemoryFormat  format,
+                                         const guchar    *data,
+                                         int              width,
+                                         int              height,
+                                         gsize            stride)
+{
+  GdkTexture **texture = (GdkTexture **) user_data;
+  GBytes *bytes;
+
+  bytes = g_bytes_new (data, stride * height);
+  *texture = gdk_memory_texture_new (width, height,
+                                     format,
+                                     bytes,
+                                     stride);
+  g_bytes_unref (bytes);
+}
+
 static GdkTexture *
 gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                     GskRenderNode         *root,
@@ -292,12 +311,20 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                               rounded_viewport.size.width,
                                               rounded_viewport.size.height);
 
-  gsk_vulkan_render_render (render, image, &rounded_viewport, NULL, root);
+  texture = NULL;
+  gsk_vulkan_render_render (render,
+                            image,
+                            &rounded_viewport,
+                            NULL,
+                            root,
+                            gsk_vulkan_renderer_download_texture_cb,
+                            &texture);
 
-  texture = gsk_vulkan_render_download_target (render);
-
-  g_object_unref (image);
   gsk_vulkan_render_free (render);
+  g_object_unref (image);
+
+  /* check that callback setting texture was actually called, as its technically async */
+  g_assert (texture);
 
 #ifdef G_ENABLE_DEBUG
   start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
@@ -349,7 +376,12 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   render_region = get_render_region (self);
   draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);
 
-  gsk_vulkan_render_render (render, self->targets[draw_index], NULL, render_region, root);
+  gsk_vulkan_render_render (render,
+                            self->targets[draw_index],
+                            NULL,
+                            render_region,
+                            root,
+                            NULL, NULL);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
