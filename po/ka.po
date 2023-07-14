@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-06-23 01:07+0000\n"
-"PO-Revision-Date: 2023-06-25 15:37+0200\n"
+"POT-Creation-Date: 2023-07-06 23:57+0000\n"
+"PO-Revision-Date: 2023-07-14 13:46+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -140,7 +140,7 @@ msgstr "აპლიკაციას %s-ის API-ის მხარდა�
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
 
-#: gdk/gdktexture.c:527
+#: gdk/gdktexture.c:528
 msgid "Unknown image format."
 msgstr "გამოსახულების ფაილის უცნობი ფორმატი."
 
@@ -7158,7 +7158,7 @@ msgstr "ნაკადის დახურვა შეუძლებელ�
 #, c-format
 msgid ""
 "Usage:\n"
-"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
+"  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 "\n"
@@ -7167,11 +7167,12 @@ msgid ""
 "  simplify     Simplify the file\n"
 "  enumerate    List all named objects\n"
 "  preview      Preview the file\n"
+"  render       Take a screenshot of the file\n"
 "  screenshot   Take a screenshot of the file\n"
 "\n"
 msgstr ""
 "Usage:\n"
-"  gtk-builder-tool [ბრძანება] [პარამეტრი…] ფაილი\n"
+"  gtk4-builder-tool [ბრძანება] [პარამეტრი…] ფაილი\n"
 "\n"
 "სხვადასხვა დავალებების შესრულება GtkBuilder-ის .ui ფაილებზე.\n"
 "\n"
@@ -7287,15 +7288,13 @@ msgid "FILE…"
 msgstr "FILE…"
 
 #: tools/gtk-builder-tool-screenshot.c:378
-msgid "Take a screenshot of the file."
-msgstr "ფაილის ეკრანის ანაბეჭდის აღება."
+msgid "Render a .ui file to an image."
+msgstr ".ui ფაილის რენდერი გამოსახულებაში"
 
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
-msgid "Can only screenshot a single .ui file and a single output file\n"
-msgstr ""
-"მხოლოდ ერთი .ui ფაილის და ერთი გამოტანის ფაილის ეკრანის ანაბეჭდის გადაღება "
-"შეგძლიათ\n"
+msgid "Can only render a single .ui file to a single output file\n"
+msgstr "ერთი .ui ფაილის მხოლოდ ერთ გამოტანის ფაილში რენდერი შეგიძლიათ\n"
 
 #: tools/gtk-builder-tool-simplify.c:444
 #, c-format
@@ -7364,7 +7363,7 @@ msgstr "ფაილის გამარტივება."
 #: tools/gtk-builder-tool-simplify.c:2558
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
-msgstr "ერთი .ui ფაილის გამარტივება მხოლოდ --replace-ის გარეშე შეგიძლიათ\n"
+msgstr "ფაილის გამარტივება მხოლოდ --replace-ის გარეშე შეგიძლიათ\n"
 
 #: tools/gtk-builder-tool-validate.c:45
 #, c-format
@@ -7547,6 +7546,9 @@ msgstr ""
 "\"%s\"-ში თემის ინდექსის ფაილი აღმოჩენილი არაა.\n"
 "თუ მართლა გნებავთ, ხატულების კეში აქ შექმნათ, --ignore-theme-index "
 "გამოიყენეთ.\n"
+
+#~ msgid "Take a screenshot of the file."
+#~ msgstr "ფაილის ეკრანის ანაბეჭდის აღება."
 
 #~ msgid "Tab list"
 #~ msgstr "ჩანართების სია"
