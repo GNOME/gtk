@@ -60,7 +60,6 @@ guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulk
                                                                          gsize                   alignment,
                                                                          gsize                  *out_offset);
 
-GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);
 
 G_END_DECLS

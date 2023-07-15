@@ -60,7 +60,6 @@ struct _GskVulkanRender
 
   GskVulkanRenderOps render_ops;
   GskVulkanOp *first_op;
-  GskVulkanUploader *uploader;
 
   GskDescriptorImageInfos descriptor_images;
   GskDescriptorBufferInfos descriptor_buffers;
@@ -360,7 +359,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   
 
   gsk_vulkan_render_ops_init (&self->render_ops);
-  self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
 
@@ -952,17 +950,6 @@ gsk_vulkan_render_submit (GskVulkanRender *self)
 #endif
 }
 
-GdkTexture *
-gsk_vulkan_render_download_target (GskVulkanRender *self)
-{
-  GdkTexture *texture;
-
-  texture = gsk_vulkan_image_download (self->target, self->uploader);
-  gsk_vulkan_uploader_reset (self->uploader);
-
-  return texture;
-}
-
 static void
 gsk_vulkan_render_cleanup (GskVulkanRender *self)
 {
@@ -988,8 +975,6 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
       gsk_vulkan_op_finish (op);
     }
   gsk_vulkan_render_ops_set_size (&self->render_ops, 0);
-
-  gsk_vulkan_uploader_reset (self->uploader);
 
   gsk_vulkan_command_pool_reset (self->command_pool);
 
@@ -1034,7 +1019,6 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   g_hash_table_unref (self->render_pass_cache);
 
   gsk_vulkan_render_ops_clear (&self->render_ops);
-  g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
 
   vkDestroyPipelineLayout (device,
