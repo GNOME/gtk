@@ -33,10 +33,12 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
                                           const cairo_rectangle_int_t *area,
                                           GskVulkanBuffer            **buffer)
 {
+  VkPipelineStageFlags stage;
   VkImageLayout image_layout;
   VkAccessFlags access;
   gsize stride;
 
+  stage = gsk_vulkan_image_get_vk_pipeline_stage (image);
   image_layout = gsk_vulkan_image_get_vk_image_layout (image);
   access = gsk_vulkan_image_get_vk_access (image);
   stride = area->width * gdk_memory_format_bytes_per_pixel (gsk_vulkan_image_get_format (image));
@@ -45,7 +47,7 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
                                        GSK_VULKAN_READ);
 
   vkCmdPipelineBarrier (command_buffer,
-                        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                        stage,
                         VK_PIPELINE_STAGE_TRANSFER_BIT,
                         0,
                         0, NULL,
@@ -77,6 +79,7 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
                             },
                         });
   gsk_vulkan_image_set_vk_image_layout (image,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
                                         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                         VK_ACCESS_TRANSFER_READ_BIT);
 
@@ -111,7 +114,7 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_TRANSFER_BIT,
-                        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                        stage,
                         0,
                         0, NULL,
                         0, NULL,
@@ -133,7 +136,7 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
                             },
                         });
 
-  gsk_vulkan_image_set_vk_image_layout (image, image_layout, access);
+  gsk_vulkan_image_set_vk_image_layout (image, stage, image_layout, access);
 
   return op->next;
 }

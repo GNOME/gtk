@@ -80,6 +80,7 @@ gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
                             },
                         });
   gsk_vulkan_image_set_vk_image_layout (image,
+                                        VK_PIPELINE_STAGE_TRANSFER_BIT,
                                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                         VK_ACCESS_TRANSFER_WRITE_BIT);
 
@@ -137,6 +138,7 @@ gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
                         });
 
   gsk_vulkan_image_set_vk_image_layout (image,
+                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                         VK_ACCESS_SHADER_READ_BIT);
 
@@ -163,6 +165,7 @@ gsk_vulkan_upload_op_command (GskVulkanOp      *op,
       *buffer = NULL;
 
       gsk_vulkan_image_set_vk_image_layout (image,
+                                            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                                             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                             VK_ACCESS_SHADER_READ_BIT);
 

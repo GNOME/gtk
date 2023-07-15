@@ -48,9 +48,11 @@ void                    gsk_vulkan_image_unmap                          (GskVulk
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);
+VkPipelineStageFlags    gsk_vulkan_image_get_vk_pipeline_stage          (GskVulkanImage         *self);
 VkImageLayout           gsk_vulkan_image_get_vk_image_layout            (GskVulkanImage         *self);
 VkAccessFlags           gsk_vulkan_image_get_vk_access                  (GskVulkanImage         *self);
 void                    gsk_vulkan_image_set_vk_image_layout            (GskVulkanImage         *self,
+                                                                         VkPipelineStageFlags    stage,
                                                                          VkImageLayout           image_layout,
                                                                          VkAccessFlags           access);
 VkImage                 gsk_vulkan_image_get_vk_image                   (GskVulkanImage         *self);

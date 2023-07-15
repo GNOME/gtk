@@ -194,6 +194,7 @@ gsk_vulkan_render_pass_end_op_command (GskVulkanOp      *op,
   vkCmdEndRenderPass (command_buffer);
 
   gsk_vulkan_image_set_vk_image_layout (self->image,
+                                        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                         self->final_layout,
                                         gsk_vulkan_image_get_vk_access (self->image));
   return op->next;

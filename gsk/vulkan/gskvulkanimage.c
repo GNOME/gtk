@@ -25,6 +25,7 @@ struct _GskVulkanImage
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
 
+  VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
   VkAccessFlags vk_access;
 
@@ -662,6 +663,12 @@ gsk_vulkan_image_get_image_view (GskVulkanImage *self)
   return self->vk_image_view;
 }
 
+VkPipelineStageFlags
+gsk_vulkan_image_get_vk_pipeline_stage (GskVulkanImage *self)
+{
+  return self->vk_pipeline_stage;
+}
+
 VkImageLayout
 gsk_vulkan_image_get_vk_image_layout (GskVulkanImage *self)
 {
@@ -675,10 +682,12 @@ gsk_vulkan_image_get_vk_access (GskVulkanImage *self)
 }
 
 void
-gsk_vulkan_image_set_vk_image_layout (GskVulkanImage *self,
-                                      VkImageLayout   image_layout,
-                                      VkAccessFlags   access)
+gsk_vulkan_image_set_vk_image_layout (GskVulkanImage       *self,
+                                      VkPipelineStageFlags  stage,
+                                      VkImageLayout         image_layout,
+                                      VkAccessFlags         access)
 {
+  self->vk_pipeline_stage = stage;
   self->vk_image_layout = image_layout;
   self->vk_access = access;
 }
