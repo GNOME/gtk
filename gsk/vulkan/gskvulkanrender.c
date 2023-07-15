@@ -422,6 +422,7 @@ gsk_vulkan_render_sort_render_pass (GskVulkanRender *self,
           break;
 
         case GSK_VULKAN_STAGE_COMMAND:
+        case GSK_VULKAN_STAGE_SHADER:
           if (sort_data->command.first == NULL)
             sort_data->command.first = op;
           else
@@ -691,7 +692,7 @@ gsk_vulkan_render_get_render_pass (GskVulkanRender *self,
                                                .pDepthStencilAttachment = NULL,
                                             }
                                          },
-                                         .dependencyCount = 0
+                                         .dependencyCount = 0,
                                       },
                                       NULL,
                                       &render_pass);

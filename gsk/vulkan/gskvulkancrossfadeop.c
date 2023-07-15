@@ -72,7 +72,7 @@ gsk_vulkan_cross_fade_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static const GskVulkanShaderOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanCrossFadeOp),
-    GSK_VULKAN_STAGE_COMMAND,
+    GSK_VULKAN_STAGE_SHADER,
     gsk_vulkan_shader_op_finish,
     gsk_vulkan_cross_fade_op_print,
     gsk_vulkan_shader_op_count_vertex_data,

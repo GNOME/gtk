@@ -64,7 +64,7 @@ gsk_vulkan_outset_shadow_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static const GskVulkanShaderOpClass GSK_VULKAN_OUTSET_SHADOW_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanOutsetShadowOp),
-    GSK_VULKAN_STAGE_COMMAND,
+    GSK_VULKAN_STAGE_SHADER,
     gsk_vulkan_outset_shadow_op_finish,
     gsk_vulkan_outset_shadow_op_print,
     gsk_vulkan_shader_op_count_vertex_data,

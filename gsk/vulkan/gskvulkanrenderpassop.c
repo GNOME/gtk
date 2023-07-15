@@ -4,6 +4,7 @@
 
 #include "gskrendernodeprivate.h"
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "gdk/gdkvulkancontextprivate.h"
 
@@ -64,6 +65,34 @@ gsk_vulkan_render_pass_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
+static void
+gsk_vulkan_render_pass_op_do_barriers (GskVulkanRenderPassOp *self,
+                                       VkCommandBuffer        command_buffer)
+{
+  GskVulkanShaderOp *shader;
+  GskVulkanOp *op;
+  gsize i;
+
+  for (op = ((GskVulkanOp *) self)->next;
+       op->op_class->stage != GSK_VULKAN_STAGE_END_PASS;
+       op = op->next)
+    {
+      if (op->op_class->stage != GSK_VULKAN_STAGE_SHADER)
+        continue;
+
+      shader = (GskVulkanShaderOp *) op;
+
+      for (i = 0; i < ((GskVulkanShaderOpClass *) op->op_class)->n_images; i++)
+        {
+          gsk_vulkan_image_transition (shader->images[i],
+                                       command_buffer,
+                                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                       VK_ACCESS_SHADER_READ_BIT);
+        }
+    }
+}
+
 static GskVulkanOp *
 gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
                                    GskVulkanRender  *render,
@@ -75,6 +104,8 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
 
   /* nesting render passes not allowed */
   g_assert (render_pass == VK_NULL_HANDLE);
+
+  gsk_vulkan_render_pass_op_do_barriers (self, command_buffer);
 
   vk_render_pass = gsk_vulkan_render_get_render_pass (render,
                                                       gsk_vulkan_image_get_vk_format (self->image),
@@ -196,7 +227,7 @@ gsk_vulkan_render_pass_end_op_command (GskVulkanOp      *op,
   gsk_vulkan_image_set_vk_image_layout (self->image,
                                         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                         self->final_layout,
-                                        gsk_vulkan_image_get_vk_access (self->image));
+                                        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
   return op->next;
 }
 

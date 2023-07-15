@@ -76,7 +76,7 @@ gsk_vulkan_linear_gradient_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static const GskVulkanShaderOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanLinearGradientOp),
-    GSK_VULKAN_STAGE_COMMAND,
+    GSK_VULKAN_STAGE_SHADER,
     gsk_vulkan_linear_gradient_op_finish,
     gsk_vulkan_linear_gradient_op_print,
     gsk_vulkan_shader_op_count_vertex_data,

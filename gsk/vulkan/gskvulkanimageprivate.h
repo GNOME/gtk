@@ -55,6 +55,15 @@ void                    gsk_vulkan_image_set_vk_image_layout            (GskVulk
                                                                          VkPipelineStageFlags    stage,
                                                                          VkImageLayout           image_layout,
                                                                          VkAccessFlags           access);
+void                    gsk_vulkan_image_transition                     (GskVulkanImage         *self,
+                                                                         VkCommandBuffer         command_buffer,
+                                                                         VkPipelineStageFlags    stage,
+                                                                         VkImageLayout           image_layout,
+                                                                         VkAccessFlags           access);
+#define gdk_vulkan_image_transition_shader(image) \
+  gsk_vulkan_image_transition ((image), VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, \
+                               VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_SHADER_READ_BIT)
+
 VkImage                 gsk_vulkan_image_get_vk_image                   (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);

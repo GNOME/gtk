@@ -367,6 +367,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
                       gsize                  height,
                       VkImageTiling          tiling,
                       VkImageUsageFlags      usage,
+                      VkPipelineStageFlags   stage,
                       VkImageLayout          layout,
                       VkAccessFlags          access,
                       VkMemoryPropertyFlags  memory)
@@ -400,6 +401,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
   self->width = width;
   self->height = height;
   self->vk_usage = usage;
+  self->vk_pipeline_stage = stage;
   self->vk_image_layout = layout;
   self->vk_access = access;
 
@@ -455,7 +457,8 @@ gsk_vulkan_image_new_for_upload (GdkVulkanContext  *context,
                                VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT,
-                               VK_IMAGE_LAYOUT_UNDEFINED,
+                               VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               VK_IMAGE_LAYOUT_PREINITIALIZED,
                                VK_ACCESS_TRANSFER_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
@@ -466,6 +469,10 @@ static gboolean
 gsk_vulkan_image_can_map (GskVulkanImage *self)
 {
   if (GSK_DEBUG_CHECK (STAGING))
+    return FALSE;
+
+  if (self->vk_image_layout != VK_IMAGE_LAYOUT_PREINITIALIZED &&
+      self->vk_image_layout != VK_IMAGE_LAYOUT_GENERAL)
     return FALSE;
 
   return gsk_vulkan_memory_can_map (self->memory, TRUE);
@@ -520,6 +527,9 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->height = height;
   self->vk_image = image;
   self->vk_format = format;
+  self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+  self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->vk_access = 0;
 
   gsk_vulkan_image_create_view (self,
                                 &(GskMemoryFormatInfo) {
@@ -547,6 +557,7 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
                                height,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+                               VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                                VK_IMAGE_LAYOUT_UNDEFINED,
                                0,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -570,6 +581,7 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
                                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT |
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+                               VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                VK_IMAGE_LAYOUT_UNDEFINED,
                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
@@ -690,6 +702,45 @@ gsk_vulkan_image_set_vk_image_layout (GskVulkanImage       *self,
   self->vk_pipeline_stage = stage;
   self->vk_image_layout = image_layout;
   self->vk_access = access;
+}
+
+void
+gsk_vulkan_image_transition (GskVulkanImage       *self,
+                             VkCommandBuffer       command_buffer,
+                             VkPipelineStageFlags  stage,
+                             VkImageLayout         image_layout,
+                             VkAccessFlags         access)
+{
+  if (self->vk_pipeline_stage == stage &&
+      self->vk_image_layout == image_layout &&
+      self->vk_access == access)
+    return;
+
+  vkCmdPipelineBarrier (command_buffer,
+                        self->vk_pipeline_stage,
+                        stage,
+                        0,
+                        0, NULL,
+                        0, NULL,
+                        1, &(VkImageMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                            .srcAccessMask = self->vk_access,
+                            .dstAccessMask = access,
+                            .oldLayout = self->vk_image_layout,
+                            .newLayout = image_layout,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .image = self->vk_image,
+                            .subresourceRange = {
+                              .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                              .baseMipLevel = 0,
+                              .levelCount = 1,
+                              .baseArrayLayer = 0,
+                              .layerCount = 1
+                            },
+                        });
+
+  gsk_vulkan_image_set_vk_image_layout (self, stage, image_layout, access);
 }
 
 VkFormat

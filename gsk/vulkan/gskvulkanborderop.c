@@ -86,7 +86,7 @@ gsk_vulkan_border_op_command (GskVulkanOp     *op,
 static const GskVulkanShaderOpClass GSK_VULKAN_BORDER_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanBorderOp),
-    GSK_VULKAN_STAGE_COMMAND,
+    GSK_VULKAN_STAGE_SHADER,
     gsk_vulkan_border_op_finish,
     gsk_vulkan_border_op_print,
     gsk_vulkan_shader_op_count_vertex_data,
