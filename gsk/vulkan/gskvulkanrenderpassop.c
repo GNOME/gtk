@@ -67,14 +67,14 @@ gsk_vulkan_render_pass_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static GskVulkanOp *
 gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
                                    GskVulkanRender  *render,
-                                   VkPipelineLayout  pipeline_layout,
+                                   VkRenderPass      render_pass,
                                    VkCommandBuffer   command_buffer)
 {
   GskVulkanRenderPassOp *self = (GskVulkanRenderPassOp *) op;
-  VkPipeline current_pipeline = VK_NULL_HANDLE;
-  const GskVulkanOpClass *current_pipeline_class = NULL;
-  const char *current_pipeline_clip_type = NULL;
   VkRenderPass vk_render_pass;
+
+  /* nesting render passes not allowed */
+  g_assert (render_pass == VK_NULL_HANDLE);
 
   vk_render_pass = gsk_vulkan_render_get_render_pass (render,
                                                       gsk_vulkan_image_get_vk_format (self->image),
@@ -114,26 +114,10 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
   op = op->next;
   while (op->op_class->stage != GSK_VULKAN_STAGE_END_PASS)
     {
-      if (op->op_class->shader_name &&
-          (op->op_class != current_pipeline_class ||
-           current_pipeline_clip_type != op->clip_type))
-        {
-          current_pipeline = gsk_vulkan_render_get_pipeline (render,
-                                                             op->op_class,
-                                                             op->clip_type,
-                                                             gsk_vulkan_image_get_vk_format (self->image),
-                                                             vk_render_pass);
-          vkCmdBindPipeline (command_buffer,
-                             VK_PIPELINE_BIND_POINT_GRAPHICS,
-                             current_pipeline);
-          current_pipeline_class = op->op_class;
-          current_pipeline_clip_type = op->clip_type;
-        }
-
-      op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
+      op = gsk_vulkan_op_command (op, render, vk_render_pass, command_buffer);
     }
 
-  op = gsk_vulkan_op_command (op, render, pipeline_layout, command_buffer);
+  op = gsk_vulkan_op_command (op, render, vk_render_pass, command_buffer);
 
   return op;
 }
@@ -141,8 +125,6 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanRenderPassOp),
   GSK_VULKAN_STAGE_BEGIN_PASS,
-  NULL,
-  NULL,
   gsk_vulkan_render_pass_op_finish,
   gsk_vulkan_render_pass_op_print,
   gsk_vulkan_render_pass_op_count_vertex_data,
@@ -204,7 +186,7 @@ gsk_vulkan_render_pass_end_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static GskVulkanOp *
 gsk_vulkan_render_pass_end_op_command (GskVulkanOp      *op,
                                        GskVulkanRender  *render,
-                                       VkPipelineLayout  pipeline_layout,
+                                       VkRenderPass      render_pass,
                                        VkCommandBuffer   command_buffer)
 {
   GskVulkanRenderPassEndOp *self = (GskVulkanRenderPassEndOp *) op;
@@ -220,8 +202,6 @@ gsk_vulkan_render_pass_end_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_END_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanRenderPassEndOp),
   GSK_VULKAN_STAGE_END_PASS,
-  NULL,
-  NULL,
   gsk_vulkan_render_pass_end_op_finish,
   gsk_vulkan_render_pass_end_op_print,
   gsk_vulkan_render_pass_end_op_count_vertex_data,

@@ -3,6 +3,7 @@
 #include "gskvulkanmaskopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/mask.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanMaskOp GskVulkanMaskOp;
 
 struct _GskVulkanMaskOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   struct {
     GskVulkanImage *image;
@@ -67,7 +68,7 @@ gsk_vulkan_mask_op_collect_vertex_data (GskVulkanOp *op,
                                         guchar      *data)
 {
   GskVulkanMaskOp *self = (GskVulkanMaskOp *) op;
-  GskVulkanMaskInstance *instance = (GskVulkanMaskInstance *) (data + op->vertex_offset);
+  GskVulkanMaskInstance *instance = (GskVulkanMaskInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->source.rect, instance->source_rect);
   gsk_vulkan_rect_to_float (&self->source.tex_rect, instance->source_tex_rect);
@@ -88,17 +89,19 @@ gsk_vulkan_mask_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->mask.image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->mask.image, GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static const GskVulkanOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanMaskOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanMaskOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_mask_op_finish,
+    gsk_vulkan_mask_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_mask_op_collect_vertex_data,
+    gsk_vulkan_mask_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "mask",
   &gsk_vulkan_mask_info,
-  gsk_vulkan_mask_op_finish,
-  gsk_vulkan_mask_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_mask_op_collect_vertex_data,
-  gsk_vulkan_mask_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -115,9 +118,9 @@ gsk_vulkan_mask_op (GskVulkanRender        *render,
 {
   GskVulkanMaskOp *self;
 
-  self = (GskVulkanMaskOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MASK_OP_CLASS);
+  self = (GskVulkanMaskOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MASK_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->source.image = g_object_ref (source);
   graphene_rect_offset_r (source_rect, offset->x, offset->y, &self->source.rect);
   gsk_vulkan_normalize_tex_coords (&self->source.tex_rect, source_rect, source_tex_rect);

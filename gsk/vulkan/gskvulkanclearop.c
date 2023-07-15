@@ -62,7 +62,7 @@ gsk_vulkan_init_clear_value (VkClearValue  *value,
 static GskVulkanOp *
 gsk_vulkan_clear_op_command (GskVulkanOp      *op,
                              GskVulkanRender  *render,
-                             VkPipelineLayout  pipeline_layout,
+                             VkRenderPass      render_pass,
                              VkCommandBuffer   command_buffer)
 {
   GskVulkanClearOp *self = (GskVulkanClearOp *) op;
@@ -93,8 +93,6 @@ gsk_vulkan_clear_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanClearOp),
   GSK_VULKAN_STAGE_COMMAND,
-  NULL,
-  NULL,
   gsk_vulkan_clear_op_finish,
   gsk_vulkan_clear_op_print,
   gsk_vulkan_clear_op_count_vertex_data,

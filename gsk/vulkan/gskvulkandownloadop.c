@@ -28,7 +28,6 @@ gsk_vulkan_download_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static GskVulkanOp *
 gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
                                           GskVulkanRender             *render,
-                                          VkPipelineLayout             pipeline_layout,
                                           VkCommandBuffer              command_buffer,
                                           GskVulkanImage              *image,
                                           const cairo_rectangle_int_t *area,
@@ -190,14 +189,13 @@ gsk_vulkan_download_op_print (GskVulkanOp *op,
 static GskVulkanOp *
 gsk_vulkan_download_op_command (GskVulkanOp      *op,
                                 GskVulkanRender  *render,
-                                VkPipelineLayout  pipeline_layout,
+                                VkRenderPass      render_pass,
                                 VkCommandBuffer   command_buffer)
 {
   GskVulkanDownloadOp *self = (GskVulkanDownloadOp *) op;
 
   return gsk_vulkan_download_op_command_with_area (op,
                                                    render,
-                                                   pipeline_layout,
                                                    command_buffer,
                                                    self->image,
                                                    &(cairo_rectangle_int_t) {
@@ -211,8 +209,6 @@ gsk_vulkan_download_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_DOWNLOAD_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanDownloadOp),
   GSK_VULKAN_STAGE_COMMAND,
-  NULL,
-  NULL,
   gsk_vulkan_download_op_finish,
   gsk_vulkan_download_op_print,
   gsk_vulkan_download_op_count_vertex_data,

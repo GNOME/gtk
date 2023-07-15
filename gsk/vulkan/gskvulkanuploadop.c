@@ -28,7 +28,6 @@ gsk_vulkan_upload_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static GskVulkanOp *
 gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
                                         GskVulkanRender             *render,
-                                        VkPipelineLayout             pipeline_layout,
                                         VkCommandBuffer              command_buffer,
                                         GskVulkanImage              *image,
                                         const cairo_rectangle_int_t *area,
@@ -147,7 +146,6 @@ gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
 static GskVulkanOp *
 gsk_vulkan_upload_op_command (GskVulkanOp      *op,
                               GskVulkanRender  *render,
-                              VkPipelineLayout  pipeline_layout,
                               VkCommandBuffer   command_buffer,
                               GskVulkanImage   *image,
                               void              (* draw_func) (GskVulkanOp *, guchar *, gsize),
@@ -173,7 +171,6 @@ gsk_vulkan_upload_op_command (GskVulkanOp      *op,
 
   return gsk_vulkan_upload_op_command_with_area (op,
                                                  render,
-                                                 pipeline_layout,
                                                  command_buffer,
                                                  image,
                                                  &(cairo_rectangle_int_t) {
@@ -237,14 +234,13 @@ gsk_vulkan_upload_texture_op_draw (GskVulkanOp *op,
 static GskVulkanOp *
 gsk_vulkan_upload_texture_op_command (GskVulkanOp      *op,
                                       GskVulkanRender  *render,
-                                      VkPipelineLayout  pipeline_layout,
+                                      VkRenderPass      render_pass,
                                       VkCommandBuffer   command_buffer)
 {
   GskVulkanUploadTextureOp *self = (GskVulkanUploadTextureOp *) op;
 
   return gsk_vulkan_upload_op_command (op,
                                        render,
-                                       pipeline_layout,
                                        command_buffer,
                                        self->image,
                                        gsk_vulkan_upload_texture_op_draw,
@@ -254,8 +250,6 @@ gsk_vulkan_upload_texture_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_TEXTURE_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanUploadTextureOp),
   GSK_VULKAN_STAGE_UPLOAD,
-  NULL,
-  NULL,
   gsk_vulkan_upload_texture_op_finish,
   gsk_vulkan_upload_texture_op_print,
   gsk_vulkan_upload_op_count_vertex_data,
@@ -353,14 +347,13 @@ gsk_vulkan_upload_cairo_op_draw (GskVulkanOp *op,
 static GskVulkanOp *
 gsk_vulkan_upload_cairo_op_command (GskVulkanOp      *op,
                                     GskVulkanRender  *render,
-                                    VkPipelineLayout  pipeline_layout,
+                                    VkRenderPass      render_pass,
                                     VkCommandBuffer   command_buffer)
 {
   GskVulkanUploadCairoOp *self = (GskVulkanUploadCairoOp *) op;
 
   return gsk_vulkan_upload_op_command (op,
                                        render,
-                                       pipeline_layout,
                                        command_buffer,
                                        self->image,
                                        gsk_vulkan_upload_cairo_op_draw,
@@ -370,8 +363,6 @@ gsk_vulkan_upload_cairo_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanUploadCairoOp),
   GSK_VULKAN_STAGE_UPLOAD,
-  NULL,
-  NULL,
   gsk_vulkan_upload_cairo_op_finish,
   gsk_vulkan_upload_cairo_op_print,
   gsk_vulkan_upload_op_count_vertex_data,
@@ -483,14 +474,13 @@ gsk_vulkan_upload_glyph_op_draw (GskVulkanOp *op,
 static GskVulkanOp *
 gsk_vulkan_upload_glyph_op_command (GskVulkanOp      *op,
                                     GskVulkanRender  *render,
-                                    VkPipelineLayout  pipeline_layout,
+                                    VkRenderPass      render_pass,
                                     VkCommandBuffer   command_buffer)
 {
   GskVulkanUploadGlyphOp *self = (GskVulkanUploadGlyphOp *) op;
 
   return gsk_vulkan_upload_op_command_with_area (op,
                                                  render,
-                                                 pipeline_layout,
                                                  command_buffer,
                                                  self->image,
                                                  &self->area,
@@ -501,8 +491,6 @@ gsk_vulkan_upload_glyph_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_UPLOAD_GLYPH_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanUploadGlyphOp),
   GSK_VULKAN_STAGE_UPLOAD,
-  NULL,
-  NULL,
   gsk_vulkan_upload_glyph_op_finish,
   gsk_vulkan_upload_glyph_op_print,
   gsk_vulkan_upload_op_count_vertex_data,

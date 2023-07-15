@@ -19,18 +19,13 @@ struct _GskVulkanOp
 {
   const GskVulkanOpClass *op_class;
 
-  const /* interned */ char *clip_type;
   GskVulkanOp *next;
-  gsize vertex_offset;
 };
 
 struct _GskVulkanOpClass
 {
   gsize                 size;
   GskVulkanStage        stage;
-
-  const char *          shader_name;
-  const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 
   void                  (* finish)                                      (GskVulkanOp            *op);
 
@@ -46,7 +41,7 @@ struct _GskVulkanOpClass
                                                                          GskVulkanRender        *render);
   GskVulkanOp *         (* command)                                     (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
+                                                                         VkRenderPass            render_pass,
                                                                          VkCommandBuffer         command_buffer);
 };
 
@@ -69,19 +64,7 @@ void                    gsk_vulkan_op_reserve_descriptor_sets           (GskVulk
                                                                          GskVulkanRender        *render);
 GskVulkanOp *           gsk_vulkan_op_command                           (GskVulkanOp            *op,
                                                                          GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
-                                                                         VkCommandBuffer         command_buffer);
-
-gsize                   gsk_vulkan_op_draw_count_vertex_data            (GskVulkanOp            *op,
-                                                                         gsize                   n_bytes);
-GskVulkanOp *           gsk_vulkan_op_draw_command_n                    (GskVulkanOp            *op,
-                                                                         GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
-                                                                         VkCommandBuffer         command_buffer,
-                                                                         gsize                   instance_scale);
-GskVulkanOp *           gsk_vulkan_op_draw_command                      (GskVulkanOp            *op,
-                                                                         GskVulkanRender        *render,
-                                                                         VkPipelineLayout        pipeline_layout,
+                                                                         VkRenderPass            render_pass,
                                                                          VkCommandBuffer         command_buffer);
 
 G_END_DECLS

@@ -3,6 +3,7 @@
 #include "gskvulkanborderopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
 #include "vulkan/resources/border.vert.h"
@@ -11,7 +12,7 @@ typedef struct _GskVulkanBorderOp GskVulkanBorderOp;
 
 struct _GskVulkanBorderOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   GskRoundedRect outline;
   float widths[4];
@@ -56,7 +57,7 @@ gsk_vulkan_border_op_collect_vertex_data (GskVulkanOp *op,
                                           guchar      *data)
 {
   GskVulkanBorderOp *self = (GskVulkanBorderOp *) op;
-  GskVulkanBorderInstance *instance = (GskVulkanBorderInstance *) (data + op->vertex_offset);
+  GskVulkanBorderInstance *instance = (GskVulkanBorderInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
   guint i;
 
   gsk_rounded_rect_to_float (&self->outline, graphene_point_zero (), instance->rect);
@@ -74,25 +75,27 @@ gsk_vulkan_border_op_reserve_descriptor_sets (GskVulkanOp     *op,
 }
 
 static GskVulkanOp *
-gsk_vulkan_border_op_command (GskVulkanOp      *op,
+gsk_vulkan_border_op_command (GskVulkanOp     *op,
                               GskVulkanRender *render,
-                              VkPipelineLayout  pipeline_layout,
-                              VkCommandBuffer   command_buffer)
+                              VkRenderPass     render_pass,
+                              VkCommandBuffer  command_buffer)
 {
-  return gsk_vulkan_op_draw_command_n (op, render, pipeline_layout, command_buffer, 8);
+  return gsk_vulkan_shader_op_command_n (op, render, render_pass, command_buffer, 8);
 }
 
-static const GskVulkanOpClass GSK_VULKAN_BORDER_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanBorderOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_BORDER_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanBorderOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_border_op_finish,
+    gsk_vulkan_border_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_border_op_collect_vertex_data,
+    gsk_vulkan_border_op_reserve_descriptor_sets,
+    gsk_vulkan_border_op_command
+  },
   "border",
   &gsk_vulkan_border_info,
-  gsk_vulkan_border_op_finish,
-  gsk_vulkan_border_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_border_op_collect_vertex_data,
-  gsk_vulkan_border_op_reserve_descriptor_sets,
-  gsk_vulkan_border_op_command
 };
 
 void
@@ -106,9 +109,9 @@ gsk_vulkan_border_op (GskVulkanRender         *render,
   GskVulkanBorderOp *self;
   guint i;
 
-  self = (GskVulkanBorderOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS);
+  self = (GskVulkanBorderOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->outline = *outline;
   gsk_rounded_rect_offset (&self->outline, offset->x, offset->y);
   for (i = 0; i < 4; i++)

@@ -41,10 +41,10 @@ GdkVulkanContext *      gsk_vulkan_render_get_context                   (GskVulk
 gpointer                gsk_vulkan_render_alloc_op                      (GskVulkanRender        *self,
                                                                          gsize                   size);
 
+VkPipelineLayout        gsk_vulkan_render_get_pipeline_layout           (GskVulkanRender        *self);
 VkPipeline              gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          const GskVulkanOpClass *op_class,
                                                                          const char             *clip_type,
-                                                                         VkFormat                format,
                                                                          VkRenderPass            render_pass);
 VkRenderPass            gsk_vulkan_render_get_render_pass               (GskVulkanRender        *self,
                                                                          VkFormat                format,

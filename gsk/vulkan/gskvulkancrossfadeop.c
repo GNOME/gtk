@@ -3,6 +3,7 @@
 #include "gskvulkancrossfadeopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/cross-fade.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanCrossFadeOp GskVulkanCrossFadeOp;
 
 struct _GskVulkanCrossFadeOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   graphene_rect_t bounds;
   float progress;
@@ -50,7 +51,7 @@ gsk_vulkan_cross_fade_op_collect_vertex_data (GskVulkanOp *op,
                                               guchar      *data)
 {
   GskVulkanCrossFadeOp *self = (GskVulkanCrossFadeOp *) op;
-  GskVulkanCrossFadeInstance *instance = (GskVulkanCrossFadeInstance *) (data + op->vertex_offset);
+  GskVulkanCrossFadeInstance *instance = (GskVulkanCrossFadeInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->bounds, instance->rect);
   gsk_vulkan_rect_to_float (&self->start.rect, instance->start_rect);
@@ -77,17 +78,19 @@ gsk_vulkan_cross_fade_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                                        GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static const GskVulkanOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanCrossFadeOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanCrossFadeOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_cross_fade_op_finish,
+    gsk_vulkan_cross_fade_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_cross_fade_op_collect_vertex_data,
+    gsk_vulkan_cross_fade_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "cross-fade",
   &gsk_vulkan_cross_fade_info,
-  gsk_vulkan_cross_fade_op_finish,
-  gsk_vulkan_cross_fade_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_cross_fade_op_collect_vertex_data,
-  gsk_vulkan_cross_fade_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -105,9 +108,9 @@ gsk_vulkan_cross_fade_op (GskVulkanRender        *render,
 {
   GskVulkanCrossFadeOp *self;
 
-  self = (GskVulkanCrossFadeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_CROSS_FADE_OP_CLASS);
+  self = (GskVulkanCrossFadeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_CROSS_FADE_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->progress = progress;
 

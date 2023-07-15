@@ -3,6 +3,7 @@
 #include "gskvulkancolormatrixopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/color-matrix.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanColorMatrixOp GskVulkanColorMatrixOp;
 
 struct _GskVulkanColorMatrixOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   GskVulkanImage *image;
   graphene_matrix_t color_matrix;
@@ -47,7 +48,7 @@ gsk_vulkan_color_matrix_op_collect_vertex_data (GskVulkanOp *op,
                                                 guchar      *data)
 {
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
-  GskVulkanColorMatrixInstance *instance = (GskVulkanColorMatrixInstance *) (data + op->vertex_offset);
+  GskVulkanColorMatrixInstance *instance = (GskVulkanColorMatrixInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   instance->rect[0] = self->rect.origin.x;
   instance->rect[1] = self->rect.origin.y;
@@ -73,17 +74,19 @@ gsk_vulkan_color_matrix_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static const GskVulkanOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanColorMatrixOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanColorMatrixOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_color_matrix_op_finish,
+    gsk_vulkan_color_matrix_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_color_matrix_op_collect_vertex_data,
+    gsk_vulkan_color_matrix_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "color-matrix",
   &gsk_vulkan_color_matrix_info,
-  gsk_vulkan_color_matrix_op_finish,
-  gsk_vulkan_color_matrix_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_color_matrix_op_collect_vertex_data,
-  gsk_vulkan_color_matrix_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -98,9 +101,9 @@ gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
 {
   GskVulkanColorMatrixOp *self;
 
-  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS);
+  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);

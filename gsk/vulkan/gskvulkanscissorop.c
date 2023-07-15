@@ -53,7 +53,7 @@ gsk_vulkan_scissor_op_reserve_descriptor_sets (GskVulkanOp     *op,
 static GskVulkanOp *
 gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
                                GskVulkanRender  *render,
-                               VkPipelineLayout  pipeline_layout,
+                               VkRenderPass      render_pass,
                                VkCommandBuffer   command_buffer)
 {
   GskVulkanScissorOp *self = (GskVulkanScissorOp *) op;
@@ -72,8 +72,6 @@ gsk_vulkan_scissor_op_command (GskVulkanOp      *op,
 static const GskVulkanOpClass GSK_VULKAN_SCISSOR_OP_CLASS = {
   GSK_VULKAN_OP_SIZE (GskVulkanScissorOp),
   GSK_VULKAN_STAGE_COMMAND,
-  NULL,
-  NULL,
   gsk_vulkan_scissor_op_finish,
   gsk_vulkan_scissor_op_print,
   gsk_vulkan_scissor_op_count_vertex_data,

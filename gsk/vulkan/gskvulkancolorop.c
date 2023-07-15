@@ -3,6 +3,7 @@
 #include "gskvulkancoloropprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/color.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanColorOp GskVulkanColorOp;
 
 struct _GskVulkanColorOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   graphene_rect_t rect;
   GdkRGBA color;
@@ -40,7 +41,7 @@ gsk_vulkan_color_op_collect_vertex_data (GskVulkanOp *op,
                                          guchar      *data)
 {
   GskVulkanColorOp *self = (GskVulkanColorOp *) op;
-  GskVulkanColorInstance *instance = (GskVulkanColorInstance *) (data + op->vertex_offset);
+  GskVulkanColorInstance *instance = (GskVulkanColorInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   instance->rect[0] = self->rect.origin.x;
   instance->rect[1] = self->rect.origin.y;
@@ -58,17 +59,19 @@ gsk_vulkan_color_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static const GskVulkanOpClass GSK_VULKAN_COLOR_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanColorOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanColorOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_color_op_finish,
+    gsk_vulkan_color_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_color_op_collect_vertex_data,
+    gsk_vulkan_color_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "color",
   &gsk_vulkan_color_info,
-  gsk_vulkan_color_op_finish,
-  gsk_vulkan_color_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_color_op_collect_vertex_data,
-  gsk_vulkan_color_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -80,9 +83,9 @@ gsk_vulkan_color_op (GskVulkanRender        *render,
 {
   GskVulkanColorOp *self;
 
-  self = (GskVulkanColorOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_OP_CLASS);
+  self = (GskVulkanColorOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   self->color = *color;
 }

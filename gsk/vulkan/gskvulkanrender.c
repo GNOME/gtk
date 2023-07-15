@@ -14,6 +14,7 @@
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkanrenderpassprivate.h"
 #include "gskvulkanrenderpassopprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "gdk/gdkvulkancontextprivate.h"
 
@@ -512,13 +513,19 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
   gsk_vulkan_render_verbose_print (self, "after sort");
 }
 
+VkPipelineLayout
+gsk_vulkan_render_get_pipeline_layout (GskVulkanRender *self)
+{
+  return self->pipeline_layout;
+}
+
 VkPipeline
 gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
                                 const GskVulkanOpClass *op_class,
                                 const char             *clip_type,
-                                VkFormat                format,
                                 VkRenderPass            render_pass)
 {
+  const GskVulkanShaderOpClass *shader_op_class = (const GskVulkanShaderOpClass *) op_class;
   PipelineCacheKey cache_key;
   VkPipeline pipeline;
   GdkDisplay *display;
@@ -527,15 +534,15 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
     .clip_type = clip_type,
-    .format = format,
+    .format = gsk_vulkan_image_get_vk_format (self->target)
   };
   pipeline = g_hash_table_lookup (self->pipeline_cache, &cache_key);
   if (pipeline)
     return pipeline;
 
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self->vulkan));
-  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", op_class->shader_name, clip_type, ".vert.spv", NULL);
-  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", op_class->shader_name, clip_type, ".frag.spv", NULL);
+  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_type, ".vert.spv", NULL);
+  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_type, ".frag.spv", NULL);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, gdk_vulkan_context_get_device (self->vulkan),
                                            gdk_vulkan_context_get_pipeline_cache (self->vulkan),
@@ -557,7 +564,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
                                                        .pName = "main",
                                                    },
                                                },
-                                               .pVertexInputState = op_class->vertex_input_state,
+                                               .pVertexInputState = shader_op_class->vertex_input_state,
                                                .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                                                    .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
@@ -920,7 +927,7 @@ gsk_vulkan_render_submit (GskVulkanRender *self)
   op = self->first_op;
   while (op)
     {
-      op = gsk_vulkan_op_command (op, self, self->pipeline_layout, command_buffer);
+      op = gsk_vulkan_op_command (op, self, VK_NULL_HANDLE, command_buffer);
     }
 
   gsk_vulkan_command_pool_submit_buffer (self->command_pool,

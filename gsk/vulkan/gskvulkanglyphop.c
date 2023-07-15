@@ -3,6 +3,7 @@
 #include "gskvulkanglyphopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/glyph.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanGlyphOp GskVulkanGlyphOp;
 
 struct _GskVulkanGlyphOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   GskVulkanImage *image;
   graphene_rect_t rect;
@@ -47,7 +48,7 @@ gsk_vulkan_glyph_op_collect_vertex_data (GskVulkanOp         *op,
                                          guchar              *data)
 {
   GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
-  GskVulkanGlyphInstance *instance = (GskVulkanGlyphInstance *) (data + op->vertex_offset);
+  GskVulkanGlyphInstance *instance = (GskVulkanGlyphInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->rect, instance->rect);
   gsk_vulkan_rect_to_float (&self->tex_rect, instance->tex_rect);
@@ -64,17 +65,19 @@ gsk_vulkan_glyph_op_reserve_descriptor_sets (GskVulkanOp     *op,
   self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->image, GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static const GskVulkanOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanGlyphOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanGlyphOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_glyph_op_finish,
+    gsk_vulkan_glyph_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_glyph_op_collect_vertex_data,
+    gsk_vulkan_glyph_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "glyph",
   &gsk_vulkan_glyph_info,
-  gsk_vulkan_glyph_op_finish,
-  gsk_vulkan_glyph_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_glyph_op_collect_vertex_data,
-  gsk_vulkan_glyph_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -88,9 +91,9 @@ gsk_vulkan_glyph_op (GskVulkanRender        *render,
 {
   GskVulkanGlyphOp *self;
 
-  self = (GskVulkanGlyphOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_GLYPH_OP_CLASS);
+  self = (GskVulkanGlyphOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_GLYPH_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);

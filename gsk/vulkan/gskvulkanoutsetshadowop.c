@@ -3,6 +3,7 @@
 #include "gskvulkanoutsetshadowopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
 #include "vulkan/resources/outset-shadow.vert.h"
@@ -11,7 +12,7 @@ typedef struct _GskVulkanOutsetShadowOp GskVulkanOutsetShadowOp;
 
 struct _GskVulkanOutsetShadowOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   GskRoundedRect outline;
   GdkRGBA color;
@@ -45,7 +46,7 @@ gsk_vulkan_outset_shadow_op_collect_vertex_data (GskVulkanOp *op,
                                                  guchar      *data)
 {
   GskVulkanOutsetShadowOp *self = (GskVulkanOutsetShadowOp *) op;
-  GskVulkanOutsetShadowInstance *instance = (GskVulkanOutsetShadowInstance *) (data + op->vertex_offset);
+  GskVulkanOutsetShadowInstance *instance = (GskVulkanOutsetShadowInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   gsk_rounded_rect_to_float (&self->outline, graphene_point_zero (), instance->outline);
   gsk_vulkan_rgba_to_float (&self->color, instance->color);
@@ -60,17 +61,19 @@ gsk_vulkan_outset_shadow_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
 }
 
-static const GskVulkanOpClass GSK_VULKAN_OUTSET_SHADOW_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanOutsetShadowOp),
-  GSK_VULKAN_STAGE_COMMAND,
+static const GskVulkanShaderOpClass GSK_VULKAN_OUTSET_SHADOW_OP_CLASS = {
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanOutsetShadowOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_outset_shadow_op_finish,
+    gsk_vulkan_outset_shadow_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_outset_shadow_op_collect_vertex_data,
+    gsk_vulkan_outset_shadow_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "outset-shadow",
   &gsk_vulkan_outset_shadow_info,
-  gsk_vulkan_outset_shadow_op_finish,
-  gsk_vulkan_outset_shadow_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_outset_shadow_op_collect_vertex_data,
-  gsk_vulkan_outset_shadow_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -85,9 +88,9 @@ gsk_vulkan_outset_shadow_op (GskVulkanRender         *render,
 {
   GskVulkanOutsetShadowOp *self;
 
-  self = (GskVulkanOutsetShadowOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_OUTSET_SHADOW_OP_CLASS);
+  self = (GskVulkanOutsetShadowOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_OUTSET_SHADOW_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->outline = *outline;
   gsk_rounded_rect_offset (&self->outline, offset->x, offset->y);
   self->color = *color;

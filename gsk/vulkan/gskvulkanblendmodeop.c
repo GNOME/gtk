@@ -3,6 +3,7 @@
 #include "gskvulkanblendmodeopprivate.h"
 
 #include "gskvulkanprivate.h"
+#include "gskvulkanshaderopprivate.h"
 
 #include "vulkan/resources/blend-mode.vert.h"
 
@@ -10,7 +11,7 @@ typedef struct _GskVulkanBlendModeOp GskVulkanBlendModeOp;
 
 struct _GskVulkanBlendModeOp
 {
-  GskVulkanOp op;
+  GskVulkanShaderOp op;
 
   graphene_rect_t bounds;
   GskBlendMode blend_mode;
@@ -50,7 +51,7 @@ gsk_vulkan_blend_mode_op_collect_vertex_data (GskVulkanOp *op,
                                               guchar      *data)
 {
   GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
-  GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) (data + op->vertex_offset);
+  GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
   gsk_vulkan_rect_to_float (&self->bounds, instance->rect);
   gsk_vulkan_rect_to_float (&self->top.rect, instance->top_rect);
@@ -77,32 +78,19 @@ gsk_vulkan_blend_mode_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                                           GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
-static GskVulkanOp *
-gsk_vulkan_blend_mode_op_command (GskVulkanOp      *op,
-                                  GskVulkanRender  *render,
-                                  VkPipelineLayout  pipeline_layout,
-                                  VkCommandBuffer   command_buffer)
-{
-  GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
-
-  vkCmdDraw (command_buffer,
-             6, 1,
-             0, self->vertex_offset / gsk_vulkan_blend_mode_info.pVertexBindingDescriptions[0].stride);
-
-  return op->next;
-}
-
 static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
-  GSK_VULKAN_OP_SIZE (GskVulkanBlendModeOp),
-  GSK_VULKAN_STAGE_COMMAND,
+  {
+    GSK_VULKAN_OP_SIZE (GskVulkanBlendModeOp),
+    GSK_VULKAN_STAGE_COMMAND,
+    gsk_vulkan_blend_mode_op_finish,
+    gsk_vulkan_blend_mode_op_print,
+    gsk_vulkan_shader_op_count_vertex_data,
+    gsk_vulkan_blend_mode_op_collect_vertex_data,
+    gsk_vulkan_blend_mode_op_reserve_descriptor_sets,
+    gsk_vulkan_shader_op_command
+  },
   "blend-mode",
   &gsk_vulkan_blend_mode_info,
-  gsk_vulkan_blend_mode_op_finish,
-  gsk_vulkan_blend_mode_op_print,
-  gsk_vulkan_op_draw_count_vertex_data,
-  gsk_vulkan_blend_mode_op_collect_vertex_data,
-  gsk_vulkan_blend_mode_op_reserve_descriptor_sets,
-  gsk_vulkan_op_draw_command
 };
 
 void
@@ -120,9 +108,9 @@ gsk_vulkan_blend_mode_op (GskVulkanRender        *render,
 {
   GskVulkanBlendModeOp *self;
 
-  self = (GskVulkanBlendModeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BLEND_MODE_OP_CLASS);
+  self = (GskVulkanBlendModeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BLEND_MODE_OP_CLASS.parent_class);
 
-  ((GskVulkanOp *) self)->clip_type = g_intern_string (clip_type);
+  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->blend_mode = blend_mode;
 
