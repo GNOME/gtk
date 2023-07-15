@@ -14,22 +14,12 @@ struct _GskVulkanMaskOp
   GskVulkanShaderOp op;
 
   struct {
-    GskVulkanImage *image;
     graphene_rect_t rect;
     graphene_rect_t tex_rect;
     guint32 image_descriptor;
   } source, mask;
   GskMaskMode mask_mode;
 };
-
-static void
-gsk_vulkan_mask_op_finish (GskVulkanOp *op)
-{
-  GskVulkanMaskOp *self = (GskVulkanMaskOp *) op;
-
-  g_object_unref (self->source.image);
-  g_object_unref (self->mask.image);
-}
 
 static void
 gsk_vulkan_mask_op_print (GskVulkanOp *op,
@@ -84,16 +74,17 @@ gsk_vulkan_mask_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                             GskVulkanRender *render)
 {
   GskVulkanMaskOp *self = (GskVulkanMaskOp *) op;
+  GskVulkanShaderOp *shader = (GskVulkanShaderOp *) op;
 
-  self->source.image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->source.image, GSK_VULKAN_SAMPLER_DEFAULT);
-  self->mask.image_descriptor = gsk_vulkan_render_get_image_descriptor (render, self->mask.image, GSK_VULKAN_SAMPLER_DEFAULT);
+  self->source.image_descriptor = gsk_vulkan_render_get_image_descriptor (render, shader->images[0], GSK_VULKAN_SAMPLER_DEFAULT);
+  self->mask.image_descriptor = gsk_vulkan_render_get_image_descriptor (render, shader->images[1], GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
 static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanMaskOp),
     GSK_VULKAN_STAGE_COMMAND,
-    gsk_vulkan_mask_op_finish,
+    gsk_vulkan_shader_op_finish,
     gsk_vulkan_mask_op_print,
     gsk_vulkan_shader_op_count_vertex_data,
     gsk_vulkan_mask_op_collect_vertex_data,
@@ -101,6 +92,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "mask",
+  2,
   &gsk_vulkan_mask_info,
 };
 
@@ -118,12 +110,16 @@ gsk_vulkan_mask_op (GskVulkanRender        *render,
 {
   GskVulkanMaskOp *self;
 
-  self = (GskVulkanMaskOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_MASK_OP_CLASS, clip);
+  self = (GskVulkanMaskOp *) gsk_vulkan_shader_op_alloc (render,
+                                                         &GSK_VULKAN_COLOR_MASK_OP_CLASS,
+                                                         clip,
+                                                         (GskVulkanImage *[2]) {
+                                                             source,
+                                                             mask,
+                                                         });
 
-  self->source.image = g_object_ref (source);
   graphene_rect_offset_r (source_rect, offset->x, offset->y, &self->source.rect);
   gsk_vulkan_normalize_tex_coords (&self->source.tex_rect, source_rect, source_tex_rect);
-  self->mask.image = g_object_ref (mask);
   graphene_rect_offset_r (mask_rect, offset->x, offset->y, &self->mask.rect);
   gsk_vulkan_normalize_tex_coords (&self->mask.tex_rect, mask_rect, mask_tex_rect);
   self->mask_mode = mask_mode;

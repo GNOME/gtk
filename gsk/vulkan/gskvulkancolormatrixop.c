@@ -13,7 +13,6 @@ struct _GskVulkanColorMatrixOp
 {
   GskVulkanShaderOp op;
 
-  GskVulkanImage *image;
   graphene_matrix_t color_matrix;
   graphene_vec4_t color_offset;
   graphene_rect_t rect;
@@ -21,14 +20,6 @@ struct _GskVulkanColorMatrixOp
 
   guint32 image_descriptor;
 };
-
-static void
-gsk_vulkan_color_matrix_op_finish (GskVulkanOp *op)
-{
-  GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
-
-  g_object_unref (self->image);
-}
 
 static void
 gsk_vulkan_color_matrix_op_print (GskVulkanOp *op,
@@ -68,9 +59,10 @@ gsk_vulkan_color_matrix_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                     GskVulkanRender *render)
 {
   GskVulkanColorMatrixOp *self = (GskVulkanColorMatrixOp *) op;
+  GskVulkanShaderOp *shader = (GskVulkanShaderOp *) op;
 
   self->image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                   self->image,
+                                                                   shader->images[0],
                                                                    GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
@@ -78,7 +70,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanColorMatrixOp),
     GSK_VULKAN_STAGE_COMMAND,
-    gsk_vulkan_color_matrix_op_finish,
+    gsk_vulkan_shader_op_finish,
     gsk_vulkan_color_matrix_op_print,
     gsk_vulkan_shader_op_count_vertex_data,
     gsk_vulkan_color_matrix_op_collect_vertex_data,
@@ -86,6 +78,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "color-matrix",
+  1,
   &gsk_vulkan_color_matrix_info,
 };
 
@@ -101,9 +94,8 @@ gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
 {
   GskVulkanColorMatrixOp *self;
 
-  self = (GskVulkanColorMatrixOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS, clip);
+  self = (GskVulkanColorMatrixOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS, clip, &image);
 
-  self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);
   self->color_matrix = *color_matrix;

@@ -95,6 +95,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BORDER_OP_CLASS = {
     gsk_vulkan_border_op_command
   },
   "border",
+  0,
   &gsk_vulkan_border_info,
 };
 
@@ -109,7 +110,7 @@ gsk_vulkan_border_op (GskVulkanRender         *render,
   GskVulkanBorderOp *self;
   guint i;
 
-  self = (GskVulkanBorderOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS, clip);
+  self = (GskVulkanBorderOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS, clip, NULL);
 
   self->outline = *outline;
   gsk_rounded_rect_offset (&self->outline, offset->x, offset->y);

@@ -71,6 +71,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "color",
+  0,
   &gsk_vulkan_color_info,
 };
 
@@ -83,7 +84,7 @@ gsk_vulkan_color_op (GskVulkanRender        *render,
 {
   GskVulkanColorOp *self;
 
-  self = (GskVulkanColorOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_OP_CLASS, clip);
+  self = (GskVulkanColorOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_OP_CLASS, clip, NULL);
 
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   self->color = *color;

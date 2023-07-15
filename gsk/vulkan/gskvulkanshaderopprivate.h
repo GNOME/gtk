@@ -15,6 +15,7 @@ struct _GskVulkanShaderOp
 
   GskVulkanShaderClip clip;
   gsize vertex_offset;
+  GskVulkanImage *images[2];
 };
 
 struct _GskVulkanShaderOpClass
@@ -22,13 +23,16 @@ struct _GskVulkanShaderOpClass
   GskVulkanOpClass      parent_class;
 
   const char *          shader_name;
+  gsize                 n_images;
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 };
 
 GskVulkanShaderOp *     gsk_vulkan_shader_op_alloc                      (GskVulkanRender        *render,
                                                                          const GskVulkanShaderOpClass *op_class,
-                                                                         GskVulkanShaderClip     clip);
+                                                                         GskVulkanShaderClip     clip,
+                                                                         GskVulkanImage        **images);
 
+void                    gsk_vulkan_shader_op_finish                     (GskVulkanOp            *op);
 gsize                   gsk_vulkan_shader_op_count_vertex_data          (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);
 GskVulkanOp *           gsk_vulkan_shader_op_command_n                  (GskVulkanOp            *op,

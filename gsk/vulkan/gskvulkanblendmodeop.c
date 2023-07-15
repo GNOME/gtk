@@ -17,21 +17,11 @@ struct _GskVulkanBlendModeOp
   GskBlendMode blend_mode;
 
   struct {
-    GskVulkanImage *image;
     graphene_rect_t rect;
     graphene_rect_t tex_rect;
     guint32 image_descriptor;
   } top, bottom;
 };
-
-static void
-gsk_vulkan_blend_mode_op_finish (GskVulkanOp *op)
-{
-  GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
-
-  g_object_unref (self->top.image);
-  g_object_unref (self->bottom.image);
-}
 
 static void
 gsk_vulkan_blend_mode_op_print (GskVulkanOp *op,
@@ -69,12 +59,13 @@ gsk_vulkan_blend_mode_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                   GskVulkanRender *render)
 {
   GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
+  GskVulkanShaderOp *shader = (GskVulkanShaderOp *) op;
 
   self->top.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                       self->top.image,
+                                                                       shader->images[0],
                                                                        GSK_VULKAN_SAMPLER_DEFAULT);
   self->bottom.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                          self->bottom.image,
+                                                                          shader->images[1],
                                                                           GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
@@ -82,7 +73,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanBlendModeOp),
     GSK_VULKAN_STAGE_COMMAND,
-    gsk_vulkan_blend_mode_op_finish,
+    gsk_vulkan_shader_op_finish,
     gsk_vulkan_blend_mode_op_print,
     gsk_vulkan_shader_op_count_vertex_data,
     gsk_vulkan_blend_mode_op_collect_vertex_data,
@@ -90,6 +81,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "blend-mode",
+  2,
   &gsk_vulkan_blend_mode_info,
 };
 
@@ -108,16 +100,20 @@ gsk_vulkan_blend_mode_op (GskVulkanRender        *render,
 {
   GskVulkanBlendModeOp *self;
 
-  self = (GskVulkanBlendModeOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_BLEND_MODE_OP_CLASS, clip);
+  self = (GskVulkanBlendModeOp *) gsk_vulkan_shader_op_alloc (render,
+                                                              &GSK_VULKAN_BLEND_MODE_OP_CLASS,
+                                                              clip,
+                                                              (GskVulkanImage *[2]) {
+                                                                  top_image,
+                                                                  bottom_image
+                                                              });
 
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->blend_mode = blend_mode;
 
-  self->top.image = g_object_ref (top_image);
   graphene_rect_offset_r (top_rect, offset->x, offset->y, &self->top.rect);
   gsk_vulkan_normalize_tex_coords (&self->top.tex_rect, bounds, top_tex_rect);
 
-  self->bottom.image = g_object_ref (bottom_image);
   graphene_rect_offset_r (bottom_rect, offset->x, offset->y, &self->bottom.rect);
   gsk_vulkan_normalize_tex_coords (&self->bottom.tex_rect, bounds, bottom_tex_rect);
 }

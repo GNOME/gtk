@@ -17,21 +17,11 @@ struct _GskVulkanCrossFadeOp
   float progress;
 
   struct {
-    GskVulkanImage *image;
     graphene_rect_t rect;
     graphene_rect_t tex_rect;
     guint32 image_descriptor;
   } start, end;
 };
-
-static void
-gsk_vulkan_cross_fade_op_finish (GskVulkanOp *op)
-{
-  GskVulkanCrossFadeOp *self = (GskVulkanCrossFadeOp *) op;
-
-  g_object_unref (self->start.image);
-  g_object_unref (self->end.image);
-}
 
 static void
 gsk_vulkan_cross_fade_op_print (GskVulkanOp *op,
@@ -69,12 +59,13 @@ gsk_vulkan_cross_fade_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                                   GskVulkanRender *render)
 {
   GskVulkanCrossFadeOp *self = (GskVulkanCrossFadeOp *) op;
+  GskVulkanShaderOp *shader = (GskVulkanShaderOp *) op;
 
   self->start.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                         self->start.image,
+                                                                         shader->images[0],
                                                                          GSK_VULKAN_SAMPLER_DEFAULT);
   self->end.image_descriptor = gsk_vulkan_render_get_image_descriptor (render,
-                                                                       self->end.image,
+                                                                       shader->images[1],
                                                                        GSK_VULKAN_SAMPLER_DEFAULT);
 }
 
@@ -82,7 +73,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
   {
     GSK_VULKAN_OP_SIZE (GskVulkanCrossFadeOp),
     GSK_VULKAN_STAGE_COMMAND,
-    gsk_vulkan_cross_fade_op_finish,
+    gsk_vulkan_shader_op_finish,
     gsk_vulkan_cross_fade_op_print,
     gsk_vulkan_shader_op_count_vertex_data,
     gsk_vulkan_cross_fade_op_collect_vertex_data,
@@ -90,6 +81,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "cross-fade",
+  2,
   &gsk_vulkan_cross_fade_info,
 };
 
@@ -108,16 +100,20 @@ gsk_vulkan_cross_fade_op (GskVulkanRender        *render,
 {
   GskVulkanCrossFadeOp *self;
 
-  self = (GskVulkanCrossFadeOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_CROSS_FADE_OP_CLASS, clip);
+  self = (GskVulkanCrossFadeOp *) gsk_vulkan_shader_op_alloc (render,
+                                                              &GSK_VULKAN_CROSS_FADE_OP_CLASS,
+                                                              clip,
+                                                              (GskVulkanImage *[2]) {
+                                                                  start_image,
+                                                                  end_image
+                                                              });
 
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->progress = progress;
 
-  self->start.image = g_object_ref (start_image);
   graphene_rect_offset_r (start_rect, offset->x, offset->y, &self->start.rect);
   gsk_vulkan_normalize_tex_coords (&self->start.tex_rect, bounds, start_tex_rect);
 
-  self->end.image = g_object_ref (end_image);
   graphene_rect_offset_r (end_rect, offset->x, offset->y, &self->end.rect);
   gsk_vulkan_normalize_tex_coords (&self->end.tex_rect, bounds, end_tex_rect);
 }

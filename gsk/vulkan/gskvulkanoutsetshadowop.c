@@ -73,6 +73,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_OUTSET_SHADOW_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "outset-shadow",
+  0,
   &gsk_vulkan_outset_shadow_info,
 };
 
@@ -88,7 +89,7 @@ gsk_vulkan_outset_shadow_op (GskVulkanRender         *render,
 {
   GskVulkanOutsetShadowOp *self;
 
-  self = (GskVulkanOutsetShadowOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_OUTSET_SHADOW_OP_CLASS, clip);
+  self = (GskVulkanOutsetShadowOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_OUTSET_SHADOW_OP_CLASS, clip, NULL);
 
   self->outline = *outline;
   gsk_rounded_rect_offset (&self->outline, offset->x, offset->y);

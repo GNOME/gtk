@@ -85,6 +85,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS = {
     gsk_vulkan_shader_op_command
   },
   "linear",
+  0,
   &gsk_vulkan_linear_info,
 };
 
@@ -101,7 +102,7 @@ gsk_vulkan_linear_gradient_op (GskVulkanRender        *render,
 {
   GskVulkanLinearGradientOp *self;
 
-  self = (GskVulkanLinearGradientOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS, clip);
+  self = (GskVulkanLinearGradientOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_LINEAR_GRADIENT_OP_CLASS, clip, NULL);
 
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   self->start = GRAPHENE_POINT_INIT (start->x + offset->x, start->y + offset->y);

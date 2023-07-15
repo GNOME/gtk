@@ -2,6 +2,17 @@
 
 #include "gskvulkanshaderopprivate.h"
 
+void
+gsk_vulkan_shader_op_finish (GskVulkanOp *op)
+{
+  GskVulkanShaderOpClass *shader_op_class = ((GskVulkanShaderOpClass *) op->op_class);
+  GskVulkanShaderOp *self = (GskVulkanShaderOp *) op;
+  gsize i;
+
+  for (i = 0; i < shader_op_class->n_images; i++)
+    g_object_unref (self->images[i]);
+}
+
 static inline gsize
 round_up (gsize number, gsize divisor)
 {
@@ -74,13 +85,18 @@ gsk_vulkan_shader_op_command (GskVulkanOp      *op,
 GskVulkanShaderOp *
 gsk_vulkan_shader_op_alloc (GskVulkanRender              *render,
                             const GskVulkanShaderOpClass *op_class,
-                            GskVulkanShaderClip           clip)
+                            GskVulkanShaderClip           clip,
+                            GskVulkanImage              **images)
 {
   GskVulkanShaderOp *self;
+  gsize i;
 
   self = (GskVulkanShaderOp *) gsk_vulkan_op_alloc (render, &op_class->parent_class);
 
   self->clip = clip;
+
+  for (i = 0; i < op_class->n_images; i++)
+    self->images[i] = g_object_ref (images[i]);
 
   return self;
 }
