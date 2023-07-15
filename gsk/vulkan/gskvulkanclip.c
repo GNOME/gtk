@@ -285,16 +285,16 @@ gsk_vulkan_clip_contains_rect (const GskVulkanClip    *self,
     }
 }
 
-const char *
-gsk_vulkan_clip_get_clip_type (const GskVulkanClip    *self,
-                               const graphene_point_t *offset,
-                               const graphene_rect_t  *rect)
+GskVulkanShaderClip
+gsk_vulkan_clip_get_shader_clip (const GskVulkanClip    *self,
+                                 const graphene_point_t *offset,
+                                 const graphene_rect_t  *rect)
 {
   if (gsk_vulkan_clip_contains_rect (self, offset, rect))
-    return "";
+    return GSK_VULKAN_SHADER_CLIP_NONE;
   else if (self->type == GSK_VULKAN_CLIP_RECT)
-    return "-clip";
+    return GSK_VULKAN_SHADER_CLIP_RECT;
   else
-    return "-clip-rounded";
+    return GSK_VULKAN_SHADER_CLIP_ROUNDED;
 }
 

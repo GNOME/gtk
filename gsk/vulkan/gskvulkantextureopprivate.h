@@ -5,7 +5,7 @@
 G_BEGIN_DECLS
 
 void                    gsk_vulkan_texture_op                           (GskVulkanRender                *render,
-                                                                         const char                     *clip_type,
+                                                                         GskVulkanShaderClip             clip,
                                                                          GskVulkanImage                 *image,
                                                                          GskVulkanRenderSampler          sampler,
                                                                          const graphene_rect_t          *rect,

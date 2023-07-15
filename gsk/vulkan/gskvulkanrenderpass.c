@@ -275,7 +275,7 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
                                       &clipped);
 
   gsk_vulkan_texture_op (render,
-                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                         gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_DEFAULT,
                          &node->bounds,
@@ -351,13 +351,13 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
       if (state->clip.type == GSK_VULKAN_CLIP_ROUNDED)
         {
           graphene_rect_t cover;
-          const char *clip_type;
+          GskVulkanShaderClip shader_clip;
           float scale_x = graphene_vec2_get_x (&state->scale);
           float scale_y = graphene_vec2_get_y (&state->scale);
           clipped = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
                                         int_clipped.width / scale_x, int_clipped.height / scale_y);
-          clip_type = gsk_vulkan_clip_get_clip_type (&state->clip, graphene_point_zero(), &clipped);
-          if (clip_type[0] != '\0')
+          shader_clip = gsk_vulkan_clip_get_shader_clip (&state->clip, graphene_point_zero(), &clipped);
+          if (shader_clip != GSK_VULKAN_SHADER_CLIP_NONE)
             {
               gsk_rounded_rect_get_largest_cover (&state->clip.rect, &clipped, &cover);
               int_clipped.x = ceil (cover.origin.x * scale_x);
@@ -367,7 +367,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
               if (int_clipped.width == 0 || int_clipped.height == 0)
                 {
                   gsk_vulkan_color_op (render,
-                                       clip_type,
+                                       shader_clip,
                                        &clipped,
                                        graphene_point_zero (),
                                        color);
@@ -377,19 +377,19 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
                                           int_clipped.width / scale_x, int_clipped.height / scale_y);
               if (clipped.origin.x != cover.origin.x)
                 gsk_vulkan_color_op (render,
-                                     clip_type,
+                                     shader_clip,
                                      &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
                                      graphene_point_zero (),
                                      color);
               if (clipped.origin.y != cover.origin.y)
                 gsk_vulkan_color_op (render,
-                                     clip_type,
+                                     shader_clip,
                                      &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
                                      graphene_point_zero (),
                                      color);
               if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
                 gsk_vulkan_color_op (render,
-                                     clip_type,
+                                     shader_clip,
                                      &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
                                                           clipped.origin.y,
                                                           clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
@@ -398,7 +398,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
                                      color);
               if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
                 gsk_vulkan_color_op (render,
-                                     clip_type,
+                                     shader_clip,
                                      &GRAPHENE_RECT_INIT (clipped.origin.x,
                                                           cover.origin.y + cover.size.height,
                                                           clipped.size.width,
@@ -415,7 +415,7 @@ gsk_vulkan_render_pass_add_color_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_color_op (render,
-                       gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                       gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                        &rect,
                        graphene_point_zero (),
                        color);
@@ -430,7 +430,7 @@ gsk_vulkan_render_pass_add_linear_gradient_node (GskVulkanRenderPass       *self
                                                  GskRenderNode             *node)
 {
   gsk_vulkan_linear_gradient_op (render,
-                                 gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                                 gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                                  &node->bounds,
                                  &state->offset,
                                  gsk_linear_gradient_node_get_start (node),
@@ -448,7 +448,7 @@ gsk_vulkan_render_pass_add_border_node (GskVulkanRenderPass       *self,
                                         GskRenderNode             *node)
 {
   gsk_vulkan_border_op (render,
-                        gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                        gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                         gsk_border_node_get_outline (node),
                         &state->offset,
                         gsk_border_node_get_widths (node),
@@ -476,7 +476,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_texture_op (render,
-                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                         gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_DEFAULT,
                          &node->bounds,
@@ -519,7 +519,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_texture_op (render,
-                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                         gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                          image,
                          sampler,
                          &node->bounds,
@@ -539,7 +539,7 @@ gsk_vulkan_render_pass_add_inset_shadow_node (GskVulkanRenderPass       *self,
     FALLBACK ("Blur support not implemented for inset shadows");
 
   gsk_vulkan_inset_shadow_op (render,
-                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                              gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                               gsk_inset_shadow_node_get_outline (node),
                               &state->offset,
                               gsk_inset_shadow_node_get_color (node),
@@ -561,7 +561,7 @@ gsk_vulkan_render_pass_add_outset_shadow_node (GskVulkanRenderPass       *self,
     FALLBACK ("Blur support not implemented for outset shadows");
 
   gsk_vulkan_outset_shadow_op (render,
-                               gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                               gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                                gsk_outset_shadow_node_get_outline (node),
                                &state->offset,
                                gsk_outset_shadow_node_get_color (node),
@@ -745,7 +745,7 @@ gsk_vulkan_render_pass_add_opacity_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   gsk_vulkan_color_matrix_op_opacity (render,
-                                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                                      gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                                       image,
                                       &node->bounds,
                                       &state->offset,
@@ -773,7 +773,7 @@ gsk_vulkan_render_pass_add_color_matrix_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   gsk_vulkan_color_matrix_op (render,
-                              gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                              gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                               image,
                               &node->bounds,
                               &state->offset,
@@ -907,7 +907,7 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
                                                gsk_repeat_node_get_child (node));
 
   gsk_vulkan_texture_op (render,
-                         gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                         gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                          image,
                          GSK_VULKAN_SAMPLER_REPEAT,
                          &node->bounds,
@@ -954,7 +954,7 @@ gsk_vulkan_render_pass_add_blend_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_blend_mode_op (render,
-                            gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                            gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                             &node->bounds,
                             &state->offset,
                             gsk_blend_node_get_blend_mode (node),
@@ -998,7 +998,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
         return TRUE;
 
       gsk_vulkan_color_matrix_op_opacity (render,
-                                          gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &end_child->bounds),
+                                          gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &end_child->bounds),
                                           end_image,
                                           &node->bounds,
                                           &state->offset,
@@ -1010,7 +1010,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
   else if (end_image == NULL)
     {
       gsk_vulkan_color_matrix_op_opacity (render,
-                                          gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &start_child->bounds),
+                                          gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &start_child->bounds),
                                           start_image,
                                           &node->bounds,
                                           &state->offset,
@@ -1020,7 +1020,7 @@ gsk_vulkan_render_pass_add_cross_fade_node (GskVulkanRenderPass       *self,
     }
 
   gsk_vulkan_cross_fade_op (render,
-                            gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                            gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                             &node->bounds,
                             &state->offset,
                             progress,
@@ -1083,7 +1083,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
                           glyph->draw_height / glyph->th);
       if (gsk_text_node_has_color_glyphs (node))
         gsk_vulkan_texture_op (render,
-                               gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &glyph_bounds),
+                               gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &glyph_bounds),
                                glyph->atlas_image,
                                GSK_VULKAN_SAMPLER_DEFAULT,
                                &glyph_bounds,
@@ -1091,7 +1091,7 @@ gsk_vulkan_render_pass_add_text_node (GskVulkanRenderPass       *self,
                                &glyph_tex_rect);
       else
         gsk_vulkan_glyph_op (render,
-                             gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &glyph_bounds),
+                             gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &glyph_bounds),
                              glyph->atlas_image,
                              &glyph_bounds,
                              &state->offset,
@@ -1130,7 +1130,7 @@ gsk_vulkan_render_pass_add_blur_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   gsk_vulkan_blur_op (render,
-                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                      gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                       image,
                       &node->bounds,
                       &state->offset,
@@ -1174,7 +1174,7 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
       graphene_rect_t bounds;
       if (graphene_rect_intersection (&source->bounds, &mask->bounds, &bounds))
         gsk_vulkan_glyph_op (render,
-                             gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &bounds),
+                             gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &bounds),
                              mask_image,
                              &bounds,
                              &state->offset,
@@ -1192,7 +1192,7 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   gsk_vulkan_mask_op (render,
-                      gsk_vulkan_clip_get_clip_type (&state->clip, &state->offset, &node->bounds),
+                      gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
                       &state->offset,
                       source_image,
                       &source->bounds,

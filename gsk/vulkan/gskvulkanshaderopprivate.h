@@ -2,6 +2,8 @@
 
 #include "gskvulkanopprivate.h"
 
+#include "gskvulkanclipprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GskVulkanShaderOp GskVulkanShaderOp;
@@ -11,7 +13,7 @@ struct _GskVulkanShaderOp
 {
   GskVulkanOp parent_op;
 
-  const /* interned */ char *clip_type;
+  GskVulkanShaderClip clip;
   gsize vertex_offset;
 };
 
@@ -22,6 +24,10 @@ struct _GskVulkanShaderOpClass
   const char *          shader_name;
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 };
+
+GskVulkanShaderOp *     gsk_vulkan_shader_op_alloc                      (GskVulkanRender        *render,
+                                                                         const GskVulkanShaderOpClass *op_class,
+                                                                         GskVulkanShaderClip     clip);
 
 gsize                   gsk_vulkan_shader_op_count_vertex_data          (GskVulkanOp            *op,
                                                                          gsize                   n_bytes);

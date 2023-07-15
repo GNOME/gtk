@@ -52,7 +52,7 @@ gsk_vulkan_shader_op_command_n (GskVulkanOp      *op,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_render_get_pipeline (render,
                                                      op->op_class,
-                                                     self->clip_type,
+                                                     self->clip,
                                                      render_pass));
 
   vkCmdDraw (command_buffer,
@@ -71,3 +71,16 @@ gsk_vulkan_shader_op_command (GskVulkanOp      *op,
   return gsk_vulkan_shader_op_command_n (op, render, render_pass, command_buffer, 1);
 }
 
+GskVulkanShaderOp *
+gsk_vulkan_shader_op_alloc (GskVulkanRender              *render,
+                            const GskVulkanShaderOpClass *op_class,
+                            GskVulkanShaderClip           clip)
+{
+  GskVulkanShaderOp *self;
+
+  self = (GskVulkanShaderOp *) gsk_vulkan_op_alloc (render, &op_class->parent_class);
+
+  self->clip = clip;
+
+  return self;
+}

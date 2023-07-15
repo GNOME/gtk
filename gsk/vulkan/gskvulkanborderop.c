@@ -100,7 +100,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BORDER_OP_CLASS = {
 
 void
 gsk_vulkan_border_op (GskVulkanRender         *render,
-                      const char              *clip_type,
+                      GskVulkanShaderClip      clip,
                       const GskRoundedRect    *outline,
                       const graphene_point_t  *offset,
                       const float              widths[4],
@@ -109,9 +109,8 @@ gsk_vulkan_border_op (GskVulkanRender         *render,
   GskVulkanBorderOp *self;
   guint i;
 
-  self = (GskVulkanBorderOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS.parent_class);
+  self = (GskVulkanBorderOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_BORDER_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->outline = *outline;
   gsk_rounded_rect_offset (&self->outline, offset->x, offset->y);
   for (i = 0; i < 4; i++)

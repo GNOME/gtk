@@ -5,7 +5,7 @@
 G_BEGIN_DECLS
 
 void                    gsk_vulkan_blur_op                              (GskVulkanRender                *render,
-                                                                         const char                     *clip_type,
+                                                                         GskVulkanShaderClip             clip,
                                                                          GskVulkanImage                 *image,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,

@@ -5,7 +5,7 @@
 G_BEGIN_DECLS
 
 void                    gsk_vulkan_border_op                            (GskVulkanRender                *render,
-                                                                         const char                     *clip_type,
+                                                                         GskVulkanShaderClip             clip,
                                                                          const GskRoundedRect           *outline,
                                                                          const graphene_point_t         *offset,
                                                                          const float                     widths[4],

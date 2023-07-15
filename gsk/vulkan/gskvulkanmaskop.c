@@ -106,7 +106,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MASK_OP_CLASS = {
 
 void
 gsk_vulkan_mask_op (GskVulkanRender        *render,
-                    const char             *clip_type,
+                    GskVulkanShaderClip     clip,
                     const graphene_point_t *offset,
                     GskVulkanImage         *source,
                     const graphene_rect_t  *source_rect,
@@ -118,9 +118,8 @@ gsk_vulkan_mask_op (GskVulkanRender        *render,
 {
   GskVulkanMaskOp *self;
 
-  self = (GskVulkanMaskOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MASK_OP_CLASS.parent_class);
+  self = (GskVulkanMaskOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_MASK_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->source.image = g_object_ref (source);
   graphene_rect_offset_r (source_rect, offset->x, offset->y, &self->source.rect);
   gsk_vulkan_normalize_tex_coords (&self->source.tex_rect, source_rect, source_tex_rect);

@@ -5,7 +5,7 @@
 G_BEGIN_DECLS
 
 void                    gsk_vulkan_inset_shadow_op                      (GskVulkanRender                *render,
-                                                                         const char                     *clip_type,
+                                                                         GskVulkanShaderClip             clip,
                                                                          const GskRoundedRect           *outline,
                                                                          const graphene_point_t         *offset,
                                                                          const GdkRGBA                  *color,

@@ -87,7 +87,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_TEXTURE_OP_CLASS = {
 
 void
 gsk_vulkan_texture_op (GskVulkanRender        *render,
-                       const char             *clip_type,
+                       GskVulkanShaderClip     clip,
                        GskVulkanImage         *image,
                        GskVulkanRenderSampler  sampler,
                        const graphene_rect_t  *rect,
@@ -96,9 +96,8 @@ gsk_vulkan_texture_op (GskVulkanRender        *render,
 {
   GskVulkanTextureOp *self;
 
-  self = (GskVulkanTextureOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_TEXTURE_OP_CLASS.parent_class);
+  self = (GskVulkanTextureOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_TEXTURE_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   self->sampler = sampler;
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);

@@ -87,7 +87,7 @@ typedef struct _RenderPassCacheKey RenderPassCacheKey;
 struct _PipelineCacheKey
 {
   const GskVulkanOpClass *op_class;
-  const /* interned */ char *clip_type;
+  GskVulkanShaderClip clip;
   VkFormat format;
 };
 
@@ -104,8 +104,8 @@ pipeline_cache_key_hash (gconstpointer data)
   const PipelineCacheKey *key = data;
 
   return GPOINTER_TO_UINT (key->op_class) ^
-         GPOINTER_TO_UINT (key->clip_type) ^
-         key->format;
+         key->clip ^
+         (key->format << 2);
 }
 
 static gboolean
@@ -116,7 +116,7 @@ pipeline_cache_key_equal (gconstpointer a,
   const PipelineCacheKey *keyb = b;
 
   return keya->op_class == keyb->op_class &&
-         keya->clip_type == keyb->clip_type &&
+         keya->clip == keyb->clip &&
          keya->format == keyb->format;
 }
 
@@ -522,10 +522,11 @@ gsk_vulkan_render_get_pipeline_layout (GskVulkanRender *self)
 VkPipeline
 gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
                                 const GskVulkanOpClass *op_class,
-                                const char             *clip_type,
+                                GskVulkanShaderClip     clip,
                                 VkRenderPass            render_pass)
 {
   const GskVulkanShaderOpClass *shader_op_class = (const GskVulkanShaderOpClass *) op_class;
+  static const char *clip_names[] = { "", "-clip", "-clip-rounded" };
   PipelineCacheKey cache_key;
   VkPipeline pipeline;
   GdkDisplay *display;
@@ -533,7 +534,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
-    .clip_type = clip_type,
+    .clip = clip,
     .format = gsk_vulkan_image_get_vk_format (self->target)
   };
   pipeline = g_hash_table_lookup (self->pipeline_cache, &cache_key);
@@ -541,8 +542,8 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender        *self,
     return pipeline;
 
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self->vulkan));
-  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_type, ".vert.spv", NULL);
-  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_type, ".frag.spv", NULL);
+  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_names[clip], ".vert.spv", NULL);
+  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/vulkan/", shader_op_class->shader_name, clip_names[clip], ".frag.spv", NULL);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, gdk_vulkan_context_get_device (self->vulkan),
                                            gdk_vulkan_context_get_pipeline_cache (self->vulkan),

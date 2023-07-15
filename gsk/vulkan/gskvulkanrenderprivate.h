@@ -3,6 +3,7 @@
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
 
+#include "gskvulkanclipprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanprivate.h"
 #include "gskvulkanrenderpassprivate.h"
@@ -44,7 +45,7 @@ gpointer                gsk_vulkan_render_alloc_op                      (GskVulk
 VkPipelineLayout        gsk_vulkan_render_get_pipeline_layout           (GskVulkanRender        *self);
 VkPipeline              gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
                                                                          const GskVulkanOpClass *op_class,
-                                                                         const char             *clip_type,
+                                                                         GskVulkanShaderClip     clip,
                                                                          VkRenderPass            render_pass);
 VkRenderPass            gsk_vulkan_render_get_render_pass               (GskVulkanRender        *self,
                                                                          VkFormat                format,

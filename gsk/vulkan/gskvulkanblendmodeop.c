@@ -95,7 +95,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_BLEND_MODE_OP_CLASS = {
 
 void
 gsk_vulkan_blend_mode_op (GskVulkanRender        *render,
-                          const char             *clip_type,
+                          GskVulkanShaderClip     clip,
                           const graphene_rect_t  *bounds,
                           const graphene_point_t *offset,
                           GskBlendMode            blend_mode,
@@ -108,9 +108,8 @@ gsk_vulkan_blend_mode_op (GskVulkanRender        *render,
 {
   GskVulkanBlendModeOp *self;
 
-  self = (GskVulkanBlendModeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_BLEND_MODE_OP_CLASS.parent_class);
+  self = (GskVulkanBlendModeOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_BLEND_MODE_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->blend_mode = blend_mode;
 

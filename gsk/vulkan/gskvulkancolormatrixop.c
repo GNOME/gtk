@@ -91,7 +91,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_COLOR_MATRIX_OP_CLASS = {
 
 void
 gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
-                            const char              *clip_type,
+                            GskVulkanShaderClip      clip,
                             GskVulkanImage          *image,
                             const graphene_rect_t   *rect,
                             const graphene_point_t  *offset,
@@ -101,9 +101,8 @@ gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
 {
   GskVulkanColorMatrixOp *self;
 
-  self = (GskVulkanColorMatrixOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS.parent_class);
+  self = (GskVulkanColorMatrixOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_COLOR_MATRIX_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);
@@ -113,7 +112,7 @@ gsk_vulkan_color_matrix_op (GskVulkanRender         *render,
 
 void
 gsk_vulkan_color_matrix_op_opacity (GskVulkanRender        *render,
-                                    const char             *clip_type,
+                                    GskVulkanShaderClip     clip,
                                     GskVulkanImage         *image,
                                     const graphene_rect_t  *rect,
                                     const graphene_point_t *offset,
@@ -133,7 +132,7 @@ gsk_vulkan_color_matrix_op_opacity (GskVulkanRender        *render,
   graphene_vec4_init (&color_offset, 0.0, 0.0, 0.0, 0.0);
 
   gsk_vulkan_color_matrix_op (render,
-                              clip_type,
+                              clip,
                               image,
                               rect,
                               offset,

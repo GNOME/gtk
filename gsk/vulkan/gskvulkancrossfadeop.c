@@ -95,7 +95,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_CROSS_FADE_OP_CLASS = {
 
 void
 gsk_vulkan_cross_fade_op (GskVulkanRender        *render,
-                          const char             *clip_type,
+                          GskVulkanShaderClip     clip,
                           const graphene_rect_t  *bounds,
                           const graphene_point_t *offset,
                           float                   progress,
@@ -108,9 +108,8 @@ gsk_vulkan_cross_fade_op (GskVulkanRender        *render,
 {
   GskVulkanCrossFadeOp *self;
 
-  self = (GskVulkanCrossFadeOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_CROSS_FADE_OP_CLASS.parent_class);
+  self = (GskVulkanCrossFadeOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_CROSS_FADE_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   graphene_rect_offset_r (bounds, offset->x, offset->y, &self->bounds);
   self->progress = progress;
 

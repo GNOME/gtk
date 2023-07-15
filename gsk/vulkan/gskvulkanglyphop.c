@@ -82,7 +82,7 @@ static const GskVulkanShaderOpClass GSK_VULKAN_GLYPH_OP_CLASS = {
 
 void
 gsk_vulkan_glyph_op (GskVulkanRender        *render,
-                     const char             *clip_type,
+                     GskVulkanShaderClip     clip,
                      GskVulkanImage         *image,
                      const graphene_rect_t  *rect,
                      const graphene_point_t *offset,
@@ -91,9 +91,8 @@ gsk_vulkan_glyph_op (GskVulkanRender        *render,
 {
   GskVulkanGlyphOp *self;
 
-  self = (GskVulkanGlyphOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_GLYPH_OP_CLASS.parent_class);
+  self = (GskVulkanGlyphOp *) gsk_vulkan_shader_op_alloc (render, &GSK_VULKAN_GLYPH_OP_CLASS, clip);
 
-  ((GskVulkanShaderOp *) self)->clip_type = g_intern_string (clip_type);
   self->image = g_object_ref (image);
   graphene_rect_offset_r (rect, offset->x, offset->y, &self->rect);
   gsk_vulkan_normalize_tex_coords (&self->tex_rect, rect, tex_rect);
