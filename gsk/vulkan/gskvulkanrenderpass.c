@@ -18,6 +18,7 @@
 #include "gskvulkancoloropprivate.h"
 #include "gskvulkanconvertopprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
+#include "gskvulkanfillopprivate.h"
 #include "gskvulkanglyphopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
 #include "gskvulkanlineargradientopprivate.h"
@@ -1214,6 +1215,31 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
 }
 
 static inline gboolean
+gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
+                                      GskVulkanRender           *render,
+                                      const GskVulkanParseState *state,
+                                      GskRenderNode             *node)
+{
+  GskRenderNode *child;
+
+  child = gsk_fill_node_get_child (node);
+  
+  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE)
+    {
+      gsk_vulkan_fill_op (render,
+                          gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
+                          &state->offset,
+                          &node->bounds,
+                          gsk_fill_node_get_path (node),
+                          gsk_fill_node_get_fill_rule (node),
+                          gsk_color_node_get_color (child));
+      return TRUE;
+    }
+
+  FALLBACK ("Fill nodes without color fills aren't supported yet.");
+}
+
+static inline gboolean
 gsk_vulkan_render_pass_add_debug_node (GskVulkanRenderPass       *self,
                                        GskVulkanRender           *render,
                                        const GskVulkanParseState *state,
@@ -1260,7 +1286,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[] = {
   [GSK_GL_SHADER_NODE] = NULL,
   [GSK_TEXTURE_SCALE_NODE] = gsk_vulkan_render_pass_add_texture_scale_node,
   [GSK_MASK_NODE] = gsk_vulkan_render_pass_add_mask_node,
-  [GSK_FILL_NODE] = NULL,
+  [GSK_FILL_NODE] = gsk_vulkan_render_pass_add_fill_node,
   [GSK_STROKE_NODE] = NULL,
 };
 
