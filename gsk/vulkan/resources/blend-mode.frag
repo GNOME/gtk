@@ -9,8 +9,8 @@ layout(location = 1) in Rect inTopRect;
 layout(location = 2) in Rect inBottomRect;
 layout(location = 3) in vec2 inTopTexCoord;
 layout(location = 4) in vec2 inBottomTexCoord;
-layout(location = 5) flat in uvec2 inTopTexId;
-layout(location = 6) flat in uvec2 inBottomTexId;
+layout(location = 5) flat in uint inTopTexId;
+layout(location = 6) flat in uint inBottomTexId;
 layout(location = 7) flat in uint inBlendMode;
 
 layout(location = 0) out vec4 color;

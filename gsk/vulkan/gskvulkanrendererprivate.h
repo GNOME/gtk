@@ -1,51 +1,18 @@
 #pragma once
 
 #include "gskvulkanrenderer.h"
+#include "gskvulkanglyphcacheprivate.h"
 #include "gskvulkanimageprivate.h"
 
 G_BEGIN_DECLS
 
-GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulkanRenderer      *self,
+GskVulkanImage *        gsk_vulkan_renderer_get_texture_image           (GskVulkanRenderer      *self,
+                                                                         GdkTexture             *texture);
+void                    gsk_vulkan_renderer_add_texture_image           (GskVulkanRenderer      *self,
                                                                          GdkTexture             *texture,
-                                                                         GskVulkanUploader      *uploader);
+                                                                         GskVulkanImage         *image);
 
-typedef struct
-{
-  guint texture_index;
-
-  float tx;
-  float ty;
-  float tw;
-  float th;
-
-  int draw_x;
-  int draw_y;
-  int draw_width;
-  int draw_height;
-
-  int atlas_x;
-  int atlas_y;
-
-  guint64 timestamp;
-} GskVulkanCachedGlyph;
-
-guint                  gsk_vulkan_renderer_cache_glyph      (GskVulkanRenderer *renderer,
-                                                             PangoFont         *font,
-                                                             PangoGlyph         glyph,
-                                                             int                x,
-                                                             int                y,
-                                                             float              scale);
-
-GskVulkanImage *       gsk_vulkan_renderer_ref_glyph_image  (GskVulkanRenderer *self,
-                                                             GskVulkanUploader *uploader,
-                                                             guint              index);
-
-GskVulkanCachedGlyph * gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
-                                                             PangoFont         *font,
-                                                             PangoGlyph         glyph,
-                                                             int                x,
-                                                             int                y,
-                                                             float              scale);
+GskVulkanGlyphCache *   gsk_vulkan_renderer_get_glyph_cache             (GskVulkanRenderer      *self);
 
 
 G_END_DECLS

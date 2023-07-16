@@ -407,8 +407,8 @@ text (guint n)
       else
         pango_font_description_set_style (desc, PANGO_STYLE_NORMAL);
 
-      pango_font_description_set_weight (desc, 100 * g_random_int_range (1, 10));
-      pango_font_description_set_size (desc, PANGO_SCALE * g_random_int_range (8,32));
+      pango_font_description_set_weight (desc, 200 * g_random_int_range (1, 5));
+      pango_font_description_set_size (desc, PANGO_SCALE * 4 * g_random_int_range (2,8));
 
       font = pango_context_load_font (context, desc);
       pango_layout_set_font_description (layout, desc);

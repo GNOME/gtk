@@ -3,53 +3,12 @@
 #include <gdk/gdk.h>
 #include <gsk/gskrendernode.h>
 
+#include "gskvulkanclipprivate.h"
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanrenderpassprivate.h"
-#include "gsk/gskprivate.h"
 
 G_BEGIN_DECLS
-
-typedef enum {
-  GSK_VULKAN_PIPELINE_TEXTURE,
-  GSK_VULKAN_PIPELINE_TEXTURE_CLIP,
-  GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_COLOR,
-  GSK_VULKAN_PIPELINE_COLOR_CLIP,
-  GSK_VULKAN_PIPELINE_COLOR_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_LINEAR_GRADIENT,
-  GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP,
-  GSK_VULKAN_PIPELINE_LINEAR_GRADIENT_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP,
-  GSK_VULKAN_PIPELINE_COLOR_MATRIX_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_BORDER,
-  GSK_VULKAN_PIPELINE_BORDER_CLIP,
-  GSK_VULKAN_PIPELINE_BORDER_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_INSET_SHADOW,
-  GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP,
-  GSK_VULKAN_PIPELINE_INSET_SHADOW_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_OUTSET_SHADOW,
-  GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP,
-  GSK_VULKAN_PIPELINE_OUTSET_SHADOW_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_BLUR,
-  GSK_VULKAN_PIPELINE_BLUR_CLIP,
-  GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_TEXT,
-  GSK_VULKAN_PIPELINE_TEXT_CLIP,
-  GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP,
-  GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_CROSS_FADE,
-  GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP,
-  GSK_VULKAN_PIPELINE_CROSS_FADE_CLIP_ROUNDED,
-  GSK_VULKAN_PIPELINE_BLEND_MODE,
-  GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP,
-  GSK_VULKAN_PIPELINE_BLEND_MODE_CLIP_ROUNDED,
-  /* add more */
-  GSK_VULKAN_N_PIPELINES
-} GskVulkanPipelineType;
 
 typedef enum {
   GSK_VULKAN_SAMPLER_DEFAULT,
@@ -57,52 +16,51 @@ typedef enum {
   GSK_VULKAN_SAMPLER_NEAREST
 } GskVulkanRenderSampler;
 
+typedef void            (* GskVulkanDownloadFunc)                       (gpointer                user_data,
+                                                                         GdkMemoryFormat         format,
+                                                                         const guchar           *data,
+                                                                         int                     width,
+                                                                         int                     height,
+                                                                         gsize                   stride);
+
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
-void                    gsk_vulkan_render_reset                         (GskVulkanRender        *self,
+void                    gsk_vulkan_render_render                        (GskVulkanRender        *self,
                                                                          GskVulkanImage         *target,
                                                                          const graphene_rect_t  *rect,
-                                                                         const cairo_region_t   *clip);
+                                                                         const cairo_region_t   *clip,
+                                                                         GskRenderNode          *node,
+                                                                         GskVulkanDownloadFunc   download_func,
+                                                                         gpointer                download_data);
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
+GdkVulkanContext *      gsk_vulkan_render_get_context                   (GskVulkanRender        *self);
 
-void                    gsk_vulkan_render_add_cleanup_image             (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *image);
+gpointer                gsk_vulkan_render_alloc_op                      (GskVulkanRender        *self,
+                                                                         gsize                   size);
 
-void                    gsk_vulkan_render_add_node                      (GskVulkanRender        *self,
-                                                                         GskRenderNode          *node);
-
-void                    gsk_vulkan_render_add_render_pass               (GskVulkanRender        *self,
-                                                                         GskVulkanRenderPass    *pass);
-
-void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
-
-GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
-                                                                         GskVulkanPipelineType   pipeline_type,
+VkPipelineLayout        gsk_vulkan_render_get_pipeline_layout           (GskVulkanRender        *self);
+VkPipeline              gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
+                                                                         const GskVulkanOpClass *op_class,
+                                                                         GskVulkanShaderClip     clip,
                                                                          VkRenderPass            render_pass);
-gsize                   gsk_vulkan_render_get_sampler_descriptor        (GskVulkanRender        *self,
-                                                                         GskVulkanRenderSampler  render_sampler);
+VkRenderPass            gsk_vulkan_render_get_render_pass               (GskVulkanRender        *self,
+                                                                         VkFormat                format,
+                                                                         VkImageLayout           from_layout,
+                                                                         VkImageLayout           to_layout);
 gsize                   gsk_vulkan_render_get_image_descriptor          (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *source);
+                                                                         GskVulkanImage         *source,
+                                                                         GskVulkanRenderSampler  render_sampler);
 gsize                   gsk_vulkan_render_get_buffer_descriptor         (GskVulkanRender        *self,
                                                                          GskVulkanBuffer        *buffer);
 guchar *                gsk_vulkan_render_get_buffer_memory             (GskVulkanRender        *self,
                                                                          gsize                   size,
                                                                          gsize                   alignment,
                                                                          gsize                  *out_offset);
-void                    gsk_vulkan_render_bind_descriptor_sets          (GskVulkanRender        *self,
-                                                                         VkCommandBuffer         command_buffer);
 
-void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
-
-void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
-
-GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
-VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *image);
 VkFence                 gsk_vulkan_render_get_fence                     (GskVulkanRender        *self);
 
 G_END_DECLS

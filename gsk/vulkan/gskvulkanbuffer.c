@@ -1,8 +1,9 @@
 #include "config.h"
 
 #include "gskvulkanbufferprivate.h"
+
 #include "gskvulkanmemoryprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 
 struct _GskVulkanBuffer
 {
@@ -100,6 +101,12 @@ VkBuffer
 gsk_vulkan_buffer_get_buffer (GskVulkanBuffer *self)
 {
   return self->vk_buffer;
+}
+
+gsize
+gsk_vulkan_buffer_get_size (GskVulkanBuffer *self)
+{
+  return self->size;
 }
 
 guchar *

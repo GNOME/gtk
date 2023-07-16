@@ -7,6 +7,12 @@
 G_BEGIN_DECLS
 
 typedef enum {
+  GSK_VULKAN_SHADER_CLIP_NONE,
+  GSK_VULKAN_SHADER_CLIP_RECT,
+  GSK_VULKAN_SHADER_CLIP_ROUNDED
+} GskVulkanShaderClip;
+
+typedef enum {
   /* The whole area is clipped, no drawing is necessary.
    * This can't be handled by return values because for return
    * values we return if clips could even be computed.
@@ -58,6 +64,9 @@ gboolean                gsk_vulkan_clip_contains_rect                   (const G
 gboolean                gsk_vulkan_clip_may_intersect_rect              (const GskVulkanClip    *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
+GskVulkanShaderClip     gsk_vulkan_clip_get_shader_clip                 (const GskVulkanClip    *self,
+                                                                         const graphene_point_t *offset,
+                                                                         const graphene_rect_t  *rect);
 
 G_END_DECLS
 

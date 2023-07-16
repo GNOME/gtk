@@ -1,7 +1,8 @@
 #include "config.h"
 
-#include "gskvulkanpipelineprivate.h"
 #include "gskvulkanmemoryprivate.h"
+
+#include "gskvulkanprivate.h"
 
 struct _GskVulkanMemory
 {

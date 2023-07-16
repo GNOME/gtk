@@ -9,8 +9,8 @@ layout(location = 1) in Rect inStartRect;
 layout(location = 2) in Rect inEndRect;
 layout(location = 3) in vec2 inStartTexCoord;
 layout(location = 4) in vec2 inEndTexCoord;
-layout(location = 5) flat in uvec2 inStartTexId;
-layout(location = 6) flat in uvec2 inEndTexId;
+layout(location = 5) flat in uint inStartTexId;
+layout(location = 6) flat in uint inEndTexId;
 layout(location = 7) in float inProgress;
 
 layout(location = 0) out vec4 color;

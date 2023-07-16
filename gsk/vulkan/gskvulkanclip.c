@@ -284,3 +284,17 @@ gsk_vulkan_clip_contains_rect (const GskVulkanClip    *self,
       return gsk_rounded_rect_contains_rect (&self->rect, &r);
     }
 }
+
+GskVulkanShaderClip
+gsk_vulkan_clip_get_shader_clip (const GskVulkanClip    *self,
+                                 const graphene_point_t *offset,
+                                 const graphene_rect_t  *rect)
+{
+  if (gsk_vulkan_clip_contains_rect (self, offset, rect))
+    return GSK_VULKAN_SHADER_CLIP_NONE;
+  else if (self->type == GSK_VULKAN_CLIP_RECT)
+    return GSK_VULKAN_SHADER_CLIP_RECT;
+  else
+    return GSK_VULKAN_SHADER_CLIP_ROUNDED;
+}
+

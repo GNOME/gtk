@@ -8,7 +8,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanpipelineprivate.h"
+#include "gskvulkanprivate.h"
 #include "gskvulkanrenderprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 
@@ -222,7 +222,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                     self);
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
-  self->glyph_cache = gsk_vulkan_glyph_cache_new (renderer, self->vulkan);
+  self->glyph_cache = gsk_vulkan_glyph_cache_new (self->vulkan);
 
   return TRUE;
 }
@@ -254,6 +254,25 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
                                        self);
 
   g_clear_object (&self->vulkan);
+}
+
+static void
+gsk_vulkan_renderer_download_texture_cb (gpointer         user_data,
+                                         GdkMemoryFormat  format,
+                                         const guchar    *data,
+                                         int              width,
+                                         int              height,
+                                         gsize            stride)
+{
+  GdkTexture **texture = (GdkTexture **) user_data;
+  GBytes *bytes;
+
+  bytes = g_bytes_new (data, stride * height);
+  *texture = gdk_memory_texture_new (width, height,
+                                     format,
+                                     bytes,
+                                     stride);
+  g_bytes_unref (bytes);
 }
 
 static GdkTexture *
@@ -292,15 +311,20 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                               rounded_viewport.size.width,
                                               rounded_viewport.size.height);
 
-  gsk_vulkan_render_reset (render, image, &rounded_viewport, NULL);
-  gsk_vulkan_render_add_node (render, root);
-  gsk_vulkan_render_upload (render);
-  gsk_vulkan_render_draw (render);
+  texture = NULL;
+  gsk_vulkan_render_render (render,
+                            image,
+                            &rounded_viewport,
+                            NULL,
+                            root,
+                            gsk_vulkan_renderer_download_texture_cb,
+                            &texture);
 
-  texture = gsk_vulkan_render_download_target (render);
-
-  g_object_unref (image);
   gsk_vulkan_render_free (render);
+  g_object_unref (image);
+
+  /* check that callback setting texture was actually called, as its technically async */
+  g_assert (texture);
 
 #ifdef G_ENABLE_DEBUG
   start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
@@ -352,10 +376,12 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
   render_region = get_render_region (self);
   draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);
 
-  gsk_vulkan_render_reset (render, self->targets[draw_index], NULL, render_region);
-  gsk_vulkan_render_add_node (render, root);
-  gsk_vulkan_render_upload (render);
-  gsk_vulkan_render_draw (render);
+  gsk_vulkan_render_render (render,
+                            self->targets[draw_index],
+                            NULL,
+                            render_region,
+                            root,
+                            NULL, NULL);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
@@ -424,18 +450,24 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 }
 
 GskVulkanImage *
-gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
-                                       GdkTexture        *texture,
-                                       GskVulkanUploader *uploader)
+gsk_vulkan_renderer_get_texture_image (GskVulkanRenderer *self,
+                                       GdkTexture        *texture)
 {
   GskVulkanTextureData *data;
-  GskVulkanImage *image;
 
   data = gdk_texture_get_render_data (texture, self);
   if (data)
-    return g_object_ref (data->image);
+    return data->image;
 
-  image = gsk_vulkan_image_new_from_texture (uploader, texture);
+  return NULL;
+}
+
+void
+gsk_vulkan_renderer_add_texture_image (GskVulkanRenderer *self,
+                                       GdkTexture        *texture,
+                                       GskVulkanImage    *image)
+{
+  GskVulkanTextureData *data;
 
   data = g_new0 (GskVulkanTextureData, 1);
   data->image = image;
@@ -451,38 +483,12 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
     {
       g_free (data);
     }
-
-  return image;
 }
 
-GskVulkanImage *
-gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
-                                     GskVulkanUploader  *uploader,
-                                     guint               index)
+GskVulkanGlyphCache *
+gsk_vulkan_renderer_get_glyph_cache (GskVulkanRenderer  *self)
 {
-  return g_object_ref (gsk_vulkan_glyph_cache_get_glyph_image (self->glyph_cache, uploader, index));
-}
-
-guint
-gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
-                                 PangoFont         *font,
-                                 PangoGlyph         glyph,
-                                 int                x,
-                                 int                y,
-                                 float              scale)
-{
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, x, y, scale)->texture_index;
-}
-
-GskVulkanCachedGlyph *
-gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
-                                      PangoFont         *font,
-                                      PangoGlyph         glyph,
-                                      int                x,
-                                      int                y,
-                                      float              scale)
-{
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, x, y, scale);
+  return self->glyph_cache;
 }
 
 /**

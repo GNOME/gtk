@@ -13,7 +13,7 @@ with open(sys.argv[1]) as f:
     matches = []
 
     for line in lines:
-        match = re.search(r"^layout\(location = ([0-9]+)\) in ([a-z0-9]+) ([a-zA-Z0-9]+);$", line)
+        match = re.search(r"^layout\(location = ([0-9]+)\) in ([a-z0-9]+) ([a-zA-Z0-9_]+);$", line)
         if not match:
             if re.search(r"layout.*\sin\s.*", line):
                 raise Exception("Failed to parse file")

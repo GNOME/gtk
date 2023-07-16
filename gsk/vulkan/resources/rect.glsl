@@ -55,4 +55,10 @@ rect_intersect (Rect a, Rect b)
   return Rect(result);
 }
 
+Rect
+rect_union (Rect a, Rect b)
+{
+  return Rect (vec4 (min (a.bounds.xy, b.bounds.xy), max (a.bounds.zw, b.bounds.zw)));
+}
+
 #endif

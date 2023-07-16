@@ -1600,6 +1600,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   gdk_display_create_pipeline_cache (display);
 
+  display->vk_shader_modules = g_hash_table_new (g_str_hash, g_str_equal);
+
   return TRUE;
 }
 
@@ -1621,12 +1623,25 @@ gdk_display_ref_vulkan (GdkDisplay *display,
 void
 gdk_display_unref_vulkan (GdkDisplay *display)
 {
+  GHashTableIter iter;
+  gpointer key, value;
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (display->vulkan_refcount > 0);
 
   display->vulkan_refcount--;
   if (display->vulkan_refcount > 0)
     return;
+
+  display->vk_shader_modules = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_iter_init (&iter, display->vk_shader_modules);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      g_free (key);
+      vkDestroyShaderModule (display->vk_device,
+                             value,
+                             NULL);
+    }
 
   if (display->vk_save_pipeline_cache_source)
     {
@@ -1652,6 +1667,47 @@ gdk_display_unref_vulkan (GdkDisplay *display)
     }
   vkDestroyInstance (display->vk_instance, NULL);
   display->vk_instance = VK_NULL_HANDLE;
+}
+
+VkShaderModule
+gdk_display_get_vk_shader_module (GdkDisplay *self,
+                                  const char *resource_name)
+{
+  VkShaderModule shader;
+  GError *error = NULL;
+  GBytes *bytes;
+
+  shader = g_hash_table_lookup (self->vk_shader_modules, resource_name);
+  if (shader)
+    return shader;
+
+  bytes = g_resources_lookup_data (resource_name, 0, &error);
+  if (bytes == NULL)
+    {
+      GDK_DEBUG (VULKAN, "Error loading shader data: %s", error->message);
+      g_clear_error (&error);
+      return VK_NULL_HANDLE;
+    }
+
+  if (GDK_VK_CHECK (vkCreateShaderModule, self->vk_device,
+                                          &(VkShaderModuleCreateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+                                              .codeSize = g_bytes_get_size (bytes),
+                                              .pCode = (uint32_t *) g_bytes_get_data (bytes, NULL),
+                                          },
+                                          NULL,
+                                          &shader) == VK_SUCCESS)
+    {
+      g_hash_table_insert (self->vk_shader_modules, g_strdup (resource_name), shader);
+    }
+  else
+    {
+      shader = VK_NULL_HANDLE;
+    }
+
+  g_bytes_unref (bytes);
+
+  return shader;
 }
 
 #else /* GDK_RENDERING_VULKAN */
