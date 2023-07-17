@@ -4,13 +4,14 @@
 # Copyright (C) 2004 Free Software Foundation, Inc.
 # Roozbeh Pournader <roozbeh@sharif.edu>, 2000, 2002, 2003, 2004.
 # Arash Mousavi <mousavi.arash@gmail.com>, 2011.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-05 17:13+0000\n"
-"PO-Revision-Date: 2022-07-09 02:09+0430\n"
+"POT-Creation-Date: 2023-07-06 11:12+0000\n"
+"PO-Revision-Date: 2023-07-17 19:50+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -18,10 +19,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:318 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "نمایشگر"
 
@@ -111,9 +112,8 @@ msgid "Seat"
 msgstr "صندلی"
 
 #: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
-#, fuzzy
 msgid "Number of concurrent touches"
-msgstr "تعداد ستون‌های جدول"
+msgstr "شمار لمس‌های هم‌زمان"
 
 #: gdk/gdkdevice.c:321 gdk/gdkdevice.c:322
 msgid "Axes"
@@ -124,15 +124,12 @@ msgid "Tool"
 msgstr "ابزار"
 
 #: gdk/gdkdevice.c:329
-#, fuzzy
-#| msgid "The GdkFont that is currently selected"
 msgid "The tool that is currently used with this device"
-msgstr "GdkFontی که هم‌اکنون انتخاب شده است"
+msgstr "ابزاری که هم‌اکنون با این افزاره استفاده شده"
 
 #: gdk/gdkdevicemanager.c:186
-#, fuzzy
 msgid "Display for the device manager"
-msgstr "نمایش سلول"
+msgstr "نمایش مدیر افزاره"
 
 #: gdk/gdkdisplaymanager.c:162
 msgid "Default Display"
@@ -142,23 +139,23 @@ msgstr "صفحه‌نمایش پیش‌فرض"
 msgid "The default display for GDK"
 msgstr "صفحه‌نمایش پیش‌فرض GDK"
 
-#: gdk/gdkglcontext.c:318
+#: gdk/gdkglcontext.c:319
 msgid "The GDK display used to create the GL context"
 msgstr ""
 
-#: gdk/gdkglcontext.c:333 gtk/gtkwidget.c:1351
+#: gdk/gdkglcontext.c:334 gtk/gtkwidget.c:1351
 msgid "Window"
 msgstr "پنجره"
 
-#: gdk/gdkglcontext.c:334
+#: gdk/gdkglcontext.c:335
 msgid "The GDK window bound to the GL context"
 msgstr ""
 
-#: gdk/gdkglcontext.c:349
+#: gdk/gdkglcontext.c:350
 msgid "Shared context"
 msgstr "بافتار هم‌رسانده"
 
-#: gdk/gdkglcontext.c:350
+#: gdk/gdkglcontext.c:351
 msgid "The GL context this context shares data with"
 msgstr ""
 
@@ -167,9 +164,8 @@ msgid "Font options"
 msgstr "گزینه‌های قلم"
 
 #: gdk/gdkscreen.c:94
-#, fuzzy
 msgid "The default font options for the screen"
-msgstr "نام قلم پیش‌فرض برای استفاده"
+msgstr "گزینه‌های قلم پیش‌گزیده برای صفحه"
 
 #: gdk/gdkscreen.c:101
 msgid "Font resolution"
@@ -278,7 +274,7 @@ msgstr "GIcon نمایشی"
 
 #: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263
 #: gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:343 gtk/gtkprinter.c:170
-#: gtk/gtkwindow.c:891
+#: gtk/gtkwindow.c:893
 msgid "Icon Name"
 msgstr "نام نقشک"
 
@@ -714,19 +710,16 @@ msgid "Icon's count"
 msgstr "شمار نقشک"
 
 #: gtk/deprecated/gtknumerableicon.c:643
-#, fuzzy
-#| msgid "The index of the current page"
 msgid "The count of the emblem currently displayed"
-msgstr "نمایهٔ صفحهٔ فعلی"
+msgstr "شمار نشان‌های نمایش دادهٔ کنونی"
 
 #: gtk/deprecated/gtknumerableicon.c:649
 msgid "Icon's label"
 msgstr "برچسب نقشک"
 
 #: gtk/deprecated/gtknumerableicon.c:650
-#, fuzzy
 msgid "The label to be displayed over the icon"
-msgstr "نام قلم انتخاب‌شده"
+msgstr "برجسب نمایشی روی نقشک"
 
 #: gtk/deprecated/gtknumerableicon.c:656
 msgid "Icon's style context"
@@ -749,9 +742,8 @@ msgid "Background icon name"
 msgstr "نام نقشک پس‌زمینه"
 
 #: gtk/deprecated/gtknumerableicon.c:671
-#, fuzzy
 msgid "The icon name for the number emblem background"
-msgstr "مدل نمایش درختی"
+msgstr "نام نقشک برای پس‌زمینهٔ نشان شماره"
 
 #: gtk/deprecated/gtkradioaction.c:120
 msgid "The value"
@@ -834,7 +826,7 @@ msgid "The size of the icon"
 msgstr "اندازهٔ نقشک"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:898
+#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:900
 msgid "Screen"
 msgstr "صفحه‌نمایش"
 
@@ -1282,7 +1274,7 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
-#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1767
+#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1716
 msgid "Position"
 msgstr "موقعیت"
@@ -1381,54 +1373,48 @@ msgid "GFile"
 msgstr "GFile"
 
 #: gtk/gtkappchooserdialog.c:675
-#, fuzzy
 msgid "The GFile used by the app chooser dialog"
-msgstr "عنوان پنجره"
+msgstr "GFile استفاده شده به دست گفت‌وگوی کاره‌گزین"
 
 #: gtk/gtkappchooserwidget.c:930
 msgid "Show default app"
 msgstr "نمایش کارهٔ پیش‌گزیده"
 
 #: gtk/gtkappchooserwidget.c:931
-#, fuzzy
 msgid "Whether the widget should show the default application"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک باید برنامهٔ پیش‌گزیده را نشان دهد یا نه"
 
 #: gtk/gtkappchooserwidget.c:945
 msgid "Show recommended apps"
 msgstr ""
 
 #: gtk/gtkappchooserwidget.c:946
-#, fuzzy
 msgid "Whether the widget should show recommended applications"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک باید برنامه‌های پیشنهادی را نشان دهد یا نه"
 
 #: gtk/gtkappchooserwidget.c:960
 msgid "Show fallback apps"
 msgstr "نمایش کاره‌های جایگزین"
 
 #: gtk/gtkappchooserwidget.c:961
-#, fuzzy
 msgid "Whether the widget should show fallback applications"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک باید برنامه‌های اضطراری را نشان دهد یا نه"
 
 #: gtk/gtkappchooserwidget.c:973
 msgid "Show other apps"
 msgstr "نمایش دیگر کاره‌ها"
 
 #: gtk/gtkappchooserwidget.c:974
-#, fuzzy
 msgid "Whether the widget should show other applications"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک باید دیگر برنامه‌ها را نشان دهد یا نه"
 
 #: gtk/gtkappchooserwidget.c:987
 msgid "Show all apps"
 msgstr "نمایش تمامی کاره‌ها"
 
 #: gtk/gtkappchooserwidget.c:988
-#, fuzzy
 msgid "Whether the widget should show all applications"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک باید تمامی برنامه‌ها را نشان دهد یا نه"
 
 #: gtk/gtkappchooserwidget.c:1002
 msgid "Widget's default text"
@@ -1438,50 +1424,43 @@ msgstr ""
 msgid "The default text appearing when there are no applications"
 msgstr ""
 
-#: gtk/gtkapplication.c:845
+#: gtk/gtkapplication.c:833
 msgid "Register session"
 msgstr "ثبت نشست"
 
-#: gtk/gtkapplication.c:846
-#, fuzzy
-#| msgid "Device role in the device manager"
+#: gtk/gtkapplication.c:834
 msgid "Register with the session manager"
-msgstr "نقش دستگاه در «مدیریت دستگاه»"
+msgstr "ثبت با مدیر نشست"
 
-#: gtk/gtkapplication.c:863
+#: gtk/gtkapplication.c:851
 msgid "Screensaver Active"
 msgstr "محافظ صفحه فعّال"
 
-#: gtk/gtkapplication.c:864
-#, fuzzy
+#: gtk/gtkapplication.c:852
 msgid "Whether the screensaver is active"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نماگرفت فعّال است یا نه"
 
-#: gtk/gtkapplication.c:870
+#: gtk/gtkapplication.c:858
 msgid "Application menu"
 msgstr "فهرست برنامه"
 
-#: gtk/gtkapplication.c:871
-#, fuzzy
-#| msgid "The model for the tree view"
+#: gtk/gtkapplication.c:859
 msgid "The GMenuModel for the application menu"
-msgstr "مدل نمایش درختی"
+msgstr "GMenuModel برای فهرست برنامه"
 
-#: gtk/gtkapplication.c:877
+#: gtk/gtkapplication.c:865
 msgid "Menubar"
 msgstr "نوار فهرست"
 
-#: gtk/gtkapplication.c:878
-#, fuzzy
-#| msgid "The model for the tree view"
+#: gtk/gtkapplication.c:866
 msgid "The GMenuModel for the menubar"
-msgstr "مدل نمایش درختی"
+msgstr "GMenuModel برای نوار فهرست"
 
-#: gtk/gtkapplication.c:884
+#: gtk/gtkapplication.c:872
 msgid "Active window"
 msgstr "پنجرهٔ فعّال"
 
-#: gtk/gtkapplication.c:885
+#: gtk/gtkapplication.c:873
 msgid "The window which most recently had focus"
 msgstr "پنجره‌ای که همین آخر تمرکز داشته"
 
@@ -1799,9 +1778,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkbutton.c:593
-#, fuzzy
 msgid "Displace focus"
-msgstr "بلوک‌های گسسته"
+msgstr "نمایش تمرکز"
 
 #: gtk/gtkbutton.c:594
 msgid ""
@@ -2036,18 +2014,16 @@ msgid "The keyval of the accelerator"
 msgstr "نام ابزارک"
 
 #: gtk/gtkcellrendereraccel.c:158
-#, fuzzy
 msgid "Accelerator modifiers"
-msgstr "ابزارک شتاب‌ده"
+msgstr "تغییردهنده‌های شتاب‌ده"
 
 #: gtk/gtkcellrendereraccel.c:159
 msgid "The modifier mask of the accelerator"
 msgstr ""
 
 #: gtk/gtkcellrendereraccel.c:176
-#, fuzzy
 msgid "Accelerator keycode"
-msgstr "ابزارک شتاب‌ده"
+msgstr "رمزکلید شتاب‌ده"
 
 #: gtk/gtkcellrendereraccel.c:177
 msgid "The hardware keycode of the accelerator"
@@ -2078,9 +2054,8 @@ msgid "Display the cell"
 msgstr "نمایش سلول"
 
 #: gtk/gtkcellrenderer.c:309
-#, fuzzy
 msgid "Display the cell sensitive"
-msgstr "نمایش سلول"
+msgstr "حسّاس نشان دادن خانه"
 
 #: gtk/gtkcellrenderer.c:316
 msgid "xalign"
@@ -2163,35 +2138,28 @@ msgid "Cell background color as a GdkColor"
 msgstr "رنگ پس‌زمینهٔ خانه به‌عنوان یک GdkColor"
 
 #: gtk/gtkcellrenderer.c:424
-#, fuzzy
-#| msgid "Cell background color"
 msgid "Cell background RGBA color"
-msgstr "رنگ پس‌زمینهٔ خانه"
+msgstr "رنگ RGBA پس‌زمینهٔ خانه"
 
 #: gtk/gtkcellrenderer.c:425
-#, fuzzy
-#| msgid "Cell background color as a GdkColor"
 msgid "Cell background color as a GdkRGBA"
-msgstr "رنگ پس‌زمینهٔ خانه به‌عنوان یک GdkColor"
+msgstr "رنگ پس‌زمینهٔ خانه به صورت یک GdkRGBA"
 
 #: gtk/gtkcellrenderer.c:432
 msgid "Editing"
 msgstr "ویرایش"
 
 #: gtk/gtkcellrenderer.c:433
-#, fuzzy
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که پرداختگر خانه در حال حاضر در حالت ویرایش است یا نه"
 
 #: gtk/gtkcellrenderer.c:441
 msgid "Cell background set"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:442
-#, fuzzy
-#| msgid "Whether this tag affects the cell background color"
 msgid "Whether the cell background color is set"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که رنگ پس‌زمینهٔ خانه ستنظیم شده یا نه"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "Model"
@@ -2246,19 +2214,16 @@ msgid "surface"
 msgstr "سطح"
 
 #: gtk/gtkcellrendererpixbuf.c:181
-#, fuzzy
-#| msgid "Text to render"
 msgid "The surface to render"
-msgstr "متن برای نمایش"
+msgstr "سطح مورد پرداخت"
 
 #: gtk/gtkcellrendererpixbuf.c:196
 msgid "The stock ID of the stock icon to render"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:211
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "اندازهٔ نقشک کشیده‌شده"
+msgstr "مقدار GtkIconSize که اندازهٔ نقشک پرداخت شده را مشخّص می‌کند"
 
 #: gtk/gtkcellrendererpixbuf.c:227
 msgid "Detail"
@@ -2277,7 +2242,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1166
-#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:842
+#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
 msgid "Icon"
 msgstr "نقشک"
 
@@ -2320,9 +2285,8 @@ msgid "Text y alignment"
 msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:215
-#, fuzzy
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
-msgstr "ردیف کردن عمودی برچسب"
+msgstr "قرار گیری متن عمودی،‌از 0 (بالا) تا 1 (پایین)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1097
 #: gtk/gtkmodelbutton.c:1242 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
@@ -2330,9 +2294,8 @@ msgid "Inverted"
 msgstr "معکوس"
 
 #: gtk/gtkcellrendererprogress.c:227 gtk/gtkprogressbar.c:265
-#, fuzzy
 msgid "Invert the direction in which the progress bar grows"
-msgstr "راستا و جهت رشد نوار پیش‌رفت"
+msgstr "برگرداندن جهتی که نوار پیشرفت رشد می‌کند"
 
 #: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:434 gtk/gtkscalebutton.c:217
 #: gtk/gtkspinbutton.c:379
@@ -2368,9 +2331,8 @@ msgid "Pulse of the spinner"
 msgstr "تپش چرخنده"
 
 #: gtk/gtkcellrendererspinner.c:160
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "اندازهٔ نقشک کشیده‌شده"
+msgstr "مقدار GtkIconSize که اندازهٔ چرخندهٔ پرداخت شده را مشخّص می‌کند"
 
 #: gtk/gtkcellrenderertext.c:256
 msgid "Text to render"
@@ -2417,16 +2379,12 @@ msgid "Background color as a GdkColor"
 msgstr "رنگ پس‌زمینه به‌عنوان یک GdkColor"
 
 #: gtk/gtkcellrenderertext.c:313
-#, fuzzy
-#| msgid "Background color name"
 msgid "Background color as RGBA"
-msgstr "نام رنگ پس‌زمینه"
+msgstr "رنگ پس‌زمینه به صورت RGBA"
 
 #: gtk/gtkcellrenderertext.c:314 gtk/gtkcellview.c:249 gtk/gtktexttag.c:247
-#, fuzzy
-#| msgid "Background color as a GdkColor"
 msgid "Background color as a GdkRGBA"
-msgstr "رنگ پس‌زمینه به‌عنوان یک GdkColor"
+msgstr "رنگ پس‌زمینه به صورت یک GdkRGBA"
 
 #: gtk/gtkcellrenderertext.c:319 gtk/gtktexttag.c:262
 msgid "Foreground color name"
@@ -2441,16 +2399,12 @@ msgid "Foreground color as a GdkColor"
 msgstr "رنگ پیش‌زمینه به‌عنوان یک GdkColor"
 
 #: gtk/gtkcellrenderertext.c:349
-#, fuzzy
-#| msgid "Foreground color name"
 msgid "Foreground color as RGBA"
-msgstr "نام رنگ پیش‌زمینه"
+msgstr "رنگ پیش‌زمینه به صورت RGBA"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:293
-#, fuzzy
-#| msgid "Foreground color as a GdkColor"
 msgid "Foreground color as a GdkRGBA"
-msgstr "رنگ پیش‌زمینه به‌عنوان یک GdkColor"
+msgstr "رنگ پیش‌زمینه به صورت یک GdkRGBA"
 
 # hich-yek, hich-kodaam, be-hich-vajh, aslan
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309
@@ -2587,9 +2541,8 @@ msgid "Maximum Width In Characters"
 msgstr "پهنای بیشینه به نویسه"
 
 #: gtk/gtkcellrenderertext.c:526
-#, fuzzy
 msgid "The maximum width of the cell, in characters"
-msgstr "عرض برحسب نویسه"
+msgstr "بیشینهٔ پهنای خانه بر حسب نویسه"
 
 #: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:569
 msgid "Wrap mode"
@@ -2743,9 +2696,8 @@ msgid "Ellipsize set"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:663
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این برچسب روی حالت مورب اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertext.c:666
 #, fuzzy
@@ -2753,9 +2705,8 @@ msgid "Align set"
 msgstr "ردیف کردن"
 
 #: gtk/gtkcellrenderertext.c:667
-#, fuzzy
 msgid "Whether this tag affects the alignment mode"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این برچسب روی حالت قرار گیری اثر می‌گذارد یا نه"
 
 #: gtk/gtkcellrenderertoggle.c:138
 msgid "Toggle state"
@@ -2791,9 +2742,8 @@ msgid "Draw the toggle button as a radio button"
 msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:170
-#, fuzzy
 msgid "Indicator size"
-msgstr "فاصله‌گذاری نشانه"
+msgstr "اندازهٔ نشانگر"
 
 #: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233
 #: gtk/gtkcheckmenuitem.c:241
@@ -2801,20 +2751,16 @@ msgid "Size of check or radio indicator"
 msgstr ""
 
 #: gtk/gtkcellview.c:248
-#, fuzzy
-#| msgid "Background color"
 msgid "Background RGBA color"
-msgstr "رنگ پس‌زمینه"
+msgstr "رنگ RGBA پس‌زمینه"
 
 #: gtk/gtkcellview.c:263
-#, fuzzy
 msgid "CellView model"
-msgstr "حالت تغییر اندازه"
+msgstr "مدل CellView"
 
 #: gtk/gtkcellview.c:264
-#, fuzzy
 msgid "The model for cell view"
-msgstr "مدل نمایش درختی"
+msgstr "مدل برای نمایش خانه"
 
 #: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1182 gtk/gtkentrycompletion.c:467
 #: gtk/gtkiconview.c:649 gtk/gtktreemenu.c:307 gtk/gtktreeviewcolumn.c:399
@@ -2835,15 +2781,12 @@ msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
 msgstr ""
 
 #: gtk/gtkcellview.c:324
-#, fuzzy
-#| msgid "Sensitive"
 msgid "Draw Sensitive"
-msgstr "حساس"
+msgstr "رسم حسّاس"
 
 #: gtk/gtkcellview.c:325
-#, fuzzy
 msgid "Whether to force cells to be drawn in a sensitive state"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که خانه‌ها به اجبار در حالت حسّاس رسم شوند یا نه"
 
 #: gtk/gtkcellview.c:343
 msgid "Fit Model"
@@ -2906,16 +2849,12 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 
 #: gtk/gtkcolorbutton.c:232
-#, fuzzy
-#| msgid "Current Color"
 msgid "Current RGBA Color"
-msgstr "رنگ فعلی"
+msgstr "رنگ RGBA کنونی"
 
 #: gtk/gtkcolorbutton.c:233
-#, fuzzy
-#| msgid "The selected color"
 msgid "The selected RGBA color"
-msgstr "رنگ انتخاب‌شده"
+msgstr "رنگ RGBA گزیده"
 
 #: gtk/gtkcolorbutton.c:274
 msgid "Show Editor"
@@ -2930,10 +2869,8 @@ msgid "Color"
 msgstr "رنگ"
 
 #: gtk/gtkcolorchooser.c:68
-#, fuzzy
-#| msgid "Foreground color as a GdkColor"
 msgid "Current color, as a GdkRGBA"
-msgstr "رنگ پیش‌زمینه به‌عنوان یک GdkColor"
+msgstr "رنگ کنونی به صورت یک GdkRGBA"
 
 #: gtk/gtkcolorchooser.c:88
 msgid "Whether alpha should be shown"
@@ -3052,10 +2989,8 @@ msgid "Whether combo box has an entry"
 msgstr ""
 
 #: gtk/gtkcombobox.c:1111
-#, fuzzy
-#| msgid "Text Column"
 msgid "Entry Text Column"
-msgstr "ستون متن"
+msgstr "ستون متن ورودی"
 
 #: gtk/gtkcombobox.c:1112
 msgid ""
@@ -3082,10 +3017,8 @@ msgid "The value of the id column for the active row"
 msgstr "مقدار ستون شناسه برای ردیف فعّال"
 
 #: gtk/gtkcombobox.c:1162
-#, fuzzy
-#| msgid "Fixed Width"
 msgid "Popup Fixed Width"
-msgstr "عرض ثابت"
+msgstr "پهنای ثابت بیرون زدنی"
 
 #: gtk/gtkcombobox.c:1163
 msgid ""
@@ -3111,10 +3044,8 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "تعداد سطرهای جدول"
 
 #: gtk/gtkcombobox.c:1228
-#, fuzzy
-#| msgid "The amount of space between children"
 msgid "The amount of space used by the arrow"
-msgstr "مقدار فاصله بین فرزندان"
+msgstr "مقدار فضای استفاده شده به دست پیکان"
 
 #: gtk/gtkcombobox.c:1247
 msgid "Which kind of shadow to draw around the combo box"
@@ -3141,9 +3072,8 @@ msgid "Child"
 msgstr "فرزند"
 
 #: gtk/gtkcontainer.c:550
-#, fuzzy
 msgid "Can be used to add a new child to the container"
-msgstr "می‌تواند برای افزودن یک فرزند تازه به ؟؟؟ استفاده شود."
+msgstr "می‌تواند برای افزودن فرزندی جدید به بارگنج استفاده شود"
 
 #: gtk/gtkcssnode.c:628
 msgid "Style Classes"
@@ -3178,10 +3108,8 @@ msgid "Widget type"
 msgstr "گونهٔ ابزارک"
 
 #: gtk/gtkcssnode.c:654
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "GType of the widget"
-msgstr "نام ابزارک"
+msgstr "GType ابزارک"
 
 #: gtk/gtkcssshorthandproperty.c:170
 msgid "Subproperties"
@@ -3236,9 +3164,8 @@ msgid "Width of border around the main dialog area"
 msgstr ""
 
 #: gtk/gtkdialog.c:607 gtk/gtkinfobar.c:548
-#, fuzzy
 msgid "Content area spacing"
-msgstr "ردیف کردن افقی"
+msgstr "فاصله‌گذاری ناحیهٔ محتوا"
 
 #: gtk/gtkdialog.c:608
 msgid "Spacing between elements of the main dialog area"
@@ -3261,9 +3188,8 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 
 #: gtk/gtkentrybuffer.c:351
-#, fuzzy
 msgid "The contents of the buffer"
-msgstr "متن برچسب"
+msgstr "محتوای میانگیر"
 
 #: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:1030
 msgid "Text length"
@@ -3356,14 +3282,12 @@ msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:937
-#, fuzzy
 msgid "Maximum width in characters"
-msgstr "عرض برحسب نویسه"
+msgstr "بیشینهٔ پهنا بر حسب نویسه"
 
 #: gtk/gtkentry.c:938
-#, fuzzy
 msgid "The desired maximum width of the entry, in characters"
-msgstr "عرض برحسب نویسه"
+msgstr "بیشینهٔ پهنای مطلوب ورودی بر حسب نویسه"
 
 #: gtk/gtkentry.c:945
 msgid "Scroll offset"
@@ -3403,14 +3327,12 @@ msgid "Length of the text currently in the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:1045
-#, fuzzy
 msgid "Invisible character set"
-msgstr "نویسهٔ نامرئی"
+msgstr "تنظیم نویسهٔ نامریی"
 
 #: gtk/gtkentry.c:1046
-#, fuzzy
 msgid "Whether the invisible character has been set"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نویسهٔ نامریی تنظیم شده یا نه"
 
 #: gtk/gtkentry.c:1063
 msgid "Caps Lock warning"
@@ -3421,14 +3343,12 @@ msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 
 #: gtk/gtkentry.c:1077
-#, fuzzy
 msgid "Progress Fraction"
-msgstr "درصد"
+msgstr "مسر پیشرقت"
 
 #: gtk/gtkentry.c:1078
-#, fuzzy
 msgid "The current fraction of the task that's been completed"
-msgstr "نمایهٔ صفحهٔ فعلی"
+msgstr "کسر کامل شدهٔ کنونی وظیفه"
 
 #: gtk/gtkentry.c:1093
 msgid "Progress Pulse Step"
@@ -3479,18 +3399,16 @@ msgid "Stock ID for secondary icon"
 msgstr ""
 
 #: gtk/gtkentry.c:1183
-#, fuzzy
 msgid "Primary icon name"
-msgstr "نام قلم"
+msgstr "نام نقشک اصلی"
 
 #: gtk/gtkentry.c:1184
 msgid "Icon name for primary icon"
 msgstr ""
 
 #: gtk/gtkentry.c:1197
-#, fuzzy
 msgid "Secondary icon name"
-msgstr "ثانویه"
+msgstr "نام نقشک ثانویه"
 
 #: gtk/gtkentry.c:1198
 msgid "Icon name for secondary icon"
@@ -3501,14 +3419,12 @@ msgid "Primary GIcon"
 msgstr ""
 
 #: gtk/gtkentry.c:1212
-#, fuzzy
 msgid "GIcon for primary icon"
-msgstr "نقشک این پنجره"
+msgstr "GIcon برای نام نقشک اصلی"
 
 #: gtk/gtkentry.c:1225
-#, fuzzy
 msgid "Secondary GIcon"
-msgstr "ثانویه"
+msgstr "GIcon ثانویه"
 
 #: gtk/gtkentry.c:1226
 msgid "GIcon for secondary icon"
@@ -3535,74 +3451,60 @@ msgid "Primary icon activatable"
 msgstr ""
 
 #: gtk/gtkentry.c:1276
-#, fuzzy
 msgid "Whether the primary icon is activatable"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نقشک اصلی قابل فعال سازی است یا نه"
 
 #: gtk/gtkentry.c:1295
-#, fuzzy
 msgid "Secondary icon activatable"
-msgstr "رنگ مکان‌نمای ثانویه"
+msgstr "نقشک ثانویه قابل فعّال سازی"
 
 #: gtk/gtkentry.c:1296
-#, fuzzy
 msgid "Whether the secondary icon is activatable"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نقشک ثانویه قابل فعّال سازی اس یا نه"
 
 #: gtk/gtkentry.c:1316
-#, fuzzy
 msgid "Primary icon sensitive"
-msgstr "نمایش سلول"
+msgstr "نقشک اصلی حسّاس"
 
 #: gtk/gtkentry.c:1317
-#, fuzzy
 msgid "Whether the primary icon is sensitive"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نقشک اصلی حسّاس است یا نه"
 
 #: gtk/gtkentry.c:1337
-#, fuzzy
 msgid "Secondary icon sensitive"
-msgstr "ثانویه"
+msgstr "نقشک ثانویه حسّاس"
 
 #: gtk/gtkentry.c:1338
-#, fuzzy
 msgid "Whether the secondary icon is sensitive"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نقشک ثانویه حسّاس است سا نه"
 
 #: gtk/gtkentry.c:1353
-#, fuzzy
 msgid "Primary icon tooltip text"
-msgstr "نمایش سلول"
+msgstr "متن راهنمای نقشک اصلی"
 
 #: gtk/gtkentry.c:1354 gtk/gtkentry.c:1387
-#, fuzzy
 msgid "The contents of the tooltip on the primary icon"
-msgstr "نام ابزارک"
+msgstr "محتوای راهنمای روی نقشک اصلی"
 
 #: gtk/gtkentry.c:1369
-#, fuzzy
 msgid "Secondary icon tooltip text"
-msgstr "رنگ مکان‌نمای ثانویه"
+msgstr "متن راهنمای نقشک ثانویه"
 
 #: gtk/gtkentry.c:1370 gtk/gtkentry.c:1404
-#, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "نام ابزارک"
+msgstr "محتوای راهنمای روی نقشک ثانویه"
 
 #: gtk/gtkentry.c:1386
-#, fuzzy
 msgid "Primary icon tooltip markup"
-msgstr "نام قلم"
+msgstr "نشانه‌گذاری راهنمای نقشک اصلی"
 
 #: gtk/gtkentry.c:1403
-#, fuzzy
 msgid "Secondary icon tooltip markup"
-msgstr "ثانویه"
+msgstr "نشانه‌گذاری راهنمای نقشک ثانویه"
 
 #: gtk/gtkentry.c:1422 gtk/gtktextview.c:994
-#, fuzzy
 msgid "IM module"
-msgstr "عرض پیش‌فرض"
+msgstr "پیمانهٔ IM"
 
 #: gtk/gtkentry.c:1423 gtk/gtktextview.c:995
 msgid "Which IM module should be used"
@@ -3621,9 +3523,8 @@ msgid "Purpose"
 msgstr ""
 
 #: gtk/gtkentry.c:1458 gtk/gtkimcontext.c:338 gtk/gtktextview.c:1013
-#, fuzzy
 msgid "Purpose of the text field"
-msgstr "نام تم نقشکی برای استفاده"
+msgstr "هودهٔ زمینهٔ متنی"
 
 #: gtk/gtkentry.c:1473 gtk/gtkimcontext.c:345 gtk/gtktextview.c:1030
 msgid "hints"
@@ -3658,19 +3559,16 @@ msgid "Emoji icon"
 msgstr "نقشک اموجی"
 
 #: gtk/gtkentry.c:1538
-#, fuzzy
 msgid "Whether to show an icon for Emoji"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که نقشکی برای شکلک نشان داده شود یا نه"
 
 #: gtk/gtkentry.c:1544
-#, fuzzy
 msgid "Enable Emoji completion"
-msgstr "پویانمایی"
+msgstr "به کار انداختن تکمیل شکلک"
 
 #: gtk/gtkentry.c:1545
-#, fuzzy
 msgid "Whether to suggest Emoji replacements"
-msgstr "رنگ پیش‌زمینه به‌عنوان یک رشته"
+msgstr "این که جایگزینی شکلک پیشنهاد شود یا نه"
 
 #: gtk/gtkentry.c:1564
 #, fuzzy
@@ -3682,14 +3580,12 @@ msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 
 #: gtk/gtkentry.c:1582
-#, fuzzy
 msgid "Progress Border"
-msgstr "ترتیب مرتب‌سازی"
+msgstr "مرز پیشرفت"
 
 #: gtk/gtkentry.c:1583
-#, fuzzy
 msgid "Border around the progress bar"
-msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
+msgstr "مرز دور نوار پیشرفت"
 
 #: gtk/gtkentry.c:2118
 msgid "Border between text and frame."
@@ -3752,14 +3648,12 @@ msgid "If TRUE, the popup window will appear for a single match."
 msgstr ""
 
 #: gtk/gtkentrycompletion.c:449
-#, fuzzy
 msgid "Inline selection"
-msgstr "سال انتخاب شده"
+msgstr "گزینش دورن‌خط"
 
 #: gtk/gtkentrycompletion.c:450
-#, fuzzy
 msgid "Your description here"
-msgstr "توصیف قلم به‌عنوان یک رشته"
+msgstr "شرحتان در این‌جا"
 
 #: gtk/gtkeventbox.c:114
 msgid "Visible Window"
@@ -3831,20 +3725,16 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 
 #: gtk/gtkexpander.c:367
-#, fuzzy
 msgid "Label fill"
-msgstr "برچسب"
+msgstr "پر کردن برچسب"
 
 #: gtk/gtkexpander.c:368
-#, fuzzy
 msgid "Whether the label widget should fill all available horizontal space"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ابزارک برچسب باید تمامی فضای افقی موجود را پر کند یا نه"
 
 #: gtk/gtkexpander.c:383
-#, fuzzy
-#| msgid "Resize mode"
 msgid "Resize toplevel"
-msgstr "حالت تغییر اندازه"
+msgstr "تغییر اندازهٔ سطح بالا"
 
 #: gtk/gtkexpander.c:384
 msgid ""
@@ -3873,9 +3763,8 @@ msgid "The file chooser dialog to use."
 msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:444
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "عنوان پنجره"
+msgstr "عنوان گفت‌وگوی گزینشگر پرونده."
 
 #: gtk/gtkfilechooserbutton.c:458
 msgid "The desired width of the button widget, in characters."
@@ -3966,9 +3855,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooser.c:458
-#, fuzzy
 msgid "Allow folder creation"
-msgstr "نمایش عملیات پرونده‌ها"
+msgstr "اجازه به ایجاد شاخه"
 
 #: gtk/gtkfilechooser.c:459
 msgid ""
@@ -3992,11 +3880,11 @@ msgstr "برچسب لغو"
 msgid "The label on the cancel button"
 msgstr "برچسب دکمهٔ لغو"
 
-#: gtk/gtkfilechooserwidget.c:8669 gtk/gtkfilechooserwidget.c:8670
+#: gtk/gtkfilechooserwidget.c:8674 gtk/gtkfilechooserwidget.c:8675
 msgid "Search mode"
 msgstr "حالت جست‌وجو"
 
-#: gtk/gtkfilechooserwidget.c:8676 gtk/gtkfilechooserwidget.c:8677
+#: gtk/gtkfilechooserwidget.c:8681 gtk/gtkfilechooserwidget.c:8682
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "زیرنویس"
@@ -4037,10 +3925,8 @@ msgid "Activate row on a single click"
 msgstr ""
 
 #: gtk/gtkflowbox.c:3866
-#, fuzzy
-#| msgid "Minimum child height"
 msgid "Minimum Children Per Line"
-msgstr "حداقل ارتفاع فرزند"
+msgstr "کمینهٔ فرزند در خط"
 
 #: gtk/gtkflowbox.c:3867
 msgid ""
@@ -4049,9 +3935,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkflowbox.c:3880
-#, fuzzy
 msgid "Maximum Children Per Line"
-msgstr "حداقل عرض فرزند"
+msgstr "بیشینهٔ فرزند در خط"
 
 #: gtk/gtkflowbox.c:3881
 msgid ""
@@ -4064,20 +3949,16 @@ msgid "Vertical spacing"
 msgstr "فاصله‌گذاری عمودی"
 
 #: gtk/gtkflowbox.c:3894
-#, fuzzy
-#| msgid "The amount of space between children"
 msgid "The amount of vertical space between two children"
-msgstr "مقدار فاصله بین فرزندان"
+msgstr "مقدار فاصلهٔ عمودی بین دو فرزند"
 
 #: gtk/gtkflowbox.c:3905
 msgid "Horizontal spacing"
 msgstr "فاصله‌گذاری افقی"
 
 #: gtk/gtkflowbox.c:3906
-#, fuzzy
-#| msgid "The amount of space between children"
 msgid "The amount of horizontal space between two children"
-msgstr "مقدار فاصله بین فرزندان"
+msgstr "مقدار فاصلهٔ افقی بین دو فرزند"
 
 #: gtk/gtkfontbutton.c:491
 msgid "The title of the font chooser dialog"
@@ -4124,15 +4005,12 @@ msgid "Font description"
 msgstr "شرح قلم"
 
 #: gtk/gtkfontchooser.c:103
-#, fuzzy
-#| msgid "Preview text"
 msgid "Show preview text entry"
-msgstr "متن پیش‌نمایش"
+msgstr "نمایش ورودی پیش‌نمایش متن"
 
 #: gtk/gtkfontchooser.c:104
-#, fuzzy
 msgid "Whether the preview text entry is shown or not"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ورودی پیش‌نمایش متن نشان داده شود یا نه"
 
 #: gtk/gtkfontchooser.c:118
 msgid "Selection level"
@@ -4147,20 +4025,16 @@ msgid "Font features"
 msgstr "ویژگی‌های قلم"
 
 #: gtk/gtkfontchooser.c:138
-#, fuzzy
-#| msgid "Foreground color as a string"
 msgid "Font features as a string"
-msgstr "رنگ پیش‌زمینه به‌عنوان یک رشته"
+msgstr "ویژگی‌های قلم به شکل یک رشته"
 
 #: gtk/gtkfontchooser.c:155
 msgid "Language for which features have been selected"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:712
-#, fuzzy
-#| msgid "Text direction"
 msgid "The tweak action"
-msgstr "جهت متن"
+msgstr "کنش سیخونک"
 
 #: gtk/gtkfontchooserwidget.c:713
 msgid "The toggle action to switch to the tweak page"
@@ -4203,9 +4077,8 @@ msgid "Number of points"
 msgstr "تعداد نقطه‌ها"
 
 #: gtk/gtkgesture.c:877
-#, fuzzy
 msgid "Number of points needed to trigger the gesture"
-msgstr "تعداد سطرهای جدول"
+msgstr "تعداد نقطه‌های تحریک شدهٔ مورد نیاز برای ژست"
 
 #: gtk/gtkgesture.c:893 gtk/gtkgesture.c:894
 msgid "GdkWindow to receive events about"
@@ -4228,9 +4101,8 @@ msgid "Handle only touch events"
 msgstr ""
 
 #: gtk/gtkgesturesingle.c:263
-#, fuzzy
 msgid "Whether the gesture handles only touch events"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ژست فقط رویدادهای لمسی را مدیریت می‌کند یا نه"
 
 #: gtk/gtkgesturesingle.c:277 gtk/gtkgesturesingle.c:278
 #, fuzzy
@@ -4297,20 +4169,16 @@ msgid "Whether the context uses OpenGL or OpenGL ES"
 msgstr ""
 
 #: gtk/gtkgrid.c:1770
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Row Homogeneous"
-msgstr "همگن"
+msgstr "ردیف همگن"
 
 #: gtk/gtkgrid.c:1771
 msgid "If TRUE, the rows are all the same height"
 msgstr ""
 
 #: gtk/gtkgrid.c:1777
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Column Homogeneous"
-msgstr "همگن"
+msgstr "ستون همگن"
 
 #: gtk/gtkgrid.c:1778
 msgid "If TRUE, the columns are all the same width"
@@ -4349,15 +4217,12 @@ msgid "The number of rows that a child spans"
 msgstr "تعداد سطرهای جدول"
 
 #: gtk/gtkheaderbar.c:2028
-#, fuzzy
 msgid "The title to display"
-msgstr "عنوان پنجره"
+msgstr "عنوان نمایشی"
 
 #: gtk/gtkheaderbar.c:2035
-#, fuzzy
-#| msgid "Icon set to display"
 msgid "The subtitle to display"
-msgstr "مجموعه‌نقشکی که باید نمایش یابد."
+msgstr "زیرنویس نمایشی"
 
 #: gtk/gtkheaderbar.c:2041
 msgid "Custom Title"
@@ -4372,9 +4237,8 @@ msgid "Show decorations"
 msgstr "نمایش دکورها"
 
 #: gtk/gtkheaderbar.c:2067
-#, fuzzy
 msgid "Whether to show window decorations"
-msgstr "رنگ پیش‌زمینه به‌عنوان یک رشته"
+msgstr "این که تزینات پنجره نشان داده شود یا نه"
 
 #: gtk/gtkheaderbar.c:2085 gtk/gtksettings.c:1627
 msgid "Decoration Layout"
@@ -4389,9 +4253,8 @@ msgid "Decoration Layout Set"
 msgstr ""
 
 #: gtk/gtkheaderbar.c:2100
-#, fuzzy
 msgid "Whether the decoration-layout property has been set"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ویژکی decoration-layout تنظیم شده یا نه"
 
 #: gtk/gtkheaderbar.c:2114
 msgid "Has Subtitle"
@@ -4630,7 +4493,7 @@ msgstr "فاصله‌گذاری بین دکمه‌ها و ..."
 msgid "Width of border around the action area"
 msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
 
-#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:899
+#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:901
 msgid "The screen where this window will be displayed"
 msgstr "صفحه‌ای که این پنجره در آن نمایش خواهد یافت"
 
@@ -5366,7 +5229,7 @@ msgstr "عنوان گفت‌وگو"
 msgid "The title of the file chooser dialog"
 msgstr "عنوان پنجره"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1782 gtk/gtkwindow.c:790
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1783 gtk/gtkwindow.c:792
 msgid "Modal"
 msgstr "چسبنده"
 
@@ -5381,11 +5244,11 @@ msgstr ""
 msgid "Whether the dialog is currently visible"
 msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
 
-#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1065
+#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1067
 msgid "Transient for Window"
 msgstr ""
 
-#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1066
+#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1068
 #, fuzzy
 msgid "The transient parent of the dialog"
 msgstr "عنوان پنجره"
@@ -5862,44 +5725,44 @@ msgstr ""
 msgid "The window of the socket the plug is embedded in"
 msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
 
-#: gtk/gtkpopover.c:1739
+#: gtk/gtkpopover.c:1740
 msgid "Relative to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1740
+#: gtk/gtkpopover.c:1741
 msgid "Widget the bubble window points to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1753
+#: gtk/gtkpopover.c:1754
 msgid "Pointing to"
 msgstr "اشاره کردن به"
 
-#: gtk/gtkpopover.c:1754
+#: gtk/gtkpopover.c:1755
 msgid "Rectangle the bubble window points to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1768
+#: gtk/gtkpopover.c:1769
 msgid "Position to place the bubble window"
 msgstr ""
 
-#: gtk/gtkpopover.c:1783
+#: gtk/gtkpopover.c:1784
 #, fuzzy
 msgid "Whether the popover is modal"
 msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
 
-#: gtk/gtkpopover.c:1800
+#: gtk/gtkpopover.c:1801
 msgid "Transitions enabled"
 msgstr ""
 
-#: gtk/gtkpopover.c:1801
+#: gtk/gtkpopover.c:1802
 msgid "Whether show/hide transitions are enabled or not"
 msgstr ""
 
-#: gtk/gtkpopover.c:1814
+#: gtk/gtkpopover.c:1815
 msgid "Constraint"
 msgstr ""
 
-#: gtk/gtkpopover.c:1815
+#: gtk/gtkpopover.c:1816
 msgid "Constraint for the popover position"
 msgstr ""
 
@@ -9032,7 +8895,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:783
+#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:785
 msgid "Resizable"
 msgstr "قابل تغییر اندازه"
 
@@ -9576,256 +9439,256 @@ msgstr "عرض دست‌گیره"
 msgid "Height of text selection handles"
 msgstr "سال انتخاب شده"
 
-#: gtk/gtkwindow.c:745
+#: gtk/gtkwindow.c:747
 msgid "Window Type"
 msgstr "نوع پنجره"
 
-#: gtk/gtkwindow.c:746
+#: gtk/gtkwindow.c:748
 msgid "The type of the window"
 msgstr "نوع این پنجره"
 
-#: gtk/gtkwindow.c:753
+#: gtk/gtkwindow.c:755
 msgid "Window Title"
 msgstr "عنوان پنجره"
 
-#: gtk/gtkwindow.c:754
+#: gtk/gtkwindow.c:756
 msgid "The title of the window"
 msgstr "عنوان پنجره"
 
-#: gtk/gtkwindow.c:760
+#: gtk/gtkwindow.c:762
 msgid "Window Role"
 msgstr "نقش پنجره"
 
-#: gtk/gtkwindow.c:761
+#: gtk/gtkwindow.c:763
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:776
+#: gtk/gtkwindow.c:778
 msgid "Startup ID"
 msgstr "شناسهٔ آغاز"
 
-#: gtk/gtkwindow.c:777
+#: gtk/gtkwindow.c:779
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 
-#: gtk/gtkwindow.c:784
+#: gtk/gtkwindow.c:786
 msgid "If TRUE, users can resize the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:791
+#: gtk/gtkwindow.c:793
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
 
-#: gtk/gtkwindow.c:797
+#: gtk/gtkwindow.c:799
 msgid "Window Position"
 msgstr "موقعیت پنجره"
 
-#: gtk/gtkwindow.c:798
+#: gtk/gtkwindow.c:800
 msgid "The initial position of the window"
 msgstr "موقعیت اولیهٔ پنجره"
 
-#: gtk/gtkwindow.c:805
+#: gtk/gtkwindow.c:807
 msgid "Default Width"
 msgstr "عرض پیش‌فرض"
 
-#: gtk/gtkwindow.c:806
+#: gtk/gtkwindow.c:808
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:813
+#: gtk/gtkwindow.c:815
 msgid "Default Height"
 msgstr "ارتفاع پیش‌فرض"
 
-#: gtk/gtkwindow.c:814
+#: gtk/gtkwindow.c:816
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:821
+#: gtk/gtkwindow.c:823
 msgid "Destroy with Parent"
 msgstr "نابودی با والد"
 
-#: gtk/gtkwindow.c:822
+#: gtk/gtkwindow.c:824
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:835
+#: gtk/gtkwindow.c:837
 msgid "Hide the titlebar during maximization"
 msgstr ""
 
-#: gtk/gtkwindow.c:836
+#: gtk/gtkwindow.c:838
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr ""
 
-#: gtk/gtkwindow.c:843
+#: gtk/gtkwindow.c:845
 msgid "Icon for this window"
 msgstr "نقشک این پنجره"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:861
 #, fuzzy
 msgid "Mnemonics Visible"
 msgstr "مرئی"
 
-#: gtk/gtkwindow.c:860
+#: gtk/gtkwindow.c:862
 msgid "Whether mnemonics are currently visible in this window"
 msgstr ""
 
-#: gtk/gtkwindow.c:876
+#: gtk/gtkwindow.c:878
 msgid "Focus Visible"
 msgstr "تمرکز نمایان"
 
-#: gtk/gtkwindow.c:877
+#: gtk/gtkwindow.c:879
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr ""
 
-#: gtk/gtkwindow.c:892
+#: gtk/gtkwindow.c:894
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "نقشک این پنجره"
 
-#: gtk/gtkwindow.c:905
+#: gtk/gtkwindow.c:907
 msgid "Is Active"
 msgstr "فعال است"
 
-#: gtk/gtkwindow.c:906
+#: gtk/gtkwindow.c:908
 msgid "Whether the toplevel is the current active window"
 msgstr ""
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:914
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:913
+#: gtk/gtkwindow.c:915
 msgid "Whether the input focus is within this GtkWindow"
 msgstr ""
 
-#: gtk/gtkwindow.c:919
+#: gtk/gtkwindow.c:921
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:920
+#: gtk/gtkwindow.c:922
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:927
+#: gtk/gtkwindow.c:929
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:928
+#: gtk/gtkwindow.c:930
 msgid "TRUE if the window should not be in the task bar."
 msgstr ""
 
-#: gtk/gtkwindow.c:934
+#: gtk/gtkwindow.c:936
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:935
+#: gtk/gtkwindow.c:937
 msgid "TRUE if the window should not be in the pager."
 msgstr ""
 
-#: gtk/gtkwindow.c:941
+#: gtk/gtkwindow.c:943
 msgid "Urgent"
 msgstr "فوری"
 
-#: gtk/gtkwindow.c:942
+#: gtk/gtkwindow.c:944
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr ""
 
-#: gtk/gtkwindow.c:955
+#: gtk/gtkwindow.c:957
 msgid "Accept focus"
 msgstr ""
 
-#: gtk/gtkwindow.c:956
+#: gtk/gtkwindow.c:958
 msgid "TRUE if the window should receive the input focus."
 msgstr ""
 
-#: gtk/gtkwindow.c:969
+#: gtk/gtkwindow.c:971
 msgid "Focus on map"
 msgstr ""
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:972
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 
-#: gtk/gtkwindow.c:983
+#: gtk/gtkwindow.c:985
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:984
+#: gtk/gtkwindow.c:986
 msgid "Whether the window should be decorated by the window manager"
 msgstr ""
 
-#: gtk/gtkwindow.c:997
+#: gtk/gtkwindow.c:999
 msgid "Deletable"
 msgstr "قابل حذف"
 
-#: gtk/gtkwindow.c:998
+#: gtk/gtkwindow.c:1000
 msgid "Whether the window frame should have a close button"
 msgstr ""
 
-#: gtk/gtkwindow.c:1018
+#: gtk/gtkwindow.c:1020
 #, fuzzy
 #| msgid "Resize"
 msgid "Resize grip"
 msgstr "تغییر اندازه"
 
-#: gtk/gtkwindow.c:1019
+#: gtk/gtkwindow.c:1021
 msgid "Specifies whether the window should have a resize grip"
 msgstr ""
 
-#: gtk/gtkwindow.c:1034
+#: gtk/gtkwindow.c:1036
 msgid "Resize grip is visible"
 msgstr ""
 
-#: gtk/gtkwindow.c:1035
+#: gtk/gtkwindow.c:1037
 msgid "Specifies whether the window's resize grip is visible."
 msgstr ""
 
-#: gtk/gtkwindow.c:1049
+#: gtk/gtkwindow.c:1051
 msgid "Gravity"
 msgstr "گرانش"
 
-#: gtk/gtkwindow.c:1050
+#: gtk/gtkwindow.c:1052
 msgid "The window gravity of the window"
 msgstr "گرانش پنجره"
 
-#: gtk/gtkwindow.c:1085
+#: gtk/gtkwindow.c:1087
 #, fuzzy
 #| msgid "Attach Widget"
 msgid "Attached to Widget"
 msgstr "پیوست کردن ابزارک"
 
-#: gtk/gtkwindow.c:1086
+#: gtk/gtkwindow.c:1088
 #, fuzzy
 #| msgid "The screen where this window will be displayed"
 msgid "The widget where the window is attached"
 msgstr "صفحه‌ای که این پنجره در آن نمایش خواهد یافت"
 
-#: gtk/gtkwindow.c:1092
+#: gtk/gtkwindow.c:1094
 msgid "Is maximized"
 msgstr ""
 
-#: gtk/gtkwindow.c:1093
+#: gtk/gtkwindow.c:1095
 msgid "Whether the window is maximized"
 msgstr "این که پنجره بیشینه است یا نه"
 
-#: gtk/gtkwindow.c:1114
+#: gtk/gtkwindow.c:1116
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1115
+#: gtk/gtkwindow.c:1117
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication برای پنجره"
 
-#: gtk/gtkwindow.c:1125 gtk/gtkwindow.c:1126
+#: gtk/gtkwindow.c:1127 gtk/gtkwindow.c:1128
 msgid "Decorated button layout"
 msgstr ""
 
-#: gtk/gtkwindow.c:1132 gtk/gtkwindow.c:1133
+#: gtk/gtkwindow.c:1134 gtk/gtkwindow.c:1135
 msgid "Decoration resize handle size"
 msgstr ""
 
@@ -9960,11 +9823,11 @@ msgstr "عنوان نمایهٔ رنگی برای استفاده"
 #~ msgstr "استفاده از آلفا"
 
 #~ msgid "The menu of options"
-#~ msgstr "منوی گزینه‌ها"
+#~ msgstr "فهرست گزینه‌ها"
 
 #, fuzzy
 #~ msgid "Spacing around indicator"
-#~ msgstr "فاصله‌گذاری دور ؟؟؟"
+#~ msgstr "فاصله‌گذاری دور نشانگر"
 
 #~ msgid "Bar style"
 #~ msgstr "سبک نوار"
@@ -9992,4 +9855,4 @@ msgstr "عنوان نمایهٔ رنگی برای استفاده"
 #~ msgstr "جداساز دارد"
 
 #~ msgid "Folder Mode"
-#~ msgstr "حالت پوشه"
+#~ msgstr "حالت شاخه"
