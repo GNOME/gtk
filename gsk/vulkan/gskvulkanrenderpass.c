@@ -1240,6 +1240,15 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
 }
 
 static inline gboolean
+gsk_vulkan_render_pass_add_stroke_node (GskVulkanRenderPass       *self,
+                                        GskVulkanRender           *render,
+                                        const GskVulkanParseState *state,
+                                        GskRenderNode             *node)
+{
+  return TRUE;
+}
+
+static inline gboolean
 gsk_vulkan_render_pass_add_debug_node (GskVulkanRenderPass       *self,
                                        GskVulkanRender           *render,
                                        const GskVulkanParseState *state,
@@ -1287,7 +1296,7 @@ static const GskVulkanRenderPassNodeFunc nodes_vtable[] = {
   [GSK_TEXTURE_SCALE_NODE] = gsk_vulkan_render_pass_add_texture_scale_node,
   [GSK_MASK_NODE] = gsk_vulkan_render_pass_add_mask_node,
   [GSK_FILL_NODE] = gsk_vulkan_render_pass_add_fill_node,
-  [GSK_STROKE_NODE] = NULL,
+  [GSK_STROKE_NODE] = gsk_vulkan_render_pass_add_stroke_node,
 };
 
 static void
