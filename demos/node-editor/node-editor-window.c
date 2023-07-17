@@ -170,31 +170,19 @@ text_iter_skip_whitespace_backward (GtkTextIter *iter)
 }
 
 static void
-text_changed (GtkTextBuffer    *buffer,
-              NodeEditorWindow *self)
+node_changed (NodeEditorWindow *self)
 {
-  char *text;
-  GBytes *bytes;
-  GtkTextIter iter;
-  GtkTextIter start, end;
   float scale;
   GskRenderNode *big_node;
-
-  g_array_remove_range (self->errors, 0, self->errors->len);
-  text = get_current_text (self->text_buffer);
-  text_buffer_remove_all_tags (self->text_buffer);
-  bytes = g_bytes_new_take (text, strlen (text));
-
-  g_clear_pointer (&self->node, gsk_render_node_unref);
-
-  /* If this is too slow, go fix the parser performance */
-  self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
 
   scale = gtk_scale_button_get_value (GTK_SCALE_BUTTON (self->scale_scale));
   if (self->node && scale != 0.)
     {
+      GskTransform *transform;
       scale = pow (2., scale);
-      big_node = gsk_transform_node_new (self->node, gsk_transform_scale (NULL, scale, scale));
+      transform = gsk_transform_scale (NULL, scale, scale);
+      big_node = gsk_transform_node_new (self->node, transform);
+      gsk_transform_unref (transform);
     }
   else if (self->node)
     {
@@ -205,7 +193,6 @@ text_changed (GtkTextBuffer    *buffer,
       big_node = NULL;
     }
 
-  g_bytes_unref (bytes);
   if (self->node)
     {
       /* XXX: Is this code necessary or can we have API to turn nodes into paintables? */
@@ -245,6 +232,30 @@ text_changed (GtkTextBuffer    *buffer,
     }
 
   g_clear_pointer (&big_node, gsk_render_node_unref);
+}
+
+static void
+text_changed (GtkTextBuffer    *buffer,
+              NodeEditorWindow *self)
+{
+  char *text;
+  GBytes *bytes;
+  GtkTextIter iter;
+  GtkTextIter start, end;
+
+  g_array_remove_range (self->errors, 0, self->errors->len);
+  text = get_current_text (self->text_buffer);
+  text_buffer_remove_all_tags (self->text_buffer);
+  bytes = g_bytes_new_take (text, strlen (text));
+
+  g_clear_pointer (&self->node, gsk_render_node_unref);
+
+  /* If this is too slow, go fix the parser performance */
+  self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
+
+  node_changed (self);
+
+  g_bytes_unref (bytes);
 
   gtk_text_buffer_get_start_iter (self->text_buffer, &iter);
 
@@ -330,7 +341,7 @@ scale_changed (GObject          *object,
                GParamSpec       *pspec,
                NodeEditorWindow *self)
 {
-  text_changed (self->text_buffer, self);
+  node_changed (self);
 }
 
 static gboolean
