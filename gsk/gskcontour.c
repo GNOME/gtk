@@ -86,6 +86,9 @@ struct _GskContourClass
   gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
                                                  const GskStroke        *stroke,
                                                  graphene_rect_t        *bounds);
+  gsize                 (* get_shader_size)     (const GskContour       *self);
+  void                  (* to_shader)           (const GskContour       *self,
+                                                 guchar                 *data);
 };
 
 static gsize
@@ -1640,6 +1643,34 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
   return TRUE;
 }
 
+static gsize
+gsk_standard_contour_get_shader_size (const GskContour *contour)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+
+  return (1 + self->n_ops) * sizeof (guint32) +
+         self->n_points * 2 * sizeof (float);
+}
+
+static void
+gsk_standard_contour_to_shader (const GskContour *contour,
+                                guchar           *data)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  guint32 *ops = (guint32 *) data;
+  gsize i;
+
+  *ops = self->n_ops;
+  ops++;
+  for (i = 0; i < self->n_ops; i++)
+    ops[i] = gsk_pathop_op (self->ops[i]);
+
+  memcpy (data + (1 + self->n_ops) * sizeof (guint32),
+          self->points,
+          self->n_points * 2 * sizeof (float));
+}
+
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1657,7 +1688,9 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_copy,
   gsk_standard_contour_add_segment,
   gsk_standard_contour_get_winding,
-  gsk_standard_contour_get_stroke_bounds
+  gsk_standard_contour_get_stroke_bounds,
+  gsk_standard_contour_get_shader_size,
+  gsk_standard_contour_to_shader,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1827,6 +1860,19 @@ gsk_contour_get_stroke_bounds (const GskContour *self,
                                graphene_rect_t  *bounds)
 {
   return self->klass->get_stroke_bounds (self, stroke, bounds);
+}
+
+gsize
+gsk_contour_get_shader_size (const GskContour *self)
+{
+  return self->klass->get_shader_size (self);
+}
+
+void
+gsk_contour_to_shader (const GskContour *self,
+                       guchar           *data)
+{
+  return self->klass->to_shader (self, data);
 }
 
 void

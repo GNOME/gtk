@@ -97,6 +97,10 @@ gboolean                gsk_contour_get_stroke_bounds           (const GskContou
                                                                  const GskStroke        *stroke,
                                                                  graphene_rect_t        *bounds);
 
+gsize                   gsk_contour_get_shader_size             (const GskContour       *self);
+void                    gsk_contour_to_shader                   (const GskContour       *self,
+                                                                 guchar                 *data);
+
 G_END_DECLS
 
 #endif /* __GSK_CONTOUR_PRIVATE_H__ */
