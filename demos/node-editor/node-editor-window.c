@@ -133,6 +133,7 @@ deserialize_error_func (const GskParseLocation *start_location,
   g_array_append_val (self->errors, text_view_error);
 }
 
+#if 0
 static void
 text_iter_skip_alpha_backward (GtkTextIter *iter)
 {
@@ -168,6 +169,7 @@ text_iter_skip_whitespace_backward (GtkTextIter *iter)
       gtk_text_iter_backward_char (iter);
     }
 }
+#endif
 
 static void
 node_changed (NodeEditorWindow *self)
@@ -240,8 +242,6 @@ text_changed (GtkTextBuffer    *buffer,
 {
   char *text;
   GBytes *bytes;
-  GtkTextIter iter;
-  GtkTextIter start, end;
 
   g_array_remove_range (self->errors, 0, self->errors->len);
   text = get_current_text (self->text_buffer);
@@ -257,6 +257,7 @@ text_changed (GtkTextBuffer    *buffer,
 
   g_bytes_unref (bytes);
 
+#if 0
   gtk_text_buffer_get_start_iter (self->text_buffer, &iter);
 
   while (!gtk_text_iter_is_end (&iter))
@@ -323,6 +324,7 @@ text_changed (GtkTextBuffer    *buffer,
   gtk_text_buffer_get_bounds (self->text_buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (self->text_buffer, "no-hyphens",
                                      &start, &end);
+#endif
 }
 
 static void
@@ -1221,6 +1223,7 @@ node_editor_window_finalize (GObject *object)
   G_OBJECT_CLASS (node_editor_window_parent_class)->finalize (object);
 }
 
+#if 0
 static void
 node_editor_window_add_renderer (NodeEditorWindow *self,
                                  GskRenderer      *renderer,
@@ -1255,11 +1258,9 @@ node_editor_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (node_editor_window_parent_class)->realize (widget);
 
-#if 0
   node_editor_window_add_renderer (self,
                                    NULL,
                                    "Default");
-#endif
   node_editor_window_add_renderer (self,
                                    gsk_gl_renderer_new (),
                                    "OpenGL");
@@ -1277,6 +1278,7 @@ node_editor_window_realize (GtkWidget *widget)
                                    gsk_cairo_renderer_new (),
                                    "Cairo");
 }
+#endif
 
 static void
 node_editor_window_unrealize (GtkWidget *widget)
@@ -1659,7 +1661,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/node-editor/node-editor-window.ui");
 
-  widget_class->realize = node_editor_window_realize;
+  //widget_class->realize = node_editor_window_realize;
   widget_class->unrealize = node_editor_window_unrealize;
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);

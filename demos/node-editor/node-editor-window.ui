@@ -147,6 +147,11 @@
             <property name="popover">testcase_popover</property>
           </object>
         </child>
+        <child type="start">
+          <object class="GtkSpinner">
+            <property name="spinning">1</property>
+          </object>
+        </child>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="focus-on-click">0</property>
