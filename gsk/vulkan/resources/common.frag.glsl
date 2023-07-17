@@ -6,4 +6,5 @@ layout(set = 1, binding = 0) readonly buffer FloatBuffers {
 #define get_sampler(id) textures[id]
 #define get_buffer(id) buffers[id]
 #define get_float(id) get_buffer(0).floats[id]
+#define get_int(id) floatBitsToInt (get_float (id))
 

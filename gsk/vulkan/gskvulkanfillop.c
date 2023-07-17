@@ -5,7 +5,7 @@
 #include "gskvulkanprivate.h"
 #include "gskvulkanshaderopprivate.h"
 
-#include "gskpath.h"
+#include "gskpathprivate.h"
 
 #include "vulkan/resources/fill.vert.h"
 
@@ -21,7 +21,6 @@ struct _GskVulkanFillOp
   GskFillRule fill_rule;
   GdkRGBA color;
 
-  gsize n_points;
   gsize buffer_offset;
 };
 
@@ -57,20 +56,7 @@ gsk_vulkan_fill_op_collect_vertex_data (GskVulkanOp *op,
   gsk_vulkan_rgba_to_float (&self->color, instance->color);
   gsk_vulkan_point_to_float (&self->offset, instance->offset);
   instance->points_id = self->buffer_offset;
-  instance->n_points = self->n_points;
   instance->fill_rule = self->fill_rule;
-}
-
-static gboolean
-gsk_vulkan_fill_op_path_foreach_cb (GskPathOperation        op,
-                                    const graphene_point_t *pts,
-                                    gsize                   n_pts,
-                                    float                   weight,
-                                    gpointer                array)
-{
-  g_array_append_val (array, pts[0].x);
-  g_array_append_val (array, pts[0].y);
-  return TRUE;
 }
 
 static void
@@ -78,21 +64,17 @@ gsk_vulkan_fill_op_reserve_descriptor_sets (GskVulkanOp     *op,
                                             GskVulkanRender *render)
 {
   GskVulkanFillOp *self = (GskVulkanFillOp *) op;
-  GArray *points;
+  const GskContour *contour;
   guchar *mem;
 
-  points = g_array_new (FALSE, FALSE, sizeof(float));
-  gsk_path_foreach (self->path,
-                    0,
-                    gsk_vulkan_fill_op_path_foreach_cb,
-                    points);
-  self->n_points = points->len / 2;
+  //g_warn_if_fail (gsk_path_get_n_contours (self->path) == 1);
+  contour = gsk_path_get_contour (self->path, 0);
+
   mem = gsk_vulkan_render_get_buffer_memory (render,
-                                             points->len * sizeof (float),
+                                             gsk_contour_get_shader_size (contour),
                                              G_ALIGNOF (float),
                                              &self->buffer_offset);
-  memcpy (mem, points->data, points->len * sizeof (float));
-  g_array_free (points, TRUE);
+  gsk_contour_to_shader (contour, mem);
 }
 
 static const GskVulkanShaderOpClass GSK_VULKAN_FILL_OP_CLASS = {

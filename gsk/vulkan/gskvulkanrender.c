@@ -729,7 +729,7 @@ gsk_vulkan_render_ensure_storage_buffer (GskVulkanRender *self)
     {
       self->storage_buffer = gsk_vulkan_buffer_new_storage (self->vulkan,
                                                             /* random */
-                                                            sizeof (float) * 1024 * 1024);
+                                                            sizeof (float) * 64 * 1024 * 1024);
     }
 
   self->storage_buffer_memory = gsk_vulkan_buffer_map (self->storage_buffer);
@@ -784,6 +784,7 @@ gsk_vulkan_render_get_buffer_memory (GskVulkanRender *self,
   *out_offset = self->storage_buffer_used / sizeof (float);
 
   self->storage_buffer_used += size;
+  g_assert (self->storage_buffer_used <= gsk_vulkan_buffer_get_size (self->storage_buffer));
 
   return result;
 }
