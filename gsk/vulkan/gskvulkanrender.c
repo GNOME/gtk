@@ -1007,6 +1007,7 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   
   gsk_vulkan_render_cleanup (self);
 
+  g_clear_pointer (&self->storage_buffer, gsk_vulkan_buffer_free);
   g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
