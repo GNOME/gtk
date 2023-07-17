@@ -216,15 +216,16 @@ cubic_distance_squared (vec2 uv,
 }
 
 float
-path_distance (vec2 p)
+standard_contour_distance (vec2      p,
+                           inout int path_idx,
+                           inout int w)
 {
-  int n_points = get_int (in_points_id);
-  int ops_idx = in_points_id + 1;
+  int n_points = get_int (path_idx);
+  int ops_idx = path_idx + 1;
   int pts_idx = ops_idx + n_points;
 
   vec2 start = get_point (pts_idx);
   float d = dot (p - start, p - start);
-  int w = 0;
   int op = GSK_PATH_MOVE;
   
   for (int i = 1; i < n_points; i++)
@@ -271,6 +272,26 @@ path_distance (vec2 p)
       int tmp_idx = ops_idx + n_points;
       vec2 end = get_point (tmp_idx);
       d = min (d, line_distance_squared (p, start, end, w));
+    }
+
+  path_idx = pts_idx;
+
+  return d;
+}
+
+float
+path_distance (vec2 p)
+{
+  int path_idx = in_points_id;
+
+  int n = get_int (path_idx);
+  path_idx++;
+  int w = 0;
+  float d = 1e38;
+  
+  while (n-- > 0)
+    {
+       d = min (d, standard_contour_distance (p, path_idx, w));
     }
 
   if (in_fill_rule == GSK_FILL_RULE_WINDING)

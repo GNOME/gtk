@@ -65,16 +65,31 @@ gsk_vulkan_fill_op_reserve_descriptor_sets (GskVulkanOp     *op,
 {
   GskVulkanFillOp *self = (GskVulkanFillOp *) op;
   const GskContour *contour;
+  gsize size, i, n;
   guchar *mem;
 
-  //g_warn_if_fail (gsk_path_get_n_contours (self->path) == 1);
-  contour = gsk_path_get_contour (self->path, 0);
+  size = sizeof (guint32);
+  n = gsk_path_get_n_contours (self->path);
+  for (i = 0; i < n; i++)
+    {
+      contour = gsk_path_get_contour (self->path, i);
+      size += gsk_contour_get_shader_size (contour);
+    }
 
   mem = gsk_vulkan_render_get_buffer_memory (render,
-                                             gsk_contour_get_shader_size (contour),
+                                             size,
                                              G_ALIGNOF (float),
                                              &self->buffer_offset);
-  gsk_contour_to_shader (contour, mem);
+
+  *(guint32*) mem = n;
+  mem += sizeof (guint32);
+
+  for (i = 0; i < n; i++)
+    {
+      contour = gsk_path_get_contour (self->path, i);
+      gsk_contour_to_shader (contour, mem);
+      mem += gsk_contour_get_shader_size (contour);
+    }
 }
 
 static const GskVulkanShaderOpClass GSK_VULKAN_FILL_OP_CLASS = {
