@@ -15,7 +15,6 @@ struct _GskVulkanRenderPassOp
   GskVulkanOp op;
 
   GskVulkanImage *image;
-  GskVulkanRenderPass *render_pass;
   cairo_rectangle_int_t area;
   graphene_size_t viewport_size;
 
@@ -29,7 +28,6 @@ gsk_vulkan_render_pass_op_finish (GskVulkanOp *op)
   GskVulkanRenderPassOp *self = (GskVulkanRenderPassOp *) op;
 
   g_object_unref (self->image);
-  gsk_vulkan_render_pass_free (self->render_pass);
 }
 
 static void
@@ -254,6 +252,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
 {
   GskVulkanRenderPassOp *self;
   GskVulkanRenderPassEndOp *end;
+  GskVulkanRenderPass *render_pass;
 
   self = (GskVulkanRenderPassOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_OP_CLASS);
 
@@ -263,15 +262,15 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   self->area = *area;
   self->viewport_size = viewport->size;
 
-  self->render_pass = gsk_vulkan_render_pass_new ();
-
+  render_pass = gsk_vulkan_render_pass_new ();
   /* This invalidates the self pointer */
-  gsk_vulkan_render_pass_add (self->render_pass,
+  gsk_vulkan_render_pass_add (render_pass,
                               render,
                               scale,
                               viewport,
                               area,
                               node);
+  gsk_vulkan_render_pass_free (render_pass);
 
   end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
 
