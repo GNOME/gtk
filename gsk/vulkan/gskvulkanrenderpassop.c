@@ -245,7 +245,7 @@ static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_END_OP_CLASS = {
 void
 gsk_vulkan_render_pass_op (GskVulkanRender       *render,
                            GskVulkanImage        *image,
-                           cairo_region_t        *clip,
+                           cairo_rectangle_int_t *area,
                            const graphene_vec2_t *scale,
                            const graphene_rect_t *viewport,
                            GskRenderNode         *node,
@@ -260,7 +260,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   self->image = image;
   self->initial_layout = initial_layout;
   self->final_layout = final_layout;
-  cairo_region_get_extents (clip, &self->area);
+  self->area = *area;
   self->viewport_size = viewport->size;
 
   self->render_pass = gsk_vulkan_render_pass_new ();
@@ -270,7 +270,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
                               render,
                               scale,
                               viewport,
-                              clip,
+                              area,
                               node);
 
   end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
@@ -288,7 +288,6 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
   GdkVulkanContext *context;
   graphene_rect_t view;
   GskVulkanImage *image;
-  cairo_region_t *clip;
   float scale_x, scale_y;
 
   scale_x = graphene_vec2_get_x (scale);
@@ -304,22 +303,18 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                                   gsk_render_node_get_preferred_depth (node)),
                                               view.size.width, view.size.height);
 
-  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                          0, 0,
-                                          gsk_vulkan_image_get_width (image),
-                                          gsk_vulkan_image_get_height (image)
-                                        });
-
   gsk_vulkan_render_pass_op (render,
                              image,
-                             clip,
+                             &(cairo_rectangle_int_t) {
+                                 0, 0,
+                                 gsk_vulkan_image_get_width (image),
+                                 gsk_vulkan_image_get_height (image)
+                             },
                              scale,
                              &view,
                              node,
                              VK_IMAGE_LAYOUT_UNDEFINED,
                              VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-  cairo_region_destroy (clip);
 
   return image;
 }

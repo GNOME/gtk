@@ -492,12 +492,14 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
                             gpointer               download_data)
 {
   graphene_vec2_t scale;
+  cairo_rectangle_int_t extents;
 
   graphene_vec2_init (&scale, self->scale, self->scale);
+  cairo_region_get_extents (self->clip, &extents);
 
   gsk_vulkan_render_pass_op (self,
                              g_object_ref (self->target),
-                             self->clip,
+                             &extents,
                              &scale,
                              &self->viewport,
                              node,

@@ -6,7 +6,7 @@ G_BEGIN_DECLS
 
 void                    gsk_vulkan_render_pass_op                       (GskVulkanRender                *render,
                                                                          GskVulkanImage                 *image,
-                                                                         cairo_region_t                 *clip,
+                                                                         cairo_rectangle_int_t          *area,
                                                                          const graphene_vec2_t          *scale,
                                                                          const graphene_rect_t          *viewport,
                                                                          GskRenderNode                  *node,

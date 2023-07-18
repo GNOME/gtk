@@ -1257,20 +1257,19 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass   *self,
                             GskVulkanRender       *render,
                             const graphene_vec2_t *scale,
                             const graphene_rect_t *viewport,
-                            cairo_region_t        *clip_region,
+                            cairo_rectangle_int_t *clip,
                             GskRenderNode         *node)
 {
   GskVulkanParseState state;
-  graphene_rect_t clip;
+  graphene_rect_t scaled_clip;
   float scale_x, scale_y;
 
   scale_x = 1 / graphene_vec2_get_x (scale);
   scale_y = 1 / graphene_vec2_get_y (scale);
-  cairo_region_get_extents (clip_region, &state.scissor);
-  clip = GRAPHENE_RECT_INIT(state.scissor.x, state.scissor.y,
-                            state.scissor.width, state.scissor.height);
-  graphene_rect_scale (&clip, scale_x, scale_y, &clip);
-  gsk_vulkan_clip_init_empty (&state.clip, &clip);
+  state.scissor = *clip;
+  scaled_clip = GRAPHENE_RECT_INIT(clip->x, clip->y, clip->width, clip->height);
+  graphene_rect_scale (&scaled_clip, scale_x, scale_y, &scaled_clip);
+  gsk_vulkan_clip_init_empty (&state.clip, &scaled_clip);
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,

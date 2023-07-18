@@ -18,7 +18,7 @@ void                    gsk_vulkan_render_pass_add                      (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          const graphene_vec2_t  *scale,
                                                                          const graphene_rect_t  *viewport,
-                                                                         cairo_region_t         *clip,
+                                                                         cairo_rectangle_int_t  *clip,
                                                                          GskRenderNode          *node);
 
 G_END_DECLS
