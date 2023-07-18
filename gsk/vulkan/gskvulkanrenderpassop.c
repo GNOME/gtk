@@ -264,16 +264,15 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   cairo_region_get_extents (clip, &self->area);
   self->viewport_size = viewport->size;
 
-  self->render_pass = gsk_vulkan_render_pass_new (context,
-                                                  render,
-                                                  self->image,
-                                                  scale,
-                                                  viewport,
-                                                  clip,
-                                                  node);
+  self->render_pass = gsk_vulkan_render_pass_new (context);
 
   /* This invalidates the self pointer */
-  gsk_vulkan_render_pass_add (self->render_pass, render, node);
+  gsk_vulkan_render_pass_add (self->render_pass,
+                              render,
+                              scale,
+                              viewport,
+                              clip,
+                              node);
 
   end = (GskVulkanRenderPassEndOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_RENDER_PASS_END_OP_CLASS);
 

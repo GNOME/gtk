@@ -43,12 +43,6 @@ typedef struct _GskVulkanParseState GskVulkanParseState;
 struct _GskVulkanRenderPass
 {
   GdkVulkanContext *vulkan;
-
-  GskVulkanImage *target;
-  graphene_rect_t viewport;
-  cairo_region_t *clip;
-
-  graphene_vec2_t scale;
 };
 
 struct _GskVulkanParseState
@@ -61,37 +55,13 @@ struct _GskVulkanParseState
   GskVulkanClip          clip;
 };
 
-#ifdef G_ENABLE_DEBUG
-static GQuark fallback_pixels_quark;
-static GQuark texture_pixels_quark;
-#endif
-
 GskVulkanRenderPass *
-gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
-                            GskVulkanRender       *render,
-                            GskVulkanImage        *target,
-                            const graphene_vec2_t *scale,
-                            const graphene_rect_t *viewport,
-                            cairo_region_t        *clip,
-                            GskRenderNode         *node)
+gsk_vulkan_render_pass_new (GdkVulkanContext *context)
 {
   GskVulkanRenderPass *self;
 
   self = g_new0 (GskVulkanRenderPass, 1);
   self->vulkan = g_object_ref (context);
-
-  self->target = g_object_ref (target);
-  self->clip = cairo_region_copy (clip);
-  self->viewport = *viewport;
-  graphene_vec2_init_from_vec2 (&self->scale, scale);
-
-#ifdef G_ENABLE_DEBUG
-  if (fallback_pixels_quark == 0)
-    {
-      fallback_pixels_quark = g_quark_from_static_string ("fallback-pixels");
-      texture_pixels_quark = g_quark_from_static_string ("texture-pixels");
-    }
-#endif
 
   return self;
 }
@@ -100,8 +70,6 @@ void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
   g_object_unref (self->vulkan);
-  g_object_unref (self->target);
-  cairo_region_destroy (self->clip);
 
   g_free (self);
 }
@@ -1292,17 +1260,20 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
 }
 
 void
-gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
-                            GskVulkanRender     *render,
-                            GskRenderNode       *node)
+gsk_vulkan_render_pass_add (GskVulkanRenderPass   *self,
+                            GskVulkanRender       *render,
+                            const graphene_vec2_t *scale,
+                            const graphene_rect_t *viewport,
+                            cairo_region_t        *clip_region,
+                            GskRenderNode         *node)
 {
   GskVulkanParseState state;
   graphene_rect_t clip;
   float scale_x, scale_y;
 
-  scale_x = 1 / graphene_vec2_get_x (&self->scale);
-  scale_y = 1 / graphene_vec2_get_y (&self->scale);
-  cairo_region_get_extents (self->clip, &state.scissor);
+  scale_x = 1 / graphene_vec2_get_x (scale);
+  scale_y = 1 / graphene_vec2_get_y (scale);
+  cairo_region_get_extents (clip_region, &state.scissor);
   clip = GRAPHENE_RECT_INIT(state.scissor.x, state.scissor.y,
                             state.scissor.width, state.scissor.height);
   graphene_rect_scale (&clip, scale_x, scale_y, &clip);
@@ -1310,13 +1281,13 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
-                              0, self->viewport.size.width,
-                              0, self->viewport.size.height,
+                              0, viewport->size.width,
+                              0, viewport->size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
-  state.offset = GRAPHENE_POINT_INIT (-self->viewport.origin.x * scale_x,
-                                      -self->viewport.origin.y * scale_y);
+  graphene_vec2_init_from_vec2 (&state.scale, scale);
+  state.offset = GRAPHENE_POINT_INIT (-viewport->origin.x * scale_x,
+                                      -viewport->origin.y * scale_y);
 
   gsk_vulkan_render_pass_append_scissor (render, node, &state);
   gsk_vulkan_render_pass_append_push_constants (render, node, &state);
