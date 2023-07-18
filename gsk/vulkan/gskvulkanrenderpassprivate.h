@@ -10,7 +10,7 @@
 G_BEGIN_DECLS
 
 
-GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context);
+GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (void);
 
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 

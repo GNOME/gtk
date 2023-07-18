@@ -42,7 +42,7 @@ typedef struct _GskVulkanParseState GskVulkanParseState;
 
 struct _GskVulkanRenderPass
 {
-  GdkVulkanContext *vulkan;
+  int empty;
 };
 
 struct _GskVulkanParseState
@@ -56,12 +56,11 @@ struct _GskVulkanParseState
 };
 
 GskVulkanRenderPass *
-gsk_vulkan_render_pass_new (GdkVulkanContext *context)
+gsk_vulkan_render_pass_new (void)
 {
   GskVulkanRenderPass *self;
 
   self = g_new0 (GskVulkanRenderPass, 1);
-  self->vulkan = g_object_ref (context);
 
   return self;
 }
@@ -69,8 +68,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext *context)
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
-  g_object_unref (self->vulkan);
-
   g_free (self);
 }
 
@@ -161,7 +158,7 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
         if (result == NULL)
           {
-            result = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+            result = gsk_vulkan_upload_texture_op (render, texture);
             gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
           }
 
@@ -180,7 +177,6 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
           return NULL;
 
         result = gsk_vulkan_upload_cairo_op (render,
-                                             self->vulkan,
                                              node,
                                              &state->scale,
                                              &clipped);
@@ -205,7 +201,6 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         *tex_bounds = clipped;
 
         result = gsk_vulkan_render_pass_op_offscreen (render,
-                                                      self->vulkan,
                                                       &state->scale,
                                                       &clipped,
                                                       node);
@@ -237,7 +232,6 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   image = gsk_vulkan_upload_cairo_op (render,
-                                      self->vulkan,
                                       node,
                                       &state->scale,
                                       &clipped);
@@ -439,7 +433,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+      image = gsk_vulkan_upload_texture_op (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -482,7 +476,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+      image = gsk_vulkan_upload_texture_op (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -869,7 +863,6 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   image = gsk_vulkan_render_pass_op_offscreen (render,
-                                               self->vulkan,
                                                &state->scale,
                                                child_bounds,
                                                gsk_repeat_node_get_child (node));

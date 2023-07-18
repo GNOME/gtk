@@ -244,7 +244,6 @@ static const GskVulkanOpClass GSK_VULKAN_RENDER_PASS_END_OP_CLASS = {
 
 void
 gsk_vulkan_render_pass_op (GskVulkanRender       *render,
-                           GdkVulkanContext      *context,
                            GskVulkanImage        *image,
                            cairo_region_t        *clip,
                            const graphene_vec2_t *scale,
@@ -264,7 +263,7 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
   cairo_region_get_extents (clip, &self->area);
   self->viewport_size = viewport->size;
 
-  self->render_pass = gsk_vulkan_render_pass_new (context);
+  self->render_pass = gsk_vulkan_render_pass_new ();
 
   /* This invalidates the self pointer */
   gsk_vulkan_render_pass_add (self->render_pass,
@@ -282,11 +281,11 @@ gsk_vulkan_render_pass_op (GskVulkanRender       *render,
 
 GskVulkanImage *
 gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
-                                     GdkVulkanContext      *context,
                                      const graphene_vec2_t *scale,
                                      const graphene_rect_t *viewport,
                                      GskRenderNode         *node)
 {
+  GdkVulkanContext *context;
   graphene_rect_t view;
   GskVulkanImage *image;
   cairo_region_t *clip;
@@ -299,6 +298,7 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                              ceil (scale_x * viewport->size.width),
                              ceil (scale_y * viewport->size.height));
 
+  context = gsk_vulkan_render_get_context (render);
   image = gsk_vulkan_image_new_for_offscreen (context,
                                               gdk_vulkan_context_get_offscreen_format (context,
                                                   gsk_render_node_get_preferred_depth (node)),
@@ -311,7 +311,6 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                         });
 
   gsk_vulkan_render_pass_op (render,
-                             context,
                              image,
                              clip,
                              scale,

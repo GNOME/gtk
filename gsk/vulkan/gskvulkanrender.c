@@ -496,7 +496,6 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
   graphene_vec2_init (&scale, self->scale, self->scale);
 
   gsk_vulkan_render_pass_op (self,
-                             self->vulkan,
                              g_object_ref (self->target),
                              self->clip,
                              &scale,
