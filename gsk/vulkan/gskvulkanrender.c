@@ -491,19 +491,33 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
                             GskVulkanDownloadFunc  download_func,
                             gpointer               download_data)
 {
+  GskVulkanRenderPass *render_pass;
   graphene_vec2_t scale;
+  cairo_rectangle_int_t extents;
 
   graphene_vec2_init (&scale, self->scale, self->scale);
+  cairo_region_get_extents (self->clip, &extents);
 
-  gsk_vulkan_render_pass_op (self,
-                             self->vulkan,
-                             g_object_ref (self->target),
-                             self->clip,
-                             &scale,
-                             &self->viewport,
-                             node,
-                             VK_IMAGE_LAYOUT_UNDEFINED,
-                             VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+  gsk_vulkan_render_pass_begin_op (self,
+                                   g_object_ref (self->target),
+                                   &extents,
+                                   &self->viewport.size,
+                                   VK_IMAGE_LAYOUT_UNDEFINED,
+                                   VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
+
+  render_pass = gsk_vulkan_render_pass_new ();
+  gsk_vulkan_render_pass_add (render_pass,
+                              self,
+                              &scale,
+                              &self->viewport,
+                              &extents,
+                              node);
+  gsk_vulkan_render_pass_free (render_pass);
+
+  gsk_vulkan_render_pass_end_op (self,
+                                 g_object_ref (self->target),
+                                 VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
   if (download_func)
     gsk_vulkan_download_op (self, self->target, download_func, download_data);
@@ -1007,6 +1021,7 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   
   gsk_vulkan_render_cleanup (self);
 
+  g_clear_pointer (&self->storage_buffer, gsk_vulkan_buffer_free);
   g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
 
   device = gdk_vulkan_context_get_device (self->vulkan);

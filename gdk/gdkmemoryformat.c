@@ -700,6 +700,26 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
+  if (src_format == dest_format)
+    {
+      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
+
+      if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
+        {
+          memcpy (dest_data, src_data, bytes_per_row * height);
+        }
+      else
+        {
+          for (y = 0; y < height; y++)
+            {
+              memcpy (dest_data, src_data, bytes_per_row);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+        }
+      return;
+    }
+
   if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_r8g8b8a8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)

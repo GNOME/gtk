@@ -1050,6 +1050,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
     {
       g_warning_once ("Failed to create pipeline cache directory");
       g_free (path);
+      g_free (data);
       return FALSE;
     }
   g_free (path);
@@ -1085,6 +1086,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
             }
           g_clear_error (&error);
           g_object_unref (file);
+          g_free (data);
 
           /* try again */
           return gdk_vulkan_save_pipeline_cache (display);
@@ -1093,10 +1095,12 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
       g_warning ("Failed to save pipeline cache: %s", error->message);
       g_clear_error (&error);
       g_object_unref (file);
+      g_free (data);
       return FALSE;
     }
 
   g_object_unref (file);
+  g_free (data);
   g_free (display->vk_pipeline_cache_etag);
   display->vk_pipeline_cache_etag = etag;
 
@@ -1132,12 +1136,15 @@ gdk_display_create_pipeline_cache (GdkDisplay *display)
 {
   display->vk_pipeline_cache = gdk_display_load_pipeline_cache (display);
 
-  GDK_VK_CHECK (vkCreatePipelineCache, display->vk_device,
-                                       &(VkPipelineCacheCreateInfo) {
-                                         .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
-                                       },
-                                       NULL,
-                                       &display->vk_pipeline_cache);
+  if (display->vk_pipeline_cache == VK_NULL_HANDLE)
+    {
+      GDK_VK_CHECK (vkCreatePipelineCache, display->vk_device,
+                                           &(VkPipelineCacheCreateInfo) {
+                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+                                           },
+                                           NULL,
+                                           &display->vk_pipeline_cache);
+    }
 }
 
 VkPipelineCache
@@ -1649,7 +1656,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
       g_assert (display->vk_save_pipeline_cache_source == 0);
     }
   vkDestroyPipelineCache (display->vk_device, display->vk_pipeline_cache, NULL);
-  display->vk_device = VK_NULL_HANDLE;
+  display->vk_pipeline_cache = VK_NULL_HANDLE;
   g_clear_pointer (&display->vk_pipeline_cache_etag, g_free);
   display->vk_pipeline_cache_size = 0;
 

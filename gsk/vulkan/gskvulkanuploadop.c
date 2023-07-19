@@ -214,7 +214,6 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_TEXTURE_OP_CLASS = {
 
 GskVulkanImage *
 gsk_vulkan_upload_texture_op (GskVulkanRender  *render,
-                              GdkVulkanContext *context,
                               GdkTexture       *texture)
 {
   GskVulkanUploadTextureOp *self;
@@ -222,7 +221,7 @@ gsk_vulkan_upload_texture_op (GskVulkanRender  *render,
   self = (GskVulkanUploadTextureOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_TEXTURE_OP_CLASS);
 
   self->texture = g_object_ref (texture);
-  self->image = gsk_vulkan_image_new_for_upload (context,
+  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_context (render),
                                                  gdk_texture_get_format (texture),
                                                  gdk_texture_get_width (texture),
                                                  gdk_texture_get_height (texture));
@@ -327,7 +326,6 @@ static const GskVulkanOpClass GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS = {
 
 GskVulkanImage *
 gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
-                            GdkVulkanContext      *context,
                             GskRenderNode         *node,
                             const graphene_vec2_t *scale,
                             const graphene_rect_t *viewport)
@@ -337,10 +335,11 @@ gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
   self = (GskVulkanUploadCairoOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS);
 
   self->node = gsk_render_node_ref (node);
-  self->image = gsk_vulkan_image_new_for_upload (context,
+  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_context (render),
                                                  GDK_MEMORY_DEFAULT,
                                                  ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                  ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+  g_assert (gsk_vulkan_image_get_postprocess (self->image) == 0);
   self->viewport = *viewport;
 
   return self->image;

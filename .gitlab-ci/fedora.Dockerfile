@@ -32,6 +32,7 @@ RUN dnf -y install \
     glib2-static \
     glibc-devel \
     glibc-headers \
+    glslc \
     gnupg2 \
     gobject-introspection-devel \
     graphene-devel \

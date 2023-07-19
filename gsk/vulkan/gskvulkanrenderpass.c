@@ -16,6 +16,7 @@
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
+#include "gskvulkanconvertopprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
 #include "gskvulkanglyphopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
@@ -42,13 +43,7 @@ typedef struct _GskVulkanParseState GskVulkanParseState;
 
 struct _GskVulkanRenderPass
 {
-  GdkVulkanContext *vulkan;
-
-  GskVulkanImage *target;
-  graphene_rect_t viewport;
-  cairo_region_t *clip;
-
-  graphene_vec2_t scale;
+  int empty;
 };
 
 struct _GskVulkanParseState
@@ -61,37 +56,12 @@ struct _GskVulkanParseState
   GskVulkanClip          clip;
 };
 
-#ifdef G_ENABLE_DEBUG
-static GQuark fallback_pixels_quark;
-static GQuark texture_pixels_quark;
-#endif
-
 GskVulkanRenderPass *
-gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
-                            GskVulkanRender       *render,
-                            GskVulkanImage        *target,
-                            const graphene_vec2_t *scale,
-                            const graphene_rect_t *viewport,
-                            cairo_region_t        *clip,
-                            GskRenderNode         *node)
+gsk_vulkan_render_pass_new (void)
 {
   GskVulkanRenderPass *self;
 
   self = g_new0 (GskVulkanRenderPass, 1);
-  self->vulkan = g_object_ref (context);
-
-  self->target = g_object_ref (target);
-  self->clip = cairo_region_copy (clip);
-  self->viewport = *viewport;
-  graphene_vec2_init_from_vec2 (&self->scale, scale);
-
-#ifdef G_ENABLE_DEBUG
-  if (fallback_pixels_quark == 0)
-    {
-      fallback_pixels_quark = g_quark_from_static_string ("fallback-pixels");
-      texture_pixels_quark = g_quark_from_static_string ("texture-pixels");
-    }
-#endif
 
   return self;
 }
@@ -99,10 +69,6 @@ gsk_vulkan_render_pass_new (GdkVulkanContext      *context,
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
-  g_object_unref (self->vulkan);
-  g_object_unref (self->target);
-  cairo_region_destroy (self->clip);
-
   g_free (self);
 }
 
@@ -176,6 +142,52 @@ gsk_vulkan_parse_rect_is_integer (const GskVulkanParseState *state,
 }
 
 static GskVulkanImage *
+gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
+                                       GdkTexture      *texture)
+{
+  GskVulkanImage *image, *better_image;
+  int width, height;
+  GskVulkanImagePostprocess postproc;
+  graphene_matrix_t projection;
+  graphene_vec2_t scale;
+
+  image = gsk_vulkan_upload_texture_op (render, texture);
+  postproc = gsk_vulkan_image_get_postprocess (image);
+  if (postproc == 0)
+    return image;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  better_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_context (render),
+                                                     gdk_texture_get_format (texture),
+                                                     width, height);
+  gsk_vulkan_render_pass_begin_op (render,
+                                   g_object_ref (better_image),
+                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                   &GRAPHENE_SIZE_INIT(width, height),
+                                   VK_IMAGE_LAYOUT_UNDEFINED,
+                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  gsk_vulkan_scissor_op (render, &(cairo_rectangle_int_t) { 0, 0, width, height });
+  graphene_matrix_init_ortho (&projection,
+                              0, width,
+                              0, height,
+                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  graphene_vec2_init (&scale, 1.0, 1.0);
+  gsk_vulkan_push_constants_op (render, &scale, &projection, &GSK_ROUNDED_RECT_INIT(0, 0, width, height));
+  gsk_vulkan_convert_op (render,
+                         GSK_VULKAN_SHADER_CLIP_NONE,
+                         image,
+                         &GRAPHENE_RECT_INIT (0, 0, width, height),
+                         &GRAPHENE_POINT_INIT (0, 0),
+                         &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_vulkan_render_pass_end_op (render,
+                                 better_image,
+                                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  return better_image;
+}
+
+static GskVulkanImage *
 gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
                                           GskVulkanRender           *render,
                                           const GskVulkanParseState *state,
@@ -193,7 +205,7 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
         if (result == NULL)
           {
-            result = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+            result = gsk_vulkan_render_pass_upload_texture (render, texture);
             gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
           }
 
@@ -212,7 +224,6 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
           return NULL;
 
         result = gsk_vulkan_upload_cairo_op (render,
-                                             self->vulkan,
                                              node,
                                              &state->scale,
                                              &clipped);
@@ -237,7 +248,6 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         *tex_bounds = clipped;
 
         result = gsk_vulkan_render_pass_op_offscreen (render,
-                                                      self->vulkan,
                                                       &state->scale,
                                                       &clipped,
                                                       node);
@@ -269,7 +279,6 @@ gsk_vulkan_render_pass_add_fallback_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   image = gsk_vulkan_upload_cairo_op (render,
-                                      self->vulkan,
                                       node,
                                       &state->scale,
                                       &clipped);
@@ -471,7 +480,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+      image = gsk_vulkan_render_pass_upload_texture (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -514,7 +523,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, self->vulkan, texture);
+      image = gsk_vulkan_render_pass_upload_texture (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -901,7 +910,6 @@ gsk_vulkan_render_pass_add_repeat_node (GskVulkanRenderPass       *self,
     return TRUE;
 
   image = gsk_vulkan_render_pass_op_offscreen (render,
-                                               self->vulkan,
                                                &state->scale,
                                                child_bounds,
                                                gsk_repeat_node_get_child (node));
@@ -1292,31 +1300,33 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
 }
 
 void
-gsk_vulkan_render_pass_add (GskVulkanRenderPass *self,
-                            GskVulkanRender     *render,
-                            GskRenderNode       *node)
+gsk_vulkan_render_pass_add (GskVulkanRenderPass   *self,
+                            GskVulkanRender       *render,
+                            const graphene_vec2_t *scale,
+                            const graphene_rect_t *viewport,
+                            cairo_rectangle_int_t *clip,
+                            GskRenderNode         *node)
 {
   GskVulkanParseState state;
-  graphene_rect_t clip;
+  graphene_rect_t scaled_clip;
   float scale_x, scale_y;
 
-  scale_x = 1 / graphene_vec2_get_x (&self->scale);
-  scale_y = 1 / graphene_vec2_get_y (&self->scale);
-  cairo_region_get_extents (self->clip, &state.scissor);
-  clip = GRAPHENE_RECT_INIT(state.scissor.x, state.scissor.y,
-                            state.scissor.width, state.scissor.height);
-  graphene_rect_scale (&clip, scale_x, scale_y, &clip);
-  gsk_vulkan_clip_init_empty (&state.clip, &clip);
+  scale_x = 1 / graphene_vec2_get_x (scale);
+  scale_y = 1 / graphene_vec2_get_y (scale);
+  state.scissor = *clip;
+  scaled_clip = GRAPHENE_RECT_INIT(clip->x, clip->y, clip->width, clip->height);
+  graphene_rect_scale (&scaled_clip, scale_x, scale_y, &scaled_clip);
+  gsk_vulkan_clip_init_empty (&state.clip, &scaled_clip);
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
-                              0, self->viewport.size.width,
-                              0, self->viewport.size.height,
+                              0, viewport->size.width,
+                              0, viewport->size.height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_vec2_init_from_vec2 (&state.scale, &self->scale);
-  state.offset = GRAPHENE_POINT_INIT (-self->viewport.origin.x * scale_x,
-                                      -self->viewport.origin.y * scale_y);
+  graphene_vec2_init_from_vec2 (&state.scale, scale);
+  state.offset = GRAPHENE_POINT_INIT (-viewport->origin.x * scale_x,
+                                      -viewport->origin.y * scale_y);
 
   gsk_vulkan_render_pass_append_scissor (render, node, &state);
   gsk_vulkan_render_pass_append_push_constants (render, node, &state);
