@@ -28,6 +28,11 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GSK_FILL_RULE_WINDING,
+  GSK_FILL_RULE_EVEN_ODD
+} GskFillRule;
+
 /**
  * GskPathForeachFlags:
  * @GSK_PATH_FOREACH_ALLOW_QUAD: Allow emission of `GSK_PATH_QUAD` operations
