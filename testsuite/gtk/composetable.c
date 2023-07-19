@@ -405,6 +405,13 @@ match_algorithmic (void)
   g_string_free (output, TRUE);
 }
 
+static void
+compose_table_large (void)
+{
+  char *file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "large", NULL);
+  gtk_compose_table_parse (file, NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -444,6 +451,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/compose-table/match", compose_table_match);
   g_test_add_func ("/compose-table/match-builtin", compose_table_match_builtin);
   g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);
+  g_test_add_func ("/compose-table/large", compose_table_large);
 
   return g_test_run ();
 }
