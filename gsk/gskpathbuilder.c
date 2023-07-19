@@ -25,7 +25,7 @@
 
 #include "gskpathprivate.h"
 
-/**
+/*< private >
  * GskPathBuilder:
  *
  * A `GskPathBuilder` struct is an opaque struct. It is meant to
@@ -82,7 +82,7 @@ G_DEFINE_BOXED_TYPE (GskPathBuilder,
                      gsk_path_builder_unref)
 
 
-/**
+/*< private >
  * gsk_path_builder_new:
  *
  * Create a new `GskPathBuilder` object.
@@ -109,7 +109,7 @@ gsk_path_builder_new (void)
   return self;
 }
 
-/**
+/*< private >
  * gsk_path_builder_ref:
  * @self: a `GskPathBuilder`
  *
@@ -201,7 +201,7 @@ gsk_path_builder_clear (GskPathBuilder *self)
   self->contours = NULL;
 }
 
-/**
+/*< private >
  * gsk_path_builder_unref:
  * @self: a `GskPathBuilder`
  *
@@ -224,7 +224,7 @@ gsk_path_builder_unref (GskPathBuilder *self)
   g_slice_free (GskPathBuilder, self);
 }
 
-/**
+/*< private >
  * gsk_path_builder_free_to_path: (skip)
  * @self: a `GskPathBuilder`
  *
@@ -248,7 +248,7 @@ gsk_path_builder_free_to_path (GskPathBuilder *self)
   return res;
 }
 
-/**
+/*< private >
  * gsk_path_builder_to_path:
  * @self: a `GskPathBuilder`
  *
@@ -291,7 +291,7 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
   self->contours = g_slist_prepend (self->contours, contour);
 }
 
-/**
+/*< private >
  * gsk_path_builder_get_current_point:
  * @self: a `GskPathBuilder`
  *
@@ -310,7 +310,7 @@ gsk_path_builder_get_current_point (GskPathBuilder *self)
   return &self->current_point;
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_path:
  * @self: a `GskPathBuilder`
  * @path: (transfer none): the path to append
@@ -332,7 +332,7 @@ gsk_path_builder_add_path (GskPathBuilder *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_reverse_path:
  * @self: a `GskPathBuilder`
  * @path: (transfer none): the path to append
@@ -355,7 +355,7 @@ gsk_path_builder_add_reverse_path (GskPathBuilder *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_cairo_path:
  * @self: a `GskPathBuilder`
  *
@@ -403,7 +403,7 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_rect:
  * @self: A `GskPathBuilder`
  * @rect: The rectangle to create a path for
@@ -430,7 +430,7 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
   gsk_contour_get_start_end (contour, NULL, &self->current_point);
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_rounded_rect:
  * @self: a #GskPathBuilder
  * @rect: the rounded rect
@@ -450,7 +450,7 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
   gsk_path_builder_add_contour (self, contour);
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_circle:
  * @self: a `GskPathBuilder`
  * @center: the center of the circle
@@ -473,7 +473,7 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
   gsk_path_builder_add_contour (self, contour);
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_ellipse:
  * @self: a #GskPathBuilder
  * @center: the center point of the ellipse
@@ -519,7 +519,7 @@ gsk_path_builder_add_ellipse (GskPathBuilder         *self,
   gsk_path_builder_close (self);
 }
 
-/**
+/*< private >
  * gsk_path_builder_move_to:
  * @self: a `GskPathBuilder`
  * @x: x coordinate
@@ -545,7 +545,7 @@ gsk_path_builder_move_to (GskPathBuilder *self,
   gsk_path_builder_ensure_current (self);
 }
 
-/**
+/*< private >
  * gsk_path_builder_rel_move_to:
  * @self: a `GskPathBuilder`
  * @x: x offset
@@ -568,7 +568,7 @@ gsk_path_builder_rel_move_to (GskPathBuilder *self,
                             self->current_point.y + y);
 }
 
-/**
+/*< private >
  * gsk_path_builder_line_to:
  * @self: a `GskPathBuilder`
  * @x: x coordinate
@@ -596,7 +596,7 @@ gsk_path_builder_line_to (GskPathBuilder *self,
                                    });
 }
 
-/**
+/*< private >
  * gsk_path_builder_rel_line_to:
  * @self: a `GskPathBuilder`
  * @x: x offset
@@ -619,7 +619,7 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
                             self->current_point.y + y);
 }
 
-/**
+/*< private >
  * gsk_path_builder_quad_to:
  * @self: a #GskPathBuilder
  * @x1: x coordinate of control point
@@ -650,7 +650,7 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
                                    });
 }
 
-/**
+/*< private >
  * gsk_path_builder_rel_quad_to:
  * @self: a `GskPathBuilder`
  * @x1: x offset of control point
@@ -681,7 +681,7 @@ gsk_path_builder_rel_quad_to (GskPathBuilder *self,
                             self->current_point.y + y2);
 }
 
-/**
+/*< private >
  * gsk_path_builder_cubic_to:
  * @self: a `GskPathBuilder`
  * @x1: x coordinate of first control point
@@ -718,7 +718,7 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                                    });
 }
 
-/**
+/*< private >
  * gsk_path_builder_rel_cubic_to:
  * @self: a `GskPathBuilder`
  * @x1: x offset of first control point
@@ -754,7 +754,7 @@ gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
                              self->current_point.y + y3);
 }
 
-/**
+/*< private >
  * gsk_path_builder_conic_to:
  * @self: a `GskPathBuilder`
  * @x1: x coordinate of control point
@@ -792,7 +792,7 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
                                    });
 }
 
-/**
+/*< private >
  * gsk_path_builder_rel_conic_to:
  * @self: a `GskPathBuilder`
  * @x1: x offset of control point
@@ -826,7 +826,7 @@ gsk_path_builder_rel_conic_to (GskPathBuilder *self,
                              weight);
 }
 
-/**
+/*< private >
  * gsk_path_builder_close:
  * @self: a `GskPathBuilder`
  *
@@ -1032,7 +1032,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_layout:
  * @self: a #GskPathBuilder
  * @layout: the pango layout to add

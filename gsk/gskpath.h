@@ -75,35 +75,19 @@ typedef gboolean (* GskPathForeachFunc) (GskPathOperation        op,
 
 #define GSK_TYPE_PATH (gsk_path_get_type ())
 
-GDK_AVAILABLE_IN_ALL
 GType                   gsk_path_get_type                       (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_ref                            (GskPath                *self);
-GDK_AVAILABLE_IN_ALL
 void                    gsk_path_unref                          (GskPath                *self);
-
-GDK_AVAILABLE_IN_ALL
 void                    gsk_path_print                          (GskPath                *self,
                                                                  GString                *string);
-GDK_AVAILABLE_IN_ALL
 char *                  gsk_path_to_string                      (GskPath                *self);
-
-GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_parse                          (const char             *string);
-
-GDK_AVAILABLE_IN_ALL
 void                    gsk_path_to_cairo                       (GskPath                *self,
                                                                  cairo_t                *cr);
-
-GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_is_empty                       (GskPath                *self);
-
-GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
                                                                  graphene_rect_t        *bounds);
-
-GDK_AVAILABLE_IN_ALL
 gboolean                gsk_path_foreach                        (GskPath                *self,
                                                                  GskPathForeachFlags     flags,
                                                                  GskPathForeachFunc      func,

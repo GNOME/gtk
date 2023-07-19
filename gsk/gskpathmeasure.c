@@ -25,7 +25,7 @@
 #include "gskpathpointprivate.h"
 #include "gskpathprivate.h"
 
-/**
+/*< private >
  * `GskPathMeasure` is an object that allows measurements
  * on `GskPath`s such as determining the length of the path.
  *
@@ -63,7 +63,7 @@ G_DEFINE_BOXED_TYPE (GskPathMeasure, gsk_path_measure,
                      gsk_path_measure_ref,
                      gsk_path_measure_unref)
 
-/**
+/*< private >
  * gsk_path_measure_new:
  * @path: the path to measure
  *
@@ -77,7 +77,7 @@ gsk_path_measure_new (GskPath *path)
   return gsk_path_measure_new_with_tolerance (path, GSK_PATH_TOLERANCE_DEFAULT);
 }
 
-/**
+/*< private >
  * gsk_path_measure_new_with_tolerance:
  * @path: the path to measure
  * @tolerance: the tolerance for measuring operations
@@ -116,7 +116,7 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
   return self;
 }
 
-/**
+/*< private >
  * gsk_path_measure_ref:
  * @self: a `GskPathMeasure`
  *
@@ -134,7 +134,7 @@ gsk_path_measure_ref (GskPathMeasure *self)
   return self;
 }
 
-/**
+/*< private >
  * gsk_path_measure_unref:
  * @self: a `GskPathMeasure`
  *
@@ -164,7 +164,7 @@ gsk_path_measure_unref (GskPathMeasure *self)
   g_free (self);
 }
 
-/**
+/*< private >
  * gsk_path_measure_get_path:
  * @self: a `GskPathMeasure`
  *
@@ -178,7 +178,7 @@ gsk_path_measure_get_path (GskPathMeasure *self)
   return self->path;
 }
 
-/**
+/*< private >
  * gsk_path_measure_get_tolerance:
  * @self: a `GskPathMeasure`
  *
@@ -192,7 +192,7 @@ gsk_path_measure_get_tolerance (GskPathMeasure *self)
   return self->tolerance;
 }
 
-/**
+/*< private >
  * gsk_path_measure_get_length:
  * @self: a `GskPathMeasure`
  *
@@ -210,7 +210,7 @@ gsk_path_measure_get_length (GskPathMeasure *self)
   return self->length;
 }
 
-/**
+/*< private >
  * gsk_path_measure_is_closed:
  * @self: a `GskPathMeasure`
  *
@@ -244,7 +244,7 @@ gsk_path_measure_clamp_distance (GskPathMeasure *self,
   return CLAMP (distance, 0, self->length);
 }
 
-/**
+/*< private >
  * gsk_path_measure_in_fill:
  * @self: a `GskPathMeasure`
  * @point: the point to test
@@ -319,7 +319,7 @@ gsk_path_builder_add_segment_chunk (GskPathBuilder *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_builder_add_segment:
  * @self: a `GskPathBuilder`
  * @measure: the `GskPathMeasure` to take the segment to
@@ -376,7 +376,7 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_measure_get_point:
  * @self: a `GskPathMeasure`
  * @distance: the distance
@@ -425,7 +425,7 @@ gsk_path_measure_get_point (GskPathMeasure *self,
                              contour_offset, offset);
 }
 
-/**
+/*< private >
  * gsk_path_measure_get_closest_point:
  * @self: a `GskPathMeasure`
  * @point: the point to fond the closest point to

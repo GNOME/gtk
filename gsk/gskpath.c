@@ -24,7 +24,7 @@
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 
-/**
+/*< private >
  * GskPath:
  *
  * A `GskPath` describes lines and curves that are more complex
@@ -96,7 +96,7 @@ gsk_path_new_from_contours (const GSList *contours)
   return path;
 }
 
-/**
+/*< private >
  * gsk_path_ref:
  * @self: a `GskPath`
  *
@@ -114,7 +114,7 @@ gsk_path_ref (GskPath *self)
   return self;
 }
 
-/**
+/*< private >
  * gsk_path_unref:
  * @self: a `GskPath`
  *
@@ -148,7 +148,7 @@ gsk_path_get_flags (GskPath *self)
   return self->flags;
 }
 
-/**
+/*< private >
  * gsk_path_print:
  * @self: a `GskPath`
  * @string:  The string to print into
@@ -179,7 +179,7 @@ gsk_path_print (GskPath *self,
     }
 }
 
-/**
+/*< private >
  * gsk_path_to_string:
  * @self: a `GskPath`
  *
@@ -252,7 +252,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
   return TRUE;
 }
 
-/**
+/*< private >
  * gsk_path_to_cairo:
  * @self: a `GskPath`
  * @cr: a cairo context
@@ -294,7 +294,7 @@ gsk_path_get_n_contours (GskPath *path)
   return path->n_contours;
 }
 
-/**
+/*< private >
  * gsk_path_is_empty:
  * @self: a `GskPath`
  *
@@ -310,7 +310,7 @@ gsk_path_is_empty (GskPath *self)
   return self->n_contours == 0;
 }
 
-/**
+/*< private >
  * gsk_path_get_bounds:
  * @self: a `GskPath`
  * @bounds: (out caller-allocates): the bounds of the given path
@@ -365,7 +365,7 @@ gsk_path_get_bounds (GskPath         *self,
   return TRUE;
 }
 
-/**
+/*< private >
  * gsk_path_foreach:
  * @self: a `GskPath`
  * @flags: flags to pass to the foreach function. See [enum@Gsk.PathForeachFlags]
@@ -763,7 +763,7 @@ parse_circle (const char **p,
   return FALSE;
 }
 
-/**
+/*< private >
  * gsk_path_parse:
  * @string: a string
  *
