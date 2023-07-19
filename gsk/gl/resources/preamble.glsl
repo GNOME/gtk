@@ -1,3 +1,5 @@
+#extension GL_OES_standard_derivatives : enable
+
 #ifndef GSK_LEGACY
 precision highp float;
 #endif
