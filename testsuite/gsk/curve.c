@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 #include "gsk/gskcurveprivate.h"
+#include "gsk/gskpath.h"
+#include "gsk/gskpathmeasure.h"
 
 static void
 init_random_point (graphene_point_t *p)

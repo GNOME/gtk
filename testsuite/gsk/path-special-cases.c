@@ -18,6 +18,8 @@
  */
 
 #include <gtk/gtk.h>
+#include "gsk/gskpath.h"
+#include "gsk/gskpathbuilder.h"
 
 /* testcases from path_parser.rs in librsvg */
 static void

@@ -18,7 +18,11 @@
  */
 
 #include <gtk/gtk.h>
-
+#include <gtk/gtk.h>
+#include "gsk/gskpath.h"
+#include "gsk/gskpathbuilder.h"
+#include "gsk/gskpathmeasure.h"
+#include "gsk/gskpathpoint.h"
 
 static void
 test_bad_split (void)

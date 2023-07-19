@@ -18,6 +18,8 @@
  */
 
 #include <gtk/gtk.h>
+#include "gsk/gskpath.h"
+#include "gsk/gskpathbuilder.h"
 
 static float
 random_weight (void)
