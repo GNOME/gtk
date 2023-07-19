@@ -339,6 +339,7 @@ gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
                                                  GDK_MEMORY_DEFAULT,
                                                  ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                  ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+  g_assert (gsk_vulkan_image_get_postprocess (self->image) == 0);
   self->viewport = *viewport;
 
   return self->image;

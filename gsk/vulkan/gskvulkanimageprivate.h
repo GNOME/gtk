@@ -8,6 +8,12 @@
 
 G_BEGIN_DECLS
 
+/* required postprocessing steps before the image van be used */
+typedef enum
+{
+  GSK_VULKAN_IMAGE_PREMULTIPLY = (1 << 0),
+} GskVulkanImagePostprocess;
+
 #define GSK_TYPE_VULKAN_IMAGE (gsk_vulkan_image_get_type ())
 
 G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GObject)
@@ -48,6 +54,8 @@ void                    gsk_vulkan_image_unmap                          (GskVulk
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);
+GskVulkanImagePostprocess
+                        gsk_vulkan_image_get_postprocess                (GskVulkanImage         *self);
 VkPipelineStageFlags    gsk_vulkan_image_get_vk_pipeline_stage          (GskVulkanImage         *self);
 VkImageLayout           gsk_vulkan_image_get_vk_image_layout            (GskVulkanImage         *self);
 VkAccessFlags           gsk_vulkan_image_get_vk_access                  (GskVulkanImage         *self);

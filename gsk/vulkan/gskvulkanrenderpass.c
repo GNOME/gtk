@@ -16,6 +16,7 @@
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolormatrixopprivate.h"
 #include "gskvulkancoloropprivate.h"
+#include "gskvulkanconvertopprivate.h"
 #include "gskvulkancrossfadeopprivate.h"
 #include "gskvulkanglyphopprivate.h"
 #include "gskvulkaninsetshadowopprivate.h"
@@ -141,6 +142,52 @@ gsk_vulkan_parse_rect_is_integer (const GskVulkanParseState *state,
 }
 
 static GskVulkanImage *
+gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
+                                       GdkTexture      *texture)
+{
+  GskVulkanImage *image, *better_image;
+  int width, height;
+  GskVulkanImagePostprocess postproc;
+  graphene_matrix_t projection;
+  graphene_vec2_t scale;
+
+  image = gsk_vulkan_upload_texture_op (render, texture);
+  postproc = gsk_vulkan_image_get_postprocess (image);
+  if (postproc == 0)
+    return image;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  better_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_context (render),
+                                                     gdk_texture_get_format (texture),
+                                                     width, height);
+  gsk_vulkan_render_pass_begin_op (render,
+                                   g_object_ref (better_image),
+                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                   &GRAPHENE_SIZE_INIT(width, height),
+                                   VK_IMAGE_LAYOUT_UNDEFINED,
+                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  gsk_vulkan_scissor_op (render, &(cairo_rectangle_int_t) { 0, 0, width, height });
+  graphene_matrix_init_ortho (&projection,
+                              0, width,
+                              0, height,
+                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  graphene_vec2_init (&scale, 1.0, 1.0);
+  gsk_vulkan_push_constants_op (render, &scale, &projection, &GSK_ROUNDED_RECT_INIT(0, 0, width, height));
+  gsk_vulkan_convert_op (render,
+                         GSK_VULKAN_SHADER_CLIP_NONE,
+                         image,
+                         &GRAPHENE_RECT_INIT (0, 0, width, height),
+                         &GRAPHENE_POINT_INIT (0, 0),
+                         &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_vulkan_render_pass_end_op (render,
+                                 better_image,
+                                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  return better_image;
+}
+
+static GskVulkanImage *
 gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
                                           GskVulkanRender           *render,
                                           const GskVulkanParseState *state,
@@ -158,7 +205,7 @@ gsk_vulkan_render_pass_get_node_as_image (GskVulkanRenderPass       *self,
         result = gsk_vulkan_renderer_get_texture_image (renderer, texture);
         if (result == NULL)
           {
-            result = gsk_vulkan_upload_texture_op (render, texture);
+            result = gsk_vulkan_render_pass_upload_texture (render, texture);
             gsk_vulkan_renderer_add_texture_image (renderer, texture, result);
           }
 
@@ -433,7 +480,7 @@ gsk_vulkan_render_pass_add_texture_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, texture);
+      image = gsk_vulkan_render_pass_upload_texture (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 
@@ -476,7 +523,7 @@ gsk_vulkan_render_pass_add_texture_scale_node (GskVulkanRenderPass       *self,
   image = gsk_vulkan_renderer_get_texture_image (renderer, texture);
   if (image == NULL)
     {
-      image = gsk_vulkan_upload_texture_op (render, texture);
+      image = gsk_vulkan_render_pass_upload_texture (render, texture);
       gsk_vulkan_renderer_add_texture_image (renderer, texture, image);
     }
 

@@ -24,6 +24,7 @@ struct _GskVulkanImage
   VkImage vk_image;
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
+  GskVulkanImagePostprocess postprocess;
 
   VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
@@ -40,6 +41,7 @@ struct _GskMemoryFormatInfo
 {
   VkFormat format;
   VkComponentMapping components;
+  GskVulkanImagePostprocess postprocess;
 };
 
 static const GskMemoryFormatInfo *
@@ -52,8 +54,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
+          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE,     0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -62,7 +64,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -71,23 +73,53 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_B8G8R8A8,
-  GDK_MEMORY_A8R8G8B8,
-  GDK_MEMORY_R8G8B8A8,
-  GDK_MEMORY_A8B8G8R8,
-#endif
+    case GDK_MEMORY_B8G8R8A8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE,     GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A), GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A8R8G8B8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R), GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_R8G8B8A8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE, GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A8B8G8R8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R), GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_R8G8B8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -96,8 +128,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A) },
+          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE,     0 },
+          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -106,7 +138,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -115,20 +147,25 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_R16G16B16A16,
-#endif
+    case GDK_MEMORY_R16G16B16A16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE, GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -137,20 +174,25 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_R16G16B16A16_FLOAT,
-#endif
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE, GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_R32G32B32_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -159,33 +201,43 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
+          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE, 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_R32G32B32A32_FLOAT,
-#endif
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE, GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
+          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_G8A8,
-#endif
+    case GDK_MEMORY_G8A8:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G), GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_G8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE) },
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -194,20 +246,25 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
+          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
       }
 
-#if 0
-  GDK_MEMORY_G16A16
-#endif
+    case GDK_MEMORY_G16A16:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G), GSK_VULKAN_IMAGE_PREMULTIPLY },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
 
     case GDK_MEMORY_G16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE) },
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -216,7 +273,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R) },
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -225,23 +282,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_R16G16B16A16:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-    case GDK_MEMORY_G8A8:
-    case GDK_MEMORY_G16A16:
-      {
-        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R), 0 },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -361,16 +402,17 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
 }
 
 static GskVulkanImage *
-gsk_vulkan_image_new (GdkVulkanContext      *context,
-                      GdkMemoryFormat        format,
-                      gsize                  width,
-                      gsize                  height,
-                      VkImageTiling          tiling,
-                      VkImageUsageFlags      usage,
-                      VkPipelineStageFlags   stage,
-                      VkImageLayout          layout,
-                      VkAccessFlags          access,
-                      VkMemoryPropertyFlags  memory)
+gsk_vulkan_image_new (GdkVulkanContext          *context,
+                      GdkMemoryFormat            format,
+                      gsize                      width,
+                      gsize                      height,
+                      GskVulkanImagePostprocess  allowed_postprocess,
+                      VkImageTiling              tiling,
+                      VkImageUsageFlags          usage,
+                      VkPipelineStageFlags       stage,
+                      VkImageLayout              layout,
+                      VkAccessFlags              access,
+                      VkMemoryPropertyFlags      memory)
 {
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
@@ -384,6 +426,9 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
            vk_format->format != VK_FORMAT_UNDEFINED;
            vk_format++)
         {
+          if (vk_format->postprocess & ~allowed_postprocess)
+            continue;
+
           if (gsk_vulkan_context_supports_format (context, vk_format->format))
             break;
         }
@@ -398,6 +443,7 @@ gsk_vulkan_image_new (GdkVulkanContext      *context,
   self->vulkan = g_object_ref (context);
   self->format = format;
   self->vk_format = vk_format->format;
+  self->postprocess = vk_format->postprocess;
   self->width = width;
   self->height = height;
   self->vk_usage = usage;
@@ -454,6 +500,7 @@ gsk_vulkan_image_new_for_upload (GdkVulkanContext  *context,
                                format,
                                width,
                                height,
+                               -1,
                                VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -555,6 +602,7 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
                                GDK_MEMORY_DEFAULT,
                                width,
                                height,
+                               0,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
@@ -577,6 +625,7 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
                                preferred_format,
                                width,
                                height,
+                               0,
                                VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT |
@@ -661,6 +710,12 @@ gsize
 gsk_vulkan_image_get_height (GskVulkanImage *self)
 {
   return self->height;
+}
+
+GskVulkanImagePostprocess
+gsk_vulkan_image_get_postprocess (GskVulkanImage *self)
+{
+  return self->postprocess;
 }
 
 VkImage
