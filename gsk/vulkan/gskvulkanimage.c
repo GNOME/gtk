@@ -20,6 +20,7 @@ struct _GskVulkanImage
   VkFormat vk_format;
   gsize width;
   gsize height;
+  VkImageTiling vk_tiling;
   VkImageUsageFlags vk_usage;
   VkImage vk_image;
   VkImageView vk_image_view;
@@ -362,20 +363,57 @@ gsk_memory_format_get_fallback (GdkMemoryFormat format)
 }
 
 static gboolean
-gsk_vulkan_context_supports_format (GdkVulkanContext *context,
-                                    VkFormat          format)
+gsk_vulkan_context_supports_format (GdkVulkanContext  *context,
+                                    VkFormat           format,
+                                    VkImageTiling      tiling,
+                                    VkImageUsageFlags  usage,
+                                    gsize              width,
+                                    gsize              height)
 {
   VkFormatProperties properties;
+  VkImageFormatProperties image_properties;
+  VkFormatFeatureFlags features, required;
+  VkResult res;
 
   vkGetPhysicalDeviceFormatProperties (gdk_vulkan_context_get_physical_device (context),
                                        format,
                                        &properties);
 
-  if ((properties.linearTilingFeatures & (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)) &&
-      (properties.optimalTilingFeatures & (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)))
-    return TRUE;
+  switch ((int) tiling)
+    {
+      case VK_IMAGE_TILING_OPTIMAL:
+        features = properties.optimalTilingFeatures;
+        break;
+      case VK_IMAGE_TILING_LINEAR:
+        features = properties.optimalTilingFeatures;
+        break;
+      default:
+        return FALSE;
+    }
+  required = 0;
+  if (usage & VK_IMAGE_USAGE_SAMPLED_BIT)
+    required |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+  if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
+    required |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
 
-  return FALSE;
+  if ((features & required) != required)
+    return FALSE;
+
+  res = vkGetPhysicalDeviceImageFormatProperties (gdk_vulkan_context_get_physical_device (context),
+                                                  format,
+                                                  VK_IMAGE_TYPE_2D,
+                                                  tiling,
+                                                  usage,
+                                                  0,
+                                                  &image_properties);
+  if (res != VK_SUCCESS)
+    return FALSE;
+
+  if (image_properties.maxExtent.width < width ||
+      image_properties.maxExtent.height < height)
+    return FALSE;
+
+  return TRUE;
 }
 
 static void
@@ -429,8 +467,21 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
           if (vk_format->postprocess & ~allowed_postprocess)
             continue;
 
-          if (gsk_vulkan_context_supports_format (context, vk_format->format))
+          if (gsk_vulkan_context_supports_format (context,
+                                                  vk_format->format,
+                                                  tiling, usage,
+                                                  width, height))
             break;
+
+          if (tiling != VK_IMAGE_TILING_OPTIMAL &&
+              gsk_vulkan_context_supports_format (context,
+                                                  vk_format->format,
+                                                  VK_IMAGE_TILING_OPTIMAL, usage,
+                                                  width, height))
+            {
+              tiling = VK_IMAGE_TILING_OPTIMAL;
+              break;
+            }
         }
       if (vk_format->format != VK_FORMAT_UNDEFINED)
         break;
@@ -446,6 +497,7 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
   self->postprocess = vk_format->postprocess;
   self->width = width;
   self->height = height;
+  self->vk_tiling = tiling;
   self->vk_usage = usage;
   self->vk_pipeline_stage = stage;
   self->vk_image_layout = layout;
@@ -518,6 +570,9 @@ gsk_vulkan_image_can_map (GskVulkanImage *self)
   if (GSK_DEBUG_CHECK (STAGING))
     return FALSE;
 
+  if (self->vk_tiling != VK_IMAGE_TILING_LINEAR)
+    return FALSE;
+
   if (self->vk_image_layout != VK_IMAGE_LAYOUT_PREINITIALIZED &&
       self->vk_image_layout != VK_IMAGE_LAYOUT_GENERAL)
     return FALSE;
@@ -572,6 +627,7 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
   self->vulkan = g_object_ref (context);
   self->width = width;
   self->height = height;
+  self->vk_tiling = VK_IMAGE_TILING_OPTIMAL;
   self->vk_image = image;
   self->vk_format = format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
