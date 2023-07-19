@@ -44,7 +44,6 @@ gsk_private_vulkan_vertex_shaders = [
 gsk_private_vulkan_shaders += gsk_private_vulkan_fragment_shaders
 gsk_private_vulkan_shaders += gsk_private_vulkan_vertex_shaders
 
-glslc = find_program('glslc', required: true)
 foreach shader: gsk_private_vulkan_shaders
   basefn = shader.split('.').get(0)
   suffix = shader.split('.').get(1)

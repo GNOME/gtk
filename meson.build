@@ -599,6 +599,7 @@ endif
 # to use a custom path for the Vulkan SDK. Bugs that are found with it should
 # be reported upstream and fixed.
 vulkan_dep = dependency('vulkan', required: get_option('vulkan'))
+glslc = find_program('glslc', required: get_option('vulkan'))
 if vulkan_dep.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
