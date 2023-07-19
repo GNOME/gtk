@@ -980,6 +980,7 @@ parser_get_compose_table (GtkComposeParser *parser)
           current_first = (guint16)sequence[0];
 
           data[first_pos] = (guint16)sequence[0];
+
           for (i = 1; i < index_rowstride; i++)
             data[first_pos + i] = rest_pos;
         }
@@ -997,6 +998,14 @@ parser_get_compose_table (GtkComposeParser *parser)
       n_sequences++;
 
       rest_pos += len;
+
+      if (rest_pos >= 0x8000)
+        {
+          g_warning ("GTK can't handle compose tables this large (%s)", parser->compose_file ? parser->compose_file : "");
+          g_free (data);
+          g_string_free (char_data, TRUE);
+          return NULL;
+        }
 
       for (i = len + 1; i < index_rowstride; i++)
         data[first_pos + i] = rest_pos;
