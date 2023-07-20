@@ -41,27 +41,32 @@ cross2d (vec2 v0, vec2 v1)
 }
 
 float
-line_distance_squared (vec2 p,
-                       vec2 start,
-                       vec2 end,
-                       inout int w)
+line_distance_squared (vec2  start,
+                       vec2  end,
+                       float d0)
 {
-  // distance
   vec2 e = end - start;
-  vec2 v = p - start;
+  vec2 v = - start;
   vec2 pq = v - e * clamp (dot (v, e) / dot(e, e), 0.0, 1.0);
-  float d = dot (pq, pq);
+  return dot (pq, pq);
+}
 
+int
+line_winding (vec2 start,
+              vec2 end)
+{
   // winding number from http://geomalgorithms.com/a03-_inclusion.html
-  vec2 v2 = p - end;
+  vec2 e = end - start;
+  vec2 v = - start;
+  vec2 v2 = - end;
   float val3 = cross2d (e, v); //isLeft
   bvec3 cond = bvec3 (v.y >= 0.0, v2.y < 0.0, val3 > 0.0);
   if (all (cond))
-    w++; // have a valid up intersect
+    return 1;
   else if (all (not (cond)))
-    w--; // have a valid down intersect
-
-  return d;
+    return -1;
+  else
+    return 0;
 }
 
 
@@ -148,19 +153,22 @@ float cubic_bezier_normal_iteration(float t, vec2 a0, vec2 a1, vec2 a2, vec2 a3)
 }
 
 float
-cubic_distance_squared (vec2 uv,
-                        vec2 p0,
-                        vec2 p1,
-                        vec2 p2,
-                        vec2 p3,
-                        inout int w)
+cubic_distance_squared (vec2  p0,
+                        vec2  p1,
+                        vec2  p2,
+                        vec2  p3,
+                        float d0)
 {
+  if (dot (p0, p0) >= d0 &&
+      dot (p1, p1) >= d0 &&
+      dot (p2, p2) >= d0 &&
+      dot (p3, p3) >= d0)
+    return d0;
+
   vec2 a3 = (-p0 + 3. * p1 - 3. * p2 + p3);
   vec2 a2 = (3. * p0 - 6. * p1 + 3. * p2);
   vec2 a1 = (-3. * p0 + 3. * p1);
-  vec2 a0 = p0 - uv;
-
-  float d0 = 1e38;
+  vec2 a0 = p0;
 
   float t;
   vec3 params = vec3 (0, .5, 1);
@@ -177,55 +185,79 @@ cubic_distance_squared (vec2 uv,
       d0 = min (d0, dot (uv_to_p, uv_to_p));
   }
 
+  return d0;
+}
+
+int
+cubic_winding (vec2 p0,
+               vec2 p1,
+               vec2 p2,
+               vec2 p3)
+{
   vec3 roots = vec3 (1e38);
   int n_roots;
+  int w = 0;
 
-  if (uv.x <= min (min (p0.x, p1.x), min (p2.x, p3.x)))
+  if ((p0.y > 0 && p1.y > 0 && p2.y > 0 && p3.y > 0) ||
+      (p0.y < 0 && p1.y < 0 && p2.y < 0 && p3.y < 0))
+    return 0;
+
+  if (0 <= min (min (p0.x, p1.x), min (p2.x, p3.x)))
     {
-      if (uv.y >= min (p0.y,p3.y) && uv.y <= max (p0.y, p3.y))
+      if (0 >= min (p0.y,p3.y) && 0 <= max (p0.y, p3.y))
         {
-          if (cross2d (p0 - uv, p3 - uv) > 0.0)
-            w++;
+          if (cross2d (p0, p3) > 0.0)
+            return 1;
           else
-            w--;
+            return -1;
         }
+      return 0;
     }
-  else
-    {
-      if (abs (a3.y) < .0001)
-        n_roots = solve_quadratic (vec2 (a0.y / a2.y, a1.y / a2.y), roots.xy);
-      else
-        n_roots = solve_cubic (vec3 (a0.y / a3.y, a1.y / a3.y, a2.y / a3.y), roots);
 
-      for (int i = 0; i < n_roots; i++)
+  vec2 a3 = (-p0 + 3. * p1 - 3. * p2 + p3);
+  vec2 a2 = (3. * p0 - 6. * p1 + 3. * p2);
+  vec2 a1 = (-3. * p0 + 3. * p1);
+  vec2 a0 = p0;
+
+  if (abs (a3.y) < .0001)
+    n_roots = solve_quadratic (vec2 (a0.y / a2.y, a1.y / a2.y), roots.xy);
+  else
+    n_roots = solve_cubic (vec3 (a0.y / a3.y, a1.y / a3.y, a2.y / a3.y), roots);
+
+  //color = vec4(roots.xy, n_roots, 1);
+
+  for (int i = 0; i < n_roots; i++)
+    {
+      if (roots[i] >= 0. && roots[i] <= 1.)
         {
-          if (roots[i] > 0. && roots[i] <= 1.)
+          if (((a3.x * roots[i] + a2.x) * roots[i] + a1.x) * roots[i] + a0.x > 0.0)
             {
-              if (((a3.x * roots[i] + a2.x) * roots[i] + a1.x) * roots[i] + a0.x > 0.0)
+              if ((3 * a3.y * roots[i] + 2 * a2.y) * roots[i] + a1.y > 0.0)
                 {
-                  if ((3 * a3.y * roots[i] + 2 * a2.y) * roots[i] + a1.y > 0.0)
-                    w++;
-                  else
-                    w--;
+                  w++;
+                }
+              else
+                {
+                  w--;
                 }
             }
         }
     }
 
-  return d0;
+  return w;
 }
 
-float
-standard_contour_distance (vec2      p,
-                           inout int path_idx,
-                           inout int w)
+void
+standard_contour_distance (vec2        p,
+                           inout float d,
+                           inout int   path_idx,
+                           inout int   w)
 {
   int n_points = get_int (path_idx);
   int ops_idx = path_idx + 1;
   int pts_idx = ops_idx + n_points;
 
-  vec2 start = get_point (pts_idx);
-  float d = dot (p - start, p - start);
+  vec2 start = get_point (pts_idx) - p;
   int op = GSK_PATH_MOVE;
   
   for (int i = 1; i < n_points; i++)
@@ -239,19 +271,20 @@ standard_contour_distance (vec2      p,
           case GSK_PATH_CLOSE:
           case GSK_PATH_LINE:
             {
-              vec2 end = get_point (pts_idx);
-              d = min (d, line_distance_squared (p, start, end, w));
+              vec2 end = get_point (pts_idx) - p;
+              d = line_distance_squared (start, end, d);
+              w += line_winding (start, end);
               start = end;
             }
             break;
 
           case GSK_PATH_CURVE:
             {
-              vec2 p1 = get_point (pts_idx);
-              vec2 p2 = get_point (pts_idx);
-              vec2 p3 = get_point (pts_idx);
-              //d = min (d, line_distance_squared (p, start, p3, w));
-              d = min (d, cubic_distance_squared (p, start, p1, p2, p3, w));
+              vec2 p1 = get_point (pts_idx) - p;
+              vec2 p2 = get_point (pts_idx) - p;
+              vec2 p3 = get_point (pts_idx) - p;
+              d = cubic_distance_squared (start, p1, p2, p3, d);
+              w += cubic_winding (start, p1, p2, p3);
               start = p3;
             }
             break;
@@ -259,8 +292,9 @@ standard_contour_distance (vec2      p,
           case GSK_PATH_CONIC:
             {
               pts_idx += 4;
-              vec2 end = get_point (pts_idx);
-              d = min (d, line_distance_squared (p, start, end, w));
+              vec2 end = get_point (pts_idx) - p;
+              d = line_distance_squared (start, end, d);
+              w += line_winding (start, end);
               start = end;
             }
             break;
@@ -270,13 +304,12 @@ standard_contour_distance (vec2      p,
   if (op != GSK_PATH_CLOSE)
     {
       int tmp_idx = ops_idx + n_points;
-      vec2 end = get_point (tmp_idx);
-      d = min (d, line_distance_squared (p, start, end, w));
+      vec2 end = get_point (tmp_idx) - p;
+      d = line_distance_squared (start, end, d);
+      w += line_winding (start, end);
     }
 
   path_idx = pts_idx;
-
-  return d;
 }
 
 float
@@ -291,7 +324,7 @@ path_distance (vec2 p)
   
   while (n-- > 0)
     {
-       d = min (d, standard_contour_distance (p, path_idx, w));
+       standard_contour_distance (p, d, path_idx, w);
     }
 
   if (in_fill_rule == GSK_FILL_RULE_WINDING)
