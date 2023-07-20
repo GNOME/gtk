@@ -32,6 +32,7 @@
 #include <gdk/gdkmemorytextureprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskroundedrectprivate.h>
+#include <gsk/gskrectprivate.h>
 #include <math.h>
 #include <string.h>
 
@@ -351,31 +352,6 @@ color_matrix_modifies_alpha (const GskRenderNode *node)
   graphene_matrix_get_row (matrix, 3, &row3);
 
   return !graphene_vec4_equal (graphene_vec4_w_axis (), &row3);
-}
-
-static inline gboolean G_GNUC_PURE
-rect_contains_rect (const graphene_rect_t *r1,
-                    const graphene_rect_t *r2)
-{
-  return r2->origin.x >= r1->origin.x &&
-         (r2->origin.x + r2->size.width) <= (r1->origin.x + r1->size.width) &&
-         r2->origin.y >= r1->origin.y &&
-         (r2->origin.y + r2->size.height) <= (r1->origin.y + r1->size.height);
-}
-
-static inline gboolean G_GNUC_PURE
-rect_intersects (const graphene_rect_t *r1,
-                 const graphene_rect_t *r2)
-{
-  /* Assume both rects are already normalized, as they usually are */
-  if (r1->origin.x > (r2->origin.x + r2->size.width) ||
-      (r1->origin.x + r1->size.width) < r2->origin.x)
-    return FALSE;
-  else if (r1->origin.y > (r2->origin.y + r2->size.height) ||
-      (r1->origin.y + r1->size.height) < r2->origin.y)
-    return FALSE;
-  else
-    return TRUE;
 }
 
 static inline void
@@ -913,7 +889,7 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
 
   gsk_gl_render_job_transform_bounds (job, bounds, &transformed_bounds);
 
-  if (!rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds))
+  if (!gsk_rect_intersects (&job->current_clip->rect.bounds, &transformed_bounds))
     {
       /* Completely clipped away */
       return FALSE;
@@ -921,7 +897,7 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
 
   if (job->current_clip->is_rectilinear)
     {
-      if (rect_contains_rect (&job->current_clip->rect.bounds, &transformed_bounds))
+      if (gsk_rect_contains_rect (&job->current_clip->rect.bounds, &transformed_bounds))
         no_clip = TRUE;
       else
         rect_clip = TRUE;
@@ -3811,7 +3787,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
               slice_bounds.size.width = slice->rect.width * scale_x;
               slice_bounds.size.height = slice->rect.height * scale_y;
 
-              if (!graphene_rect_intersection (&slice_bounds, &viewport, NULL))
+              if (!gsk_rect_intersects (&slice_bounds, &viewport))
                 continue;
 
               if (i > 0)
@@ -3889,7 +3865,7 @@ gsk_gl_render_job_visit_repeat_node (GskGLRenderJob      *job,
   /* If the size of the repeat node is smaller than the size of the
    * child node, we don't repeat at all and can just draw that part
    * of the child texture... */
-  if (rect_contains_rect (child_bounds, &node->bounds))
+  if (gsk_rect_contains_rect (child_bounds, &node->bounds))
     {
       gsk_gl_render_job_visit_clipped_child (job, child, &node->bounds);
       return;
