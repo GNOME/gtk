@@ -405,6 +405,28 @@ match_algorithmic (void)
   g_string_free (output, TRUE);
 }
 
+static void
+compose_table_large (void)
+{
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_test_build_filename (G_TEST_DIST, "compose", "large", NULL);
+
+      table = gtk_compose_table_parse (file, NULL);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*can't handle compose tables this large*");
+  g_test_trap_assert_failed ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -444,6 +466,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/compose-table/match", compose_table_match);
   g_test_add_func ("/compose-table/match-builtin", compose_table_match_builtin);
   g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);
+  g_test_add_func ("/compose-table/large", compose_table_large);
 
   return g_test_run ();
 }
