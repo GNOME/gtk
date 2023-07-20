@@ -408,8 +408,23 @@ match_algorithmic (void)
 static void
 compose_table_large (void)
 {
-  char *file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "large", NULL);
-  gtk_compose_table_parse (file, NULL);
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_test_build_filename (G_TEST_DIST, "compose", "large", NULL);
+
+      table = gtk_compose_table_parse (file, NULL);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*can't handle compose tables this large*");
+  g_test_trap_assert_failed ();
 }
 
 int
