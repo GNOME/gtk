@@ -31,6 +31,11 @@ gtk_tools = [
                          'gtk-builder-tool-screenshot.c',
                          'gtk-builder-tool-preview.c',
                          'fake-scope.c'], [libgtk_dep] ],
+  ['gtk4-rendernode-tool', ['gtk-rendernode-tool.c',
+                        'gtk-rendernode-tool-info.c',
+                        'gtk-rendernode-tool-render.c',
+                        'gtk-rendernode-tool-show.c',
+                        'gtk-rendernode-tool-utils.c'], [libgtk_dep] ],
   ['gtk4-update-icon-cache', ['updateiconcache.c', '../gtk/gtkiconcachevalidator.c' ] + extra_update_icon_cache_objs, [ libgtk_dep ] ],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
 ]

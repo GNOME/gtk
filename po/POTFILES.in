@@ -425,4 +425,9 @@ tools/gtk-builder-tool-screenshot.c
 tools/gtk-builder-tool-simplify.c
 tools/gtk-builder-tool-validate.c
 tools/gtk-launch.c
+tools/gtk-rendernode-tool.c
+tools/gtk-rendernode-tool-info.c
+tools/gtk-rendernode-tool-show.c
+tools/gtk-rendernode-tool-render.c
+tools/gtk-rendernode-tool-utils.c
 tools/updateiconcache.c
