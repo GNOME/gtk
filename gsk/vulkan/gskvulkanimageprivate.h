@@ -32,18 +32,6 @@ GskVulkanImage *        gsk_vulkan_image_new_for_offscreen              (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 
-typedef struct _GskVulkanImageMap GskVulkanImageMap;
-
-struct _GskVulkanImageMap
-{
-  guchar *data;
-  gsize stride;
-  GskVulkanMapMode mode;
-
-  /* private */
-  GskVulkanBuffer *staging_buffer;
-};
-
 GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GdkVulkanContext       *context,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
