@@ -704,6 +704,33 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
     }
 }
 
+/*
+ * gdk_memory_depth_get_alpha_format:
+ * @depth: the depth
+ *
+ * Gets the preferred format to use for rendering masks and other
+ * alpha-only content.
+ *
+ * Returns: the format
+ **/
+GdkMemoryFormat
+gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
+{
+  switch (depth)
+    {
+      case GDK_MEMORY_U8:
+        return GDK_MEMORY_A8;
+      case GDK_MEMORY_U16:
+        return GDK_MEMORY_A16;
+      case GDK_MEMORY_FLOAT16:
+        return GDK_MEMORY_A16_FLOAT;
+      case GDK_MEMORY_FLOAT32:
+        return GDK_MEMORY_A32_FLOAT;
+      default:
+        g_return_val_if_reached (GDK_MEMORY_A8);
+    }
+}
+
 gboolean
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              gboolean         gles,
