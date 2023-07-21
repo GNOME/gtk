@@ -24,19 +24,19 @@
  * `GtkShortcutController` is an event controller that manages shortcuts.
  *
  * Most common shortcuts are using this controller implicitly, e.g. by
- * adding a mnemonic underline to a `GtkLabel`, or by installing a key
+ * adding a mnemonic underline to a [class@Gtk.Label], or by installing a key
  * binding using [method@Gtk.WidgetClass.add_binding], or by adding accelerators
  * to global actions using [method@Gtk.Application.set_accels_for_action].
  *
  * But it is possible to create your own shortcut controller, and add
  * shortcuts to it.
  *
- * `GtkShortcutController` implements `GListModel` for querying the
+ * `GtkShortcutController` implements [iface@Gio.ListModel] for querying the
  * shortcuts that have been added to it.
  *
- * # GtkShortcutController as a GtkBuildable
+ * # GtkShortcutController as GtkBuildable
  *
- * `GtkShortcutControllers` can be creates in ui files to set up
+ * `GtkShortcutController`s can be created in [class@Gtk.Builder] ui files, to set up
  * shortcuts in the same place as the widgets.
  *
  * An example of a UI definition fragment with `GtkShortcutController`:
@@ -57,8 +57,8 @@
  * ```
  *
  * This example creates a [class@Gtk.ActivateAction] for triggering the
- * `activate` signal of the `GtkButton`. See [ctor@Gtk.ShortcutAction.parse_string]
- * for the syntax for other kinds of `GtkShortcutAction`. See
+ * `activate` signal of the [class@Gtk.Button]. See [ctor@Gtk.ShortcutAction.parse_string]
+ * for the syntax for other kinds of [class@Gtk.ShortcutAction]. See
  * [ctor@Gtk.ShortcutTrigger.parse_string] to learn more about the syntax
  * for triggers.
  */
