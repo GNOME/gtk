@@ -1,11 +1,11 @@
-/*  Copyright 2015 Red Hat, Inc.
+/*  Copyright 2023 Red Hat, Inc.
  *
  * GTK+ is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
- * GLib is distributed in the hope that it will be useful,
+ * GTK+ is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
@@ -27,24 +27,20 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtkbuilderprivate.h"
-#include "gtk-builder-tool.h"
+#include "gtk-rendernode-tool.h"
 
 static void G_GNUC_NORETURN
 usage (void)
 {
   g_print (_("Usage:\n"
-             "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
+             "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
              "\n"
-             "Perform various tasks on GtkBuilder .ui files.\n"
+             "Perform various tasks on GTK render nodes.\n"
              "\n"
              "Commands:\n"
-             "  validate     Validate the file\n"
-             "  simplify     Simplify the file\n"
-             "  enumerate    List all named objects\n"
-             "  preview      Preview the file\n"
-             "  render       Take a screenshot of the file\n"
-             "  screenshot   Take a screenshot of the file\n"
+             "  info         Provide information about the node\n"
+             "  show         Show the node\n"
+             "  render       Take a screenshot of the node\n"
              "\n"));
   exit (1);
 }
@@ -94,7 +90,7 @@ log_writer_func (GLogLevelFlags   level,
 int
 main (int argc, const char *argv[])
 {
-  g_set_prgname ("gtk-builder-tool");
+  g_set_prgname ("gtk-rendernode-tool");
 
   g_log_set_writer_func (log_writer_func, NULL, NULL);
 
@@ -111,17 +107,12 @@ main (int argc, const char *argv[])
   argv++;
   argc--;
 
-  if (strcmp (argv[0], "validate") == 0)
-    do_validate (&argc, &argv);
-  else if (strcmp (argv[0], "simplify") == 0)
-    do_simplify (&argc, &argv);
-  else if (strcmp (argv[0], "enumerate") == 0)
-    do_enumerate (&argc, &argv);
-  else if (strcmp (argv[0], "preview") == 0)
-    do_preview (&argc, &argv);
-  else if (strcmp (argv[0], "render") == 0 ||
-           strcmp (argv[0], "screenshot") == 0)
-    do_screenshot (&argc, &argv);
+  if (strcmp (argv[0], "show") == 0)
+    do_show (&argc, &argv);
+  else if (strcmp (argv[0], "render") == 0)
+    do_render (&argc, &argv);
+  else if (strcmp (argv[0], "info") == 0)
+    do_info (&argc, &argv);
   else
     usage ();
 
