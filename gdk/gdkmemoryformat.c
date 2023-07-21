@@ -346,7 +346,7 @@ struct _GdkMemoryFormatDescription
 #  error "Define the right GL flags here"
 #endif
 
-static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
+static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
@@ -628,6 +628,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     a32_float_from_float,
   }
 };
+
+/* if this fails, somebody forgot to add formats above */
+G_STATIC_ASSERT (G_N_ELEMENTS (memory_formats) == GDK_MEMORY_N_FORMATS);
 
 gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
