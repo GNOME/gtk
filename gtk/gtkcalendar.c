@@ -264,6 +264,10 @@ static gboolean gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *
 static void     gtk_calendar_focus_controller_focus     (GtkEventController    *controller,
                                                          GtkWidget             *widget);
 
+static void calendar_select_day_internal (GtkCalendar *calendar,
+                                          GDateTime   *date,
+                                          gboolean     emit_day_signal);
+
 static void calendar_invalidate_day     (GtkCalendar *widget,
                                          int        row,
                                          int        col);
@@ -331,7 +335,7 @@ gtk_calendar_drag_drop (GtkDropTarget  *dest,
                                     0, 0, 0);
   g_date_free (date);
 
-  gtk_calendar_select_day (calendar, datetime);
+  calendar_select_day_internal (calendar, datetime, TRUE);
   g_date_time_unref (datetime);
 
   return TRUE;
@@ -815,7 +819,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   /* Select current day */
   calendar->date = g_date_time_new_from_unix_local (0);
   now = g_date_time_new_now_local ();
-  gtk_calendar_select_day (calendar, now);
+  calendar_select_day_internal (calendar, now, FALSE);
   g_date_time_unref (now);
 
   /* We just initialized the year label, now add some space to it so
@@ -840,7 +844,7 @@ calendar_set_month_prev (GtkCalendar *calendar)
 
   new_date = g_date_time_add_months (calendar->date, -1);
 
-  gtk_calendar_select_day (calendar, new_date);
+  calendar_select_day_internal (calendar, new_date, FALSE);
   g_date_time_unref (new_date);
 
   g_signal_emit (calendar, gtk_calendar_signals[PREV_MONTH_SIGNAL], 0);
@@ -853,7 +857,7 @@ calendar_set_month_next (GtkCalendar *calendar)
 
   new_date = g_date_time_add_months (calendar->date, 1);
 
-  gtk_calendar_select_day (calendar, new_date);
+  calendar_select_day_internal (calendar, new_date, FALSE);
   g_date_time_unref (new_date);
 
   g_signal_emit (calendar, gtk_calendar_signals[NEXT_MONTH_SIGNAL], 0);
@@ -866,7 +870,7 @@ calendar_set_year_prev (GtkCalendar *calendar)
 
   new_date = g_date_time_add_years (calendar->date, -1);
 
-  gtk_calendar_select_day (calendar, new_date);
+  calendar_select_day_internal (calendar, new_date, FALSE);
   g_date_time_unref (new_date);
 
   g_signal_emit (calendar, gtk_calendar_signals[PREV_YEAR_SIGNAL], 0);
@@ -879,7 +883,7 @@ calendar_set_year_next (GtkCalendar *calendar)
 
   new_date = g_date_time_add_years (calendar->date, 1);
 
-  gtk_calendar_select_day (calendar, new_date);
+  calendar_select_day_internal (calendar, new_date, FALSE);
   g_date_time_unref (new_date);
 
   g_signal_emit (calendar, gtk_calendar_signals[NEXT_YEAR_SIGNAL], 0);
@@ -949,6 +953,168 @@ calendar_compute_days (GtkCalendar *calendar)
 }
 
 static void
+calendar_select_day_internal (GtkCalendar *calendar,
+                              GDateTime   *date,
+                              gboolean     emit_day_signal)
+{
+  GDateTime *today;
+  int new_day, new_month, new_year;
+  gboolean day_changed, month_changed, year_changed;
+  char buffer[255];
+  char *str;
+  time_t tmp_time;
+  struct tm *tm;
+  int i;
+  int x, y;
+  int today_day;
+
+  day_changed = g_date_time_get_day_of_month (calendar->date) != g_date_time_get_day_of_month (date);
+  month_changed = g_date_time_get_month (calendar->date) != g_date_time_get_month (date);
+  year_changed = g_date_time_get_year (calendar->date) != g_date_time_get_year (date);
+
+  if (!day_changed && !month_changed && !year_changed)
+    return;
+
+  new_year = g_date_time_get_year (date);
+  new_month = g_date_time_get_month (date);
+  new_day = g_date_time_get_day_of_month (date);
+
+  g_date_time_unref (calendar->date);
+  calendar->date = g_date_time_ref (date);
+
+  tmp_time = 1;  /* Jan 1 1970, 00:00:01 UTC */
+  tm = gmtime (&tmp_time);
+  tm->tm_year = new_year - 1900;
+
+  /* Translators: This dictates how the year is displayed in
+   * gtkcalendar widget.  See strftime() manual for the format.
+   * Use only ASCII in the translation.
+   *
+   * "%Y" is appropriate for most locales.
+   */
+  strftime (buffer, sizeof (buffer), C_("calendar year format", "%Y"), tm);
+  str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+  gtk_label_set_label (GTK_LABEL (calendar->year_label), str);
+  g_free (str);
+
+  /* Update month */
+
+  calendar_compute_days (calendar);
+  gtk_stack_set_visible_child_name (GTK_STACK (calendar->month_name_stack),
+                                    default_monthname[new_month - 1]);
+
+  today = g_date_time_new_now_local ();
+
+  if (g_date_time_get_year (calendar->date) == g_date_time_get_year (today) &&
+      g_date_time_get_month (calendar->date) == g_date_time_get_month (today))
+    today_day = g_date_time_get_day_of_month (today);
+  else
+    today_day = -1;
+
+  g_date_time_unref (today);
+
+  /* Update day labels */
+  for (y = 0; y < 6; y ++)
+    for (x = 0; x < 7; x ++)
+      {
+        const int day = calendar->day[y][x];
+        GtkWidget *label = calendar->day_number_labels[y][x];
+        /* Translators: this defines whether the day numbers should use
+         * localized digits or the ones used in English (0123...).
+         *
+         * Translate to "%Id" if you want to use localized digits, or
+         * translate to "%d" otherwise.
+         *
+         * Note that translating this doesn't guarantee that you get localized
+         * digits. That needs support from your system and locale definition
+         * too.
+         */
+        g_snprintf (buffer, sizeof (buffer), C_("calendar:day:digits", "%d"), day);
+
+        gtk_label_set_label (GTK_LABEL (label), buffer);
+
+        if (calendar->day_month[y][x] == MONTH_PREV ||
+            calendar->day_month[y][x] == MONTH_NEXT)
+          gtk_widget_add_css_class (label, "other-month");
+        else
+          gtk_widget_remove_css_class (label, "other-month");
+
+        if (calendar->marked_date[day-1] &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
+
+        if (new_day == day &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
+
+        if (calendar->focus_row == y && calendar->focus_col == x)
+          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
+        else
+          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
+
+        if (day == today_day &&
+            calendar->day_month[y][x] == MONTH_CURRENT)
+          gtk_widget_add_css_class (label, "today");
+        else
+          gtk_widget_remove_css_class (label, "today");
+      }
+
+  /* Update week number labels.
+   * We simply get the week number of calendar->date and add the others.
+   * simple. */
+  for (i = 0; i < 6; i ++)
+    {
+      int year = new_year;
+      int month, week;
+
+      month = new_month + calendar->day_month[i][6] - MONTH_CURRENT;
+
+      if (month < 1)
+        {
+          month += 12;
+          year -= 1;
+        }
+      else if (month > 12)
+        {
+          month -= 12;
+          year += 1;
+        }
+
+      week = week_of_year (year, month, calendar->day[i][6]);
+
+      /* Translators: this defines whether the week numbers should use
+       * localized digits or the ones used in English (0123...).
+       *
+       * Translate to "%Id" if you want to use localized digits, or
+       * translate to "%d" otherwise.
+       * Note that translating this doesn't guarantee that you get localized
+       * digits. That needs support from your system and locale definition
+       * too. */
+      g_snprintf (buffer, sizeof (buffer), C_("calendar:week:digits", "%d"), week);
+
+      gtk_label_set_label (GTK_LABEL (calendar->week_number_labels[i]), buffer);
+    }
+
+  if (day_changed)
+    {
+      g_object_notify (G_OBJECT (calendar), "day");
+
+      if (emit_day_signal)
+        g_signal_emit (calendar, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
+    }
+
+  if (month_changed)
+    g_object_notify (G_OBJECT (calendar), "month");
+
+  if (year_changed)
+    g_object_notify (G_OBJECT (calendar), "year");
+}
+
+static void
 calendar_select_and_focus_day (GtkCalendar *calendar,
                                int          day)
 {
@@ -973,7 +1139,7 @@ calendar_select_and_focus_day (GtkCalendar *calendar,
                                     day,
                                     0, 0, 0);
 
-  gtk_calendar_select_day (calendar, new_date);
+  calendar_select_day_internal (calendar, new_date, TRUE);
   g_date_time_unref (new_date);
 }
 
@@ -995,7 +1161,7 @@ gtk_calendar_set_property (GObject      *object,
                                     0, 0, 0);
       if (date)
         {
-          gtk_calendar_select_day (calendar, date);
+          calendar_select_day_internal (calendar, date, TRUE);
           g_date_time_unref (date);
         }
       break;
@@ -1006,7 +1172,7 @@ gtk_calendar_set_property (GObject      *object,
                                     0, 0, 0);
       if (date)
         {
-          gtk_calendar_select_day (calendar, date);
+          calendar_select_day_internal (calendar, date, TRUE);
           g_date_time_unref (date);
         }
       break;
@@ -1017,7 +1183,7 @@ gtk_calendar_set_property (GObject      *object,
                                     0, 0, 0);
       if (date)
         {
-          gtk_calendar_select_day (calendar, date);
+          calendar_select_day_internal (calendar, date, TRUE);
           g_date_time_unref (date);
         }
       break;
@@ -1352,163 +1518,10 @@ void
 gtk_calendar_select_day (GtkCalendar *calendar,
                          GDateTime   *date)
 {
-  GDateTime *today;
-  int new_day, new_month, new_year;
-  gboolean day_changed, month_changed, year_changed;
-  char buffer[255];
-  char *str;
-  time_t tmp_time;
-  struct tm *tm;
-  int i;
-  int x, y;
-  int today_day;
-
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
   g_return_if_fail (date != NULL);
 
-  day_changed = g_date_time_get_day_of_month (calendar->date) != g_date_time_get_day_of_month (date);
-  month_changed = g_date_time_get_month (calendar->date) != g_date_time_get_month (date);
-  year_changed = g_date_time_get_year (calendar->date) != g_date_time_get_year (date);
-
-  if (!day_changed && !month_changed && !year_changed)
-    return;
-
-  new_year = g_date_time_get_year (date);
-  new_month = g_date_time_get_month (date);
-  new_day = g_date_time_get_day_of_month (date);
-
-  g_date_time_unref (calendar->date);
-  calendar->date = g_date_time_ref (date);
-
-  tmp_time = 1;  /* Jan 1 1970, 00:00:01 UTC */
-  tm = gmtime (&tmp_time);
-  tm->tm_year = new_year - 1900;
-
-  /* Translators: This dictates how the year is displayed in
-   * gtkcalendar widget.  See strftime() manual for the format.
-   * Use only ASCII in the translation.
-   *
-   * "%Y" is appropriate for most locales.
-   */
-  strftime (buffer, sizeof (buffer), C_("calendar year format", "%Y"), tm);
-  str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
-  gtk_label_set_label (GTK_LABEL (calendar->year_label), str);
-  g_free (str);
-
-  /* Update month */
-
-  calendar_compute_days (calendar);
-  gtk_stack_set_visible_child_name (GTK_STACK (calendar->month_name_stack),
-                                    default_monthname[new_month - 1]);
-
-  today = g_date_time_new_now_local ();
-
-  if (g_date_time_get_year (calendar->date) == g_date_time_get_year (today) &&
-      g_date_time_get_month (calendar->date) == g_date_time_get_month (today))
-    today_day = g_date_time_get_day_of_month (today);
-  else
-    today_day = -1;
-
-  g_date_time_unref (today);
-
-  /* Update day labels */
-  for (y = 0; y < 6; y ++)
-    for (x = 0; x < 7; x ++)
-      {
-        const int day = calendar->day[y][x];
-        GtkWidget *label = calendar->day_number_labels[y][x];
-        /* Translators: this defines whether the day numbers should use
-         * localized digits or the ones used in English (0123...).
-         *
-         * Translate to "%Id" if you want to use localized digits, or
-         * translate to "%d" otherwise.
-         *
-         * Note that translating this doesn't guarantee that you get localized
-         * digits. That needs support from your system and locale definition
-         * too.
-         */
-        g_snprintf (buffer, sizeof (buffer), C_("calendar:day:digits", "%d"), day);
-
-        gtk_label_set_label (GTK_LABEL (label), buffer);
-
-        if (calendar->day_month[y][x] == MONTH_PREV ||
-            calendar->day_month[y][x] == MONTH_NEXT)
-          gtk_widget_add_css_class (label, "other-month");
-        else
-          gtk_widget_remove_css_class (label, "other-month");
-
-        if (calendar->marked_date[day-1] &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
-
-        if (new_day == day &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
-
-        if (calendar->focus_row == y && calendar->focus_col == x)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
-
-        if (day == today_day &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_add_css_class (label, "today");
-        else
-          gtk_widget_remove_css_class (label, "today");
-      }
-
-  /* Update week number labels.
-   * We simply get the week number of calendar->date and add the others.
-   * simple. */
-  for (i = 0; i < 6; i ++)
-    {
-      int year = new_year;
-      int month, week;
-
-      month = new_month + calendar->day_month[i][6] - MONTH_CURRENT;
-
-      if (month < 1)
-        {
-          month += 12;
-          year -= 1;
-        }
-      else if (month > 12)
-        {
-          month -= 12;
-          year += 1;
-        }
-
-      week = week_of_year (year, month, calendar->day[i][6]);
-
-      /* Translators: this defines whether the week numbers should use
-       * localized digits or the ones used in English (0123...).
-       *
-       * Translate to "%Id" if you want to use localized digits, or
-       * translate to "%d" otherwise.
-       * Note that translating this doesn't guarantee that you get localized
-       * digits. That needs support from your system and locale definition
-       * too. */
-      g_snprintf (buffer, sizeof (buffer), C_("calendar:week:digits", "%d"), week);
-
-      gtk_label_set_label (GTK_LABEL (calendar->week_number_labels[i]), buffer);
-    }
-
-  if (day_changed)
-    {
-      g_object_notify (G_OBJECT (calendar), "day");
-      g_signal_emit (calendar, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
-    }
-
-  if (month_changed)
-    g_object_notify (G_OBJECT (calendar), "month");
-
-  if (year_changed)
-    g_object_notify (G_OBJECT (calendar), "year");
-
+  calendar_select_day_internal (calendar, date, TRUE);
 }
 
 /**
