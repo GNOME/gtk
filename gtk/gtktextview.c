@@ -5653,7 +5653,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
               gtk_text_iter_get_line (&ins))
             {
               gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-              n_press = 1;
+              return;
             }
         }
 
