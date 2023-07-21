@@ -157,6 +157,37 @@ r16g16b16a16_float_from_float (guchar      *dest,
 }
 
 static void
+a16_float_to_float (float        *dest,
+                    const guchar *src_data,
+                    gsize         n)
+{
+  const guint16 *src = (const guint16 *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      half_to_float (src, dest, 1);
+      dest[1] = dest[0];
+      dest[2] = dest[0];
+      dest[3] = dest[0];
+      src++;
+      dest += 4;
+    }
+}
+
+static void
+a16_float_from_float (guchar      *dest_data,
+                      const float *src,
+                      gsize        n)
+{
+  guint16 *dest = (guint16 *) dest_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float_to_half (&src[3], dest, 1);
+      dest ++;
+      src += 4;
+    }
+}
+
+static void
 r32g32b32_float_to_float (float        *dest,
                           const guchar *src_data,
                           gsize         n)
@@ -203,6 +234,37 @@ r32g32b32a32_float_from_float (guchar      *dest,
                                gsize        n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
+}
+
+static void
+a32_float_to_float (float        *dest,
+                    const guchar *src_data,
+                    gsize         n)
+{
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      dest[0] = src[0];
+      dest[1] = src[0];
+      dest[2] = src[0];
+      dest[3] = src[0];
+      src++;
+      dest += 4;
+    }
+}
+
+static void
+a32_float_from_float (guchar      *dest_data,
+                      const float *src,
+                      gsize        n)
+{
+  float *dest = (float *) dest_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      dest[0] = src[3];
+      dest ++;
+      src += 4;
+    }
 }
 
 #define PREMULTIPLY_FUNC(name, R1, G1, B1, A1, R2, G2, B2, A2) \
@@ -544,6 +606,26 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
     a16_to_float,
     a16_from_float,
+  },
+  [GDK_MEMORY_A16_FLOAT] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    2,
+    G_ALIGNOF (guint16),
+    GDK_MEMORY_FLOAT16,
+    { 0, 0, 3, 0 },
+    { GL_R16F, GL_RED, GL_HALF_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
+    a16_float_to_float,
+    a16_float_from_float,
+  },
+  [GDK_MEMORY_A32_FLOAT] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    4,
+    G_ALIGNOF (float),
+    GDK_MEMORY_FLOAT32,
+    { 0, 0, 3, 0 },
+    { GL_R32F, GL_RED, GL_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
+    a32_float_to_float,
+    a32_float_from_float,
   }
 };
 

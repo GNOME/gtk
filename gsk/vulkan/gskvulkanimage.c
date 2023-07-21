@@ -289,6 +289,24 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
         return info;
       }
 
+    case GDK_MEMORY_A16_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R16_SFLOAT, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
+    case GDK_MEMORY_A32_FLOAT:
+      {
+        static const GskMemoryFormatInfo info[] = {
+          { VK_FORMAT_R32_SFLOAT, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_UNDEFINED }
+        };
+        return info;
+      }
+
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -355,6 +373,10 @@ gsk_memory_format_get_fallback (GdkMemoryFormat format)
       return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
     case GDK_MEMORY_A16:
       return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+    case GDK_MEMORY_A16_FLOAT:
+      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+    case GDK_MEMORY_A32_FLOAT:
+      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
 
     case GDK_MEMORY_N_FORMATS:
     default:

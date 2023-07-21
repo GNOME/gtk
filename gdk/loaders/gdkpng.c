@@ -387,6 +387,8 @@ gdk_save_png (GdkTexture *texture)
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
     case GDK_MEMORY_G16A16:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       format = GDK_MEMORY_G16A16;
       png_format = PNG_COLOR_TYPE_GRAY_ALPHA;
       depth = 16;
