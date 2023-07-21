@@ -287,6 +287,8 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
     case GDK_MEMORY_A16_FLOAT:
     case GDK_MEMORY_A32_FLOAT:
       return TRUE;
@@ -307,8 +309,6 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G16:
     case GDK_MEMORY_G16A16:
-    case GDK_MEMORY_A8:
-    case GDK_MEMORY_A16:
       return FALSE;
 
     case GDK_MEMORY_N_FORMATS:

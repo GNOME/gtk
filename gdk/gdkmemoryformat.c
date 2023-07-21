@@ -69,9 +69,9 @@ name ## _to_float (float        *dest, \
   for (gsize i = 0; i < n; i++) \
     { \
       T *src = (T *) (src_data + i * bpp); \
-      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = 1.0; \
-      dest[1] = dest[2] = dest[0]; \
       if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
+      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = dest[3]; \
+      dest[1] = dest[2] = dest[0]; \
       dest += 4; \
     } \
 } \
@@ -588,22 +588,22 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     g16_from_float,
   },
   [GDK_MEMORY_A8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
     1,
     G_ALIGNOF (guchar),
     GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
-    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_RED } },
     a8_to_float,
     a8_from_float,
   },
   [GDK_MEMORY_A16] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
     2,
     G_ALIGNOF (guint16),
     GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
-    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_RED } },
     a16_to_float,
     a16_from_float,
   },
