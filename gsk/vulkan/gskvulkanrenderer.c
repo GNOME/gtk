@@ -353,6 +353,7 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
+  GdkSurface *surface;
   cairo_region_t *render_region;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
@@ -372,13 +373,18 @@ gsk_vulkan_renderer_render (GskRenderer          *renderer,
                                      gsk_render_node_get_preferred_depth (root),
                                      region);
   render = gsk_vulkan_renderer_get_render (self);
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->vulkan));
 
   render_region = get_render_region (self);
   draw_index = gdk_vulkan_context_get_draw_index (self->vulkan);
 
   gsk_vulkan_render_render (render,
                             self->targets[draw_index],
-                            NULL,
+                            &GRAPHENE_RECT_INIT(
+                              0, 0,
+                              gdk_surface_get_width (surface),
+                              gdk_surface_get_height (surface)
+                            ),
                             render_region,
                             root,
                             NULL, NULL);

@@ -16,7 +16,6 @@ struct _GskVulkanRenderPassOp
 
   GskVulkanImage *image;
   cairo_rectangle_int_t area;
-  graphene_size_t viewport_size;
 
   VkImageLayout initial_layout;
   VkImageLayout final_layout;
@@ -117,8 +116,8 @@ gsk_vulkan_render_pass_op_command (GskVulkanOp      *op,
                     &(VkViewport) {
                         .x = 0,
                         .y = 0,
-                        .width = self->viewport_size.width,
-                        .height = self->viewport_size.height,
+                        .width = gsk_vulkan_image_get_width (self->image),
+                        .height = gsk_vulkan_image_get_height (self->image),
                         .minDepth = 0,
                         .maxDepth = 1
                     });
@@ -244,7 +243,6 @@ void
 gsk_vulkan_render_pass_begin_op (GskVulkanRender             *render,
                                  GskVulkanImage              *image,
                                  const cairo_rectangle_int_t *area,
-                                 const graphene_size_t       *viewport_size,
                                  VkImageLayout                initial_layout,
                                  VkImageLayout                final_layout)
 {
@@ -256,7 +254,6 @@ gsk_vulkan_render_pass_begin_op (GskVulkanRender             *render,
   self->initial_layout = initial_layout;
   self->final_layout = final_layout;
   self->area = *area;
-  self->viewport_size = *viewport_size;
 }
 
 void
@@ -280,45 +277,31 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
 {
   GskVulkanRenderPass *render_pass;
   GdkVulkanContext *context;
-  graphene_rect_t view;
   GskVulkanImage *image;
-  float scale_x, scale_y;
+  int width, height;
 
-  scale_x = graphene_vec2_get_x (scale);
-  scale_y = graphene_vec2_get_y (scale);
-  view = GRAPHENE_RECT_INIT (scale_x * viewport->origin.x,
-                             scale_y * viewport->origin.y,
-                             ceil (scale_x * viewport->size.width),
-                             ceil (scale_y * viewport->size.height));
+  width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
+  height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
 
   context = gsk_vulkan_render_get_context (render);
   image = gsk_vulkan_image_new_for_offscreen (context,
                                               gdk_vulkan_context_get_offscreen_format (context,
                                                   gsk_render_node_get_preferred_depth (node)),
-                                              view.size.width, view.size.height);
+                                              width, height);
 
   gsk_vulkan_render_pass_begin_op (render,
                                    image,
-                                   &(cairo_rectangle_int_t) {
-                                       0, 0,
-                                       gsk_vulkan_image_get_width (image),
-                                       gsk_vulkan_image_get_height (image)
-                                   },
-                                   &viewport->size,
+                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    VK_IMAGE_LAYOUT_UNDEFINED,
                                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
   render_pass = gsk_vulkan_render_pass_new ();
   gsk_vulkan_render_pass_add (render_pass,
                               render,
-                              scale,
-                              viewport,
-                              &(cairo_rectangle_int_t) {
-                                  0, 0,
-                                  gsk_vulkan_image_get_width (image),
-                                  gsk_vulkan_image_get_height (image)
-                              },
-                              node);
+                              width, height,
+                              &(cairo_rectangle_int_t) { 0, 0, width, height },
+                              node,
+                              viewport);
   gsk_vulkan_render_pass_free (render_pass);
 
   gsk_vulkan_render_pass_end_op (render,

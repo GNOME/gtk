@@ -50,7 +50,6 @@ struct _GskVulkanRender
   GskRenderer *renderer;
   GdkVulkanContext *vulkan;
 
-  double scale;
   graphene_rect_t viewport;
   cairo_region_t *clip;
 
@@ -175,22 +174,9 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
                          const graphene_rect_t *rect,
                          const cairo_region_t  *clip)
 {
-  GdkSurface *surface = gsk_renderer_get_surface (self->renderer);
-
   self->target = g_object_ref (target);
+  self->viewport = *rect;
 
-  if (rect)
-    {
-      self->viewport = *rect;
-      self->scale = 1.0;
-    }
-  else
-    {
-      self->scale = gdk_surface_get_scale (surface);
-      self->viewport = GRAPHENE_RECT_INIT (0, 0,
-                                           (int) ceil (gdk_surface_get_width (surface) * self->scale),
-                                           (int) ceil (gdk_surface_get_height (surface) * self->scale));
-    }
   if (clip)
     {
       self->clip = cairo_region_reference ((cairo_region_t *) clip);
@@ -492,27 +478,24 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
                             gpointer               download_data)
 {
   GskVulkanRenderPass *render_pass;
-  graphene_vec2_t scale;
   cairo_rectangle_int_t extents;
 
-  graphene_vec2_init (&scale, self->scale, self->scale);
   cairo_region_get_extents (self->clip, &extents);
 
   gsk_vulkan_render_pass_begin_op (self,
                                    g_object_ref (self->target),
                                    &extents,
-                                   &self->viewport.size,
                                    VK_IMAGE_LAYOUT_UNDEFINED,
                                    VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-
 
   render_pass = gsk_vulkan_render_pass_new ();
   gsk_vulkan_render_pass_add (render_pass,
                               self,
-                              &scale,
-                              &self->viewport,
+                              gsk_vulkan_image_get_width (self->target),
+                              gsk_vulkan_image_get_height (self->target),
                               &extents,
-                              node);
+                              node,
+                              &self->viewport);
   gsk_vulkan_render_pass_free (render_pass);
 
   gsk_vulkan_render_pass_end_op (self,

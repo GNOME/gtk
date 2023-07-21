@@ -16,10 +16,11 @@ void                    gsk_vulkan_render_pass_free                     (GskVulk
 
 void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         const graphene_vec2_t  *scale,
-                                                                         const graphene_rect_t  *viewport,
+                                                                         int                     width,
+                                                                         int                     height,
                                                                          cairo_rectangle_int_t  *clip,
-                                                                         GskRenderNode          *node);
+                                                                         GskRenderNode          *node,
+                                                                         const graphene_rect_t  *viewport);
 
 G_END_DECLS
 
