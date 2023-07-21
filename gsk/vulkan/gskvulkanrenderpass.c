@@ -1221,6 +1221,10 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
                                       GskRenderNode             *node)
 {
   GskRenderNode *child;
+  graphene_rect_t clipped, child_tex_rect;
+  GskVulkanImage *child_image, *mask_image;
+  graphene_matrix_t projection;
+  int width, height;
 
   child = gsk_fill_node_get_child (node);
   
@@ -1236,7 +1240,62 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
       return TRUE;
     }
 
-  FALLBACK ("Fill nodes without color fills aren't supported yet.");
+  graphene_rect_offset_r (&state->clip.rect.bounds, - state->offset.x, - state->offset.y, &clipped);
+  graphene_rect_intersection (&clipped, &node->bounds, &clipped);
+  if (clipped.size.width == 0 || clipped.size.height == 0)
+    return TRUE;
+
+  child_image = gsk_vulkan_render_pass_get_node_as_image (self,
+                                                          render,
+                                                          state,
+                                                          child,
+                                                          &child_tex_rect);
+  if (child_image == NULL)
+    return TRUE;
+
+  width = ceil (graphene_vec2_get_x (&state->scale) * clipped.size.width);
+  height = ceil (graphene_vec2_get_y (&state->scale) * clipped.size.height);
+  mask_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_context (render),
+                                                   gdk_memory_depth_get_alpha_format (gsk_render_node_get_preferred_depth (child)),
+                                                   width, height);
+
+  gsk_vulkan_render_pass_begin_op (render,
+                                   mask_image,
+                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                   VK_IMAGE_LAYOUT_UNDEFINED,
+                                   VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  gsk_vulkan_scissor_op (render, &(cairo_rectangle_int_t) { 0, 0, width, height });
+  graphene_matrix_init_ortho (&projection,
+                              0, width,
+                              0, height,
+                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
+                              ORTHO_FAR_PLANE);
+  gsk_vulkan_push_constants_op (render, &state->scale, &projection, &GSK_ROUNDED_RECT_INIT_FROM_RECT (clipped));
+  gsk_vulkan_fill_op (render,
+                      GSK_VULKAN_SHADER_CLIP_NONE,
+                      &GRAPHENE_POINT_INIT (- clipped.origin.x, - clipped.origin.y),
+                      &node->bounds,
+                      gsk_fill_node_get_path (node),
+                      gsk_fill_node_get_fill_rule (node),
+                      &(GdkRGBA) { 1.0, 1.0, 1.0, 1.0 });
+  gsk_vulkan_render_pass_end_op (render,
+                                 mask_image,
+                                 VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+  gsk_vulkan_mask_op (render,
+                      gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
+                      &state->offset,
+                      child_image,
+                      &child->bounds,
+                      &child_tex_rect,
+                      mask_image,
+                      &node->bounds,
+                      &clipped,
+                      GSK_MASK_MODE_ALPHA);
+
+  g_object_unref (mask_image);
+
+  return TRUE;
 }
 
 static inline gboolean
