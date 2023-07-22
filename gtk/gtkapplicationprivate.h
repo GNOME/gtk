@@ -117,6 +117,7 @@ typedef struct
   GtkApplicationImpl impl;
 
   GDBusConnection *session;
+  GCancellable    *cancellable;
 
   const gchar     *application_id;
   const gchar     *unique_name;
