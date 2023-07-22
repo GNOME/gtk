@@ -162,7 +162,7 @@ gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
                                                      gdk_texture_get_format (texture),
                                                      width, height);
   gsk_vulkan_render_pass_begin_op (render,
-                                   g_object_ref (better_image),
+                                   better_image,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    VK_IMAGE_LAYOUT_UNDEFINED,
                                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
