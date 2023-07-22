@@ -3,6 +3,7 @@
 #include "gskpathpointprivate.h"
 
 #include "gskcontourprivate.h"
+#include "gskpathmeasure.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -150,4 +151,11 @@ gsk_path_point_get_curvature (GskPathPoint     *self,
                               graphene_point_t *center)
 {
   return gsk_contour_get_curvature (self->contour, self, center);
+}
+
+float
+gsk_path_point_get_distance (GskPathPoint *self,
+                             gpointer      measure_data)
+{
+  return gsk_contour_get_distance (self->contour, self, measure_data);
 }
