@@ -45,6 +45,7 @@ gsk_private_sources = files([
   'gskcontour.c',
   'gskcurve.c',
   'gskdebug.c',
+  'gskpathdash.c',
   'gskprivate.c',
   'gskprofiler.c',
   'gskspline.c',
