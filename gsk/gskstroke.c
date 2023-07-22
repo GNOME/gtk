@@ -498,7 +498,7 @@ gsk_stroke_get_dash_offset (const GskStroke *self)
  * Returns: the join width
  */
 float
-gsk_stroke_get_join_width (GskStroke *stroke)
+gsk_stroke_get_join_width (const GskStroke *stroke)
 {
   float width;
 

@@ -26,6 +26,7 @@
 #include "gskpathprivate.h"
 #include "gskpathpointprivate.h"
 #include "gsksplineprivate.h"
+#include "gskstrokeprivate.h"
 
 typedef struct _GskContourClass GskContourClass;
 
@@ -46,6 +47,9 @@ struct _GskContourClass
   void                  (* print)               (const GskContour       *contour,
                                                  GString                *string);
   gboolean              (* get_bounds)          (const GskContour       *contour,
+                                                 GskBoundingBox         *bounds);
+  gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
+                                                 const GskStroke        *stroke,
                                                  GskBoundingBox         *bounds);
   void                  (* get_start_end)       (const GskContour       *self,
                                                  graphene_point_t       *start,
@@ -295,6 +299,60 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
   return bounds->max.x > bounds->min.x && bounds->max.y > bounds->min.y;
 }
 
+static gboolean
+add_stroke_bounds (GskPathOperation        op,
+                   const graphene_point_t *pts,
+                   gsize                   n_pts,
+                   gpointer                user_data)
+{
+  struct {
+    GskBoundingBox *bounds;
+    float lw;
+    float mw;
+  } *data = user_data;
+  GskBoundingBox bounds;
+
+  for (int i = 1; i < n_pts - 1; i++)
+    {
+      gsk_bounding_box_init (&bounds,
+                             &GRAPHENE_POINT_INIT (pts[i].x - data->lw/2, pts[i].y - data->lw/2),
+                             &GRAPHENE_POINT_INIT (pts[i].x + data->lw/2, pts[i].y + data->lw/2));
+      gsk_bounding_box_union (&bounds, data->bounds, data->bounds);
+    }
+
+  gsk_bounding_box_init (&bounds,
+                         &GRAPHENE_POINT_INIT (pts[n_pts - 1].x - data->mw/2, pts[n_pts  - 1].y - data->mw/2),
+                         &GRAPHENE_POINT_INIT (pts[n_pts - 1].x + data->mw/2, pts[n_pts  - 1].y + data->mw/2));
+  gsk_bounding_box_union (&bounds, data->bounds, data->bounds);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
+                                        const GskStroke  *stroke,
+                                        GskBoundingBox   *bounds)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  struct {
+    GskBoundingBox *bounds;
+    float lw;
+    float mw;
+  } data;
+
+  data.bounds = bounds;
+  data.lw = stroke->line_width;
+  data.mw = gsk_stroke_get_join_width (stroke);
+
+  gsk_bounding_box_init (bounds,
+                         &GRAPHENE_POINT_INIT (self->points[0].x - data.mw/2, self->points[0].y - data.mw/2),
+                         &GRAPHENE_POINT_INIT (self->points[0].x + data.mw/2, self->points[0].y + data.mw/2));
+
+  gsk_standard_contour_foreach (contour, GSK_PATH_TOLERANCE_DEFAULT, add_stroke_bounds, &data);
+
+  return TRUE;
+}
+
 static void
 gsk_standard_contour_get_start_end (const GskContour *contour,
                                     graphene_point_t *start,
@@ -493,6 +551,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_flags,
   gsk_standard_contour_print,
   gsk_standard_contour_get_bounds,
+  gsk_standard_contour_get_stroke_bounds,
   gsk_standard_contour_get_start_end,
   gsk_standard_contour_foreach,
   gsk_standard_contour_reverse,
@@ -603,6 +662,14 @@ gsk_contour_get_bounds (const GskContour *self,
                         GskBoundingBox   *bounds)
 {
   return self->klass->get_bounds (self, bounds);
+}
+
+gboolean
+gsk_contour_get_stroke_bounds (const GskContour *self,
+                               const GskStroke  *stroke,
+                               GskBoundingBox   *bounds)
+{
+  return self->klass->get_stroke_bounds (self, stroke, bounds);
 }
 
 gboolean
