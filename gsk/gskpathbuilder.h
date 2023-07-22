@@ -70,6 +70,12 @@ void                    gsk_path_builder_add_circle             (GskPathBuilder 
                                                                  float                   radius);
 
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_add_segment            (GskPathBuilder         *self,
+                                                                 GskPathMeasure         *measure,
+                                                                 float                   start,
+                                                                 float                   end);
+
+GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_move_to                (GskPathBuilder         *self,
                                                                  float                   x,
                                                                  float                   y);
