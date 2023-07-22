@@ -72,5 +72,8 @@ float                   gsk_path_point_get_curvature   (GskPath            *path
                                                         const GskPathPoint *point,
                                                         graphene_point_t   *center);
 
+GDK_AVAILABLE_IN_4_14
+float                   gsk_path_point_get_distance    (GskPathMeasure     *measure,
+                                                        const GskPathPoint *point);
 
 G_END_DECLS
