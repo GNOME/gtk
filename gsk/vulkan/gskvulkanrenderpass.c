@@ -184,6 +184,8 @@ gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
   gsk_vulkan_render_pass_end_op (render,
                                  better_image,
                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  g_object_unref (better_image);
+
   return better_image;
 }
 
