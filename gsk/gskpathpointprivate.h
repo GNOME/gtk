@@ -30,6 +30,8 @@ GskPathPoint *     gsk_path_point_new          (GskPath          *path);
 
 GskPath          * gsk_path_point_get_path     (GskPathPoint     *self);
 const GskContour * gsk_path_point_get_contour  (GskPathPoint     *self);
+float              gsk_path_point_get_distance (GskPathPoint     *self,
+                                                gpointer          measure_data);
 
 G_END_DECLS
 
