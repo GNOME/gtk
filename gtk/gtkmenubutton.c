@@ -1038,6 +1038,8 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
   if (gtk_menu_button_get_child (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
 
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), NULL);
+
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
@@ -1162,6 +1164,8 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   if (gtk_menu_button_get_child (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
 
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), NULL);
+
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_hexpand (box, FALSE);
   label_widget = gtk_label_new (label);
@@ -1173,9 +1177,11 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   gtk_widget_set_hexpand (label_widget, TRUE);
   arrow = gtk_builtin_icon_new ("arrow");
   menu_button->arrow_widget = arrow;
+
   gtk_box_append (GTK_BOX (box), label_widget);
   gtk_box_append (GTK_BOX (box), arrow);
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
+
   menu_button->label_widget = label_widget;
 
   menu_button->image_widget = NULL;
@@ -1497,6 +1503,8 @@ gtk_menu_button_set_child (GtkMenuButton *menu_button,
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
   if (gtk_menu_button_get_icon_name (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
+
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), NULL);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_hexpand (box, FALSE);
