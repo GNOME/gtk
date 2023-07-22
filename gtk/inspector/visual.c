@@ -97,9 +97,6 @@ struct _GtkInspectorVisual
   GtkWidget *focus_switch;
   GtkWidget *a11y_switch;
 
-  GtkWidget *misc_box;
-  GtkWidget *touchscreen_switch;
-
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
@@ -973,29 +970,6 @@ init_slowdown (GtkInspectorVisual *vis)
                     G_CALLBACK (slowdown_entry_activated), vis);
 }
 
-static void
-update_touchscreen (GtkSwitch *sw)
-{
-  GtkDebugFlags flags;
-
-  flags = gtk_get_debug_flags ();
-
-  if (gtk_switch_get_active (sw))
-    flags |= GTK_DEBUG_TOUCHSCREEN;
-  else
-    flags &= ~GTK_DEBUG_TOUCHSCREEN;
-
-  gtk_set_debug_flags (flags);
-}
-
-static void
-init_touchscreen (GtkInspectorVisual *vis)
-{
-  gtk_switch_set_active (GTK_SWITCH (vis->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
-  g_signal_connect (vis->touchscreen_switch, "notify::active",
-                    G_CALLBACK (update_touchscreen), NULL);
-}
-
 static gboolean
 keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual *vis)
 {
@@ -1004,15 +978,9 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
   if (direction == GTK_DIR_DOWN &&
       widget == vis->visual_box)
     next = vis->debug_box;
-  else if (direction == GTK_DIR_DOWN &&
-      widget == vis->debug_box)
-    next = vis->misc_box;
   else if (direction == GTK_DIR_UP &&
            widget == vis->debug_box)
     next = vis->visual_box;
-  else if (direction == GTK_DIR_UP &&
-           widget == vis->misc_box)
-    next = vis->debug_box;
   else
     next = NULL;
 
@@ -1070,11 +1038,6 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->focus_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->touchscreen_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->touchscreen_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
   else if (gtk_widget_is_ancestor (vis->a11y_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->a11y_switch);
@@ -1112,10 +1075,8 @@ gtk_inspector_visual_constructed (GObject *object)
 
   g_signal_connect (vis->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
   g_signal_connect (vis->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
-  g_signal_connect (vis->misc_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
   g_signal_connect (vis->visual_box, "row-activated", G_CALLBACK (row_activated), vis);
   g_signal_connect (vis->debug_box, "row-activated", G_CALLBACK (row_activated), vis);
-  g_signal_connect (vis->misc_box, "row-activated", G_CALLBACK (row_activated), vis);
 }
 
 static void
@@ -1189,11 +1150,9 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, animation_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, touchscreen_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, debug_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, misc_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fps_switch);
@@ -1234,7 +1193,6 @@ gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
   init_scale (vis);
   init_animation (vis);
   init_slowdown (vis);
-  init_touchscreen (vis);
   init_gl (vis);
 }
 

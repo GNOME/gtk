@@ -125,8 +125,6 @@ guint gtk_get_portal_interface_version (GDBusConnection *connection,
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 #endif
 
-gboolean        gtk_simulate_touchscreen (void);
-
 void            gtk_set_display_debug_flags        (GdkDisplay    *display,
                                                     GtkDebugFlags  flags);
 GtkDebugFlags   gtk_get_display_debug_flags        (GdkDisplay    *display);

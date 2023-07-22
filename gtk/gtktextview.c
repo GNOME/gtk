@@ -5598,8 +5598,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
   gtk_text_view_reset_blink_time (text_view);
 
   device = gdk_event_get_device ((GdkEvent *) event);
-  is_touchscreen = gtk_simulate_touchscreen () ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+  is_touchscreen = gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (n_press == 1)
     {
@@ -7487,8 +7486,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   device = gdk_event_get_device (event);
 
-  is_touchscreen = gtk_simulate_touchscreen () ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+  is_touchscreen = gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
                          &cursor, NULL, NULL);
@@ -7629,8 +7627,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
 
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   device = gdk_event_get_device (event);
-  is_touchscreen = gtk_simulate_touchscreen () ||
-    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+  is_touchscreen = gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if ((is_touchscreen || clicked_in_selection) &&
       !gtk_drag_check_threshold_double (GTK_WIDGET (text_view), 0, 0, offset_x, offset_y))
