@@ -94,6 +94,13 @@ struct _GskContourClass
   float                 (* get_distance)        (const GskContour       *contour,
                                                  GskPathPoint           *point,
                                                  gpointer                measure_data);
+  void                  (* add_stroke)          (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 GskStroke              *stroke);
+  void                  (* offset)              (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 float                   distance,
+                                                 GskStroke              *stroke);
 };
 
 static gsize
@@ -727,6 +734,23 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
   return winding;
 }
 
+static void
+gsk_standard_contour_add_stroke (const GskContour *contour,
+                                 GskPathBuilder   *builder,
+                                 GskStroke        *stroke)
+{
+  gsk_contour_default_add_stroke (contour, builder, stroke);
+}
+
+static void
+gsk_standard_contour_offset (const GskContour *contour,
+                             GskPathBuilder   *builder,
+                             float             distance,
+                             GskStroke        *stroke)
+{
+  gsk_contour_default_offset (contour, builder, distance, stroke);
+}
+
 static gboolean
 gsk_standard_contour_get_closest_point (const GskContour       *contour,
                                         const graphene_point_t *point,
@@ -922,6 +946,8 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_add_segment,
   gsk_standard_contour_get_point,
   gsk_standard_contour_get_distance,
+  gsk_standard_contour_add_stroke,
+  gsk_standard_contour_offset,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1386,6 +1412,68 @@ gsk_rect_contour_get_winding (const GskContour       *contour,
 }
 
 static gboolean
+stroke_is_simple (GskStroke *stroke)
+{
+  if (stroke->line_join == GSK_LINE_JOIN_ROUND ||
+      stroke->line_join == GSK_LINE_JOIN_BEVEL)
+    return FALSE;
+
+  if (stroke->miter_limit < 1.5)
+    return FALSE;
+
+  if (stroke->dash_length != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+gsk_rect_contour_add_stroke (const GskContour *contour,
+                             GskPathBuilder   *builder,
+                             GskStroke        *stroke)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  if (stroke_is_simple (stroke))
+    {
+      graphene_rect_t rect;
+
+      graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
+
+      graphene_rect_inset (&rect, stroke->line_width / 2, stroke->line_width / 2);
+      gsk_path_builder_add_rect (builder, &rect);
+
+      graphene_rect_inset (&rect, - stroke->line_width, - stroke->line_width);
+      rect.origin.x += rect.size.width;
+      rect.size.width = - rect.size.width;
+      gsk_path_builder_add_rect (builder, &rect);
+    }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
+}
+
+static void
+gsk_rect_contour_offset (const GskContour *contour,
+                         GskPathBuilder   *builder,
+                         float             distance,
+                         GskStroke        *stroke)
+{
+  const GskRectContour *self = (const GskRectContour *) contour;
+
+  if (stroke_is_simple (stroke))
+    {
+      graphene_rect_t rect;
+
+      graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
+
+      graphene_rect_inset (&rect, distance, distance);
+      gsk_path_builder_add_rect (builder, &rect);
+    }
+  else
+    gsk_contour_default_offset (contour, builder, distance, stroke);
+}
+
+static gboolean
 gsk_rect_contour_get_closest_point (const GskContour       *contour,
                                     const graphene_point_t *point,
                                     float                   threshold,
@@ -1475,6 +1563,8 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_add_segment,
   gsk_rect_contour_get_point,
   gsk_rect_contour_get_distance,
+  gsk_rect_contour_add_stroke,
+  gsk_rect_contour_offset,
 };
 
 GskContour *
@@ -1822,6 +1912,54 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
   return 0;
 }
 
+static void
+gsk_circle_contour_add_stroke (const GskContour *contour,
+                               GskPathBuilder   *builder,
+                               GskStroke        *stroke)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  if (stroke->dash_length == 0 &&
+      fabs (self->start_angle - self->end_angle) >= 360)
+    {
+      GskContour *c;
+
+      c = gsk_circle_contour_new (&self->center, self->radius + stroke->line_width / 2,
+                                  self->start_angle,
+                                  self->end_angle);
+      gsk_path_builder_add_contour (builder, c);
+
+      c = gsk_circle_contour_new (&self->center, self->radius - stroke->line_width / 2,
+                                  self->end_angle,
+                                  self->start_angle);
+      gsk_path_builder_add_contour (builder, c);
+    }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
+}
+
+static void
+gsk_circle_contour_offset (const GskContour *contour,
+                           GskPathBuilder   *builder,
+                           float             distance,
+                           GskStroke        *stroke)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  if (stroke->dash_length == 0 &&
+      fabs (self->start_angle - self->end_angle) >= 360)
+    {
+      GskContour *c;
+
+      c = gsk_circle_contour_new (&self->center, self->radius + distance,
+                                  self->start_angle,
+                                  self->end_angle);
+      gsk_path_builder_add_contour (builder, c);
+    }
+  else
+    gsk_contour_default_offset (contour, builder, distance, stroke);
+}
+
 typedef struct
 {
   float angle;
@@ -1931,6 +2069,8 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_add_segment,
   gsk_circle_contour_get_point,
   gsk_circle_contour_get_distance,
+  gsk_circle_contour_add_stroke,
+  gsk_circle_contour_offset,
 };
 
 GskContour *
@@ -2327,6 +2467,60 @@ gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
   return 0;
 }
 
+static void
+gsk_rounded_rect_contour_add_stroke (const GskContour *contour,
+                                     GskPathBuilder   *builder,
+                                     GskStroke        *stroke)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  if (stroke_is_simple (stroke))
+    {
+      GskRoundedRect rect;
+      GskContour *c;
+
+      gsk_rounded_rect_init_copy (&rect, &self->rect);
+
+      gsk_rounded_rect_shrink (&rect,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2);
+      c = gsk_rounded_rect_contour_new (&rect);
+      gsk_path_builder_add_contour (builder, c);
+
+      gsk_rounded_rect_init_copy (&rect, &self->rect);
+      gsk_rounded_rect_shrink (&rect,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2);
+      c = gsk_rounded_rect_contour_new (&rect);
+      ((GskRoundedRectContour *)c)->ccw = TRUE;
+      gsk_path_builder_add_contour (builder, c);
+    }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
+}
+
+static void
+gsk_rounded_rect_contour_offset (const GskContour *contour,
+                                 GskPathBuilder   *builder,
+                                 float             distance,
+                                 GskStroke        *stroke)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  GskRoundedRect rect;
+  GskContour *c;
+
+  gsk_rounded_rect_init_copy (&rect, &self->rect);
+  if (self->ccw)
+    distance = - distance;
+  gsk_rounded_rect_shrink (&rect, - distance, - distance, - distance, - distance);
+  c = gsk_rounded_rect_contour_new (&rect);
+  gsk_path_builder_add_contour (builder, c);
+}
+
 static gboolean
 gsk_rounded_rect_contour_get_closest_point (const GskContour       *contour,
                                             const graphene_point_t *point,
@@ -2424,6 +2618,8 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_rounded_rect_contour_add_segment,
   gsk_rounded_rect_contour_get_point,
   gsk_rounded_rect_contour_get_distance,
+  gsk_rounded_rect_contour_add_stroke,
+  gsk_rounded_rect_contour_offset,
 };
 
 GskContour *
@@ -2602,6 +2798,23 @@ gsk_contour_get_distance (const GskContour *self,
                           gpointer          measure_data)
 {
   return self->klass->get_distance (self, point, measure_data);
+}
+
+void
+gsk_contour_add_stroke (const GskContour *self,
+                        GskPathBuilder   *builder,
+                        GskStroke        *stroke)
+{
+  self->klass->add_stroke (self, builder, stroke);
+}
+
+void
+gsk_contour_offset (const GskContour *self,
+                    GskPathBuilder   *builder,
+                    float             distance,
+                    GskStroke        *stroke)
+{
+  self->klass->offset (self, builder, distance, stroke);
 }
 
 /* }}} */
