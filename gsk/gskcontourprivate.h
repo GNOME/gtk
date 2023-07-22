@@ -106,5 +106,10 @@ void                    gsk_contour_get_point                   (const GskContou
 float                   gsk_contour_get_distance                (const GskContour       *self,
                                                                  GskPathPoint           *point,
                                                                  gpointer                measure_data);
+gboolean                gsk_contour_dash                        (const GskContour       *contour,
+                                                                 GskStroke              *stroke,
+                                                                 float                   tolerance,
+                                                                 GskPathForeachFunc      func,
+                                                                 gpointer                user_data);
 
 G_END_DECLS
