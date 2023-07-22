@@ -51,8 +51,7 @@ get_save_filename (const char *filename)
 static void
 render_file (const char *filename,
              const char *renderer_name,
-             const char *save_file,
-             gboolean    force)
+             const char *save_file)
 {
   GskRenderNode *node;
   GBytes *bytes;
@@ -76,14 +75,16 @@ render_file (const char *filename,
   save_to = (char *)save_file;
 
   if (save_to == NULL)
-    save_to = get_save_filename (filename);
-
-  if (g_file_test (save_to, G_FILE_TEST_EXISTS) && !force)
     {
-      g_printerr (_("File %s exists.\n"
-                    "Use --force to overwrite.\n"), save_to);
-      exit (1);
+      save_to = get_save_filename (filename);
+      if (g_file_test (save_to, G_FILE_TEST_EXISTS))
+        {
+          g_printerr (_("File %s exists.\n"
+                        "If you want to overwrite, specify the filename.\n"), save_to);
+          exit (1);
+        }
     }
+
 
   bytes = gdk_texture_save_to_png_bytes (texture);
 
@@ -116,11 +117,9 @@ do_render (int          *argc,
 {
   GOptionContext *context;
   char **filenames = NULL;
-  gboolean force = FALSE;
   char *renderer = NULL;
   const GOptionEntry entries[] = {
     { "renderer", 0, 0, G_OPTION_ARG_STRING, &renderer, N_("Renderer to use"), N_("RENDERER") },
-    { "force", 0, 0, G_OPTION_ARG_NONE, &force, N_("Overwrite existing file"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -159,7 +158,7 @@ do_render (int          *argc,
       exit (1);
     }
 
-  render_file (filenames[0], renderer, filenames[1], force);
+  render_file (filenames[0], renderer, filenames[1]);
 
   g_strfreev (filenames);
 }
