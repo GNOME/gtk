@@ -57,6 +57,9 @@ void                    gsk_path_builder_svg_arc_to             (GskPathBuilder 
                                                                  float                   x,
                                                                  float                   y);
 
+gboolean                gsk_path_get_stroke_bounds              (GskPath                *self,
+                                                                 const GskStroke        *stroke,
+                                                                 graphene_rect_t        *bounds);
 
 G_END_DECLS
 
