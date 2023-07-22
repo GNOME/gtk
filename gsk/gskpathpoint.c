@@ -22,6 +22,7 @@
 #include "gskpathpointprivate.h"
 
 #include "gskcontourprivate.h"
+#include "gskpathmeasure.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -34,7 +35,8 @@
  * It can be queried for properties of the path at that point, such as its
  * tangent or its curvature.
  *
- * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point].
+ * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point]
+ * or [method@Gsk.PathMeasure.get_point].
  */
 
 G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,
@@ -176,4 +178,11 @@ gsk_path_point_get_curvature (GskPathPoint     *self,
                               graphene_point_t *center)
 {
   return gsk_contour_get_curvature (self->contour, self, center);
+}
+
+float
+gsk_path_point_get_distance (GskPathPoint *self,
+                             gpointer      measure_data)
+{
+  return gsk_contour_get_distance (self->contour, self, measure_data);
 }
