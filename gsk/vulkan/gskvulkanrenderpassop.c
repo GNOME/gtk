@@ -325,5 +325,7 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                  image,
                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+  g_object_unref (image);
+
   return image;
 }
