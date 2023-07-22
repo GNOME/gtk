@@ -73,9 +73,6 @@ A number of keys are influencing behavior instead of just logging:
 `no-css-cache`
 : Bypass caching for CSS style properties
 
-`touchscreen`
-: Pretend the pointer is a touchscreen device
-
 `snapshot`
 : Include debug render nodes in the generated snapshots
 

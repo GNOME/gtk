@@ -180,12 +180,6 @@ gtk_set_debug_flags (GtkDebugFlags flags)
   gtk_set_display_debug_flags (gdk_display_get_default (), flags);
 }
 
-gboolean
-gtk_simulate_touchscreen (void)
-{
-  return (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0;
-}
-
 static const GdkDebugKey gtk_debug_keys[] = {
   { "keybindings", GTK_DEBUG_KEYBINDINGS, "Information about keyboard shortcuts" },
   { "modules", GTK_DEBUG_MODULES, "Information about modules and extensions" },
@@ -202,7 +196,6 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector", TRUE },
-  { "touchscreen", GTK_DEBUG_TOUCHSCREEN, "Pretend the pointer is a touchscreen" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },

@@ -46,7 +46,6 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_SIZE_REQUEST: Information about size requests
  * @GTK_DEBUG_NO_CSS_CACHE: Disable the style property cache
  * @GTK_DEBUG_INTERACTIVE: Open the GTK inspector
- * @GTK_DEBUG_TOUCHSCREEN: Pretend the pointer is a touchscreen
  * @GTK_DEBUG_ACTIONS: Information about actions and menu models
  * @GTK_DEBUG_LAYOUT: Information from layout managers
  * @GTK_DEBUG_SNAPSHOT: Include debug render nodes in the generated snapshots
@@ -73,7 +72,6 @@ typedef enum {
   GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
   GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
   GTK_DEBUG_INTERACTIVE     = 1 << 10,
-  GTK_DEBUG_TOUCHSCREEN     = 1 << 11,
   GTK_DEBUG_ACTIONS         = 1 << 12,
   GTK_DEBUG_LAYOUT          = 1 << 13,
   GTK_DEBUG_SNAPSHOT        = 1 << 14,

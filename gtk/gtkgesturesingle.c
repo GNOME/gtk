@@ -139,7 +139,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   GdkDevice *source_device;
   GdkInputSource source;
   guint button = 0, state, i;
-  gboolean retval, test_touchscreen = FALSE;
+  gboolean retval;
   GdkEventType event_type;
 
   source_device = gdk_event_get_device (event);
@@ -149,9 +149,6 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
 
   priv = gtk_gesture_single_get_instance_private (GTK_GESTURE_SINGLE (controller));
   source = gdk_device_get_source (source_device);
-
-  if (source != GDK_SOURCE_TOUCHSCREEN)
-    test_touchscreen = gtk_simulate_touchscreen ();
 
   event_type = gdk_event_get_event_type (event);
 
@@ -168,7 +165,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
+      if (priv->touch_only && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
       button = gdk_button_event_get_button (event);
@@ -176,7 +173,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_MOTION_NOTIFY:
       if (!gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
         return FALSE;
-      if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
+      if (priv->touch_only && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
       state = gdk_event_get_modifier_state (event);
 
