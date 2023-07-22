@@ -31,9 +31,12 @@ gsk_vulkan_allocator_get (GdkVulkanContext   *context,
     }
 
   if (allocators[index] == NULL)
-    allocators[index] = gsk_vulkan_direct_allocator_new (gdk_vulkan_context_get_device (context),
-                                                         index,
-                                                         type);
+    {
+      allocators[index] = gsk_vulkan_direct_allocator_new (gdk_vulkan_context_get_device (context),
+                                                           index,
+                                                           type);
+      //allocators[index] = gsk_vulkan_stats_allocator_new (allocators[index]);
+    }
 
   return allocators[index];
 }
@@ -186,3 +189,93 @@ gsk_vulkan_direct_allocator_new (VkDevice            device,
 }
 
 /* }}} */
+/* {{{ stats allocator ***/
+
+typedef struct _GskVulkanStatsAllocator GskVulkanStatsAllocator;
+
+struct _GskVulkanStatsAllocator
+{
+  GskVulkanAllocator allocator_class;
+
+  GskVulkanAllocator *allocator;
+
+  gsize n_alloc;
+  gsize n_free;
+
+  gsize n_bytes_requested;
+  gsize n_bytes_allocated;
+  gsize n_bytes_freed;
+};
+
+static void
+dump_stats (GskVulkanStatsAllocator *self,
+            const char              *reason)
+{
+  g_printerr ("%s\n", reason);
+  g_printerr ("  %zu bytes requested in %zu allocations\n", self->n_bytes_requested, self->n_alloc);
+  g_printerr ("  %zu bytes allocated (%.2f%% overhead)\n", self->n_bytes_allocated,
+              (self->n_bytes_allocated - self->n_bytes_requested) * 100. / self->n_bytes_requested);
+  g_printerr ("  %zu bytes freed in %zu frees\n", self->n_bytes_freed , self->n_free);
+  g_printerr ("  %zu bytes remaining in %zu allocations\n",
+              self->n_bytes_allocated - self->n_bytes_freed, self->n_alloc - self->n_free);
+}
+
+static void
+gsk_vulkan_stats_allocator_free_allocator (GskVulkanAllocator *allocator)
+{
+  GskVulkanStatsAllocator *self = (GskVulkanStatsAllocator *) allocator;
+
+  g_assert (self->n_alloc == self->n_free);
+  g_assert (self->n_bytes_allocated == self->n_bytes_freed);
+
+  gsk_vulkan_allocator_free (self->allocator);
+
+  g_free (self);
+}
+
+static void
+gsk_vulkan_stats_allocator_alloc (GskVulkanAllocator  *allocator,
+                                  VkDeviceSize         size,
+                                  GskVulkanAllocation *alloc)
+{
+  GskVulkanStatsAllocator *self = (GskVulkanStatsAllocator *) allocator;
+
+  gsk_vulkan_alloc (self->allocator, size, alloc);
+
+  self->n_alloc++;
+  self->n_bytes_requested += size;
+  self->n_bytes_allocated += alloc->size;
+
+  dump_stats (self, "alloc()");
+}
+
+static void
+gsk_vulkan_stats_allocator_free (GskVulkanAllocator        *allocator,
+                                 const GskVulkanAllocation *alloc)
+{
+  GskVulkanStatsAllocator *self = (GskVulkanStatsAllocator *) allocator;
+
+  self->n_free++;
+  self->n_bytes_freed += alloc->size;
+
+  gsk_vulkan_free (self->allocator, alloc);
+
+  dump_stats (self, "free()");
+}
+
+GskVulkanAllocator *
+gsk_vulkan_stats_allocator_new (GskVulkanAllocator *allocator)
+{
+  GskVulkanStatsAllocator *self;
+
+  self = g_new0 (GskVulkanStatsAllocator, 1);
+  self->allocator_class.free_allocator = gsk_vulkan_stats_allocator_free_allocator;
+  self->allocator_class.alloc = gsk_vulkan_stats_allocator_alloc;
+  self->allocator_class.free = gsk_vulkan_stats_allocator_free;
+  self->allocator = allocator;
+
+  return (GskVulkanAllocator *) self;
+}
+
+/* }}} */
+
