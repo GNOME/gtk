@@ -2,6 +2,7 @@
 
 #include "gskvulkanclipprivate.h"
 
+#include "gskrectprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gsktransform.h"
 
@@ -58,7 +59,7 @@ gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
       gsk_vulkan_clip_init_copy (dest, src);
       return TRUE;
     }
-  if (!graphene_rect_intersection (rect, &src->rect.bounds, NULL))
+  if (!gsk_rect_intersects (rect, &src->rect.bounds))
     {
       dest->type = GSK_VULKAN_CLIP_ALL_CLIPPED;
       return TRUE;
@@ -110,7 +111,7 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
       gsk_vulkan_clip_init_copy (dest, src);
       return TRUE;
     }
-  if (!graphene_rect_intersection (&rounded->bounds, &src->rect.bounds, NULL))
+  if (!gsk_rect_intersects (&rounded->bounds, &src->rect.bounds))
     {
       dest->type = GSK_VULKAN_CLIP_ALL_CLIPPED;
       return TRUE;
@@ -254,7 +255,7 @@ gsk_vulkan_clip_may_intersect_rect (const GskVulkanClip    *self,
     case GSK_VULKAN_CLIP_NONE:
     case GSK_VULKAN_CLIP_RECT:
     case GSK_VULKAN_CLIP_ROUNDED:
-      return graphene_rect_intersection (&self->rect.bounds, &r, NULL);
+      return gsk_rect_intersects (&self->rect.bounds, &r);
     }
 }
 

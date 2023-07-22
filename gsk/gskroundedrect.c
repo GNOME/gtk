@@ -42,6 +42,7 @@
 #include "gskroundedrectprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskrectprivate.h"
 
 #include <math.h>
 
@@ -507,7 +508,7 @@ gboolean
 gsk_rounded_rect_intersects_rect (const GskRoundedRect  *self,
                                   const graphene_rect_t *rect)
 {
-  if (!graphene_rect_intersection (&self->bounds, rect, NULL))
+  if (!gsk_rect_intersects (&self->bounds, rect))
     return FALSE;
 
   /* If the bounding boxes intersect but the rectangles don't,

@@ -69,9 +69,9 @@ name ## _to_float (float        *dest, \
   for (gsize i = 0; i < n; i++) \
     { \
       T *src = (T *) (src_data + i * bpp); \
-      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = 1.0; \
-      dest[1] = dest[2] = dest[0]; \
       if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
+      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = dest[3]; \
+      dest[1] = dest[2] = dest[0]; \
       dest += 4; \
     } \
 } \
@@ -157,6 +157,37 @@ r16g16b16a16_float_from_float (guchar      *dest,
 }
 
 static void
+a16_float_to_float (float        *dest,
+                    const guchar *src_data,
+                    gsize         n)
+{
+  const guint16 *src = (const guint16 *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      half_to_float (src, dest, 1);
+      dest[1] = dest[0];
+      dest[2] = dest[0];
+      dest[3] = dest[0];
+      src++;
+      dest += 4;
+    }
+}
+
+static void
+a16_float_from_float (guchar      *dest_data,
+                      const float *src,
+                      gsize        n)
+{
+  guint16 *dest = (guint16 *) dest_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float_to_half (&src[3], dest, 1);
+      dest ++;
+      src += 4;
+    }
+}
+
+static void
 r32g32b32_float_to_float (float        *dest,
                           const guchar *src_data,
                           gsize         n)
@@ -203,6 +234,37 @@ r32g32b32a32_float_from_float (guchar      *dest,
                                gsize        n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
+}
+
+static void
+a32_float_to_float (float        *dest,
+                    const guchar *src_data,
+                    gsize         n)
+{
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      dest[0] = src[0];
+      dest[1] = src[0];
+      dest[2] = src[0];
+      dest[3] = src[0];
+      src++;
+      dest += 4;
+    }
+}
+
+static void
+a32_float_from_float (guchar      *dest_data,
+                      const float *src,
+                      gsize        n)
+{
+  float *dest = (float *) dest_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      dest[0] = src[3];
+      dest ++;
+      src += 4;
+    }
 }
 
 #define PREMULTIPLY_FUNC(name, R1, G1, B1, A1, R2, G2, B2, A2) \
@@ -284,7 +346,7 @@ struct _GdkMemoryFormatDescription
 #  error "Define the right GL flags here"
 #endif
 
-static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
+static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
@@ -526,26 +588,49 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     g16_from_float,
   },
   [GDK_MEMORY_A8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
     1,
     G_ALIGNOF (guchar),
     GDK_MEMORY_U8,
     { 0, 0, 3, 0 },
-    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_RED } },
     a8_to_float,
     a8_from_float,
   },
   [GDK_MEMORY_A16] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
     2,
     G_ALIGNOF (guint16),
     GDK_MEMORY_U16,
     { 0, 0, 3, 0 },
-    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
+    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_RED } },
     a16_to_float,
     a16_from_float,
+  },
+  [GDK_MEMORY_A16_FLOAT] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    2,
+    G_ALIGNOF (guint16),
+    GDK_MEMORY_FLOAT16,
+    { 0, 0, 3, 0 },
+    { GL_R16F, GL_RED, GL_HALF_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
+    a16_float_to_float,
+    a16_float_from_float,
+  },
+  [GDK_MEMORY_A32_FLOAT] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    4,
+    G_ALIGNOF (float),
+    GDK_MEMORY_FLOAT32,
+    { 0, 0, 3, 0 },
+    { GL_R32F, GL_RED, GL_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
+    a32_float_to_float,
+    a32_float_from_float,
   }
 };
+
+/* if this fails, somebody forgot to add formats above */
+G_STATIC_ASSERT (G_N_ELEMENTS (memory_formats) == GDK_MEMORY_N_FORMATS);
 
 gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
@@ -616,6 +701,33 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
       default:
         g_assert_not_reached ();
         return GDK_MEMORY_U8;
+    }
+}
+
+/*
+ * gdk_memory_depth_get_alpha_format:
+ * @depth: the depth
+ *
+ * Gets the preferred format to use for rendering masks and other
+ * alpha-only content.
+ *
+ * Returns: the format
+ **/
+GdkMemoryFormat
+gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
+{
+  switch (depth)
+    {
+      case GDK_MEMORY_U8:
+        return GDK_MEMORY_A8;
+      case GDK_MEMORY_U16:
+        return GDK_MEMORY_A16;
+      case GDK_MEMORY_FLOAT16:
+        return GDK_MEMORY_A16_FLOAT;
+      case GDK_MEMORY_FLOAT32:
+        return GDK_MEMORY_A32_FLOAT;
+      default:
+        g_return_val_if_reached (GDK_MEMORY_A8);
     }
 }
 

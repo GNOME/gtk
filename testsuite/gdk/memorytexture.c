@@ -92,6 +92,7 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G16:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
       return 2;
 
     case GDK_MEMORY_R8G8B8:
@@ -107,6 +108,7 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     case GDK_MEMORY_A8B8G8R8:
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
     case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_A32_FLOAT:
       return 4;
 
     case GDK_MEMORY_R16G16B16:
@@ -165,11 +167,13 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_A16_FLOAT:
       return CHANNEL_FLOAT_16;
 
     case GDK_MEMORY_R32G32B32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       return CHANNEL_FLOAT_32;
 
     case GDK_MEMORY_N_FORMATS:
@@ -215,6 +219,8 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
 
     case GDK_MEMORY_A8:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       return 0;
 
     case GDK_MEMORY_N_FORMATS:
@@ -257,6 +263,8 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_G16A16:
     case GDK_MEMORY_A8:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       return TRUE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -279,6 +287,10 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       return TRUE;
 
     case GDK_MEMORY_R8G8B8:
@@ -297,8 +309,6 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G16:
     case GDK_MEMORY_G16A16:
-    case GDK_MEMORY_A8:
-    case GDK_MEMORY_A16:
       return FALSE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -341,6 +351,8 @@ gdk_memory_format_is_deep (GdkMemoryFormat format)
     case GDK_MEMORY_G16:
     case GDK_MEMORY_G16A16:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       return TRUE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -395,6 +407,7 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_A16_FLOAT:
       {
         guint i;
         for (i = 0; i < gdk_memory_format_bytes_per_pixel (format) / sizeof (guint16); i++)
@@ -410,6 +423,7 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_R32G32B32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_A32_FLOAT:
       {
         const float *f1 = (const float *) pixel1;
         const float *f2 = (const float *) pixel2;
@@ -731,6 +745,17 @@ texture_builder_set_pixel (TextureBuilder  *builder,
       {
         guint16 pixel = CLAMP (color->alpha * 65535.f, 0.f, 65535.f);
         memcpy (data, &pixel,  sizeof (guint16));
+      }
+      break;
+    case GDK_MEMORY_A16_FLOAT:
+      {
+        guint16 pixel = float_to_half (color->alpha);
+        memcpy (data, &pixel, sizeof (guint16));
+      }
+      break;
+    case GDK_MEMORY_A32_FLOAT:
+      {
+        memcpy (data, &color->alpha, sizeof (float));
       }
       break;
     case GDK_MEMORY_N_FORMATS:

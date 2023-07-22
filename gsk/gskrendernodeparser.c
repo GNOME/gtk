@@ -2931,9 +2931,11 @@ append_texture_param (Printer    *p,
     case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16A16_FLOAT:
+    case GDK_MEMORY_A16_FLOAT:
     case GDK_MEMORY_R32G32B32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
       bytes = gdk_texture_save_to_tiff_bytes (texture);
       g_string_append (p->str, "url(\"data:image/tiff;base64,");
       break;

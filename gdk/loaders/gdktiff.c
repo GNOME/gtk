@@ -259,6 +259,8 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_G16]                              = { GDK_MEMORY_G16,                              16, 1, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A8]                               = { GDK_MEMORY_G8A8,                              8, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A16]                              = { GDK_MEMORY_G16A16,                           16, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
+  [GDK_MEMORY_A16_FLOAT]                        = { GDK_MEMORY_R16G16B16A16_FLOAT,               16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_A32_FLOAT]                        = { GDK_MEMORY_R32G32B32A32_FLOAT,               32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
 };
 
 /* if this fails, somebody forgot to add formats above */

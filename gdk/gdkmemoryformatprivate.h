@@ -44,6 +44,7 @@ gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat    
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth              depth1,
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;
+GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth              depth) G_GNUC_CONST;
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gboolean                    gles,
                                                              guint                       gl_major,
