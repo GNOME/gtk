@@ -6885,16 +6885,13 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 
   priv = text_view->priv;
 
-  if (type == GTK_DELETE_CHARS)
+  /* If a selection exists, we operate on it first */
+  if (gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
+                                        priv->editable))
     {
-      /* Char delete deletes the selection, if one exists */
-      if (gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
-                                            priv->editable))
-        {
-          priv->need_im_reset = TRUE;
-          gtk_text_view_reset_im_context (text_view);
-          return;
-        }
+      priv->need_im_reset = TRUE;
+      gtk_text_view_reset_im_context (text_view);
+      return;
     }
 
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
