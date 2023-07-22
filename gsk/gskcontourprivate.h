@@ -58,6 +58,9 @@ void                    gsk_contour_print                       (const GskContou
                                                                  GString                *string);
 gboolean                gsk_contour_get_bounds                  (const GskContour       *self,
                                                                  graphene_rect_t        *bounds);
+gboolean                gsk_contour_get_stroke_bounds           (const GskContour       *self,
+                                                                 const GskStroke        *stroke,
+                                                                 graphene_rect_t        *bounds);
 gboolean                gsk_contour_foreach                     (const GskContour       *self,
                                                                  float                   tolerance,
                                                                  GskPathForeachFunc      func,
