@@ -164,7 +164,6 @@ gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
   gsk_vulkan_render_pass_begin_op (render,
                                    g_object_ref (better_image),
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                   &GRAPHENE_SIZE_INIT(width, height),
                                    VK_IMAGE_LAYOUT_UNDEFINED,
                                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
   gsk_vulkan_scissor_op (render, &(cairo_rectangle_int_t) { 0, 0, width, height });
@@ -184,6 +183,8 @@ gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
   gsk_vulkan_render_pass_end_op (render,
                                  better_image,
                                  VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  g_object_unref (better_image);
+
   return better_image;
 }
 
@@ -1302,31 +1303,27 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass       *self,
 void
 gsk_vulkan_render_pass_add (GskVulkanRenderPass   *self,
                             GskVulkanRender       *render,
-                            const graphene_vec2_t *scale,
-                            const graphene_rect_t *viewport,
+                            int                    width,
+                            int                    height,
                             cairo_rectangle_int_t *clip,
-                            GskRenderNode         *node)
+                            GskRenderNode         *node,
+                            const graphene_rect_t *viewport)
 {
   GskVulkanParseState state;
-  graphene_rect_t scaled_clip;
-  float scale_x, scale_y;
 
-  scale_x = 1 / graphene_vec2_get_x (scale);
-  scale_y = 1 / graphene_vec2_get_y (scale);
   state.scissor = *clip;
-  scaled_clip = GRAPHENE_RECT_INIT(clip->x, clip->y, clip->width, clip->height);
-  graphene_rect_scale (&scaled_clip, scale_x, scale_y, &scaled_clip);
-  gsk_vulkan_clip_init_empty (&state.clip, &scaled_clip);
+  gsk_vulkan_clip_init_empty (&state.clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
 
   state.modelview = NULL;
   graphene_matrix_init_ortho (&state.projection,
-                              0, viewport->size.width,
-                              0, viewport->size.height,
+                              0, width,
+                              0, height,
                               2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_vec2_init_from_vec2 (&state.scale, scale);
-  state.offset = GRAPHENE_POINT_INIT (-viewport->origin.x * scale_x,
-                                      -viewport->origin.y * scale_y);
+  graphene_vec2_init (&state.scale, width / viewport->size.width,
+                                    height / viewport->size.height);
+  state.offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
+                                      -viewport->origin.y);
 
   gsk_vulkan_render_pass_append_scissor (render, node, &state);
   gsk_vulkan_render_pass_append_push_constants (render, node, &state);

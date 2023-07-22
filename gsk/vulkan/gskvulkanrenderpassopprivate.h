@@ -8,7 +8,6 @@ G_BEGIN_DECLS
 void                    gsk_vulkan_render_pass_begin_op                 (GskVulkanRender                *render,
                                                                          GskVulkanImage                 *image,
                                                                          const cairo_rectangle_int_t    *area,
-                                                                         const graphene_size_t          *viewport_size,
                                                                          VkImageLayout                   initial_layout,
                                                                          VkImageLayout                   final_layout);
 void                    gsk_vulkan_render_pass_end_op                   (GskVulkanRender                *render,
