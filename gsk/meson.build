@@ -27,6 +27,7 @@ gsk_public_sources = files([
   'gskdiff.c',
   'gskglshader.c',
   'gskpath.c',
+  'gskpathdash.c',
   'gskpathbuilder.c',
   'gskpathmeasure.c',
   'gskpathpoint.c',
