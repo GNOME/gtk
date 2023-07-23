@@ -30,7 +30,6 @@ typedef struct {
   GskVulkanImage *image;
   int width, height;
   int x, y, y0;
-  int num_glyphs;
   guint old_pixels;
 } Atlas;
 
@@ -70,7 +69,6 @@ create_atlas (GskVulkanGlyphCache *cache)
   atlas->y = 0;
   atlas->x = 0;
   atlas->image = NULL;
-  atlas->num_glyphs = 0;
 
   atlas->image = gsk_vulkan_image_new_for_atlas (cache->vulkan, atlas->width, atlas->height);
 
@@ -213,8 +211,6 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   atlas->x = atlas->x + width_with_padding;
   atlas->y = MAX (atlas->y, atlas->y0 + height_with_padding);
 
-  atlas->num_glyphs++;
-
   gsk_vulkan_upload_glyph_op (render,
                               atlas->image,
                               &(cairo_rectangle_int_t) {
@@ -239,9 +235,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
       for (i = 0; i < cache->atlases->len; i++)
         {
           atlas = g_ptr_array_index (cache->atlases, i);
-          g_print ("\tAtlas %d (%dx%d): %d glyphs, %.2g%% old pixels, filled to %d, %d / %d\n",
+          g_print ("\tAtlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d\n",
                    i, atlas->width, atlas->height,
-                   atlas->num_glyphs,
                    100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height),
                    atlas->x, atlas->y0, atlas->y);
         }
