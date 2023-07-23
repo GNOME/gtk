@@ -27,9 +27,7 @@
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl3.h>
-#import <AppKit/AppKit.h>
+#import <epoxy/gl.h>
 
 G_BEGIN_DECLS
 
