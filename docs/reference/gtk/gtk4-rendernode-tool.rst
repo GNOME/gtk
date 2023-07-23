@@ -14,7 +14,7 @@ SYNOPSIS
 |
 |   **gtk4-rendernode-tool** info [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** show [OPTIONS...] <FILE>
-|   **gtk4-rendernode-tool** render [OPTIONS...] <FILE>
+|   **gtk4-rendernode-tool** render [OPTIONS...] <FILE> [<FILE>]
 
 DESCRIPTION
 -----------
@@ -43,9 +43,5 @@ The name of the file to write can be specified as a second FILE argument.
 
 ``--renderer=RENDERER``
 
-  Use the given renderer. This option accepts the same values as the
-  ``GSK_RENDERER`` environment variable.
-
-``--force``
-
-  Overwrite an existing file.
+  Use the given renderer. Use ``--renderer=help`` to get a information
+  about poassible values for the ``RENDERER``.
