@@ -26,6 +26,7 @@
 
 #define DESCRIPTOR_POOL_MAXITEMS 50000
 #define VERTEX_BUFFER_SIZE_STEP 128 * 1024 /* 128kB */
+#define STORAGE_BUFFER_SIZE_STEP 32 * 1024
 
 #define GDK_ARRAY_NAME gsk_descriptor_image_infos
 #define GDK_ARRAY_TYPE_NAME GskDescriptorImageInfos
@@ -726,11 +727,7 @@ gsk_vulkan_render_ensure_storage_buffer (GskVulkanRender *self)
     return;
 
   if (self->storage_buffer == NULL)
-    {
-      self->storage_buffer = gsk_vulkan_buffer_new_storage (self->vulkan,
-                                                            /* random */
-                                                            sizeof (float) * 64 * 1024 * 1024);
-    }
+    self->storage_buffer = gsk_vulkan_buffer_new_storage (self->vulkan, STORAGE_BUFFER_SIZE_STEP);
 
   self->storage_buffer_memory = gsk_vulkan_buffer_get_data (self->storage_buffer);
 
@@ -780,11 +777,21 @@ gsk_vulkan_render_get_buffer_memory (GskVulkanRender *self,
   gsk_vulkan_render_ensure_storage_buffer (self);
 
   self->storage_buffer_used = round_up (self->storage_buffer_used, alignment);
+  if (self->storage_buffer_used + size > gsk_vulkan_buffer_get_size (self->storage_buffer))
+    {
+      gsize larger_size = 1 << g_bit_storage (self->storage_buffer_used + size - 1);
+      GskVulkanBuffer *larger_buffer = gsk_vulkan_buffer_new_storage (self->vulkan, larger_size);
+      guchar *larger_memory = gsk_vulkan_buffer_get_data (larger_buffer);
+      memcpy (larger_memory, self->storage_buffer_memory, self->storage_buffer_used);
+      gsk_vulkan_buffer_free (self->storage_buffer);
+      self->storage_buffer = larger_buffer;
+      self->storage_buffer_memory = larger_memory;
+      gsk_descriptor_buffer_infos_index (&self->descriptor_buffers, 0)->buffer = gsk_vulkan_buffer_get_buffer (larger_buffer);
+    }
+
   result = self->storage_buffer_memory + self->storage_buffer_used;
   *out_offset = self->storage_buffer_used / sizeof (float);
-
   self->storage_buffer_used += size;
-  g_assert (self->storage_buffer_used <= gsk_vulkan_buffer_get_size (self->storage_buffer));
 
   return result;
 }
