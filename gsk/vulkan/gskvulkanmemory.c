@@ -171,6 +171,7 @@ struct _GskVulkanBuddyAllocator
 
   gsize block_size_slot;
 
+  GskVulkanAllocation cache;
   GskVulkanAllocationList free_lists[N_SUBDIVISIONS];
 };
 
@@ -179,6 +180,9 @@ gsk_vulkan_buddy_allocator_free_allocator (GskVulkanAllocator *allocator)
 {
   GskVulkanBuddyAllocator *self = (GskVulkanBuddyAllocator *) allocator;
   gsize i;
+
+  if (self->cache.vk_memory)
+    gsk_vulkan_free (self->allocator, &self->cache);
 
   for (i = 0; i < N_SUBDIVISIONS; i++)
     {
@@ -226,10 +230,18 @@ gsk_vulkan_buddy_allocator_alloc (GskVulkanAllocator  *allocator,
     }
   if (i < 0)
     {
-      /* We force alignment to our size, so that we can use offset
-       * to find the buddy allocation.
-       */
-      gsk_vulkan_alloc (self->allocator, 1 << self->block_size_slot, 1 << self->block_size_slot, alloc);
+      if (self->cache.vk_memory)
+        {
+          *alloc = self->cache;
+          self->cache.vk_memory = NULL;
+        }
+      else
+        {
+          /* We force alignment to our size, so that we can use offset
+           * to find the buddy allocation.
+           */
+          gsk_vulkan_alloc (self->allocator, 1 << self->block_size_slot, 1 << self->block_size_slot, alloc);
+        }
     }
   else
     {
@@ -283,7 +295,10 @@ restart:
           alloc->size <<= 1;
           if (slot == 0)
             {
-              gsk_vulkan_free (self->allocator, alloc);
+              if (self->cache.vk_memory == NULL)
+                self->cache = *alloc;
+              else
+                gsk_vulkan_free (self->allocator, alloc);
               return;
             }
           else
