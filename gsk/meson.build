@@ -130,6 +130,7 @@ if have_vulkan
     'vulkan/gskvulkancommandpool.c',
     'vulkan/gskvulkanconvertop.c',
     'vulkan/gskvulkancrossfadeop.c',
+    'vulkan/gskvulkandevice.c',
     'vulkan/gskvulkandownloadop.c',
     'vulkan/gskvulkanfillop.c',
     'vulkan/gskvulkanglyphcache.c',

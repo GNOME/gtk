@@ -6,7 +6,7 @@
 #include "gskprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gskvulkanbufferprivate.h"
+#include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanprivate.h"
 #include "gskvulkanrenderprivate.h"
@@ -52,6 +52,7 @@ struct _GskVulkanRenderer
   GskRenderer parent_instance;
 
   GdkVulkanContext *vulkan;
+  GskVulkanDevice *device;
 
   guint n_targets;
   GskVulkanImage **targets;
@@ -217,6 +218,13 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
   if (self->vulkan == NULL)
     return FALSE;
 
+  self->device = gsk_vulkan_device_get_for_display (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self->vulkan)), error);
+  if (self->device == NULL)
+    {
+      g_clear_object (&self->vulkan);
+      return FALSE;
+    }
+
   g_signal_connect (self->vulkan,
                     "images-updated",
                     G_CALLBACK (gsk_vulkan_renderer_update_images_cb),
@@ -236,6 +244,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   guint i;
 
   g_clear_object (&self->glyph_cache);
+  g_clear_object (&self->device);
 
   for (l = self->textures; l; l = l->next)
     {
