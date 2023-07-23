@@ -31,7 +31,8 @@ struct _GskVulkanImage
   VkImageLayout vk_image_layout;
   VkAccessFlags vk_access;
 
-  GskVulkanMemory *memory;
+  GskVulkanAllocator *allocator;
+  GskVulkanAllocation allocation;
 };
 
 G_DEFINE_TYPE (GskVulkanImage, gsk_vulkan_image, G_TYPE_OBJECT)
@@ -547,15 +548,19 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
                                 self->vk_image,
                                 &requirements);
 
-  self->memory = gsk_vulkan_memory_new (context,
-                                        requirements.memoryTypeBits,
-                                        memory,
-                                        requirements.size);
+  self->allocator = gsk_vulkan_find_allocator (context,
+                                               requirements.memoryTypeBits,
+                                               0,
+                                               GSK_VULKAN_MEMORY_MAPPABLE);
+  gsk_vulkan_alloc (self->allocator,
+                    requirements.size,
+                    requirements.alignment,
+                    &self->allocation);
 
   GSK_VK_CHECK (vkBindImageMemory, gdk_vulkan_context_get_device (context),
                                    self->vk_image,
-                                   gsk_vulkan_memory_get_device_memory (self->memory),
-                                   0);
+                                   self->allocation.vk_memory,
+                                   self->allocation.offset);
 
   gsk_vulkan_image_create_view (self, vk_format);
 
@@ -599,22 +604,17 @@ gsk_vulkan_image_can_map (GskVulkanImage *self)
       self->vk_image_layout != VK_IMAGE_LAYOUT_GENERAL)
     return FALSE;
 
-  return gsk_vulkan_memory_can_map (self->memory, TRUE);
+  return self->allocation.map != NULL;
 }
 
 guchar *
-gsk_vulkan_image_try_map (GskVulkanImage *self,
-                          gsize          *out_stride)
+gsk_vulkan_image_get_data (GskVulkanImage *self,
+                           gsize          *out_stride)
 {
   VkImageSubresource image_res;
   VkSubresourceLayout image_layout;
-  guchar *result;
 
   if (!gsk_vulkan_image_can_map (self))
-    return NULL;
-
-  result = gsk_vulkan_memory_map (self->memory);
-  if (result == NULL)
     return NULL;
 
   image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -626,13 +626,7 @@ gsk_vulkan_image_try_map (GskVulkanImage *self,
 
   *out_stride = image_layout.rowPitch;
 
-  return result + image_layout.offset;
-}
-
-void
-gsk_vulkan_image_unmap (GskVulkanImage *self)
-{
-  gsk_vulkan_memory_unmap (self->memory);
+  return self->allocation.map + image_layout.offset;
 }
 
 GskVulkanImage *
@@ -732,10 +726,11 @@ gsk_vulkan_image_finalize (GObject *object)
 
   /* memory is NULL for for_swapchain() images, where we don't own
    * the VkImage */
-  if (self->memory)
-    vkDestroyImage (device, self->vk_image, NULL);
-
-  g_clear_pointer (&self->memory, gsk_vulkan_memory_free);
+  if (self->allocator)
+    {
+      vkDestroyImage (device, self->vk_image, NULL);
+      gsk_vulkan_free (self->allocator, &self->allocation);
+    }
 
   g_object_unref (self->vulkan);
 

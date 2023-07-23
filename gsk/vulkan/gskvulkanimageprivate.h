@@ -36,9 +36,8 @@ GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GdkVulk
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
-guchar *                gsk_vulkan_image_try_map                        (GskVulkanImage         *self,
+guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
                                                                          gsize                  *out_stride);
-void                    gsk_vulkan_image_unmap                          (GskVulkanImage         *self);
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);
 gsize                   gsk_vulkan_image_get_height                     (GskVulkanImage         *self);

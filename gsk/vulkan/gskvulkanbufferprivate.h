@@ -24,9 +24,7 @@ void                    gsk_vulkan_buffer_free                          (GskVulk
 
 VkBuffer                gsk_vulkan_buffer_get_buffer                    (GskVulkanBuffer        *self);
 gsize                   gsk_vulkan_buffer_get_size                      (GskVulkanBuffer        *self);
-
-guchar *                gsk_vulkan_buffer_map                           (GskVulkanBuffer        *self);
-void                    gsk_vulkan_buffer_unmap                         (GskVulkanBuffer        *self);
+guchar *                gsk_vulkan_buffer_get_data                      (GskVulkanBuffer        *self);
 
 G_END_DECLS
 

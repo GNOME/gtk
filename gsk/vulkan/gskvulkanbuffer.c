@@ -9,11 +9,10 @@ struct _GskVulkanBuffer
 {
   GdkVulkanContext *vulkan;
 
-  gsize size;
-
   VkBuffer vk_buffer;
 
-  GskVulkanMemory *memory;
+  GskVulkanAllocator *allocator;
+  GskVulkanAllocation allocation;
 };
 
 static GskVulkanBuffer *
@@ -27,7 +26,6 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
   self = g_new0 (GskVulkanBuffer, 1);
 
   self->vulkan = g_object_ref (context);
-  self->size = size;
 
   GSK_VK_CHECK (vkCreateBuffer, gdk_vulkan_context_get_device (context),
                                 &(VkBufferCreateInfo) {
@@ -43,16 +41,21 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
   vkGetBufferMemoryRequirements (gdk_vulkan_context_get_device (context),
                                  self->vk_buffer,
                                  &requirements);
-
-  self->memory = gsk_vulkan_memory_new (context,
-                                        requirements.memoryTypeBits,
-                                        GSK_VULKAN_MEMORY_MAPPABLE,
-                                        requirements.size);
+  
+  self->allocator = gsk_vulkan_find_allocator (context,
+                                               requirements.memoryTypeBits,
+                                               GSK_VULKAN_MEMORY_MAPPABLE,
+                                               GSK_VULKAN_MEMORY_MAPPABLE);
+  gsk_vulkan_alloc (self->allocator,
+                    requirements.size,
+                    requirements.alignment,
+                    &self->allocation);
 
   GSK_VK_CHECK (vkBindBufferMemory, gdk_vulkan_context_get_device (context),
                                     self->vk_buffer,
-                                    gsk_vulkan_memory_get_device_memory (self->memory),
-                                    0);
+                                    self->allocation.vk_memory,
+                                    self->allocation.offset);
+
   return self;
 }
 
@@ -90,7 +93,7 @@ gsk_vulkan_buffer_free (GskVulkanBuffer *self)
                    self->vk_buffer,
                    NULL);
 
-  gsk_vulkan_memory_free (self->memory);
+  gsk_vulkan_free (self->allocator, &self->allocation);
 
   g_object_unref (self->vulkan);
 
@@ -106,17 +109,12 @@ gsk_vulkan_buffer_get_buffer (GskVulkanBuffer *self)
 gsize
 gsk_vulkan_buffer_get_size (GskVulkanBuffer *self)
 {
-  return self->size;
+  return self->allocation.size;
 }
 
 guchar *
-gsk_vulkan_buffer_map (GskVulkanBuffer *self)
+gsk_vulkan_buffer_get_data (GskVulkanBuffer *self)
 {
-  return gsk_vulkan_memory_map (self->memory);
+  return self->allocation.map;
 }
 
-void
-gsk_vulkan_buffer_unmap (GskVulkanBuffer *self)
-{
-  gsk_vulkan_memory_unmap (self->memory);
-}

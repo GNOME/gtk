@@ -115,7 +115,7 @@ gsk_vulkan_download_op_finish (GskVulkanOp *op)
   guchar *data;
   gsize stride;
 
-  data = gsk_vulkan_buffer_map (self->buffer);
+  data = gsk_vulkan_buffer_get_data (self->buffer);
   stride = gsk_vulkan_image_get_width (self->image) *
            gdk_memory_format_bytes_per_pixel (gsk_vulkan_image_get_format (self->image));
   self->func (self->user_data, 
@@ -124,7 +124,6 @@ gsk_vulkan_download_op_finish (GskVulkanOp *op)
               gsk_vulkan_image_get_width (self->image),
               gsk_vulkan_image_get_height (self->image),
               stride);
-  gsk_vulkan_buffer_unmap (self->buffer);
 
   g_object_unref (self->image);
   g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);

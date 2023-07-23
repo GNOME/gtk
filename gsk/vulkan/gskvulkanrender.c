@@ -732,7 +732,7 @@ gsk_vulkan_render_ensure_storage_buffer (GskVulkanRender *self)
                                                             sizeof (float) * 64 * 1024 * 1024);
     }
 
-  self->storage_buffer_memory = gsk_vulkan_buffer_map (self->storage_buffer);
+  self->storage_buffer_memory = gsk_vulkan_buffer_get_data (self->storage_buffer);
 
   if (gsk_vulkan_render_get_buffer_descriptor (self, self->storage_buffer) != 0)
     {
@@ -806,7 +806,6 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
   
   if (self->storage_buffer_memory)
     {
-      gsk_vulkan_buffer_unmap (self->storage_buffer);
       self->storage_buffer_memory = NULL;
       self->storage_buffer_used = 0;
     }
@@ -881,12 +880,11 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
   if (self->vertex_buffer == NULL)
     self->vertex_buffer = gsk_vulkan_buffer_new (self->vulkan, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
 
-  data = gsk_vulkan_buffer_map (self->vertex_buffer);
+  data = gsk_vulkan_buffer_get_data (self->vertex_buffer);
   for (op = self->first_op; op; op = op->next)
     {
       gsk_vulkan_op_collect_vertex_data (op, data);
     }
-  gsk_vulkan_buffer_unmap (self->vertex_buffer);
 }
 
 static void

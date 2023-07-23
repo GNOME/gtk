@@ -41,11 +41,9 @@ gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
   *buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_context (render),
                                        area->height * stride,
                                        GSK_VULKAN_WRITE);
-  data = gsk_vulkan_buffer_map (*buffer);
+  data = gsk_vulkan_buffer_get_data (*buffer);
 
   draw_func (op, data, stride);
-
-  gsk_vulkan_buffer_unmap (*buffer);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_HOST_BIT,
@@ -112,12 +110,11 @@ gsk_vulkan_upload_op_command (GskVulkanOp      *op,
   gsize stride;
   guchar *data;
 
-  data = gsk_vulkan_image_try_map (image, &stride);
+  data = gsk_vulkan_image_get_data (image, &stride);
   if (data)
     {
       draw_func (op, data, stride);
 
-      gsk_vulkan_image_unmap (image);
       *buffer = NULL;
 
       return op->next;

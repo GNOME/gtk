@@ -5,17 +5,7 @@
 #include "gskvulkanprivate.h"
 
 
-struct _GskVulkanMemory
-{
-  GdkVulkanContext *vulkan;
-
-  gsize size;
-
-  GskVulkanAllocator *allocator;
-  GskVulkanAllocation allocation;
-};
-
-static GskVulkanAllocator *
+GskVulkanAllocator *
 gsk_vulkan_allocator_get (GdkVulkanContext   *context,
                           gsize               index,
                           const VkMemoryType *type)
@@ -41,19 +31,16 @@ gsk_vulkan_allocator_get (GdkVulkanContext   *context,
   return allocators[index];
 }
 
-GskVulkanMemory *
-gsk_vulkan_memory_new (GdkVulkanContext      *context,
-                       uint32_t               allowed_types,
-                       VkMemoryPropertyFlags  flags,
-                       gsize                  size)
+/* following code found in
+ * https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkPhysicalDeviceMemoryProperties.html */
+GskVulkanAllocator *
+gsk_vulkan_find_allocator (GdkVulkanContext      *context,
+                           uint32_t               allowed_types,
+                           VkMemoryPropertyFlags  required_flags,
+                           VkMemoryPropertyFlags  desired_flags)
 {
   VkPhysicalDeviceMemoryProperties properties;
-  GskVulkanMemory *self;
-  uint32_t i;
-
-  self = g_new0 (GskVulkanMemory, 1);
-
-  self->size = size;
+  uint32_t i, found;
 
   vkGetPhysicalDeviceMemoryProperties (gdk_vulkan_context_get_physical_device (context),
                                        &properties);
@@ -63,48 +50,18 @@ gsk_vulkan_memory_new (GdkVulkanContext      *context,
       if (!(allowed_types & (1 << i)))
         continue;
 
-      if ((properties.memoryTypes[i].propertyFlags & flags) == flags)
+      if ((properties.memoryTypes[i].propertyFlags & required_flags) != required_flags)
+        continue;
+
+      found = MIN (i, found);
+
+      if ((properties.memoryTypes[i].propertyFlags & desired_flags) == desired_flags)
         break;
   }
 
-  g_assert (i < properties.memoryTypeCount);
+  g_assert (found < properties.memoryTypeCount);
 
-  self->allocator = gsk_vulkan_allocator_get (context, i, &properties.memoryTypes[i]);
-  gsk_vulkan_alloc (self->allocator, size, &self->allocation);
-
-  return self;
-}
-
-void
-gsk_vulkan_memory_free (GskVulkanMemory *self)
-{
-  gsk_vulkan_free (self->allocator, &self->allocation);
-
-  g_free (self);
-}
-
-VkDeviceMemory
-gsk_vulkan_memory_get_device_memory (GskVulkanMemory *self)
-{
-  return self->allocation.vk_memory;
-}
-
-gboolean
-gsk_vulkan_memory_can_map (GskVulkanMemory *self,
-                           gboolean         fast)
-{
-  return self->allocation.map != NULL;
-}
-
-guchar *
-gsk_vulkan_memory_map (GskVulkanMemory *self)
-{
-  return self->allocation.map;
-}
-
-void
-gsk_vulkan_memory_unmap (GskVulkanMemory *self)
-{
+  return gsk_vulkan_allocator_get (context, i, &properties.memoryTypes[i]);
 }
 
 /* {{{ direct allocator ***/
@@ -129,6 +86,7 @@ gsk_vulkan_direct_allocator_free_allocator (GskVulkanAllocator *allocator)
 static void
 gsk_vulkan_direct_allocator_alloc (GskVulkanAllocator  *allocator,
                                    VkDeviceSize         size,
+                                   VkDeviceSize         alignment,
                                    GskVulkanAllocation *alloc)
 {
   GskVulkanDirectAllocator *self = (GskVulkanDirectAllocator *) allocator;
@@ -236,11 +194,12 @@ gsk_vulkan_stats_allocator_free_allocator (GskVulkanAllocator *allocator)
 static void
 gsk_vulkan_stats_allocator_alloc (GskVulkanAllocator  *allocator,
                                   VkDeviceSize         size,
+                                  VkDeviceSize         align,
                                   GskVulkanAllocation *alloc)
 {
   GskVulkanStatsAllocator *self = (GskVulkanStatsAllocator *) allocator;
 
-  gsk_vulkan_alloc (self->allocator, size, alloc);
+  gsk_vulkan_alloc (self->allocator, size, align, alloc);
 
   self->n_alloc++;
   self->n_bytes_requested += size;
