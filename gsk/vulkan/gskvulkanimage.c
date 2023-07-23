@@ -551,7 +551,7 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
   self->allocator = gsk_vulkan_find_allocator (context,
                                                requirements.memoryTypeBits,
                                                0,
-                                               GSK_VULKAN_MEMORY_MAPPABLE);
+                                               tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
@@ -698,7 +698,7 @@ gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
                                width,
                                height,
                                0,
-                               VK_IMAGE_TILING_LINEAR,
+                               VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT |
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
