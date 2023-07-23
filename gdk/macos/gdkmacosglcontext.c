@@ -21,7 +21,6 @@
 
 #include "gdkconfig.h"
 
-#include <OpenGL/gl3.h>
 #include <OpenGL/CGLIOSurface.h>
 #include <QuartzCore/QuartzCore.h>
 
@@ -499,7 +498,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   gdk_macos_gl_context_allocate (self);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, prefers_high_depth, region);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, depth, region);
 
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, self->fbo));
