@@ -70,7 +70,9 @@ subdir('tools')
 subdir('reftests')
 if build_gir
   subdir('introspection')
+
+  if wayland_enabled
+    subdir('headless')
+  endif
 endif
-if wayland_enabled
-  subdir('headless')
-endif
+
