@@ -50,6 +50,7 @@ struct _GskVulkanRender
 {
   GskRenderer *renderer;
   GdkVulkanContext *vulkan;
+  GskVulkanDevice *device;
 
   graphene_rect_t viewport;
   cairo_region_t *clip;
@@ -194,22 +195,24 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
 
 GskVulkanRender *
 gsk_vulkan_render_new (GskRenderer      *renderer,
-                       GdkVulkanContext *context)
+                       GdkVulkanContext *context,
+                       GskVulkanDevice  *device)
 {
   GskVulkanRender *self;
-  VkDevice device;
+  VkDevice vk_device;
 
   self = g_new0 (GskVulkanRender, 1);
 
   self->vulkan = context;
+  self->device = device;
   self->renderer = renderer;
   gsk_descriptor_image_infos_init (&self->descriptor_images);
   gsk_descriptor_buffer_infos_init (&self->descriptor_buffers);
 
-  device = gdk_vulkan_context_get_device (self->vulkan);
+  vk_device = gdk_vulkan_context_get_device (self->vulkan);
 
   self->command_pool = gsk_vulkan_command_pool_new (self->vulkan);
-  GSK_VK_CHECK (vkCreateFence, device,
+  GSK_VK_CHECK (vkCreateFence, vk_device,
                                &(VkFenceCreateInfo) {
                                    .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                                    .flags = VK_FENCE_CREATE_SIGNALED_BIT
@@ -217,7 +220,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                NULL,
                                &self->fence);
 
-  GSK_VK_CHECK (vkCreateDescriptorPool, device,
+  GSK_VK_CHECK (vkCreateDescriptorPool, vk_device,
                                         &(VkDescriptorPoolCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                                             .flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
@@ -237,7 +240,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                         NULL,
                                         &self->descriptor_pool);
 
-  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, vk_device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                                                  .bindingCount = 1,
@@ -263,7 +266,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                              NULL,
                                              &self->descriptor_set_layouts[0]);
 
-  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, vk_device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                                                  .bindingCount = 1,
@@ -289,7 +292,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                              NULL,
                                              &self->descriptor_set_layouts[1]);
 
-  GSK_VK_CHECK (vkCreatePipelineLayout, device,
+  GSK_VK_CHECK (vkCreatePipelineLayout, vk_device,
                                         &(VkPipelineLayoutCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                                             .setLayoutCount = G_N_ELEMENTS (self->descriptor_set_layouts),
@@ -300,7 +303,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                         NULL,
                                         &self->pipeline_layout);
 
-  GSK_VK_CHECK (vkCreateSampler, device,
+  GSK_VK_CHECK (vkCreateSampler, vk_device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = VK_FILTER_LINEAR,
@@ -315,7 +318,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                  NULL,
                                  &self->samplers[GSK_VULKAN_SAMPLER_DEFAULT]);
 
-  GSK_VK_CHECK (vkCreateSampler, device,
+  GSK_VK_CHECK (vkCreateSampler, vk_device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = VK_FILTER_LINEAR,
@@ -330,7 +333,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                  NULL,
                                  &self->samplers[GSK_VULKAN_SAMPLER_REPEAT]);
   
-  GSK_VK_CHECK (vkCreateSampler, device,
+  GSK_VK_CHECK (vkCreateSampler, vk_device,
                                  &(VkSamplerCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = VK_FILTER_NEAREST,
@@ -727,7 +730,7 @@ gsk_vulkan_render_ensure_storage_buffer (GskVulkanRender *self)
     return;
 
   if (self->storage_buffer == NULL)
-    self->storage_buffer = gsk_vulkan_buffer_new_storage (self->vulkan, STORAGE_BUFFER_SIZE_STEP);
+    self->storage_buffer = gsk_vulkan_buffer_new_storage (self->device, STORAGE_BUFFER_SIZE_STEP);
 
   self->storage_buffer_memory = gsk_vulkan_buffer_get_data (self->storage_buffer);
 
@@ -780,7 +783,7 @@ gsk_vulkan_render_get_buffer_memory (GskVulkanRender *self,
   if (self->storage_buffer_used + size > gsk_vulkan_buffer_get_size (self->storage_buffer))
     {
       gsize larger_size = 1 << g_bit_storage (self->storage_buffer_used + size - 1);
-      GskVulkanBuffer *larger_buffer = gsk_vulkan_buffer_new_storage (self->vulkan, larger_size);
+      GskVulkanBuffer *larger_buffer = gsk_vulkan_buffer_new_storage (self->device, larger_size);
       guchar *larger_memory = gsk_vulkan_buffer_get_data (larger_buffer);
       memcpy (larger_memory, self->storage_buffer_memory, self->storage_buffer_used);
       gsk_vulkan_buffer_free (self->storage_buffer);
@@ -885,7 +888,7 @@ gsk_vulkan_render_collect_vertex_buffer (GskVulkanRender *self)
     g_clear_pointer (&self->vertex_buffer, gsk_vulkan_buffer_free);
 
   if (self->vertex_buffer == NULL)
-    self->vertex_buffer = gsk_vulkan_buffer_new (self->vulkan, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
+    self->vertex_buffer = gsk_vulkan_buffer_new (self->device, round_up (n_bytes, VERTEX_BUFFER_SIZE_STEP));
 
   data = gsk_vulkan_buffer_get_data (self->vertex_buffer);
   for (op = self->first_op; op; op = op->next)
@@ -1099,6 +1102,12 @@ GdkVulkanContext *
 gsk_vulkan_render_get_context (GskVulkanRender *self)
 {
   return self->vulkan;
+}
+
+GskVulkanDevice *
+gsk_vulkan_render_get_device (GskVulkanRender *self)
+{
+  return self->device;
 }
 
 gpointer

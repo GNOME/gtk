@@ -7,7 +7,7 @@
 
 struct _GskVulkanBuffer
 {
-  GdkVulkanContext *vulkan;
+  GskVulkanDevice *device;
 
   VkBuffer vk_buffer;
 
@@ -16,7 +16,7 @@ struct _GskVulkanBuffer
 };
 
 static GskVulkanBuffer *
-gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
+gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
                                 gsize              size,
                                 VkBufferUsageFlags usage)
 {
@@ -25,9 +25,9 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
 
   self = g_new0 (GskVulkanBuffer, 1);
 
-  self->vulkan = g_object_ref (context);
+  self->device = g_object_ref (device);
 
-  GSK_VK_CHECK (vkCreateBuffer, gdk_vulkan_context_get_device (context),
+  GSK_VK_CHECK (vkCreateBuffer, gsk_vulkan_device_get_vk_device (device),
                                 &(VkBufferCreateInfo) {
                                     .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
                                     .size = size,
@@ -38,20 +38,20 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
                                 NULL,
                                 &self->vk_buffer);
 
-  vkGetBufferMemoryRequirements (gdk_vulkan_context_get_device (context),
+  vkGetBufferMemoryRequirements (gsk_vulkan_device_get_vk_device (device),
                                  self->vk_buffer,
                                  &requirements);
   
-  self->allocator = gsk_vulkan_find_allocator (context,
-                                               requirements.memoryTypeBits,
-                                               GSK_VULKAN_MEMORY_MAPPABLE,
-                                               GSK_VULKAN_MEMORY_MAPPABLE);
+  self->allocator = gsk_vulkan_device_find_allocator (device,
+                                                      requirements.memoryTypeBits,
+                                                      GSK_VULKAN_MEMORY_MAPPABLE,
+                                                      GSK_VULKAN_MEMORY_MAPPABLE);
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
                     &self->allocation);
 
-  GSK_VK_CHECK (vkBindBufferMemory, gdk_vulkan_context_get_device (context),
+  GSK_VK_CHECK (vkBindBufferMemory, gsk_vulkan_device_get_vk_device (device),
                                     self->vk_buffer,
                                     self->allocation.vk_memory,
                                     self->allocation.offset);
@@ -60,27 +60,27 @@ gsk_vulkan_buffer_new_internal (GdkVulkanContext  *context,
 }
 
 GskVulkanBuffer *
-gsk_vulkan_buffer_new (GdkVulkanContext  *context,
-                       gsize              size)
+gsk_vulkan_buffer_new (GskVulkanDevice *device,
+                       gsize            size)
 {
-  return gsk_vulkan_buffer_new_internal (context, size,
+  return gsk_vulkan_buffer_new_internal (device, size,
                                          VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
                                          | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
 }
 
 GskVulkanBuffer *
-gsk_vulkan_buffer_new_storage (GdkVulkanContext  *context,
-                               gsize              size)
+gsk_vulkan_buffer_new_storage (GskVulkanDevice *device,
+                               gsize            size)
 {
-  return gsk_vulkan_buffer_new_internal (context, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  return gsk_vulkan_buffer_new_internal (device, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
 GskVulkanBuffer *
-gsk_vulkan_buffer_new_map (GdkVulkanContext  *context,
-                           gsize              size,
-                           GskVulkanMapMode   mode)
+gsk_vulkan_buffer_new_map (GskVulkanDevice  *device,
+                           gsize             size,
+                           GskVulkanMapMode  mode)
 {
-  return gsk_vulkan_buffer_new_internal (context,
+  return gsk_vulkan_buffer_new_internal (device,
                                          size,
                                          (mode & GSK_VULKAN_READ ? VK_BUFFER_USAGE_TRANSFER_DST_BIT : 0) |
                                          (mode & GSK_VULKAN_WRITE ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0));
@@ -89,13 +89,13 @@ gsk_vulkan_buffer_new_map (GdkVulkanContext  *context,
 void
 gsk_vulkan_buffer_free (GskVulkanBuffer *self)
 {
-  vkDestroyBuffer (gdk_vulkan_context_get_device (self->vulkan),
+  vkDestroyBuffer (gsk_vulkan_device_get_vk_device (self->device),
                    self->vk_buffer,
                    NULL);
 
   gsk_vulkan_free (self->allocator, &self->allocation);
 
-  g_object_unref (self->vulkan);
+  g_object_unref (self->device);
 
   g_free (self);
 }

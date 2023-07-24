@@ -159,7 +159,7 @@ gsk_vulkan_render_pass_upload_texture (GskVulkanRender *render,
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-  better_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_context (render),
+  better_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_device (render),
                                                      gdk_texture_get_format (texture),
                                                      width, height);
   gsk_vulkan_render_pass_begin_op (render,
@@ -1255,7 +1255,7 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
 
   width = ceil (graphene_vec2_get_x (&state->scale) * clipped.size.width);
   height = ceil (graphene_vec2_get_y (&state->scale) * clipped.size.height);
-  mask_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_context (render),
+  mask_image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_device (render),
                                                    gdk_memory_depth_get_alpha_format (gsk_render_node_get_preferred_depth (child)),
                                                    width, height);
 

@@ -38,7 +38,7 @@ gsk_vulkan_upload_op_command_with_area (GskVulkanOp                 *op,
   guchar *data;
 
   stride = area->width * gdk_memory_format_bytes_per_pixel (gsk_vulkan_image_get_format (image));
-  *buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_context (render),
+  *buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_device (render),
                                        area->height * stride,
                                        GSK_VULKAN_WRITE);
   data = gsk_vulkan_buffer_get_data (*buffer);
@@ -218,7 +218,7 @@ gsk_vulkan_upload_texture_op (GskVulkanRender  *render,
   self = (GskVulkanUploadTextureOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_TEXTURE_OP_CLASS);
 
   self->texture = g_object_ref (texture);
-  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_context (render),
+  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_device (render),
                                                  gdk_texture_get_format (texture),
                                                  gdk_texture_get_width (texture),
                                                  gdk_texture_get_height (texture));
@@ -335,7 +335,7 @@ gsk_vulkan_upload_cairo_op (GskVulkanRender       *render,
   self = (GskVulkanUploadCairoOp *) gsk_vulkan_op_alloc (render, &GSK_VULKAN_UPLOAD_CAIRO_OP_CLASS);
 
   self->node = gsk_render_node_ref (node);
-  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_context (render),
+  self->image = gsk_vulkan_image_new_for_upload (gsk_vulkan_render_get_device (render),
                                                  GDK_MEMORY_DEFAULT,
                                                  ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                  ceil (graphene_vec2_get_y (scale) * viewport->size.height));

@@ -31,7 +31,7 @@ typedef struct
   guint64 timestamp;
 } GskVulkanCachedGlyph;
 
-GskVulkanGlyphCache  *gsk_vulkan_glyph_cache_new            (GdkVulkanContext    *vulkan);
+GskVulkanGlyphCache  *gsk_vulkan_glyph_cache_new            (GskVulkanDevice     *device);
 
 GskVulkanCachedGlyph *gsk_vulkan_glyph_cache_lookup         (GskVulkanGlyphCache *cache,
                                                              GskVulkanRender     *render,

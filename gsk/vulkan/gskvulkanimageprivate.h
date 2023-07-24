@@ -4,6 +4,7 @@
 
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkancommandpoolprivate.h"
+#include "gskvulkandeviceprivate.h"
 
 
 G_BEGIN_DECLS
@@ -18,21 +19,21 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GObject)
 
-GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GdkVulkanContext       *context,
+GskVulkanImage *        gsk_vulkan_image_new_for_swapchain              (GskVulkanDevice        *device,
                                                                          VkImage                 image,
                                                                          VkFormat                format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 
-GskVulkanImage *        gsk_vulkan_image_new_for_atlas                  (GdkVulkanContext       *context,
+GskVulkanImage *        gsk_vulkan_image_new_for_atlas                  (GskVulkanDevice        *device,
                                                                          gsize                   width,
                                                                          gsize                   height);
-GskVulkanImage *        gsk_vulkan_image_new_for_offscreen              (GdkVulkanContext       *context,
+GskVulkanImage *        gsk_vulkan_image_new_for_offscreen              (GskVulkanDevice        *device,
                                                                          GdkMemoryFormat         preferred_format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 
-GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GdkVulkanContext       *context,
+GskVulkanImage *        gsk_vulkan_image_new_for_upload                 (GskVulkanDevice        *device,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);

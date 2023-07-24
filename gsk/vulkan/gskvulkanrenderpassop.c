@@ -276,16 +276,15 @@ gsk_vulkan_render_pass_op_offscreen (GskVulkanRender       *render,
                                      GskRenderNode         *node)
 {
   GskVulkanRenderPass *render_pass;
-  GdkVulkanContext *context;
   GskVulkanImage *image;
   int width, height;
 
   width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
   height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
 
-  context = gsk_vulkan_render_get_context (render);
-  image = gsk_vulkan_image_new_for_offscreen (context,
-                                              gdk_vulkan_context_get_offscreen_format (context,
+  image = gsk_vulkan_image_new_for_offscreen (gsk_vulkan_render_get_device (render),
+                                              gdk_vulkan_context_get_offscreen_format (
+                                                  gsk_vulkan_render_get_context (render),
                                                   gsk_render_node_get_preferred_depth (node)),
                                               width, height);
 

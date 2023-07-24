@@ -4,68 +4,6 @@
 
 #include "gskvulkanprivate.h"
 
-
-GskVulkanAllocator *
-gsk_vulkan_allocator_get (GdkVulkanContext   *context,
-                          gsize               index,
-                          const VkMemoryType *type)
-{
-  GskVulkanAllocator **allocators = g_object_get_data (G_OBJECT (context), "-gsk-allocators");
-
-  g_assert (index <= 10);
-
-  if (allocators == NULL)
-    {
-      allocators = g_new0 (GskVulkanAllocator *, 10);
-      g_object_set_data (G_OBJECT (context), "-gsk-allocators", allocators);
-    }
-
-  if (allocators[index] == NULL)
-    {
-      allocators[index] = gsk_vulkan_direct_allocator_new (gdk_vulkan_context_get_device (context),
-                                                           index,
-                                                           type);
-      allocators[index] = gsk_vulkan_buddy_allocator_new (allocators[index],
-                                                          1024 * 1024);
-      //allocators[index] = gsk_vulkan_stats_allocator_new (allocators[index]);
-    }
-
-  return allocators[index];
-}
-
-/* following code found in
- * https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkPhysicalDeviceMemoryProperties.html */
-GskVulkanAllocator *
-gsk_vulkan_find_allocator (GdkVulkanContext      *context,
-                           uint32_t               allowed_types,
-                           VkMemoryPropertyFlags  required_flags,
-                           VkMemoryPropertyFlags  desired_flags)
-{
-  VkPhysicalDeviceMemoryProperties properties;
-  uint32_t i, found;
-
-  vkGetPhysicalDeviceMemoryProperties (gdk_vulkan_context_get_physical_device (context),
-                                       &properties);
-
-  for (i = 0; i < properties.memoryTypeCount; i++)
-    {
-      if (!(allowed_types & (1 << i)))
-        continue;
-
-      if ((properties.memoryTypes[i].propertyFlags & required_flags) != required_flags)
-        continue;
-
-      found = MIN (i, found);
-
-      if ((properties.memoryTypes[i].propertyFlags & desired_flags) == desired_flags)
-        break;
-  }
-
-  g_assert (found < properties.memoryTypeCount);
-
-  return gsk_vulkan_allocator_get (context, i, &properties.memoryTypes[i]);
-}
-
 /* {{{ direct allocator ***/
 
 typedef struct _GskVulkanDirectAllocator GskVulkanDirectAllocator;

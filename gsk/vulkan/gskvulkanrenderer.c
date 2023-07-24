@@ -163,7 +163,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 
   for (i = 0; i < self->n_targets; i++)
     {
-      self->targets[i] = gsk_vulkan_image_new_for_swapchain (self->vulkan,
+      self->targets[i] = gsk_vulkan_image_new_for_swapchain (self->device,
                                                              gdk_vulkan_context_get_image (context, i),
                                                              gdk_vulkan_context_get_image_format (self->vulkan),
                                                              width, height);
@@ -185,7 +185,7 @@ gsk_vulkan_renderer_get_render (GskVulkanRenderer *self)
         {
           if (self->renders[i] == NULL)
             {
-              self->renders[i] = gsk_vulkan_render_new (GSK_RENDERER (self), self->vulkan);
+              self->renders[i] = gsk_vulkan_render_new (GSK_RENDERER (self), self->vulkan, self->device);
               return self->renders[i];
             }
 
@@ -231,7 +231,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                     self);
   gsk_vulkan_renderer_update_images_cb (self->vulkan, self);
 
-  self->glyph_cache = gsk_vulkan_glyph_cache_new (self->vulkan);
+  self->glyph_cache = gsk_vulkan_glyph_cache_new (self->device);
 
   return TRUE;
 }
@@ -309,13 +309,13 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
-  render = gsk_vulkan_render_new (renderer, self->vulkan);
+  render = gsk_vulkan_render_new (renderer, self->vulkan, self->device);
 
   rounded_viewport = GRAPHENE_RECT_INIT (viewport->origin.x,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
-  image = gsk_vulkan_image_new_for_offscreen (self->vulkan,
+  image = gsk_vulkan_image_new_for_offscreen (self->device,
                                               gdk_vulkan_context_get_offscreen_format (self->vulkan,
                                                   gsk_render_node_get_preferred_depth (root)),
                                               rounded_viewport.size.width,

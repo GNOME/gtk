@@ -14,7 +14,7 @@ struct _GskVulkanImage
 {
   GObject parent_instance;
 
-  GdkVulkanContext *vulkan;
+  GskVulkanDevice *device;
 
   GdkMemoryFormat format;
   VkFormat vk_format;
@@ -386,19 +386,22 @@ gsk_memory_format_get_fallback (GdkMemoryFormat format)
 }
 
 static gboolean
-gsk_vulkan_context_supports_format (GdkVulkanContext  *context,
-                                    VkFormat           format,
-                                    VkImageTiling      tiling,
-                                    VkImageUsageFlags  usage,
-                                    gsize              width,
-                                    gsize              height)
+gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
+                                   VkFormat           format,
+                                   VkImageTiling      tiling,
+                                   VkImageUsageFlags  usage,
+                                   gsize              width,
+                                   gsize              height)
 {
+  VkPhysicalDevice vk_phys_device;
   VkFormatProperties properties;
   VkImageFormatProperties image_properties;
   VkFormatFeatureFlags features, required;
   VkResult res;
 
-  vkGetPhysicalDeviceFormatProperties (gdk_vulkan_context_get_physical_device (context),
+  vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
+
+  vkGetPhysicalDeviceFormatProperties (vk_phys_device,
                                        format,
                                        &properties);
 
@@ -422,7 +425,7 @@ gsk_vulkan_context_supports_format (GdkVulkanContext  *context,
   if ((features & required) != required)
     return FALSE;
 
-  res = vkGetPhysicalDeviceImageFormatProperties (gdk_vulkan_context_get_physical_device (context),
+  res = vkGetPhysicalDeviceImageFormatProperties (vk_phys_device,
                                                   format,
                                                   VK_IMAGE_TYPE_2D,
                                                   tiling,
@@ -443,7 +446,7 @@ static void
 gsk_vulkan_image_create_view (GskVulkanImage            *self,
                               const GskMemoryFormatInfo *format)
 {
-  GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
+  GSK_VK_CHECK (vkCreateImageView, gsk_vulkan_device_get_vk_device (self->device),
                                  &(VkImageViewCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                      .image = self->vk_image,
@@ -463,7 +466,7 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
 }
 
 static GskVulkanImage *
-gsk_vulkan_image_new (GdkVulkanContext          *context,
+gsk_vulkan_image_new (GskVulkanDevice           *device,
                       GdkMemoryFormat            format,
                       gsize                      width,
                       gsize                      height,
@@ -477,6 +480,7 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
 {
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
+  VkDevice vk_device;
   const GskMemoryFormatInfo *vk_format;
 
   g_assert (width > 0 && height > 0);
@@ -490,17 +494,17 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
           if (vk_format->postprocess & ~allowed_postprocess)
             continue;
 
-          if (gsk_vulkan_context_supports_format (context,
-                                                  vk_format->format,
-                                                  tiling, usage,
-                                                  width, height))
+          if (gsk_vulkan_device_supports_format (device,
+                                                 vk_format->format,
+                                                 tiling, usage,
+                                                 width, height))
             break;
 
           if (tiling != VK_IMAGE_TILING_OPTIMAL &&
-              gsk_vulkan_context_supports_format (context,
-                                                  vk_format->format,
-                                                  VK_IMAGE_TILING_OPTIMAL, usage,
-                                                  width, height))
+              gsk_vulkan_device_supports_format (device,
+                                                 vk_format->format,
+                                                 VK_IMAGE_TILING_OPTIMAL, usage,
+                                                 width, height))
             {
               tiling = VK_IMAGE_TILING_OPTIMAL;
               break;
@@ -512,9 +516,11 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
       format = gsk_memory_format_get_fallback (format);
     }
 
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->vulkan = g_object_ref (context);
+  self->device = g_object_ref (device);
   self->format = format;
   self->vk_format = vk_format->format;
   self->postprocess = vk_format->postprocess;
@@ -526,7 +532,7 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
   self->vk_image_layout = layout;
   self->vk_access = access;
 
-  GSK_VK_CHECK (vkCreateImage, gdk_vulkan_context_get_device (context),
+  GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                                     .flags = 0,
@@ -544,20 +550,20 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
                                 NULL,
                                 &self->vk_image);
 
-  vkGetImageMemoryRequirements (gdk_vulkan_context_get_device (context),
+  vkGetImageMemoryRequirements (vk_device,
                                 self->vk_image,
                                 &requirements);
 
-  self->allocator = gsk_vulkan_find_allocator (context,
-                                               requirements.memoryTypeBits,
-                                               0,
-                                               tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
+  self->allocator = gsk_vulkan_device_find_allocator (device,
+                                                      requirements.memoryTypeBits,
+                                                      0,
+                                                      tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
                     &self->allocation);
 
-  GSK_VK_CHECK (vkBindImageMemory, gdk_vulkan_context_get_device (context),
+  GSK_VK_CHECK (vkBindImageMemory, vk_device,
                                    self->vk_image,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
@@ -568,14 +574,14 @@ gsk_vulkan_image_new (GdkVulkanContext          *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_upload (GdkVulkanContext  *context,
+gsk_vulkan_image_new_for_upload (GskVulkanDevice   *device,
                                  GdkMemoryFormat    format,
                                  gsize              width,
                                  gsize              height)
 {
   GskVulkanImage *self;
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (device,
                                format,
                                width,
                                height,
@@ -621,7 +627,7 @@ gsk_vulkan_image_get_data (GskVulkanImage *self,
   image_res.mipLevel = 0;
   image_res.arrayLayer = 0;
 
-  vkGetImageSubresourceLayout (gdk_vulkan_context_get_device (self->vulkan),
+  vkGetImageSubresourceLayout (gsk_vulkan_device_get_vk_device (self->device),
                                self->vk_image, &image_res, &image_layout);
 
   *out_stride = image_layout.rowPitch;
@@ -630,7 +636,7 @@ gsk_vulkan_image_get_data (GskVulkanImage *self,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
+gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
                                     VkImage           image,
                                     VkFormat          format,
                                     gsize             width,
@@ -640,7 +646,7 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->vulkan = g_object_ref (context);
+  self->device = g_object_ref (device);
   self->width = width;
   self->height = height;
   self->vk_tiling = VK_IMAGE_TILING_OPTIMAL;
@@ -664,13 +670,13 @@ gsk_vulkan_image_new_for_swapchain (GdkVulkanContext *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
-                                gsize             width,
-                                gsize             height)
+gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
+                                gsize            width,
+                                gsize            height)
 {
   GskVulkanImage *self;
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (device,
                                GDK_MEMORY_DEFAULT,
                                width,
                                height,
@@ -686,14 +692,14 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
 }
 
 GskVulkanImage *
-gsk_vulkan_image_new_for_offscreen (GdkVulkanContext *context,
-                                    GdkMemoryFormat   preferred_format,
-                                    gsize             width,
-                                    gsize             height)
+gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
+                                    GdkMemoryFormat  preferred_format,
+                                    gsize            width,
+                                    gsize            height)
 {
   GskVulkanImage *self;
 
-  self = gsk_vulkan_image_new (context,
+  self = gsk_vulkan_image_new (device,
                                preferred_format,
                                width,
                                height,
@@ -716,7 +722,7 @@ gsk_vulkan_image_finalize (GObject *object)
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
   VkDevice device;
 
-  device = gdk_vulkan_context_get_device (self->vulkan);
+  device = gsk_vulkan_device_get_vk_device (self->device);
 
   if (self->vk_framebuffer != VK_NULL_HANDLE)
     vkDestroyFramebuffer (device, self->vk_framebuffer, NULL);
@@ -732,7 +738,7 @@ gsk_vulkan_image_finalize (GObject *object)
       gsk_vulkan_free (self->allocator, &self->allocation);
     }
 
-  g_object_unref (self->vulkan);
+  g_object_unref (self->device);
 
   G_OBJECT_CLASS (gsk_vulkan_image_parent_class)->finalize (object);
 }
@@ -755,7 +761,7 @@ gsk_vulkan_image_get_framebuffer (GskVulkanImage *self,
   if (self->vk_framebuffer)
     return self->vk_framebuffer;
 
-  GSK_VK_CHECK (vkCreateFramebuffer, gdk_vulkan_context_get_device (self->vulkan),
+  GSK_VK_CHECK (vkCreateFramebuffer, gsk_vulkan_device_get_vk_device (self->device),
                                      &(VkFramebufferCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                                          .renderPass = render_pass,

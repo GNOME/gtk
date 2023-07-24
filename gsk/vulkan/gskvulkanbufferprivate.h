@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gdk/gdk.h>
+#include "gskvulkandeviceprivate.h"
 
 G_BEGIN_DECLS
 
@@ -13,11 +13,11 @@ typedef enum
   GSK_VULKAN_READWRITE = GSK_VULKAN_READ | GSK_VULKAN_WRITE
 } GskVulkanMapMode;
 
-GskVulkanBuffer *       gsk_vulkan_buffer_new                           (GdkVulkanContext       *context,
+GskVulkanBuffer *       gsk_vulkan_buffer_new                           (GskVulkanDevice        *device,
                                                                          gsize                   size);
-GskVulkanBuffer *       gsk_vulkan_buffer_new_storage                   (GdkVulkanContext       *context,
+GskVulkanBuffer *       gsk_vulkan_buffer_new_storage                   (GskVulkanDevice        *device,
                                                                          gsize                   size);
-GskVulkanBuffer *       gsk_vulkan_buffer_new_map                       (GdkVulkanContext       *context,
+GskVulkanBuffer *       gsk_vulkan_buffer_new_map                       (GskVulkanDevice        *device,
                                                                          gsize                   size,
                                                                          GskVulkanMapMode        mode);
 void                    gsk_vulkan_buffer_free                          (GskVulkanBuffer        *buffer);

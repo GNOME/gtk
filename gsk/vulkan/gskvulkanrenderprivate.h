@@ -24,7 +24,8 @@ typedef void            (* GskVulkanDownloadFunc)                       (gpointe
                                                                          gsize                   stride);
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
-                                                                         GdkVulkanContext       *context);
+                                                                         GdkVulkanContext       *context,
+                                                                         GskVulkanDevice        *device);
 void                    gsk_vulkan_render_free                          (GskVulkanRender        *self);
 
 gboolean                gsk_vulkan_render_is_busy                       (GskVulkanRender        *self);
@@ -38,6 +39,7 @@ void                    gsk_vulkan_render_render                        (GskVulk
 
 GskRenderer *           gsk_vulkan_render_get_renderer                  (GskVulkanRender        *self);
 GdkVulkanContext *      gsk_vulkan_render_get_context                   (GskVulkanRender        *self);
+GskVulkanDevice *       gsk_vulkan_render_get_device                    (GskVulkanRender        *self);
 
 gpointer                gsk_vulkan_render_alloc_op                      (GskVulkanRender        *self,
                                                                          gsize                   size);

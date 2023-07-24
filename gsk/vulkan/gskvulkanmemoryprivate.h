@@ -41,14 +41,6 @@ static inline void      gsk_vulkan_free                                 (GskVulk
 
 static inline void      gsk_vulkan_allocator_free                       (GskVulkanAllocator             *allocator);
 
-GskVulkanAllocator *    gsk_vulkan_allocator_get                        (GdkVulkanContext               *context,
-                                                                         gsize                           index,
-                                                                         const VkMemoryType             *type);
-GskVulkanAllocator *    gsk_vulkan_find_allocator                       (GdkVulkanContext               *context,
-                                                                         uint32_t                        allowed_types,
-                                                                         VkMemoryPropertyFlags           required_flags,
-                                                                         VkMemoryPropertyFlags           desired_flags);
-
 GskVulkanAllocator *    gsk_vulkan_direct_allocator_new                 (VkDevice                        device,
                                                                          uint32_t                        vk_type_index,
                                                                          const VkMemoryType             *vk_type);

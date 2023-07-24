@@ -36,7 +36,7 @@ gsk_vulkan_download_op_command_with_area (GskVulkanOp                 *op,
   gsize stride;
 
   stride = area->width * gdk_memory_format_bytes_per_pixel (gsk_vulkan_image_get_format (image));
-  *buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_context (render),
+  *buffer = gsk_vulkan_buffer_new_map (gsk_vulkan_render_get_device (render),
                                        area->height * stride,
                                        GSK_VULKAN_READ);
 
