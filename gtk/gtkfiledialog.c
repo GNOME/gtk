@@ -887,11 +887,11 @@ finish_file_op (GtkFileDialog  *self,
   files = g_task_propagate_pointer (task, error);
   if (files)
     {
-      GFile *file;
+      GFile *file = NULL;
 
-      g_assert (g_list_model_get_n_items (files) == 1);
+      if (g_list_model_get_n_items (files) > 0)
+        file = g_list_model_get_item (files, 0);
 
-      file = g_list_model_get_item (files, 0);
       g_object_unref (files);
 
       return file;
