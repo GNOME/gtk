@@ -25,6 +25,7 @@ gsk_private_vulkan_fragment_shaders = [
   'linear.frag',
   'mask.frag',
   'outset-shadow.frag',
+  'stroke.frag',
   'texture.frag',
 ]
 
@@ -42,6 +43,7 @@ gsk_private_vulkan_vertex_shaders = [
   'linear.vert',
   'mask.vert',
   'outset-shadow.vert',
+  'stroke.vert',
   'texture.vert',
 ]
 

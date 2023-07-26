@@ -8,6 +8,7 @@
 #include "gskrenderer.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gskstrokeprivate.h"
 #include "gsktransform.h"
 #include "gskvulkanblendmodeopprivate.h"
 #include "gskvulkanbluropprivate.h"
@@ -31,6 +32,7 @@
 #include "gskvulkanoutsetshadowopprivate.h"
 #include "gskvulkanpushconstantsopprivate.h"
 #include "gskvulkanscissoropprivate.h"
+#include "gskvulkanstrokeopprivate.h"
 #include "gskvulkantextureopprivate.h"
 #include "gskvulkanuploadopprivate.h"
 #include "gskprivate.h"
@@ -1304,6 +1306,27 @@ gsk_vulkan_render_pass_add_stroke_node (GskVulkanRenderPass       *self,
                                         const GskVulkanParseState *state,
                                         GskRenderNode             *node)
 {
+  GskRenderNode *child;
+  const GskStroke *stroke;
+
+  child = gsk_stroke_node_get_child (node);
+  stroke = gsk_stroke_node_get_stroke (node);
+  
+  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE)
+    {
+      gsk_vulkan_stroke_op (render,
+                            gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
+                            &state->offset,
+                            &node->bounds,
+                            gsk_stroke_node_get_path (node),
+                            stroke->line_width,
+                            stroke->line_cap,
+                            stroke->line_join,
+                            stroke->miter_limit,
+                            gsk_color_node_get_color (child));
+      return TRUE;
+    }
+
   return TRUE;
 }
 
