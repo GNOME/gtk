@@ -275,9 +275,6 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
     gtk_bitset_remove_range_closed (self->pending, 0, pos - 1);
   else
     g_clear_pointer (&self->pending, gtk_bitset_unref);
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
-
-  return;
 }
 
 static void
@@ -332,6 +329,7 @@ gtk_filter_list_model_run_filter_cb (gpointer data)
     gtk_filter_list_model_stop_filtering (self);
 
   gtk_filter_list_model_emit_items_changed_for_changes (self, old);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
 
   return G_SOURCE_CONTINUE;
 }
@@ -955,6 +953,7 @@ gtk_filter_list_model_set_incremental (GtkFilterListModel *self,
       gtk_filter_list_model_stop_filtering (self);
 
       gtk_filter_list_model_emit_items_changed_for_changes (self, old);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INCREMENTAL]);
