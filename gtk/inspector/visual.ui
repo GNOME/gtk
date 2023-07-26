@@ -697,7 +697,6 @@
       <widget name="baselines_label"/>
       <widget name="layout_label_box"/>
       <widget name="focus_label"/>
-      <widget name="touchscreen_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
