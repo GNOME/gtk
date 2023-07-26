@@ -89,11 +89,11 @@ using `gtk_application_new()`.
 When creating a [class@Gtk.Application], you need to pick an application
 identifier (a name) and pass it to [ctor@Gtk.Application.new] as parameter. For
 this example `org.gtk.example` is used. For choosing an identifier for your
-application, see [this guide](https://wiki.gnome.org/HowDoI/ChooseApplicationID).
+application, see [this guide](https://developer.gnome.org/documentation/tutorials/application-id.html).
 Lastly, [ctor@Gtk.Application.new] takes `GApplicationFlags` as input
 for your application, if your application would have special needs.
 
-Next the [activate signal](https://wiki.gnome.org/HowDoI/GtkApplication) is
+Next the [activate signal](https://developer.gnome.org/documentation/tutorials/application.html) is
 connected to the activate() function above the `main()` function. The `activate`
 signal will be emitted when your application is launched with `g_application_run()`
 on the line below. The `g_application_run()` call also takes as arguments the
