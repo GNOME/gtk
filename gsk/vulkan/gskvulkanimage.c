@@ -317,6 +317,21 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
 #undef SWIZZLE
 }
 
+static gboolean
+gsk_memory_format_info_is_framebuffer_compatible (const GskMemoryFormatInfo *format)
+{
+  if (format->postprocess)
+    return FALSE;
+
+  if (format->components.r != VK_COMPONENT_SWIZZLE_R ||
+      format->components.g != VK_COMPONENT_SWIZZLE_G ||
+      format->components.b != VK_COMPONENT_SWIZZLE_B ||
+      format->components.a != VK_COMPONENT_SWIZZLE_A)
+    return FALSE;
+
+  return TRUE;
+}
+
 static GdkMemoryFormat
 gsk_memory_format_get_fallback (GdkMemoryFormat format)
 {
@@ -492,6 +507,10 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
            vk_format++)
         {
           if (vk_format->postprocess & ~allowed_postprocess)
+            continue;
+
+          if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
+              !gsk_memory_format_info_is_framebuffer_compatible (vk_format))
             continue;
 
           if (gsk_vulkan_device_supports_format (device,
