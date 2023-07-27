@@ -1634,7 +1634,7 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
 
   data.bounds = bounds;
   data.lw = stroke->line_width;
-  data.mw = MAX (stroke->miter_limit, 1.f) * stroke->line_width;
+  data.mw = MAX (stroke->miter_limit, G_SQRT2) * stroke->line_width;
 
   graphene_rect_init (bounds, self->points[0].x - data.mw/2, self->points[0].y - data.mw/2, data.mw, data.mw);
 
