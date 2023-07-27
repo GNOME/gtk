@@ -56,6 +56,7 @@ gsk_vulkan_command_pool_free (GskVulkanCommandPool *self)
                         self->vk_command_pool,
                         NULL);
 
+  g_object_unref (self->vulkan);
   g_free (self);
 }
 
