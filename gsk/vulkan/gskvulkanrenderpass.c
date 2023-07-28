@@ -75,6 +75,33 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_free (self);
 }
 
+static gboolean
+gsk_vulkan_render_pass_is_color_node (GskRenderNode *node,
+                                      GdkRGBA       *out_color)
+{
+  GskRenderNodeType node_type;
+
+  node_type = gsk_render_node_get_node_type (node);
+
+  if (node_type == GSK_COLOR_NODE)
+    {
+      *out_color = *gsk_color_node_get_color (node);
+      return TRUE;
+    }
+  else if (node_type == GSK_OPACITY_NODE)
+    {
+      if (!gsk_vulkan_render_pass_is_color_node (gsk_opacity_node_get_child (node),
+                                                 out_color))
+        return FALSE;
+      out_color->alpha *= gsk_opacity_node_get_opacity (node);
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
 static void
 gsk_vulkan_render_pass_append_scissor (GskVulkanRender           *render,
                                        GskRenderNode             *node,
@@ -1161,6 +1188,7 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
   GskVulkanImage *source_image, *mask_image;
   graphene_rect_t source_tex_rect, mask_tex_rect;
   GskRenderNode *source, *mask;
+  GdkRGBA source_color;
   GskMaskMode mode;
 
   mode = gsk_mask_node_get_mask_mode (node);
@@ -1181,7 +1209,7 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
 
   /* Use the glyph shader as an optimization */
   if (mode == GSK_MASK_MODE_ALPHA &&
-      gsk_render_node_get_node_type (source) == GSK_COLOR_NODE)
+      gsk_vulkan_render_pass_is_color_node (source, &source_color))
     {
       graphene_rect_t bounds;
       if (graphene_rect_intersection (&source->bounds, &mask->bounds, &bounds))
@@ -1191,7 +1219,7 @@ gsk_vulkan_render_pass_add_mask_node (GskVulkanRenderPass       *self,
                              &bounds,
                              &state->offset,
                              &mask_tex_rect,
-                             gsk_color_node_get_color (source));
+                             &source_color);
       return TRUE;
     }
 
@@ -1226,11 +1254,12 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
   graphene_rect_t clipped, child_tex_rect;
   GskVulkanImage *child_image, *mask_image;
   graphene_matrix_t projection;
+  GdkRGBA color;
   int width, height;
 
   child = gsk_fill_node_get_child (node);
   
-  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE)
+  if (gsk_vulkan_render_pass_is_color_node (child, &color))
     {
       gsk_vulkan_fill_op (render,
                           gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
@@ -1238,7 +1267,7 @@ gsk_vulkan_render_pass_add_fill_node (GskVulkanRenderPass       *self,
                           &node->bounds,
                           gsk_fill_node_get_path (node),
                           gsk_fill_node_get_fill_rule (node),
-                          gsk_color_node_get_color (child));
+                          &color);
       return TRUE;
     }
 
@@ -1308,11 +1337,12 @@ gsk_vulkan_render_pass_add_stroke_node (GskVulkanRenderPass       *self,
 {
   GskRenderNode *child;
   const GskStroke *stroke;
+  GdkRGBA color;
 
   child = gsk_stroke_node_get_child (node);
   stroke = gsk_stroke_node_get_stroke (node);
   
-  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE)
+  if (gsk_vulkan_render_pass_is_color_node (child, &color))
     {
       gsk_vulkan_stroke_op (render,
                             gsk_vulkan_clip_get_shader_clip (&state->clip, &state->offset, &node->bounds),
@@ -1323,7 +1353,7 @@ gsk_vulkan_render_pass_add_stroke_node (GskVulkanRenderPass       *self,
                             stroke->line_cap,
                             stroke->line_join,
                             stroke->miter_limit,
-                            gsk_color_node_get_color (child));
+                            &color);
       return TRUE;
     }
 
