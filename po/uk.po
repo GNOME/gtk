@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-07-28 08:47+0000\n"
-"PO-Revision-Date: 2023-07-28 20:30+0300\n"
+"PO-Revision-Date: 2023-07-28 20:32+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7606,11 +7606,11 @@ msgid "Render a .node file to an image."
 msgstr "Обробити файл .node до зображення."
 
 #: tools/gtk-rendernode-tool-render.c:157
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only screenshot a single .ui file and a single output file\n"
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
-"Одночасно можливе створення лише одного знімка вікна файла .ui і виведення "
+"Одночасно можливе створення лише одного знімка вікна файла .node і виведення "
 "даних лише до одного файла\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
