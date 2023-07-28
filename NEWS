@@ -1,5 +1,134 @@
-Overview of Changes in 4.11.5, xx-xx-xxxx
+Overview of Changes in 4.12.0, 05-08-2023
 =========================================
+
+* List widgets:
+ - Add scroll_to APIs
+
+* GtkFileLauncher:
+ - Add an always-ask property
+
+* GtkTextView:
+ - Make backspace behavior match GtkEntry
+
+* gsk:
+ - Fix handling of luminance in mask nodes
+
+* Text rendering:
+ - Automate the setting of gtk-hint-font-metrics from the
+   scale factor. This improves font rendering in flatpaks
+
+* Wayland:
+ - Fix behavior of stylus buttons
+ - Support suspended window state
+
+* Vulkan:
+ - Many improvements
+
+* Tools:
+ - Add gtk4-rendernode-tool
+
+* Debugging:
+ - Drop the GTK_DEBUG_TOUCHSCREEN flag
+
+* Build:
+ - Some build options have been renamed:
+     gtk_doc -> documentation
+     update_screenshots -> screenshots
+   The old names still work
+
+* Translation updates:
+ Georgian
+ Greek
+ Hebrew
+ Persian
+ Vietnamese
+
+* Contributors:
+ Aleksandr Melman
+ Alexander Mikhaylenko
+ Alexander Shopov
+ Alexandre Franke
+ Alice Mikhaylenko
+ António Fernandes
+ Arjan Molenaar
+ Asier Sarasua Garmendia
+ Balázs Meskó
+ Balázs Úr
+ Barnabás Pőcze
+ Bart Jacobs
+ Benjamin Otte
+ Bilal Elmoussaoui
+ Boyuan Yang
+ Bruce Cowan
+ Calvin Walton
+ Cam Cook
+ Chris Mayo
+ Christian Hergert
+ Christopher Davis
+ Chun-wei Fan
+ Corey Berla
+ Danial Behzadi
+ Daniel Boles
+ Daniel Rusek
+ Efstathios Iosifidis
+ Ekaterine Papava
+ Emin Tufan Çetin
+ Emmanuele Bassi
+ Erik Schilling
+ Fabio Tomat
+ FeRD (Frank Dana)
+ Fina Wilke
+ FineFindus
+ Fran Dieguez
+ G.Willems
+ Georges Basile Stavracas Neto
+ Guillaume Bernard
+ Hugo Carvalho
+ Ivan Molodetskikh
+ Jason Francis
+ Jonas Ådahl
+ Jordan Petridis
+ Jordi Mas
+ José Expósito
+ José Roberto de Souza
+ Khalid Abu Shawarib
+ Kévin Commaille
+ Leônidas Araújo
+ Luca Bacci
+ Ludovico de Nittis
+ Lukáš Tyrychtr
+ Marc-André Lureau
+ Marco Trevisan (Treviño)
+ Matt Turner
+ Matthias Clasen
+ Maximiliano Sandoval R
+ Michael Catanzaro
+ Michel Dänzer
+ Mohammed Sadiq
+ Nathan Follens
+ Nelson Benítez León
+ Ngọc Quân Trần
+ Niels De Graef
+ Olivier Crête
+ Patrick Griffis
+ Piotr Drąg
+ Sabri Ünal
+ Sebastian Keller
+ Sophie Herold
+ Sébastien Le Roux
+ Takao Fujiwara
+ Thomas Lange
+ Yiğit Burak
+ Yosef Or Boczko
+ Yuri Chornoivan
+ Zander Brown
+ al_SeveR
+ dgsasha
+ sumibi-yakitori
+ tszymanski
+ velsinki
+ Алексей Шилин
+ Арсений Засыпкин
 
 Overview of Changes in 4.11.4, 03-07-2023
 =========================================
