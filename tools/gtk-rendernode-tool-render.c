@@ -85,8 +85,11 @@ render_file (const char *filename,
         }
     }
 
-
-  bytes = gdk_texture_save_to_png_bytes (texture);
+  if (g_str_has_suffix (save_to, ".tif") ||
+      g_str_has_suffix (save_to, ".tiff"))
+    bytes = gdk_texture_save_to_tiff_bytes (texture);
+  else
+    bytes = gdk_texture_save_to_png_bytes (texture);
 
   if (g_file_set_contents (save_to,
                            g_bytes_get_data (bytes, NULL),

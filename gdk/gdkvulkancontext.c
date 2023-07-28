@@ -244,7 +244,7 @@ gdk_vulkan_strerror (VkResult result)
 #endif
 #if VK_HEADER_VERSION >= 246
     case VK_ERROR_INCOMPATIBLE_SHADER_BINARY_EXT:
-      return "The provided binary shader code is not compatible with this device."
+      return "The provided binary shader code is not compatible with this device. (VK_ERROR_INCOMPATIBLE_SHADER_BINARY_EXT)";
 #endif
     case VK_RESULT_MAX_ENUM:
     default:

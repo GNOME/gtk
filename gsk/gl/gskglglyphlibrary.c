@@ -28,6 +28,8 @@
 #include "gskgldriverprivate.h"
 #include "gskglglyphlibraryprivate.h"
 
+#include "gskdebugprivate.h"
+
 #define MAX_GLYPH_SIZE 128
 
 G_DEFINE_TYPE (GskGLGlyphLibrary, gsk_gl_glyph_library, GSK_TYPE_GL_TEXTURE_LIBRARY)
@@ -406,6 +408,8 @@ gsk_gl_glyph_library_add (GskGLGlyphLibrary      *self,
 
   width = (int) ceil (ink_rect.width * key->scale / 1024.0);
   height = (int) ceil (ink_rect.height * key->scale / 1024.0);
+
+  GSK_DEBUG (GLYPH_CACHE, "font %p glyph %u: %u x %u pixels", key->font, key->glyph, width, height);
 
   value = gsk_gl_texture_library_pack (tl,
                                        key,
