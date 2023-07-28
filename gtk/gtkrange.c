@@ -1455,18 +1455,17 @@ gtk_range_allocate_trough (GtkGizmo *gizmo,
   if (lower == upper)
     value = 0;
   else
-    value = (gtk_adjustment_get_value (priv->adjustment) - lower) / (upper - lower);
+    value = (gtk_adjustment_get_value (priv->adjustment) - lower) /
+            (upper - page_size - lower);
 
   if (priv->show_fill_level &&
       upper - page_size - lower != 0)
     {
       double level, fill;
       GtkAllocation fill_alloc;
-
       fill_alloc = (GtkAllocation) {0, 0, width, height};
 
       level = CLAMP (priv->fill_level, lower, upper - page_size);
-
       fill = (level - lower) / (upper - lower - page_size);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
