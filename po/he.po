@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-03 23:37+0000\n"
-"PO-Revision-Date: 2023-07-06 12:37+0300\n"
+"POT-Creation-Date: 2023-07-26 12:55+0000\n"
+"PO-Revision-Date: 2023-07-28 10:13+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -146,7 +146,7 @@ msgstr "היישום אינו תומך ב־API ‏%s"
 msgid "Trying to use %s, but %s is already in use"
 msgstr "מתבצע ניסיון להשתמש ב־%s אך %s כבר בשימוש"
 
-#: gdk/gdktexture.c:527
+#: gdk/gdktexture.c:528
 msgid "Unknown image format."
 msgstr "תצורת התמונה אינה מוכרת."
 
@@ -539,7 +539,7 @@ msgstr "שגיאה בפיענוח קובץ תמונת JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "מרחב הצבעים של ה־JPEG אינו נתמך (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:465
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "אין מספיק זיכרון לתמונה בגודל ‎%ux%u‎"
@@ -559,15 +559,15 @@ msgstr "העומק %u אינו נתמך בתמונות png"
 msgid "Unsupported color type %u in png image"
 msgstr "סוג הצבע %u אינו נתמך בתמונות png"
 
-#: gdk/loaders/gdktiff.c:351
+#: gdk/loaders/gdktiff.c:353
 msgid "Failed to load RGB data from TIFF file"
 msgstr "ארע כשל בטעינת נתוני RGB מקובץ TIFF"
 
-#: gdk/loaders/gdktiff.c:394
+#: gdk/loaders/gdktiff.c:396
 msgid "Could not load TIFF data"
 msgstr "לא ניתן לטעון נתוני TIFF"
 
-#: gdk/loaders/gdktiff.c:477
+#: gdk/loaders/gdktiff.c:479
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "קריאת הנתונים נכשלה בשורה %d"
@@ -1770,12 +1770,10 @@ msgid "window"
 msgstr "חלון"
 
 #: gtk/gtkaccessible.c:833
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "button"
+# msgctxt "accessibility"
 msgctxt "accessibility"
 msgid "toggle button"
-msgstr "כפתור"
+msgstr "שינוי מצב הכפתור"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -1819,7 +1817,7 @@ msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:655
+#: gtk/gtkcalendar.c:659
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1833,7 +1831,7 @@ msgstr "calendar:week_start:0"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:806
+#: gtk/gtkcalendar.c:810
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1843,7 +1841,7 @@ msgstr "calendar:YM"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1393
+#: gtk/gtkcalendar.c:995
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1858,7 +1856,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1430
+#: gtk/gtkcalendar.c:1032
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1872,7 +1870,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1495
+#: gtk/gtkcalendar.c:1097
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2350,7 +2348,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "אם פריט ימחק, הוא יאבד לצמיתות."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6127 gtk/gtktextview.c:9024
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6125 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -2694,19 +2692,19 @@ msgstr "סגירה"
 msgid "Close the infobar"
 msgstr "סגירת פס המידע"
 
-#: gtk/gtklabel.c:5690 gtk/gtktext.c:6115 gtk/gtktextview.c:9012
+#: gtk/gtklabel.c:5690 gtk/gtktext.c:6113 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: gtk/gtklabel.c:5691 gtk/gtktext.c:6119 gtk/gtktextview.c:9016
+#: gtk/gtklabel.c:5691 gtk/gtktext.c:6117 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6123 gtk/gtktextview.c:9020
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6121 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: gtk/gtklabel.c:5698 gtk/gtktext.c:6136 gtk/gtktextview.c:9045
+#: gtk/gtklabel.c:5698 gtk/gtktext.c:6134 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "בחירה בה_כול"
 
@@ -2718,8 +2716,8 @@ msgstr "_פתיחת קישור"
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
-#: gtk/gtklabel.c:5751 gtk/gtktext.c:2716 gtk/gtktextview.c:9094
 # msgctxt "OpenType layout"
+#: gtk/gtklabel.c:5751 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "תפריט הקשר"
 
@@ -3658,15 +3656,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "סרגל צד"
 
-#: gtk/gtktext.c:6141 gtk/gtktextview.c:9050
+#: gtk/gtktext.c:6139 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "הכנסת _רגשון"
 
-#: gtk/gtktextview.c:9032
+#: gtk/gtktextview.c:9026
 msgid "_Undo"
 msgstr "_ביטול"
 
-#: gtk/gtktextview.c:9036
+#: gtk/gtktextview.c:9030
 msgid "_Redo"
 msgstr "ביצוע _שוב"
 
@@ -3721,8 +3719,8 @@ msgstr "תפקיד"
 msgid "Description"
 msgstr "תיאור"
 
-#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:297
 # msgctxt "OpenType layout"
+#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:297
 msgid "Bounds"
 msgstr "גבולות"
 
@@ -4048,8 +4046,6 @@ msgid "Frame Clock"
 msgstr "מונה מסגרת"
 
 #: gtk/inspector/misc-info.ui:452
-#, fuzzy
-#| msgid "Tick callback"
 msgid "Tick Callback"
 msgstr "רגע התקשרות"
 
@@ -4323,11 +4319,11 @@ msgstr "היררכייה"
 msgid "Implements"
 msgstr "מיישם"
 
-#: gtk/inspector/visual.c:640 gtk/inspector/visual.c:659
+#: gtk/inspector/visual.c:637 gtk/inspector/visual.c:656
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "ערכת נושא קשיחה בקוד על ידי GTK_THEME"
 
-#: gtk/inspector/visual.c:908
+#: gtk/inspector/visual.c:905
 msgid "Backend does not support window scaling"
 msgstr "הממשק אינו תומך בקנה מידה לחלון"
 
@@ -4423,11 +4419,7 @@ msgstr "הצגת מיקוד"
 msgid "Show Accessibility warnings"
 msgstr "הצגת אזהרות נגישות"
 
-#: gtk/inspector/visual.ui:670
-msgid "Simulate Touchscreen"
-msgstr "הדמיית מסך מגע"
-
-#: gtk/inspector/visual.ui:701
+#: gtk/inspector/visual.ui:667
 msgid "Inspect Inspector"
 msgstr ""
 
@@ -7245,6 +7237,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "FILE"
 
@@ -7276,6 +7269,8 @@ msgid "Use style from CSS file"
 msgstr "Use style from CSS file"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-rendernode-tool-render.c:130
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Could not initialize windowing system\n"
@@ -7285,7 +7280,7 @@ msgid "Preview the file."
 msgstr "Preview the file."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:281
+#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "לא צוין קובץ ‎.ui\n"
@@ -7320,11 +7315,13 @@ msgstr ""
 "Use --force to overwrite.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
+#: tools/gtk-rendernode-tool-render.c:97
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Output written to %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
+#: tools/gtk-rendernode-tool-render.c:101
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Failed to save %s: %s\n"
@@ -7342,6 +7339,7 @@ msgid "Overwrite existing file"
 msgstr "Overwrite existing file"
 
 #: tools/gtk-builder-tool-screenshot.c:363
+#: tools/gtk-rendernode-tool-render.c:123
 msgid "FILE…"
 msgstr "FILE…"
 
@@ -7430,21 +7428,20 @@ msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Can only simplify a single .ui file without --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to lookup template parent type %s\n"
-msgstr "Failed to open file %s : %s\n"
+msgstr "Failed to lookup template parent type %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
-msgstr ""
+msgstr "Deprecated types:\n"
 
 #: tools/gtk-builder-tool-validate.c:167
 #, c-format
 msgid "Failed to create an instance of the template type %s\n"
-msgstr ""
+msgstr "Failed to create an instance of the template type %s\n"
 
-#: tools/gtk-builder-tool-validate.c:270
+#: tools/gtk-builder-tool-validate.c:276
 msgid "Validate the file."
 msgstr "Validate the file."
 
@@ -7503,6 +7500,119 @@ msgstr "%s: no such application %s"
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: error launching application: %s\n"
+
+#: tools/gtk-rendernode-tool.c:35
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+"\n"
+"Perform various tasks on GTK render nodes.\n"
+"\n"
+"Commands:\n"
+"  info         Provide information about the node\n"
+"  show         Show the node\n"
+"  render       Take a screenshot of the node\n"
+"\n"
+msgstr ""
+"Usage:\n"
+"  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+"\n"
+"Perform various tasks on GTK render nodes.\n"
+"\n"
+"Commands:\n"
+"  info         Provide information about the node\n"
+"  show         Show the node\n"
+"  render       Take a screenshot of the node\n"
+"\n"
+
+#: tools/gtk-rendernode-tool-info.c:177
+#, c-format
+msgid "Number of nodes: %u\n"
+msgstr "מספר צמתים: %u\n"
+
+#: tools/gtk-rendernode-tool-info.c:184
+#, c-format
+msgid "Depth: %u\n"
+msgstr "עומק: %u\n"
+
+#: tools/gtk-rendernode-tool-info.c:187
+#, c-format
+msgid "Bounds: %g x %g\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-info.c:188
+#, c-format
+msgid "Origin: %g %g\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-info.c:209
+#, fuzzy
+#| msgid "Could not retrieve information about the file"
+msgid "Provide information about the render node."
+msgstr "לא ניתן לקבל מידע על הקובץ"
+
+#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-render.c:151
+#, c-format
+msgid "No .node file specified\n"
+msgstr "לא צוין קובץ ‎.node\n"
+
+#: tools/gtk-rendernode-tool-info.c:228
+#, fuzzy, c-format
+#| msgid "Can only preview a single .ui file\n"
+msgid "Can only accept a single .node file\n"
+msgstr "Can only preview a single .ui file\n"
+
+#: tools/gtk-rendernode-tool-show.c:117
+msgid "Show the render node."
+msgstr ""
+
+#: tools/gtk-rendernode-tool-show.c:136
+#, fuzzy, c-format
+#| msgid "Can only preview a single .ui file\n"
+msgid "Can only preview a single .node file\n"
+msgstr "Can only preview a single .ui file\n"
+
+#: tools/gtk-rendernode-tool-render.c:82
+#, fuzzy, c-format
+#| msgid ""
+#| "File %s exists.\n"
+#| "Use --force to overwrite.\n"
+msgid ""
+"File %s exists.\n"
+"If you want to overwrite, specify the filename.\n"
+msgstr ""
+"File %s exists.\n"
+"Use --force to overwrite.\n"
+
+#: tools/gtk-rendernode-tool-render.c:122
+#, fuzzy
+#| msgid "Renderer"
+msgid "Renderer to use"
+msgstr "עיבוד"
+
+#: tools/gtk-rendernode-tool-render.c:122
+msgid "RENDERER"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-render.c:138
+#, fuzzy
+#| msgid "Render a .ui file to an image."
+msgid "Render a .node file to an image."
+msgstr "Render a .ui file to an image."
+
+#: tools/gtk-rendernode-tool-render.c:157
+#, fuzzy, c-format
+#| msgid "Can only render a single .ui file to a single output file\n"
+msgid "Can only render a single .node file to a single output file\n"
+msgstr "Can only render a single .ui file to a single output file\n"
+
+#: tools/gtk-rendernode-tool-utils.c:51
+#, fuzzy, c-format
+#| msgid "Error creating folder '%s': %s"
+msgid "Error at %s: %s\n"
+msgstr "שגיאה ביצירת התיקייה '%s': %s"
 
 #: tools/updateiconcache.c:1391
 #, c-format
@@ -7610,6 +7720,9 @@ msgid ""
 msgstr ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
+
+#~ msgid "Simulate Touchscreen"
+#~ msgstr "הדמיית מסך מגע"
 
 #~ msgid "Tab list"
 #~ msgstr "רשימת לשוניות"
@@ -9814,9 +9927,6 @@ msgstr ""
 #~ msgid "Could not find application"
 #~ msgstr "לא ניתן למצוא יישום"
 
-#~ msgid "Could not retrieve information about the file"
-#~ msgstr "לא ניתן לקבל מידע על הקובץ"
-
 #~ msgid "Could not add a bookmark"
 #~ msgstr "לא ניתן להוסיף סימנייה"
 
@@ -9951,9 +10061,6 @@ msgstr ""
 
 #~ msgid "Unable to find include file: \"%s\""
 #~ msgstr "לא ניתן למצוא את קובץ ה include: \"%s\""
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "שגיאה ביצירת התיקייה '%s': %s"
 
 #~ msgid "Gdk debugging flags to set"
 #~ msgstr "Gdk debugging flags to set"
