@@ -206,6 +206,7 @@ if can_use_objcopy_for_resources
     output : 'gtkdemo_resources2.o',
     command : [objcopy,
                  '--strip-all',
+                 '--set-section-alignment', '.data=8',
                  '--add-symbol','_g_binary_gtkdemo_resource_data=.data:0',
                  '@INPUT@',
                  '@OUTPUT@'])
