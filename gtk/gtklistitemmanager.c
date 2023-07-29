@@ -575,9 +575,14 @@ gtk_list_item_manager_get_nearest_tile (GtkListItemManager *self,
                                         int                 x,
                                         int                 y)
 {
+  GtkListTile *root;
   int distance = G_MAXINT;
 
-  return gtk_list_tile_get_tile_at (self, gtk_list_item_manager_get_root (self), x, y, &distance);
+  root = gtk_list_item_manager_get_root (self);
+  if (root == NULL)
+    return NULL;
+
+  return gtk_list_tile_get_tile_at (self, root, x, y, &distance);
 }
 
 guint
