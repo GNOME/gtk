@@ -61,18 +61,7 @@ render_file (const char *filename,
   GdkSurface *window;
   GError *error = NULL;
 
-  node = load_node_file (filename);
-
-  if (renderer_name)
-    g_object_set_data_full (G_OBJECT (gdk_display_get_default ()), "gsk-renderer",
-                            g_strdup (renderer_name), g_free);
-
-  window = gdk_surface_new_toplevel (gdk_display_get_default ());
-  renderer = gsk_renderer_new_for_surface (window);
-
-  texture = gsk_renderer_render_texture (renderer, node, NULL);
-
-  save_to = (char *)save_file;
+  save_to = (char *) save_file;
 
   if (save_to == NULL)
     {
@@ -84,6 +73,17 @@ render_file (const char *filename,
           exit (1);
         }
     }
+
+  node = load_node_file (filename);
+
+  if (renderer_name)
+    g_object_set_data_full (G_OBJECT (gdk_display_get_default ()), "gsk-renderer",
+                            g_strdup (renderer_name), g_free);
+
+  window = gdk_surface_new_toplevel (gdk_display_get_default ());
+  renderer = gsk_renderer_new_for_surface (window);
+
+  texture = gsk_renderer_render_texture (renderer, node, NULL);
 
   if (g_str_has_suffix (save_to, ".tif") ||
       g_str_has_suffix (save_to, ".tiff"))
