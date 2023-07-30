@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-28 17:31+0000\n"
-"PO-Revision-Date: 2023-07-29 05:28+0330\n"
+"POT-Creation-Date: 2023-07-29 01:59+0000\n"
+"PO-Revision-Date: 2023-07-31 02:45+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -707,7 +707,7 @@ msgstr "WGL نگارش %Id. %Id بیش از حد قدیمی است. کمینه �
 #: gdk/win32/gdkglcontext-win32-wgl.c:414
 #, c-format
 msgid "GL implementation cannot share GL contexts"
-msgstr ""
+msgstr "پیاده‌سازی GL نمی‌تواند بافتارهای GL را هم‌رساند"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:696
 msgid "No available configurations for the given pixel format"
@@ -7140,12 +7140,12 @@ msgstr "هیچ موردی با شناسهٔ «‎%s» پیدا نشد\n"
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
 msgid "No previewable object found\n"
-msgstr ""
+msgstr "هیچ شی قابل پیش‌نمایشی پیدا نشد\n"
 
 #: tools/gtk-builder-tool-preview.c:136
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
-msgstr ""
+msgstr "اشیا از گونهٔ %s نمی‌توانند پیش‌نمایش یابند\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
@@ -7185,7 +7185,7 @@ msgstr "هیچ شی‌ای پیدا نشد\n"
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
-msgstr ""
+msgstr "نمای اشیا از گونهٔ %s نمی‌تواندگرفته شود\n"
 
 #: tools/gtk-builder-tool-screenshot.c:298
 #, c-format
@@ -7198,11 +7198,13 @@ msgid ""
 "File %s exists.\n"
 "Use --force to overwrite.\n"
 msgstr ""
+"پروندهٔ %s موجود است.\n"
+"برای پایکالی از ‪--force‬ استفاده کنید.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332 tools/gtk-rendernode-tool-render.c:100
 #, c-format
 msgid "Output written to %s.\n"
-msgstr ""
+msgstr "خروجی در %s نوشته شد.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336 tools/gtk-rendernode-tool-render.c:104
 #, c-format
@@ -7227,7 +7229,7 @@ msgstr "پرونده…"
 
 #: tools/gtk-builder-tool-screenshot.c:378
 msgid "Render a .ui file to an image."
-msgstr ""
+msgstr "پرداخت یک پروندهٔ ‪.ui‬ در یک تصویر."
 
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
@@ -7264,7 +7266,7 @@ msgstr "مشخّصهٔ چینش %s پیدا نشد"
 #: tools/gtk-builder-tool-simplify.c:1397
 #, c-format
 msgid "%s only accepts three children"
-msgstr ""
+msgstr "%s تنها سه فرزند می‌پذیرد"
 
 #: tools/gtk-builder-tool-simplify.c:2455
 #, c-format
@@ -7311,12 +7313,12 @@ msgstr "شکست در یافتن گونهٔ والد الگوی %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
-msgstr ""
+msgstr "گونه‌های منقضی:\n"
 
 #: tools/gtk-builder-tool-validate.c:167
 #, c-format
 msgid "Failed to create an instance of the template type %s\n"
-msgstr ""
+msgstr "شکست در ایجاد نمونه‌ای از گونهٔ %s\n"
 
 #: tools/gtk-builder-tool-validate.c:276
 msgid "Validate the file."
@@ -7443,7 +7445,7 @@ msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.node‬ را �
 
 #: tools/gtk-rendernode-tool-show.c:117
 msgid "Show the render node."
-msgstr ""
+msgstr "نمایش گره پرداختگر."
 
 #: tools/gtk-rendernode-tool-show.c:136
 #, c-format
@@ -7456,6 +7458,8 @@ msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
+"پروندهٔ %s وجود دارد.\n"
+"اگر می‌خواهید پایممالش کنید، نام پرونده را مشخّص کنید.\n"
 
 #: tools/gtk-rendernode-tool-render.c:125
 msgid "Renderer to use"
@@ -7463,16 +7467,16 @@ msgstr "پرداختگر مورد استفاده"
 
 #: tools/gtk-rendernode-tool-render.c:125
 msgid "RENDERER"
-msgstr ""
+msgstr "RENDERER"
 
 #: tools/gtk-rendernode-tool-render.c:141
 msgid "Render a .node file to an image."
-msgstr ""
+msgstr "پرداخت یک پروندهٔ ‪.node‬ در یک تصویر."
 
 #: tools/gtk-rendernode-tool-render.c:160
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
-msgstr ""
+msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.noide‬ را در یک پروندهٔ خروحی پرداخت کند\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
