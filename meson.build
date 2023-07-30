@@ -18,7 +18,7 @@ harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
-wayland_proto_req  = '>= 1.32'
+wayland_proto_req  = '>= 1.31'
 wayland_req        = '>= 1.21.0'
 graphene_req       = '>= 1.10.0'
 epoxy_req          = '>= 1.4'
@@ -483,6 +483,10 @@ if wayland_enabled
     'xkbcommon @0@'.format(xkbcommon_req),
     'wayland-egl',
   ]
+
+  if wlprotocolsdep.version().version_compare('>=1.32')
+    cdata.set('HAVE_TOPLEVEL_STATE_SUSPENDED', 1)
+  endif
 endif
 
 x11_pkgs = []
