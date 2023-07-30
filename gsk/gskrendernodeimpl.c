@@ -26,6 +26,7 @@
 #include "gskdiffprivate.h"
 #include "gl/gskglrenderer.h"
 #include "gskpath.h"
+#include "gskrectprivate.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
@@ -4412,9 +4413,17 @@ gsk_fill_node_draw (GskRenderNode *node,
       break;
   }
   gsk_path_to_cairo (self->path, cr);
-  cairo_clip (cr);
-
-  gsk_render_node_draw (self->child, cr);
+  if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
+      gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
+    {
+      gdk_cairo_set_source_rgba (cr, gsk_color_node_get_color (self->child));
+      cairo_fill (cr);
+    }
+  else
+    {
+      cairo_clip (cr);
+      gsk_render_node_draw (self->child, cr);
+    }
 
   cairo_restore (cr);
 }
