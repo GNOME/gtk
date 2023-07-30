@@ -3014,9 +3014,11 @@ gdk_event_translate (MSG *msg,
 	  unset_bits = 0;
 
 	  if (IsIconic (msg->hwnd))
-	    set_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
+	    set_bits |= (GDK_TOPLEVEL_STATE_MINIMIZED |
+                         GDK_TOPLEVEL_STATE_SUSPENDED);
 	  else
-	    unset_bits |= GDK_TOPLEVEL_STATE_MINIMIZED;
+	    unset_bits |= (GDK_TOPLEVEL_STATE_MINIMIZED |
+                           GDK_TOPLEVEL_STATE_SUSPENDED);
 
 	  if (IsZoomed (msg->hwnd))
 	    set_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;

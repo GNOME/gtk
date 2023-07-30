@@ -483,6 +483,10 @@ if wayland_enabled
     'xkbcommon @0@'.format(xkbcommon_req),
     'wayland-egl',
   ]
+
+  if wlprotocolsdep.version().version_compare('>=1.32')
+    cdata.set('HAVE_TOPLEVEL_STATE_SUSPENDED', 1)
+  endif
 endif
 
 x11_pkgs = []

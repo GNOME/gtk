@@ -238,6 +238,7 @@ typedef struct
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
   guint    maximized                 : 1;
+  guint    suspended                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
@@ -300,6 +301,7 @@ enum {
 
   /* Readonly properties */
   PROP_IS_ACTIVE,
+  PROP_SUSPENDED,
 
   /* Writeonly properties */
   PROP_STARTUP_ID,
@@ -974,6 +976,18 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkWindow:suspended: (attributes org.gtk.Property.get=gtk_window_is_suspended)
+   *
+   * Whether the window is suspended.
+   *
+   * See [method@Gtk.Window.is_suspended] for details about what suspended means.
+   */
+  window_props[PROP_SUSPENDED] =
+      g_param_spec_boolean ("suspended", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkWindow:application: (attributes org.gtk.Property.get=gtk_window_get_application org.gtk.Property.set=gtk_window_set_application)
    *
    * The `GtkApplication` associated with the window.
@@ -1279,6 +1293,27 @@ gtk_window_is_fullscreen (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return priv->fullscreen;
+}
+
+/**
+ * gtk_window_is_suspended: (attributes org.gtk.Property.get=suspended)
+ * @window: a `GtkWindow`
+ *
+ * Retrieves the current suspended state of @window.
+ *
+ * A window being suspended means it's currently not visible to the user, for
+ * example by being on a inactive workspace, minimized, obstructed.
+ *
+ * Returns: whether the window is suspended.
+ */
+gboolean
+gtk_window_is_suspended (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return priv->suspended;
 }
 
 void
@@ -1910,6 +1945,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_FULLSCREENED:
       g_value_set_boolean (value, gtk_window_is_fullscreen (window));
+      break;
+    case PROP_SUSPENDED:
+      g_value_set_boolean (value, gtk_window_is_suspended (window));
       break;
     case PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
@@ -4677,6 +4715,13 @@ surface_state_changed (GtkWidget *widget)
       priv->maximized = (new_surface_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? TRUE : FALSE;
 
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_MAXIMIZED]);
+    }
+
+  if (changed_mask & GDK_TOPLEVEL_STATE_SUSPENDED)
+    {
+      priv->suspended = (new_surface_state & GDK_TOPLEVEL_STATE_SUSPENDED) ? TRUE : FALSE;
+
+      g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_SUSPENDED]);
     }
 
   update_edge_constraints (window, new_surface_state);

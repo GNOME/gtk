@@ -418,12 +418,18 @@ do_net_wm_state_changes (GdkSurface *surface)
   if (old_state & GDK_TOPLEVEL_STATE_MINIMIZED)
     {
       if (!toplevel->have_hidden)
-        unset |= GDK_TOPLEVEL_STATE_MINIMIZED;
+        {
+          unset |= (GDK_TOPLEVEL_STATE_MINIMIZED |
+                    GDK_TOPLEVEL_STATE_SUSPENDED);
+        }
     }
   else
     {
       if (toplevel->have_hidden)
-        set |= GDK_TOPLEVEL_STATE_MINIMIZED;
+        {
+          set |= (GDK_TOPLEVEL_STATE_MINIMIZED |
+                  GDK_TOPLEVEL_STATE_SUSPENDED);
+        }
     }
 
   /* Update edge constraints and tiling */
@@ -810,9 +816,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                * the minimized bit off.
                */
               if (GDK_SURFACE_IS_MAPPED (surface))
-                gdk_synthesize_surface_state (surface,
-                                              0,
-                                              GDK_TOPLEVEL_STATE_MINIMIZED);
+                {
+                  gdk_synthesize_surface_state (surface,
+                                                0,
+                                                GDK_TOPLEVEL_STATE_MINIMIZED |
+                                                GDK_TOPLEVEL_STATE_SUSPENDED);
+                }
             }
 
           if (surface_impl->toplevel &&
@@ -841,9 +850,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	{
 	  /* Unset minimized if it was set */
 	  if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
-	    gdk_synthesize_surface_state (surface,
-				 	  GDK_TOPLEVEL_STATE_MINIMIZED,
-					  0);
+            {
+              gdk_synthesize_surface_state (surface,
+                                            GDK_TOPLEVEL_STATE_MINIMIZED |
+                                            GDK_TOPLEVEL_STATE_SUSPENDED,
+                                            0);
+            }
 
 	  if (toplevel)
 	    gdk_surface_thaw_updates (surface);

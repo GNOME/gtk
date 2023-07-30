@@ -4542,6 +4542,8 @@ surface_state_callback (GdkSurface  *window,
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
                      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED) ?
                      "minimized" : "not minimized", ", ",
+                     (new_state & GDK_TOPLEVEL_STATE_SUSPENDED) ?
+                     "suspended" : "not suspended", ", ",
                      (new_state & GDK_TOPLEVEL_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
                      (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ?
