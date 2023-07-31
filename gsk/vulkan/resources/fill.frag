@@ -56,11 +56,8 @@ line_winding (vec2 start,
               vec2 end)
 {
   // winding number from http://geomalgorithms.com/a03-_inclusion.html
-  vec2 e = end - start;
-  vec2 v = - start;
-  vec2 v2 = - end;
-  float val3 = cross2d (e, v); //isLeft
-  bvec3 cond = bvec3 (v.y >= 0.0, v2.y < 0.0, val3 > 0.0);
+  float val3 = cross2d (start, end - start); //isLeft
+  bvec3 cond = bvec3 (start.y <= 0.0, end.y > 0.0, val3 > 0.0);
   if (all (cond))
     return 1;
   else if (all (not (cond)))
@@ -92,6 +89,13 @@ solve_quadratic (vec2 coeffs,
   return 2;
 }
 
+vec3
+sort3 (vec3 v)
+{
+  vec2 t = vec2 ( min(v.x, v.y), max (v.x, v.y));
+  return vec3 (min (t.x, v.z), min (max (v.z, t.x), t.y), max (t.y, v.z));
+}
+
 //From Trisomie21
 //But instead of his cancellation fix i'm using a newton iteration
 int solve_cubic(vec3 coeffs, inout vec3 r){
@@ -105,51 +109,60 @@ int solve_cubic(vec3 coeffs, inout vec3 r){
   float p3 = p*p*p;
   float d = q*q + 4.0*p3 / 27.0;
   float offset = -a / 3.0;
-  if(d >= 0.0) { // Single solution
-    float z = sqrt(d);
-    float u = (-q + z) / 2.0;
-    float v = (-q - z) / 2.0;
-    u = sign(u)*pow(abs(u),1.0/3.0);
-    v = sign(v)*pow(abs(v),1.0/3.0);
-    r[0] = offset + u + v;  
+  if(d >= 0.0)
+    { 
+      // Single solution
+      float z = sqrt(d);
+      float u = (-q + z) / 2.0;
+      float v = (-q - z) / 2.0;
+      u = sign (u) * pow (abs (u), 1.0 / 3.0);
+      v = sign (v) * pow (abs (v), 1.0 / 3.0);
+      r[0] = offset + u + v;  
 
-    //Single newton iteration to account for cancellation
-    float f = ((r[0] + a) * r[0] + b) * r[0] + c;
-    float f1 = (3. * r[0] + 2. * a) * r[0] + b;
+      //Single newton iteration to account for cancellation
+      float f = ((r[0] + a) * r[0] + b) * r[0] + c;
+      float f1 = (3. * r[0] + 2. * a) * r[0] + b;
 
-    r[0] -= f / f1;
+      r[0] -= f / f1;
 
-    return 1;
-  }
-  float u = sqrt(-p / 3.0);
-  float v = acos(-sqrt( -27.0 / p3) * q / 2.0) / 3.0;
-  float m = cos(v), n = sin(v)*1.732050808;
+      return 1;
+    }
+  float u = sqrt (-p / 3.0);
+  float v = acos (-sqrt ( -27.0 / p3) * q / 2.0) / 3.0;
+  float m = cos (v), n = sin (v)*1.732050808;
 
-  //Single newton iteration to account for cancellation
-  //(once for every root)
+  // Single newton iteration to account for cancellation
+  // (once for every root)
   r[0] = offset + u * (m + m);
-    r[1] = offset - u * (n + m);
-    r[2] = offset + u * (n - m);
+  r[1] = offset - u * (n + m);
+  r[2] = offset + u * (n - m);
 
   vec3 f = ((r + a) * r + b) * r + c;
   vec3 f1 = (3. * r + 2. * a) * r + b;
 
   r -= f / f1;
+  r = sort3 (r);
 
   return 3;
 }
 
-float cubic_bezier_normal_iteration(float t, vec2 a0, vec2 a1, vec2 a2, vec2 a3){
-  //horner's method
-  vec2 a_2=a2+t*a3;
-  vec2 a_1=a1+t*a_2;
-  vec2 b_2=a_2+t*a3;
+float
+cubic_bezier_normal_iteration (float t,
+                               vec2  a0,
+                               vec2  a1,
+                               vec2  a2,
+                               vec2  a3)
+{
+  // Horner's method
+  vec2 a_2 = a2 + t * a3;
+  vec2 a_1 = a1 + t * a_2;
+  vec2 b_2 = a_2 + t * a3;
 
-  vec2 uv_to_p=a0+t*a_1;
-  vec2 tang=a_1+t*b_2;
+  vec2 uv_to_p = a0 + t * a_1;
+  vec2 tang = a_1 + t*b_2;
 
-  float l_tang=dot(tang,tang);
-  return t-dot(tang,uv_to_p)/l_tang;
+  float l_tang = dot (tang,tang);
+  return t - dot (tang, uv_to_p) / l_tang;
 }
 
 float
@@ -199,19 +212,17 @@ cubic_winding (vec2 p0,
   int w = 0;
 
   if ((p0.y > 0 && p1.y > 0 && p2.y > 0 && p3.y > 0) ||
-      (p0.y < 0 && p1.y < 0 && p2.y < 0 && p3.y < 0))
+      (p0.y <= 0 && p1.y <= 0 && p2.y <= 0 && p3.y <= 0))
     return 0;
 
   if (0 <= min (min (p0.x, p1.x), min (p2.x, p3.x)))
     {
-      if (0 >= min (p0.y,p3.y) && 0 <= max (p0.y, p3.y))
-        {
-          if (cross2d (p0, p3) > 0.0)
-            return 1;
-          else
-            return -1;
-        }
-      return 0;
+      if (p0.y <= 0 && p3.y > 0)
+        return 1;
+      else if (p0.y > 0 && p3.y <= 0)
+        return -1;
+      else
+        return 0;
     }
 
   vec2 a3 = (-p0 + 3. * p1 - 3. * p2 + p3);
@@ -219,29 +230,38 @@ cubic_winding (vec2 p0,
   vec2 a1 = (-3. * p0 + 3. * p1);
   vec2 a0 = p0;
 
-  if (abs (a3.y) < .0001)
+  if (abs (a3.y) < max (max (a0.y, a1.y), a2.y) * .001)
     n_roots = solve_quadratic (vec2 (a0.y / a2.y, a1.y / a2.y), roots.xy);
   else
     n_roots = solve_cubic (vec3 (a0.y / a3.y, a1.y / a3.y, a2.y / a3.y), roots);
 
-  //color = vec4(roots.xy, n_roots, 1);
-
+  bool greater = p0.y > 0.0;
+  float last = 0;
+  float last_x = p0.x;
   for (int i = 0; i < n_roots; i++)
     {
-      if (roots[i] >= 0. && roots[i] <= 1.)
+      if (roots[i] < 0. || roots[i] > 1.)
+        continue;
+
+      float t = 0.5 * (roots[i] + last);
+      bool new_greater = fma (fma (fma (a3.y, t,  a2.y), t, a1.y), t, a0.y) > 0.0;
+      if (new_greater != greater)
         {
-          if (((a3.x * roots[i] + a2.x) * roots[i] + a1.x) * roots[i] + a0.x > 0.0)
-            {
-              if ((3 * a3.y * roots[i] + 2 * a2.y) * roots[i] + a1.y > 0.0)
-                {
-                  w++;
-                }
-              else
-                {
-                  w--;
-                }
-            }
+          greater = new_greater;
+
+          if (last_x > 0.0)
+            w += (greater ? 1 : -1);
         }
+
+      last_x = fma (fma (fma (a3.x, roots[i], a2.x), roots[i], a1.x), roots[i], a0.x);
+      last = roots[i];
+    }
+
+  bool new_greater = p3.y > 0;
+  if (new_greater != greater)
+    {
+      if (last_x > 0.0)
+        w += (new_greater ? 1 : -1);
     }
 
   return w;
@@ -356,7 +376,7 @@ path_coverage (vec2 p)
 
 void main()
 {
-  float alpha = in_color.a * rect_coverage (in_rect, in_pos);
-  alpha *= path_coverage (in_pos - in_offset * push.scale);
+  float cov = path_coverage (in_pos - in_offset * push.scale);
+  float alpha = in_color.a * cov;
   color = clip_scaled (in_pos, vec4(in_color.rgb, 1) * alpha);
 }
