@@ -245,8 +245,7 @@
                             <property name="label" translatable="yes">Show</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <signal name="clicked" handler="update_measure_picture" swapped="yes" after="1" object="measure_picture"/>
-                            <signal name="clicked" handler="measure_graph_measure" after="1"/>
+                            <signal name="clicked" handler="measure_graph_measure" after="1" swapped="yes"/>
                           </object>
                         </child>
                         <child>

@@ -142,6 +142,37 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
 }
 
 static void
+update_measure_picture (GtkPicture      *picture,
+                        GtkToggleButton *toggle)
+{
+  GdkPaintable *paintable = gtk_picture_get_paintable (picture);
+
+  if (gtk_toggle_button_get_active (toggle) ||
+      (gdk_paintable_get_intrinsic_width (paintable) <= 200 &&
+       gdk_paintable_get_intrinsic_height (paintable) <= 100))
+    {
+      gtk_picture_set_can_shrink (picture, FALSE);
+      gtk_widget_set_size_request (GTK_WIDGET (picture), -1, -1);
+    }
+  else
+    {
+      gtk_picture_set_can_shrink (picture, TRUE);
+      gtk_widget_set_size_request (GTK_WIDGET (picture),
+                                   -1,
+                                   MIN (100, 200 / gdk_paintable_get_intrinsic_aspect_ratio (paintable)));
+    }
+}
+
+static void
+measure_graph_measure (GtkInspectorMiscInfo *sl)
+{
+  if (gtk_widget_get_visible (sl->measure_row))
+    gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), GTK_WIDGET (sl->object));
+
+  update_measure_picture (GTK_PICTURE (sl->measure_picture), GTK_TOGGLE_BUTTON (sl->measure_expand_toggle));
+}
+
+static void
 update_allocation (GtkWidget            *w,
                    GtkInspectorMiscInfo *sl)
 {
@@ -169,15 +200,7 @@ update_allocation (GtkWidget            *w,
   gtk_label_set_label (GTK_LABEL (sl->request_mode), value->value_nick);
   g_type_class_unref (class);
 
-  if (gtk_widget_get_visible (sl->measure_row))
-    gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), w);
-}
-
-static void
-measure_graph_measure (GtkWidget            *button,
-                       GtkInspectorMiscInfo *sl)
-{
-  gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), GTK_WIDGET (sl->object));
+  measure_graph_measure (sl);
 }
 
 static void
@@ -461,28 +484,6 @@ measure_picture_drag_prepare (GtkDragSource *source,
   return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, texture);
 }
 
-static void
-update_measure_picture (GtkPicture      *picture,
-                        GtkToggleButton *toggle)
-{
-  GdkPaintable *paintable = gtk_picture_get_paintable (picture);
-
-  if (gtk_toggle_button_get_active (toggle) ||
-      (gdk_paintable_get_intrinsic_width (paintable) <= 200 &&
-       gdk_paintable_get_intrinsic_height (paintable) <= 100))
-    {
-      gtk_picture_set_can_shrink (picture, FALSE);
-      gtk_widget_set_size_request (GTK_WIDGET (picture), -1, -1);
-    }
-  else
-    {
-      gtk_picture_set_can_shrink (picture, TRUE);
-      gtk_widget_set_size_request (GTK_WIDGET (picture),
-                                   -1,
-                                   MIN (100, 200 / gdk_paintable_get_intrinsic_aspect_ratio (paintable)));
-    }
-}
-
 void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
@@ -507,7 +508,9 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->request_mode_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->bounds_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->baseline_row, GTK_IS_WIDGET (object));
-  gtk_widget_set_visible (sl->measure_row, GTK_IS_WIDGET (object));
+  /* Don't autoshow, it may be slow, we have a button for this */
+  if (!GTK_IS_WIDGET (object))
+    gtk_widget_set_visible (sl->measure_row, FALSE);
   gtk_widget_set_visible (sl->measure_info_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->mnemonic_label_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->tick_callback_row, GTK_IS_WIDGET (object));
