@@ -28,6 +28,9 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
+#ifdef CAIRO_HAS_SVG_SURFACE
+#include <cairo-svg.h>
+#endif
 
 static char *
 get_save_filename (const char *filename)
@@ -48,6 +51,58 @@ get_save_filename (const char *filename)
   return result;
 }
 
+#ifdef CAIRO_HAS_SVG_SURFACE
+static cairo_status_t
+cairo_serializer_write (gpointer             user_data,
+                        const unsigned char *data,
+                        unsigned int         length)
+{
+  g_byte_array_append (user_data, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static GBytes *
+create_svg (GskRenderNode  *node,
+            GError        **error)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  graphene_rect_t bounds;
+  GByteArray *array;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  array = g_byte_array_new ();
+
+  surface = cairo_svg_surface_create_for_stream (cairo_serializer_write,
+                                                 array,
+                                                 bounds.size.width,
+                                                 bounds.size.height);
+  cairo_svg_surface_set_document_unit (surface, CAIRO_SVG_UNIT_PX);
+  cairo_surface_set_device_offset (surface, -bounds.origin.x, -bounds.origin.y);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  if (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS)
+    {
+      cairo_surface_destroy (surface);
+      return g_byte_array_free_to_bytes (array);
+    }
+  else
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "%s", cairo_status_to_string (cairo_surface_status (surface)));
+      cairo_surface_destroy (surface);
+      g_byte_array_unref (array);
+      return NULL;
+    }
+}
+#endif
+
 static void
 render_file (const char *filename,
              const char *renderer_name,
@@ -55,24 +110,10 @@ render_file (const char *filename,
 {
   GskRenderNode *node;
   GBytes *bytes;
-  GdkTexture *texture;
   char *save_to;
-  GskRenderer *renderer;
-  GdkSurface *window;
   GError *error = NULL;
 
-  node = load_node_file (filename);
-
-  if (renderer_name)
-    g_object_set_data_full (G_OBJECT (gdk_display_get_default ()), "gsk-renderer",
-                            g_strdup (renderer_name), g_free);
-
-  window = gdk_surface_new_toplevel (gdk_display_get_default ());
-  renderer = gsk_renderer_new_for_surface (window);
-
-  texture = gsk_renderer_render_texture (renderer, node, NULL);
-
-  save_to = (char *)save_file;
+  save_to = (char *) save_file;
 
   if (save_to == NULL)
     {
@@ -85,11 +126,42 @@ render_file (const char *filename,
         }
     }
 
-  if (g_str_has_suffix (save_to, ".tif") ||
-      g_str_has_suffix (save_to, ".tiff"))
-    bytes = gdk_texture_save_to_tiff_bytes (texture);
+  node = load_node_file (filename);
+
+#ifdef CAIRO_HAS_SVG_SURFACE
+  if (g_str_has_suffix (save_to, ".svg"))
+    {
+      bytes = create_svg (node, &error);
+      if (bytes == NULL)
+        {
+          g_printerr (_("Failed to generate SVG: %s\n"), error->message);
+          exit (1);
+        }
+    }
   else
-    bytes = gdk_texture_save_to_png_bytes (texture);
+#endif
+    {
+      GdkTexture *texture;
+      GskRenderer *renderer;
+      GdkSurface *window;
+
+      if (renderer_name)
+        g_object_set_data_full (G_OBJECT (gdk_display_get_default ()), "gsk-renderer",
+                                g_strdup (renderer_name), g_free);
+
+      window = gdk_surface_new_toplevel (gdk_display_get_default ());
+      renderer = gsk_renderer_new_for_surface (window);
+
+      texture = gsk_renderer_render_texture (renderer, node, NULL);
+
+      if (g_str_has_suffix (save_to, ".tif") ||
+          g_str_has_suffix (save_to, ".tiff"))
+        bytes = gdk_texture_save_to_tiff_bytes (texture);
+      else
+        bytes = gdk_texture_save_to_png_bytes (texture);
+
+      g_object_unref (texture);
+    }
 
   if (g_file_set_contents (save_to,
                            g_bytes_get_data (bytes, NULL),
@@ -110,7 +182,6 @@ render_file (const char *filename,
   if (save_to != save_file)
     g_free (save_to);
 
-  g_object_unref (texture);
   gsk_render_node_unref (node);
 }
 

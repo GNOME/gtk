@@ -1009,6 +1009,7 @@ gdk_display_load_pipeline_cache (GdkDisplay *display)
                                            &result) != VK_SUCCESS)
     result = VK_NULL_HANDLE;
 
+  g_object_unref (cache_file);
   g_free (data);
   g_free (display->vk_pipeline_cache_etag);
   display->vk_pipeline_cache_etag = etag;
@@ -1644,7 +1645,6 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   if (display->vulkan_refcount > 0)
     return;
 
-  display->vk_shader_modules = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_iter_init (&iter, display->vk_shader_modules);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -1653,9 +1653,11 @@ gdk_display_unref_vulkan (GdkDisplay *display)
                              value,
                              NULL);
     }
+  g_hash_table_unref (display->vk_shader_modules);
 
   if (display->vk_save_pipeline_cache_source)
     {
+      g_clear_handle_id (&display->vk_save_pipeline_cache_source, g_source_remove);
       gdk_vulkan_save_pipeline_cache_cb (display);
       g_assert (display->vk_save_pipeline_cache_source == 0);
     }

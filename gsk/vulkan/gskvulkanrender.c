@@ -483,7 +483,7 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
   cairo_region_get_extents (self->clip, &extents);
 
   gsk_vulkan_render_pass_begin_op (self,
-                                   g_object_ref (self->target),
+                                   self->target,
                                    &extents,
                                    VK_IMAGE_LAYOUT_UNDEFINED,
                                    VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
@@ -499,7 +499,7 @@ gsk_vulkan_render_add_node (GskVulkanRender       *self,
   gsk_vulkan_render_pass_free (render_pass);
 
   gsk_vulkan_render_pass_end_op (self,
-                                 g_object_ref (self->target),
+                                 self->target,
                                  VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
   if (download_func)

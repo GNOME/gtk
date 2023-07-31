@@ -151,6 +151,8 @@ gdk_memory_texture_new (int              width,
   g_return_val_if_fail (height > 0, NULL);
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
+  /* needs to be this complex to support subtexture of the bottom right part */
+  g_return_val_if_fail (g_bytes_get_size (bytes) >= stride * (height - 1) + width * gdk_memory_format_bytes_per_pixel (format), NULL);
 
   bytes = gdk_memory_sanitize (bytes, width, height, format, stride, &stride);
 
