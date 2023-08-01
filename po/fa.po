@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-29 01:59+0000\n"
-"PO-Revision-Date: 2023-07-31 02:45+0330\n"
+"POT-Creation-Date: 2023-07-31 15:14+0000\n"
+"PO-Revision-Date: 2023-08-01 09:23+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -2182,7 +2182,7 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170 gtk/gtkmessagedialog.c:179
 #: gtk/gtkmountoperation.c:608 gtk/print/gtkpagesetupunixdialog.c:282
 #: gtk/print/gtkprintbackend.c:638 gtk/print/gtkprintunixdialog.c:682
-#: gtk/print/gtkprintunixdialog.c:839 gtk/gtkwindow.c:6193
+#: gtk/print/gtkprintunixdialog.c:839 gtk/gtkwindow.c:6238
 #: gtk/ui/gtkappchooserdialog.ui:48 gtk/ui/gtkassistant.ui:52
 #: gtk/ui/gtkcolorchooserdialog.ui:36 gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2703,7 +2703,7 @@ msgid "Play"
 msgstr "پخش"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6194
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6239
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -3569,12 +3569,12 @@ msgstr "بر_گردان"
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
-#: gtk/gtkwindow.c:6182
+#: gtk/gtkwindow.c:6227
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6184
+#: gtk/gtkwindow.c:6229
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
@@ -3584,7 +3584,7 @@ msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
 "را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6189
+#: gtk/gtkwindow.c:6234
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
@@ -7157,7 +7157,7 @@ msgstr "استفادهٔ سبک از پروندهٔ CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:133
+#: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "نتوانست سامانهٔ پنجره را راه‌اندازی کند\n"
@@ -7201,12 +7201,12 @@ msgstr ""
 "پروندهٔ %s موجود است.\n"
 "برای پایکالی از ‪--force‬ استفاده کنید.\n"
 
-#: tools/gtk-builder-tool-screenshot.c:332 tools/gtk-rendernode-tool-render.c:100
+#: tools/gtk-builder-tool-screenshot.c:332 tools/gtk-rendernode-tool-render.c:172
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "خروجی در %s نوشته شد.\n"
 
-#: tools/gtk-builder-tool-screenshot.c:336 tools/gtk-rendernode-tool-render.c:104
+#: tools/gtk-builder-tool-screenshot.c:336 tools/gtk-rendernode-tool-render.c:176
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "شکست در ذخیرهٔ %s: %s\n"
@@ -7223,7 +7223,7 @@ msgstr "ذخیره به شکل پروندهٔ گره به‌جای png"
 msgid "Overwrite existing file"
 msgstr "رونویسی پروندهٔ موجود"
 
-#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-rendernode-tool-render.c:126
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-rendernode-tool-render.c:197
 msgid "FILE…"
 msgstr "پرونده…"
 
@@ -7433,7 +7433,7 @@ msgid "Provide information about the render node."
 msgstr "اطّلاعاتی دربارهٔ گره پرداختگر فراهم می‌کند."
 
 #: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:154
+#: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "هیچ پروندهٔ ‪.node‬ ای مشخّص نشده\n"
@@ -7452,7 +7452,7 @@ msgstr "نمایش گره پرداختگر."
 msgid "Can only preview a single .node file\n"
 msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.node‬ را پیش‌نمایش دهد\n"
 
-#: tools/gtk-rendernode-tool-render.c:82
+#: tools/gtk-rendernode-tool-render.c:123
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7461,19 +7461,24 @@ msgstr ""
 "پروندهٔ %s وجود دارد.\n"
 "اگر می‌خواهید پایممالش کنید، نام پرونده را مشخّص کنید.\n"
 
-#: tools/gtk-rendernode-tool-render.c:125
+#: tools/gtk-rendernode-tool-render.c:137
+#, c-format
+msgid "Failed to generate SVG: %s\n"
+msgstr "شکست در ایجاد SVG: ‏%s\n"
+
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "Renderer to use"
 msgstr "پرداختگر مورد استفاده"
 
-#: tools/gtk-rendernode-tool-render.c:125
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "RENDERER"
 msgstr "RENDERER"
 
-#: tools/gtk-rendernode-tool-render.c:141
+#: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
 msgstr "پرداخت یک پروندهٔ ‪.node‬ در یک تصویر."
 
-#: tools/gtk-rendernode-tool-render.c:160
+#: tools/gtk-rendernode-tool-render.c:231
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.noide‬ را در یک پروندهٔ خروحی پرداخت کند\n"
