@@ -30,6 +30,7 @@ gboolean gtk_openuri_portal_is_available (void);
 
 void     gtk_openuri_portal_open_async   (GFile               *file,
                                           gboolean             open_folder,
+                                          gboolean             always_ask,
                                           GtkWindow           *window,
                                           GCancellable        *cancellable,
                                           GAsyncReadyCallback  callback,
