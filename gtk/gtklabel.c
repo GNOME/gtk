@@ -1313,8 +1313,8 @@ gtk_label_measure (GtkWidget      *widget,
 
 static void
 get_layout_location (GtkLabel  *self,
-                     int       *xp,
-                     int       *yp)
+                     float     *xp,
+                     float     *yp)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   const int widget_width = gtk_widget_get_width (widget);
@@ -1322,7 +1322,7 @@ get_layout_location (GtkLabel  *self,
   PangoRectangle logical;
   float xalign;
   int baseline;
-  int x, y;
+  float x, y;
 
   g_assert (xp);
   g_assert (yp);
@@ -1334,6 +1334,8 @@ get_layout_location (GtkLabel  *self,
 
   pango_layout_get_pixel_extents (self->layout, NULL, &logical);
   x = floor ((xalign * (widget_width - logical.width)) - logical.x);
+  if (x < 0)
+    x = 0.f;
 
   baseline = gtk_widget_get_baseline (widget);
   if (baseline != -1)
@@ -1382,7 +1384,7 @@ gtk_label_snapshot (GtkWidget   *widget,
   GtkLabel *self = GTK_LABEL (widget);
   GtkLabelSelectionInfo *info;
   GtkCssStyle *style;
-  int lx, ly;
+  float lx, ly;
   int width, height;
   GtkCssBoxes boxes;
 
@@ -1705,7 +1707,7 @@ get_layout_index (GtkLabel *self,
   const char *cluster;
   const char *cluster_end;
   gboolean inside;
-  int lx, ly;
+  float lx, ly;
 
   *index = 0;
 
@@ -5247,17 +5249,17 @@ gtk_label_get_layout_offsets (GtkLabel *self,
                               int      *x,
                               int      *y)
 {
-  int local_x, local_y;
+  float local_x, local_y;
   g_return_if_fail (GTK_IS_LABEL (self));
 
   gtk_label_ensure_layout (self);
   get_layout_location (self, &local_x, &local_y);
 
   if (x)
-    *x = local_x;
+    *x = (int) local_x;
 
   if (y)
-    *y = local_y;
+    *y = (int) local_y;
 }
 
 /**

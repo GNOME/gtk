@@ -245,11 +245,11 @@ update_pango_alignment (GtkInscription *self)
   ltr = _gtk_widget_get_direction (GTK_WIDGET (self)) != GTK_TEXT_DIR_RTL;
 
   if (self->xalign < 0.33)
-      align = ltr ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
+    align = ltr ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
   else if (self->xalign < 0.67)
-      align = PANGO_ALIGN_CENTER;
+    align = PANGO_ALIGN_CENTER;
   else
-      align = ltr ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+    align = ltr ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
 
   pango_layout_set_alignment (self->layout, align);
 }

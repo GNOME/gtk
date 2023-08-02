@@ -6463,6 +6463,8 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   GtkSettings *settings;
   cairo_font_options_t *font_options;
   guint old_serial;
+  gboolean hint_font_metrics = FALSE;
+  int scale;
 
   old_serial = pango_context_get_serial (context);
 
@@ -6470,14 +6472,18 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   pango_context_set_font_description (context, font_desc);
   pango_font_description_free (font_desc);
 
+  scale = gtk_widget_get_scale_factor (widget);
   settings = gtk_widget_get_settings (widget);
 
-  if (settings &&
+  if (settings != NULL &&
       cairo_version () >= CAIRO_VERSION_ENCODE (1, 17, 4))
     {
-      gboolean hint_font_metrics;
-
       g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
+
+      /* Override the user setting on non-HiDPI */
+      if (scale == 1)
+        hint_font_metrics = TRUE;
+
       pango_context_set_round_glyph_positions (context, hint_font_metrics);
     }
 
@@ -6495,13 +6501,25 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
 
       options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
       cairo_font_options_merge (options, font_options);
+
+      cairo_font_options_set_hint_metrics (options,
+                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
+                                                                  : CAIRO_HINT_METRICS_OFF);
+
       pango_cairo_context_set_font_options (context, options);
       cairo_font_options_destroy (options);
     }
   else if (settings)
     {
-      pango_cairo_context_set_font_options (context,
-                                            gtk_settings_get_font_options (settings));
+      cairo_font_options_t *options;
+
+      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
+      cairo_font_options_set_hint_metrics (options,
+                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
+                                                                  : CAIRO_HINT_METRICS_OFF);
+
+      pango_cairo_context_set_font_options (context, options);
+      cairo_font_options_destroy (options);
     }
 
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
@@ -6800,6 +6818,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+  gtk_widget_update_default_pango_context (widget);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SCALE_FACTOR]);
 
