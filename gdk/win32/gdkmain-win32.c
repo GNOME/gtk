@@ -48,15 +48,6 @@ static gboolean ole_initialized = FALSE;
 void
 _gdk_win32_surfaceing_init (void)
 {
-  GdkWin32Keymap *win32_keymap;
-
-  win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
-
-  _gdk_input_locale = GetKeyboardLayout (0);
-  _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);
-
-  GDK_NOTE (EVENTS, g_print ("input_locale: %p\n", _gdk_input_locale));
-
   _gdk_win32_clipdrop_init ();
 
   gdk_dmanipulation_initialize ();
