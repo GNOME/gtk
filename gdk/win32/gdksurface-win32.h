@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 2023 the GTK team
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -13,13 +14,6 @@
  *
  * You should have received a copy of the GNU Library General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #pragma once
@@ -289,23 +283,7 @@ struct _GdkWin32Surface
    */
   guint maximizing : 1;
 
-  /* GDK does not keep window contents around, it just draws new
-   * stuff over the window where changes occurred.
-   * cache_surface retains old window contents, because
-   * UpdateLayeredWindow() doesn't do partial redraws.
-   */
-  cairo_surface_t *cache_surface;
-
-  /* Unlike window-backed surfaces, DIB-backed surface
-   * does not provide a way to query its size,
-   * so we have to remember it ourselves.
-   */
-  int              dib_width;
-  int              dib_height;
-
-  HDC              hdc;
-  int              hdc_count;
-  HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
+  HDC hdc;
 
   GdkW32DragMoveResizeContext drag_move_resize_context;
 

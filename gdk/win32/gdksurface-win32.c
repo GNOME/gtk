@@ -194,12 +194,6 @@ gdk_surface_win32_finalize (GObject *object)
       surface->hicon_small = NULL;
     }
 
-  if (surface->cache_surface)
-    {
-      cairo_surface_destroy (surface->cache_surface);
-      surface->cache_surface = NULL;
-    }
-
   _gdk_win32_surface_unregister_dnd (GDK_SURFACE (surface));
 
   g_assert (surface->transient_owner == NULL);
