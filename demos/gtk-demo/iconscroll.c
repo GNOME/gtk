@@ -354,10 +354,18 @@ do_iconscroll (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GtkBuilderScope *scope;
       GtkWidget *label;
       guint id;
 
-      builder = gtk_builder_new_from_resource ("/iconscroll/iconscroll.ui");
+      scope = gtk_builder_cscope_new ();
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), iconscroll_prev_clicked_cb);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), iconscroll_next_clicked_cb);
+
+      builder = gtk_builder_new ();
+      gtk_builder_set_scope (builder, scope);
+
+      gtk_builder_add_from_resource (builder, "/iconscroll/iconscroll.ui", NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -375,6 +383,7 @@ do_iconscroll (GtkWidget *do_widget)
                               GUINT_TO_POINTER (id), remove_timeout);
 
       g_object_unref (builder);
+      g_object_unref (scope);
     }
 
   if (!gtk_widget_get_visible (window))

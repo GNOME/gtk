@@ -310,11 +310,20 @@ do_fishbowl (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GtkBuilderScope *scope;
       GtkWidget *bowl;
 
       g_type_ensure (GTK_TYPE_FISHBOWL);
 
-      builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
+      scope = gtk_builder_cscope_new ();
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), fishbowl_prev_button_clicked_cb);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), fishbowl_next_button_clicked_cb);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), fishbowl_changes_toggled_cb);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), format_header_cb);
+
+      builder = gtk_builder_new ();
+      gtk_builder_set_scope (builder, scope);
+      gtk_builder_add_from_resource (builder, "/fishbowl/fishbowl.ui", NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
@@ -326,6 +335,7 @@ do_fishbowl (GtkWidget *do_widget)
 
       gtk_widget_realize (window);
       g_object_unref (builder);
+      g_object_unref (scope);
     }
 
   if (!gtk_widget_get_visible (window))

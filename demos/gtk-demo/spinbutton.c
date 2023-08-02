@@ -188,10 +188,20 @@ do_spinbutton (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GtkBuilderScope *scope;
       GtkAdjustment *adj;
       GtkWidget *label;
 
-      builder = gtk_builder_new_from_resource ("/spinbutton/spinbutton.ui");
+      scope = gtk_builder_cscope_new ();
+      builder = gtk_builder_new ();
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_hex_spin_input);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_hex_spin_output);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_time_spin_input);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_time_spin_output);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_month_spin_input);
+      gtk_builder_cscope_add_callback (GTK_BUILDER_CSCOPE (scope), spinbutton_month_spin_output);
+      gtk_builder_set_scope (builder, scope);
+      gtk_builder_add_from_resource (builder, "/spinbutton/spinbutton.ui", NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
@@ -233,6 +243,7 @@ do_spinbutton (GtkWidget *do_widget)
                                    NULL, NULL);
 
       g_object_unref (builder);
+      g_object_unref (scope);
     }
 
   if (!gtk_widget_get_visible (window))
