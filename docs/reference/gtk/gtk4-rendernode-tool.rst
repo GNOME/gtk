@@ -38,7 +38,7 @@ The ``show`` command displays the rendernode.
 Rendering
 ^^^^^^^^^
 
-The ``render`` command saves a rendering of the rendernode as a png ot tiff image.
+The ``render`` command saves a rendering of the rendernode as a png or tiff image.
 The name of the file to write can be specified as a second FILE argument.
 
 ``--renderer=RENDERER``
