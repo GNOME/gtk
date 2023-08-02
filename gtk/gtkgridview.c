@@ -431,6 +431,11 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
         {
           guint rows_in_tile = tile->n_items / self->n_columns;
           guint row_height = (tile->area.height + yspacing) / rows_in_tile - yspacing;
+
+          /* tile has no computed area */
+          if (row_height + yspacing == 0)
+            return FALSE;
+
           guint row_index = MIN (tile->area.height - 1, y - tile->area.y) / (row_height + yspacing);
           pos += self->n_columns * row_index;
 
