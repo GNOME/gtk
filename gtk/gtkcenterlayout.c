@@ -106,16 +106,6 @@ gtk_center_layout_get_request_mode (GtkLayoutManager *layout_manager,
            : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
-static gboolean
-get_expand (GtkWidget      *widget,
-            GtkOrientation  orientation)
-{
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    return gtk_widget_get_hexpand (widget);
-  else
-    return gtk_widget_get_vexpand (widget);
-}
-
 static void
 gtk_center_layout_distribute (GtkCenterLayout  *self,
                               int               for_size,
@@ -165,21 +155,21 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
         natural_size = sizes[1].natural_size;
 
       center_size = CLAMP (avail, sizes[1].minimum_size, natural_size);
-      center_expand = get_expand (self->center_widget, self->orientation);
+      center_expand = gtk_widget_compute_expand (self->center_widget, self->orientation);
     }
 
   if (self->start_widget)
     {
       avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[2].minimum_size));
       start_size = CLAMP (avail, sizes[0].minimum_size, sizes[0].natural_size);
-      start_expand = get_expand (self->start_widget, self->orientation);
+      start_expand = gtk_widget_compute_expand (self->start_widget, self->orientation);
     }
 
    if (self->end_widget)
     {
       avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[0].minimum_size));
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
-      end_expand = get_expand (self->end_widget, self->orientation);
+      end_expand = gtk_widget_compute_expand (self->end_widget, self->orientation);
     }
 
   if (self->center_widget)
