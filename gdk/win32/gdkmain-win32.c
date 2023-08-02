@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 2023 the GTK team
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,13 +15,6 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -45,8 +39,6 @@
 #include <wintab.h>
 #include <imm.h>
 
-static gboolean gdk_synchronize = FALSE;
-
 /* Whether GDK initialized COM */
 static gboolean co_initialized = FALSE;
 
@@ -56,18 +48,6 @@ static gboolean ole_initialized = FALSE;
 void
 _gdk_win32_surfaceing_init (void)
 {
-  GdkWin32Keymap *win32_keymap;
-
-  win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
-
-  if (gdk_synchronize)
-    GdiSetBatchLimit (1);
-
-  _gdk_input_locale = GetKeyboardLayout (0);
-  _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);
-
-  GDK_NOTE (EVENTS, g_print ("input_locale: %p\n", _gdk_input_locale));
-
   _gdk_win32_clipdrop_init ();
 
   gdk_dmanipulation_initialize ();
