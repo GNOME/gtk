@@ -5,16 +5,6 @@ How to do a GTK release?
 
 Make sure you have suitable versions of Meson and Ninja.
 
-Also make sure you have the following packages installed with all their
-dependencies:
-
-  * gtk-doc
-  * docbook-utils
-
-Without those packages make distcheck will *not* pass.
-
-Make sure that gtk-doc is the latest released version.
-
 ## Release check list
 
   0. Save all your work, then move to the branch from which you want
@@ -28,8 +18,8 @@ $ git clean -dfx
   1. Build using the common sequence:
 
 ```sh
-$ meson _build .
-$ ninja -C _build
+$ meson setup _build
+$ meson compile -C _build
 ```
 
   2. Update NEWS based on the content of git log; follow the format of prior
@@ -40,11 +30,10 @@ $ ninja -C _build
      writers, committers, etc. Anybody who is mentioned in the commit log
      gets a credit, but only real names, not email addresses or nicknames.
 
-  3. Update the pot files and commit the changes:
+  3. Update the pot file and commit the changes:
 
 ```sh
 $ ninja -C _build gtk40-pot
-$ ninja -C _build gtk40-properties-pot
 ```
 
   4. If this is a major, stable, release, verify that the release notes
@@ -72,7 +61,7 @@ $ ninja -C _build gtk40-properties-pot
      Make sure that all new symbols have proper Since: tags, and that there
      is an index in the main `-docs.xml` for the next stable version.
 
-  8. Run `ninja dist` to generate the tarball.
+  8. Run `meson dist -C_build` to generate the tarball.
 
   9. Fix broken stuff found by 8), commit changes, repeat.
 
@@ -94,7 +83,8 @@ $ ninja -C _build gtk40-properties-pot
 $ git tag -m "GTK 4.2.0" 4.2.0
 ```
 
-  13. Bump the version number in `meson.build` and commit the change.
+  13. Bump the version number in `meson.build`, and add a section for the next
+      release in NEWS and commit the change.
 
   14. Push the changes upstream, and push the tag as well. The git command for
     doing that is:
@@ -111,7 +101,8 @@ $ git push origin 4.2.0
 
 ```sh
 $ scp gtk-4.2.0.tar.xz matthiasc@master.gnome.org:
-$ ssh matthiasc@master.gnome.org ftpadmin install gtk-4.2.0.tar.xz
+$ ssh matthiasc@master.gnome.org
+$ ftpadmin install gtk-4.2.0.tar.xz
 ```
 
   16. Go to the gnome-announce list archives, find the last announce message,

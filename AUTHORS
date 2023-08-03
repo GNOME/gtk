@@ -7,7 +7,7 @@ Peter Mattis      <petm@xcf.berkeley.edu>
 Spencer Kimball   <spencer@xcf.berkeley.edu>
 Josh MacDonald    <jmacd@xcf.berkeley.edu>
 
-The Team that build GTK 2 (in alphabetical order)
+The team that build GTK 2 (in alphabetical order)
 -------------------------------------------------
 Shawn T. Amundson <amundson@gtk.org>
 Jerome Bolliet    <bolliet@gtk.org>
@@ -28,9 +28,8 @@ Jay Painter       <jpaint@gtk.org>
 Manish Singh      <manish@gtk.org>
 Owen Taylor       <otaylor@gtk.org>
 
-The current team (GTK 3 and 4)
-------------------------------
-
+The team that built GTK 3
+-------------------------
 Jonas Ådahl       <jadahl@gmail.com>
 Tim Bäder         <mail@baedert.org>
 Emmanuele Bassi   <ebassi@gnome.org>
@@ -38,6 +37,16 @@ Chun-wei Fan      <fanchunwei@src.gnome.org>
 Matthias Clasen   <mclasen@redhat.com>
 Carlos Garnacho   <mrgarnacho@gmail.com>
 Alexander Larsson <alexl@redhat.com>
+Benjamin Otte     <otte@gnome.org>
+
+The current team (GTK 4)
+------------------------
+Jonas Ådahl       <jadahl@gmail.com>
+Emmanuele Bassi   <ebassi@gnome.org>
+Christian Hergert <chergert@gnome.org>
+Chun-wei Fan      <fanchunwei@src.gnome.org>
+Matthias Clasen   <mclasen@redhat.com>
+Carlos Garnacho   <mrgarnacho@gmail.com>
 Benjamin Otte     <otte@gnome.org>
 
 
@@ -49,35 +58,15 @@ Over time, GTK has incorporated some pieces of software which
 started as independent projects. We list the original authors here:
 
 
-MS-Windows theme engine
------------------------
-Raymond Penners
-Dom Lachowicz
-
-
-Pixbuf theme engine
--------------------
-Owen Taylor
-
-
 IME input method
 ----------------
 Takuro Ashie
 Kazuki IWAMOTO
 
-
-Mac OS X backend
-----------------
+MacOS backend
+-------------
 Anders Carlsson
 
-
-DirectFB backend
-----------------
-Denis Oliver Kropp
-Sven Neumann
-Mike Emmel
-
-
-gtkparasite
------------
+GtkInspector (originally gtkparasite)
+-------------------------------------
 Christian Hammond
