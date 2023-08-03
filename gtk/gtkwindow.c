@@ -981,6 +981,8 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Whether the window is suspended.
    *
    * See [method@Gtk.Window.is_suspended] for details about what suspended means.
+   *
+   * Since: 4.12
    */
   window_props[PROP_SUSPENDED] =
       g_param_spec_boolean ("suspended", NULL, NULL,
@@ -1305,6 +1307,8 @@ gtk_window_is_fullscreen (GtkWindow *window)
  * example by being on a inactive workspace, minimized, obstructed.
  *
  * Returns: whether the window is suspended.
+ *
+ * Since: 4.12
  */
 gboolean
 gtk_window_is_suspended (GtkWindow *window)
