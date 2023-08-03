@@ -6,8 +6,6 @@
 
 #include "demo_conf.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 static GtkWidget *main_window;
 static GFile *filename = NULL;
 static GtkPageSetup *page_setup = NULL;
@@ -43,7 +41,7 @@ update_statusbar (void)
   GtkTextIter iter;
   const char *print_str;
 
-  gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 0);
+  gtk_label_set_label (GTK_LABEL (statusbar), "");
 
   gtk_text_buffer_get_iter_at_mark (buffer,
                                     &iter,
@@ -61,10 +59,10 @@ update_statusbar (void)
 
   msg = g_strdup_printf ("%d, %d%s %s",
                          row, col,
-			 file_changed?" - Modified":"",
-			 print_str);
+                         file_changed?" - Modified":"",
+                         print_str);
 
-  gtk_statusbar_push (GTK_STATUSBAR (statusbar), 0, msg);
+  gtk_label_set_label (GTK_LABEL (statusbar), msg);
 
   g_free (msg);
 }
@@ -827,7 +825,12 @@ activate (GApplication *app)
                      contents);
 
   /* Create statusbar */
-  statusbar = gtk_statusbar_new ();
+  statusbar = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (statusbar), 0);
+  gtk_widget_set_margin_start (statusbar, 2);
+  gtk_widget_set_margin_end (statusbar, 2);
+  gtk_widget_set_margin_top (statusbar, 2);
+  gtk_widget_set_margin_bottom (statusbar, 2);
   gtk_box_append (GTK_BOX (box), statusbar);
 
   /* Show text widget info in the statusbar */
