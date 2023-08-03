@@ -160,14 +160,14 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
 
   if (self->start_widget)
     {
-      avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[2].minimum_size));
+      avail = size - needed_spacing - (center_size + sizes[2].minimum_size);
       start_size = CLAMP (avail, sizes[0].minimum_size, sizes[0].natural_size);
       start_expand = gtk_widget_compute_expand (self->start_widget, self->orientation);
     }
 
    if (self->end_widget)
     {
-      avail = MIN ((size - needed_spacing - center_size) / 2, size - needed_spacing - (center_size + sizes[0].minimum_size));
+      avail = size - needed_spacing - (center_size + sizes[0].minimum_size);
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
       end_expand = gtk_widget_compute_expand (self->end_widget, self->orientation);
     }
