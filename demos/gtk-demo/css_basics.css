@@ -4,23 +4,24 @@
  * anymore. :)
  */
 
-/* This CSS resets all properties to their defaults values
- *    and overrides all user settings and the theme in use */
-@import url("resource://css_basics/reset.css");
+/* This resets all properties to their defaults values
+ * and overrides all user settings and the theme in use
+ */
+@import url("resource://css_shadows/reset.css");
 
 /* Set a very futuristic style by default */
-* {
+.demo * {
   color: green;
   font-family: Monospace;
   border: 1px solid;
 }
 
-window {
+window.demo {
   background-color: white;
 }
 
 /* Make sure selections are visible */
-selection {
+.demo selection {
   background-color: darkGreen;
   color: black;
 }

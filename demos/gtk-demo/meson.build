@@ -150,8 +150,6 @@ if librsvg_dep.found()
   gtkdemo_deps += [ librsvg_dep ]
 endif
 
-gtkdemo_args = [ '-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED', ]
-
 demos_h = custom_target('gtk4 demo header',
   output: 'demos.h',
   input: demos,
@@ -235,7 +233,7 @@ gtkdemo_deps += [ demo_conf_h ]
 
 executable('gtk4-demo',
   sources: [demos, demos_h, extra_demo_sources, gtkdemo_resources],
-  c_args: gtkdemo_args + demo_cflags,
+  c_args: demo_cflags,
   dependencies: gtkdemo_deps,
   include_directories: confinc,
   win_subsystem: 'windows',
@@ -245,7 +243,7 @@ executable('gtk4-demo',
 
 executable('gtk4-demo-application',
   sources: ['application.c', gtkdemo_resources],
-  c_args: gtkdemo_args + common_cflags,
+  c_args: common_cflags,
   dependencies: gtkdemo_deps,
   include_directories: confinc,
   win_subsystem: 'windows',

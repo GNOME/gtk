@@ -68,13 +68,18 @@ create_blurred_button (void)
   return w;
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GtkWidget *
 create_font_button (void)
 {
-  return gtk_font_button_new ();
+  GtkFontDialog *dialog;
+  GtkWidget *button;
+
+  dialog = gtk_font_dialog_new ();
+  button = gtk_font_dialog_button_new (dialog);
+  g_object_unref (dialog);
+
+  return button;
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GtkWidget *
 create_level_bar (void)

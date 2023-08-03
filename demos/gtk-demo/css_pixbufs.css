@@ -50,7 +50,7 @@
     100% { background-size: 12px, 96px, 12px, 96px, 12px, 96px, 12px, 96px, auto; }
 }
 
-window {
+window.demo {
     background-image: url("resource://css_pixbufs/images/apple-red.png"),
                       url("resource://css_pixbufs/images/gnome-applets.png"),
                       url("resource://css_pixbufs/images/gnome-calendar.png"),
@@ -66,11 +66,11 @@ window {
 }
 
 /* Make the text editor has a nice style */
-.view, scrollbar, separator {
+window.demo .view, scrollbar, separator {
   color: black;
   background-color: rgba(255,255,255,0.5);
 }
 
-.view:selected {
+window.demo .view:selected {
   background-color: rgba(127,127,255,0.5);
 }

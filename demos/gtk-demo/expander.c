@@ -10,8 +10,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 static GtkWidget *window = NULL;
 
 static void
@@ -45,21 +43,22 @@ do_expander (GtkWidget *do_widget)
   if (!window)
     {
       toplevel = GTK_WIDGET (gtk_widget_get_root (do_widget));
-      window = gtk_message_dialog_new_with_markup (GTK_WINDOW (toplevel),
-                                                   0,
-                                                   GTK_MESSAGE_ERROR,
-                                                   GTK_BUTTONS_CLOSE,
-                                                   "<big><b>%s</b></big>",
-                                                   "Something went wrong");
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (window),
-                                                "Here are some more details "
-                                                "but not the full story.");
-
-      area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (window));
-
-      label = gtk_widget_get_last_child (area);
+      window = gtk_window_new ();
+      gtk_window_set_title (GTK_WINDOW (window), "Expander");
+      gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (toplevel));
+      area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_widget_set_margin_start (area, 10);
+      gtk_widget_set_margin_end (area, 10);
+      gtk_widget_set_margin_top (area, 10);
+      gtk_widget_set_margin_bottom (area, 10);
+      gtk_window_set_child (GTK_WINDOW (window), area);
+      label = gtk_label_new ("<big><b>Something went wrong</b></big>");
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_box_append (GTK_BOX (area), label);
+      label = gtk_label_new ("Here are some more details but not the full story");
       gtk_label_set_wrap (GTK_LABEL (label), FALSE);
       gtk_widget_set_vexpand (label, FALSE);
+      gtk_box_append (GTK_BOX (area), label);
 
       expander = gtk_expander_new ("Details:");
       gtk_widget_set_vexpand (expander, TRUE);
@@ -122,7 +121,7 @@ do_expander (GtkWidget *do_widget)
   }
 
   if (!gtk_widget_get_visible (window))
-    gtk_widget_set_visible (window, TRUE);
+    gtk_window_present (GTK_WINDOW (window));
   else
     gtk_window_destroy (GTK_WINDOW (window));
 

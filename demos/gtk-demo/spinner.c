@@ -27,7 +27,6 @@ GtkWidget *
 do_spinner (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *button;
@@ -35,28 +34,19 @@ do_spinner (GtkWidget *do_widget)
 
   if (!window)
   {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    window = gtk_dialog_new_with_buttons ("Spinner",
-                                          GTK_WINDOW (do_widget),
-                                          0,
-                                          _("_Close"),
-                                          GTK_RESPONSE_NONE,
-                                          NULL);
+    window = gtk_window_new ();
+    gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
+    gtk_window_set_title (GTK_WINDOW (window), "Spinner");
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-    g_signal_connect (window, "response",
-                      G_CALLBACK (gtk_window_destroy), NULL);
     g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-    content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-    gtk_widget_set_margin_start (vbox, 5);
-    gtk_widget_set_margin_end (vbox, 5);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
     gtk_widget_set_margin_top (vbox, 5);
     gtk_widget_set_margin_bottom (vbox, 5);
-    gtk_box_append (GTK_BOX (content_area), vbox);
+    gtk_widget_set_margin_start (vbox, 5);
+    gtk_widget_set_margin_end (vbox, 5);
+
+    gtk_window_set_child (GTK_WINDOW (window), vbox);
 
     /* Sensitive */
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);

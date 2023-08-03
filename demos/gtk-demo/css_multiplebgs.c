@@ -6,8 +6,6 @@
 
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 static void
 show_parsing_error (GtkCssProvider *provider,
                     GtkCssSection  *section,
@@ -50,33 +48,23 @@ css_text_changed (GtkTextBuffer  *buffer,
   gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-  gtk_css_provider_load_from_data (provider, text, -1);
+  gtk_css_provider_load_from_string (provider, text);
   g_free (text);
 }
 
 static void
-drawing_area_draw (GtkDrawingArea *da,
-                   cairo_t        *cr,
-                   int             width,
-                   int             height,
-                   gpointer        data)
+clear_provider (gpointer data)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (da));
+  GtkStyleProvider *provider = data;
 
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (), provider);
 }
 
 static void
 apply_css (GtkWidget *widget, GtkStyleProvider *provider)
 {
-  GtkWidget *child;
-
-  gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
-  for (child = gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    apply_css (child, provider);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), provider, G_MAXUINT);
+  g_object_set_data_full (G_OBJECT (widget), "provider", provider, clear_provider);
 }
 
 GtkWidget *
@@ -95,16 +83,17 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Multiple Backgrounds");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
+      gtk_widget_add_css_class (window, "demo");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       overlay = gtk_overlay_new ();
       gtk_window_set_child (GTK_WINDOW (window), overlay);
 
       child = gtk_drawing_area_new ();
+      /* Don't set a draw_func, since we are only interested in CSS drawing,
+       * which happens automatically.
+       */
       gtk_widget_set_name (child, "canvas");
-      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (child),
-                                      drawing_area_draw,
-                                      NULL, NULL);
       gtk_overlay_set_child (GTK_OVERLAY (overlay), child);
 
       child = gtk_button_new ();
