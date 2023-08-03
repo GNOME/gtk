@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <object class="GtkStringList" id="targets">
+    <items>
+      <item>None</item>
+      <item>Left</item>
+      <item>Right</item>
+      <item>Top</item>
+      <item>Bottom</item>
+      <item>Start</item>
+      <item>End</item>
+      <item>Width</item>
+      <item>Height</item>
+      <item>Center X</item>
+      <item>Center Y</item>
+      <item>Baseline</item>
+    </items>
+  </object>
   <template class="ConstraintEditor" parent="GtkWidget">
     <child>
       <object class="GtkGrid" id="grid">
@@ -19,9 +35,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="target">
-            <signal name="changed" handler="update_preview" swapped="yes"/>
-            <signal name="changed" handler="update_button" swapped="yes"/>
+          <object class="GtkDropDown" id="target">
+            <signal name="notify::selected" handler="update_preview" swapped="yes"/>
+            <signal name="notify::selected" handler="update_button" swapped="yes"/>
             <layout>
               <property name="column">1</property>
               <property name="row">1</property>
@@ -29,8 +45,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="target_attr">
-            <signal name="changed" handler="update_preview" swapped="yes"/>
+          <object class="GtkDropDown" id="target_attr">
+            <property name="model">targets</property>
+            <signal name="notify::selected" handler="update_preview" swapped="yes"/>
             <layout>
               <property name="column">2</property>
               <property name="row">1</property>
@@ -47,8 +64,17 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="relation">
-            <signal name="changed" handler="update_preview" swapped="yes"/>
+          <object class="GtkDropDown" id="relation">
+            <signal name="notify::selected" handler="update_preview" swapped="yes"/>
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>≤</item>
+                  <item>=</item>
+                  <item>≥</item>
+                </items>
+              </object>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">2</property>
@@ -65,9 +91,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="source">
-            <signal name="changed" handler="update_preview" swapped="yes"/>
-            <signal name="changed" handler="update_button" swapped="yes"/>
+          <object class="GtkDropDown" id="source">
+            <signal name="notify::selected" handler="update_preview" swapped="yes"/>
+            <signal name="notify::selected" handler="update_button" swapped="yes"/>
             <layout>
               <property name="column">1</property>
               <property name="row">3</property>
@@ -75,10 +101,11 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="source_attr">
-            <signal name="changed" handler="update_preview" swapped="yes"/>
-            <signal name="changed" handler="source_attr_changed" swapped="yes"/>
-            <signal name="changed" handler="update_button" swapped="yes"/>
+          <object class="GtkDropDown" id="source_attr">
+            <property name="model">targets</property>
+            <signal name="notify::selected" handler="update_preview" swapped="yes"/>
+            <signal name="notify::selected" handler="source_attr_changed" swapped="yes"/>
+            <signal name="notify::selected" handler="update_button" swapped="yes"/>
             <layout>
               <property name="column">2</property>
               <property name="row">3</property>
@@ -131,7 +158,17 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="strength">
+          <object class="GtkDropDown" id="strength">
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Weak</item>
+                  <item>Medium</item>
+                  <item>Strong</item>
+                  <item>Required</item>
+                </items>
+              </object>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">6</property>

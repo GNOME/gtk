@@ -167,7 +167,17 @@
           </object>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="strength">
+          <object class="GtkDropDown" id="strength">
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Weak</item>
+                  <item>Medium</item>
+                  <item>Strong</item>
+                  <item>Required</item>
+                </items>
+              </object>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">4</property>

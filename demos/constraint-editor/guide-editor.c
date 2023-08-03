@@ -21,8 +21,6 @@
 
 #include "guide-editor.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 struct _GuideEditor
 {
   GtkWidget parent_instance;
@@ -59,25 +57,30 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE(GuideEditor, guide_editor, GTK_TYPE_WIDGET);
 
-static void
-guide_strength_combo (GtkWidget *combo)
+static GtkConstraintStrength
+get_strength (unsigned int id)
 {
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "weak", "Weak");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "medium", "Medium");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "strong", "Strong");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "required", "Required");
+  switch (id)
+    {
+    case 0: return GTK_CONSTRAINT_STRENGTH_WEAK;
+    case 1: return GTK_CONSTRAINT_STRENGTH_MEDIUM;
+    case 2: return GTK_CONSTRAINT_STRENGTH_STRONG;
+    case 3: return GTK_CONSTRAINT_STRENGTH_REQUIRED;
+    default: g_assert_not_reached ();
+    }
 }
 
-static GtkConstraintStrength
-get_strength (const char *id)
+static unsigned int
+get_strength_id (GtkConstraintStrength strength)
 {
-  GtkConstraintStrength strength;
-  GEnumClass *class = g_type_class_ref (GTK_TYPE_CONSTRAINT_STRENGTH);
-  GEnumValue *value = g_enum_get_value_by_nick (class, id);
-  strength = value->value;
-  g_type_class_unref (class);
-
-  return strength;
+  switch (strength)
+    {
+    case GTK_CONSTRAINT_STRENGTH_WEAK: return 0;
+    case GTK_CONSTRAINT_STRENGTH_MEDIUM: return 1;
+    case GTK_CONSTRAINT_STRENGTH_STRONG: return 2;
+    case GTK_CONSTRAINT_STRENGTH_REQUIRED: return 3;
+    default: g_assert_not_reached ();
+    }
 }
 
 static const char *
@@ -118,11 +121,11 @@ static void
 create_guide (GtkButton   *button,
               GuideEditor *editor)
 {
-  const char *id;
   int strength;
   const char *name;
   int w, h;
   GtkConstraintGuide *guide;
+  unsigned int id;
 
   if (editor->guide)
     guide = g_object_ref (editor->guide);
@@ -144,7 +147,7 @@ create_guide (GtkButton   *button,
   h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->max_height));
   gtk_constraint_guide_set_max_size (guide, w, h);
 
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->strength));
+  id = gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->strength));
   strength = get_strength (id);
   gtk_constraint_guide_set_strength (guide, strength);
 
@@ -191,14 +194,9 @@ guide_editor_constructed (GObject *object)
 {
   GuideEditor *editor = GUIDE_EDITOR (object);
 
-  guide_strength_combo (editor->strength);
-
   g_signal_connect (editor->min_width, "input", G_CALLBACK (min_input), NULL);
-
   g_signal_connect (editor->min_height, "input", G_CALLBACK (min_input), NULL);
-
   g_signal_connect (editor->max_width, "input", G_CALLBACK (max_input), NULL);
-
   g_signal_connect (editor->max_height, "input", G_CALLBACK (max_input), NULL);
 
   if (editor->guide)
@@ -224,8 +222,7 @@ guide_editor_constructed (GObject *object)
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_height), h);
 
       strength = gtk_constraint_guide_get_strength (editor->guide);
-      nick = get_strength_nick (strength);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), nick);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->strength), get_strength_id (strength));
 
       gtk_button_set_label (GTK_BUTTON (editor->button), "Apply");
     }
@@ -245,7 +242,7 @@ guide_editor_constructed (GObject *object)
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_width), G_MAXINT);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_height), G_MAXINT);
 
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), "medium");
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->strength), get_strength_id (GTK_CONSTRAINT_STRENGTH_MEDIUM));
 
       gtk_button_set_label (GTK_BUTTON (editor->button), "Create");
     }
