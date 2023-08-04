@@ -309,14 +309,14 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
    * natural widths, the start and end widgets start shrinking and the
    * center child keeps natural width until they reach minimum width.
    *
-   * If set to `TRUE`, start and end widgets keep natural width and the
+   * If set to `FALSE`, start and end widgets keep natural width and the
    * center widget starts shrinking instead.
    *
    * Since: 4.12
    */
   props[PROP_SHRINK_CENTER_LAST] =
       g_param_spec_boolean ("shrink-center-last", NULL, NULL,
-                            FALSE,
+                            TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
@@ -554,7 +554,7 @@ gtk_center_box_get_baseline_position (GtkCenterBox *self)
  * natural widths, the start and end widgets start shrinking and the
  * center child keeps natural width until they reach minimum width.
  *
- * If set to `TRUE`, start and end widgets keep natural width and the
+ * If set to `FALSE`, start and end widgets keep natural width and the
  * center widget starts shrinking instead.
  *
  * Since: 4.12
