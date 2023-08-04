@@ -30,7 +30,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 #ifdef G_OS_WIN32
 # define _BUILDER_TEST_EXPORT __declspec(dllexport)
 #else
-# define _BUILDER_TEST_EXPORT
+# define _BUILDER_TEST_EXPORT __attribute__((visibility("default")))
 #endif
 
 /* exported for GtkBuilder */
@@ -131,6 +131,7 @@ static int after = 0;
 static int object = 0;
 static int object_after = 0;
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_normal (GtkWindow *window, GParamSpec *spec)
 {
@@ -141,6 +142,7 @@ signal_normal (GtkWindow *window, GParamSpec *spec)
   normal++;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_after (GtkWindow *window, GParamSpec *spec)
 {
@@ -151,6 +153,7 @@ signal_after (GtkWindow *window, GParamSpec *spec)
   after++;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_object (GtkButton *button, GParamSpec *spec)
 {
@@ -161,6 +164,7 @@ signal_object (GtkButton *button, GParamSpec *spec)
   object++;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_object_after (GtkButton *button, GParamSpec *spec)
 {
@@ -171,6 +175,7 @@ signal_object_after (GtkButton *button, GParamSpec *spec)
   object_after++;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_first (GtkButton *button, GParamSpec *spec)
 {
@@ -178,6 +183,7 @@ signal_first (GtkButton *button, GParamSpec *spec)
   normal = 10;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_second (GtkButton *button, GParamSpec *spec)
 {
@@ -185,6 +191,7 @@ signal_second (GtkButton *button, GParamSpec *spec)
   normal = 20;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_extra (GtkButton *button, GParamSpec *spec)
 {
@@ -192,6 +199,7 @@ signal_extra (GtkButton *button, GParamSpec *spec)
   normal = 30;
 }
 
+_BUILDER_TEST_EXPORT
 void /* exported for GtkBuilder */
 signal_extra2 (GtkButton *button, GParamSpec *spec)
 {
