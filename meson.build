@@ -339,14 +339,16 @@ else
   test_cflags = []
 endif
 
-common_cflags = cc.get_supported_arguments(test_cflags)
-
 # Symbol visibility
 if get_option('default_library') != 'static'
   if os_win32
     cdata.set('DLL_EXPORT', true)
+  else
+    test_cflags += ['-fvisibility=hidden']
   endif
 endif
+
+common_cflags = cc.get_supported_arguments(test_cflags)
 
 common_ldflags = cc.get_supported_link_arguments([
   '-Wl,-Bsymbolic',
