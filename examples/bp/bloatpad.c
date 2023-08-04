@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 typedef struct
 {
   GtkApplication parent_instance;
@@ -356,8 +354,8 @@ combo_changed (GtkDropDown *combo,
                GParamSpec  *pspec,
                gpointer     user_data)
 {
-  GtkDialog *dialog = user_data;
   GtkEntry *entry = g_object_get_data (user_data, "entry");
+  GtkWidget *set_button = g_object_get_data (user_data, "set-button");
   const char *action;
   char **accels;
   char *str;
@@ -372,7 +370,7 @@ combo_changed (GtkDropDown *combo,
   g_strfreev (accels);
 
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
-  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
+  gtk_widget_set_sensitive (set_button, FALSE);
 }
 
 static void
@@ -380,27 +378,27 @@ entry_changed (GtkEntry   *entry,
                GParamSpec *pspec,
                gpointer    user_data)
 {
-  GtkDialog *dialog = user_data;
+  GtkWidget *set_button = g_object_get_data (user_data, "set-button");
 
-  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, TRUE);
+  gtk_widget_set_sensitive (set_button, TRUE);
 }
 
 static void
-response (GtkDialog *dialog,
-          guint      response_id,
-          gpointer   user_data)
+close_clicked (GtkButton *button,
+               gpointer   user_data)
+{
+  gtk_window_destroy (GTK_WINDOW (user_data));
+}
+
+static void
+set_clicked (GtkButton *button,
+             gpointer   user_data)
 {
   GtkEntry *entry = g_object_get_data (user_data, "entry");
   GtkDropDown *combo = g_object_get_data (user_data, "combo");
   const char *action;
   const char *str;
   char **accels;
-
-  if (response_id == GTK_RESPONSE_CANCEL)
-    {
-      gtk_window_destroy (GTK_WINDOW (dialog));
-      return;
-    }
 
   action = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (combo)));
 
@@ -413,7 +411,7 @@ response (GtkDialog *dialog,
   gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const char **) accels);
   g_strfreev (accels);
 
-  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
 }
 
 static void
@@ -424,32 +422,45 @@ edit_accels (GSimpleAction *action,
   GtkApplication *app = user_data;
   GtkWidget *combo;
   GtkWidget *entry;
+  GtkWidget *header;
+  GtkWidget *close_button;
+  GtkWidget *set_button;
+  GtkWidget *box;
   char **actions;
   GtkWidget *dialog;
   int i;
   GtkStringList *strings;
 
-  dialog = gtk_dialog_new_with_buttons ("Accelerators",
-                                        NULL,
-                                        GTK_DIALOG_USE_HEADER_BAR,
-                                        "Close", GTK_RESPONSE_CANCEL,
-                                        "Set", GTK_RESPONSE_APPLY,
-                                        NULL);
-
+  dialog = gtk_window_new ();
+  gtk_window_set_title (GTK_WINDOW (dialog), "Accelerators");
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
 
-  strings = gtk_string_list_new (NULL);
-  combo = gtk_drop_down_new (G_LIST_MODEL (strings), NULL);
-  g_object_set (gtk_dialog_get_content_area (GTK_DIALOG (dialog)),
+  header = gtk_header_bar_new ();
+  gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), FALSE);
+  close_button = gtk_button_new_with_label ("Close");
+  g_signal_connect (close_button, "clicked", G_CALLBACK (close_clicked), dialog);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), close_button);
+  set_button = gtk_button_new_with_label ("Set");
+  g_signal_connect (set_button, "clicked", G_CALLBACK (set_clicked), dialog);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), set_button);
+
+  gtk_window_set_titlebar (GTK_WINDOW (dialog), header);
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  g_object_set (box,
                 "margin-top", 10,
                 "margin-bottom", 10,
                 "margin-start", 10,
                 "margin-end", 10,
-                "spacing", 10,
                 NULL);
+  gtk_window_set_child (GTK_WINDOW (dialog), box);
 
-  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
+  strings = gtk_string_list_new (NULL);
+  combo = gtk_drop_down_new (G_LIST_MODEL (strings), NULL);
+
+  gtk_box_append (GTK_BOX (box), combo);
+
   for (i = 0; actions[i]; i++)
     gtk_string_list_append (strings, actions[i]);
   g_signal_connect (combo, "notify::selected", G_CALLBACK (combo_changed), dialog);
@@ -458,10 +469,10 @@ edit_accels (GSimpleAction *action,
   gtk_widget_set_hexpand (entry, TRUE);
   g_signal_connect (entry, "notify::text", G_CALLBACK (entry_changed), dialog);
 
-  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
-  g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);
+  gtk_box_append (GTK_BOX (box), entry);
   g_object_set_data (G_OBJECT (dialog), "combo", combo);
   g_object_set_data (G_OBJECT (dialog), "entry", entry);
+  g_object_set_data (G_OBJECT (dialog), "set-button", set_button);
 
   gtk_drop_down_set_selected (GTK_DROP_DOWN (combo), 0);
 
