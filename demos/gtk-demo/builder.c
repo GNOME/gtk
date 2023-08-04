@@ -1,5 +1,5 @@
 /* Builder
- * #Keywords: GMenu, GtkPopoverMenuBar, GtkBuilder, GtkStatusBar, GtkShortcutController, toolbar
+ * #Keywords: GMenu, GtkPopoverMenuBar, GtkBuilder, GtkShortcutController, toolbar
  *
  * Demonstrates a traditional interface, loaded from a XML description,
  * and shows how to connect actions to the menu items and toolbar buttons.
@@ -37,29 +37,33 @@ remove_timeout (gpointer data)
   g_source_remove (id);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-static gboolean
-pop_status (gpointer data)
+static int
+pop_message (gpointer data)
 {
-  gtk_statusbar_pop (GTK_STATUSBAR (data), 0);
-  g_object_set_data (G_OBJECT (data), "timeout", NULL);
+  GtkWidget *status = data;
+
+  gtk_label_set_label (GTK_LABEL (status), "");
+  g_object_set_data (G_OBJECT (status), "timeout", GUINT_TO_POINTER (0));
+
   return G_SOURCE_REMOVE;
 }
 
 static void
-status_message (GtkStatusbar *status,
-                const char   *text)
+status_message (GtkWidget  *status,
+                const char *text)
 {
   guint id;
 
-  gtk_statusbar_push (GTK_STATUSBAR (status), 0, text);
-  id = g_timeout_add (5000, pop_status, status);
+  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (status), "timeout"));
+  if (id)
+    g_source_remove (id);
+
+  gtk_label_set_text (GTK_LABEL (status), text);
+
+  id = g_timeout_add (5000, pop_message, status);
 
   g_object_set_data_full (G_OBJECT (status), "timeout", GUINT_TO_POINTER (id), remove_timeout);
 }
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 help_activate (GSimpleAction *action,
@@ -69,7 +73,7 @@ help_activate (GSimpleAction *action,
   GtkWidget *status;
 
   status = GTK_WIDGET (g_object_get_data (G_OBJECT (user_data), "status"));
-  status_message (GTK_STATUSBAR (status), "Help not available");
+  status_message (status, "Help not available");
 }
 
 static void
@@ -82,7 +86,7 @@ not_implemented (GSimpleAction *action,
 
   text = g_strdup_printf ("Action “%s” not implemented", g_action_get_name (G_ACTION (action)));
   status = GTK_WIDGET (g_object_get_data (G_OBJECT (user_data), "status"));
-  status_message (GTK_STATUSBAR (status), text);
+  status_message (status, text);
   g_free (text);
 }
 

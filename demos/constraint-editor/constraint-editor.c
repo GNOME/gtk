@@ -20,8 +20,7 @@
 #include "config.h"
 
 #include "constraint-editor.h"
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+#include "constraint-view.h"
 
 struct _ConstraintEditor
 {
@@ -66,7 +65,7 @@ static const char *
 get_target_name (GtkConstraintTarget *target)
 {
   if (target == NULL)
-    return "super";
+    return "Super";
   else if (GTK_IS_WIDGET (target))
     return gtk_widget_get_name (GTK_WIDGET (target));
   else if (GTK_IS_CONSTRAINT_GUIDE (target))
@@ -80,62 +79,29 @@ constraint_target_combo (GListModel *model,
                          GtkWidget  *combo,
                          gboolean    is_source)
 {
+  GtkStringList *targets;
   int i;
 
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "super", "Super");
+  targets = gtk_string_list_new (NULL);
+
+  gtk_string_list_append (targets, "Super");
 
   if (model)
     {
       for (i = 0; i < g_list_model_get_n_items (model); i++)
         {
           GObject *item = g_list_model_get_object (model, i);
-          const char *name;
 
           if (GTK_IS_CONSTRAINT (item))
             continue;
 
-          name = get_target_name (GTK_CONSTRAINT_TARGET (item));
-
-          gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), name, name);
+          gtk_string_list_append (targets, get_target_name (GTK_CONSTRAINT_TARGET (item)));
           g_object_unref (item);
         }
     }
-}
 
-static void
-constraint_attribute_combo (GtkWidget *combo,
-                            gboolean is_source)
-{
-  if (is_source)
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "none", "None");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "left", "Left");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "right", "Right");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "top", "Top");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "bottom", "Bottom");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "start", "Start");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "end", "End");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "width", "Width");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "height", "Height");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center-x", "Center X");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center-y", "Center Y");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "baseline", "Baseline");
-}
-
-static void
-constraint_relation_combo (GtkWidget *combo)
-{
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "le", "≤");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "eq", "=");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "ge", "≥");
-}
-
-static void
-constraint_strength_combo (GtkWidget *combo)
-{
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "weak", "Weak");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "medium", "Medium");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "strong", "Strong");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "required", "Required");
+  gtk_drop_down_set_model (GTK_DROP_DOWN (combo), G_LIST_MODEL (targets));
+  g_object_unref (targets);
 }
 
 static gpointer
@@ -147,7 +113,7 @@ get_target (GListModel *model,
   if (id == NULL)
     return NULL;
 
-  if (strcmp ("super", id) == 0)
+  if (strcmp ("Super", id) == 0)
     return NULL;
 
   for (i = 0; i < g_list_model_get_n_items (model); i++)
@@ -171,16 +137,65 @@ get_target (GListModel *model,
   return NULL;
 }
 
-static GtkConstraintAttribute
-get_target_attr (const char *id)
+static void
+select_target (GtkDropDown *combo,
+               const char  *target_name)
 {
-  GtkConstraintAttribute attr;
-  GEnumClass *class = g_type_class_ref (GTK_TYPE_CONSTRAINT_ATTRIBUTE);
-  GEnumValue *value = g_enum_get_value_by_nick (class, id);
-  attr = value->value;
-  g_type_class_unref (class);
+  GListModel *model = gtk_drop_down_get_model (combo);
 
-  return attr;
+  for (unsigned int i = 0; i < g_list_model_get_n_items (model); i++)
+    {
+      GtkStringObject *s = g_list_model_get_item (model, i);
+
+      g_object_unref (s);
+      if (strcmp (target_name, gtk_string_object_get_string (s)) == 0)
+        {
+          gtk_drop_down_set_selected (GTK_DROP_DOWN (combo), i);
+          return;
+        }
+    }
+}
+
+static GtkConstraintAttribute
+get_attr (unsigned int id)
+{
+  switch (id)
+    {
+    case 0: return GTK_CONSTRAINT_ATTRIBUTE_NONE;
+    case 1: return GTK_CONSTRAINT_ATTRIBUTE_LEFT;
+    case 2: return GTK_CONSTRAINT_ATTRIBUTE_RIGHT;
+    case 3: return GTK_CONSTRAINT_ATTRIBUTE_TOP;
+    case 4: return GTK_CONSTRAINT_ATTRIBUTE_BOTTOM;
+    case 5: return GTK_CONSTRAINT_ATTRIBUTE_START;
+    case 6: return GTK_CONSTRAINT_ATTRIBUTE_END;
+    case 7: return GTK_CONSTRAINT_ATTRIBUTE_WIDTH;
+    case 8: return GTK_CONSTRAINT_ATTRIBUTE_HEIGHT;
+    case 9: return GTK_CONSTRAINT_ATTRIBUTE_CENTER_X;
+    case 10: return GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y;
+    case 11: return GTK_CONSTRAINT_ATTRIBUTE_BASELINE;
+    default: g_assert_not_reached ();
+    }
+}
+
+static unsigned int
+get_attr_id (GtkConstraintAttribute attr)
+{
+  switch (attr)
+    {
+    case GTK_CONSTRAINT_ATTRIBUTE_NONE: return 0;
+    case GTK_CONSTRAINT_ATTRIBUTE_LEFT: return 1;
+    case GTK_CONSTRAINT_ATTRIBUTE_RIGHT: return 2;
+    case GTK_CONSTRAINT_ATTRIBUTE_TOP: return 3;
+    case GTK_CONSTRAINT_ATTRIBUTE_BOTTOM: return 4;
+    case GTK_CONSTRAINT_ATTRIBUTE_START: return 5;
+    case GTK_CONSTRAINT_ATTRIBUTE_END: return 6;
+    case GTK_CONSTRAINT_ATTRIBUTE_WIDTH: return 7;
+    case GTK_CONSTRAINT_ATTRIBUTE_HEIGHT: return 8;
+    case GTK_CONSTRAINT_ATTRIBUTE_CENTER_X: return 9;
+    case GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y: return 10;
+    case GTK_CONSTRAINT_ATTRIBUTE_BASELINE: return 11;
+    default: g_assert_not_reached ();
+    }
 }
 
 static const char *
@@ -195,15 +210,27 @@ get_attr_nick (GtkConstraintAttribute attr)
 }
 
 static GtkConstraintRelation
-get_relation (const char *id)
+get_relation (unsigned int id)
 {
-  GtkConstraintRelation relation;
-  GEnumClass *class = g_type_class_ref (GTK_TYPE_CONSTRAINT_RELATION);
-  GEnumValue *value = g_enum_get_value_by_nick (class, id);
-  relation = value->value;
-  g_type_class_unref (class);
+  switch (id)
+    {
+    case 0: return GTK_CONSTRAINT_RELATION_LE;
+    case 1: return GTK_CONSTRAINT_RELATION_EQ;
+    case 2: return GTK_CONSTRAINT_RELATION_GE;
+    default: g_assert_not_reached ();
+    }
+}
 
-  return relation;
+static unsigned int
+get_relation_id (GtkConstraintRelation relation)
+{
+  switch (relation)
+    {
+    case GTK_CONSTRAINT_RELATION_LE: return 0;
+    case GTK_CONSTRAINT_RELATION_EQ: return 1;
+    case GTK_CONSTRAINT_RELATION_GE: return 2;
+    default: g_assert_not_reached ();
+    }
 }
 
 static const char *
@@ -234,15 +261,29 @@ get_relation_display_name (GtkConstraintRelation relation)
 }
 
 static GtkConstraintStrength
-get_strength (const char *id)
-{
-  GtkConstraintStrength strength;
-  GEnumClass *class = g_type_class_ref (GTK_TYPE_CONSTRAINT_STRENGTH);
-  GEnumValue *value = g_enum_get_value_by_nick (class, id);
-  strength = value->value;
-  g_type_class_unref (class);
+get_strength (unsigned int id)
+{ 
+  switch (id)
+    {
+    case 0: return GTK_CONSTRAINT_STRENGTH_WEAK;
+    case 1: return GTK_CONSTRAINT_STRENGTH_MEDIUM;
+    case 2: return GTK_CONSTRAINT_STRENGTH_STRONG;
+    case 3: return GTK_CONSTRAINT_STRENGTH_REQUIRED;
+    default: g_assert_not_reached ();
+    }
+}
 
-  return strength;
+static unsigned int
+get_strength_id (GtkConstraintStrength strength)
+{
+  switch (strength)
+    {
+    case GTK_CONSTRAINT_STRENGTH_WEAK: return 0;
+    case GTK_CONSTRAINT_STRENGTH_MEDIUM: return 1;
+    case GTK_CONSTRAINT_STRENGTH_STRONG: return 2;
+    case GTK_CONSTRAINT_STRENGTH_REQUIRED: return 3;
+    default: g_assert_not_reached ();
+    }
 }
 
 static const char *
@@ -294,7 +335,7 @@ static void
 create_constraint (GtkButton        *button,
                    ConstraintEditor *editor)
 {
-  const char *id;
+  gpointer obj;
   gpointer target;
   GtkConstraintAttribute target_attr;
   gpointer source;
@@ -305,25 +346,27 @@ create_constraint (GtkButton        *button,
   int strength;
   GtkConstraint *constraint;
 
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target));
-  target = get_target (editor->model, id);
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target_attr));
-  target_attr = get_target_attr (id);
+  obj = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->target));
+  if (obj)
+    target = get_target (editor->model, gtk_string_object_get_string (GTK_STRING_OBJECT (obj)));
+  else
+    target = NULL;
+  target_attr = get_attr (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->target_attr)));
 
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
-  source = get_target (editor->model, id);
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
-  source_attr = get_target_attr (id);
+  obj = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->source));
+  if (obj)
+    source = get_target (editor->model, gtk_string_object_get_string (GTK_STRING_OBJECT (obj)));
+  else
+    source = NULL;
+  source_attr = get_attr (gtk_drop_down_get_selected (GTK_DROP_DOWN(editor->source_attr)));
 
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->relation));
-  relation = get_relation (id);
+  relation = get_relation (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->relation)));
 
   multiplier = g_ascii_strtod (gtk_editable_get_text (GTK_EDITABLE (editor->multiplier)), NULL);
 
   constant = g_ascii_strtod (gtk_editable_get_text (GTK_EDITABLE (editor->constant)), NULL);
 
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->strength));
-  strength = get_strength (id);
+  strength = get_strength (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->strength)));
 
   constraint = gtk_constraint_new (target, target_attr,
                                    relation,
@@ -338,12 +381,9 @@ create_constraint (GtkButton        *button,
 static void
 source_attr_changed (ConstraintEditor *editor)
 {
-  const char *id;
-
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
-  if (strcmp (id, "none") == 0)
+  if (get_attr (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->source_attr))) == GTK_CONSTRAINT_ATTRIBUTE_NONE)
     {
-      gtk_combo_box_set_active (GTK_COMBO_BOX (editor->source), -1);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->source), GTK_INVALID_LIST_POSITION);
       gtk_editable_set_text (GTK_EDITABLE (editor->multiplier), "");
       gtk_widget_set_sensitive (editor->source, FALSE);
       gtk_widget_set_sensitive (editor->multiplier, FALSE);
@@ -409,7 +449,7 @@ update_preview (ConstraintEditor *editor)
   GString *str;
   const char *name;
   const char *attr;
-  char *relation;
+  const char *relation;
   const char *multiplier;
   const char *constant;
   double c, m;
@@ -419,23 +459,22 @@ update_preview (ConstraintEditor *editor)
 
   str = g_string_new ("");
 
-  name = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target));
-  attr = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target_attr));
-  relation = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (editor->relation));
+  name = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->target))));
+  attr = get_attr_nick (get_attr (gtk_drop_down_get_selected ((GTK_DROP_DOWN (editor->target_attr)))));
+  relation = get_relation_nick (get_relation (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->relation))));
 
   if (name == NULL)
     name = "[ ]";
 
   g_string_append_printf (str, "%s.%s %s ", name, attr, relation);
-  g_free (relation);
 
   constant = gtk_editable_get_text (GTK_EDITABLE (editor->constant));
   c = g_ascii_strtod (constant, NULL);
 
-  attr = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
+  attr = get_attr_nick (get_attr (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->source_attr))));
   if (strcmp (attr, "none") != 0)
     {
-      name = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
+       name = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->source))));
       multiplier = gtk_editable_get_text (GTK_EDITABLE (editor->multiplier));
       m = g_ascii_strtod (multiplier, NULL);
 
@@ -463,12 +502,18 @@ update_preview (ConstraintEditor *editor)
 static void
 update_button (ConstraintEditor *editor)
 {
-  const char *target = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target));
-  const char *source = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
-  const char *source_attr = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
+  gpointer obj;
+  const char *target;
+  const char *source;
+  GtkConstraintAttribute source_attr = get_attr (gtk_drop_down_get_selected (GTK_DROP_DOWN (editor->source_attr)));
 
-  if (target &&
-      (source || (source_attr && get_target_attr (source_attr) == GTK_CONSTRAINT_ATTRIBUTE_NONE)))
+  obj = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->target));
+  target = obj ? gtk_string_object_get_string (GTK_STRING_OBJECT (obj)) : NULL;
+
+  obj = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (editor->source));
+  source = obj ?  gtk_string_object_get_string (GTK_STRING_OBJECT (obj)) : NULL;
+
+  if (target && (source || (source_attr == GTK_CONSTRAINT_ATTRIBUTE_NONE)))
     gtk_widget_set_sensitive (editor->button, TRUE);
   else
     gtk_widget_set_sensitive (editor->button, FALSE);
@@ -486,12 +531,7 @@ constraint_editor_constructed (GObject *object)
   ConstraintEditor *editor = CONSTRAINT_EDITOR (object);
 
   constraint_target_combo (editor->model, editor->target, FALSE);
-  constraint_attribute_combo (editor->target_attr, FALSE);
-  constraint_relation_combo (editor->relation);
   constraint_target_combo (editor->model, editor->source, TRUE);
-  constraint_attribute_combo (editor->source_attr, TRUE);
-
-  constraint_strength_combo (editor->strength);
 
   if (editor->constraint)
     {
@@ -499,30 +539,24 @@ constraint_editor_constructed (GObject *object)
       GtkConstraintAttribute attr;
       GtkConstraintRelation relation;
       GtkConstraintStrength strength;
-      const char *nick;
       char *val;
       double multiplier;
       double constant;
 
       target = gtk_constraint_get_target (editor->constraint);
-      nick = get_target_name (target);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->target), nick);
+      select_target (GTK_DROP_DOWN (editor->target), get_target_name (target));
 
       attr = gtk_constraint_get_target_attribute (editor->constraint);
-      nick = get_attr_nick (attr);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->target_attr), nick);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->target_attr), get_attr_id (attr));
 
       target = gtk_constraint_get_source (editor->constraint);
-      nick = get_target_name (target);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->source), nick);
+      select_target (GTK_DROP_DOWN (editor->source), get_target_name (target));
 
       attr = gtk_constraint_get_source_attribute (editor->constraint);
-      nick = get_attr_nick (attr);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->source_attr), nick);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->source_attr), get_attr_id (attr));
 
       relation = gtk_constraint_get_relation (editor->constraint);
-      nick = get_relation_nick (relation);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->relation), nick);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->relation), get_relation_id (relation));
 
       multiplier = gtk_constraint_get_multiplier (editor->constraint);
       val = g_strdup_printf ("%g", multiplier);
@@ -535,17 +569,16 @@ constraint_editor_constructed (GObject *object)
       g_free (val);
 
       strength = gtk_constraint_get_strength (editor->constraint);
-      nick = get_strength_nick (strength);
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), nick);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->strength), get_strength_id (strength));
 
       gtk_button_set_label (GTK_BUTTON (editor->button), "Apply");
     }
   else
     {
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->target_attr), "left");
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->source_attr), "left");
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->relation), "eq");
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), "required");
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->target_attr), get_attr_id (GTK_CONSTRAINT_ATTRIBUTE_LEFT));
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->source_attr), get_attr_id (GTK_CONSTRAINT_ATTRIBUTE_LEFT));
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->relation), get_relation_id (GTK_CONSTRAINT_RELATION_EQ));
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (editor->strength), get_strength_id (GTK_CONSTRAINT_STRENGTH_REQUIRED));
 
       gtk_editable_set_text (GTK_EDITABLE (editor->multiplier), "1.0");
       gtk_editable_set_text (GTK_EDITABLE (editor->constant), "0.0");

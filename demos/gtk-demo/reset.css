@@ -6,6 +6,6 @@
  * Also, when adding new style properties, please add them here.
  */
 
-* {
+window.demo * {
   all: unset;
 }

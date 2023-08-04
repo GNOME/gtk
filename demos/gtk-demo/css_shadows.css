@@ -5,12 +5,13 @@
  */
 
 /* This CSS resets all properties to their defaults values
- *    and overrides all user settings and the theme in use */
+ * and overrides all user settings and the theme in use
+ */
 @import url("resource://css_shadows/reset.css");
 @import url("resource://css_shadows/cssview.css");
 
 /* Get a nice background for the window */
-.background {
+window.demo.background {
   background-color: #4870bc;
   background-image: linear-gradient(to left, transparent, rgba(255,255,255,.07) 50%, transparent 50%),
                     linear-gradient(to left, transparent, rgba(255,255,255,.13) 50%, transparent 50%),
@@ -19,7 +20,7 @@
   background-size: 29px, 59px, 73px, 109px;
 }
 
-button {
+window.demo button {
   color: black;
   padding: 10px;
   border-radius: 5px;
@@ -27,18 +28,15 @@ button {
   border: 1px transparent solid;
 }
 
-button:hover {
+window.demo button:hover {
   text-shadow: 3px 3px 5px alpha(black, 0.75);
   -gtk-icon-shadow: 3px 3px 5px alpha(black, 0.75);
   box-shadow: 3px 3px 5px alpha(black, 0.5) inset;
   border: solid 1px alpha(black, 0.75);
 }
 
-button:active {
+window.demo button:active {
   padding: 11px 9px 9px 11px;
   text-shadow: 1px 1px 2.5px alpha(black, 0.6);
   -gtk-icon-shadow: 1px 1px 2.5px alpha(black, 0.6);
 }
-
-
-

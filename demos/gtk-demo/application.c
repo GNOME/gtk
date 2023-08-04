@@ -2,8 +2,6 @@
 
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 typedef GtkApplication DemoApplication;
 typedef GtkApplicationClass DemoApplicationClass;
 
@@ -217,6 +215,41 @@ activate_quit (GSimpleAction *action,
 }
 
 static void
+delete_messages (gpointer data)
+{
+  g_list_free_full ((GList *)data, g_free);
+}
+
+static void
+pop_message (GtkWidget *status)
+{
+  GList *messages = (GList *) g_object_get_data (G_OBJECT (status), "messages");
+
+  if (messages)
+    {
+      char *message = messages->data;
+      messages = g_list_remove (messages, message);
+
+      g_object_set_data_full (G_OBJECT (status), "messages",
+                              messages, delete_messages);
+
+      gtk_label_set_label (GTK_LABEL (status), message);
+    }
+}
+
+static void
+push_message (GtkWidget  *status,
+              const char *message)
+{
+  GList *messages = (GList *) g_object_get_data (G_OBJECT (status), "messages");
+
+  gtk_label_set_label (GTK_LABEL (status), message);
+  messages = g_list_prepend (messages, g_strdup (message));
+  g_object_set_data_full (G_OBJECT (status), "messages",
+                          messages, delete_messages);
+}
+
+static void
 update_statusbar (GtkTextBuffer         *buffer,
                   DemoApplicationWindow *window)
 {
@@ -226,7 +259,7 @@ update_statusbar (GtkTextBuffer         *buffer,
   GtkTextIter iter;
 
   /* clear any previous message, underflow is allowed */
-  gtk_statusbar_pop (GTK_STATUSBAR (window->status), 0);
+  pop_message (window->status);
 
   count = gtk_text_buffer_get_char_count (buffer);
 
@@ -240,7 +273,7 @@ update_statusbar (GtkTextBuffer         *buffer,
   msg = g_strdup_printf ("Cursor at row %d column %d - %d chars in document",
                          row, col, count);
 
-  gtk_statusbar_push (GTK_STATUSBAR (window->status), 0, msg);
+  push_message (window->status, msg);
 
   g_free (msg);
 }

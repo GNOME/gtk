@@ -1,21 +1,21 @@
 /* Make the text editor has a nice style */
-.view {
+window.demo .view {
   color: #2e3436;
   font-family: Monospace;
   background-color: alpha(white, 0.30);
 }
 
-.view:selected {
+window.demo .view:selected {
   color: white;
   background-color: #4a90d9;
 }
 
-scrollbar trough,
+window.demo scrollbar trough,
 .scrollbars-junction {
   background-color: alpha(white, 0.80);
 }
 
-scrollbar slider {
+window.demo scrollbar slider {
   border-width: 3px;
   border-style: solid;
   border-radius: 10px;
@@ -24,11 +24,11 @@ scrollbar slider {
   background-color: #999;
 }
 
-scrollbar slider:hover {
+window.demo scrollbar slider:hover {
   background-color: #555;
 }
 
-paned separator {
+window.demo paned separator {
   background-color: alpha(white, 0.80);
   background-image: linear-gradient(transparent, transparent 1px, #999 1px, #999 4px, transparent 4px);
   background-size: 40px auto;
@@ -36,6 +36,6 @@ paned separator {
   background-position: center;
 }
 
-paned separator:hover {
+window.demo paned separator:hover {
   background-image: linear-gradient(transparent, transparent 1px, #555 1px, #555 4px, transparent 4px);
 }

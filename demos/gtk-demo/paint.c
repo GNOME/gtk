@@ -7,8 +7,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 enum {
   COLOR_SET,
   N_SIGNALS
@@ -124,19 +122,16 @@ drawing_area_unmap (GtkWidget *widget)
 
 static void
 drawing_area_snapshot (GtkWidget   *widget,
-		       GtkSnapshot *snapshot)
+                       GtkSnapshot *snapshot)
 {
   DrawingArea *area = (DrawingArea *) widget;
-  GtkAllocation allocation;
+  int width, height;
   cairo_t *cr;
 
-  gtk_widget_get_allocation (widget, &allocation);
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (
-                                    0, 0,
-				    allocation.width,
-				    allocation.height
-                                  ));
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
+
+  cr = gtk_snapshot_append_cairo (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);
@@ -145,7 +140,7 @@ drawing_area_snapshot (GtkWidget   *widget,
   cairo_paint (cr);
 
   cairo_set_source_rgb (cr, 0.6, 0.6, 0.6);
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
+  cairo_rectangle (cr, 0, 0, width, height);
   cairo_stroke (cr);
 
   cairo_destroy (cr);

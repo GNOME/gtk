@@ -483,6 +483,8 @@ constraint_editor_window_class_init (ConstraintEditorWindowClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  g_type_ensure (CONSTRAINT_VIEW_TYPE);
+
   object_class->dispose = constraint_editor_window_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
