@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-28 08:47+0000\n"
-"PO-Revision-Date: 2023-07-28 20:32+0300\n"
+"POT-Creation-Date: 2023-07-31 15:14+0000\n"
+"PO-Revision-Date: 2023-08-04 22:43+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -738,7 +738,6 @@ msgstr "Немає жодної реалізації GL"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:396
 #, c-format
-#| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версія WGL %d.%d є надто давньою. Потрібна версія принаймні %d.%d"
 
@@ -2091,7 +2090,6 @@ msgid "Custom"
 msgstr "Власний"
 
 #: gtk/gtkcolorchooserwidget.c:571
-#| msgid "Color"
 msgid "Add Color"
 msgstr "Додати колір"
 
@@ -2240,7 +2238,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6193 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6238 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2663,7 +2661,6 @@ msgid "Close"
 msgstr "Закрити"
 
 #: gtk/deprecated/gtkinfobar.c:499
-#| msgid "Close the window"
 msgid "Close the infobar"
 msgstr "Закрити панель відомостей"
 
@@ -2692,8 +2689,6 @@ msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
 #: gtk/gtklabel.c:5751 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
-#| msgctxt "OpenType layout"
-#| msgid "Contextual Alternates"
 msgid "Context menu"
 msgstr "Контекстне меню"
 
@@ -2754,20 +2749,17 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmediacontrols.c:412
-#| msgid "_Stop"
 msgctxt "media controls tooltip"
 msgid "Stop"
 msgstr "Стоп"
 
 #: gtk/gtkmediacontrols.c:417 gtk/ui/gtkmediacontrols.ui:28
-#| msgctxt "keyboard label"
-#| msgid "AudioPlay"
 msgctxt "media controls tooltip"
 msgid "Play"
 msgstr "Пуск"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6194
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6239
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -3648,12 +3640,12 @@ msgstr "_Скасувати"
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtkwindow.c:6182
+#: gtk/gtkwindow.c:6227
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6184
+#: gtk/gtkwindow.c:6229
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3664,7 +3656,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6189
+#: gtk/gtkwindow.c:6234
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -3697,18 +3689,14 @@ msgid "Role"
 msgstr "Роль"
 
 #: gtk/inspector/a11y.ui:71
-#| msgid "Direction"
 msgid "Description"
 msgstr "Опис"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:297
-#| msgctxt "OpenType layout"
-#| msgid "Left Bounds"
 msgid "Bounds"
 msgstr "Межі"
 
 #: gtk/inspector/a11y.ui:125
-#| msgid "Object path"
 msgid "Object Path"
 msgstr "Шлях до об'єкта"
 
@@ -4361,7 +4349,6 @@ msgid "Slowdown"
 msgstr "Уповільнення"
 
 #: gtk/inspector/visual.ui:385
-#| msgid "Frame Rate"
 msgid "Show Framerate"
 msgstr "Показати частоту кадрів"
 
@@ -4402,7 +4389,6 @@ msgid "Show Focus"
 msgstr "Показувати фокус"
 
 #: gtk/inspector/visual.ui:635
-#| msgid "Accessibility"
 msgid "Show Accessibility warnings"
 msgstr "Показати попередження щодо доступності"
 
@@ -6235,7 +6221,6 @@ msgid "Search font name"
 msgstr "Пошук за назвою шрифту"
 
 #: gtk/ui/gtkfontchooserwidget.ui:77
-#| msgid "Filter by"
 msgid "Filters"
 msgstr "Фільтри"
 
@@ -6261,13 +6246,11 @@ msgid "No Fonts Found"
 msgstr "Не знайдено жодного шрифту"
 
 #: gtk/ui/gtkmediacontrols.ui:47
-#| msgid "List Position"
 msgctxt "media controls"
 msgid "Position"
 msgstr "Розташування"
 
 #: gtk/ui/gtkmediacontrols.ui:65
-#| msgid "Full Volume"
 msgctxt "media controls"
 msgid "Volume"
 msgstr "Гучність"
@@ -7186,19 +7169,6 @@ msgstr "Не вдалося закрити потік"
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7264,7 +7234,7 @@ msgstr "Використати стиль з файла CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:130
+#: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Не вдалося ініціалізувати систему вікон\n"
@@ -7309,13 +7279,13 @@ msgstr ""
 "Скористайтеся --force, щоб перезаписати його.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:97
+#: tools/gtk-rendernode-tool-render.c:172
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Результати записано до %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:101
+#: tools/gtk-rendernode-tool-render.c:176
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Не вдалося зберегти %s: %s\n"
@@ -7333,8 +7303,7 @@ msgid "Overwrite existing file"
 msgstr "Перезаписати наявний файл"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:123
-#| msgid "FILE"
+#: tools/gtk-rendernode-tool-render.c:197
 msgid "FILE…"
 msgstr "ФАЙЛ…"
 
@@ -7344,7 +7313,6 @@ msgstr "Обробити файл .ui до зображення."
 
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
-#| msgid "Can only screenshot a single .ui file and a single output file\n"
 msgid "Can only render a single .ui file to a single output file\n"
 msgstr ""
 "Одночасно можливе створення лише одного знімка вікна файла .ui і виведення "
@@ -7497,19 +7465,6 @@ msgstr "%s: помилка запускання програми: %s\n"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7558,15 +7513,13 @@ msgid "Provide information about the render node."
 msgstr "Надати дані щодо вузла обробки."
 
 #: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:151
+#: tools/gtk-rendernode-tool-render.c:225
 #, c-format
-#| msgid "No .ui file specified\n"
 msgid "No .node file specified\n"
 msgstr "Не вказано файл .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:228
 #, c-format
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only accept a single .node file\n"
 msgstr "Можлива одночасна обробка лише одного файла .node\n"
 
@@ -7576,15 +7529,11 @@ msgstr "Показати вузол обробки."
 
 #: tools/gtk-rendernode-tool-show.c:136
 #, c-format
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only preview a single .node file\n"
 msgstr "Можливий попередній перегляд лише одного файла .node\n"
 
-#: tools/gtk-rendernode-tool-render.c:82
+#: tools/gtk-rendernode-tool-render.c:123
 #, c-format
-#| msgid ""
-#| "File %s exists.\n"
-#| "Use --force to overwrite.\n"
 msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
@@ -7592,22 +7541,26 @@ msgstr ""
 "Файл із назвою %s вже існує.\n"
 "Якщо ви хочете його перезаписати, вкажіть назву файла.\n"
 
-#: tools/gtk-rendernode-tool-render.c:122
-#| msgid "Renderer"
+#: tools/gtk-rendernode-tool-render.c:137
+#, c-format
+#| msgid "Failed to save %s: %s\n"
+msgid "Failed to generate SVG: %s\n"
+msgstr "Не вдалося створити SVG: %s\n"
+
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "Renderer to use"
 msgstr "Обробник, яким слід скористатися"
 
-#: tools/gtk-rendernode-tool-render.c:122
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "RENDERER"
 msgstr "ОБРОБНИК"
 
-#: tools/gtk-rendernode-tool-render.c:138
+#: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
 msgstr "Обробити файл .node до зображення."
 
-#: tools/gtk-rendernode-tool-render.c:157
+#: tools/gtk-rendernode-tool-render.c:231
 #, c-format
-#| msgid "Can only screenshot a single .ui file and a single output file\n"
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Одночасно можливе створення лише одного знімка вікна файла .node і виведення "
