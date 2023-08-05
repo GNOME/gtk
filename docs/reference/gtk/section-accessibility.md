@@ -222,7 +222,7 @@ It is possible to set accessible attributes in UI files as well:
   <accessibility>
     <property name="label">Download</property>
     <relation name="labelled-by">label1</relation>
-  /accessibility>
+  </accessibility>
 </object>
 ```
 
