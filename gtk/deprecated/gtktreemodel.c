@@ -257,6 +257,8 @@ static guint tree_model_signals[LAST_SIGNAL] = { 0 };
  * GtkTreePath:
  *
  * An opaque structure representing a path to a row in a model.
+ *
+ * Deprecated: 4.10
  */
 struct _GtkTreePath
 {
