@@ -34,6 +34,7 @@
 #include "gtkmultiselection.h"
 #include "gtkorientable.h"
 #include "gtkscrollable.h"
+#include "gtkscrollinfoprivate.h"
 #include "gtksingleselection.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
@@ -528,7 +529,7 @@ gtk_list_base_get_n_items (GtkListBase *self)
   return g_list_model_get_n_items (G_LIST_MODEL (priv->model));
 }
 
-guint
+static guint
 gtk_list_base_get_focus_position (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
@@ -818,23 +819,19 @@ gtk_list_base_set_property (GObject      *object,
 }
 
 static void
-gtk_list_base_compute_scroll_align (GtkListBase   *self,
-                                    GtkOrientation orientation,
-                                    int            cell_start,
-                                    int            cell_end,
+gtk_list_base_compute_scroll_align (int            cell_start,
+                                    int            cell_size,
+                                    int            visible_start,
+                                    int            visible_size,
                                     double         current_align,
                                     GtkPackType    current_side,
                                     double        *new_align,
                                     GtkPackType   *new_side)
 {
-  int visible_start, visible_size, visible_end;
-  int cell_size;
+  int cell_end, visible_end;
 
-  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
-                                       orientation,
-                                       &visible_start, NULL, &visible_size);
   visible_end = visible_start + visible_size;
-  cell_size = cell_end - cell_start;
+  cell_end = cell_start + cell_size;
 
   if (cell_size <= visible_size)
     {
@@ -878,26 +875,38 @@ gtk_list_base_compute_scroll_align (GtkListBase   *self,
 }
 
 static void
-gtk_list_base_scroll_to_item (GtkListBase *self,
-                              guint        pos)
+gtk_list_base_scroll_to_item (GtkListBase   *self,
+                              guint          pos,
+                              GtkScrollInfo *scroll)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   double align_along, align_across;
   GtkPackType side_along, side_across;
-  GdkRectangle area;
+  GdkRectangle area, viewport;
+  int x, y;
 
   if (!gtk_list_base_get_allocation (GTK_LIST_BASE (self), pos, &area))
-    return;
+    {
+      g_clear_pointer (&scroll, gtk_scroll_info_unref);
+      return;
+    }
 
-  gtk_list_base_compute_scroll_align (self,
-                                      gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                      area.y, area.y + area.height,
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                       &viewport.y, NULL, &viewport.height);
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
+                                       &viewport.x, NULL, &viewport.width);
+
+  gtk_scroll_info_compute_scroll (scroll, &area, &viewport, &x, &y);
+
+  gtk_list_base_compute_scroll_align (area.y, area.height,
+                                      y, viewport.height,
                                       priv->anchor_align_along, priv->anchor_side_along,
                                       &align_along, &side_along);
 
-  gtk_list_base_compute_scroll_align (self,
-                                      gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
-                                      area.x, area.x + area.width,
+  gtk_list_base_compute_scroll_align (area.x, area.width,
+                                      x, viewport.width,
                                       priv->anchor_align_across, priv->anchor_side_across,
                                       &align_across, &side_across);
 
@@ -905,6 +914,8 @@ gtk_list_base_scroll_to_item (GtkListBase *self,
                             pos,
                             align_across, side_across,
                             align_along, side_along);
+
+  g_clear_pointer (&scroll, gtk_scroll_info_unref);
 }
 
 static void
@@ -920,7 +931,7 @@ gtk_list_base_scroll_to_item_action (GtkWidget  *widget,
 
   g_variant_get (parameter, "u", &pos);
 
-  gtk_list_base_scroll_to_item (self, pos);
+  gtk_list_base_scroll_to_item (self, pos, NULL);
 }
 
 static void
@@ -940,7 +951,7 @@ gtk_list_base_set_focus_child (GtkWidget *widget,
 
   if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
     {
-      gtk_list_base_scroll_to_item (self, pos);
+      gtk_list_base_scroll_to_item (self, pos, NULL);
       gtk_list_item_tracker_set_position (priv->item_manager,
                                           priv->focus,
                                           pos,
@@ -2318,5 +2329,44 @@ gtk_list_base_get_tab_behavior (GtkListBase *self)
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
   return priv->tab_behavior;
+}
+
+void
+gtk_list_base_scroll_to (GtkListBase        *self,
+                         guint               pos,
+                         GtkListScrollFlags  flags,
+                         GtkScrollInfo      *scroll)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (flags & GTK_LIST_SCROLL_FOCUS)
+    {
+      GtkListItemTracker *old_focus;
+
+      /* We need a tracker here to keep the focus widget around,
+       * because we need to update the focus tracker before grabbing
+       * focus, because otherwise gtk_list_base_set_focus_child() will
+       * scroll to the item, and we want to avoid that.
+       */
+      old_focus = gtk_list_item_tracker_new (priv->item_manager);
+      gtk_list_item_tracker_set_position (priv->item_manager, old_focus, gtk_list_base_get_focus_position (self), 0, 0);
+
+      gtk_list_item_tracker_set_position (priv->item_manager, priv->focus, pos, 0, 0);
+
+      /* XXX: Is this the proper check? */
+      if (gtk_widget_get_state_flags (GTK_WIDGET (self)) & GTK_STATE_FLAG_FOCUS_WITHIN)
+        {
+          GtkListTile *tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+
+          gtk_widget_grab_focus (tile->widget);
+        }
+
+      gtk_list_item_tracker_free (priv->item_manager, old_focus);
+    }
+
+  if (flags & GTK_LIST_SCROLL_SELECT)
+    gtk_list_base_select_item (self, pos, FALSE, FALSE);
+
+  gtk_list_base_scroll_to_item (self, pos, scroll);
 }
 
