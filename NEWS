@@ -1,5 +1,21 @@
-Overview of Changes in 4.10.5, xx-xx-xxxx
+Overview of Changes in 4.10.5, 05-08-2023
 =========================================
+
+* Fix ordering problems with filter model signals
+
+* Avoid lingering resize cursors
+
+* Fix alignment issues on sparc
+
+* Fix a problem with CSS corner values
+
+* Translation updates
+ Brazilian Portuguese
+ Czech
+ Greek
+ Spanish
+ Vietnamese
+
 
 Overview of Changes in 4.10.4, 05-06-2023
 =========================================
