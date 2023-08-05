@@ -1202,7 +1202,7 @@ my_pango_layout_get_width_for_height (PangoLayout *layout,
       else if (text_height > for_height)
         min = mid + 1;
       else
-        max = mid;
+        max = text_width;
     }
 
   return min * PANGO_SCALE;
