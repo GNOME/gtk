@@ -83,28 +83,42 @@ option('f16c',
        value: 'enabled',
        description: 'Enable F16C fast paths (requires F16C)')
 
-# Documentation and introspection
-
-option('gtk_doc',
-       type: 'boolean',
-       value: false,
-       description : 'Build API reference and tools documentation')
-
-option('update_screenshots',
-       type: 'boolean',
-       value: false,
-       description : 'Regenerate screenshots for the documentation')
-
-option('man-pages',
-       type: 'boolean',
-       value: false,
-       description : 'Build man pages for installed tools')
+# Introspection
 
 option('introspection',
        type: 'feature',
        value: 'auto',
        yield: true,
        description : 'Build introspection data (requires gobject-introspection)')
+
+# Documentation
+
+option('documentation',
+       type: 'boolean',
+       value: false,
+       description : 'Build API reference and tools documentation')
+
+option('gtk_doc',
+       type: 'boolean',
+       value: false,
+       description : 'Build API reference and tools documentation',
+       deprecated: 'documentation')
+
+option('screenshots',
+       type: 'boolean',
+       value: false,
+       description : 'Regenerate screenshots for the documentation')
+
+option('update_screenshots',
+       type: 'boolean',
+       value: false,
+       description : 'Regenerate screenshots for the documentation',
+       deprecated: 'screenshots')
+
+option('man-pages',
+       type: 'boolean',
+       value: false,
+       description : 'Build man pages for installed tools')
 
 # Demos, examples and tests
 
@@ -114,16 +128,16 @@ option('demo-profile',
        value: 'default',
        description : 'Profile to use for demos')
 
-option('build-demos',
-       type: 'boolean',
-       value: true,
-       description : 'Build demo programs')
-
 option('profile',
        type: 'combo',
        choices: [ 'default', 'devel' ],
        value: 'default',
        deprecated: 'demo-profile')
+
+option('build-demos',
+       type: 'boolean',
+       value: true,
+       description : 'Build demo programs')
 
 option('demos',
        type: 'boolean',

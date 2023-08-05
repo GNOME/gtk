@@ -78,7 +78,7 @@ ui_files = [
 
 gtk_builder_tool = find_program('gtk4-builder-tool')
 
-if get_option('update_screenshots')
+if get_option('screenshots')
   foreach ui_file: ui_files
     png_file = ui_file.replace('.ui', '.png')
     gtk_images += custom_target('@0@ from @1@'.format(png_file, ui_file),

@@ -32,7 +32,7 @@ gtk_images = []
 
 subdir('images')
 
-if get_option('gtk_doc')
+if get_option('documentation')
   gtk4_toml = configure_file(
     input: 'gtk4.toml.in',
     output: 'gtk4.toml',

@@ -67,6 +67,13 @@ building for:
   - [Graphene](https://github.com/ebassi/graphene)
   - [Xkb-common](https://github.com/xkbcommon/libxkbcommon)
 
+If you are building the Wayland backend, you will also need:
+
+  - Wayland-client
+  - Wayland-protocols
+  - Wayland-cursor
+  - Wayland-EGL
+
 If you are building the X11 backend, you will also need:
 
   - Xlib, and the following X extensions:
@@ -79,32 +86,24 @@ If you are building the X11 backend, you will also need:
     - xdamage
     - xcomposite
 
-If you are building the Wayland backend, you will also need:
-
-  - Wayland-client
-  - Wayland-protocols
-  - Wayland-cursor
-  - Wayland-EGL
-
 Once you have all the necessary dependencies, you can build GTK by using
 Meson:
 
 ```sh
-$ meson _build .
-$ cd _build
-$ ninja
+$ meson setup _build
+$ meson compile -C_build
 ```
 
 You can run the test suite using:
 
 ```sh
-$ meson test
+$ meson test -C_build
 ```
 
 And, finally, you can install GTK using:
 
 ```
-$ sudo ninja install
+$ sudo meson install -C_build
 ```
 
 Complete information about installing GTK and related libraries

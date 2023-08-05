@@ -1,7 +1,7 @@
 expand_content_md_files = [
 ]
 
-if get_option('gtk_doc')
+if get_option('documentation')
   gdk4_toml = configure_file(
     input: 'gdk4.toml.in',
     output: 'gdk4.toml',

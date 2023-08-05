@@ -418,10 +418,11 @@ reference:
             --buildtype=release
             --force-fallback-for=gdk-pixbuf,pango
             -Dintrospection=enabled
+            -Ddocumentation=true
             -Dgtk_doc=true
             -Dgdk-pixbuf:gtk_doc=true
             -Dpango:gtk_doc=true
-            -Ddemos=false
+            -Dbuild-demos=false
             -Dbuild-examples=false
             -Dbuild-tests=false
             -Dbuild-testsuite=false
