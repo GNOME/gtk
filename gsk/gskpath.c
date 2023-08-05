@@ -500,48 +500,47 @@ gsk_path_in_fill (GskPath                *self,
  * @self: a `GskPath`
  * @point: the point
  * @threshold: maximum allowed distance
+ * @result: (out caller-allocates): return location for the closest point
  *
  * Computes the closest point on the path to the given point
- * and returns a `GskPathPoint` for it.
+ * and sets the @result to it.
  *
- * If there is no point closer than the given threshold, `NULL`
- * is returned.
+ * If there is no point closer than the given threshold,
+ * `FALSE` is returned.
  *
- * Returns: (transfer full) (nullable): the closest point
- *   on @self, or `NULL` if no point is closer than @threshold
+ * Returns: `TRUE` if @point was set to the closest point
+ *   on @self, `FALSE` if no point is closer than @threshold
  *
  * Since: 4.14
  */
-GskPathPoint *
+gboolean
 gsk_path_get_closest_point (GskPath                *self,
                             const graphene_point_t *point,
-                            float                   threshold)
+                            float                   threshold,
+                            GskPathPoint           *result)
 {
-  GskPathPoint *p;
+  GskRealPathPoint *res = (GskRealPathPoint *) result;
 
-  g_return_val_if_fail (self != NULL, NULL);
-  g_return_val_if_fail (point != NULL, NULL);
-  g_return_val_if_fail (threshold >= 0, NULL);
-
-  p = gsk_path_point_new (self);
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (point != NULL, FALSE);
+  g_return_val_if_fail (threshold >= 0, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
 
   for (int i = 0; i < self->n_contours; i++)
     {
       float distance;
 
-      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, p, &distance))
+      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, res, &distance))
         {
-          p->contour = self->contours[i];
+          res->contour = self->contours[i];
           threshold = distance;
         }
     }
 
-  if (p->contour != NULL)
-    return p;
+  if (res->contour != NULL)
+    return TRUE;
 
-  gsk_path_point_unref (p);
-
-  return NULL;
+  return FALSE;
 }
 
 /**

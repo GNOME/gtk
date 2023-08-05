@@ -53,8 +53,9 @@ GDK_AVAILABLE_IN_4_14
 float                   gsk_path_measure_get_length             (GskPathMeasure         *self);
 
 GDK_AVAILABLE_IN_4_14
-GskPathPoint *          gsk_path_measure_get_point              (GskPathMeasure         *self,
-                                                                 float                   distance);
+gboolean                gsk_path_measure_get_point              (GskPathMeasure         *self,
+                                                                 float                   distance,
+                                                                 GskPathPoint           *point);
 
 GDK_AVAILABLE_IN_4_14
 float                   gsk_path_measure_get_distance           (GskPathMeasure         *self,

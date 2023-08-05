@@ -22,10 +22,18 @@
 
 #include "gskpath.h"
 
-#include "gskcontourprivate.h"
 #include "gskpathopprivate.h"
 
 G_BEGIN_DECLS
+
+typedef enum
+{
+  GSK_PATH_FLAT,
+  GSK_PATH_CLOSED
+} GskPathFlags;
+
+typedef struct _GskContour GskContour;
+typedef struct _GskRealPathPoint GskRealPathPoint;
 
 /* Same as Skia, so looks like a good value. ¯\_(ツ)_/¯ */
 #define GSK_PATH_TOLERANCE_DEFAULT (0.5)

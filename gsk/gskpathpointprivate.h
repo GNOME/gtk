@@ -5,10 +5,8 @@
 
 G_BEGIN_DECLS
 
-struct _GskPathPoint
+struct _GskRealPathPoint
 {
-  guint ref_count;
-
   GskPath *path;
   const GskContour *contour;
 
@@ -25,8 +23,6 @@ struct _GskPathPoint
     } circle;
   } data;
 };
-
-GskPathPoint *     gsk_path_point_new          (GskPath          *path);
 
 GskPath          * gsk_path_point_get_path     (GskPathPoint     *self);
 const GskContour * gsk_path_point_get_contour  (GskPathPoint     *self);

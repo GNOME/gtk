@@ -24,6 +24,7 @@
 #include "gskpathbuilder.h"
 
 #include "gskpathprivate.h"
+#include "gskcontourprivate.h"
 
 /**
  * GskPathBuilder:

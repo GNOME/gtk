@@ -30,27 +30,35 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_PATH_POINT (gsk_path_point_get_type ())
 
+typedef struct _GskPathPoint GskPathPoint;
+struct _GskPathPoint {
+  /*< private >*/
+  union {
+    float f[8];
+    gpointer p[8];
+  } data;
+};
+
 GDK_AVAILABLE_IN_4_14
 GType                   gsk_path_point_get_type        (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_4_14
-GskPathPoint *          gsk_path_point_ref             (GskPathPoint *self);
-GDK_AVAILABLE_IN_4_14
-void                    gsk_path_point_unref           (GskPathPoint *self);
+GskPathPoint *          gsk_path_point_copy            (GskPathPoint     *point);
 
 GDK_AVAILABLE_IN_4_14
-void                    gsk_path_point_get_position    (GskPathPoint     *self,
+void                    gsk_path_point_free            (GskPathPoint     *point);
+
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_point_get_position    (GskPathPoint     *point,
                                                         graphene_point_t *position);
 
 GDK_AVAILABLE_IN_4_14
-void                    gsk_path_point_get_tangent     (GskPathPoint     *self,
+void                    gsk_path_point_get_tangent     (GskPathPoint     *point,
                                                         GskPathDirection  direction,
                                                         graphene_vec2_t  *tangent);
 
 GDK_AVAILABLE_IN_4_14
-float                   gsk_path_point_get_curvature   (GskPathPoint     *self,
+float                   gsk_path_point_get_curvature   (GskPathPoint     *point,
                                                         graphene_point_t *center);
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathPoint, gsk_path_point_unref)
 
 G_END_DECLS

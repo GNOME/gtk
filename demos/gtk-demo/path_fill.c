@@ -274,7 +274,7 @@ update_path (GtkWidget     *widget,
   float progress = gdk_frame_clock_get_frame_time (frame_clock) % (60 * G_USEC_PER_SEC) / (float) (30 * G_USEC_PER_SEC);
   GskPathBuilder *builder;
   GskPath *path;
-  GskPathPoint *point;
+  GskPathPoint point;
   graphene_point_t pos;
   graphene_vec2_t tangent;
   GskStroke *stroke;
@@ -287,22 +287,23 @@ update_path (GtkWidget     *widget,
   builder = gsk_path_builder_new ();
   gsk_path_dash (path, stroke, 0.2, build_path, builder);
 
-  point = gsk_path_measure_get_point (measure,
-                                      (progress > 1 ? (progress - 1) : progress) * gsk_path_measure_get_length (measure));
-  gsk_path_point_get_position (point, &pos);
-  gsk_path_point_get_tangent (point, GSK_PATH_END, &tangent);
-  gsk_path_point_unref (point);
+  if (gsk_path_measure_get_point (measure,
+                                   (progress > 1 ? (progress - 1) : progress) * gsk_path_measure_get_length (measure), &point))
+    {
+      gsk_path_point_get_position (&point, &pos);
+      gsk_path_point_get_tangent (&point, GSK_PATH_END, &tangent);
 
-  gsk_path_builder_move_to (builder, pos.x + 5 * graphene_vec2_get_x (&tangent), pos.y + 5 * graphene_vec2_get_y (&tangent));
-  gsk_path_builder_line_to (builder, pos.x + 3 * graphene_vec2_get_y (&tangent), pos.y + 3 * graphene_vec2_get_x (&tangent));
-  gsk_path_builder_line_to (builder, pos.x - 3 * graphene_vec2_get_y (&tangent), pos.y - 3 * graphene_vec2_get_x (&tangent));
-  gsk_path_builder_close (builder);
+      gsk_path_builder_move_to (builder, pos.x + 5 * graphene_vec2_get_x (&tangent), pos.y + 5 * graphene_vec2_get_y (&tangent));
+      gsk_path_builder_line_to (builder, pos.x + 3 * graphene_vec2_get_y (&tangent), pos.y + 3 * graphene_vec2_get_x (&tangent));
+      gsk_path_builder_line_to (builder, pos.x - 3 * graphene_vec2_get_y (&tangent), pos.y - 3 * graphene_vec2_get_x (&tangent));
+      gsk_path_builder_close (builder);
 
-  path = gsk_path_builder_free_to_path (builder);
+      path = gsk_path_builder_free_to_path (builder);
 
-  gtk_path_paintable_set_path (GTK_PATH_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget))),
-                               path);
-  gsk_path_unref (path);
+      gtk_path_paintable_set_path (GTK_PATH_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget))),
+                                   path);
+      gsk_path_unref (path);
+    }
 
   return G_SOURCE_CONTINUE;
 }

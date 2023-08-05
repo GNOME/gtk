@@ -527,11 +527,12 @@ test_get_point (void)
   static const float tolerance = 1.0;
   GskPath *path;
   GskPathMeasure *measure;
-  GskPathPoint *point;
+  GskPathPoint point;
   guint n_discontinuities;
   float length, offset, last_offset;
   graphene_point_t p, last_point;
   guint i, j;
+  gboolean ret;
 
   for (i = 0; i < 10; i++)
     {
@@ -540,14 +541,13 @@ test_get_point (void)
       length = gsk_path_measure_get_length (measure);
       n_discontinuities = 0;
 
-      point = gsk_path_measure_get_point (measure, 0);
-      if (point == NULL)
+      ret = gsk_path_measure_get_point (measure, 0, &point);
+      if (!ret)
         {
           g_assert_true (gsk_path_is_empty (path));
           continue;
         }
-      gsk_path_point_get_position (point, &last_point);
-      gsk_path_point_unref (point);
+      gsk_path_point_get_position (&point, &last_point);
 
       /* FIXME: anything we can test with tangents here? */
       last_offset = 0;
@@ -555,9 +555,9 @@ test_get_point (void)
       for (j = 1; j <= 1024; j++)
         {
           offset = length * j / 1024;
-          point = gsk_path_measure_get_point (measure, offset);
-          gsk_path_point_get_position (point, &p);
-          gsk_path_point_unref (point);
+          ret = gsk_path_measure_get_point (measure, offset, &point);
+          g_assert_true (ret);
+          gsk_path_point_get_position (&point, &p);
 
           if (graphene_point_distance (&last_point, &p, NULL, NULL) > 2 * (offset - last_offset))
             {
@@ -581,8 +581,9 @@ test_closest_point (void)
   GskPath *path, *path1, *path2;
   GskPathMeasure *measure, *measure1, *measure2;
   GskPathBuilder *builder;
-  GskPathPoint *point;
+  GskPathPoint point;
   guint i, j;
+  gboolean ret;
 
   if (!g_test_slow ())
     {
@@ -614,32 +615,29 @@ test_closest_point (void)
 
           offset1 = offset2 = offset = 0;
           distance1 = distance2 = distance = 0;
-          point = gsk_path_get_closest_point (path1, &test, INFINITY);
-          g_assert_true (point != NULL);
+          ret = gsk_path_get_closest_point (path1, &test, INFINITY, &point);
+          g_assert_true (ret);
 
-          gsk_path_point_get_position (point, &p1);
-          gsk_path_point_get_tangent (point, GSK_PATH_END, &t1);
-          offset1 = gsk_path_measure_get_distance (measure1, point);
+          gsk_path_point_get_position (&point, &p1);
+          gsk_path_point_get_tangent (&point, GSK_PATH_END, &t1);
+          offset1 = gsk_path_measure_get_distance (measure1, &point);
           distance1 = graphene_point_distance (&p1, &test, NULL, NULL);
-          gsk_path_point_unref (point);
 
-          point = gsk_path_get_closest_point (path2, &test, INFINITY);
-          g_assert_true (point != NULL);
+          ret = gsk_path_get_closest_point (path2, &test, INFINITY, &point);
+          g_assert_true (ret);
 
-          gsk_path_point_get_position (point, &p2);
-          gsk_path_point_get_tangent (point, GSK_PATH_END, &t2);
-          offset2 = gsk_path_measure_get_distance (measure2, point);
+          gsk_path_point_get_position (&point, &p2);
+          gsk_path_point_get_tangent (&point, GSK_PATH_END, &t2);
+          offset2 = gsk_path_measure_get_distance (measure2, &point);
           distance2 = graphene_point_distance (&p2, &test, NULL, NULL);
-          gsk_path_point_unref (point);
 
-          point = gsk_path_get_closest_point (path, &test, INFINITY);
-          g_assert_true (point != NULL);
+          ret = gsk_path_get_closest_point (path, &test, INFINITY, &point);
+          g_assert_true (ret);
 
-          gsk_path_point_get_position (point, &p);
-          gsk_path_point_get_tangent (point, GSK_PATH_END, &t);
-          offset = gsk_path_measure_get_distance (measure, point);
+          gsk_path_point_get_position (&point, &p);
+          gsk_path_point_get_tangent (&point, GSK_PATH_END, &t);
+          offset = gsk_path_measure_get_distance (measure, &point);
           distance = graphene_point_distance (&p, &test, NULL, NULL);
-          gsk_path_point_unref (point);
 
           if (distance1 == distance)
             {
@@ -674,10 +672,11 @@ test_closest_point_for_point (void)
   static const float tolerance = 0.5;
   GskPath *path;
   GskPathMeasure *measure;
-  GskPathPoint *point;
+  GskPathPoint point;
   float length, offset, distance;
   graphene_point_t p, closest_point;
   guint i, j;
+  gboolean ret;
 
   if (!g_test_slow ())
     {
@@ -701,15 +700,14 @@ test_closest_point_for_point (void)
       for (j = 0; j < 100; j++)
         {
           offset = g_test_rand_double_range (0, length);
-          point = gsk_path_measure_get_point (measure, offset);
-          gsk_path_point_get_position (point, &p);
-          gsk_path_point_unref (point);
-          point = gsk_path_get_closest_point (path, &p, 2 * tolerance);
-          g_assert_nonnull (point);
-          gsk_path_point_get_position (point, &closest_point);
-          //closest_offset = gsk_path_measure_get_distance (measure, point);
+          ret = gsk_path_measure_get_point (measure, offset, &point);
+          g_assert_true (ret);
+          gsk_path_point_get_position (&point, &p);
+          ret = gsk_path_get_closest_point (path, &p, 2 * tolerance, &point);
+          g_assert_true (ret);
+          gsk_path_point_get_position (&point, &closest_point);
+          //closest_offset = gsk_path_measure_get_distance (measure, &point);
           distance = graphene_point_distance (&p, &closest_point, NULL, NULL);
-          gsk_path_point_unref (point);
 
           /* should be given due to the TRUE return above, but who knows... */
           g_assert_cmpfloat (distance, <=, 2 * tolerance);

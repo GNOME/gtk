@@ -88,15 +88,16 @@ gtk_path_transform_point (GskPathMeasure         *measure,
                           graphene_point_t       *res)
 {
   graphene_vec2_t tangent;
-  GskPathPoint *point;
+  GskPathPoint point;
 
-  point = gsk_path_measure_get_point (measure, (pt->x + offset->x) * scale);
-  gsk_path_point_get_position (point, res);
-  gsk_path_point_get_tangent (point, GSK_PATH_END, &tangent);
-  gsk_path_point_unref (point);
+  if (gsk_path_measure_get_point (measure, (pt->x + offset->x) * scale, &point))
+    {
+      gsk_path_point_get_position (&point, res);
+      gsk_path_point_get_tangent (&point, GSK_PATH_END, &tangent);
 
-  res->x -= (pt->y + offset->y) * scale * graphene_vec2_get_y (&tangent);
-  res->y += (pt->y + offset->y) * scale * graphene_vec2_get_x (&tangent);
+      res->x -= (pt->y + offset->y) * scale * graphene_vec2_get_y (&tangent);
+      res->y += (pt->y + offset->y) * scale * graphene_vec2_get_x (&tangent);
+    }
 }
 
 static gboolean
@@ -325,21 +326,22 @@ gtk_path_widget_snapshot (GtkWidget   *widget,
   if (self->line_closest >= 0)
     {
       GskPathBuilder *builder;
-      GskPathPoint *point;
+      GskPathPoint point;
       graphene_point_t closest;
 
       builder = gsk_path_builder_new ();
-      point = gsk_path_measure_get_point (self->line_measure, self->line_closest);
-      gsk_path_point_get_position (point, &closest);
-      gsk_path_point_unref (point);
-      gsk_path_builder_add_circle (builder, &closest, POINT_SIZE);
-      path = gsk_path_builder_free_to_path (builder);
+      if (gsk_path_measure_get_point (self->line_measure, self->line_closest, &point))
+        {
+          gsk_path_point_get_position (&point, &closest);
+          gsk_path_builder_add_circle (builder, &closest, POINT_SIZE);
+          path = gsk_path_builder_free_to_path (builder);
 
-      gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
-      gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
-      gtk_snapshot_pop (snapshot);
+          gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+          gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_pop (snapshot);
 
-      gsk_path_unref (path);
+          gsk_path_unref (path);
+        }
     }
 }
 
@@ -519,17 +521,19 @@ pointer_motion (GtkEventControllerMotion *controller,
                 double                    y,
                 GtkPathWidget            *self)
 {
-  GskPathPoint *point;
+  GskPathPoint point;
   graphene_point_t pos;
 
-  point = gsk_path_get_closest_point (gsk_path_measure_get_path (self->line_measure),
-                                              &GRAPHENE_POINT_INIT (x, y),
-                                              INFINITY);
-  gsk_path_point_get_position (point, &pos);
-  self->line_closest = graphene_point_distance (&pos, &GRAPHENE_POINT_INIT (x, y), NULL, NULL);
-  gsk_path_point_unref (point);
-
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  if (gsk_path_get_closest_point (gsk_path_measure_get_path (self->line_measure),
+                                  &GRAPHENE_POINT_INIT (x, y),
+                                  INFINITY,
+                                  &point))
+    {
+      gsk_path_point_get_position (&point, &pos);
+      self->line_closest = graphene_point_distance (&pos, &GRAPHENE_POINT_INIT (x, y), NULL, NULL);
+    
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
 }
 
 static void

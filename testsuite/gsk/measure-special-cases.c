@@ -93,10 +93,11 @@ test_rect (void)
   GskPathBuilder *builder;
   GskPath *path;
   GskPathMeasure *measure;
-  GskPathPoint *point;
+  GskPathPoint point;
   graphene_point_t p;
   graphene_vec2_t tangent, expected_tangent;
   float length;
+  gboolean ret;
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 50));
@@ -107,37 +108,37 @@ test_rect (void)
   g_assert_true (length == 300);
 
 #define TEST_POS_AT(distance, X, Y) \
-  point = gsk_path_measure_get_point (measure, distance); \
-  gsk_path_point_get_position (point, &p); \
+  ret = gsk_path_measure_get_point (measure, distance, &point); \
+  g_assert_true (ret); \
+  gsk_path_point_get_position (&point, &p); \
   g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (X, Y), 0.01)); \
-  gsk_path_point_unref (point); \
-  point = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (X, Y), INFINITY); \
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (X, Y), INFINITY, &point); \
+  g_assert_true (ret); \
   if (distance < length) \
-    g_assert_true (fabs (gsk_path_measure_get_distance (measure, point) - distance) < 0.01); \
+    g_assert_true (fabs (gsk_path_measure_get_distance (measure, &point) - distance) < 0.01); \
   else \
-    g_assert_true (fabs (gsk_path_measure_get_distance (measure, point)) < 0.01); \
-  gsk_path_point_get_position (point, &p); \
+    g_assert_true (fabs (gsk_path_measure_get_distance (measure, &point)) < 0.01); \
+  gsk_path_point_get_position (&point, &p); \
   g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (X, Y), 0.01)); \
-  gsk_path_point_unref (point);
 
 #define TEST_TANGENT_AT(distance, x1, y1, x2, y2) \
-  point = gsk_path_measure_get_point (measure, distance); \
-  gsk_path_point_get_tangent (point, GSK_PATH_START, &tangent); \
+  ret = gsk_path_measure_get_point (measure, distance, &point); \
+  g_assert_true (ret); \
+  gsk_path_point_get_tangent (&point, GSK_PATH_START, &tangent); \
   g_assert_true (graphene_vec2_near (&tangent, graphene_vec2_init (&expected_tangent, x1, y1), 0.01)); \
-  gsk_path_point_get_tangent (point, GSK_PATH_END, &tangent); \
+  gsk_path_point_get_tangent (&point, GSK_PATH_END, &tangent); \
   g_assert_true (graphene_vec2_near (&tangent, graphene_vec2_init (&expected_tangent, x2, y2), 0.01)); \
-  gsk_path_point_unref (point); \
 
 #define TEST_POS_AT2(distance, X, Y, expected_distance) \
-  point = gsk_path_measure_get_point (measure, distance); \
-  gsk_path_point_get_position (point, &p); \
+  ret = gsk_path_measure_get_point (measure, distance, &point); \
+  g_assert_true (ret); \
+  gsk_path_point_get_position (&point, &p); \
   g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (X, Y), 0.01)); \
-  gsk_path_point_unref (point); \
-  point = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (X, Y), INFINITY); \
-  g_assert_true (fabs (gsk_path_measure_get_distance (measure, point) - expected_distance) < 0.01); \
-  gsk_path_point_get_position (point, &p); \
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (X, Y), INFINITY, &point); \
+  g_assert_true (ret); \
+  g_assert_true (fabs (gsk_path_measure_get_distance (measure, &point) - expected_distance) < 0.01); \
+  gsk_path_point_get_position (&point, &p); \
   g_assert_true (graphene_point_near (&p, &GRAPHENE_POINT_INIT (X, Y), 0.01)); \
-  gsk_path_point_unref (point);
 
   TEST_POS_AT (0, 0, 0)
   TEST_POS_AT (25, 25, 0)

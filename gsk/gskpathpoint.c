@@ -30,93 +30,62 @@
 /**
  * GskPathPoint:
  *
- * `GskPathPoint` is an opaque, immutable type representing a point on a path.
+ * `GskPathPoint` is an opaque type representing a point on a path.
  *
  * It can be queried for properties of the path at that point, such as its
  * tangent or its curvature.
  *
  * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point]
  * or [method@Gsk.PathMeasure.get_point].
+ *
+ * Note that `GskPathPoint` structs are meant to be stack-allocated, and
+ * don't a reference to the path object they are obtained from. It is the
+ * callers responsibility to keep a reference to the path as long as the
+ * `GskPathPoint` is used.
  */
 
 G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,
-                     gsk_path_point_ref,
-                     gsk_path_point_unref)
+                     gsk_path_point_copy,
+                     gsk_path_point_free)
 
 
 GskPathPoint *
-gsk_path_point_new (GskPath *path)
+gsk_path_point_copy (GskPathPoint *point)
 {
-  GskPathPoint *self;
+  GskPathPoint *copy;
 
-  self = g_new0 (GskPathPoint, 1);
+  copy = g_new0 (GskPathPoint, 1);
 
-  self->ref_count = 1;
+  memcpy (copy, point, sizeof (GskRealPathPoint));
 
-  self->path = gsk_path_ref (path);
+  return copy;
+}
 
-  return self;
+void
+gsk_path_point_free (GskPathPoint *point)
+{
+  g_free (point);
 }
 
 GskPath *
-gsk_path_point_get_path (GskPathPoint *self)
+gsk_path_point_get_path (GskPathPoint *point)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   return self->path;
 }
 
 const GskContour *
-gsk_path_point_get_contour (GskPathPoint *self)
+gsk_path_point_get_contour (GskPathPoint *point)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   return self->contour;
 }
 
 /**
- * gsk_path_point_ref:
- * @self: a `GskPathPoint`
- *
- * Increases the reference count of a `GskPathPoint` by one.
- *
- * Returns: the passed in `GskPathPoint`
- *
- * Since: 4.14
- */
-GskPathPoint *
-gsk_path_point_ref (GskPathPoint *self)
-{
-  g_return_val_if_fail (self != NULL, NULL);
-
-  self->ref_count++;
-
-  return self;
-}
-
-/**
- * gsk_path_point_unref:
- * @self: a `GskPathPoint`
- *
- * Decreases the reference count of a `GskPathPoint` by one.
- *
- * If the resulting reference count is zero, frees the object.
- *
- * Since: 4.14
- */
-void
-gsk_path_point_unref (GskPathPoint *self)
-{
-  g_return_if_fail (self != NULL);
-  g_return_if_fail (self->ref_count > 0);
-
-  self->ref_count--;
-  if (self->ref_count > 0)
-    return;
-
-  gsk_path_unref (self->path);
-  g_free (self);
-}
-
-/**
  * gsk_path_point_get_position:
- * @self: a `GskPathPoint`
+ * @point: a `GskPathPoint`
  * @position: (out caller-allocates): Return location for
  *   the coordinates of the point
  *
@@ -125,15 +94,17 @@ gsk_path_point_unref (GskPathPoint *self)
  * Since: 4.14
  */
 void
-gsk_path_point_get_position (GskPathPoint     *self,
+gsk_path_point_get_position (GskPathPoint     *point,
                              graphene_point_t *position)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   gsk_contour_get_position (self->contour, self, position);
 }
 
 /**
  * gsk_path_point_get_tangent:
- * @self: a `GskPathPoint`
+ * @point: a `GskPathPoint`
  * @direction: the direction for which to return the tangent
  * @tangent: (out caller-allocates): Return location for
  *   the tangent at the point
@@ -149,16 +120,18 @@ gsk_path_point_get_position (GskPathPoint     *self,
  * Since: 4.14
  */
 void
-gsk_path_point_get_tangent (GskPathPoint     *self,
+gsk_path_point_get_tangent (GskPathPoint     *point,
                             GskPathDirection  direction,
                             graphene_vec2_t  *tangent)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   gsk_contour_get_tangent (self->contour, self, direction, tangent);
 }
 
 /**
  * gsk_path_point_get_curvature:
- * @self: a `GskPathPoint`
+ * @point: a `GskPathPoint`
  * @center: (out caller-allocates): Return location for
  *   the center of the osculating circle
  *
@@ -174,15 +147,19 @@ gsk_path_point_get_tangent (GskPathPoint     *self,
  * Since: 4.14
  */
 float
-gsk_path_point_get_curvature (GskPathPoint     *self,
+gsk_path_point_get_curvature (GskPathPoint     *point,
                               graphene_point_t *center)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   return gsk_contour_get_curvature (self->contour, self, center);
 }
 
 float
-gsk_path_point_get_distance (GskPathPoint *self,
+gsk_path_point_get_distance (GskPathPoint *point,
                              gpointer      measure_data)
 {
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+
   return gsk_contour_get_distance (self->contour, self, measure_data);
 }

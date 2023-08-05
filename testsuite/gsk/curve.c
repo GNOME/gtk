@@ -269,14 +269,15 @@ test_curve_decompose_conic (void)
           /* Check that the curves we got are approximating the conic */
           for (int k = 0; k < 11; k++)
             {
-              GskPathPoint *point;
+              GskPathPoint point;
               graphene_point_t p, q;
 
               gsk_curve_get_point (c2, k/10.0, &p);
-              point = gsk_path_get_closest_point (path, &p, INFINITY);
-              gsk_path_point_get_position (point, &q);
-              g_assert_true (graphene_point_near (&p, &q, 0.5));
-              gsk_path_point_unref (point);
+              if (gsk_path_get_closest_point (path, &p, INFINITY, &point))
+                {
+                  gsk_path_point_get_position (&point, &q);
+                  g_assert_true (graphene_point_near (&p, &q, 0.5));
+                }
             }
         }
 

@@ -20,19 +20,11 @@
 
 #pragma once
 
-#include "gskpath.h"
-
+#include "gskpathprivate.h"
+#include "gskpathpointprivate.h"
 #include "gskpathopprivate.h"
 
 G_BEGIN_DECLS
-
-typedef enum
-{
-  GSK_PATH_FLAT,
-  GSK_PATH_CLOSED
-} GskPathFlags;
-
-typedef struct _GskContour GskContour;
 
 GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
 GskContour *            gsk_rounded_rect_contour_new            (const GskRoundedRect   *rounded_rect);
@@ -74,19 +66,19 @@ int                     gsk_contour_get_winding                 (const GskContou
 gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
                                                                  const graphene_point_t *point,
                                                                  float                   threshold,
-                                                                 GskPathPoint           *result,
+                                                                 GskRealPathPoint       *result,
                                                                  float                  *out_dist);
 
 void                    gsk_contour_get_position                (const GskContour       *self,
-                                                                 GskPathPoint           *point,
+                                                                 GskRealPathPoint       *point,
                                                                  graphene_point_t       *pos);
 
 void                    gsk_contour_get_tangent                 (const GskContour       *self,
-                                                                 GskPathPoint           *point,
+                                                                 GskRealPathPoint       *point,
                                                                  GskPathDirection        direction,
                                                                  graphene_vec2_t        *tangent);
 float                   gsk_contour_get_curvature               (const GskContour       *self,
-                                                                 GskPathPoint           *point,
+                                                                 GskRealPathPoint       *point,
                                                                  graphene_point_t       *center);
 gpointer                gsk_contour_init_measure                (const GskContour       *self,
                                                                  float                   tolerance,
@@ -102,9 +94,9 @@ void                    gsk_contour_add_segment                 (const GskContou
 void                    gsk_contour_get_point                   (const GskContour       *self,
                                                                  gpointer                measure_data,
                                                                  float                   offset,
-                                                                 GskPathPoint           *result);
+                                                                 GskRealPathPoint       *result);
 float                   gsk_contour_get_distance                (const GskContour       *self,
-                                                                 GskPathPoint           *point,
+                                                                 GskRealPathPoint       *point,
                                                                  gpointer                measure_data);
 gboolean                gsk_contour_dash                        (const GskContour       *contour,
                                                                  GskStroke              *stroke,

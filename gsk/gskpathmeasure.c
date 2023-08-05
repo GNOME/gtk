@@ -338,29 +338,31 @@ gsk_path_builder_add_segment (GskPathBuilder *self,
  * gsk_path_measure_get_point:
  * @self: a `GskPathMeasure`
  * @distance: the distance
+ * @result: (out caller-allocates): return location for the result
  *
- * Returns a `GskPathPoint` representing the point at the given
- * distance into the path.
+ * Sets @result to the point at the given distance into the path.
  *
- * An empty path has no points, so `NULL` is returned in that case.
+ * An empty path has no points, so `FALSE` is returned in that case.
  *
- * Returns: (transfer full) (nullable): a newly allocated `GskPathPoint`
+ * Returns: `TRUE` if @result was set
  *
  * Since: 4.14
  */
-GskPathPoint *
+gboolean
 gsk_path_measure_get_point (GskPathMeasure *self,
-                            float           distance)
+                            float           distance,
+                            GskPathPoint   *result)
 {
+  GskRealPathPoint *res = (GskRealPathPoint *) result;
   gsize i;
   float offset;
   const GskContour *contour;
-  GskPathPoint *point;
 
-  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
 
   if (self->n_contours == 0)
-    return NULL;
+    return FALSE;
 
   offset = gsk_path_measure_clamp_distance (self, distance);
 
@@ -378,28 +380,28 @@ gsk_path_measure_get_point (GskPathMeasure *self,
 
   contour = gsk_path_get_contour (self->path, i);
 
-  point = gsk_path_point_new (self->path);
-  gsk_contour_get_point (contour, self->measures[i].contour_data, offset, point);
+  gsk_contour_get_point (contour, self->measures[i].contour_data, offset, res);
 
-  return point;
+  return TRUE;
 }
 
 float
 gsk_path_measure_get_distance (GskPathMeasure *self,
                                GskPathPoint   *point)
 {
-  const GskContour *contour = gsk_path_point_get_contour (point);
+  GskRealPathPoint *p = (GskRealPathPoint *)point;
+  const GskContour *contour = p->contour;
   float contour_offset = 0;
 
   g_return_val_if_fail (self != NULL, 0);
   g_return_val_if_fail (point != NULL, 0);
-  g_return_val_if_fail (self->path == point->path, 0);
+  g_return_val_if_fail (self->path == p->path, 0);
 
   for (gsize i = 0; i < self->n_contours; i++)
     {
       if (contour == gsk_path_get_contour (self->path, i))
         return contour_offset + gsk_contour_get_distance (contour,
-                                                          point,
+                                                          p,
                                                           self->measures[i].contour_data);
 
       contour_offset += self->measures[i].length;
