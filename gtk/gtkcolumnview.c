@@ -2174,3 +2174,37 @@ gtk_column_view_set_header_factory (GtkColumnView      *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_FACTORY]);
 }
 
+/**
+ * gtk_column_view_scroll_to:
+ * @self: The columnview to scroll in
+ * @pos: position of the item
+ * @column: (nullable): the column to scroll into view
+ * @flags: actions to perform
+ * @scroll: (nullable) (transfer full): details of how to perform
+ *   the scroll operation or %NULL to scroll into view
+ *
+ * Scrolls to the item at the given position and column and performs
+ * the actions specified in @flags.
+ *
+ * This function works no matter if the columnview is shown or focused
+ * or not. If it isn't, then the changes will take effect once that happens.
+ *
+ * Since: 4.12
+ */
+void
+gtk_column_view_scroll_to (GtkColumnView       *self,
+                           guint                pos,
+                           GtkColumnViewColumn *column,
+                           GtkListScrollFlags   flags,
+                           GtkScrollInfo       *scroll)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || gtk_column_view_column_get_column_view (column) == self);
+
+  gtk_list_view_scroll_to (self->listview, pos, flags, scroll);
+
+  if (column)
+    g_warning ("column scrolling is not implemented");
+}
+
