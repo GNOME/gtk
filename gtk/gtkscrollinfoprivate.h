@@ -38,7 +38,5 @@ int                     gtk_scroll_info_compute_for_orientation (GtkScrollInfo  
                                                                  int                             viewport_origin,
                                                                  int                             viewport_size);
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScrollInfo, gtk_scroll_info_unref)
-
 G_END_DECLS
 

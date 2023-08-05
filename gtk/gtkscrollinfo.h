@@ -54,17 +54,6 @@ void                    gtk_scroll_info_set_enable_vertical     (GtkScrollInfo  
 GDK_AVAILABLE_IN_4_12
 gboolean                gtk_scroll_info_get_enable_vertical     (GtkScrollInfo           *self);
 
-void                    gtk_scroll_info_compute_scroll          (GtkScrollInfo               *self,
-                                                                 const cairo_rectangle_int_t *area,
-                                                                 const cairo_rectangle_int_t *viewport,
-                                                                 int                         *out_x,
-                                                                 int                         *out_y);
-int                     gtk_scroll_info_compute_for_orientation (GtkScrollInfo           *self,
-                                                                 GtkOrientation           orientation,
-                                                                 int                      area_origin,
-                                                                 int                      area_size,
-                                                                 int                      viewport_origin,
-                                                                 int                      viewport_size);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScrollInfo, gtk_scroll_info_unref)
 

@@ -29,7 +29,7 @@
 
 #include "config.h"
 
-#include "gtkscrollinfo.h"
+#include "gtkscrollinfoprivate.h"
 
 #include <math.h>
 

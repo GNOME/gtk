@@ -30,7 +30,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
-#include "gtkscrollinfo.h"
+#include "gtkscrollinfoprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
