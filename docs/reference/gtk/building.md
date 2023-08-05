@@ -268,7 +268,7 @@ support in the file chooser.
 This option controls whether GTK should use colord for color
 calibration support in the cups print backend.
 
-### `gtk_doc`, `man-pages` and `update_screenshots`
+### `documentation`, `man-pages` and `screenshots`
 
 The *gi-docgen* package is used to generate the reference documentation
 included with GTK. By default support for *gi-docgen* is disabled

@@ -1,4 +1,4 @@
-if get_option('gtk_doc')
+if get_option('documentation')
   gsk4_toml = configure_file(
     input: 'gsk4.toml.in',
     output: 'gsk4.toml',

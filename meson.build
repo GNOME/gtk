@@ -742,7 +742,7 @@ if not gir.found() and get_option('introspection').enabled()
 endif
 
 build_gir = gir.found() and (get_option('introspection').enabled() or
-                             (get_option('introspection').allowed() and get_option('gtk_doc')))
+                             (get_option('introspection').allowed() and get_option('documentation')))
 
 # Resource building
 glib_compile_resources = find_program('glib-compile-resources')
@@ -920,7 +920,7 @@ summary('Linker', cc.get_linker_id(), section: 'Toolchain')
 summary('Debugging', get_option('debug'), section: 'Build')
 summary('Optimization', get_option('optimization'), section: 'Build')
 summary('Introspection', build_gir, section: 'Build')
-summary('Documentation', get_option('gtk_doc'), section: 'Build')
+summary('Documentation', get_option('documentation'), section: 'Build')
 summary('Man pages', get_option('man-pages'), section: 'Build')
 summary('Testsuite', get_option('build-testsuite'), section: 'Build')
 summary('Tests', get_option('build-tests'), section: 'Build')
