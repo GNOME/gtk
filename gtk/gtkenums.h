@@ -304,6 +304,8 @@ typedef enum
  *
  * List of actions to perform when scrolling to items in
  * a list widget.
+ *
+ * Since: 4.12
  */
 typedef enum {
   GTK_LIST_SCROLL_NONE      = 0,

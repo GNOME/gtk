@@ -122,7 +122,9 @@ gtk_scroll_info_unref (GtkScrollInfo *self)
  *     should happen
  *
  * Turns horizontal scrolling on or off.
- **/
+ *
+ * Since: 4.12
+ */
 void
 gtk_scroll_info_set_enable_horizontal (GtkScrollInfo *self,
                                        gboolean       horizontal)
@@ -139,7 +141,9 @@ gtk_scroll_info_set_enable_horizontal (GtkScrollInfo *self,
  * Checks if horizontal scrolling is enabled.
  *
  * Returns: %TRUE if horizontal scrolling is enabled.
- **/
+ *
+ * Since: 4.12
+ */
 gboolean
 gtk_scroll_info_get_enable_horizontal (GtkScrollInfo *self)
 {
@@ -155,7 +159,9 @@ gtk_scroll_info_get_enable_horizontal (GtkScrollInfo *self)
  *     should happen
  *
  * Turns vertical scrolling on or off.
- **/
+ *
+ * Since: 4.12
+ */
 void
 gtk_scroll_info_set_enable_vertical (GtkScrollInfo *self,
                                      gboolean       vertical)
@@ -172,7 +178,9 @@ gtk_scroll_info_set_enable_vertical (GtkScrollInfo *self,
  * Checks if vertical scrolling is enabled.
  *
  * Returns: %TRUE if vertical scrolling is enabled.
- **/
+ *
+ * Since: 4.12
+ */
 gboolean
 gtk_scroll_info_get_enable_vertical (GtkScrollInfo *self)
 {
@@ -207,7 +215,7 @@ gtk_scroll_info_compute_for_orientation (GtkScrollInfo  *self,
     delta = area_origin + area_size - floor (origin + size);
   else
     delta = 0;
-                                      
+
   return viewport_origin + delta;
 }
 
@@ -221,7 +229,7 @@ gtk_scroll_info_compute_for_orientation (GtkScrollInfo  *self,
  *
  * Computes The new x/y coordinate to move the viewport to
  * according to this scroll info.
- **/
+ */
 void
 gtk_scroll_info_compute_scroll (GtkScrollInfo               *self,
                                 const cairo_rectangle_int_t *area,
