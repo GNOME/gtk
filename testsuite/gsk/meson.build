@@ -393,6 +393,7 @@ internal_tests = [
   [ 'half-float' ],
   ['rounded-rect'],
   ['misc'],
+  ['boundingbox'],
 ]
 
 foreach t : internal_tests
