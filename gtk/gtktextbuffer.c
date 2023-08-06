@@ -1039,11 +1039,11 @@ gtk_text_buffer_get_property (GObject         *object,
       break;
 
     case PROP_CAN_UNDO:
-      g_value_set_boolean (value, gtk_text_buffer_get_can_undo (text_buffer));
+      g_value_set_boolean (value, gtk_text_history_get_can_undo (text_buffer->priv->history));
       break;
 
     case PROP_CAN_REDO:
-      g_value_set_boolean (value, gtk_text_buffer_get_can_redo (text_buffer));
+      g_value_set_boolean (value, gtk_text_history_get_can_redo (text_buffer->priv->history));
       break;
 
     default:
@@ -4871,9 +4871,13 @@ gtk_text_buffer_real_redo (GtkTextBuffer *buffer)
 gboolean
 gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
 {
+  gboolean can_undo;
+
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
-  return gtk_text_history_get_can_undo (buffer->priv->history);
+  g_object_get (buffer, "can-undo", &can_undo, NULL);
+
+  return can_undo;
 }
 
 /**
@@ -4887,9 +4891,13 @@ gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
 gboolean
 gtk_text_buffer_get_can_redo (GtkTextBuffer *buffer)
 {
+  gboolean can_redo;
+
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
 
-  return gtk_text_history_get_can_redo (buffer->priv->history);
+  g_object_get (buffer, "can-redo", &can_redo, NULL);
+
+  return can_redo;
 }
 
 static void
