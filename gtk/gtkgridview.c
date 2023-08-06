@@ -411,7 +411,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     }
 
   pos = gtk_list_tile_get_position (self->item_manager, tile);
-  if (tile->n_items > 1)
+  if (tile->n_items > 1 && tile->area.width > 0 && tile->area.height > 0)
     {
       int xspacing, yspacing;
 
