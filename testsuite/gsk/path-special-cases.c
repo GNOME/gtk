@@ -422,6 +422,37 @@ test_foreach (void)
   g_free (s2);
 }
 
+/* Test the basics of the path point api */
+static void
+test_path_point (void)
+{
+  GskPath *path;
+  GskPathPoint point;
+  gboolean ret;
+  graphene_point_t pos, center;
+  graphene_vec2_t t1, t2, mx;
+  float curvature;
+
+  path = gsk_path_parse ("M0,0L100,0L100,100L0,100Z");
+
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point);
+  g_assert_true (ret);
+
+  gsk_path_point_get_position (path, &point, &pos);
+  gsk_path_point_get_tangent (path, &point, GSK_PATH_START, &t1);
+  gsk_path_point_get_tangent (path, &point, GSK_PATH_END, &t2);
+  curvature = gsk_path_point_get_curvature (path, &point, &center);
+
+  g_print ("%g %g\n", graphene_vec2_get_x (&t1), graphene_vec2_get_y (&t1));
+  g_assert_true (graphene_point_equal (&pos, &GRAPHENE_POINT_INIT (100, 100)));
+  g_assert_true (graphene_vec2_equal (&t1, graphene_vec2_y_axis ()));
+  graphene_vec2_negate (graphene_vec2_x_axis (), &mx);
+  g_assert_true (graphene_vec2_equal (&t2, &mx));
+  g_assert_true (curvature == 0);
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -431,6 +462,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/empty", test_empty_path);
   g_test_add_func ("/path/rect", test_rect_path);
   g_test_add_func ("/path/foreach", test_foreach);
+  g_test_add_func ("/path/point", test_path_point);
 
   return g_test_run ();
 }
