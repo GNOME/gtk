@@ -424,6 +424,8 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
+  gsize idx;
+  float t;
 
   if (G_UNLIKELY (point->data.std.idx == 0))
     {
@@ -431,8 +433,40 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
       return;
     }
 
-  gsk_curve_init (&curve, self->ops[point->data.std.idx]);
-  gsk_curve_get_tangent (&curve, point->data.std.t, tangent);
+  idx = point->data.std.idx;
+  t = point->data.std.t;
+
+  if (t == 0 && direction == GSK_PATH_START)
+    {
+      /* Look at the previous segment */
+      if (idx > 0)
+        {
+          idx--;
+          t = 1;
+        }
+      else if (self->flags & GSK_PATH_CLOSED)
+        {
+          idx = self->n_ops - 1;
+          t = 1;
+        }
+    }
+  else if (t == 1 && direction == GSK_PATH_END)
+    {
+      /* Look at the next segment */
+      if (idx < self->n_ops - 1)
+        {
+          idx++;
+          t = 0;
+        }
+      else if (self->flags & GSK_PATH_CLOSED)
+        {
+          idx = 0;
+          t = 0;
+        }
+    }
+
+  gsk_curve_init (&curve, self->ops[idx]);
+  gsk_curve_get_tangent (&curve, t, tangent);
 }
 
 static float
