@@ -1245,9 +1245,9 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
 done:
   if (scale_x < 0 || scale_y < 0)
     {
-      GskTransform *transform = gsk_transform_translate (NULL,
-                                                         &GRAPHENE_POINT_INIT (scale_x < 0 ? - surface_width : 0,
-                                                                               scale_y < 0 ? - surface_height : 0));
+      GskTransform *transform = gsk_transform_translate (gsk_transform_scale (NULL, scale_x < 0 ? -1 : 1, scale_y < 0 ? -1 : 1),
+                                                         &GRAPHENE_POINT_INIT (scale_x < 0 ? - (node->bounds.size.width + 2 * node->bounds.origin.x) : 0,
+                                                                               scale_y < 0 ? - (node->bounds.size.height + 2 * node->bounds.origin.y) : 0));
       gsk_gl_render_job_push_modelview (job, transform);
       gsk_transform_unref (transform);
     }
