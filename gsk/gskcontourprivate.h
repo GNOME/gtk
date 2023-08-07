@@ -33,6 +33,7 @@ GskContour *            gsk_standard_contour_new                (GskPathFlags   
                                                                  const gskpathop        *ops,
                                                                  gsize                   n_ops,
                                                                  gssize                  offset);
+GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
 
 void                    gsk_contour_copy                        (GskContour *            dest,
                                                                  const GskContour       *src);

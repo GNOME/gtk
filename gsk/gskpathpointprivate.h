@@ -15,6 +15,9 @@ struct _GskRealPathPoint
       unsigned int idx;
       float t;
     } std;
+    struct {
+      float distance;
+    } rect;
   } data;
 };
 

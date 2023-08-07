@@ -442,15 +442,14 @@ void
 gsk_path_builder_add_rect (GskPathBuilder        *self,
                            const graphene_rect_t *rect)
 {
+  GskContour *contour;
+
   g_return_if_fail (self != NULL);
 
-  gsk_path_builder_move_to (self, rect->origin.x, rect->origin.y);
+  contour = gsk_rect_contour_new (rect);
+  gsk_path_builder_add_contour (self, contour);
 
-  gsk_path_builder_rel_line_to (self, rect->size.width, 0);
-  gsk_path_builder_rel_line_to (self, 0, rect->size.height);
-  gsk_path_builder_rel_line_to (self, - rect->size.width, 0);
-
-  gsk_path_builder_close (self);
+  gsk_contour_get_start_end (contour, NULL, &self->current_point);
 }
 
 static gboolean
