@@ -130,6 +130,10 @@ count_nodes (GskRenderNode *node,
       d = MAX (d, dd);
       break;
 
+    case GSK_FILL_NODE:
+      count_nodes (gsk_fill_node_get_child (node), counts, &d);
+      break;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();

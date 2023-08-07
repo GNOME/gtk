@@ -42,6 +42,7 @@
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
+ * @GSK_FILL_NODE: A node that fills a path
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
  * @GSK_BLEND_NODE: A node that blends two children together
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
@@ -74,6 +75,7 @@ typedef enum {
   GSK_REPEAT_NODE,
   GSK_CLIP_NODE,
   GSK_ROUNDED_CLIP_NODE,
+  GSK_FILL_NODE,
   GSK_SHADOW_NODE,
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
@@ -169,6 +171,81 @@ typedef enum {
   GSK_CORNER_BOTTOM_RIGHT,
   GSK_CORNER_BOTTOM_LEFT
 } GskCorner;
+
+/**
+ * GskFillRule:
+ * @GSK_FILL_RULE_WINDING: If the path crosses the ray from
+ *   left-to-right, counts +1. If the path crosses the ray
+ *   from right to left, counts -1. (Left and right are determined
+ *   from the perspective of looking along the ray from the starting
+ *   point.) If the total count is non-zero, the point will be filled.
+ * @GSK_FILL_RULE_EVEN_ODD: Counts the total number of
+ *   intersections, without regard to the orientation of the contour. If
+ *   the total number of intersections is odd, the point will be
+ *   filled.
+ *
+ * `GskFillRule` is used to select how paths are filled.
+ *
+ * Whether or not a point is included in the fill is determined by taking
+ * a ray from that point to infinity and looking at intersections with the
+ * path. The ray can be in any direction, as long as it doesn't pass through
+ * the end point of a segment or have a tricky intersection such as
+ * intersecting tangent to the path.
+ *
+ * (Note that filling is not actually implemented in this way. This
+ * is just a description of the rule that is applied.)
+ *
+ * New entries may be added in future versions.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GSK_FILL_RULE_WINDING,
+  GSK_FILL_RULE_EVEN_ODD
+} GskFillRule;
+
+/**
+ * GskPathOperation:
+ * @GSK_PATH_MOVE: A move-to operation, with 1 point describing the target point.
+ * @GSK_PATH_CLOSE: A close operation ending the current contour with a line back
+ *   to the starting point. Two points describe the start and end of the line.
+ * @GSK_PATH_LINE: A line-to operation, with 2 points describing the start and
+ *   end point of a straight line.
+ * @GSK_PATH_QUAD: A curve-to operation describing a quadratic Bézier curve
+ *   with 3 points describing the start point, the control point and the end
+ *   point of the curve.
+ * @GSK_PATH_CUBIC: A curve-to operation describing a cubic Bézier curve with 4
+ *   points describing the start point, the two control points and the end point
+ *   of the curve.
+ *
+ * Path operations are used to described segments of a `GskPath`.
+ *
+ * More values may be added in the future.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GSK_PATH_MOVE,
+  GSK_PATH_CLOSE,
+  GSK_PATH_LINE,
+  GSK_PATH_QUAD,
+  GSK_PATH_CUBIC,
+} GskPathOperation;
+
+/**
+ * GskPathDirection:
+ * @GSK_PATH_START: The side that leads to the start of the path
+ * @GSK_PATH_END: The side that leads to the end of the path
+ *
+ * The values of the `GskPathDirection` enum are used to pick one
+ * of the two sides of the path that at a given point on the path.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GSK_PATH_START,
+  GSK_PATH_END
+} GskPathDirection;
 
 /**
  * GskSerializationError:
@@ -274,4 +351,3 @@ typedef enum
   GSK_MASK_MODE_LUMINANCE,
   GSK_MASK_MODE_INVERTED_LUMINANCE
 } GskMaskMode;
-

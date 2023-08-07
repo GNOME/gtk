@@ -359,6 +359,8 @@ endforeach
 tests = [
   ['transform'],
   ['shader'],
+  ['path'],
+  ['path-special-cases'],
 ]
 
 test_cargs = []
@@ -389,10 +391,13 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'curve' ],
+  [ 'curve-special-cases' ],
   [ 'diff' ],
   [ 'half-float' ],
   ['rounded-rect'],
   ['misc'],
+  ['boundingbox'],
 ]
 
 foreach t : internal_tests
