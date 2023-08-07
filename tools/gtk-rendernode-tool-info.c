@@ -134,6 +134,10 @@ count_nodes (GskRenderNode *node,
       count_nodes (gsk_fill_node_get_child (node), counts, &d);
       break;
 
+    case GSK_STROKE_NODE:
+      count_nodes (gsk_stroke_node_get_child (node), counts, &d);
+      break;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();

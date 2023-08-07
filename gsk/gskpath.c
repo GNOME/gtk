@@ -379,7 +379,6 @@ gsk_path_get_bounds (GskPath         *self,
                      graphene_rect_t *bounds)
 {
   GskBoundingBox b;
-  gsize i;
 
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (bounds != NULL, FALSE);
@@ -392,12 +391,60 @@ gsk_path_get_bounds (GskPath         *self,
 
   gsk_contour_get_bounds (self->contours[0], &b);
 
-  for (i = 1; i < self->n_contours; i++)
+  for (gsize i = 1; i < self->n_contours; i++)
     {
-      GskBoundingBox bb;
+      GskBoundingBox tmp;
 
-      gsk_contour_get_bounds (self->contours[i], &bb);
-      gsk_bounding_box_union (&b, &bb, &b);
+      gsk_contour_get_bounds (self->contours[i], &tmp);
+      gsk_bounding_box_union (&b, &tmp, &b);
+    }
+
+  gsk_bounding_box_to_rect (&b, bounds);
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_get_stroke_bounds:
+ * @self: a #GtkPath
+ * @stroke: stroke parameters
+ * @bounds: (out caller-allocates): the bounds to fill in
+ *
+ * Computes the bounds for stroking the given path with the
+ * parameters in @stroke.
+ *
+ * The returned bounds may be larger than necessary, because this
+ * function aims to be fast, not accurate. The bounds are guaranteed
+ * to contain the area affected by the stroke, including protrusions
+ * like miters.
+ *
+ * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
+ *   to be empty and have no bounds.
+ */
+gboolean
+gsk_path_get_stroke_bounds (GskPath         *self,
+                            const GskStroke *stroke,
+                            graphene_rect_t *bounds)
+{
+  GskBoundingBox b;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (bounds != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    {
+      graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
+      return FALSE;
+    }
+
+  gsk_contour_get_stroke_bounds (self->contours[0], stroke, &b);
+
+  for (gsize i = 1; i < self->n_contours; i++)
+    {
+      GskBoundingBox tmp;
+
+      if (gsk_contour_get_stroke_bounds (self->contours[i], stroke, &tmp))
+        gsk_bounding_box_union (&b, &tmp, &b);
     }
 
   gsk_bounding_box_to_rect (&b, bounds);

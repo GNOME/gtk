@@ -101,6 +101,11 @@ gboolean                gsk_path_get_bounds                     (GskPath        
                                                                  graphene_rect_t        *bounds);
 
 GDK_AVAILABLE_IN_4_14
+gboolean                gsk_path_get_stroke_bounds              (GskPath                *self,
+                                                                 const GskStroke        *stroke,
+                                                                 graphene_rect_t        *bounds);
+
+GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_in_fill                        (GskPath                *self,
                                                                  const graphene_point_t *point,
                                                                  GskFillRule             fill_rule);

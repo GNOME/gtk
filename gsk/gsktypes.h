@@ -29,5 +29,6 @@ typedef struct _GskPath                 GskPath;
 typedef struct _GskPathBuilder          GskPathBuilder;
 typedef struct _GskPathPoint            GskPathPoint;
 typedef struct _GskRenderer             GskRenderer;
+typedef struct _GskStroke               GskStroke;
 typedef struct _GskTransform            GskTransform;
 
