@@ -485,6 +485,7 @@ gsk_path_get_closest_point (GskPath                *self,
         {
           found = TRUE;
           res->contour = i;
+          res->path = self;
           threshold = distance;
         }
     }
