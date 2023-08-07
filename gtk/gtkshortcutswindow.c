@@ -56,9 +56,14 @@
  * showing information that is not relevant in the current application context.
  *
  * The recommended way to construct a `GtkShortcutsWindow` is with
- * [class@Gtk.Builder], by populating a `GtkShortcutsWindow` with one or
- * more `GtkShortcutsSection` objects, which contain `GtkShortcutsGroups`
- * that in turn contain objects of class `GtkShortcutsShortcut`.
+ * [class@Gtk.Builder], by using the `<child>` tag to populate a
+ * `GtkShortcutsWindow` with one or more [class@Gtk.ShortcutsSection] objects,
+ * which contain one or more [class@Gtk.ShortcutsGroup] instances, which, in turn,
+ * contain [class@Gtk.ShortcutsShortcut] instances.
+ *
+ * If you need to add a section programmatically, use [method@Gtk.ShortcutsWindow.add_section]
+ * instead of [method@Gtk.Window.set_child], as the shortcuts window manages
+ * its children directly.
  *
  * # A simple example:
  *
@@ -333,10 +338,29 @@ section_notify_cb (GObject    *section,
     }
 }
 
-static void
+/**
+ * gtk_shortcuts_window_add_section:
+ * @self: a `GtkShortcutsWindow`
+ * @section: the `GtkShortcutsSection` to add
+ *
+ * Adds a section to the shortcuts window.
+ *
+ * This is the programmatic equivalent to using [class@Gtk.Builder] and a
+ * `<child>` tag to add the child.
+ * 
+ * Using [method@Gtk.Window.set_child] is not appropriate as the shortcuts
+ * window manages its children internally.
+ *
+ * Since: 4.14
+ */
+void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
                                   GtkShortcutsSection *section)
 {
+  g_return_if_fail (GTK_IS_SHORTCUTS_WINDOW (self));
+  g_return_if_fail (GTK_IS_SHORTCUTS_SECTION (section));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (section)) == NULL);
+
   GtkListBoxRow *row;
   char *title;
   char *name;
