@@ -24,7 +24,7 @@
 
 /* GskCurve collects all the functionality we need for Bézier segments */
 
-#define MIN_PROGRESS (1/1024.f)
+#define MIN_PROGRESS (1/2048.f)
 
 typedef struct _GskCurveClass GskCurveClass;
 
@@ -524,20 +524,6 @@ gsk_quad_curve_segment (const GskCurve *curve,
   gsk_quad_curve_split (&tmp, (end - start) / (1.0f - start), segment, NULL);
 }
 
-/* taken from Skia, including the very descriptive name */
-static gboolean
-gsk_quad_curve_too_curvy (const GskQuadCurve *self,
-                               float          tolerance)
-{
-  const graphene_point_t *pts = self->points;
-  float dx, dy;
-
-  dx = fabs (pts[1].x / 2 - (pts[0].x + pts[2].x) / 4);
-  dy = fabs (pts[1].y / 2 - (pts[0].y + pts[2].y) / 4);
-
-  return MAX (dx, dy) > tolerance;
-}
-
 static gboolean
 gsk_quad_curve_decompose_step (const GskCurve      *curve,
                                float                start_progress,
@@ -550,8 +536,8 @@ gsk_quad_curve_decompose_step (const GskCurve      *curve,
   GskCurve left, right;
   float mid_progress;
 
-  if (!gsk_quad_curve_too_curvy (self, tolerance))
-    return add_line_func (&self->points[0], &self->points[2], start_progress, end_progress, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
+  if (graphene_point_distance (&self->points[0], &self->points[2], NULL, NULL) < tolerance)
+    return add_line_func (&self->points[0], &self->points[2], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
   if (end_progress - start_progress <= MIN_PROGRESS)
     return add_line_func (&self->points[0], &self->points[2], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
 
@@ -994,25 +980,6 @@ gsk_cubic_curve_segment (const GskCurve *curve,
   gsk_cubic_curve_split (&tmp, (end - start) / (1.0f - start), segment, NULL);
 }
 
-/* taken from Skia, including the very descriptive name */
-static gboolean
-gsk_cubic_curve_too_curvy (const GskCubicCurve *self,
-                           float                tolerance)
-{
-  const graphene_point_t *pts = self->points;
-  graphene_point_t p;
-
-  graphene_point_interpolate (&pts[0], &pts[3], 1.0f / 3, &p);
-  if (MAX (ABS (p.x - pts[1].x), ABS (p.y - pts[1].y)) > tolerance)
-    return TRUE;
-
-  graphene_point_interpolate (&pts[0], &pts[3], 2.0f / 3, &p);
-  if (MAX (ABS (p.x - pts[2].x), ABS (p.y - pts[2].y)) > tolerance)
-    return TRUE;
-
-  return FALSE;
-}
-
 static gboolean
 gsk_cubic_curve_decompose_step (const GskCurve      *curve,
                                 float                start_progress,
@@ -1025,8 +992,8 @@ gsk_cubic_curve_decompose_step (const GskCurve      *curve,
   GskCurve left, right;
   float mid_progress;
 
-  if (!gsk_cubic_curve_too_curvy (self, tolerance))
-    return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_STRAIGHT, user_data);
+  if (graphene_point_distance (&self->points[0], &self->points[3], NULL, NULL) < tolerance)
+    return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
   if (end_progress - start_progress <= MIN_PROGRESS)
     return add_line_func (&self->points[0], &self->points[3], start_progress, end_progress, GSK_CURVE_LINE_REASON_SHORT, user_data);
 
