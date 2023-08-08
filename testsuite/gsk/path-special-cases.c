@@ -443,7 +443,6 @@ test_path_point (void)
   gsk_path_point_get_tangent (path, &point, GSK_PATH_END, &t2);
   curvature = gsk_path_point_get_curvature (path, &point, &center);
 
-  g_print ("%g %g\n", graphene_vec2_get_x (&t1), graphene_vec2_get_y (&t1));
   g_assert_true (graphene_point_equal (&pos, &GRAPHENE_POINT_INIT (100, 100)));
   g_assert_true (graphene_vec2_equal (&t1, graphene_vec2_y_axis ()));
   graphene_vec2_negate (graphene_vec2_x_axis (), &mx);
@@ -451,6 +450,72 @@ test_path_point (void)
   g_assert_true (curvature == 0);
 
   gsk_path_unref (path);
+}
+
+/* Test that gsk_path_builder_add_segment yields the expected results */
+static void
+test_path_segments (void)
+{
+  struct {
+    const char *path;
+    graphene_point_t p1;
+    graphene_point_t p2;
+    const char *result;
+  } tests[] = {
+    {
+      "M 0 0 L 100 0 L 50 50 Z",
+      { 100, 0 },
+      { 50, 50 },
+      "M 100 0 L 50 50"
+    },
+    {
+      "M 0 0 L 100 0 L 50 50 Z",
+      { 50, 0 },
+      { 70, 0 },
+      "M 50 0 L 70 0"
+    },
+    {
+      "M 0 0 L 100 0 L 50 50 Z",
+      { 70, 0 },
+      { 50, 0 },
+      "M 70 0 L 100 0 L 50 50 L 0 0 L 50 0"
+    },
+    {
+      "M 0 0 L 100 0 L 50 50 Z",
+      { 50, 0 },
+      { 50, 50 },
+      "M 50 0 L 100 0 L 50 50"
+    },
+    {
+      "M 0 0 L 100 0 L 50 50 Z",
+      { 100, 0 },
+      { 100, 0 },
+      "M 100 0 L 50 50 L 0 0 L 100 0"
+    }
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      GskPath *path;
+      GskPathPoint p1, p2;
+      GskPathBuilder *builder;
+      GskPath *result;
+      char *str;
+
+      path = gsk_path_parse (tests[i].path);
+      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p1, INFINITY, &p1));
+      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p2, INFINITY, &p2));
+
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_segment (builder, path, &p1, &p2);
+      result = gsk_path_builder_free_to_path (builder);
+      str = gsk_path_to_string (result);
+
+      g_assert_cmpstr (str, ==, tests[i].result);
+
+      g_free (str);
+      gsk_path_unref (path);
+    }
 }
 
 int
@@ -463,6 +528,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rect", test_rect_path);
   g_test_add_func ("/path/foreach", test_foreach);
   g_test_add_func ("/path/point", test_path_point);
+  g_test_add_func ("/path/segments", test_path_segments);
 
   return g_test_run ();
 }
