@@ -3,7 +3,7 @@
 REF="main"
 
 curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/gtk/-/jobs/artifacts/$REF/download?job=reference" || exit $?
-unzip -d "$REF-docs" "$REF-docs.zip"
+unzip -d "$REF-docs" "$REF-docs.zip" || exit $?
 
 rm -f "$REF-docs.zip"
 
