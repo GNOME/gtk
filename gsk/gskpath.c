@@ -551,6 +551,122 @@ gsk_path_get_end_point (GskPath      *self,
 }
 
 /**
+ * gsk_path_get_previous_point:
+ * @self: a `GskPath`
+ * @point: a point on @self
+ * @result: (out caller-allocates): Return location for the result
+ *
+ * Gets the previous 'significant' point on @self before @point.
+ *
+ * The 'significant' points of a path are typically the
+ * on-curve points that have been specified when the
+ * path was created.
+ *
+ * For example, in a path with 3 Bézier segments, the
+ * significant points are the start of the first segment,
+ * the start point of the second segment (which coincides
+ * with the end point of the first segment), the start
+ * point of the third segment, and the end point of the
+ * last segment.
+ *
+ * If @point is the start point of the path, there is no
+ * prior point, and this function returns `FALSE`.
+ *
+ * Returns: `TRUE` if @result has been set to a point
+ *
+ * Since: 4.20
+ */
+gboolean
+gsk_path_get_previous_point (GskPath            *self,
+                             const GskPathPoint *point,
+                             GskPathPoint       *result)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (point->t > 0)
+    {
+      result->contour = point->contour;
+      result->idx = point->idx;
+      result->t = 0;
+      return TRUE;
+    }
+  else if (point->idx > 0)
+    {
+      result->contour = point->contour;
+      result->idx = point->idx - 1;
+      result->t = 0;
+      return TRUE;
+    }
+  else if (point->contour > 0)
+    {
+      result->contour = point->contour - 1;
+      result->idx = gsk_contour_get_n_ops (self->contours[result->contour]) - 1;
+      result->t = 1;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gsk_path_get_next_point:
+ * @self: a `GskPath`
+ * @point: a point on @self
+ * @result: (out caller-allocates): Return location for the result
+ *
+ * Gets the next 'significant' point on @self after @point.
+ *
+ * The 'significant' points of a path are typically the
+ * on-curve points that have been specified when the
+ * path was created.
+ *
+ * For example, in a path with 3 Bézier segments, the
+ * significant points are the start of the first segment,
+ * the start point of the second segment (which coincides
+ * with the end point of the first segment), the start
+ * point of the third segment, and the end point of the
+ * last segment.
+ *
+ * If @point is the end point of the path, there is no
+ * next point, and this function returns `FALSE`.
+ *
+ * Returns: `TRUE` if @result has been set to a point
+ *
+ * Since: 4.20
+ */
+gboolean
+gsk_path_get_next_point (GskPath            *self,
+                         const GskPathPoint *point,
+                         GskPathPoint       *result)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (point->t < 1)
+    {
+      result->contour = point->contour;
+      result->idx = point->idx;
+      result->t = 1;
+      return TRUE;
+    }
+  else if (point->idx < gsk_contour_get_n_ops (self->contours[point->contour]) - 1)
+    {
+      result->contour = point->contour;
+      result->idx = point->idx + 1;
+      result->t = 1;
+      return TRUE;
+    }
+  else if (point->contour < self->n_contours - 1)
+    {
+      result->contour = point->contour + 1;
+      result->idx = 0;
+      result->t = 0;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
  * gsk_path_get_closest_point:
  * @self: a path
  * @point: the point
