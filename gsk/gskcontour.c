@@ -420,8 +420,8 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
       if (dist <= threshold)
         {
           *out_dist = dist;
-          result->data.std.idx = 0;
-          result->data.std.t = 0;
+          result->idx = 0;
+          result->t = 0;
           return TRUE;
         }
 
@@ -448,8 +448,8 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
   if (best_idx != G_MAXUINT)
     {
       *out_dist = threshold;
-      result->data.std.idx = best_idx;
-      result->data.std.t = best_t;
+      result->idx = best_idx;
+      result->t = best_t;
       return TRUE;
     }
 
@@ -464,14 +464,14 @@ gsk_standard_contour_get_position (const GskContour *contour,
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
 
-  if (G_UNLIKELY (point->data.std.idx == 0))
+  if (G_UNLIKELY (point->idx == 0))
     {
       *position = self->points[0];
       return;
     }
 
-  gsk_curve_init (&curve, self->ops[point->data.std.idx]);
-  gsk_curve_get_point (&curve, point->data.std.t, position);
+  gsk_curve_init (&curve, self->ops[point->idx]);
+  gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -485,14 +485,14 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
   gsize idx;
   float t;
 
-  if (G_UNLIKELY (point->data.std.idx == 0))
+  if (G_UNLIKELY (point->idx == 0))
     {
       graphene_vec2_init (tangent, 1, 0);
       return;
     }
 
-  idx = point->data.std.idx;
-  t = point->data.std.t;
+  idx = point->idx;
+  t = point->t;
 
   if (t == 0 && direction == GSK_PATH_START)
     {
@@ -535,11 +535,11 @@ gsk_standard_contour_get_curvature (const GskContour *contour,
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
 
-  if (G_UNLIKELY (point->data.std.idx == 0))
+  if (G_UNLIKELY (point->idx == 0))
     return 0;
 
-  gsk_curve_init (&curve, self->ops[point->data.std.idx]);
-  return gsk_curve_get_curvature (&curve, point->data.std.t, center);
+  gsk_curve_init (&curve, self->ops[point->idx]);
+  return gsk_curve_get_curvature (&curve, point->t, center);
 }
 
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =

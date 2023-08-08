@@ -81,11 +81,14 @@ gsk_path_point_get_position (GskPath            *path,
                              graphene_point_t   *position)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
-  const GskContour *contour = gsk_path_get_contour (path, self->contour);
+  const GskContour *contour;
 
-  g_return_if_fail (path == self->path);
-  g_return_if_fail (contour != NULL);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (point != NULL);
+  g_return_if_fail (position != NULL);
+  g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
 
+  contour = gsk_path_get_contour (path, self->contour),
   gsk_contour_get_position (contour, self, position);
 }
 
@@ -114,11 +117,14 @@ gsk_path_point_get_tangent (GskPath            *path,
                             graphene_vec2_t    *tangent)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
-  const GskContour *contour = gsk_path_get_contour (path, self->contour);
+  const GskContour *contour;
 
-  g_return_if_fail (path == self->path);
-  g_return_if_fail (contour != NULL);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (point != NULL);
+  g_return_if_fail (tangent != NULL);
+  g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
 
+  contour = gsk_path_get_contour (path, self->contour),
   gsk_contour_get_tangent (contour, self, direction, tangent);
 }
 
@@ -126,7 +132,7 @@ gsk_path_point_get_tangent (GskPath            *path,
  * gsk_path_point_get_curvature:
  * @path: a `GskPath`
  * @point: a `GskPathPoint` on @path
- * @center: (out caller-allocates): Return location for
+ * @center: (out caller-allocates) (nullable): Return location for
  *   the center of the osculating circle
  *
  * Calculates the curvature of the path at the point.
@@ -146,10 +152,12 @@ gsk_path_point_get_curvature (GskPath            *path,
                               graphene_point_t   *center)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
-  const GskContour *contour = gsk_path_get_contour (path, self->contour);
+  const GskContour *contour;
 
-  g_return_val_if_fail (path == self->path, 0);
-  g_return_val_if_fail (contour != NULL, 0);
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (point != NULL, 0);
+  g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
 
+  contour = gsk_path_get_contour (path, self->contour);
   return gsk_contour_get_curvature (contour, self, center);
 }
