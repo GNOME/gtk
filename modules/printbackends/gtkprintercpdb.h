@@ -21,7 +21,7 @@
 
 #include <glib-object.h>
 #include <cpdb/cpdb-frontend.h>
-#include <gtk/gtkprinterprivate.h>
+#include <gtk/print/gtkprinterprivate.h>
 
 G_BEGIN_DECLS
 
