@@ -77,6 +77,11 @@ struct _GskContourClass
   float                 (* get_curvature)       (const GskContour       *contour,
                                                  GskRealPathPoint       *point,
                                                  graphene_point_t       *center);
+  void                  (* add_segment)         (const GskContour       *contour,
+                                                 GskPathBuilder         *builder,
+                                                 gboolean                emit_move_to,
+                                                 GskRealPathPoint       *start,
+                                                 GskRealPathPoint       *end);
 };
 
 /* {{{ Utilities */
@@ -551,6 +556,71 @@ gsk_standard_contour_get_curvature (const GskContour *contour,
   return gsk_curve_get_curvature (&curve, point->t, center);
 }
 
+static void
+add_curve (GskCurve       *curve,
+           GskPathBuilder *builder,
+           gboolean       *emit_move_to)
+{
+  if (*emit_move_to)
+    {
+      const graphene_point_t *s;
+
+      s = gsk_curve_get_start_point (curve);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      *emit_move_to = FALSE;
+    }
+  gsk_curve_builder_to (curve, builder);
+}
+
+static void
+gsk_standard_contour_add_segment (const GskContour *contour,
+                                  GskPathBuilder   *builder,
+                                  gboolean          emit_move_to,
+                                  GskRealPathPoint *start,
+                                  GskRealPathPoint *end)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+  GskCurve c, c1, c2;
+
+  gsk_curve_init (&c, self->ops[start->idx]);
+
+  if (start->idx == end->idx)
+    {
+      gsk_curve_segment (&c, start->t, end->t, &c1);
+      add_curve (&c1, builder, &emit_move_to);
+      return;
+    }
+  if (start->t == 0)
+    {
+      add_curve (&c, builder, &emit_move_to);
+    }
+  else if (start->t < 1)
+    {
+      gsk_curve_split (&c, start->t, &c1, &c2);
+      add_curve (&c2, builder, &emit_move_to);
+    }
+
+  for (gsize i = start->idx + 1; i < end->idx; i++)
+    {
+      gsk_curve_init (&c, self->ops[i]);
+      add_curve (&c, builder, &emit_move_to);
+    }
+
+  gsk_curve_init (&c, self->ops[end->idx]);
+  if (c.op == GSK_PATH_CLOSE)
+    c.op = GSK_PATH_LINE;
+
+  if (end->t == 1)
+    {
+      add_curve (&c, builder, &emit_move_to);
+    }
+  else if (end->t > 0)
+    {
+      gsk_curve_split (&c, end->t, &c1, &c2);
+      add_curve (&c, builder, &emit_move_to);
+    }
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -570,6 +640,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_position,
   gsk_standard_contour_get_tangent,
   gsk_standard_contour_get_curvature,
+  gsk_standard_contour_add_segment,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -745,6 +816,16 @@ gsk_contour_get_curvature (const GskContour *self,
                            graphene_point_t *center)
 {
   return self->klass->get_curvature (self, point, center);
+}
+
+void
+gsk_contour_add_segment (const GskContour *self,
+                         GskPathBuilder   *builder,
+                         gboolean          emit_move_to,
+                         GskRealPathPoint *start,
+                         GskRealPathPoint *end)
+{
+  self->klass->add_segment (self, builder, emit_move_to, start, end);
 }
 
 /* }}} */

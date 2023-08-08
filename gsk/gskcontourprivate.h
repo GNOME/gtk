@@ -73,5 +73,11 @@ void                    gsk_contour_get_tangent                 (const GskContou
 float                   gsk_contour_get_curvature               (const GskContour       *self,
                                                                  GskRealPathPoint       *point,
                                                                  graphene_point_t       *center);
+void                    gsk_contour_add_segment                 (const GskContour       *self,
+                                                                 GskPathBuilder         *builder,
+                                                                 gboolean                emit_move_to,
+                                                                 GskRealPathPoint       *start,
+                                                                 GskRealPathPoint       *end);
+
 
 G_END_DECLS
