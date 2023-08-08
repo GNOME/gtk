@@ -23,7 +23,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include "gtkprintbackendprivate.h"
+#include "gtk/print/gtkprintbackendprivate.h"
 
 G_BEGIN_DECLS
 
