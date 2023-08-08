@@ -20,10 +20,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 15:33+0000\n"
+"POT-Creation-Date: 2023-08-05 15:50+0000\n"
 "PO-Revision-Date: 2021-02-21 21:04+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
-"Language-Team: Türkçe <gnome-turk@gnome.org>\n"
+"Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:318 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Göster"
 
@@ -148,23 +148,23 @@ msgstr "Öntanımlı Görüntü"
 msgid "The default display for GDK"
 msgstr "GDK için öntanımlı görüntü"
 
-#: gdk/gdkglcontext.c:318
+#: gdk/gdkglcontext.c:319
 msgid "The GDK display used to create the GL context"
 msgstr "GL bağlamını oluşturmak için kullanılan GDK ekranı"
 
-#: gdk/gdkglcontext.c:333 gtk/gtkwidget.c:1351
+#: gdk/gdkglcontext.c:334 gtk/gtkwidget.c:1351
 msgid "Window"
 msgstr "Pencere"
 
-#: gdk/gdkglcontext.c:334
+#: gdk/gdkglcontext.c:335
 msgid "The GDK window bound to the GL context"
 msgstr "GL bağlamına bağlı GDK penceresi"
 
-#: gdk/gdkglcontext.c:349
+#: gdk/gdkglcontext.c:350
 msgid "Shared context"
 msgstr "Paylaşılan bağlam"
 
-#: gdk/gdkglcontext.c:350
+#: gdk/gdkglcontext.c:351
 msgid "The GL context this context shares data with"
 msgstr "Bu bağlamın kendisiyle veri paylaştığı GL bağlamı"
 
@@ -283,7 +283,7 @@ msgstr "Gösterilen GIcon"
 
 #: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263
 #: gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:343 gtk/gtkprinter.c:170
-#: gtk/gtkwindow.c:891
+#: gtk/gtkwindow.c:893
 msgid "Icon Name"
 msgstr "Simge Adı"
 
@@ -851,7 +851,7 @@ msgid "The size of the icon"
 msgstr "Simgenin boyutu"
 
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:898
+#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:900
 msgid "Screen"
 msgstr "Ekran"
 
@@ -1308,7 +1308,7 @@ msgstr ""
 "bir GtkPackType"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
-#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1767
+#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1716
 msgid "Position"
 msgstr "Konum"
@@ -1463,43 +1463,43 @@ msgstr "Programcığın öntanımlı metni"
 msgid "The default text appearing when there are no applications"
 msgstr "Uygulamalar olmadığında görünen öntanımlı metin"
 
-#: gtk/gtkapplication.c:845
+#: gtk/gtkapplication.c:833
 msgid "Register session"
 msgstr "Kayıt oturumu"
 
-#: gtk/gtkapplication.c:846
+#: gtk/gtkapplication.c:834
 msgid "Register with the session manager"
 msgstr "Oturum yöneticisi ile Kayıt"
 
-#: gtk/gtkapplication.c:863
+#: gtk/gtkapplication.c:851
 msgid "Screensaver Active"
 msgstr "Ekran Koruyucu Aktif"
 
-#: gtk/gtkapplication.c:864
+#: gtk/gtkapplication.c:852
 msgid "Whether the screensaver is active"
 msgstr "Ekran koruyucunun aktif olup olmaması"
 
-#: gtk/gtkapplication.c:870
+#: gtk/gtkapplication.c:858
 msgid "Application menu"
 msgstr "Uygulama menüsü"
 
-#: gtk/gtkapplication.c:871
+#: gtk/gtkapplication.c:859
 msgid "The GMenuModel for the application menu"
 msgstr "Uygulama menüsü için GMenuModel"
 
-#: gtk/gtkapplication.c:877
+#: gtk/gtkapplication.c:865
 msgid "Menubar"
 msgstr "Menü çubuğu"
 
-#: gtk/gtkapplication.c:878
+#: gtk/gtkapplication.c:866
 msgid "The GMenuModel for the menubar"
 msgstr "Menü çubuğu için GMenuModel"
 
-#: gtk/gtkapplication.c:884
+#: gtk/gtkapplication.c:872
 msgid "Active window"
 msgstr "Etkin pencere"
 
-#: gtk/gtkapplication.c:885
+#: gtk/gtkapplication.c:873
 msgid "The window which most recently had focus"
 msgstr "En son odaklanılan pencere"
 
@@ -2299,7 +2299,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Taranmış pixbuf'ın durumuna uygun olarak renklendirilmesi"
 
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1166
-#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:842
+#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
 msgid "Icon"
 msgstr "Simge"
 
@@ -3968,11 +3968,11 @@ msgstr "İptal etiketi"
 msgid "The label on the cancel button"
 msgstr "İptal düğmesi üzerindeki etiket"
 
-#: gtk/gtkfilechooserwidget.c:8672 gtk/gtkfilechooserwidget.c:8673
+#: gtk/gtkfilechooserwidget.c:8674 gtk/gtkfilechooserwidget.c:8675
 msgid "Search mode"
 msgstr "Arama kipi"
 
-#: gtk/gtkfilechooserwidget.c:8679 gtk/gtkfilechooserwidget.c:8680
+#: gtk/gtkfilechooserwidget.c:8681 gtk/gtkfilechooserwidget.c:8682
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "Alt başlık"
@@ -4565,7 +4565,7 @@ msgstr "Alanın ögeleri arasındaki boşluk"
 msgid "Width of border around the action area"
 msgstr "Eylem alanı çevresindeki kenarlığın genişliği"
 
-#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:899
+#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:901
 msgid "The screen where this window will be displayed"
 msgstr "Bu pencerenin gösterileceği ekran"
 
@@ -5277,7 +5277,7 @@ msgstr "İletişim Penceresi Başlığı"
 msgid "The title of the file chooser dialog"
 msgstr "Dosya seçici iletişim penceresinin başlığı"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1782 gtk/gtkwindow.c:790
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1783 gtk/gtkwindow.c:792
 msgid "Modal"
 msgstr "Yönetsel"
 
@@ -5293,11 +5293,11 @@ msgstr ""
 msgid "Whether the dialog is currently visible"
 msgstr "İletişim penceresinin şu anki görünürlüğü"
 
-#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1065
+#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1067
 msgid "Transient for Window"
 msgstr "Pencere için Geçirgenlik"
 
-#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1066
+#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1068
 msgid "The transient parent of the dialog"
 msgstr "Pencerenin geçirgen üstü"
 
@@ -5755,43 +5755,43 @@ msgstr "Soket Penceresi"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Fişin gömülü olduğu soketin penceresi"
 
-#: gtk/gtkpopover.c:1739
+#: gtk/gtkpopover.c:1740
 msgid "Relative to"
 msgstr "Hizalama türü"
 
-#: gtk/gtkpopover.c:1740
+#: gtk/gtkpopover.c:1741
 msgid "Widget the bubble window points to"
 msgstr "Balon penceresine işaret edecek parçacık"
 
-#: gtk/gtkpopover.c:1753
+#: gtk/gtkpopover.c:1754
 msgid "Pointing to"
 msgstr "Şurayı işaret ediyor"
 
-#: gtk/gtkpopover.c:1754
+#: gtk/gtkpopover.c:1755
 msgid "Rectangle the bubble window points to"
 msgstr "Baloncuk pencerenin konumlandırılacağı dikdörtgen"
 
-#: gtk/gtkpopover.c:1768
+#: gtk/gtkpopover.c:1769
 msgid "Position to place the bubble window"
 msgstr "Baloncuk pencerenin yerleştirileceği konum"
 
-#: gtk/gtkpopover.c:1783
+#: gtk/gtkpopover.c:1784
 msgid "Whether the popover is modal"
 msgstr "Açılan kutucuğun kalıcı olup olmadığı"
 
-#: gtk/gtkpopover.c:1800
+#: gtk/gtkpopover.c:1801
 msgid "Transitions enabled"
 msgstr "Geçişler etkinleştirildi"
 
-#: gtk/gtkpopover.c:1801
+#: gtk/gtkpopover.c:1802
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Göster/gizle geçişlerinin etkinleştirilip etkinleştirilmediği"
 
-#: gtk/gtkpopover.c:1814
+#: gtk/gtkpopover.c:1815
 msgid "Constraint"
 msgstr "Kısıt"
 
-#: gtk/gtkpopover.c:1815
+#: gtk/gtkpopover.c:1816
 msgid "Constraint for the popover position"
 msgstr "Açılır menü konumu için kısıt"
 
@@ -8809,7 +8809,7 @@ msgstr "Ağaç görünümü ağaç çizgisi çizerken kullanılacak kesik çizgi
 msgid "Whether to display the column"
 msgstr "Sütunun gösterilmesi"
 
-#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:783
+#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:785
 msgid "Resizable"
 msgstr "Boyutlandırılabilir"
 
@@ -9339,44 +9339,44 @@ msgstr "Metin seçim işleyicileri genişliği"
 msgid "Height of text selection handles"
 msgstr "Metin seçim işleyicileri yüksekliği"
 
-#: gtk/gtkwindow.c:745
+#: gtk/gtkwindow.c:747
 msgid "Window Type"
 msgstr "Pencere Türü"
 
-#: gtk/gtkwindow.c:746
+#: gtk/gtkwindow.c:748
 msgid "The type of the window"
 msgstr "Pencerenin türü"
 
-#: gtk/gtkwindow.c:753
+#: gtk/gtkwindow.c:755
 msgid "Window Title"
 msgstr "Pencere Başlığı"
 
-#: gtk/gtkwindow.c:754
+#: gtk/gtkwindow.c:756
 msgid "The title of the window"
 msgstr "Pencerenin başlığı"
 
-#: gtk/gtkwindow.c:760
+#: gtk/gtkwindow.c:762
 msgid "Window Role"
 msgstr "Pencere Rolü"
 
-#: gtk/gtkwindow.c:761
+#: gtk/gtkwindow.c:763
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Oturum geri getirilirken kullanılacak pencere için tek olan belirteç"
 
-#: gtk/gtkwindow.c:776
+#: gtk/gtkwindow.c:778
 msgid "Startup ID"
 msgstr "Başlangıç Kimliği"
 
-#: gtk/gtkwindow.c:777
+#: gtk/gtkwindow.c:779
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "startup-notification tarafından kullanılacak perncere için tek olan belirteç"
 
-#: gtk/gtkwindow.c:784
+#: gtk/gtkwindow.c:786
 msgid "If TRUE, users can resize the window"
 msgstr "Eğer TRUE ise, kullanıcılar pencere boyutlarını değiştirebilir"
 
-#: gtk/gtkwindow.c:791
+#: gtk/gtkwindow.c:793
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -9384,93 +9384,93 @@ msgstr ""
 "Eğer TRUE ise, pencere yönetseldir. (bu pencere etkin olduğunda uygulamanın "
 "diğer pencereleri odak alamaz)"
 
-#: gtk/gtkwindow.c:797
+#: gtk/gtkwindow.c:799
 msgid "Window Position"
 msgstr "Pencere Konumu"
 
-#: gtk/gtkwindow.c:798
+#: gtk/gtkwindow.c:800
 msgid "The initial position of the window"
 msgstr "Pencerenin başlangıç pozisyonu"
 
-#: gtk/gtkwindow.c:805
+#: gtk/gtkwindow.c:807
 msgid "Default Width"
 msgstr "Öntanımlı Genişlik"
 
-#: gtk/gtkwindow.c:806
+#: gtk/gtkwindow.c:808
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Pencere ilk gösterildiğinde pencerenin öntanımlı genişliği"
 
-#: gtk/gtkwindow.c:813
+#: gtk/gtkwindow.c:815
 msgid "Default Height"
 msgstr "Öntanımlı Yükseklik"
 
-#: gtk/gtkwindow.c:814
+#: gtk/gtkwindow.c:816
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Pencere ilk gösterildiğinde pencerenin öntanımlı yüksekliği"
 
-#: gtk/gtkwindow.c:821
+#: gtk/gtkwindow.c:823
 msgid "Destroy with Parent"
 msgstr "Üst ile Kapat"
 
-#: gtk/gtkwindow.c:822
+#: gtk/gtkwindow.c:824
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Bu pencerenin üstü olan pencere kapatıldığında kapatılması"
 
-#: gtk/gtkwindow.c:835
+#: gtk/gtkwindow.c:837
 msgid "Hide the titlebar during maximization"
 msgstr "Büyütme sırasında başlık çubuğunu gizle"
 
-#: gtk/gtkwindow.c:836
+#: gtk/gtkwindow.c:838
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr ""
 "Pencere büyütüldüğünde başlık çubuğunun gizli olmasının gerekip gerekmemesi"
 
-#: gtk/gtkwindow.c:843
+#: gtk/gtkwindow.c:845
 msgid "Icon for this window"
 msgstr "Bu pencere için simge"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:861
 msgid "Mnemonics Visible"
 msgstr "Görünür Anımsatıcı"
 
-#: gtk/gtkwindow.c:860
+#: gtk/gtkwindow.c:862
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Bu pencerede anımsatıcıların şu anda görünür olup olmaması"
 
-#: gtk/gtkwindow.c:876
+#: gtk/gtkwindow.c:878
 msgid "Focus Visible"
 msgstr "Görünür Odak"
 
-#: gtk/gtkwindow.c:877
+#: gtk/gtkwindow.c:879
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Odak dikdörtgenlerin şu anda bu pencerede görünür olup olmaması"
 
-#: gtk/gtkwindow.c:892
+#: gtk/gtkwindow.c:894
 msgid "Name of the themed icon for this window"
 msgstr "Bu pencere için temalı simgenin adı"
 
-#: gtk/gtkwindow.c:905
+#: gtk/gtkwindow.c:907
 msgid "Is Active"
 msgstr "Etkin"
 
-#: gtk/gtkwindow.c:906
+#: gtk/gtkwindow.c:908
 msgid "Whether the toplevel is the current active window"
 msgstr "Üst düzeyin şu anki aktif pencere olması"
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:914
 msgid "Focus in Toplevel"
 msgstr "Üst Düzeyde Odakla"
 
-#: gtk/gtkwindow.c:913
+#: gtk/gtkwindow.c:915
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Girdi odaklamasının bu GtkWindow ile yapılması"
 
-#: gtk/gtkwindow.c:919
+#: gtk/gtkwindow.c:921
 msgid "Type hint"
 msgstr "Tür ipucu"
 
-#: gtk/gtkwindow.c:920
+#: gtk/gtkwindow.c:922
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -9478,115 +9478,115 @@ msgstr ""
 "Masaüstü dağıtımının bu pencerenin ne türde olduğunu ve nasıl davranacağını "
 "anlamasına yardım etmek için gereken ipucu."
 
-#: gtk/gtkwindow.c:927
+#: gtk/gtkwindow.c:929
 msgid "Skip taskbar"
 msgstr "Görev çubuğunu geç"
 
-#: gtk/gtkwindow.c:928
+#: gtk/gtkwindow.c:930
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Eğer TRUE ise, pencere görev çubuğunda bulunmayacak."
 
-#: gtk/gtkwindow.c:934
+#: gtk/gtkwindow.c:936
 msgid "Skip pager"
 msgstr "Görüntüleyiciyi geç"
 
-#: gtk/gtkwindow.c:935
+#: gtk/gtkwindow.c:937
 msgid "TRUE if the window should not be in the pager."
 msgstr "Eğer TRUE ise, pencere görüntüleyicide gösterilmeyecektir."
 
-#: gtk/gtkwindow.c:941
+#: gtk/gtkwindow.c:943
 msgid "Urgent"
 msgstr "Acil"
 
-#: gtk/gtkwindow.c:942
+#: gtk/gtkwindow.c:944
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "TRUE ise, pencere kullanıcının ilgisini çekmeye çalışacak."
 
-#: gtk/gtkwindow.c:955
+#: gtk/gtkwindow.c:957
 msgid "Accept focus"
 msgstr "Odaklamayı kabul et"
 
-#: gtk/gtkwindow.c:956
+#: gtk/gtkwindow.c:958
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE ise pencere girdi odağını almayacak."
 
-#: gtk/gtkwindow.c:969
+#: gtk/gtkwindow.c:971
 msgid "Focus on map"
 msgstr "Yerleştirme ile odaklan"
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:972
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE ise pencere yerleştirildiğinde girdi odağını alacak."
 
-#: gtk/gtkwindow.c:983
+#: gtk/gtkwindow.c:985
 msgid "Decorated"
 msgstr "Dekorasyonlu"
 
-#: gtk/gtkwindow.c:984
+#: gtk/gtkwindow.c:986
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Pencerenin pencere yöneticisi tarafından dekore edilmesi"
 
-#: gtk/gtkwindow.c:997
+#: gtk/gtkwindow.c:999
 msgid "Deletable"
 msgstr "Silinebilir"
 
-#: gtk/gtkwindow.c:998
+#: gtk/gtkwindow.c:1000
 msgid "Whether the window frame should have a close button"
 msgstr "Pencere çerçevesinin kapatma düğmesine sahip olması"
 
-#: gtk/gtkwindow.c:1018
+#: gtk/gtkwindow.c:1020
 msgid "Resize grip"
 msgstr "Sapı yeniden boyutlandır"
 
-#: gtk/gtkwindow.c:1019
+#: gtk/gtkwindow.c:1021
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Pencerenin sapı yeniden boyutlandırması gerektiğini belirtir"
 
-#: gtk/gtkwindow.c:1034
+#: gtk/gtkwindow.c:1036
 msgid "Resize grip is visible"
 msgstr "Sapı yeniden boyutlandırma görünür"
 
-#: gtk/gtkwindow.c:1035
+#: gtk/gtkwindow.c:1037
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Pencerenin görünür sapı yeniden boyutlandırmasını belirtir"
 
-#: gtk/gtkwindow.c:1049
+#: gtk/gtkwindow.c:1051
 msgid "Gravity"
 msgstr "Çekimi"
 
-#: gtk/gtkwindow.c:1050
+#: gtk/gtkwindow.c:1052
 msgid "The window gravity of the window"
 msgstr "Pencerenin, pencere çekimi"
 
-#: gtk/gtkwindow.c:1085
+#: gtk/gtkwindow.c:1087
 msgid "Attached to Widget"
 msgstr "Parçacığa Eklendi"
 
-#: gtk/gtkwindow.c:1086
+#: gtk/gtkwindow.c:1088
 msgid "The widget where the window is attached"
 msgstr "Pencerenin eklendiği parçacık"
 
-#: gtk/gtkwindow.c:1092
+#: gtk/gtkwindow.c:1094
 msgid "Is maximized"
 msgstr "Ekranı Kaplamış mı"
 
-#: gtk/gtkwindow.c:1093
+#: gtk/gtkwindow.c:1095
 msgid "Whether the window is maximized"
 msgstr "Pencerenin büyütülebilirliği"
 
-#: gtk/gtkwindow.c:1114
+#: gtk/gtkwindow.c:1116
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1115
+#: gtk/gtkwindow.c:1117
 msgid "The GtkApplication for the window"
 msgstr "Pencere için GtkApplication"
 
-#: gtk/gtkwindow.c:1125 gtk/gtkwindow.c:1126
+#: gtk/gtkwindow.c:1127 gtk/gtkwindow.c:1128
 msgid "Decorated button layout"
 msgstr "Dekore ediliş düğme düzeni"
 
-#: gtk/gtkwindow.c:1132 gtk/gtkwindow.c:1133
+#: gtk/gtkwindow.c:1134 gtk/gtkwindow.c:1135
 msgid "Decoration resize handle size"
 msgstr "Dekorasyon sap boyutunu yeniden boyutlandırır"
 
