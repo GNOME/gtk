@@ -1232,16 +1232,9 @@ get_effective_window_decorations (GdkSurface       *window,
 
       return TRUE;
     }
-  else if (impl->hint_flags & GDK_HINT_MAX_SIZE)
-    {
-      *decoration = GDK_DECOR_ALL | GDK_DECOR_MAXIMIZE;
-      *decoration |= GDK_DECOR_MINIMIZE;
-
-      return TRUE;
-    }
   else
     {
-      *decoration = (GDK_DECOR_ALL | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE);
+      *decoration = GDK_DECOR_ALL;
       return TRUE;
     }
 
