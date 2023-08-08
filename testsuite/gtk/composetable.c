@@ -242,6 +242,16 @@ compose_table_match (void)
   g_assert_true (match);
   g_assert_cmpstr (output->str, ==, "this is a long replacement string");
 
+  g_string_set_size (output, 0);
+
+  buffer[0] = GDK_KEY_q;
+  buffer[1] = 0;
+  ret = gtk_compose_table_check (table, buffer, 1, &finish, &match, output);
+  g_assert_true (ret);
+  g_assert_false (finish);
+  g_assert_true (match);
+  g_assert_cmpstr (output->str, ==, "qq");
+
   g_string_free (output, TRUE);
   g_free (file);
 }
