@@ -10,7 +10,7 @@ test_calendar_set_day (void)
 
   cal = gtk_calendar_new ();
 
-  tz = g_time_zone_new_identifier ("MET");
+  tz = g_time_zone_new_identifier ("Europe/Brussels");
   g_assert_nonnull (tz);
   dt = g_date_time_new (tz, 1970, 3, 1, 0, 0, 0);
   g_assert_nonnull (dt);
