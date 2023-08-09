@@ -451,7 +451,8 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
         continue;
 
       gsk_curve_init (&c, self->ops[i]);
-      if (gsk_curve_get_closest_point (&c, point, threshold, &distance, &t))
+      if (gsk_curve_get_closest_point (&c, point, threshold, &distance, &t) &&
+          distance < threshold)
         {
           best_idx = i;
           best_t = t;
@@ -511,7 +512,7 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
   if (t == 0 && direction == GSK_PATH_START)
     {
       /* Look at the previous segment */
-      if (idx > 0)
+      if (idx > 1)
         {
           idx--;
           t = 1;
@@ -532,7 +533,7 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
         }
       else if (self->flags & GSK_PATH_CLOSED)
         {
-          idx = 0;
+          idx = 1;
           t = 0;
         }
     }
