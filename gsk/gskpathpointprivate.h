@@ -8,7 +8,7 @@ G_BEGIN_DECLS
 struct _GskRealPathPoint
 {
   gsize contour;
-  unsigned int idx;
+  gsize idx;
   float t;
 };
 
