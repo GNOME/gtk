@@ -27,13 +27,14 @@
 /**
  * GtkListItem:
  *
- * `GtkListItem` is used by list widgets to represent items in a `GListModel`.
+ * `GtkListItem` is used by list widgets to represent items in a
+ * [iface@Gio.ListModel].
  *
- * The `GtkListItem`s are managed by the list widget (with its factory)
+ * `GtkListItem` objects are managed by the list widget (with its factory)
  * and cannot be created by applications, but they need to be populated
  * by application code. This is done by calling [method@Gtk.ListItem.set_child].
  *
- * `GtkListItem`s exist in 2 stages:
+ * `GtkListItem` objects exist in 2 stages:
  *
  * 1. The unbound stage where the listitem is not currently connected to
  *    an item in the list. In that case, the [property@Gtk.ListItem:item]
