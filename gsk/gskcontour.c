@@ -451,7 +451,8 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
         continue;
 
       gsk_curve_init (&c, self->ops[i]);
-      if (gsk_curve_get_closest_point (&c, point, threshold, &distance, &t))
+      if (gsk_curve_get_closest_point (&c, point, threshold, &distance, &t) &&
+          distance < threshold)
         {
           best_idx = i;
           best_t = t;
