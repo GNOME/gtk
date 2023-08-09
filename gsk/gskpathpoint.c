@@ -70,7 +70,13 @@ gsk_path_point_free (GskPathPoint *point)
  * @point2: another `GskPathPoint`
  *
  * Returns whether the two path points refer to the same
- * location.
+ * location on all paths.
+ *
+ * Note that the start- and endpoint of a closed contour
+ * will compare nonequal according to this definition.
+ * Use [method@Gsk.Path.is_closed] to find out if the
+ * start- and endpoint of a concrete path refer to the
+ * same location.
  *
  * Return: `TRUE` if @point1 and @point2 are equal
  */
