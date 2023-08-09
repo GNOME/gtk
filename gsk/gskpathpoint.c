@@ -65,6 +65,71 @@ gsk_path_point_free (GskPathPoint *point)
 }
 
 /**
+ * gsk_path_point_equal:
+ * @point1: a `GskPathPoint`
+ * @point2: another `GskPathPoint`
+ *
+ * Returns whether the two path points refer to the same
+ * location.
+ *
+ * Return: `TRUE` if @point1 and @point2 are equal
+ */
+gboolean
+gsk_path_point_equal (const GskPathPoint *point1,
+                      const GskPathPoint *point2)
+{
+  const GskRealPathPoint *p1 = (const GskRealPathPoint *) point1;
+  const GskRealPathPoint *p2 = (const GskRealPathPoint *) point2;
+
+  if (p1->contour == p2->contour)
+    {
+      if ((p1->idx     == p2->idx     && p1->t == p2->t) ||
+          (p1->idx + 1 == p2->idx     && p1->t == 1 && p2->t == 0) ||
+          (p1->idx     == p2->idx + 1 && p1->t == 0 && p2->t == 1))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gsk_path_point_compare:
+ * @point1: a `GskPathPoint`
+ * @point2: another `GskPathPoint`
+ *
+ * Returns whether @point1 is before or after @point2.
+ *
+ * Returns: -1 if @point1 is before @point2,
+ *   1 if @point1 is after @point2,
+ *   0 if they are equal
+ */
+int
+gsk_path_point_compare (const GskPathPoint *point1,
+                        const GskPathPoint *point2)
+{
+  const GskRealPathPoint *p1 = (const GskRealPathPoint *) point1;
+  const GskRealPathPoint *p2 = (const GskRealPathPoint *) point2;
+
+  if (gsk_path_point_equal (point1, point2))
+    return 0;
+
+  if (p1->contour < p2->contour)
+    return -1;
+  else if (p1->contour > p2->contour)
+    return 1;
+  else if (p1->idx < p2->idx)
+    return -1;
+  else if (p1->idx > p2->idx)
+    return 1;
+  else if (p1->t < p2->t)
+    return -1;
+  else if (p1->t > p2->t)
+    return 1;
+
+  return 0;
+}
+
+/**
  * gsk_path_point_get_position:
  * @path: a `GskPath`
  * @point: a `GskPathPoint` on @path
