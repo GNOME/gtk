@@ -640,8 +640,6 @@ typedef struct
   float start_progress;
   float end_progress;
   GskCurveLineReason reason;
-  graphene_point_t start_point;
-  graphene_point_t end_point;
   gsize op;
 } GskStandardContourMeasure;
 
@@ -669,8 +667,6 @@ gsk_standard_contour_measure_add_point (const graphene_point_t *from,
   decomp->measure.end += seg_length;
   decomp->measure.start_progress = from_progress;
   decomp->measure.end_progress = to_progress;
-  decomp->measure.start_point = *from;
-  decomp->measure.end_point = *to;
   decomp->measure.reason = reason;
 
   g_array_append_val (decomp->array, decomp->measure);
@@ -696,7 +692,7 @@ gsk_standard_contour_init_measure (const GskContour *contour,
   for (i = 1; i < self->n_ops; i ++)
     {
       GskCurve curve;
-      LengthDecompose decomp = { array, { length, length, 0, 0, GSK_CURVE_LINE_REASON_SHORT, { 0, 0 }, { 0, 0 }, i } };
+      LengthDecompose decomp = { array, { length, length, 0, 0, GSK_CURVE_LINE_REASON_SHORT, i } };
 
       gsk_curve_init (&curve, self->ops[i]);
       gsk_curve_decompose (&curve, tolerance, gsk_standard_contour_measure_add_point, &decomp);
