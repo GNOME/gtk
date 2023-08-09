@@ -1,5 +1,5 @@
 /* GSK - The GTK Scene Kit
- * Copyright 2016  Endless 
+ * Copyright 2016  Endless
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,8 +42,6 @@
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
- * @GSK_FILL_NODE: A node that fills a path
- * @GSK_STROKE_NODE: A node that strokes a path
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
  * @GSK_BLEND_NODE: A node that blends two children together
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
@@ -53,7 +51,9 @@
  * @GSK_GL_SHADER_NODE: A node that uses OpenGL fragment shaders to render
  * @GSK_TEXTURE_SCALE_NODE: A node drawing a `GdkTexture` scaled and filtered (Since: 4.10)
  * @GSK_MASK_NODE: A node that masks one child with another (Since: 4.10)
- 
+ * @GSK_FILL_NODE: A node that fills a path
+ * @GSK_STROKE_NODE: A node that strokes a path
+
  * The type of a node determines what the node is rendering.
  */
 typedef enum {
@@ -76,8 +76,6 @@ typedef enum {
   GSK_REPEAT_NODE,
   GSK_CLIP_NODE,
   GSK_ROUNDED_CLIP_NODE,
-  GSK_FILL_NODE,
-  GSK_STROKE_NODE,
   GSK_SHADOW_NODE,
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
@@ -86,7 +84,9 @@ typedef enum {
   GSK_DEBUG_NODE,
   GSK_GL_SHADER_NODE,
   GSK_TEXTURE_SCALE_NODE,
-  GSK_MASK_NODE
+  GSK_MASK_NODE,
+  GSK_FILL_NODE,
+  GSK_STROKE_NODE
 } GskRenderNodeType;
 
 /**

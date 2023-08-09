@@ -63,6 +63,8 @@
  * back with a line to the starting point.
  *
  * This is similar for how paths are drawn in Cairo.
+ *
+ * Since: 4.14
  */
 
 struct _GskPathBuilder

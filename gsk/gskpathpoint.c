@@ -39,6 +39,8 @@
  * don't a reference to the path object they are obtained from. It is the
  * callers responsibility to keep a reference to the path as long as the
  * `GskPathPoint` is used.
+ *
+ * Since: 4.14
  */
 
 G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,

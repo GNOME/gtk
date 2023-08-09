@@ -26,6 +26,8 @@
  *
  * A `GskStroke` struct collects the parameters that influence
  * the operation of stroking a path.
+ *
+ * Since: 4.14
  */
 
 G_DEFINE_BOXED_TYPE (GskStroke, gsk_stroke, gsk_stroke_copy, gsk_stroke_free)
