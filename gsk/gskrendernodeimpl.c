@@ -3970,7 +3970,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
   scale_x *= width / self->child_bounds.size.width;
   scale_y *= height / self->child_bounds.size.height;
   cairo_surface_set_device_scale (surface, scale_x, scale_y);
-  cairo_surface_set_device_offset (surface, 
+  cairo_surface_set_device_offset (surface,
                                    - self->child_bounds.origin.x * scale_x,
                                    - self->child_bounds.origin.y * scale_y);
 
@@ -4141,7 +4141,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
       gsk_render_node_diff_impossible (node1, node2, region);
     }
 }
- 
+
 static void
 gsk_clip_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -4372,6 +4372,15 @@ gsk_rounded_clip_node_get_clip (const GskRenderNode *node)
 /* }}} */
 /* {{{ GSK_FILL_NODE */
 
+/**
+ * GskFillNode:
+ *
+ * A render node filling the child node in the area given by [struct@Gsk.Path]
+ * and [enum@Gsk.FillRule].
+ *
+ * Since: 4.14
+ */
+
 struct _GskFillNode
 {
   GskRenderNode render_node;
@@ -4571,6 +4580,15 @@ gsk_fill_node_get_fill_rule (const GskRenderNode *node)
 
 /* }}} */
 /* {{{ GSK_STROKE_NODE */
+
+/**
+ * GskStrokeNode:
+ *
+ * A render node that will stroke the child node along the given [struct@Gsk.Path]
+ * using the [struct@Gsk.Stroke] attributes.
+ *
+ * Since: 4.14
+ */
 
 struct _GskStrokeNode
 {

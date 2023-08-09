@@ -41,6 +41,8 @@ G_BEGIN_DECLS
  * By default, [method@Gsk.Path.foreach] will only emit a path with all operations
  * flattened to straight lines to allow for maximum compatibility. The only
  * operations emitted will be `GSK_PATH_MOVE`, `GSK_PATH_LINE` and `GSK_PATH_CLOSE`.
+ *
+ * Since: 4.14
  */
 typedef enum
 {

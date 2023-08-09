@@ -42,6 +42,8 @@
  * Conceptually, a path consists of zero or more contours (continous, connected
  * curves), each of which may or may not be closed. Contours are typically
  * constructed from Bézier segments.
+ *
+ * Since: 4.14
  */
 
 struct _GskPath
@@ -420,6 +422,7 @@ gsk_path_get_bounds (GskPath         *self,
  *
  * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
  *   to be empty and have no bounds.
+ * Since: 4.14
  */
 gboolean
 gsk_path_get_stroke_bounds (GskPath         *self,
