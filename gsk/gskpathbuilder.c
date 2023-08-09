@@ -983,3 +983,77 @@ gsk_path_builder_add_layout (GskPathBuilder *self,
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
 }
+
+/**
+ * gsk_path_builder_add_segment:
+ * @self: a `GskPathBuilder`
+ * @path: the `GskPath` to take the segment to
+ * @start: the point on @path to start at
+ * @end: the point on @path to end at
+ *
+ * Adds to @self the segment of @path from @start to @end.
+ *
+ * If @start is equal to or after @end, the path will first add the
+ * segment from @start to the end of the path, and then add the segment
+ * from the beginning to @end. If the path is closed, these segments
+ * will be connected.
+ *
+ * Note that this method always adds a path with the given start point
+ * and end point. To add a closed path, use [method@Gsk.PathBuilder.add_path].
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_add_segment (GskPathBuilder     *self,
+                              GskPath            *path,
+                              const GskPathPoint *start,
+                              const GskPathPoint *end)
+{
+  GskRealPathPoint *s = (GskRealPathPoint *) start;
+  GskRealPathPoint *e = (GskRealPathPoint *) end;
+  const GskContour *contour;
+  gsize n_contours = gsk_path_get_n_contours (path);
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (start != NULL);
+  g_return_if_fail (end != NULL);
+  g_return_if_fail (s->contour < n_contours);
+  g_return_if_fail (e->contour < n_contours);
+
+  contour = gsk_path_get_contour (path, s->contour);
+
+  if (s->contour == e->contour)
+    {
+      if (gsk_path_point_compare (start, end) < 0)
+        {
+          gsk_contour_add_segment (contour, self, TRUE, s, e);
+          goto out;
+        }
+      else if (n_contours == 1)
+        {
+          gsk_contour_add_segment (contour, self, TRUE,
+                                   s,
+                                   &(GskRealPathPoint) { s->contour, gsk_contour_get_n_points (contour) - 1, 1 });
+          gsk_contour_add_segment (contour, self, FALSE,
+                                   &(GskRealPathPoint) { s->contour, 1, 0 },
+                                   e);
+          goto out;
+        }
+    }
+
+  gsk_contour_add_segment (contour, self, TRUE,
+                           s,
+                           &(GskRealPathPoint) { s->contour, gsk_contour_get_n_points (contour) - 1, 1 });
+
+  for (gsize i = (s->contour + 1) % n_contours; i != e->contour; i = (i + 1) % n_contours)
+    gsk_path_builder_add_contour (self, gsk_contour_dup (gsk_path_get_contour (path, i)));
+
+  contour = gsk_path_get_contour (path, e->contour);
+  gsk_contour_add_segment (contour, self, FALSE,
+                           &(GskRealPathPoint) { e->contour, 1, 0 },
+                           e);
+
+out:
+  gsk_path_builder_end_current (self);
+}

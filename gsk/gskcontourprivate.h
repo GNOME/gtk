@@ -57,6 +57,7 @@ void                    gsk_contour_get_start_end               (const GskContou
                                                                  graphene_point_t       *end);
 int                     gsk_contour_get_winding                 (const GskContour       *self,
                                                                  const graphene_point_t *point);
+gsize                   gsk_contour_get_n_points                (const GskContour       *self);
 gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
                                                                  const graphene_point_t *point,
                                                                  float                   threshold,
@@ -72,5 +73,11 @@ void                    gsk_contour_get_tangent                 (const GskContou
 float                   gsk_contour_get_curvature               (const GskContour       *self,
                                                                  GskRealPathPoint       *point,
                                                                  graphene_point_t       *center);
+void                    gsk_contour_add_segment                 (const GskContour       *self,
+                                                                 GskPathBuilder         *builder,
+                                                                 gboolean                emit_move_to,
+                                                                 GskRealPathPoint       *start,
+                                                                 GskRealPathPoint       *end);
+
 
 G_END_DECLS

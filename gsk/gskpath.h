@@ -111,6 +111,13 @@ gboolean                gsk_path_in_fill                        (GskPath        
                                                                  GskFillRule             fill_rule);
 
 GDK_AVAILABLE_IN_4_14
+gboolean                gsk_path_get_start_point                (GskPath                *self,
+                                                                 GskPathPoint           *result);
+GDK_AVAILABLE_IN_4_14
+gboolean                gsk_path_get_end_point                  (GskPath                *self,
+                                                                 GskPathPoint           *result);
+
+GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_closest_point              (GskPath                *self,
                                                                  const graphene_point_t *point,
                                                                  float                   threshold,

@@ -491,6 +491,72 @@ gsk_path_in_fill (GskPath                *self,
 }
 
 /**
+ * gsk_path_get_start_point:
+ * @self: a `GskPath`
+ * @result: (out caller-allocates): return location for point
+ *
+ * Gets the start point of the path.
+ *
+ * An empty path has no points, so `FALSE`
+ * is returned in this case.
+ *
+ * Returns: `TRUE` if @result was filled
+ *
+ * Since: 4.14
+ */
+gboolean
+gsk_path_get_start_point (GskPath      *self,
+                          GskPathPoint *result)
+{
+  GskRealPathPoint *res = (GskRealPathPoint *) result;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    return FALSE;
+
+  res->contour = 0;
+  res->idx = 1;
+  res->t = 0;
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_get_end_point:
+ * @self: a `GskPath`
+ * @result: (out caller-allocates): return location for point
+ *
+ * Gets the end point of the path.
+ *
+ * An empty path has no points, so `FALSE`
+ * is returned in this case.
+ *
+ * Returns: `TRUE` if @result was filled
+ *
+ * Since: 4.14
+ */
+gboolean
+gsk_path_get_end_point (GskPath      *self,
+                        GskPathPoint *result)
+{
+  GskRealPathPoint *res = (GskRealPathPoint *) result;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  if (self->n_contours == 0)
+    return FALSE;
+
+  res->contour = self->n_contours - 1;
+  res->idx = gsk_contour_get_n_points (self->contours[self->n_contours - 1]) - 1;
+  res->t = 1;
+
+  return TRUE;
+}
+
+/**
  * gsk_path_get_closest_point:
  * @self: a `GskPath`
  * @point: the point
@@ -532,7 +598,6 @@ gsk_path_get_closest_point (GskPath                *self,
         {
           found = TRUE;
           res->contour = i;
-          res->path = self;
           threshold = distance;
         }
     }

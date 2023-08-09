@@ -7,15 +7,9 @@ G_BEGIN_DECLS
 
 struct _GskRealPathPoint
 {
-  GskPath *path;
   gsize contour;
-
-  union {
-    struct {
-      unsigned int idx;
-      float t;
-    } std;
-  } data;
+  unsigned int idx;
+  float t;
 };
 
 G_STATIC_ASSERT (sizeof (GskRealPathPoint) <= sizeof (GskPathPoint));
