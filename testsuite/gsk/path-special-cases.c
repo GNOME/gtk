@@ -423,20 +423,47 @@ test_foreach (void)
 }
 
 /* Test the basics of the path point api */
+typedef struct _GskRealPathPoint GskRealPathPoint;
+struct _GskRealPathPoint
+{
+  gsize contour;
+  gsize idx;
+  float t;
+};
+
 static void
 test_path_point (void)
 {
   GskPath *path;
   GskPathPoint point;
+  GskRealPathPoint *rp = (GskRealPathPoint *)&point;
   gboolean ret;
   graphene_point_t pos, center;
   graphene_vec2_t t1, t2, mx;
   float curvature;
 
-  path = gsk_path_parse ("M0,0L100,0L100,100L0,100Z");
+  path = gsk_path_parse ("M 0 0 L 100 0 L 100 100 L 0 100 Z");
+
+  ret = gsk_path_get_start_point (path, &point);
+  g_assert_true (ret);
+
+  g_assert_true (rp->contour == 0);
+  g_assert_true (rp->idx == 1);
+  g_assert_true (rp->t == 0);
+
+  ret = gsk_path_get_end_point (path, &point);
+  g_assert_true (ret);
+
+  g_assert_true (rp->contour == 0);
+  g_assert_true (rp->idx == 4);
+  g_assert_true (rp->t == 1);
 
   ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point);
   g_assert_true (ret);
+
+  g_assert_true (rp->contour == 0);
+  g_assert_true (rp->idx == 2);
+  g_assert_true (rp->t == 1);
 
   gsk_path_point_get_position (path, &point, &pos);
   gsk_path_point_get_tangent (path, &point, GSK_PATH_START, &t1);
@@ -448,6 +475,13 @@ test_path_point (void)
   graphene_vec2_negate (graphene_vec2_x_axis (), &mx);
   g_assert_true (graphene_vec2_equal (&t2, &mx));
   g_assert_true (curvature == 0);
+
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (100, 50), INFINITY, &point);
+  g_assert_true (ret);
+
+  g_assert_true (rp->contour == 0);
+  g_assert_true (rp->idx == 2);
+  g_assert_true (rp->t == 0.5);
 
   gsk_path_unref (path);
 }
@@ -563,8 +597,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/foreach", test_foreach);
   g_test_add_func ("/path/point", test_path_point);
   g_test_add_func ("/path/segments", test_path_segments);
-  g_test_add_func ("/measure/bad-in-fill", test_bad_in_fill);
-  g_test_add_func ("/measure/unclosed-in-fill", test_unclosed_in_fill);
+  g_test_add_func ("/path/bad-in-fill", test_bad_in_fill);
+  g_test_add_func ("/path/unclosed-in-fill", test_unclosed_in_fill);
 
   return g_test_run ();
 }
