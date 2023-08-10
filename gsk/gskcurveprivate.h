@@ -153,5 +153,9 @@ gboolean                gsk_curve_get_closest_point             (const GskCurve 
                                                                  float                  *out_dist,
                                                                  float                  *out_t);
 
+float                  gsk_curve_get_length                     (const GskCurve         *curve);
+float                  gsk_curve_at_length                      (const GskCurve         *curve,
+                                                                 float                   distance);
+
 G_END_DECLS
 
