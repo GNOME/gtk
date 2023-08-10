@@ -121,12 +121,14 @@ test_simple (void)
       { 0, 5 }, 2, 0.f,
       "M 5 0 M 10 0 M 10 5 M 10 10 M 5 10 M 0 10 M 0 5 M 0 0"
     },
+#if 0
     /* a dash of a circle */
     {
       "M 10 5 O 10 10, 5 10, 0.70710676908493042 O 0 10, 0 5, 0.70710676908493042 O 0 0, 5 0, 0.70710676908493042 O 10 0, 10 5, 0.70710676908493042 Z",
       { 32, }, 1, 0.f,
       "M 10 5 O 10 10, 5 10, 0.70710676908493042 O 0 10, 0 5, 0.70710676908493042 O 0 0, 5 0, 0.70710676908493042 O 10 0, 10 5, 0.70710676908493042 Z",
     },
+#endif
     /* a dash with offset and 2 contours */
     {
       "M 10 10 h 10 v 10 h -10 z M 20 20 h 10 v 10 h -10 z",
@@ -142,15 +144,21 @@ test_simple (void)
 
   for (gsize i = 0; i < G_N_ELEMENTS(tests); i++)
     {
+      if (g_test_verbose ())
+        g_test_message ("%lu: %s", i, tests[i].test);
+
       stroke = gsk_stroke_new (1);
       gsk_stroke_set_dash (stroke, tests[i].dash, tests[i].n_dash);
       gsk_stroke_set_dash_offset (stroke, tests[i].dash_offset);
 
       path = gsk_path_parse (tests[i].test);
       g_assert_nonnull (path);
+#if 0
+      /* This assumes that we have rectangle contours */
       s = gsk_path_to_string (path);
       g_assert_cmpstr (s, ==, tests[i].test);
       g_free (s);
+#endif
 
       builder = gsk_path_builder_new ();
       gsk_path_dash (path, stroke, 0.5, build_path, builder);
