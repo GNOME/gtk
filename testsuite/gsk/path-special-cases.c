@@ -563,8 +563,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/foreach", test_foreach);
   g_test_add_func ("/path/point", test_path_point);
   g_test_add_func ("/path/segments", test_path_segments);
-  g_test_add_func ("/measure/bad-in-fill", test_bad_in_fill);
-  g_test_add_func ("/measure/unclosed-in-fill", test_unclosed_in_fill);
+  g_test_add_func ("/path/bad-in-fill", test_bad_in_fill);
+  g_test_add_func ("/path/unclosed-in-fill", test_unclosed_in_fill);
 
   return g_test_run ();
 }
