@@ -423,6 +423,8 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
           break;
         }
     }
+
+  gsk_path_builder_end_current (self);
 }
 
 /**
