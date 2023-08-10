@@ -518,6 +518,40 @@ test_path_segments (void)
     }
 }
 
+static void
+test_bad_in_fill (void)
+{
+  GskPath *path;
+  gboolean inside;
+
+  /* A fat Cantarell W */
+  path = gsk_path_parse ("M -2 694 M 206.1748046875 704 L 390.9371337890625 704 L 551.1888427734375 99.5035400390625 L 473.0489501953125 99.5035400390625 L 649.1048583984375 704 L 828.965087890625 704 L 1028.3077392578125 10 L 857.8111572265625 10 L 710.0489501953125 621.251708984375 L 775.9720458984375 598.426513671875 L 614.5245361328125 14.0489501953125 L 430.2237548828125 14.0489501953125 L 278.6783447265625 602.230712890625 L 330.0909423828125 602.230712890625 L 195.88818359375 10 L 5.7342529296875 10 L 206.1748046875 704 Z");
+
+  /* The midpoint of the right foot of a fat Cantarell X */
+  inside = gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (552.360107, 704.000000), GSK_FILL_RULE_WINDING);
+
+  g_assert_false (inside);
+
+  gsk_path_unref (path);
+}
+
+/* Test that path_in_fill implicitly closes contours. I think this is wrong,
+ * but it is what "everybody" does.
+ */
+static void
+test_unclosed_in_fill (void)
+{
+  GskPath *path;
+
+  path = gsk_path_parse ("M 0 0 L 0 100 L 100 100 L 100 0 Z");
+  g_assert_true (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  gsk_path_unref (path);
+
+  path = gsk_path_parse ("M 0 0 L 0 100 L 100 100 L 100 0");
+  g_assert_true (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -529,6 +563,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/foreach", test_foreach);
   g_test_add_func ("/path/point", test_path_point);
   g_test_add_func ("/path/segments", test_path_segments);
+  g_test_add_func ("/measure/bad-in-fill", test_bad_in_fill);
+  g_test_add_func ("/measure/unclosed-in-fill", test_unclosed_in_fill);
 
   return g_test_run ();
 }
