@@ -331,7 +331,7 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   gdk_monitor_set_physical_size (GDK_MONITOR (self), width_mm, height_mm);
   gdk_monitor_set_scale_factor (GDK_MONITOR (self), scale_factor);
   gdk_monitor_set_refresh_rate (GDK_MONITOR (self), refresh_rate);
-  gdk_monitor_set_subpixel_layout (GDK_MONITOR (self), GDK_SUBPIXEL_LAYOUT_UNKNOWN);
+  gdk_monitor_set_subpixel_layout (GDK_MONITOR (self), subpixel_layout);
 
   self->workarea = [screen visibleFrame];
 
