@@ -43,6 +43,8 @@
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+@class FilterComboBox;
+
 typedef struct {
   GtkFileChooserNative *self;
 
@@ -68,31 +70,33 @@ typedef struct {
 
   NSMutableArray *filters;
   NSMutableArray *filter_names;
-  NSComboBox *filter_combo_box;
+  FilterComboBox *filter_popup_button;
 
   GSList *files;
   int response;
 } FileChooserQuartzData;
 
-@interface FilterComboBox : NSObject<NSComboBoxDelegate>
+@interface FilterComboBox : NSPopUpButton
 {
   FileChooserQuartzData *data;
 }
 - (id) initWithData:(FileChooserQuartzData *) quartz_data;
-- (void)comboBoxSelectionDidChange:(NSNotification *)notification;
+- (void) popUpButtonSelectionChanged:(id) sender;
 @end
 
 @implementation FilterComboBox
 
 - (id) initWithData:(FileChooserQuartzData *) quartz_data
 {
-  [super init];
+  [super initWithFrame:NSMakeRect(0, 0, 200, 24)];
+  [self setTarget:self];
+  [self setAction:@selector(popUpButtonSelectionChanged:)];
   data = quartz_data;
   return self;
 }
-- (void)comboBoxSelectionDidChange:(NSNotification *)notification
+- (void)popUpButtonSelectionChanged:(id)sender
 {
-  NSInteger selected_index = [data->filter_combo_box indexOfSelectedItem];
+  NSInteger selected_index = [data->filter_popup_button indexOfSelectedItem];
   NSArray *filter = [data->filters objectAtIndex:selected_index];
   // check for empty strings in filter -> indicates all filetypes should be allowed!
   if ([filter containsObject:@""])
@@ -302,10 +306,8 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   if (data->filters)
     {
       // when filters have been provided, a combobox needs to be added
-      data->filter_combo_box = [[NSComboBox alloc] initWithFrame:NSMakeRect(0, 0, 200, 24)];
-      [data->filter_combo_box addItemsWithObjectValues:data->filter_names];
-      [data->filter_combo_box setEditable:NO];
-      [data->filter_combo_box setDelegate:[[FilterComboBox alloc] initWithData:data]];
+      data->filter_popup_button = [[FilterComboBox alloc] initWithData:data];
+      [data->filter_popup_button addItemsWithTitles:data->filter_names];
 
       if (data->self->current_filter)
         {
@@ -329,16 +331,18 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
           g_object_unref (filters);
 
           if (current_filter_index != GTK_INVALID_LIST_POSITION)
-            [data->filter_combo_box selectItemAtIndex:current_filter_index];
+            [data->filter_popup_button selectItemAtIndex:current_filter_index];
           else
-            [data->filter_combo_box selectItemAtIndex:0];
+            [data->filter_popup_button selectItemAtIndex:0];
         }
       else
         {
-          [data->filter_combo_box selectItemAtIndex:0];
+          [data->filter_popup_button selectItemAtIndex:0];
         }
-      [data->filter_combo_box setToolTip:[NSString stringWithUTF8String:_("Select which types of files are shown")]];
-      [data->panel setAccessoryView:data->filter_combo_box];
+
+      [data->filter_popup_button popUpButtonSelectionChanged:NULL];
+      [data->filter_popup_button setToolTip:[NSString stringWithUTF8String:_("Select which types of files are shown")]];
+      [data->panel setAccessoryView:data->filter_popup_button];
       if ([data->panel isKindOfClass:[NSOpenPanel class]] && [data->panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
         {
           [(id<CanSetAccessoryViewDisclosed>) data->panel setAccessoryViewDisclosed:YES];
@@ -578,4 +582,3 @@ gtk_file_chooser_native_quartz_hide (GtkFileChooserNative *self)
     }
   data->panel = NULL;
 }
-
