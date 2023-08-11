@@ -30,8 +30,16 @@ variables:
 
 workflow:
   rules:
-    - if: $CI_COMMIT_TAG
+    # run merge request pipelines
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # do not run branch pipelines if corresponding merge requests exist...
+    # (this avoids duplicate pipelines)
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    # ...but otherwise run branch pipelines
     - if: $CI_COMMIT_BRANCH
+    # run tag pipelines
+    - if: $CI_COMMIT_TAG
 
 default:
   retry:
@@ -199,6 +207,9 @@ msys2-mingw64:
 
 macos-x86_64:
   rules:
+    # run merge request pipelines
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # do not run in forks
     - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
   tags:
