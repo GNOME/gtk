@@ -758,8 +758,6 @@ gtk_file_filter_get_attributes (GtkFileFilter *filter)
 
 #ifdef GDK_WINDOWING_MACOS
 
-#import <Foundation/Foundation.h>
-
 NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
 {
   NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -773,9 +771,8 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
         {
         case FILTER_RULE_MIME_TYPE:
           {
-            // convert mime-types to UTI
-            NSString *mime_type_nsstring = [NSString stringWithUTF8String: rule->u.content_types[0]];
-            NSString *uti_nsstring = (NSString *) UTTypeCreatePreferredIdentifierForTag (kUTTagClassMIMEType, (CFStringRef) mime_type_nsstring, NULL);
+            // GContentType from GIO use UTI on macOS since glib version 2.51
+            NSString *uti_nsstring = [NSString stringWithUTF8String: rule->u.content_types[0]];
             if (uti_nsstring == NULL)
               {
                 [array release];
