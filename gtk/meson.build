@@ -1075,7 +1075,6 @@ endif
 if macos_enabled
   gtk_macos_frameworks = [
     'AppKit',
-    'Foundation',
   ]
   gtk_deps += [dependency('appleframeworks', modules: gtk_macos_frameworks)]
 endif
