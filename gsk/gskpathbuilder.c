@@ -54,6 +54,9 @@
  * either common shapes like [method@Gsk.PathBuilder.add_circle]
  * or by adding from other paths like [method@Gsk.PathBuilder.add_path].
  *
+ * The `gsk_path_builder_add_*` methods always add complete contours,
+ * and do not use or modify the current point.
+ *
  * The other option is to define each line and curve manually with
  * the `gsk_path_builder_*_to` group of functions. You start with
  * a call to [method@Gsk.PathBuilder.move_to] to set the starting point
@@ -390,8 +393,12 @@ void
 gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
                                  const cairo_path_t *path)
 {
+  graphene_point_t current;
+
   g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
+
+  current = self->current_point;
 
   for (gsize i = 0; i < path->num_data; i += path->data[i].header.length)
     {
@@ -423,6 +430,9 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
           break;
         }
     }
+
+  gsk_path_builder_end_current (self);
+  self->current_point = current;
 }
 
 /**
@@ -444,7 +454,11 @@ void
 gsk_path_builder_add_rect (GskPathBuilder        *self,
                            const graphene_rect_t *rect)
 {
+  graphene_point_t current;
+
   g_return_if_fail (self != NULL);
+
+  current = self->current_point;
 
   gsk_path_builder_move_to (self, rect->origin.x, rect->origin.y);
 
@@ -453,6 +467,7 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
   gsk_path_builder_rel_line_to (self, - rect->size.width, 0);
 
   gsk_path_builder_close (self);
+  self->current_point = current;
 }
 
 static gboolean
@@ -484,16 +499,22 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
                              const graphene_point_t *center,
                              float                   radius)
 {
+  graphene_point_t current;
+
   g_return_if_fail (self != NULL);
   g_return_if_fail (center != NULL);
   g_return_if_fail (radius > 0);
+
+  current = self->current_point;
 
   gsk_path_builder_move_to (self, center->x + radius, center->y);
   gsk_spline_decompose_arc (center, radius,
                             GSK_PATH_TOLERANCE_DEFAULT,
                             0, 2 * M_PI,
                             circle_contour_curve, self);
+
   gsk_path_builder_close (self);
+  self->current_point = current;
 }
 
 /**
@@ -1015,6 +1036,7 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
   GskRealPathPoint *e = (GskRealPathPoint *) end;
   const GskContour *contour;
   gsize n_contours = gsk_path_get_n_contours (path);
+  graphene_point_t current;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
@@ -1022,6 +1044,8 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
   g_return_if_fail (end != NULL);
   g_return_if_fail (s->contour < n_contours);
   g_return_if_fail (e->contour < n_contours);
+
+  current = self->current_point;
 
   contour = gsk_path_get_contour (path, s->contour);
 
@@ -1058,4 +1082,5 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
 
 out:
   gsk_path_builder_end_current (self);
+  self->current_point = current;
 }

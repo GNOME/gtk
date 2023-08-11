@@ -586,6 +586,95 @@ test_unclosed_in_fill (void)
   gsk_path_unref (path);
 }
 
+/* Test that all the gsk_path_builder_add methods close the current
+ * contour in the end and do not change the current point.
+ */
+static void
+test_path_builder_add (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path, *path2;
+  char *s;
+  cairo_path_t *cpath;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  PangoLayout *layout;
+  GskPathPoint point1, point2;
+
+#define N_ADD_METHODS 7
+
+  path = gsk_path_parse ("M 10 10 L 100 100");
+
+  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (50, 50), INFINITY, &point1);
+  gsk_path_get_end_point (path, &point2);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 100, 100);
+  cr = cairo_create (surface);
+  cairo_move_to (cr, 10, 10);
+  cairo_line_to (cr, 20, 30);
+  cpath = cairo_copy_path (cr);
+
+  layout = pango_cairo_create_layout (cr);
+  pango_layout_set_text (layout, "ABC", -1);
+
+  for (unsigned int i = 0; i < N_ADD_METHODS; i++)
+    {
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_move_to (builder, 123, 456);
+
+      switch (i)
+        {
+        case 0:
+          gsk_path_builder_add_path (builder, path);
+          break;
+
+        case 1:
+          gsk_path_builder_add_reverse_path (builder, path);
+          break;
+
+        case 2:
+          gsk_path_builder_add_segment (builder, path, &point1, &point2);
+          break;
+
+        case 3:
+          gsk_path_builder_add_cairo_path (builder, cpath);
+          break;
+
+        case 4:
+          gsk_path_builder_add_layout (builder, layout);
+          break;
+
+        case 5:
+          gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 10, 10));
+          break;
+
+        case 6:
+          gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (0, 0), 10);
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      gsk_path_builder_rel_line_to (builder, 10, 0);
+      path2 = gsk_path_builder_free_to_path (builder);
+
+      s = gsk_path_to_string (path2);
+      g_assert_true (g_str_has_prefix (s, "M 123 456"));
+      g_assert_true (g_str_has_suffix (s, "M 123 456 L 133 456"));
+      g_free (s);
+      gsk_path_unref (path2);
+    }
+
+  g_object_unref (layout);
+
+  cairo_path_destroy (cpath);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -599,6 +688,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/segments", test_path_segments);
   g_test_add_func ("/path/bad-in-fill", test_bad_in_fill);
   g_test_add_func ("/path/unclosed-in-fill", test_unclosed_in_fill);
+  g_test_add_func ("/path/builder/add", test_path_builder_add);
 
   return g_test_run ();
 }
