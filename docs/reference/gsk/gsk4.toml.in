@@ -34,5 +34,11 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/"
 [extra]
 content_images = [
   "gtk-logo.svg",
+  "images/caps-dark.png",
+  "images/caps-light.png",
+  "images/join-dark.png",
+  "images/join-light.png",
+  "images/path-dark.png",
+  "images/path-light.png",
 ]
 urlmap_file = "urlmap.js"

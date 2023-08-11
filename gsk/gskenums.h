@@ -220,6 +220,11 @@ typedef enum {
  *
  * The default line cap style is `GSK_LINE_CAP_BUTT`.
  *
+ * <picture>
+ *   <source srcset="caps-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Line Cap Styles" src="caps-light.png">
+ * </picture>
+ *
  * New entries may be added in future versions.
  *
  * Since: 4.14
@@ -241,6 +246,11 @@ typedef enum {
  * Specifies how to render the junction of two lines when stroking.
  *
  * The default line join style is `GSK_LINE_JOIN_MITER`.
+ *
+ * <picture>
+ *   <source srcset="join-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Line Join Styles" src="join-light.png">
+ * </picture>
  *
  * New entries may be added in future versions.
  *
