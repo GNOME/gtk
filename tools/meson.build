@@ -23,6 +23,13 @@ if win32_enabled
 endif
 
 gtk_tools = [
+  ['gtk4-path-tool', ['gtk-path-tool.c',
+                      'gtk-path-tool-decompose.c',
+                      'gtk-path-tool-info.c',
+                      'gtk-path-tool-render.c',
+                      'gtk-path-tool-show.c',
+                      'gtk-path-tool-utils.c',
+                      'path-view.c'], [libgtk_dep]],
   ['gtk4-query-settings', ['gtk-query-settings.c'], [libgtk_dep]],
   ['gtk4-builder-tool', ['gtk-builder-tool.c',
                          'gtk-builder-tool-simplify.c',

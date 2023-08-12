@@ -65,6 +65,9 @@ GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_add_rect               (GskPathBuilder         *self,
                                                                  const graphene_rect_t  *rect);
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_add_rounded_rect       (GskPathBuilder         *self,
+                                                                 const GskRoundedRect   *rect);
+GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_add_circle             (GskPathBuilder         *self,
                                                                  const graphene_point_t *center,
                                                                  float                   radius);
