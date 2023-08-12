@@ -89,6 +89,7 @@ do_info (int *argc, const char ***argv)
     { NULL, },
   };
   GskPath *path;
+  GskPathMeasure *measure;
   graphene_rect_t bounds;
 
   g_set_prgname ("gtk4-path-tool info");
@@ -114,6 +115,7 @@ do_info (int *argc, const char ***argv)
     }
 
   path = get_path (args[0]);
+  measure = gsk_path_measure_new (path);
 
   if (gsk_path_is_empty (path))
     g_print ("%s\n", _("Path is empty."));
@@ -123,6 +125,8 @@ do_info (int *argc, const char ***argv)
 
       if (gsk_path_is_closed (path))
         g_print ("%s\n", _("Path is closed"));
+
+      g_print ("%s %g\n", _("Path length"), gsk_path_measure_get_length (measure));
 
       if (gsk_path_get_bounds (path, &bounds))
         g_print ("%s: %g %g %g %g\n", _("Bounds"),
