@@ -153,7 +153,7 @@ gdk_gl_texture_find_format (gboolean         use_es,
       if (gdk_memory_format_alpha (format) != alpha)
         continue;
 
-      if (!gdk_memory_format_gl_format (format, use_es, gl_major, gl_minor, &q_internal_format, &q_format, &q_type, &q_swizzle))
+      if (!gdk_memory_format_gl_format (format, use_es, gl_major, gl_minor, &q_internal_format, &q_format, &q_type, q_swizzle))
         continue;
 
       if (q_format != gl_format || q_type != gl_type)
@@ -188,7 +188,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                                    FALSE,
                                    major, minor,
                                    &gl_internal_format,
-                                   &gl_format, &gl_type, &gl_swizzle))
+                                   &gl_format, &gl_type, gl_swizzle))
     {
       if (download->stride == expected_stride &&
           download->format == format)
