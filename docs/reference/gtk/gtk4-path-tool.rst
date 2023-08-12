@@ -13,7 +13,6 @@ SYNOPSIS
 |   **gtk4-path-tool** <COMMAND> [OPTIONS...] <PATH>
 |
 |   **gtk4-path-tool** decompose [OPTIONS...] <PATH>
-|   **gtk4-path-tool** restrict [OPTIONS...] <PATH>
 |   **gtk4-path-tool** show [OPTIONS...] <PATH>
 |   **gtk4-path-tool** render [OPTIONS...] <PATH>
 |   **gtk4-path-tool** info [OPTIONS...] <PATH>
@@ -37,30 +36,13 @@ The ``decompose`` command approximates the path by one with simpler elements.
 When used without options, the curves of the path are approximated by line
 segments.
 
-``--allow-curves``
+``--allow-quad``
+
+  Allow quadratic Bézier curves to be used in the generated path.
+
+``--allow-cubic``
 
   Allow cubic Bézier curves to be used in the generated path.
-
-``--allow-conics``
-
-  Allow rational quadratic Bézier curves to be used in the generated path.
-
-Restricting
-^^^^^^^^^^^
-
-The ``restrict`` command creates a path that traces a segment of the original
-path. Note that the start and the end of the segment are specified as
-path length from the beginning of the path.
-
-``--start=LENGTH``
-
-  The distance from the beginning of the path where the segment begins. The
-  default values is 0.
-
-``--end=LENGTH``
-
-  The distance from the beginning of the path where the segment ends. The
-  default value is the length of path.
 
 Showing
 ^^^^^^^
@@ -75,13 +57,52 @@ of the path is filled.
 
 ``--fg-color=COLOR``
 
-  The color that is used to fill the interior of the path.
+  The color that is used to fill the interior of the path or stroke the path.
   If not specified, black is used.
 
 ``--bg-color=COLOR``
 
   The color that is used to render the background behind the path.
   If not specified, white is used.
+
+``--stroke``
+
+  Stroke the path instead of filling it.
+
+``--line-width=VALUE``
+
+  The line width to use for the stroke. ``VALUE`` must be a positive number.
+  The default line width is 1.
+
+``--line-cap=VALUE``
+
+  The cap style to use at line ends. The possible values are ``butt``, ``round``
+  or ``square``. See the SVG specification for details on these styles.
+  The default cap style is ``butt``.
+
+``--line-join=VALUE``
+
+  The join style to use at line joins. The possible values are ``miter``,
+  ``miter-clip``, ``round``, ``bevel`` or ``arcs``. See the SVG specification
+  for details on these styles.
+  The default join style is ``miter``.
+
+``--miter-limit=VALUE``
+
+  The limit at which to clip miters at line joins. The default value is 4.
+
+``--dashes=VALUE``
+
+  The dash pattern to use for this stroke. A dash pattern is specified by
+  a comma-separated list of alternating non-negative numbers. Each number
+  provides the length of alternate "on" and "off" portions of the stroke.
+  If the dash pattern is empty, dashing is disabled, which is the default.
+  See the SVG specification for details on dashing.
+
+``--dash-offset=VALUE``
+
+  The offset into the dash pattern where dashing should begin.
+  The default value is 0.
 
 Rendering
 ^^^^^^^^^
@@ -96,7 +117,7 @@ The interior of the path is filled.
 
 ``--fg-color=COLOR``
 
-  The color that is used to fill the interior of the path.
+  The color that is used to fill the interior of the path or stroke the path.
   If not specified, black is used.
 
 ``--bg-color=COLOR``
@@ -109,11 +130,50 @@ The interior of the path is filled.
   The file to save the PNG image to.
   If not specified, "path.png" is used.
 
+``--stroke``
+
+  Stroke the path instead of filling it.
+
+``--line-width=VALUE``
+
+  The line width to use for the stroke. ``VALUE`` must be a positive number.
+  The default line width is 1.
+
+``--line-cap=VALUE``
+
+  The cap style to use at line ends. The possible values are ``butt``, ``round``
+  or ``square``. See the SVG specification for details on these styles.
+  The default cap style is ``butt``.
+
+``--line-join=VALUE``
+
+  The join style to use at line joins. The possible values are ``miter``,
+  ``miter-clip``, ``round``, ``bevel`` or ``arcs``. See the SVG specification
+  for details on these styles.
+  The default join style is ``miter``.
+
+``--miter-limit=VALUE``
+
+  The limit at which to clip miters at line joins. The default value is 4.
+
+``--dashes=VALUE``
+
+  The dash pattern to use for this stroke. A dash pattern is specified by
+  a comma-separated list of alternating non-negative numbers. Each number
+  provides the length of alternate "on" and "off" portions of the stroke.
+  If the dash pattern is empty, dashing is disabled, which is the default.
+  See the SVG specification for details on dashing.
+
+``--dash-offset=VALUE``
+
+  The offset into the dash pattern where dashing should begin.
+  The default value is 0.
+
 Info
 ^^^^
 
 The ``info`` command shows various information about the given path,
-such as its bounding box and and its length.
+such as its bounding box.
 
 REFERENCES
 ----------
