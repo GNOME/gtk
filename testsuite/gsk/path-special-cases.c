@@ -601,7 +601,7 @@ test_path_builder_add (void)
   PangoLayout *layout;
   GskPathPoint point1, point2;
 
-#define N_ADD_METHODS 7
+#define N_ADD_METHODS 8
 
   path = gsk_path_parse ("M 10 10 L 100 100");
 
@@ -649,6 +649,20 @@ test_path_builder_add (void)
           break;
 
         case 6:
+          {
+            GskRoundedRect rect;
+
+            gsk_rounded_rect_init (&rect,
+                                   &GRAPHENE_RECT_INIT (0, 0, 100, 100),
+                                   &GRAPHENE_SIZE_INIT (10, 20),
+                                   &GRAPHENE_SIZE_INIT (20, 30),
+                                   &GRAPHENE_SIZE_INIT (0, 0),
+                                   &GRAPHENE_SIZE_INIT (10, 10));
+            gsk_path_builder_add_rounded_rect (builder, &rect);
+          }
+          break;
+
+        case 7:
           gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (0, 0), 10);
           break;
 
