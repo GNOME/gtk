@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 
 #define GSK_SERIALIZATION_ERROR       (gsk_serialization_error_quark ())
 
-typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskColorStop            GskColorStop;
 typedef struct _GskShadow               GskShadow;
 
