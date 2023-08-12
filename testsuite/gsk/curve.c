@@ -281,16 +281,29 @@ test_curve_decompose_into_cubic (void)
 static void
 test_curve_split (void)
 {
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < 1000; i++)
     {
       GskCurve c;
       GskCurve c1, c2;
       graphene_point_t p;
       graphene_vec2_t t, t1, t2;
+      float tt;
+      float l, l1, l2;
 
       init_random_curve (&c);
 
-      gsk_curve_split (&c, 0.5, &c1, &c2);
+      tt = g_test_rand_double_range (0, 1);
+
+      if (tt == 0 || tt == 1)
+        continue;
+
+      if (g_test_verbose ())
+        g_print ("curve %s\nt %g\n", gsk_curve_to_string (&c), tt);
+
+      gsk_curve_split (&c, tt, &c1, &c2);
+
+      if (g_test_verbose ())
+        g_print ("c1 %s\nc2 %s\n", gsk_curve_to_string (&c1), gsk_curve_to_string (&c2));
 
       g_assert_true (c1.op == c.op);
       g_assert_true (c2.op == c.op);
@@ -301,8 +314,9 @@ test_curve_split (void)
                                           gsk_curve_get_start_point (&c2), 0.005));
       g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c),
                                           gsk_curve_get_end_point (&c2), 0.005));
-      gsk_curve_get_point (&c, 0.5, &p);
-      gsk_curve_get_tangent (&c, 0.5, &t);
+
+      gsk_curve_get_point (&c, tt, &p);
+      gsk_curve_get_tangent (&c, tt, &t);
       g_assert_true (graphene_point_near (gsk_curve_get_end_point (&c1), &p, 0.005));
       g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c2), &p, 0.005));
 
@@ -317,6 +331,14 @@ test_curve_split (void)
       gsk_curve_get_end_tangent (&c, &t1);
       gsk_curve_get_end_tangent (&c2, &t2);
       g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+
+      l = gsk_curve_get_length (&c);
+      l1 = gsk_curve_get_length (&c1);
+      l2 = gsk_curve_get_length (&c2);
+
+      g_print ("l %g l1 %g l2 %g\n", l, l1, l2);
+
+      g_assert_cmpfloat_with_epsilon (l, l1 + l2, 0.1);
     }
 }
 
