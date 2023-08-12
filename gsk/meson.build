@@ -104,55 +104,10 @@ if get_variable('broadway_enabled')
   gsk_public_headers += gsk_public_broadway_headers
 endif
 
-if have_vulkan
-  gsk_public_vulkan_headers = files([
-    'vulkan/gskvulkanrenderer.h'
-  ])
-  install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
-  gsk_public_headers += gsk_public_vulkan_headers
-endif
-
 gsk_private_vulkan_shaders = []
 gsk_private_vulkan_compiled_shaders = []
 gsk_private_vulkan_compiled_shaders_deps = []
 gsk_private_vulkan_shader_headers = []
-
-if have_vulkan
-  gsk_private_sources += files([
-    'vulkan/gskvulkanblendmodeop.c',
-    'vulkan/gskvulkanblurop.c',
-    'vulkan/gskvulkanborderop.c',
-    'vulkan/gskvulkanbuffer.c',
-    'vulkan/gskvulkanclearop.c',
-    'vulkan/gskvulkanclip.c',
-    'vulkan/gskvulkancolormatrixop.c',
-    'vulkan/gskvulkancolorop.c',
-    'vulkan/gskvulkancommandpool.c',
-    'vulkan/gskvulkanconvertop.c',
-    'vulkan/gskvulkancrossfadeop.c',
-    'vulkan/gskvulkandownloadop.c',
-    'vulkan/gskvulkanglyphcache.c',
-    'vulkan/gskvulkanglyphop.c',
-    'vulkan/gskvulkanimage.c',
-    'vulkan/gskvulkaninsetshadowop.c',
-    'vulkan/gskvulkanlineargradientop.c',
-    'vulkan/gskvulkanmaskop.c',
-    'vulkan/gskvulkanmemory.c',
-    'vulkan/gskvulkanop.c',
-    'vulkan/gskvulkanoutsetshadowop.c',
-    'vulkan/gskvulkanpushconstantsop.c',
-    'vulkan/gskvulkanrender.c',
-    'vulkan/gskvulkanrenderer.c',
-    'vulkan/gskvulkanrenderpass.c',
-    'vulkan/gskvulkanrenderpassop.c',
-    'vulkan/gskvulkanscissorop.c',
-    'vulkan/gskvulkanshaderop.c',
-    'vulkan/gskvulkantextureop.c',
-    'vulkan/gskvulkanuploadop.c',
-  ])
-
-  subdir('vulkan/resources')
-endif # have_vulkan
 
 if get_variable('broadway_enabled')
   gsk_public_sources += files([
