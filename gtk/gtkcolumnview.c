@@ -1798,6 +1798,8 @@ gtk_column_view_scroll_to_column (GtkColumnView       *self,
                                                        gtk_adjustment_get_page_size (self->hadjustment));
 
   gtk_adjustment_set_value (self->hadjustment, new_value);
+
+  g_clear_pointer (&scroll_info, gtk_scroll_info_unref);
 }
 
 void
@@ -2214,9 +2216,14 @@ gtk_column_view_scroll_to (GtkColumnView       *self,
   if (column && (flags & GTK_LIST_SCROLL_FOCUS))
     gtk_column_view_set_focus_column (self, column, FALSE);
 
-  gtk_list_view_scroll_to (self->listview, pos, flags, scroll);
+  gtk_list_view_scroll_to (self->listview,
+                           pos,
+                           flags,
+                           scroll ? gtk_scroll_info_ref (scroll) : NULL);
 
   if (column)
     gtk_column_view_scroll_to_column (self, column, scroll);
+  else
+    g_clear_pointer (&scroll, gtk_scroll_info_unref);
 }
 
