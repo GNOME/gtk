@@ -761,7 +761,7 @@ gsk_standard_contour_get_point (const GskContour *contour,
       GskCurve curve;
 
       gsk_curve_init (&curve, self->ops[i]);
-      result->t = gsk_curve_at_length (&curve, distance);
+      result->t = gsk_curve_at_length (&curve, distance, 0.001);
 #else
       GskCurveLutEntry *e0, *e1;
 

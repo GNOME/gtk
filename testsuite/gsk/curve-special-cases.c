@@ -156,7 +156,7 @@ test_bad_split (void)
   l = gsk_curve_get_length (&c);
 
   t[0] = 0.5;
-  t[1] = gsk_curve_at_length (&c, 2);
+  t[1] = gsk_curve_at_length (&c, 2, FLT_EPSILON);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (t); i++)
     {

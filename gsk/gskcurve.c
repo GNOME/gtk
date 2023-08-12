@@ -1553,6 +1553,10 @@ const double C[] = {
     0.0123412297999871995468056670700372915759,
 };
 
+/* Compute arclength by using Gauss quadrature on
+ *
+ * \int_0^z \sqrt{ (dx/dt)^2 + (dy/dt)^2 } dt
+ */
 float
 gsk_curve_get_length (const GskCurve *curve)
 {
@@ -1581,33 +1585,40 @@ gsk_curve_get_length (const GskCurve *curve)
   return z * sum;
 }
 
+/* Compute the inverse of the arclength using bisection,
+ * to a given precision
+ */
 float
 gsk_curve_at_length (const GskCurve *curve,
-                     float           length)
+                     float           length,
+                     float           epsilon)
 {
   float t1, t2, t, l;
   GskCurve c1;
+  //int loop_count = 0;
 
   t1 = 0;
   t2 = 1;
 
-  while (1)
+  while (t1 < t2)
     {
+      //loop_count++;
       t = (t1 + t2) / 2;
-
-      if (t1 == t2)
-        return t;
 
       gsk_curve_split (curve, t, &c1, NULL);
 
       l = gsk_curve_get_length (&c1);
-      if (fabs (length - l) < FLT_EPSILON)
-        return t;
+      if (fabs (length - l) < epsilon)
+        break;
       else if (l < length)
         t1 = t;
       else
         t2 = t;
     }
+
+  //g_print ("loop count %d\n", loop_count);
+
+  return t;
 }
 
 /* }}} */
