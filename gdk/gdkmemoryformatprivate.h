@@ -52,7 +52,7 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              guint                      *out_internal_format,
                                                              guint                      *out_format,
                                                              guint                      *out_type,
-                                                             GLint                     (*out_gizzle)[4]);
+                                                             GLint                       out_gizzle[4]);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
