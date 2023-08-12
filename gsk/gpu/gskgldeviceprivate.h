@@ -1,0 +1,23 @@
+#pragma once
+
+#include "gskgpudeviceprivate.h"
+
+G_BEGIN_DECLS
+
+#define GSK_TYPE_GL_DEVICE (gsk_gl_device_get_type ())
+
+G_DECLARE_FINAL_TYPE (GskGLDevice, gsk_gl_device, GSK, GL_DEVICE, GskGpuDevice)
+
+GskGpuDevice *          gsk_gl_device_get_for_display                   (GdkDisplay             *display,
+                                                                         GError                **error);
+
+
+void                    gsk_gl_device_find_gl_format                    (GskGLDevice            *self,
+                                                                         GdkMemoryFormat         format,
+                                                                         GdkMemoryFormat        *out_format,
+                                                                         GLint                  *out_gl_internal_format,
+                                                                         GLenum                 *out_gl_format,
+                                                                         GLenum                 *out_gl_type,
+                                                                         GLint                   out_swizzle[4]);
+
+G_END_DECLS

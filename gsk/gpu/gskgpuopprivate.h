@@ -1,0 +1,73 @@
+#pragma once
+
+#include <gdk/gdk.h>
+
+#include "gskgputypesprivate.h"
+
+G_BEGIN_DECLS
+
+typedef enum
+{
+  GSK_GPU_STAGE_UPLOAD,
+  GSK_GPU_STAGE_PASS,
+  GSK_GPU_STAGE_COMMAND,
+  GSK_GPU_STAGE_SHADER,
+  /* magic ones */
+  GSK_GPU_STAGE_BEGIN_PASS,
+  GSK_GPU_STAGE_END_PASS
+} GskGpuStage;
+
+struct _GskGpuOp
+{
+  const GskGpuOpClass *op_class;
+
+  GskGpuOp *next;
+};
+
+struct _GskGpuOpClass
+{
+  gsize                 size;
+  GskGpuStage           stage;
+
+  void                  (* finish)                                      (GskGpuOp               *op);
+
+  void                  (* print)                                       (GskGpuOp               *op,
+                                                                         GString                *string,
+                                                                         guint                   indent);
+
+#ifdef GDK_RENDERING_VULKAN
+  void                  (* vk_reserve_descriptor_sets)                  (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame);
+  GskGpuOp *            (* vk_command)                                  (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         VkRenderPass            render_pass,
+                                                                         VkCommandBuffer         command_buffer);
+#endif
+  GskGpuOp *            (* gl_command)                                  (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame);
+};
+
+/* ensures alignment of ops to multipes of 16 bytes - and that makes graphene happy */
+#define GSK_GPU_OP_SIZE(struct_name) ((sizeof(struct_name) + 15) & ~15)
+
+GskGpuOp *              gsk_gpu_op_alloc                                (GskGpuFrame            *frame,
+                                                                         const GskGpuOpClass    *op_class);
+void                    gsk_gpu_op_finish                               (GskGpuOp               *op);
+
+void                    gsk_gpu_op_print                                (GskGpuOp               *op,
+                                                                         GString                *string,
+                                                                         guint                   indent);
+
+#ifdef GDK_RENDERING_VULKAN
+void                    gsk_gpu_op_vk_reserve_descriptor_sets           (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame);
+GskGpuOp *              gsk_gpu_op_vk_command                           (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         VkRenderPass            render_pass,
+                                                                         VkCommandBuffer         command_buffer);
+#endif
+GskGpuOp *              gsk_gpu_op_gl_command                           (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame);
+
+G_END_DECLS
+

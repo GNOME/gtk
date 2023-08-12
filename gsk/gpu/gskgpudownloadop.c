@@ -1,0 +1,278 @@
+#include "config.h"
+
+#include "gskgpudownloadopprivate.h"
+
+#include "gskgpuframeprivate.h"
+#include "gskglimageprivate.h"
+#include "gskgpuimageprivate.h"
+#include "gskgpuprintprivate.h"
+#ifdef GDK_RENDERING_VULKAN
+#include "gskvulkanbufferprivate.h"
+#include "gskvulkanimageprivate.h"
+#endif
+
+#include "gdk/gdkglcontextprivate.h"
+
+typedef struct _GskGpuDownloadOp GskGpuDownloadOp;
+
+typedef void (* GdkGpuDownloadOpCreateFunc) (GskGpuDownloadOp *);
+
+struct _GskGpuDownloadOp
+{
+  GskGpuOp op;
+
+  GskGpuImage *image;
+  GdkGpuDownloadOpCreateFunc create_func;
+  GskGpuDownloadFunc func;
+  gpointer user_data;
+
+  GdkTexture *texture;
+#ifdef GDK_RENDERING_VULKAN
+  GskVulkanBuffer *buffer;
+#endif
+};
+
+static void
+gsk_gpu_download_op_finish (GskGpuOp *op)
+{
+  GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+
+  if (self->create_func)
+    self->create_func (self);
+
+  self->func (self->user_data, self->texture);
+
+  g_object_unref (self->texture);
+  g_object_unref (self->image);
+#ifdef GDK_RENDERING_VULKAN
+  g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);
+#endif
+}
+
+static void
+gsk_gpu_download_op_print (GskGpuOp *op,
+                           GString  *string,
+                           guint     indent)
+{
+  GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+
+  gsk_gpu_print_op (string, indent, "download");
+  gsk_gpu_print_image (string, self->image);
+  gsk_gpu_print_newline (string);
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static void
+gsk_gpu_download_op_vk_reserve_descriptor_sets (GskGpuOp    *op,
+                                                GskGpuFrame *frame)
+{
+}
+
+static void
+gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
+{
+  GBytes *bytes;
+  guchar *data;
+  gsize width, height, stride;
+  GdkMemoryFormat format;
+
+  data = gsk_vulkan_buffer_get_data (self->buffer);
+  width = gsk_gpu_image_get_width (self->image);
+  height = gsk_gpu_image_get_height (self->image);
+  format = gsk_gpu_image_get_format (self->image);
+  stride = width * gdk_memory_format_bytes_per_pixel (format);
+  bytes = g_bytes_new (data, stride * height);
+  self->texture = gdk_memory_texture_new (width,
+                                          height,
+                                          format,
+                                          bytes,
+                                          stride);
+  g_bytes_unref (bytes);
+}
+
+static GskGpuOp *
+gsk_gpu_download_op_vk_command (GskGpuOp         *op,
+                                GskGpuFrame      *frame,
+                                VkRenderPass      render_pass,
+                                VkCommandBuffer   command_buffer)
+{
+  GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+  gsize width, height, stride;
+
+  width = gsk_gpu_image_get_width (self->image);
+  height = gsk_gpu_image_get_height (self->image);
+  stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (self->image));
+  self->buffer = gsk_vulkan_buffer_new_map (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                            height * stride,
+                                            GSK_VULKAN_READ);
+
+  gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->image),
+                               command_buffer,
+                               VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               VK_ACCESS_TRANSFER_READ_BIT);
+
+  vkCmdCopyImageToBuffer (command_buffer,
+                          gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->image)),
+                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                          gsk_vulkan_buffer_get_buffer (self->buffer),
+                          1,
+                          (VkBufferImageCopy[1]) {
+                               {
+                                   .bufferOffset = 0,
+                                   .bufferRowLength = width,
+                                   .bufferImageHeight = height,
+                                   .imageSubresource = {
+                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                       .mipLevel = 0,
+                                       .baseArrayLayer = 0,
+                                       .layerCount = 1
+                                   },
+                                   .imageOffset = {
+                                       .x = 0,
+                                       .y = 0,
+                                       .z = 0
+                                   },
+                                   .imageExtent = {
+                                       .width = width,
+                                       .height = height,
+                                       .depth = 1
+                                   }
+                               }
+                          });
+
+  vkCmdPipelineBarrier (command_buffer,
+                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                        VK_PIPELINE_STAGE_HOST_BIT,
+                        0,
+                        0, NULL,
+                        1, &(VkBufferMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                            .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                            .dstAccessMask = VK_ACCESS_HOST_READ_BIT,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .buffer = gsk_vulkan_buffer_get_buffer (self->buffer),
+                            .offset = 0,
+                            .size = VK_WHOLE_SIZE,
+                        },
+                        0, NULL);
+
+  self->create_func = gsk_gpu_download_op_vk_create;
+
+  return op->next;
+}
+#endif
+
+typedef struct _GskGLTextureData GskGLTextureData;
+
+struct _GskGLTextureData
+{
+  GdkGLContext *context;
+  GLuint texture_id;
+  GLsync sync;
+};
+
+static void
+gsk_gl_texture_data_free (gpointer user_data)
+{
+  GskGLTextureData *data = user_data;
+
+  gdk_gl_context_make_current (data->context);
+
+  g_clear_pointer (&data->sync, glDeleteSync);
+  glDeleteTextures (1, &data->texture_id);
+  g_object_unref (data->context);
+
+  g_free (data);
+}
+
+static GskGpuOp *
+gsk_gpu_download_op_gl_command (GskGpuOp    *op,
+                                GskGpuFrame *frame)
+{
+  GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+  GdkGLTextureBuilder *builder;
+  GskGLTextureData *data;
+  GdkGLContext *context;
+
+  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+
+  data = g_new (GskGLTextureData, 1);
+  data->context = g_object_ref (context);
+  data->texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
+
+  if (gdk_gl_context_has_sync (context))
+    data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_context (builder, context);
+  gdk_gl_texture_builder_set_id (builder, data->texture_id);
+  gdk_gl_texture_builder_set_format (builder, gsk_gpu_image_get_format (self->image));
+  gdk_gl_texture_builder_set_width (builder, gsk_gpu_image_get_width (self->image));
+  gdk_gl_texture_builder_set_height (builder, gsk_gpu_image_get_height (self->image));
+  gdk_gl_texture_builder_set_sync (builder, data->sync);
+
+  self->texture = gdk_gl_texture_builder_build (builder,
+                                                gsk_gl_texture_data_free,
+                                                data);
+
+  g_object_unref (builder);
+
+  return op->next;
+}
+
+static const GskGpuOpClass GSK_GPU_DOWNLOAD_OP_CLASS = {
+  GSK_GPU_OP_SIZE (GskGpuDownloadOp),
+  GSK_GPU_STAGE_COMMAND,
+  gsk_gpu_download_op_finish,
+  gsk_gpu_download_op_print,
+#ifdef GDK_RENDERING_VULKAN
+  gsk_gpu_download_op_vk_reserve_descriptor_sets,
+  gsk_gpu_download_op_vk_command,
+#endif
+  gsk_gpu_download_op_gl_command
+};
+
+void
+gsk_gpu_download_op (GskGpuFrame        *frame,
+                     GskGpuImage        *image,
+                     GskGpuDownloadFunc  func,
+                     gpointer            user_data)
+{
+  GskGpuDownloadOp *self;
+
+  self = (GskGpuDownloadOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_OP_CLASS);
+
+  self->image = g_object_ref (image);
+  self->func = func,
+  self->user_data = user_data;
+}
+
+static void
+gsk_gpu_download_save_png_cb (gpointer    filename,
+                              GdkTexture *texture)
+{
+  gdk_texture_save_to_png (texture, filename);
+
+  g_free (filename);
+}
+
+void
+gsk_gpu_download_png_op (GskGpuFrame *frame,
+                         GskGpuImage *image,
+                         const char  *filename_format,
+                         ...)
+{
+  va_list args;
+  char *filename;
+
+  va_start (args, filename_format);
+  filename = g_strdup_vprintf (filename_format, args);
+  va_end (args);
+
+  gsk_gpu_download_op (frame,
+                       image,
+                       gsk_gpu_download_save_png_cb,
+                       filename);
+}
