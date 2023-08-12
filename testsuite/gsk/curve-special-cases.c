@@ -145,6 +145,28 @@ test_curve_crossing (void)
     }
 }
 
+static void
+test_bad_split (void)
+{
+  GskCurve c, c1, c2;
+  float t[2], l, l1, l2;
+
+  parse_curve (&c, "M 0 0 C 2 0 4 0 4 0");
+
+  l = gsk_curve_get_length (&c);
+
+  t[0] = 0.5;
+  t[1] = gsk_curve_at_length (&c, 2);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (t); i++)
+    {
+      gsk_curve_split (&c, t[i], &c1, &c2);
+      l1 = gsk_curve_get_length (&c1);
+      l2 = gsk_curve_get_length (&c2);
+      g_print ("split at t=%g: %g == %g + %g, error %f\n", t[i], l, l1, l2, l - (l1 + l2));
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -154,6 +176,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
   g_test_add_func ("/curve/special/crossing", test_curve_crossing);
+  g_test_add_func ("/curve/special/bad-split", test_bad_split);
 
   return g_test_run ();
 }
