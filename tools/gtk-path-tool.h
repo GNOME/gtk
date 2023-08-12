@@ -2,6 +2,7 @@
 
 void do_info      (int *argc, const char ***argv);
 void do_decompose (int *argc, const char ***argv);
+void do_restrict  (int *argc, const char ***argv);
 void do_render    (int *argc, const char ***argv);
 void do_show      (int *argc, const char ***argv);
 

@@ -39,6 +39,7 @@ usage (void)
              "\n"
              "Commands:\n"
              "  decompose    Decompose the path\n"
+             "  restrict     Restrict the path to a segment\n"
              "  show         Display the path in a window\n"
              "  render       Render the path as an image\n"
              "  info         Print information about the path\n"
@@ -130,6 +131,8 @@ main (int argc, const char *argv[])
     do_info (&argc, &argv);
   else if (strcmp (argv[0], "render") == 0)
     do_render (&argc, &argv);
+  else if (strcmp (argv[0], "restrict") == 0)
+    do_restrict (&argc, &argv);
   else if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
   else
