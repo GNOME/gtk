@@ -46,10 +46,6 @@
 #include <gsk/broadway/gskbroadwayrenderer.h>
 #endif
 
-#ifdef GDK_RENDERING_VULKAN
-#include <gsk/vulkan/gskvulkanrenderer.h>
-#endif
-
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
