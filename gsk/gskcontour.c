@@ -644,9 +644,18 @@ typedef struct
 {
   gsize op;
   float length;
+#ifdef USE_LUT
   GArray *lut;
+#endif
 } GskCurveMeasureData;
 
+typedef struct
+{
+  float tolerance;
+  GArray *measure_data;
+} GskStandardContourMeasureData;
+
+#ifdef USE_LUT
 static void
 clear_lut (gpointer data)
 {
@@ -654,6 +663,7 @@ clear_lut (gpointer data)
 
   g_clear_pointer (&md->lut, g_array_unref);
 }
+#endif
 
 static gpointer
 gsk_standard_contour_init_measure (const GskContour *contour,
@@ -661,32 +671,41 @@ gsk_standard_contour_init_measure (const GskContour *contour,
                                    float            *out_length)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  GArray *array;
+  GskStandardContourMeasureData *cd;
   GskCurveMeasureData md;
 
-  array = g_array_new (FALSE, FALSE, sizeof (GskCurveMeasureData));
-  g_array_set_clear_func (array, clear_lut);
+  cd = g_new0 (GskStandardContourMeasureData, 1);
+
+  cd->tolerance = tolerance;
+  cd->measure_data = g_array_new (FALSE, FALSE, sizeof (GskCurveMeasureData));
 
   *out_length = 0;
 
   md.op = 0;
   md.length = 0;
-  md.lut = NULL;
 
-  g_array_append_val (array, md);
+#ifdef USE_LUT
+  g_array_set_clear_func (cd->measure_data, clear_lut);
+  md.lut = NULL;
+#endif
+
+  g_array_append_val (cd->measure_data, md);
 
   for (gsize i = 1; i < self->n_ops; i ++)
     {
-      GskCurve curve, curve1;
-      GskCurveLutEntry e;
-      gsize n;
+      GskCurve curve;
 
       gsk_curve_init (&curve, self->ops[i]);
 
       md.op = i;
       md.length = gsk_curve_get_length (&curve);
+      *out_length += md.length;
 
+#ifdef USE_LUT
       md.lut = g_array_new (FALSE, FALSE, sizeof (GskCurveLutEntry));
+
+      GskCurveLutEntry e;
+      gsize n;
 
       if (curve.op == GSK_PATH_LINE ||
           curve.op == GSK_PATH_CLOSE)
@@ -701,6 +720,7 @@ gsk_standard_contour_init_measure (const GskContour *contour,
 
       for (gsize j = 1; j < n; j++)
         {
+          GskCurve curve1;
           e.t = j / (float) n;
           gsk_curve_split (&curve, e.t, &curve1, NULL);
           e.length = gsk_curve_get_length (&curve1);
@@ -711,20 +731,21 @@ gsk_standard_contour_init_measure (const GskContour *contour,
       e.length = md.length;
       g_array_append_val (md.lut, e);
 
-      g_array_append_val (array, md);
-
-      *out_length += md.length;
+      g_array_append_val (cd->measure_data, md);
+#endif
     }
 
-  return array;
+  return cd;
 }
 
 static void
 gsk_standard_contour_free_measure (const GskContour *contour,
                                    gpointer          data)
 {
-  GArray *array = data;
-  g_array_unref (array);
+  GskStandardContourMeasureData *cd = data;
+
+  g_array_unref (cd->measure_data);
+  g_free (cd);
 }
 
 static void
@@ -734,13 +755,13 @@ gsk_standard_contour_get_point (const GskContour *contour,
                                 GskRealPathPoint *result)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  GArray *array = measure_data;
+  GskStandardContourMeasureData *cd = measure_data;
   unsigned int i;
   GskCurveMeasureData *md;
 
-  for (i = 1; i < array->len; i++)
+  for (i = 1; i < cd->measure_data->len; i++)
     {
-      md = &g_array_index (array, GskCurveMeasureData, i);
+      md = &g_array_index (cd->measure_data, GskCurveMeasureData, i);
 
       if (distance < md->length)
         break;
@@ -757,11 +778,11 @@ gsk_standard_contour_get_point (const GskContour *contour,
     {
       result->idx = i;
 
-#if 1
+#ifndef USE_LUT
       GskCurve curve;
 
       gsk_curve_init (&curve, self->ops[i]);
-      result->t = gsk_curve_at_length (&curve, distance, 0.001);
+      result->t = gsk_curve_at_length (&curve, distance, cd->tolerance / 2);
 #else
       GskCurveLutEntry *e0, *e1;
 
@@ -793,7 +814,7 @@ gsk_standard_contour_get_distance (const GskContour *contour,
                                    gpointer          measure_data)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  GArray *array = measure_data;
+  GskStandardContourMeasureData *cd = measure_data;
   float length;
   GskCurveMeasureData *md;
 
@@ -804,7 +825,7 @@ gsk_standard_contour_get_distance (const GskContour *contour,
 
   for (gsize i = 1; i < self->n_ops; i++)
     {
-      md = &g_array_index (array, GskCurveMeasureData, i);
+      md = &g_array_index (cd->measure_data, GskCurveMeasureData, i);
 
       if (i == point->idx)
         break;
@@ -818,7 +839,7 @@ gsk_standard_contour_get_distance (const GskContour *contour,
     }
   else if (point->t > 0)
     {
-#if 1
+#ifndef USE_LUT
       GskCurve curve, curve1;
 
       gsk_curve_init (&curve, self->ops[md->op]);
