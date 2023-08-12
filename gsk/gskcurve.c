@@ -1581,33 +1581,33 @@ gsk_curve_get_length (const GskCurve *curve)
   return z * sum;
 }
 
-static float
-gsk_curve_at_length_recurse (const GskCurve *curve,
-                             float           length,
-                             float           t1,
-                             float           t2)
-{
-  GskCurve c1, c2;
-  float t, l;
-
-  gsk_curve_split (curve, 0.5, &c1, &c2);
-
-  t = (t1 + t2) / 2;
-  l = gsk_curve_get_length (&c1);
-  if (fabs (length - l) < 0.01)
-    return t;
-
-  if (l < length)
-    return gsk_curve_at_length_recurse (&c2, length - l , t, t2);
-  else
-    return gsk_curve_at_length_recurse (&c1, length, t1, t);
-}
-
 float
 gsk_curve_at_length (const GskCurve *curve,
                      float           length)
 {
-  return gsk_curve_at_length_recurse (curve, length, 0, 1);
+  float t1, t2, t, l;
+  GskCurve c1;
+
+  t1 = 0;
+  t2 = 1;
+
+  while (1)
+    {
+      t = (t1 + t2) / 2;
+
+      if (t1 == t2)
+        return t;
+
+      gsk_curve_split (curve, t, &c1, NULL);
+
+      l = gsk_curve_get_length (&c1);
+      if (fabs (length - l) < FLT_EPSILON)
+        return t;
+      else if (l < length)
+        t1 = t;
+      else
+        t2 = t;
+    }
 }
 
 /* }}} */
