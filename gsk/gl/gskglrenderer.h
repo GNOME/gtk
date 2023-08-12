@@ -40,9 +40,9 @@ GType        gsk_gl_renderer_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_4_2
 GskRenderer *gsk_gl_renderer_new      (void);
 
-GDK_DEPRECATED_IN_4_4_FOR (gsk_gl_renderer_get_type)
+GDK_AVAILABLE_IN_ALL
 GType        gsk_ngl_renderer_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_IN_4_4_FOR (gsk_gl_renderer_new)
+GDK_AVAILABLE_IN_ALL
 GskRenderer *gsk_ngl_renderer_new      (void);
 G_END_DECLS
 
