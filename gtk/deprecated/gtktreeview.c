@@ -1140,7 +1140,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * @column: (nullable): the `GtkTreeViewColumn` in which the activation occurred
    *
    * The "row-activated" signal is emitted when the method
-   * [`method@Gtk.TreeView.row_activated`] is called.
+   * [method@Gtk.TreeView.row_activated] is called.
    *
    * This signal is emitted when the user double-clicks a treeview row with the
    * [property@Gtk.TreeView:activate-on-single-click] property set to %FALSE,

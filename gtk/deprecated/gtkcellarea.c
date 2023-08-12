@@ -234,8 +234,8 @@
  * API as they come in. Usually `GtkCellArea` is only interested in
  * button events, however some customized derived areas can be implemented
  * who are interested in handling other events. Handling an event can
- * trigger the [`signal@Gtk.CellArea::focus-changed`] signal to fire; as well
- * as [`signal@Gtk.CellArea::add-editable`] in the case that an editable cell
+ * trigger the [signal@Gtk.CellArea::focus-changed] signal to fire; as well
+ * as [signal@Gtk.CellArea::add-editable] in the case that an editable cell
  * was clicked and needs to start editing. You can call
  * [method@Gtk.CellArea.stop_editing] at any time to cancel any cell editing
  * that is currently in progress.
