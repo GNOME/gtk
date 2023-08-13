@@ -739,12 +739,12 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              guint           *out_internal_format,
                              guint           *out_format,
                              guint           *out_type,
-                             GLint          (*out_swizzle)[4])
+                             GLint            out_swizzle[4])
 {
   *out_internal_format = memory_formats[format].gl.internal_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
-  memcpy (out_swizzle, &memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
+  memcpy (out_swizzle, memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
 
   if (gles)
     {

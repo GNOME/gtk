@@ -1528,7 +1528,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (gdk_gl_context_get_use_es (context))
     {
-      priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
+      priv->has_unpack_subimage = gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)) ||
+                                  epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else

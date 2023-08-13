@@ -1456,7 +1456,7 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                          guint           *gl_internalformat,
                          guint           *gl_format,
                          guint           *gl_type,
-                         GLint          (*gl_swizzle)[4])
+                         GLint            gl_swizzle[4])
 {
   GdkMemoryDepth depth;
 
@@ -1577,7 +1577,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type,
-                                         &gl_swizzle);
+                                         gl_swizzle);
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, data_format);
@@ -1595,8 +1595,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
     {
       glTexSubImage2D (GL_TEXTURE_2D, 0, x, y, width, height, gl_format, gl_type, data);
     }
-  else if (stride % bpp == 0 &&
-           (gdk_gl_context_check_version (self->context, NULL, "3.0") || gdk_gl_context_has_unpack_subimage (self->context)))
+  else if (stride % bpp == 0 && gdk_gl_context_has_unpack_subimage (self->context))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
@@ -1684,7 +1683,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type,
-                                         &gl_swizzle);
+                                         gl_swizzle);
 
   glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
 

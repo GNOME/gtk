@@ -937,13 +937,13 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       if ((!alternative && priv->sort_order == GTK_SORT_ASCENDING) ||
           (alternative && priv->sort_order == GTK_SORT_DESCENDING))
         {
-          gtk_widget_remove_css_class (arrow, "descending");
-          gtk_widget_add_css_class (arrow, "ascending");
+          gtk_widget_remove_css_class (arrow, "ascending");
+          gtk_widget_add_css_class (arrow, "descending");
         }
       else
         {
-          gtk_widget_remove_css_class (arrow, "ascending");
-          gtk_widget_add_css_class (arrow, "descending");
+          gtk_widget_remove_css_class (arrow, "descending");
+          gtk_widget_add_css_class (arrow, "ascending");
         }
     }
 
