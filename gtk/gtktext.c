@@ -3977,9 +3977,11 @@ gtk_text_insert_at_cursor (GtkText    *self,
 
   if (priv->editable)
     {
+      begin_change (self);
       gtk_text_reset_im_context (self);
       gtk_editable_insert_text (GTK_EDITABLE (self), str, -1, &pos);
       gtk_text_set_selection_bounds (self, pos, pos);
+      end_change (self);
     }
 }
 
@@ -3999,12 +4001,14 @@ gtk_text_delete_from_cursor (GtkText       *self,
       return;
     }
 
+  begin_change (self);
+
   if (priv->selection_bound != priv->current_pos)
     {
       gtk_text_delete_selection (self);
       gtk_text_schedule_im_reset (self);
       gtk_text_reset_im_context (self);
-      return;
+      goto done;
     }
 
   switch (type)
@@ -4074,6 +4078,8 @@ gtk_text_delete_from_cursor (GtkText       *self,
       gtk_text_reset_im_context (self);
     }
 
+done:
+  end_change (self);
   gtk_text_pend_cursor_blink (self);
 }
 
@@ -4089,12 +4095,14 @@ gtk_text_backspace (GtkText *self)
       return;
     }
 
+  begin_change (self);
+
   if (priv->selection_bound != priv->current_pos)
     {
       gtk_text_delete_selection (self);
       gtk_text_schedule_im_reset (self);
       gtk_text_reset_im_context (self);
-      return;
+      goto done;
     }
 
   prev_pos = gtk_text_move_logically (self, priv->current_pos, -1);
@@ -4147,6 +4155,8 @@ gtk_text_backspace (GtkText *self)
       gtk_widget_error_bell (GTK_WIDGET (self));
     }
 
+done:
+  end_change (self);
   gtk_text_pend_cursor_blink (self);
 }
 
@@ -4191,7 +4201,11 @@ gtk_text_cut_clipboard (GtkText *self)
   if (priv->editable)
     {
       if (priv->selection_bound != priv->current_pos)
-        gtk_text_delete_selection (self);
+        {
+          begin_change (self);
+          gtk_text_delete_selection (self);
+          end_change (self);
+        }
     }
   else
     {
@@ -4209,9 +4223,15 @@ gtk_text_paste_clipboard (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->editable)
-    gtk_text_paste (self, gtk_widget_get_clipboard (GTK_WIDGET (self)));
+    {
+      begin_change (self);
+      gtk_text_paste (self, gtk_widget_get_clipboard (GTK_WIDGET (self)));
+      end_change (self);
+    }
   else
-    gtk_widget_error_bell (GTK_WIDGET (self));
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self));
+    }
 
   gtk_text_update_handles (self);
 }
