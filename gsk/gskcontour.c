@@ -82,6 +82,20 @@ struct _GskContourClass
                                                  gboolean                emit_move_to,
                                                  GskRealPathPoint       *start,
                                                  GskRealPathPoint       *end);
+  gpointer              (* init_measure)        (const GskContour       *contour,
+                                                 float                   tolerance,
+                                                 float                  *out_length);
+  void                  (* free_measure)        (const GskContour       *contour,
+                                                 gpointer                measure_data);
+  void                  (* get_point)           (const GskContour       *contour,
+                                                 gpointer                measure_data,
+                                                 float                   distance,
+                                                 gboolean                precise,
+                                                 GskRealPathPoint       *result);
+  float                 (* get_distance)        (const GskContour       *contour,
+                                                 GskRealPathPoint       *point,
+                                                 gpointer                measure_data,
+                                                 gboolean                precise);
 };
 
 /* {{{ Utilities */
@@ -111,6 +125,18 @@ _g_string_append_point (GString                *string,
 
 /* }}} */
 /* {{{ Standard */
+
+typedef struct
+{
+  float t;
+  float length;
+} CurvePoint;
+
+typedef struct
+{
+  float length;
+  CurvePoint lut[32];
+} CurveMeasure;
 
 typedef struct _GskStandardContour GskStandardContour;
 struct _GskStandardContour
@@ -602,6 +628,186 @@ gsk_standard_contour_add_segment (const GskContour *contour,
     }
 }
 
+static gpointer
+gsk_standard_contour_init_measure (const GskContour *contour,
+                                   float             tolerance,
+                                   float            *out_length)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  GskCurve curve, curve1;
+  CurveMeasure *measure;
+  CurvePoint *lut;
+
+  measure = g_new (CurveMeasure, self->n_ops);
+
+  measure[0].length = 0;
+
+  for (gsize i = 1; i < self->n_ops; i++)
+    {
+      gsk_curve_init (&curve, self->ops[i]);
+      measure[i].length = measure[i - 1].length + gsk_curve_get_length (&curve);
+
+      lut = measure[i].lut;
+      for (gsize j = 0; j < 32; j++)
+        {
+          lut[j].t = (j + 1) / 32.f;
+
+          gsk_curve_split (&curve, lut[j].t, &curve1, NULL);
+          lut[j].length = gsk_curve_get_length (&curve1);
+        }
+    }
+
+  *out_length = measure[self->n_ops - 1].length;
+
+  return measure;
+}
+
+static void
+gsk_standard_contour_free_measure (const GskContour *contour,
+                                   gpointer          data)
+{
+  g_free (data);
+}
+
+static void
+gsk_standard_contour_get_point (const GskContour *contour,
+                                gpointer          measure_data,
+                                float             distance,
+                                gboolean          precise,
+                                GskRealPathPoint *result)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  CurveMeasure *measure = (CurveMeasure *)measure_data;
+  gsize i, i0, i1;
+
+  distance = CLAMP (distance, 0, measure[self->n_ops - 1].length);
+
+  i0 = 0;
+  i1 = self->n_ops - 1;
+  while (i0 + 1 < i1)
+    {
+      i = (i0 + i1) / 2;
+
+      if (measure[i].length < distance)
+        i0 = i;
+      else
+        i1 = i;
+    }
+
+  g_assert (measure[i0].length <= distance && distance <= measure[i1].length);
+
+  if (distance >= measure[i1].length)
+    {
+      if (i1 == self->n_ops - 1)
+        {
+          result->idx = i1;
+          result->t = 1;
+        }
+      else
+        {
+          result->idx = i1 + 1;
+          result->t = 0;
+        }
+    }
+  else if (precise)
+    {
+      GskCurve curve;
+
+      gsk_curve_init (&curve, self->ops[i1]);
+
+      result->idx = i1;
+      result->t = gsk_curve_at_length (&curve, distance - measure[i1 - 1].length, FLT_EPSILON);
+    }
+  else
+    {
+      float length, fraction, l1, t1;
+      gsize j;
+      CurvePoint *lut;
+
+      length = distance - measure[i1 - 1].length;
+
+      result->idx = i1;
+
+      lut = measure[i1].lut;
+
+      for (j = 0; j < 32; j++)
+        {
+          if (lut[j].length >= length)
+            break;
+        }
+
+      if (j > 0)
+        {
+          l1 = lut[j - 1].length;
+          t1 = lut[j - 1].t;
+        }
+      else
+        {
+          l1 = 0;
+          t1 = 0;
+        }
+
+      fraction = (length - l1) / (lut[j].length - l1);
+      g_assert (fraction >= 0.f && fraction <= 1.f);
+      result->t = t1 * (1 - fraction) + lut[j].t * fraction;
+      g_assert (result->t >= 0.f && result->t <= 1.f);
+    }
+}
+
+static float
+gsk_standard_contour_get_distance (const GskContour *contour,
+                                   GskRealPathPoint *point,
+                                   gpointer          measure_data,
+                                   gboolean          precise)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  CurveMeasure *measure = (CurveMeasure *)measure_data;
+  GskCurve curve, curve1;
+
+  if (G_UNLIKELY (point->idx == 0))
+    return 0;
+
+  if (point->t == 0)
+    return measure[point->idx - 1].length;
+  else if (point->t == 1)
+    return measure[point->idx].length;
+  else if (precise)
+    {
+      gsk_curve_init (&curve, self->ops[point->idx]);
+      gsk_curve_split (&curve, point->t, &curve1, NULL);
+      return measure[point->idx - 1].length + gsk_curve_get_length (&curve1);
+    }
+  else
+    {
+      float fraction, l1, t1;
+      gsize j;
+      CurvePoint *lut;
+
+      lut = measure[point->idx].lut;
+
+      for (j = 0; j < 32; j++)
+        {
+          if (lut[j].t >= point->t)
+            break;
+        }
+
+      if (j > 0)
+        {
+          l1 = lut[j - 1].length;
+          t1 = lut[j - 1].t;
+        }
+      else
+        {
+          l1 = 0;
+          t1 = 0;
+        }
+
+      fraction = (point->t - t1) / (lut[j].t - t1);
+      g_assert (fraction >= 0.f && fraction <= 1.f);
+      return measure[point->idx - 1].length + l1 * (1 - fraction) + lut[j].length * fraction;
+    }
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -622,6 +828,10 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_tangent,
   gsk_standard_contour_get_curvature,
   gsk_standard_contour_add_segment,
+  gsk_standard_contour_init_measure,
+  gsk_standard_contour_free_measure,
+  gsk_standard_contour_get_point,
+  gsk_standard_contour_get_distance,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -808,6 +1018,40 @@ gsk_contour_add_segment (const GskContour *self,
                          GskRealPathPoint *end)
 {
   self->klass->add_segment (self, builder, emit_move_to, start, end);
+}
+
+gpointer
+gsk_contour_init_measure (const GskContour *self,
+                          float             tolerance,
+                          float            *out_length)
+{
+  return self->klass->init_measure (self, tolerance, out_length);
+}
+
+void
+gsk_contour_free_measure (const GskContour *self,
+                          gpointer          data)
+{
+  self->klass->free_measure (self, data);
+}
+
+void
+gsk_contour_get_point (const GskContour *self,
+                       gpointer          measure_data,
+                       float             distance,
+                       gboolean          precise,
+                       GskRealPathPoint *result)
+{
+  self->klass->get_point (self, measure_data, distance, precise, result);
+}
+
+float
+gsk_contour_get_distance (const GskContour *self,
+                          GskRealPathPoint *point,
+                          gpointer          measure_data,
+                          gboolean          precise)
+{
+  return self->klass->get_distance (self, point, measure_data, precise);
 }
 
 /* }}} */
