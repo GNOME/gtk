@@ -1413,3 +1413,107 @@ error:
 
   return NULL;
 }
+
+/**
+ * gsk_path_get_length:
+ * @self: a `GskPath`
+ *
+ * Returns the length of the path.
+ *
+ * Returns: the length of @self
+ *
+ * Since: 4.14
+ */
+float
+gsk_path_get_length (GskPath *self)
+{
+  float length = 0;
+
+  g_return_val_if_fail (self != NULL, 0);
+
+  for (gsize i = 0; i < self->n_contours; i++)
+    {
+      length += gsk_contour_get_length (self->contours[i]);
+    }
+
+  return length;
+}
+
+/**
+ * gsk_path_get_point:
+ * @self: a `GskPath`
+ * @distance: the distance
+ * @result: (out caller-allocates): return location for the point
+ *
+ * Computes the point that is at the given
+ * distance from the beginning of the path.
+ *
+ * An empty path has no points, so `FALSE`
+ * is returned in this case.
+ *
+ * Returns: `TRUE` if @result was filled
+ *
+ * Since: 4.14
+ */
+gboolean
+gsk_path_get_point (GskPath      *self,
+                    float         distance,
+                    GskPathPoint *result)
+{
+  GskRealPathPoint *res = (GskRealPathPoint *) result;
+  gsize i;
+
+  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (result != NULL, 0);
+
+  if (self->n_contours == 0)
+    return FALSE;
+
+  for (i = 0; i < self->n_contours - 1; i++)
+    {
+      float length = gsk_contour_get_length (self->contours[i]);
+      if (distance < length)
+        break;
+
+      distance -= length;
+    }
+
+  gsk_contour_get_point (self->contours[i], distance, 0.0001, res);
+  res->contour = i;
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_point_get_distance:
+ * @point: a `GskPathPoint
+ * @path: the `GskPath` that @point is on
+ *
+ * Returns the distance from the beginning of the path to @point.
+ *
+ * Returns: the distance of @point
+ *
+ * Since: 4.14
+ */
+float
+gsk_path_point_get_distance (const GskPathPoint *point,
+                             GskPath            *path)
+{
+  GskRealPathPoint *p = (GskRealPathPoint *)point;
+  float distance = 0;
+
+  g_return_val_if_fail (point != NULL, 0);
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (p->contour < path->n_contours, 0);
+
+  for (gsize i = 0; i < path->n_contours; i++)
+    {
+      if (i == p->contour)
+        return distance + gsk_contour_get_distance (path->contours[i], p);
+
+      distance += gsk_contour_get_length (path->contours[i]);
+    }
+
+  g_return_val_if_reached (0);
+}
+
