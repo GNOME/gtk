@@ -79,5 +79,13 @@ void                    gsk_contour_add_segment                 (const GskContou
                                                                  GskRealPathPoint       *start,
                                                                  GskRealPathPoint       *end);
 
+void                    gsk_contour_get_point                   (const GskContour       *self,
+                                                                 float                   distance,
+                                                                 float                   precision,
+                                                                 GskRealPathPoint       *result);
+float                   gsk_contour_get_distance                (const GskContour       *self,
+                                                                 GskRealPathPoint       *point);
+float                   gsk_contour_get_length                  (const GskContour       *self);
+
 
 G_END_DECLS

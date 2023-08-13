@@ -82,6 +82,13 @@ struct _GskContourClass
                                                  gboolean                emit_move_to,
                                                  GskRealPathPoint       *start,
                                                  GskRealPathPoint       *end);
+  void                  (* get_point)           (const GskContour       *contour,
+                                                 float                   distance,
+                                                 float                   precision,
+                                                 GskRealPathPoint       *result);
+  float                 (* get_distance)        (const GskContour       *contour,
+                                                 GskRealPathPoint       *point);
+  float                 (* get_length)          (const GskContour       *contour);
 };
 
 /* {{{ Utilities */
@@ -119,9 +126,13 @@ struct _GskStandardContour
 
   GskPathFlags flags;
 
+  float length;
+  gsize has_length;
+
   gsize n_ops;
   gsize n_points;
   graphene_point_t *points;
+  float *lengths;
   gskpathop ops[];
 };
 
@@ -134,6 +145,7 @@ gsk_standard_contour_compute_size (gsize n_ops,
                           G_ALIGNOF (GskStandardContour)));
   gsize s = sizeof (GskStandardContour)
           + sizeof (gskpathop) * n_ops
+          + sizeof (float) * n_ops
           + sizeof (graphene_point_t) * n_points;
   return s + (align - (s % align));
 }
@@ -162,6 +174,29 @@ gsk_standard_contour_get_size (const GskContour *contour)
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
   return gsk_standard_contour_compute_size (self->n_ops, self->n_points);
+}
+
+static void
+gsk_standard_contour_ensure_lengths (const GskContour *contour)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+
+  if (g_once_init_enter (&self->has_length))
+    {
+      GskCurve curve;
+
+      self->lengths[0] = 0;
+
+      for (gsize i = 1; i < self->n_ops; i++)
+        {
+          gsk_curve_init (&curve, self->ops[i]);
+          self->lengths[i] = self->lengths[i - 1] + gsk_curve_get_length (&curve);
+        }
+
+      self->length = self->lengths[self->n_ops - 1];
+
+      g_once_init_leave (&self->has_length, 1);
+    }
 }
 
 static gboolean
@@ -633,6 +668,91 @@ gsk_standard_contour_add_segment (const GskContour *contour,
     }
 }
 
+static void
+gsk_standard_contour_get_point (const GskContour *contour,
+                                float             distance,
+                                float             precision,
+                                GskRealPathPoint *result)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  gsize i, i0, i1;
+
+  gsk_standard_contour_ensure_lengths (contour);
+
+  distance = CLAMP (distance, 0, self->length);
+
+  i0 = 0;
+  i1 = self->n_ops - 1;
+  while (i0 + 1 < i1)
+    {
+      i = (i0 + i1) / 2;
+
+      if (self->lengths[i] < distance)
+        i0 = i;
+      else
+        i1 = i;
+    }
+
+  g_assert (self->lengths[i0] <= distance && distance <= self->lengths[i1]);
+
+  if (distance >= self->lengths[i1])
+    {
+      if (i1 == self->n_ops - 1)
+        {
+          result->idx = i1;
+          result->t = 1;
+        }
+      else
+        {
+          result->idx = i1 + 1;
+          result->t = 0;
+        }
+    }
+  else
+    {
+      GskCurve curve;
+
+      gsk_curve_init (&curve, self->ops[i1]);
+
+      result->idx = i1;
+      result->t = gsk_curve_at_length (&curve, distance - self->lengths[i1 - 1], precision);
+    }
+}
+
+static float
+gsk_standard_contour_get_distance (const GskContour *contour,
+                                   GskRealPathPoint *point)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  GskCurve curve, curve1;
+
+  if (G_UNLIKELY (point->idx == 0))
+    return 0;
+
+  gsk_standard_contour_ensure_lengths (contour);
+
+  if (point->t == 0)
+    return self->lengths[point->idx - 1];
+  else if (point->t == 1)
+    return self->lengths[point->idx];
+  else
+    {
+      gsk_curve_init (&curve, self->ops[point->idx]);
+      gsk_curve_split (&curve, point->t, &curve1, NULL);
+      return self->lengths[point->idx - 1] + gsk_curve_get_length (&curve1);
+    }
+}
+
+static float
+gsk_standard_contour_get_length (const GskContour *contour)
+{
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+
+  gsk_standard_contour_ensure_lengths (contour);
+
+  return self->length;
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -653,6 +773,9 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_get_tangent,
   gsk_standard_contour_get_curvature,
   gsk_standard_contour_add_segment,
+  gsk_standard_contour_get_point,
+  gsk_standard_contour_get_distance,
+  gsk_standard_contour_get_length,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -677,14 +800,17 @@ gsk_standard_contour_init (GskContour             *contour,
   self->n_ops = n_ops;
   self->n_points = n_points;
   self->points = (graphene_point_t *) &self->ops[n_ops];
+  self->lengths = (float *) &self->points[n_points];
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
+  memset (self->lengths, 0, sizeof (float) * n_ops);
 
   offset += self->points - points;
   for (i = 0; i < n_ops; i++)
-    {
-      self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
-                                        gsk_pathop_points (ops[i]) + offset);
-    }
+    self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
+                                      gsk_pathop_points (ops[i]) + offset);
+
+  self->length = 0.f;
+  self->has_length = 0;
 }
 
 GskContour *
@@ -838,6 +964,28 @@ gsk_contour_add_segment (const GskContour *self,
                          GskRealPathPoint *end)
 {
   self->klass->add_segment (self, builder, emit_move_to, start, end);
+}
+
+void
+gsk_contour_get_point (const GskContour       *self,
+                       float                   distance,
+                       float                   precision,
+                       GskRealPathPoint       *result)
+{
+  self->klass->get_point (self, distance, precision, result);
+}
+
+float
+gsk_contour_get_distance (const GskContour *self,
+                          GskRealPathPoint *point)
+{
+  return self->klass->get_distance (self, point);
+}
+
+float
+gsk_contour_get_length (const GskContour *self)
+{
+  return self->klass->get_length (self);
 }
 
 /* }}} */
