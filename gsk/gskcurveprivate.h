@@ -174,6 +174,16 @@ gboolean                gsk_curve_get_closest_point             (const GskCurve 
                                                                  float                   threshold,
                                                                  float                  *out_dist,
                                                                  float                  *out_t);
+float                  gsk_curve_get_length                     (const GskCurve         *curve);
+float                  gsk_curve_get_length_to                  (const GskCurve         *curve,
+                                                                 float                   t);
+float                  gsk_curve_at_length                      (const GskCurve         *curve,
+                                                                 float                   distance,
+                                                                 float                   epsilon);
+
+int                    gsk_curve_get_curvature_points           (const GskCurve *        curve,
+                                                                 float                   t[3]);
+
 
 G_END_DECLS
 
