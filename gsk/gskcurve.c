@@ -1563,6 +1563,80 @@ gsk_curve_get_closest_point (const GskCurve         *curve,
     return find_closest_point (curve, point, threshold, 0, 1, out_dist, out_t);
 }
 
+/* Legendre-Gauss values for n=64,
+ * see https://pomax.github.io/bezierinfo/legendre-gauss.html
+ */
+
+#include "ct-values.c"
+
+/* Compute arclength by using Gauss quadrature on
+ *
+ * \int_0^z \sqrt{ (dx/dt)^2 + (dy/dt)^2 } dt
+ */
+float
+gsk_curve_get_length (const GskCurve *curve)
+{
+  double z = 0.5;
+  double sum;
+  GskCurve derivative;
+  graphene_point_t d;
+
+  if (curve->op == GSK_PATH_LINE ||
+      curve->op == GSK_PATH_CLOSE)
+    return graphene_point_distance (gsk_curve_get_start_point (curve),
+                                    gsk_curve_get_end_point (curve),
+                                    NULL, NULL);
+
+  gsk_curve_get_derivative (curve, &derivative);
+
+  sum = 0;
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (T); i++)
+    {
+      double t = z * T[i] + z;
+      gsk_curve_get_point (&derivative, t, &d);
+      sum += C[i] * sqrt (d.x * d.x + d.y * d.y);
+    }
+
+  return z * sum;
+}
+
+/* Compute the inverse of the arclength using bisection,
+ * to a given precision
+ */
+float
+gsk_curve_at_length (const GskCurve *curve,
+                     float           length,
+                     float           epsilon)
+{
+  float t1, t2, t, l;
+  GskCurve c1;
+
+  g_assert (epsilon >= FLT_EPSILON);
+
+  t1 = 0;
+  t2 = 1;
+
+  while (t1 < t2)
+    {
+      t = (t1 + t2) / 2;
+      if (t == t1 || t == t2)
+        break;
+
+      gsk_curve_split (curve, t, &c1, NULL);
+
+      l = gsk_curve_get_length (&c1);
+      if (fabsf (length - l) < epsilon)
+        break;
+      else if (l < length)
+        t1 = t;
+      else
+        t2 = t;
+    }
+
+  return t;
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker expandtab: */
