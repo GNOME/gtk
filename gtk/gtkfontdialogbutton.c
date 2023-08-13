@@ -32,7 +32,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
 
-
+static void     activated      (GtkFontDialogButton *self);
 static void     button_clicked (GtkFontDialogButton *self);
 static void     update_button_sensitivity
                                (GtkFontDialogButton *self);
@@ -100,7 +100,16 @@ enum
   NUM_PROPERTIES
 };
 
+/* Signals */
+enum
+{
+  SIGNAL_ACTIVATE = 1,
+  NUM_SIGNALS
+};
+
 static GParamSpec *properties[NUM_PROPERTIES];
+
+static unsigned int font_dialog_button_signals[NUM_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (GtkFontDialogButton, gtk_font_dialog_button, GTK_TYPE_WIDGET)
 
@@ -109,6 +118,8 @@ gtk_font_dialog_button_init (GtkFontDialogButton *self)
 {
   GtkWidget *box;
   PangoFontDescription *font_desc;
+
+  g_signal_connect_swapped (self, "activate", G_CALLBACK (activated), self);
 
   self->button = gtk_button_new ();
   g_signal_connect_swapped (self->button, "clicked", G_CALLBACK (button_clicked), self);
@@ -383,6 +394,27 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
+  /**
+   * FontDialogButton::activate:
+   * @widget: The object which received the signal
+   *
+   * Emitted when the font dialog button is activated.
+   *
+   * The `::activate` signal on `GtkFontDialogButton` is an action signal
+   * and emitting it causes the button to pop up its dialog.
+   *
+   * Since: 4.14
+   */
+  font_dialog_button_signals[SIGNAL_ACTIVATE] =
+    g_signal_new (I_ ("activate"),
+                  G_TYPE_FROM_CLASS (class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, font_dialog_button_signals[SIGNAL_ACTIVATE]);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "fontbutton");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
@@ -497,6 +529,12 @@ font_and_features_chosen (GObject      *source,
 
   g_clear_object (&self->cancellable);
   update_button_sensitivity (self);
+}
+
+static void
+activated (GtkFontDialogButton *self)
+{
+  gtk_widget_activate (self->button);
 }
 
 static void
