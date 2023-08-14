@@ -476,6 +476,8 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
  * @rect: the rounded rect
  *
  * Adds @rect as a new contour to the path built in @self.
+ *
+ * Since: 4.14
  **/
 void
 gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
