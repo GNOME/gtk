@@ -618,7 +618,7 @@ gsk_standard_contour_add_segment (const GskContour *contour,
   else if (end->t > 0)
     {
       gsk_curve_split (&c, end->t, &c1, &c2);
-      add_curve (&c, builder, &emit_move_to);
+      add_curve (&c1, builder, &emit_move_to);
     }
 }
 
