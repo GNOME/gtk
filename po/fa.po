@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-31 15:14+0000\n"
-"PO-Revision-Date: 2023-08-01 09:23+0330\n"
+"POT-Creation-Date: 2023-08-14 13:16+0000\n"
+"PO-Revision-Date: 2023-08-15 02:04+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -137,7 +137,7 @@ msgstr "برنامه از API مربوط به %s پشتبانی نمی‌کند"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1863
+#: gdk/gdkglcontext.c:1864
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "تلاش شد از %s استفاده شود، ولی %s از پیش در حال استفاده است"
@@ -2182,7 +2182,7 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170 gtk/gtkmessagedialog.c:179
 #: gtk/gtkmountoperation.c:608 gtk/print/gtkpagesetupunixdialog.c:282
 #: gtk/print/gtkprintbackend.c:638 gtk/print/gtkprintunixdialog.c:682
-#: gtk/print/gtkprintunixdialog.c:839 gtk/gtkwindow.c:6238
+#: gtk/print/gtkprintunixdialog.c:839 gtk/gtkwindow.c:6242
 #: gtk/ui/gtkappchooserdialog.ui:48 gtk/ui/gtkassistant.ui:52
 #: gtk/ui/gtkcolorchooserdialog.ui:36 gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2270,7 +2270,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6125 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2608,31 +2608,31 @@ msgstr "بستن"
 msgid "Close the infobar"
 msgstr "بستن نوار اطّلاعات"
 
-#: gtk/gtklabel.c:5690 gtk/gtktext.c:6113 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5691 gtk/gtktext.c:6117 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6121 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5698 gtk/gtktext.c:6134 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtklabel.c:5703
+#: gtk/gtklabel.c:5705
 msgid "_Open Link"
 msgstr "_گشودن پیوند"
 
-#: gtk/gtklabel.c:5707
+#: gtk/gtklabel.c:5709
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: gtk/gtklabel.c:5751 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "فهرست بافتاری"
 
@@ -2703,7 +2703,7 @@ msgid "Play"
 msgstr "پخش"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6239
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -3557,7 +3557,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "نوار کناری"
 
-#: gtk/gtktext.c:6139 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
@@ -3569,12 +3569,12 @@ msgstr "بر_گردان"
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
-#: gtk/gtkwindow.c:6227
+#: gtk/gtkwindow.c:6231
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6229
+#: gtk/gtkwindow.c:6233
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
@@ -3584,7 +3584,7 @@ msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
 "را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6234
+#: gtk/gtkwindow.c:6238
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
@@ -3620,7 +3620,8 @@ msgstr "نقش"
 msgid "Description"
 msgstr "شرح"
 
-#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:297
+#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
+#: tools/gtk-path-tool-info.c:72
 msgid "Bounds"
 msgstr "مزرها"
 
@@ -3925,61 +3926,61 @@ msgstr "حالت درخواست"
 msgid "Measure map"
 msgstr "نگاشت اندازه"
 
-#: gtk/inspector/misc-info.ui:254
+#: gtk/inspector/misc-info.ui:253
 msgid "Expand"
 msgstr "گسترش"
 
-#: gtk/inspector/misc-info.ui:322
+#: gtk/inspector/misc-info.ui:321
 msgid "Baseline"
 msgstr "خط مبنا"
 
-#: gtk/inspector/misc-info.ui:347
+#: gtk/inspector/misc-info.ui:346
 msgid "Surface"
 msgstr "سطح"
 
-#: gtk/inspector/misc-info.ui:366 gtk/inspector/misc-info.ui:401
-#: gtk/inspector/misc-info.ui:436 gtk/inspector/prop-editor.c:1150
+#: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
 #: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "ویژگی‌ها"
 
-#: gtk/inspector/misc-info.ui:382
+#: gtk/inspector/misc-info.ui:381
 msgid "Renderer"
 msgstr "پرداختگر"
 
-#: gtk/inspector/misc-info.ui:417
+#: gtk/inspector/misc-info.ui:416
 msgid "Frame Clock"
 msgstr "دیده‌بان فریم"
 
-#: gtk/inspector/misc-info.ui:452
+#: gtk/inspector/misc-info.ui:451
 msgid "Tick Callback"
 msgstr "بازخورد تیک"
 
-#: gtk/inspector/misc-info.ui:478
+#: gtk/inspector/misc-info.ui:477
 msgid "Frame Count"
 msgstr "تعداد قاب"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:502
 msgid "Frame Rate"
 msgstr "آهنگ قاب"
 
-#: gtk/inspector/misc-info.ui:528
+#: gtk/inspector/misc-info.ui:527
 msgid "Scale"
 msgstr "مقیاس"
 
-#: gtk/inspector/misc-info.ui:553
+#: gtk/inspector/misc-info.ui:552
 msgid "Mapped"
 msgstr "متصل شده"
 
-#: gtk/inspector/misc-info.ui:579
+#: gtk/inspector/misc-info.ui:578
 msgid "Realized"
 msgstr "محقق شده"
 
-#: gtk/inspector/misc-info.ui:605
+#: gtk/inspector/misc-info.ui:604
 msgid "Is Toplevel"
 msgstr "سطح بالا (Toplevel) است"
 
-#: gtk/inspector/misc-info.ui:631
+#: gtk/inspector/misc-info.ui:630
 msgid "Child Visible"
 msgstr "فرزند قابل دیدن است"
 
@@ -4088,7 +4089,7 @@ msgstr "منبع:"
 msgid "Defined At"
 msgstr "تعریف شده در"
 
-#: gtk/inspector/recorder.c:1865
+#: gtk/inspector/recorder.c:1922
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "ذخیرهٔ RenderNode شکست خورد"
@@ -7124,7 +7125,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-path-tool-render.c:62 tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "پرونده"
 
@@ -7156,8 +7158,8 @@ msgid "Use style from CSS file"
 msgstr "استفادهٔ سبک از پروندهٔ CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-rendernode-tool-show.c:109
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "نتوانست سامانهٔ پنجره را راه‌اندازی کند\n"
@@ -7380,6 +7382,213 @@ msgstr "%s: همچین برنامه‌ای وجود ندارد %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: خطا در اجرا برنامه: %s\n"
 
+#: tools/gtk-path-tool.c:35
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
+"\n"
+"Perform various tasks on paths.\n"
+"\n"
+"Commands:\n"
+"  decompose    Decompose the path\n"
+"  show         Display the path in a window\n"
+"  render       Render the path as an image\n"
+"  info         Print information about the path\n"
+"\n"
+msgstr ""
+"استفاده:\n"
+"  gtk4-path-tool [دستور] [‫گزینه…‬]‬ FILE\n"
+"\n"
+"انجام وظایف مختلف روی مسیرها.\n"
+"\n"
+"\n"
+"  decompose    باز کردن مسیر\n"
+"  show         نمایش مسیر در یک پنجره\n"
+"  render       پرداخت مسیر به شکل یک عکس\n"
+"  info         چاپ اطّلاعات دربارهٔ مسیر\n"
+"\n"
+
+#: tools/gtk-path-tool-decompose.c:75
+msgid "Allow quadratic Bézier curves"
+msgstr "اجازه به منحی‌های درجه دوم بزیه"
+
+#: tools/gtk-path-tool-decompose.c:76
+msgid "Allow cubic Bézier curves"
+msgstr "اجازه به منحی‌های درجه سوم بزیه"
+
+#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:34
+#: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
+msgid "PATH"
+msgstr "PATH"
+
+#: tools/gtk-path-tool-decompose.c:89
+msgid "Decompose a path."
+msgstr "باز کردن یک مسیر."
+
+#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:58
+msgid "No paths given."
+msgstr "مسیری داده نشده"
+
+#: tools/gtk-path-tool-decompose.c:128
+msgid "That didn't work out."
+msgstr "کار نکرد."
+
+#: tools/gtk-path-tool-info.c:45
+msgid "Print information about a path."
+msgstr "چاپ اطّلاعات دربارهٔ یک مسیر."
+
+#: tools/gtk-path-tool-info.c:65
+msgid "Path is empty."
+msgstr "مسیر خالی است."
+
+#: tools/gtk-path-tool-info.c:69
+msgid "Path is closed"
+msgstr "مسیر بسته است"
+
+#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
+msgid "Fill rule (winding, even-odd)"
+msgstr "قاعدهٔ پر کردن (winding, even-odd)"
+
+#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-render.c:56
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-render.c:58
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-render.c:60
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:122
+#: tools/gtk-path-tool-show.c:126 tools/gtk-path-tool-show.c:127
+#: tools/gtk-path-tool-show.c:128 tools/gtk-path-tool-show.c:129
+#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
+msgid "VALUE"
+msgstr "VALUE"
+
+#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
+msgid "Foreground color"
+msgstr "رنگ پیش‌زمینه"
+
+#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-render.c:54
+#: tools/gtk-path-tool-show.c:123 tools/gtk-path-tool-show.c:124
+msgid "COLOR"
+msgstr "COLOR"
+
+#: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
+msgid "Background color"
+msgstr "رنگ پس‌زمینه"
+
+#: tools/gtk-path-tool-render.c:55 tools/gtk-path-tool-show.c:125
+msgid "Stroke the path instead of filling it"
+msgstr "خط‌کشی دور مسیر به جای پر کردنش"
+
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:126
+msgid "Line width (number)"
+msgstr "پهنای خط (عدد)"
+
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:127
+msgid "Line cap (butt, round, square)"
+msgstr "کلاهک خط (butt, round, square)"
+
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:128
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr "پیوستن خط (miter, miter-clip, round, bevel, arcs)"
+
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:129
+msgid "Miter limit (number)"
+msgstr "کران تاج (عدد)"
+
+#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:130
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "الگوی نقطه‌چین (عددهای جدا شده با کاما)"
+
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:131
+msgid "Dash offset (number)"
+msgstr "انحراف از مبدأ نقطه‌چین (عدد)"
+
+#: tools/gtk-path-tool-render.c:62
+msgid "The output file"
+msgstr "پروندهٔ خروجی"
+
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:145
+msgid "Could not initialize windowing system"
+msgstr "نتوانست سامانهٔ پنجره را راه‌اندازی کند"
+
+#: tools/gtk-path-tool-render.c:89
+msgid "Render the path to a png image."
+msgstr "پرداخت مسیر در یک تصویر png."
+
+#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:166
+msgid "No path specified"
+msgstr "مسیری مشخّص نشده"
+
+#: tools/gtk-path-tool-render.c:108
+msgid "Can only render a single path"
+msgstr "تنها می‌تواند یک تک‌مسیر را پرداخت کند"
+
+#: tools/gtk-path-tool-render.c:114 tools/gtk-path-tool-show.c:178
+msgid "fill rule"
+msgstr "قاعدهٔ پر کردن"
+
+#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:182
+msgid "line cap"
+msgstr "کلاهک خط"
+
+#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:183
+msgid "line join"
+msgstr "پیوستن خط"
+
+#: tools/gtk-path-tool-render.c:143 tools/gtk-path-tool-show.c:207
+#, c-format
+msgid "Failed to parse '%s' as number"
+msgstr "شکست در تجزیهٔ «%s» به شکل عدد"
+
+#: tools/gtk-path-tool-render.c:187
+#, c-format
+msgid "Saving png to '%s' failed"
+msgstr "ذخیرهٔ png در «%s» شکست خورد"
+
+#: tools/gtk-path-tool-render.c:194
+#, c-format
+msgid "Output written to '%s'."
+msgstr "خروجی در «%s» نوشته شد."
+
+#: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
+msgid "Path Preview"
+msgstr "پیش‌نمایش مسیر"
+
+#: tools/gtk-path-tool-show.c:153
+msgid "Display the path."
+msgstr "نمایش مسیر."
+
+#: tools/gtk-path-tool-show.c:172
+msgid "Can only show a single path"
+msgstr "تنها می‌تواند یک تک‌مسیر را نمایش دهد"
+
+#: tools/gtk-path-tool-utils.c:58
+#, c-format
+msgid "Failed to read from standard input: %s\n"
+msgstr "شکست در خواندن از ورودی استاندارد: %s\n"
+
+#: tools/gtk-path-tool-utils.c:64
+#, c-format
+msgid "Error reading from standard input: %s\n"
+msgstr "خطا در خواندن از ورودی استاندارد: %s\n"
+
+#: tools/gtk-path-tool-utils.c:83
+#, c-format
+msgid "Failed to parse '%s' as path.\n"
+msgstr "شکست در تجزیهٔ «%s» به شکل مسیر.\n"
+
+#: tools/gtk-path-tool-utils.c:109
+#, c-format
+msgid "Failed to parse '%s' as %s."
+msgstr "شکست در تجزیهٔ «%s» به شکل %s"
+
+#: tools/gtk-path-tool-utils.c:111
+msgid "Possible values: "
+msgstr "مقدارهای ممکن: "
+
+#: tools/gtk-path-tool-utils.c:135
+#, c-format
+msgid "Could not parse '%s' as color"
+msgstr "نتوانست «%s» را به شکل رنگ تجزیه کند"
+
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
 msgid ""
@@ -7408,49 +7617,40 @@ msgstr ""
 "  screenshot   نماگرفت از پرونده\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:185
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "شمار گره‌ها:‌ %Iu\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:192
 #, c-format
 msgid "Depth: %u\n"
 msgstr "ژرفا: %Iu\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:195
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "مرزها: %g × %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:196
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "خاستگاه: %g × %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:217
 msgid "Provide information about the render node."
 msgstr "اطّلاعاتی دربارهٔ گره پرداختگر فراهم می‌کند."
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:230 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-show.c:130
 #, c-format
 msgid "No .node file specified\n"
 msgstr "هیچ پروندهٔ ‪.node‬ ای مشخّص نشده\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:236
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.node‬ را بپذیرد\n"
-
-#: tools/gtk-rendernode-tool-show.c:117
-msgid "Show the render node."
-msgstr "نمایش گره پرداختگر."
-
-#: tools/gtk-rendernode-tool-show.c:136
-#, c-format
-msgid "Can only preview a single .node file\n"
-msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.node‬ را پیش‌نمایش دهد\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7482,6 +7682,15 @@ msgstr "پرداخت یک پروندهٔ ‪.node‬ در یک تصویر."
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.noide‬ را در یک پروندهٔ خروحی پرداخت کند\n"
+
+#: tools/gtk-rendernode-tool-show.c:117
+msgid "Show the render node."
+msgstr "نمایش گره پرداختگر."
+
+#: tools/gtk-rendernode-tool-show.c:136
+#, c-format
+msgid "Can only preview a single .node file\n"
+msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.node‬ را پیش‌نمایش دهد\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
@@ -8372,9 +8581,6 @@ msgstr ""
 #~ msgid "Can't parse “%s”\n"
 #~ msgstr "نمی‌توان «%s» را تجزیه کرد\n"
 
-#~ msgid "Failed to parse png image"
-#~ msgstr "شکست در تجزیهٔ تصویر png"
-
 #~ msgid "Sandbox does not provide an OpenGL implementation"
 #~ msgstr "قرنطینه پیاده‌سازی OpenGLای را فراهم نمی‌کند"
 
@@ -8507,9 +8713,6 @@ msgstr ""
 
 #~ msgid "Size of the palette in 8 bit mode"
 #~ msgstr "اندازهٔ تخته‌رنگ در حالت ۸ بیتی"
-
-#~ msgid "COLORS"
-#~ msgstr "COLORS"
 
 #~ msgctxt "Action description"
 #~ msgid "Toggles the cell"
@@ -8738,10 +8941,6 @@ msgstr ""
 #~ msgctxt "Stock label"
 #~ msgid "_Print"
 #~ msgstr "_چاپ"
-
-#~ msgctxt "Stock label"
-#~ msgid "Print Pre_view"
-#~ msgstr "_پیش‌نمایش چاپ"
 
 #~ msgctxt "Stock label"
 #~ msgid "_Properties"
@@ -9906,9 +10105,6 @@ msgstr ""
 #~ msgid "_Insert Unicode Control Character"
 #~ msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
-#~ msgid "Could not add a bookmark"
-#~ msgstr "نمی‌توان نشانکی اضافه کرد"
-
 #~ msgid "Could not remove bookmark"
 #~ msgstr "نمی‌توان نشانک را حذف کرد"
 
@@ -10098,9 +10294,6 @@ msgstr ""
 
 #~ msgid "Failed to open temporary file"
 #~ msgstr "باز کردن پرونده‌ی موقت شکست خورد"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "خواندن از پرونده‌ی موقت شکست خورد"
 
 #~ msgid "Failed to open '%s' for writing: %s"
 #~ msgstr "نمی‌توان «%s» را برای نوشتن باز کرد: %s"
