@@ -19,11 +19,15 @@
 
 #include "config.h"
 
+#include <math.h>
+
 #include "gskpathpointprivate.h"
 
 #include "gskcontourprivate.h"
 
 #include "gdk/gdkprivate.h"
+
+#define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
 
 /**
  * GskPathPoint:
@@ -181,6 +185,10 @@ gsk_path_point_get_position (const GskPathPoint *point,
  * point, and the direction coming out of it. The @direction
  * argument lets you choose which one to get.
  *
+ * If you want to orient something in the direction of the
+ * path, [method@Gsk.PathPoint.get_rotation] may be more
+ * convenient to use.
+ *
  * Since: 4.14
  */
 void
@@ -199,6 +207,40 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
 
   contour = gsk_path_get_contour (path, self->contour),
   gsk_contour_get_tangent (contour, self, direction, tangent);
+}
+
+/**
+ * gsk_path_point_get_rotation:
+ * @point: a `GskPathPoint`
+ * @path: the path that @point is on
+ * @direction: the direction for which to return the rotation
+ *
+ * Gets the direction of the tangent at a given point.
+ *
+ * This is a convenience variant of [method@Gsk.PathPoint.get_tangent]
+ * that returns the angle between the tangent and the X axis. The angle
+ * can e.g. be used in [method@Gtk.Snapshot.rotate].
+ *
+ * Returns: the angle between the tangent and the X axis, in degrees
+ *
+ * Since: 4.14
+ */
+float
+gsk_path_point_get_rotation (const GskPathPoint *point,
+                             GskPath            *path,
+                             GskPathDirection    direction)
+{
+  GskRealPathPoint *self = (GskRealPathPoint *) point;
+  graphene_vec2_t tangent;
+
+  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
+
+  gsk_path_point_get_tangent (point, path, direction, &tangent);
+
+  return RAD_TO_DEG (atan2f (graphene_vec2_get_y (&tangent),
+                             graphene_vec2_get_x (&tangent)));
 }
 
 /**

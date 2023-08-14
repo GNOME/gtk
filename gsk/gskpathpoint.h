@@ -68,6 +68,11 @@ void                    gsk_path_point_get_tangent     (const GskPathPoint *poin
                                                         graphene_vec2_t    *tangent);
 
 GDK_AVAILABLE_IN_4_14
+float                   gsk_path_point_get_rotation    (const GskPathPoint     *point,
+                                                        GskPath                *path,
+                                                        GskPathDirection        direction);
+
+GDK_AVAILABLE_IN_4_14
 float                   gsk_path_point_get_curvature   (const GskPathPoint *point,
                                                         GskPath            *path,
                                                         graphene_point_t   *center);
