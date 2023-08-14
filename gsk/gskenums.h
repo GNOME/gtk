@@ -292,17 +292,30 @@ typedef enum {
 
 /**
  * GskPathDirection:
- * @GSK_PATH_START: The side that leads to the start of the path
- * @GSK_PATH_END: The side that leads to the end of the path
+ * @GSK_PATH_FROM_START: The tangent in path direction of the incoming side
+ *   of the path
+ * @GSK_PATH_TO_START: The tangent against path direction of the incoming side
+ *   of the path
+ * @GSK_PATH_TO_END: The tangent in path direction of the outgoing side
+ *   of the path
+ * @GSK_PATH_FROM_END: The tangent against path direction of the outgoing
+ *   side of the path
  *
  * The values of the `GskPathDirection` enum are used to pick one
- * of the two sides of the path that at a given point on the path.
+ * of the four tangents at a given point on the path.
+ *
+ * <picture>
+ *   <source srcset="directions-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Path Tangents" src="directions-light.png">
+ * </picture>
  *
  * Since: 4.14
  */
 typedef enum {
-  GSK_PATH_START,
-  GSK_PATH_END
+  GSK_PATH_FROM_START,
+  GSK_PATH_TO_START,
+  GSK_PATH_TO_END,
+  GSK_PATH_FROM_END,
 } GskPathDirection;
 
 /**

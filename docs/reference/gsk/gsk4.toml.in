@@ -36,6 +36,8 @@ content_images = [
   "gtk-logo.svg",
   "images/caps-dark.png",
   "images/caps-light.png",
+  "images/directions-dark.png",
+  "images/directions-light.png",
   "images/join-dark.png",
   "images/join-light.png",
   "images/path-dark.png",

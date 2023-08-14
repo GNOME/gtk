@@ -509,7 +509,8 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
   idx = point->idx;
   t = point->t;
 
-  if (t == 0 && direction == GSK_PATH_START)
+  if (t == 0 && (direction == GSK_PATH_FROM_START ||
+                 direction == GSK_PATH_TO_START))
     {
       /* Look at the previous segment */
       if (idx > 1)
@@ -523,7 +524,8 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
           t = 1;
         }
     }
-  else if (t == 1 && direction == GSK_PATH_END)
+  else if (t == 1 && (direction == GSK_PATH_TO_END ||
+                      direction == GSK_PATH_FROM_END))
     {
       /* Look at the next segment */
       if (idx < self->n_ops - 1)
@@ -540,6 +542,9 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
 
   gsk_curve_init (&curve, self->ops[idx]);
   gsk_curve_get_tangent (&curve, t, tangent);
+
+  if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
+    graphene_vec2_negate (tangent, tangent);
 }
 
 static float
