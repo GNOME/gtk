@@ -34,7 +34,8 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     showgrid="false" />
   <defs
      id="defs1">
     <marker
@@ -201,7 +202,7 @@
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;marker-end:url(#marker5-9)"
-       d="m 91.839025,194.73224 c -22.098283,1.18425 -24.17615,-37.34309 2.699778,-37.47998 20.898567,-0.10644 38.726427,9.19795 51.837087,35.26711"
+       d="m 91.839025,170.91959 c -22.098283,1.18425 -24.17615,-37.34309 2.699778,-37.47998 20.898567,-0.10644 38.726427,9.19795 51.837087,35.26711"
        id="path1-8"
        sodipodi:nodetypes="csc" />
     <path
@@ -218,99 +219,99 @@
        inkscape:transform-center-y="28.680447" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none;marker-start:url(#marker3-8-4);marker-end:url(#Triangle-0-7)"
-       d="m 48.764932,157.5522 92.665618,-0.60775"
+       d="M 48.764932,133.73955 141.43055,133.1318"
        id="path2-3-1"
        sodipodi:nodetypes="cc"
        inkscape:transform-center-x="-74.875204"
        inkscape:transform-center-y="16.143612" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="85.620346"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="99.90786"
        y="24.737305"
        id="text4"><tspan
          sodipodi:role="line"
          id="tspan4"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="85.620346"
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.2"
+         x="99.90786"
          y="24.737305">GSK_PATH_FROM_START</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="125.74581"
-       y="152.63206"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="143.20811"
+       y="128.29073"
        id="text4-5"><tspan
          sodipodi:role="line"
          id="tspan4-7"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="125.74581"
-         y="152.63206">GSK_PATH_FROM_START</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.2"
+         x="143.20811"
+         y="128.29073">GSK_PATH_FROM_START</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="15.551258"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="29.309605"
        y="100.65614"
        id="text5"><tspan
          sodipodi:role="line"
          id="tspan5"
-         style="stroke-width:0.2"
-         x="15.551258"
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.2"
+         x="29.309605"
          y="100.65614">GSK_PATH_TO_START</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="2.9303639"
-       y="165.83383"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="3.4595304"
+       y="142.02165"
        id="text5-8"><tspan
          sodipodi:role="line"
          id="tspan5-8"
-         style="stroke-width:0.2"
-         x="2.9303639"
-         y="165.83383">GSK_PATH_TO_START</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.2"
+         x="3.4595304"
+         y="142.02165">GSK_PATH_TO_START</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
        x="135.70834"
        y="69.753548"
        id="text6"><tspan
          sodipodi:role="line"
          id="tspan6"
-         style="stroke-width:0.2"
+         style="stroke-width:0.2;-inkscape-font-specification:'Cantarell, Light';font-family:Cantarell;font-weight:300;font-style:normal;font-stretch:normal;font-variant:normal;font-size:4.23333333px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="135.70834"
          y="69.753548">GSK_PATH_TO_END</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="142.40665"
-       y="165.91626"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="143.46497"
+       y="142.10408"
        id="text6-6"><tspan
          sodipodi:role="line"
          id="tspan6-2"
-         style="stroke-width:0.2"
-         x="142.40665"
-         y="165.91626">GSK_PATH_TO_END</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.2"
+         x="143.46497"
+         y="142.10408">GSK_PATH_TO_END</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="2.3828762"
-       y="48.245087"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="15.612036"
+       y="48.774254"
        id="text7"><tspan
          sodipodi:role="line"
          id="tspan7"
-         style="stroke-width:0.2"
-         x="2.3828762"
-         y="48.245087">GSK_PATH_FROM_END</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.2"
+         x="15.612036"
+         y="48.774254">GSK_PATH_FROM_END</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
-       x="2.4781337"
-       y="153.32378"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none"
+       x="3.5364671"
+       y="128.98244"
        id="text7-5"><tspan
          sodipodi:role="line"
          id="tspan7-9"
-         style="stroke-width:0.2"
-         x="2.4781337"
-         y="153.32378">GSK_PATH_FROM_END</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:4.23333px;font-family:Cantarell;-inkscape-font-specification:'Cantarell, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.2"
+         x="3.5364671"
+         y="128.98244">GSK_PATH_FROM_END</tspan></text>
     <circle
        style="fill:#ff0404;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
        id="path2-8-9-7"
@@ -321,7 +322,7 @@
        style="fill:#ff0404;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
        id="path2-8-9-7-0"
        cx="93.787331"
-       cy="157.1212"
+       cy="133.30902"
        r="1.5" />
   </g>
 </svg>
