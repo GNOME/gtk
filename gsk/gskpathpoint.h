@@ -57,19 +57,19 @@ int                     gsk_path_point_compare         (const GskPathPoint *poin
                                                         const GskPathPoint *point2);
 
 GDK_AVAILABLE_IN_4_14
-void                    gsk_path_point_get_position    (GskPath            *path,
-                                                        const GskPathPoint *point,
+void                    gsk_path_point_get_position    (const GskPathPoint *point,
+                                                        GskPath            *path,
                                                         graphene_point_t   *position);
 
 GDK_AVAILABLE_IN_4_14
-void                    gsk_path_point_get_tangent     (GskPath            *path,
-                                                        const GskPathPoint *point,
+void                    gsk_path_point_get_tangent     (const GskPathPoint *point,
+                                                        GskPath            *path,
                                                         GskPathDirection    direction,
                                                         graphene_vec2_t    *tangent);
 
 GDK_AVAILABLE_IN_4_14
-float                   gsk_path_point_get_curvature   (GskPath            *path,
-                                                        const GskPathPoint *point,
+float                   gsk_path_point_get_curvature   (const GskPathPoint *point,
+                                                        GskPath            *path,
                                                         graphene_point_t   *center);
 
 

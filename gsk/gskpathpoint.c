@@ -139,8 +139,8 @@ gsk_path_point_compare (const GskPathPoint *point1,
 
 /**
  * gsk_path_point_get_position:
- * @path: a `GskPath`
- * @point: a `GskPathPoint` on @path
+ * @point: a `GskPathPoint`
+ * @path: the path that @point is on
  * @position: (out caller-allocates): Return location for
  *   the coordinates of the point
  *
@@ -149,15 +149,15 @@ gsk_path_point_compare (const GskPathPoint *point1,
  * Since: 4.14
  */
 void
-gsk_path_point_get_position (GskPath            *path,
-                             const GskPathPoint *point,
+gsk_path_point_get_position (const GskPathPoint *point,
+                             GskPath            *path,
                              graphene_point_t   *position)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
+  g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
-  g_return_if_fail (point != NULL);
   g_return_if_fail (position != NULL);
   g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
 
@@ -167,8 +167,8 @@ gsk_path_point_get_position (GskPath            *path,
 
 /**
  * gsk_path_point_get_tangent:
- * @path: a `GskPath`
- * @point: a `GskPathPoint` on @path
+ * @point: a `GskPathPoint`
+ * @path: the path that @point is on
  * @direction: the direction for which to return the tangent
  * @tangent: (out caller-allocates): Return location for
  *   the tangent at the point
@@ -184,16 +184,16 @@ gsk_path_point_get_position (GskPath            *path,
  * Since: 4.14
  */
 void
-gsk_path_point_get_tangent (GskPath            *path,
-                            const GskPathPoint *point,
+gsk_path_point_get_tangent (const GskPathPoint *point,
+                            GskPath            *path,
                             GskPathDirection    direction,
                             graphene_vec2_t    *tangent)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
+  g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
-  g_return_if_fail (point != NULL);
   g_return_if_fail (tangent != NULL);
   g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
 
@@ -203,8 +203,8 @@ gsk_path_point_get_tangent (GskPath            *path,
 
 /**
  * gsk_path_point_get_curvature:
- * @path: a `GskPath`
- * @point: a `GskPathPoint` on @path
+ * @point: a `GskPathPoint`
+ * @path: the path that @point is on
  * @center: (out caller-allocates) (nullable): Return location for
  *   the center of the osculating circle
  *
@@ -220,15 +220,15 @@ gsk_path_point_get_tangent (GskPath            *path,
  * Since: 4.14
  */
 float
-gsk_path_point_get_curvature (GskPath            *path,
-                              const GskPathPoint *point,
+gsk_path_point_get_curvature (const GskPathPoint *point,
+                              GskPath            *path,
                               graphene_point_t   *center)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
+  g_return_val_if_fail (self != NULL, 0);
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
 
   contour = gsk_path_get_contour (path, self->contour);
