@@ -45,6 +45,7 @@ static GdkContentProvider *
                                 double                x,
                                 double                y,
                                 GtkColorDialogButton *self);
+static void     activated      (GtkColorDialogButton *self);
 static void     button_clicked (GtkColorDialogButton *self);
 static void     update_button_sensitivity
                                (GtkColorDialogButton *self);
@@ -96,7 +97,16 @@ enum
   NUM_PROPERTIES
 };
 
+/* Signals */
+enum
+{
+  SIGNAL_ACTIVATE = 1,
+  NUM_SIGNALS
+};
+
 static GParamSpec *properties[NUM_PROPERTIES];
+
+static unsigned int color_dialog_button_signals[NUM_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (GtkColorDialogButton, gtk_color_dialog_button, GTK_TYPE_WIDGET)
 
@@ -107,6 +117,8 @@ gtk_color_dialog_button_init (GtkColorDialogButton *self)
   PangoRectangle rect;
   GtkDragSource *source;
   GtkDropTarget *dest;
+
+  g_signal_connect_swapped (self, "activate", G_CALLBACK (activated), self);
 
   self->color = GDK_RGBA ("00000000");
 
@@ -278,6 +290,27 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
+  /**
+   * GtkColorDialogButton::activate:
+   * @widget: the object which received the signal
+   *
+   * Emitted when the color dialog button is activated.
+   *
+   * The `::activate` signal on `GtkColorDialogButton` is an action signal
+   * and emitting it causes the button to pop up its dialog.
+   *
+   * Since: 4.14
+   */
+  color_dialog_button_signals[SIGNAL_ACTIVATE] =
+    g_signal_new (I_ ("activate"),
+                  G_TYPE_FROM_CLASS (class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, color_dialog_button_signals[SIGNAL_ACTIVATE]);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "colorbutton");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
@@ -364,6 +397,12 @@ color_chosen (GObject      *source,
 
   g_clear_object (&self->cancellable);
   update_button_sensitivity (self);
+}
+
+static void
+activated (GtkColorDialogButton *self)
+{
+  gtk_widget_activate (self->button);
 }
 
 static void
