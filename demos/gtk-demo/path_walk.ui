@@ -2,16 +2,32 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">World Map</property>
-    <child>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="end">
+          <object class="GtkSpinButton">
+            <property name="adjustment">
+              <object class="GtkAdjustment" id="adjustment">
+                <property name="lower">0</property>
+                <property name="upper">5000</property>
+                <property name="value">500</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkPathWalk" id="view">
+            <property name="n-points" bind-source="adjustment" bind-property="value"/>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>
