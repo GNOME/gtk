@@ -1510,8 +1510,8 @@ gtk_menu_button_set_child (GtkMenuButton *menu_button,
                                           NULL,
                                           NULL,
                                           NULL,
-                                          (GtkGizmoFocusFunc)gtk_widget_focus_self,
-                                          (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
+                                          (GtkGizmoFocusFunc)gtk_widget_focus_child,
+                                          NULL);
 
   gtk_widget_set_layout_manager (inner_widget, gtk_bin_layout_new ());
   gtk_widget_set_hexpand (inner_widget, TRUE);
