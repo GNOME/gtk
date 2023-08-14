@@ -240,6 +240,16 @@ void            gtk_snapshot_append_layout              (GtkSnapshot            
                                                          PangoLayout            *layout,
                                                          const GdkRGBA          *color);
 
+GDK_AVAILABLE_IN_4_14
+void            gtk_snapshot_append_fill                (GtkSnapshot            *snapshot,
+                                                         GskPath                *path,
+                                                         GskFillRule             fill_rule,
+                                                         const GdkRGBA          *color);
+GDK_AVAILABLE_IN_4_14
+void            gtk_snapshot_append_stroke              (GtkSnapshot            *snapshot,
+                                                         GskPath                *path,
+                                                         const GskStroke        *stroke,
+                                                         const GdkRGBA          *color);
 
 G_END_DECLS
 
