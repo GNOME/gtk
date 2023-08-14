@@ -24,6 +24,7 @@ struct _GtkPathWalk
   GtkWidget parent_instance;
 
   GskPath *path;
+  graphene_rect_t bounds;
 };
 
 struct _GtkPathWalkClass
@@ -59,6 +60,23 @@ gtk_path_walk_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_path_walk_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
+{
+  GtkPathWalk *self = GTK_PATH_WALK (widget);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = (int) ceilf (self->bounds.size.width);
+  else
+    *minimum = *natural = (int) ceilf (self->bounds.size.height);
+}
+
+static void
 gtk_path_walk_set_path (GtkPathWalk *self,
                         GskPath     *path)
 {
@@ -66,10 +84,18 @@ gtk_path_walk_set_path (GtkPathWalk *self,
     return;
 
   g_clear_pointer (&self->path, gsk_path_unref);
+  graphene_rect_init (&self->bounds, 0, 0, 0, 0);
   if (path)
-    self->path = gsk_path_ref (path);
+    {
+      GskStroke *stroke;
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+      self->path = gsk_path_ref (path);
+      stroke = gsk_stroke_new (2.0);
+      gsk_path_get_stroke_bounds (path, stroke, &self->bounds);
+      gsk_stroke_free (stroke);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
 }
@@ -136,6 +162,7 @@ gtk_path_walk_class_init (GtkPathWalkClass *klass)
   object_class->get_property = gtk_path_walk_get_property;
 
   widget_class->snapshot = gtk_path_walk_snapshot;
+  widget_class->measure = gtk_path_walk_measure;
 
   properties[PROP_PATH] =
     g_param_spec_boxed ("path",
@@ -149,7 +176,9 @@ gtk_path_walk_class_init (GtkPathWalkClass *klass)
 static void
 gtk_path_walk_init (GtkPathWalk *self)
 {
-  self->path = gsk_path_parse (path_world);
+  GskPath *path = gsk_path_parse (path_world);
+  gtk_path_walk_set_path (self, path);
+  gsk_path_unref (path);
 }
 
 GtkWidget *
