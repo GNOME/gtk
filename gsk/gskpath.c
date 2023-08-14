@@ -1413,3 +1413,95 @@ error:
 
   return NULL;
 }
+
+/**
+ * gsk_path_get_position:
+ * @self: a `GskPath`
+ * @point: a `GskPathPoint` on @path
+ * @position: (out caller-allocates): Return location for
+ *   the coordinates of the point
+ *
+ * Gets the position of the point.
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_get_position (GskPath            *self,
+                       const GskPathPoint *point,
+                       graphene_point_t   *position)
+{
+  GskRealPathPoint *p = (GskRealPathPoint *) point;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (point != NULL);
+  g_return_if_fail (position != NULL);
+  g_return_if_fail (p->contour < self->n_contours);
+
+  gsk_contour_get_position (self->contours[p->contour], p, position);
+}
+
+/**
+ * gsk_path_get_tangent:
+ * @self: a `GskPath`
+ * @point: a `GskPathPoint` on @path
+ * @direction: the direction for which to return the tangent
+ * @tangent: (out caller-allocates): Return location for
+ *   the tangent at the point
+ *
+ * Gets the tangent of the path at the point.
+ *
+ * Note that certain points on a path may not have a single
+ * tangent, such as sharp turns. At such points, there are
+ * two tangents -- the direction of the path going into the
+ * point, and the direction coming out of it. The @direction
+ * argument lets you choose which one to get.
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_get_tangent (GskPath            *self,
+                      const GskPathPoint *point,
+                      GskPathDirection    direction,
+                      graphene_vec2_t    *tangent)
+{
+  GskRealPathPoint *p = (GskRealPathPoint *) point;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (point != NULL);
+  g_return_if_fail (tangent != NULL);
+  g_return_if_fail (p->contour < self->n_contours);
+
+  gsk_contour_get_tangent (self->contours[p->contour], p, direction, tangent);
+}
+
+/**
+ * gsk_path_get_curvature:
+ * @self: a `GskPath`
+ * @point: a `GskPathPoint` on @path
+ * @center: (out caller-allocates) (nullable): Return location for
+ *   the center of the osculating circle
+ *
+ * Calculates the curvature of the path at the point.
+ *
+ * Optionally, returns the center of the osculating circle as well.
+ *
+ * If the curvature is infinite (at line segments), zero is returned,
+ * and @center is not modified.
+ *
+ * Returns: The curvature of the path at the given point
+ *
+ * Since: 4.14
+ */
+float
+gsk_path_get_curvature (GskPath            *self,
+                        const GskPathPoint *point,
+                        graphene_point_t   *center)
+{
+  GskRealPathPoint *p = (GskRealPathPoint *) point;
+
+  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (point != NULL, 0);
+  g_return_val_if_fail (p->contour < self->n_contours, 0);
+
+  return gsk_contour_get_curvature (self->contours[p->contour], p, center);
+}

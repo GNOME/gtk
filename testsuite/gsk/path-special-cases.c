@@ -465,10 +465,10 @@ test_path_point (void)
   g_assert_true (rp->idx == 2);
   g_assert_true (rp->t == 1);
 
-  gsk_path_point_get_position (path, &point, &pos);
-  gsk_path_point_get_tangent (path, &point, GSK_PATH_START, &t1);
-  gsk_path_point_get_tangent (path, &point, GSK_PATH_END, &t2);
-  curvature = gsk_path_point_get_curvature (path, &point, &center);
+  gsk_path_get_position (path, &point, &pos);
+  gsk_path_get_tangent (path, &point, GSK_PATH_START, &t1);
+  gsk_path_get_tangent (path, &point, GSK_PATH_END, &t2);
+  curvature = gsk_path_get_curvature (path, &point, &center);
 
   g_assert_true (graphene_point_equal (&pos, &GRAPHENE_POINT_INIT (100, 100)));
   g_assert_true (graphene_vec2_equal (&t1, graphene_vec2_y_axis ()));

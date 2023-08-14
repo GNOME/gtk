@@ -126,6 +126,22 @@ gboolean                gsk_path_get_closest_point              (GskPath        
                                                                  GskPathPoint           *result);
 
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_get_position                   (GskPath                *self,
+                                                                 const GskPathPoint     *point,
+                                                                 graphene_point_t       *position);
+
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_get_tangent                    (GskPath                *self,
+                                                                 const GskPathPoint     *point,
+                                                                 GskPathDirection        direction,
+                                                                 graphene_vec2_t        *tangent);
+
+GDK_AVAILABLE_IN_4_14
+float                   gsk_path_get_curvature                  (GskPath                *self,
+                                                                 const GskPathPoint     *point,
+                                                                 graphene_point_t       *center);
+
+GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_foreach                        (GskPath                *self,
                                                                  GskPathForeachFlags     flags,
                                                                  GskPathForeachFunc      func,
