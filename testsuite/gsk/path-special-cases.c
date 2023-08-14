@@ -466,7 +466,7 @@ test_path_point (void)
   g_assert_true (rp->t == 1);
 
   gsk_path_point_get_position (&point, path, &pos);
-  gsk_path_point_get_tangent (&point, path, GSK_PATH_TO_START, &t1);
+  gsk_path_point_get_tangent (&point, path, GSK_PATH_FROM_START, &t1);
   gsk_path_point_get_tangent (&point, path, GSK_PATH_TO_END, &t2);
   curvature = gsk_path_point_get_curvature (&point, path, &center);
 
