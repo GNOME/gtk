@@ -129,9 +129,13 @@ static gsize
 gsk_standard_contour_compute_size (gsize n_ops,
                                    gsize n_points)
 {
-  return sizeof (GskStandardContour)
-       + sizeof (gskpathop) * n_ops
-       + sizeof (graphene_point_t) * n_points;
+  gsize align = MAX (G_ALIGNOF (graphene_point_t),
+                     MAX (G_ALIGNOF (gpointer),
+                          G_ALIGNOF (GskStandardContour)));
+  gsize s = sizeof (GskStandardContour)
+          + sizeof (gskpathop) * n_ops
+          + sizeof (graphene_point_t) * n_points;
+  return s + (align - (s % align));
 }
 
 static void
