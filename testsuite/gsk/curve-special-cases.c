@@ -145,6 +145,23 @@ test_curve_crossing (void)
     }
 }
 
+static void
+test_curve_length (void)
+{
+  GskCurve c, c1, c2;
+  float l, l1, l2;
+
+  parse_curve (&c, "M 1462.632080 -1593.118896 C 751.533630 -74.179169 -914.280090 956.537720 -83.091866 207.213776");
+
+  gsk_curve_split (&c, 0.5, &c1, &c2);
+
+  l = gsk_curve_get_length (&c);
+  l1 = gsk_curve_get_length (&c1);
+  l2 = gsk_curve_get_length (&c2);
+
+  g_assert_cmpfloat_with_epsilon (l, l1 + l2, 0.5);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -154,6 +171,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
   g_test_add_func ("/curve/special/crossing", test_curve_crossing);
+  g_test_add_func ("/curve/special/length", test_curve_length);
 
   return g_test_run ();
 }
