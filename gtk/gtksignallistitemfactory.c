@@ -29,7 +29,7 @@
  * GtkSignalListItemFactory:
  *
  * `GtkSignalListItemFactory` is a `GtkListItemFactory` that emits signals
- * to to manage listitems.
+ * to manage listitems.
  *
  * Signals are emitted for every listitem in the same order:
  *
@@ -216,9 +216,9 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
    * @self: The `GtkSignalListItemFactory`
    * @object: The `GObject` to unbind
    *
-   * Emitted when a object has been unbound from its item, for example when
+   * Emitted when an object has been unbound from its item, for example when
    * a listitem was removed from use in a list widget
-   * and its new [property@Gtk.ListItem:item] is about to be unset.
+   * and its [property@Gtk.ListItem:item] is about to be unset.
    *
    * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::bind]
    * signal and should be used to undo everything done in that signal.
