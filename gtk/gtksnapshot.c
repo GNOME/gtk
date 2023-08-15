@@ -647,6 +647,13 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
  * Modifies the colors of an image by applying an affine transformation
  * in RGB space.
  *
+ * In particular, the colors will be transformed by applying
+ *
+ *     pixel = transpose(color_matrix) * pixel + color_offset
+ *
+ * for every pixel. The transformation operates on unpremultiplied
+ * colors, with color components ordered R, G, B, A.
+ *
  * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void

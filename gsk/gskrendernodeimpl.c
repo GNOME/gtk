@@ -3838,11 +3838,12 @@ gsk_color_matrix_node_class_init (gpointer g_class,
  * Creates a `GskRenderNode` that will drawn the @child with
  * @color_matrix.
  *
- * In particular, the node will transform the operation
+ * In particular, the node will transform colors by applying
  *
- *     pixel = color_matrix * pixel + color_offset
+ *     pixel = transpose(color_matrix) * pixel + color_offset
  *
- * for every pixel.
+ * for every pixel. The transformation operates on unpremultiplied
+ * colors, with color components ordered R, G, B, A.
  *
  * Returns: (transfer full) (type GskColorMatrixNode): A new `GskRenderNode`
  */
