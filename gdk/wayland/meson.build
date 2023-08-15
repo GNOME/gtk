@@ -127,3 +127,6 @@ libgdk_wayland = static_library('gdk-wayland',
   link_with: [ libwayland_cursor, ],
   dependencies: [ gdk_deps, gdk_wayland_deps ],
 )
+
+# Used to generate pkg-config Requires
+wayland_public_deps = [wlclientdep]

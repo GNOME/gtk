@@ -826,19 +826,15 @@ gsk_private_packages = [] # all already in gdk_private_packages
 pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
 gtk_private_packages = pangoft2_pkgs
 
-pkgs = []
-pkg_targets = []
-display_backends = []
+enabled_backends = []
 foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
-    pkgs += ['gtk4-@0@'.format(backend)]
-    pkg_targets += backend
-    display_backends += [ backend ]
+    enabled_backends += backend
   endif
 endforeach
 
 common_pc_variables = [
-  'targets=@0@'.format(' '.join(pkg_targets)),
+  'targets=@0@'.format(' '.join(enabled_backends)),
   'gtk_binary_version=@0@'.format(gtk_binary_version),
   'gtk_host=@0@-@1@'.format(host_machine.cpu_family(), host_machine.system()), # FIXME
 ]
@@ -853,13 +849,14 @@ pkg_config.generate(libgtk,
 )
 meson.override_dependency('gtk4', libgtk_dep)
 
-foreach pkg: pkgs
+foreach backend: enabled_backends
+  pkg = 'gtk4-@0@'.format(backend)
   pkg_config.generate(
     filebase: pkg,
     unescaped_variables: common_pc_variables,
     name: 'GTK',
     description: 'GTK Graphical UI Library',
-    requires: 'gtk4',
+    requires: ['gtk4', get_variable('@0@_public_deps'.format(backend), [])],
   )
   meson.override_dependency(pkg, libgtk_dep)
 endforeach
@@ -904,7 +901,7 @@ endif
 
 #### Summary ####
 
-summary('Display backends', display_backends, section: 'Components')
+summary('Display backends', enabled_backends, section: 'Components')
 summary('Print backends', print_backends, section: 'Components')
 summary('Media backends', media_backends, section: 'Components')
 
