@@ -54,7 +54,8 @@
  *
  * ![An example GtkDropDown](drop-down.png)
  *
- * The `GtkDropDown` displays the selected choice.
+ * The `GtkDropDown` displays the [selected][property@Gtk.DropDown:selected]
+ * choice.
  *
  * The options are given to `GtkDropDown` in the form of `GListModel`
  * and how the individual options are represented is determined by
@@ -74,6 +75,7 @@
  * use [method@Gtk.DropDown.set_enable_search].
  *
  * Here is a UI definition example for `GtkDropDown` with a simple model:
+ *
  * ```xml
  * <object class="GtkDropDown">
  *   <property name="model">
@@ -91,12 +93,12 @@
  * To learn more about the list widget framework, see the
  * [overview](section-list-widget.html).
  *
- * # CSS nodes
+ * ## CSS nodes
  *
  * `GtkDropDown` has a single CSS node with name dropdown,
  * with the button and popover nodes as children.
  *
- * # Accessibility
+ * ## Accessibility
  *
  * `GtkDropDown` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
  */
@@ -127,7 +129,7 @@ struct _GtkDropDown
   GtkWidget *search_entry;
 
   GtkExpression *expression;
-  
+
   GtkStringFilterMatchMode search_match_mode;
 
   guint enable_search : 1;
@@ -394,7 +396,7 @@ gtk_drop_down_get_property (GObject    *object,
     case PROP_SHOW_ARROW:
       g_value_set_boolean (value, gtk_drop_down_get_show_arrow (self));
       break;
-      
+
     case PROP_SEARCH_MATCH_MODE:
       g_value_set_enum (value, gtk_drop_down_get_search_match_mode (self));
       break;
@@ -446,7 +448,7 @@ gtk_drop_down_set_property (GObject      *object,
     case PROP_SHOW_ARROW:
       gtk_drop_down_set_show_arrow (self, g_value_get_boolean (value));
       break;
-      
+
     case PROP_SEARCH_MATCH_MODE:
       gtk_drop_down_set_search_match_mode (self, g_value_get_enum (value));
       break;
@@ -605,8 +607,8 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    */
   properties[PROP_SELECTED] =
     g_param_spec_uint ("selected", NULL, NULL,
-                         0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkDropDown:selected-item: (attributes org.gtk.Property.get=gtk_drop_down_get_selected_item)
@@ -615,8 +617,8 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    */
   properties[PROP_SELECTED_ITEM] =
     g_param_spec_object ("selected-item", NULL, NULL,
-                       G_TYPE_OBJECT,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_TYPE_OBJECT,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkDropDown:enable-search: (attributes org.gtk.Property.get=gtk_drop_down_get_enable_search org.gtk.Property.set=gtk_drop_down_set_enable_search)
@@ -656,7 +658,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
     g_param_spec_boolean  ("show-arrow", NULL, NULL,
                            TRUE,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-                           
+
   /**
    * GtkDropDown:search-match-mode: (attributes org.gtk.Property.get=gtk_drop_down_get_search_match_mode org.gtk.Property.set=gtk_drop_down_set_search_match_mode)
    *
@@ -669,7 +671,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
                            GTK_TYPE_STRING_FILTER_MATCH_MODE,
                            GTK_STRING_FILTER_MATCH_MODE_PREFIX,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-                           
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /**
@@ -841,7 +843,7 @@ gtk_drop_down_init (GtkDropDown *self)
   self->show_arrow = gtk_widget_get_visible (self->arrow);
 
   set_default_factory (self);
- 
+
   self->search_match_mode = GTK_STRING_FILTER_MATCH_MODE_PREFIX;
 }
 
@@ -1311,7 +1313,7 @@ gtk_drop_down_get_show_arrow (GtkDropDown *self)
  * @search_match_mode: the new match mode
  *
  * Sets the match mode for the search filter.
- * 
+ *
  * Since: 4.12
  */
 void
@@ -1337,7 +1339,7 @@ gtk_drop_down_set_search_match_mode (GtkDropDown *self,
  * Returns the match mode that the search filter is using.
  *
  * Returns: the match mode of the search filter
- * 
+ *
  * Since: 4.12
  */
 GtkStringFilterMatchMode
