@@ -442,6 +442,8 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
  *
  * Adds @rect as a new contour to the path built by the builder.
  *
+ * The path is going around the rectangle in clockwise direction.
+ *
  * If the width or height of the rectangle is negative, the start
  * point will be on the right or bottom, respectively.
  *
@@ -477,8 +479,10 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
  *
  * Adds @rect as a new contour to the path built in @self.
  *
+ * The path is going around the rectangle in clockwise direction.
+ *
  * Since: 4.14
- **/
+ */
 void
 gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                                    const GskRoundedRect *rect)
@@ -563,6 +567,8 @@ circle_contour_curve (const graphene_point_t pts[4],
  * @radius: the radius of the circle
  *
  * Adds a circle with the @center and @radius.
+ *
+ * The path is going around the circle in clockwise direction.
  *
  * Since: 4.14
  */
