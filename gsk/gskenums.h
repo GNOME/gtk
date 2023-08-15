@@ -220,12 +220,15 @@ typedef enum {
  *
  * The default line cap style is `GSK_LINE_CAP_BUTT`.
  *
- * <picture>
- *   <source srcset="caps-dark.png" media="(prefers-color-scheme: dark)">
- *   <img alt="Line Cap Styles" src="caps-light.png">
- * </picture>
- *
  * New entries may be added in future versions.
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="caps-dark.png" media="(prefers-color-scheme: dark)">
+ *     <img alt="Line Cap Styles" src="caps-light.png">
+ *   </picture>
+ *   <figcaption>GSK_LINE_CAP_BUTT, GSK_LINE_CAP_ROUND, GSK_LINE_CAP_SQUARE</figcaption>
+ * </figure>
  *
  * Since: 4.14
  */
@@ -247,12 +250,15 @@ typedef enum {
  *
  * The default line join style is `GSK_LINE_JOIN_MITER`.
  *
- * <picture>
- *   <source srcset="join-dark.png" media="(prefers-color-scheme: dark)">
- *   <img alt="Line Join Styles" src="join-light.png">
- * </picture>
- *
  * New entries may be added in future versions.
+ *
+ * <figure>
+ *   <picture>
+ *     <source srcset="join-dark.png" media="(prefers-color-scheme: dark)">
+ *     <img alt="Line Join Styles" src="join-light.png">
+ *   </picture>
+ *   <figcaption>GSK_LINE_JOINT_MITER, GSK_LINE_JOINT_ROUND, GSK_LINE_JOIN_BEVEL</figcaption>
+ * </figure>
  *
  * Since: 4.14
  */
@@ -303,6 +309,10 @@ typedef enum {
  *
  * The values of the `GskPathDirection` enum are used to pick one
  * of the four tangents at a given point on the path.
+ *
+ * Note that the directions for @GSK_PATH_FROM_START/@GSK_PATH_TO_END and
+ * @GSK_PATH_TO_START/@GSK_PATH_FROM_END will coincide for smooth points.
+ * Only sharp turns will exhibit four different directions.
  *
  * <picture>
  *   <source srcset="directions-dark.png" media="(prefers-color-scheme: dark)">

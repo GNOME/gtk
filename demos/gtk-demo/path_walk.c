@@ -1,6 +1,9 @@
 /* Path/Map
  *
  * This demo shows how to draw a map using paths.
+ *
+ * The world map that is used here is a path with 211 lines and 1569 cubic
+ * Bėzier segments in 121 contours.
  */
 
 #include <glib/gi18n.h>

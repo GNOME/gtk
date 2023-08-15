@@ -24,6 +24,60 @@
 
 #include <glib/gi18n-lib.h>
 
+typedef struct
+{
+  int contours;
+  int ops;
+  int lines;
+  int quads;
+  int cubics;
+} Statistics;
+
+static gboolean
+stats_cb (GskPathOperation        op,
+          const graphene_point_t *pts,
+          gsize                   n_pts,
+          gpointer                user_data)
+{
+  Statistics *stats = user_data;
+
+  stats->ops++;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      stats->contours++;
+      break;
+    case GSK_PATH_CLOSE:
+    case GSK_PATH_LINE:
+      stats->lines++;
+      break;
+    case GSK_PATH_QUAD:
+      stats->quads++;
+      break;
+    case GSK_PATH_CUBIC:
+      stats->cubics++;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+collect_statistics (GskPath    *path,
+                    Statistics *stats)
+{
+  stats->contours = 0;
+  stats->ops = 0;
+  stats->lines = 0;
+  stats->quads = 0;
+  stats->cubics = 0;
+
+  gsk_path_foreach (path, -1, stats_cb, stats);
+}
+
 void
 do_info (int *argc, const char ***argv)
 {
@@ -65,6 +119,8 @@ do_info (int *argc, const char ***argv)
     g_print ("%s\n", _("Path is empty."));
   else
     {
+      Statistics stats;
+
       if (gsk_path_is_closed (path))
         g_print ("%s\n", _("Path is closed"));
 
@@ -72,5 +128,27 @@ do_info (int *argc, const char ***argv)
         g_print ("%s: %g %g %g %g\n", _("Bounds"),
                  bounds.origin.x, bounds.origin.y,
                  bounds.size.width, bounds.size.height);
+
+      collect_statistics (path, &stats);
+
+      g_print (_("%d contours"), stats.contours);
+      g_print ("\n");
+      g_print (_("%d operations"), stats.ops);
+      g_print ("\n");
+      if (stats.lines)
+        {
+          g_print (_("%d lines"), stats.lines);
+          g_print ("\n");
+        }
+      if (stats.quads)
+        {
+          g_print (_("%d quadratics"), stats.quads);
+          g_print ("\n");
+        }
+      if (stats.cubics)
+        {
+          g_print (_("%d cubics"), stats.cubics);
+          g_print ("\n");
+        }
     }
 }
