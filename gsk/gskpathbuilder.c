@@ -1138,7 +1138,7 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
         {
           gsk_contour_add_segment (contour, self, TRUE,
                                    s,
-                                   &(GskRealPathPoint) { s->contour, gsk_contour_get_n_points (contour) - 1, 1 });
+                                   &(GskRealPathPoint) { s->contour, gsk_contour_get_n_ops (contour) - 1, 1 });
           gsk_contour_add_segment (contour, self, FALSE,
                                    &(GskRealPathPoint) { s->contour, 1, 0 },
                                    e);
@@ -1148,7 +1148,7 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
 
   gsk_contour_add_segment (contour, self, TRUE,
                            s,
-                           &(GskRealPathPoint) { s->contour, gsk_contour_get_n_points (contour) - 1, 1 });
+                           &(GskRealPathPoint) { s->contour, gsk_contour_get_n_ops (contour) - 1, 1. });
 
   for (gsize i = (s->contour + 1) % n_contours; i != e->contour; i = (i + 1) % n_contours)
     gsk_path_builder_add_contour (self, gsk_contour_dup (gsk_path_get_contour (path, i)));
