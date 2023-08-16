@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-14 13:16+0000\n"
-"PO-Revision-Date: 2023-08-14 20:33+0200\n"
+"POT-Creation-Date: 2023-08-15 19:28+0000\n"
+"PO-Revision-Date: 2023-08-16 05:35+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -1068,13 +1068,13 @@ msgid "Pick a Color"
 msgstr "ფერის არჩევა"
 
 #: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "წითელი %d%%, მწვანე %d%%, ლურჯი %d%%, ალფა %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "წითელი %d%%, მწვანე %d%%, ლურჯი %d%%"
@@ -1089,11 +1089,11 @@ msgid "Pick a Font"
 msgstr "აირჩიეთ შრიფტი"
 
 #: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "შრიფტი"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "არცერთი"
@@ -2243,7 +2243,7 @@ msgstr "გახსნა"
 msgid "_Save"
 msgstr "შენახვა"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "ფაილის ტიპების შერჩევა საჩვენებლად"
 
@@ -2456,7 +2456,7 @@ msgstr "პროგრამა"
 msgid "Audio"
 msgstr "აუდიო"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "გამოსახულება"
 
@@ -2566,7 +2566,7 @@ msgstr "მონიშნეთ საქაღალდეები"
 msgid "Select a Folder"
 msgstr "აირჩიეთ საქაღალდე"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "მიუთითებელი"
 
@@ -3678,7 +3678,7 @@ msgid "Description"
 msgstr "აღწერა"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:72
+#: tools/gtk-path-tool-info.c:128
 msgid "Bounds"
 msgstr "საზღვრები"
 
@@ -7478,7 +7478,7 @@ msgstr "კვადრატული ბეზიეს მრუდები�
 msgid "Allow cubic Bézier curves"
 msgstr "კუბური ბეზიეს მრუდების დაშვება"
 
-#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:34
+#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
 msgid "PATH"
 msgstr "ბილიკი"
@@ -7487,7 +7487,7 @@ msgstr "ბილიკი"
 msgid "Decompose a path."
 msgstr "ბილიკის დაშლა."
 
-#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:58
+#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
 msgid "No paths given."
 msgstr "ბილიკები მითითებული არაა."
 
@@ -7495,17 +7495,42 @@ msgstr "ბილიკები მითითებული არაა."
 msgid "That didn't work out."
 msgstr "ამან არ იმუშავა."
 
-#: tools/gtk-path-tool-info.c:45
+#: tools/gtk-path-tool-info.c:99
 msgid "Print information about a path."
 msgstr "ბილიკის შესახებ ინფორმაციის ჩვენება."
 
-#: tools/gtk-path-tool-info.c:65
+#: tools/gtk-path-tool-info.c:119
 msgid "Path is empty."
 msgstr "ბილიკი ცარიელია."
 
-#: tools/gtk-path-tool-info.c:69
+#: tools/gtk-path-tool-info.c:125
 msgid "Path is closed"
 msgstr "ბილიკი დახურულია"
+
+#: tools/gtk-path-tool-info.c:134
+#, c-format
+msgid "%d contours"
+msgstr "%d მოხაზულობა"
+
+#: tools/gtk-path-tool-info.c:136
+#, c-format
+msgid "%d operations"
+msgstr "%d ოპერაცია"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+msgid "%d lines"
+msgstr "%d ხაზი"
+
+#: tools/gtk-path-tool-info.c:145
+#, c-format
+msgid "%d quadratics"
+msgstr "%d კვადრატი"
+
+#: tools/gtk-path-tool-info.c:150
+#, c-format
+msgid "%d cubics"
+msgstr "%d კუბი"
 
 #: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
 msgid "Fill rule (winding, even-odd)"
