@@ -817,15 +817,6 @@ endif
 gsk_packages = [ 'graphene-gobject-1.0 @0@'.format(graphene_req) ]
 gtk_packages = [ 'gio-2.0 @0@'.format(glib_req) ]
 
-gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
-gdk_private_packages = [
-  '@0@ @1@'.format(gio_pkgname, glib_req),
-  'epoxy @0@'.format(epoxy_req),
-] + x11_pkgs + wayland_pkgs + cairo_backends
-gsk_private_packages = [] # all already in gdk_private_packages
-pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
-gtk_private_packages = pangoft2_pkgs
-
 enabled_backends = []
 foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
