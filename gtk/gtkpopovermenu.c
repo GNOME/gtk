@@ -135,7 +135,14 @@
  *
  * `GtkPopoverMenu` is just a subclass of `GtkPopover` that adds custom content
  * to it, therefore it has the same CSS nodes. It is one of the cases that add
- * a .menu style class to the popover's main node.
+ * a `.menu` style class to the main `popover` node.
+ *
+ * Menu items have nodes with name `button` and class `.model`. If a section
+ * display-hint is set, the section gets a node `box` with class `horizontal`
+ * plus a class with the same text as the display hint. Note that said box may
+ * not be the direct ancestor of the item `button`s. Thus, for example, to style
+ * items in an `inline-buttons` section, select `.inline-buttons button.model`.
+ * Other things that may be of interest to style in menus include `label` nodes.
  *
  * # Accessibility
  *
