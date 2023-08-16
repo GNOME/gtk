@@ -459,7 +459,8 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
  *
  * Creates render nodes for rendering @layout in the given foregound @color
  * and appends them to the current node of @snapshot without changing the
- * current node.
+ * current node. The current theme's foreground color for a widget can be
+ * obtained with [method@Gtk.Widget.get_color].
  *
  * Note that if the layout does not produce any visible output, then nodes
  * may not be added to the @snapshot.
