@@ -18,16 +18,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-03-01 11:04+0000\n"
-"PO-Revision-Date: 2023-03-05 12:58+0100\n"
-"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"POT-Creation-Date: 2023-04-05 09:02+0000\n"
+"PO-Revision-Date: 2023-08-16 21:38+0200\n"
+"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -570,7 +570,7 @@ msgstr "Nezdařilo se načíst data TIFF"
 #: gdk/loaders/gdktiff.c:465
 #, c-format
 msgid "Reading data failed at row %d"
-msgstr "Čtení dat selhalo na řáku %d"
+msgstr "Čtení dat selhalo na řádku %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:240
 #: gdk/wayland/gdkdrop-wayland.c:208 gdk/wayland/gdkprimary-wayland.c:336
@@ -2227,7 +2227,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Pokud smažete položku, bude natrvalo ztracena."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6077 gtk/gtktextview.c:8966
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6065 gtk/gtktextview.c:8966
 msgid "_Delete"
 msgstr "_Smazat"
 
@@ -2520,19 +2520,19 @@ msgstr "Varianty znaků"
 msgid "OpenGL context creation failed"
 msgstr "Vytvoření kontextu GL selhalo"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6065 gtk/gtktextview.c:8954
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6053 gtk/gtktextview.c:8954
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6069 gtk/gtktextview.c:8958
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6057 gtk/gtktextview.c:8958
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6073 gtk/gtktextview.c:8962
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6061 gtk/gtktextview.c:8962
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6086 gtk/gtktextview.c:8987
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6074 gtk/gtktextview.c:8987
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
@@ -3514,7 +3514,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Postranní panel"
 
-#: gtk/gtktext.c:6091 gtk/gtktextview.c:8992
+#: gtk/gtktext.c:6079 gtk/gtktextview.c:8992
 msgid "Insert _Emoji"
 msgstr "Vložit _Emodži"
 
