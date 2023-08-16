@@ -121,7 +121,7 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
  * @self: a `GtkListBase`
  * @across: position in pixels in the direction cross to the list
  * @along:  position in pixels in the direction of the list
- * @pos: (out caller-allocates): set to the looked up position
+ * @pos: (out): set to the looked up position
  * @area: (out caller-allocates) (optional): set to the area occupied
  *   by the returned position
  *
@@ -1519,7 +1519,7 @@ gtk_list_base_allocate_children (GtkListBase *self,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListTile *tile;
   int dx, dy;
-  
+
   gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &dx, NULL, NULL);
   gtk_list_base_get_adjustment_values (self, priv->orientation, &dy, NULL, NULL);
 

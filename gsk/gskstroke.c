@@ -428,8 +428,7 @@ gsk_stroke_set_dash (GskStroke   *self,
 /**
  * gsk_stroke_get_dash:
  * @self: a `GskStroke`
- * @n_dash: (out caller-allocates): number of elements
- *     in the array returned
+ * @n_dash: (out): number of elements in the array returned
  *
  * Gets the dash array in use or `NULL` if dashing is disabled.
  *
