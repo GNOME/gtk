@@ -742,6 +742,72 @@ test_in_fill_rotated (void)
 #undef N_FILL_RULES
 }
 
+static void
+test_segment (void)
+{
+  GskPath *path, *path1, *path2, *path3;
+  GskPathBuilder *builder;
+  guint i;
+  float split1, split2, epsilon, length;
+  GskPathPoint point0, point1, point2, point3;
+
+  if (!g_test_slow ())
+    {
+      g_test_skip ("Skipping slow test");
+      return;
+    }
+
+  for (i = 0; i < 50000; i++)
+    {
+      path = create_random_path (G_MAXUINT);
+
+      length = gsk_path_get_length (path);
+      /* chosen high enough to stop the testsuite from failing */
+      epsilon = MAX (length / 64, 1.f / 1024);
+
+      split1 = g_test_rand_double_range (0, length);
+      split2 = g_test_rand_double_range (split1, length);
+
+      if (!gsk_path_get_start_point (path, &point0) ||
+          !gsk_path_get_point (path, split1, &point1) ||
+          !gsk_path_get_point (path, split2, &point2) ||
+          !gsk_path_get_end_point (path, &point3))
+        {
+          gsk_path_unref (path);
+          continue;
+        }
+
+      if (gsk_path_point_equal (&point0, &point1) ||
+          gsk_path_point_equal (&point1, &point2) ||
+          gsk_path_point_equal (&point2, &point3))
+        {
+          gsk_path_unref (path);
+          continue;
+        }
+
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_segment (builder, path, &point0, &point1);
+      path1 = gsk_path_builder_free_to_path (builder);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_segment (builder, path, &point1, &point2);
+      path2 = gsk_path_builder_free_to_path (builder);
+
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_segment (builder, path, &point2, &point3);
+      path3 = gsk_path_builder_free_to_path (builder);
+
+      g_assert_cmpfloat_with_epsilon (split1, gsk_path_get_length (path1), epsilon);
+      g_assert_cmpfloat_with_epsilon (split2 - split1, gsk_path_get_length (path2), epsilon);
+      g_assert_cmpfloat_with_epsilon (length - split2, gsk_path_get_length (path3), epsilon);
+
+      gsk_path_unref (path3);
+      gsk_path_unref (path2);
+      gsk_path_unref (path1);
+      gsk_path_unref (path);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -752,6 +818,7 @@ main (int   argc,
   g_test_add_func ("/path/parse", test_parse);
   g_test_add_func ("/path/in-fill-union", test_in_fill_union);
   g_test_add_func ("/path/in-fill-rotated", test_in_fill_rotated);
+  g_test_add_func ("/path/segment", test_segment);
 
   return g_test_run ();
 }
