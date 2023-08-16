@@ -424,7 +424,7 @@
   </gresource>
   <gresource prefix="/path_walk">
     <file>path_walk.ui</file>
-    <file>path_world.c</file>
+    <file compressed="true">path_world.txt</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>

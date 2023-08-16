@@ -9,8 +9,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "path_world.c"
-
 #define GTK_TYPE_PATH_WALK (gtk_path_walk_get_type ())
 G_DECLARE_FINAL_TYPE (GtkPathWalk, gtk_path_walk, GTK, PATH_WALK, GtkWidget)
 
@@ -179,7 +177,12 @@ gtk_path_walk_class_init (GtkPathWalkClass *klass)
 static void
 gtk_path_walk_init (GtkPathWalk *self)
 {
-  GskPath *path = gsk_path_parse (path_world);
+  /* Data taken from
+   * https://commons.wikimedia.org/wiki/Maps_of_the_world#/media/File:Simplified_blank_world_map_without_Antartica_(no_borders).svg
+   */
+  GBytes *data = g_resources_lookup_data ("/path_walk/path_world.txt", 0, NULL);
+  GskPath *path = gsk_path_parse (g_bytes_get_data (data, NULL));
+  g_bytes_unref (data);
   gtk_path_walk_set_path (self, path);
   gsk_path_unref (path);
 }
