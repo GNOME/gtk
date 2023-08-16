@@ -1115,6 +1115,7 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
   const GskContour *contour;
   gsize n_contours = gsk_path_get_n_contours (path);
   graphene_point_t current;
+  gsize n_ops;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
@@ -1126,6 +1127,7 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
   current = self->current_point;
 
   contour = gsk_path_get_contour (path, s->contour);
+  n_ops = gsk_contour_get_n_ops (contour);
 
   if (s->contour == e->contour)
     {
@@ -1136,27 +1138,32 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
         }
       else if (n_contours == 1)
         {
-          gsk_contour_add_segment (contour, self, TRUE,
-                                   s,
-                                   &(GskRealPathPoint) { s->contour, gsk_contour_get_n_ops (contour) - 1, 1 });
-          gsk_contour_add_segment (contour, self, FALSE,
+          if (n_ops > 1)
+            gsk_contour_add_segment (contour, self, TRUE,
+                                     s,
+                                     &(GskRealPathPoint) { s->contour, n_ops - 1, 1 });
+          gsk_contour_add_segment (contour, self, n_ops <= 1,
                                    &(GskRealPathPoint) { s->contour, 1, 0 },
                                    e);
           goto out;
         }
     }
 
-  gsk_contour_add_segment (contour, self, TRUE,
-                           s,
-                           &(GskRealPathPoint) { s->contour, gsk_contour_get_n_ops (contour) - 1, 1. });
+  if (n_ops > 1)
+    gsk_contour_add_segment (contour, self, TRUE,
+                             s,
+                             &(GskRealPathPoint) { s->contour, n_ops - 1, 1. });
 
   for (gsize i = (s->contour + 1) % n_contours; i != e->contour; i = (i + 1) % n_contours)
     gsk_path_builder_add_contour (self, gsk_contour_dup (gsk_path_get_contour (path, i)));
 
   contour = gsk_path_get_contour (path, e->contour);
-  gsk_contour_add_segment (contour, self, FALSE,
-                           &(GskRealPathPoint) { e->contour, 1, 0 },
-                           e);
+  n_ops = gsk_contour_get_n_ops (contour);
+
+  if (n_ops > 1)
+    gsk_contour_add_segment (contour, self, TRUE,
+                             &(GskRealPathPoint) { e->contour, 1, 0 },
+                             e);
 
 out:
   gsk_path_builder_end_current (self);
