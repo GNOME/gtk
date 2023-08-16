@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-14 13:16+0000\n"
-"PO-Revision-Date: 2023-08-14 20:30+0300\n"
+"POT-Creation-Date: 2023-08-15 19:28+0000\n"
+"PO-Revision-Date: 2023-08-16 14:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1077,13 +1077,13 @@ msgid "Pick a Color"
 msgstr "Вибір кольору"
 
 #: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%, Альфа %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%"
@@ -1098,11 +1098,11 @@ msgid "Pick a Font"
 msgstr "Виберіть шрифт"
 
 #: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Шрифт"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Немає"
@@ -2254,7 +2254,7 @@ msgstr "_Відкрити"
 msgid "_Save"
 msgstr "З_берегти"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Виберіть типи файлів, які слід показувати"
 
@@ -2467,7 +2467,7 @@ msgstr "Програма"
 msgid "Audio"
 msgstr "Звук"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "Картинка"
 
@@ -2576,7 +2576,7 @@ msgstr "Вибір тек"
 msgid "Select a Folder"
 msgstr "Вибір теки"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "Не визначено"
 
@@ -3693,7 +3693,7 @@ msgid "Description"
 msgstr "Опис"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:72
+#: tools/gtk-path-tool-info.c:128
 msgid "Bounds"
 msgstr "Межі"
 
@@ -7467,17 +7467,6 @@ msgstr "%s: помилка запускання програми: %s\n"
 
 #: tools/gtk-path-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
@@ -7511,7 +7500,7 @@ msgstr "Дозволити квадратичні криві Безьє"
 msgid "Allow cubic Bézier curves"
 msgstr "Дозволити кубічні криві Безьє"
 
-#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:34
+#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
 msgid "PATH"
 msgstr "КОНТУР"
@@ -7520,7 +7509,7 @@ msgstr "КОНТУР"
 msgid "Decompose a path."
 msgstr "Розкласти шлях."
 
-#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:58
+#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
 msgid "No paths given."
 msgstr "Не задано контурів."
 
@@ -7528,18 +7517,45 @@ msgstr "Не задано контурів."
 msgid "That didn't work out."
 msgstr "Не спрацювало."
 
-#: tools/gtk-path-tool-info.c:45
-#| msgid "Provide information about the render node."
+#: tools/gtk-path-tool-info.c:99
 msgid "Print information about a path."
 msgstr "Вивести відомості щодо контура."
 
-#: tools/gtk-path-tool-info.c:65
+#: tools/gtk-path-tool-info.c:119
 msgid "Path is empty."
 msgstr "Порожній шлях."
 
-#: tools/gtk-path-tool-info.c:69
+#: tools/gtk-path-tool-info.c:125
 msgid "Path is closed"
 msgstr "Контур замкнено"
+
+#: tools/gtk-path-tool-info.c:134
+#, c-format
+msgid "%d contours"
+msgstr "%d контурів"
+
+#: tools/gtk-path-tool-info.c:136
+#, c-format
+#| msgid "Fractions"
+msgid "%d operations"
+msgstr "%d дій"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+#| msgctxt "Script"
+#| msgid "Balinese"
+msgid "%d lines"
+msgstr "%d ліній"
+
+#: tools/gtk-path-tool-info.c:145
+#, c-format
+msgid "%d quadratics"
+msgstr "%d квадратних апроксимацій"
+
+#: tools/gtk-path-tool-info.c:150
+#, c-format
+msgid "%d cubics"
+msgstr "%d кубічних апроксимацій"
 
 #: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
 msgid "Fill rule (winding, even-odd)"
@@ -7583,8 +7599,8 @@ msgstr "Кінець лінії (торець, заокруглення, ква�
 #: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:128
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr ""
-"З'єднання лінії (під кутом, під кутом з обрізанням, заокруглення,"
-" загострення, дуги)"
+"З'єднання лінії (під кутом, під кутом з обрізанням, заокруглення, "
+"загострення, дуги)"
 
 #: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:129
 msgid "Miter limit (number)"
@@ -7603,22 +7619,18 @@ msgid "The output file"
 msgstr "Файл результатів"
 
 #: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:145
-#| msgid "Could not initialize windowing system\n"
 msgid "Could not initialize windowing system"
 msgstr "Не вдалося ініціалізувати систему вікон"
 
 #: tools/gtk-path-tool-render.c:89
-#| msgid "Render a .node file to an image."
 msgid "Render the path to a png image."
 msgstr "Обробити контур до зображення png."
 
 #: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:166
-#| msgid "Reason not specified"
 msgid "No path specified"
 msgstr "Не вказано контур"
 
 #: tools/gtk-path-tool-render.c:108
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only render a single path"
 msgstr "Можлива обробка для показу лише одного контура"
 
@@ -7636,24 +7648,20 @@ msgstr "об'єднання рядків"
 
 #: tools/gtk-path-tool-render.c:143 tools/gtk-path-tool-show.c:207
 #, c-format
-#| msgid "Failed to parse png image"
 msgid "Failed to parse '%s' as number"
 msgstr "Не вдалося обробити «%s» як число"
 
 #: tools/gtk-path-tool-render.c:187
 #, c-format
-#| msgid "Saving CSS failed"
 msgid "Saving png to '%s' failed"
 msgstr "Не вдалося зберегти png до «%s»"
 
 #: tools/gtk-path-tool-render.c:194
 #, c-format
-#| msgid "Output written to %s.\n"
 msgid "Output written to '%s'."
 msgstr "Результати записано до «%s»."
 
 #: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
-#| msgid "Pre_view"
 msgid "Path Preview"
 msgstr "Перегляд контура"
 
@@ -7662,31 +7670,26 @@ msgid "Display the path."
 msgstr "Показати контур."
 
 #: tools/gtk-path-tool-show.c:172
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only show a single path"
 msgstr "Можливий показ лише одного контура"
 
 #: tools/gtk-path-tool-utils.c:58
 #, c-format
-#| msgid "Failed to read “%s”: %s\n"
 msgid "Failed to read from standard input: %s\n"
 msgstr "Не вдалося прочитати дані зі стандартного джерела даних: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
 #, c-format
-#| msgid "Error parsing commandline options: %s\n"
 msgid "Error reading from standard input: %s\n"
 msgstr "Помилка під час спроби читання зі стандартного джерела даних: %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
 #, c-format
-#| msgid "Failed to save %s: %s\n"
 msgid "Failed to parse '%s' as path.\n"
 msgstr "Не вдалося обробити «%s» як контур.\n"
 
 #: tools/gtk-path-tool-utils.c:109
 #, c-format
-#| msgid "Failed to save %s: %s\n"
 msgid "Failed to parse '%s' as %s."
 msgstr "Не вдалося обробити «%s» як %s."
 
@@ -7696,7 +7699,6 @@ msgstr "Можливі значення:"
 
 #: tools/gtk-path-tool-utils.c:135
 #, c-format
-#| msgid "Could not rename %s to %s: %s\n"
 msgid "Could not parse '%s' as color"
 msgstr "Не вдалося обробити «%s» як колір"
 
@@ -8309,10 +8311,6 @@ msgstr ""
 #~ msgctxt "Script"
 #~ msgid "Unknown"
 #~ msgstr "невідома"
-
-#~ msgctxt "Script"
-#~ msgid "Balinese"
-#~ msgstr "балійська"
 
 #~ msgctxt "Script"
 #~ msgid "Cuneiform"
