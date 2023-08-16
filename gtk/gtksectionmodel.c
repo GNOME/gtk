@@ -113,10 +113,9 @@ gtk_section_model_default_init (GtkSectionModelInterface *iface)
  * gtk_section_model_get_section:
  * @self: a `GtkSectionModel`
  * @position: the position of the item to query
- * @out_start: (out caller-allocates): the position of the first
- *   item in the section
- * @out_end: (out caller-allocates): the position of the first
- *   item not part of the section anymore.
+ * @out_start: (out): the position of the first item in the section
+ * @out_end: (out): the position of the first item not part of the section
+ *   anymore.
  *
  * Query the section that covers the given position. The number of
  * items in the section can be computed by `out_end - out_start`.
