@@ -592,6 +592,8 @@ gsk_standard_contour_add_segment (const GskContour *contour,
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve c, c1, c2;
 
+  g_assert (start->idx < self->n_ops);
+
   gsk_curve_init (&c, self->ops[start->idx]);
 
   if (start->idx == end->idx)
