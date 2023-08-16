@@ -61,7 +61,7 @@ struct _GskContourClass
   GskContour *          (* reverse)             (const GskContour       *contour);
   int                   (* get_winding)         (const GskContour       *contour,
                                                  const graphene_point_t *point);
-  gsize                 (* get_n_points)        (const GskContour       *contour);
+  gsize                 (* get_n_ops)           (const GskContour       *contour);
   gboolean              (* get_closest_point)   (const GskContour       *contour,
                                                  const graphene_point_t *point,
                                                  float                   threshold,
@@ -410,7 +410,7 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
 }
 
 static gsize
-gsk_standard_contour_get_n_points (const GskContour *contour)
+gsk_standard_contour_get_n_ops (const GskContour *contour)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
 
@@ -592,6 +592,8 @@ gsk_standard_contour_add_segment (const GskContour *contour,
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve c, c1, c2;
 
+  g_assert (start->idx < self->n_ops);
+
   gsk_curve_init (&c, self->ops[start->idx]);
 
   if (start->idx == end->idx)
@@ -645,7 +647,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_foreach,
   gsk_standard_contour_reverse,
   gsk_standard_contour_get_winding,
-  gsk_standard_contour_get_n_points,
+  gsk_standard_contour_get_n_ops,
   gsk_standard_contour_get_closest_point,
   gsk_standard_contour_get_position,
   gsk_standard_contour_get_tangent,
@@ -798,9 +800,9 @@ gsk_contour_get_closest_point (const GskContour       *self,
 }
 
 gsize
-gsk_contour_get_n_points (const GskContour *self)
+gsk_contour_get_n_ops (const GskContour *self)
 {
-  return self->klass->get_n_points (self);
+  return self->klass->get_n_ops (self);
 }
 
 void

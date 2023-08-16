@@ -559,7 +559,7 @@ gsk_path_get_end_point (GskPath      *self,
     return FALSE;
 
   res->contour = self->n_contours - 1;
-  res->idx = gsk_contour_get_n_points (self->contours[self->n_contours - 1]) - 1;
+  res->idx = gsk_contour_get_n_ops (self->contours[self->n_contours - 1]) - 1;
   res->t = 1;
 
   return TRUE;
