@@ -567,29 +567,29 @@ merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
                           const graphene_vec4_t   *offset2,
                           GskRenderNode           *child)
 {
-  const graphene_matrix_t *mat1 = gsk_color_matrix_node_get_color_matrix (child);
+  const graphene_matrix_t *matrix1 = gsk_color_matrix_node_get_color_matrix (child);
   const graphene_vec4_t *offset1 = gsk_color_matrix_node_get_color_offset (child);
-  graphene_matrix_t mat2 = *matrix2;
-  graphene_vec4_t off2 = *offset2;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
   GskRenderNode *result;
 
   g_assert (gsk_render_node_get_node_type (child) == GSK_COLOR_MATRIX_NODE);
 
-  /* color matrix node: color = mat * p + offset; for a pixel p.
-   * color =  mat1 * (mat2 * p + offset2) + offset1;
-   *       =  mat1 * mat2  * p + offset2 * mat1 + offset1
-   *       = (mat1 * mat2) * p + (offset2 * mat1 + offset1)
+  /* color matrix node: color = trans(mat) * p + offset; for a pixel p.
+   * color =  trans(mat2) * (trans(mat1) * p + offset1) + offset2
+   *       =  trans(mat2) * trans(mat1) * p + trans(mat2) * offset1 + offset2
+   *       = trans(mat1 * mat2) * p + (trans(mat2) * offset1 + offset2)
    * Which this code does.
    * mat1 and offset1 come from @child.
    */
 
-  graphene_matrix_transform_vec4 (mat1, offset2, &off2);
-  graphene_vec4_add (&off2, offset1, &off2);
+  graphene_matrix_transform_vec4 (matrix2, offset1, &offset);
+  graphene_vec4_add (&offset, offset2, &offset);
 
-  graphene_matrix_multiply (mat1, &mat2, &mat2);
+  graphene_matrix_multiply (matrix1, matrix2, &matrix);
 
   result = gsk_color_matrix_node_new (gsk_color_matrix_node_get_child (child),
-                                      &mat2, &off2);
+                                      &matrix, &offset);
 
   return result;
 }
@@ -655,6 +655,13 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
  *
  * Modifies the colors of an image by applying an affine transformation
  * in RGB space.
+ *
+ * In particular, the colors will be transformed by applying
+ *
+ *     pixel = transpose(color_matrix) * pixel + color_offset
+ *
+ * for every pixel. The transformation operates on unpremultiplied
+ * colors, with color components ordered R, G, B, A.
  *
  * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
