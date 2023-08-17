@@ -1728,5 +1728,18 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
   GTK_ACCESSIBLE_SORT_OTHER
 } GtkAccessibleSort;
 
+/**
+ * GtkPopoverMenuFlags:
+ * @GTK_POPOVER_MENU_NESTED: Create submenus as nested
+ *    popovers. Without this flag, submenus are created as
+ *    sliding pages that replace the main menu.
+ *
+ * Flags that affect how [class@Gtk.PopoverMenu] widgets built from
+ * a [class@Gio.MenuModel] are created and displayed.
+ */
+typedef enum { /*< prefix=GTK_POPOVER_MENU >*/
+  GTK_POPOVER_MENU_NESTED = 1 << 0
+} GtkPopoverMenuFlags;
+
 G_END_DECLS
 
