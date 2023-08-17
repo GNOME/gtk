@@ -38,7 +38,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtkviewport.h"
 
-
 /**
  * GtkPopoverMenu:
  *
@@ -50,6 +49,7 @@
  * `GtkPopoverMenu` treats its children like menus and allows switching
  * between them. It can open submenus as traditional, nested submenus,
  * or in a more touch-friendly sliding fashion.
+ * The property [property@Gtk.PopoverMenu:flags] controls this appearance.
  *
  * `GtkPopoverMenu` is meant to be used primarily with menu models,
  * using [ctor@Gtk.PopoverMenu.new_from_model]. If you need to put
@@ -173,7 +173,8 @@ struct _GtkPopoverMenuClass
 
 enum {
   PROP_VISIBLE_SUBMENU = 1,
-  PROP_MENU_MODEL
+  PROP_MENU_MODEL,
+  PROP_FLAGS
 };
 
 static void gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface);
@@ -410,6 +411,10 @@ gtk_popover_menu_get_property (GObject    *object,
       g_value_set_object (value, gtk_popover_menu_get_menu_model (menu));
       break;
 
+    case PROP_FLAGS:
+      g_value_set_flags (value, gtk_popover_menu_get_flags (menu));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -432,6 +437,10 @@ gtk_popover_menu_set_property (GObject      *object,
 
     case PROP_MENU_MODEL:
       gtk_popover_menu_set_menu_model (menu, g_value_get_object (value));
+      break;
+
+    case PROP_FLAGS:
+      gtk_popover_menu_set_flags (menu, g_value_get_flags (value));
       break;
 
     default:
@@ -514,7 +523,6 @@ gtk_popover_menu_focus (GtkWidget        *widget,
 
   return FALSE;
 }
-
 
 static void
 add_tab_bindings (GtkWidgetClass   *widget_class,
@@ -616,6 +624,23 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         G_TYPE_MENU_MODEL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkPopoverMenu:flags: (attributes org.gtk.Property.get=gtk_popover_menu_get_flags org.gtk.Property.set=gtk_popover_menu_set_flags)
+   *
+   * The flags that @popover uses to create/display a menu from its model.
+   *
+   * If a model is set and the flags change, contents are rebuilt, so if setting
+   * properties individually, set flags before model to avoid a redundant rebuild.
+   *
+   * Since: 4.14
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_FLAGS,
+                                   g_param_spec_flags ("flags", NULL, NULL,
+                                                       GTK_TYPE_POPOVER_MENU_FLAGS, 0,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+                                                         | G_PARAM_EXPLICIT_NOTIFY));
+
   add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
   add_arrow_bindings (widget_class, GDK_KEY_Left, GTK_DIR_LEFT);
@@ -663,6 +688,20 @@ gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
   iface->add_child = gtk_popover_menu_buildable_add_child;
+}
+
+static void
+gtk_popover_menu_rebuild_contents (GtkPopoverMenu *popover)
+{
+  GtkWidget *stack;
+  GtkWidget *child;
+
+  stack = gtk_popover_menu_get_stack (popover);
+  while ((child = gtk_widget_get_first_child (stack)))
+    gtk_stack_remove (GTK_STACK (stack), child);
+
+  if (popover->model)
+    gtk_menu_section_box_new_toplevel (popover, popover->model, popover->flags);
 }
 
 /**
@@ -775,7 +814,7 @@ gtk_popover_menu_new_from_model_full (GMenuModel          *model,
   g_return_val_if_fail (model == NULL || G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_menu_new ();
-  GTK_POPOVER_MENU (popover)->flags = flags;
+  gtk_popover_menu_set_flags (GTK_POPOVER_MENU (popover), flags);
   gtk_popover_menu_set_menu_model (GTK_POPOVER_MENU (popover), model);
 
   return popover;
@@ -801,18 +840,39 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
 
   if (g_set_object (&popover->model, model))
     {
-      GtkWidget *stack;
-      GtkWidget *child;
-
-      stack = gtk_popover_menu_get_stack (popover);
-      while ((child = gtk_widget_get_first_child (stack)))
-        gtk_stack_remove (GTK_STACK (stack), child);
-
-      if (model)
-        gtk_menu_section_box_new_toplevel (popover, model, popover->flags);
-
+      gtk_popover_menu_rebuild_contents (popover);
       g_object_notify (G_OBJECT (popover), "menu-model");
     }
+}
+
+/**
+ * gtk_popover_menu_set_flags: (attributes org.gtk.Method.set_property=flags)
+ * @popover: a `GtkPopoverMenu`
+ * @flags: a set of `GtkPopoverMenuFlags`
+ *
+ * Sets the flags that @popover uses to create/display a menu from its model.
+ *
+ * If a model is set and the flags change, contents are rebuilt, so if setting
+ * properties individually, set flags before model to avoid a redundant rebuild.
+ *
+ * Since: 4.14
+ */
+void
+gtk_popover_menu_set_flags (GtkPopoverMenu      *popover,
+                            GtkPopoverMenuFlags  flags)
+{
+  g_return_if_fail (GTK_IS_POPOVER_MENU (popover));
+
+  if (popover->flags == flags)
+    return;
+
+  popover->flags = flags;
+
+  /* This shouldn’t happen IRL, but notify test unsets :child, so dodge error */
+  if (gtk_popover_get_child (GTK_POPOVER (popover)) != NULL)
+    gtk_popover_menu_rebuild_contents (popover);
+
+  g_object_notify (G_OBJECT (popover), "flags");
 }
 
 /**
@@ -829,6 +889,24 @@ gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover)
   g_return_val_if_fail (GTK_IS_POPOVER_MENU (popover), NULL);
 
   return popover->model;
+}
+
+/**
+ * gtk_popover_menu_get_flags: (attributes org.gtk.Method.get_property=flags)
+ * @popover: a `GtkPopoverMenu`
+ *
+ * Returns the flags that @popover uses to create/display a menu from its model.
+ *
+ * Returns: the `GtkPopoverMenuFlags`
+ *
+ * Since: 4.14
+ */
+GtkPopoverMenuFlags
+gtk_popover_menu_get_flags (GtkPopoverMenu *popover)
+{
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU (popover), 0);
+
+  return popover->flags;
 }
 
 /**
