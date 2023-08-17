@@ -34,6 +34,7 @@ compare_render_tests = [
   'clip-translate-offscreen',
   'color-blur0',
   'color-matrix-identity',
+  'color-matrix-merge',
   'color-matrix-parsing',
   'crossfade-clip-both-children',
   'cross-fade-in-opacity',
