@@ -119,6 +119,8 @@ struct _GskStandardContour
 
   GskPathFlags flags;
 
+  GskBoundingBox bounds;
+
   gsize n_ops;
   gsize n_points;
   graphene_point_t *points;
@@ -254,7 +256,7 @@ gsk_standard_contour_print (const GskContour *contour,
       const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
 
       switch (gsk_pathop_op (self->ops[i]))
-      {
+        {
         case GSK_PATH_MOVE:
           g_string_append (string, "M ");
           _g_string_append_point (string, &pt[0]);
@@ -288,7 +290,7 @@ gsk_standard_contour_print (const GskContour *contour,
         default:
           g_assert_not_reached();
           return;
-      }
+        }
     }
 }
 
@@ -297,45 +299,13 @@ gsk_standard_contour_get_bounds (const GskContour *contour,
                                  GskBoundingBox   *bounds)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  gsize i;
 
   if (self->n_points == 0)
     return FALSE;
 
-  gsk_bounding_box_init (bounds,  &self->points[0], &self->points[0]);
-  for (i = 1; i < self->n_points; i ++)
-    gsk_bounding_box_expand (bounds, &self->points[i]);
+  *bounds = self->bounds;
 
   return bounds->max.x > bounds->min.x && bounds->max.y > bounds->min.y;
-}
-
-static gboolean
-add_stroke_bounds (GskPathOperation        op,
-                   const graphene_point_t *pts,
-                   gsize                   n_pts,
-                   gpointer                user_data)
-{
-  struct {
-    GskBoundingBox *bounds;
-    float lw;
-    float mw;
-  } *data = user_data;
-  GskBoundingBox bounds;
-
-  for (int i = 1; i < n_pts - 1; i++)
-    {
-      gsk_bounding_box_init (&bounds,
-                             &GRAPHENE_POINT_INIT (pts[i].x - data->lw/2, pts[i].y - data->lw/2),
-                             &GRAPHENE_POINT_INIT (pts[i].x + data->lw/2, pts[i].y + data->lw/2));
-      gsk_bounding_box_union (&bounds, data->bounds, data->bounds);
-    }
-
-  gsk_bounding_box_init (&bounds,
-                         &GRAPHENE_POINT_INIT (pts[n_pts - 1].x - data->mw/2, pts[n_pts  - 1].y - data->mw/2),
-                         &GRAPHENE_POINT_INIT (pts[n_pts - 1].x + data->mw/2, pts[n_pts  - 1].y + data->mw/2));
-  gsk_bounding_box_union (&bounds, data->bounds, data->bounds);
-
-  return TRUE;
 }
 
 static gboolean
@@ -344,21 +314,17 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
                                         GskBoundingBox   *bounds)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
-  struct {
-    GskBoundingBox *bounds;
-    float lw;
-    float mw;
-  } data;
+  float extra;
 
-  data.bounds = bounds;
-  data.lw = stroke->line_width;
-  data.mw = gsk_stroke_get_join_width (stroke);
+  if (self->n_points == 0)
+    return FALSE;
 
-  gsk_bounding_box_init (bounds,
-                         &GRAPHENE_POINT_INIT (self->points[0].x - data.mw/2, self->points[0].y - data.mw/2),
-                         &GRAPHENE_POINT_INIT (self->points[0].x + data.mw/2, self->points[0].y + data.mw/2));
+  extra = MAX (stroke->line_width / 2, gsk_stroke_get_join_width (stroke) / 2);
 
-  gsk_standard_contour_foreach (contour, GSK_PATH_TOLERANCE_DEFAULT, add_stroke_bounds, &data);
+  gsk_bounding_box_init (bounds, &GRAPHENE_POINT_INIT (self->bounds.min.x - extra,
+                                                       self->bounds.min.y - extra),
+                                 &GRAPHENE_POINT_INIT (self->bounds.max.x + extra,
+                                                       self->bounds.max.y + extra));
 
   return TRUE;
 }
@@ -383,6 +349,9 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   int winding = 0;
+
+  if (!gsk_bounding_box_contains_point (&self->bounds, point))
+    return 0;
 
   for (gsize i = 0; i < self->n_ops; i ++)
     {
@@ -669,7 +638,6 @@ gsk_standard_contour_init (GskContour             *contour,
 
 {
   GskStandardContour *self = (GskStandardContour *) contour;
-  gsize i;
 
   self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
 
@@ -680,11 +648,13 @@ gsk_standard_contour_init (GskContour             *contour,
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
 
   offset += self->points - points;
-  for (i = 0; i < n_ops; i++)
-    {
-      self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
-                                        gsk_pathop_points (ops[i]) + offset);
-    }
+  for (gsize i = 0; i < n_ops; i++)
+    self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
+                                      gsk_pathop_points (ops[i]) + offset);
+
+  gsk_bounding_box_init (&self->bounds,  &self->points[0], &self->points[0]);
+  for (gsize i = 1; i < self->n_points; i ++)
+    gsk_bounding_box_expand (&self->bounds, &self->points[i]);
 }
 
 GskContour *
