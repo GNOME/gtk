@@ -225,7 +225,7 @@ add_standard_contour (GskPathBuilder *builder)
   n = g_test_rand_int_range (1, 20);
   for (i = 0; i < n; i++)
     {
-      switch (g_test_rand_int_range (0, 6))
+      switch (g_test_rand_int_range (0, 8))
       {
         case 0:
           gsk_path_builder_line_to (builder,
@@ -273,6 +273,22 @@ add_standard_contour (GskPathBuilder *builder)
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000),
                                          g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 6:
+          gsk_path_builder_arc_to (builder,
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 7:
+          gsk_path_builder_rel_arc_to (builder,
+                                       g_test_rand_double_range (-1000, 1000),
+                                       g_test_rand_double_range (-1000, 1000),
+                                       g_test_rand_double_range (-1000, 1000),
+                                       g_test_rand_double_range (-1000, 1000));
           break;
 
         default:
@@ -371,6 +387,13 @@ path_operation_print (const PathOperation *p,
       _g_string_append_point (string, &p->pts[3]);
       break;
 
+    case GSK_PATH_ARC:
+      g_string_append (string, " E ");
+      _g_string_append_point (string, &p->pts[1]);
+      g_string_append (string, ", ");
+      _g_string_append_point (string, &p->pts[2]);
+      break;
+
     default:
       g_assert_not_reached();
       return;
@@ -404,6 +427,10 @@ path_operation_equal (const PathOperation *p1,
         return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
             && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon)
             && graphene_point_near (&p1->pts[3], &p2->pts[3], epsilon);
+
+      case GSK_PATH_ARC:
+        return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
+            && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon);
 
       default:
         g_return_val_if_reached (FALSE);
@@ -689,6 +716,11 @@ rotate_path_cb (GskPathOperation        op,
       gsk_path_builder_cubic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
       break;
 
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      gsk_path_builder_arc_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
+      break;
+
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -727,7 +759,7 @@ test_in_fill_rotated (void)
           GskFillRule fill_rule = g_random_int_range (0, N_FILL_RULES);
           float x = g_test_rand_double_range (-1000, 1000);
           float y = g_test_rand_double_range (-1000, 1000);
-  
+
           g_assert_cmpint (gsk_path_in_fill (paths[0], &GRAPHENE_POINT_INIT (x, y), fill_rule),
                            ==,
                            gsk_path_in_fill (paths[1], &GRAPHENE_POINT_INIT (y, -x), fill_rule));

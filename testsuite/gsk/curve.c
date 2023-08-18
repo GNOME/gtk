@@ -249,6 +249,9 @@ test_curve_decompose_into (GskPathForeachFlags flags)
             case GSK_PATH_CUBIC:
               g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_CUBIC);
               break;
+            case GSK_PATH_ARC:
+              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_ARC);
+              break;
             default:
               g_assert_not_reached ();
             }

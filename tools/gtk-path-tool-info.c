@@ -31,6 +31,7 @@ typedef struct
   int lines;
   int quads;
   int cubics;
+  int arcs;
 } Statistics;
 
 static gboolean
@@ -58,6 +59,9 @@ stats_cb (GskPathOperation        op,
     case GSK_PATH_CUBIC:
       stats->cubics++;
       break;
+    case GSK_PATH_ARC:
+      stats->arcs++;
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -74,6 +78,7 @@ collect_statistics (GskPath    *path,
   stats->lines = 0;
   stats->quads = 0;
   stats->cubics = 0;
+  stats->arcs = 0;
 
   gsk_path_foreach (path, -1, stats_cb, stats);
 }
@@ -148,6 +153,11 @@ do_info (int *argc, const char ***argv)
       if (stats.cubics)
         {
           g_print (_("%d cubics"), stats.cubics);
+          g_print ("\n");
+        }
+      if (stats.arcs)
+        {
+          g_print (_("%d arcs"), stats.arcs);
           g_print ("\n");
         }
     }

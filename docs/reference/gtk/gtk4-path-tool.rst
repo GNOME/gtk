@@ -44,6 +44,10 @@ segments.
 
   Allow cubic Bézier curves to be used in the generated path.
 
+``--allow-arc``
+
+  Allow elliptical arcs to be used in the generated path.
+
 Showing
 ^^^^^^^
 

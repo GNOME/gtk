@@ -94,6 +94,9 @@ gsk_pathop_foreach (gskpathop          pop,
     case GSK_PATH_CUBIC:
       return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 4, user_data);
 
+    case GSK_PATH_ARC:
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, user_data);
+
     default:
       g_assert_not_reached ();
       return TRUE;
@@ -128,6 +131,10 @@ gsk_path_builder_pathop_to (GskPathBuilder *builder,
       gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -160,6 +167,10 @@ gsk_path_builder_pathop_reverse_to (GskPathBuilder *builder,
 
     case GSK_PATH_CUBIC:
       gsk_path_builder_cubic_to (builder, pts[2].x, pts[2].y, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
       break;
 
     default:

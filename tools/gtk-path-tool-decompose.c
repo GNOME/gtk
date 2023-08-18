@@ -56,6 +56,10 @@ foreach_cb (GskPathOperation        op,
                                           pts[3].x, pts[3].y);
       break;
 
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -68,12 +72,14 @@ do_decompose (int *argc, const char ***argv)
 {
   GError *error = NULL;
   gboolean allow_quad = FALSE;
-  gboolean allow_curve = FALSE;
+  gboolean allow_cubic = FALSE;
+  gboolean allow_arc = FALSE;
   char **args = NULL;
   GOptionContext *context;
   GOptionEntry entries[] = {
     { "allow-quad", 0, 0, G_OPTION_ARG_NONE, &allow_quad, N_("Allow quadratic Bézier curves"), NULL },
-    { "allow-cubic", 0, 0, G_OPTION_ARG_NONE, &allow_curve, N_("Allow cubic Bézier curves"), NULL },
+    { "allow-cubic", 0, 0, G_OPTION_ARG_NONE, &allow_cubic, N_("Allow cubic Bézier curves"), NULL },
+    { "allow-arc", 0, 0, G_OPTION_ARG_NONE, &allow_arc, N_("Allow elliptical arcs"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &args, NULL, N_("PATH") },
     { NULL, },
   };
@@ -108,8 +114,10 @@ do_decompose (int *argc, const char ***argv)
   flags = 0;
   if (allow_quad)
     flags |= GSK_PATH_FOREACH_ALLOW_QUAD;
-  if (allow_curve)
+  if (allow_cubic)
     flags |= GSK_PATH_FOREACH_ALLOW_CUBIC;
+  if (allow_arc)
+    flags |= GSK_PATH_FOREACH_ALLOW_ARC;
 
   builder = gsk_path_builder_new ();
 

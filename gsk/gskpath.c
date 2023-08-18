@@ -178,7 +178,8 @@ gsk_path_get_flags (const GskPath *self)
  * for printing.
  *
  * The string is compatible with
- * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData).
+ * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
+ * see [func@Gsk.Path.parse] for a summary of the syntax.
  *
  * Since: 4.14
  */
@@ -230,6 +231,20 @@ gsk_path_to_string (GskPath *self)
 }
 
 static gboolean
+add_curve_func (GskPathOperation op,
+                const graphene_point_t *pts,
+                gsize                   n_pts,
+                gpointer                user_data)
+{
+  cairo_t *cr = user_data;
+
+  g_assert (op == GSK_PATH_CUBIC);
+  cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+
+  return TRUE;
+}
+
+static gboolean
 gsk_path_to_cairo_add_op (GskPathOperation        op,
                           const graphene_point_t *pts,
                           gsize                   n_pts,
@@ -262,6 +277,15 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
 
     case GSK_PATH_CUBIC:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      break;
+
+    case GSK_PATH_ARC:
+      {
+        GskCurve curve;
+
+        gsk_curve_init_foreach (&curve, op, pts, n_pts);
+        gsk_curve_decompose_curve (&curve, GSK_PATH_FOREACH_ALLOW_CUBIC, 0.5, add_curve_func, cr);
+      }
       break;
 
     default:
@@ -749,6 +773,27 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
                                     trampoline);
       }
 
+    case GSK_PATH_ARC:
+      {
+        GskCurve curve;
+
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_ARC)
+          return trampoline->func (op, pts, n_pts, trampoline->user_data);
+
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_ARC, pts));
+        if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_CUBIC|GSK_PATH_FOREACH_ALLOW_QUAD))
+          return gsk_curve_decompose_curve (&curve,
+                                            trampoline->flags,
+                                            trampoline->tolerance,
+                                            gsk_path_foreach_trampoline_add_curve,
+                                            trampoline);
+
+        return gsk_curve_decompose (&curve,
+                                    trampoline->tolerance,
+                                    gsk_path_foreach_trampoline_add_line,
+                                    trampoline);
+      }
+
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -914,7 +959,7 @@ parse_command (const char **p,
   if (*cmd == 'X')
     allowed = "mM";
   else
-    allowed = "mMhHvVzZlLcCsStTqQaA";
+    allowed = "mMhHvVzZlLcCsStTqQaAeE";
 
   skip_whitespace (p);
   s = _strchr (allowed, **p);
@@ -950,9 +995,12 @@ parse_command (const char **p,
  * - `T x2 y2` Add a quadratic Bézier, using the reflection of the previous segments' control point as control point
  * - `S x2 y2 x3 y3` Add a cubic Bézier, using the reflection of the previous segments' second control point as first control point
  * - `A rx ry r l s x y` Add an elliptical arc from the current point to `(x, y)` with radii rx and ry. See the SVG documentation for how the other parameters influence the arc.
+ * - `E x1 y1 x2 y2` Add an elliptical arc from the current point to `(x2, y2)` with tangents that are dermined by the point `(x1, y1)`.
  *
  * All the commands have lowercase variants that interpret coordinates
  * relative to the current point.
+ *
+ * The `E` command is an extension that is not supported in SVG.
  *
  * Returns: (nullable): a new `GskPath`, or `NULL`
  *   if @string could not be parsed
@@ -1292,6 +1340,38 @@ gsk_path_parse (const char *string)
                                              x1, y1);
                 x = x1;
                 y = y1;
+              }
+            else
+              goto error;
+          }
+          break;
+
+        case 'E':
+        case 'e':
+          {
+            double x1, y1, x2, y2;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2))
+              {
+                if (cmd == 'e')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (_strchr ("zZ", prev_cmd))
+                  {
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_arc_to (builder, x1, y1, x2, y2);
+                prev_x1 = x1;
+                prev_y1 = y1;
+                x = x2;
+                y = y2;
               }
             else
               goto error;
