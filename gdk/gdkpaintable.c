@@ -25,10 +25,12 @@
 #include "gdkprivate.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
+GdkSnapshot *   gtk_snapshot_new                        (void);
 void            gtk_snapshot_push_debug                 (GdkSnapshot            *snapshot,
                                                          const char             *message,
                                                          ...) G_GNUC_PRINTF (2, 3);
 void            gtk_snapshot_pop                        (GdkSnapshot            *snapshot);
+GdkPaintable *  gtk_snapshot_free_to_paintable          (GdkSnapshot            *snapshot);
 
 /**
  * GdkPaintable:
@@ -102,9 +104,21 @@ gdk_paintable_default_snapshot (GdkPaintable *paintable,
 static GdkPaintable *
 gdk_paintable_default_get_current_image (GdkPaintable *paintable)
 {
-  g_warning ("FIXME: implement by snapshotting at default size and returning a GskRendererNodePaintable");
+  int width, height;
+  GdkSnapshot *snapshot;
 
-  return paintable;
+  /* No need to check whether the paintable is static, as
+   * gdk_paintable_get_current_image () takes care of that already.  */
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+
+  if (width <= 0 || height <= 0)
+    return gdk_paintable_new_empty (width, height);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  return gtk_snapshot_free_to_paintable (snapshot);
 }
 
 static GdkPaintableFlags
