@@ -657,6 +657,11 @@ gsk_path_builder_rel_move_to (GskPathBuilder *self,
  * Draws a line from the current point to @x, @y and makes it
  * the new current point.
  *
+ * <picture>
+ *   <source srcset="line-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Line To" src="line-light.png">
+ * </picture>
+ *
  * Since: 4.14
  */
 void
@@ -715,6 +720,11 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
  * from the current point to @x2, @y2 with @x1, @y1 as the control point.
  *
  * After this, @x2, @y2 will be the new current point.
+ *
+ * <picture>
+ *   <source srcset="quad-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Quad To" src="quad-light.png">
+ * </picture>
  *
  * Since: 4.14
  */
@@ -782,6 +792,11 @@ gsk_path_builder_rel_quad_to (GskPathBuilder *self,
  * Adds a [cubic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
  * points.
+ *
+ * <picture>
+ *   <source srcset="cubic-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Cubic To" src="cubic-light.png">
+ * </picture>
  *
  * After this, @x3, @y3 will be the new current point.
  *
