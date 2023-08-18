@@ -914,7 +914,7 @@ parse_command (const char **p,
   if (*cmd == 'X')
     allowed = "mM";
   else
-    allowed = "mMhHvVzZlLcCsStTqQoOaA";
+    allowed = "mMhHvVzZlLcCsStTqQaA";
 
   skip_whitespace (p);
   s = _strchr (allowed, **p);
