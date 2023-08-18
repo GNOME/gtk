@@ -43,11 +43,11 @@ gsk_vulkan_cross_fade_op_collect_vertex_data (GskVulkanOp *op,
   GskVulkanCrossFadeOp *self = (GskVulkanCrossFadeOp *) op;
   GskVulkanCrossFadeInstance *instance = (GskVulkanCrossFadeInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->bounds, instance->rect);
-  gsk_vulkan_rect_to_float (&self->start.rect, instance->start_rect);
-  gsk_vulkan_rect_to_float (&self->end.rect, instance->end_rect);
-  gsk_vulkan_rect_to_float (&self->start.tex_rect, instance->start_tex_rect);
-  gsk_vulkan_rect_to_float (&self->end.tex_rect, instance->end_tex_rect);
+  gsk_rect_to_float (&self->bounds, instance->rect);
+  gsk_rect_to_float (&self->start.rect, instance->start_rect);
+  gsk_rect_to_float (&self->end.rect, instance->end_rect);
+  gsk_rect_to_float (&self->start.tex_rect, instance->start_tex_rect);
+  gsk_rect_to_float (&self->end.tex_rect, instance->end_tex_rect);
 
   instance->start_tex_id = self->start.image_descriptor;
   instance->end_tex_id = self->end.image_descriptor;

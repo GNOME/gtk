@@ -2,6 +2,7 @@
 
 #include "gskdebugprivate.h"
 
+#include "gskrectprivate.h"
 #include "gskroundedrectprivate.h"
 
 #include <gdk/gdk.h>
@@ -35,16 +36,6 @@ gsk_vulkan_normalize_tex_coords (graphene_rect_t       *tex_coords,
                       (rect->origin.y - tex->origin.y) / tex->size.height,
                       rect->size.width / tex->size.width,
                       rect->size.height / tex->size.height);
-}
-
-static inline void
-gsk_vulkan_rect_to_float (const graphene_rect_t *rect,
-                          float                  values[4])
-{
-  values[0] = rect->origin.x;
-  values[1] = rect->origin.y;
-  values[2] = rect->size.width;
-  values[3] = rect->size.height;
 }
 
 static inline void

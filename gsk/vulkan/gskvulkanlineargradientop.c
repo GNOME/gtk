@@ -51,7 +51,7 @@ gsk_vulkan_linear_gradient_op_collect_vertex_data (GskVulkanOp *op,
   GskVulkanLinearGradientOp *self = (GskVulkanLinearGradientOp *) op;
   GskVulkanLinearInstance *instance = (GskVulkanLinearInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->rect, instance->rect);
+  gsk_rect_to_float (&self->rect, instance->rect);
   gsk_vulkan_point_to_float (&self->start, instance->start);
   gsk_vulkan_point_to_float (&self->end, instance->end);
   instance->repeating = self->repeating;

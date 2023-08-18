@@ -41,8 +41,8 @@ gsk_vulkan_blur_op_collect_vertex_data (GskVulkanOp *op,
   GskVulkanBlurOp *self = (GskVulkanBlurOp *) op;
   GskVulkanBlurInstance *instance = (GskVulkanBlurInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->rect, instance->rect);
-  gsk_vulkan_rect_to_float (&self->tex_rect, instance->tex_rect);
+  gsk_rect_to_float (&self->rect, instance->rect);
+  gsk_rect_to_float (&self->tex_rect, instance->tex_rect);
   instance->tex_id = self->image_descriptor;
   instance->radius = self->radius;
 }

@@ -43,11 +43,11 @@ gsk_vulkan_blend_mode_op_collect_vertex_data (GskVulkanOp *op,
   GskVulkanBlendModeOp *self = (GskVulkanBlendModeOp *) op;
   GskVulkanBlendModeInstance *instance = (GskVulkanBlendModeInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->bounds, instance->rect);
-  gsk_vulkan_rect_to_float (&self->top.rect, instance->top_rect);
-  gsk_vulkan_rect_to_float (&self->bottom.rect, instance->bottom_rect);
-  gsk_vulkan_rect_to_float (&self->top.tex_rect, instance->top_tex_rect);
-  gsk_vulkan_rect_to_float (&self->bottom.tex_rect, instance->bottom_tex_rect);
+  gsk_rect_to_float (&self->bounds, instance->rect);
+  gsk_rect_to_float (&self->top.rect, instance->top_rect);
+  gsk_rect_to_float (&self->bottom.rect, instance->bottom_rect);
+  gsk_rect_to_float (&self->top.tex_rect, instance->top_tex_rect);
+  gsk_rect_to_float (&self->bottom.tex_rect, instance->bottom_tex_rect);
 
   instance->top_tex_id = self->top.image_descriptor;
   instance->bottom_tex_id = self->bottom.image_descriptor;

@@ -26,3 +26,13 @@ gsk_rect_intersects (const graphene_rect_t *r1,
     return TRUE;
 }
 
+static inline void
+gsk_rect_to_float (const graphene_rect_t *rect,
+                   float                  values[4])
+{
+  values[0] = rect->origin.x;
+  values[1] = rect->origin.y;
+  values[2] = rect->size.width;
+  values[3] = rect->size.height;
+}
+

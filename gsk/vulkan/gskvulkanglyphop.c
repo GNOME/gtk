@@ -42,8 +42,8 @@ gsk_vulkan_glyph_op_collect_vertex_data (GskVulkanOp         *op,
   GskVulkanGlyphOp *self = (GskVulkanGlyphOp *) op;
   GskVulkanGlyphInstance *instance = (GskVulkanGlyphInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->rect, instance->rect);
-  gsk_vulkan_rect_to_float (&self->tex_rect, instance->tex_rect);
+  gsk_rect_to_float (&self->rect, instance->rect);
+  gsk_rect_to_float (&self->tex_rect, instance->tex_rect);
   instance->tex_id = self->image_descriptor;
   gsk_vulkan_rgba_to_float (&self->color, instance->color);
 }

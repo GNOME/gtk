@@ -60,11 +60,11 @@ gsk_vulkan_mask_op_collect_vertex_data (GskVulkanOp *op,
   GskVulkanMaskOp *self = (GskVulkanMaskOp *) op;
   GskVulkanMaskInstance *instance = (GskVulkanMaskInstance *) (data + ((GskVulkanShaderOp *) op)->vertex_offset);
 
-  gsk_vulkan_rect_to_float (&self->source.rect, instance->source_rect);
-  gsk_vulkan_rect_to_float (&self->source.tex_rect, instance->source_tex_rect);
+  gsk_rect_to_float (&self->source.rect, instance->source_rect);
+  gsk_rect_to_float (&self->source.tex_rect, instance->source_tex_rect);
   instance->source_id = self->source.image_descriptor;
-  gsk_vulkan_rect_to_float (&self->mask.rect, instance->mask_rect);
-  gsk_vulkan_rect_to_float (&self->mask.tex_rect, instance->mask_tex_rect);
+  gsk_rect_to_float (&self->mask.rect, instance->mask_rect);
+  gsk_rect_to_float (&self->mask.tex_rect, instance->mask_tex_rect);
   instance->mask_id = self->mask.image_descriptor;
   instance->mask_mode = self->mask_mode;
 }
