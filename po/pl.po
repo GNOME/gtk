@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-05 15:54+0000\n"
-"PO-Revision-Date: 2023-08-06 14:20+0200\n"
+"POT-Creation-Date: 2023-08-19 01:57+0000\n"
+"PO-Revision-Date: 2023-08-19 17:17+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -141,7 +141,7 @@ msgstr "Program nie obsługuje API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1863
+#: gdk/gdkglcontext.c:1864
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Próbowanie użycia %s, ale %s jest już używane"
@@ -1073,13 +1073,13 @@ msgid "Pick a Color"
 msgstr "Wybór koloru"
 
 #: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%, alfa %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%"
@@ -1094,11 +1094,11 @@ msgid "Pick a Font"
 msgstr "Wybór czcionki"
 
 #: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Czcionka"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Brak"
@@ -2249,7 +2249,7 @@ msgstr "_Otwórz"
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Wybór typów wyświetlanych plików"
 
@@ -2322,7 +2322,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6125 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2463,7 +2463,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Dźwięk"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "Obraz"
 
@@ -2574,7 +2574,7 @@ msgstr "Wybór katalogów"
 msgid "Select a Folder"
 msgstr "Wybór katalogu"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "Nieokreślone"
 
@@ -2662,19 +2662,19 @@ msgstr "Zamknij"
 msgid "Close the infobar"
 msgstr "Zamknij pasek informacyjny"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6113 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6117 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6121 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6134 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
@@ -3626,7 +3626,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Panel boczny"
 
-#: gtk/gtktext.c:6139 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
@@ -3691,6 +3691,7 @@ msgid "Description"
 msgstr "Opis"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
+#: tools/gtk-path-tool-info.c:128
 msgid "Bounds"
 msgstr "Granice"
 
@@ -4154,7 +4155,7 @@ msgstr "Źródło:"
 msgid "Defined At"
 msgstr "Określone w"
 
-#: gtk/inspector/recorder.c:1865
+#: gtk/inspector/recorder.c:1922
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Zapisanie węzła rysowania się nie powiodło"
@@ -7199,7 +7200,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-path-tool-render.c:62 tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "PLIK"
 
@@ -7231,8 +7233,8 @@ msgid "Use style from CSS file"
 msgstr "Używa stylu z pliku CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-rendernode-tool-show.c:109
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Nie można zainicjować systemu okien\n"
@@ -7459,6 +7461,238 @@ msgstr "%s: program „%s” nie istnieje"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: błąd podczas uruchamiania programu: %s\n"
 
+#: tools/gtk-path-tool.c:35
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
+"\n"
+"Perform various tasks on paths.\n"
+"\n"
+"Commands:\n"
+"  decompose    Decompose the path\n"
+"  show         Display the path in a window\n"
+"  render       Render the path as an image\n"
+"  info         Print information about the path\n"
+"\n"
+msgstr ""
+"Użycie:\n"
+"  gtk4-path-tool [POLECENIE] [OPCJA…] ŚCIEŻKA\n"
+"\n"
+"Wykonuje różne zadania na ścieżkach.\n"
+"\n"
+"Polecenia:\n"
+"  decompose    Rozkłada ścieżkę\n"
+"  show         Wyświetla ścieżkę w oknie\n"
+"  render       Rysuje ścieżkę jako obraz\n"
+"  info         Wyświetla informacje o ścieżce\n"
+"\n"
+
+#: tools/gtk-path-tool-decompose.c:75
+msgid "Allow quadratic Bézier curves"
+msgstr "Zezwala na kwadratowe krzywe Béziera"
+
+#: tools/gtk-path-tool-decompose.c:76
+msgid "Allow cubic Bézier curves"
+msgstr "Zezwala na sześcienne krzywe Béziera"
+
+#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
+msgid "PATH"
+msgstr "ŚCIEŻKA"
+
+#: tools/gtk-path-tool-decompose.c:89
+msgid "Decompose a path."
+msgstr "Rozkłada ścieżkę."
+
+#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
+msgid "No paths given."
+msgstr "Nie podano ścieżek."
+
+#: tools/gtk-path-tool-decompose.c:128
+msgid "That didn't work out."
+msgstr "To nie zadziałało."
+
+#: tools/gtk-path-tool-info.c:99
+msgid "Print information about a path."
+msgstr "Wyświetla informacje o ścieżce."
+
+#: tools/gtk-path-tool-info.c:119
+msgid "Path is empty."
+msgstr "Ścieżka jest pusta."
+
+#: tools/gtk-path-tool-info.c:125
+msgid "Path is closed"
+msgstr "Ścieżka jest zamknięta"
+
+#: tools/gtk-path-tool-info.c:134
+#, c-format
+msgid "%d contours"
+msgstr "Obrysy: %d"
+
+#: tools/gtk-path-tool-info.c:136
+#, c-format
+msgid "%d operations"
+msgstr "Działania: %d"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+msgid "%d lines"
+msgstr "Linie: %d"
+
+#: tools/gtk-path-tool-info.c:145
+#, c-format
+msgid "%d quadratics"
+msgstr "Równania kwadratowe: %d"
+
+#: tools/gtk-path-tool-info.c:150
+#, c-format
+msgid "%d cubics"
+msgstr "Równania sześcienne: %d"
+
+#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
+msgid "Fill rule (winding, even-odd)"
+msgstr "Reguła wypełniania (kręcona, parzysta-nieparzysta)"
+
+#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-render.c:56
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-render.c:58
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-render.c:60
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:122
+#: tools/gtk-path-tool-show.c:126 tools/gtk-path-tool-show.c:127
+#: tools/gtk-path-tool-show.c:128 tools/gtk-path-tool-show.c:129
+#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
+msgid "VALUE"
+msgstr "WARTOŚĆ"
+
+#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
+msgid "Foreground color"
+msgstr "Kolor pierwszego planu"
+
+#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-render.c:54
+#: tools/gtk-path-tool-show.c:123 tools/gtk-path-tool-show.c:124
+msgid "COLOR"
+msgstr "KOLOR"
+
+#: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
+msgid "Background color"
+msgstr "Kolor tła"
+
+#: tools/gtk-path-tool-render.c:55 tools/gtk-path-tool-show.c:125
+msgid "Stroke the path instead of filling it"
+msgstr "Pociąga ścieżkę zamiast ją wypełniać"
+
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:126
+msgid "Line width (number)"
+msgstr "Szerokość linii (liczba)"
+
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:127
+msgid "Line cap (butt, round, square)"
+msgstr "Koniec linii (grubszy koniec, okrągły, kwadratowy)"
+
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:128
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr "Złącze linii (kątowe, kątowe przycięte, okrągłe, skośne, łuki)"
+
+#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:129
+msgid "Miter limit (number)"
+msgstr "Ograniczenie kątowych (liczba)"
+
+#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:130
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "Wzór kresek (liczby oddzielone przecinkami)"
+
+#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:131
+msgid "Dash offset (number)"
+msgstr "Wyrównanie kresek (liczba)"
+
+#: tools/gtk-path-tool-render.c:62
+msgid "The output file"
+msgstr "Plik wyjściowy"
+
+#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:145
+msgid "Could not initialize windowing system"
+msgstr "Nie można zainicjować systemu okien"
+
+#: tools/gtk-path-tool-render.c:89
+msgid "Render the path to a png image."
+msgstr "Rysuje ścieżkę do obrazu PNG."
+
+#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:166
+msgid "No path specified"
+msgstr "Nie podano ścieżki"
+
+#: tools/gtk-path-tool-render.c:108
+msgid "Can only render a single path"
+msgstr "Można narysować tylko jedną ścieżkę"
+
+#: tools/gtk-path-tool-render.c:114 tools/gtk-path-tool-show.c:178
+msgid "fill rule"
+msgstr "reguła wypełniania"
+
+#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:182
+msgid "line cap"
+msgstr "koniec linii"
+
+#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:183
+msgid "line join"
+msgstr "złącze linii"
+
+#: tools/gtk-path-tool-render.c:143 tools/gtk-path-tool-show.c:207
+#, c-format
+msgid "Failed to parse '%s' as number"
+msgstr "Przetworzenie „%s” jako liczby się nie powiodło"
+
+#: tools/gtk-path-tool-render.c:187
+#, c-format
+msgid "Saving png to '%s' failed"
+msgstr "Zapisanie obrazu PNG do „%s” się nie powiodło"
+
+#: tools/gtk-path-tool-render.c:194
+#, c-format
+msgid "Output written to '%s'."
+msgstr "Wyjście zapisano do „%s”."
+
+#: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
+msgid "Path Preview"
+msgstr "Podgląd ścieżki"
+
+#: tools/gtk-path-tool-show.c:153
+msgid "Display the path."
+msgstr "Wyświetla ścieżkę."
+
+#: tools/gtk-path-tool-show.c:172
+msgid "Can only show a single path"
+msgstr "Można wyświetlić tylko jedną ścieżkę"
+
+#: tools/gtk-path-tool-utils.c:58
+#, c-format
+msgid "Failed to read from standard input: %s\n"
+msgstr "Odczytanie ze standardowego wejścia się nie powiodło: %s\n"
+
+#: tools/gtk-path-tool-utils.c:64
+#, c-format
+msgid "Error reading from standard input: %s\n"
+msgstr "Błąd podczas odczytywania ze standardowego wejścia: %s\n"
+
+#: tools/gtk-path-tool-utils.c:83
+#, c-format
+msgid "Failed to parse '%s' as path.\n"
+msgstr "Przetworzenie „%s” jako ścieżki się nie powiodło.\n"
+
+#: tools/gtk-path-tool-utils.c:109
+#, c-format
+msgid "Failed to parse '%s' as %s."
+msgstr "Przetworzenie „%s” jako %s się nie powiodło."
+
+#: tools/gtk-path-tool-utils.c:111
+msgid "Possible values: "
+msgstr "Możliwe wartości: "
+
+#: tools/gtk-path-tool-utils.c:135
+#, c-format
+msgid "Could not parse '%s' as color"
+msgstr "Nie można przetworzyć „%s” jako kolor"
+
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
 msgid ""
@@ -7484,49 +7718,40 @@ msgstr ""
 "  render       Wykonuje zrzut ekranu węzła\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:185
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Liczba węzłów: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:192
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Głębokość: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:195
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Granice: %g×%g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:196
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Punkt początkowy: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:217
 msgid "Provide information about the render node."
 msgstr "Podaje informacje o węźle rysowania."
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:230 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-show.c:130
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Nie podano pliku .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:236
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Może przyjąć tylko jeden plik .node\n"
-
-#: tools/gtk-rendernode-tool-show.c:117
-msgid "Show the render node."
-msgstr "Wyświetla węzeł rysowania."
-
-#: tools/gtk-rendernode-tool-show.c:136
-#, c-format
-msgid "Can only preview a single .node file\n"
-msgstr "Można wyświetlić podgląd tylko jednego pliku .node\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7558,6 +7783,15 @@ msgstr "Rysuje plik .node do obrazu."
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Można narysować tylko jeden plik .node do jednego pliku wyjściowego\n"
+
+#: tools/gtk-rendernode-tool-show.c:117
+msgid "Show the render node."
+msgstr "Wyświetla węzeł rysowania."
+
+#: tools/gtk-rendernode-tool-show.c:136
+#, c-format
+msgid "Can only preview a single .node file\n"
+msgstr "Można wyświetlić podgląd tylko jednego pliku .node\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
