@@ -608,7 +608,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
  * the required height for the natural width is generally smaller than the
  * required height for the minimum width.
  *
- * Use [id@gtk_widget_measure] if you want to support baseline alignment.
+ * Use [method@Gtk.Widget.measure] if you want to support baseline alignment.
  */
 void
 gtk_widget_get_preferred_size (GtkWidget      *widget,

@@ -566,7 +566,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * A logo for the about box.
    *
    * If it is `NULL`, the default window icon set with
-   * [id@gtk_window_set_default_icon_name] will be used.
+   * [func@Gtk.Window.set_default_icon_name] will be used.
    */
   props[PROP_LOGO] =
     g_param_spec_object ("logo", NULL, NULL,
