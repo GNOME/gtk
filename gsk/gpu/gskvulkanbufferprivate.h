@@ -1,30 +1,25 @@
 #pragma once
 
+#include "gskgpubufferprivate.h"
+
 #include "gskvulkandeviceprivate.h"
 
 G_BEGIN_DECLS
 
-typedef struct _GskVulkanBuffer GskVulkanBuffer;
+#define GSK_TYPE_VULKAN_BUFFER (gsk_vulkan_buffer_get_type ())
 
-typedef enum
-{
-  GSK_VULKAN_READ = (1 << 0),
-  GSK_VULKAN_WRITE = (1 << 1),
-  GSK_VULKAN_READWRITE = GSK_VULKAN_READ | GSK_VULKAN_WRITE
-} GskVulkanMapMode;
+G_DECLARE_FINAL_TYPE (GskVulkanBuffer, gsk_vulkan_buffer, GSK, VULKAN_BUFFER, GskGpuBuffer)
 
-GskVulkanBuffer *       gsk_vulkan_buffer_new                           (GskVulkanDevice        *device,
+GskGpuBuffer *          gsk_vulkan_buffer_new_vertex                    (GskVulkanDevice        *device,
                                                                          gsize                   size);
-GskVulkanBuffer *       gsk_vulkan_buffer_new_storage                   (GskVulkanDevice        *device,
+GskGpuBuffer *          gsk_vulkan_buffer_new_storage                   (GskVulkanDevice        *device,
                                                                          gsize                   size);
-GskVulkanBuffer *       gsk_vulkan_buffer_new_map                       (GskVulkanDevice        *device,
-                                                                         gsize                   size,
-                                                                         GskVulkanMapMode        mode);
-void                    gsk_vulkan_buffer_free                          (GskVulkanBuffer        *buffer);
+GskGpuBuffer *          gsk_vulkan_buffer_new_write                     (GskVulkanDevice        *device,
+                                                                         gsize                   size);
+GskGpuBuffer *          gsk_vulkan_buffer_new_read                      (GskVulkanDevice        *device,
+                                                                         gsize                   size);
 
-VkBuffer                gsk_vulkan_buffer_get_buffer                    (GskVulkanBuffer        *self);
-gsize                   gsk_vulkan_buffer_get_size                      (GskVulkanBuffer        *self);
-guchar *                gsk_vulkan_buffer_get_data                      (GskVulkanBuffer        *self);
+VkBuffer                gsk_vulkan_buffer_get_vk_buffer                 (GskVulkanBuffer        *self);
 
 G_END_DECLS
 

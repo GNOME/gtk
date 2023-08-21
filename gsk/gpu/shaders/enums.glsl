@@ -1,0 +1,8 @@
+#ifndef _ENUMS_
+#define _ENUMS_
+
+#define GSK_GPU_SHADER_CLIP_NONE 0u
+#define GSK_GPU_SHADER_CLIP_RECT 1u
+#define GSK_GPU_SHADER_CLIP_ROUNDED 2u
+
+#endif

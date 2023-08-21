@@ -23,28 +23,23 @@ gsk_gpu_op_finish (GskGpuOp *op)
 }
 
 void
-gsk_gpu_op_print (GskGpuOp *op,
-                  GString  *string,
-                  guint     indent)
+gsk_gpu_op_print (GskGpuOp    *op,
+                  GskGpuFrame *frame,
+                  GString     *string,
+                  guint        indent)
 {
-  op->op_class->print (op, string, indent);
+  op->op_class->print (op, frame, string, indent);
 }
 
 #ifdef GDK_RENDERING_VULKAN
-void
-gsk_gpu_op_vk_reserve_descriptor_sets (GskGpuOp    *op,
-                                       GskGpuFrame *frame)
-{
-  op->op_class->vk_reserve_descriptor_sets (op, frame);
-}
-
 GskGpuOp *
 gsk_gpu_op_vk_command (GskGpuOp        *op,
                        GskGpuFrame     *frame,
                        VkRenderPass     render_pass,
+                       VkFormat                format,
                        VkCommandBuffer  command_buffer)
 {
-  return op->op_class->vk_command (op, frame, render_pass, command_buffer);
+  return op->op_class->vk_command (op, frame, render_pass, format, command_buffer);
 }
 #endif
 

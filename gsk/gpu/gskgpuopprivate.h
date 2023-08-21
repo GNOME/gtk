@@ -32,15 +32,15 @@ struct _GskGpuOpClass
   void                  (* finish)                                      (GskGpuOp               *op);
 
   void                  (* print)                                       (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
                                                                          GString                *string,
                                                                          guint                   indent);
 
 #ifdef GDK_RENDERING_VULKAN
-  void                  (* vk_reserve_descriptor_sets)                  (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame);
   GskGpuOp *            (* vk_command)                                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          VkRenderPass            render_pass,
+                                                                         VkFormat                format,
                                                                          VkCommandBuffer         command_buffer);
 #endif
   GskGpuOp *            (* gl_command)                                  (GskGpuOp               *op,
@@ -55,15 +55,15 @@ GskGpuOp *              gsk_gpu_op_alloc                                (GskGpuF
 void                    gsk_gpu_op_finish                               (GskGpuOp               *op);
 
 void                    gsk_gpu_op_print                                (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
                                                                          GString                *string,
                                                                          guint                   indent);
 
 #ifdef GDK_RENDERING_VULKAN
-void                    gsk_gpu_op_vk_reserve_descriptor_sets           (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame);
 GskGpuOp *              gsk_gpu_op_vk_command                           (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          VkRenderPass            render_pass,
+                                                                         VkFormat                format,
                                                                          VkCommandBuffer         command_buffer);
 #endif
 GskGpuOp *              gsk_gpu_op_gl_command                           (GskGpuOp               *op,

@@ -92,12 +92,6 @@ gsk_gpu_upload_op_gl_command (GskGpuOp          *op,
 }
 
 #ifdef GDK_RENDERING_VULKAN
-static void
-gsk_gpu_upload_op_vk_reserve_descriptor_sets (GskGpuOp    *op,
-                                              GskGpuFrame *frame)
-{
-}
-
 static GskGpuOp *
 gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                                         GskGpuFrame                 *frame,
@@ -105,18 +99,19 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                                         GskVulkanImage              *image,
                                         const cairo_rectangle_int_t *area,
                                         void           (* draw_func) (GskGpuOp *, guchar *, gsize),
-                                        GskVulkanBuffer            **buffer)
+                                        GskGpuBuffer               **buffer)
 {
   gsize stride;
   guchar *data;
 
   stride = area->width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)));
-  *buffer = gsk_vulkan_buffer_new_map (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                       area->height * stride,
-                                       GSK_VULKAN_WRITE);
-  data = gsk_vulkan_buffer_get_data (*buffer);
+  *buffer = gsk_vulkan_buffer_new_write (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                         area->height * stride);
+  data = gsk_gpu_buffer_map (*buffer);
 
   draw_func (op, data, stride);
+  
+  gsk_gpu_buffer_unmap (*buffer);
 
   vkCmdPipelineBarrier (command_buffer,
                         VK_PIPELINE_STAGE_HOST_BIT,
@@ -129,7 +124,7 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                             .dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT,
                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                            .buffer = gsk_vulkan_buffer_get_buffer (*buffer),
+                            .buffer = gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (*buffer)),
                             .offset = 0,
                             .size = VK_WHOLE_SIZE,
                         },
@@ -141,7 +136,7 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                                VK_ACCESS_TRANSFER_WRITE_BIT);
 
   vkCmdCopyBufferToImage (command_buffer,
-                          gsk_vulkan_buffer_get_buffer (*buffer),
+                          gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (*buffer)),
                           gsk_vulkan_image_get_vk_image (image),
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                           1,
@@ -178,7 +173,7 @@ gsk_gpu_upload_op_vk_command (GskGpuOp         *op,
                               VkCommandBuffer   command_buffer,
                               GskVulkanImage   *image,
                               void              (* draw_func) (GskGpuOp *, guchar *, gsize),
-                              GskVulkanBuffer **buffer)
+                              GskGpuBuffer    **buffer)
 {
   gsize stride;
   guchar *data;
@@ -218,9 +213,7 @@ struct _GskGpuUploadCairoOp
   GskRenderNode *node;
   graphene_rect_t viewport;
 
-#ifdef GDK_RENDERING_VULKAN
-  GskVulkanBuffer *buffer;
-#endif
+  GskGpuBuffer *buffer;
 };
 
 static void
@@ -230,15 +223,14 @@ gsk_gpu_upload_cairo_op_finish (GskGpuOp *op)
 
   g_object_unref (self->image);
   gsk_render_node_unref (self->node);
-#ifdef GDK_RENDERING_VULKAN
-  g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);
-#endif
+  g_clear_object (&self->buffer);
 }
 
 static void
-gsk_gpu_upload_cairo_op_print (GskGpuOp *op,
-                               GString  *string,
-                               guint     indent)
+gsk_gpu_upload_cairo_op_print (GskGpuOp    *op,
+                               GskGpuFrame *frame,
+                               GString     *string,
+                               guint        indent)
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
@@ -283,10 +275,11 @@ gsk_gpu_upload_cairo_op_draw (GskGpuOp *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static GskGpuOp *
-gsk_gpu_upload_cairo_op_vk_command (GskGpuOp         *op,
-                                    GskGpuFrame      *frame,
-                                    VkRenderPass      render_pass,
-                                    VkCommandBuffer   command_buffer)
+gsk_gpu_upload_cairo_op_vk_command (GskGpuOp        *op,
+                                    GskGpuFrame     *frame,
+                                    VkRenderPass     render_pass,
+                                    VkFormat         format,
+                                    VkCommandBuffer  command_buffer)
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
@@ -317,7 +310,6 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
   gsk_gpu_upload_cairo_op_finish,
   gsk_gpu_upload_cairo_op_print,
 #ifdef GDK_RENDERING_VULKAN
-  gsk_gpu_upload_op_vk_reserve_descriptor_sets,
   gsk_gpu_upload_cairo_op_vk_command,
 #endif
   gsk_gpu_upload_cairo_op_gl_command

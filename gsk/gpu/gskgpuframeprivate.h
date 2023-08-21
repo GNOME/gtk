@@ -26,7 +26,13 @@ struct _GskGpuFrameClass
   gboolean              (* is_busy)                                     (GskGpuFrame            *self);
   void                  (* setup)                                       (GskGpuFrame            *self);
   void                  (* cleanup)                                     (GskGpuFrame            *self);
+  guint32               (* get_image_descriptor)                        (GskGpuFrame            *self,
+                                                                         GskGpuImage            *image,
+                                                                         GskGpuSampler           sampler);
+  GskGpuBuffer *        (* create_vertex_buffer)                        (GskGpuFrame            *self,
+                                                                         gsize                   size);
   void                  (* submit)                                      (GskGpuFrame            *self,
+                                                                         GskGpuBuffer           *vertex_buffer,
                                                                          GskGpuOp               *op);
 };
 
@@ -37,11 +43,18 @@ void                    gsk_gpu_frame_setup                             (GskGpuF
                                                                          GskGpuRenderer         *renderer,
                                                                          GskGpuDevice           *device);
 
-GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self);
-GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self);
+GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self) G_GNUC_PURE;
+GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self) G_GNUC_PURE;
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
                                                                          gsize                   size);
+gsize                   gsk_gpu_frame_reserve_vertex_data               (GskGpuFrame            *self,
+                                                                         gsize                   size);
+guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuFrame            *self,
+                                                                         gsize                   offset);
+guint32                 gsk_gpu_frame_get_image_descriptor              (GskGpuFrame            *self,
+                                                                         GskGpuImage            *image,
+                                                                         GskGpuSampler           sampler);
 
 gboolean                gsk_gpu_frame_is_busy                           (GskGpuFrame            *self);
 

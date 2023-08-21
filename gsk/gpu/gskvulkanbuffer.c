@@ -7,6 +7,8 @@
 
 struct _GskVulkanBuffer
 {
+  GskGpuBuffer parent_instance;
+
   GskVulkanDevice *device;
 
   VkBuffer vk_buffer;
@@ -15,7 +17,56 @@ struct _GskVulkanBuffer
   GskVulkanAllocation allocation;
 };
 
-static GskVulkanBuffer *
+G_DEFINE_TYPE (GskVulkanBuffer, gsk_vulkan_buffer, GSK_TYPE_GPU_BUFFER)
+
+static void
+gsk_vulkan_buffer_finalize (GObject *object)
+{
+  GskVulkanBuffer *self = GSK_VULKAN_BUFFER (object);
+
+  vkDestroyBuffer (gsk_vulkan_device_get_vk_device (self->device),
+                   self->vk_buffer,
+                   NULL);
+
+  gsk_vulkan_free (self->allocator, &self->allocation);
+  gsk_vulkan_allocator_unref (self->allocator);
+
+  g_object_unref (self->device);
+
+  G_OBJECT_CLASS (gsk_vulkan_buffer_parent_class)->finalize (object);
+}
+
+static guchar *
+gsk_vulkan_buffer_map (GskGpuBuffer *buffer)
+{
+  GskVulkanBuffer *self = GSK_VULKAN_BUFFER (buffer);
+
+  return self->allocation.map;
+}
+
+static void
+gsk_vulkan_buffer_unmap (GskGpuBuffer *buffer)
+{
+}
+
+static void
+gsk_vulkan_buffer_class_init (GskVulkanBufferClass *klass)
+{
+  GskGpuBufferClass *buffer_class = GSK_GPU_BUFFER_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  buffer_class->map = gsk_vulkan_buffer_map;
+  buffer_class->unmap = gsk_vulkan_buffer_unmap;
+
+  gobject_class->finalize = gsk_vulkan_buffer_finalize;
+}
+
+static void
+gsk_vulkan_buffer_init (GskVulkanBuffer *self)
+{
+}
+
+static GskGpuBuffer *
 gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
                                 gsize              size,
                                 VkBufferUsageFlags usage)
@@ -23,7 +74,7 @@ gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
   VkMemoryRequirements requirements;
   GskVulkanBuffer *self;
 
-  self = g_new0 (GskVulkanBuffer, 1);
+  self = g_object_new (GSK_TYPE_VULKAN_BUFFER, NULL);
 
   self->device = g_object_ref (device);
 
@@ -51,70 +102,49 @@ gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
                     requirements.alignment,
                     &self->allocation);
 
+  gsk_gpu_buffer_setup (GSK_GPU_BUFFER (self), self->allocation.size);
+
   GSK_VK_CHECK (vkBindBufferMemory, gsk_vulkan_device_get_vk_device (device),
                                     self->vk_buffer,
                                     self->allocation.vk_memory,
                                     self->allocation.offset);
 
-  return self;
+  return GSK_GPU_BUFFER (self);
 }
 
-GskVulkanBuffer *
-gsk_vulkan_buffer_new (GskVulkanDevice *device,
-                       gsize            size)
+GskGpuBuffer *
+gsk_vulkan_buffer_new_vertex (GskVulkanDevice *device,
+                              gsize            size)
 {
   return gsk_vulkan_buffer_new_internal (device, size,
                                          VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
                                          | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
 }
 
-GskVulkanBuffer *
+GskGpuBuffer *
 gsk_vulkan_buffer_new_storage (GskVulkanDevice *device,
                                gsize            size)
 {
   return gsk_vulkan_buffer_new_internal (device, size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 }
 
-GskVulkanBuffer *
-gsk_vulkan_buffer_new_map (GskVulkanDevice  *device,
-                           gsize             size,
-                           GskVulkanMapMode  mode)
+GskGpuBuffer *
+gsk_vulkan_buffer_new_write (GskVulkanDevice *device,
+                             gsize            size)
 {
-  return gsk_vulkan_buffer_new_internal (device,
-                                         size,
-                                         (mode & GSK_VULKAN_READ ? VK_BUFFER_USAGE_TRANSFER_DST_BIT : 0) |
-                                         (mode & GSK_VULKAN_WRITE ? VK_BUFFER_USAGE_TRANSFER_SRC_BIT : 0));
+  return gsk_vulkan_buffer_new_internal (device, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
 }
 
-void
-gsk_vulkan_buffer_free (GskVulkanBuffer *self)
+GskGpuBuffer *
+gsk_vulkan_buffer_new_read (GskVulkanDevice *device,
+                            gsize            size)
 {
-  vkDestroyBuffer (gsk_vulkan_device_get_vk_device (self->device),
-                   self->vk_buffer,
-                   NULL);
-
-  gsk_vulkan_free (self->allocator, &self->allocation);
-
-  g_object_unref (self->device);
-
-  g_free (self);
+  return gsk_vulkan_buffer_new_internal (device, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
 }
 
 VkBuffer
-gsk_vulkan_buffer_get_buffer (GskVulkanBuffer *self)
+gsk_vulkan_buffer_get_vk_buffer (GskVulkanBuffer *self)
 {
   return self->vk_buffer;
-}
-
-gsize
-gsk_vulkan_buffer_get_size (GskVulkanBuffer *self)
-{
-  return self->allocation.size;
-}
-
-guchar *
-gsk_vulkan_buffer_get_data (GskVulkanBuffer *self)
-{
-  return self->allocation.map;
 }
 

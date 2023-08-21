@@ -27,9 +27,7 @@ struct _GskGpuDownloadOp
   gpointer user_data;
 
   GdkTexture *texture;
-#ifdef GDK_RENDERING_VULKAN
-  GskVulkanBuffer *buffer;
-#endif
+  GskGpuBuffer *buffer;
 };
 
 static void
@@ -44,15 +42,14 @@ gsk_gpu_download_op_finish (GskGpuOp *op)
 
   g_object_unref (self->texture);
   g_object_unref (self->image);
-#ifdef GDK_RENDERING_VULKAN
-  g_clear_pointer (&self->buffer, gsk_vulkan_buffer_free);
-#endif
+  g_clear_object (&self->buffer);
 }
 
 static void
-gsk_gpu_download_op_print (GskGpuOp *op,
-                           GString  *string,
-                           guint     indent)
+gsk_gpu_download_op_print (GskGpuOp    *op,
+                           GskGpuFrame *frame,
+                           GString     *string,
+                           guint        indent)
 {
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
 
@@ -63,12 +60,6 @@ gsk_gpu_download_op_print (GskGpuOp *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static void
-gsk_gpu_download_op_vk_reserve_descriptor_sets (GskGpuOp    *op,
-                                                GskGpuFrame *frame)
-{
-}
-
-static void
 gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
 {
   GBytes *bytes;
@@ -76,7 +67,7 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
   gsize width, height, stride;
   GdkMemoryFormat format;
 
-  data = gsk_vulkan_buffer_get_data (self->buffer);
+  data = gsk_gpu_buffer_map (self->buffer);
   width = gsk_gpu_image_get_width (self->image);
   height = gsk_gpu_image_get_height (self->image);
   format = gsk_gpu_image_get_format (self->image);
@@ -88,12 +79,14 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
                                           bytes,
                                           stride);
   g_bytes_unref (bytes);
+  gsk_gpu_buffer_unmap (self->buffer);
 }
 
 static GskGpuOp *
 gsk_gpu_download_op_vk_command (GskGpuOp         *op,
                                 GskGpuFrame      *frame,
                                 VkRenderPass      render_pass,
+                                VkFormat          format,
                                 VkCommandBuffer   command_buffer)
 {
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
@@ -102,9 +95,8 @@ gsk_gpu_download_op_vk_command (GskGpuOp         *op,
   width = gsk_gpu_image_get_width (self->image);
   height = gsk_gpu_image_get_height (self->image);
   stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (self->image));
-  self->buffer = gsk_vulkan_buffer_new_map (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                            height * stride,
-                                            GSK_VULKAN_READ);
+  self->buffer = gsk_vulkan_buffer_new_read (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                             height * stride);
 
   gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->image),
                                command_buffer,
@@ -115,7 +107,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp         *op,
   vkCmdCopyImageToBuffer (command_buffer,
                           gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->image)),
                           VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                          gsk_vulkan_buffer_get_buffer (self->buffer),
+                          gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (self->buffer)),
                           1,
                           (VkBufferImageCopy[1]) {
                                {
@@ -152,7 +144,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp         *op,
                             .dstAccessMask = VK_ACCESS_HOST_READ_BIT,
                             .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
                             .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                            .buffer = gsk_vulkan_buffer_get_buffer (self->buffer),
+                            .buffer = gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (self->buffer)),
                             .offset = 0,
                             .size = VK_WHOLE_SIZE,
                         },
@@ -228,7 +220,6 @@ static const GskGpuOpClass GSK_GPU_DOWNLOAD_OP_CLASS = {
   gsk_gpu_download_op_finish,
   gsk_gpu_download_op_print,
 #ifdef GDK_RENDERING_VULKAN
-  gsk_gpu_download_op_vk_reserve_descriptor_sets,
   gsk_gpu_download_op_vk_command,
 #endif
   gsk_gpu_download_op_gl_command
