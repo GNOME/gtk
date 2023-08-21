@@ -78,6 +78,8 @@ struct _GskCurveClass
                                                          GskBoundingBox         *bounds);
   void                          (* get_derivative)      (const GskCurve         *curve,
                                                          GskCurve               *derivative);
+  int                           (* get_crossing)        (const GskCurve         *curve,
+                                                         const graphene_point_t *point);
 };
 
 /* {{{ Utilities */
@@ -89,6 +91,51 @@ get_tangent (const graphene_point_t *p0,
 {
   graphene_vec2_init (t, p1->x - p0->x, p1->y - p0->y);
   graphene_vec2_normalize (t, t);
+}
+
+static int
+line_get_crossing (const graphene_point_t *p,
+                   const graphene_point_t *p1,
+                   const graphene_point_t *p2)
+{
+  if (p1->y <= p->y)
+    {
+      if (p2->y > p->y)
+        {
+          if ((p2->x - p1->x) * (p->y - p1->y) - (p->x - p1->x) * (p2->y - p1->y) > 0)
+            return 1;
+        }
+    }
+  else if (p2->y <= p->y)
+    {
+      if ((p2->x - p1->x) * (p->y - p1->y) - (p->x - p1->x) * (p2->y - p1->y) < 0)
+        return -1;
+    }
+
+  return 0;
+}
+
+static int
+get_crossing_by_bisection (const GskCurve         *curve,
+                           const graphene_point_t *point)
+{
+  GskBoundingBox bounds;
+  GskCurve c1, c2;
+
+  gsk_curve_get_bounds (curve, &bounds);
+
+  if (bounds.max.y < point->y || bounds.min.y > point->y || bounds.max.x < point->x)
+    return 0;
+
+  if (bounds.min.x > point->x)
+    return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
+
+  if (graphene_point_distance (&bounds.min, &bounds.max, NULL, NULL) < 0.001)
+    return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
+
+  gsk_curve_split (curve, 0.5, &c1, &c2);
+
+  return gsk_curve_get_crossing (&c1, point) + gsk_curve_get_crossing (&c2, point);
 }
 
 /* Replace a line by an equivalent quad,
@@ -326,6 +373,13 @@ gsk_line_curve_get_derivative (const GskCurve *curve,
   gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p, &p);
 }
 
+static int
+gsk_line_curve_get_crossing (const GskCurve         *curve,
+                             const graphene_point_t *point)
+{
+  return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -346,6 +400,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_derivative,
+  gsk_line_curve_get_crossing,
 };
 
 /* }}} */
@@ -701,6 +756,13 @@ gsk_quad_curve_get_derivative (const GskCurve *curve,
   gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p[0], &p[1]);
 }
 
+static int
+gsk_quad_curve_get_crossing (const GskCurve         *curve,
+                             const graphene_point_t *point)
+{
+  return get_crossing_by_bisection (curve, point);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -721,6 +783,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_bounds,
   gsk_quad_curve_get_tight_bounds,
   gsk_quad_curve_get_derivative,
+  gsk_quad_curve_get_crossing,
 };
 
 /* }}} */
@@ -1147,6 +1210,13 @@ gsk_cubic_curve_get_derivative (const GskCurve *curve,
   gsk_quad_curve_init_from_points (&deriv->quad, p);
 }
 
+static int
+gsk_cubic_curve_get_crossing (const GskCurve         *curve,
+                              const graphene_point_t *point)
+{
+  return get_crossing_by_bisection (curve, point);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -1167,6 +1237,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_bounds,
   gsk_cubic_curve_get_tight_bounds,
   gsk_cubic_curve_get_derivative,
+  gsk_cubic_curve_get_crossing,
 };
 
 /* }}} */
@@ -1364,52 +1435,11 @@ gsk_curve_get_derivative (const GskCurve *curve,
   get_class (curve->op)->get_derivative (curve, deriv);
 }
 
-static inline int
-line_get_crossing (const graphene_point_t *p,
-                   const graphene_point_t *p1,
-                   const graphene_point_t *p2)
-{
-  if (p1->y <= p->y)
-    {
-      if (p2->y > p->y)
-        {
-          if ((p2->x - p1->x) * (p->y - p1->y) - (p->x - p1->x) * (p2->y - p1->y) > 0)
-            return 1;
-        }
-    }
-  else if (p2->y <= p->y)
-    {
-      if ((p2->x - p1->x) * (p->y - p1->y) - (p->x - p1->x) * (p2->y - p1->y) < 0)
-        return -1;
-    }
-
-  return 0;
-}
-
 int
 gsk_curve_get_crossing (const GskCurve         *curve,
                         const graphene_point_t *point)
 {
-  GskBoundingBox bounds;
-  GskCurve c1, c2;
-
-  if (curve->op == GSK_PATH_LINE || curve->op == GSK_PATH_CLOSE)
-    return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
-
-  gsk_curve_get_bounds (curve, &bounds);
-
-  if (bounds.max.y < point->y || bounds.min.y > point->y || bounds.max.x < point->x)
-    return 0;
-
-  if (bounds.min.x > point->x)
-    return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
-
-  if (graphene_point_distance (&bounds.min, &bounds.max, NULL, NULL) < 0.001)
-    return line_get_crossing (point, gsk_curve_get_start_point (curve), gsk_curve_get_end_point (curve));
-
-  gsk_curve_split (curve, 0.5, &c1, &c2);
-
-  return gsk_curve_get_crossing (&c1, point) + gsk_curve_get_crossing (&c2, point);
+  return get_class (curve->op)->get_crossing (curve, point);
 }
 
 static gboolean
