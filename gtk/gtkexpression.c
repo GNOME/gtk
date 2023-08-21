@@ -89,7 +89,7 @@
  * ## GtkExpression in GObject properties
  *
  * In order to use a `GtkExpression` as a `GObject` property, you must use the
- * [id@gtk_param_spec_expression] when creating a `GParamSpec` to install in the
+ * [func@Gtk.param_spec_expression] when creating a `GParamSpec` to install in the
  * `GObject` class being defined; for instance:
  *
  * ```c
@@ -103,8 +103,8 @@
  * ```
  *
  * When implementing the `GObjectClass.set_property` and `GObjectClass.get_property`
- * virtual functions, you must use [id@gtk_value_get_expression], to retrieve the
- * stored `GtkExpression` from the `GValue` container, and [id@gtk_value_set_expression],
+ * virtual functions, you must use [func@Gtk.value_get_expression], to retrieve the
+ * stored `GtkExpression` from the `GValue` container, and [func@Gtk.value_set_expression],
  * to store the `GtkExpression` into the `GValue`; for instance:
  *
  * ```c

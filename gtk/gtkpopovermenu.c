@@ -128,7 +128,7 @@
  *
  * Menu items will also show accelerators, which are usually associated
  * with actions via [method@Gtk.Application.set_accels_for_action],
- * [id@gtk_widget_class_add_binding_action] or
+ * [method@WidgetClass.add_binding_action] or
  * [method@Gtk.ShortcutController.add_shortcut].
  *
  * # CSS Nodes
@@ -543,7 +543,7 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
                     GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
- 
+
   gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
                                        "move-focus",
                                        "(i)", direction);
