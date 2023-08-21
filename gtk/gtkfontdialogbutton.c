@@ -395,7 +395,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   /**
-   * FontDialogButton::activate:
+   * GtkFontDialogButton::activate:
    * @widget: The object which received the signal
    *
    * Emitted when the font dialog button is activated.
