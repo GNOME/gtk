@@ -76,6 +76,8 @@ struct _GskCurveClass
                                                          GskBoundingBox         *bounds);
   void                          (* get_tight_bounds)    (const GskCurve         *curve,
                                                          GskBoundingBox         *bounds);
+  void                          (* get_derivative)      (const GskCurve         *curve,
+                                                         GskCurve               *derivative);
 };
 
 /* {{{ Utilities */
@@ -311,6 +313,19 @@ gsk_line_curve_get_bounds (const GskCurve  *curve,
   gsk_bounding_box_init (bounds, &pts[0], &pts[1]);
 }
 
+static void
+gsk_line_curve_get_derivative (const GskCurve *curve,
+                               GskCurve       *deriv)
+{
+  const GskLineCurve *self = &curve->line;
+  graphene_point_t p;
+
+  p.x = self->points[1].x - self->points[0].x;
+  p.y = self->points[1].y - self->points[0].y;
+
+  gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p, &p);
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -330,6 +345,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_decompose_curve,
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_bounds,
+  gsk_line_curve_get_derivative,
 };
 
 /* }}} */
@@ -670,6 +686,21 @@ gsk_quad_curve_get_tight_bounds (const GskCurve  *curve,
     }
 }
 
+static void
+gsk_quad_curve_get_derivative (const GskCurve *curve,
+                               GskCurve       *deriv)
+{
+  const GskQuadCurve *self = &curve->quad;
+  graphene_point_t p[2];
+
+  p[0].x = 2.f * (self->points[1].x - self->points[0].x);
+  p[0].y = 2.f * (self->points[1].y - self->points[0].y);
+  p[1].x = 2.f * (self->points[2].x - self->points[1].x);
+  p[1].y = 2.f * (self->points[2].y - self->points[1].y);
+
+  gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p[0], &p[1]);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -689,6 +720,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_decompose_curve,
   gsk_quad_curve_get_bounds,
   gsk_quad_curve_get_tight_bounds,
+  gsk_quad_curve_get_derivative,
 };
 
 /* }}} */
@@ -859,61 +891,6 @@ gsk_cubic_curve_reverse (const GskCurve *curve,
   reverse->cubic.has_coefficients = FALSE;
 }
 
-static void
-gsk_curve_get_derivative (const GskCurve *curve,
-                          GskCurve       *deriv)
-{
-  switch (curve->op)
-    {
-    case GSK_PATH_LINE:
-      {
-        const GskLineCurve *self = &curve->line;
-        graphene_point_t p;
-
-        p.x = self->points[1].x - self->points[0].x;
-        p.y = self->points[1].y - self->points[0].y;
-
-        gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p, &p);
-      }
-      break;
-
-    case GSK_PATH_QUAD:
-      {
-        const GskQuadCurve *self = &curve->quad;
-        graphene_point_t p[2];
-
-        p[0].x = 2.f * (self->points[1].x - self->points[0].x);
-        p[0].y = 2.f * (self->points[1].y - self->points[0].y);
-        p[1].x = 2.f * (self->points[2].x - self->points[1].x);
-        p[1].y = 2.f * (self->points[2].y - self->points[1].y);
-
-        gsk_line_curve_init_from_points (&deriv->line, GSK_PATH_LINE, &p[0], &p[1]);
-      }
-      break;
-
-    case GSK_PATH_CUBIC:
-      {
-        const GskCubicCurve *self = &curve->cubic;
-        graphene_point_t p[3];
-
-        p[0].x = 3.f * (self->points[1].x - self->points[0].x);
-        p[0].y = 3.f * (self->points[1].y - self->points[0].y);
-        p[1].x = 3.f * (self->points[2].x - self->points[1].x);
-        p[1].y = 3.f * (self->points[2].y - self->points[1].y);
-        p[2].x = 3.f * (self->points[3].x - self->points[2].x);
-        p[2].y = 3.f * (self->points[3].y - self->points[2].y);
-
-        gsk_quad_curve_init_from_points (&deriv->quad, p);
-      }
-      break;
-
-    case GSK_PATH_MOVE:
-    case GSK_PATH_CLOSE:
-    default:
-      g_assert_not_reached ();
-    }
-}
-
 static inline float
 cross (const graphene_vec2_t *v1,
        const graphene_vec2_t *v2)
@@ -928,6 +905,9 @@ pow3 (float w)
   return w * w * w;
 }
 
+static void gsk_cubic_curve_get_derivative (const GskCurve *curve,
+                                            GskCurve       *deriv);
+
 static float
 gsk_cubic_curve_get_curvature (const GskCurve *curve,
                                float           t)
@@ -937,8 +917,8 @@ gsk_cubic_curve_get_curvature (const GskCurve *curve,
   graphene_vec2_t d, dd;
   float num, denom;
 
-  gsk_curve_get_derivative (curve, &c1);
-  gsk_curve_get_derivative (&c1, &c2);
+  gsk_cubic_curve_get_derivative (curve, &c1);
+  gsk_quad_curve_get_derivative (&c1, &c2);
 
   gsk_curve_get_point (&c1, t, &p);
   gsk_curve_get_point (&c2, t, &pp);
@@ -1150,6 +1130,23 @@ gsk_cubic_curve_get_tight_bounds (const GskCurve  *curve,
     }
 }
 
+static void
+gsk_cubic_curve_get_derivative (const GskCurve *curve,
+                                GskCurve       *deriv)
+{
+  const GskCubicCurve *self = &curve->cubic;
+  graphene_point_t p[3];
+
+  p[0].x = 3.f * (self->points[1].x - self->points[0].x);
+  p[0].y = 3.f * (self->points[1].y - self->points[0].y);
+  p[1].x = 3.f * (self->points[2].x - self->points[1].x);
+  p[1].y = 3.f * (self->points[2].y - self->points[1].y);
+  p[2].x = 3.f * (self->points[3].x - self->points[2].x);
+  p[2].y = 3.f * (self->points[3].y - self->points[2].y);
+
+  gsk_quad_curve_init_from_points (&deriv->quad, p);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -1169,6 +1166,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_decompose_curve,
   gsk_cubic_curve_get_bounds,
   gsk_cubic_curve_get_tight_bounds,
+  gsk_cubic_curve_get_derivative,
 };
 
 /* }}} */
@@ -1357,6 +1355,13 @@ gsk_curve_get_tight_bounds (const GskCurve  *curve,
                             GskBoundingBox  *bounds)
 {
   get_class (curve->op)->get_tight_bounds (curve, bounds);
+}
+
+void
+gsk_curve_get_derivative (const GskCurve *curve,
+                          GskCurve       *deriv)
+{
+  get_class (curve->op)->get_derivative (curve, deriv);
 }
 
 static inline int
