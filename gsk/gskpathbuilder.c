@@ -1040,6 +1040,25 @@ _sincos (double angle,
 #endif
 }
 
+/**
+ * gsk_path_builder_svg_arc_to:
+ * @self: a `GskPathBuilder`
+ * @rx: X radius
+ * @ry: Y radius
+ * @x_axis_rotation: the rotation of the ellipsis
+ * @large_arc: whether to add the large arc
+ * @positive_sweep: whether to sweep in the positive direction
+ * @x: the X coordinate of the endpoint
+ * @y: the Y coordinate of the endpoint
+ *
+ * Implements arc-to according to the SVG spec.
+ *
+ * A convenience function that implements the
+ * [SVG arc_to](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands)
+ * functionality.
+ *
+ * Since: 4.14
+ */
 void
 gsk_path_builder_svg_arc_to (GskPathBuilder *self,
                              float           rx,
@@ -1071,6 +1090,8 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
   double sin_th1, cos_th1;
   double th_half;
   double t;
+
+  g_return_if_fail (self != NULL);
 
   if (self->points->len > 0)
     {

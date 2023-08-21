@@ -56,15 +56,5 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
-void                    gsk_path_builder_svg_arc_to             (GskPathBuilder         *builder,
-                                                                 float                   rx,
-                                                                 float                   ry,
-                                                                 float                   x_axis_rotation,
-                                                                 gboolean                large_arc,
-                                                                 gboolean                positive_sweep,
-                                                                 float                   x,
-                                                                 float                   y);
-
-
 G_END_DECLS
 
