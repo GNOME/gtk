@@ -97,10 +97,6 @@ if have_vulkan
 endif
 
 gsk_private_vulkan_shaders = []
-# This is an odd split because we use configure_file() below to workaround
-# a limitation in meson preventing using custom_target() with gnome.compile_resources()
-# and that requires file paths, but we also need to have dependencies during development
-# on constantly regenerated files.
 gsk_private_vulkan_compiled_shaders = []
 gsk_private_vulkan_compiled_shaders_deps = []
 gsk_private_vulkan_shader_headers = []
@@ -148,7 +144,7 @@ if get_variable('broadway_enabled')
   ])
 endif
 
-gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
+gsk_resources_xml = custom_target(output: 'gsk.resources.xml',
   input: 'gen-gsk-gresources-xml.py',
   command: [
     find_program('gen-gsk-gresources-xml.py'),

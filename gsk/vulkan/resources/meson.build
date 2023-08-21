@@ -93,12 +93,12 @@ foreach shader: gsk_private_vulkan_shaders
 endforeach
 
 foreach shader: gsk_private_vulkan_vertex_shaders
-  shader_header = configure_file(output: '@0@.h'.format(shader),
-                                 input: shader,
-                                 command: [
-                                   find_program('generate-header.py'),
-                                   '@INPUT@',
-                                 ],
-                                 capture: true)
+  shader_header = custom_target(output: '@0@.h'.format(shader),
+                                input: shader,
+                                command: [
+                                  find_program('generate-header.py'),
+                                  '@INPUT@',
+                                ],
+                                capture: true)
   gsk_private_vulkan_shader_headers += shader_header
 endforeach
