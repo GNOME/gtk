@@ -201,7 +201,7 @@ gdk_x11_clipboard_formats_to_targets (GdkContentFormats *formats)
             continue;
 
           if (g_str_equal (mime_types[i], special_targets[j].mime_type))
-            targets = g_slist_prepend (targets, (gpointer) g_intern_string (special_targets[j].x_target));
+            targets = g_slist_prepend (targets, (gpointer) g_intern_static_string (special_targets[j].x_target));
         }
       targets = g_slist_prepend (targets, (gpointer) mime_types[i]);
     }
@@ -237,6 +237,8 @@ gdk_x11_clipboard_formats_to_atoms (GdkDisplay        *display,
   i = 0;
   for (l = targets; l; l = l->next)
     atoms[i++] = gdk_x11_get_xatom_by_name_for_display (display, l->data);
+
+  g_slist_free (targets);
 
   return atoms;
 }
