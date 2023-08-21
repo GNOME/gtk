@@ -28,6 +28,7 @@
 
 #include "gtkactionmuxerprivate.h"
 #include "gtkatcontextprivate.h"
+#include "gtkborder.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtklistlistmodelprivate.h"

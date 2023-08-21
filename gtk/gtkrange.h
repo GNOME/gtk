@@ -29,6 +29,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/gtkborder.h>
 #include <gtk/gtkwidget.h>
 
 
