@@ -8,5 +8,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GskGLFrame, gsk_gl_frame, GSK, GL_FRAME, GskGpuFrame)
 
+void                    gsk_gl_frame_use_program                        (GskGLFrame             *self,
+                                                                         const GskGpuShaderOpClass *op_class,
+                                                                         GskGpuShaderClip        clip);
 
 G_END_DECLS

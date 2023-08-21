@@ -31,9 +31,10 @@ gsk_gpu_blit_op_finish (GskGpuOp *op)
 }
 
 static void
-gsk_gpu_blit_op_print (GskGpuOp *op,
-                       GString  *string,
-                       guint     indent)
+gsk_gpu_blit_op_print (GskGpuOp    *op,
+                       GskGpuFrame *frame,
+                       GString     *string,
+                       guint        indent)
 {
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
 
@@ -43,16 +44,11 @@ gsk_gpu_blit_op_print (GskGpuOp *op,
 }
 
 #ifdef GDK_RENDERING_VULKAN
-static void
-gsk_gpu_blit_op_vk_reserve_descriptor_sets (GskGpuOp    *op,
-                                            GskGpuFrame *frame)
-{
-}
-
 static GskGpuOp *
 gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
                             GskGpuFrame     *frame,
                             VkRenderPass     render_pass,
+                            VkFormat         format,
                             VkCommandBuffer  command_buffer)
 {
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
@@ -195,7 +191,6 @@ static const GskGpuOpClass GSK_GPU_BLIT_OP_CLASS = {
   gsk_gpu_blit_op_finish,
   gsk_gpu_blit_op_print,
 #ifdef GDK_RENDERING_VULKAN
-  gsk_gpu_blit_op_vk_reserve_descriptor_sets,
   gsk_gpu_blit_op_vk_command,
 #endif
   gsk_gpu_blit_op_gl_command

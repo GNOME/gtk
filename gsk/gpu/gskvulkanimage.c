@@ -805,6 +805,7 @@ gsk_vulkan_image_finalize (GObject *object)
     {
       vkDestroyImage (device, self->vk_image, NULL);
       gsk_vulkan_free (self->allocator, &self->allocation);
+      gsk_vulkan_allocator_unref (self->allocator);
     }
 
   gdk_display_unref_vulkan (self->display);
@@ -825,8 +826,8 @@ gsk_vulkan_image_init (GskVulkanImage *self)
 }
 
 VkFramebuffer
-gsk_vulkan_image_get_framebuffer (GskVulkanImage *self,
-                                  VkRenderPass    render_pass)
+gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
+                                     VkRenderPass    render_pass)
 {
   if (self->vk_framebuffer)
     return self->vk_framebuffer;
@@ -862,7 +863,7 @@ gsk_vulkan_image_get_vk_image (GskVulkanImage *self)
 }
 
 VkImageView
-gsk_vulkan_image_get_image_view (GskVulkanImage *self)
+gsk_vulkan_image_get_vk_image_view (GskVulkanImage *self)
 {
   return self->vk_image_view;
 }

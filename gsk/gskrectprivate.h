@@ -94,3 +94,15 @@ gsk_rect_equal (const graphene_rect_t *r1,
          r1->size.width == r2->size.width &&
          r1->size.height == r2->size.height;
 }
+
+static inline void
+gsk_gpu_rect_to_float (const graphene_rect_t  *rect,
+                       const graphene_point_t *offset,
+                       float                   values[4])
+{
+  values[0] = rect->origin.x + offset->x;
+  values[1] = rect->origin.y + offset->y;
+  values[2] = rect->size.width;
+  values[3] = rect->size.height;
+}
+

@@ -55,9 +55,9 @@ void                    gsk_vulkan_image_transition                     (GskVulk
                                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_SHADER_READ_BIT)
 
 VkImage                 gsk_vulkan_image_get_vk_image                   (GskVulkanImage         *self);
-VkImageView             gsk_vulkan_image_get_image_view                 (GskVulkanImage         *self);
+VkImageView             gsk_vulkan_image_get_vk_image_view              (GskVulkanImage         *self);
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
-VkFramebuffer           gsk_vulkan_image_get_framebuffer                (GskVulkanImage         *self,
+VkFramebuffer           gsk_vulkan_image_get_vk_framebuffer             (GskVulkanImage         *self,
                                                                          VkRenderPass            pass);
 
 G_END_DECLS

@@ -2,15 +2,19 @@
 
 #include "gskgpuframeprivate.h"
 
+#include "gskgpubufferprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpudownloadopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpunodeprocessorprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
+#include "gskgpurenderpassopprivate.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
+
+#define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
 
 #define GDK_ARRAY_NAME gsk_gpu_ops
 #define GDK_ARRAY_TYPE_NAME GskGpuOps
@@ -27,6 +31,10 @@ struct _GskGpuFramePrivate
 
   GskGpuOps ops;
   GskGpuOp *first_op;
+
+  GskGpuBuffer *vertex_buffer;
+  guchar *vertex_buffer_data;
+  gsize vertex_buffer_used;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuFrame, gsk_gpu_frame, G_TYPE_OBJECT)
@@ -75,6 +83,8 @@ gsk_gpu_frame_finalize (GObject *object)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_clear (&priv->ops);
+
+  g_clear_object (&priv->vertex_buffer);
 
   g_object_unref (priv->device);
 
@@ -148,7 +158,7 @@ gsk_gpu_frame_verbose_print (GskGpuFrame *self,
         {
           if (op->op_class->stage == GSK_GPU_STAGE_END_PASS)
             indent--;
-          gsk_gpu_op_print (op, string, indent);
+          gsk_gpu_op_print (op, self, string, indent);
           if (op->op_class->stage == GSK_GPU_STAGE_BEGIN_PASS)
             indent++;
         }
@@ -295,6 +305,72 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
   return gsk_gpu_ops_index (&priv->ops, pos);
 }
 
+static GskGpuBuffer *
+gsk_gpu_frame_create_vertex_buffer (GskGpuFrame *self,
+                                    gsize        size)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->create_vertex_buffer (self, size);
+}
+
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
+gsize
+gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
+                                   gsize        size)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  gsize size_needed;
+
+  if (priv->vertex_buffer == NULL)
+    priv->vertex_buffer = gsk_gpu_frame_create_vertex_buffer (self, DEFAULT_VERTEX_BUFFER_SIZE);
+
+  size_needed = round_up (priv->vertex_buffer_used, size) + size;
+
+  if (gsk_gpu_buffer_get_size (priv->vertex_buffer) < size_needed)
+    {
+      gsize old_size = gsk_gpu_buffer_get_size (priv->vertex_buffer);
+      GskGpuBuffer *new_buffer = gsk_gpu_frame_create_vertex_buffer (self, old_size * 2);
+      guchar *new_data = gsk_gpu_buffer_map (new_buffer);
+
+      if (priv->vertex_buffer_data)
+        {
+          memcpy (new_data, priv->vertex_buffer_data, old_size);
+          gsk_gpu_buffer_unmap (priv->vertex_buffer);
+        }
+      g_object_unref (priv->vertex_buffer);
+      priv->vertex_buffer = new_buffer;
+      priv->vertex_buffer_data = new_data;
+    }
+
+  priv->vertex_buffer_used = size_needed;
+  
+  return size_needed - size;
+}
+
+guchar *
+gsk_gpu_frame_get_vertex_data (GskGpuFrame *self,
+                               gsize        offset)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  if (priv->vertex_buffer_data == NULL)
+    priv->vertex_buffer_data = gsk_gpu_buffer_map (priv->vertex_buffer);
+
+  return priv->vertex_buffer_data + offset;
+}
+
+guint32
+gsk_gpu_frame_get_image_descriptor (GskGpuFrame   *self,
+                                    GskGpuImage   *image,
+                                    GskGpuSampler  sampler)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->get_image_descriptor (self, image, sampler);
+}
+
 gboolean
 gsk_gpu_frame_is_busy (GskGpuFrame *self)
 {
@@ -333,13 +409,10 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                 };
     }
 
-#if 0
   gsk_gpu_render_pass_begin_op (self,
                                 target,
                                 &extents,
-                                VK_IMAGE_LAYOUT_UNDEFINED,
-                                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-#endif
+                                GSK_RENDER_PASS_PRESENT);
 
   gsk_gpu_node_processor_process (self,
                                   target,
@@ -347,11 +420,9 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                                   node,
                                   viewport);
 
-#if 0
   gsk_gpu_render_pass_end_op (self,
                               target,
-                              VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-#endif
+                              GSK_RENDER_PASS_PRESENT);
 
   if (texture)
     gsk_gpu_download_op (self, target, copy_texture, texture);
@@ -367,7 +438,16 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
   gsk_gpu_frame_sort_ops (self);
   gsk_gpu_frame_verbose_print (self, "after sort");
 
-  GSK_GPU_FRAME_GET_CLASS (self)->submit (self, priv->first_op);
+  if (priv->vertex_buffer)
+    {
+      gsk_gpu_buffer_unmap (priv->vertex_buffer);
+      priv->vertex_buffer_data = NULL;
+      priv->vertex_buffer_used = 0;
+    }
+
+  GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
+                                          priv->vertex_buffer,
+                                          priv->first_op);
 }
 
 void
