@@ -635,6 +635,35 @@ test_issue_4575 (void)
   run_test (commands, G_N_ELEMENTS (commands), 0);
 }
 
+static void
+test_issue_5777 (void)
+{
+  static const Command commands[] = {
+    { MODIFIED, -1, -1, NULL, NULL, UNSET, UNSET, SET },
+    { INSERT_SEQ, 0, -1, "this is a test\nmore", "this is a test\nmore", SET, UNSET, SET },
+    { UNDO, -1, -1, NULL, "this is a test\n", SET, SET, SET },
+    { UNMODIFIED, -1, -1, NULL, NULL, SET, SET, UNSET },
+    { REDO, -1, -1, NULL, "this is a test\nmore", SET, UNSET, SET },
+    { UNDO, -1, -1, NULL, "this is a test\n", SET, SET, UNSET },
+    { REDO, -1, -1, NULL, "this is a test\nmore", SET, UNSET, SET },
+    { UNDO, -1, -1, NULL, "this is a test\n", SET, SET, UNSET },
+    { MODIFIED, -1, -1, NULL, NULL, SET, SET, SET },
+    { REDO, -1, -1, NULL, "this is a test\nmore", SET, UNSET, SET },
+    { UNMODIFIED, -1, -1, NULL, NULL, SET, UNSET, UNSET },
+    { UNDO, -1, -1, NULL, "this is a test\n", SET, SET, SET },
+    { REDO, -1, -1, NULL, "this is a test\nmore", SET, UNSET, UNSET },
+    { UNDO, -1, -1, NULL, "this is a test\n", SET, SET, SET },
+    { UNDO, -1, -1, NULL, "this is a test", SET, SET, SET },
+    { UNMODIFIED, -1, -1, NULL, NULL, SET, SET, UNSET },
+    { UNDO, -1, -1, NULL, "this is a", SET, SET, SET },
+    { REDO, -1, -1, NULL, "this is a test", SET, SET, UNSET },
+    { REDO, -1, -1, NULL, "this is a test\n", SET, SET, SET },
+    { REDO, -1, -1, NULL, "this is a test\nmore", SET, UNSET, SET },
+  };
+
+  run_test (commands, G_N_ELEMENTS (commands), 4);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -657,6 +686,7 @@ main (int   argc,
   g_test_add_func ("/Gtk/TextHistory/test14", test14);
   g_test_add_func ("/Gtk/TextHistory/issue_4276", test_issue_4276);
   g_test_add_func ("/Gtk/TextHistory/issue_4575", test_issue_4575);
+  g_test_add_func ("/Gtk/TextHistory/issue_5777", test_issue_5777);
 
   return g_test_run ();
 }

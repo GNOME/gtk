@@ -1100,6 +1100,18 @@ gtk_text_history_modified_changed (GtkTextHistory *self,
       peek->is_modified_set = TRUE;
     }
 
+  if ((peek = g_queue_peek_head (&self->redo_queue)))
+    {
+      if (peek->kind == ACTION_KIND_BARRIER)
+        {
+          if (!(peek = peek->link.next->data))
+            return;
+        }
+
+      peek->is_modified = TRUE;
+      peek->is_modified_set = TRUE;
+    }
+
   self->is_modified = !!modified;
   self->is_modified_set = TRUE;
 
