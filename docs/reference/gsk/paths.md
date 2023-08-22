@@ -1,13 +1,15 @@
 Title: Paths
 Slug: paths
 
-GSK provides a path object that can be used to render more complex
+GSK provides a path API that can be used to render more complex
 shapes than lines or rounded rectangles. It is comparable to cairos
 [path API](https://www.cairographics.org/manual/cairo-Paths.html),
 with some notable differences.
 
 In general, a path consists of one or more connected **_contours_**,
-each of which may have multiple **_segments_**, and may or may not be closed.
+each of which may have multiple **_operations_**, and may or may not be closed.
+Operations can be straight lines or curves of various kinds. At the points
+where the operations connect, the path can have sharp turns.
 
 <figure>
   <picture>
@@ -17,20 +19,33 @@ each of which may have multiple **_segments_**, and may or may not be closed.
   <figcaption>A path with one closed, and one open contour</figcaption>
 </figure>
 
-The central object of the GSK path api is the immutable [struct@Gsk.Path]
+The central object of the GSK path API is the immutable [struct@Gsk.Path]
 struct, which contains path data in compact form suitable for rendering.
 
 ## Creating Paths
 
 Since `GskPath` is immutable, the auxiliary [struct@Gsk.PathBuilder] struct
-can be used to construct a path piece by piece. The `GskPathBuilder` API
-has three distinct groups of functions:
+can be used to construct a path piece by piece. The pieces are specified with
+points, some of which will be on the path, while others are just **_control points_**
+that are used to influence the shape of the resulting path.
+
+<figure>
+  <picture>
+    <source srcset="cubic-dark.png" media="(prefers-color-scheme: dark)">
+    <img alt="An cubic Bézier" src="cubic-light.png">
+  </picture>
+  <figcaption>A cubic Bézier operation, with 2 control points</figcaption>
+</figure>
+
+The `GskPathBuilder` API has three distinct groups of functions:
+
+- Functions for building contours from individual operations, like [method@Gsk.PathBuilder.move_to],
+  [method@Gsk.PathBuilder.line_to], [method@Gsk.PathBuilder.cubic_to], [method@Gsk.PathBuilder.close]. `GskPathBuilder` maintains a **_current point_**, so these methods all
+  take one less points than necessary for the operation (e.g. `gsk_path_builder_line_to`
+  only takes a single point and draws a line from the current point to the new point).
 
 - Functions for adding complete contours, such as [method@Gsk.PathBuilder.add_rect],
   [method@Gsk.PathBuilder.add_rounded_rect], [method@Gsk.PathBuilder.add_circle].
-
-- Functions for building contours from individual segments, like [method@Gsk.PathBuilder.move_to],
-  [method@Gsk.PathBuilder.line_to], [method@Gsk.PathBuilder.cubic_to], [method@Gsk.PathBuilder.close].
 
 - Adding parts of a preexisting path. Functions in this group include
   [method@Gsk.PathBuilder.add_path] and [method@Gsk.PathBuilder.add_segment].
@@ -38,9 +53,9 @@ has three distinct groups of functions:
 When you are done with building a path, you can convert the accumulated path
 data into a `GskPath` struct with [method@Gsk.PathBuilder.free_to_path].
 
-A sometimes convenient alternative is to create a path from a serialized
-form, with [func@Gsk.Path.parse]. This function interprets strings
-in SVG path syntax, such as:
+A sometimes convenient alternative is to create a path from a serialized form,
+with [func@Gsk.Path.parse]. This function interprets strings in SVG path syntax,
+such as:
 
     M 100 100 C 100 200 200 200 200 100 Z
 
@@ -48,9 +63,8 @@ in SVG path syntax, such as:
 
 There are two main ways to render with paths. The first is to **_fill_** the
 interior of a path with a color or more complex content, such as a gradient.
-GSK currently supports two different ways of determining what part of the plane
-are interior to the path, which can be selected with a  [enum@Gsk.FillRule]
-value.
+GSK supports different ways of determining what part of the plane are interior
+to the path, which can be selected with a [enum@Gsk.FillRule] value.
 
 <figure>
   <picture>
@@ -66,13 +80,16 @@ value.
   <figcaption>The same path, filled with GSK_FILL_RULE_EVEN_ODD</figcaption>
 </figure>
 
+To fill a path, use [method@Gtk.Snapshot.append_fill] or the more general
+[method@Gtk.Snapshot.push_fill].
+
 Alternatively, a path can be **_stroked_**, which means to emulate drawing
 with an idealized pen along the path. The result of stroking a path is another
 path (the **_stroke path_**), which is then filled.
 
 The stroke operation can be influenced with the [struct@Gsk.Stroke] struct
 that collects various stroke parameters, such as the line width, the style
-of line joins and line caps to use, and a dash pattern.
+of line joins and line caps, and a dash pattern.
 
 <figure>
   <picture>
@@ -88,13 +105,18 @@ of line joins and line caps to use, and a dash pattern.
   <figcaption>The same path, stroked with GSK_LINE_JOIN_ROUND</figcaption>
 </figure>
 
-GSK provides render nodes for these path rendering operations: [class@Gsk.FillNode]
-and [class@Gsk.StrokeNode], and GTK has convenience API to use them with
-[class@Gtk.Snapshot].
+To stroke a path, use [method@Gtk.Snapshot.append_stroke] or
+[method@Gtk.Snapshot.push_stroke].
+
+## Hit testing
+
+When paths are rendered as part of an interactive interface, it is sometimes
+necessary to determine whether the mouse points is over the path. GSK provides
+[method@Gsk.Path.in_fill] for this purpose.
 
 ## Other Path APIs
 
-Beyond rendering, paths can be used e.g. as trajectories in animations.
+Paths have uses beyond rendering, for example as trajectories in animations.
 In such uses, it is often important to access properties of paths, such as
 their tangents at certain points. GSK provides an abstract representation
 for points on a path in the form of the [struct@Gsk.PathPoint] struct.
