@@ -51,10 +51,6 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 
-
-void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
-                                                                 GskContour             *contour);
-
 void                    gsk_path_builder_svg_arc_to             (GskPathBuilder         *builder,
                                                                  float                   rx,
                                                                  float                   ry,

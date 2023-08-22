@@ -180,6 +180,9 @@ gsk_path_builder_append_current (GskPathBuilder         *self,
   self->current_point = points[n_points - 1];
 }
 
+static void add_contour (GskPathBuilder *self,
+                         GskContour     *contour);
+
 static void
 gsk_path_builder_end_current (GskPathBuilder *self)
 {
@@ -199,7 +202,16 @@ gsk_path_builder_end_current (GskPathBuilder *self)
   g_array_set_size (self->points, 0);
 
   /* do this at the end to avoid inflooping when add_contour calls back here */
-  gsk_path_builder_add_contour (self, contour);
+  add_contour (self, contour);
+}
+
+static void
+add_contour (GskPathBuilder *self,
+             GskContour     *contour)
+{
+  gsk_path_builder_end_current (self);
+
+  self->contours = g_slist_prepend (self->contours, contour);
 }
 
 static void
@@ -298,15 +310,6 @@ gsk_path_builder_to_path (GskPathBuilder *self)
   return path;
 }
 
-void
-gsk_path_builder_add_contour (GskPathBuilder *self,
-                              GskContour     *contour)
-{
-  gsk_path_builder_end_current (self);
-
-  self->contours = g_slist_prepend (self->contours, contour);
-}
-
 /**
  * gsk_path_builder_get_current_point:
  * @self: a `GskPathBuilder`
@@ -350,7 +353,7 @@ gsk_path_builder_add_path (GskPathBuilder *self,
     {
       const GskContour *contour = gsk_path_get_contour (path, i);
 
-      gsk_path_builder_add_contour (self, gsk_contour_dup (contour));
+      add_contour (self, gsk_contour_dup (contour));
     }
 }
 
@@ -374,7 +377,7 @@ gsk_path_builder_add_reverse_path (GskPathBuilder *self,
     {
       const GskContour *contour = gsk_path_get_contour (path, i - 1);
 
-      gsk_path_builder_add_contour (self, gsk_contour_reverse (contour));
+      add_contour (self, gsk_contour_reverse (contour));
     }
 }
 
@@ -1115,7 +1118,8 @@ gsk_path_builder_add_layout (GskPathBuilder *self,
  * will be connected.
  *
  * Note that this method always adds a path with the given start point
- * and end point. To add a closed path, use [method@Gsk.PathBuilder.add_path].
+ * and end point. To add a closed path, use [method@Gsk.PathBuilder.add_path]
+ * of [method@Gsk.PathBuilder.add_contour].
  *
  * Since: 4.14
  */
@@ -1170,7 +1174,11 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
                              &(GskRealPathPoint) { s->contour, n_ops - 1, 1. });
 
   for (gsize i = (s->contour + 1) % n_contours; i != e->contour; i = (i + 1) % n_contours)
-    gsk_path_builder_add_contour (self, gsk_contour_dup (gsk_path_get_contour (path, i)));
+    {
+      const GskContour *contour = gsk_path_get_contour (path, i);
+
+      add_contour (self, gsk_contour_dup (contour));
+    }
 
   contour = gsk_path_get_contour (path, e->contour);
   n_ops = gsk_contour_get_n_ops (contour);
@@ -1183,4 +1191,29 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
 out:
   gsk_path_builder_end_current (self);
   self->current_point = current;
+}
+
+/**
+ * gsk_path_builder_add_contour:
+ * @self: a `GskPathBuilder`
+ * @path: the `GskPath` to take the contour from
+ * @contour: the index of the contour to take
+ *
+ * Adds one of the connected contours of @path to @self.
+ *
+ * Use [method@Gsk.Path.get_n_contours] to find out how
+ * many contours a path has.
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_add_contour (GskPathBuilder *self,
+                              GskPath        *path,
+                              gsize           contour)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (contour < gsk_path_get_n_contours (path));
+
+  add_contour (self, gsk_contour_dup (gsk_path_get_contour (path, contour)));
 }

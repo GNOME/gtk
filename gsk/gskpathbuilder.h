@@ -76,6 +76,12 @@ void                    gsk_path_builder_add_segment            (GskPathBuilder 
                                                                  GskPath                *path,
                                                                  const GskPathPoint     *start,
                                                                  const GskPathPoint     *end);
+
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_add_contour            (GskPathBuilder         *self,
+                                                                 GskPath                *path,
+                                                                 gsize                   contour);
+
 GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_move_to                (GskPathBuilder         *self,
                                                                  float                   x,
