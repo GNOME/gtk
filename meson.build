@@ -309,6 +309,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'missing-declarations',
     'missing-prototypes',
     'nonnull',
+    'override-init',
     'pointer-to-int-cast',
     'redundant-decls',
     'return-type',
