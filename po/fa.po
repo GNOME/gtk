@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-14 13:16+0000\n"
-"PO-Revision-Date: 2023-08-15 02:04+0330\n"
+"POT-Creation-Date: 2023-08-20 17:48+0000\n"
+"PO-Revision-Date: 2023-08-22 17:08+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -1031,13 +1031,13 @@ msgid "Pick a Color"
 msgstr "یک رنگ بردارید"
 
 #: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "قرمز ٪%Id، سبز ٪%Id، آبی ٪%Id، آلفا ٪%Id"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "قرمز ٪%Id، سبز ٪%Id، آبی ٪%Id"
@@ -1052,12 +1052,12 @@ msgid "Pick a Font"
 msgstr "یک قلم بردارید"
 
 #: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "قلم"
 
 # farmaan
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "هیچ‌کدام"
@@ -2198,7 +2198,7 @@ msgstr "_گشودن"
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
@@ -2411,7 +2411,7 @@ msgstr "برنامه"
 msgid "Audio"
 msgstr "صدا"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "تصویر"
 
@@ -2520,7 +2520,7 @@ msgstr "گزینش شاخه‌ها"
 msgid "Select a Folder"
 msgstr "شاخه‌ای را برگزنید"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "نامشخّص"
 
@@ -3621,7 +3621,7 @@ msgid "Description"
 msgstr "شرح"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:72
+#: tools/gtk-path-tool-info.c:128
 msgid "Bounds"
 msgstr "مزرها"
 
@@ -7417,7 +7417,7 @@ msgstr "اجازه به منحی‌های درجه دوم بزیه"
 msgid "Allow cubic Bézier curves"
 msgstr "اجازه به منحی‌های درجه سوم بزیه"
 
-#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:34
+#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
 msgid "PATH"
 msgstr "PATH"
@@ -7426,7 +7426,7 @@ msgstr "PATH"
 msgid "Decompose a path."
 msgstr "باز کردن یک مسیر."
 
-#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:58
+#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
 msgid "No paths given."
 msgstr "مسیری داده نشده"
 
@@ -7434,17 +7434,42 @@ msgstr "مسیری داده نشده"
 msgid "That didn't work out."
 msgstr "کار نکرد."
 
-#: tools/gtk-path-tool-info.c:45
+#: tools/gtk-path-tool-info.c:99
 msgid "Print information about a path."
 msgstr "چاپ اطّلاعات دربارهٔ یک مسیر."
 
-#: tools/gtk-path-tool-info.c:65
+#: tools/gtk-path-tool-info.c:119
 msgid "Path is empty."
 msgstr "مسیر خالی است."
 
-#: tools/gtk-path-tool-info.c:69
+#: tools/gtk-path-tool-info.c:125
 msgid "Path is closed"
 msgstr "مسیر بسته است"
+
+#: tools/gtk-path-tool-info.c:134
+#, c-format
+msgid "%d contours"
+msgstr "%Id خط فاصل"
+
+#: tools/gtk-path-tool-info.c:136
+#, c-format
+msgid "%d operations"
+msgstr "%Id عملیات"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+msgid "%d lines"
+msgstr "%Id خط"
+
+#: tools/gtk-path-tool-info.c:145
+#, c-format
+msgid "%d quadratics"
+msgstr "%Id درجه دوم"
+
+#: tools/gtk-path-tool-info.c:150
+#, c-format
+msgid "%d cubics"
+msgstr "%Id درجه سوم"
 
 #: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
 msgid "Fill rule (winding, even-odd)"
@@ -8194,10 +8219,6 @@ msgstr ""
 #~ msgctxt "Script"
 #~ msgid "Unknown"
 #~ msgstr "ناشناخته"
-
-#~ msgctxt "Script"
-#~ msgid "Balinese"
-#~ msgstr "بالیایی"
 
 #~ msgctxt "Script"
 #~ msgid "Cuneiform"
